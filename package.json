@@ -1,5 +1,5 @@
 {
-    "name": "firecms",
+    "name": "@camberi/firecms",
     "version": "0.1.0",
     "description": "Awesome Firestore based CMS",
     "author": "camberi",

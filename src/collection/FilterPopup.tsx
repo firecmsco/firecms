@@ -10,7 +10,7 @@ import { Grid, IconButton, Tooltip } from "@material-ui/core";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Popover from "@material-ui/core/Popover";
 import Box from "@material-ui/core/Box";
-import React, { ReactNode } from "react";
+import React, { ReactElement } from "react";
 import { Form, Formik } from "formik";
 import { initFilterValues } from "../firebase/firestore";
 import { useStyles } from "../styles";
@@ -38,7 +38,7 @@ export default function FilterPopup<S extends EntitySchema>({ schema, initialVal
     const filterableProperties = getFilterableProperties(schema.properties);
     const classes = useStyles();
 
-    function createFieldFormField(key: string, property: Property, value: any, includeDescription = true): ReactNode {
+    function createFieldFormField(key: string, property: Property, value: any, includeDescription = true): ReactElement {
 
         if (property.dataType === "timestamp") {
             return <DateTimeField name={key}

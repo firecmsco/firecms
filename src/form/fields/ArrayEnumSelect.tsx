@@ -10,7 +10,7 @@ import {
     Select as MuiSelect
 } from "@material-ui/core";
 import { renderPreviewEnumChip } from "../../preview";
-import React, { ReactNode } from "react";
+import React, { ReactElement } from "react";
 
 
 interface ArrayEnumSelectProps<T extends EnumType> {
@@ -20,7 +20,7 @@ interface ArrayEnumSelectProps<T extends EnumType> {
     errors: any[],
     touched: any[],
     includeDescription: boolean,
-    createFormField: (key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any) => ReactNode
+    createFormField: (key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any) => ReactElement
 }
 
 export default function ArrayEnumSelect<T extends EnumType>({ name, arrayProperty, values }: ArrayEnumSelectProps<T>) {

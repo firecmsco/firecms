@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactElement } from "react";
 import {
     FormControl,
     InputLabel,
@@ -23,7 +23,7 @@ import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
 
 
-export function createFormField(key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any): ReactNode {
+export function createFormField(key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any): ReactElement {
 
     if (property.disabled) {
         return <DisabledField name={key}

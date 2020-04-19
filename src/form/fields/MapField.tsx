@@ -6,7 +6,7 @@ import {
     Grid,
     Paper
 } from "@material-ui/core";
-import React, { ReactNode } from "react";
+import React, { ReactElement } from "react";
 import { formStyles } from "../../styles";
 
 interface MapFieldProps<S extends EntitySchema> {
@@ -16,7 +16,7 @@ interface MapFieldProps<S extends EntitySchema> {
     value: object,
     errors: object,
     touched: object,
-    createFormField: (key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any) => ReactNode
+    createFormField: (key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any) => ReactElement
 }
 
 export default function MapField<S extends EntitySchema>({ name, property, includeDescription, value, createFormField, errors, touched }: MapFieldProps<S>) {

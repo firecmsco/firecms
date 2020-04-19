@@ -12,7 +12,7 @@ import {
     TableCell,
     TableRow
 } from "@material-ui/core";
-import React, { ReactNode } from "react";
+import React, { ReactElement } from "react";
 import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
 
@@ -24,7 +24,7 @@ interface ArrayDefaultFieldProps {
     errors: any[],
     touched: any[],
     includeDescription: boolean,
-    createFormField: (key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any) => ReactNode
+    createFormField: (key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any) => ReactElement
 }
 
 export default function ArrayDefaultField({ name, arrayProperty, values, createFormField, includeDescription, errors, touched }: ArrayDefaultFieldProps) {

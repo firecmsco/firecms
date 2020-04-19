@@ -211,6 +211,7 @@ export function renderStorageThumbnail(
         <StorageThumbnail
             storagePath={storagePath}
             property={property}
+            renderUrlComponent={renderUrlComponent}
         />
     );
 }

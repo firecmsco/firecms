@@ -1,14 +1,14 @@
 import { StringProperty } from "../models";
-import React, { useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { getDownloadURL } from "../firebase";
-import { renderUrlComponent } from "./index";
 
 interface StorageThumbnailProps {
     storagePath: string | undefined;
     property: StringProperty;
+    renderUrlComponent: (property: StringProperty, url: any) => ReactElement;
 }
 
-export default function StorageThumbnail({ storagePath, property }: StorageThumbnailProps) {
+export default function StorageThumbnail({ storagePath, property, renderUrlComponent }: StorageThumbnailProps) {
 
     const [url, setUrl] = React.useState<string>();
 
