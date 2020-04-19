@@ -99,9 +99,6 @@ export const formStyles = makeStyles(theme => ({
 
         },
     },
-    stepper: {
-        padding: theme.spacing(3, 0, 5)
-    },
     buttons: {
         display: "flex",
         justifyContent: "flex-end"

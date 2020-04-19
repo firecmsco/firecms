@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import {
-    AppBar,
+    AppBar, Box,
     Button,
     CssBaseline,
     Divider,
@@ -290,7 +290,7 @@ export default function CMSApp({
 
     function renderMainView() {
         if (error) {
-            return <div> {error} </div>;
+            return <Box> {error} </Box>;
         }
 
         if (!firebaseConfigInitialized) {
@@ -301,8 +301,8 @@ export default function CMSApp({
             includeMedia !== undefined && includeMedia;
 
         const drawer = (
-            <div>
-                <div className={classes.toolbar}/>
+            <React.Fragment>
+                <Box className={classes.toolbar}/>
                 <Divider/>
                 <List>
                     {Object.entries(navigation).map(([key, view], index) => (
@@ -341,13 +341,13 @@ export default function CMSApp({
                         </React.Fragment>
                     )}
                 </List>
-            </div>
+            </React.Fragment>
         );
 
         return (
             <AuthContext.Provider value={loggedUser}>
                 <Router>
-                    <div className={classes.root}>
+                    <Box className={classes.root}>
                         <CssBaseline/>
                         <AppBar position="fixed" className={classes.appBar}>
                             <Toolbar>
@@ -363,7 +363,7 @@ export default function CMSApp({
                                 <Typography variant="h6" noWrap>
                                     {name}
                                 </Typography>
-                                <div className={classes.grow}/>
+                                <Box className={classes.grow}/>
                                 <Button variant="text" color="inherit"
                                         onClick={onSignOut}>
                                     Log Out
@@ -401,10 +401,10 @@ export default function CMSApp({
                             </Hidden>
                         </nav>
                         <main className={classes.content}>
-                            <div className={classes.toolbar}/>
+                            <Box className={classes.toolbar}/>
                             {getRouterSwitch(shouldIncludeMedia)}
                         </main>
-                    </div>
+                    </Box>
                 </Router>
             </AuthContext.Provider>
         );

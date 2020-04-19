@@ -1,4 +1,5 @@
 import {
+    Box,
     CardMedia,
     Chip,
     Container,
@@ -71,7 +72,11 @@ export default function renderPreviewComponent(value: any, property: Property): 
 
 
 function renderMap(property: MapProperty<any>, values: any) {
-    const listProperties = Object.entries(property.properties).filter(([_, property]) => property.includeAsMapPreview);
+
+    let listProperties = Object.entries(property.properties).filter(([_, property]) => property.includeAsMapPreview);
+    if (!listProperties) {
+        listProperties = Object.entries(property.properties).slice(0, 3);
+    }
 
     return (
         <List>
@@ -86,7 +91,10 @@ function renderMap(property: MapProperty<any>, values: any) {
 
 function renderArrayOfMaps(properties: Properties, values: any[]) {
 
-    const tableProperties = Object.entries(properties).filter(([_, property]) => property.includeAsMapPreview);
+    let tableProperties = Object.entries(properties).filter(([_, property]) => property.includeAsMapPreview);
+    if (!tableProperties) {
+        tableProperties = Object.entries(properties).slice(0, 3);
+    }
 
     return <Table
         size={"small"}>
@@ -161,12 +169,12 @@ function renderUrlAudioComponent(value: any) {
 
 function renderUrlImageThumbnail(url: string) {
     return (
-        <Container maxWidth={"sm"}>
+        <Box maxWidth={300} maxHeight={300}>
             <CardMedia
                 component="img"
                 image={url}
             />
-        </Container>
+        </Box>
     );
 }
 

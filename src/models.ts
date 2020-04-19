@@ -159,7 +159,9 @@ interface BaseProperty<T> {
 
     /**
      * When the entity is rendered as the target of a reference or as part of a
-     * map, should this property be included
+     * map, should this property be included.
+     * If includeAsMapPreview is not specified in any property of an entity, when
+     * the given entity is rendered, the first 3 properties are displayed.
      */
     includeAsMapPreview?: boolean;
 

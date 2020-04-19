@@ -12,7 +12,7 @@ export interface ReferencePreviewProps<S extends EntitySchema> {
 
     schema: S;
 
-    renderPreviewComponent(value: any, property: Property):JSX.Element
+    renderPreviewComponent(value: any, property: Property): JSX.Element
 }
 
 export default function ReferencePreview<S extends EntitySchema>(
@@ -37,7 +37,10 @@ export default function ReferencePreview<S extends EntitySchema>(
     if (!entity)
         return (<CircularProgress/>);
 
-    const listProperties = Object.entries(schema.properties).filter(([_, property]) => property.includeInListView );
+    let listProperties = Object.entries(schema.properties).filter(([_, property]) => property.includeAsMapPreview);
+    if (!listProperties) {
+        listProperties = Object.entries(schema.properties).slice(0, 3);
+    }
 
     return (
         <List>
