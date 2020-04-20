@@ -2,6 +2,7 @@
 
 /src/firebase_config.ts
 .firebaserc
+.firebase
 
 # dependencies
 /node_modules

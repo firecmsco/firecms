@@ -220,7 +220,7 @@ const blogSchema: EntitySchema = {
 ReactDOM.render(
     <CMSApp
         name={"Test shop CMS"}
-        authentication={true}
+        authentication={false}
         navigation={[
             {
                 relativePath: "products",
