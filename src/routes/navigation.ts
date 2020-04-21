@@ -3,13 +3,14 @@ import hash from "object-hash";
 
 const DATA_PATH = `/c`;
 
-export type RouteType = "entity_new" | "entity_existing" | "collection";
+export type RouteType = "entity" | "collection";
 
 export interface PathConfiguration {
     entityPlaceholderPath: string; // path with placeholders instead of ids
     view: EntityCollectionView<any>;
     entries: {
         routeType: RouteType;
+        placeHolderId:string;
         fullPath: string;
     }[];
     breadcrumbs: BreadcrumbEntry[];
@@ -54,15 +55,18 @@ export function getAllPaths(entityCollectionView: EntityCollectionView<any>[],
         const pathConfiguration: PathConfiguration = {
             entries: [
                 {
-                    routeType: "entity_new",
+                    routeType: "entity",
+                    placeHolderId,
                     fullPath: `${path}/new`
                 },
                 {
-                    routeType: "entity_existing",
+                    routeType: "entity",
+                    placeHolderId,
                     fullPath: entityPath
                 },
                 {
                     routeType: "collection",
+                    placeHolderId,
                     fullPath: path
                 }
             ],

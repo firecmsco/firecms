@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import {
-    AppBar, Box,
+    AppBar,
+    Box,
     Button,
     CssBaseline,
     Divider,
@@ -230,18 +231,9 @@ export default function CMSApp({
                             entries.map(entry => (
                                 <Route
                                     path={buildDataPath(entry.fullPath)}
-                                    key={`navigation_${entry.fullPath}`}
+                                    key={`navigation_${entry.routeType}_${entry.placeHolderId}`}
                                     render={props => {
-                                        if (entry.routeType === "entity_new")
-                                            return (
-                                                <EntityFormRoute
-                                                    {...props}
-                                                    view={view}
-                                                    breadcrumbs={breadcrumbs}
-                                                    entityPlaceholderPath={entityPlaceholderPath}
-                                                />
-                                            );
-                                        else if (entry.routeType === "entity_existing")
+                                        if (entry.routeType === "entity")
                                             return (
                                                 <EntityFormRoute
                                                     {...props}

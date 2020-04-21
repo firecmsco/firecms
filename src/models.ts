@@ -69,7 +69,7 @@ export interface EntitySchema {
 /**
  * New or existing status
  */
-export enum EntityStatus { new, existing}
+export enum EntityStatus { new = "new", existing = "existing"}
 
 /**
  * Representation of an entity fetched from Firestore
