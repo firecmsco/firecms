@@ -8,9 +8,7 @@ import {
     IconButton,
     Paper,
     Table,
-    TableBody,
-    TableCell,
-    TableRow
+    TableBody
 } from "@material-ui/core";
 import React, { ReactElement } from "react";
 import { Add, Remove } from "@material-ui/icons";
@@ -50,38 +48,34 @@ export default function ArrayDefaultField({ name, arrayProperty, values, createF
 
                     <Paper variant={"outlined"} className={classes.paper}>
                         {hasValue ? (
-                            <Table>
-                                <TableBody>
+                            <React.Fragment>
                                     {values.map((entryValue: any, index: number) => {
                                         const errorElement = errors && errors[index];
                                         const touchedElement = touched && touched[index];
                                         return (
-                                            <TableRow key={`field_${index}`}>
-                                                <TableCell
-                                                    key={`field_${name}_entryValue`}>
-                                                    {createFormField(`${name}[${index}]`, property, entryValue, includeDescription, errorElement, touchedElement)}
-                                                </TableCell>
-                                                <TableCell size={"small"}
-                                                           padding={"none"}>
-                                                    <Box display={"inline"}>
-
-                                                        <IconButton
-                                                            aria-label="remove"
-                                                            onClick={() => arrayHelpers.remove(index)}>
-                                                            <Remove/>
-                                                        </IconButton>
-                                                        <IconButton
-                                                            aria-label="insert"
-                                                            onClick={() => arrayHelpers.insert(index + 1, undefined)}>
-                                                            <Add/>
-                                                        </IconButton>
-                                                    </Box>
-                                                </TableCell>
-                                            </TableRow>
+                                            <Box key={`field_${index}`}
+                                                 mb={1}
+                                                 display={"flex"}>
+                                                <Box flexGrow={1}
+                                                     key={`field_${name}_entryValue`}>{createFormField(`${name}[${index}]`, property, entryValue, includeDescription, errorElement, touchedElement)}</Box>
+                                                <Box>
+                                                    <IconButton
+                                                        aria-label="remove"
+                                                        onClick={() => arrayHelpers.remove(index)}>
+                                                        <Remove/>
+                                                    </IconButton>
+                                                </Box>
+                                                <Box>
+                                                    <IconButton
+                                                        aria-label="insert"
+                                                        onClick={() => arrayHelpers.insert(index + 1, undefined)}>
+                                                        <Add/>
+                                                    </IconButton>
+                                                </Box>
+                                            </Box>
                                         );
                                     })}
-                                </TableBody>
-                            </Table>
+                            </React.Fragment>
                         ) : (
                             <Box margin={2}>
                                 <Button onClick={() => arrayHelpers.push(null)}>

@@ -1,5 +1,4 @@
 import {
-    Box,
     CardMedia,
     Chip,
     Grid,
@@ -30,7 +29,7 @@ export default function renderPreviewComponent(
     value: any,
     property: Property
 ): JSX.Element {
-    if (!value) return <React.Fragment />;
+    if (!value) return <React.Fragment/>;
 
     let content;
     if (property.dataType === "string") {
@@ -104,25 +103,25 @@ function renderArrayOfMaps(properties: Properties, values: any[]) {
         <Table size="small">
             <TableBody>
                 {values &&
-                    values.map((value, index) => {
-                        return (
-                            <TableRow key={`table_${value}_${index}`}>
-                                {tableProperties.map(
-                                    ([key, property], index) => (
-                                        <TableCell
-                                            key={`table-cell-${key}`}
-                                            component="th"
-                                        >
-                                            {renderPreviewComponent(
-                                                value[key],
-                                                property
-                                            )}
-                                        </TableCell>
-                                    )
-                                )}
-                            </TableRow>
-                        );
-                    })}
+                values.map((value, index) => {
+                    return (
+                        <TableRow key={`table_${value}_${index}`}>
+                            {tableProperties.map(
+                                ([key, property], index) => (
+                                    <TableCell
+                                        key={`table-cell-${key}`}
+                                        component="th"
+                                    >
+                                        {renderPreviewComponent(
+                                            value[key],
+                                            property
+                                        )}
+                                    </TableCell>
+                                )
+                            )}
+                        </TableRow>
+                    );
+                })}
             </TableBody>
         </Table>
     );
@@ -135,17 +134,17 @@ function renderArrayOfStrings(values: string[]) {
     return (
         <Grid>
             {values &&
-                values.map((value, index) => (
-                    <Chip
-                        size="small"
-                        key={value}
-                        label={
-                            <Typography variant="caption" color="textPrimary">
-                                {value}
-                            </Typography>
-                        }
-                    />
-                ))}
+            values.map((value, index) => (
+                <Chip
+                    size="small"
+                    key={value}
+                    label={
+                        <Typography variant="caption" color="textPrimary">
+                            {value}
+                        </Typography>
+                    }
+                />
+            ))}
         </Grid>
     );
 }
@@ -157,9 +156,9 @@ function renderArrayEnumTableCell<T extends EnumType>(
     return (
         <Grid>
             {values &&
-                values.map((value, index) =>
-                    renderPreviewEnumChip(enumValues, value)
-                )}
+            values.map((value, index) =>
+                renderPreviewEnumChip(enumValues, value)
+            )}
         </Grid>
     );
 }
@@ -171,9 +170,9 @@ function renderGenericArrayCell<T extends EnumType>(
     return (
         <Grid>
             {values &&
-                values.map((value, index) =>
-                    renderPreviewComponent(value, property)
-                )}
+            values.map((value, index) =>
+                renderPreviewComponent(value, property)
+            )}
         </Grid>
     );
 }
@@ -189,9 +188,8 @@ function renderUrlAudioComponent(value: any) {
 
 function renderUrlImageThumbnail(url: string) {
     return (
-        <Box maxWidth={300} maxHeight={300}>
-            <CardMedia component="img" image={url} />
-        </Box>
+        <img src={url}
+             style={{ maxWidth: 200, maxHeight: 200 }}/>
     );
 }
 

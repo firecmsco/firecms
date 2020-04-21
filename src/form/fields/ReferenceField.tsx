@@ -59,7 +59,7 @@ export default function ReferenceField<S extends EntitySchema>({ name, property,
                 const classes = formStyles();
                 const title = property.title || name;
                 return (
-                    <FormControl error={showError}>
+                    <FormControl error={showError} fullWidth>
                         <Paper elevation={0} className={classes.paper}
                                variant={"outlined"}>
                             <Box my={1}>
@@ -152,6 +152,8 @@ export function ReferenceDialog<S extends EntitySchema>(
                         reference={value}
                         schema={schema}
                         renderPreviewComponent={renderPreviewComponent}/>}
+                    {!value &&
+                    <Box>No value set</Box>}
                 </Grid>
                 <Box display="inline">
                     {value &&
@@ -165,7 +167,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                     <Button variant="outlined"
                             color="primary"
                             onClick={handleClickOpen}>
-                        Edit
+                        {value ? "Edit" : "Set"}
                     </Button>
                 </Box>
             </Grid>
