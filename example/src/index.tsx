@@ -29,8 +29,7 @@ export const productSchema: EntitySchema = {
             title: "Price",
             validation: { required: true },
             dataType: "number",
-            includeInListView: true,
-            includeAsMapPreview: true
+            includeInListView: true
         },
         status: {
             title: "Status",
@@ -40,8 +39,7 @@ export const productSchema: EntitySchema = {
                 private: "Private",
                 public: "Public"
             },
-            includeInListView: true,
-            includeAsMapPreview: true
+            includeInListView: true
         },
         categories: {
             title: "Categories",
@@ -179,7 +177,7 @@ const blogSchema: EntitySchema = {
             of: {
                 dataType: "string"
             },
-            includeInListView: true
+            includeInListView: false
         },
         status: {
             title: "Status",

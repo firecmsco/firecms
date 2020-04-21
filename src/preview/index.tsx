@@ -1,6 +1,7 @@
 import {
     CardMedia,
     Chip,
+    Divider,
     Grid,
     List,
     ListItem,
@@ -169,9 +170,13 @@ function renderGenericArrayCell<T extends EnumType>(
 ) {
     return (
         <Grid>
+
             {values &&
             values.map((value, index) =>
-                renderPreviewComponent(value, property)
+                <React.Fragment>
+                    {renderPreviewComponent(value, property)}
+                    {index < values.length - 1 && <Divider/>}
+                </React.Fragment>
             )}
         </Grid>
     );
