@@ -16,7 +16,7 @@ interface TextFieldProps {
     includeDescription: boolean,
 }
 
-export default function TextField({ name, property, includeDescription }: TextFieldProps) {
+export default function FilterTextField({ name, property, includeDescription }: TextFieldProps) {
 
     return (
         <Field

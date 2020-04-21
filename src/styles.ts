@@ -95,9 +95,7 @@ export const formStyles = makeStyles(theme => ({
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
         padding: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-
-        },
+        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {}
     },
     buttons: {
         display: "flex",
@@ -129,6 +127,9 @@ export const useToolbarStyles = makeStyles((theme: Theme) =>
                     backgroundColor: theme.palette.secondary.dark
                 },
         title: {
+            flex: "1 1 100%"
+        },
+        searchBar: {
             flex: "1 1 100%"
         }
     })

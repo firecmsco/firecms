@@ -15,3 +15,5 @@ export {
 
 export * from "./models";
 
+export * from "./text_search_delegate";
+
