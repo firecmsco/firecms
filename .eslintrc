@@ -1,5 +1,5 @@
 {
-  "parser": "typescript-eslint",
+  "parser": "@typescript-eslint/eslint-plugin",
   "extends": [
     "standard",
     "standard-react",

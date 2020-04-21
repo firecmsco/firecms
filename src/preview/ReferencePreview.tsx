@@ -38,14 +38,14 @@ export default function ReferencePreview<S extends EntitySchema>(
         return (<CircularProgress/>);
 
     let listProperties = Object.entries(schema.properties).filter(([_, property]) => property.includeAsMapPreview);
-    if (!listProperties) {
-        listProperties = Object.entries(schema.properties).slice(0, 3);
+    if (!listProperties.length) {
+        listProperties = Object.entries(schema.properties).slice(0,3);
     }
 
     return (
         <List>
             {listProperties.map(([key, property]) => (
-                <ListItem>
+                <ListItem key={"ref_prev" + property.title + key}>
                     {renderPreviewComponent(entity.values[key], property)}
                 </ListItem>
             ))}

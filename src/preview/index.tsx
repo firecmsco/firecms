@@ -2,7 +2,6 @@ import {
     Box,
     CardMedia,
     Chip,
-    Container,
     Grid,
     List,
     ListItem,
@@ -27,10 +26,11 @@ import * as firebase from "firebase";
 import ReferencePreview from "./ReferencePreview";
 import StorageThumbnail from "./StorageThumbnail";
 
-
-export default function renderPreviewComponent(value: any, property: Property): JSX.Element {
-
-    if (!value) return <React.Fragment></React.Fragment>;
+export default function renderPreviewComponent(
+    value: any,
+    property: Property
+): JSX.Element {
+    if (!value) return <React.Fragment />;
 
     let content;
     if (property.dataType === "string") {
@@ -49,7 +49,10 @@ export default function renderPreviewComponent(value: any, property: Property): 
             content = renderArrayOfMaps(arrayProperty.of.properties, value);
         else if (arrayProperty.of.dataType === "string") {
             if (arrayProperty.of.enumValues) {
-                content = renderArrayEnumTableCell(arrayProperty.of.enumValues, value);
+                content = renderArrayEnumTableCell(
+                    arrayProperty.of.enumValues,
+                    value
+                );
             } else {
                 content = renderArrayOfStrings(value);
             }
@@ -70,18 +73,18 @@ export default function renderPreviewComponent(value: any, property: Property): 
     return content;
 }
 
-
 function renderMap(property: MapProperty<any>, values: any) {
-
-    let listProperties = Object.entries(property.properties).filter(([_, property]) => property.includeAsMapPreview);
-    if (!listProperties) {
+    let listProperties = Object.entries(property.properties).filter(
+        ([_, property]) => property.includeAsMapPreview
+    );
+    if (!listProperties.length) {
         listProperties = Object.entries(property.properties).slice(0, 3);
     }
 
     return (
         <List>
             {listProperties.map(([key, property]) => (
-                <ListItem>
+                <ListItem key={property.title + key}>
                     {renderPreviewComponent(values[key], property)}
                 </ListItem>
             ))}
@@ -90,77 +93,94 @@ function renderMap(property: MapProperty<any>, values: any) {
 }
 
 function renderArrayOfMaps(properties: Properties, values: any[]) {
-
-    let tableProperties = Object.entries(properties).filter(([_, property]) => property.includeAsMapPreview);
-    if (!tableProperties) {
+    let tableProperties = Object.entries(properties).filter(
+        ([_, property]) => property.includeAsMapPreview
+    );
+    if (!tableProperties.length) {
         tableProperties = Object.entries(properties).slice(0, 3);
     }
 
-    return <Table
-        size={"small"}>
-        <TableBody>
-            {values && values
-                .map((value, index) => {
-                    return (
-                        <TableRow
-                            key={`table_${value}_${index}`}
-                        >
-                            {tableProperties
-                                .map(([key, property], index) => (
-                                    <TableCell key={`table-cell-${key}`}
-                                               component="th">
-                                        {renderPreviewComponent(value[key], property)}
-                                    </TableCell>
-                                ))}
-                        </TableRow>
-                    );
-                })}
-        </TableBody>
-    </Table>;
+    return (
+        <Table size="small">
+            <TableBody>
+                {values &&
+                    values.map((value, index) => {
+                        return (
+                            <TableRow key={`table_${value}_${index}`}>
+                                {tableProperties.map(
+                                    ([key, property], index) => (
+                                        <TableCell
+                                            key={`table-cell-${key}`}
+                                            component="th"
+                                        >
+                                            {renderPreviewComponent(
+                                                value[key],
+                                                property
+                                            )}
+                                        </TableCell>
+                                    )
+                                )}
+                            </TableRow>
+                        );
+                    })}
+            </TableBody>
+        </Table>
+    );
 }
-
 
 function renderArrayOfStrings(values: string[]) {
     if (values && !Array.isArray(values)) {
         return <div>{`Unexpected value: ${values}`}</div>;
     }
-    return <Grid>
-        {values && values
-            .map((value, index) => (
-                <Chip size={"small"} key={value} label={
-                    <Typography
-                        variant={"caption"}
-                        color={"textPrimary"}>
-                        {value}
-                    </Typography>
-                }/>
-            ))}
-    </Grid>;
-}
-
-function renderArrayEnumTableCell<T extends EnumType>(enumValues: EnumValues<T>, values: T[]) {
     return (
         <Grid>
-            {values && values
-                .map((value, index) => renderPreviewEnumChip(enumValues, value))}
+            {values &&
+                values.map((value, index) => (
+                    <Chip
+                        size="small"
+                        key={value}
+                        label={
+                            <Typography variant="caption" color="textPrimary">
+                                {value}
+                            </Typography>
+                        }
+                    />
+                ))}
         </Grid>
     );
 }
 
-function renderGenericArrayCell<T extends EnumType>(property: Property, values: T[]) {
+function renderArrayEnumTableCell<T extends EnumType>(
+    enumValues: EnumValues<T>,
+    values: T[]
+) {
     return (
         <Grid>
-            {values && values
-                .map((value, index) => renderPreviewComponent(value, property))}
+            {values &&
+                values.map((value, index) =>
+                    renderPreviewEnumChip(enumValues, value)
+                )}
+        </Grid>
+    );
+}
+
+function renderGenericArrayCell<T extends EnumType>(
+    property: Property,
+    values: T[]
+) {
+    return (
+        <Grid>
+            {values &&
+                values.map((value, index) =>
+                    renderPreviewComponent(value, property)
+                )}
         </Grid>
     );
 }
 
 function renderUrlAudioComponent(value: any) {
     return (
-        <audio
-            controls
-            src={value}>
+        <audio controls src={value}>
             Your browser does not support the
             <code>audio</code> element.
         </audio>
@@ -170,10 +190,7 @@ function renderUrlAudioComponent(value: any) {
 function renderUrlImageThumbnail(url: string) {
     return (
         <Box maxWidth={300} maxHeight={300}>
-            <CardMedia
-                component="img"
-                image={url}
-            />
+            <CardMedia component="img" image={url} />
         </Box>
     );
 }
@@ -189,15 +206,18 @@ function renderUrlVideo(url: string) {
     );
 }
 
-
-function renderReference(ref: firebase.firestore.DocumentReference, refSchema: EntitySchema) {
+function renderReference(
+    ref: firebase.firestore.DocumentReference,
+    refSchema: EntitySchema
+) {
     return (
-        <ReferencePreview reference={ref}
-                          schema={refSchema}
-                          renderPreviewComponent={renderPreviewComponent}/>
+        <ReferencePreview
+            reference={ref}
+            schema={refSchema}
+            renderPreviewComponent={renderPreviewComponent}
+        />
     );
 }
-
 
 export function renderUrlComponent(property: StringProperty, url: any) {
     const mediaType = property.urlMediaType || property.storageMeta?.mediaType;
@@ -213,8 +233,8 @@ export function renderUrlComponent(property: StringProperty, url: any) {
 
 export function renderStorageThumbnail(
     property: StringProperty,
-    storagePath: string | undefined) {
-
+    storagePath: string | undefined
+) {
     return (
         <StorageThumbnail
             storagePath={storagePath}
@@ -224,16 +244,23 @@ export function renderStorageThumbnail(
     );
 }
 
-export function renderPreviewEnumChip<T extends EnumType>(enumValues: EnumValues<T>, value: any) {
+export function renderPreviewEnumChip<T extends EnumType>(
+    enumValues: EnumValues<T>,
+    value: any
+) {
     const label = enumValues[value as T];
     return (
-        <Chip size={"small"} key={value} label={
-            <Typography
-                variant={"caption"}
-                color={label ? "textPrimary" : "error"}>
-                {label ? label : value}
-            </Typography>
-        }/>
+        <Chip
+            size="small"
+            key={value}
+            label={
+                <Typography
+                    variant="caption"
+                    color={label ? "textPrimary" : "error"}
+                >
+                    {label || value}
+                </Typography>
+            }
+        />
     );
 }
-
