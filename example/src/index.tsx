@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import logo from './images/test_shop_logo.png';
+
 import * as serviceWorker from "./serviceWorker";
 
 import { CMSApp, EntitySchema, EnumValues } from "firecms";
@@ -219,6 +221,7 @@ ReactDOM.render(
     <CMSApp
         name={"Test shop CMS"}
         authentication={false}
+        logo={logo}
         navigation={[
             {
                 relativePath: "products",

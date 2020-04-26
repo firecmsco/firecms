@@ -33,6 +33,9 @@ export const useStyles = makeStyles((theme: Theme) =>
             flexGrow: 1
         },
         toolbar: theme.mixins.toolbar,
+        logo: {
+            maxWidth: drawerWidth
+        },
         drawerPaper: {
             width: drawerWidth
         },

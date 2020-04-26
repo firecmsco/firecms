@@ -56,6 +56,11 @@ interface CMSAppProps {
     name: string;
 
     /**
+     * Logo to be displayed in the drawer of the CMS
+     */
+    logo?: string;
+
+    /**
      * List of the views in the CMS. Each view relates to a collection in the
      * root Firestore database. Each of the navigation entries in this field
      * generates an entry in the main menu.
@@ -114,6 +119,7 @@ export const AuthContext = React.createContext<firebase.User | null>(null);
 
 export default function CMSApp({
                                    name,
+                                   logo,
                                    navigation,
                                    includeMedia,
                                    authentication,
@@ -294,7 +300,11 @@ export default function CMSApp({
 
         const drawer = (
             <React.Fragment>
-                <Box className={classes.toolbar}/>
+
+                <Box className={classes.toolbar}>
+                    {logo && <img className={classes.logo} src={logo}/>}
+                </Box>
+
                 <Divider/>
                 <List>
                     {Object.entries(navigation).map(([key, view], index) => (
