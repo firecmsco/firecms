@@ -19,6 +19,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
+import 'typeface-roboto';
+
 import { ThemeProvider, useTheme } from "@material-ui/core/styles";
 import {
     BrowserRouter as Router,
@@ -314,7 +316,7 @@ export default function CMSApp({
                             component={ReactLink}
                             to={buildDataPath(view.relativePath)}
                         >
-                            <ListItemText primary={view.name}/>
+                            <ListItemText primary={view.name} primaryTypographyProps={{variant:"subtitle2"}}/>
                         </ListItem>
                     ))}
 
