@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import logo from './images/test_shop_logo.png';
+import logo from "./images/test_shop_logo.png";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -271,7 +271,16 @@ const usersSchema: EntitySchema = {
     }
 };
 
-const usersSearchDelegate = new AlgoliaTextSearchDelegate("Y6FR1MDSVW", "f084e6dcc154c04295c8124dbb797ff1", "users");
+let usersSearchDelegate: AlgoliaTextSearchDelegate | undefined = undefined;
+if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
+    usersSearchDelegate = new AlgoliaTextSearchDelegate(
+        process.env.REACT_APP_ALGOLIA_APP_ID,
+        process.env.REACT_APP_ALGOLIA_SEARCH_KEY,
+        "users");
+} else {
+    console.error("ALGOLIA_APP_ID or SEARCH_KEY env variables not specified");
+    console.error("Text search not enabled");
+}
 
 ReactDOM.render(
     <CMSApp

@@ -1,6 +1,4 @@
-import { SearchIndex } from "algoliasearch";
-
-const algoliasearch = require("algoliasearch");
+import algoliasearch, { SearchIndex } from "algoliasearch";
 
 export interface TextSearchDelegate {
     performTextSearch(query: string): Promise<readonly string[]>;

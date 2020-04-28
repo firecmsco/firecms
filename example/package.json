@@ -7,10 +7,10 @@
         "@material-ui/icons": "link:../node_modules/@material-ui/icons",
         "@material-ui/pickers": "link:../node_modules/firebase",
         "firebase": "link:../node_modules/firebase",
+        "firecms": "link:..",
         "react": "link:../node_modules/react",
         "react-dom": "link:../node_modules/react-dom",
-        "react-scripts": "link:../node_modules/react-scripts",
-        "firecms": "link:.."
+        "react-scripts": "link:../node_modules/react-scripts"
     },
     "scripts": {
         "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
