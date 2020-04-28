@@ -5,7 +5,12 @@ import logo from './images/test_shop_logo.png';
 
 import * as serviceWorker from "./serviceWorker";
 
-import { CMSApp, EntitySchema, EnumValues } from "firecms";
+import {
+    AlgoliaTextSearchDelegate,
+    CMSApp,
+    EntitySchema,
+    EnumValues
+} from "firecms";
 
 import { firebaseConfig } from "./firebase_config";
 
@@ -16,7 +21,7 @@ const locales: EnumValues<string> = {
     "es-419": "Spanish (South America)"
 };
 
-export const productSchema: EntitySchema = {
+const productSchema: EntitySchema = {
     customId: true,
     name: "Product",
     properties: {
@@ -215,7 +220,58 @@ const blogSchema: EntitySchema = {
         }
     }
 };
+const usersSchema: EntitySchema = {
+    name: "User",
+    properties: {
 
+        first_name: {
+            title: "First name",
+            dataType: "string",
+            includeInListView: true,
+            filterable: true
+        },
+        last_name: {
+            title: "Last name",
+            dataType: "string",
+            includeInListView: true
+        },
+        picture: {
+            title: "Picture",
+            dataType: "map",
+            properties: {
+                large: {
+                    title: "Large",
+                    dataType: "string",
+                    urlMediaType: "image",
+                    includeAsMapPreview: true
+                },
+                medium: {
+                    title: "Medium",
+                    dataType: "string",
+                    urlMediaType: "image"
+                },
+                thumbnail: {
+                    title: "Thumbnail",
+                    dataType: "string",
+                    urlMediaType: "image"
+                }
+            },
+            includeInListView: true
+        },
+        email: {
+            title: "Email",
+            dataType: "string",
+            includeInListView: true
+        },
+        phone: {
+            title: "Phone",
+            dataType: "string",
+            includeInListView: true
+        }
+    }
+};
+
+const usersSearchDelegate = new AlgoliaTextSearchDelegate("Y6FR1MDSVW", "f084e6dcc154c04295c8124dbb797ff1", "users");
 
 ReactDOM.render(
     <CMSApp
@@ -227,6 +283,12 @@ ReactDOM.render(
                 relativePath: "products",
                 schema: productSchema,
                 name: "Products"
+            },
+            {
+                relativePath: "users",
+                schema: usersSchema,
+                name: "Users",
+                textSearchDelegate: usersSearchDelegate
             },
             {
                 relativePath: "blog",

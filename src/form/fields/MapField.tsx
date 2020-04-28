@@ -36,12 +36,13 @@ export default function MapField<S extends EntitySchema>({ name, property, inclu
 
             <Paper elevation={0} variant={"outlined"} className={classes.paper}>
                 <Box m={1}>
-                    <Grid container>
+                    <Grid container spacing={1}>
                         {Object.entries(mapProperties).map(([entryKey, childProperty], index) => {
                                 const fieldValue = value ? value[entryKey] : null;
                                 const fieldError = errors ? errors[entryKey] : null;
                                 const fieldTouched = touched ? touched[entryKey] : null;
-                                return <Grid item xs={12} key={`map-${name}-${index}`}>
+                                return <Grid item xs={12}
+                                             key={`map-${name}-${index}`}>
                                     {createFormField(`${name}[${entryKey}]`,
                                         childProperty,
                                         fieldValue,

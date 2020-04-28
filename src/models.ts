@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import { TextSearchDelegate } from "./text_search_delegate";
 
 
 /**
@@ -29,6 +30,11 @@ export interface EntityCollectionView<S extends EntitySchema> {
      * Is pagination enabled in this view. True if not specified
      */
     pagination?: boolean;
+
+    /**
+     * If a text search delegate is supplied, a search bar is displayed on top
+     */
+    textSearchDelegate?: TextSearchDelegate;
 }
 
 /**
@@ -227,7 +233,9 @@ export interface ReferenceProperty<S extends EntitySchema> extends BaseProperty<
 }
 
 export interface StringProperty extends BaseProperty<string> {
+
     dataType: "string";
+
     /**
      * If this field is specified, the string value of this property will be a
      * reference to a Google Cloud Storage File.

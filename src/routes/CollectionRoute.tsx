@@ -82,6 +82,7 @@ export function CollectionRoute<S extends EntitySchema>({
             </Box>
             <CollectionTable collectionPath={view.relativePath}
                              schema={view.schema}
+                             textSearchDelegate={view.textSearchDelegate}
                              includeToolbar={true}
                              onEntityEdit={onEntityEdit}
                              paginationEnabled={view.pagination === undefined ? true : view.pagination}/>

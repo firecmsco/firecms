@@ -10,19 +10,19 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { useStyles, useToolbarStyles } from "../styles";
-import { IconButton, TableContainer } from "@material-ui/core";
+import { Box, Grid, IconButton, TableContainer } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import renderPreviewComponent from "../preview";
-import {
-    Entity,
-    EntitySchema,
-    FilterValues,
-    Properties,
-    Property
-} from "../models";
-import { listenCollection } from "../firebase";
+import { Entity, EntitySchema, FilterValues, Property } from "../models";
+import { fetchEntity, listenCollection } from "../firebase";
 import FilterPopup from "./FilterPopup";
+import { TextSearchDelegate } from "../text_search_delegate";
+import SearchBar from "./SearchBar";
+import {
+    getCollectionTableProperties,
+    getFilterableProperties
+} from "../util/properties";
 
 interface CollectionTableProps<S extends EntitySchema> {
     /**
@@ -33,8 +33,9 @@ interface CollectionTableProps<S extends EntitySchema> {
      * Schema of the entity displayed by this collection
      */
     schema: S;
+
     /**
-     *
+     * Show the toolbar in this collection
      */
     includeToolbar: boolean,
 
@@ -47,6 +48,11 @@ interface CollectionTableProps<S extends EntitySchema> {
      * In case this table should have some filters set
      */
     paginationEnabled: boolean,
+
+    /**
+     * If a text search delegate is provided, a searchbar is displayed
+     */
+    textSearchDelegate?: TextSearchDelegate,
 
     /**
      * Should the table add an edit button
@@ -68,6 +74,8 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     const classes = useStyles();
     const [data, setData] = React.useState<Entity<S>[]>([]);
+    const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
+    const [textSearchData, setTextSearchData] = React.useState<Entity<S>[]>([]);
     const [filter, setFilter] = React.useState<FilterValues<S> | undefined>(props.initialFilter);
     const [order, setOrder] = React.useState<Order>();
     const [orderBy, setOrderBy] = React.useState<string>();
@@ -130,30 +138,61 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     const hasEditButton = !!props.onEntityEdit;
 
-    const tableBody = <TableBody>
-        {data
-            .map((entity, index) => {
-                return (
-                    <TableRow
-                        key={`table_${entity.snapshot.id}_${index}`}
-                        hover
-                        onClick={(event) => onEntityClick(entity)}
-                        tabIndex={-1}
-                    >
+    function buildTableRow<S extends EntitySchema>(entity: Entity<S>, index: number) {
+        return (
+            <TableRow
+                key={`table_${entity.snapshot.id}_${index}`}
+                hover
+                onClick={(event) => onEntityClick(entity)}
+                tabIndex={-1}
+            >
 
-                        {hasEditButton && renderEditCell(entity, onEntityEdit)}
-                        {renderIdCell(entity.id)}
-                        {tableViewFields
-                            .map(([key, field], index) => renderTableCell(index, entity.values[key], key, field))}
-                    </TableRow>
-                );
+                {hasEditButton && renderEditCell(entity, onEntityEdit)}
+                {renderIdCell(entity.id)}
+                {tableViewFields
+                    .map(([key, field], index) =>
+                        renderTableCell(index, entity.values[key], key, field))}
+            </TableRow>
+        );
+    }
+
+    const tableBody = <TableBody>
+        {textSearchInProgress && textSearchData
+            .map((entity, index) => {
+                return buildTableRow(entity, index);
             })}
+
+        {!textSearchInProgress && data
+            .map((entity, index) => {
+                return buildTableRow(entity, index);
+            })}
+
         {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
                 <TableCell colSpan={tableViewFields.length}/>
             </TableRow>
         )}
+
     </TableBody>;
+
+    const textSearchEnabled = !!props.textSearchDelegate;
+
+    async function onTextSearch(searchString?: string) {
+        if (textSearchEnabled) {
+            const textSearchDelegate = props.textSearchDelegate as TextSearchDelegate;
+            if (!searchString) {
+                setTextSearchData([]);
+                setTextSearchInProgress(false);
+            } else {
+                setTextSearchInProgress(true);
+                const ids = await textSearchDelegate.performTextSearch(searchString);
+                const promises: Promise<Entity<S>>[] = ids
+                    .map((id) => fetchEntity(props.collectionPath, id, props.schema));
+                const entities = await Promise.all(promises);
+                setTextSearchData(entities);
+            }
+        }
+    }
 
     return (
 
@@ -161,7 +200,8 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
             {props.includeToolbar &&
             <CollectionTableToolbar schema={props.schema}
-                                    initialFilterValues={filter}
+                                    filterValues={filter}
+                                    onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                                     collectionPath={props.collectionPath}
                                     onFilterUpdate={onFilterUpdate}/>}
 
@@ -178,13 +218,15 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                         hasEditButton={hasEditButton}
                         order={order}
                         orderBy={orderBy}
+                        sortable={!textSearchData.length}
                         onRequestSort={handleRequestSort}
                     />
                     {tableBody}
                 </Table>
             </div>
 
-            {props.paginationEnabled && rowsPerPage && <TablePagination
+            {props.paginationEnabled && !textSearchInProgress && rowsPerPage &&
+            <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={Infinity}
@@ -214,15 +256,8 @@ interface CollectionTableHeadProps<S extends EntitySchema> {
     onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
     order?: Order;
     orderBy?: string;
+    sortable: boolean;
     schema: S;
-}
-
-interface CollectionTableToolbarProps<S extends EntitySchema> {
-    collectionPath: string;
-    schema: S;
-    initialFilterValues?: FilterValues<S>;
-
-    onFilterUpdate?(filterValues: FilterValues<S>): void;
 }
 
 interface HeadCell {
@@ -232,8 +267,17 @@ interface HeadCell {
     align: "right" | "left";
 }
 
-function CollectionTableHead<S extends EntitySchema>(props: CollectionTableHeadProps<S>) {
-    const { classes, order, orderBy, onRequestSort, schema } = props;
+function CollectionTableHead<S extends EntitySchema>({
+                                                         classes,
+                                                         order,
+                                                         orderBy,
+                                                         sortable,
+                                                         onRequestSort,
+                                                         hasEditButton,
+                                                         schema
+                                                     }: CollectionTableHeadProps<S>) {
+
+
     const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
@@ -249,7 +293,7 @@ function CollectionTableHead<S extends EntitySchema>(props: CollectionTableHeadP
     return (
         <TableHead>
             <TableRow>
-                {props.hasEditButton && <TableCell
+                {hasEditButton && <TableCell
                     key={"header-edit"}
                     align={"left"}
                     padding={"default"}/>
@@ -260,51 +304,89 @@ function CollectionTableHead<S extends EntitySchema>(props: CollectionTableHeadP
                     align={"left"}
                     padding={"default"}> Id </TableCell>
 
-                {headCells.map(headCell => (
-                    <TableCell
-                        key={headCell.id}
-                        align={headCell.align}
-                        padding={"default"}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={order}
-                            onClick={createSortHandler(headCell.id)}
+                {headCells.map(headCell => {
+                    const active = sortable && orderBy === headCell.id;
+                    return (
+                        <TableCell
+                            key={headCell.id}
+                            align={headCell.align}
+                            padding={"default"}
+                            sortDirection={active ? order : false}
                         >
-                            {headCell.label}
-                            {orderBy === headCell.id ?
-                                (
+                            <TableSortLabel
+                                active={active}
+                                direction={order}
+                                onClick={createSortHandler(headCell.id)}
+                            >
+                                {headCell.label}
+                                {active ?
                                     <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : (order === "asc" ? "sorted ascending" : "")}
-                </span>
-                                ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
+                                         {order === "desc" ? "sorted descending" : (order === "asc" ? "sorted ascending" : "")}
+                                    </span>
+                                    : null}
+                            </TableSortLabel>
+                        </TableCell>
+                    );
+                })}
             </TableRow>
         </TableHead>
     );
 }
 
+interface CollectionTableToolbarProps<S extends EntitySchema> {
+    collectionPath: string;
+    schema: S;
+    filterValues?: FilterValues<S>;
+    onTextSearch?: (searchString?: string) => void;
+
+    onFilterUpdate?(filterValues: FilterValues<S>): void;
+}
+
 function CollectionTableToolbar<S extends EntitySchema>(props: CollectionTableToolbarProps<S>) {
     const classes = useToolbarStyles();
+
+    const filterableProperties = getFilterableProperties(props.schema.properties);
 
     return (
         <Toolbar
             className={classes.root}
         >
-            <Typography className={classes.title} variant="h6">
-                All {props.schema.name}
-            </Typography>
-            <Typography className={classes.title} variant={"caption"}>
-                {props.collectionPath}
-            </Typography>
-            {props.onFilterUpdate &&
-            <FilterPopup schema={props.schema}
-                         initialValues={props.initialFilterValues}
-                         onFilterUpdate={props.onFilterUpdate}/>
-            }
+
+            <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center"
+            >
+
+                <Grid item>
+                    <Box className={classes.title}>
+                        <Typography variant="h6">
+                            All {props.schema.name}
+                        </Typography>
+                        <Typography variant={"caption"}>
+                            {props.collectionPath}
+                        </Typography>
+                    </Box>
+                </Grid>
+                <Grid item>
+                    {props.onTextSearch &&
+                    <Box className={classes.searchBar}>
+                        <SearchBar
+                            onTextSearch={props.onTextSearch}/>
+                    </Box>
+                    }
+                </Grid>
+                <Grid item>
+                    {props.onFilterUpdate && filterableProperties.length > 0 &&
+                    <FilterPopup schema={props.schema}
+                                 filterValues={props.filterValues}
+                                 onFilterUpdate={props.onFilterUpdate}/>
+                    }
+                </Grid>
+            </Grid>
+
+
 
         </Toolbar>
     );
@@ -353,6 +435,3 @@ function getCellAlignment(property: Property): "right" | "left" {
     return property.dataType === "number" || property.dataType === "timestamp" ? "right" : "left";
 }
 
-function getCollectionTableProperties(properties: Properties): [string, Property][] {
-    return Object.entries(properties).filter(([_, property]) => property.includeInListView);
-}
