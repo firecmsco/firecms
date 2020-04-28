@@ -1,4 +1,4 @@
-import algoliasearch, { SearchIndex } from "algoliasearch";
+import algoliasearch, { SearchClient, SearchIndex } from "algoliasearch";
 
 export interface TextSearchDelegate {
     performTextSearch(query: string): Promise<readonly string[]>;
@@ -6,16 +6,12 @@ export interface TextSearchDelegate {
 
 export class AlgoliaTextSearchDelegate implements TextSearchDelegate {
 
-    appId: string;
-    searchKey: string;
+    algoliaClient: SearchClient;
     index: SearchIndex;
 
-    constructor(appId: string, searchKey: string, indexKey: string) {
-        this.appId = appId;
-        this.searchKey = searchKey;
-
-        const client = algoliasearch(appId, searchKey);
-        this.index = client.initIndex(indexKey);
+    constructor(algoliaClient: SearchClient, indexKey: string) {
+        this.algoliaClient = algoliaClient;
+        this.index = algoliaClient.initIndex(indexKey);
     }
 
     performTextSearch(query: string): Promise<readonly string[]> {

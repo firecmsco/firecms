@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import logo from "./images/test_shop_logo.png";
+import algoliasearch from "algoliasearch";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -273,9 +274,9 @@ const usersSchema: EntitySchema = {
 
 let usersSearchDelegate: AlgoliaTextSearchDelegate | undefined = undefined;
 if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
+    const client = algoliasearch(process.env.REACT_APP_ALGOLIA_APP_ID, process.env.REACT_APP_ALGOLIA_SEARCH_KEY);
     usersSearchDelegate = new AlgoliaTextSearchDelegate(
-        process.env.REACT_APP_ALGOLIA_APP_ID,
-        process.env.REACT_APP_ALGOLIA_SEARCH_KEY,
+        client,
         "users");
 } else {
     console.error("ALGOLIA_APP_ID or SEARCH_KEY env variables not specified");
