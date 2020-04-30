@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import {
     FormControl,
     InputLabel,
@@ -23,61 +23,59 @@ import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
 
 
-export function createFormField(key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any): ReactElement {
+export function createFormField(name: string,
+                                property: Property,
+                                value: any,
+                                includeDescription: boolean,
+                                errors: any,
+                                touched: any): JSX.Element {
+
+    const fieldProps = {
+        name,
+        value,
+        errors,
+        touched,
+        includeDescription,
+        createFormField
+    };
 
     if (property.disabled) {
-        return <DisabledField name={key}
-                              property={property}
-                              value={value}
-                              includeDescription={includeDescription}/>;
+        return <DisabledField {...fieldProps}
+                              property={property}/>;
     }
 
     if (property.dataType === "array") {
-        return createArrayField(key, property, value, includeDescription, error, touched);
+        return createArrayField(name, property, value, includeDescription, errors, touched);
     } else if (property.dataType === "map") {
-        return <MapField name={key}
-                         property={property}
-                         value={value}
-                         createFormField={createFormField}
-                         errors={error}
-                         touched={touched}
-                         includeDescription={includeDescription}/>;
+        return <MapField {...fieldProps}
+                         property={property}/>;
     } else if (property.dataType === "reference") {
-        return <ReferenceField name={key}
-                               property={property}
-                               includeDescription={includeDescription}/>;
+        return <ReferenceField {...fieldProps}
+                               property={property}/>;
     } else if (property.dataType === "timestamp") {
-        return <DateTimeField name={key}
-                              property={property}
-                              includeDescription={includeDescription}/>;
+        return <DateTimeField {...fieldProps}
+                              property={property}/>;
     } else if (property.dataType === "boolean") {
-        return <SwitchField name={key}
-                            property={property}
-                            includeDescription={includeDescription}/>;
+        return <SwitchField {...fieldProps}
+                            property={property}/>;
     } else if (property.dataType === "number") {
         if (property.enumValues) {
-            return <Select name={key}
-                           property={property}
-                           includeDescription={includeDescription}/>;
+            return <Select {...fieldProps}
+                           property={property}/>;
         } else {
-            return <TextField name={key}
-                              property={property}
-                              includeDescription={includeDescription}/>;
+            return <TextField {...fieldProps}
+                              property={property}/>;
         }
     } else if (property.dataType === "string") {
         if (property.storageMeta) {
-            return <StorageUploadField value={value as string}
-                                       name={key}
-                                       property={property}
-                                       includeDescription={includeDescription}/>;
+            return <StorageUploadField {...fieldProps}
+                                       property={property}/>;
         } else if (property.enumValues) {
-            return <Select name={key}
-                           property={property}
-                           includeDescription={includeDescription}/>;
+            return <Select {...fieldProps}
+                           property={property}/>;
         } else {
-            return <TextField name={key}
-                              property={property}
-                              includeDescription={includeDescription}/>;
+            return <TextField {...fieldProps}
+                              property={property}/>;
         }
     }
 
@@ -102,28 +100,28 @@ function createArrayField(key: string,
 
     if ((arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") && arrayProperty.of.enumValues) {
         return <ArrayEnumSelect name={key}
-                                arrayProperty={arrayProperty}
+                                property={arrayProperty}
                                 includeDescription={includeDescription}
                                 createFormField={createFormField}
                                 errors={errors}
                                 touched={touched}
-                                values={values}/>;
+                                value={values}/>;
     } else if (arrayProperty.of.dataType === "map") {
         return <ArrayMapField name={key}
-                              arrayProperty={arrayProperty}
+                              property={arrayProperty}
                               includeDescription={includeDescription}
                               createFormField={createFormField}
                               errors={errors}
                               touched={touched}
-                              values={values}/>;
+                              value={values}/>;
     } else {
         return <ArrayDefaultField name={key}
-                                  arrayProperty={arrayProperty}
+                                  property={arrayProperty}
                                   includeDescription={includeDescription}
                                   createFormField={createFormField}
                                   errors={errors}
                                   touched={touched}
-                                  values={values}/>;
+                                  value={values}/>;
     }
 
 }

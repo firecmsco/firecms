@@ -1,10 +1,4 @@
-import {
-    ArrayProperty,
-    EnumType,
-    MapProperty,
-    Properties,
-    Property
-} from "../../models";
+import { ArrayProperty, EnumType, MapProperty, Properties } from "../../models";
 import { FieldArray } from "formik";
 import {
     Box,
@@ -18,46 +12,39 @@ import {
     TableCell,
     TableRow
 } from "@material-ui/core";
-import React, { ReactElement } from "react";
+import React from "react";
 import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
+import { CMSFieldProps } from "./CMSFieldProps";
 
-
-interface ArrayMapFieldProps<T extends EnumType> {
-    name: string,
-    arrayProperty: ArrayProperty<T>,
-    values: any[],
-    errors: any[],
-    touched: any[],
-    includeDescription: boolean,
-    createFormField: (key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any) => ReactElement
+interface ArrayMapFieldProps<T extends EnumType> extends CMSFieldProps<any[], ArrayProperty<T>> {
 }
 
-export default function ArrayMapField<T extends EnumType>({ name, arrayProperty, values, createFormField, includeDescription, errors, touched }: ArrayMapFieldProps<T>) {
+export default function ArrayMapField<T extends EnumType>({ name, property, value, createFormField, includeDescription, errors, touched }: ArrayMapFieldProps<T>) {
 
-    if (arrayProperty.of.dataType !== "map") {
-        console.error(arrayProperty);
+    if (property.of.dataType !== "map") {
+        console.error(property);
         throw Error("Field misconfiguration: this array field should have type map");
     }
 
     const classes = formStyles();
-    const mapProperty: MapProperty<any> = arrayProperty.of;
+    const mapProperty: MapProperty<any> = property.of;
     const properties: Properties = mapProperty.properties;
 
     return <FieldArray
         name={name}
         render={arrayHelpers => {
 
-            const hasValue = values && values.length > 0;
-            const error = touched && arrayProperty.validation?.required && !values;
+            const hasValue = value && value.length > 0;
+            const error = touched && property.validation?.required && !value;
 
             return (
 
                 <FormControl fullWidth error={error}>
 
                     <FormHelperText filled
-                                    required={arrayProperty.validation?.required}>
-                        {arrayProperty.title || name}
+                                    required={property.validation?.required}>
+                        {property.title || name}
                     </FormHelperText>
 
                     <Paper elevation={0} className={classes.paper}>
@@ -65,7 +52,7 @@ export default function ArrayMapField<T extends EnumType>({ name, arrayProperty,
                         {hasValue ? (
                             <Table>
                                 <TableBody>
-                                    {values.map((entryValue: any, index: number) => (
+                                    {value.map((entryValue: any, index: number) => (
                                         <TableRow key={`field_${index}`}>
                                             {Object.entries(properties).map(([arrayKey, childProperty]) => {
 
@@ -112,9 +99,9 @@ export default function ArrayMapField<T extends EnumType>({ name, arrayProperty,
                         )}
                     </Paper>
 
-                    {includeDescription && arrayProperty.description &&
+                    {includeDescription && property.description &&
                     <Box>
-                        <FormHelperText>{arrayProperty.description}</FormHelperText>
+                        <FormHelperText>{property.description}</FormHelperText>
                     </Box>}
                 </FormControl>
             );

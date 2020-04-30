@@ -19,7 +19,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
-import 'typeface-roboto';
+import "typeface-roboto";
 
 import { ThemeProvider, useTheme } from "@material-ui/core/styles";
 import {
@@ -316,7 +316,9 @@ export default function CMSApp({
                             component={ReactLink}
                             to={buildDataPath(view.relativePath)}
                         >
-                            <ListItemText primary={view.name} primaryTypographyProps={{variant:"subtitle2"}}/>
+                            <ListItemText
+                                primary={view.name}
+                                primaryTypographyProps={{ variant: "subtitle2" }}/>
                         </ListItem>
                     ))}
 
@@ -324,13 +326,16 @@ export default function CMSApp({
                         <React.Fragment>
                             <Divider/>
                             <ListItem button component={ReactLink} to="/media">
-                                <ListItemText primary="Media"/>
+                                <ListItemText
+                                    primary="Media"
+                                    primaryTypographyProps={{ variant: "subtitle2" }}/>
                             </ListItem>
                         </React.Fragment>
                     )}
 
                     {additionalViews && (
                         <React.Fragment>
+                            <Divider/>
                             {additionalViews.map(additionalView => (
                                 <ListItem
                                     button
@@ -339,7 +344,8 @@ export default function CMSApp({
                                     to={addInitialSlash(additionalView.path)}
                                 >
                                     <ListItemText
-                                        primary={additionalView.name}/>
+                                        primary={additionalView.name}
+                                        primaryTypographyProps={{ variant: "subtitle2" }}/>
                                 </ListItem>
                             ))}
                         </React.Fragment>

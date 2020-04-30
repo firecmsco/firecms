@@ -1,4 +1,8 @@
-import { MediaType, NumberProperty, StringProperty } from "../../models";
+import {
+    MediaType,
+    NumberProperty,
+    StringProperty
+} from "../../models";
 import { Field, getIn } from "formik";
 import {
     Box,
@@ -7,13 +11,11 @@ import {
     Input,
     InputLabel
 } from "@material-ui/core";
-import React from "react";
+import React, { ReactElement } from "react";
 import renderPreviewComponent from "../../preview";
+import { CMSFieldProps } from "./CMSFieldProps";
 
-interface TextFieldProps {
-    name: string,
-    property: StringProperty | NumberProperty,
-    includeDescription: boolean,
+interface TextFieldProps extends CMSFieldProps<string | number, StringProperty | NumberProperty> {
 }
 
 export default function TextField({ name, property, includeDescription }: TextFieldProps) {

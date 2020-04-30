@@ -8,15 +8,9 @@ import {
 } from "@material-ui/core";
 import React, { ReactElement } from "react";
 import { formStyles } from "../../styles";
+import { CMSFieldProps } from "./CMSFieldProps";
 
-interface MapFieldProps<S extends EntitySchema> {
-    name: string,
-    property: MapProperty<S>,
-    includeDescription: boolean,
-    value: object,
-    errors: object,
-    touched: object,
-    createFormField: (key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any) => ReactElement
+interface MapFieldProps<S extends EntitySchema> extends CMSFieldProps<object, MapProperty<S>>{
 }
 
 export default function MapField<S extends EntitySchema>({ name, property, includeDescription, value, createFormField, errors, touched }: MapFieldProps<S>) {
@@ -24,10 +18,10 @@ export default function MapField<S extends EntitySchema>({ name, property, inclu
     const classes = formStyles();
 
     const mapProperties = property.properties;
-    const error = touched && property.validation?.required && !value;
+    const hasError = touched && property.validation?.required && !value;
 
     return (
-        <FormControl fullWidth error={error}>
+        <FormControl fullWidth error={hasError}>
 
             <FormHelperText filled
                             required={property.validation?.required}>
@@ -39,7 +33,7 @@ export default function MapField<S extends EntitySchema>({ name, property, inclu
                     <Grid container spacing={1}>
                         {Object.entries(mapProperties).map(([entryKey, childProperty], index) => {
                                 const fieldValue = value ? value[entryKey] : null;
-                                const fieldError = errors ? errors[entryKey] : null;
+                                const fieldError = hasError ? hasError[entryKey] : null;
                                 const fieldTouched = touched ? touched[entryKey] : null;
                                 return <Grid item xs={12}
                                              key={`map-${name}-${index}`}>

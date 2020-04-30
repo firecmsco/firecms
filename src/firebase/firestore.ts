@@ -64,7 +64,7 @@ export function listenCollection<S extends EntitySchema>(
     order?: "desc" | "asc"
 ): Function {
 
-    console.log("Listening collection", path, limit, startAfter, orderBy, order);
+    console.log("Listening collection", path, limit, filter, startAfter, orderBy, order);
 
     let collectionReference: firebase.firestore.Query = firebase.firestore()
         .collection(path);

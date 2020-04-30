@@ -13,26 +13,20 @@ import {
 import React, { ReactElement } from "react";
 import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
+import { CMSFieldProps } from "./CMSFieldProps";
 
 
-interface ArrayDefaultFieldProps {
-    name: string,
-    arrayProperty: ArrayProperty<any>,
-    values: any[],
-    errors: any[],
-    touched: any[],
-    includeDescription: boolean,
-    createFormField: (key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any) => ReactElement
+interface ArrayDefaultFieldProps extends CMSFieldProps<any[],ArrayProperty<any>>{
 }
 
-export default function ArrayDefaultField({ name, arrayProperty, values, createFormField, includeDescription, errors, touched }: ArrayDefaultFieldProps) {
+export default function ArrayDefaultField({ name, property, value, createFormField, includeDescription, errors, touched }: ArrayDefaultFieldProps) {
 
     const classes = formStyles();
 
-    const property: Property = arrayProperty.of;
+    const ofProperty: Property = property.of;
 
-    const hasValue = values && values.length > 0;
-    const error = touched && arrayProperty.validation?.required && !values;
+    const hasValue = value && value.length > 0;
+    const error = touched && property.validation?.required && !value;
 
     return <FieldArray
         name={name}
@@ -42,14 +36,14 @@ export default function ArrayDefaultField({ name, arrayProperty, values, createF
                 <FormControl fullWidth error={error}>
 
                     <FormHelperText filled
-                                    required={arrayProperty.validation?.required}>
-                        {arrayProperty.title || name}
+                                    required={property.validation?.required}>
+                        {property.title || name}
                     </FormHelperText>
 
                     <Paper variant={"outlined"} className={classes.paper}>
                         {hasValue ? (
                             <React.Fragment>
-                                    {values.map((entryValue: any, index: number) => {
+                                    {value.map((entryValue: any, index: number) => {
                                         const errorElement = errors && errors[index];
                                         const touchedElement = touched && touched[index];
                                         return (
@@ -57,7 +51,7 @@ export default function ArrayDefaultField({ name, arrayProperty, values, createF
                                                  mb={1}
                                                  display={"flex"}>
                                                 <Box flexGrow={1}
-                                                     key={`field_${name}_entryValue`}>{createFormField(`${name}[${index}]`, property, entryValue, includeDescription, errorElement, touchedElement)}</Box>
+                                                     key={`field_${name}_entryValue`}>{createFormField(`${name}[${index}]`, ofProperty, entryValue, includeDescription, errorElement, touchedElement)}</Box>
                                                 <Box>
                                                     <IconButton
                                                         aria-label="remove"
@@ -86,9 +80,9 @@ export default function ArrayDefaultField({ name, arrayProperty, values, createF
                         )}
                     </Paper>
 
-                    {includeDescription && arrayProperty.description &&
+                    {includeDescription && property.description &&
                     <Box>
-                        <FormHelperText>{arrayProperty.description}</FormHelperText>
+                        <FormHelperText>{property.description}</FormHelperText>
                     </Box>}
 
                 </FormControl>

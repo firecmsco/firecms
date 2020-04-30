@@ -2,11 +2,11 @@ import { TimestampProperty } from "../../models";
 import { Field, getIn } from "formik";
 import React from "react";
 import { DateTimePicker } from "@material-ui/pickers";
+import { CMSFieldProps } from "./CMSFieldProps";
+import firebase from "firebase";
 
-interface DateTimeFieldProps {
-    name: string,
-    property: TimestampProperty,
-    includeDescription: boolean,
+
+interface DateTimeFieldProps extends CMSFieldProps<firebase.firestore.Timestamp, TimestampProperty> {
 }
 
 export default function DateTimeField({ name, property, includeDescription }: DateTimeFieldProps) {

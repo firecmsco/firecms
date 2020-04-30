@@ -1,76 +1,105 @@
-import { MediaType, NumberProperty, StringProperty } from "../../models";
-import { Field, getIn } from "formik";
+import { NumberProperty, StringProperty } from "../../models";
+import { Field } from "formik";
 import {
-    Box,
     FormControl,
-    FormHelperText,
+    Grid,
     Input,
-    InputLabel
+    MenuItem,
+    Select as MuiSelect,
+    Typography
 } from "@material-ui/core";
-import React from "react";
-import renderPreviewComponent from "../../preview";
+import React, { useState } from "react";
 
 interface TextFieldProps {
     name: string,
     property: StringProperty | NumberProperty,
-    includeDescription: boolean,
 }
 
-export default function FilterTextField({ name, property, includeDescription }: TextFieldProps) {
+export default function StringNumberFilterField({ name, property }: TextFieldProps) {
+
+    const enumValues = property.enumValues;
 
     return (
         <Field
-            required={property.validation?.required}
             name={`${name}`}
         >
             {({
-                  disabled,
                   field,
-                  form: { isSubmitting, errors, touched, setFieldValue },
+                  form: { setFieldValue },
                   ...props
               }: any) => {
 
-                const fieldError = getIn(errors, field.name);
-                const showError = getIn(touched, field.name) && !!fieldError;
+                const [fieldOperation, fieldValue] = field.value ? field.value : ["==", undefined];
+                const [operation, setOperation] = useState<string>(fieldOperation);
+                const [value, setValue] = useState<string | number>(fieldValue);
 
-                const value = field.value;
-
-                let mediaType: MediaType | undefined;
-                if (property.dataType === "string")
-                    mediaType = property.urlMediaType;
+                function updateFilter(op: string, val: string | number) {
+                    setOperation(op);
+                    setValue(value);
+                    if (op && val) {
+                        setFieldValue(
+                            name,
+                            [op, val]
+                        );
+                    } else {
+                        setFieldValue(
+                            name,
+                            undefined
+                        );
+                    }
+                }
 
                 return (
-                    <React.Fragment>
 
-                        <FormControl
-                            required={property.validation?.required}
-                            error={showError}
-                            disabled={disabled !== undefined ? disabled : isSubmitting}
-                            fullWidth>
-                            <InputLabel>{property.title || name}</InputLabel>
-                            <Input
-                                type={property.dataType === "number" ? "number" : undefined}
-                                defaultValue={value}
-                                onChange={(evt) => setFieldValue(
-                                    name,
-                                    evt.target.value
-                                )}
-                            />
+                    <FormControl
+                        fullWidth>
+                        <Typography variant={"caption"}>
+                            {property.title || name}
+                        </Typography>
+                        <Grid container>
 
-                            {showError && <FormHelperText
-                                id="component-error-text">{fieldError}</FormHelperText>}
+                            <Grid item xs={3}>
+                                <MuiSelect value={operation}
+                                           autoWidth
+                                           onChange={(evt: any) => {
+                                               updateFilter(evt.target.value, value);
+                                           }}>
+                                    <MenuItem value={"=="}>==</MenuItem>
+                                    <MenuItem value={">"}>{">"}</MenuItem>
+                                    <MenuItem value={"<"}>{"<"}</MenuItem>
+                                    <MenuItem value={">="}>{">="}</MenuItem>
+                                    <MenuItem value={"<="}>{"<="}</MenuItem>
+                                </MuiSelect>
+                            </Grid>
 
-                            {includeDescription && property.description &&
-                            <FormHelperText>{property.description}</FormHelperText>}
+                            {!enumValues && <Grid item xs={9}>
+                                <Input
+                                    key={`filter-${name}`}
+                                    type={property.dataType === "number" ? "number" : undefined}
+                                    defaultValue={value}
+                                    onChange={(evt) => {
+                                        updateFilter(operation, evt.target.value);
+                                    }}
+                                />
+                            </Grid>}
 
-                        </FormControl>
+                            {enumValues && <Grid item xs={9}>
+                                <MuiSelect
+                                    fullWidth
+                                    key={`filter-${name}`}
+                                    value={value}
+                                    onChange={(evt: any) => {
+                                        updateFilter(operation, evt.target.value);
+                                    }}>
+                                    {Object.entries(enumValues).map(([key, value]) => (
+                                        <MenuItem key={`select-${key}`}
+                                                  value={key}>{value as string}</MenuItem>
+                                    ))}
+                                </MuiSelect>
+                            </Grid>}
 
-                        {mediaType && value &&
-                        <Box m={1}>
-                            {renderPreviewComponent(value, property)}
-                        </Box>
-                        }
-                    </React.Fragment>
+                        </Grid>
+                    </FormControl>
                 );
             }}
         </Field>

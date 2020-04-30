@@ -1,7 +1,7 @@
 import {
     Entity,
     EntitySchema,
-    FilterValues,
+    FilterValues, Property,
     ReferenceProperty
 } from "../../models";
 import { Field, getIn } from "formik";
@@ -25,11 +25,9 @@ import ReferencePreview from "../../preview/ReferencePreview";
 import ClearIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import CollectionTable from "../../collection/CollectionTable";
 import renderPreviewComponent from "../../preview";
+import { CMSFieldProps } from "./CMSFieldProps";
 
-interface ReferenceFieldProps<S extends EntitySchema> {
-    name: string,
-    property: ReferenceProperty<S>,
-    includeDescription: boolean,
+interface ReferenceFieldProps<S extends EntitySchema> extends CMSFieldProps<any, ReferenceProperty<S>> {
 }
 
 export default function ReferenceField<S extends EntitySchema>({ name, property, includeDescription }: ReferenceFieldProps<S>) {

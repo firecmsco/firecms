@@ -1,13 +1,18 @@
-import { BooleanProperty } from "../../models";
+import {
+    BooleanProperty,
+    EnumType,
+    NumberProperty,
+    StringProperty
+} from "../../models";
 import { Field } from "formik";
 import { FormControlLabel, FormHelperText, Switch } from "@material-ui/core";
 import React from "react";
+import { CMSFieldProps } from "./CMSFieldProps";
 
-interface SwitchFieldProps {
-    name: string,
-    property: BooleanProperty,
-    includeDescription: boolean,
+
+interface SwitchFieldProps extends CMSFieldProps<boolean, BooleanProperty> {
 }
+
 
 export default function SwitchField({ name, property, includeDescription }: SwitchFieldProps) {
 

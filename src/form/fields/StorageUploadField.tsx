@@ -16,17 +16,12 @@ import { getDownloadURL, uploadFile } from "../../firebase";
 import firebase from "firebase";
 import renderPreviewComponent from "../../preview";
 import { formStyles } from "../../styles";
-import { StorageMeta, StringProperty } from "../../models";
+import { NumberProperty, StorageMeta, StringProperty } from "../../models";
 import { Field, getIn } from "formik";
+import { CMSFieldProps } from "./CMSFieldProps";
 
-
-interface StorageUploadFieldProps {
-    value: string,
-    name: string,
-    property: StringProperty,
-    includeDescription: boolean,
+interface StorageUploadFieldProps extends CMSFieldProps<string, StringProperty> {
 }
-
 
 export default function StorageUploadField({ value, name, property, includeDescription }: StorageUploadFieldProps) {
     return (

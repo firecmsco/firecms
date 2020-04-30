@@ -13,11 +13,9 @@ import {
     Select as MuiSelect
 } from "@material-ui/core";
 import React from "react";
+import { CMSFieldProps } from "./CMSFieldProps";
 
-interface SelectProps<T extends EnumType> {
-    name: T,
-    property: StringProperty | NumberProperty,
-    includeDescription: boolean,
+interface SelectProps<T extends EnumType> extends CMSFieldProps<T, StringProperty | NumberProperty> {
 }
 
 export default function Select<T extends EnumType>({ name, property, includeDescription }: SelectProps<T>) {

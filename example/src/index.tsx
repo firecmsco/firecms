@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import logo from "./images/test_shop_logo.png";
-import algoliasearch from "algoliasearch";
+import algoliasearch, { SearchClient } from "algoliasearch";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -36,6 +36,7 @@ const productSchema: EntitySchema = {
         price: {
             title: "Price",
             validation: { required: true },
+            filterable: true,
             dataType: "number",
             includeInListView: true
         },
@@ -175,6 +176,7 @@ const blogSchema: EntitySchema = {
         name: {
             title: "Name",
             validation: { required: true },
+            filterable: true,
             dataType: "string",
             includeInListView: true
         },
@@ -191,6 +193,7 @@ const blogSchema: EntitySchema = {
             title: "Status",
             validation: { required: true },
             dataType: "string",
+            filterable: true,
             enumValues: {
                 published: "Published",
                 draft: "Draft"
@@ -272,14 +275,11 @@ const usersSchema: EntitySchema = {
     }
 };
 
-let usersSearchDelegate: AlgoliaTextSearchDelegate | undefined = undefined;
+let client: SearchClient | undefined = undefined;
 if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
-    const client = algoliasearch(process.env.REACT_APP_ALGOLIA_APP_ID, process.env.REACT_APP_ALGOLIA_SEARCH_KEY);
-    usersSearchDelegate = new AlgoliaTextSearchDelegate(
-        client,
-        "users");
+    client = algoliasearch(process.env.REACT_APP_ALGOLIA_APP_ID, process.env.REACT_APP_ALGOLIA_SEARCH_KEY);
 } else {
-    console.error("ALGOLIA_APP_ID or SEARCH_KEY env variables not specified");
+    console.error("REACT_APP_ALGOLIA_APP_ID or REACT_APP_ALGOLIA_SEARCH_KEY env variables not specified");
     console.error("Text search not enabled");
 }
 
@@ -292,18 +292,26 @@ ReactDOM.render(
             {
                 relativePath: "products",
                 schema: productSchema,
-                name: "Products"
+                name: "Products",
+                textSearchDelegate: client && new AlgoliaTextSearchDelegate(
+                    client,
+                    "products")
             },
             {
                 relativePath: "users",
                 schema: usersSchema,
                 name: "Users",
-                textSearchDelegate: usersSearchDelegate
+                textSearchDelegate: client && new AlgoliaTextSearchDelegate(
+                    client,
+                    "users")
             },
             {
                 relativePath: "blog",
                 schema: blogSchema,
-                name: "Blog"
+                name: "Blog",
+                textSearchDelegate: client && new AlgoliaTextSearchDelegate(
+                    client,
+                    "blog")
             }
         ]}
         firebaseConfig={firebaseConfig}

@@ -1,4 +1,4 @@
-import { ArrayProperty, EnumType, EnumValues, Property } from "../../models";
+import { ArrayProperty, EnumType, EnumValues } from "../../models";
 import { Field, getIn } from "formik";
 import {
     Checkbox,
@@ -10,28 +10,21 @@ import {
     Select as MuiSelect
 } from "@material-ui/core";
 import { renderPreviewEnumChip } from "../../preview";
-import React, { ReactElement } from "react";
+import React from "react";
+import { CMSFieldProps } from "./CMSFieldProps";
 
-
-interface ArrayEnumSelectProps<T extends EnumType> {
-    name: string,
-    arrayProperty: ArrayProperty<T>,
-    values: any[],
-    errors: any[],
-    touched: any[],
-    includeDescription: boolean,
-    createFormField: (key: string, property: Property, value: any, includeDescription: boolean, error: any, touched: any) => ReactElement
+interface ArrayEnumSelectProps<T extends EnumType> extends CMSFieldProps<any[],ArrayProperty<T>>{
 }
 
-export default function ArrayEnumSelect<T extends EnumType>({ name, arrayProperty, values }: ArrayEnumSelectProps<T>) {
+export default function ArrayEnumSelect<T extends EnumType>({ name,  property,  value }: ArrayEnumSelectProps<T>) {
 
-    if (arrayProperty.of.dataType !== "string" && arrayProperty.of.dataType !== "number") {
+    if (property.of.dataType !== "string" && property.of.dataType !== "number") {
         throw Error("Field misconfigured: array field of type string or number");
     }
 
-    const enumValues: EnumValues<number | string> | undefined = arrayProperty.of.enumValues;
+    const enumValues: EnumValues<number | string> | undefined = property.of.enumValues;
     if (!enumValues) {
-        console.error(arrayProperty);
+        console.error(property);
         throw Error("Field misconfigured: array field of type string or number needs to have enumValues");
     }
 
@@ -49,15 +42,15 @@ export default function ArrayEnumSelect<T extends EnumType>({ name, arrayPropert
 
                 return <FormControl
                     fullWidth
-                    required={arrayProperty.validation?.required}
+                    required={property.validation?.required}
                     error={showError}
                 >
                     <InputLabel
-                        id={`${name}-label`}>{arrayProperty.title || name}
+                        id={`${name}-label`}>{property.title || name}
                     </InputLabel>
                     <MuiSelect multiple
                                labelId={`${name}-label`}
-                               value={!!values ? values : []}
+                               value={!!value ? value : []}
                                onChange={(evt: any) => {
                                    return setFieldValue(
                                        `${name}`,
@@ -75,7 +68,7 @@ export default function ArrayEnumSelect<T extends EnumType>({ name, arrayPropert
                             return (
                                 <MenuItem key={key} value={key}>
                                     <Checkbox
-                                        checked={!!values && values.indexOf(key) > -1}/>
+                                        checked={!!value && value.indexOf(key) > -1}/>
                                     <ListItemText
                                         primary={enumValues[key]}/>
                                 </MenuItem>

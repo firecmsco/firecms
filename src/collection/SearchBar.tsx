@@ -74,8 +74,10 @@ export default function SearchBar({ onTextSearch }: SearchBarProps) {
             const handler = setTimeout(() => {
                 if (searchText) {
                     onTextSearch(searchText);
+                } else {
+                    onTextSearch(undefined);
                 }
-            }, 300);
+            }, 250);
 
             return () => {
                 clearTimeout(handler);

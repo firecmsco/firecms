@@ -3,15 +3,13 @@ import { Box, FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React from "react";
 import { formStyles } from "../../styles";
 import renderPreviewComponent from "../../preview";
+import { CMSFieldProps } from "./CMSFieldProps";
 
-interface DisabledFieldProps<S extends EntitySchema> {
-    name: string,
-    property: Property,
-    includeDescription: boolean,
-    value: object,
+
+interface DisabledFieldProps extends CMSFieldProps<any, Property> {
 }
 
-export default function DisabledField<S extends EntitySchema>({ name, property, includeDescription, value }: DisabledFieldProps<S>) {
+export default function DisabledField<S extends EntitySchema>({ name, property, includeDescription, value }: DisabledFieldProps) {
 
     const classes = formStyles();
 
