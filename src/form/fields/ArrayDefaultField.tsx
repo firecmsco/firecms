@@ -1,78 +1,86 @@
-import { ArrayProperty, Property } from "../../models";
-import { FieldArray } from "formik";
+import { Property } from "../../models";
+import { FieldArray, getIn } from "formik";
 import {
     Box,
     Button,
     FormControl,
     FormHelperText,
     IconButton,
-    Paper,
-    Table,
-    TableBody
+    Paper
 } from "@material-ui/core";
-import React, { ReactElement } from "react";
 import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
-import { CMSFieldProps } from "./CMSFieldProps";
+import { CMSFieldProps } from "./form_props";
+import React from "react";
 
+type ArrayDefaultFieldProps<T> = CMSFieldProps<T[]>;
 
-interface ArrayDefaultFieldProps extends CMSFieldProps<any[],ArrayProperty<any>>{
-}
-
-export default function ArrayDefaultField({ name, property, value, createFormField, includeDescription, errors, touched }: ArrayDefaultFieldProps) {
+export default function ArrayDefaultField<T>({
+                                                 field,
+                                                 form: { errors, touched },
+                                                 property,
+                                                 createFormField,
+                                                 includeDescription
+                                             }: ArrayDefaultFieldProps<T>) {
 
     const classes = formStyles();
 
     const ofProperty: Property = property.of;
 
-    const hasValue = value && value.length > 0;
-    const error = touched && property.validation?.required && !value;
+    const hasValue = field.value && field.value.length > 0;
+
+    const fieldError = getIn(errors, field.name);
+    const showError = getIn(touched, field.name) && !!fieldError;
 
     return <FieldArray
-        name={name}
+        name={field.name}
         render={arrayHelpers =>
             (
 
-                <FormControl fullWidth error={error}>
+                <FormControl fullWidth error={showError}>
 
                     <FormHelperText filled
                                     required={property.validation?.required}>
-                        {property.title || name}
+                        {property.title || field.name}
                     </FormHelperText>
 
-                    <Paper variant={"outlined"} className={classes.paper}>
+                    <Paper variant={"outlined"}
+                           className={classes.paper}>
                         {hasValue ? (
                             <React.Fragment>
-                                    {value.map((entryValue: any, index: number) => {
-                                        const errorElement = errors && errors[index];
-                                        const touchedElement = touched && touched[index];
-                                        return (
-                                            <Box key={`field_${index}`}
-                                                 mb={1}
-                                                 display={"flex"}>
-                                                <Box flexGrow={1}
-                                                     key={`field_${name}_entryValue`}>{createFormField(`${name}[${index}]`, ofProperty, entryValue, includeDescription, errorElement, touchedElement)}</Box>
-                                                <Box>
-                                                    <IconButton
-                                                        aria-label="remove"
-                                                        onClick={() => arrayHelpers.remove(index)}>
-                                                        <Remove/>
-                                                    </IconButton>
-                                                </Box>
-                                                <Box>
-                                                    <IconButton
-                                                        aria-label="insert"
-                                                        onClick={() => arrayHelpers.insert(index + 1, undefined)}>
-                                                        <Add/>
-                                                    </IconButton>
-                                                </Box>
+                                {field.value.map((entryValue: any, index: number) => {
+                                    const errorElement = errors && errors[index];
+                                    const touchedElement = touched && touched[index];
+                                    return (
+                                        <Box key={`field_${index}`}
+                                             mb={1}
+                                             display={"flex"}>
+                                            <Box flexGrow={1}
+                                                 key={`field_${field.name}_entryValue`}>
+                                                {createFormField(`${field.name}[${index}]`, ofProperty, includeDescription)}
                                             </Box>
-                                        );
-                                    })}
+                                            <Box>
+                                                <IconButton
+                                                    aria-label="remove"
+                                                    onClick={() => arrayHelpers.remove(index)}>
+                                                    <Remove/>
+                                                </IconButton>
+                                            </Box>
+                                            <Box>
+                                                <IconButton
+                                                    aria-label="insert"
+                                                    onClick={() => arrayHelpers.insert(index + 1, undefined)}>
+                                                    <Add/>
+                                                </IconButton>
+                                            </Box>
+                                        </Box>
+                                    );
+                                })}
                             </React.Fragment>
                         ) : (
                             <Box margin={2}>
-                                <Button onClick={() => arrayHelpers.push(null)}>
+                                <Button
+                                    onClick={() => arrayHelpers.push(null)}>
                                     {/* show this when user has removed all entries from the list */}
                                     Add
                                 </Button>

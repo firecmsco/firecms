@@ -16,50 +16,45 @@ import { getDownloadURL, uploadFile } from "../../firebase";
 import firebase from "firebase";
 import renderPreviewComponent from "../../preview";
 import { formStyles } from "../../styles";
-import { NumberProperty, StorageMeta, StringProperty } from "../../models";
-import { Field, getIn } from "formik";
-import { CMSFieldProps } from "./CMSFieldProps";
+import { StorageMeta, StringProperty } from "../../models";
+import { getIn } from "formik";
 
-interface StorageUploadFieldProps extends CMSFieldProps<string, StringProperty> {
-}
+import { CMSFieldProps } from "./form_props";
 
-export default function StorageUploadField({ value, name, property, includeDescription }: StorageUploadFieldProps) {
+type StorageUploadFieldProps = CMSFieldProps<string> ;
+
+export default function StorageUploadField({
+                                               field,
+                                               form: { errors, touched, setFieldValue },
+                                               property,
+                                               includeDescription
+                                           }: StorageUploadFieldProps) {
+
+    const fieldError = getIn(errors, field.name);
+    const showError = getIn(touched, field.name) && !!fieldError;
+
     return (
-        <Field
-            name={`${name}`}>
-            {({
-                  field,
-                  form: { errors, touched, setFieldValue }
-              }: any) => {
 
-                const fieldError = getIn(errors, field.name);
-                const showError = getIn(touched, field.name) && !!fieldError;
+        <FormControl fullWidth
+                     required={property.validation?.required}
+                     error={showError}>
 
-                return (
+            <FormHelperText filled
+                            required={property.validation?.required}>
+                {property.title || field.name}
+            </FormHelperText>
 
-                    <FormControl fullWidth
-                                 required={property.validation?.required}
-                                 error={showError}>
+            <StorageUpload value={field.value}
+                           property={property}
+                           onChange={(newValue) => setFieldValue(
+                               field.name,
+                               newValue
+                           )}/>
 
-                        <FormHelperText filled
-                                        required={property.validation?.required}>
-                            {property.title || name}
-                        </FormHelperText>
+            {includeDescription && property.description &&
+            <FormHelperText>{property.description}</FormHelperText>}
 
-                        <StorageUpload value={value}
-                                       property={property}
-                                       onChange={(newValue) => setFieldValue(
-                                           name,
-                                           newValue
-                                       )}/>
-
-                        {includeDescription && property.description &&
-                        <FormHelperText>{property.description}</FormHelperText>}
-
-                    </FormControl>
-                );
-            }}
-        </Field>
+        </FormControl>
     );
 }
 

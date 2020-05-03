@@ -1,4 +1,4 @@
-import { ArrayProperty, EnumType, MapProperty, Properties } from "../../models";
+import { MapProperty, Properties } from "../../models";
 import { FieldArray } from "formik";
 import {
     Box,
@@ -15,12 +15,17 @@ import {
 import React from "react";
 import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
-import { CMSFieldProps } from "./CMSFieldProps";
+import { CMSFieldProps } from "./form_props";
 
-interface ArrayMapFieldProps<T extends EnumType> extends CMSFieldProps<any[], ArrayProperty<T>> {
-}
+type ArrayMapFieldProps<T> = CMSFieldProps<T[]>;
 
-export default function ArrayMapField<T extends EnumType>({ name, property, value, createFormField, includeDescription, errors, touched }: ArrayMapFieldProps<T>) {
+export default function ArrayMapField<T>({
+                                             field,
+                                             form: { errors, touched },
+                                             property,
+                                             createFormField,
+                                             includeDescription
+                                         }: ArrayMapFieldProps<T>) {
 
     if (property.of.dataType !== "map") {
         console.error(property);
@@ -28,15 +33,15 @@ export default function ArrayMapField<T extends EnumType>({ name, property, valu
     }
 
     const classes = formStyles();
-    const mapProperty: MapProperty<any> = property.of;
+    const mapProperty: MapProperty<T> = property.of as MapProperty<T>;
     const properties: Properties = mapProperty.properties;
 
     return <FieldArray
-        name={name}
+        name={field.name}
         render={arrayHelpers => {
 
-            const hasValue = value && value.length > 0;
-            const error = touched && property.validation?.required && !value;
+            const hasValue = field.value && field.value.length > 0;
+            const error = touched && property.validation?.required && !field.value;
 
             return (
 
@@ -44,7 +49,7 @@ export default function ArrayMapField<T extends EnumType>({ name, property, valu
 
                     <FormHelperText filled
                                     required={property.validation?.required}>
-                        {property.title || name}
+                        {property.title || field.name}
                     </FormHelperText>
 
                     <Paper elevation={0} className={classes.paper}>
@@ -52,22 +57,15 @@ export default function ArrayMapField<T extends EnumType>({ name, property, valu
                         {hasValue ? (
                             <Table>
                                 <TableBody>
-                                    {value.map((entryValue: any, index: number) => (
+                                    {field.value.map((entryValue: any, index: number) => (
                                         <TableRow key={`field_${index}`}>
                                             {Object.entries(properties).map(([arrayKey, childProperty]) => {
-
-                                                const errorElement = errors && errors[index];
-                                                const touchedElement = touched && touched[index];
-
                                                 return (
                                                     <TableCell
                                                         key={`field_${arrayKey}`}>
-                                                        {createFormField(`${name}[${index}].${arrayKey}`,
+                                                        {createFormField(`${field.name}[${index}].${arrayKey}`,
                                                             childProperty,
-                                                            entryValue ? entryValue[arrayKey] : null,
-                                                            includeDescription,
-                                                            errorElement,
-                                                            touchedElement)}
+                                                            includeDescription)}
                                                     </TableCell>
                                                 );
                                             })}

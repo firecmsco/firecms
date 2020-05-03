@@ -20,30 +20,32 @@ import {
     MapProperty,
     Properties,
     Property,
+    ReferenceProperty,
     StringProperty
 } from "../models";
 import * as firebase from "firebase";
 import ReferencePreview from "./ReferencePreview";
 import StorageThumbnail from "./StorageThumbnail";
 
-export default function renderPreviewComponent(
-    value: any,
-    property: Property
-): JSX.Element {
+export default function renderPreviewComponent<T>(
+    value: T,
+    property: Property<T>
+): JSX.Element | any {
     if (!value) return <React.Fragment/>;
 
-    let content;
-    if (property.dataType === "string") {
-        if (property.urlMediaType) {
-            content = renderUrlComponent(property, value);
-        } else if (property.storageMeta) {
-            content = renderStorageThumbnail(property, value);
-        } else if (property.enumValues) {
-            content = property.enumValues[value];
+    let content: JSX.Element | any;
+    if (property.dataType === "string" && typeof value === "string") {
+        const stringProperty = property as StringProperty;
+        if (stringProperty.urlMediaType) {
+            content = renderUrlComponent(stringProperty, value);
+        } else if (stringProperty.storageMeta) {
+            content = renderStorageThumbnail(stringProperty, value as string);
+        } else if (stringProperty.enumValues) {
+            content = stringProperty.enumValues[value];
         } else {
             content = value;
         }
-    } else if (property.dataType === "array") {
+    } else if (property.dataType === "array" && value instanceof Array) {
         const arrayProperty = property as ArrayProperty<any>;
         if (arrayProperty.of.dataType === "map")
             content = renderArrayOfMaps(arrayProperty.of.properties, value);
@@ -59,12 +61,12 @@ export default function renderPreviewComponent(
         } else {
             content = renderGenericArrayCell(arrayProperty.of, value);
         }
-    } else if (property.dataType === "map") {
-        content = renderMap(property, value);
-    } else if (property.dataType === "timestamp") {
+    } else if (property.dataType === "map" && typeof value === "object") {
+        content = renderMap(property as MapProperty<any>, value);
+    } else if (property.dataType === "timestamp" && value instanceof firebase.firestore.Timestamp) {
         content = value && value.toLocaleString();
-    } else if (property.dataType === "reference") {
-        content = value && renderReference(value, property.schema);
+    } else if (property.dataType === "reference" && value instanceof firebase.firestore.DocumentReference) {
+        content = value && renderReference(value, (property as ReferenceProperty<any>).schema);
     } else if (property.dataType === "boolean") {
         content = value ? "Yes" : "No";
     } else {
@@ -73,7 +75,7 @@ export default function renderPreviewComponent(
     return content;
 }
 
-function renderMap(property: MapProperty<any>, values: any) {
+function renderMap<T>(property: MapProperty<T>, value: T) {
     let listProperties = Object.entries(property.properties).filter(
         ([_, property]) => property.includeAsMapPreview
     );
@@ -85,7 +87,7 @@ function renderMap(property: MapProperty<any>, values: any) {
         <List>
             {listProperties.map(([key, property]) => (
                 <ListItem key={property.title + key}>
-                    {renderPreviewComponent(values[key], property)}
+                    {renderPreviewComponent(value[key], property)}
                 </ListItem>
             ))}
         </List>

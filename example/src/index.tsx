@@ -14,6 +14,7 @@ import {
 } from "firecms";
 
 import { firebaseConfig } from "./firebase_config";
+import CustomLargeTextField from "./custom_field/CustomLargeTextField";
 
 const locales: EnumValues<string> = {
     "de-DE": "German",
@@ -180,12 +181,20 @@ const blogSchema: EntitySchema = {
             dataType: "string",
             includeInListView: true
         },
+        long_text: {
+            title: "Long text",
+            description: "This field is using a custom component",
+            validation: { required: true },
+            dataType: "string",
+            customField: CustomLargeTextField,
+            includeInListView: false
+        },
         content: {
             title: "Content",
             validation: { required: true },
             dataType: "array",
             of: {
-                dataType: "string"
+                dataType: "string",
             },
             includeInListView: false
         },

@@ -31,11 +31,11 @@ export default function StringNumberFilterField({ name, property }: TextFieldPro
 
                 const [fieldOperation, fieldValue] = field.value ? field.value : ["==", undefined];
                 const [operation, setOperation] = useState<string>(fieldOperation);
-                const [value, setValue] = useState<string | number>(fieldValue);
+                const [internalValue, setInternalValue] = useState<string | number>(fieldValue);
 
                 function updateFilter(op: string, val: string | number) {
                     setOperation(op);
-                    setValue(value);
+                    setInternalValue(internalValue);
                     if (op && val) {
                         setFieldValue(
                             name,
@@ -62,7 +62,7 @@ export default function StringNumberFilterField({ name, property }: TextFieldPro
                                 <MuiSelect value={operation}
                                            autoWidth
                                            onChange={(evt: any) => {
-                                               updateFilter(evt.target.value, value);
+                                               updateFilter(evt.target.value, internalValue);
                                            }}>
                                     <MenuItem value={"=="}>==</MenuItem>
                                     <MenuItem value={">"}>{">"}</MenuItem>
@@ -76,9 +76,12 @@ export default function StringNumberFilterField({ name, property }: TextFieldPro
                                 <Input
                                     key={`filter-${name}`}
                                     type={property.dataType === "number" ? "number" : undefined}
-                                    defaultValue={value}
+                                    defaultValue={internalValue}
                                     onChange={(evt) => {
-                                        updateFilter(operation, evt.target.value);
+                                        const val = property.dataType === "number" ?
+                                            parseFloat(evt.target.value)
+                                            : evt.target.value;
+                                        updateFilter(operation, val);
                                     }}
                                 />
                             </Grid>}
@@ -87,7 +90,7 @@ export default function StringNumberFilterField({ name, property }: TextFieldPro
                                 <MuiSelect
                                     fullWidth
                                     key={`filter-${name}`}
-                                    value={value}
+                                    value={internalValue}
                                     onChange={(evt: any) => {
                                         updateFilter(operation, evt.target.value);
                                     }}>

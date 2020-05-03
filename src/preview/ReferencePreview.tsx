@@ -12,7 +12,7 @@ export interface ReferencePreviewProps<S extends EntitySchema> {
 
     schema: S;
 
-    renderPreviewComponent(value: any, property: Property): JSX.Element
+    renderPreviewComponent<T>(value: T, property: Property<T>): JSX.Element
 }
 
 export default function ReferencePreview<S extends EntitySchema>(

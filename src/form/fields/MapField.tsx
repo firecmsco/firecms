@@ -1,4 +1,4 @@
-import { EntitySchema, MapProperty, Property } from "../../models";
+import { EntitySchema } from "../../models";
 import {
     Box,
     FormControl,
@@ -6,43 +6,44 @@ import {
     Grid,
     Paper
 } from "@material-ui/core";
-import React, { ReactElement } from "react";
+import React from "react";
 import { formStyles } from "../../styles";
-import { CMSFieldProps } from "./CMSFieldProps";
 
-interface MapFieldProps<S extends EntitySchema> extends CMSFieldProps<object, MapProperty<S>>{
-}
+import { CMSFieldProps } from "./form_props";
 
-export default function MapField<S extends EntitySchema>({ name, property, includeDescription, value, createFormField, errors, touched }: MapFieldProps<S>) {
+type MapFieldProps<S extends EntitySchema> = CMSFieldProps<object>;
+
+export default function MapField<S extends EntitySchema>({
+                                                             field,
+                                                             form: { isSubmitting, errors, touched, setFieldValue },
+                                                             property,
+                                                             includeDescription,
+                                                             createFormField
+                                                         }: MapFieldProps<S>) {
 
     const classes = formStyles();
 
     const mapProperties = property.properties;
-    const hasError = touched && property.validation?.required && !value;
+    const hasError = touched && property.validation?.required && !field.value;
 
     return (
         <FormControl fullWidth error={hasError}>
 
             <FormHelperText filled
                             required={property.validation?.required}>
-                {property.title || name}
+                {property.title || field.name}
             </FormHelperText>
 
             <Paper elevation={0} variant={"outlined"} className={classes.paper}>
                 <Box m={1}>
                     <Grid container spacing={1}>
                         {Object.entries(mapProperties).map(([entryKey, childProperty], index) => {
-                                const fieldValue = value ? value[entryKey] : null;
-                                const fieldError = hasError ? hasError[entryKey] : null;
-                                const fieldTouched = touched ? touched[entryKey] : null;
+                                const fieldValue = field.value ? field.value[entryKey] : null;
                                 return <Grid item xs={12}
-                                             key={`map-${name}-${index}`}>
-                                    {createFormField(`${name}[${entryKey}]`,
+                                             key={`map-${field.name}-${index}`}>
+                                    {createFormField(`${field.name}[${entryKey}]`,
                                         childProperty,
-                                        fieldValue,
-                                        includeDescription,
-                                        fieldError,
-                                        fieldTouched)}
+                                        includeDescription)}
                                 </Grid>;
                             }
                         )}

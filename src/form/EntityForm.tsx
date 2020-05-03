@@ -67,18 +67,14 @@ export default function EntityForm<S extends EntitySchema>({
     } else if (status === EntityStatus.existing && entity) {
         initialValues = entity.values;
     } else {
-        throw new Error("Form wrongly configured");
+        throw new Error("Form configured wrong");
     }
 
-    function createFormFields(schema: EntitySchema, values: any, errors: any, touchedFields: any) {
+    function createFormFields(schema: EntitySchema) {
         return <React.Fragment>
             {Object.entries(schema.properties).map(([key, property]) => {
 
-                const value = values ? values[key] : undefined;
-                const error = errors ? errors[key] : undefined;
-                const touched = touchedFields ? touchedFields[key] : undefined;
-
-                const formField = createFormField(key, property, value, true, error, touched);
+                const formField = createFormField(key, property,  true);
 
                 if (property.dataType === "array" && property.of.dataType === "map") {
                     return <Grid item xs={12}
@@ -153,7 +149,7 @@ export default function EntityForm<S extends EntitySchema>({
                               noValidate>
                             <Box padding={1}>
                                 <Grid container spacing={3}>
-                                    {createFormFields(schema, values, errors, touched)}
+                                    {createFormFields(schema)}
                                     {savingError && <Grid item xs={12}>
                                         <Box textAlign="right">
                                             {savingError}

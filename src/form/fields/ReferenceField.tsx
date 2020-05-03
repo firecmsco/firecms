@@ -1,10 +1,5 @@
-import {
-    Entity,
-    EntitySchema,
-    FilterValues, Property,
-    ReferenceProperty
-} from "../../models";
-import { Field, getIn } from "formik";
+import { Entity, EntitySchema, FilterValues } from "../../models";
+import { getIn } from "formik";
 import {
     Box,
     Button,
@@ -25,64 +20,54 @@ import ReferencePreview from "../../preview/ReferencePreview";
 import ClearIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import CollectionTable from "../../collection/CollectionTable";
 import renderPreviewComponent from "../../preview";
-import { CMSFieldProps } from "./CMSFieldProps";
+import { CMSFieldProps } from "./form_props";
+import firebase from "firebase";
 
-interface ReferenceFieldProps<S extends EntitySchema> extends CMSFieldProps<any, ReferenceProperty<S>> {
-}
+type ReferenceFieldProps<S extends EntitySchema> = CMSFieldProps<firebase.firestore.DocumentReference> ;
 
-export default function ReferenceField<S extends EntitySchema>({ name, property, includeDescription }: ReferenceFieldProps<S>) {
+export default function ReferenceField<S extends EntitySchema>({
+                                                                   field,
+                                                                   form: { isSubmitting, errors, touched, setFieldValue },
+                                                                   property,
+                                                                   includeDescription
+                                                               }: ReferenceFieldProps<S>) {
 
+
+    const fieldError = getIn(errors, field.name);
+    const showError = getIn(touched, field.name) && !!fieldError;
+
+    const value = field.value;
+
+    const handleEntityClick = (entity: Entity<S>) => {
+        const ref = entity ? entity.reference : null;
+        setFieldValue(field.name, ref);
+    };
+
+    const classes = formStyles();
+    const title = property.title || field.name;
     return (
-        <Field
-            required={property.validation?.required}
-            name={`${name}`}
-        >
-            {({
-                  disabled,
-                  field,
-                  form: { isSubmitting, errors, touched, setFieldValue },
-                  ...props
-              }: any) => {
-
-                const fieldError = getIn(errors, field.name);
-                const showError = getIn(touched, field.name) && !!fieldError;
-
-                const value = field.value;
-
-                const handleEntityClick = (entity: Entity<S>) => {
-                    const ref = entity ? entity.reference : null;
-                    setFieldValue(name, ref);
-                };
-
-                const classes = formStyles();
-                const title = property.title || name;
-                return (
-                    <FormControl error={showError} fullWidth>
-                        <Paper elevation={0} className={classes.paper}
-                               variant={"outlined"}>
-                            <Box my={1}>
-                                <Typography variant="caption"
-                                            display="block"
-                                            gutterBottom>
-                                    {title}
-                                </Typography>
-                            </Box>
-                            <ReferenceDialog value={value}
-                                             title={title}
-                                             collectionPath={property.collectionPath}
-                                             schema={property.schema}
-                                             initialFilter={property.filter}
-                                             onEntityClick={handleEntityClick}/>
-                        </Paper>
-                        {includeDescription && property.description &&
-                        <Box>
-                            <FormHelperText>{property.description}</FormHelperText>
-                        </Box>}
-                    </FormControl>
-                );
-            }}
-        </Field>
-
+        <FormControl error={showError} fullWidth>
+            <Paper elevation={0} className={classes.paper}
+                   variant={"outlined"}>
+                <Box my={1}>
+                    <Typography variant="caption"
+                                display="block"
+                                gutterBottom>
+                        {title}
+                    </Typography>
+                </Box>
+                <ReferenceDialog value={value}
+                                 title={title}
+                                 collectionPath={property.collectionPath}
+                                 schema={property.schema}
+                                 initialFilter={property.filter}
+                                 onEntityClick={handleEntityClick}/>
+            </Paper>
+            {includeDescription && property.description &&
+            <Box>
+                <FormHelperText>{property.description}</FormHelperText>
+            </Box>}
+        </FormControl>
     );
 }
 

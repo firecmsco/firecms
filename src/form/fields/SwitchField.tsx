@@ -1,46 +1,37 @@
-import {
-    BooleanProperty,
-    EnumType,
-    NumberProperty,
-    StringProperty
-} from "../../models";
-import { Field } from "formik";
 import { FormControlLabel, FormHelperText, Switch } from "@material-ui/core";
 import React from "react";
-import { CMSFieldProps } from "./CMSFieldProps";
 
+import { CMSFieldProps } from "./form_props";
 
-interface SwitchFieldProps extends CMSFieldProps<boolean, BooleanProperty> {
-}
+type SwitchFieldProps = CMSFieldProps<boolean>;
 
-
-export default function SwitchField({ name, property, includeDescription }: SwitchFieldProps) {
+export default function SwitchField({
+                                        field,
+                                        form: { isSubmitting, setFieldValue },
+                                        property,
+                                        includeDescription
+                                    }: SwitchFieldProps) {
 
     return (
         <React.Fragment>
             <FormControlLabel
+                checked={field.value}
                 control={
-                    <Field
-                        required={property.validation?.required}
-                        component={({
-                                        disabled,
-                                        field,
-                                        form: { isSubmitting },
-                                        type,
-                                        ...props
-                                    }: any) => {
-                            return <Switch
-                                disabled={disabled || isSubmitting} {...props}{...field} />;
-                        }}
+                    <Switch
                         type={"checkbox"}
-                        name={name}
-                    />
+                        onChange={(evt) => {
+                            setFieldValue(
+                                field.name,
+                                evt.target.checked
+                            );
+                        }}/>
                 }
-                disabled={property.disabled}
-                label={property.title || name}
+                disabled={property.disabled || isSubmitting}
+                label={property.title || field.name}
             />
             {includeDescription && property.description &&
             <FormHelperText>{property.description}</FormHelperText>}
         </React.Fragment>
     );
 }
+

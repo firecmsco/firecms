@@ -3,13 +3,11 @@ import { Box, FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React from "react";
 import { formStyles } from "../../styles";
 import renderPreviewComponent from "../../preview";
-import { CMSFieldProps } from "./CMSFieldProps";
+import { CMSFieldProps } from "./form_props";
 
+type DisabledFieldProps = CMSFieldProps<any> ;
 
-interface DisabledFieldProps extends CMSFieldProps<any, Property> {
-}
-
-export default function DisabledField<S extends EntitySchema>({ name, property, includeDescription, value }: DisabledFieldProps) {
+export default function DisabledField<S extends EntitySchema>({ field, property, includeDescription }: DisabledFieldProps) {
 
     const classes = formStyles();
 
@@ -19,12 +17,12 @@ export default function DisabledField<S extends EntitySchema>({ name, property, 
 
             <FormHelperText filled
                             required={property.validation?.required}>
-                {property.title || name}
+                {property.title || field.name}
             </FormHelperText>
 
             <Paper elevation={0} className={classes.paper} variant={"outlined"}>
-                {value && renderPreviewComponent(value, property)}
-                {!value && <Box m={1}>No value set</Box>}
+                {field.value && renderPreviewComponent(field.value, property)}
+                {!field.value && <Box m={1}>No value set</Box>}
             </Paper>
 
             {includeDescription && property.description &&

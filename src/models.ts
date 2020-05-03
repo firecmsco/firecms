@@ -1,5 +1,7 @@
 import firebase from "firebase";
+import * as React from "react";
 import { TextSearchDelegate } from "./text_search_delegate";
+import { CMSFieldProps } from "./form";
 
 
 /**
@@ -89,17 +91,6 @@ export interface Entity<S extends EntitySchema> {
 
 export type EntityValues<S extends EntitySchema> = { [K in keyof S["properties"]]: any };
 
-// type DataType<T> =
-//     T extends string ? "string" :
-//         T extends number ? "number" :
-//             T extends boolean ? "boolean" :
-//                 T extends firebase.firestore.Timestamp ? "timestamp" :
-//                     T extends firebase.firestore.GeoPoint ? "geopoint" :
-//                         T extends firebase.firestore.DocumentReference ? "reference" :
-//                             T extends Array<any> ? "array" :
-//                                 "map";
-
-
 type DataType =
     | "number"
     | "string"
@@ -115,28 +106,17 @@ export type MediaType =
     | "video"
     | "audio";
 
+export type Property<T = any, ArrayT = any> =
+    T extends string ? StringProperty :
+        T extends number ? NumberProperty :
+            T extends boolean ? BooleanProperty :
+                T extends firebase.firestore.Timestamp ? TimestampProperty :
+                    T extends firebase.firestore.GeoPoint ? GeopointProperty :
+                        T extends firebase.firestore.DocumentReference ? ReferenceProperty<EntitySchema> :
+                            T extends Array<ArrayT> ? ArrayProperty<ArrayT> :
+                                MapProperty<T>;
 
-// export type Property<T> =
-//     T extends string ? StringProperty :
-//         T extends number ? NumberProperty :
-//             T extends boolean ? BooleanProperty :
-//                 T extends firebase.firestore.Timestamp ? TimestampProperty :
-//                     T extends firebase.firestore.GeoPoint ? GeopointProperty :
-//                         T extends firebase.firestore.DocumentReference ? ReferenceProperty :
-//                             T extends Array<T> ? ArrayProperty<T> :
-//                                 MapProperty<T>;
-
-export type Property =
-    | NumberProperty
-    | BooleanProperty
-    | TimestampProperty
-    | GeopointProperty
-    | ReferenceProperty<EntitySchema>
-    | StringProperty
-    | MapProperty<any>
-    | ArrayProperty<any>;
-
-interface BaseProperty<T> {
+export interface BaseProperty<T> {
 
     /**
      * Firestore datatype of the property
@@ -180,6 +160,11 @@ interface BaseProperty<T> {
      * Is this a read only property
      */
     disabled?: boolean;
+
+    /**
+     * If you need to render a custom field.
+     */
+    customField?: React.ComponentType<CMSFieldProps<T>>;
 }
 
 export type EnumType = number | string ;
@@ -195,7 +180,7 @@ export type EnumValues<T extends EnumType> = Record<T, string>; // id -> Label
 /**
  * Record of properties of an entity, as defined in a schema
  */
-export type Properties = Record<string, Property>;
+export type Properties = Record<string, Property<any>>;
 
 /**
  * Rules to validate a property
@@ -258,7 +243,7 @@ export interface StringProperty extends BaseProperty<string> {
 
 export interface ArrayProperty<T> extends BaseProperty<T[]> {
     dataType: "array";
-    of: Property;
+    of: Property<T>;
 }
 
 export interface MapProperty<T> extends BaseProperty<T> {
@@ -287,7 +272,7 @@ export type StorageFileTypes =
     | "font/*" ;
 
 /**
- * WIP
+ * Used to define filters applied in collections
  */
 export type FilterValues<S extends EntitySchema> = { [K in keyof Partial<S["properties"]>]: [WhereFilterOp, any] };
 
