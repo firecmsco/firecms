@@ -6,7 +6,7 @@ import {
     InputLabel
 } from "@material-ui/core";
 import React, { ReactElement } from "react";
-import { CMSFieldProps } from "../../../src/form";
+import { CMSFieldProps } from "firecms";
 
 export default function CustomLargeTextField({
                                                  property,
@@ -15,7 +15,6 @@ export default function CustomLargeTextField({
                                                  ...props
                                              }: CMSFieldProps<string>)
     : ReactElement {
-    console.log("CustomLargeTextField");
 
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
