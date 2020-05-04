@@ -3,7 +3,7 @@ import { AppBar, Box, Button, Grid, Paper, Tab, Tabs } from "@material-ui/core";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import CollectionTable from "./CollectionTable";
 import { Link as ReactLink } from "react-router-dom";
-import { getRouterNewEntityPath } from "../routes";
+import { getRouterNewEntityPath } from "../routes/navigation";
 
 
 interface SubCollectionViewProps<S extends EntitySchema> {
