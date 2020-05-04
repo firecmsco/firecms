@@ -34,6 +34,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         toolbar: theme.mixins.toolbar,
         logo: {
+            padding: theme.spacing(3),
             maxWidth: drawerWidth
         },
         drawerPaper: {
