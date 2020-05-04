@@ -27,7 +27,7 @@ export default function StorageUploadField({
                                                field,
                                                form: { errors, touched, setFieldValue },
                                                property,
-                                               includeDescription
+                                               includeDescription,
                                            }: StorageUploadFieldProps) {
 
     const fieldError = getIn(errors, field.name);

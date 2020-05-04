@@ -18,7 +18,8 @@ export default function MapField<S extends EntitySchema>({
                                                              form: { isSubmitting, errors, touched, setFieldValue },
                                                              property,
                                                              includeDescription,
-                                                             createFormField
+                                                             createFormField,
+                                                             ...props
                                                          }: MapFieldProps<S>) {
 
     const classes = formStyles();

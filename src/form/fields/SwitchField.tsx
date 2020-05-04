@@ -9,7 +9,8 @@ export default function SwitchField({
                                         field,
                                         form: { isSubmitting, setFieldValue },
                                         property,
-                                        includeDescription
+                                        includeDescription,
+                                        ...props
                                     }: SwitchFieldProps) {
 
     return (
@@ -18,6 +19,7 @@ export default function SwitchField({
                 checked={field.value}
                 control={
                     <Switch
+                        {...props}
                         type={"checkbox"}
                         onChange={(evt) => {
                             setFieldValue(

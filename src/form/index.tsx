@@ -68,7 +68,7 @@ export function createFormField(name: string,
         }
     }
     if (component)
-        return buildField(name, property, includeDescription, component);
+        return buildField(name, property, includeDescription, component, property.customFieldProps);
 
     return (
         <div>{`Currently the field ${property.dataType} is not supported`}</div>
@@ -78,7 +78,8 @@ export function createFormField(name: string,
 function buildField<T, P extends Property<T>>(name: string,
                                               property: P,
                                               includeDescription: boolean,
-                                              component: React.ComponentType<CMSFieldProps<T>>) {
+                                              component: React.ComponentType<CMSFieldProps<T>>,
+                                              customFieldProps?: any) {
     return <Field
         required={property.validation?.required}
         name={`${name}`}
@@ -86,6 +87,7 @@ function buildField<T, P extends Property<T>>(name: string,
         {(fieldProps: FieldProps<T>) =>
             React.createElement(component, {
                 ...fieldProps,
+                ...customFieldProps,
                 includeDescription,
                 property,
                 createFormField

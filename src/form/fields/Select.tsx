@@ -17,7 +17,8 @@ export default function Select<T extends EnumType>({
                                                        field,
                                                        form: { isSubmitting, errors, touched, setFieldValue },
                                                        property,
-                                                       includeDescription
+                                                       includeDescription,
+                                                       ...props
                                                    }: SelectProps<T>) {
 
     const enumValues = property.enumValues as EnumValues<T>;
@@ -34,6 +35,7 @@ export default function Select<T extends EnumType>({
         >
             <InputLabel
                 id={`${field.name}-label`}>{property.title || field.name}</InputLabel>
+
             <MuiSelect labelId={`${field.name}-label`}
                        value={!!value ? value : ""}
                        onChange={(evt: any) => {
@@ -42,15 +44,20 @@ export default function Select<T extends EnumType>({
                                field.name,
                                newValue ? newValue : null
                            );
-                       }}>
+                       }}
+                       {...props}>
+
                 {Object.entries(enumValues).map(([key, value]) => (
                     <MenuItem key={`select-${key}`}
                               value={key}>{value as string}</MenuItem>
                 ))}
             </MuiSelect>
+
             {includeDescription && property.description &&
             <FormHelperText>{property.description}</FormHelperText>}
+
             <FormHelperText>{fieldError}</FormHelperText>
+
         </FormControl>
     );
 }

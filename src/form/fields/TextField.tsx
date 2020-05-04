@@ -18,7 +18,8 @@ export default function TextField({
                                       field,
                                       form: { isSubmitting, errors, touched, setFieldValue },
                                       property,
-                                      includeDescription
+                                      includeDescription,
+                                      ...props
                                   }: TextFieldProps) {
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
@@ -41,6 +42,7 @@ export default function TextField({
                 <Input
                     type={property.dataType === "number" ? "number" : undefined}
                     defaultValue={value}
+                    {...props}
                     onChange={(evt) => setFieldValue(
                         field.name,
                         evt.target.value

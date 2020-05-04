@@ -10,7 +10,8 @@ type DateTimeFieldProps = CMSFieldProps<firebase.firestore.Timestamp> ;
 export default function DateTimeField({
                                           field,
                                           form: { isSubmitting, errors, touched, setFieldValue },
-                                          property
+                                          property,
+                                          ...props
                                       }: DateTimeFieldProps) {
 
 
@@ -18,6 +19,7 @@ export default function DateTimeField({
     const showError = getIn(touched, field.name) && !!fieldError;
 
     const value = field.value;
+
     return (
         <DateTimePicker
             fullWidth
@@ -31,6 +33,7 @@ export default function DateTimeField({
                 field.name,
                 dateValue
             )}
+            {...props}
         />
     );
 }

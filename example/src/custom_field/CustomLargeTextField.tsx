@@ -8,14 +8,20 @@ import {
 import React, { ReactElement } from "react";
 import { CMSFieldProps } from "firecms";
 
+interface CustomLargeTextFieldProps extends CMSFieldProps<string> {
+    rows: number
+}
+
 export default function CustomLargeTextField({
                                                  property,
                                                  field,
+                                                 rows,
                                                  form: { isSubmitting, errors, touched, setFieldValue },
                                                  ...props
-                                             }: CMSFieldProps<string>)
+                                             }: CustomLargeTextFieldProps)
     : ReactElement {
 
+    console.log(props);
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
 
@@ -32,7 +38,7 @@ export default function CustomLargeTextField({
                 <InputLabel>{property.title || field.name}</InputLabel>
                 <Input
                     multiline
-                    rows={4}
+                    rows={rows}
                     defaultValue={value}
                     onChange={(evt) => setFieldValue(
                         field.name,

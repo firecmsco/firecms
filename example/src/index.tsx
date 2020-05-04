@@ -187,6 +187,9 @@ const blogSchema: EntitySchema = {
             validation: { required: true },
             dataType: "string",
             customField: CustomLargeTextField,
+            customFieldProps: {
+                rows: 5
+            },
             includeInListView: false
         },
         content: {
@@ -194,7 +197,7 @@ const blogSchema: EntitySchema = {
             validation: { required: true },
             dataType: "array",
             of: {
-                dataType: "string",
+                dataType: "string"
             },
             includeInListView: false
         },
