@@ -63,10 +63,15 @@ export default function ReferenceField<S extends EntitySchema>({
                                  initialFilter={property.filter}
                                  onEntityClick={handleEntityClick}/>
             </Paper>
+
             {includeDescription && property.description &&
             <Box>
                 <FormHelperText>{property.description}</FormHelperText>
             </Box>}
+
+            {showError && <FormHelperText
+                id="component-error-text">{fieldError}</FormHelperText>}
+
         </FormControl>
     );
 }

@@ -1,5 +1,5 @@
 import { MapProperty, Properties } from "../../models";
-import { FieldArray } from "formik";
+import { FieldArray, getIn } from "formik";
 import {
     Box,
     Button,
@@ -35,6 +35,9 @@ export default function ArrayMapField<T>({
     const classes = formStyles();
     const mapProperty: MapProperty<T> = property.of as MapProperty<T>;
     const properties: Properties = mapProperty.properties;
+
+    const fieldError = getIn(errors, field.name);
+    const showError = getIn(touched, field.name) && !!fieldError;
 
     return <FieldArray
         name={field.name}
@@ -101,6 +104,10 @@ export default function ArrayMapField<T>({
                     <Box>
                         <FormHelperText>{property.description}</FormHelperText>
                     </Box>}
+
+                    {showError && <FormHelperText
+                        id="component-error-text">{fieldError}</FormHelperText>}
+
                 </FormControl>
             );
         }}

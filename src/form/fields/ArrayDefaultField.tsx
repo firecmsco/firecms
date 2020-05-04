@@ -93,6 +93,9 @@ export default function ArrayDefaultField<T>({
                         <FormHelperText>{property.description}</FormHelperText>
                     </Box>}
 
+                    {showError && <FormHelperText
+                        id="component-error-text">{fieldError}</FormHelperText>}
+
                 </FormControl>
             )}
     />;

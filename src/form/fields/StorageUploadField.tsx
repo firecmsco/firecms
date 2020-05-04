@@ -54,6 +54,9 @@ export default function StorageUploadField({
             {includeDescription && property.description &&
             <FormHelperText>{property.description}</FormHelperText>}
 
+            {showError && <FormHelperText
+                id="component-error-text">{fieldError}</FormHelperText>}
+
         </FormControl>
     );
 }

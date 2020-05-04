@@ -56,7 +56,8 @@ export default function Select<T extends EnumType>({
             {includeDescription && property.description &&
             <FormHelperText>{property.description}</FormHelperText>}
 
-            <FormHelperText>{fieldError}</FormHelperText>
+            {showError && <FormHelperText
+                id="component-error-text">{fieldError}</FormHelperText>}
 
         </FormControl>
     );
