@@ -102,7 +102,7 @@ const productSchema: EntitySchema = {
         expires_on: {
             title: "Expires on",
             dataType: "timestamp",
-            includeInListView: false
+            includeInListView: true
         },
         publisher: {
             title: "Publisher",

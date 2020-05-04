@@ -63,14 +63,14 @@ export default function renderPreviewComponent<T>(
         }
     } else if (property.dataType === "map" && typeof value === "object") {
         content = renderMap(property as MapProperty<any>, value);
-    } else if (property.dataType === "timestamp" && value instanceof firebase.firestore.Timestamp) {
+    } else if (property.dataType === "timestamp" && value instanceof Date) {
         content = value && value.toLocaleString();
     } else if (property.dataType === "reference" && value instanceof firebase.firestore.DocumentReference) {
         content = value && renderReference(value, (property as ReferenceProperty<any>).schema);
     } else if (property.dataType === "boolean") {
         content = value ? "Yes" : "No";
     } else {
-        content = value;
+        content = typeof value === "object" ? (value as unknown as object).toString() : value;
     }
     return content;
 }
