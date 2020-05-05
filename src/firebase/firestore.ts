@@ -249,3 +249,17 @@ export function saveEntity(
         .set(data, { merge: true })
         .then(() => documentReference.id);
 }
+
+/**
+ * Save entity to the specified path. Note that Firestore does not allow
+ * undefined values.
+ * @param path
+ * @param entityId
+ * @param data
+ */
+export function deleteEntity(
+    entity:Entity<any>
+): Promise<void> {
+    console.debug("Deleting entity", entity);
+    return entity.reference.delete();
+}

@@ -167,6 +167,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                 <CollectionTable collectionPath={collectionPath}
                                  schema={schema}
                                  includeToolbar={false}
+                                 deleteEnabled={false}
                                  onEntityClick={handleEntityClick}
                                  paginationEnabled={false}
                                  initialFilter={initialFilter}

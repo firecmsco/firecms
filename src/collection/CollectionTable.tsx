@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -10,7 +10,14 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { useStyles, useToolbarStyles } from "../styles";
-import { Box, Grid, IconButton, TableContainer } from "@material-ui/core";
+import {
+    Box,
+    DialogContent,
+    Grid,
+    IconButton,
+    Snackbar,
+    TableContainer
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import renderPreviewComponent from "../preview";
@@ -23,6 +30,14 @@ import {
     getCollectionTableProperties,
     getFilterableProperties
 } from "../util/properties";
+import Button from "@material-ui/core/Button";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
+import { deleteEntity } from "../firebase/firestore";
+import MuiAlert from "@material-ui/lab/Alert/Alert";
+import { CircularProgressCenter } from "../util";
+import EntityPreview from "../preview/EntityPreview";
 
 interface CollectionTableProps<S extends EntitySchema> {
     /**
@@ -55,6 +70,11 @@ interface CollectionTableProps<S extends EntitySchema> {
     textSearchDelegate?: TextSearchDelegate,
 
     /**
+     * Should this component allow deletion of entries
+     */
+    deleteEnabled:boolean,
+
+    /**
      * Should the table add an edit button
      */
     onEntityEdit?(collectionPath: string, entity: Entity<S>): void;
@@ -82,6 +102,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     const [page, setPage] = React.useState<number>(0);
     const [pageKeys, setPageKeys] = React.useState<any[]>([]);
     const [rowsPerPage, setRowsPerPage] = React.useState<number | undefined>(props.paginationEnabled ? 10 : undefined);
+    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
 
     useEffect(() => {
         const startAfter = pageKeys[page];
@@ -120,6 +141,10 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         }
     };
 
+    const onEntityDelete = (entity: Entity<S>) => {
+        setDeleteEntityClicked(entity);
+    };
+
     const onFilterUpdate = (filterValues: FilterValues<S>) => {
         setFilter(filterValues);
     };
@@ -137,6 +162,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     const tableViewFields = getCollectionTableProperties(props.schema.properties);
 
     const hasEditButton = !!props.onEntityEdit;
+    const hasDeleteButton = props.deleteEnabled;
 
     function buildTableRow<S extends EntitySchema>(entity: Entity<S>, index: number) {
         return (
@@ -148,6 +174,8 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
             >
 
                 {hasEditButton && renderEditCell(entity, onEntityEdit)}
+                {hasDeleteButton && renderDeleteCell(entity, onEntityDelete)}
+
                 {renderIdCell(entity.id)}
                 {tableViewFields
                     .map(([key, field], index) =>
@@ -216,6 +244,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                         classes={classes}
                         schema={props.schema}
                         hasEditButton={hasEditButton}
+                        hasDeleteButton={hasEditButton}
                         order={order}
                         orderBy={orderBy}
                         sortable={!textSearchData.length}
@@ -243,6 +272,11 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
             />
             }
 
+            <DeleteEntityDialog entity={deleteEntityClicked}
+                                schema={props.schema}
+                                open={!!deleteEntityClicked}
+                                onClose={() => setDeleteEntityClicked(undefined)}/>
+
         </TableContainer>
     );
 }
@@ -253,6 +287,7 @@ type Order = "asc" | "desc" | undefined;
 interface CollectionTableHeadProps<S extends EntitySchema> {
     classes: ReturnType<typeof useStyles>;
     hasEditButton: boolean;
+    hasDeleteButton: boolean;
     onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
     order?: Order;
     orderBy?: string;
@@ -274,6 +309,7 @@ function CollectionTableHead<S extends EntitySchema>({
                                                          sortable,
                                                          onRequestSort,
                                                          hasEditButton,
+                                                         hasDeleteButton,
                                                          schema
                                                      }: CollectionTableHeadProps<S>) {
 
@@ -295,6 +331,12 @@ function CollectionTableHead<S extends EntitySchema>({
             <TableRow>
                 {hasEditButton && <TableCell
                     key={"header-edit"}
+                    align={"left"}
+                    padding={"default"}/>
+                }
+
+                {hasDeleteButton && <TableCell
+                    key={"header-delete"}
                     align={"left"}
                     padding={"default"}/>
                 }
@@ -321,7 +363,7 @@ function CollectionTableHead<S extends EntitySchema>({
                                 {headCell.label}
                                 {active ?
                                     <span className={classes.visuallyHidden}>
-                                         {order === "desc" ? "sorted descending" : (order === "asc" ? "sorted ascending" : "")}
+                                         {order === "desc" ? "Sorted descending" : (order === "asc" ? "Sorted ascending" : "")}
                                     </span>
                                     : null}
                             </TableSortLabel>
@@ -387,7 +429,6 @@ function CollectionTableToolbar<S extends EntitySchema>(props: CollectionTableTo
             </Grid>
 
 
-
         </Toolbar>
     );
 }
@@ -402,10 +443,13 @@ function renderIdCell(id: string) {
 
 function renderDeleteCell<S extends EntitySchema>(entity: Entity<S>, onDelete: Function) {
     return (
-        <TableCell key={`table-cell-delete-${entity.id}`} component="th"
+        <TableCell key={`table-cell-delete-${entity.id}`}
+                   component="th"
+                   padding={"none"}
                    align={"left"}>
-            <IconButton aria-label="delete" onClick={() => onDelete(entity)}>
-                <DeleteIcon/>
+            <IconButton aria-label="delete"
+                        onClick={() => onDelete(entity)}>
+                <DeleteIcon fontSize={"small"}/>
             </IconButton>
         </TableCell>
     );
@@ -413,10 +457,12 @@ function renderDeleteCell<S extends EntitySchema>(entity: Entity<S>, onDelete: F
 
 function renderEditCell<S extends EntitySchema>(entity: Entity<S>, onEdit: Function) {
     return (
-        <TableCell key={`table-cell-edit-${entity.id}`} component="th"
-                   align={"left"}>
-            <IconButton aria-label="edit" onClick={() => onEdit(entity)}>
-                <EditIcon/>
+        <TableCell key={`table-cell-edit-${entity.id}`}
+                   component="th"
+                   align={"right"}>
+            <IconButton aria-label="edit"
+                        onClick={() => onEdit(entity)}>
+                <EditIcon color={"action"}/>
             </IconButton>
         </TableCell>
     );
@@ -434,4 +480,77 @@ function renderTableCell(index: number, value: any, key: string, property: Prope
 function getCellAlignment(property: Property): "right" | "left" {
     return property.dataType === "number" || property.dataType === "timestamp" ? "right" : "left";
 }
+
+export interface DeleteEntityDialogProps<S extends EntitySchema> {
+    entity?: Entity<S>,
+    schema: S
+    open: boolean;
+    onClose: (value?: string) => void;
+}
+
+function DeleteEntityDialog<S extends EntitySchema>(props: DeleteEntityDialogProps<S>) {
+    const { entity, schema, onClose, open, ...other } = props;
+    const [loading, setLoading] = useState(false);
+    const [openSnackBar, setOpenSnackbar] = React.useState<boolean>(false);
+
+    const handleCancel = () => {
+        onClose();
+    };
+
+    const handleOk = () => {
+        if (entity) {
+            setOpenSnackbar(true);
+            setLoading(true);
+            deleteEntity(entity).then(_ => setLoading(false));
+            onClose();
+        }
+    };
+
+    return (
+        <React.Fragment>
+
+            <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                maxWidth="md"
+                keepMounted
+                aria-labelledby="confirmation-dialog-title"
+                open={open}
+                {...other}
+            >
+                <DialogTitle id="confirmation-dialog-title">
+                    Would you like to delete this {schema.name}?
+                </DialogTitle>
+
+                <DialogContent dividers>
+                    {entity && <EntityPreview entity={entity} schema={schema}/>}
+                </DialogContent>
+
+                {loading && <CircularProgressCenter/>}
+
+                {!loading &&
+                <DialogActions>
+                    <Button autoFocus onClick={handleCancel}
+                            color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleOk} color="primary">
+                        Ok
+                    </Button>
+                </DialogActions>}
+
+            </Dialog>
+
+            <Snackbar open={openSnackBar} autoHideDuration={3000}
+                      onClose={(_) => setOpenSnackbar(false)}>
+                <MuiAlert elevation={6} variant="filled"
+                          onClose={(_) => setOpenSnackbar(false)}>
+                    Deleted
+                </MuiAlert>
+            </Snackbar>
+
+        </React.Fragment>
+    );
+}
+
 

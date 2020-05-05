@@ -82,6 +82,7 @@ export function CollectionRoute<S extends EntitySchema>({
             </Box>
             <CollectionTable collectionPath={view.relativePath}
                              schema={view.schema}
+                             deleteEnabled={view.deleteEnabled !== undefined ? view.deleteEnabled : true}
                              textSearchDelegate={view.textSearchDelegate}
                              includeToolbar={true}
                              onEntityEdit={onEntityEdit}

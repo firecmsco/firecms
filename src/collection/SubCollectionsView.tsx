@@ -18,7 +18,6 @@ interface TabPanelProps<S extends EntitySchema> {
     subcollectionPath: string | undefined;
     thisView: EntityCollectionView<S>;
     selectedView: EntityCollectionView<S>;
-
     onEntityClick?(collectionPath: string, entity: Entity<S>): void;
 }
 
@@ -28,6 +27,7 @@ function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thi
         hidden={selectedView !== thisView}>
         {subcollectionPath ?
             <CollectionTable collectionPath={subcollectionPath}
+                             deleteEnabled={thisView.deleteEnabled !== undefined ? thisView.deleteEnabled : true}
                              schema={thisView.schema}
                              onEntityEdit={onEntityClick}
                              includeToolbar={false}

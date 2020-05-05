@@ -37,6 +37,11 @@ export interface EntityCollectionView<S extends EntitySchema> {
      * If a text search delegate is supplied, a search bar is displayed on top
      */
     textSearchDelegate?: TextSearchDelegate;
+
+    /**
+     * Can the elements in this collection be deleted. Defaults to true
+     */
+    deleteEnabled?:boolean,
 }
 
 /**
@@ -45,7 +50,7 @@ export interface EntityCollectionView<S extends EntitySchema> {
 export interface EntitySchema {
 
     /**
-     * Singular name of the entity as diplayed in an Add button . E.g. Product
+     * Singular name of the entity as displayed in an Add button . E.g. Product
      */
     name: string;
 

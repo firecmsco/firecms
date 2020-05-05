@@ -31,6 +31,7 @@ export default function renderPreviewComponent<T>(
     value: T,
     property: Property<T>
 ): JSX.Element | any {
+
     if (!value) return <React.Fragment/>;
 
     let content: JSX.Element | any;
