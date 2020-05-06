@@ -251,11 +251,8 @@ export function saveEntity(
 }
 
 /**
- * Save entity to the specified path. Note that Firestore does not allow
- * undefined values.
- * @param path
- * @param entityId
- * @param data
+ * Delete an entity
+ * @param entity
  */
 export function deleteEntity(
     entity:Entity<any>

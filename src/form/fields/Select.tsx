@@ -17,6 +17,7 @@ export default function Select<T extends EnumType>({
                                                        field,
                                                        form: { isSubmitting, errors, touched, setFieldValue },
                                                        property,
+                                                       createFormField,
                                                        includeDescription,
                                                        ...props
                                                    }: SelectProps<T>) {

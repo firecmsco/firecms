@@ -1,6 +1,5 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import { Box, Button, Paper } from "@material-ui/core";
+import { Box, Button, Container, Grid, Paper } from "@material-ui/core";
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
 import { formStyles } from "../styles";
@@ -74,7 +73,7 @@ export default function EntityForm<S extends EntitySchema>({
         return <React.Fragment>
             {Object.entries(schema.properties).map(([key, property]) => {
 
-                const formField = createFormField(key, property,  true);
+                const formField = createFormField(key, property, true);
 
                 if (property.dataType === "array" && property.of.dataType === "map") {
                     return <Grid item xs={12}
@@ -141,48 +140,54 @@ export default function EntityForm<S extends EntitySchema>({
         >
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => {
                 return (
-                    <Paper elevation={1} className={classes.formPaper}>
-                        <Box margin={1}>
-                            {createCustomIdField(schema, status, setCustomId, customIdError, entity?.id)}
-                        </Box>
-                        <Form className={classes.form} onSubmit={handleSubmit}
-                              noValidate>
-                            <Box padding={1}>
-                                <Grid container spacing={3}>
-                                    {createFormFields(schema)}
-                                    {savingError && <Grid item xs={12}>
-                                        <Box textAlign="right">
-                                            {savingError}
-                                        </Box>
-                                    </Grid>}
-                                    <Grid item xs={12}>
-                                        <Box textAlign="right">
-                                            {status === EntityStatus.existing &&
-                                            <Button
-                                                variant="text"
-                                                color="primary"
-                                                disabled={isSubmitting}
-                                                className={classes.button}
-                                                type="reset"
-                                            >
-                                                Discard
-                                            </Button>}
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                type="submit"
-                                                disabled={isSubmitting}
+                    <Paper elevation={1}>
+                        <Container maxWidth={"md"}
+                                   className={classes.formPaper}
+                                   disableGutters={true}>
 
-                                                className={classes.button}
-                                            >
-                                                Save
-                                            </Button>
-                                        </Box>
-                                    </Grid>
-                                </Grid>
-
+                            <Box margin={1}>
+                                {createCustomIdField(schema, status, setCustomId, customIdError, entity?.id)}
                             </Box>
-                        </Form>
+
+                            <Form className={classes.form}
+                                  onSubmit={handleSubmit}
+                                  noValidate>
+
+                                <Box padding={1}>
+                                    <Grid container spacing={3}>
+                                        {createFormFields(schema)}
+                                    </Grid>
+                                </Box>
+
+                                {savingError &&
+                                <Box textAlign="right">
+                                    {savingError}
+                                </Box>}
+                                <Box textAlign="right">
+                                    {status === EntityStatus.existing &&
+                                    <Button
+                                        variant="text"
+                                        color="primary"
+                                        disabled={isSubmitting}
+                                        className={classes.button}
+                                        type="reset"
+                                    >
+                                        Discard
+                                    </Button>}
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        type="submit"
+                                        disabled={isSubmitting}
+
+                                        className={classes.button}
+                                    >
+                                        Save
+                                    </Button>
+                                </Box>
+                            </Form>
+
+                        </Container>
                     </Paper>
                 );
             }}

@@ -25,7 +25,7 @@ import { CMSFieldProps } from "./fields/form_props";
 
 
 export function createFormField(name: string,
-                                property: Property<any>,
+                                property: Property,
                                 includeDescription: boolean): JSX.Element {
 
     if (property.disabled) {
@@ -68,18 +68,18 @@ export function createFormField(name: string,
         }
     }
     if (component)
-        return buildField(name, property, includeDescription, component, property.customFieldProps);
+        return buildField(name, property, includeDescription, component, property.additionalProps);
 
     return (
         <div>{`Currently the field ${property.dataType} is not supported`}</div>
     );
 }
 
-function buildField<T, P extends Property<T>>(name: string,
+function buildField<P extends Property<T>, T = any>(name: string,
                                               property: P,
                                               includeDescription: boolean,
                                               component: React.ComponentType<CMSFieldProps<T>>,
-                                              customFieldProps?: any) {
+                                              additionalProps?: any) {
     return <Field
         required={property.validation?.required}
         name={`${name}`}
@@ -87,7 +87,7 @@ function buildField<T, P extends Property<T>>(name: string,
         {(fieldProps: FieldProps<T>) =>
             React.createElement(component, {
                 ...fieldProps,
-                ...customFieldProps,
+                ...additionalProps,
                 includeDescription,
                 property,
                 createFormField

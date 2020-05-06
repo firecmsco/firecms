@@ -109,7 +109,7 @@ export function EntityFormRoute<S extends EntitySchema>({
             })
             .catch((e) => {
                 setOpenErrorAlert(true);
-                console.error("Error saving entity");
+                console.error("Error saving entity", collectionPath, entityId, values);
                 console.error(e);
             });
     }

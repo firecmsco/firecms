@@ -21,7 +21,6 @@ export default function CustomLargeTextField({
                                              }: CustomLargeTextFieldProps)
     : ReactElement {
 
-    console.log(props);
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
 

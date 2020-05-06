@@ -125,7 +125,7 @@ const productSchema: EntitySchema = {
         available_locales: {
             title: "Available locales",
             description:
-                "This is an example of a disable field",
+                "This is an example of a disabled field",
             dataType: "array",
             disabled: true,
             of: {
@@ -187,8 +187,18 @@ const blogSchema: EntitySchema = {
             validation: { required: true },
             dataType: "string",
             customField: CustomLargeTextField,
-            customFieldProps: {
+            additionalProps: {
                 rows: 5
+            },
+            includeInListView: false
+        },
+        priority: {
+            title: "Priority",
+            description: "This field allows the selection of Infinity as a value",
+            validation: { required: true },
+            dataType: "number",
+            additionalProps: {
+                allowInfinity: true
             },
             includeInListView: false
         },
