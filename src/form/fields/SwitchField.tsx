@@ -16,6 +16,7 @@ export default function SwitchField({
                                         form: { isSubmitting, errors, touched, setFieldValue },
                                         property,
                                         includeDescription,
+                                        createFormField,
                                         ...props
                                     }: SwitchFieldProps) {
 
