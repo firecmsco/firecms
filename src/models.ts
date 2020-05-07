@@ -3,7 +3,6 @@ import * as React from "react";
 import { TextSearchDelegate } from "./text_search_delegate";
 import { CMSFieldProps } from "./form";
 
-
 /**
  * This interface represents a view that includes a collection of entities.
  * It can be in the root level of the configuration, defining the main
@@ -198,6 +197,7 @@ export type Properties = Record<string, Property<any>>;
  */
 export interface PropertyValidationSchema {
     required?: boolean;
+    requiredMessage?: string;
 }
 
 export interface NumberProperty extends BaseProperty<number> {

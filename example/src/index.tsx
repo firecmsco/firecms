@@ -36,7 +36,10 @@ const productSchema: EntitySchema = {
         },
         price: {
             title: "Price",
-            validation: { required: true },
+            validation: {
+                required: true,
+                requiredMessage: "You must set a price"
+            },
             filterable: true,
             dataType: "number",
             includeInListView: true

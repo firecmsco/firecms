@@ -46,20 +46,19 @@ function mapPropertyToYup(property: Property): Schema<any> {
 export function getYupObjectSchema(properties: Properties): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties).forEach(([key, property]: [string, Property]) => {
-        // TODO:temporarily disabling reference validation
-        if (property.dataType !== "reference")
-            objectSchema[key] = mapPropertyToYup(property);
+        objectSchema[key] = mapPropertyToYup(property);
     });
     return yup.object().shape(objectSchema);
 }
 
 function getYupStringSchema(property: StringProperty): StringSchema {
-    let schema = yup.string();
+    let schema: StringSchema<any> = yup.string();
     const validation = property.validation;
-    if (validation) {
-        if (validation.required) {
-            schema = schema.required("Required").nullable(false); // todo: required message?
-        }
+    if (validation?.required) {
+        schema = schema.required(validation.requiredMessage)
+            .nullable(false);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     if (property.enumValues) {
         schema = schema.oneOf(Object.keys(property.enumValues));
@@ -68,56 +67,61 @@ function getYupStringSchema(property: StringProperty): StringSchema {
 }
 
 function getYupNumberSchema(property: NumberProperty): NumberSchema {
-    let schema = yup.number();
     const validation = property.validation;
-    if (validation) {
-        if (validation.required) {
-            schema = schema.required("Required").nullable(false); // todo: required message?
-        }
+    let schema: NumberSchema<any> = yup.number()
+        .typeError(validation?.requiredMessage ? validation?.requiredMessage : "Must be a number");
+    if (validation?.required) {
+        schema = schema.required(validation.requiredMessage).nullable(false);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
 
 function getYupGeoPointSchema(property: GeopointProperty): ObjectSchema {
-    let schema = yup.object();
+    let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
-    if (validation) {
-        if (validation.required) {
-            schema = schema.required("Required").nullable(false); // todo: required message?
-        }
+    if (validation?.required) {
+        schema = schema.required(validation.requiredMessage)
+            .nullable(false);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
 
 function getYupDateSchema(property: TimestampProperty): DateSchema {
-    let schema = yup.date();
+    let schema: DateSchema<any> = yup.date();
     const validation = property.validation;
-    if (validation) {
-        if (validation.required) {
-            schema = schema.required("Required").nullable(false); // todo: required message?
-        }
+    if (validation?.required) {
+        schema = schema.required(validation.requiredMessage)
+            .nullable(false);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
 
-function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProperty<S>): StringSchema {
-    let schema = yup.string();
+function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProperty<S>): ObjectSchema {
+    let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
-    if (validation) {
-        if (validation.required) {
-            schema = schema.required("Required").nullable(false); // todo: required message?
-        }
+    if (validation?.required) {
+        schema = schema.required(validation.requiredMessage)
+            .nullable(false);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
 
 function getYupBooleanSchema(property: BooleanProperty): BooleanSchema {
-    let schema = yup.boolean();
+    let schema: BooleanSchema<any> = yup.boolean();
     const validation = property.validation;
-    if (validation) {
-        if (validation.required) {
-            schema = schema.required("Required").nullable(false); // todo: required message?
-        }
+    if (validation?.required) {
+        schema = schema.required(validation.requiredMessage)
+            .nullable(false);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
@@ -125,10 +129,9 @@ function getYupBooleanSchema(property: BooleanProperty): BooleanSchema {
 function getYupArraySchema<T>(property: ArrayProperty<T>): ArraySchema<T> {
     let schema: ArraySchema<T> = yup.array().of(mapPropertyToYup(property.of));
     const validation = property.validation;
-    if (validation) {
-        if (validation.required) {
-            schema = schema.required("Required").nullable(false); // todo: required message?
-        }
+    if (validation?.required) {
+        schema = schema.required(validation.requiredMessage)
+            .nullable(false);
     }
     return schema;
 }

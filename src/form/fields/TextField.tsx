@@ -7,7 +7,8 @@ import {
     FormHelperText,
     Input,
     InputLabel,
-    Switch, Typography
+    Switch,
+    Typography
 } from "@material-ui/core";
 import React from "react";
 import renderPreviewComponent from "../../preview";
@@ -37,13 +38,28 @@ export default function TextField({
 
     const value = field.value ? field.value : "";
     const updateValue = (newValue: typeof value) => {
-        setFieldValue(
-            field.name,
-            newValue
-        );
+
+        if (!newValue) {
+            setFieldValue(
+                field.name,
+                null
+            );
+        } else if (inputType === "number") {
+            const numValue = parseFloat(newValue);
+            setFieldValue(
+                field.name,
+                numValue
+            );
+        } else {
+            setFieldValue(
+                field.name,
+                newValue
+            );
+        }
     };
 
     const valueIsInfinity = value === Infinity;
+    const inputType = !valueIsInfinity && property.dataType === "number" ? "number" : undefined;
     return (
         <React.Fragment>
 
@@ -54,33 +70,35 @@ export default function TextField({
                 fullWidth>
                 <InputLabel>{property.title || field.name}</InputLabel>
                 <Input
-                    type={!valueIsInfinity && property.dataType === "number" ? "number" : undefined}
+                    type={inputType}
                     value={valueIsInfinity ? "Infinity" : value}
                     {...props}
                     disabled={valueIsInfinity}
-                    onChange={(evt) => updateValue(evt.target.value)}
+                    onChange={(evt) => {
+                        updateValue(evt.target.value);
+                    }}
                 />
 
                 {allowInfinity &&
-                    <FormControlLabel
-                        checked={valueIsInfinity}
-                        labelPlacement={"start"}
-                        control={
-                            <Switch
-                                size={"small"}
-                                type={"checkbox"}
-                                onChange={(evt) => {
-                                    updateValue(
-                                        evt.target.checked ? Infinity : undefined);
-                                }}/>
-                        }
-                        disabled={property.disabled || isSubmitting}
-                        label={
-                            <Typography variant={"caption"}>
-                                Set value to Infinity
-                            </Typography>
-                        }
-                    />
+                <FormControlLabel
+                    checked={valueIsInfinity}
+                    labelPlacement={"start"}
+                    control={
+                        <Switch
+                            size={"small"}
+                            type={"checkbox"}
+                            onChange={(evt) => {
+                                updateValue(
+                                    evt.target.checked ? Infinity : undefined);
+                            }}/>
+                    }
+                    disabled={property.disabled || isSubmitting}
+                    label={
+                        <Typography variant={"caption"}>
+                            Set value to Infinity
+                        </Typography>
+                    }
+                />
                 }
 
                 {showError && <FormHelperText

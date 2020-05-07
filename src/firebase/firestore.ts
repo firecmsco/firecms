@@ -14,6 +14,7 @@ import { Entity, EntitySchema, EntityValues, FilterValues } from "../models";
 export function fetchCollection<S extends EntitySchema>(
     path: string,
     schema: S,
+    filter?: FilterValues<S>,
     limit?: number,
     startAfter?: any,
     orderBy?: string,
@@ -24,6 +25,11 @@ export function fetchCollection<S extends EntitySchema>(
 
     let collectionReference: firebase.firestore.Query = firebase.firestore()
         .collection(path);
+
+    if (filter)
+        Object.entries(filter)
+            .filter(([_, entry]) => !!entry)
+            .forEach(([key, [op, value]]) => collectionReference = collectionReference.where(key, op, value));
 
     if (orderBy && order)
         collectionReference = collectionReference.orderBy(orderBy, order);
@@ -234,7 +240,7 @@ export function saveEntity(
     data: { [fieldKey: string]: any }
 ): Promise<string> {
 
-    console.debug("Saving entity", path, entityId, data);
+    console.log("Saving entity", path, entityId, data);
 
     let documentReference: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
     if (entityId)

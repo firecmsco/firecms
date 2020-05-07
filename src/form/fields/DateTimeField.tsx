@@ -12,6 +12,7 @@ export default function DateTimeField({
                                           form: { isSubmitting, errors, touched, setFieldValue },
                                           property,
                                           createFormField,
+                                          includeDescription,
                                           ...props
                                       }: DateTimeFieldProps) {
 

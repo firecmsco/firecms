@@ -135,6 +135,8 @@ export default function EntityForm<S extends EntitySchema>({
     return (
         <Formik
             initialValues={initialValues}
+            validate={(values => console.log("validate", values))}
+
             onSubmit={saveValues}
             validationSchema={getYupObjectSchema(schema.properties)}
         >
