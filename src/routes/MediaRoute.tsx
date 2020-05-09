@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { RouteComponentProps } from "react-router";
 import { formStyles, useStyles } from "../styles";
-import { DropzoneArea } from "material-ui-dropzone";
 import { Button, Grid, Paper } from "@material-ui/core";
 import * as firebase from "firebase";
 import TreeView from "@material-ui/lab/TreeView";
@@ -104,12 +103,12 @@ export function MediaRoute({ ...props }: MediaRouteProps & Partial<RouteComponen
                 </Grid>
 
                 <Grid item xs={12} sm={9}>
-                    <DropzoneArea
-                        dropzoneText={""}
-                        onChange={handleChange}
-                        maxFileSize={20 * 1024 * 1024}
-                        filesLimit={10}
-                    />
+                    {/*<DropzoneArea*/}
+                    {/*    dropzoneText={""}*/}
+                    {/*    onChange={handleChange}*/}
+                    {/*    maxFileSize={20 * 1024 * 1024}*/}
+                    {/*    filesLimit={10}*/}
+                    {/*/>*/}
 
                     <Button disabled={!files.length}
                             onClick={upload}>Upload</Button>

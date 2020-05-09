@@ -95,6 +95,25 @@ export const formStyles = makeStyles(theme => ({
             padding: theme.spacing(2)
         }
     },
+    dropZone: {
+        "&:hover": {
+            backgroundColor: "#f5f5f5"
+        }
+    },
+    activeDrop: {
+        backgroundColor: "#f5f5f5"
+    },
+    acceptDrop: {
+        borderColor: theme.palette.success.main
+    },
+    rejectDrop: {
+        borderColor: theme.palette.error.main
+    },
+    uploadItem: {
+        padding: theme.spacing(1),
+        minWidth: 220,
+        minHeight: 220
+    },
     formPaper: {
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),

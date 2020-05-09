@@ -1,25 +1,29 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import {
+    Box,
     FormControl,
     FormHelperText,
-    Grid,
+    IconButton,
     LinearProgress,
     Paper,
-    Snackbar
+    RootRef,
+    Snackbar,
+    Typography
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert/Alert";
-import { DropzoneArea } from "material-ui-dropzone";
 
-import { getDownloadURL, uploadFile } from "../../firebase";
+import { uploadFile } from "../../firebase";
 import firebase from "firebase";
 import renderPreviewComponent from "../../preview";
 import { formStyles } from "../../styles";
-import { StorageMeta, StringProperty } from "../../models";
+import { Property, StorageMeta, StringProperty } from "../../models";
 import { getIn } from "formik";
 
 import { CMSFieldProps } from "./form_props";
+import { useDropzone } from "react-dropzone";
+import ClearIcon from "@material-ui/icons/Clear";
 
 type StorageUploadFieldProps = CMSFieldProps<string> ;
 
@@ -27,7 +31,7 @@ export default function StorageUploadField({
                                                field,
                                                form: { errors, touched, setFieldValue },
                                                property,
-                                               includeDescription,
+                                               includeDescription
                                            }: StorageUploadFieldProps) {
 
     const fieldError = getIn(errors, field.name);
@@ -61,11 +65,11 @@ export default function StorageUploadField({
     );
 }
 
-
 interface StorageUploadProps {
     value: string;
+    // property: StringProperty | ArrayProperty<string>;
     property: StringProperty;
-    onChange: (value: string) => void;
+    onChange: (value: string | null) => void;
 }
 
 export function StorageUpload({
@@ -80,58 +84,30 @@ export function StorageUpload({
 
     const storageMeta: StorageMeta = property.storageMeta;
 
-    const [progress, setProgress] = React.useState<number>(-1);
-    const [error, setError] = React.useState<string>();
-    const [currentValue, setCurrentValue] = useState<string>(value);
-
     const classes = formStyles();
 
-    const [url, setUrl] = React.useState<string>();
+    const [error, setError] = React.useState<string>();
+    const [fileToUpload, setFileToUpload] = React.useState<File | undefined>();
     const [openErrorAlert, setOpenErrorAlert] = React.useState<boolean>(false);
 
-    useEffect(() => {
-        if (value)
-            getDownloadURL(value).then(function(downloadURL) {
-                setUrl(downloadURL);
-            });
-    }, [value]);
+    const onDrop = (acceptedFiles: File[]) => {
+        console.log(acceptedFiles);
+        setFileToUpload(acceptedFiles[0]);
+    };
 
-    function upload(files: File[]) {
+    const {
+        getRootProps,
+        getInputProps,
+        isDragActive,
+        isDragAccept,
+        isDragReject
+    } = useDropzone({
+            accept: storageMeta.acceptedFiles,
+            onDrop: onDrop
+        }
+    );
 
-        setError(undefined);
-        setProgress(0);
-
-        // TODO: support multiple files for array type
-        const uploadTask = uploadFile(files[0], storageMeta.storagePath);
-        uploadTask.on("state_changed", (snapshot) => {
-            const currentProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setProgress(currentProgress);
-            console.log("Upload is " + currentProgress + "% done");
-            switch (snapshot.state) {
-                case firebase.storage.TaskState.PAUSED: // or 'paused'
-                    console.log("Upload is paused");
-                    break;
-                case firebase.storage.TaskState.RUNNING: // or 'running'
-                    console.log("Upload is running");
-                    break;
-            }
-        }, (e: any) => {
-            console.log(e);
-            setError(e.message);
-            setProgress(-1);
-        }, () => {
-            const fullPath = uploadTask.snapshot.ref.fullPath;
-            setCurrentValue(fullPath);
-            setProgress(-1);
-            onChange(fullPath);
-        });
-    }
-
-    function onDropRejected(files: any, evt: any) {
-        console.log(evt);
-        setError("Wrong file type");
-        setOpenErrorAlert(true);
-    }
+    const { ref, ...rootProps } = getRootProps();
 
     const handleCloseErrorAlert = (event?: React.SyntheticEvent, reason?: string) => {
         setOpenErrorAlert(false);
@@ -139,35 +115,62 @@ export function StorageUpload({
 
     return (
         <React.Fragment>
-            <Paper elevation={0} className={classes.paper} variant={"outlined"}>
 
-                <Grid container spacing={2}>
+            <Paper elevation={0}
+                   className={`${isDragActive ? classes.activeDrop : ""} ${isDragReject ? classes.rejectDrop : ""} ${isDragAccept ? classes.acceptDrop : ""}`}
+                   variant={"outlined"}>
 
-                    <Grid item xs={12} sm={4}>
-                        {progress > -1 &&
-                        <LinearProgress variant="indeterminate"
-                                        value={progress}/>}
-                        {currentValue && renderPreviewComponent(currentValue, property)}
-                    </Grid>
+                <Box display="flex"
+                     flexDirection="row"
+                     flexWrap="wrap"
+                     alignItems="center"
+                     minHeight={220}>
 
-                    <Grid item xs={12} sm={8}>
-                        <DropzoneArea
-                            dropzoneText={""}
-                            acceptedFiles={storageMeta.acceptedFiles}
-                            initialFiles={url ? [url] : []}
-                            onChange={upload}
-                            onDropRejected={onDropRejected}
-                            maxFileSize={200 * 1024 * 1024}
-                            showAlerts={false}
-                            filesLimit={1}
-                        />
-                    </Grid>
+                    {(value || fileToUpload) && <Box ml={2} mt={2} mb={2}>
+                        {value && <StorageItem property={property} value={value}
+                                               onClear={() => onChange(null)}/>}
 
+                        {fileToUpload && <Box>
+                            <StorageUploadItem
+                                file={fileToUpload}
+                                storagePath={property.storageMeta.storagePath}
+                                onChange={(value) => {
+                                    setFileToUpload(undefined);
+                                    onChange(value ? value : null);
+                                }}/>
+                        </Box>}
+                    </Box>
+                    }
+                    <Box
+                        {...rootProps}
+                        className={`${classes.dropZone}`}
+                        minHeight={220}
+                        flexGrow={1}
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        m={2}>
+                        <RootRef rootRef={ref}>
+                            <input {...getInputProps()} />
+                            <Box m={"auto"}>
+                                <Typography color={"textSecondary"}
+                                            variant={"body2"}
+                                            align={"center"}>
+                                    Drag 'n' drop some
+                                    files here, or click to
+                                    select files
+                                </Typography>
+                            </Box>
+                        </RootRef>
+
+                    </Box>
                     {error &&
                     <FormHelperText error={true}>{error}</FormHelperText>}
 
-                </Grid>
+                </Box>
+
             </Paper>
+
             <Snackbar open={openErrorAlert} autoHideDuration={3000}
                       onClose={handleCloseErrorAlert}>
                 <MuiAlert elevation={6} variant="filled"
@@ -176,7 +179,116 @@ export function StorageUpload({
                     {error}
                 </MuiAlert>
             </Snackbar>
+
         </React.Fragment>
+    );
+
+}
+
+
+interface StorageUploadItemProps {
+    storagePath: string;
+    file?: File,
+    onChange: (value?: string) => void;
+}
+
+export function StorageUploadItem({
+                                      storagePath,
+                                      file,
+                                      onChange
+                                  }: StorageUploadItemProps) {
+
+    const classes = formStyles();
+
+    const [error, setError] = React.useState<string>();
+    const [progress, setProgress] = React.useState<number>(-1);
+
+    useEffect(() => {
+        if (file)
+            upload(file);
+    }, [file]);
+
+    function upload(file: File) {
+
+        setError(undefined);
+        setProgress(0);
+
+        const uploadTask = uploadFile(file, storagePath);
+        uploadTask.on("state_changed", (snapshot) => {
+            const currentProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgress(currentProgress);
+            console.debug("Upload is " + currentProgress + "% done");
+            switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                    console.debug("Upload is paused");
+                    break;
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                    console.debug("Upload is running");
+                    break;
+            }
+        }, (e: any) => {
+            console.log(e);
+            setError(e.message);
+            setProgress(-1);
+        }, () => {
+            const fullPath = uploadTask.snapshot.ref.fullPath;
+            setProgress(-1);
+            onChange(fullPath);
+        });
+    }
+
+    return (
+        <Paper elevation={0} className={classes.uploadItem}
+               variant={"outlined"}>
+
+            {progress > -1 &&
+            <LinearProgress variant="indeterminate"
+                            value={progress}/>}
+
+            {error && <p>Error uploading file: {error}</p>}
+
+        </Paper>
+    );
+
+}
+
+interface StorageItemProps {
+    property: Property;
+    value: string,
+    onClear: () => void;
+}
+
+export function StorageItem({
+                                property,
+                                value,
+                                onClear
+                            }: StorageItemProps) {
+
+    const classes = formStyles();
+    return (
+
+        <Box position={"relative"}>
+
+            <Paper
+                elevation={0}
+                className={classes.uploadItem}
+                variant={"outlined"}>
+
+                <Box position={"absolute"} top={4} right={4}>
+                    <IconButton
+                        onClick={(event) => {
+                            onClear();
+                            event.preventDefault();
+                        }}>
+                        <ClearIcon fontSize={"small"}/>
+                    </IconButton>
+                </Box>
+
+                {value && renderPreviewComponent(value, property)}
+
+            </Paper>
+
+        </Box>
     );
 
 }

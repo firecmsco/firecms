@@ -1,4 +1,4 @@
-import algoliasearch, { SearchClient, SearchIndex } from "algoliasearch";
+import { SearchClient, SearchIndex } from "algoliasearch";
 
 export interface TextSearchDelegate {
     performTextSearch(query: string): Promise<readonly string[]>;
