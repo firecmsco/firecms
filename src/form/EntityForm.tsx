@@ -82,6 +82,13 @@ export default function EntityForm<S extends EntitySchema>({
                     </Grid>;
                 }
 
+                if (property.dataType === "array" && property.of.dataType === "string" && property.of.storageMeta) {
+                    return <Grid item xs={12}
+                                 key={`field_${schema.name}_${key}`}>
+                        {formField}
+                    </Grid>;
+                }
+
                 if (property.dataType === "string" && property.storageMeta) {
                     return <Grid item xs={12}
                                  key={`field_${schema.name}_${key}`}>
@@ -135,8 +142,7 @@ export default function EntityForm<S extends EntitySchema>({
     return (
         <Formik
             initialValues={initialValues}
-            validate={(values => console.log("validate", values))}
-
+            validate={(values => console.debug("validate", values))}
             onSubmit={saveValues}
             validationSchema={getYupObjectSchema(schema.properties)}
         >

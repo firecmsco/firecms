@@ -18,14 +18,30 @@ import { uploadFile } from "../../firebase";
 import firebase from "firebase";
 import renderPreviewComponent from "../../preview";
 import { formStyles } from "../../styles";
-import { Property, StorageMeta, StringProperty } from "../../models";
+import {
+    ArrayProperty,
+    Property,
+    StorageMeta,
+    StringProperty
+} from "../../models";
 import { getIn } from "formik";
 
 import { CMSFieldProps } from "./form_props";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
 
-type StorageUploadFieldProps = CMSFieldProps<string> ;
+type StorageUploadFieldProps = CMSFieldProps<string | string[]> ;
+
+/**
+ * Internal representation of an item in the storage field.
+ * It can have two states, having a storagePath set, which means the file has
+ * been uploaded and it is rendered as a preview
+ * Or have a pending file being uploaded.
+ */
+interface StorageFieldItem {
+    storagePath?: string;
+    file?: File;
+}
 
 export default function StorageUploadField({
                                                field,
@@ -36,6 +52,12 @@ export default function StorageUploadField({
 
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
+
+    const multipleFilesSupported = property.dataType === "array";
+
+    const value = multipleFilesSupported ?
+        (Array.isArray(field.value) ? field.value : []) :
+        field.value;
 
     return (
 
@@ -48,7 +70,7 @@ export default function StorageUploadField({
                 {property.title || field.name}
             </FormHelperText>
 
-            <StorageUpload value={field.value}
+            <StorageUpload value={value}
                            property={property}
                            onChange={(newValue) => setFieldValue(
                                field.name,
@@ -66,10 +88,9 @@ export default function StorageUploadField({
 }
 
 interface StorageUploadProps {
-    value: string;
-    // property: StringProperty | ArrayProperty<string>;
-    property: StringProperty;
-    onChange: (value: string | null) => void;
+    value: string | string[];
+    property: StringProperty | ArrayProperty<string>;
+    onChange: (value: string | string[] | null) => void;
 }
 
 export function StorageUpload({
@@ -78,21 +99,87 @@ export function StorageUpload({
                                   onChange
                               }: StorageUploadProps) {
 
-    if (!property.storageMeta) {
-        throw Error("Wrong field used StorageFieldUpload");
+    const multipleFilesSupported = property.dataType === "array";
+
+    if (multipleFilesSupported && (property as ArrayProperty<any>).of.dataType !== "string") {
+        throw Error("Storage field using array must be of data type string");
     }
 
-    const storageMeta: StorageMeta = property.storageMeta;
+    const storageMeta: StorageMeta | undefined = property.dataType === "string" ? property.storageMeta :
+        property.dataType === "array" ? property.of.storageMeta :
+            undefined;
+
+    if (!storageMeta)
+        throw Error("Storage meta must be specified");
 
     const classes = formStyles();
 
-    const [error, setError] = React.useState<string>();
-    const [fileToUpload, setFileToUpload] = React.useState<File | undefined>();
-    const [openErrorAlert, setOpenErrorAlert] = React.useState<boolean>(false);
+    const initialValue: StorageFieldItem[] = multipleFilesSupported ?
+        (value as string[]).map(v => (
+            {
+                storagePath: v
+            }
+        )) : [{
+            storagePath: value as string
+        }];
+
+    const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(initialValue);
+
+    function removeDuplicates(items: StorageFieldItem[]) {
+        return items.filter(
+            (v, i) => {
+                return ((items.map((v) => v.storagePath).indexOf(v.storagePath) === i) || !v.storagePath)
+                    && ((items.map((v) => v.file).indexOf(v.file) === i) || !v.file);
+            }
+        );
+    }
 
     const onDrop = (acceptedFiles: File[]) => {
-        console.log(acceptedFiles);
-        setFileToUpload(acceptedFiles[0]);
+
+        let newInternalValue: StorageFieldItem[];
+        if (multipleFilesSupported) {
+            newInternalValue = [...internalValue, ...acceptedFiles.map(file => ({ file }))];
+        } else {
+            newInternalValue = [{ file: acceptedFiles[0] }];
+        }
+
+        // Remove either storage path or file duplicates
+        newInternalValue = removeDuplicates(newInternalValue);
+
+        setInternalValue(newInternalValue);
+    };
+
+    const onFileUploadComplete = (uploadedPath: string, file: File) => {
+        console.log("onFileUploadComplete", uploadedPath, file);
+        let item: StorageFieldItem | undefined = internalValue.find(entry => entry.file === file || entry.storagePath === uploadedPath);
+        let newValue: StorageFieldItem[];
+        if (!item) {
+            item = {
+                storagePath: uploadedPath,
+                file: file
+            };
+            if (multipleFilesSupported)
+                newValue = [...internalValue, item];
+            else newValue = [item];
+        } else {
+            item.storagePath = uploadedPath;
+            item.file = file;
+            newValue = [...internalValue];
+        }
+        newValue = removeDuplicates(newValue);
+        setInternalValue(newValue);
+        onChange(newValue.filter(e => !!e.storagePath).map(e => e.storagePath as string));
+    };
+
+    const onClear = (clearedStoragePath: string) => {
+        if (multipleFilesSupported) {
+            const newValue: StorageFieldItem[] = internalValue.filter(v => v.storagePath !== clearedStoragePath);
+            onChange(newValue.filter(v => !!v.storagePath).map(v => v.storagePath as string));
+            setInternalValue(newValue);
+        } else {
+            onChange(null);
+            setInternalValue([]);
+        }
     };
 
     const {
@@ -109,15 +196,15 @@ export function StorageUpload({
 
     const { ref, ...rootProps } = getRootProps();
 
-    const handleCloseErrorAlert = (event?: React.SyntheticEvent, reason?: string) => {
-        setOpenErrorAlert(false);
-    };
-
     return (
-        <React.Fragment>
+
+
+        <RootRef rootRef={ref}>
+            <input {...getInputProps()} />
 
             <Paper elevation={0}
-                   className={`${isDragActive ? classes.activeDrop : ""} ${isDragReject ? classes.rejectDrop : ""} ${isDragAccept ? classes.acceptDrop : ""}`}
+                   {...rootProps}
+                   className={`${classes.dropZone} ${isDragActive ? classes.activeDrop : ""} ${isDragReject ? classes.rejectDrop : ""} ${isDragAccept ? classes.acceptDrop : ""}`}
                    variant={"outlined"}>
 
                 <Box display="flex"
@@ -126,61 +213,41 @@ export function StorageUpload({
                      alignItems="center"
                      minHeight={220}>
 
-                    {(value || fileToUpload) && <Box ml={2} mt={2} mb={2}>
-                        {value && <StorageItem property={property} value={value}
-                                               onClear={() => onChange(null)}/>}
-
-                        {fileToUpload && <Box>
-                            <StorageUploadItem
-                                file={fileToUpload}
-                                storagePath={property.storageMeta.storagePath}
-                                onChange={(value) => {
-                                    setFileToUpload(undefined);
-                                    onChange(value ? value : null);
-                                }}/>
-                        </Box>}
-                    </Box>
+                    {internalValue.map(entry => {
+                        if (entry.storagePath) {
+                            return <StorageItemPreview
+                                property={(property as ArrayProperty<string>).of}
+                                value={entry.storagePath}
+                                onClear={onClear}/>;
+                        } else if (entry.file) {
+                            return <StorageUploadProgress
+                                key={`storage_upload_${entry.file.name}`}
+                                file={entry.file}
+                                storagePath={storageMeta.storagePath}
+                                onFileUploadComplete={(value, file) => {
+                                    onFileUploadComplete(value, file);
+                                }}/>;
+                        }
+                        return null;
+                    })
                     }
-                    <Box
-                        {...rootProps}
-                        className={`${classes.dropZone}`}
-                        minHeight={220}
-                        flexGrow={1}
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        m={2}>
-                        <RootRef rootRef={ref}>
-                            <input {...getInputProps()} />
-                            <Box m={"auto"}>
-                                <Typography color={"textSecondary"}
-                                            variant={"body2"}
-                                            align={"center"}>
-                                    Drag 'n' drop some
-                                    files here, or click to
-                                    select files
-                                </Typography>
-                            </Box>
-                        </RootRef>
 
+                    <Box
+                        flexGrow={1}
+                        m={2}>
+                        <Typography color={"textSecondary"}
+                                    variant={"body2"}
+                                    align={"center"}>
+                            Drag 'n' drop some
+                            files here, or click to
+                            select files
+                        </Typography>
                     </Box>
-                    {error &&
-                    <FormHelperText error={true}>{error}</FormHelperText>}
 
                 </Box>
 
             </Paper>
-
-            <Snackbar open={openErrorAlert} autoHideDuration={3000}
-                      onClose={handleCloseErrorAlert}>
-                <MuiAlert elevation={6} variant="filled"
-                          onClose={handleCloseErrorAlert}
-                          severity="error">
-                    {error}
-                </MuiAlert>
-            </Snackbar>
-
-        </React.Fragment>
+        </RootRef>
     );
 
 }
@@ -188,25 +255,26 @@ export function StorageUpload({
 
 interface StorageUploadItemProps {
     storagePath: string;
-    file?: File,
-    onChange: (value?: string) => void;
+    file: File,
+    onFileUploadComplete: (value: string, file: File) => void;
 }
 
-export function StorageUploadItem({
-                                      storagePath,
-                                      file,
-                                      onChange
-                                  }: StorageUploadItemProps) {
+export function StorageUploadProgress({
+                                          storagePath,
+                                          file,
+                                          onFileUploadComplete
+                                      }: StorageUploadItemProps) {
 
     const classes = formStyles();
 
     const [error, setError] = React.useState<string>();
     const [progress, setProgress] = React.useState<number>(-1);
+    const [openErrorAlert, setOpenErrorAlert] = React.useState<boolean>(false);
 
     useEffect(() => {
         if (file)
             upload(file);
-    }, [file]);
+    }, []);
 
     function upload(file: File) {
 
@@ -227,47 +295,69 @@ export function StorageUploadItem({
                     break;
             }
         }, (e: any) => {
-            console.log(e);
+            console.error("Upload error", e);
             setError(e.message);
             setProgress(-1);
+            setOpenErrorAlert(true);
         }, () => {
             const fullPath = uploadTask.snapshot.ref.fullPath;
             setProgress(-1);
-            onChange(fullPath);
+            onFileUploadComplete(fullPath, file);
         });
     }
 
+    const handleCloseErrorAlert = (event?: React.SyntheticEvent, reason?: string) => {
+        setOpenErrorAlert(false);
+    };
+
     return (
-        <Paper elevation={0} className={classes.uploadItem}
-               variant={"outlined"}>
 
-            {progress > -1 &&
-            <LinearProgress variant="indeterminate"
-                            value={progress}/>}
+        <React.Fragment>
 
-            {error && <p>Error uploading file: {error}</p>}
+            <Box ml={2} mt={2} mb={2}>
+                <Paper elevation={0}
+                       className={classes.uploadItem}
+                       variant={"outlined"}>
 
-        </Paper>
+                    {progress > -1 &&
+                    <LinearProgress variant="indeterminate"
+                                    value={progress}/>}
+
+                    {error && <p>Error uploading file: {error}</p>}
+
+                </Paper>
+            </Box>
+
+
+            <Snackbar open={openErrorAlert} autoHideDuration={3000}
+                      onClose={handleCloseErrorAlert}>
+                <MuiAlert elevation={6} variant="filled"
+                          onClose={handleCloseErrorAlert}
+                          severity="error">
+                    {error}
+                </MuiAlert>
+            </Snackbar>
+
+        </React.Fragment>
     );
 
 }
 
-interface StorageItemProps {
+interface StorageItemPreviewProps {
     property: Property;
     value: string,
-    onClear: () => void;
+    onClear: (value: string) => void;
 }
 
-export function StorageItem({
-                                property,
-                                value,
-                                onClear
-                            }: StorageItemProps) {
+export function StorageItemPreview({
+                                       property,
+                                       value,
+                                       onClear
+                                   }: StorageItemPreviewProps) {
 
     const classes = formStyles();
     return (
-
-        <Box position={"relative"}>
+        <Box ml={2} mt={2} mb={2} position={"relative"}>
 
             <Paper
                 elevation={0}
@@ -276,15 +366,16 @@ export function StorageItem({
 
                 <Box position={"absolute"} top={4} right={4}>
                     <IconButton
+                        style={{ backgroundColor: "white" }}
                         onClick={(event) => {
-                            onClear();
-                            event.preventDefault();
+                            event.stopPropagation();
+                            onClear(value);
                         }}>
                         <ClearIcon fontSize={"small"}/>
                     </IconButton>
                 </Box>
 
-                {value && renderPreviewComponent(value, property)}
+                {value && renderPreviewComponent(value, property, false)}
 
             </Paper>
 

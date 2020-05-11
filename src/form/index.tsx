@@ -39,6 +39,8 @@ export function createFormField(name: string,
     } else if (property.dataType === "array") {
         if ((property.of.dataType === "string" || property.of.dataType === "number") && property.of.enumValues) {
             component = ArrayEnumSelect;
+        } else if (property.of.dataType === "string" && property.of.storageMeta) {
+            component = StorageUploadField;
         } else if (property.of.dataType === "map") {
             component = ArrayMapField;
         } else {
@@ -76,10 +78,10 @@ export function createFormField(name: string,
 }
 
 function buildField<P extends Property<T>, T = any>(name: string,
-                                              property: P,
-                                              includeDescription: boolean,
-                                              component: React.ComponentType<CMSFieldProps<T>>,
-                                              additionalProps?: any) {
+                                                    property: P,
+                                                    includeDescription: boolean,
+                                                    component: React.ComponentType<CMSFieldProps<T>>,
+                                                    additionalProps?: any) {
     return <Field
         required={property.validation?.required}
         name={`${name}`}

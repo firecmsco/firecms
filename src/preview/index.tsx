@@ -29,8 +29,11 @@ import StorageThumbnail from "./StorageThumbnail";
 
 export default function renderPreviewComponent<T>(
     value: T,
-    property: Property<T>
+    property: Property<T>,
+    small: boolean
 ): JSX.Element | any {
+
+    console.debug("renderPreviewComponent", value, property, small);
 
     if (!value) return <React.Fragment/>;
 
@@ -38,9 +41,9 @@ export default function renderPreviewComponent<T>(
     if (property.dataType === "string" && typeof value === "string") {
         const stringProperty = property as StringProperty;
         if (stringProperty.urlMediaType) {
-            content = renderUrlComponent(stringProperty, value);
+            content = renderUrlComponent(stringProperty, value, small);
         } else if (stringProperty.storageMeta) {
-            content = renderStorageThumbnail(stringProperty, value as string);
+            content = renderStorageThumbnail(stringProperty, value as string, true);
         } else if (stringProperty.enumValues) {
             content = stringProperty.enumValues[value];
         } else {
@@ -56,6 +59,8 @@ export default function renderPreviewComponent<T>(
                     arrayProperty.of.enumValues,
                     value
                 );
+            } else if (arrayProperty.of.storageMeta) {
+                content = renderGenericArrayCell(arrayProperty.of, value);
             } else {
                 content = renderArrayOfStrings(value);
             }
@@ -88,7 +93,7 @@ function renderMap<T>(property: MapProperty<T>, value: T) {
         <List>
             {listProperties.map(([key, property]) => (
                 <ListItem key={property.title + key}>
-                    {renderPreviewComponent(value[key], property)}
+                    {renderPreviewComponent(value[key], property, true)}
                 </ListItem>
             ))}
         </List>
@@ -118,7 +123,8 @@ function renderArrayOfMaps(properties: Properties, values: any[]) {
                                     >
                                         {renderPreviewComponent(
                                             value[key],
-                                            property
+                                            property,
+                                            true
                                         )}
                                     </TableCell>
                                 )
@@ -177,7 +183,7 @@ function renderGenericArrayCell<T extends EnumType>(
             {values &&
             values.map((value, index) =>
                 <React.Fragment>
-                    {renderPreviewComponent(value, property)}
+                    {renderPreviewComponent(value, property, true)}
                     {index < values.length - 1 && <Divider/>}
                 </React.Fragment>
             )}
@@ -194,17 +200,23 @@ function renderUrlAudioComponent(value: any) {
     );
 }
 
-function renderUrlImageThumbnail(url: string) {
+function renderUrlImageThumbnail(url: string,
+                                 small: boolean) {
+    console.log(url, small);
     return (
         <img src={url}
-             style={{ maxWidth: 200, maxHeight: 200 }}/>
+             style={{
+                 maxWidth: small ? 100 : 200,
+                 maxHeight: small ? 100 : 200
+             }}/>
     );
 }
 
-function renderUrlVideo(url: string) {
+function renderUrlVideo(url: string,
+                        small: boolean) {
     return (
         <CardMedia
-            style={{ maxWidth: 500 }}
+            style={{ maxWidth: small ? 300 : 500 }}
             component="video"
             controls
             image={url}
@@ -225,26 +237,29 @@ function renderReference(
     );
 }
 
-export function renderUrlComponent(property: StringProperty, url: any) {
+export function renderUrlComponent(property: StringProperty, url: any,
+                                   small: boolean = false) {
     const mediaType = property.urlMediaType || property.storageMeta?.mediaType;
     if (mediaType === "image") {
-        return renderUrlImageThumbnail(url);
+        return renderUrlImageThumbnail(url, small);
     } else if (mediaType === "audio") {
         return renderUrlAudioComponent(url);
     } else if (mediaType === "video") {
-        return renderUrlVideo(url);
+        return renderUrlVideo(url, small);
     }
     throw Error("URL component misconfigured");
 }
 
 export function renderStorageThumbnail(
     property: StringProperty,
-    storagePath: string | undefined
+    storagePath: string | undefined,
+    small: boolean
 ) {
     return (
         <StorageThumbnail
             storagePath={storagePath}
             property={property}
+            small={small}
             renderUrlComponent={renderUrlComponent}
         />
     );

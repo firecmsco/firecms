@@ -40,7 +40,7 @@ export interface EntityCollectionView<S extends EntitySchema> {
     /**
      * Can the elements in this collection be deleted. Defaults to true
      */
-    deleteEnabled?:boolean,
+    deleteEnabled?: boolean,
 }
 
 /**
@@ -93,7 +93,13 @@ export interface Entity<S extends EntitySchema> {
     values: EntityValues<S>
 }
 
-export type EntityValues<S extends EntitySchema> = { [K in keyof S["properties"]]: any };
+/**
+ * This type represents a record of key value pairs as described in an
+ * entity schema.
+ */
+export type EntityValues<S extends EntitySchema> = {
+    [K in keyof S["properties"]]: S["properties"][K] extends Property<infer X> ? X : never
+};
 
 type DataType =
     | "number"
@@ -190,7 +196,7 @@ export type EnumValues<T extends EnumType> = Record<T, string>; // id -> Label
 /**
  * Record of properties of an entity, as defined in a schema
  */
-export type Properties = Record<string, Property<any>>;
+export type Properties = Record<string, Property>;
 
 /**
  * Rules to validate a property

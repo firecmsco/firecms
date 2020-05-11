@@ -195,6 +195,19 @@ const blogSchema: EntitySchema = {
             },
             includeInListView: false
         },
+        images: {
+            title: "Images",
+            dataType: "array",
+            of: {
+                dataType: "string",
+                storageMeta: {
+                    mediaType: "image",
+                    storagePath: "images",
+                    acceptedFiles: ["image/*"]
+                }
+            },
+            includeInListView: true
+        },
         priority: {
             title: "Priority",
             description: "This field allows the selection of Infinity as a value",
@@ -233,17 +246,6 @@ const blogSchema: EntitySchema = {
                 dataType: "reference",
                 collectionPath: "products",
                 schema: productSchema
-            },
-            includeInListView: true
-        },
-
-        image: {
-            title: "Image",
-            dataType: "string",
-            storageMeta: {
-                mediaType: "image",
-                storagePath: "images",
-                acceptedFiles: ["image/*"]
             },
             includeInListView: true
         }

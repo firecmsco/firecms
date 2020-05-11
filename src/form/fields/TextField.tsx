@@ -111,7 +111,7 @@ export default function TextField({
 
             {mediaType && value &&
             <Box m={1}>
-                {renderPreviewComponent(value, property)}
+                {renderPreviewComponent(value, property, false)}
             </Box>
             }
         </React.Fragment>

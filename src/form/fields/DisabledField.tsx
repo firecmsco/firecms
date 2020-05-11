@@ -21,7 +21,7 @@ export default function DisabledField<S extends EntitySchema>({ field, property,
             </FormHelperText>
 
             <Paper elevation={0} className={classes.paper} variant={"outlined"}>
-                {field.value && renderPreviewComponent(field.value, property)}
+                {field.value && renderPreviewComponent(field.value, property, false)}
                 {!field.value && <Box m={1}>No value set</Box>}
             </Paper>
 

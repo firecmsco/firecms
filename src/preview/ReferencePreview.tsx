@@ -12,7 +12,7 @@ export interface ReferencePreviewProps<S extends EntitySchema> {
 
     schema: S;
 
-    renderPreviewComponent<T>(value: T, property: Property<T>): JSX.Element
+    renderPreviewComponent<T>(value: T, property: Property<T>, small:boolean): JSX.Element
 }
 
 export default function ReferencePreview<S extends EntitySchema>(
@@ -46,7 +46,7 @@ export default function ReferencePreview<S extends EntitySchema>(
         <List>
             {listProperties.map(([key, property]) => (
                 <ListItem key={"ref_prev" + property.title + key}>
-                    {renderPreviewComponent(entity.values[key], property)}
+                    {renderPreviewComponent(entity.values[key], property, true)}
                 </ListItem>
             ))}
         </List>

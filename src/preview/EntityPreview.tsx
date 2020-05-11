@@ -34,7 +34,7 @@ export default function EntityPreview<S extends EntitySchema>(
                                 {property.title}
                             </TableCell>
                             <TableCell>
-                                {renderPreviewComponent(entity.values[key], property)}
+                                {renderPreviewComponent(entity.values[key], property, false)}
                             </TableCell>
                         </TableRow>
                     ))}

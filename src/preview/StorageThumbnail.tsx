@@ -5,10 +5,11 @@ import { getDownloadURL } from "../firebase";
 interface StorageThumbnailProps {
     storagePath: string | undefined;
     property: StringProperty;
-    renderUrlComponent: (property: StringProperty, url: any) => ReactElement;
+    small:boolean;
+    renderUrlComponent: (property: StringProperty, url: any, small:boolean) => ReactElement;
 }
 
-export default function StorageThumbnail({ storagePath, property, renderUrlComponent }: StorageThumbnailProps) {
+export default function StorageThumbnail({ storagePath, property, renderUrlComponent, small }: StorageThumbnailProps) {
 
     const [url, setUrl] = React.useState<string>();
 
@@ -20,6 +21,6 @@ export default function StorageThumbnail({ storagePath, property, renderUrlCompo
             });
     }, [storagePath]);
 
-    return url ? renderUrlComponent(property, url) :
+    return url ? renderUrlComponent(property, url, small) :
         <React.Fragment></React.Fragment>;
 }

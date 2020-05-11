@@ -472,7 +472,7 @@ function renderTableCell(index: number, value: any, key: string, property: Prope
     return (
         <TableCell key={`table-cell-${key}`} component="th"
                    align={getCellAlignment(property)}>
-            {renderPreviewComponent(value, property)}
+            {renderPreviewComponent(value, property, false)}
         </TableCell>
     );
 }
