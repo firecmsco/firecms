@@ -174,12 +174,15 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
             >
 
                 {hasEditButton && renderEditCell(entity, onEntityEdit)}
+
                 {hasDeleteButton && renderDeleteCell(entity, onEntityDelete)}
 
                 {renderIdCell(entity.id)}
+
                 {tableViewFields
                     .map(([key, field], index) =>
                         renderTableCell(index, entity.values[key], key, field))}
+
             </TableRow>
         );
     }
@@ -244,7 +247,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                         classes={classes}
                         schema={props.schema}
                         hasEditButton={hasEditButton}
-                        hasDeleteButton={hasEditButton}
+                        hasDeleteButton={hasDeleteButton}
                         order={order}
                         orderBy={orderBy}
                         sortable={!textSearchData.length}
