@@ -37,13 +37,17 @@ export default function renderPreviewComponent<T>(
 
     if (!value) return <React.Fragment/>;
 
+    if(!property){
+        console.error("No property assigned for preview component", value, property, small);
+    }
+
     let content: JSX.Element | any;
     if (property.dataType === "string" && typeof value === "string") {
         const stringProperty = property as StringProperty;
         if (stringProperty.urlMediaType) {
             content = renderUrlComponent(stringProperty, value, small);
         } else if (stringProperty.storageMeta) {
-            content = renderStorageThumbnail(stringProperty, value as string, true);
+            content = renderStorageThumbnail(stringProperty, value as string, small);
         } else if (stringProperty.enumValues) {
             content = stringProperty.enumValues[value];
         } else {
@@ -202,7 +206,6 @@ function renderUrlAudioComponent(value: any) {
 
 function renderUrlImageThumbnail(url: string,
                                  small: boolean) {
-    console.log(url, small);
     return (
         <img src={url}
              style={{

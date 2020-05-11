@@ -15,6 +15,7 @@ import {
 
 import { firebaseConfig } from "./firebase_config";
 import CustomLargeTextField from "./custom_field/CustomLargeTextField";
+import { EntityCollectionView } from "../../src";
 
 const locales: EnumValues<string> = {
     "de-DE": "German",
@@ -302,6 +303,64 @@ const usersSchema: EntitySchema = {
     }
 };
 
+export const testEntitySchema: EntitySchema = {
+    customId: true,
+    name: "Test entity",
+    properties: {
+        tags: {
+            title: "Tags",
+            includeInListView: true,
+            // validation: { required: true },
+            dataType: "array",
+            of: {
+                dataType: "string"
+            }
+        },
+        title: {
+            title: "Title",
+            description: "A catching title is important",
+            includeInListView: true,
+            // validation: { required: true },
+            dataType: "string"
+        },
+        description: {
+            title: "Description",
+            includeInListView: true,
+            // validation: { required: true },
+            dataType: "string"
+        },
+        search_adjacent: {
+            title: "Search adjacent",
+            // validation: { required: true },
+            includeInListView: true,
+            dataType: "boolean"
+        },
+        difficulty: {
+            title: "Difficulty",
+            // validation: { required: true },
+            includeInListView: true,
+            dataType: "number"
+        },
+        created_at: {
+            title: "Created at",
+            // validation: { required: true },
+            includeInListView: true,
+            dataType: "timestamp"
+        },
+        image: {
+            title: "Image",
+            dataType: "string",
+            includeInListView: true,
+            storageMeta: {
+                mediaType: "image",
+                storagePath: "test",
+                acceptedFiles: ["image/*"]
+            },
+        }
+    }
+};
+
+
 let client: SearchClient | undefined = undefined;
 if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
     client = algoliasearch(process.env.REACT_APP_ALGOLIA_APP_ID, process.env.REACT_APP_ALGOLIA_SEARCH_KEY);
@@ -310,37 +369,47 @@ if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH
     console.error("Text search not enabled");
 }
 
+let navigation : EntityCollectionView<any>[]= [
+    {
+        relativePath: "products",
+        schema: productSchema,
+        name: "Products",
+        textSearchDelegate: client && new AlgoliaTextSearchDelegate(
+            client,
+            "products")
+    },
+    {
+        relativePath: "users",
+        schema: usersSchema,
+        name: "Users",
+        textSearchDelegate: client && new AlgoliaTextSearchDelegate(
+            client,
+            "users")
+    },
+    {
+        relativePath: "blog",
+        schema: blogSchema,
+        name: "Blog",
+        textSearchDelegate: client && new AlgoliaTextSearchDelegate(
+            client,
+            "blog")
+    }
+];
+
+if (process.env.NODE_ENV !== "production") {
+    navigation.push({
+        relativePath: "test_entity",
+        schema: testEntitySchema,
+        name: "Test entity"
+    });
+}
+
 ReactDOM.render(
     <CMSApp
         name={"Test shop CMS"}
         authentication={false}
         logo={logo}
-        navigation={[
-            {
-                relativePath: "products",
-                schema: productSchema,
-                name: "Products",
-                textSearchDelegate: client && new AlgoliaTextSearchDelegate(
-                    client,
-                    "products")
-            },
-            {
-                relativePath: "users",
-                schema: usersSchema,
-                name: "Users",
-                textSearchDelegate: client && new AlgoliaTextSearchDelegate(
-                    client,
-                    "users")
-            },
-            {
-                relativePath: "blog",
-                schema: blogSchema,
-                name: "Blog",
-                textSearchDelegate: client && new AlgoliaTextSearchDelegate(
-                    client,
-                    "blog")
-            }
-        ]}
+        navigation={navigation}
         firebaseConfig={firebaseConfig}
     />,
     document.getElementById("root")

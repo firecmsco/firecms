@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "Awesome Firestore based CMS",
     "author": "camberi",
     "license": "GPL-3.0",

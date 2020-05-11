@@ -168,7 +168,14 @@ export function StorageUpload({
         }
         newValue = removeDuplicates(newValue);
         setInternalValue(newValue);
-        onChange(newValue.filter(e => !!e.storagePath).map(e => e.storagePath as string));
+
+        const fieldValue = newValue.filter(e => !!e.storagePath).map(e => e.storagePath as string);
+
+        if (multipleFilesSupported) {
+            onChange(fieldValue);
+        }else{
+            onChange(fieldValue ? fieldValue[0] : null);
+        }
     };
 
     const onClear = (clearedStoragePath: string) => {
@@ -200,12 +207,13 @@ export function StorageUpload({
 
 
         <RootRef rootRef={ref}>
-            <input {...getInputProps()} />
 
             <Paper elevation={0}
                    {...rootProps}
                    className={`${classes.dropZone} ${isDragActive ? classes.activeDrop : ""} ${isDragReject ? classes.rejectDrop : ""} ${isDragAccept ? classes.acceptDrop : ""}`}
                    variant={"outlined"}>
+
+                <input {...getInputProps()} />
 
                 <Box display="flex"
                      flexDirection="row"
@@ -215,8 +223,10 @@ export function StorageUpload({
 
                     {internalValue.map(entry => {
                         if (entry.storagePath) {
+                            const renderProperty = multipleFilesSupported ? (property as ArrayProperty<string>).of : property;
                             return <StorageItemPreview
-                                property={(property as ArrayProperty<string>).of}
+                                key={`storage_preview_${entry.storagePath}`}
+                                property={renderProperty}
                                 value={entry.storagePath}
                                 onClear={onClear}/>;
                         } else if (entry.file) {
