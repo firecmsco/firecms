@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
-import { CMSFieldProps } from "./form_props";
+import { CMSFieldProps } from "../form_props";
 import React from "react";
 
 type ArrayDefaultFieldProps<T> = CMSFieldProps<T[]>;

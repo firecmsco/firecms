@@ -11,9 +11,9 @@ import {
     Typography
 } from "@material-ui/core";
 import React from "react";
-import renderPreviewComponent from "../../preview";
 
-import { CMSFieldProps } from "./form_props";
+import { CMSFieldProps } from "../form_props";
+import PreviewComponent from "../../preview/PreviewComponent";
 
 interface TextFieldProps extends CMSFieldProps<string | number> {
     allowInfinity?: boolean
@@ -111,7 +111,9 @@ export default function TextField({
 
             {mediaType && value &&
             <Box m={1}>
-                {renderPreviewComponent(value, property, false)}
+                <PreviewComponent value={value}
+                                  property={property}
+                                  small={false}/>
             </Box>
             }
         </React.Fragment>

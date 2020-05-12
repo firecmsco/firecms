@@ -7,6 +7,7 @@ import { getRouterNewEntityPath } from "../routes/navigation";
 
 
 interface SubCollectionViewProps<S extends EntitySchema> {
+
     parentCollectionPath: string;
     parentSchema: S;
     entity?: Entity<S>;
@@ -32,6 +33,7 @@ function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thi
                              onEntityEdit={onEntityClick}
                              includeToolbar={false}
                              paginationEnabled={false}
+                             additionalColumns={thisView.additionalColumns}
             />
             :
             <Grid container>

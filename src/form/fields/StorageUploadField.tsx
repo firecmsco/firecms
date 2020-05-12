@@ -16,7 +16,6 @@ import MuiAlert from "@material-ui/lab/Alert/Alert";
 
 import { uploadFile } from "../../firebase";
 import firebase from "firebase";
-import renderPreviewComponent from "../../preview";
 import { formStyles } from "../../styles";
 import {
     ArrayProperty,
@@ -26,9 +25,10 @@ import {
 } from "../../models";
 import { getIn } from "formik";
 
-import { CMSFieldProps } from "./form_props";
+import { CMSFieldProps } from "../form_props";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
+import PreviewComponent from "../../preview/PreviewComponent";
 
 type StorageUploadFieldProps = CMSFieldProps<string | string[]> ;
 
@@ -385,7 +385,10 @@ export function StorageItemPreview({
                     </IconButton>
                 </Box>
 
-                {value && renderPreviewComponent(value, property, false)}
+                {value &&
+                <PreviewComponent value={value}
+                                  property={property}
+                                  small={false}/>}
 
             </Paper>
 

@@ -7,15 +7,18 @@ import algoliasearch, { SearchClient } from "algoliasearch";
 import * as serviceWorker from "./serviceWorker";
 
 import {
+    AdditionalColumnDelegate,
     AlgoliaTextSearchDelegate,
+    AsyncPreviewComponent,
     CMSApp,
+    Entity,
+    EntityCollectionView,
     EntitySchema,
     EnumValues
 } from "firecms";
 
 import { firebaseConfig } from "./firebase_config";
 import CustomLargeTextField from "./custom_field/CustomLargeTextField";
-import { EntityCollectionView } from "../../src";
 
 const locales: EnumValues<string> = {
     "de-DE": "German",
@@ -173,6 +176,7 @@ const productSchema: EntitySchema = {
             }
         }
     ]
+
 };
 
 const blogSchema: EntitySchema = {
@@ -355,9 +359,20 @@ export const testEntitySchema: EntitySchema = {
                 mediaType: "image",
                 storagePath: "test",
                 acceptedFiles: ["image/*"]
-            },
+            }
         }
     }
+};
+
+const productAdditionalColumn: AdditionalColumnDelegate<typeof productSchema> = {
+    title: "Spanish title",
+    builder: (entity: Entity<typeof productSchema>) =>
+        <AsyncPreviewComponent builder={
+            entity.reference.collection("locales")
+                .doc("es-ES")
+                .get()
+                .then((snapshot: any) => snapshot.get("title") as string)
+        }/>
 };
 
 
@@ -369,14 +384,15 @@ if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH
     console.error("Text search not enabled");
 }
 
-let navigation : EntityCollectionView<any>[]= [
+let navigation: EntityCollectionView<any>[] = [
     {
         relativePath: "products",
         schema: productSchema,
         name: "Products",
         textSearchDelegate: client && new AlgoliaTextSearchDelegate(
             client,
-            "products")
+            "products"),
+        additionalColumns: [productAdditionalColumn]
     },
     {
         relativePath: "users",

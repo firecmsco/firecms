@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { formStyles } from "../../styles";
 
-import { CMSFieldProps } from "./form_props";
+import { CMSFieldProps } from "../form_props";
 
 type MapFieldProps<S extends EntitySchema> = CMSFieldProps<object>;
 

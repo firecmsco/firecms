@@ -9,9 +9,9 @@ import {
     MenuItem,
     Select as MuiSelect
 } from "@material-ui/core";
-import { renderPreviewEnumChip } from "../../preview";
 import React from "react";
-import { CMSFieldProps } from "./form_props";
+import { CMSFieldProps } from "../form_props";
+import { renderPreviewEnumChip } from "../../preview/PreviewComponent";
 
 type ArrayEnumSelectProps<T extends EnumType> = CMSFieldProps<T[]>;
 

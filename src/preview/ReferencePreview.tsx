@@ -2,9 +2,10 @@ import * as React from "react";
 import { useEffect } from "react";
 
 import { CircularProgress, List, ListItem } from "@material-ui/core";
-import { Entity, EntitySchema, Property } from "../models";
+import { Entity, EntitySchema } from "../models";
 import * as firebase from "firebase";
 import { listenEntityFromRef } from "../firebase";
+import { PreviewComponentProps } from "./PreviewComponentProps";
 
 export interface ReferencePreviewProps<S extends EntitySchema> {
 
@@ -12,14 +13,15 @@ export interface ReferencePreviewProps<S extends EntitySchema> {
 
     schema: S;
 
-    renderPreviewComponent<T>(value: T, property: Property<T>, small:boolean): JSX.Element
+    previewComponent: React.FunctionComponent<PreviewComponentProps<any>>;
+
 }
 
 export default function ReferencePreview<S extends EntitySchema>(
     {
         reference,
         schema,
-        renderPreviewComponent
+        previewComponent
     }: ReferencePreviewProps<S>) {
 
     if (!reference)
@@ -46,7 +48,12 @@ export default function ReferencePreview<S extends EntitySchema>(
         <List>
             {listProperties.map(([key, property]) => (
                 <ListItem key={"ref_prev" + property.title + key}>
-                    {renderPreviewComponent(entity.values[key], property, true)}
+                    {
+                        React.createElement(previewComponent, {
+                            value:entity.values[key],
+                            property:property,
+                            small:true
+                        })}}
                 </ListItem>
             ))}
         </List>

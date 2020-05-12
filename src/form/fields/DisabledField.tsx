@@ -1,9 +1,9 @@
-import { EntitySchema, Property } from "../../models";
+import { EntitySchema } from "../../models";
 import { Box, FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React from "react";
 import { formStyles } from "../../styles";
-import renderPreviewComponent from "../../preview";
-import { CMSFieldProps } from "./form_props";
+import { CMSFieldProps } from "../form_props";
+import PreviewComponent from "../../preview/PreviewComponent";
 
 type DisabledFieldProps = CMSFieldProps<any> ;
 
@@ -21,7 +21,10 @@ export default function DisabledField<S extends EntitySchema>({ field, property,
             </FormHelperText>
 
             <Paper elevation={0} className={classes.paper} variant={"outlined"}>
-                {field.value && renderPreviewComponent(field.value, property, false)}
+                {field.value &&
+                <PreviewComponent value={field.value}
+                                  property={property}
+                                  small={false}/>}
                 {!field.value && <Box m={1}>No value set</Box>}
             </Paper>
 

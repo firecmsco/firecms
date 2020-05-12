@@ -1,7 +1,7 @@
 import firebase from "firebase";
 import * as React from "react";
 import { TextSearchDelegate } from "./text_search_delegate";
-import { CMSFieldProps } from "./form";
+import { CMSFieldProps } from "./form/form_props";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -31,6 +31,12 @@ export interface EntityCollectionView<S extends EntitySchema> {
      * Is pagination enabled in this view. True if not specified
      */
     pagination?: boolean;
+
+    /**
+     * You can add additional columns to the collection view by implementing
+     * an additional column delegate.
+     */
+    additionalColumns?: AdditionalColumnDelegate<S>[];
 
     /**
      * If a text search delegate is supplied, a search bar is displayed on top
@@ -126,6 +132,21 @@ export type Property<T = any, ArrayT = any> =
                             T extends Array<ArrayT> ? ArrayProperty<ArrayT> :
                                 MapProperty<T>;
 
+/**
+ * Use this interface for adding additional columns to entity collection views.
+ * If you need to do some async loading you can use AsyncPreviewComponent
+ */
+export interface AdditionalColumnDelegate<S extends EntitySchema> {
+
+    title: string;
+
+    builder: (entity:Entity<S>) => React.ReactNode;
+
+}
+
+/**
+ * Interface including all common properties of a CMS property
+ */
 export interface BaseProperty<T> {
 
     /**
@@ -134,7 +155,7 @@ export interface BaseProperty<T> {
     dataType: DataType;
 
     /**
-     * Property title
+     * Property title (e.g. Product)
      */
     title?: string;
 

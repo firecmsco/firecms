@@ -21,7 +21,7 @@ import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
-import { CMSFieldProps } from "./fields/form_props";
+import { CMSFieldProps } from "./form_props";
 
 
 export function createFormField(name: string,
@@ -143,7 +143,6 @@ export function createCustomIdField(schema: EntitySchema, formType: EntityStatus
     );
 }
 
-export * from "./fields/form_props";
 export {
     ArrayDefaultField,
     ArrayEnumSelect,

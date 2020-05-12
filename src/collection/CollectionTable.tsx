@@ -14,14 +14,19 @@ import {
     Box,
     DialogContent,
     Grid,
-    IconButton,
+    IconButton, ListItem,
     Snackbar,
     TableContainer
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-import renderPreviewComponent from "../preview";
-import { Entity, EntitySchema, FilterValues, Property } from "../models";
+import {
+    AdditionalColumnDelegate,
+    Entity,
+    EntitySchema,
+    FilterValues,
+    Property
+} from "../models";
 import { fetchEntity, listenCollection } from "../firebase";
 import FilterPopup from "./FilterPopup";
 import { TextSearchDelegate } from "../text_search_delegate";
@@ -38,6 +43,7 @@ import { deleteEntity } from "../firebase/firestore";
 import MuiAlert from "@material-ui/lab/Alert/Alert";
 import { CircularProgressCenter } from "../util";
 import EntityPreview from "../preview/EntityPreview";
+import PreviewComponent from "../preview/PreviewComponent";
 
 interface CollectionTableProps<S extends EntitySchema> {
     /**
@@ -70,9 +76,15 @@ interface CollectionTableProps<S extends EntitySchema> {
     textSearchDelegate?: TextSearchDelegate,
 
     /**
+     * You can add additional columns to the collection view by implementing
+     * an additional column delegate.
+     */
+    additionalColumns?: AdditionalColumnDelegate<S>[];
+
+    /**
      * Should this component allow deletion of entries
      */
-    deleteEnabled:boolean,
+    deleteEnabled: boolean,
 
     /**
      * Should the table add an edit button
@@ -183,6 +195,10 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                     .map(([key, field], index) =>
                         renderTableCell(index, entity.values[key], key, field))}
 
+                {props.additionalColumns && props.additionalColumns
+                    .map((delegate, index) =>
+                        renderCustomTableCell(index, delegate.builder(entity)))}
+
             </TableRow>
         );
     }
@@ -251,6 +267,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                         order={order}
                         orderBy={orderBy}
                         sortable={!textSearchData.length}
+                        additionalColumns={props.additionalColumns}
                         onRequestSort={handleRequestSort}
                     />
                     {tableBody}
@@ -296,6 +313,7 @@ interface CollectionTableHeadProps<S extends EntitySchema> {
     orderBy?: string;
     sortable: boolean;
     schema: S;
+    additionalColumns?: AdditionalColumnDelegate<S>[];
 }
 
 interface HeadCell {
@@ -313,7 +331,8 @@ function CollectionTableHead<S extends EntitySchema>({
                                                          onRequestSort,
                                                          hasEditButton,
                                                          hasDeleteButton,
-                                                         schema
+                                                         schema,
+                                                         additionalColumns
                                                      }: CollectionTableHeadProps<S>) {
 
 
@@ -332,6 +351,7 @@ function CollectionTableHead<S extends EntitySchema>({
     return (
         <TableHead>
             <TableRow>
+
                 {hasEditButton && <TableCell
                     key={"header-edit"}
                     align={"left"}
@@ -373,6 +393,19 @@ function CollectionTableHead<S extends EntitySchema>({
                         </TableCell>
                     );
                 })}
+
+                {additionalColumns && additionalColumns.map((additionalColumn, index) => {
+                    return (
+                        <TableCell
+                            key={`head-additional-${index}`}
+                            align={"left"}
+                            padding={"default"}
+                        >
+                            {additionalColumn.title}
+                        </TableCell>
+                    );
+                })}
+
             </TableRow>
         </TableHead>
     );
@@ -475,7 +508,18 @@ function renderTableCell(index: number, value: any, key: string, property: Prope
     return (
         <TableCell key={`table-cell-${key}`} component="th"
                    align={getCellAlignment(property)}>
-            {renderPreviewComponent(value, property, false)}
+
+            <PreviewComponent value={value}
+                              property={property}
+                              small={false}/>
+        </TableCell>
+    );
+}
+
+function renderCustomTableCell(index: number, element: React.ReactNode) {
+    return (
+        <TableCell key={`table-additional-${index}`} component="th">
+            {element}
         </TableCell>
     );
 }

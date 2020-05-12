@@ -48,6 +48,7 @@ export function CollectionRoute<S extends EntitySchema>({
 
     return (
         <React.Fragment>
+
             <Box mb={3}>
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
@@ -77,16 +78,20 @@ export function CollectionRoute<S extends EntitySchema>({
                     </Grid>
                 </Grid>
             </Box>
+
             <Box mb={3}>
                 <Typography variant="h5">{view.schema.name} List</Typography>
             </Box>
+
             <CollectionTable collectionPath={view.relativePath}
                              schema={view.schema}
                              deleteEnabled={view.deleteEnabled !== undefined ? view.deleteEnabled : true}
                              textSearchDelegate={view.textSearchDelegate}
                              includeToolbar={true}
                              onEntityEdit={onEntityEdit}
+                             additionalColumns={view.additionalColumns}
                              paginationEnabled={view.pagination === undefined ? true : view.pagination}/>
+
         </React.Fragment>
     );
 }

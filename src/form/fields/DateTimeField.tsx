@@ -2,7 +2,7 @@ import { getIn } from "formik";
 import React from "react";
 import { DateTimePicker } from "@material-ui/pickers";
 
-import { CMSFieldProps } from "./form_props";
+import { CMSFieldProps } from "../form_props";
 import firebase from "firebase";
 
 type DateTimeFieldProps = CMSFieldProps<firebase.firestore.Timestamp> ;

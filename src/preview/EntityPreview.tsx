@@ -8,7 +8,7 @@ import {
     TableRow
 } from "@material-ui/core";
 import { Entity, EntitySchema } from "../models";
-import renderPreviewComponent from "./index";
+import PreviewComponent from "./PreviewComponent";
 
 export interface EntityPreviewProps<S extends EntitySchema> {
 
@@ -34,7 +34,9 @@ export default function EntityPreview<S extends EntitySchema>(
                                 {property.title}
                             </TableCell>
                             <TableCell>
-                                {renderPreviewComponent(entity.values[key], property, false)}
+                                <PreviewComponent value={entity.values[key]}
+                                                  property={property}
+                                                  small={false}/>
                             </TableCell>
                         </TableRow>
                     ))}

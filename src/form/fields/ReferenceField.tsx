@@ -19,9 +19,9 @@ import { formStyles } from "../../styles";
 import ReferencePreview from "../../preview/ReferencePreview";
 import ClearIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import CollectionTable from "../../collection/CollectionTable";
-import renderPreviewComponent from "../../preview";
-import { CMSFieldProps } from "./form_props";
+import { CMSFieldProps } from "../form_props";
 import firebase from "firebase";
+import { PreviewComponent } from "../../preview";
 
 type ReferenceFieldProps<S extends EntitySchema> = CMSFieldProps<firebase.firestore.DocumentReference> ;
 
@@ -139,7 +139,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                     <ReferencePreview
                         reference={value}
                         schema={schema}
-                        renderPreviewComponent={renderPreviewComponent}/>}
+                        previewComponent={PreviewComponent}/>}
                     {!value &&
                     <Box>No value set</Box>}
                 </Grid>

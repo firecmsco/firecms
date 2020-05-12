@@ -1,4 +1,4 @@
-import { Property } from "../../models";
+import { Property } from "../models";
 import { ReactElement } from "react";
 import { FieldProps } from "formik/dist/Field";
 

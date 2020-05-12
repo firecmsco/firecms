@@ -6,7 +6,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 
-import { CMSFieldProps } from "./form_props";
+import { CMSFieldProps } from "../form_props";
 import { getIn } from "formik";
 
 type SwitchFieldProps = CMSFieldProps<boolean>;

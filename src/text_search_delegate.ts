@@ -1,6 +1,13 @@
 import { SearchClient, SearchIndex } from "algoliasearch";
 
+/**
+ * Simple interface for implementing a text search
+ */
 export interface TextSearchDelegate {
+    /**
+     * @param query string
+     * @return array containing the Firestore ids of the search results
+     */
     performTextSearch(query: string): Promise<readonly string[]>;
 }
 
@@ -26,6 +33,5 @@ export class AlgoliaTextSearchDelegate implements TextSearchDelegate {
                 console.log(err);
                 return [];
             });
-        // return [];
     }
 }
