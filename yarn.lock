@@ -403,7 +403,7 @@
     "@babel/helper-create-class-features-plugin" "^7.8.3"
     "@babel/helper-plugin-utils" "^7.8.3"
 
-"@babel/plugin-proposal-decorators@7.8.3":
+"@babel/plugin-proposal-decorators@7.8.3", "@babel/plugin-proposal-decorators@^7.8.3":
   version "7.8.3"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.8.3.tgz#2156860ab65c5abf068c3f67042184041066543e"
   integrity sha512-e3RvdvS4qPJVTe288DlXjwKflpfy1hr0j5dz5WpIYYeP7vQZg2WfAEIp8k5/Lwis/m5REXEteIz6rrcDtXXG7w==
@@ -461,7 +461,7 @@
     "@babel/helper-plugin-utils" "^7.8.3"
     "@babel/plugin-syntax-optional-catch-binding" "^7.8.0"
 
-"@babel/plugin-proposal-optional-chaining@7.9.0", "@babel/plugin-proposal-optional-chaining@^7.9.0":
+"@babel/plugin-proposal-optional-chaining@7.9.0", "@babel/plugin-proposal-optional-chaining@^7.8.3", "@babel/plugin-proposal-optional-chaining@^7.9.0":
   version "7.9.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-optional-chaining/-/plugin-proposal-optional-chaining-7.9.0.tgz#31db16b154c39d6b8a645292472b98394c292a58"
   integrity sha512-NDn5tu3tcv4W30jNhmc2hyD5c56G6cXx4TesJubhxrJeCvuuMpttxr0OnNCqbZGhFjLrg+NIhxxC+BK5F6yS3w==
@@ -8529,13 +8529,15 @@ methods@~1.1.2:
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4=
 
-microbundle-crl@^0.13.8:
-  version "0.13.9"
-  resolved "https://registry.yarnpkg.com/microbundle-crl/-/microbundle-crl-0.13.9.tgz#d4b6a8663dc4093f34997db0d860489507f8aa52"
-  integrity sha512-IJiuNWikNtSlPJ2s6fO0PVXOC3uq4ofvR5wu7UgLpqehV7Zf/wMHSHGmwxB3NbuLopwZy1SUfiGKH0nzNS/d4Q==
+microbundle-crl@^0.13.10:
+  version "0.13.10"
+  resolved "https://registry.yarnpkg.com/microbundle-crl/-/microbundle-crl-0.13.10.tgz#38062d0fd6e343ce9df079687064bb0010d4b244"
+  integrity sha512-S1e1C1q0X8ASRQegt2JaLLvsZc85z32aiAaDx8xTCh6hQmRlM00ablx3WD/ZodiY3MegxwDv0mvbGH0ud5Gj2A==
   dependencies:
     "@babel/core" "^7.8.7"
     "@babel/plugin-proposal-class-properties" "7.7.4"
+    "@babel/plugin-proposal-decorators" "^7.8.3"
+    "@babel/plugin-proposal-optional-chaining" "^7.8.3"
     "@babel/plugin-syntax-jsx" "^7.7.4"
     "@babel/plugin-transform-flow-strip-types" "^7.7.4"
     "@babel/plugin-transform-react-jsx" "^7.7.7"

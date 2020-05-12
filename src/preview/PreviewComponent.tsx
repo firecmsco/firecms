@@ -29,15 +29,15 @@ import ReferencePreview from "./ReferencePreview";
 import { PreviewComponentProps } from "./PreviewComponentProps";
 
 export default function PreviewComponent<T>({
-                                                      value,
-                                                      property,
-                                                      small
-                                                  }: PreviewComponentProps<T>
-): JSX.Element | any {
+                                                value,
+                                                property,
+                                                small
+                                            }: PreviewComponentProps<T>
+) {
 
     console.debug("renderPreviewComponent", value, property, small);
 
-    if (!value) return <React.Fragment/>;
+    if (!value) return null;
 
     if (!property) {
         console.error("No property assigned for preview component", value, property, small);
@@ -82,7 +82,7 @@ export default function PreviewComponent<T>({
     } else if (property.dataType === "boolean") {
         content = value ? "Yes" : "No";
     } else {
-        content = typeof value === "object" ? (value as unknown as object).toString() : value;
+        content = typeof value === "object" ? (value as unknown as object).toString() : (value ? value : null);
     }
     return content;
 }
@@ -100,8 +100,8 @@ function renderMap<T>(property: MapProperty<T>, value: T) {
             {listProperties.map(([key, property]) => (
                 <ListItem key={property.title + key}>
                     <PreviewComponent value={value[key] as any}
-                                            property={property}
-                                            small={true}/>
+                                      property={property}
+                                      small={true}/>
                 </ListItem>
             ))}
         </List>
@@ -129,9 +129,10 @@ function renderArrayOfMaps(properties: Properties, values: any[]) {
                                         key={`table-cell-${key}`}
                                         component="th"
                                     >
-                                        <PreviewComponent value={value[key] as any}
-                                                                property={property}
-                                                                small={true}/>
+                                        <PreviewComponent
+                                            value={value[key] as any}
+                                            property={property}
+                                            small={true}/>
                                     </TableCell>
                                 )
                             )}
@@ -190,8 +191,8 @@ function renderGenericArrayCell<T extends EnumType>(
             values.map((value, index) =>
                 <React.Fragment>
                     <PreviewComponent value={value}
-                                            property={property}
-                                            small={true}/>
+                                      property={property}
+                                      small={true}/>
                     {index < values.length - 1 && <Divider/>}
                 </React.Fragment>
             )}
