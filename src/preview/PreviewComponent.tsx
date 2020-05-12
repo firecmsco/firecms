@@ -82,9 +82,9 @@ export default function PreviewComponent<T>({
     } else if (property.dataType === "boolean") {
         content = value ? "Yes" : "No";
     } else {
-        content = typeof value === "object" ? (value as unknown as object).toString() : (value ? value : null);
+        content = typeof value === "object" ? (value as unknown as object).toString() : value;
     }
-    return content;
+    return (content ? content : null);
 }
 
 function renderMap<T>(property: MapProperty<T>, value: T) {
