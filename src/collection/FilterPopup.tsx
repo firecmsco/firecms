@@ -10,7 +10,7 @@ import { initFilterValues } from "../firebase/firestore";
 import { useStyles } from "../styles";
 import ClearIcon from "@material-ui/icons/Clear";
 import { getFilterableProperties } from "../util/properties";
-import StringNumberFilterField from "./filters/FilterTextField";
+import StringNumberFilterField from "./filters/StringNumberFilterField";
 
 interface FilterPopupProps<S extends EntitySchema> {
     schema: S;

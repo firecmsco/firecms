@@ -96,7 +96,7 @@
         "react-router-dom": "^5.1.2",
         "react-scripts": "^3.4.1",
         "react-select": ">=3",
-        "typescript": "^3.8.3",
+        "typescript": "^3.9.2",
         "yup": "^0.28.3"
     },
     "files": [

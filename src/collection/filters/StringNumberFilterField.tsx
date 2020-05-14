@@ -9,6 +9,7 @@ import {
     Typography
 } from "@material-ui/core";
 import React, { useState } from "react";
+import { FieldProps } from "formik/dist/Field";
 
 interface TextFieldProps {
     name: string,
@@ -27,7 +28,7 @@ export default function StringNumberFilterField({ name, property }: TextFieldPro
                   field,
                   form: { setFieldValue },
                   ...props
-              }: any) => {
+              }: FieldProps) => {
 
                 const [fieldOperation, fieldValue] = field.value ? field.value : ["==", undefined];
                 const [operation, setOperation] = useState<string>(fieldOperation);

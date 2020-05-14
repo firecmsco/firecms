@@ -41,7 +41,7 @@ export default function ReferencePreview<S extends EntitySchema>(
 
     let listProperties = Object.entries(schema.properties).filter(([_, property]) => property.includeAsMapPreview);
     if (!listProperties.length) {
-        listProperties = Object.entries(schema.properties).slice(0,3);
+        listProperties = Object.entries(schema.properties).slice(0, 3);
     }
 
     return (
@@ -50,10 +50,11 @@ export default function ReferencePreview<S extends EntitySchema>(
                 <ListItem key={"ref_prev" + property.title + key}>
                     {
                         React.createElement(previewComponent, {
-                            value:entity.values[key],
-                            property:property,
-                            small:true
-                        })}}
+                            value: entity.values[key],
+                            property: property,
+                            small: true
+                        })
+                    }
                 </ListItem>
             ))}
         </List>

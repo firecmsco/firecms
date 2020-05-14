@@ -6,6 +6,7 @@ import { Entity, EntitySchema, EntityValues, FilterValues } from "../models";
  * Retrieve collection from a Firestore path with a given schema
  * @param path
  * @param schema
+ * @param filter
  * @param limit
  * @param startAfter
  * @param orderBy
