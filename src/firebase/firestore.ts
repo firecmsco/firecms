@@ -3,52 +3,6 @@ import "firebase/firestore";
 import { Entity, EntitySchema, EntityValues, FilterValues } from "../models";
 
 /**
- * Retrieve collection from a Firestore path with a given schema
- * @param path
- * @param schema
- * @param filter
- * @param limit
- * @param startAfter
- * @param orderBy
- * @param order
- */
-export function fetchCollection<S extends EntitySchema>(
-    path: string,
-    schema: S,
-    filter?: FilterValues<S>,
-    limit?: number,
-    startAfter?: any,
-    orderBy?: string,
-    order?: "desc" | "asc"
-): Promise<Entity<S>[]> {
-
-    console.debug("Fetch collection", path, limit, startAfter, orderBy, order);
-
-    let collectionReference: firebase.firestore.Query = firebase.firestore()
-        .collection(path);
-
-    if (filter)
-        Object.entries(filter)
-            .filter(([_, entry]) => !!entry)
-            .forEach(([key, [op, value]]) => collectionReference = collectionReference.where(key, op, value));
-
-    if (orderBy && order)
-        collectionReference = collectionReference.orderBy(orderBy, order);
-
-    if (startAfter)
-        collectionReference = collectionReference
-            .startAfter(startAfter);
-
-    if (limit)
-        collectionReference = collectionReference
-            .limit(limit);
-
-    return collectionReference
-        .get()
-        .then((querySnapshot) => querySnapshot.docs.map((doc) => createEntityFromSchema(doc, schema)));
-}
-
-/**
  * Listen to a entities in a Firestore path
  * @param path
  * @param schema
@@ -66,7 +20,7 @@ export function listenCollection<S extends EntitySchema>(
     onSnapshot: (entity: Entity<S>[]) => void,
     filter?: FilterValues<S>,
     limit?: number,
-    startAfter?: any,
+    startAfter?: any[],
     orderBy?: string,
     order?: "desc" | "asc"
 ): Function {

@@ -35,8 +35,6 @@ export default function PreviewComponent<T>({
                                             }: PreviewComponentProps<T>
 ) {
 
-    console.debug("renderPreviewComponent", value, property, small);
-
     if (!value) return null;
 
     if (!property) {

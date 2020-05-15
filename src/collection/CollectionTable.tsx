@@ -14,7 +14,7 @@ import {
     Box,
     DialogContent,
     Grid,
-    IconButton, ListItem,
+    IconButton,
     Snackbar,
     TableContainer
 } from "@material-ui/core";
@@ -118,10 +118,15 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     useEffect(() => {
         const startAfter = pageKeys[page];
-        const cancelSubscription = listenCollection<S>(props.collectionPath, props.schema,
+        const cancelSubscription = listenCollection<S>(
+            props.collectionPath,
+            props.schema,
             entities => {
                 if (entities.length)
-                    pageKeys[page + 1] = entities[entities.length - 1].snapshot;
+                    {
+                        const lastEntity = entities[entities.length - 1];
+                        pageKeys[page + 1] = orderBy? lastEntity.values[orderBy] : lastEntity.snapshot ;
+                    }
                 setData(entities);
             },
             filter, rowsPerPage, startAfter, orderBy, order);
