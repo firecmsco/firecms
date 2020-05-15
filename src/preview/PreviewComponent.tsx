@@ -12,6 +12,7 @@ import {
 import React from "react";
 import * as firebase from "firebase";
 import {
+    Box,
     CardMedia,
     Chip,
     Divider,
@@ -64,12 +65,12 @@ export default function PreviewComponent<T>({
                     value
                 );
             } else if (arrayProperty.of.storageMeta) {
-                content = renderGenericArrayCell(arrayProperty.of, value);
+                content = renderGenericArray(arrayProperty.of, value);
             } else {
                 content = renderArrayOfStrings(value);
             }
         } else {
-            content = renderGenericArrayCell(arrayProperty.of, value);
+            content = renderGenericArray(arrayProperty.of, value);
         }
     } else if (property.dataType === "map" && typeof value === "object") {
         content = renderMap(property as MapProperty<any>, value);
@@ -178,7 +179,7 @@ function renderArrayEnumTableCell<T extends EnumType>(
     );
 }
 
-function renderGenericArrayCell<T extends EnumType>(
+function renderGenericArray<T extends EnumType>(
     property: Property,
     values: T[]
 ) {
@@ -188,9 +189,11 @@ function renderGenericArrayCell<T extends EnumType>(
             {values &&
             values.map((value, index) =>
                 <React.Fragment>
-                    <PreviewComponent value={value}
-                                      property={property}
-                                      small={true}/>
+                    <Box m={1}>
+                        <PreviewComponent value={value}
+                                          property={property}
+                                          small={true}/>
+                    </Box>
                     {index < values.length - 1 && <Divider/>}
                 </React.Fragment>
             )}
@@ -210,11 +213,18 @@ function renderUrlAudioComponent(value: any) {
 function renderUrlImageThumbnail(url: string,
                                  small: boolean) {
     return (
-        <img src={url}
-             style={{
-                 maxWidth: small ? 100 : 200,
-                 maxHeight: small ? 100 : 200
-             }}/>
+        <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            width={small ? 100 : 200}
+            height={small ? 100 : 200}>
+            <img src={url}
+                 style={{
+                     maxWidth: small ? 100 : 200,
+                     maxHeight: small ? 100 : 200
+                 }}/>
+        </Box>
     );
 }
 

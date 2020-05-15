@@ -1,11 +1,13 @@
 import * as React from "react";
 import { useEffect } from "react";
 
-import { CircularProgress, List, ListItem } from "@material-ui/core";
+import { Box, List, ListItem } from "@material-ui/core";
 import { Entity, EntitySchema } from "../models";
 import * as firebase from "firebase";
 import { listenEntityFromRef } from "../firebase";
 import { PreviewComponentProps } from "./PreviewComponentProps";
+import SkeletonComponent from "./SkeletonComponent";
+import LinkIcon from "@material-ui/icons/Link";
 
 export interface ReferencePreviewProps<S extends EntitySchema> {
 
@@ -36,28 +38,35 @@ export default function ReferencePreview<S extends EntitySchema>(
         return () => cancel();
     }, [reference, schema]);
 
-    if (!entity)
-        return (<CircularProgress/>);
 
     let listProperties = Object.entries(schema.properties).filter(([_, property]) => property.includeAsMapPreview);
     if (!listProperties.length) {
         listProperties = Object.entries(schema.properties).slice(0, 3);
     }
 
+
     return (
-        <List>
-            {listProperties.map(([key, property]) => (
-                <ListItem key={"ref_prev" + property.title + key}>
-                    {
-                        React.createElement(previewComponent, {
-                            value: entity.values[key],
-                            property: property,
-                            small: true
-                        })
-                    }
-                </ListItem>
-            ))}
-        </List>
+        <Box display={"flex"}>
+
+            <Box mt={1.5}><LinkIcon color={"disabled"}/></Box>
+
+            <List>
+                {listProperties.map(([key, property]) => (
+                    <ListItem key={"ref_prev" + property.title + key}>
+                        {entity ?
+                            React.createElement(previewComponent, {
+                                value: entity.values[key],
+                                property: property,
+                                small: true
+                            })
+                            :
+                            <SkeletonComponent property={property}
+                                               small={true}/>
+                        }
+                    </ListItem>
+                ))}
+            </List>
+        </Box>
     );
 
 }

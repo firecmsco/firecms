@@ -1,12 +1,13 @@
 import { StringProperty } from "../models";
 import React, { ReactElement, useEffect } from "react";
 import { getDownloadURL } from "../firebase";
+import { renderImageThumbnail } from "./SkeletonComponent";
 
 interface StorageThumbnailProps {
     storagePath: string | undefined;
     property: StringProperty;
-    small:boolean;
-    renderUrlComponent: (property: StringProperty, url: any, small:boolean) => ReactElement;
+    small: boolean;
+    renderUrlComponent: (property: StringProperty, url: any, small: boolean) => ReactElement;
 }
 
 export default function StorageThumbnail({ storagePath, property, renderUrlComponent, small }: StorageThumbnailProps) {
@@ -21,6 +22,7 @@ export default function StorageThumbnail({ storagePath, property, renderUrlCompo
             });
     }, [storagePath]);
 
-    return url ? renderUrlComponent(property, url, small) :
-        <React.Fragment></React.Fragment>;
+    return url ?
+        renderUrlComponent(property, url, small) :
+        renderImageThumbnail(small);
 }

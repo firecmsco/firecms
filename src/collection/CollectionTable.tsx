@@ -44,6 +44,10 @@ import MuiAlert from "@material-ui/lab/Alert/Alert";
 import { CircularProgressCenter } from "../util";
 import EntityPreview from "../preview/EntityPreview";
 import PreviewComponent from "../preview/PreviewComponent";
+import SkeletonComponent, {
+    renderSkeletonIcon,
+    renderSkeletonText
+} from "../preview/SkeletonComponent";
 
 interface CollectionTableProps<S extends EntitySchema> {
     /**
@@ -105,9 +109,14 @@ interface CollectionTableProps<S extends EntitySchema> {
 export default function CollectionTable<S extends EntitySchema>(props: CollectionTableProps<S>) {
 
     const classes = useStyles();
+
     const [data, setData] = React.useState<Entity<S>[]>([]);
+    const [dataLoading, setDataLoading] = React.useState<boolean>();
+
     const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
+    const [textSearchLoading, setTextSearchLoading] = React.useState<boolean>(false);
     const [textSearchData, setTextSearchData] = React.useState<Entity<S>[]>([]);
+
     const [filter, setFilter] = React.useState<FilterValues<S> | undefined>(props.initialFilter);
     const [order, setOrder] = React.useState<Order>();
     const [orderBy, setOrderBy] = React.useState<string>();
@@ -118,15 +127,16 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     useEffect(() => {
         const startAfter = pageKeys[page];
+        setDataLoading(true);
         const cancelSubscription = listenCollection<S>(
             props.collectionPath,
             props.schema,
             entities => {
-                if (entities.length)
-                    {
-                        const lastEntity = entities[entities.length - 1];
-                        pageKeys[page + 1] = orderBy? lastEntity.values[orderBy] : lastEntity.snapshot ;
-                    }
+                setDataLoading(false);
+                if (entities.length) {
+                    const lastEntity = entities[entities.length - 1];
+                    pageKeys[page + 1] = orderBy ? lastEntity.values[orderBy] : lastEntity.snapshot;
+                }
                 setData(entities);
             },
             filter, rowsPerPage, startAfter, orderBy, order);
@@ -208,7 +218,46 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         );
     }
 
-    const tableBody = <TableBody>
+    function buildTableRowSkeleton<S extends EntitySchema>(index: number) {
+        return (
+            <TableRow
+                key={`table_row_skeleton_${index}`}
+                tabIndex={-1}
+            >
+
+                {hasEditButton && <TableCell>
+                    {renderSkeletonIcon()}
+                </TableCell>}
+
+                {hasDeleteButton && <TableCell>
+                    {renderSkeletonIcon()}
+                </TableCell>}
+
+                {/*Id*/}
+                <TableCell component="th">
+                    {renderSkeletonText()}
+                </TableCell>
+
+                {tableViewFields
+                    .map(([key, field], index) =>
+                        renderTableSkeletonCell(index, key, field))}
+
+                {props.additionalColumns && props.additionalColumns
+                    .map((delegate, index) =>
+                        renderSkeletonText())}
+
+            </TableRow>
+        );
+    }
+
+    const skeletonBody = <TableBody>
+        {[0, 1, 2, 3, 4]
+            .map((_, index) => {
+                return buildTableRowSkeleton(index);
+            })}
+    </TableBody>;
+
+    const body = <TableBody>
         {textSearchInProgress && textSearchData
             .map((entity, index) => {
                 return buildTableRow(entity, index);
@@ -224,13 +273,15 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                 <TableCell colSpan={tableViewFields.length}/>
             </TableRow>
         )}
-
     </TableBody>;
+
+    const tableBody = dataLoading || textSearchLoading ? skeletonBody : body;
 
     const textSearchEnabled = !!props.textSearchDelegate;
 
     async function onTextSearch(searchString?: string) {
         if (textSearchEnabled) {
+            setTextSearchLoading(true);
             const textSearchDelegate = props.textSearchDelegate as TextSearchDelegate;
             if (!searchString) {
                 setTextSearchData([]);
@@ -243,6 +294,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                 const entities = await Promise.all(promises);
                 setTextSearchData(entities);
             }
+            setTextSearchLoading(false);
         }
     }
 
@@ -517,6 +569,18 @@ function renderTableCell(index: number, value: any, key: string, property: Prope
             <PreviewComponent value={value}
                               property={property}
                               small={false}/>
+        </TableCell>
+    );
+}
+
+function renderTableSkeletonCell(index: number, key: string, property: Property) {
+    return (
+        <TableCell key={`table-cell-${key}`} component="th"
+                   align={getCellAlignment(property)}>
+
+            <SkeletonComponent
+                property={property}
+                small={false}/>
         </TableCell>
     );
 }
