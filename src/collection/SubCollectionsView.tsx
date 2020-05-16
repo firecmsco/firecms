@@ -4,6 +4,7 @@ import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import CollectionTable from "./CollectionTable";
 import { Link as ReactLink } from "react-router-dom";
 import { getRouterNewEntityPath } from "../routes/navigation";
+import DeleteEntityDialog from "./DeleteEntityDialog";
 
 
 interface SubCollectionViewProps<S extends EntitySchema> {
@@ -19,16 +20,26 @@ interface TabPanelProps<S extends EntitySchema> {
     subcollectionPath: string | undefined;
     thisView: EntityCollectionView<S>;
     selectedView: EntityCollectionView<S>;
+
     onEntityClick?(collectionPath: string, entity: Entity<S>): void;
 }
 
 function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thisView, onEntityClick, ...props }: TabPanelProps<S>) {
 
+    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
+
+    const onEntityDelete = (collectionPath: string, entity: Entity<S>) => {
+        setDeleteEntityClicked(entity);
+    };
+
+    const deleteEnabled = thisView.deleteEnabled !== undefined || thisView.deleteEnabled;
+
     return <Grid
         hidden={selectedView !== thisView}>
+
         {subcollectionPath ?
             <CollectionTable collectionPath={subcollectionPath}
-                             deleteEnabled={thisView.deleteEnabled !== undefined ? thisView.deleteEnabled : true}
+                             onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
                              schema={thisView.schema}
                              onEntityEdit={onEntityClick}
                              includeToolbar={false}
@@ -40,6 +51,11 @@ function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thi
                 <Box m={3}>You need to save your entity before adding additional
                     collections</Box>
             </Grid>}
+
+        <DeleteEntityDialog entity={deleteEntityClicked}
+                            schema={thisView.schema}
+                            open={!!deleteEntityClicked}
+                            onClose={() => setDeleteEntityClicked(undefined)}/>
     </Grid>;
 }
 

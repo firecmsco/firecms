@@ -13,11 +13,13 @@ import {
     Breadcrumbs,
     Button,
     Grid,
-    Link,
+    Link, TableContainer,
     Typography
 } from "@material-ui/core";
 import { Link as ReactLink } from "react-router-dom";
 import { BreadcrumbContainer } from "../util/BreadcrumbContainer";
+import DeleteEntityDialog from "../collection/DeleteEntityDialog";
+import EntityDetailDialog from "../preview/EntityDetailDialog";
 
 interface CollectionRouteProps<S extends EntitySchema> {
     view: EntityCollectionView<S>;
@@ -41,11 +43,23 @@ export function CollectionRoute<S extends EntitySchema>({
         throw Error("No match prop for some reason");
     }
 
+    const [entityClicked, setEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
+    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
+
     function onEntityEdit(collectionPath: string, entity: Entity<S>) {
         const entityPath = getEntityPath(entity.id, collectionPath);
         history.push(entityPath);
     }
 
+    const onEntityClick = (collectionPath: string, entity: Entity<S>) => {
+        setEntityClicked(entity);
+    };
+
+    const onEntityDelete = (collectionPath: string, entity: Entity<S>) => {
+        setDeleteEntityClicked(entity);
+    };
+
+    const deleteEnabled = view.deleteEnabled === undefined || view.deleteEnabled;
     return (
         <React.Fragment>
 
@@ -85,12 +99,24 @@ export function CollectionRoute<S extends EntitySchema>({
 
             <CollectionTable collectionPath={view.relativePath}
                              schema={view.schema}
-                             deleteEnabled={view.deleteEnabled !== undefined ? view.deleteEnabled : true}
                              textSearchDelegate={view.textSearchDelegate}
                              includeToolbar={true}
                              onEntityEdit={onEntityEdit}
+                             onEntityClick={onEntityClick}
+                             onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
                              additionalColumns={view.additionalColumns}
                              paginationEnabled={view.pagination === undefined ? true : view.pagination}/>
+
+
+            <EntityDetailDialog entity={entityClicked}
+                                schema={view.schema}
+                                open={!!entityClicked}
+                                onClose={() => setEntityClicked(undefined)}/>
+
+            <DeleteEntityDialog entity={deleteEntityClicked}
+                                schema={view.schema}
+                                open={!!deleteEntityClicked}
+                                onClose={() => setDeleteEntityClicked(undefined)}/>
 
         </React.Fragment>
     );

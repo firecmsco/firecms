@@ -159,6 +159,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                     </Button>
                 </Box>
             </Grid>
+
             <Dialog
                 onClose={handleClose}
                 maxWidth={"xl"}
@@ -167,7 +168,6 @@ export function ReferenceDialog<S extends EntitySchema>(
                 <CollectionTable collectionPath={collectionPath}
                                  schema={schema}
                                  includeToolbar={false}
-                                 deleteEnabled={false}
                                  onEntityClick={handleEntityClick}
                                  paginationEnabled={false}
                                  initialFilter={initialFilter}
@@ -178,6 +178,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                     </Button>
                 </DialogActions>
             </Dialog>
+
         </React.Fragment>
     );
 
