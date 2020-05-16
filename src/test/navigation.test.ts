@@ -1,4 +1,4 @@
-import { getAllPaths, PathConfiguration } from "../routes/navigation";
+import { getAllPaths, PathConfiguration } from "../routes";
 import { siteConfig } from "./test_site_config";
 
 it("model routes are correct", () => {

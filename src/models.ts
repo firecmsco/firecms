@@ -77,7 +77,7 @@ export interface EntitySchema {
     properties: Properties;
 
     /**
-     * Following the Firetsore document and collection schema, you can add
+     * Following the Firestore document and collection schema, you can add
      * subcollections to your entity in the same way you define the root
      * collections.
      */
