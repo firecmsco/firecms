@@ -1,4 +1,5 @@
 import CMSApp from "./CMSApp";
+import { Authenticator } from "./authenticator";
 
 export { CMSApp };
 
@@ -44,4 +45,7 @@ export {
 
 
 export * from "./text_search_delegate";
+export type {
+    Authenticator
+} from "./authenticator";
 

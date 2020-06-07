@@ -30,8 +30,7 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
             <Box className={classes.filter} width={220}>
                 {filterableProperties.map(
                     ([key, property]) => {
-                        const value = values ? values[key] : undefined;
-                        const formField = createFilterField(key, property, value);
+                        const formField = createFilterField(key, property);
                         return (
                             <Box key={`filter_${key}`} mb={1}>
                                 {formField}
@@ -122,7 +121,7 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
     );
 }
 
-function createFilterField(key: string, property: Property, value: any): JSX.Element {
+function createFilterField(key: string, property: Property): JSX.Element {
 
     if (property.dataType === "number" || property.dataType === "string") {
         return <StringNumberFilterField name={key} property={property}/>;

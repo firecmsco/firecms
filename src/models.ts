@@ -66,8 +66,9 @@ export interface EntitySchema {
 
     /**
      * If this property is not set Firestore will create a random ID.
-     * You can set the value to true to allow the user to choose the ID.
-     * You can also pass a set of values to allow him to pick from only those
+     * You can set the value to true to allow the users to choose the ID.
+     * You can also pass a set of values (as an EnumValues object) to allow them
+     * to pick from only those
      */
     customId?: boolean | EnumValues<string>;
 
@@ -177,13 +178,16 @@ export interface BaseProperty<T> {
     /**
      * When the entity is rendered as the target of a reference or as part of a
      * map, should this property be included.
+     * Basically, if it is rendered in second level references.
+     * e.g: One entity -> Array property -> This property
      * If includeAsMapPreview is not specified in any property of an entity, when
      * the given entity is rendered, the first 3 properties are displayed.
      */
     includeAsMapPreview?: boolean;
 
     /**
-     * Should this property have a filter entry in the collection view
+     * Should this property have a filter entry in the collection view.
+     * Defaults to false
      */
     filterable?: boolean;
 

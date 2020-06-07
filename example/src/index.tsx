@@ -14,11 +14,13 @@ import {
     Entity,
     EntityCollectionView,
     EntitySchema,
-    EnumValues
+    EnumValues,
+    Authenticator
 } from "firecms";
 
 import { firebaseConfig } from "./firebase_config";
 import CustomLargeTextField from "./custom_field/CustomLargeTextField";
+import firebase from "firebase";
 
 const locales: EnumValues<string> = {
     "de-DE": "German",
@@ -420,10 +422,17 @@ if (process.env.NODE_ENV !== "production") {
     });
 }
 
+
+const myAuthenticator:Authenticator = (user?: firebase.User) => {
+    console.log("Allowing access to", user?.email)
+    return true;
+};
+
+
 ReactDOM.render(
     <CMSApp
         name={"Test shop CMS"}
-        authentication={false}
+        authentication={myAuthenticator}
         logo={logo}
         navigation={navigation}
         firebaseConfig={firebaseConfig}

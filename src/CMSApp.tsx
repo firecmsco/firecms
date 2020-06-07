@@ -46,6 +46,7 @@ import {
     removeInitialSlash
 } from "./routes";
 import { useStyles } from "./styles";
+import { Authenticator } from "./authenticator";
 
 
 /**
@@ -76,10 +77,11 @@ interface CMSAppProps {
 
     /**
      * Do the users need to log in to access the CMS.
-     * Defaults to true.
-     * TODO: change for an object defining log in methods and an authenticator to discriminate specific users or domains.
+     * You can specify an Authenticator function to discriminate which users can
+     * access the CMS or not.
+     * If not specified authentication is enabled but no user restrictions apply
      */
-    authentication?: boolean;
+    authentication?: boolean | Authenticator;
 
     /**
      * Custom additional views created by the developer, added to the main
@@ -108,6 +110,7 @@ export interface AdditionalView {
      * Name of this view
      */
     name: string;
+
     /**
      * Component to be rendered
      */
@@ -130,32 +133,58 @@ export default function CMSApp({
                                }: CMSAppProps) {
     const classes = useStyles();
     const theme = useTheme();
-    const [authLoading, setAuthLoading] = React.useState(true);
+
     const [mobileOpen, setMobileOpen] = React.useState(false);
+
     const [
         firebaseConfigInitialized,
         setFirebaseConfigInitialized
     ] = React.useState<boolean>(false);
-    const [loggedUser, setLoggedUser] = React.useState<firebase.User | null>(null);
-    const [authError, setAuthError] = React.useState<any>();
-    const [error, setError] = React.useState<string>();
+    const [configError, setConfigError] = React.useState<string>();
 
-    const authenticationEnabled = authentication === undefined || authentication;
+    const [authLoading, setAuthLoading] = React.useState(true);
+    const [loggedUser, setLoggedUser] = React.useState<firebase.User | null>(null);
+    const [authProviderError, setAuthProviderError] = React.useState<any>();
+    const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
+    const [firebaseConfigError, setFirebaseConfigError] = React.useState<boolean>(false);
+
+    const authenticationEnabled = authentication === undefined || !!authentication;
+    const authenticator: Authenticator | undefined
+        = authentication instanceof Function ? authentication : undefined;
+
+    const onAuthStateChanged = async (user: firebase.User | null) => {
+
+        setNotAllowedError(false);
+
+        if (authenticator && user) {
+            const allowed = await authenticator(user);
+            if (allowed)
+                setLoggedUser(user);
+            else
+                setNotAllowedError(true);
+        } else {
+            setLoggedUser(user);
+        }
+
+        setAuthLoading(false);
+    };
 
     function initFirebase(config: Object) {
-        firebase.initializeApp(config);
-        setFirebaseConfigInitialized(true);
-        firebase.auth().onAuthStateChanged(
-            user => {
-                setAuthLoading(false);
-                setLoggedUser(user);
-            },
-            error => setAuthError(error)
-        );
+        try {
+            firebase.initializeApp(config);
+            firebase.auth().onAuthStateChanged(
+                onAuthStateChanged,
+                error => setAuthProviderError(error)
+            );
+            setFirebaseConfigError(false);
+            setFirebaseConfigInitialized(true);
+        } catch (e) {
+            console.error(e);
+            setFirebaseConfigError(true);
+        }
     }
 
     useEffect(() => {
-        document.title = name;
 
         if (process.env.NODE_ENV === "production") {
             fetch("/__/firebase/init.json")
@@ -167,7 +196,7 @@ export default function CMSApp({
                     }
                 })
                 .catch(e =>
-                    setError(
+                    setConfigError(
                         "Could not load Firebase configuration from Firebase hosting. " +
                         "If the app is not deployed in Firebase hosting, you need to specify the configuration manually" +
                         e.toString()
@@ -176,7 +205,7 @@ export default function CMSApp({
         } else if (firebaseConfig) {
             initFirebase(firebaseConfig);
         } else {
-            setError(
+            setConfigError(
                 "You need to deploy the app to Firebase hosting or specify a Firebase configuration object"
             );
         }
@@ -184,13 +213,13 @@ export default function CMSApp({
 
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
-    function signIn() {
+    function googleSignIn() {
         firebase
             .auth()
             .signInWithPopup(googleAuthProvider)
             .then((_: firebase.auth.UserCredential) => {
             })
-            .catch(error => setAuthError(error));
+            .catch(error => setAuthProviderError(error));
     }
 
     function onSignOut() {
@@ -208,13 +237,21 @@ export default function CMSApp({
                 style={{ minHeight: "100vh" }}
             >
                 <Grid item xs={12}>
-                    <Button onClick={signIn}>Sign in</Button>
+                    <Button onClick={googleSignIn}>Sign in</Button>
                 </Grid>
                 <Grid item xs={12}>
+
                     {/* TODO: add link to https://console.firebase.google.com/u/0/project/[PROYECT_ID]/authentication/providers in order to enable google */}
                     {/* in case the error code is auth/operation-not-allowed */}
-                    {authError && <div>{authError.code}</div>}
-                    {authError && <div>{authError.message}</div>}
+
+                    {notAllowedError &&
+                    <div>It looks like you don't have access to the CMS, based
+                        on the specified Authenticator configuration</div>}
+
+                    {authProviderError && <div>{authProviderError.code}</div>}
+                    {authProviderError &&
+                    <div>{authProviderError.message}</div>}
+
                 </Grid>
             </Grid>
         );
@@ -289,8 +326,8 @@ export default function CMSApp({
     }
 
     function renderMainView() {
-        if (error) {
-            return <Box> {error} </Box>;
+        if (configError) {
+            return <Box> {configError} </Box>;
         }
 
         if (!firebaseConfigInitialized) {
@@ -423,13 +460,20 @@ export default function CMSApp({
     return (
         <ThemeProvider theme={theme}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                {authLoading ? (
-                    <CircularProgressCenter/>
-                ) : (!authenticationEnabled || loggedUser) ? (
-                    renderMainView()
-                ) : (
-                    renderLoginView()
-                )}
+                {firebaseConfigError ?
+                    <Box>
+                        It seems like the provided Firebase config is not
+                        correct
+                    </Box> :
+                    (
+                        authLoading ? (
+                            <CircularProgressCenter/>
+                        ) : (!authenticationEnabled || loggedUser) ? (
+                            renderMainView()
+                        ) : (
+                            renderLoginView()
+                        )
+                    )}
             </MuiPickersUtilsProvider>
         </ThemeProvider>
     );

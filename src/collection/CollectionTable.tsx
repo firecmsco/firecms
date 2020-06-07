@@ -33,7 +33,6 @@ import SkeletonComponent, {
     renderSkeletonIcon,
     renderSkeletonText
 } from "../preview/SkeletonComponent";
-import DeleteEntityDialog from "./DeleteEntityDialog";
 
 interface CollectionTableProps<S extends EntitySchema> {
     /**
@@ -142,21 +141,21 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         setOrderBy(isAsc ? undefined : property);
     };
 
-    const onEntityClick = (event:MouseEvent,entity: Entity<S>) => {
+    const onEntityClick = (event: React.MouseEvent<HTMLTableRowElement>, entity: Entity<S>) => {
         if (props.onEntityClick) {
             event.stopPropagation();
             props.onEntityClick(props.collectionPath, entity);
         }
     };
 
-    const onEntityEdit = (event:MouseEvent,entity: Entity<S>) => {
+    const onEntityEdit = (event: React.MouseEvent<HTMLTableRowElement>, entity: Entity<S>) => {
         if (props.onEntityEdit) {
             event.stopPropagation();
             props.onEntityEdit(props.collectionPath, entity);
         }
     };
 
-    const onEntityDelete = (event:MouseEvent,entity: Entity<S>) => {
+    const onEntityDelete = (event: React.MouseEvent<HTMLTableRowElement>, entity: Entity<S>) => {
         if (props.onEntityDelete) {
             event.stopPropagation();
             props.onEntityDelete(props.collectionPath, entity);
