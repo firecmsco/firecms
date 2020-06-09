@@ -276,7 +276,8 @@ ReactDOM.render(
 
 #### Included example
 
-You can access the code for the demo project under `example`. It includes
+You can access the code for the demo project under
+[`example`](https://github.com/Camberi/firecms/tree/master/example). It includes
 every feature provided by this CMS.
 
 To get going you just need to set you Firebase config in `firebase_config.ts`

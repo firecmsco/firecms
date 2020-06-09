@@ -183,7 +183,6 @@ const blogSchema: EntitySchema = {
         priority: {
             title: "Priority",
             description: "This field allows the selection of Infinity as a value",
-            validation: { required: true },
             dataType: "number",
             additionalProps: {
                 allowInfinity: true

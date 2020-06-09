@@ -203,6 +203,17 @@
     readable-stream "^3.4.0"
     through2 "^3.0.0"
 
+"@google-cloud/firestore@^3.8.4":
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/@google-cloud/firestore/-/firestore-3.8.4.tgz#486e4ac19e538a233ff9e862ce576e7c58ce0e7e"
+  integrity sha512-LCZeqB6goNKzD5G/wcoqWaQ2uf3FV/dtU5OSypqOWl+vHMTEVh1ap2H21JXaEydxq53lCayGfqjhDQzs0J3Qew==
+  dependencies:
+    deep-equal "^2.0.0"
+    functional-red-black-tree "^1.0.1"
+    google-gax "^1.13.0"
+    readable-stream "^3.4.0"
+    through2 "^3.0.0"
+
 "@google-cloud/paginator@^2.0.0":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@google-cloud/paginator/-/paginator-2.0.3.tgz#c7987ad05d1c3ebcef554381be80e9e8da4e4882"
