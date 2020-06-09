@@ -15,6 +15,18 @@ const status = {
     public: "Public"
 };
 
+// Replace with your config
+const firebaseConfig = {
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
+};
+
 const categories: EnumValues<string> = {
     electronics: "Electronics",
     books: "Books",
@@ -128,66 +140,57 @@ export const productSchema: EntitySchema = {
                 dataType: "string"
             }
         }
-    },
-    subcollections: [
-        {
-            name: "Locales",
-            relativePath: "locales",
-            schema: {
-                customId: locales,
-                name: "Locale",
-                properties: {
-                    title: {
-                        title: "Title",
-                        validation: { required: true },
-                        includeInListView: true,
-                        dataType: "string"
-                    },
-                    selectable: {
-                        title: "Selectable",
-                        description: "Is this locale selectable",
-                        includeInListView: true,
-                        dataType: "boolean"
-                    },
-                    video: {
-                        title: "Video",
-                        dataType: "string",
-                        validation: { required: false },
-                        includeInListView: true,
-                        storageMeta: {
-                            mediaType: "video",
-                            storagePath: "videos",
-                            acceptedFiles: ["video/*"]
-                        }
+    }
+};
+
+const subcollections = [
+    {
+        name: "Locales",
+        relativePath: "locales",
+        schema: {
+            customId: locales,
+            name: "Locale",
+            properties: {
+                title: {
+                    title: "Title",
+                    validation: { required: true },
+                    includeInListView: true,
+                    dataType: "string"
+                },
+                selectable: {
+                    title: "Selectable",
+                    description: "Is this locale selectable",
+                    includeInListView: true,
+                    dataType: "boolean"
+                },
+                video: {
+                    title: "Video",
+                    dataType: "string",
+                    validation: { required: false },
+                    includeInListView: true,
+                    storageMeta: {
+                        mediaType: "video",
+                        storagePath: "videos",
+                        acceptedFiles: ["video/*"]
                     }
                 }
             }
         }
-    ]
-};
+    }
+];
 
 const navigation: EntityCollectionView<any>[] = [
     {
         relativePath: "products",
         schema: productSchema,
-        name: "Products"
+        name: "Products",
+        subcollections: subcollections
     }
 ];
 
 const myAuthenticator: Authenticator = (user?: firebase.User) => {
     console.log("Allowing access to", user?.email);
     return true;
-};
-
-const firebaseConfig = {
-    apiKey: "",
-    authDomain: "",
-    databaseURL: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: "",
-    measurementId: ""
 };
 
 ReactDOM.render(

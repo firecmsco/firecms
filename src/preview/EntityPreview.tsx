@@ -28,6 +28,14 @@ export default function EntityPreview<S extends EntitySchema>(
         <TableContainer >
             <Table aria-label="simple table">
                 <TableBody>
+                    <TableRow key={"entity_prev_id"}>
+                        <TableCell align="right" component="th" scope="row">
+                            Id
+                        </TableCell>
+                        <TableCell>
+                            {entity.id}
+                        </TableCell>
+                    </TableRow>
                     {Object.entries(schema.properties).map(([key, property]) => (
                         <TableRow key={"entity_prev" + property.title + key}>
                             <TableCell align="right" component="th" scope="row">

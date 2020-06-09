@@ -45,6 +45,7 @@ export default function DeleteEntityDialog<S extends EntitySchema>(props: Delete
                 keepMounted
                 aria-labelledby="confirmation-dialog-title"
                 open={open}
+                onBackdropClick={onClose}
                 {...other}
             >
                 <DialogTitle id="confirmation-dialog-title">

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import {
     AppBar,
+    Avatar,
     Box,
     Button,
     CssBaseline,
@@ -84,6 +85,12 @@ interface CMSAppProps {
     authentication?: boolean | Authenticator;
 
     /**
+     * If authentication is enabled, allow the user to access the content
+     * without login.
+     */
+    allowSkipLogin?: boolean;
+
+    /**
      * Custom additional views created by the developer, added to the main
      * navigation
      */
@@ -128,6 +135,7 @@ export default function CMSApp({
                                    navigation,
                                    includeMedia,
                                    authentication,
+                                   allowSkipLogin,
                                    firebaseConfig,
                                    additionalViews
                                }: CMSAppProps) {
@@ -144,11 +152,14 @@ export default function CMSApp({
 
     const [authLoading, setAuthLoading] = React.useState(true);
     const [loggedUser, setLoggedUser] = React.useState<firebase.User | null>(null);
+    const [loginSkipped, setLoginSkipped] = React.useState<boolean>(false);
     const [authProviderError, setAuthProviderError] = React.useState<any>();
     const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
     const [firebaseConfigError, setFirebaseConfigError] = React.useState<boolean>(false);
 
     const authenticationEnabled = authentication === undefined || !!authentication;
+    const skipLoginButtonEnabled = authenticationEnabled && allowSkipLogin;
+
     const authenticator: Authenticator | undefined
         = authentication instanceof Function ? authentication : undefined;
 
@@ -214,6 +225,7 @@ export default function CMSApp({
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
     function googleSignIn() {
+        setAuthProviderError(null);
         firebase
             .auth()
             .signInWithPopup(googleAuthProvider)
@@ -222,8 +234,14 @@ export default function CMSApp({
             .catch(error => setAuthProviderError(error));
     }
 
+    function skipLogin() {
+        setAuthProviderError(null);
+        setLoginSkipped(true);
+    }
+
     function onSignOut() {
         firebase.auth().signOut();
+        setLoginSkipped(false);
     }
 
     function renderLoginView() {
@@ -236,21 +254,35 @@ export default function CMSApp({
                 justify="center"
                 style={{ minHeight: "100vh" }}
             >
+                <Box className={classes.toolbar}>
+                    {logo && <img className={classes.logo} src={logo}/>}
+                </Box>
+
                 <Grid item xs={12}>
-                    <Button onClick={googleSignIn}>Sign in</Button>
+                    <Button variant="contained"
+                            color="primary"
+                            onClick={googleSignIn}>
+                        Google login
+                    </Button>
                 </Grid>
+
+                {skipLoginButtonEnabled && <Grid item xs={12}>
+                    <Button onClick={skipLogin}>Skip login</Button>
+                </Grid>}
+
                 <Grid item xs={12}>
 
                     {/* TODO: add link to https://console.firebase.google.com/u/0/project/[PROYECT_ID]/authentication/providers in order to enable google */}
                     {/* in case the error code is auth/operation-not-allowed */}
 
                     {notAllowedError &&
-                    <div>It looks like you don't have access to the CMS, based
-                        on the specified Authenticator configuration</div>}
+                    <Box p={2}>It looks like you don't have access to the CMS,
+                        based
+                        on the specified Authenticator configuration</Box>}
 
-                    {authProviderError && <div>{authProviderError.code}</div>}
+                    {/*{authProviderError && <Box>{authProviderError.code}</div>}*/}
                     {authProviderError &&
-                    <div>{authProviderError.message}</div>}
+                    <Box p={2}>{authProviderError.message}</Box>}
 
                 </Grid>
             </Grid>
@@ -411,10 +443,20 @@ export default function CMSApp({
                                     {name}
                                 </Typography>
                                 <Box className={classes.grow}/>
+
+                                <Box p={2}>
+                                    {loggedUser && loggedUser.photoURL ?
+                                        <Avatar src={loggedUser.photoURL}/>
+                                        :
+                                        <Avatar>{loggedUser?.displayName ? loggedUser.displayName[0] : "A"}</Avatar>
+                                    }
+                                </Box>
+
                                 <Button variant="text" color="inherit"
                                         onClick={onSignOut}>
                                     Log Out
                                 </Button>
+
                             </Toolbar>
                         </AppBar>
                         <nav className={classes.drawer}>
@@ -468,7 +510,7 @@ export default function CMSApp({
                     (
                         authLoading ? (
                             <CircularProgressCenter/>
-                        ) : (!authenticationEnabled || loggedUser) ? (
+                        ) : (!authenticationEnabled || loggedUser || loginSkipped) ? (
                             renderMainView()
                         ) : (
                             renderLoginView()

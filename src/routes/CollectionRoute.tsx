@@ -13,7 +13,7 @@ import {
     Breadcrumbs,
     Button,
     Grid,
-    Link, TableContainer,
+    Link,
     Typography
 } from "@material-ui/core";
 import { Link as ReactLink } from "react-router-dom";
@@ -107,16 +107,17 @@ export function CollectionRoute<S extends EntitySchema>({
                              additionalColumns={view.additionalColumns}
                              paginationEnabled={view.pagination === undefined ? true : view.pagination}/>
 
-
+            {entityClicked &&
             <EntityDetailDialog entity={entityClicked}
                                 schema={view.schema}
                                 open={!!entityClicked}
-                                onClose={() => setEntityClicked(undefined)}/>
+                                onClose={() => setEntityClicked(undefined)}/>}
 
+            {deleteEntityClicked &&
             <DeleteEntityDialog entity={deleteEntityClicked}
                                 schema={view.schema}
                                 open={!!deleteEntityClicked}
-                                onClose={() => setDeleteEntityClicked(undefined)}/>
+                                onClose={() => setDeleteEntityClicked(undefined)}/>}
 
         </React.Fragment>
     );

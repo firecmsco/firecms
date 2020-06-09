@@ -10,12 +10,12 @@ import {
     AdditionalColumnDelegate,
     AlgoliaTextSearchDelegate,
     AsyncPreviewComponent,
+    Authenticator,
     CMSApp,
     Entity,
     EntityCollectionView,
     EntitySchema,
-    EnumValues,
-    Authenticator
+    EnumValues
 } from "firecms";
 
 import { firebaseConfig } from "./firebase_config";
@@ -142,44 +142,9 @@ const productSchema: EntitySchema = {
             },
             includeInListView: true
         }
-    },
-    subcollections: [
-        {
-            name: "Locales",
-            relativePath: "locales",
-            schema: {
-                customId: locales,
-                name: "Locale",
-                properties: {
-                    title: {
-                        title: "Title",
-                        validation: { required: true },
-                        dataType: "string",
-                        includeInListView: true
-                    },
-                    selectable: {
-                        title: "Selectable",
-                        description: "Is this locale selectable",
-                        dataType: "boolean",
-                        includeInListView: true
-                    },
-                    video: {
-                        title: "Video",
-                        dataType: "string",
-                        validation: { required: false },
-                        storageMeta: {
-                            mediaType: "video",
-                            storagePath: "videos",
-                            acceptedFiles: ["video/*"]
-                        },
-                        includeInListView: true
-                    }
-                }
-            }
-        }
-    ]
-
+    }
 };
+
 
 const blogSchema: EntitySchema = {
     name: "Blog entry",
@@ -386,6 +351,42 @@ if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH
     console.error("Text search not enabled");
 }
 
+const localeCollection =
+    {
+        name: "Locales",
+        relativePath: "locales",
+        schema: {
+            customId: locales,
+            name: "Locale",
+            properties: {
+                title: {
+                    title: "Title",
+                    validation: { required: true },
+                    dataType: "string",
+                    includeInListView: true
+                },
+                selectable: {
+                    title: "Selectable",
+                    description: "Is this locale selectable",
+                    dataType: "boolean",
+                    includeInListView: true
+                },
+                video: {
+                    title: "Video",
+                    dataType: "string",
+                    validation: { required: false },
+                    storageMeta: {
+                        mediaType: "video",
+                        storagePath: "videos",
+                        acceptedFiles: ["video/*"]
+                    },
+                    includeInListView: true
+                }
+            }
+        }
+    }
+;
+
 let navigation: EntityCollectionView<any>[] = [
     {
         relativePath: "products",
@@ -394,7 +395,9 @@ let navigation: EntityCollectionView<any>[] = [
         textSearchDelegate: client && new AlgoliaTextSearchDelegate(
             client,
             "products"),
-        additionalColumns: [productAdditionalColumn]
+        additionalColumns: [productAdditionalColumn],
+        subcollections: [localeCollection]
+
     },
     {
         relativePath: "users",
@@ -423,8 +426,8 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 
-const myAuthenticator:Authenticator = (user?: firebase.User) => {
-    console.log("Allowing access to", user?.email)
+const myAuthenticator: Authenticator = (user?: firebase.User) => {
+    console.log("Allowing access to", user?.email);
     return true;
 };
 
@@ -433,6 +436,7 @@ ReactDOM.render(
     <CMSApp
         name={"Test shop CMS"}
         authentication={myAuthenticator}
+        allowSkipLogin={true}
         logo={logo}
         navigation={navigation}
         firebaseConfig={firebaseConfig}

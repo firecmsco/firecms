@@ -1,7 +1,7 @@
 ## Testing the example
 
-It is linked to the firecms package in the parent directory for development
-purposes.
+This example has dependencies to the FireCMS package in the parent directory
+for development purposes.
 
 In a regular project you would link the dependencies regularly using the `npm`
 repository.
@@ -17,4 +17,8 @@ The example backend included in this package indexes various collections to
 Algolia, using Cloud functions. If you deploy it your data will be indexed.
 Then you can add your appId and searchKey to the .env file in the root of this
 example project.
+
+Note that you only need to have a Cloud Functions backend such as this one if
+you want to enable text search or are extending functionality in any other
+way.
 

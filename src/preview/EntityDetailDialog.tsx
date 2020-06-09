@@ -29,6 +29,7 @@ export default function EntityDetailDialog<S extends EntitySchema>(props: Entity
                 maxWidth="md"
                 keepMounted
                 aria-labelledby="confirmation-dialog-title"
+                onBackdropClick={onClose}
                 open={open}
                 {...other}
             >

@@ -10,7 +10,7 @@ import DeleteEntityDialog from "./DeleteEntityDialog";
 interface SubCollectionViewProps<S extends EntitySchema> {
 
     parentCollectionPath: string;
-    parentSchema: S;
+    subcollections: EntityCollectionView<any>[];
     entity?: Entity<S>;
 
     onEntityClick?(collectionPath: string, entity: Entity<any>): void;
@@ -59,9 +59,13 @@ function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thi
     </Grid>;
 }
 
-export default function SubCollectionsView<S extends EntitySchema>({ parentCollectionPath, parentSchema, entity, onEntityClick }: SubCollectionViewProps<S>) {
-
-    const subcollections: EntityCollectionView<any>[] = parentSchema.subcollections as EntityCollectionView<any>[];
+export default function SubCollectionsView<S extends EntitySchema>(
+    {
+        parentCollectionPath,
+        subcollections,
+        entity,
+        onEntityClick
+    }: SubCollectionViewProps<S>) {
 
     if (!subcollections) {
         throw Error("Subcollection view must use a schema with subcollection entries");

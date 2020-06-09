@@ -16,7 +16,7 @@ export interface EntityCollectionView<S extends EntitySchema> {
     name: string;
 
     /**
-     * Relative Firestore path of this view to it's parent.
+     * Relative Firestore path of this view to its parent.
      * If this view is in the root the path is equal to the absolute one.
      * This path also determines the URL in FireCMS
      */
@@ -46,7 +46,14 @@ export interface EntityCollectionView<S extends EntitySchema> {
     /**
      * Can the elements in this collection be deleted. Defaults to true
      */
-    deleteEnabled?: boolean,
+    deleteEnabled?: boolean;
+
+    /**
+     * Following the Firestore document and collection schema, you can add
+     * subcollections to your entity in the same way you define the root
+     * collections.
+     */
+    subcollections?: EntityCollectionView<any>[];
 }
 
 /**
@@ -77,12 +84,6 @@ export interface EntitySchema {
      */
     properties: Properties;
 
-    /**
-     * Following the Firestore document and collection schema, you can add
-     * subcollections to your entity in the same way you define the root
-     * collections.
-     */
-    subcollections?: EntityCollectionView<any>[];
 }
 
 /**
@@ -171,7 +172,7 @@ export interface BaseProperty<T> {
     validation?: PropertyValidationSchema,
 
     /**
-     * Should this property be displayed in collection view
+     * Is this property displayed in the collection view
      */
     includeInListView?: boolean;
 
@@ -219,7 +220,7 @@ export type EnumType = number | string ;
 export type EnumValues<T extends EnumType> = Record<T, string>; // id -> Label
 
 /**
- * Record of properties of an entity, as defined in a schema
+ * Record of properties of an entity or a map property
  */
 export type Properties = Record<string, Property>;
 
@@ -233,6 +234,12 @@ export interface PropertyValidationSchema {
 
 export interface NumberProperty extends BaseProperty<number> {
     dataType: "number";
+
+    /**
+     * You can use the enum values providing a map of possible
+     * exclusive values the property can take, mapped to the label that it is
+     * displayed in the dropdown.
+     */
     enumValues?: EnumValues<number>;
 }
 
@@ -250,12 +257,23 @@ export interface GeopointProperty extends BaseProperty<firebase.firestore.GeoPoi
 }
 
 export interface ReferenceProperty<S extends EntitySchema> extends BaseProperty<firebase.firestore.DocumentReference> {
+
     dataType: "reference";
+
     /**
-     * Absolute collection path
+     * Absolute collection path.
      */
     collectionPath: string;
+
+    /**
+     * Schema of the entity this reference points to.
+     */
     schema: S,
+
+    /**
+     * When the dialog for selecting the value of this reference, should
+     * a filter be applied to the possible entities.
+     */
     filter?: FilterValues<S>;
 }
 
@@ -264,8 +282,8 @@ export interface StringProperty extends BaseProperty<string> {
     dataType: "string";
 
     /**
-     * If this field is specified, the string value of this property will be a
-     * reference to a Google Cloud Storage File.
+     * You can specify a `StorageMeta` configuration. It is used to
+     * indicate that this string refers to a path in Google Cloud Storage.
      */
     storageMeta?: StorageMeta;
 
@@ -276,20 +294,30 @@ export interface StringProperty extends BaseProperty<string> {
     urlMediaType?: MediaType;
 
     /**
-     * If this field is specified, the string value of this property will one
-     * of the possible values specified here.
+     * You can use the enum values providing a map of possible
+     * exclusive values the property can take, mapped to the label that it is
+     * displayed in the dropdown.
      */
     enumValues?: EnumValues<string>;
 }
 
-
 export interface ArrayProperty<T> extends BaseProperty<T[]> {
+
     dataType: "array";
+
+    /**
+     * The property of this array. You can specify any property.
+     */
     of: Property<T>;
 }
 
 export interface MapProperty<T> extends BaseProperty<T> {
+
     dataType: "map";
+
+    /**
+     * Record of properties included in this map.
+     */
     properties: Properties;
 }
 
@@ -297,13 +325,25 @@ export interface MapProperty<T> extends BaseProperty<T> {
  * Additional configuration related to Storage related fields
  */
 export interface StorageMeta {
+
+    /**
+     * Media type of this reference, used for displaying the preview
+     */
     mediaType: MediaType;
+
+    /**
+     * Absolute path in you bucket
+     */
     storagePath: string;
+
+    /**
+     * File MIME types that can be uploaded to this reference
+     */
     acceptedFiles?: StorageFileTypes[];
 }
 
 /**
- * Mime types for storage fields
+ * MIME types for storage fields
  */
 export type StorageFileTypes =
     "image/*"

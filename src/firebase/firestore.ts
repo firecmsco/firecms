@@ -18,6 +18,7 @@ export function listenCollection<S extends EntitySchema>(
     path: string,
     schema: S,
     onSnapshot: (entity: Entity<S>[]) => void,
+    onError?: (error: Error) => void,
     filter?: FilterValues<S>,
     limit?: number,
     startAfter?: any[],
@@ -47,7 +48,9 @@ export function listenCollection<S extends EntitySchema>(
             .limit(limit);
 
     return collectionReference
-        .onSnapshot((colSnapshot) => onSnapshot(colSnapshot.docs.map((doc) => createEntityFromSchema(doc, schema))));
+        .onSnapshot((colSnapshot) =>
+                onSnapshot(colSnapshot.docs.map((doc) => createEntityFromSchema(doc, schema))),
+            onError);
 }
 
 /**
@@ -216,7 +219,7 @@ export function saveEntity(
  * @param entity
  */
 export function deleteEntity(
-    entity:Entity<any>
+    entity: Entity<any>
 ): Promise<void> {
     console.debug("Deleting entity", entity);
     return entity.reference.delete();

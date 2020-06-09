@@ -29,16 +29,14 @@ import {
     getFilterableProperties
 } from "../util/properties";
 import PreviewComponent from "../preview/PreviewComponent";
-import SkeletonComponent, {
-    renderSkeletonIcon,
-    renderSkeletonText
-} from "../preview/SkeletonComponent";
+import SkeletonComponent, { renderSkeletonText } from "../preview/SkeletonComponent";
 
 interface CollectionTableProps<S extends EntitySchema> {
     /**
      * Absolute collection path
      */
     collectionPath: string;
+
     /**
      * Schema of the entity displayed by this collection
      */
@@ -97,6 +95,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     const [data, setData] = React.useState<Entity<S>[]>([]);
     const [dataLoading, setDataLoading] = React.useState<boolean>();
+    const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
 
     const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
     const [textSearchLoading, setTextSearchLoading] = React.useState<boolean>(false);
@@ -109,22 +108,32 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     const [pageKeys, setPageKeys] = React.useState<any[]>([]);
     const [rowsPerPage, setRowsPerPage] = React.useState<number | undefined>(props.paginationEnabled ? 10 : undefined);
 
-
     useEffect(() => {
         const startAfter = pageKeys[page];
         setDataLoading(true);
+
         const cancelSubscription = listenCollection<S>(
             props.collectionPath,
             props.schema,
             entities => {
                 setDataLoading(false);
+                setDataLoadingError(undefined);
                 if (entities.length) {
                     const lastEntity = entities[entities.length - 1];
                     pageKeys[page + 1] = orderBy ? lastEntity.values[orderBy] : lastEntity.snapshot;
                 }
                 setData(entities);
             },
-            filter, rowsPerPage, startAfter, orderBy, order);
+            (error) => {
+                setDataLoading(false);
+                setDataLoadingError(error);
+            },
+            filter,
+            rowsPerPage,
+            startAfter,
+            orderBy,
+            order);
+
         return () => cancelSubscription();
     }, [props.collectionPath, props.schema, rowsPerPage, page, order, orderBy, pageKeys, filter]);
 
@@ -148,14 +157,14 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         }
     };
 
-    const onEntityEdit = (event: React.MouseEvent<HTMLTableRowElement>, entity: Entity<S>) => {
+    const onEntityEdit = (event: React.MouseEvent<HTMLButtonElement>, entity: Entity<S>) => {
         if (props.onEntityEdit) {
             event.stopPropagation();
             props.onEntityEdit(props.collectionPath, entity);
         }
     };
 
-    const onEntityDelete = (event: React.MouseEvent<HTMLTableRowElement>, entity: Entity<S>) => {
+    const onEntityDelete = (event: React.MouseEvent<HTMLButtonElement>, entity: Entity<S>) => {
         if (props.onEntityDelete) {
             event.stopPropagation();
             props.onEntityDelete(props.collectionPath, entity);
@@ -181,6 +190,41 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     const hasEditButton = !!props.onEntityEdit;
     const hasDeleteButton = !!props.onEntityDelete;
 
+    const buildTableRowButtons = <S extends EntitySchema>(entity: Entity<S> | null, index: number) => (
+        <TableCell key={`row-buttons-${index}`}>
+            <Box minWidth={96}>
+                {hasEditButton && (
+                    <IconButton aria-label="edit"
+                                disabled={!entity}
+                                onClick={(event) => entity && onEntityEdit(event, entity)}>
+                        <EditIcon color={"action"}/>
+                    </IconButton>
+                )}
+
+                {hasDeleteButton && (
+                    <IconButton aria-label="delete"
+                                disabled={!entity}
+                                onClick={(event) => entity && onEntityDelete(event, entity)}>
+                        <DeleteIcon/>
+                    </IconButton>
+                )}
+            </Box>
+
+            <Box maxWidth={96}
+                 component="div"
+                 textAlign="center"
+                 textOverflow="ellipsis"
+                 overflow="auto">
+                {entity ?
+                    <Typography variant={"caption"}> {entity.id} </Typography>
+                    :
+                    renderSkeletonText()
+                }
+            </Box>
+
+        </TableCell>
+    );
+
     function buildTableRow<S extends EntitySchema>(entity: Entity<S>, index: number) {
         return (
             <TableRow
@@ -190,11 +234,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                 tabIndex={-1}
             >
 
-                {hasEditButton && renderEditCell(entity, onEntityEdit)}
-
-                {hasDeleteButton && renderDeleteCell(entity, onEntityDelete)}
-
-                {renderIdCell(entity.id)}
+                {buildTableRowButtons(entity, index)}
 
                 {tableViewFields
                     .map(([key, field], index) =>
@@ -208,25 +248,17 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         );
     }
 
+
     function buildTableRowSkeleton<S extends EntitySchema>(index: number) {
+        const buttonsCell = buildTableRowButtons(null, index);
+
         return (
             <TableRow
                 key={`table_row_skeleton_${index}`}
                 tabIndex={-1}
             >
 
-                {hasEditButton && <TableCell>
-                    {renderSkeletonIcon()}
-                </TableCell>}
-
-                {hasDeleteButton && <TableCell>
-                    {renderSkeletonIcon()}
-                </TableCell>}
-
-                {/*Id*/}
-                <TableCell component="th">
-                    {renderSkeletonText()}
-                </TableCell>
+                {buttonsCell}
 
                 {tableViewFields
                     .map(([key, field], index) =>
@@ -247,7 +279,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
             })}
     </TableBody>;
 
-    const body = <TableBody>
+    const tableBody = <TableBody>
         {textSearchInProgress && textSearchData
             .map((entity, index) => {
                 return buildTableRow(entity, index);
@@ -265,7 +297,8 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         )}
     </TableBody>;
 
-    const tableBody = dataLoading || textSearchLoading ? skeletonBody : body;
+    const body =
+        (dataLoading || textSearchLoading) ? skeletonBody : tableBody;
 
     const textSearchEnabled = !!props.textSearchDelegate;
 
@@ -299,6 +332,22 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                                     collectionPath={props.collectionPath}
                                     onFilterUpdate={onFilterUpdate}/>}
 
+            {dataLoadingError &&
+            <Box m={5}>
+                <Grid container spacing={2} justify="center">
+                    <Grid container justify="center">
+                        <Typography
+                            variant={"h6"}
+                            color={"error"}>{dataLoadingError.name}</Typography>
+                    </Grid>
+                    <Grid container justify="center">
+                        <Typography
+                            color={"error"}>{dataLoadingError.message}</Typography>
+                    </Grid>
+                </Grid>
+            </Box>}
+
+            {!dataLoadingError &&
             <div className={classes.tableWrapper}>
                 <Table stickyHeader
                        className={classes.table}
@@ -309,17 +358,16 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                     <CollectionTableHead
                         classes={classes}
                         schema={props.schema}
-                        hasEditButton={hasEditButton}
-                        hasDeleteButton={hasDeleteButton}
                         order={order}
                         orderBy={orderBy}
                         sortable={!textSearchData.length}
                         additionalColumns={props.additionalColumns}
                         onRequestSort={handleRequestSort}
                     />
-                    {tableBody}
+                    {body}
                 </Table>
             </div>
+            }
 
             {props.paginationEnabled && !textSearchInProgress && rowsPerPage &&
             <TablePagination
@@ -348,8 +396,6 @@ type Order = "asc" | "desc" | undefined;
 
 interface CollectionTableHeadProps<S extends EntitySchema> {
     classes: ReturnType<typeof useStyles>;
-    hasEditButton: boolean;
-    hasDeleteButton: boolean;
     onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
     order?: Order;
     orderBy?: string;
@@ -371,8 +417,6 @@ function CollectionTableHead<S extends EntitySchema>({
                                                          orderBy,
                                                          sortable,
                                                          onRequestSort,
-                                                         hasEditButton,
-                                                         hasDeleteButton,
                                                          schema,
                                                          additionalColumns
                                                      }: CollectionTableHeadProps<S>) {
@@ -394,22 +438,10 @@ function CollectionTableHead<S extends EntitySchema>({
         <TableHead>
             <TableRow>
 
-                {hasEditButton && <TableCell
-                    key={"header-edit"}
-                    align={"left"}
-                    padding={"default"}/>
-                }
-
-                {hasDeleteButton && <TableCell
-                    key={"header-delete"}
-                    align={"left"}
-                    padding={"default"}/>
-                }
-
                 <TableCell
                     key={"header-id"}
-                    align={"left"}
-                    padding={"default"}> Id </TableCell>
+                    align={"center"}
+                    padding={"default"}>Id</TableCell>
 
                 {headCells.map(headCell => {
                     const active = sortable && orderBy === headCell.id;
@@ -511,40 +543,6 @@ function CollectionTableToolbar<S extends EntitySchema>(props: CollectionTableTo
     );
 }
 
-function renderIdCell(id: string) {
-    return (
-        <TableCell key={`table-cell-id-${id}`} component="th" align={"left"}>
-            <Typography variant={"caption"}> {id}</Typography>
-        </TableCell>
-    );
-}
-
-function renderDeleteCell<S extends EntitySchema>(entity: Entity<S>, onDelete: Function) {
-    return (
-        <TableCell key={`table-cell-delete-${entity.id}`}
-                   component="th"
-                   padding={"none"}
-                   align={"left"}>
-            <IconButton aria-label="delete"
-                        onClick={(event) => onDelete(event, entity)}>
-                <DeleteIcon fontSize={"small"}/>
-            </IconButton>
-        </TableCell>
-    );
-}
-
-function renderEditCell<S extends EntitySchema>(entity: Entity<S>, onEdit: Function) {
-    return (
-        <TableCell key={`table-cell-edit-${entity.id}`}
-                   component="th"
-                   align={"right"}>
-            <IconButton aria-label="edit"
-                        onClick={(event) => onEdit(event, entity)}>
-                <EditIcon color={"action"}/>
-            </IconButton>
-        </TableCell>
-    );
-}
 
 function renderTableCell(index: number, value: any, key: string, property: Property) {
     return (

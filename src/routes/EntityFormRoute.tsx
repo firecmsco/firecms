@@ -83,11 +83,11 @@ export function EntityFormRoute<S extends EntitySchema>({
     };
 
     const handleCloseErrorAlert = (event?: React.SyntheticEvent, reason?: string) => {
-        setOpenErrorAlert(false);
+        setOpenErrorAlert(undefined);
     };
 
     const [openSuccessAlert, setOpenSuccessAlert] = React.useState<boolean>(false);
-    const [openErrorAlert, setOpenErrorAlert] = React.useState<boolean>(false);
+    const [openErrorAlert, setOpenErrorAlert] = React.useState<Error | undefined>(undefined);
 
     function onSubcollectionEntityClick(collectionPath: string, entity: Entity<S>) {
         const entityPath = getEntityPath(entity.id, collectionPath);
@@ -108,7 +108,7 @@ export function EntityFormRoute<S extends EntitySchema>({
                 // history.goBack();
             })
             .catch((e) => {
-                setOpenErrorAlert(true);
+                setOpenErrorAlert(e);
                 console.error("Error saving entity", collectionPath, entityId, values);
                 console.error(e);
             });
@@ -153,12 +153,14 @@ export function EntityFormRoute<S extends EntitySchema>({
             schema={view.schema}
             onEntitySave={onEntitySave}
             entity={entity}/>
-        {view.schema.subcollections &&
+
+        {view.subcollections &&
         <SubCollectionsView parentCollectionPath={collectionPath}
-                            parentSchema={view.schema}
+                            subcollections={view.subcollections}
                             entity={entity}
                             onEntityClick={onSubcollectionEntityClick}/>
         }
+
     </React.Fragment>;
 
     return (
@@ -176,12 +178,13 @@ export function EntityFormRoute<S extends EntitySchema>({
                     The item has been saved correctly
                 </MuiAlert>
             </Snackbar>
-            <Snackbar open={openErrorAlert} autoHideDuration={3000}
+            <Snackbar open={!!openErrorAlert} autoHideDuration={3000}
                       onClose={handleCloseErrorAlert}>
                 <MuiAlert elevation={6} variant="filled"
                           onClose={handleCloseErrorAlert}
                           severity="error">
-                    An error occurred saving this item
+                    <Box>Error saving</Box>
+                    <Box>{openErrorAlert?.message}</Box>
                 </MuiAlert>
             </Snackbar>
         </React.Fragment>

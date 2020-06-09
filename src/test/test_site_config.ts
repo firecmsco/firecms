@@ -125,42 +125,43 @@ const productSchema: EntitySchema = {
             }
         }
     },
-    subcollections: [
-        {
-            name: "Locales",
-            relativePath: "locales",
-            schema: {
-                customId: locales,
-                name: "Locale",
-                properties: {
-                    title: {
-                        title: "Title",
-                        validation: { required: true },
-                        includeInListView: true,
-                        dataType: "string"
-                    },
-                    selectable: {
-                        title: "Selectable",
-                        description: "Is this locale selectable",
-                        includeInListView: true,
-                        dataType: "boolean"
-                    },
-                    video: {
-                        title: "Video",
-                        dataType: "string",
-                        validation: { required: false },
-                        includeInListView: true,
-                        storageMeta: {
-                            mediaType: "video",
-                            storagePath: "videos",
-                            acceptedFiles: ["video/*"]
-                        }
+};
+
+const subcollections =  [
+    {
+        name: "Locales",
+        relativePath: "locales",
+        schema: {
+            customId: locales,
+            name: "Locale",
+            properties: {
+                title: {
+                    title: "Title",
+                    validation: { required: true },
+                    includeInListView: true,
+                    dataType: "string"
+                },
+                selectable: {
+                    title: "Selectable",
+                    description: "Is this locale selectable",
+                    includeInListView: true,
+                    dataType: "boolean"
+                },
+                video: {
+                    title: "Video",
+                    dataType: "string",
+                    validation: { required: false },
+                    includeInListView: true,
+                    storageMeta: {
+                        mediaType: "video",
+                        storagePath: "videos",
+                        acceptedFiles: ["video/*"]
                     }
                 }
             }
         }
-    ]
-};
+    }
+];
 
 export const siteConfig = {
     name: "Test site",
@@ -168,7 +169,8 @@ export const siteConfig = {
         {
             relativePath: "products",
             schema: productSchema,
-            name: "Products"
+            name: "Products",
+            subcollections: subcollections
         }
     ]
 };
