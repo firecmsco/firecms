@@ -183,6 +183,7 @@ export default function CMSApp({
     function initFirebase(config: Object) {
         try {
             firebase.initializeApp(config);
+            firebase.analytics();
             firebase.auth().onAuthStateChanged(
                 onAuthStateChanged,
                 error => setAuthProviderError(error)

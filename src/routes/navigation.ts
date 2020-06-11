@@ -76,8 +76,8 @@ export function getAllPaths(entityCollectionView: EntityCollectionView<any>[],
         };
 
         // The order in which this routes are added matters
-        if (view.schema.subcollections) {
-            getAllPaths(view.schema.subcollections, entityPath, breadcrumbs)
+        if (view.subcollections) {
+            getAllPaths(view.subcollections, entityPath, breadcrumbs)
                 .forEach((pathConfiguration) => pathConfigurations.push(pathConfiguration));
         }
         pathConfigurations.push(pathConfiguration);
