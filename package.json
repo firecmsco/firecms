@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "Awesome Firestore based CMS",
     "author": "camberi",
     "license": "GPL-3.0",
@@ -12,6 +12,14 @@
     "engines": {
         "node": ">=10"
     },
+    "keywords": [
+        "firebase",
+        "cms",
+        "firestore",
+        "headless",
+        "headless cms",
+        "content manager"
+    ],
     "scripts": {
         "build": "microbundle-crl --no-compress --format modern,cjs",
         "start": "microbundle-crl watch --no-compress --format modern,cjs",
