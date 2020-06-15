@@ -118,7 +118,7 @@ export function listenEntityFromRef<S extends EntitySchema>(
  */
 function replaceTimestampsWithDates(data: any) {
 
-    if (typeof data === "object"
+    if (data && typeof data === "object"
         && !(data instanceof firebase.firestore.DocumentReference)
         && !(data instanceof firebase.firestore.GeoPoint)) {
 
