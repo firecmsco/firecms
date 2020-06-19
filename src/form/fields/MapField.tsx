@@ -1,4 +1,4 @@
-import { EntitySchema } from "../../models";
+import { EntitySchema, Property } from "../../models";
 import {
     Box,
     FormControl,
@@ -10,6 +10,7 @@ import React from "react";
 import { formStyles } from "../../styles";
 
 import { CMSFieldProps } from "../form_props";
+import { getColumnsForProperty } from "../../util/layout";
 
 type MapFieldProps<S extends EntitySchema> = CMSFieldProps<object>;
 
@@ -24,7 +25,7 @@ export default function MapField<S extends EntitySchema>({
 
     const classes = formStyles();
 
-    const mapProperties = property.properties;
+    const mapProperties:Record<string, Property> = property.properties;
     const hasError = touched && property.validation?.required && !field.value;
 
     return (
@@ -39,8 +40,7 @@ export default function MapField<S extends EntitySchema>({
                 <Box m={1}>
                     <Grid container spacing={1}>
                         {Object.entries(mapProperties).map(([entryKey, childProperty], index) => {
-                                const fieldValue = field.value ? field.value[entryKey] : null;
-                                return <Grid item xs={12}
+                                return <Grid item xs={getColumnsForProperty(childProperty)}
                                              key={`map-${field.name}-${index}`}>
                                     {createFormField(`${field.name}[${entryKey}]`,
                                         childProperty,

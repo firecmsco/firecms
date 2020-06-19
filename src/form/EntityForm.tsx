@@ -2,10 +2,11 @@ import React from "react";
 import { Box, Button, Container, Grid, Paper } from "@material-ui/core";
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
-import { formStyles } from "../styles";
+import { formStyles, useStyles } from "../styles";
 import { createCustomIdField, createFormField } from "./index";
 import { initEntityValues } from "../firebase/firestore";
 import { getYupObjectSchema } from "./validation";
+import { getColumnsForProperty } from "../util/layout";
 
 interface EntityFormProps<S extends EntitySchema> {
 
@@ -70,33 +71,15 @@ export default function EntityForm<S extends EntitySchema>({
     }
 
     function createFormFields(schema: EntitySchema) {
+
+        const classes = useStyles();
         return <React.Fragment>
             {Object.entries(schema.properties).map(([key, property]) => {
 
                 const formField = createFormField(key, property, true);
+                const columns = getColumnsForProperty(property);
 
-                if (property.dataType === "array" && property.of.dataType === "map") {
-                    return <Grid item xs={12}
-                                 key={`field_${schema.name}_${key}`}>
-                        {formField}
-                    </Grid>;
-                }
-
-                if (property.dataType === "array" && property.of.dataType === "string" && property.of.storageMeta) {
-                    return <Grid item xs={12}
-                                 key={`field_${schema.name}_${key}`}>
-                        {formField}
-                    </Grid>;
-                }
-
-                if (property.dataType === "string" && property.storageMeta) {
-                    return <Grid item xs={12}
-                                 key={`field_${schema.name}_${key}`}>
-                        {formField}
-                    </Grid>;
-                }
-
-                return <Grid item xs={12} sm={6}
+                return <Grid item sm={columns} className={classes.field}
                              key={`field_${schema.name}_${key}`}>
                     {formField}
                 </Grid>;

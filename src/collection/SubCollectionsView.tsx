@@ -16,49 +16,6 @@ interface SubCollectionViewProps<S extends EntitySchema> {
     onEntityClick?(collectionPath: string, entity: Entity<any>): void;
 }
 
-interface TabPanelProps<S extends EntitySchema> {
-    subcollectionPath: string | undefined;
-    thisView: EntityCollectionView<S>;
-    selectedView: EntityCollectionView<S>;
-
-    onEntityClick?(collectionPath: string, entity: Entity<S>): void;
-}
-
-function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thisView, onEntityClick, ...props }: TabPanelProps<S>) {
-
-    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
-
-    const onEntityDelete = (collectionPath: string, entity: Entity<S>) => {
-        setDeleteEntityClicked(entity);
-    };
-
-    const deleteEnabled = thisView.deleteEnabled !== undefined || thisView.deleteEnabled;
-
-    return <Grid
-        hidden={selectedView !== thisView}>
-
-        {subcollectionPath ?
-            <CollectionTable collectionPath={subcollectionPath}
-                             onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
-                             schema={thisView.schema}
-                             onEntityEdit={onEntityClick}
-                             includeToolbar={false}
-                             paginationEnabled={false}
-                             additionalColumns={thisView.additionalColumns}
-            />
-            :
-            <Grid container>
-                <Box m={3}>You need to save your entity before adding additional
-                    collections</Box>
-            </Grid>}
-
-        <DeleteEntityDialog entity={deleteEntityClicked}
-                            schema={thisView.schema}
-                            open={!!deleteEntityClicked}
-                            onClose={() => setDeleteEntityClicked(undefined)}/>
-    </Grid>;
-}
-
 export default function SubCollectionsView<S extends EntitySchema>(
     {
         parentCollectionPath,
@@ -120,4 +77,48 @@ export default function SubCollectionsView<S extends EntitySchema>(
             ))}
         </Paper>
     );
+}
+
+
+interface TabPanelProps<S extends EntitySchema> {
+    subcollectionPath: string | undefined;
+    thisView: EntityCollectionView<S>;
+    selectedView: EntityCollectionView<S>;
+
+    onEntityClick?(collectionPath: string, entity: Entity<S>): void;
+}
+
+function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thisView, onEntityClick, ...props }: TabPanelProps<S>) {
+
+    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
+
+    const onEntityDelete = (collectionPath: string, entity: Entity<S>) => {
+        setDeleteEntityClicked(entity);
+    };
+
+    const deleteEnabled = thisView.deleteEnabled === undefined || thisView.deleteEnabled;
+
+    return <Grid
+        hidden={selectedView !== thisView}>
+
+        {subcollectionPath ?
+            <CollectionTable collectionPath={subcollectionPath}
+                             onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
+                             schema={thisView.schema}
+                             onEntityEdit={onEntityClick}
+                             includeToolbar={false}
+                             paginationEnabled={false}
+                             additionalColumns={thisView.additionalColumns}
+            />
+            :
+            <Grid container>
+                <Box m={3}>You need to save your entity before adding additional
+                    collections</Box>
+            </Grid>}
+
+        <DeleteEntityDialog entity={deleteEntityClicked}
+                            schema={thisView.schema}
+                            open={!!deleteEntityClicked}
+                            onClose={() => setDeleteEntityClicked(undefined)}/>
+    </Grid>;
 }

@@ -3,6 +3,7 @@ import { FieldArray, getIn } from "formik";
 import {
     Box,
     Button,
+    Container,
     FormControl,
     FormHelperText,
     IconButton,
@@ -12,6 +13,7 @@ import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
 import { CMSFieldProps } from "../form_props";
 import React from "react";
+import { getColumnsForProperty } from "../../util/layout";
 
 type ArrayDefaultFieldProps<T> = CMSFieldProps<T[]>;
 
@@ -47,10 +49,8 @@ export default function ArrayDefaultField<T>({
                     <Paper variant={"outlined"}
                            className={classes.paper}>
                         {hasValue ? (
-                            <React.Fragment>
+                            <Container maxWidth={"xs"}>
                                 {field.value.map((entryValue: any, index: number) => {
-                                    const errorElement = errors && errors[index];
-                                    const touchedElement = touched && touched[index];
                                     return (
                                         <Box key={`field_${index}`}
                                              mb={1}
@@ -76,7 +76,7 @@ export default function ArrayDefaultField<T>({
                                         </Box>
                                     );
                                 })}
-                            </React.Fragment>
+                            </Container>
                         ) : (
                             <Box margin={2}>
                                 <Button

@@ -32,6 +32,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         grow: {
             flexGrow: 1
         },
+        field: {
+            minHeight: 56
+        },
         toolbar: theme.mixins.toolbar,
         logo: {
             padding: theme.spacing(3),
