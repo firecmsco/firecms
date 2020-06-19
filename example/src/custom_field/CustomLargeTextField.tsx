@@ -6,7 +6,7 @@ import {
     InputLabel
 } from "@material-ui/core";
 import React, { ReactElement } from "react";
-import { CMSFieldProps } from "firecms";
+import { CMSFieldProps } from "@camberi/firecms";
 
 interface CustomLargeTextFieldProps extends CMSFieldProps<string> {
     rows: number

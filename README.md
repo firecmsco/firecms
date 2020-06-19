@@ -79,7 +79,7 @@ firebaseConfig specification, since it gets picked up automatically.
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { CMSApp, EntitySchema, EnumValues, Authenticator, EntityCollectionView } from "firecms";
+import { CMSApp, EntitySchema, EnumValues, Authenticator, EntityCollectionView } from "@camberi/firecms";
 import  firebase from "firebase";
 
 const status = {

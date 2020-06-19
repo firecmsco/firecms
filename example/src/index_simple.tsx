@@ -7,7 +7,7 @@ import {
     EntityCollectionView,
     EntitySchema,
     EnumValues
-} from "firecms";
+} from "@camberi/firecms";
 import firebase from "firebase";
 
 const status = {

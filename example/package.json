@@ -3,12 +3,12 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@camberi/firecms": "link:..",
         "@material-ui/core": "link:../node_modules/@material-ui/core",
         "@material-ui/icons": "link:../node_modules/@material-ui/icons",
         "@material-ui/pickers": "link:../node_modules/firebase",
         "algoliasearch": "link:../node_modules/algoliasearch",
         "firebase": "link:../node_modules/firebase",
-        "firecms": "link:..",
         "react": "link:../node_modules/react",
         "react-dom": "link:../node_modules/react-dom",
         "react-scripts": "link:../node_modules/react-scripts"

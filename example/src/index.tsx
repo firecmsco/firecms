@@ -16,7 +16,7 @@ import {
     EntityCollectionView,
     EntitySchema,
     EnumValues
-} from "firecms";
+} from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
 import CustomLargeTextField from "./custom_field/CustomLargeTextField";

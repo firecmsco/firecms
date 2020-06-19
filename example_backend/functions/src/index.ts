@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import { DocumentSnapshot } from "firebase-functions/lib/providers/firestore";
 import { deleteInAlgolia, indexInAlgolia } from "./algolia";
-import { eraseDatabase, importDatabaseBackup } from "./util";
+import {  importDatabaseBackup } from "./util";
 
 
 function updateIndex(snap: functions.Change<DocumentSnapshot>, indexName: string) {
@@ -45,6 +45,6 @@ export const scheduledFirestoreImport = functions
     .pubsub
     .schedule("every 24 hours")
     .onRun((context) => {
-        eraseDatabase().then(() => importDatabaseBackup());
+        return importDatabaseBackup();
     });
 
