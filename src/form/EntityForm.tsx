@@ -51,12 +51,11 @@ export default function EntityForm<S extends EntitySchema>({
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
+
     /**
      * Base values are the ones this view is initialized from, we use them to
      * compare them with underlying changes in Firestore
      */
-        // const [baseValues, setBaseValues] = React.useState<EntityValues<S>>();
-
     let baseValues: EntityValues<S>;
     if (status === EntityStatus.new) {
         baseValues = (initEntityValues(schema));
@@ -69,6 +68,8 @@ export default function EntityForm<S extends EntitySchema>({
     const mustSetCustomId: boolean = status === EntityStatus.new && !!schema.customId;
 
     function saveValues(values: EntityValues<S>, actions: FormikHelpers<EntityValues<S>>) {
+
+        console.log("Saving values", values);
 
         if (mustSetCustomId && !customId) {
             console.error("Missing custom Id");
@@ -93,6 +94,7 @@ export default function EntityForm<S extends EntitySchema>({
         }
 
         onEntitySave(collectionPath, id, values)
+            .then(_ => actions.setTouched({}))
             .catch(e => {
                 console.error(e);
                 setSavingError(e);
@@ -103,24 +105,33 @@ export default function EntityForm<S extends EntitySchema>({
 
     }
 
-
     return (
         <Formik
             initialValues={baseValues as EntityValues<S>}
             onSubmit={saveValues}
             validationSchema={getYupObjectSchema(schema.properties)}
         >
-            {({ values, setFieldValue, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => {
+            {({ values, touched, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
 
                 let underlyingValuesChanged: [string, unknown][] = [];
                 if (baseValues && entity) {
-                    underlyingValuesChanged = Object.entries(entity.values).filter(([key, value]) => !deepEqual(baseValues[key], value));
+
+                    underlyingValuesChanged = Object.entries(entity.values)
+                        .filter(([key, value]) => !deepEqual(baseValues[key], value));
+
                     // we update the form fields from the Firestore data
                     // if they were not touched
-                    Object.entries(entity.values).forEach(([key, value]) => {
-                        if (!deepEqual(values[key], value) && !touched[key])
-                            setFieldValue(key, value);
+                    const objectKeys = Object.entries(schema.properties)
+                        .map(([key, property]) => key);
+                    objectKeys.forEach((key) => {
+                        const firestoreValue = entity.values[key];
+                        const formValue = values[key];
+                        if (!deepEqual(firestoreValue, formValue) && !touched[key]) {
+                            setFieldValue(key, !!firestoreValue ? firestoreValue : null);
+                            setFieldTouched(key, false);
+                        }
                     });
+
                 }
 
                 function createFormFields(schema: EntitySchema) {

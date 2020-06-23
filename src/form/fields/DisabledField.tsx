@@ -23,12 +23,14 @@ export default function DisabledField<S extends EntitySchema>({ field, property,
             </FormHelperText>
 
             <Paper elevation={0} className={classes.paper} variant={"outlined"}>
+
                 {hasValue &&
                 <PreviewComponent value={value}
                                   property={property}
                                   small={false}/>}
 
-                {!hasValue && <Box m={1}>No value set</Box>}
+                {!hasValue && <Box>No value set</Box>}
+
             </Paper>
 
             {includeDescription && property.description &&

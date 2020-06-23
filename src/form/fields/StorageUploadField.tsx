@@ -29,6 +29,7 @@ import { CMSFieldProps } from "../form_props";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
 import PreviewComponent from "../../preview/PreviewComponent";
+import deepEqual from "deep-equal";
 
 type StorageUploadFieldProps = CMSFieldProps<string | string[]> ;
 
@@ -58,6 +59,8 @@ export default function StorageUploadField({
     const value = multipleFilesSupported ?
         (Array.isArray(field.value) ? field.value : []) :
         field.value;
+    console.log("StorageUploadField", value);
+
 
     return (
 
@@ -117,7 +120,7 @@ export function StorageUpload({
 
     const classes = formStyles();
 
-    const initialValue: StorageFieldItem[] = multipleFilesSupported ?
+    const internalInitialValue: StorageFieldItem[] = multipleFilesSupported ?
         (value as string[]).map(v => (
             {
                 storagePath: v
@@ -126,7 +129,12 @@ export function StorageUpload({
             storagePath: value as string
         }];
 
-    const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(initialValue);
+    const [initialValue, setInitialValue] = React.useState<string| string[]>(value);
+    const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
+    if (!deepEqual(initialValue, value)) {
+        setInitialValue(value)
+        setInternalValue(internalInitialValue);
+    }
 
     function removeDuplicates(items: StorageFieldItem[]) {
         return items.filter(
@@ -222,7 +230,7 @@ export function StorageUpload({
                      flexDirection="row"
                      flexWrap="wrap"
                      alignItems="center"
-                     minHeight={220}>
+                     minHeight={250}>
 
                     {internalValue.map(entry => {
                         if (entry.storagePath) {
@@ -378,8 +386,8 @@ export function StorageItemPreview({
                 variant={"outlined"}>
 
                 <Box position={"absolute"}
-                     top={4}
-                     right={4}
+                     top={-8}
+                     right={-8}
                      style={{ zIndex: 100 }}>
                     <IconButton
                         style={{ backgroundColor: "white" }}

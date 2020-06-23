@@ -23,7 +23,6 @@ import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
 import { CMSFieldProps } from "./form_props";
-import { Alert } from "@material-ui/lab";
 
 
 function buildField<P extends Property<T>, T = any>(name: string,
@@ -49,11 +48,9 @@ function buildField<P extends Property<T>, T = any>(name: string,
         </Field>
 
         {underlyingValueHasChanged &&
-        <Alert>
-            <FormHelperText>
-                This value has been updated in Firestore
-            </FormHelperText>
-        </Alert>}
+        <FormHelperText>
+            This value has been updated in Firestore
+        </FormHelperText>}
 
     </React.Fragment>;
 }
@@ -129,7 +126,8 @@ export function createCustomIdField(schema: EntitySchema, formType: EntityStatus
     };
 
     return (
-        <FormControl fullWidth error={error} {...fieldProps}>
+        <FormControl fullWidth error={error} {...fieldProps}
+                     key={"custom-id-field"}>
 
             {hasEnumValues && schema.customId &&
             <React.Fragment>
@@ -141,7 +139,10 @@ export function createCustomIdField(schema: EntitySchema, formType: EntityStatus
                     onChange={(event: any) => onChange(event.target.value)}>
                     {Object.entries(schema.customId).map(([key, label]) =>
                         <MenuItem
-                            value={key}>{`${key} - ${label}`}</MenuItem>)}
+                            key={`custom-id-item-${key}`}
+                            value={key}>
+                            {`${key} - ${label}`}
+                        </MenuItem>)}
                 </MuiSelect>
             </React.Fragment>}
 
