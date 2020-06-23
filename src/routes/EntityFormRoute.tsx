@@ -8,7 +8,7 @@ import {
     EntitySchema,
     EntityStatus
 } from "../models";
-import { fetchEntity, saveEntity } from "../firebase";
+import { listenEntity, saveEntity } from "../firebase";
 import {
     Box,
     Breadcrumbs,
@@ -59,16 +59,25 @@ export function EntityFormRoute<S extends EntitySchema>({
 
     useEffect(() => {
         if (entityId) {
-            fetchEntity<S>(collectionPath, entityId, view.schema)
-                .then((e) => {
-                    setStatus(EntityStatus.existing);
-                    setEntity(e);
-                })
-                .finally(() => setLoading(false));
+            console.log("Listening entity", entityId);
+            const cancelSubscription = listenEntity<S>(collectionPath,
+                entityId,
+                view.schema,
+                (e) => {
+                    if (e) {
+                        setStatus(EntityStatus.existing);
+                        setEntity(e);
+                        console.log("Updated entity from Firestore", e);
+                    }
+                    setLoading(false);
+                });
+            return () => cancelSubscription();
         } else {
             setStatus(EntityStatus.new);
             setLoading(false);
         }
+        return () => {
+        };
     }, [collectionPath, entityId, view]);
 
     const backListener = history.listen(location => {

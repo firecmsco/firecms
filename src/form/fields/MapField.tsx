@@ -38,7 +38,7 @@ export default function MapField<S extends EntitySchema>({
 
             <Paper elevation={0} variant={"outlined"} className={classes.paper}>
                 <Box m={1}>
-                    <Grid container spacing={1}>
+                    <Grid container spacing={2}>
                         {Object.entries(mapProperties).map(([entryKey, childProperty], index) => {
                                 return <Grid item xs={getColumnsForProperty(childProperty)}
                                              key={`map-${field.name}-${index}`}>

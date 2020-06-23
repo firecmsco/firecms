@@ -10,6 +10,8 @@ type DisabledFieldProps = CMSFieldProps<any> ;
 export default function DisabledField<S extends EntitySchema>({ field, property, includeDescription }: DisabledFieldProps) {
 
     const classes = formStyles();
+    const value = field.value;
+    const hasValue = value instanceof Array ? value.length > 0 : !!value;
 
     return (
 
@@ -21,11 +23,12 @@ export default function DisabledField<S extends EntitySchema>({ field, property,
             </FormHelperText>
 
             <Paper elevation={0} className={classes.paper} variant={"outlined"}>
-                {field.value &&
-                <PreviewComponent value={field.value}
+                {hasValue &&
+                <PreviewComponent value={value}
                                   property={property}
                                   small={false}/>}
-                {!field.value && <Box m={1}>No value set</Box>}
+
+                {!hasValue && <Box m={1}>No value set</Box>}
             </Paper>
 
             {includeDescription && property.description &&

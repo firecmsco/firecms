@@ -1,6 +1,7 @@
 import React from "react";
 import {
     FormControl,
+    FormHelperText,
     InputLabel,
     MenuItem,
     Select as MuiSelect,
@@ -22,14 +23,45 @@ import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
 import { CMSFieldProps } from "./form_props";
+import { AlertTitle } from "@material-ui/lab";
 
+
+function buildField<P extends Property<T>, T = any>(name: string,
+                                                    property: P,
+                                                    includeDescription: boolean,
+                                                    component: React.ComponentType<CMSFieldProps<T>>,
+                                                    underlyingValueHasChanged: boolean,
+                                                    additionalProps?: any) {
+    return <React.Fragment>
+        <Field
+            required={property.validation?.required}
+            name={`${name}`}
+        >
+            {(fieldProps: FieldProps<T>) =>
+                React.createElement(component, {
+                    ...fieldProps,
+                    ...additionalProps,
+                    includeDescription,
+                    property,
+                    createFormField
+                })}
+
+        </Field>
+        {underlyingValueHasChanged &&
+        <AlertTitle>
+            <FormHelperText> This value has been updated in
+                Firestore</FormHelperText>
+        </AlertTitle>}
+    </React.Fragment>;
+}
 
 export function createFormField(name: string,
                                 property: Property,
-                                includeDescription: boolean): JSX.Element {
+                                includeDescription: boolean,
+                                underlyingValueHasChanged: boolean): JSX.Element {
 
     if (property.disabled) {
-        return buildField(name, property, includeDescription, DisabledField);
+        return buildField(name, property, includeDescription, DisabledField, underlyingValueHasChanged);
     }
 
     let component: React.ComponentType<CMSFieldProps<any>> | undefined;
@@ -70,32 +102,11 @@ export function createFormField(name: string,
         }
     }
     if (component)
-        return buildField(name, property, includeDescription, component, property.additionalProps);
+        return buildField(name, property, includeDescription, component, underlyingValueHasChanged, property.additionalProps);
 
     return (
         <div>{`Currently the field ${property.dataType} is not supported`}</div>
     );
-}
-
-function buildField<P extends Property<T>, T = any>(name: string,
-                                                    property: P,
-                                                    includeDescription: boolean,
-                                                    component: React.ComponentType<CMSFieldProps<T>>,
-                                                    additionalProps?: any) {
-    return <Field
-        required={property.validation?.required}
-        name={`${name}`}
-    >
-        {(fieldProps: FieldProps<T>) =>
-            React.createElement(component, {
-                ...fieldProps,
-                ...additionalProps,
-                includeDescription,
-                property,
-                createFormField
-            })}
-
-    </Field>;
 }
 
 

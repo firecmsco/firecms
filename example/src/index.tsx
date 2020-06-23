@@ -134,7 +134,7 @@ const productSchema: EntitySchema = {
         available_locales: {
             title: "Available locales",
             description:
-                "This is an example of a disabled field",
+                "This is an example of a disabled field that gets updated trough a cloud functions, try changing a locale 'selectable' value",
             dataType: "array",
             disabled: true,
             of: {
@@ -237,6 +237,16 @@ const usersSchema: EntitySchema = {
             dataType: "string",
             includeInListView: true
         },
+        email: {
+            title: "Email",
+            dataType: "string",
+            includeInListView: true
+        },
+        phone: {
+            title: "Phone",
+            dataType: "string",
+            includeInListView: true
+        },
         picture: {
             title: "Picture",
             dataType: "map",
@@ -247,27 +257,12 @@ const usersSchema: EntitySchema = {
                     urlMediaType: "image",
                     includeAsMapPreview: true
                 },
-                medium: {
-                    title: "Medium",
-                    dataType: "string",
-                    urlMediaType: "image"
-                },
                 thumbnail: {
                     title: "Thumbnail",
                     dataType: "string",
                     urlMediaType: "image"
                 }
             },
-            includeInListView: true
-        },
-        email: {
-            title: "Email",
-            dataType: "string",
-            includeInListView: true
-        },
-        phone: {
-            title: "Phone",
-            dataType: "string",
             includeInListView: true
         }
     }
@@ -290,6 +285,7 @@ export const testEntitySchema: EntitySchema = {
             title: "Title",
             description: "A catching title is important",
             includeInListView: true,
+            forceFullWidth:true,
             // validation: { required: true },
             dataType: "string"
         },

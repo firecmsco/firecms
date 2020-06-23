@@ -4,13 +4,15 @@ import { deleteInAlgolia, indexInAlgolia } from "./algolia";
 import {  importDatabaseBackup } from "./util";
 
 
+export { setProductAvailableLocales } from "./products";
+
 function updateIndex(snap: functions.Change<DocumentSnapshot>, indexName: string) {
     if (!snap.after.exists) return deleteInAlgolia(indexName, snap.after.id);
     return indexInAlgolia(indexName, snap.after.data(), snap.after.id);
 }
 
 export const onBlogUpdateIndexAlgolia = functions
-    .region("europe-west1")
+    .region("europe-west3")
     .firestore
     .document("blog/{blogId}")
     .onWrite((snap, context) => {
@@ -19,7 +21,7 @@ export const onBlogUpdateIndexAlgolia = functions
     });
 
 export const onProductsUpdateIndexAlgolia = functions
-    .region("europe-west1")
+    .region("europe-west3")
     .firestore
     .document("products/{productId}")
     .onWrite((snap, context) => {
@@ -28,7 +30,7 @@ export const onProductsUpdateIndexAlgolia = functions
     });
 
 export const onUsersUpdateIndexAlgolia = functions
-    .region("europe-west1")
+    .region("europe-west3")
     .firestore
     .document("users/{userId}")
     .onWrite((snap, context) => {
@@ -41,10 +43,11 @@ export const onUsersUpdateIndexAlgolia = functions
  * This function is only used to reset the database daily
  */
 export const scheduledFirestoreImport = functions
-    .region("europe-west1")
+    .region("europe-west3")
     .pubsub
     .schedule("every 24 hours")
     .onRun((context) => {
         return importDatabaseBackup();
     });
+
 

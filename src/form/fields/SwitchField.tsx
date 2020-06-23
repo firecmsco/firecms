@@ -13,7 +13,7 @@ type SwitchFieldProps = CMSFieldProps<boolean>;
 
 export default function SwitchField({
                                         field,
-                                        form: { isSubmitting, errors, touched, setFieldValue },
+                                        form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                         property,
                                         includeDescription,
                                         createFormField,
@@ -33,6 +33,7 @@ export default function SwitchField({
                         {...props}
                         type={"checkbox"}
                         onChange={(evt) => {
+                            setFieldTouched(field.name);
                             setFieldValue(
                                 field.name,
                                 evt.target.checked

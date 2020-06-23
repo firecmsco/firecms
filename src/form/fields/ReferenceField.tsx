@@ -27,7 +27,7 @@ type ReferenceFieldProps<S extends EntitySchema> = CMSFieldProps<firebase.firest
 
 export default function ReferenceField<S extends EntitySchema>({
                                                                    field,
-                                                                   form: { isSubmitting, errors, touched, setFieldValue },
+                                                                   form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                                                    property,
                                                                    includeDescription
                                                                }: ReferenceFieldProps<S>) {
@@ -40,6 +40,7 @@ export default function ReferenceField<S extends EntitySchema>({
 
     const handleEntityClick = (entity: Entity<S>) => {
         const ref = entity ? entity.reference : null;
+        setFieldTouched(field.name);
         setFieldValue(field.name, ref);
     };
 

@@ -7,6 +7,7 @@ import { createCustomIdField, createFormField } from "./index";
 import { initEntityValues } from "../firebase/firestore";
 import { getYupObjectSchema } from "./validation";
 import { getColumnsForProperty } from "../util/layout";
+import deepEqual from "deep-equal";
 
 interface EntityFormProps<S extends EntitySchema> {
 
@@ -32,12 +33,6 @@ interface EntityFormProps<S extends EntitySchema> {
     entity?: Entity<S>;
 
     /**
-     * The updated entity is passed from the parent component when the underlying data
-     * has changed in Firestore
-     */
-    updatedEntity?: Entity<S>;
-
-    /**
      * The callback function called when Save is clicked and validation is correct
      */
     onEntitySave(collectionPath: string, id: string | undefined, values: any): Promise<void>;
@@ -53,39 +48,25 @@ export default function EntityForm<S extends EntitySchema>({
                                                            }: EntityFormProps<S>) {
     const classes = formStyles();
 
-
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
+    /**
+     * Base values are the ones this view is initialized from, we use them to
+     * compare them with underlying changes in Firestore
+     */
+        // const [baseValues, setBaseValues] = React.useState<EntityValues<S>>();
 
-    const mustSetCustomId: boolean = status === EntityStatus.new && !!schema.customId;
-
-    let initialValues: EntityValues<S>;
-
+    let baseValues: EntityValues<S>;
     if (status === EntityStatus.new) {
-        initialValues = initEntityValues(schema);
+        baseValues = (initEntityValues(schema));
     } else if (status === EntityStatus.existing && entity) {
-        initialValues = entity.values;
+        baseValues = (entity.values);
     } else {
         throw new Error("Form configured wrong");
     }
 
-    function createFormFields(schema: EntitySchema) {
-
-        const classes = useStyles();
-        return <React.Fragment>
-            {Object.entries(schema.properties).map(([key, property]) => {
-
-                const formField = createFormField(key, property, true);
-                const columns = getColumnsForProperty(property);
-
-                return <Grid item sm={columns} className={classes.field}
-                             key={`field_${schema.name}_${key}`}>
-                    {formField}
-                </Grid>;
-            })}
-        </React.Fragment>;
-    }
+    const mustSetCustomId: boolean = status === EntityStatus.new && !!schema.customId;
 
     function saveValues(values: EntityValues<S>, actions: FormikHelpers<EntityValues<S>>) {
 
@@ -100,11 +81,11 @@ export default function EntityForm<S extends EntitySchema>({
 
         let id: string | undefined;
         if (status === EntityStatus.existing) {
-            if (!entity?.id) throw Error("Form misconfigured when saving, no id for existing entity");
+            if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
             id = entity.id;
         } else if (status === EntityStatus.new) {
             if (schema.customId) {
-                if (!customId) throw Error("Form misconfigured when saving, customId should be set");
+                if (!customId) throw Error("Form misconfiguration when saving, customId should be set");
                 id = customId;
             }
         } else {
@@ -122,14 +103,44 @@ export default function EntityForm<S extends EntitySchema>({
 
     }
 
+
     return (
         <Formik
-            initialValues={initialValues}
-            validate={(values => console.debug("validate", values))}
+            initialValues={baseValues as EntityValues<S>}
             onSubmit={saveValues}
             validationSchema={getYupObjectSchema(schema.properties)}
         >
-            {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => {
+            {({ values, setFieldValue, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => {
+
+                let underlyingValuesChanged: [string, unknown][] = [];
+                if (baseValues && entity) {
+                    underlyingValuesChanged = Object.entries(entity.values).filter(([key, value]) => !deepEqual(baseValues[key], value));
+                    // we update the form fields from the Firestore data
+                    // if they were not touched
+                    Object.entries(entity.values).forEach(([key, value]) => {
+                        if (!deepEqual(values[key], value) && !touched[key])
+                            setFieldValue(key, value);
+                    });
+                }
+
+                function createFormFields(schema: EntitySchema) {
+                    const classes = useStyles();
+                    return <Grid container spacing={3}>
+                        {Object.entries(schema.properties).map(([key, property]) => {
+
+                            const underlyingValueHasChanged: boolean = underlyingValuesChanged.map(([k]) => k).includes(key) && !!touched[key];
+                            const formField = createFormField(key, property, true, underlyingValueHasChanged);
+                            const columns = getColumnsForProperty(property);
+
+                            return <Grid item sm={columns}
+                                         className={classes.field}
+                                         key={`field_${schema.name}_${key}`}>
+                                {formField}
+                            </Grid>;
+                        })}
+                    </Grid>;
+                }
+
                 return (
                     <Paper elevation={1}>
                         <Container maxWidth={"md"}
@@ -145,9 +156,7 @@ export default function EntityForm<S extends EntitySchema>({
                                   noValidate>
 
                                 <Box padding={1}>
-                                    <Grid container spacing={3}>
-                                        {createFormFields(schema)}
-                                    </Grid>
+                                    {createFormFields(schema)}
                                 </Box>
 
                                 {savingError &&

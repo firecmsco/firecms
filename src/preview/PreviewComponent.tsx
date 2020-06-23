@@ -35,7 +35,6 @@ export default function PreviewComponent<T>({
                                                 small
                                             }: PreviewComponentProps<T>
 ) {
-
     if (!value) return null;
 
     if (!property) {
@@ -263,7 +262,7 @@ export function renderUrlComponent(property: StringProperty, url: any,
     } else if (mediaType === "video") {
         return renderUrlVideo(url, small);
     }
-    throw Error("URL component misconfigured");
+    throw Error("URL component misconfiguration");
 }
 
 export function renderStorageThumbnail(

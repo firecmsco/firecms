@@ -45,7 +45,7 @@ interface StorageFieldItem {
 
 export default function StorageUploadField({
                                                field,
-                                               form: { errors, touched, setFieldValue },
+                                               form: { errors, touched, setFieldValue, setFieldTouched },
                                                property,
                                                includeDescription
                                            }: StorageUploadFieldProps) {
@@ -72,10 +72,13 @@ export default function StorageUploadField({
 
             <StorageUpload value={value}
                            property={property}
-                           onChange={(newValue) => setFieldValue(
-                               field.name,
-                               newValue
-                           )}/>
+                           onChange={(newValue) => {
+                               setFieldTouched(field.name);
+                               setFieldValue(
+                                   field.name,
+                                   newValue
+                               );
+                           }}/>
 
             {includeDescription && property.description &&
             <FormHelperText>{property.description}</FormHelperText>}

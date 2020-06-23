@@ -9,7 +9,7 @@ type DateTimeFieldProps = CMSFieldProps<firebase.firestore.Timestamp> ;
 
 export default function DateTimeField({
                                           field,
-                                          form: { isSubmitting, errors, touched, setFieldValue },
+                                          form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                           property,
                                           createFormField,
                                           includeDescription,
@@ -31,10 +31,13 @@ export default function DateTimeField({
             error={showError}
             disabled={property.disabled !== undefined ? property.disabled : isSubmitting}
             helperText={showError ? fieldError : property.description}
-            onChange={(dateValue) => setFieldValue(
-                field.name,
-                dateValue
-            )}
+            onChange={(dateValue) => {
+                setFieldTouched(field.name);
+                return setFieldValue(
+                    field.name,
+                    dateValue
+                );
+            }}
             {...props}
         />
     );

@@ -15,7 +15,7 @@ type SelectProps<T extends EnumType> = CMSFieldProps<T>;
 
 export default function Select<T extends EnumType>({
                                                        field,
-                                                       form: { isSubmitting, errors, touched, setFieldValue },
+                                                       form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                                        property,
                                                        createFormField,
                                                        includeDescription,
@@ -41,6 +41,7 @@ export default function Select<T extends EnumType>({
                        value={!!value ? value : ""}
                        onChange={(evt: any) => {
                            const newValue = evt.target.value;
+                           setFieldTouched(field.name);
                            return setFieldValue(
                                field.name,
                                newValue ? newValue : null

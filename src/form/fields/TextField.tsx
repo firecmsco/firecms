@@ -21,7 +21,7 @@ interface TextFieldProps extends CMSFieldProps<string | number> {
 
 export default function TextField({
                                       field,
-                                      form: { isSubmitting, errors, touched, setFieldValue },
+                                      form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                       property,
                                       includeDescription,
                                       allowInfinity,
@@ -38,6 +38,8 @@ export default function TextField({
 
     const value = field.value ? field.value : "";
     const updateValue = (newValue: typeof value) => {
+
+        setFieldTouched(field.name);
 
         if (!newValue) {
             setFieldValue(

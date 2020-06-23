@@ -17,7 +17,7 @@ type ArrayEnumSelectProps<T extends EnumType> = CMSFieldProps<T[]>;
 
 export default function ArrayEnumSelect<T extends EnumType>({
                                                                 field,
-                                                                form: { errors, touched, setFieldValue },
+                                                                form: { errors, touched, setFieldValue, setFieldTouched },
                                                                 property
                                                             }: ArrayEnumSelectProps<T>) {
 
@@ -46,6 +46,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
                    labelId={`${field.name}-label`}
                    value={!!field.value ? field.value : []}
                    onChange={(evt: any) => {
+                       setFieldTouched(field.name);
                        return setFieldValue(
                            `${field.name}`,
                            evt.target.value

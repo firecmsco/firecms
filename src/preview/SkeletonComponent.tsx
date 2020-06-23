@@ -204,7 +204,7 @@ function renderUrlComponent(property: StringProperty, small: boolean = false) {
     } else if (mediaType === "video") {
         return renderUrlVideo(small);
     }
-    throw Error("URL component misconfigured");
+    throw Error("URL component misconfiguration");
 }
 
 

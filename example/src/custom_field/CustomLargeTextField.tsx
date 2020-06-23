@@ -27,33 +27,29 @@ export default function CustomLargeTextField({
     const value = field.value;
 
     return (
-        <React.Fragment>
+        <FormControl
+            required={property.validation?.required}
+            error={showError}
+            disabled={isSubmitting}
+            fullWidth>
+            <InputLabel>{property.title || field.name}</InputLabel>
+            <Input
+                multiline
+                rows={rows}
+                defaultValue={value}
+                onChange={(evt) => setFieldValue(
+                    field.name,
+                    evt.target.value
+                )}
+            />
 
-            <FormControl
-                required={property.validation?.required}
-                error={showError}
-                disabled={isSubmitting}
-                fullWidth>
-                <InputLabel>{property.title || field.name}</InputLabel>
-                <Input
-                    multiline
-                    rows={rows}
-                    defaultValue={value}
-                    onChange={(evt) => setFieldValue(
-                        field.name,
-                        evt.target.value
-                    )}
-                />
+            {showError && <FormHelperText
+                id="component-error-text">{fieldError}</FormHelperText>}
 
-                {showError && <FormHelperText
-                    id="component-error-text">{fieldError}</FormHelperText>}
+            {property.description &&
+            <FormHelperText>{property.description}</FormHelperText>}
 
-                {property.description &&
-                <FormHelperText>{property.description}</FormHelperText>}
-
-            </FormControl>
-
-        </React.Fragment>
+        </FormControl>
     );
 
 }

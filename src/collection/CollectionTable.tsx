@@ -228,7 +228,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     function buildTableRow<S extends EntitySchema>(entity: Entity<S>, index: number) {
         return (
             <TableRow
-                key={`table_${entity.snapshot.id}_${index}`}
+                key={`table_${entity.id}_${index}`}
                 hover
                 onClick={(event) => onEntityClick(event, entity)}
                 tabIndex={-1}
@@ -497,7 +497,8 @@ interface CollectionTableToolbarProps<S extends EntitySchema> {
 function CollectionTableToolbar<S extends EntitySchema>(props: CollectionTableToolbarProps<S>) {
     const classes = useToolbarStyles();
 
-    const filterableProperties = getFilterableProperties(props.schema.properties);
+    const filterableProperties =
+        getFilterableProperties(props.schema.properties);
 
     return (
         <Toolbar
