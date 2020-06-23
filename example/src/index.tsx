@@ -101,6 +101,7 @@ const productSchema: EntitySchema = {
             title: "Description",
             description: "Not mandatory but it'd be awesome if you filled this up",
             dataType: "string",
+            forceFullWidth: true,
             includeInListView: false
         },
         published: {
