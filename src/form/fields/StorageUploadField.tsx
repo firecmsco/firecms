@@ -176,7 +176,7 @@ export function StorageUpload({
 
         if (multipleFilesSupported) {
             onChange(fieldValue);
-        }else{
+        } else {
             onChange(fieldValue ? fieldValue[0] : null);
         }
     };
@@ -377,7 +377,10 @@ export function StorageItemPreview({
                 className={classes.uploadItem}
                 variant={"outlined"}>
 
-                <Box position={"absolute"} top={4} right={4}>
+                <Box position={"absolute"}
+                     top={4}
+                     right={4}
+                     style={{ zIndex: 100 }}>
                     <IconButton
                         style={{ backgroundColor: "white" }}
                         onClick={(event) => {

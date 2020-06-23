@@ -23,7 +23,7 @@ import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
 import { CMSFieldProps } from "./form_props";
-import { AlertTitle } from "@material-ui/lab";
+import { Alert } from "@material-ui/lab";
 
 
 function buildField<P extends Property<T>, T = any>(name: string,
@@ -47,11 +47,14 @@ function buildField<P extends Property<T>, T = any>(name: string,
                 })}
 
         </Field>
+
         {underlyingValueHasChanged &&
-        <AlertTitle>
-            <FormHelperText> This value has been updated in
-                Firestore</FormHelperText>
-        </AlertTitle>}
+        <Alert>
+            <FormHelperText>
+                This value has been updated in Firestore
+            </FormHelperText>
+        </Alert>}
+
     </React.Fragment>;
 }
 

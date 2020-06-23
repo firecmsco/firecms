@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Box, Button, Grid, Paper, Tab, Tabs } from "@material-ui/core";
+import { Box, Button, Container, Grid, Tab, Tabs } from "@material-ui/core";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import CollectionTable from "./CollectionTable";
 import { Link as ReactLink } from "react-router-dom";
@@ -40,8 +40,9 @@ export default function SubCollectionsView<S extends EntitySchema>(
         subcollectionPath = `${parentCollectionPath}/${entity.id}/${selectedView.relativePath}`;
 
     return (
-        <Paper elevation={0}>
-            <AppBar position="static" color={"transparent"} elevation={0}>
+        <React.Fragment>
+
+            <Container maxWidth={"md"}>
                 <Grid
                     container
                     direction="row"
@@ -55,7 +56,7 @@ export default function SubCollectionsView<S extends EntitySchema>(
                                  key={`wrapped-tab-${key}`}/>
                         ))}
                     </Tabs>
-                    <Box m={1} textAlign="right">
+                    <Box my={2} textAlign="right">
                         {subcollectionPath && <Button
                             component={ReactLink}
                             to={getRouterNewEntityPath(subcollectionPath)}
@@ -67,7 +68,8 @@ export default function SubCollectionsView<S extends EntitySchema>(
                         </Button>}
                     </Box>
                 </Grid>
-            </AppBar>
+            </Container>
+
             {Object.entries(subcollections).map(([key, view]) => (
                 <TabPanel key={`wrapped-tab-content-${key}`}
                           selectedView={selectedView}
@@ -75,7 +77,8 @@ export default function SubCollectionsView<S extends EntitySchema>(
                           onEntityClick={onEntityClick}
                           subcollectionPath={subcollectionPath}/>
             ))}
-        </Paper>
+
+        </React.Fragment>
     );
 }
 
