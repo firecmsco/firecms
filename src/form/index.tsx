@@ -24,8 +24,6 @@ import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
 import { CMSFieldProps } from "./form_props";
-import FieldInfoPopover from "../util/FieldInfoPopover";
-
 
 function buildField<P extends Property<T>, T = any>(name: string,
                                                     property: P,

@@ -4,7 +4,7 @@
     "description": "Awesome Firestore based CMS",
     "author": "camberi",
     "license": "GPL-3.0",
-    "repository": "camberi/firecms",
+    "repository": "git@github.com:Camberi/firecms.git",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "module": "dist/index.modern.js",
