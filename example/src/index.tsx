@@ -54,6 +54,8 @@ const productSchema: EntitySchema = {
             title: "Status",
             validation: { required: true },
             dataType: "string",
+            description: "Should this product be visible in the website",
+            longDescription: "Example of a long description hidden under a popover",
             enumValues: {
                 private: "Private",
                 public: "Public"
@@ -100,6 +102,7 @@ const productSchema: EntitySchema = {
         description: {
             title: "Description",
             description: "Not mandatory but it'd be awesome if you filled this up",
+            longDescription: "Example of a long description hidden under a popover",
             dataType: "string",
             forceFullWidth: true,
             includeInListView: false
@@ -136,6 +139,7 @@ const productSchema: EntitySchema = {
             title: "Available locales",
             description:
                 "This is an example of a disabled field that gets updated trough a cloud functions, try changing a locale 'selectable' value",
+            longDescription: "Example of a long description hidden under a popover",
             dataType: "array",
             disabled: true,
             of: {
@@ -286,7 +290,7 @@ export const testEntitySchema: EntitySchema = {
             title: "Title",
             description: "A catching title is important",
             includeInListView: true,
-            forceFullWidth:true,
+            forceFullWidth: true,
             // validation: { required: true },
             dataType: "string"
         },

@@ -12,13 +12,15 @@ import {
 import React from "react";
 import { CMSFieldProps } from "../form_props";
 import { renderPreviewEnumChip } from "../../preview/PreviewComponent";
+import { FieldDescription } from "../../util";
 
 type ArrayEnumSelectProps<T extends EnumType> = CMSFieldProps<T[]>;
 
 export default function ArrayEnumSelect<T extends EnumType>({
                                                                 field,
                                                                 form: { errors, touched, setFieldValue, setFieldTouched },
-                                                                property
+                                                                property,
+                                                                includeDescription
                                                             }: ArrayEnumSelectProps<T>) {
 
     if (property.of.dataType !== "string" && property.of.dataType !== "number") {
@@ -71,5 +73,9 @@ export default function ArrayEnumSelect<T extends EnumType>({
             })}
         </MuiSelect>
         <FormHelperText>{fieldError}</FormHelperText>
+
+        {includeDescription &&
+        <FieldDescription property={property}/>}
+
     </FormControl>;
 }

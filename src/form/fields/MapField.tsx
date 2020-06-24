@@ -11,6 +11,7 @@ import { formStyles } from "../../styles";
 
 import { CMSFieldProps } from "../form_props";
 import { getColumnsForProperty } from "../../util/layout";
+import { FieldDescription } from "../../util";
 
 type MapFieldProps<S extends EntitySchema> = CMSFieldProps<object>;
 
@@ -52,9 +53,8 @@ export default function MapField<S extends EntitySchema>({
                 </Box>
             </Paper>
 
-            {includeDescription && property.description &&
-            <FormHelperText>{property.description}</FormHelperText>
-            }
+            {includeDescription &&
+            <FieldDescription property={property}/>}
 
         </FormControl>
     );

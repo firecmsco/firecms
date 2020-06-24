@@ -1,9 +1,10 @@
 import React from "react";
 import {
+    Box,
     FormControl,
-    FormHelperText,
+    FormHelperText, IconButton,
     InputLabel,
-    MenuItem,
+    MenuItem, Paper,
     Select as MuiSelect,
     TextField as MuiTextField
 } from "@material-ui/core";
@@ -23,6 +24,7 @@ import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
 import { CMSFieldProps } from "./form_props";
+import FieldInfoPopover from "../util/FieldInfoPopover";
 
 
 function buildField<P extends Property<T>, T = any>(name: string,
@@ -32,6 +34,7 @@ function buildField<P extends Property<T>, T = any>(name: string,
                                                     underlyingValueHasChanged: boolean,
                                                     additionalProps?: any) {
     return <React.Fragment>
+
         <Field
             required={property.validation?.required}
             name={`${name}`}

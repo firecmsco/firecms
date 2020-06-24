@@ -45,6 +45,10 @@ export {
 
 
 export * from "./text_search_delegate";
+export {
+    FieldDescription
+} from "./util";
+
 export type {
     Authenticator
 } from "./authenticator";

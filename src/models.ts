@@ -162,9 +162,14 @@ export interface BaseProperty<T> {
     title?: string;
 
     /**
-     * Property description
+     * Property description, always displayed under the field
      */
     description?: string;
+
+    /**
+     * Longer description of a field, displayed under a popover
+     */
+    longDescription?: string;
 
     /**
      * Rules for validating this property

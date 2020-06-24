@@ -14,6 +14,7 @@ import React from "react";
 
 import { CMSFieldProps } from "../form_props";
 import PreviewComponent from "../../preview/PreviewComponent";
+import { FieldDescription } from "../../util";
 
 interface TextFieldProps extends CMSFieldProps<string | number> {
     allowInfinity?: boolean
@@ -106,8 +107,8 @@ export default function TextField({
                 {showError && <FormHelperText
                     id="component-error-text">{fieldError}</FormHelperText>}
 
-                {includeDescription && property.description &&
-                <FormHelperText>{property.description}</FormHelperText>}
+                {includeDescription &&
+                <FieldDescription property={property}/>}
 
             </FormControl>
 

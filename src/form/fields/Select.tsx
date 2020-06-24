@@ -10,6 +10,7 @@ import {
 import React from "react";
 
 import { CMSFieldProps } from "../form_props";
+import { FieldDescription } from "../../util";
 
 type SelectProps<T extends EnumType> = CMSFieldProps<T>;
 
@@ -55,8 +56,8 @@ export default function Select<T extends EnumType>({
                 ))}
             </MuiSelect>
 
-            {includeDescription && property.description &&
-            <FormHelperText>{property.description}</FormHelperText>}
+            {includeDescription &&
+            <FieldDescription property={property}/>}
 
             {showError && <FormHelperText
                 id="component-error-text">{fieldError}</FormHelperText>}

@@ -13,7 +13,7 @@ import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
 import { CMSFieldProps } from "../form_props";
 import React from "react";
-import { getColumnsForProperty } from "../../util/layout";
+import { FieldDescription } from "../../util";
 
 type ArrayDefaultFieldProps<T> = CMSFieldProps<T[]>;
 
@@ -88,10 +88,8 @@ export default function ArrayDefaultField<T>({
                         )}
                     </Paper>
 
-                    {includeDescription && property.description &&
-                    <Box>
-                        <FormHelperText>{property.description}</FormHelperText>
-                    </Box>}
+                    {includeDescription &&
+                    <FieldDescription property={property}/>}
 
                     {showError && <FormHelperText
                         id="component-error-text">{fieldError}</FormHelperText>}

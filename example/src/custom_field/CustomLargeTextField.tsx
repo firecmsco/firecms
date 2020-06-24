@@ -6,7 +6,7 @@ import {
     InputLabel
 } from "@material-ui/core";
 import React, { ReactElement } from "react";
-import { CMSFieldProps } from "@camberi/firecms";
+import { CMSFieldProps, FieldDescription } from "@camberi/firecms";
 
 interface CustomLargeTextFieldProps extends CMSFieldProps<string> {
     rows: number
@@ -46,8 +46,7 @@ export default function CustomLargeTextField({
             {showError && <FormHelperText
                 id="component-error-text">{fieldError}</FormHelperText>}
 
-            {property.description &&
-            <FormHelperText>{property.description}</FormHelperText>}
+            <FieldDescription property={property}/>
 
         </FormControl>
     );

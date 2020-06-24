@@ -22,6 +22,7 @@ import CollectionTable from "../../collection/CollectionTable";
 import { CMSFieldProps } from "../form_props";
 import firebase from "firebase";
 import { PreviewComponent } from "../../preview";
+import { FieldDescription } from "../../util";
 
 type ReferenceFieldProps<S extends EntitySchema> = CMSFieldProps<firebase.firestore.DocumentReference> ;
 
@@ -65,10 +66,8 @@ export default function ReferenceField<S extends EntitySchema>({
                                  onEntityClick={handleEntityClick}/>
             </Paper>
 
-            {includeDescription && property.description &&
-            <Box>
-                <FormHelperText>{property.description}</FormHelperText>
-            </Box>}
+            {includeDescription &&
+            <FieldDescription property={property}/>}
 
             {showError && <FormHelperText
                 id="component-error-text">{fieldError}</FormHelperText>}

@@ -30,6 +30,7 @@ import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
 import PreviewComponent from "../../preview/PreviewComponent";
 import deepEqual from "deep-equal";
+import { FieldDescription } from "../../util";
 
 type StorageUploadFieldProps = CMSFieldProps<string | string[]> ;
 
@@ -83,8 +84,8 @@ export default function StorageUploadField({
                                );
                            }}/>
 
-            {includeDescription && property.description &&
-            <FormHelperText>{property.description}</FormHelperText>}
+            {includeDescription &&
+            <FieldDescription property={property}/>}
 
             {showError && <FormHelperText
                 id="component-error-text">{fieldError}</FormHelperText>}

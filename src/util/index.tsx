@@ -6,5 +6,9 @@ export {
     BreadcrumbContainer
 } from "./BreadcrumbContainer";
 
+export {
+    FieldDescription
+}  from "./FieldDescription";
+
 
 

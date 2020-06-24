@@ -1,13 +1,9 @@
-import {
-    FormControl,
-    FormControlLabel,
-    FormHelperText,
-    Switch
-} from "@material-ui/core";
+import { FormControlLabel, FormHelperText, Switch } from "@material-ui/core";
 import React from "react";
 
 import { CMSFieldProps } from "../form_props";
 import { getIn } from "formik";
+import { FieldDescription } from "../../util";
 
 type SwitchFieldProps = CMSFieldProps<boolean>;
 
@@ -44,8 +40,8 @@ export default function SwitchField({
                 label={property.title || field.name}
             />
 
-            {includeDescription && property.description &&
-            <FormHelperText>{property.description}</FormHelperText>}
+            {includeDescription &&
+            <FieldDescription property={property}/>}
 
             {showError && <FormHelperText
                 id="component-error-text">{fieldError}</FormHelperText>}

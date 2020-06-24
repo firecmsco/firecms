@@ -4,6 +4,7 @@ import React from "react";
 import { formStyles } from "../../styles";
 import { CMSFieldProps } from "../form_props";
 import PreviewComponent from "../../preview/PreviewComponent";
+import { FieldDescription } from "../../util";
 
 type DisabledFieldProps = CMSFieldProps<any> ;
 
@@ -33,9 +34,8 @@ export default function DisabledField<S extends EntitySchema>({ field, property,
 
             </Paper>
 
-            {includeDescription && property.description &&
-            <FormHelperText>{property.description}</FormHelperText>
-            }
+            {includeDescription &&
+            <FieldDescription property={property}/>}
 
         </FormControl>
     );
