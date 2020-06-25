@@ -130,10 +130,10 @@ export function StorageUpload({
             storagePath: value as string
         }];
 
-    const [initialValue, setInitialValue] = React.useState<string| string[]>(value);
+    const [initialValue, setInitialValue] = React.useState<string | string[]>(value);
     const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
     if (!deepEqual(initialValue, value)) {
-        setInitialValue(value)
+        setInitialValue(value);
         setInternalValue(internalInitialValue);
     }
 
@@ -215,8 +215,11 @@ export function StorageUpload({
 
     const { ref, ...rootProps } = getRootProps();
 
-    return (
+    const helpText = multipleFilesSupported ?
+        "Drag 'n' drop some files here, or click to select files" :
+        "Drag 'n' drop a file here, or click to select one";
 
+    return (
 
         <RootRef rootRef={ref}>
 
@@ -260,9 +263,7 @@ export function StorageUpload({
                         <Typography color={"textSecondary"}
                                     variant={"body2"}
                                     align={"center"}>
-                            Drag 'n' drop some
-                            files here, or click to
-                            select files
+                            {helpText}
                         </Typography>
                     </Box>
 
