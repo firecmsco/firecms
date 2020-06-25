@@ -109,7 +109,6 @@
         "typescript": "^3.9.2",
         "yup": "^0.28.3"
     },
-    "publishConfig": { "registry": "https://npm.pkg.github.com/" },
     "files": [
         "dist"
     ]
