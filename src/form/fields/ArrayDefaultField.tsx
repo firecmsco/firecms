@@ -49,7 +49,7 @@ export default function ArrayDefaultField<T>({
                     <Paper variant={"outlined"}
                            className={classes.paper}>
                         {hasValue ? (
-                            <Container maxWidth={"xs"}>
+                            <Container maxWidth={"sm"}>
                                 {field.value.map((entryValue: any, index: number) => {
                                     return (
                                         <Box key={`field_${index}`}

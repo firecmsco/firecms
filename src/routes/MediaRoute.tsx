@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { RouteComponentProps } from "react-router";
 import { formStyles, useStyles } from "../styles";
 import { Button, Grid, Paper } from "@material-ui/core";
-import * as firebase from "firebase";
+import { storage } from "firebase/app";
+
 import TreeView from "@material-ui/lab/TreeView";
 import TreeItem from "@material-ui/lab/TreeItem";
 
@@ -17,19 +18,19 @@ interface Node {
     full_path: string;
     name: string;
     children: Node[],
-    ref: firebase.storage.Reference
+    ref: storage.Reference
 }
 
 function StorageTree() {
 
     const classes = useStyles();
-    let storage = firebase.storage();
+    let st = storage();
 
     let initialState: Node = {
         full_path: "",
         name: "Root",
         children: [],
-        ref: storage.ref()
+        ref: st.ref()
     };
 
     const [treeArray, setTreeArray] = useState<Record<string, Node>>({ "": initialState });
@@ -38,7 +39,7 @@ function StorageTree() {
 
     };
     const onNodeToggle2 = (nodeId: string, expanded: boolean) => {
-        let reference = storage.ref(nodeId);
+        let reference = st.ref(nodeId);
         if (expanded) {
             reference.list().then((listResult) => {
                 const newTreeArray = { ...treeArray };

@@ -15,7 +15,9 @@ import {
 import MuiAlert from "@material-ui/lab/Alert/Alert";
 
 import { uploadFile } from "../../firebase";
-import firebase from "firebase";
+import { storage } from "firebase/app";
+
+
 import { formStyles } from "../../styles";
 import {
     ArrayProperty,
@@ -310,10 +312,10 @@ export function StorageUploadProgress({
             setProgress(currentProgress);
             console.debug("Upload is " + currentProgress + "% done");
             switch (snapshot.state) {
-                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                case storage.TaskState.PAUSED: // or 'paused'
                     console.debug("Upload is paused");
                     break;
-                case firebase.storage.TaskState.RUNNING: // or 'running'
+                case storage.TaskState.RUNNING: // or 'running'
                     console.debug("Upload is running");
                     break;
             }

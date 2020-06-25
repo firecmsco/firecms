@@ -8,7 +8,7 @@ import {
     EntitySchema,
     EnumValues
 } from "@camberi/firecms";
-import firebase from "firebase";
+import { User } from "firebase/app";
 
 const status = {
     private: "Private",
@@ -55,7 +55,7 @@ export const productSchema: EntitySchema = {
         price: {
             title: "Price",
             includeInListView: true,
-            validation: { required: true },
+            validation: { required: true, max: 10000 },
             dataType: "number"
         },
         status: {
@@ -188,7 +188,7 @@ const navigation: EntityCollectionView<any>[] = [
     }
 ];
 
-const myAuthenticator: Authenticator = (user?: firebase.User) => {
+const myAuthenticator: Authenticator = (user?: User) => {
     console.log("Allowing access to", user?.email);
     return true;
 };

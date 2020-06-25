@@ -20,7 +20,7 @@ import {
 
 import { firebaseConfig } from "./firebase_config";
 import CustomLargeTextField from "./custom_field/CustomLargeTextField";
-import firebase from "firebase";
+import { User } from "firebase/app";
 
 const locales: EnumValues<string> = {
     "de-DE": "German",
@@ -44,8 +44,11 @@ const productSchema: EntitySchema = {
             title: "Price",
             validation: {
                 required: true,
-                requiredMessage: "You must set a price"
+                requiredMessage: "You must set a price between 0 and 1000",
+                min: 0,
+                max: 1000
             },
+            description: "Price with range validation",
             filterable: true,
             dataType: "number",
             includeInListView: true
@@ -183,6 +186,7 @@ const blogSchema: EntitySchema = {
                     acceptedFiles: ["image/*"]
                 }
             },
+            description: "This fields allows uploading multiple images at once",
             includeInListView: true
         },
         priority: {
@@ -191,15 +195,6 @@ const blogSchema: EntitySchema = {
             dataType: "number",
             additionalProps: {
                 allowInfinity: true
-            },
-            includeInListView: false
-        },
-        content: {
-            title: "Content",
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "string"
             },
             includeInListView: false
         },
@@ -214,6 +209,15 @@ const blogSchema: EntitySchema = {
             },
             includeInListView: true
         },
+        content: {
+            title: "Content",
+            validation: { required: true },
+            dataType: "array",
+            of: {
+                dataType: "string"
+            },
+            includeInListView: false
+        },
         products: {
             title: "Products",
             validation: { required: true },
@@ -227,6 +231,7 @@ const blogSchema: EntitySchema = {
         }
     }
 };
+
 const usersSchema: EntitySchema = {
     name: "User",
     properties: {
@@ -355,6 +360,7 @@ const localeCollection =
     {
         name: "Locales",
         relativePath: "locales",
+        deleteEnabled: false,
         schema: {
             customId: locales,
             name: "Locale",
@@ -426,7 +432,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 
-const myAuthenticator: Authenticator = (user?: firebase.User) => {
+const myAuthenticator: Authenticator = (user?: User) => {
     console.log("Allowing access to", user?.email);
     return true;
 };

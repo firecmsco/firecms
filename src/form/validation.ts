@@ -12,9 +12,10 @@ import {
 } from "../models";
 import * as yup from "yup";
 import {
-    ArraySchema,
     BooleanSchema,
     DateSchema,
+    NotRequiredArraySchema,
+    NotRequiredNullableArraySchema,
     NumberSchema,
     ObjectSchema,
     Schema,
@@ -22,7 +23,7 @@ import {
 } from "yup";
 
 
-function mapPropertyToYup(property: Property): Schema<any> {
+function mapPropertyToYup(property: Property): Schema<unknown> {
     if (property.dataType === "string") {
         return getYupStringSchema(property);
     } else if (property.dataType === "number") {
@@ -54,14 +55,21 @@ export function getYupObjectSchema(properties: Properties): ObjectSchema<any> {
 function getYupStringSchema(property: StringProperty): StringSchema {
     let schema: StringSchema<any> = yup.string();
     const validation = property.validation;
-    if (validation?.required) {
-        schema = schema.required(validation.requiredMessage)
-            .nullable(false);
-    } else {
-        schema = schema.notRequired().nullable(true);
-    }
     if (property.enumValues) {
         schema = schema.oneOf(Object.keys(property.enumValues));
+    }
+    if (validation) {
+        schema = validation.required ?
+            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
+            schema.notRequired().nullable(true);
+        if (validation.min) schema = schema.min(validation.min, `${property.title} must be min ${validation.min} characters long`);
+        if (validation.max) schema = schema.max(validation.max, `${property.title} must be max ${validation.min} characters long`);
+        if (validation.matches) schema = schema.matches(validation.matches);
+        if (validation.email) schema = schema.email(`${property.title} must be an email`);
+        if (validation.url) schema = schema.url(`${property.title} must be a url`);
+        if (validation.trim) schema = schema.trim();
+        if (validation.lowercase) schema = schema.lowercase();
+        if (validation.lowercase) schema = schema.uppercase();
     }
     return schema;
 }
@@ -70,10 +78,17 @@ function getYupNumberSchema(property: NumberProperty): NumberSchema {
     const validation = property.validation;
     let schema: NumberSchema<any> = yup.number()
         .typeError(validation?.requiredMessage ? validation?.requiredMessage : "Must be a number");
-    if (validation?.required) {
-        schema = schema.required(validation.requiredMessage).nullable(false);
-    } else {
-        schema = schema.notRequired().nullable(true);
+    if (validation) {
+        schema = validation.required ?
+            schema.required(validation.requiredMessage).nullable(false) :
+            schema.notRequired().nullable(true);
+        if (validation.min) schema = schema.min(validation.min, `${property.title} must be more or equal to ${validation.min}`);
+        if (validation.max) schema = schema.max(validation.max, `${property.title} must be less or equal to ${validation.max}`);
+        if (validation.lessThan) schema = schema.lessThan(validation.lessThan, `${property.title} must be less than ${validation.lessThan}`);
+        if (validation.moreThan) schema = schema.moreThan(validation.moreThan, `${property.title} must be more than ${validation.moreThan}`);
+        if (validation.positive) schema = schema.positive(`${property.title} must be positive`);
+        if (validation.negative) schema = schema.negative(`${property.title} must be negative`);
+        if (validation.integer) schema = schema.integer(`${property.title} must be an integer`);
     }
     return schema;
 }
@@ -93,11 +108,12 @@ function getYupGeoPointSchema(property: GeopointProperty): ObjectSchema {
 function getYupDateSchema(property: TimestampProperty): DateSchema {
     let schema: DateSchema<any> = yup.date();
     const validation = property.validation;
-    if (validation?.required) {
-        schema = schema.required(validation.requiredMessage)
-            .nullable(false);
-    } else {
-        schema = schema.notRequired().nullable(true);
+    if (validation) {
+        schema = validation.required ?
+            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
+            schema.notRequired().nullable(true);
+        if (validation.min) schema = schema.min(validation.min, `${property.title} must be after ${validation.min}`);
+        if (validation.max) schema = schema.max(validation.max, `${property.title} must be before ${validation.min}`);
     }
     return schema;
 }
@@ -105,11 +121,10 @@ function getYupDateSchema(property: TimestampProperty): DateSchema {
 function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProperty<S>): ObjectSchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
-    if (validation?.required) {
-        schema = schema.required(validation.requiredMessage)
-            .nullable(false);
-    } else {
-        schema = schema.notRequired().nullable(true);
+    if (validation) {
+        schema = validation.required ?
+            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
+            schema.notRequired().nullable(true);
     }
     return schema;
 }
@@ -117,21 +132,24 @@ function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProper
 function getYupBooleanSchema(property: BooleanProperty): BooleanSchema {
     let schema: BooleanSchema<any> = yup.boolean();
     const validation = property.validation;
-    if (validation?.required) {
-        schema = schema.required(validation.requiredMessage)
-            .nullable(false);
-    } else {
-        schema = schema.notRequired().nullable(true);
+    if (validation) {
+        schema = validation.required ?
+            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
+            schema.notRequired().nullable(true);
     }
     return schema;
 }
 
-function getYupArraySchema<T>(property: ArrayProperty<T>): ArraySchema<T> {
-    let schema: ArraySchema<T> = yup.array().of(mapPropertyToYup(property.of));
+function getYupArraySchema<T>(property: ArrayProperty<T>): Schema<unknown> {
+    let schema: NotRequiredArraySchema<any> | NotRequiredNullableArraySchema<any> = yup.array().of(mapPropertyToYup(property.of));
     const validation = property.validation;
-    if (validation?.required) {
-        schema = schema.required(validation.requiredMessage)
-            .nullable(false);
+
+    if (validation) {
+        schema = validation.required ?
+            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
+            schema.notRequired().nullable(true);
+        if (validation.min) schema = schema.min(validation.min, `${property.title} should be min ${validation.min} entries long`);
+        if (validation.max) schema = schema.max(validation.max, `${property.title} should be max ${validation.min} entries long`);
     }
     return schema;
 }

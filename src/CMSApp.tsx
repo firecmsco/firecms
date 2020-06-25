@@ -31,8 +31,12 @@ import {
     Switch
 } from "react-router-dom";
 
-import * as firebase from "firebase";
+import * as firebase from "firebase/app";
+import { User } from "firebase/app";
+import "firebase/analytics";
 import "firebase/auth";
+import "firebase/storage";
+import "firebase/firestore";
 
 import { CircularProgressCenter } from "./util";
 import { EntityCollectionView } from "./models";
@@ -48,7 +52,6 @@ import {
 } from "./routes";
 import { useStyles } from "./styles";
 import { Authenticator } from "./authenticator";
-
 
 /**
  * Main entry point that defines the CMS configuration
@@ -125,9 +128,9 @@ export interface AdditionalView {
 }
 
 
-const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+// const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
-export const AuthContext = React.createContext<firebase.User | null>(null);
+export const AuthContext = React.createContext<User | null>(null);
 
 export default function CMSApp({
                                    name,
@@ -151,7 +154,7 @@ export default function CMSApp({
     const [configError, setConfigError] = React.useState<string>();
 
     const [authLoading, setAuthLoading] = React.useState(true);
-    const [loggedUser, setLoggedUser] = React.useState<firebase.User | null>(null);
+    const [loggedUser, setLoggedUser] = React.useState<User | null>(null);
     const [loginSkipped, setLoginSkipped] = React.useState<boolean>(false);
     const [authProviderError, setAuthProviderError] = React.useState<any>();
     const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
@@ -163,7 +166,7 @@ export default function CMSApp({
     const authenticator: Authenticator | undefined
         = authentication instanceof Function ? authentication : undefined;
 
-    const onAuthStateChanged = async (user: firebase.User | null) => {
+    const onAuthStateChanged = async (user: User | null) => {
 
         setNotAllowedError(false);
 
@@ -226,13 +229,13 @@ export default function CMSApp({
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
     function googleSignIn() {
-        setAuthProviderError(null);
-        firebase
-            .auth()
-            .signInWithPopup(googleAuthProvider)
-            .then((_: firebase.auth.UserCredential) => {
-            })
-            .catch(error => setAuthProviderError(error));
+        // setAuthProviderError(null);
+        // firebase
+        //     .auth()
+        //     .signInWithPopup(googleAuthProvider)
+        //     .then((_: auth.UserCredential) => {
+        //     })
+        //     .catch(error => setAuthProviderError(error));
     }
 
     function skipLogin() {

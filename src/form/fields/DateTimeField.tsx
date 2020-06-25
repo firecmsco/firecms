@@ -3,7 +3,8 @@ import React from "react";
 import { DateTimePicker } from "@material-ui/pickers";
 
 import { CMSFieldProps } from "../form_props";
-import firebase from "firebase";
+import "firebase/firestore";
+
 import { FieldDescription } from "../../util";
 
 type DateTimeFieldProps = CMSFieldProps<firebase.firestore.Timestamp> ;

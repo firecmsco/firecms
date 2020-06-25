@@ -1,10 +1,9 @@
 import React from "react";
 import {
-    Box,
     FormControl,
-    FormHelperText, IconButton,
+    FormHelperText,
     InputLabel,
-    MenuItem, Paper,
+    MenuItem,
     Select as MuiSelect,
     TextField as MuiTextField
 } from "@material-ui/core";

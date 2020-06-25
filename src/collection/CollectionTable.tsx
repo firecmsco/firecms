@@ -187,27 +187,23 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     const emptyRows = rowsPerPage ? data.length - rowsPerPage : 0;
     const tableViewFields = getCollectionTableProperties(props.schema.properties);
 
-    const hasEditButton = !!props.onEntityEdit;
-    const hasDeleteButton = !!props.onEntityDelete;
+    const editEnabled = !!props.onEntityEdit;
+    const deleteEnabled = !!props.onEntityDelete;
 
     const buildTableRowButtons = <S extends EntitySchema>(entity: Entity<S> | null, index: number) => (
         <TableCell key={`row-buttons-${index}`}>
             <Box minWidth={96}>
-                {hasEditButton && (
-                    <IconButton aria-label="edit"
-                                disabled={!entity}
-                                onClick={(event) => entity && onEntityEdit(event, entity)}>
-                        <EditIcon color={"action"}/>
-                    </IconButton>
-                )}
+                <IconButton aria-label="edit"
+                            disabled={!entity || !editEnabled}
+                            onClick={editEnabled ? (event) => entity && onEntityEdit(event, entity) : undefined}>
+                    <EditIcon color={"action"}/>
+                </IconButton>
 
-                {hasDeleteButton && (
-                    <IconButton aria-label="delete"
-                                disabled={!entity}
-                                onClick={(event) => entity && onEntityDelete(event, entity)}>
-                        <DeleteIcon/>
-                    </IconButton>
-                )}
+                <IconButton aria-label="delete"
+                            disabled={!entity || !deleteEnabled}
+                            onClick={deleteEnabled ? (event) => entity && onEntityDelete(event, entity) : undefined}>
+                    <DeleteIcon/>
+                </IconButton>
             </Box>
 
             <Box maxWidth={96}

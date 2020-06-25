@@ -1,4 +1,3 @@
-import firebase from "firebase";
 import * as React from "react";
 import { TextSearchDelegate } from "./text_search_delegate";
 import { CMSFieldProps } from "./form/form_props";
@@ -142,7 +141,7 @@ export interface AdditionalColumnDelegate<S extends EntitySchema> {
 
     title: string;
 
-    builder: (entity:Entity<S>) => React.ReactNode;
+    builder: (entity: Entity<S>) => React.ReactNode;
 
 }
 
@@ -170,11 +169,6 @@ export interface BaseProperty<T> {
      * Longer description of a field, displayed under a popover
      */
     longDescription?: string;
-
-    /**
-     * Rules for validating this property
-     */
-    validation?: PropertyValidationSchema,
 
     /**
      * Is this property displayed in the collection view
@@ -236,13 +230,6 @@ export type EnumValues<T extends EnumType> = Record<T, string>; // id -> Label
  */
 export type Properties = Record<string, Property>;
 
-/**
- * Rules to validate a property
- */
-export interface PropertyValidationSchema {
-    required?: boolean;
-    requiredMessage?: string;
-}
 
 export interface NumberProperty extends BaseProperty<number> {
     dataType: "number";
@@ -253,40 +240,20 @@ export interface NumberProperty extends BaseProperty<number> {
      * displayed in the dropdown.
      */
     enumValues?: EnumValues<number>;
+
+    /**
+     * Rules for validating this property
+     */
+    validation?: NumberPropertyValidationSchema,
 }
 
 export interface BooleanProperty extends BaseProperty<boolean> {
     dataType: "boolean";
-}
-
-export interface TimestampProperty extends BaseProperty<firebase.firestore.Timestamp> {
-    dataType: "timestamp";
-}
-
-// TODO: currently this is the only unsupported field
-export interface GeopointProperty extends BaseProperty<firebase.firestore.GeoPoint> {
-    dataType: "geopoint";
-}
-
-export interface ReferenceProperty<S extends EntitySchema> extends BaseProperty<firebase.firestore.DocumentReference> {
-
-    dataType: "reference";
 
     /**
-     * Absolute collection path.
+     * Rules for validating this property
      */
-    collectionPath: string;
-
-    /**
-     * Schema of the entity this reference points to.
-     */
-    schema: S,
-
-    /**
-     * When the dialog for selecting the value of this reference, should
-     * a filter be applied to the possible entities.
-     */
-    filter?: FilterValues<S>;
+    validation?: PropertyValidationSchema,
 }
 
 export interface StringProperty extends BaseProperty<string> {
@@ -311,6 +278,11 @@ export interface StringProperty extends BaseProperty<string> {
      * displayed in the dropdown.
      */
     enumValues?: EnumValues<string>;
+
+    /**
+     * Rules for validating this property
+     */
+    validation?: StringPropertyValidationSchema,
 }
 
 export interface ArrayProperty<T> extends BaseProperty<T[]> {
@@ -321,6 +293,11 @@ export interface ArrayProperty<T> extends BaseProperty<T[]> {
      * The property of this array. You can specify any property.
      */
     of: Property<T>;
+
+    /**
+     * Rules for validating this property
+     */
+    validation?: ArrayPropertyValidationSchema,
 }
 
 export interface MapProperty<T> extends BaseProperty<T> {
@@ -331,6 +308,56 @@ export interface MapProperty<T> extends BaseProperty<T> {
      * Record of properties included in this map.
      */
     properties: Properties;
+
+    /**
+     * Rules for validating this property
+     */
+    validation?: PropertyValidationSchema,
+}
+
+export interface TimestampProperty extends BaseProperty<firebase.firestore.Timestamp> {
+    dataType: "timestamp";
+
+    /**
+     * Rules for validating this property
+     */
+    validation?: DatePropertyValidationSchema,
+}
+
+// TODO: currently this is the only unsupported field
+export interface GeopointProperty extends BaseProperty<firebase.firestore.GeoPoint> {
+    dataType: "geopoint";
+
+    /**
+     * Rules for validating this property
+     */
+    validation?: PropertyValidationSchema,
+}
+
+export interface ReferenceProperty<S extends EntitySchema> extends BaseProperty<firebase.firestore.DocumentReference> {
+
+    dataType: "reference";
+
+    /**
+     * Absolute collection path.
+     */
+    collectionPath: string;
+
+    /**
+     * Schema of the entity this reference points to.
+     */
+    schema: S,
+
+    /**
+     * When the dialog for selecting the value of this reference, should
+     * a filter be applied to the possible entities.
+     */
+    filter?: FilterValues<S>;
+
+    /**
+     * Rules for validating this property
+     */
+    validation?: PropertyValidationSchema,
 }
 
 /**
@@ -383,3 +410,43 @@ export type WhereFilterOp =
     | "array-contains"
     | "in"
     | "array-contains-any";
+
+/**
+ * Rules to validate a property
+ */
+export interface PropertyValidationSchema {
+    required?: boolean;
+    requiredMessage?: string;
+}
+
+export interface NumberPropertyValidationSchema extends PropertyValidationSchema {
+    min?: number;
+    max?: number;
+    lessThan?: number;
+    moreThan?: number;
+    positive?: boolean;
+    negative?: boolean;
+    integer?: boolean;
+}
+
+interface StringPropertyValidationSchema extends PropertyValidationSchema {
+    length?: number;
+    min?: number;
+    max?: number;
+    matches?: RegExp;
+    email?: boolean;
+    url?: boolean;
+    trim?: boolean;
+    lowercase?: boolean;
+    uppercase?: boolean;
+}
+
+interface DatePropertyValidationSchema extends PropertyValidationSchema {
+    min?: Date;
+    max?: Date;
+}
+
+interface ArrayPropertyValidationSchema extends PropertyValidationSchema {
+    min?: number;
+    max?: number;
+}

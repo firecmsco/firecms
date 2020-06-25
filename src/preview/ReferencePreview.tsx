@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import { Box, List, ListItem } from "@material-ui/core";
 import { Entity, EntitySchema } from "../models";
-import * as firebase from "firebase";
+
 import { listenEntityFromRef } from "../firebase";
 import { PreviewComponentProps } from "./PreviewComponentProps";
 import SkeletonComponent from "./SkeletonComponent";

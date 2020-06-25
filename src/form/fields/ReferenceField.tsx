@@ -17,10 +17,10 @@ import {
 import React from "react";
 import { formStyles } from "../../styles";
 import ReferencePreview from "../../preview/ReferencePreview";
-import ClearIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import ClearIcon from "@material-ui/icons/Clear";
 import CollectionTable from "../../collection/CollectionTable";
 import { CMSFieldProps } from "../form_props";
-import firebase from "firebase";
+
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../util";
 
@@ -134,7 +134,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                 justify="space-between"
                 container
                 spacing={2}>
-                <Grid item>
+                <Grid item xs={10}>
                     {value &&
                     <ReferencePreview
                         reference={value}
@@ -143,13 +143,13 @@ export function ReferenceDialog<S extends EntitySchema>(
                     {!value &&
                     <Box>No value set</Box>}
                 </Grid>
-                <Box display="inline">
+                <Grid item xs={2}>
                     {value &&
                     <Tooltip title="Clear">
                         <IconButton
-                            aria-label="clear"
+                            style={{ backgroundColor: "white" }}
                             onClick={clearValue}>
-                            <ClearIcon/>
+                            <ClearIcon />
                         </IconButton>
                     </Tooltip>}
                     <Button variant="outlined"
@@ -157,7 +157,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                             onClick={handleClickOpen}>
                         {value ? "Edit" : "Set"}
                     </Button>
-                </Box>
+                </Grid>
             </Grid>
 
             <Dialog

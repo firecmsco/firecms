@@ -1,5 +1,4 @@
-import * as firebase from "firebase";
-import "firebase/firestore";
+import { firestore } from "firebase/app";
 import { Entity, EntitySchema, EntityValues, FilterValues } from "../models";
 
 /**
@@ -28,7 +27,7 @@ export function listenCollection<S extends EntitySchema>(
 
     console.log("Listening collection", path, limit, filter, startAfter, orderBy, order);
 
-    let collectionReference: firebase.firestore.Query = firebase.firestore()
+    let collectionReference: firestore.Query = firestore()
         .collection(path);
 
     if (filter)
@@ -67,7 +66,7 @@ export function fetchEntity<S extends EntitySchema>(
 
     console.debug("fetch entity", path, entityId);
 
-    return firebase.firestore()
+    return firestore()
         .collection(path)
         .doc(entityId)
         .get()
@@ -88,7 +87,7 @@ export function listenEntity<S extends EntitySchema>(
     schema: S,
     onSnapshot: (entity: Entity<S>) => void
 ): Function {
-    return firebase.firestore()
+    return firestore()
         .collection(path)
         .doc(entityId)
         .onSnapshot((docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema)));
@@ -102,7 +101,7 @@ export function listenEntity<S extends EntitySchema>(
  * @return Function to cancel subscription
  */
 export function listenEntityFromRef<S extends EntitySchema>(
-    ref: firebase.firestore.DocumentReference,
+    ref: firestore.DocumentReference,
     schema: S,
     onSnapshot: (entity: Entity<S>) => void
 ): Function {
@@ -119,12 +118,12 @@ export function listenEntityFromRef<S extends EntitySchema>(
 function replaceTimestampsWithDates(data: any) {
 
     if (data && typeof data === "object"
-        && !(data instanceof firebase.firestore.DocumentReference)
-        && !(data instanceof firebase.firestore.GeoPoint)) {
+        && !(data instanceof firestore.DocumentReference)
+        && !(data instanceof firestore.GeoPoint)) {
 
         let result: any = {};
         Object.entries(data).forEach(([k, v]) => {
-            if (v && v instanceof firebase.firestore.Timestamp) {
+            if (v && v instanceof firestore.Timestamp) {
                 v = v.toDate();
             } else if (Array.isArray(v)) {
                 v = v.map(a => replaceTimestampsWithDates(a));
@@ -153,7 +152,7 @@ function sanitizeData<S extends EntitySchema>(values: EntityValues<S>, schema: S
     return result;
 }
 
-function createEntityFromSchema<S extends EntitySchema>(doc: firebase.firestore.DocumentSnapshot, schema: S): Entity<S> {
+function createEntityFromSchema<S extends EntitySchema>(doc: firestore.DocumentSnapshot, schema: S): Entity<S> {
     const data = sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S>, schema);
     return {
         id: doc.id,
@@ -200,13 +199,13 @@ export function saveEntity(
 
     console.log("Saving entity", path, entityId, data);
 
-    let documentReference: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
+    let documentReference: firestore.DocumentReference<firestore.DocumentData>;
     if (entityId)
-        documentReference = firebase.firestore()
+        documentReference = firestore()
             .collection(path)
             .doc(entityId);
     else
-        documentReference = firebase.firestore()
+        documentReference = firestore()
             .collection(path)
             .doc();
     return documentReference

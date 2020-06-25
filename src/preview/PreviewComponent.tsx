@@ -10,7 +10,8 @@ import {
     StringProperty
 } from "../models";
 import React from "react";
-import * as firebase from "firebase";
+import { firestore } from "firebase/app";
+
 import {
     Box,
     CardMedia,
@@ -75,7 +76,7 @@ export default function PreviewComponent<T>({
         content = renderMap(property as MapProperty<any>, value);
     } else if (property.dataType === "timestamp" && value instanceof Date) {
         content = value && value.toLocaleString();
-    } else if (property.dataType === "reference" && value instanceof firebase.firestore.DocumentReference) {
+    } else if (property.dataType === "reference" && value instanceof firestore.DocumentReference) {
         content = value && renderReference(value, (property as ReferenceProperty<any>).schema);
     } else if (property.dataType === "boolean") {
         content = value ? "Yes" : "No";
@@ -240,7 +241,7 @@ function renderUrlVideo(url: string,
 }
 
 function renderReference(
-    ref: firebase.firestore.DocumentReference,
+    ref: firestore.DocumentReference,
     refSchema: EntitySchema
 ) {
     return (
