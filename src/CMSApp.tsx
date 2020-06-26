@@ -32,7 +32,7 @@ import {
 } from "react-router-dom";
 
 import * as firebase from "firebase/app";
-import { User } from "firebase/app";
+import { auth, User } from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
@@ -128,7 +128,7 @@ export interface AdditionalView {
 }
 
 
-// const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
 export const AuthContext = React.createContext<User | null>(null);
 
@@ -229,13 +229,13 @@ export default function CMSApp({
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
     function googleSignIn() {
-        // setAuthProviderError(null);
-        // firebase
-        //     .auth()
-        //     .signInWithPopup(googleAuthProvider)
-        //     .then((_: auth.UserCredential) => {
-        //     })
-        //     .catch(error => setAuthProviderError(error));
+        setAuthProviderError(null);
+        firebase
+            .auth()
+            .signInWithPopup(googleAuthProvider)
+            .then((_: auth.UserCredential) => {
+            })
+            .catch(error => setAuthProviderError(error));
     }
 
     function skipLogin() {
