@@ -250,7 +250,10 @@ const usersSchema: EntitySchema = {
         email: {
             title: "Email",
             dataType: "string",
-            includeInListView: true
+            includeInListView: true,
+            validation: {
+                email: true
+            }
         },
         phone: {
             title: "Phone",
@@ -265,12 +268,18 @@ const usersSchema: EntitySchema = {
                     title: "Large",
                     dataType: "string",
                     urlMediaType: "image",
-                    includeAsMapPreview: true
+                    includeAsMapPreview: true,
+                    validation: {
+                        url: true
+                    }
                 },
                 thumbnail: {
                     title: "Thumbnail",
                     dataType: "string",
-                    urlMediaType: "image"
+                    urlMediaType: "image",
+                    validation: {
+                        url: true
+                    }
                 }
             },
             includeInListView: true
@@ -314,6 +323,16 @@ export const testEntitySchema: EntitySchema = {
         difficulty: {
             title: "Difficulty",
             // validation: { required: true },
+            includeInListView: true,
+            dataType: "number"
+        },
+        range: {
+            title: "Range",
+            validation: {
+                required: true,
+                min: 0,
+                max: 3
+            },
             includeInListView: true,
             dataType: "number"
         },
