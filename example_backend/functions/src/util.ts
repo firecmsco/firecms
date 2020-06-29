@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 
-const bucket = "gs://firecms_firestore_backups/2020-06-09T21:01:18_12964";
+const bucket = "gs://firecms_firestore_backups/2020-06-29T16:21:42_37668";
 
 export function eraseDatabase() {
     const firebase_tools = require("firebase-tools");
