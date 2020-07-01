@@ -79,178 +79,15 @@ firebaseConfig specification, since it gets picked up automatically.
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { CMSApp, EntitySchema, EnumValues, Authenticator, EntityCollectionView } from "@camberi/firecms";
-import {User} from "firebase/app";
+import {
+    Authenticator,
+    CMSApp,
+    EntityCollectionView,
+    EntitySchema
+} from "@camberi/firecms";
+import { User } from "firebase/app";
 
-const status = {
-    private: "Private",
-    public: "Public"
-};
-
-const categories: EnumValues<string> = {
-    electronics: "Electronics",
-    books: "Books",
-    furniture: "Furniture",
-    clothing: "Clothing",
-    food: "Food"
-};
-
-const locales = {
-    "de-DE": "German",
-    "en-US": "English (United States)",
-    "es-ES": "Spanish (Spain)",
-    "es-419": "Spanish (South America)"
-};
-
-export const productSchema: EntitySchema = {
-    customId: true,
-    name: "Product",
-    properties: {
-        name: {
-            title: "Name",
-            includeInListView: true,
-            validation: { required: true },
-            dataType: "string"
-        },
-        price: {
-            title: "Price",
-            includeInListView: true,
-            validation: { required: true, max: 10000 },
-            dataType: "number"
-        },
-        status: {
-            title: "Status",
-            includeInListView: true,
-            validation: { required: true },
-            dataType: "string",
-            enumValues: status
-        },
-        categories: {
-            title: "Categories",
-            includeInListView: true,
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "string",
-                enumValues: categories
-            }
-        },
-        image: {
-            title: "Image",
-            dataType: "string",
-            includeInListView: true,
-            storageMeta: {
-                mediaType: "image",
-                storagePath: "images",
-                acceptedFiles: ["image/*"]
-            }
-        },
-        tags: {
-            title: "Tags",
-            includeInListView: true,
-            description: "Example of generic array",
-            validation: { required: true, min:1 },
-            dataType: "array",
-            of: {
-                dataType: "string"
-            }
-        },
-        description: {
-            title: "Description",
-            description: "Not mandatory but it'd be awesome if you filled this up",
-            includeInListView: false,
-            dataType: "string"
-        },
-        published: {
-            title: "Published",
-            includeInListView: true,
-            dataType: "boolean"
-        },
-        expires_on: {
-            title: "Expires on",
-            includeInListView: false,
-            dataType: "timestamp"
-        },
-        publisher: {
-            title: "Publisher",
-            includeInListView: true,
-            description: "This is an example of a map property",
-            dataType: "map",
-            properties: {
-                name: {
-                    title: "Name",
-                    includeInListView: true,
-                    dataType: "string"
-                },
-                external_id: {
-                    title: "External id",
-                    includeInListView: true,
-                    dataType: "string"
-                }
-            }
-        },
-        available_locales: {
-            title: "Available locales",
-            description:
-                "This field is set automatically by Cloud Functions and can't be edited here",
-            includeInListView: true,
-            dataType: "array",
-            disabled: true,
-            of: {
-                dataType: "string"
-            }
-        }
-    },
-    subcollections: [
-        {
-            name: "Locales",
-            relativePath: "locales",
-            schema: {
-                customId: locales,
-                name: "Locale",
-                properties: {
-                    title: {
-                        title: "Title",
-                        validation: { required: true },
-                        includeInListView: true,
-                        dataType: "string"
-                    },
-                    selectable: {
-                        title: "Selectable",
-                        description: "Is this locale selectable",
-                        includeInListView: true,
-                        dataType: "boolean"
-                    },
-                    video: {
-                        title: "Video",
-                        dataType: "string",
-                        validation: { required: false },
-                        includeInListView: true,
-                        storageMeta: {
-                            mediaType: "video",
-                            storagePath: "videos",
-                            acceptedFiles: ["video/*"]
-                        }
-                    }
-                }
-            }
-        }
-    ]
-};
-
-const navigation: EntityCollectionView<any>[] = [
-    {
-        relativePath: "products",
-        schema: productSchema,
-        name: "Products"
-    },
-];
-
-const myAuthenticator:Authenticator = (user?: User) => {
-    console.log("Allowing access to", user?.email)
-    return true;
-};
-
+// Replace with your config
 const firebaseConfig = {
     apiKey: "",
     authDomain: "",
@@ -260,6 +97,156 @@ const firebaseConfig = {
     messagingSenderId: "",
     appId: "",
     measurementId: ""
+};
+
+const locales = {
+    "de-DE": "German",
+    "en-US": "English (United States)",
+    "es-ES": "Spanish (Spain)",
+    "es-419": "Spanish (South America)"
+};
+
+const productSchema: EntitySchema = {
+    name: "Product",
+    properties: {
+        name: {
+            title: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        price: {
+            title: "Price",
+            validation: {
+                required: true,
+                requiredMessage: "You must set a price between 0 and 1000",
+                min: 0,
+                max: 1000
+            },
+            description: "Price with range validation",
+            dataType: "number"
+        },
+        status: {
+            title: "Status",
+            validation: { required: true },
+            dataType: "string",
+            description: "Should this product be visible in the website",
+            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
+            enumValues: {
+                private: "Private",
+                public: "Public"
+            }
+        },
+        categories: {
+            title: "Categories",
+            validation: { required: true },
+            dataType: "array",
+            of: {
+                dataType: "string",
+                enumValues: {
+                    electronics: "Electronics",
+                    books: "Books",
+                    furniture: "Furniture",
+                    clothing: "Clothing",
+                    food: "Food"
+                }
+            }
+        },
+        image: {
+            title: "Image",
+            dataType: "string",
+            storageMeta: {
+                mediaType: "image",
+                storagePath: "images",
+                acceptedFiles: ["image/*"]
+            }
+        },
+        tags: {
+            title: "Tags",
+            description: "Example of generic array",
+            validation: { required: true },
+            dataType: "array",
+            of: {
+                dataType: "string"
+            }
+        },
+        description: {
+            title: "Description",
+            description: "Not mandatory but it'd be awesome if you filled this up",
+            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
+            dataType: "string",
+            forceFullWidth: true
+        },
+        published: {
+            title: "Published",
+            dataType: "boolean"
+        },
+        expires_on: {
+            title: "Expires on",
+            dataType: "timestamp"
+        },
+        publisher: {
+            title: "Publisher",
+            description: "This is an example of a map property",
+            dataType: "map",
+            properties: {
+                name: {
+                    title: "Name",
+                    dataType: "string"
+                },
+                external_id: {
+                    title: "External id",
+                    dataType: "string"
+                }
+            }
+        }
+    }
+};
+
+const localeSchema: EntitySchema = {
+    customId: locales,
+    name: "Locale",
+    properties: {
+        title: {
+            title: "Title",
+            validation: { required: true },
+            dataType: "string"
+        },
+        selectable: {
+            title: "Selectable",
+            description: "Is this locale selectable",
+            dataType: "boolean"
+        },
+        video: {
+            title: "Video",
+            dataType: "string",
+            validation: { required: false },
+            storageMeta: {
+                mediaType: "video",
+                storagePath: "videos",
+                acceptedFiles: ["video/*"]
+            }
+        }
+    }
+};
+
+const navigation: EntityCollectionView<any>[] = [
+    {
+        relativePath: "products",
+        schema: productSchema,
+        name: "Products",
+        subcollections: [
+            {
+                name: "Locales",
+                relativePath: "locales",
+                schema: localeSchema
+            }
+        ]
+    }
+];
+
+const myAuthenticator: Authenticator = (user?: User) => {
+    console.log("Allowing access to", user?.email);
+    return true;
 };
 
 ReactDOM.render(
@@ -325,18 +312,6 @@ fields, common to all data types:
 * `title`: Property title (e.g. Product)
 
 * `description`: Property description
-
-* `includeInListView`: Is this property displayed in the collection view
-
-* `includeAsMapPreview`: When the entity is rendered as the target of a reference or as part of a
-        map, should this property be included.
-        Basically, if it is rendered in second level references.
-        e.g: One entity -> Array property -> This property
-        If includeAsMapPreview is not specified in any property of an entity, when
-        the given entity is rendered, the first 3 properties are displayed.
-
-* `filterable`: Should this property have a filter entry in the collection view.
-        Defaults to false.
 
 * `disabled`: Is this a read only property
 
@@ -418,6 +393,9 @@ Besides the common fields, some properties have specific configurations.
 * `filter`: When the dialog for selecting the value of this reference, should
          a filter be applied to the possible entities.
 
+* `previewProperties`: List of properties rendered as this reference preview.
+        Defaults to first 3.
+
 * `validation`: Rules for validating this property
   * `required`: Should this field be compulsory
   * `requiredMessage`: Message to be displayed as a validation error
@@ -435,6 +413,9 @@ Besides the common fields, some properties have specific configurations.
 ##### `map`
 
 * `properties`: Record of properties included in this map.
+
+* `previewProperties`: List of properties rendered as this map preview.
+        Defaults to first 3.
 
 * `validation`: Rules for validating this property
   * `required`: Should this field be compulsory
@@ -472,6 +453,11 @@ Firestore data schema.
         This path also determines the URL in FireCMS
 
 * `schema`: Schema representing the entities of this view
+
+* `properties`: List of properties included in this collection. Defaults to all.
+
+* `filterableProperties`: List of properties that include a filter. Defaults to
+        none.
 
 * `pagination`: Is pagination enabled in this view. Defaults to true
 
@@ -527,7 +513,6 @@ A delegate using AlgoliaSearch is included, where you need to specify your
 credentials and index. For this to work you need to set up an AlgoliaSearch
 account and manage the indexing of your documents. There is a full backend
 example included in the code, which indexes documents with Cloud Functions.
-
 
 
 ## License

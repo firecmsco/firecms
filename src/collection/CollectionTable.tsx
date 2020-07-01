@@ -59,6 +59,12 @@ interface CollectionTableProps<S extends EntitySchema> {
     textSearchDelegate?: TextSearchDelegate,
 
     /**
+     * Properties displayed in this collection. If this property is not set
+     * every property is displayed
+     */
+    properties?: (keyof S["properties"])[];
+
+    /**
      * You can add additional columns to the collection view by implementing
      * an additional column delegate.
      */
@@ -203,7 +209,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     };
 
     const emptyRows = rowsPerPage ? data.length - rowsPerPage : 0;
-    let tableViewProperties = props.filterableProperties;
+    let tableViewProperties = props.properties;
     if (!tableViewProperties) {
         tableViewProperties = Object.keys(props.schema.properties);
     }

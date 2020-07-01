@@ -101,7 +101,9 @@ export function CollectionRoute<S extends EntitySchema>({
                              onEntityClick={onEntityClick}
                              onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
                              additionalColumns={view.additionalColumns}
-                             paginationEnabled={view.pagination === undefined ? true : view.pagination}/>
+                             paginationEnabled={view.pagination === undefined ? true : view.pagination}
+                             filterableProperties={view.filterableProperties}
+                             properties={view.properties}/>
 
             {entityClicked &&
             <EntityDetailDialog entity={entityClicked}

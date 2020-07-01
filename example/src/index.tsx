@@ -397,7 +397,7 @@ let navigation: EntityCollectionView<any>[] = [
             client,
             "blog"),
         properties: ["name", "images", "status", "products"],
-        filterableProperties: ["name", "status", "products"]
+        filterableProperties: ["name", "status"]
     }
 ];
 
