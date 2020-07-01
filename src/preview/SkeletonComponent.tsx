@@ -47,7 +47,7 @@ export default function SkeletonComponent<T>({
     } else if (property.dataType === "array") {
         const arrayProperty = property as ArrayProperty<any>;
         if (arrayProperty.of.dataType === "map")
-            content = renderArrayOfMaps(arrayProperty.of.properties);
+            content = renderArrayOfMaps(arrayProperty.of.properties, arrayProperty.of.previewProperties);
         else if (arrayProperty.of.dataType === "string") {
             if (arrayProperty.of.enumValues) {
                 content = renderArrayEnumTableCell();
@@ -74,19 +74,17 @@ export default function SkeletonComponent<T>({
 }
 
 function renderMap<T>(property: MapProperty<T>) {
-    let listProperties = Object.entries(property.properties).filter(
-        ([_, property]) => property.includeAsMapPreview
-    );
-    if (!listProperties.length) {
-        listProperties = Object.entries(property.properties).slice(0, 3);
+    let listProperties = property.previewProperties;
+    if (!listProperties || !listProperties.length) {
+        listProperties = Object.keys(property.properties).slice(0, 3);
     }
 
     return (
         <List>
-            {listProperties.map(([key, property]) => (
+            {listProperties && listProperties.map((key) => (
                 <ListItem key={property.title + key}>
                     <SkeletonComponent
-                        property={property}
+                        property={property.properties[key]}
                         small={true}/>
                 </ListItem>
             ))}
@@ -94,12 +92,10 @@ function renderMap<T>(property: MapProperty<T>) {
     );
 }
 
-function renderArrayOfMaps(properties: Properties) {
-    let tableProperties = Object.entries(properties).filter(
-        ([_, property]) => property.includeAsMapPreview
-    );
-    if (!tableProperties.length) {
-        tableProperties = Object.entries(properties).slice(0, 3);
+function renderArrayOfMaps<P extends Properties>(properties: P, previewProperties?: (keyof P)[]) {
+    let tableProperties = previewProperties;
+    if (!tableProperties || !tableProperties.length) {
+        tableProperties = Object.keys(properties).slice(0, 3);
     }
 
     return (
@@ -109,14 +105,14 @@ function renderArrayOfMaps(properties: Properties) {
                     [0, 1, 2].map((value, index) => {
                         return (
                             <TableRow key={`table_${value}_${index}`}>
-                                {tableProperties.map(
-                                    ([key, property], index) => (
+                                {tableProperties && tableProperties.map(
+                                    (key, index) => (
                                         <TableCell
                                             key={`table-cell-${key}`}
                                             component="th"
                                         >
                                             <SkeletonComponent
-                                                property={property}
+                                                property={properties[key as string]}
                                                 small={true}/>
                                         </TableCell>
                                     )
@@ -134,7 +130,9 @@ function renderArrayOfStrings() {
         <Grid>
             {
                 [0, 1].map((value, index) => (
-                    renderSkeletonText()
+                    <React.Fragment key={"skeleton_array_strings_" + value}>
+                        {renderSkeletonText(index)}
+                    </React.Fragment>
                 ))}
         </Grid>
     );
@@ -145,7 +143,9 @@ function renderArrayEnumTableCell<T extends EnumType>() {
         <Grid>
             {
                 [0, 1].map((value, index) =>
-                    renderSkeletonText()
+                    <React.Fragment key={"skeleton_array_enum_" + value}>
+                        {renderSkeletonText(index)}
+                    </React.Fragment>
                 )}
         </Grid>
     );
@@ -159,7 +159,7 @@ function renderGenericArrayCell<T extends EnumType>(
 
             {
                 [0, 1].map((value, index) =>
-                    <React.Fragment>
+                    <React.Fragment key={"skeleton_array_" + value}>
                         <SkeletonComponent property={property}
                                            small={true}/>
                     </React.Fragment>
@@ -208,8 +208,8 @@ function renderUrlComponent(property: StringProperty, small: boolean = false) {
 }
 
 
-export function renderSkeletonText() {
-    return <Skeleton variant="text"/>;
+export function renderSkeletonText(index?: number) {
+    return <Skeleton key={"skeleton_text_" + index} variant="text"/>;
 }
 
 export function renderSkeletonIcon() {

@@ -176,11 +176,11 @@ export function initEntityValues<S extends EntitySchema>(schema: S): EntityValue
 /**
  * Functions used to initialize filter object
  * @param schema
+ * @param filterableProperties
  */
-export function initFilterValues<S extends EntitySchema>(schema: S): FilterValues<S> {
-    return Object.entries(schema.properties)
-        .filter(([key, property]) => property.filterable)
-        .map(([key, property]) => ({ [key]: undefined }))
+export function initFilterValues<S extends EntitySchema>(schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<S> {
+    return filterableProperties
+        .map((key) => ({ [key]: undefined }))
         .reduce((a: any, b: any) => ({ ...a, ...b }), {});
 }
 

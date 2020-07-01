@@ -63,6 +63,7 @@ export default function ReferenceField<S extends EntitySchema>({
                                  collectionPath={property.collectionPath}
                                  schema={property.schema}
                                  initialFilter={property.filter}
+                                 previewProperties={property.previewProperties}
                                  onEntityClick={handleEntityClick}/>
             </Paper>
 
@@ -93,6 +94,11 @@ export interface ReferenceDialogProps<S extends EntitySchema> {
      */
     initialFilter?: FilterValues<S>;
 
+    /**
+     * Properties that need to be rendered when as a preview of this reference
+     */
+    previewProperties?: (keyof S["properties"])[];
+
     schema: S;
 
     onEntityClick(entity?: Entity<S>): void;
@@ -105,6 +111,7 @@ export function ReferenceDialog<S extends EntitySchema>(
         title,
         schema,
         initialFilter,
+        previewProperties,
         collectionPath
     }: ReferenceDialogProps<S>) {
 
@@ -139,6 +146,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                     <ReferencePreview
                         reference={value}
                         schema={schema}
+                        previewProperties={previewProperties}
                         previewComponent={PreviewComponent}/>}
                     {!value &&
                     <Box>No value set</Box>}

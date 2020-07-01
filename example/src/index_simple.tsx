@@ -5,15 +5,9 @@ import {
     Authenticator,
     CMSApp,
     EntityCollectionView,
-    EntitySchema,
-    EnumValues
+    EntitySchema
 } from "@camberi/firecms";
 import { User } from "firebase/app";
-
-const status = {
-    private: "Private",
-    public: "Public"
-};
 
 // Replace with your config
 const firebaseConfig = {
@@ -27,14 +21,6 @@ const firebaseConfig = {
     measurementId: ""
 };
 
-const categories: EnumValues<string> = {
-    electronics: "Electronics",
-    books: "Books",
-    furniture: "Furniture",
-    clothing: "Clothing",
-    food: "Food"
-};
-
 const locales = {
     "de-DE": "German",
     "en-US": "English (United States)",
@@ -42,43 +28,54 @@ const locales = {
     "es-419": "Spanish (South America)"
 };
 
-export const productSchema: EntitySchema = {
-    customId: true,
+const productSchema: EntitySchema = {
     name: "Product",
     properties: {
         name: {
             title: "Name",
-            includeInListView: true,
             validation: { required: true },
             dataType: "string"
         },
         price: {
             title: "Price",
-            includeInListView: true,
-            validation: { required: true, max: 10000 },
+            validation: {
+                required: true,
+                requiredMessage: "You must set a price between 0 and 1000",
+                min: 0,
+                max: 1000
+            },
+            description: "Price with range validation",
             dataType: "number"
         },
         status: {
             title: "Status",
-            includeInListView: true,
             validation: { required: true },
             dataType: "string",
-            enumValues: status
+            description: "Should this product be visible in the website",
+            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
+            enumValues: {
+                private: "Private",
+                public: "Public"
+            }
         },
         categories: {
             title: "Categories",
-            includeInListView: true,
             validation: { required: true },
             dataType: "array",
             of: {
                 dataType: "string",
-                enumValues: categories
+                enumValues: {
+                    electronics: "Electronics",
+                    books: "Books",
+                    furniture: "Furniture",
+                    clothing: "Clothing",
+                    food: "Food"
+                }
             }
         },
         image: {
             title: "Image",
             dataType: "string",
-            includeInListView: true,
             storageMeta: {
                 mediaType: "image",
                 storagePath: "images",
@@ -87,7 +84,6 @@ export const productSchema: EntitySchema = {
         },
         tags: {
             title: "Tags",
-            includeInListView: true,
             description: "Example of generic array",
             validation: { required: true },
             dataType: "array",
@@ -98,93 +94,75 @@ export const productSchema: EntitySchema = {
         description: {
             title: "Description",
             description: "Not mandatory but it'd be awesome if you filled this up",
-            includeInListView: false,
-            dataType: "string"
+            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
+            dataType: "string",
+            forceFullWidth: true
         },
         published: {
             title: "Published",
-            includeInListView: true,
             dataType: "boolean"
         },
         expires_on: {
             title: "Expires on",
-            includeInListView: false,
             dataType: "timestamp"
         },
         publisher: {
             title: "Publisher",
-            includeInListView: true,
             description: "This is an example of a map property",
             dataType: "map",
             properties: {
                 name: {
                     title: "Name",
-                    includeInListView: true,
                     dataType: "string"
                 },
                 external_id: {
                     title: "External id",
-                    includeInListView: true,
                     dataType: "string"
                 }
-            }
-        },
-        available_locales: {
-            title: "Available locales",
-            description:
-                "This field is set automatically by Cloud Functions and can't be edited here",
-            includeInListView: true,
-            dataType: "array",
-            disabled: true,
-            of: {
-                dataType: "string"
             }
         }
     }
 };
 
-const subcollections = [
-    {
-        name: "Locales",
-        relativePath: "locales",
-        schema: {
-            customId: locales,
-            name: "Locale",
-            properties: {
-                title: {
-                    title: "Title",
-                    validation: { required: true },
-                    includeInListView: true,
-                    dataType: "string"
-                },
-                selectable: {
-                    title: "Selectable",
-                    description: "Is this locale selectable",
-                    includeInListView: true,
-                    dataType: "boolean"
-                },
-                video: {
-                    title: "Video",
-                    dataType: "string",
-                    validation: { required: false },
-                    includeInListView: true,
-                    storageMeta: {
-                        mediaType: "video",
-                        storagePath: "videos",
-                        acceptedFiles: ["video/*"]
-                    }
-                }
+const localeSchema: EntitySchema = {
+    customId: locales,
+    name: "Locale",
+    properties: {
+        title: {
+            title: "Title",
+            validation: { required: true },
+            dataType: "string"
+        },
+        selectable: {
+            title: "Selectable",
+            description: "Is this locale selectable",
+            dataType: "boolean"
+        },
+        video: {
+            title: "Video",
+            dataType: "string",
+            validation: { required: false },
+            storageMeta: {
+                mediaType: "video",
+                storagePath: "videos",
+                acceptedFiles: ["video/*"]
             }
         }
     }
-];
+};
 
 const navigation: EntityCollectionView<any>[] = [
     {
         relativePath: "products",
         schema: productSchema,
         name: "Products",
-        subcollections: subcollections
+        subcollections: [
+            {
+                name: "Locales",
+                relativePath: "locales",
+                schema: localeSchema
+            }
+        ]
     }
 ];
 

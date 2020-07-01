@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { EntitySchema } from "../models";
-import { CircularProgressCenter } from "../util";
+import { Box, CircularProgress } from "@material-ui/core";
 
 export interface AsyncPreviewComponentProps<S extends EntitySchema> {
 
@@ -37,7 +37,9 @@ export default function AsyncPreviewComponent<S extends EntitySchema>(
     }, [builder]);
 
     if (loading)
-        return <CircularProgressCenter/>;
+        return <Box m="auto" style={{ minWidth: 80 }}>
+            <CircularProgress size={24}/>
+        </Box>;
 
     return <React.Fragment>{result}</React.Fragment>;
 

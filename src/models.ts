@@ -53,6 +53,17 @@ export interface EntityCollectionView<S extends EntitySchema> {
      * collections.
      */
     subcollections?: EntityCollectionView<any>[];
+
+    /**
+     * Properties displayed in this collection. If this property is not set
+     * every property is displayed
+     */
+    properties?: (keyof S["properties"])[];
+
+    /**
+     * Properties that can be filtered in this view
+     */
+    filterableProperties?: (keyof S["properties"])[];
 }
 
 /**
@@ -171,27 +182,6 @@ export interface BaseProperty<T> {
     longDescription?: string;
 
     /**
-     * Is this property displayed in the collection view
-     */
-    includeInListView?: boolean;
-
-    /**
-     * When the entity is rendered as the target of a reference or as part of a
-     * map, should this property be included.
-     * Basically, if it is rendered in second level references.
-     * e.g: One entity -> Array property -> This property
-     * If includeAsMapPreview is not specified in any property of an entity,
-     * when the given entity is rendered, the first 3 properties are displayed.
-     */
-    includeAsMapPreview?: boolean;
-
-    /**
-     * Should this property have a filter entry in the collection view.
-     * Defaults to false
-     */
-    filterable?: boolean;
-
-    /**
      * Is this a read only property
      */
     disabled?: boolean;
@@ -300,19 +290,24 @@ export interface ArrayProperty<T> extends BaseProperty<T[]> {
     validation?: ArrayPropertyValidationSchema,
 }
 
-export interface MapProperty<T> extends BaseProperty<T> {
+export interface MapProperty<T, P extends Properties = Properties> extends BaseProperty<T> {
 
     dataType: "map";
 
     /**
      * Record of properties included in this map.
      */
-    properties: Properties;
+    properties: P;
 
     /**
      * Rules for validating this property
      */
     validation?: PropertyValidationSchema,
+
+    /**
+     * Properties that need to be rendered when as a preview of this reference
+     */
+    previewProperties?: (keyof P)[];
 }
 
 export interface TimestampProperty extends BaseProperty<firebase.firestore.Timestamp> {
@@ -358,6 +353,11 @@ export interface ReferenceProperty<S extends EntitySchema> extends BaseProperty<
      * Rules for validating this property
      */
     validation?: PropertyValidationSchema,
+
+    /**
+     * Properties that need to be rendered when as a preview of this reference
+     */
+    previewProperties?: (keyof S["properties"])[];
 }
 
 /**

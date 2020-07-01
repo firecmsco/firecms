@@ -9,7 +9,6 @@ import { Form, Formik } from "formik";
 import { initFilterValues } from "../firebase/firestore";
 import { useStyles } from "../styles";
 import ClearIcon from "@material-ui/icons/Clear";
-import { getFilterableProperties } from "../util/properties";
 import StringNumberFilterField from "./filters/StringNumberFilterField";
 
 interface FilterPopupProps<S extends EntitySchema> {
@@ -17,20 +16,24 @@ interface FilterPopupProps<S extends EntitySchema> {
 
     filterValues?: FilterValues<S>;
 
+    /**
+     * Properties that can be filtered
+     */
+    filterableProperties:  (keyof S["properties"])[];
+
     onFilterUpdate(filterValues?: FilterValues<S>): void;
 }
 
-export default function FilterPopup<S extends EntitySchema>({ schema, filterValues, onFilterUpdate }: FilterPopupProps<S>) {
+export default function FilterPopup<S extends EntitySchema>({ schema, filterValues, onFilterUpdate, filterableProperties }: FilterPopupProps<S>) {
 
-    const filterableProperties = getFilterableProperties(schema.properties);
     const classes = useStyles();
 
     function createFilterFields(values: any) {
         return (
             <Box className={classes.filter} width={220}>
                 {filterableProperties.map(
-                    ([key, property]) => {
-                        const formField = createFilterField(key, property);
+                    (key) => {
+                        const formField = createFilterField(key as string, schema.properties[key as string]);
                         return (
                             <Box key={`filter_${key}`} mb={1}>
                                 {formField}
@@ -41,7 +44,7 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
         );
     }
 
-    const cleanedInitialValues = filterValues || initFilterValues(schema);
+    const cleanedInitialValues = filterValues || initFilterValues(schema, filterableProperties);
 
     return (
         <PopupState variant="popover" popupId="collection-filter">

@@ -56,9 +56,9 @@ export default function PreviewComponent<T>({
         }
     } else if (property.dataType === "array" && value instanceof Array) {
         const arrayProperty = property as ArrayProperty<any>;
-        if (arrayProperty.of.dataType === "map")
-            content = renderArrayOfMaps(arrayProperty.of.properties, value);
-        else if (arrayProperty.of.dataType === "string") {
+        if (arrayProperty.of.dataType === "map") {
+            content = renderArrayOfMaps(arrayProperty.of.properties, value, arrayProperty.of.previewProperties);
+        } else if (arrayProperty.of.dataType === "string") {
             if (arrayProperty.of.enumValues) {
                 content = renderArrayEnumTableCell(
                     arrayProperty.of.enumValues,
@@ -77,7 +77,8 @@ export default function PreviewComponent<T>({
     } else if (property.dataType === "timestamp" && value instanceof Date) {
         content = value && value.toLocaleString();
     } else if (property.dataType === "reference" && value instanceof firestore.DocumentReference) {
-        content = value && renderReference(value, (property as ReferenceProperty<any>).schema);
+        const referenceProperty = property as ReferenceProperty<any>;
+        content = value && renderReference(value, referenceProperty.schema, referenceProperty.previewProperties);
     } else if (property.dataType === "boolean") {
         content = value ? "Yes" : "No";
     } else {
@@ -87,19 +88,17 @@ export default function PreviewComponent<T>({
 }
 
 function renderMap<T>(property: MapProperty<T>, value: T) {
-    let listProperties = Object.entries(property.properties).filter(
-        ([_, property]) => property.includeAsMapPreview
-    );
-    if (!listProperties.length) {
-        listProperties = Object.entries(property.properties).slice(0, 3);
+    let listProperties = property.previewProperties;
+    if (!listProperties || !listProperties.length) {
+        listProperties = Object.keys(property.properties).slice(0, 3);
     }
 
     return (
         <List>
-            {listProperties.map(([key, property]) => (
+            {listProperties.map((key) => (
                 <ListItem key={property.title + key}>
                     <PreviewComponent value={value[key] as any}
-                                      property={property}
+                                      property={property.properties[key]}
                                       small={true}/>
                 </ListItem>
             ))}
@@ -107,12 +106,10 @@ function renderMap<T>(property: MapProperty<T>, value: T) {
     );
 }
 
-function renderArrayOfMaps(properties: Properties, values: any[]) {
-    let tableProperties = Object.entries(properties).filter(
-        ([_, property]) => property.includeAsMapPreview
-    );
-    if (!tableProperties.length) {
-        tableProperties = Object.entries(properties).slice(0, 3);
+function renderArrayOfMaps(properties: Properties, values: any[], previewProperties?: string[]) {
+    let mapProperties = previewProperties;
+    if (!mapProperties || !mapProperties.length) {
+        mapProperties = Object.keys(properties).slice(0, 3);
     }
 
     return (
@@ -122,15 +119,15 @@ function renderArrayOfMaps(properties: Properties, values: any[]) {
                 values.map((value, index) => {
                     return (
                         <TableRow key={`table_${value}_${index}`}>
-                            {tableProperties.map(
-                                ([key, property], index) => (
+                            {mapProperties && mapProperties.map(
+                                (key, index) => (
                                     <TableCell
                                         key={`table-cell-${key}`}
                                         component="th"
                                     >
                                         <PreviewComponent
                                             value={value[key] as any}
-                                            property={property}
+                                            property={properties[key]}
                                             small={true}/>
                                     </TableCell>
                                 )
@@ -153,7 +150,7 @@ function renderArrayOfStrings(values: string[]) {
             values.map((value, index) => (
                 <Chip
                     size="small"
-                    key={value}
+                    key={"preview_chip_" + value}
                     label={
                         <Typography variant="caption" color="textPrimary">
                             {value}
@@ -188,7 +185,7 @@ function renderGenericArray<T extends EnumType>(
 
             {values &&
             values.map((value, index) =>
-                <React.Fragment>
+                <React.Fragment key={"preview_array_" + value + "_" + index}>
                     <Box m={1}>
                         <PreviewComponent value={value}
                                           property={property}
@@ -240,15 +237,17 @@ function renderUrlVideo(url: string,
     );
 }
 
-function renderReference(
+function renderReference<S extends EntitySchema>(
     ref: firestore.DocumentReference,
-    refSchema: EntitySchema
+    refSchema: S,
+    previewProperties?: (keyof S["properties"])[]
 ) {
     return (
         <ReferencePreview
             reference={ref}
             schema={refSchema}
             previewComponent={PreviewComponent}
+            previewProperties={previewProperties}
         />
     );
 }
@@ -289,7 +288,7 @@ export function renderPreviewEnumChip<T extends EnumType>(
     return (
         <Chip
             size="small"
-            key={value}
+            key={"preview_chip_" + value}
             label={
                 <Typography
                     variant="caption"

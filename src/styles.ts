@@ -1,6 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import { createMuiTheme, lighten } from "@material-ui/core/styles";
-import { red } from "@material-ui/core/colors";
+import { lighten } from "@material-ui/core/styles";
 
 const drawerWidth = 240;
 
@@ -35,7 +34,15 @@ export const useStyles = makeStyles((theme: Theme) =>
         field: {
             minHeight: 56
         },
-        toolbar: theme.mixins.toolbar,
+        toolbar: {
+            minHeight: 56,
+            [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
+                minHeight: 48
+            },
+            [theme.breakpoints.up("sm")]: {
+                minHeight: 64
+            }
+        },
         logo: {
             padding: theme.spacing(3),
             maxWidth: drawerWidth
@@ -51,23 +58,6 @@ export const useStyles = makeStyles((theme: Theme) =>
         filter: {
             flexGrow: 1,
             padding: theme.spacing(1)
-        },
-        table: {
-            minWidth: 750
-        },
-        tableWrapper: {
-            overflow: "auto"
-        },
-        visuallyHidden: {
-            border: 0,
-            clip: "rect(0 0 0 0)",
-            height: 1,
-            margin: -1,
-            overflow: "hidden",
-            padding: 0,
-            position: "absolute",
-            top: 20,
-            width: 1
         },
         tree: {
             height: 216,
@@ -136,11 +126,28 @@ export const formStyles = makeStyles(theme => ({
 }));
 
 
-export const useToolbarStyles = makeStyles((theme: Theme) =>
+export const collectionStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
+        toolbar: {
             paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(1)
+            paddingRight: theme.spacing(1),
+            zIndex: 100,
+            position: "sticky",
+            top: 64,
+            [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
+                top: 56
+            },
+            [theme.breakpoints.up("sm")]: {
+                top: 72
+            },
+            backgroundColor: "white",
+            borderBottom: "1px solid rgba(224, 224, 224, 1)"
+        },
+        table: {
+            minWidth: 750
+        },
+        tableWrapper: {
+            minHeight: `calc(100vh - 96px)`
         },
         highlight:
             theme.palette.type === "light"
@@ -157,32 +164,17 @@ export const useToolbarStyles = makeStyles((theme: Theme) =>
         },
         searchBar: {
             flex: "1 1 100%"
+        },
+        visuallyHidden: {
+            border: 0,
+            clip: "rect(0 0 0 0)",
+            height: 1,
+            margin: -1,
+            overflow: "hidden",
+            padding: 0,
+            position: "absolute",
+            top: 20,
+            width: 1
         }
     })
 );
-
-export const theme = createMuiTheme({
-    palette: {
-        background: {
-            default: "#f1f1f1"
-        },
-        primary: {
-            main: "#03238d"
-        },
-        secondary: {
-            main: "#8AC9BD"
-        },
-        error: {
-            main: red.A400
-        }
-    },
-    typography: {
-        h6: {
-            fontSize: 16,
-            fontWeight: 600
-        }
-    },
-    shape: {
-        borderRadius: 2
-    }
-});

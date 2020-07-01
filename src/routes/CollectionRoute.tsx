@@ -17,7 +17,7 @@ import {
     Typography
 } from "@material-ui/core";
 import { Link as ReactLink } from "react-router-dom";
-import { BreadcrumbContainer } from "../util/BreadcrumbContainer";
+import { BreadcrumbContainer } from "../util";
 import DeleteEntityDialog from "../collection/DeleteEntityDialog";
 import EntityDetailDialog from "../preview/EntityDetailDialog";
 
@@ -91,10 +91,6 @@ export function CollectionRoute<S extends EntitySchema>({
                         </Box>
                     </Grid>
                 </Grid>
-            </Box>
-
-            <Box mb={3}>
-                <Typography variant="h5">{view.schema.name} List</Typography>
             </Box>
 
             <CollectionTable collectionPath={view.relativePath}

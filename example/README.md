@@ -9,7 +9,8 @@ repository.
 To run this project locally you can set your Firebase configuration in the file
 `firebase_config.ts` under `src`
 
-You can run `yarn install` and then `yarn start` to test this package.
+For local development, you need to run `yarn install` and then `yarn start`,
+both in the root folder of the project and the example folder.
 
 ### Algolia search
 

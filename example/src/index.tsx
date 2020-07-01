@@ -36,9 +36,7 @@ const productSchema: EntitySchema = {
         name: {
             title: "Name",
             validation: { required: true },
-            dataType: "string",
-            includeInListView: true,
-            includeAsMapPreview: true
+            dataType: "string"
         },
         price: {
             title: "Price",
@@ -49,9 +47,7 @@ const productSchema: EntitySchema = {
                 max: 1000
             },
             description: "Price with range validation",
-            filterable: true,
-            dataType: "number",
-            includeInListView: true
+            dataType: "number"
         },
         status: {
             title: "Status",
@@ -62,8 +58,7 @@ const productSchema: EntitySchema = {
             enumValues: {
                 private: "Private",
                 public: "Public"
-            },
-            includeInListView: true
+            }
         },
         categories: {
             title: "Categories",
@@ -78,8 +73,7 @@ const productSchema: EntitySchema = {
                     clothing: "Clothing",
                     food: "Food"
                 }
-            },
-            includeInListView: true
+            }
         },
         image: {
             title: "Image",
@@ -88,9 +82,7 @@ const productSchema: EntitySchema = {
                 mediaType: "image",
                 storagePath: "images",
                 acceptedFiles: ["image/*"]
-            },
-            includeInListView: true,
-            includeAsMapPreview: true
+            }
         },
         tags: {
             title: "Tags",
@@ -99,26 +91,22 @@ const productSchema: EntitySchema = {
             dataType: "array",
             of: {
                 dataType: "string"
-            },
-            includeInListView: true
+            }
         },
         description: {
             title: "Description",
             description: "Not mandatory but it'd be awesome if you filled this up",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
             dataType: "string",
-            forceFullWidth: true,
-            includeInListView: false
+            forceFullWidth: true
         },
         published: {
             title: "Published",
-            dataType: "boolean",
-            includeInListView: true
+            dataType: "boolean"
         },
         expires_on: {
             title: "Expires on",
-            dataType: "timestamp",
-            includeInListView: true
+            dataType: "timestamp"
         },
         publisher: {
             title: "Publisher",
@@ -127,16 +115,13 @@ const productSchema: EntitySchema = {
             properties: {
                 name: {
                     title: "Name",
-                    includeInListView: true,
                     dataType: "string"
                 },
                 external_id: {
                     title: "External id",
-                    includeInListView: true,
                     dataType: "string"
                 }
-            },
-            includeInListView: true
+            }
         },
         available_locales: {
             title: "Available locales",
@@ -147,12 +132,10 @@ const productSchema: EntitySchema = {
             disabled: true,
             of: {
                 dataType: "string"
-            },
-            includeInListView: true
+            }
         }
     }
 };
-
 
 const blogSchema: EntitySchema = {
     name: "Blog entry",
@@ -160,9 +143,7 @@ const blogSchema: EntitySchema = {
         name: {
             title: "Name",
             validation: { required: true },
-            filterable: true,
-            dataType: "string",
-            includeInListView: true
+            dataType: "string"
         },
         long_text: {
             title: "Long text",
@@ -172,8 +153,7 @@ const blogSchema: EntitySchema = {
             customField: CustomLargeTextField,
             additionalProps: {
                 rows: 5
-            },
-            includeInListView: false
+            }
         },
         images: {
             title: "Images",
@@ -186,8 +166,7 @@ const blogSchema: EntitySchema = {
                     acceptedFiles: ["image/*"]
                 }
             },
-            description: "This fields allows uploading multiple images at once",
-            includeInListView: true
+            description: "This fields allows uploading multiple images at once"
         },
         priority: {
             title: "Priority",
@@ -195,19 +174,16 @@ const blogSchema: EntitySchema = {
             dataType: "number",
             additionalProps: {
                 allowInfinity: true
-            },
-            includeInListView: false
+            }
         },
         status: {
             title: "Status",
             validation: { required: true },
             dataType: "string",
-            filterable: true,
             enumValues: {
                 published: "Published",
                 draft: "Draft"
-            },
-            includeInListView: true
+            }
         },
         content: {
             title: "Content",
@@ -215,8 +191,7 @@ const blogSchema: EntitySchema = {
             dataType: "array",
             of: {
                 dataType: "string"
-            },
-            includeInListView: false
+            }
         },
         products: {
             title: "Products",
@@ -225,9 +200,9 @@ const blogSchema: EntitySchema = {
             of: {
                 dataType: "reference",
                 collectionPath: "products",
-                schema: productSchema
-            },
-            includeInListView: true
+                schema: productSchema,
+                previewProperties: ["name", "image"]
+            }
         }
     }
 };
@@ -235,30 +210,24 @@ const blogSchema: EntitySchema = {
 const usersSchema: EntitySchema = {
     name: "User",
     properties: {
-
         first_name: {
             title: "First name",
-            dataType: "string",
-            includeInListView: true,
-            filterable: true
+            dataType: "string"
         },
         last_name: {
             title: "Last name",
-            dataType: "string",
-            includeInListView: true
+            dataType: "string"
         },
         email: {
             title: "Email",
             dataType: "string",
-            includeInListView: true,
             validation: {
                 email: true
             }
         },
         phone: {
             title: "Phone",
-            dataType: "string",
-            includeInListView: true
+            dataType: "string"
         },
         picture: {
             title: "Picture",
@@ -268,7 +237,6 @@ const usersSchema: EntitySchema = {
                     title: "Large",
                     dataType: "string",
                     urlMediaType: "image",
-                    includeAsMapPreview: true,
                     validation: {
                         url: true
                     }
@@ -282,7 +250,7 @@ const usersSchema: EntitySchema = {
                     }
                 }
             },
-            includeInListView: true
+            previewProperties: ["large"]
         }
     }
 };
@@ -293,7 +261,6 @@ export const testEntitySchema: EntitySchema = {
     properties: {
         tags: {
             title: "Tags",
-            includeInListView: true,
             // validation: { required: true },
             dataType: "array",
             of: {
@@ -303,27 +270,19 @@ export const testEntitySchema: EntitySchema = {
         title: {
             title: "Title",
             description: "A catching title is important",
-            includeInListView: true,
             forceFullWidth: true,
-            // validation: { required: true },
             dataType: "string"
         },
         description: {
             title: "Description",
-            includeInListView: true,
-            // validation: { required: true },
             dataType: "string"
         },
         search_adjacent: {
             title: "Search adjacent",
-            // validation: { required: true },
-            includeInListView: true,
             dataType: "boolean"
         },
         difficulty: {
             title: "Difficulty",
-            // validation: { required: true },
-            includeInListView: true,
             dataType: "number"
         },
         range: {
@@ -333,19 +292,15 @@ export const testEntitySchema: EntitySchema = {
                 min: 0,
                 max: 3
             },
-            includeInListView: true,
             dataType: "number"
         },
         created_at: {
             title: "Created at",
-            // validation: { required: true },
-            includeInListView: true,
             dataType: "timestamp"
         },
         image: {
             title: "Image",
             dataType: "string",
-            includeInListView: true,
             storageMeta: {
                 mediaType: "image",
                 storagePath: "test",
@@ -375,40 +330,40 @@ if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH
     console.error("Text search not enabled");
 }
 
-const localeCollection =
+const localeSchema: EntitySchema = {
+    customId: locales,
+    name: "Locale",
+    properties: {
+        title: {
+            title: "Title",
+            validation: { required: true },
+            dataType: "string"
+        },
+        selectable: {
+            title: "Selectable",
+            description: "Is this locale selectable",
+            dataType: "boolean"
+        },
+        video: {
+            title: "Video",
+            dataType: "string",
+            validation: { required: false },
+            storageMeta: {
+                mediaType: "video",
+                storagePath: "videos",
+                acceptedFiles: ["video/*"]
+            }
+        }
+    }
+};
+
+
+const localeCollection: EntityCollectionView<typeof localeSchema> =
     {
         name: "Locales",
         relativePath: "locales",
         deleteEnabled: false,
-        schema: {
-            customId: locales,
-            name: "Locale",
-            properties: {
-                title: {
-                    title: "Title",
-                    validation: { required: true },
-                    dataType: "string",
-                    includeInListView: true
-                },
-                selectable: {
-                    title: "Selectable",
-                    description: "Is this locale selectable",
-                    dataType: "boolean",
-                    includeInListView: true
-                },
-                video: {
-                    title: "Video",
-                    dataType: "string",
-                    validation: { required: false },
-                    storageMeta: {
-                        mediaType: "video",
-                        storagePath: "videos",
-                        acceptedFiles: ["video/*"]
-                    },
-                    includeInListView: true
-                }
-            }
-        }
+        schema: localeSchema
     }
 ;
 
@@ -421,8 +376,9 @@ let navigation: EntityCollectionView<any>[] = [
             client,
             "products"),
         additionalColumns: [productAdditionalColumn],
-        subcollections: [localeCollection]
-
+        subcollections: [localeCollection],
+        properties: ["name", "price", "status", "categories", "image", "tags", "published", "expires_on", "publisher", "available_locales"],
+        filterableProperties: ["price"]
     },
     {
         relativePath: "users",
@@ -430,7 +386,8 @@ let navigation: EntityCollectionView<any>[] = [
         name: "Users",
         textSearchDelegate: client && new AlgoliaTextSearchDelegate(
             client,
-            "users")
+            "users"),
+        properties: ["first_name", "last_name", "email", "phone", "picture"]
     },
     {
         relativePath: "blog",
@@ -438,7 +395,9 @@ let navigation: EntityCollectionView<any>[] = [
         name: "Blog",
         textSearchDelegate: client && new AlgoliaTextSearchDelegate(
             client,
-            "blog")
+            "blog"),
+        properties: ["name", "images", "status", "products"],
+        filterableProperties: ["name", "status", "products"]
     }
 ];
 

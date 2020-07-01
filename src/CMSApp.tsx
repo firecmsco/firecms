@@ -13,16 +13,17 @@ import {
     List,
     ListItem,
     ListItemText,
+    Slide,
     Toolbar,
-    Typography
+    Typography,
+    useScrollTrigger
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
 import "typeface-roboto";
-
-import { ThemeProvider, useTheme } from "@material-ui/core/styles";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {
     BrowserRouter as Router,
     Link as ReactLink,
@@ -52,6 +53,7 @@ import {
 } from "./routes";
 import { useStyles } from "./styles";
 import { Authenticator } from "./authenticator";
+import { blue, pink, red } from "@material-ui/core/colors";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -104,6 +106,16 @@ interface CMSAppProps {
      * Firebase hosting, you don't need to specify this value
      */
     firebaseConfig?: Object;
+
+    /**
+     * Primary color of the theme of the CMS
+     */
+    primaryColor?: string;
+
+    /**
+     * Primary color of the theme of the CMS
+     */
+    secondaryColor?: string
 }
 
 /**
@@ -132,6 +144,29 @@ const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
 export const AuthContext = React.createContext<User | null>(null);
 
+interface HideOnScrollProps {
+    /**
+     * Injected by the documentation to work in an iframe.
+     * You won't need it on your project.
+     */
+    window?: () => Window;
+    children: React.ReactElement;
+}
+
+function HideOnScroll(props: HideOnScrollProps) {
+    const { children, window } = props;
+    const trigger = useScrollTrigger({
+        target: window ? window() : undefined,
+        threshold: 100
+    });
+
+    return (
+        <Slide appear={false} direction="down" in={!trigger}>
+            {children}
+        </Slide>
+    );
+}
+
 export default function CMSApp({
                                    name,
                                    logo,
@@ -140,10 +175,32 @@ export default function CMSApp({
                                    authentication,
                                    allowSkipLogin,
                                    firebaseConfig,
-                                   additionalViews
+                                   additionalViews,
+                                   primaryColor,
+                                   secondaryColor,
+                                   ...props
                                }: CMSAppProps) {
     const classes = useStyles();
-    const theme = useTheme();
+    const theme = createMuiTheme({
+        palette: {
+            background: {
+                default: "#f1f1f1"
+            },
+            primary: {
+                main: primaryColor ? primaryColor : blue["800"]
+            },
+            secondary: {
+                main: secondaryColor ? secondaryColor : pink["400"]
+            },
+            error: {
+                main: red.A400
+            }
+        },
+        shape: {
+            borderRadius: 2
+        }
+    });
+
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -432,7 +489,7 @@ export default function CMSApp({
                 <Router>
                     <Box className={classes.root}>
                         <CssBaseline/>
-                        <AppBar position="fixed" className={classes.appBar}>
+                        <AppBar className={classes.appBar}>
                             <Toolbar>
                                 <IconButton
                                     color="inherit"
@@ -463,8 +520,8 @@ export default function CMSApp({
 
                             </Toolbar>
                         </AppBar>
+
                         <nav className={classes.drawer}>
-                            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                             <Hidden mdUp implementation="css">
                                 <Drawer
                                     variant="temporary"

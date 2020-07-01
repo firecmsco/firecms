@@ -27,23 +27,18 @@ const productSchema: EntitySchema = {
         name: {
             validation: { required: true },
             dataType: "string",
-            title: "Name",
-            includeInListView: true,
-            includeAsMapPreview:true
+            title: "Name"
         },
         price: {
             title: "Price",
             validation: { required: true },
-            dataType: "number",
-            includeInListView: true,
-            includeAsMapPreview:true
+            dataType: "number"
         },
         status: {
             title: "Status",
             validation: { required: true },
             dataType: "string",
-            enumValues: status,
-            includeInListView: true
+            enumValues: status
         },
         categories: {
             title: "Categories",
@@ -52,8 +47,7 @@ const productSchema: EntitySchema = {
             of: {
                 dataType: "string",
                 enumValues: categories
-            },
-            includeInListView: true
+            }
         },
         tags: {
             title: "Tags",
@@ -61,24 +55,20 @@ const productSchema: EntitySchema = {
             dataType: "array",
             of: {
                 dataType: "string"
-            },
-            includeInListView: true
+            }
         },
         description: {
             title: "Description",
             description: "Not mandatory but it'd be awesome if you filled this up",
-            dataType: "string",
-            includeInListView: true
+            dataType: "string"
         },
         published: {
             title: "Published",
-            dataType: "boolean",
-            includeInListView: true
+            dataType: "boolean"
         },
         added_on: {
             title: "Published",
-            dataType: "timestamp",
-            includeInListView: true
+            dataType: "timestamp"
         },
         publisher: {
             title: "Publisher",
@@ -86,28 +76,24 @@ const productSchema: EntitySchema = {
             properties: {
                 morning: {
                     title: "Name",
-                    dataType: "number",
-                    includeInListView: true
+                    dataType: "number"
                 },
                 midday: {
                     title: "External id",
-                    dataType: "number",
-                    includeInListView: true
+                    dataType: "number"
                 },
                 locale: {
                     title: "Locale",
-                    includeInListView: true,
                     dataType: "string",
                     enumValues: locales
                 }
             },
-            includeInListView: true
+            previewProperties: ["morning", "midday", "locale"]
         },
         available_locales: {
             title: "Available locales",
             description:
                 "This field is set automatically by Cloud Functions and can't be edited here",
-            includeInListView: true,
             dataType: "array",
             disabled: true,
             of: {
@@ -117,17 +103,16 @@ const productSchema: EntitySchema = {
         image: {
             title: "Image",
             dataType: "string",
-            includeInListView: true,
             storageMeta: {
                 mediaType: "image",
                 storagePath: "images",
                 acceptedFiles: ["image/*"]
             }
         }
-    },
+    }
 };
 
-const subcollections =  [
+const subcollections = [
     {
         name: "Locales",
         relativePath: "locales",
@@ -170,7 +155,8 @@ export const siteConfig = {
             relativePath: "products",
             schema: productSchema,
             name: "Products",
-            subcollections: subcollections
+            subcollections: subcollections,
+            previewProperties: ["name", "price", "status", "categories", "tags", "description", "published", "added_on", "publisher", "available_locales", "image"]
         }
     ]
 };
