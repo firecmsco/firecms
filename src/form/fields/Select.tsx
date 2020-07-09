@@ -23,7 +23,7 @@ export default function Select<T extends EnumType>({
                                                        ...props
                                                    }: SelectProps<T>) {
 
-    const enumValues = property.enumValues as EnumValues<T>;
+    const enumValues = property.config?.enumValues as EnumValues<T>;
 
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;

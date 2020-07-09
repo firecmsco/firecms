@@ -38,7 +38,9 @@ const productSchema: EntitySchema = {
             title: "Status",
             validation: { required: true },
             dataType: "string",
-            enumValues: status
+            config: {
+                enumValues: status
+            }
         },
         categories: {
             title: "Categories",
@@ -46,7 +48,9 @@ const productSchema: EntitySchema = {
             dataType: "array",
             of: {
                 dataType: "string",
-                enumValues: categories
+                config: {
+                    enumValues: categories
+                }
             }
         },
         tags: {
@@ -85,7 +89,9 @@ const productSchema: EntitySchema = {
                 locale: {
                     title: "Locale",
                     dataType: "string",
-                    enumValues: locales
+                    config: {
+                        enumValues: locales
+                    }
                 }
             },
             previewProperties: ["morning", "midday", "locale"]
@@ -103,10 +109,12 @@ const productSchema: EntitySchema = {
         image: {
             title: "Image",
             dataType: "string",
-            storageMeta: {
-                mediaType: "image",
-                storagePath: "images",
-                acceptedFiles: ["image/*"]
+            config: {
+                storageMeta: {
+                    mediaType: "image",
+                    storagePath: "images",
+                    acceptedFiles: ["image/*"]
+                }
             }
         }
     }

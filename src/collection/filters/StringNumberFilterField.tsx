@@ -18,7 +18,7 @@ interface TextFieldProps {
 
 export default function StringNumberFilterField({ name, property }: TextFieldProps) {
 
-    const enumValues = property.enumValues;
+    const enumValues = property.config?.enumValues;
 
     return (
         <Field

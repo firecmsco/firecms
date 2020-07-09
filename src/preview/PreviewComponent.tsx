@@ -9,7 +9,7 @@ import {
     ReferenceProperty,
     StringProperty
 } from "../models";
-import React from "react";
+import React, { createElement } from "react";
 import { firestore } from "firebase/app";
 
 import {
@@ -38,19 +38,28 @@ export default function PreviewComponent<T>({
 ) {
     if (!value) return null;
 
+
     if (!property) {
         console.error("No property assigned for preview component", value, property, small);
     }
 
     let content: JSX.Element | any;
-    if (property.dataType === "string" && typeof value === "string") {
+
+    if (property.config?.customPreview) {
+        content = createElement(property.config.customPreview as React.ComponentType<PreviewComponentProps<T>>,
+            {
+                value,
+                property,
+                small
+            });
+    } else if (property.dataType === "string" && typeof value === "string") {
         const stringProperty = property as StringProperty;
-        if (stringProperty.urlMediaType) {
+        if (stringProperty.config?.urlMediaType) {
             content = renderUrlComponent(stringProperty, value, small);
-        } else if (stringProperty.storageMeta) {
+        } else if (stringProperty.config?.storageMeta) {
             content = renderStorageThumbnail(stringProperty, value as string, small);
-        } else if (stringProperty.enumValues) {
-            content = stringProperty.enumValues[value];
+        } else if (stringProperty.config?.enumValues) {
+            content = stringProperty.config?.enumValues[value];
         } else {
             content = value;
         }
@@ -59,12 +68,12 @@ export default function PreviewComponent<T>({
         if (arrayProperty.of.dataType === "map") {
             content = renderArrayOfMaps(arrayProperty.of.properties, value, arrayProperty.of.previewProperties);
         } else if (arrayProperty.of.dataType === "string") {
-            if (arrayProperty.of.enumValues) {
+            if (arrayProperty.of.config?.enumValues) {
                 content = renderArrayEnumTableCell(
-                    arrayProperty.of.enumValues,
+                    arrayProperty.of.config?.enumValues,
                     value
                 );
-            } else if (arrayProperty.of.storageMeta) {
+            } else if (arrayProperty.of.config?.storageMeta) {
                 content = renderGenericArray(arrayProperty.of, value);
             } else {
                 content = renderArrayOfStrings(value);
@@ -254,7 +263,7 @@ function renderReference<S extends EntitySchema>(
 
 export function renderUrlComponent(property: StringProperty, url: any,
                                    small: boolean = false) {
-    const mediaType = property.urlMediaType || property.storageMeta?.mediaType;
+    const mediaType = property.config?.urlMediaType || property.config?.storageMeta?.mediaType;
     if (mediaType === "image") {
         return renderUrlImageThumbnail(url, small);
     } else if (mediaType === "audio") {

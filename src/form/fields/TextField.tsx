@@ -35,7 +35,7 @@ export default function TextField({
 
     let mediaType: MediaType | undefined;
     if (property.dataType === "string")
-        mediaType = (property as StringProperty).urlMediaType;
+        mediaType = (property as StringProperty).config?.urlMediaType;
 
     const value = field.value ? field.value : (property.dataType === "string" ? "" : field.value === 0 ? 0 : "");
     const updateValue = (newValue: typeof value) => {

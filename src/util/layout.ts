@@ -2,10 +2,10 @@ import { Property } from "../models";
 
 export function getColumnsForProperty(property: Property): 6 | 12 {
 
-    if (property.forceFullWidth)
+    if (property.config?.forceFullWidth)
         return 12;
 
-    if (property.dataType === "array" && property.of.dataType === "string" && property.of.enumValues) {
+    if (property.dataType === "array" && property.of.dataType === "string" && property.of.config?.enumValues) {
         return 6;
     }
 
@@ -13,7 +13,7 @@ export function getColumnsForProperty(property: Property): 6 | 12 {
         return 12;
     }
 
-    if (property.dataType === "string" && property.storageMeta) {
+    if (property.dataType === "string" && property.config?.storageMeta) {
         return 12;
     }
 

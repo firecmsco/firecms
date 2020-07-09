@@ -55,9 +55,11 @@ const productSchema: EntitySchema = {
             dataType: "string",
             description: "Should this product be visible in the website",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            enumValues: {
-                private: "Private",
-                public: "Public"
+            config: {
+                enumValues: {
+                    private: "Private",
+                    public: "Public"
+                }
             }
         },
         categories: {
@@ -66,22 +68,26 @@ const productSchema: EntitySchema = {
             dataType: "array",
             of: {
                 dataType: "string",
-                enumValues: {
-                    electronics: "Electronics",
-                    books: "Books",
-                    furniture: "Furniture",
-                    clothing: "Clothing",
-                    food: "Food"
+                config: {
+                    enumValues: {
+                        electronics: "Electronics",
+                        books: "Books",
+                        furniture: "Furniture",
+                        clothing: "Clothing",
+                        food: "Food"
+                    }
                 }
             }
         },
         image: {
             title: "Image",
             dataType: "string",
-            storageMeta: {
-                mediaType: "image",
-                storagePath: "images",
-                acceptedFiles: ["image/*"]
+            config: {
+                storageMeta: {
+                    mediaType: "image",
+                    storagePath: "images",
+                    acceptedFiles: ["image/*"]
+                }
             }
         },
         tags: {
@@ -98,7 +104,9 @@ const productSchema: EntitySchema = {
             description: "Not mandatory but it'd be awesome if you filled this up",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
             dataType: "string",
-            forceFullWidth: true
+            config: {
+                forceFullWidth: true
+            }
         },
         published: {
             title: "Published",
@@ -150,9 +158,11 @@ const blogSchema: EntitySchema = {
             description: "This field is using a custom component",
             validation: { required: true },
             dataType: "string",
-            customField: CustomLargeTextField,
-            additionalProps: {
-                rows: 5
+            config: {
+                field: CustomLargeTextField,
+                fieldProps: {
+                    rows: 5
+                }
             }
         },
         images: {
@@ -160,10 +170,12 @@ const blogSchema: EntitySchema = {
             dataType: "array",
             of: {
                 dataType: "string",
-                storageMeta: {
-                    mediaType: "image",
-                    storagePath: "images",
-                    acceptedFiles: ["image/*"]
+                config: {
+                    storageMeta: {
+                        mediaType: "image",
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"]
+                    }
                 }
             },
             description: "This fields allows uploading multiple images at once"
@@ -172,17 +184,21 @@ const blogSchema: EntitySchema = {
             title: "Priority",
             description: "This field allows the selection of Infinity as a value",
             dataType: "number",
-            additionalProps: {
-                allowInfinity: true
+            config: {
+                fieldProps: {
+                    allowInfinity: true
+                }
             }
         },
         status: {
             title: "Status",
             validation: { required: true },
             dataType: "string",
-            enumValues: {
-                published: "Published",
-                draft: "Draft"
+            config: {
+                enumValues: {
+                    published: "Published",
+                    draft: "Draft"
+                }
             }
         },
         content: {
@@ -236,7 +252,9 @@ const usersSchema: EntitySchema = {
                 large: {
                     title: "Large",
                     dataType: "string",
-                    urlMediaType: "image",
+                    config: {
+                        urlMediaType: "image"
+                    },
                     validation: {
                         url: true
                     }
@@ -244,7 +262,9 @@ const usersSchema: EntitySchema = {
                 thumbnail: {
                     title: "Thumbnail",
                     dataType: "string",
-                    urlMediaType: "image",
+                    config: {
+                        urlMediaType: "image"
+                    },
                     validation: {
                         url: true
                     }
@@ -270,8 +290,10 @@ export const testEntitySchema: EntitySchema = {
         title: {
             title: "Title",
             description: "A catching title is important",
-            forceFullWidth: true,
-            dataType: "string"
+            dataType: "string",
+            config: {
+                forceFullWidth: true
+            }
         },
         description: {
             title: "Description",
@@ -301,10 +323,12 @@ export const testEntitySchema: EntitySchema = {
         image: {
             title: "Image",
             dataType: "string",
-            storageMeta: {
-                mediaType: "image",
-                storagePath: "test",
-                acceptedFiles: ["image/*"]
+            config: {
+                storageMeta: {
+                    mediaType: "image",
+                    storagePath: "test",
+                    acceptedFiles: ["image/*"]
+                }
             }
         }
     }
@@ -348,10 +372,12 @@ const localeSchema: EntitySchema = {
             title: "Video",
             dataType: "string",
             validation: { required: false },
-            storageMeta: {
-                mediaType: "video",
-                storagePath: "videos",
-                acceptedFiles: ["video/*"]
+            config: {
+                storageMeta: {
+                    mediaType: "video",
+                    storagePath: "videos",
+                    acceptedFiles: ["video/*"]
+                }
             }
         }
     }

@@ -27,7 +27,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
-    const enumValues: EnumValues<number | string> | undefined = property.of.enumValues;
+    const enumValues: EnumValues<number | string> | undefined = property.of.config?.enumValues;
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");

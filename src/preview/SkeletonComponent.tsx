@@ -37,9 +37,9 @@ export default function SkeletonComponent<T>({
     let content: JSX.Element | any;
     if (property.dataType === "string") {
         const stringProperty = property as StringProperty;
-        if (stringProperty.urlMediaType) {
+        if (stringProperty.config?.urlMediaType) {
             content = renderUrlComponent(stringProperty, small);
-        } else if (stringProperty.storageMeta) {
+        } else if (stringProperty.config?.storageMeta) {
             content = renderImageThumbnail(small);
         } else {
             content = renderSkeletonText();
@@ -49,9 +49,9 @@ export default function SkeletonComponent<T>({
         if (arrayProperty.of.dataType === "map")
             content = renderArrayOfMaps(arrayProperty.of.properties, arrayProperty.of.previewProperties);
         else if (arrayProperty.of.dataType === "string") {
-            if (arrayProperty.of.enumValues) {
+            if (arrayProperty.of.config?.enumValues) {
                 content = renderArrayEnumTableCell();
-            } else if (arrayProperty.of.storageMeta) {
+            } else if (arrayProperty.of.config?.storageMeta) {
                 content = renderGenericArrayCell(arrayProperty.of);
             } else {
                 content = renderArrayOfStrings();
@@ -196,7 +196,7 @@ function renderReference() {
 
 
 function renderUrlComponent(property: StringProperty, small: boolean = false) {
-    const mediaType = property.urlMediaType || property.storageMeta?.mediaType;
+    const mediaType = property.config?.urlMediaType || property.config?.storageMeta?.mediaType;
     if (mediaType === "image") {
         return renderImageThumbnail(small);
     } else if (mediaType === "audio") {

@@ -29,7 +29,7 @@ function buildField<P extends Property<T>, T = any>(name: string,
                                                     includeDescription: boolean,
                                                     component: React.ComponentType<CMSFieldProps<T>>,
                                                     underlyingValueHasChanged: boolean,
-                                                    additionalProps?: any) {
+                                                    fieldProps?: any) {
     return <React.Fragment>
 
         <Field
@@ -39,7 +39,7 @@ function buildField<P extends Property<T>, T = any>(name: string,
             {(fieldProps: FieldProps<T>) =>
                 React.createElement(component, {
                     ...fieldProps,
-                    ...additionalProps,
+                    ...fieldProps,
                     includeDescription,
                     property,
                     createFormField
@@ -66,12 +66,12 @@ export function createFormField(name: string,
 
     let component: React.ComponentType<CMSFieldProps<any>> | undefined;
 
-    if (property.customField) {
-        component = property.customField;
+    if (property.config?.field) {
+        component = property.config?.field;
     } else if (property.dataType === "array") {
-        if ((property.of.dataType === "string" || property.of.dataType === "number") && property.of.enumValues) {
+        if ((property.of.dataType === "string" || property.of.dataType === "number") && property.of.config?.enumValues) {
             component = ArrayEnumSelect;
-        } else if (property.of.dataType === "string" && property.of.storageMeta) {
+        } else if (property.of.dataType === "string" && property.of.config?.storageMeta) {
             component = StorageUploadField;
         } else if (property.of.dataType === "map") {
             component = ArrayMapField;
@@ -87,22 +87,22 @@ export function createFormField(name: string,
     } else if (property.dataType === "boolean") {
         component = SwitchField;
     } else if (property.dataType === "number") {
-        if (property.enumValues) {
+        if (property.config?.enumValues) {
             component = Select;
         } else {
             component = TextField;
         }
     } else if (property.dataType === "string") {
-        if (property.storageMeta) {
+        if (property.config?.storageMeta) {
             component = StorageUploadField;
-        } else if (property.enumValues) {
+        } else if (property.config?.enumValues) {
             component = Select;
         } else {
             component = TextField;
         }
     }
     if (component)
-        return buildField(name, property, includeDescription, component, underlyingValueHasChanged, property.additionalProps);
+        return buildField(name, property, includeDescription, component, underlyingValueHasChanged, property.config?.fieldProps);
 
     return (
         <div>{`Currently the field ${property.dataType} is not supported`}</div>

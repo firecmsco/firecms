@@ -26,7 +26,7 @@ export default function ArrayDefaultField<T>({
                                              }: ArrayDefaultFieldProps<T>) {
 
     const classes = formStyles();
-
+classes.formPaper
     const ofProperty: Property = property.of;
 
     const hasValue = field.value && field.value.length > 0;

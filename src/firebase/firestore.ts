@@ -6,6 +6,7 @@ import { Entity, EntitySchema, EntityValues, FilterValues } from "../models";
  * @param path
  * @param schema
  * @param onSnapshot
+ * @param onError
  * @param filter
  * @param limit
  * @param startAfter

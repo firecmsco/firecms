@@ -114,8 +114,8 @@ export function StorageUpload({
         throw Error("Storage field using array must be of data type string");
     }
 
-    const storageMeta: StorageMeta | undefined = property.dataType === "string" ? property.storageMeta :
-        property.dataType === "array" ? property.of.storageMeta :
+    const storageMeta: StorageMeta | undefined = property.dataType === "string" ? property.config?.storageMeta :
+        property.dataType === "array" ? property.of.config?.storageMeta :
             undefined;
 
     if (!storageMeta)
