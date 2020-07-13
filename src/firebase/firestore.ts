@@ -218,8 +218,8 @@ export function saveEntity(
  * Delete an entity
  * @param entity
  */
-export function deleteEntity(
-    entity: Entity<any>
+export function deleteEntity<S extends EntitySchema>(
+    entity: Entity<S>
 ): Promise<void> {
     console.debug("Deleting entity", entity);
     return entity.reference.delete();
