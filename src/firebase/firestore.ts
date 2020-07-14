@@ -1,5 +1,12 @@
 import { firestore } from "firebase/app";
-import { Entity, EntitySchema, EntityValues, FilterValues } from "../models";
+import {
+    Entity,
+    EntitySchema,
+    EntityValues,
+    FilterValues,
+    Property,
+    WhereFilterOp
+} from "../models";
 
 /**
  * Listen to a entities in a Firestore path
@@ -34,7 +41,10 @@ export function listenCollection<S extends EntitySchema>(
     if (filter)
         Object.entries(filter)
             .filter(([_, entry]) => !!entry)
-            .forEach(([key, [op, value]]) => collectionReference = collectionReference.where(key, op, value));
+            .forEach(([key, filterParameter]) => {
+                const [op, value] = filterParameter as  [WhereFilterOp, any];
+                return collectionReference = collectionReference.where(key, op, value);
+            });
 
     if (orderBy && order)
         collectionReference = collectionReference.orderBy(orderBy, order);
@@ -101,7 +111,7 @@ export function listenEntity<S extends EntitySchema>(
  * @param onSnapshot
  * @return Function to cancel subscription
  */
-export function listenEntityFromRef<S extends EntitySchema>(
+export function listenEntityFromRef<S extends EntitySchema<Key>,  Key extends string = string>(
     ref: firestore.DocumentReference,
     schema: S,
     onSnapshot: (entity: Entity<S>) => void
@@ -148,12 +158,12 @@ function sanitizeData<S extends EntitySchema>(values: EntityValues<S>, schema: S
     let result: any = values;
     Object.entries(schema.properties).forEach(([key, property]) => {
         if (values && values[key]) result[key] = values[key];
-        else if (property.validation?.required) result[key] = undefined;
+        else if ((property as Property).validation?.required) result[key] = undefined;
     });
     return result;
 }
 
-function createEntityFromSchema<S extends EntitySchema>(doc: firestore.DocumentSnapshot, schema: S): Entity<S> {
+function createEntityFromSchema<S extends EntitySchema >(doc: firestore.DocumentSnapshot, schema: S): Entity<S> {
     const data = sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S>, schema);
     return {
         id: doc.id,
@@ -169,7 +179,7 @@ function createEntityFromSchema<S extends EntitySchema>(doc: firestore.DocumentS
  */
 export function initEntityValues<S extends EntitySchema>(schema: S): EntityValues<S> {
     return Object.entries(schema.properties)
-        .filter(([key, property]) => property.validation?.required)
+        .filter(([key, property]) => (property as Property).validation?.required)
         .map(([key, property]) => ({ [key]: undefined }))
         .reduce((a: any, b: any) => ({ ...a, ...b }), {});
 }
@@ -179,7 +189,7 @@ export function initEntityValues<S extends EntitySchema>(schema: S): EntityValue
  * @param schema
  * @param filterableProperties
  */
-export function initFilterValues<S extends EntitySchema>(schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<S> {
+export function initFilterValues<S extends EntitySchema<Key>,  Key extends string = string>(schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<S> {
     return filterableProperties
         .map((key) => ({ [key]: undefined }))
         .reduce((a: any, b: any) => ({ ...a, ...b }), {});
@@ -218,8 +228,8 @@ export function saveEntity(
  * Delete an entity
  * @param entity
  */
-export function deleteEntity<S extends EntitySchema>(
-    entity: Entity<S>
+export function deleteEntity(
+    entity: Entity<any>
 ): Promise<void> {
     console.debug("Deleting entity", entity);
     return entity.reference.delete();

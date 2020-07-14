@@ -13,4 +13,6 @@ export {
     StorageThumbnail,
     AsyncPreviewComponent,
     EntityPreview
-}
+};
+
+export type { PreviewComponentProps } from "./PreviewComponentProps";

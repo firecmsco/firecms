@@ -14,7 +14,8 @@ interface FieldDescriptionPopoverProps {
     property: Property,
 }
 
-export const FieldDescription: React.FunctionComponent<FieldDescriptionPopoverProps> = ({ property }: FieldDescriptionPopoverProps) => {
+
+export function FieldDescription({ property }: FieldDescriptionPopoverProps) {
 
     return (
         <Box display="flex">

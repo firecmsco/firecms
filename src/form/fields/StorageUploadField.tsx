@@ -110,12 +110,12 @@ export function StorageUpload({
 
     const multipleFilesSupported = property.dataType === "array";
 
-    if (multipleFilesSupported && (property as ArrayProperty<any>).of.dataType !== "string") {
+    if (multipleFilesSupported && (property as ArrayProperty<string>).of.dataType !== "string") {
         throw Error("Storage field using array must be of data type string");
     }
 
     const storageMeta: StorageMeta | undefined = property.dataType === "string" ? property.config?.storageMeta :
-        property.dataType === "array" ? property.of.config?.storageMeta :
+        property.dataType === "array" && property.of.dataType === "string" ? property.of.config?.storageMeta :
             undefined;
 
     if (!storageMeta)

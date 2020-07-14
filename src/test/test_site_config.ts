@@ -1,4 +1,5 @@
-import { EntitySchema, EnumValues } from "../models";
+import { buildSchema, EnumValues } from "../models";
+import { CMSAppProps } from "../CMSApp";
 
 const status = {
     private: "Private",
@@ -13,14 +14,14 @@ const categories: EnumValues<string> = {
     food: "Food"
 };
 
-const locales = {
+const locales: EnumValues<string> = {
     "de-DE": "German",
     "en-US": "English (United States)",
     "es-ES": "Spanish (Spain)",
     "es-419": "Spanish (South America)"
 };
 
-const productSchema: EntitySchema = {
+const productSchema = buildSchema({
     customId: true,
     name: "Product",
     properties: {
@@ -30,9 +31,9 @@ const productSchema: EntitySchema = {
             title: "Name"
         },
         price: {
+            dataType: "number",
             title: "Price",
-            validation: { required: true },
-            dataType: "number"
+            validation: { required: true }
         },
         status: {
             title: "Status",
@@ -118,7 +119,7 @@ const productSchema: EntitySchema = {
             }
         }
     }
-};
+});
 
 const subcollections = [
     {
@@ -156,7 +157,7 @@ const subcollections = [
     }
 ];
 
-export const siteConfig = {
+export const siteConfig:CMSAppProps = {
     name: "Test site",
     navigation: [
         {
@@ -164,8 +165,10 @@ export const siteConfig = {
             schema: productSchema,
             name: "Products",
             subcollections: subcollections,
-            previewProperties: ["name", "price", "status", "categories", "tags", "description", "published", "added_on", "publisher", "available_locales", "image"]
+            properties: ["name", "price", "status", "categories", "tags", "description", "published", "added_on", "publisher", "available_locales", "image"]
         }
     ]
 };
+
+
 

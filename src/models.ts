@@ -8,7 +8,7 @@ import { PreviewComponentProps } from "./preview/PreviewComponentProps";
  * It can be in the root level of the configuration, defining the main
  * menu navigation.
  */
-export interface EntityCollectionView<S extends EntitySchema> {
+export interface EntityCollectionView<S extends EntitySchema = EntitySchema> {
 
     /**
      * Plural name of the view. E.g. 'products'
@@ -59,18 +59,18 @@ export interface EntityCollectionView<S extends EntitySchema> {
      * Properties displayed in this collection. If this property is not set
      * every property is displayed
      */
-    properties?: (keyof S["properties"])[];
+    properties?: Extract<keyof S["properties"], string>[];
 
     /**
      * Properties that can be filtered in this view
      */
-    filterableProperties?: (keyof S["properties"])[];
+    filterableProperties?: Extract<keyof S["properties"], string>[];
 }
 
 /**
  * Specification for defining an entity
  */
-export interface EntitySchema {
+export interface EntitySchema<Key extends string = string> {
 
     /**
      * Singular name of the entity as displayed in an Add button . E.g. Product
@@ -93,8 +93,17 @@ export interface EntitySchema {
     /**
      * Set of properties that compose an entity
      */
-    properties: Properties;
+    properties: Properties<Key>;
 
+}
+
+/**
+ * Identity function we use to defeat the type system of Typescript and preserve
+ * the schema keys
+ * @param schema
+ */
+export function buildSchema<Key extends string = string>(schema: EntitySchema<Key>): EntitySchema<Key> {
+    return schema;
 }
 
 /**
@@ -109,16 +118,8 @@ export interface Entity<S extends EntitySchema> {
     id: string;
     snapshot: firebase.firestore.DocumentSnapshot;
     reference: firebase.firestore.DocumentReference;
-    values: EntityValues<S>
+    values: EntityValues<S>;
 }
-
-/**
- * This type represents a record of key value pairs as described in an
- * entity schema.
- */
-export type EntityValues<S extends EntitySchema> = {
-    [K in keyof S["properties"]]: S["properties"][K] extends Property<infer X> ? X : never
-};
 
 type DataType =
     | "number"
@@ -192,6 +193,11 @@ export interface BaseProperty<T> {
      */
     config?: FieldConfig<T>;
 
+    /**
+     * Rules for validating this property
+     */
+    validation?: PropertyValidationSchema,
+
 }
 
 export type EnumType = number | string ;
@@ -207,12 +213,17 @@ export type EnumValues<T extends EnumType> = Record<T, string>; // id -> Label
 /**
  * Record of properties of an entity or a map property
  */
-export type Properties<K extends keyof any = string> = {
-    [P in K]: Property;
-};
+export type Properties<Key extends string = string> = Record<Key, Property>;
 
+/**
+ * This type represents a record of key value pairs as described in an
+ * entity schema.
+ */
+export type EntityValues<S extends EntitySchema, Key extends string = Extract<keyof S["properties"], string>>
+    = Record<Key, (S["properties"][Key] extends BaseProperty<infer T> ? T : never)>;
 
 export interface NumberProperty extends BaseProperty<number> {
+
     dataType: "number";
 
     /**
@@ -228,6 +239,7 @@ export interface NumberProperty extends BaseProperty<number> {
 }
 
 export interface BooleanProperty extends BaseProperty<boolean> {
+
     dataType: "boolean";
 
     /**
@@ -251,14 +263,14 @@ export interface StringProperty extends BaseProperty<string> {
     validation?: StringPropertyValidationSchema,
 }
 
-export interface ArrayProperty<T> extends BaseProperty<T[]> {
+export interface ArrayProperty<T = any> extends BaseProperty<T[]> {
 
     dataType: "array";
 
     /**
      * The property of this array. You can specify any property.
      */
-    of: Property<T>;
+    of: Property;
 
     /**
      * Rules for validating this property
@@ -266,7 +278,7 @@ export interface ArrayProperty<T> extends BaseProperty<T[]> {
     validation?: ArrayPropertyValidationSchema,
 }
 
-export interface MapProperty<T, P extends Properties = Properties> extends BaseProperty<T> {
+export interface MapProperty<T = any, P extends Properties = Properties> extends BaseProperty<T> {
 
     dataType: "map";
 
@@ -305,7 +317,7 @@ export interface GeopointProperty extends BaseProperty<firebase.firestore.GeoPoi
     validation?: PropertyValidationSchema,
 }
 
-export interface ReferenceProperty<S extends EntitySchema> extends BaseProperty<firebase.firestore.DocumentReference> {
+export interface ReferenceProperty<S extends EntitySchema = EntitySchema> extends BaseProperty<firebase.firestore.DocumentReference> {
 
     dataType: "reference";
 

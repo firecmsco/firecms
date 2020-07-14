@@ -9,7 +9,7 @@ import { getYupObjectSchema } from "./validation";
 import { getColumnsForProperty } from "../util/layout";
 import deepEqual from "deep-equal";
 
-interface EntityFormProps<S extends EntitySchema> {
+interface EntityFormProps<S extends EntitySchema > {
 
     /**
      * New or existing status
@@ -39,7 +39,7 @@ interface EntityFormProps<S extends EntitySchema> {
 
 }
 
-export default function EntityForm<S extends EntitySchema>({
+export default function EntityForm<S extends EntitySchema >({
                                                                status,
                                                                collectionPath,
                                                                schema,
@@ -60,7 +60,7 @@ export default function EntityForm<S extends EntitySchema>({
     if (status === EntityStatus.new) {
         baseValues = (initEntityValues(schema));
     } else if (status === EntityStatus.existing && entity) {
-        baseValues = (entity.values);
+        baseValues = entity.values as EntityValues<S>;
     } else {
         throw new Error("Form configured wrong");
     }
@@ -124,7 +124,7 @@ export default function EntityForm<S extends EntitySchema>({
                     const objectKeys = Object.entries(schema.properties)
                         .map(([key, property]) => key);
                     objectKeys.forEach((key) => {
-                        const firestoreValue = entity.values[key];
+                        const firestoreValue = entity.values[key as string];
                         const formValue = values[key];
                         if (!deepEqual(firestoreValue, formValue) && !touched[key]) {
                             setFieldValue(key, !!firestoreValue ? firestoreValue : null);

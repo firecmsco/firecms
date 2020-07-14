@@ -62,7 +62,7 @@ export default function ReferencePreview<S extends EntitySchema>(
                         <ListItem key={"ref_prev" + property.title + key}>
                             {entity ?
                                 React.createElement(previewComponent, {
-                                    value: entity.values[key],
+                                    value: entity.values[key as string],
                                     property: property,
                                     small: true
                                 })

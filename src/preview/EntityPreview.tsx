@@ -42,7 +42,7 @@ export default function EntityPreview<S extends EntitySchema>(
                                 {property.title}
                             </TableCell>
                             <TableCell>
-                                <PreviewComponent value={entity.values[key]}
+                                <PreviewComponent value={entity.values[key as string]}
                                                   property={property}
                                                   small={false}/>
                             </TableCell>

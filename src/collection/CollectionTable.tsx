@@ -261,7 +261,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
                 {tableViewProperties && tableViewProperties
                     .map((key, index) =>
-                        renderTableCell(index, entity.values[key], key as string, props.schema.properties[key as string]))}
+                        renderTableCell(index, entity.values[key as string], key as string, props.schema.properties[key as string] as Property))}
 
                 {props.additionalColumns && props.additionalColumns
                     .map((delegate, index) =>
@@ -431,7 +431,7 @@ interface CollectionTableHeadProps<S extends EntitySchema> {
     sortable: boolean;
     schema: S;
     additionalColumns?: AdditionalColumnDelegate<S>[];
-    tableViewProperties:  (keyof S["properties"])[];
+    tableViewProperties: (keyof S["properties"])[];
 }
 
 interface HeadCell {
@@ -448,7 +448,7 @@ function CollectionTableHead<S extends EntitySchema>({
                                                          sortable,
                                                          onRequestSort,
                                                          schema,
-    tableViewProperties,
+                                                         tableViewProperties,
                                                          additionalColumns
                                                      }: CollectionTableHeadProps<S>) {
 
@@ -610,4 +610,3 @@ function renderCustomTableCell(index: number, element: React.ReactNode) {
 function getCellAlignment(property: Property): "right" | "left" {
     return property.dataType === "number" || property.dataType === "timestamp" ? "right" : "left";
 }
-

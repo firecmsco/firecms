@@ -58,7 +58,7 @@ import { blue, pink, red } from "@material-ui/core/colors";
 /**
  * Main entry point that defines the CMS configuration
  */
-interface CMSAppProps {
+export interface CMSAppProps {
     /**
      * Name of the service, displayed as the main title and in the tab title
      */
@@ -74,7 +74,7 @@ interface CMSAppProps {
      * root Firestore database. Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    navigation: EntityCollectionView<any>[];
+    navigation: EntityCollectionView[];
 
     /**
      * Should the CMS include the Media view (WIP, do not use yet)

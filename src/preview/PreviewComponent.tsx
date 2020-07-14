@@ -15,6 +15,7 @@ import { firestore } from "firebase/app";
 import {
     Box,
     CardMedia,
+    Checkbox,
     Chip,
     Divider,
     Grid,
@@ -36,8 +37,6 @@ export default function PreviewComponent<T>({
                                                 small
                                             }: PreviewComponentProps<T>
 ) {
-    if (!value) return null;
-
 
     if (!property) {
         console.error("No property assigned for preview component", value, property, small);
@@ -64,7 +63,7 @@ export default function PreviewComponent<T>({
             content = value;
         }
     } else if (property.dataType === "array" && value instanceof Array) {
-        const arrayProperty = property as ArrayProperty<any>;
+        const arrayProperty = property as ArrayProperty;
         if (arrayProperty.of.dataType === "map") {
             content = renderArrayOfMaps(arrayProperty.of.properties, value, arrayProperty.of.previewProperties);
         } else if (arrayProperty.of.dataType === "string") {
@@ -82,21 +81,24 @@ export default function PreviewComponent<T>({
             content = renderGenericArray(arrayProperty.of, value);
         }
     } else if (property.dataType === "map" && typeof value === "object") {
-        content = renderMap(property as MapProperty<any>, value);
+        content = renderMap(property as MapProperty, value);
     } else if (property.dataType === "timestamp" && value instanceof Date) {
         content = value && value.toLocaleString();
     } else if (property.dataType === "reference" && value instanceof firestore.DocumentReference) {
-        const referenceProperty = property as ReferenceProperty<any>;
+        const referenceProperty = property as ReferenceProperty;
         content = value && renderReference(value, referenceProperty.schema, referenceProperty.previewProperties);
     } else if (property.dataType === "boolean") {
-        content = value ? "Yes" : "No";
+        content = renderBoolean(!!value);
     } else {
         content = typeof value === "object" ? (value as unknown as object).toString() : value;
     }
     return (content ? content : null);
-}
+};
 
 function renderMap<T>(property: MapProperty<T>, value: T) {
+
+    if (!value) return null;
+
     let listProperties = property.previewProperties;
     if (!listProperties || !listProperties.length) {
         listProperties = Object.keys(property.properties).slice(0, 3);
@@ -104,7 +106,7 @@ function renderMap<T>(property: MapProperty<T>, value: T) {
 
     return (
         <List>
-            {listProperties.map((key) => (
+            {listProperties.map((key: string) => (
                 <ListItem key={property.title + key}>
                     <PreviewComponent value={value[key] as any}
                                       property={property.properties[key]}
@@ -116,6 +118,9 @@ function renderMap<T>(property: MapProperty<T>, value: T) {
 }
 
 function renderArrayOfMaps(properties: Properties, values: any[], previewProperties?: string[]) {
+
+    if (!values) return null;
+
     let mapProperties = previewProperties;
     if (!mapProperties || !mapProperties.length) {
         mapProperties = Object.keys(properties).slice(0, 3);
@@ -150,6 +155,9 @@ function renderArrayOfMaps(properties: Properties, values: any[], previewPropert
 }
 
 function renderArrayOfStrings(values: string[]) {
+
+    if (!values) return null;
+
     if (values && !Array.isArray(values)) {
         return <div>{`Unexpected value: ${values}`}</div>;
     }
@@ -175,6 +183,9 @@ function renderArrayEnumTableCell<T extends EnumType>(
     enumValues: EnumValues<T>,
     values: T[]
 ) {
+
+    if (!values) return null;
+
     return (
         <Grid>
             {values &&
@@ -189,6 +200,9 @@ function renderGenericArray<T extends EnumType>(
     property: Property,
     values: T[]
 ) {
+
+    if (!values) return null;
+
     return (
         <Grid>
 
@@ -207,7 +221,8 @@ function renderGenericArray<T extends EnumType>(
     );
 }
 
-function renderUrlAudioComponent(value: any) {
+function renderUrlAudioComponent(value: string) {
+
     return (
         <audio controls src={value}>
             Your browser does not support the
@@ -251,6 +266,9 @@ function renderReference<S extends EntitySchema>(
     refSchema: S,
     previewProperties?: (keyof S["properties"])[]
 ) {
+
+    if (!ref) return null;
+
     return (
         <ReferencePreview
             reference={ref}
@@ -261,8 +279,12 @@ function renderReference<S extends EntitySchema>(
     );
 }
 
-export function renderUrlComponent(property: StringProperty, url: any,
+export function renderUrlComponent(property: StringProperty,
+                                   url: any,
                                    small: boolean = false) {
+
+    if (!url) return <div/>;
+
     const mediaType = property.config?.urlMediaType || property.config?.storageMeta?.mediaType;
     if (mediaType === "image") {
         return renderUrlImageThumbnail(url, small);
@@ -279,6 +301,8 @@ export function renderStorageThumbnail(
     storagePath: string | undefined,
     small: boolean
 ) {
+    if (!storagePath) return null;
+
     return (
         <StorageThumbnail
             storagePath={storagePath}
@@ -289,10 +313,17 @@ export function renderStorageThumbnail(
     );
 }
 
+export function renderBoolean(
+    value: boolean | undefined
+) {
+    return <Checkbox disabled={true} checked={value}/>;
+}
+
 export function renderPreviewEnumChip<T extends EnumType>(
     enumValues: EnumValues<T>,
     value: any
 ) {
+    if (!value) return null;
     const label = enumValues[value as T];
     return (
         <Chip

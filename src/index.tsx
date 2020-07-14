@@ -43,6 +43,7 @@ export {
     StorageThumbnail
 } from "./preview";
 
+export type { PreviewComponentProps } from "./preview";
 
 export * from "./text_search_delegate";
 export {

@@ -19,7 +19,7 @@ import {
 import { Skeleton } from "@material-ui/lab";
 
 export interface SkeletonComponentProps<T> {
-    property: Property<T>,
+    property: Property,
     small: boolean
 }
 
@@ -45,7 +45,7 @@ export default function SkeletonComponent<T>({
             content = renderSkeletonText();
         }
     } else if (property.dataType === "array") {
-        const arrayProperty = property as ArrayProperty<any>;
+        const arrayProperty = property as ArrayProperty;
         if (arrayProperty.of.dataType === "map")
             content = renderArrayOfMaps(arrayProperty.of.properties, arrayProperty.of.previewProperties);
         else if (arrayProperty.of.dataType === "string") {
@@ -60,7 +60,7 @@ export default function SkeletonComponent<T>({
             content = renderGenericArrayCell(arrayProperty.of);
         }
     } else if (property.dataType === "map") {
-        content = renderMap(property as MapProperty<any>);
+        content = renderMap(property as MapProperty);
     } else if (property.dataType === "timestamp") {
         content = renderSkeletonText();
     } else if (property.dataType === "reference") {
@@ -81,7 +81,7 @@ function renderMap<T>(property: MapProperty<T>) {
 
     return (
         <List>
-            {listProperties && listProperties.map((key) => (
+            {listProperties && listProperties.map((key:string) => (
                 <ListItem key={property.title + key}>
                     <SkeletonComponent
                         property={property.properties[key]}
@@ -151,7 +151,7 @@ function renderArrayEnumTableCell<T extends EnumType>() {
     );
 }
 
-function renderGenericArrayCell<T extends EnumType>(
+function renderGenericArrayCell(
     property: Property
 ) {
     return (

@@ -21,6 +21,7 @@ import {
 import { firebaseConfig } from "./firebase_config";
 import CustomLargeTextField from "./custom_field/CustomLargeTextField";
 import { User } from "firebase/app";
+import CustomBooleanPreview from "./custom_preview/CustomBooleanPreview";
 
 const locales: EnumValues<string> = {
     "de-DE": "German",
@@ -110,7 +111,10 @@ const productSchema: EntitySchema = {
         },
         published: {
             title: "Published",
-            dataType: "boolean"
+            dataType: "boolean",
+            config:{
+                customPreview: CustomBooleanPreview
+            }
         },
         expires_on: {
             title: "Expires on",
