@@ -7,14 +7,13 @@ import algoliasearch, { SearchClient } from "algoliasearch";
 import * as serviceWorker from "./serviceWorker";
 
 import {
+    buildSchema,
     AdditionalColumnDelegate,
     AlgoliaTextSearchDelegate,
     AsyncPreviewComponent,
     Authenticator,
     CMSApp,
-    Entity,
     EntityCollectionView,
-    EntitySchema,
     EnumValues
 } from "@camberi/firecms";
 
@@ -30,7 +29,7 @@ const locales: EnumValues<string> = {
     "es-419": "Spanish (South America)"
 };
 
-const productSchema: EntitySchema = {
+const productSchema = buildSchema({
     customId: true,
     name: "Product",
     properties: {
@@ -147,9 +146,9 @@ const productSchema: EntitySchema = {
             }
         }
     }
-};
+});
 
-const blogSchema: EntitySchema = {
+const blogSchema = buildSchema({
     name: "Blog entry",
     properties: {
         name: {
@@ -225,9 +224,9 @@ const blogSchema: EntitySchema = {
             }
         }
     }
-};
+});
 
-const usersSchema: EntitySchema = {
+const usersSchema = buildSchema({
     name: "User",
     properties: {
         first_name: {
@@ -277,9 +276,9 @@ const usersSchema: EntitySchema = {
             previewProperties: ["large"]
         }
     }
-};
+});
 
-export const testEntitySchema: EntitySchema = {
+export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
     properties: {
@@ -336,11 +335,11 @@ export const testEntitySchema: EntitySchema = {
             }
         }
     }
-};
+});
 
 const productAdditionalColumn: AdditionalColumnDelegate<typeof productSchema> = {
     title: "Spanish title",
-    builder: (entity: Entity<typeof productSchema>) =>
+    builder: (entity) =>
         <AsyncPreviewComponent builder={
             entity.reference.collection("locales")
                 .doc("es-ES")
@@ -358,7 +357,7 @@ if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH
     console.error("Text search not enabled");
 }
 
-const localeSchema: EntitySchema = {
+const localeSchema = buildSchema({
     customId: locales,
     name: "Locale",
     properties: {
@@ -385,7 +384,7 @@ const localeSchema: EntitySchema = {
             }
         }
     }
-};
+});
 
 
 const localeCollection: EntityCollectionView<typeof localeSchema> =

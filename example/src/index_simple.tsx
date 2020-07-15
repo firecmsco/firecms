@@ -5,7 +5,7 @@ import {
     Authenticator,
     CMSApp,
     EntityCollectionView,
-    EntitySchema
+    buildSchema,
 } from "@camberi/firecms";
 import { User } from "firebase/app";
 
@@ -28,7 +28,7 @@ const locales = {
     "es-419": "Spanish (South America)"
 };
 
-const productSchema: EntitySchema = {
+const productSchema = buildSchema({
     name: "Product",
     properties: {
         name: {
@@ -130,9 +130,9 @@ const productSchema: EntitySchema = {
             }
         }
     }
-};
+});
 
-const localeSchema: EntitySchema = {
+const localeSchema = buildSchema({
     customId: locales,
     name: "Locale",
     properties: {
@@ -159,7 +159,7 @@ const localeSchema: EntitySchema = {
             }
         }
     }
-};
+});
 
 const navigation: EntityCollectionView<any>[] = [
     {

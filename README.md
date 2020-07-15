@@ -59,6 +59,8 @@ firebaseConfig specification, since it gets picked up automatically.
 - [x] Implementation of fields for every property (except Geopoint)
 - [x] Native support for Google Storage references and file upload.
 - [ ] Geopoint field
+- [ ] Hook after saving an entity
+- [ ] Allow set up of a project using a CLI create-firecms-app
 - [x] Real-time Collection view for entities
 - [ ] Encoding pagination in URL for improved navigation
 - [x] Custom additional views in main navigation
