@@ -9,7 +9,7 @@ import { getYupObjectSchema } from "./validation";
 import { getColumnsForProperty } from "../util/layout";
 import deepEqual from "deep-equal";
 
-interface EntityFormProps<S extends EntitySchema > {
+interface EntityFormProps<S extends EntitySchema> {
 
     /**
      * New or existing status
@@ -35,11 +35,11 @@ interface EntityFormProps<S extends EntitySchema > {
     /**
      * The callback function called when Save is clicked and validation is correct
      */
-    onEntitySave(collectionPath: string, id: string | undefined, values: any): Promise<void>;
+    onEntitySave(schema: S, collectionPath: string, id: string | undefined, values: EntityValues<S>): Promise<void>;
 
 }
 
-export default function EntityForm<S extends EntitySchema >({
+export default function EntityForm<S extends EntitySchema>({
                                                                status,
                                                                collectionPath,
                                                                schema,
@@ -93,7 +93,7 @@ export default function EntityForm<S extends EntitySchema >({
             throw Error("New FormType added, check EntityForm");
         }
 
-        onEntitySave(collectionPath, id, values)
+        onEntitySave(schema, collectionPath, id, values)
             .then(_ => actions.setTouched({}))
             .catch(e => {
                 console.error(e);

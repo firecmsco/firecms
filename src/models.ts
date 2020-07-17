@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TextSearchDelegate } from "./text_search_delegate";
 import { CMSFieldProps } from "./form/form_props";
-import { PreviewComponentProps } from "./preview/PreviewComponentProps";
+import { PreviewComponentProps } from "./preview";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -95,6 +95,40 @@ export interface EntitySchema<Key extends string = string> {
      */
     properties: Properties<Key>;
 
+    /**
+     * Hook called when save is successful
+     * @param entitySaveProps
+     */
+    onSaveSuccess?(entitySaveProps: EntitySaveProps<this>)
+        : Promise<void> | void;
+
+    /**
+     * Hook called when saving fails
+     * @param entitySaveProps
+     */
+    onSaveFailure?(entitySaveProps: EntitySaveProps<this>)
+        : Promise<void> | void;
+
+    /**
+     * Hook called before saving, you need to return the values that will get
+     * saved. If you throw an error in this method the process stops, and an
+     * error snackbar gets displayed.
+     * @param entitySaveProps
+     */
+    onPreSave?(entitySaveProps: EntitySaveProps<this>)
+        : Promise<EntityValues<this>> | EntityValues<this>
+
+}
+
+/**
+ *
+ */
+export interface EntitySaveProps<S extends EntitySchema> {
+    schema: S;
+    collectionPath: string;
+    id?: string;
+    values: EntityValues<S>;
+    status: EntityStatus;
 }
 
 /**
@@ -213,14 +247,14 @@ export type EnumValues<T extends EnumType> = Record<T, string>; // id -> Label
 /**
  * Record of properties of an entity or a map property
  */
-export type Properties<Key extends string = string> = Record<Key, Property>;
+export type Properties<Key extends string = string, T extends any = any> = Record<Key, Property<T>>;
 
 /**
  * This type represents a record of key value pairs as described in an
  * entity schema.
  */
 export type EntityValues<S extends EntitySchema, Key extends string = Extract<keyof S["properties"], string>>
-    = Record<Key, (S["properties"][Key] extends BaseProperty<infer T> ? T : never)>;
+    = Record<Key, (S["properties"][Key] extends Property<infer T> ? T : any)>;
 
 export interface NumberProperty extends BaseProperty<number> {
 

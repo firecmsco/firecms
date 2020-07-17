@@ -10,7 +10,7 @@ export function getColumnsForProperty(property: Property): 6 | 12 {
     }
 
     if (property.dataType === "array" || property.dataType === "map") {
-        return 12;
+        return property.disabled ? 6 : 12;
     }
 
     if (property.dataType === "string" && property.config?.storageMeta) {

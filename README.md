@@ -38,6 +38,13 @@ https://firecms-demo-27150.web.app/
 npm install --save firecms
 ```
 
+## Use
+
+FireCMS is a purely a React app that uses your Firebase project as a backend
+so you do not need a specific backend to make it run. Just build your project
+following the installation instructions and deploy it in the way you prefer.
+A very easy way is using Firebase Hosting.
+
 ## Firebase requirements
 
 You need to enable the Firestore database in your Firebase project.
@@ -53,13 +60,13 @@ enable Firebase Storage
 If you are deploying this project to firebase hosting, you can omit the
 firebaseConfig specification, since it gets picked up automatically.
 
-## Current status
+## Feature roadmap
 - [x] Create, read, update, delete views
 - [x] Form for editing entities
 - [x] Implementation of fields for every property (except Geopoint)
+- [x] Hooks on pre and post saving of entities
 - [x] Native support for Google Storage references and file upload.
 - [ ] Geopoint field
-- [ ] Hook after saving an entity
 - [ ] Allow set up of a project using a CLI create-firecms-app
 - [x] Real-time Collection view for entities
 - [ ] Encoding pagination in URL for improved navigation
@@ -85,7 +92,7 @@ import {
     Authenticator,
     CMSApp,
     EntityCollectionView,
-    EntitySchema
+    buildSchema,
 } from "@camberi/firecms";
 import { User } from "firebase/app";
 
@@ -108,7 +115,7 @@ const locales = {
     "es-419": "Spanish (South America)"
 };
 
-const productSchema: EntitySchema = {
+const productSchema = buildSchema({
     name: "Product",
     properties: {
         name: {
@@ -210,9 +217,9 @@ const productSchema: EntitySchema = {
             }
         }
     }
-};
+});
 
-const localeSchema: EntitySchema = {
+const localeSchema = buildSchema({
     customId: locales,
     name: "Locale",
     properties: {
@@ -239,7 +246,7 @@ const localeSchema: EntitySchema = {
             }
         }
     }
-};
+});
 
 const navigation: EntityCollectionView<any>[] = [
     {
@@ -339,6 +346,14 @@ fields, common to all data types:
 
     * `customPreview`: Configure how a property is displayed as a preview,
         e.g. in the collection view
+
+* `onPreSave`: Hook called before saving, you need to return the values that
+        will get saved. If you throw an error in this method the process stops,
+        and an error snackbar gets displayed. (example bellow)
+
+* `onSaveSuccess`: Hook called when save is successful
+
+* `onPreSave`: Hook called when saving fails
 
 
 #### Property configurations
@@ -454,6 +469,42 @@ the `forceFullWidth` property.
 
 See how it works in this [sample large text field](https://github.com/Camberi/firecms/blob/master/example/src/custom_field/CustomLargeTextField.tsx)
 
+
+#### Saving hooks
+
+When you are saving an entity you can attach different hooks before and after
+it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`
+
+```
+const productSchema = buildSchema({
+    customId: true,
+    name: "Product",
+    properties: {
+        name: {
+            title: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        uppercase_name: {
+            title: "Uppercase Name",
+            dataType: "string",
+            disabled: true,
+            description: "This field gets updated with a preSave hook"
+        },
+    }
+});
+
+productSchema.onPreSave = ({
+                               schema,
+                               collectionPath,
+                               id,
+                               values,
+                               status
+                           }: EntitySaveProps<typeof productSchema>) => {
+    values.uppercase_name = values.name.toUpperCase();
+    return values;
+};
+```
 
 
 Collection configuration

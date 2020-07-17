@@ -6,7 +6,8 @@ import {
     Entity,
     EntityCollectionView,
     EntitySchema,
-    EntityStatus
+    EntityStatus,
+    EntityValues
 } from "../models";
 import { listenEntity, saveEntity } from "../firebase";
 import {
@@ -92,18 +93,46 @@ export function EntityFormRoute<S extends EntitySchema>({
     };
 
     const handleCloseErrorAlert = (event?: React.SyntheticEvent, reason?: string) => {
-        setOpenErrorAlert(undefined);
+        setSaveErrorAlert(undefined);
+        setPreSaveErrorAlert(undefined);
+        setPostSaveErrorAlert(undefined);
     };
 
     const [openSuccessAlert, setOpenSuccessAlert] = React.useState<boolean>(false);
-    const [openErrorAlert, setOpenErrorAlert] = React.useState<Error | undefined>(undefined);
+    const [saveErrorAlert, setSaveErrorAlert] = React.useState<Error | undefined>(undefined);
+    const [preSaveErrorAlert, setPreSaveErrorAlert] = React.useState<Error | undefined>(undefined);
+    const [postSaveErrorAlert, setPostSaveErrorAlert] = React.useState<Error | undefined>(undefined);
 
     function onSubcollectionEntityClick(collectionPath: string, entity: Entity<S>) {
         const entityPath = getEntityPath(entity.id, collectionPath);
         history.push(entityPath);
     }
 
-    function onEntitySave(collectionPath: string, id: string | undefined, values: any): Promise<void> {
+    async function onEntitySave(schema: S, collectionPath: string, id: string | undefined, values: EntityValues<S>): Promise<void> {
+
+        if (!status)
+            return;
+
+        let continueWithSave = true;
+
+        if (schema.onPreSave) {
+            try {
+                values = await schema.onPreSave({
+                    schema,
+                    collectionPath,
+                    id,
+                    values,
+                    status
+                });
+            } catch (e) {
+                continueWithSave = false;
+                setPreSaveErrorAlert(e);
+            }
+        }
+
+        if (!continueWithSave)
+            return;
+
         return saveEntity(collectionPath, id, values)
             .then((id) => {
                 setOpenSuccessAlert(true);
@@ -114,10 +143,35 @@ export function EntityFormRoute<S extends EntitySchema>({
                     setStatus(undefined);
                     history.replace(getEntityPath(id, collectionPath));
                 }
-                // history.goBack();
+
+                if (schema.onSaveSuccess) {
+                    try {
+                        schema.onSaveSuccess({
+                            schema,
+                            collectionPath,
+                            id,
+                            values,
+                            status
+                        });
+                    } catch (e) {
+                        setPostSaveErrorAlert(e);
+                    }
+                }
+
             })
             .catch((e) => {
-                setOpenErrorAlert(e);
+
+                if (schema.onSaveFailure) {
+                    schema.onSaveFailure({
+                        schema,
+                        collectionPath,
+                        id,
+                        values,
+                        status
+                    });
+                }
+
+                setSaveErrorAlert(e);
                 console.error("Error saving entity", collectionPath, entityId, values);
                 console.error(e);
             });
@@ -187,15 +241,38 @@ export function EntityFormRoute<S extends EntitySchema>({
                     The item has been saved correctly
                 </MuiAlert>
             </Snackbar>
-            <Snackbar open={!!openErrorAlert} autoHideDuration={3000}
+
+            <Snackbar open={!!saveErrorAlert} autoHideDuration={3000}
                       onClose={handleCloseErrorAlert}>
                 <MuiAlert elevation={6} variant="filled"
                           onClose={handleCloseErrorAlert}
                           severity="error">
                     <Box>Error saving</Box>
-                    <Box>{openErrorAlert?.message}</Box>
+                    <Box>{saveErrorAlert?.message}</Box>
                 </MuiAlert>
             </Snackbar>
+
+            <Snackbar open={!!preSaveErrorAlert} autoHideDuration={3000}
+                      onClose={handleCloseErrorAlert}>
+                <MuiAlert elevation={6} variant="filled"
+                          onClose={handleCloseErrorAlert}
+                          severity="error">
+                    <Box>Error before saving</Box>
+                    <Box>{preSaveErrorAlert?.message}</Box>
+                </MuiAlert>
+            </Snackbar>
+
+            <Snackbar open={!!postSaveErrorAlert} autoHideDuration={3000}
+                      onClose={handleCloseErrorAlert}>
+                <MuiAlert elevation={6} variant="filled"
+                          onClose={handleCloseErrorAlert}
+                          severity="error">
+                    <Box>Error after saving</Box>
+                    <Box>The entity has been saved</Box>
+                    <Box>{postSaveErrorAlert?.message}</Box>
+                </MuiAlert>
+            </Snackbar>
+
         </React.Fragment>
     );
 }
