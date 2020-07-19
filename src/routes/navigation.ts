@@ -10,7 +10,7 @@ export interface PathConfiguration {
     view: EntityCollectionView<any>;
     entries: {
         routeType: RouteType;
-        placeHolderId:string;
+        placeHolderId: string;
         fullPath: string;
     }[];
     breadcrumbs: BreadcrumbEntry[];
@@ -103,7 +103,7 @@ export function getRouterNewEntityPath(basePath: string) {
     return `${DATA_PATH}/${basePath}/new`;
 }
 
-export function buildDataPath(absolutePath:string){
+export function buildDataPath(absolutePath: string) {
     return `${DATA_PATH}/${removeInitialSlash(absolutePath)}`;
 
 }

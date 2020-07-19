@@ -4,6 +4,7 @@ import {
     EntitySchema,
     EntityValues,
     FilterValues,
+    Properties,
     Property,
     WhereFilterOp
 } from "../models";
@@ -21,10 +22,10 @@ import {
  * @param order
  * @return Function to cancel subscription
  */
-export function listenCollection<S extends EntitySchema>(
+export function listenCollection<S extends EntitySchema<Key, P>, Key extends string = string, P extends Properties<Key> = Properties>(
     path: string,
     schema: S,
-    onSnapshot: (entity: Entity<S>[]) => void,
+    onSnapshot: (entity: Entity<S, P, Key>[]) => void,
     onError?: (error: Error) => void,
     filter?: FilterValues<S>,
     limit?: number,
@@ -42,7 +43,7 @@ export function listenCollection<S extends EntitySchema>(
         Object.entries(filter)
             .filter(([_, entry]) => !!entry)
             .forEach(([key, filterParameter]) => {
-                const [op, value] = filterParameter as  [WhereFilterOp, any];
+                const [op, value] = filterParameter as [WhereFilterOp, any];
                 return collectionReference = collectionReference.where(key, op, value);
             });
 
@@ -69,11 +70,13 @@ export function listenCollection<S extends EntitySchema>(
  * @param entityId
  * @param schema
  */
-export function fetchEntity<S extends EntitySchema>(
+export function fetchEntity<S extends EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>>(
     path: string,
     entityId: string,
     schema: S
-): Promise<Entity<S>> {
+): Promise<Entity<S, P, Key>> {
 
     console.debug("fetch entity", path, entityId);
 
@@ -92,11 +95,13 @@ export function fetchEntity<S extends EntitySchema>(
  * @param onSnapshot
  * @return Function to cancel subscription
  */
-export function listenEntity<S extends EntitySchema>(
+export function listenEntity<S extends EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>>(
     path: string,
     entityId: string,
     schema: S,
-    onSnapshot: (entity: Entity<S>) => void
+    onSnapshot: (entity: Entity<S, P, Key>) => void
 ): Function {
     return firestore()
         .collection(path)
@@ -111,10 +116,12 @@ export function listenEntity<S extends EntitySchema>(
  * @param onSnapshot
  * @return Function to cancel subscription
  */
-export function listenEntityFromRef<S extends EntitySchema<Key>,  Key extends string = string>(
+export function listenEntityFromRef<S extends EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>>(
     ref: firestore.DocumentReference,
     schema: S,
-    onSnapshot: (entity: Entity<S>) => void
+    onSnapshot: (entity: Entity<S, P, Key>) => void
 ): Function {
     return ref
         .onSnapshot((docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema)));
@@ -154,7 +161,9 @@ function replaceTimestampsWithDates(data: any) {
  * @param values
  * @param schema
  */
-function sanitizeData<S extends EntitySchema>(values: EntityValues<S>, schema: S) {
+function sanitizeData<S extends EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>>(values: EntityValues<S, P, Key>, schema: S) {
     let result: any = values;
     Object.entries(schema.properties).forEach(([key, property]) => {
         if (values && values[key]) result[key] = values[key];
@@ -163,8 +172,11 @@ function sanitizeData<S extends EntitySchema>(values: EntityValues<S>, schema: S
     return result;
 }
 
-function createEntityFromSchema<S extends EntitySchema >(doc: firestore.DocumentSnapshot, schema: S): Entity<S> {
-    const data = sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S>, schema);
+export function createEntityFromSchema<S extends EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>>
+(doc: firestore.DocumentSnapshot, schema: S): Entity<S, P, Key> {
+    const data = sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, P, Key>, schema);
     return {
         id: doc.id,
         snapshot: doc,
@@ -177,11 +189,11 @@ function createEntityFromSchema<S extends EntitySchema >(doc: firestore.Document
  * Functions used to set required fields to undefined in the initially created entity
  * @param schema
  */
-export function initEntityValues<S extends EntitySchema>(schema: S): EntityValues<S> {
+export function initEntityValues<S extends EntitySchema<Key, P>, Key extends string, P extends Properties<Key>>(schema: S): EntityValues<S> {
     return Object.entries(schema.properties)
-        .filter(([key, property]) => (property as Property).validation?.required)
-        .map(([key, property]) => ({ [key]: undefined }))
-        .reduce((a: any, b: any) => ({ ...a, ...b }), {});
+        .filter(([_, property]) => (property as Property).validation?.required)
+        .map(([key, _]) => ({ [key]: undefined }))
+        .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<S>;
 }
 
 /**
@@ -189,7 +201,8 @@ export function initEntityValues<S extends EntitySchema>(schema: S): EntityValue
  * @param schema
  * @param filterableProperties
  */
-export function initFilterValues<S extends EntitySchema<Key>,  Key extends string = string>(schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<S> {
+export function initFilterValues<S extends EntitySchema<Key, P>, Key extends string, P extends Properties<Key> = S["properties"]>
+(schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<S> {
     return filterableProperties
         .map((key) => ({ [key]: undefined }))
         .reduce((a: any, b: any) => ({ ...a, ...b }), {});
@@ -229,7 +242,7 @@ export function saveEntity(
  * @param entity
  */
 export function deleteEntity(
-    entity: Entity<any>
+    entity: Entity<any, any, any>
 ): Promise<void> {
     console.debug("Deleting entity", entity);
     return entity.reference.delete();

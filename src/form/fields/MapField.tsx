@@ -26,7 +26,7 @@ export default function MapField<S extends EntitySchema>({
 
     const classes = formStyles();
 
-    const mapProperties:Record<string, Property> = property.properties;
+    const mapProperties: Record<string, Property> = property.properties;
     const hasError = touched && property.validation?.required && !field.value;
 
     return (
@@ -41,7 +41,8 @@ export default function MapField<S extends EntitySchema>({
                 <Box m={1}>
                     <Grid container spacing={2}>
                         {Object.entries(mapProperties).map(([entryKey, childProperty], index) => {
-                                return <Grid item xs={getColumnsForProperty(childProperty)}
+                                return <Grid item
+                                             xs={getColumnsForProperty(childProperty)}
                                              key={`map-${field.name}-${index}`}>
                                     {createFormField(`${field.name}[${entryKey}]`,
                                         childProperty,

@@ -74,7 +74,7 @@ export interface CMSAppProps {
      * root Firestore database. Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    navigation: EntityCollectionView[];
+    navigation: EntityCollectionView<any>[];
 
     /**
      * Should the CMS include the Media view (WIP, do not use yet)

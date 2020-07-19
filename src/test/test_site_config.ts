@@ -157,7 +157,7 @@ const subcollections = [
     }
 ];
 
-export const siteConfig:CMSAppProps = {
+export const siteConfig: CMSAppProps = {
     name: "Test site",
     navigation: [
         {

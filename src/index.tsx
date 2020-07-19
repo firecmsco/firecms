@@ -1,7 +1,10 @@
-import CMSApp from "./CMSApp";
+import CMSApp, { CMSAppProps } from "./CMSApp";
 import { Authenticator } from "./authenticator";
 
-export { CMSApp };
+export { CMSApp,  };
+export type {
+    CMSAppProps
+}
 
 export {
     listenCollection,

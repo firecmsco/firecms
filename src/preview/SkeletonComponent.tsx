@@ -81,7 +81,7 @@ function renderMap<T>(property: MapProperty<T>) {
 
     return (
         <List>
-            {listProperties && listProperties.map((key:string) => (
+            {listProperties && listProperties.map((key: string) => (
                 <ListItem key={property.title + key}>
                     <SkeletonComponent
                         property={property.properties[key]}

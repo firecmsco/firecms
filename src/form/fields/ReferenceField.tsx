@@ -157,7 +157,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                         <IconButton
                             style={{ backgroundColor: "white" }}
                             onClick={clearValue}>
-                            <ClearIcon />
+                            <ClearIcon/>
                         </IconButton>
                     </Tooltip>}
                     <Button variant="outlined"

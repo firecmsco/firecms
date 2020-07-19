@@ -8,7 +8,9 @@ import { PreviewComponentProps } from "./preview";
  * It can be in the root level of the configuration, defining the main
  * menu navigation.
  */
-export interface EntityCollectionView<S extends EntitySchema = EntitySchema> {
+export interface EntityCollectionView<S extends EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>> {
 
     /**
      * Plural name of the view. E.g. 'products'
@@ -59,18 +61,18 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema> {
      * Properties displayed in this collection. If this property is not set
      * every property is displayed
      */
-    properties?: Extract<keyof S["properties"], string>[];
+    properties?: Key[];
 
     /**
      * Properties that can be filtered in this view
      */
-    filterableProperties?: Extract<keyof S["properties"], string>[];
+    filterableProperties?: Key[];
 }
 
 /**
  * Specification for defining an entity
  */
-export interface EntitySchema<Key extends string = string> {
+export interface EntitySchema<Key extends string = string, P extends Properties<Key> = Properties<Key>> {
 
     /**
      * Singular name of the entity as displayed in an Add button . E.g. Product
@@ -93,7 +95,7 @@ export interface EntitySchema<Key extends string = string> {
     /**
      * Set of properties that compose an entity
      */
-    properties: Properties<Key>;
+    properties: P;
 
     /**
      * Hook called when save is successful
@@ -123,11 +125,13 @@ export interface EntitySchema<Key extends string = string> {
 /**
  *
  */
-export interface EntitySaveProps<S extends EntitySchema> {
+export interface EntitySaveProps<S extends EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>> {
     schema: S;
     collectionPath: string;
     id?: string;
-    values: EntityValues<S>;
+    values: EntityValues<S, P, Key>;
     status: EntityStatus;
 }
 
@@ -136,7 +140,7 @@ export interface EntitySaveProps<S extends EntitySchema> {
  * the schema keys
  * @param schema
  */
-export function buildSchema<Key extends string = string>(schema: EntitySchema<Key>): EntitySchema<Key> {
+export function buildSchema<Key extends string, P extends Properties<Key>>(schema: EntitySchema<Key, P>): EntitySchema<Key, P> {
     return schema;
 }
 
@@ -148,11 +152,13 @@ export enum EntityStatus { new = "new", existing = "existing"}
 /**
  * Representation of an entity fetched from Firestore
  */
-export interface Entity<S extends EntitySchema> {
+export interface Entity<S extends EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>> {
     id: string;
     snapshot: firebase.firestore.DocumentSnapshot;
     reference: firebase.firestore.DocumentReference;
-    values: EntityValues<S>;
+    values: EntityValues<S, P, Key>;
 }
 
 type DataType =
@@ -184,11 +190,13 @@ export type Property<T = any, ArrayT = any> =
  * Use this interface for adding additional columns to entity collection views.
  * If you need to do some async loading you can use AsyncPreviewComponent
  */
-export interface AdditionalColumnDelegate<S extends EntitySchema> {
+export interface AdditionalColumnDelegate<S extends EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>> {
 
     title: string;
 
-    builder: (entity: Entity<S>) => React.ReactNode;
+    builder: (entity: Entity<S, P, Key>) => React.ReactNode;
 
 }
 
@@ -253,8 +261,12 @@ export type Properties<Key extends string = string, T extends any = any> = Recor
  * This type represents a record of key value pairs as described in an
  * entity schema.
  */
-export type EntityValues<S extends EntitySchema, Key extends string = Extract<keyof S["properties"], string>>
-    = Record<Key, (S["properties"][Key] extends Property<infer T> ? T : any)>;
+export type EntityValues<S extends EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>>
+    = {
+    [K in Key]: P[K] extends Property<infer T> ? T : any;
+};
 
 export interface NumberProperty extends BaseProperty<number> {
 
@@ -351,7 +363,10 @@ export interface GeopointProperty extends BaseProperty<firebase.firestore.GeoPoi
     validation?: PropertyValidationSchema,
 }
 
-export interface ReferenceProperty<S extends EntitySchema = EntitySchema> extends BaseProperty<firebase.firestore.DocumentReference> {
+export interface ReferenceProperty<S extends EntitySchema = EntitySchema,
+    P extends Properties = S["properties"],
+    Key extends string = Extract<keyof P, string>>
+    extends BaseProperty<firebase.firestore.DocumentReference> {
 
     dataType: "reference";
 
@@ -379,7 +394,7 @@ export interface ReferenceProperty<S extends EntitySchema = EntitySchema> extend
     /**
      * Properties that need to be rendered when as a preview of this reference
      */
-    previewProperties?: (keyof S["properties"])[];
+    previewProperties?: Key[];
 }
 
 

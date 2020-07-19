@@ -52,7 +52,8 @@ export default function EntityDetailDialog<S extends EntitySchema>(props: Entity
                 </DialogTitle>
 
                 <DialogContent dividers>
-                    {updatedEntity && <EntityPreview entity={updatedEntity} schema={schema}/>}
+                    {updatedEntity &&
+                    <EntityPreview entity={updatedEntity} schema={schema}/>}
                 </DialogContent>
 
                 <DialogActions>

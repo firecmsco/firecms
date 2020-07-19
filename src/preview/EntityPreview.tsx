@@ -25,7 +25,7 @@ export default function EntityPreview<S extends EntitySchema>(
     }: EntityPreviewProps<S>) {
 
     return (
-        <TableContainer >
+        <TableContainer>
             <Table aria-label="simple table">
                 <TableBody>
                     <TableRow key={"entity_prev_id"}>
@@ -42,9 +42,10 @@ export default function EntityPreview<S extends EntitySchema>(
                                 {property.title}
                             </TableCell>
                             <TableCell>
-                                <PreviewComponent value={entity.values[key as string]}
-                                                  property={property}
-                                                  small={false}/>
+                                <PreviewComponent
+                                    value={entity.values[key as string]}
+                                    property={property}
+                                    small={false}/>
                             </TableCell>
                         </TableRow>
                     ))}

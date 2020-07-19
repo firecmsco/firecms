@@ -5,7 +5,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 
-export function CircularProgressCenter(props:CircularProgressProps) {
+export function CircularProgressCenter(props: CircularProgressProps) {
     return (
         <Box
             display="flex"

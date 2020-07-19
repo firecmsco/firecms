@@ -19,7 +19,7 @@ interface FilterPopupProps<S extends EntitySchema> {
     /**
      * Properties that can be filtered
      */
-    filterableProperties:  (keyof S["properties"])[];
+    filterableProperties: (keyof S["properties"])[];
 
     onFilterUpdate(filterValues?: FilterValues<S>): void;
 }
