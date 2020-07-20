@@ -14,8 +14,8 @@ import {
     buildSchema,
     CMSApp,
     EntityCollectionView,
-    EnumValues,
-    EntitySaveProps
+    EntitySaveProps,
+    EnumValues
 } from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
@@ -151,7 +151,7 @@ const productSchema = buildSchema({
             dataType: "string",
             disabled: true,
             description: "This field gets updated with a preSave hook"
-        },
+        }
     }
 });
 
@@ -199,7 +199,10 @@ const blogSchema = buildSchema({
                     storageMeta: {
                         mediaType: "image",
                         storagePath: "images",
-                        acceptedFiles: ["image/*"]
+                        acceptedFiles: ["image/*"],
+                        metadata: {
+                            cacheControl: "max-age=1000000",
+                        }
                     }
                 }
             },

@@ -2,6 +2,7 @@ import * as React from "react";
 import { TextSearchDelegate } from "./text_search_delegate";
 import { CMSFieldProps } from "./form/form_props";
 import { PreviewComponentProps } from "./preview";
+import { storage } from "firebase";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -533,7 +534,7 @@ export interface StorageMeta {
     mediaType: MediaType;
 
     /**
-     * Absolute path in you bucket
+     * Absolute path in your bucket
      */
     storagePath: string;
 
@@ -541,6 +542,11 @@ export interface StorageMeta {
      * File MIME types that can be uploaded to this reference
      */
     acceptedFiles?: StorageFileTypes[];
+
+    /**
+     * Specific metadata set in your uploaded file
+     */
+    metadata?: storage.UploadMetadata,
 }
 
 /**

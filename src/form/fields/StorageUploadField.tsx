@@ -45,6 +45,7 @@ type StorageUploadFieldProps = CMSFieldProps<string | string[]> ;
 interface StorageFieldItem {
     storagePath?: string;
     file?: File;
+    metadata?: storage.UploadMetadata,
 }
 
 export default function StorageUploadField({
@@ -62,8 +63,6 @@ export default function StorageUploadField({
     const value = multipleFilesSupported ?
         (Array.isArray(field.value) ? field.value : []) :
         field.value;
-    console.log("StorageUploadField", value);
-
 
     return (
 
@@ -118,6 +117,8 @@ export function StorageUpload({
         property.dataType === "array" && property.of.dataType === "string" ? property.of.config?.storageMeta :
             undefined;
 
+    const metadata: storage.UploadMetadata | undefined = storageMeta?.metadata;
+
     if (!storageMeta)
         throw Error("Storage meta must be specified");
 
@@ -126,14 +127,17 @@ export function StorageUpload({
     const internalInitialValue: StorageFieldItem[] = multipleFilesSupported ?
         (value as string[]).map(v => (
             {
-                storagePath: v
+                storagePath: v,
+                metadata: metadata
             }
         )) : [{
-            storagePath: value as string
+            storagePath: value as string,
+            metadata: metadata
         }];
 
     const [initialValue, setInitialValue] = React.useState<string | string[]>(value);
     const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
+
     if (!deepEqual(initialValue, value)) {
         setInitialValue(value);
         setInternalValue(internalInitialValue);
@@ -152,9 +156,9 @@ export function StorageUpload({
 
         let newInternalValue: StorageFieldItem[];
         if (multipleFilesSupported) {
-            newInternalValue = [...internalValue, ...acceptedFiles.map(file => ({ file }))];
+            newInternalValue = [...internalValue, ...acceptedFiles.map(file => ({ file, metadata }))];
         } else {
-            newInternalValue = [{ file: acceptedFiles[0] }];
+            newInternalValue = [{ file: acceptedFiles[0], metadata }];
         }
 
         // Remove either storage path or file duplicates
@@ -163,14 +167,17 @@ export function StorageUpload({
         setInternalValue(newInternalValue);
     };
 
-    const onFileUploadComplete = (uploadedPath: string, file: File) => {
+    const onFileUploadComplete = (uploadedPath: string,
+                                  file: File,
+                                  metadata?: storage.UploadMetadata) => {
         console.log("onFileUploadComplete", uploadedPath, file);
         let item: StorageFieldItem | undefined = internalValue.find(entry => entry.file === file || entry.storagePath === uploadedPath);
         let newValue: StorageFieldItem[];
         if (!item) {
             item = {
                 storagePath: uploadedPath,
-                file: file
+                file: file,
+                metadata: metadata
             };
             if (multipleFilesSupported)
                 newValue = [...internalValue, item];
@@ -178,6 +185,7 @@ export function StorageUpload({
         } else {
             item.storagePath = uploadedPath;
             item.file = file;
+            item.metadata = metadata;
             newValue = [...internalValue];
         }
         newValue = removeDuplicates(newValue);
@@ -250,9 +258,10 @@ export function StorageUpload({
                             return <StorageUploadProgress
                                 key={`storage_upload_${entry.file.name}`}
                                 file={entry.file}
+                                metadata={metadata}
                                 storagePath={storageMeta.storagePath}
-                                onFileUploadComplete={(value, file) => {
-                                    onFileUploadComplete(value, file);
+                                onFileUploadComplete={(value, file, metadata) => {
+                                    onFileUploadComplete(value, file, metadata);
                                 }}/>;
                         }
                         return null;
@@ -280,13 +289,17 @@ export function StorageUpload({
 
 interface StorageUploadItemProps {
     storagePath: string;
+    metadata?: storage.UploadMetadata,
     file: File,
-    onFileUploadComplete: (value: string, file: File) => void;
+    onFileUploadComplete: (value: string,
+                           file: File,
+                           metadata?: storage.UploadMetadata) => void;
 }
 
 export function StorageUploadProgress({
                                           storagePath,
                                           file,
+                                          metadata,
                                           onFileUploadComplete
                                       }: StorageUploadItemProps) {
 
@@ -306,7 +319,7 @@ export function StorageUploadProgress({
         setError(undefined);
         setProgress(0);
 
-        const uploadTask = uploadFile(file, storagePath);
+        const uploadTask = uploadFile(file, storagePath, metadata);
         uploadTask.on("state_changed", (snapshot) => {
             const currentProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             setProgress(currentProgress);
@@ -327,7 +340,7 @@ export function StorageUploadProgress({
         }, () => {
             const fullPath = uploadTask.snapshot.ref.fullPath;
             setProgress(-1);
-            onFileUploadComplete(fullPath, file);
+            onFileUploadComplete(fullPath, file, metadata);
         });
     }
 

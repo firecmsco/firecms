@@ -167,7 +167,7 @@ function HideOnScroll(props: HideOnScrollProps) {
     );
 }
 
-export default function CMSApp({
+export function CMSApp({
                                    name,
                                    logo,
                                    navigation,

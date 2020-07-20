@@ -28,8 +28,11 @@ function buildField<P extends Property<T>, T = any>(name: string,
                                                     property: P,
                                                     includeDescription: boolean,
                                                     component: React.ComponentType<CMSFieldProps<T>>,
-                                                    underlyingValueHasChanged: boolean,
-                                                    fieldProps?: any) {
+                                                    underlyingValueHasChanged: boolean
+) {
+
+    const additionalFieldProps: any = property.config?.fieldProps;
+
     return <React.Fragment>
 
         <Field
@@ -39,7 +42,7 @@ function buildField<P extends Property<T>, T = any>(name: string,
             {(fieldProps: FieldProps<T>) =>
                 React.createElement(component, {
                     ...fieldProps,
-                    ...fieldProps,
+                    ...additionalFieldProps,
                     includeDescription,
                     property,
                     createFormField
@@ -102,7 +105,7 @@ export function createFormField(name: string,
         }
     }
     if (component)
-        return buildField(name, property, includeDescription, component, underlyingValueHasChanged, property.config?.fieldProps);
+        return buildField(name, property, includeDescription, component, underlyingValueHasChanged);
 
     return (
         <div>{`Currently the field ${property.dataType} is not supported`}</div>

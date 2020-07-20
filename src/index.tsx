@@ -1,10 +1,9 @@
-import CMSApp, { CMSAppProps } from "./CMSApp";
 import { Authenticator } from "./authenticator";
 
-export { CMSApp,  };
+export { CMSApp } from "./CMSApp";
 export type {
-    CMSAppProps
-}
+    CMSAppProps, AdditionalView
+} from "./CMSApp";
 
 export {
     listenCollection,
@@ -36,8 +35,6 @@ export {
     TextField
 } from "./form";
 
-export * as renderPreviewComponent from "./preview";
-
 export {
     PreviewComponent,
     AsyncPreviewComponent,
@@ -48,7 +45,9 @@ export {
 
 export type { PreviewComponentProps } from "./preview";
 
-export * from "./text_search_delegate";
+export type { TextSearchDelegate } from "./text_search_delegate";
+export { AlgoliaTextSearchDelegate } from "./text_search_delegate";
+
 export {
     FieldDescription
 } from "./util";
