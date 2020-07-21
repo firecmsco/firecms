@@ -89,7 +89,6 @@ function getYupNumberSchema(property: NumberProperty): NumberSchema {
         if (validation.negative) schema = schema.negative(`${property.title} must be negative`);
         if (validation.integer) schema = schema.integer(`${property.title} must be an integer`);
     }
-    console.log(schema);
     return schema;
 }
 

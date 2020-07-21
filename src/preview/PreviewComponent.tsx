@@ -90,7 +90,7 @@ export default function PreviewComponent<T>({
     } else if (property.dataType === "boolean") {
         content = renderBoolean(!!value);
     } else {
-        content = typeof value === "object" ? (value as unknown as object).toString() : value;
+        content = value;
     }
     return (content ? content : null);
 };
