@@ -88,6 +88,8 @@ firebaseConfig specification, since it gets picked up automatically.
 import React from "react";
 import ReactDOM from "react-dom";
 
+import "typeface-roboto";
+
 import {
     Authenticator,
     CMSApp,

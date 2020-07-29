@@ -16,7 +16,7 @@ export default function CustomLargeTextField({
                                                  property,
                                                  field,
                                                  rows,
-                                                 form: { isSubmitting, errors, touched, setFieldValue },
+                                                 form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                                  ...props
                                              }: CustomLargeTextFieldProps)
     : ReactElement {
@@ -37,10 +37,13 @@ export default function CustomLargeTextField({
                 multiline
                 rows={rows}
                 defaultValue={value}
-                onChange={(evt) => setFieldValue(
-                    field.name,
-                    evt.target.value
-                )}
+                onChange={(evt) => {
+                    setFieldTouched(field.name);
+                    setFieldValue(
+                        field.name,
+                        evt.target.value
+                    );
+                }}
             />
 
             {showError && <FormHelperText

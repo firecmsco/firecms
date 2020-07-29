@@ -8,6 +8,7 @@ import {
     buildSchema,
 } from "@camberi/firecms";
 import { User } from "firebase/app";
+import "typeface-roboto";
 
 // Replace with your config
 const firebaseConfig = {

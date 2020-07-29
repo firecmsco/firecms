@@ -1,8 +1,8 @@
 import { Property } from "../models";
 import { ReactElement } from "react";
-import { FieldProps } from "formik/dist/Field";
+import { FieldProps as FormikFieldProps } from "formik/dist/Field";
 
-interface BaseCMSFieldProps<T> extends FieldProps<T> {
+interface BaseCMSFieldProps<T> extends FormikFieldProps<T> {
     property: Property<T>,
     includeDescription: boolean,
     createFormField: (name: string, property: Property, includeDescription: boolean) => ReactElement,

@@ -289,7 +289,10 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
                 {props.additionalColumns && props.additionalColumns
                     .map((delegate, index) =>
-                        renderSkeletonText(index))}
+                        <TableCell key={`table-cell-additional-${index}`}
+                                   component="th">
+                            {renderSkeletonText(index)}
+                        </TableCell>)}
 
             </TableRow>
         );

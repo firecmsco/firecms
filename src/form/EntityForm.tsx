@@ -51,6 +51,7 @@ export default function EntityForm<S extends EntitySchema>({
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
+    const [initialValues, setInitialValues] = React.useState<EntityValues<S> | undefined>(entity?.values);
 
     /**
      * Base values are the ones this view is initialized from, we use them to
@@ -63,6 +64,20 @@ export default function EntityForm<S extends EntitySchema>({
         baseValues = entity.values as EntityValues<S>;
     } else {
         throw new Error("Form configured wrong");
+    }
+
+    let underlyingChanges: Partial<EntityValues<S>> | undefined;
+    if (initialValues) {
+        underlyingChanges = Object.keys(schema.properties)
+            .map((key) => {
+                const initialValue = initialValues[key];
+                const latestValue = baseValues[key];
+                if (!deepEqual(initialValue, latestValue)) {
+                    return { [key]: latestValue };
+                }
+                return {};
+            })
+            .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<S>;
     }
 
     const mustSetCustomId: boolean = status === EntityStatus.new && !!schema.customId;
@@ -94,7 +109,10 @@ export default function EntityForm<S extends EntitySchema>({
         }
 
         onEntitySave(schema, collectionPath, id, values)
-            .then(_ => actions.setTouched({}))
+            .then(_ => {
+                setInitialValues(values);
+                actions.setTouched({});
+            })
             .catch(e => {
                 console.error(e);
                 setSavingError(e);
@@ -113,21 +131,14 @@ export default function EntityForm<S extends EntitySchema>({
         >
             {({ values, touched, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
 
-                let underlyingValuesChanged: [string, unknown][] = [];
-                if (baseValues && entity) {
-
-                    underlyingValuesChanged = Object.entries(entity.values)
-                        .filter(([key, value]) => !deepEqual(baseValues[key], value));
+                if (underlyingChanges && entity) {
 
                     // we update the form fields from the Firestore data
                     // if they were not touched
-                    const objectKeys = Object.entries(schema.properties)
-                        .map(([key, property]) => key);
-                    objectKeys.forEach((key) => {
-                        const firestoreValue = entity.values[key as string];
+                    Object.entries(underlyingChanges).forEach(([key, value]) => {
                         const formValue = values[key];
-                        if (!deepEqual(firestoreValue, formValue) && !touched[key]) {
-                            setFieldValue(key, !!firestoreValue ? firestoreValue : null);
+                        if (!deepEqual(value, formValue) && !touched[key]) {
+                            setFieldValue(key, !!value ? value : null);
                             setFieldTouched(key, false);
                         }
                     });
@@ -135,11 +146,17 @@ export default function EntityForm<S extends EntitySchema>({
                 }
 
                 function createFormFields(schema: EntitySchema) {
+
                     const classes = useStyles();
+
                     return <Grid container spacing={3}>
                         {Object.entries(schema.properties).map(([key, property]) => {
 
-                            const underlyingValueHasChanged: boolean = underlyingValuesChanged.map(([k]) => k).includes(key) && !!touched[key];
+                            const underlyingValueHasChanged: boolean =
+                                !!underlyingChanges
+                                && Object.keys(underlyingChanges).includes(key)
+                                && !!touched[key];
+
                             const formField = createFormField(key, property, true, underlyingValueHasChanged);
                             const columns = getColumnsForProperty(property);
 

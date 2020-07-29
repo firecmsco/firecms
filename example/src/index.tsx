@@ -4,6 +4,8 @@ import "./index.css";
 import logo from "./images/test_shop_logo.png";
 import algoliasearch, { SearchClient } from "algoliasearch";
 
+import "typeface-roboto";
+
 import * as serviceWorker from "./serviceWorker";
 
 import {

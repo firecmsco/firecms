@@ -22,7 +22,6 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
-import "typeface-roboto";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {
     BrowserRouter as Router,
