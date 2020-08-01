@@ -31,6 +31,11 @@ export interface EntityCollectionView<S extends EntitySchema,
     schema: S;
 
     /**
+     * Should the table be rendered in small format
+     */
+    small?: boolean;
+
+    /**
      * Is pagination enabled in this view. True if not specified
      */
     pagination?: boolean;

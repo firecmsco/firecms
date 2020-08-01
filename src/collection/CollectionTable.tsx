@@ -54,6 +54,11 @@ interface CollectionTableProps<S extends EntitySchema> {
     paginationEnabled: boolean,
 
     /**
+     * Should the table be rendered in small format
+     */
+    small: boolean,
+
+    /**
      * If a text search delegate is provided, a searchbar is displayed
      */
     textSearchDelegate?: TextSearchDelegate,
@@ -237,7 +242,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                  component="div"
                  textAlign="center"
                  textOverflow="ellipsis"
-                 overflow="auto">
+                 overflow="hidden">
                 {entity ?
                     <Typography variant={"caption"}> {entity.id} </Typography>
                     :
@@ -248,7 +253,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         </TableCell>
     );
 
-    function buildTableRow<S extends EntitySchema>(entity: Entity<S>, index: number) {
+    function buildTableRow<S extends EntitySchema>(entity: Entity<S>, index: number, small: boolean) {
         return (
             <TableRow
                 key={`table_${entity.id}_${index}`}
@@ -261,7 +266,11 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
                 {tableViewProperties && tableViewProperties
                     .map((key, index) =>
-                        renderTableCell(index, entity.values[key as string], key as string, props.schema.properties[key as string] as Property))}
+                        renderTableCell(index,
+                            entity.values[key as string],
+                            key as string,
+                            props.schema.properties[key as string] as Property,
+                            small))}
 
                 {props.additionalColumns && props.additionalColumns
                     .map((delegate, index) =>
@@ -308,12 +317,12 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     const tableBody = <TableBody>
         {textSearchInProgress && textSearchData
             .map((entity, index) => {
-                return buildTableRow(entity, index);
+                return buildTableRow(entity, index, props.small);
             })}
 
         {!textSearchInProgress && data
             .map((entity, index) => {
-                return buildTableRow(entity, index);
+                return buildTableRow(entity, index, props.small);
             })}
 
         {emptyRows > 0 && (
@@ -578,14 +587,13 @@ function CollectionTableToolbar<S extends EntitySchema>(props: CollectionTableTo
 }
 
 
-function renderTableCell(index: number, value: any, key: string, property: Property) {
+function renderTableCell(index: number, value: any, key: string, property: Property, small: boolean) {
     return (
         <TableCell key={`table-cell-${key}`} component="th"
                    align={getCellAlignment(property)}>
-
             <PreviewComponent value={value}
                               property={property}
-                              small={false}/>
+                              small={small}/>
         </TableCell>
     );
 }

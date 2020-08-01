@@ -72,6 +72,7 @@ export default function SubCollectionsView<S extends EntitySchema>(
 
             {Object.entries(subcollections).map(([key, view]) => (
                 <TabPanel key={`wrapped-tab-content-${key}`}
+                          small={view.small === undefined ? false : view.small}
                           selectedView={selectedView}
                           thisView={view}
                           onEntityClick={onEntityClick}
@@ -85,13 +86,14 @@ export default function SubCollectionsView<S extends EntitySchema>(
 
 interface TabPanelProps<S extends EntitySchema> {
     subcollectionPath: string | undefined;
+    small: boolean;
     thisView: EntityCollectionView<S>;
     selectedView: EntityCollectionView<S>;
 
     onEntityClick?(collectionPath: string, entity: Entity<S>): void;
 }
 
-function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thisView, onEntityClick, ...props }: TabPanelProps<S>) {
+function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thisView, onEntityClick, small, ...props }: TabPanelProps<S>) {
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
 
@@ -111,6 +113,7 @@ function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thi
                              onEntityEdit={onEntityClick}
                              includeToolbar={false}
                              paginationEnabled={false}
+                             small={small}
                              additionalColumns={thisView.additionalColumns}
             />
             :

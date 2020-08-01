@@ -178,6 +178,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                                  includeToolbar={false}
                                  onEntityClick={handleEntityClick}
                                  paginationEnabled={false}
+                                 small={true}
                                  initialFilter={initialFilter}
                 />
                 <DialogActions>

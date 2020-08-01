@@ -19,8 +19,6 @@ import {
     Chip,
     Divider,
     Grid,
-    List,
-    ListItem,
     Table,
     TableBody,
     TableCell,
@@ -81,7 +79,7 @@ export default function PreviewComponent<T>({
             content = renderGenericArray(arrayProperty.of, value);
         }
     } else if (property.dataType === "map" && typeof value === "object") {
-        content = renderMap(property as MapProperty, value);
+        content = renderMap(property as MapProperty, value, small);
     } else if (property.dataType === "timestamp" && value instanceof Date) {
         content = value && value.toLocaleString();
     } else if (property.dataType === "reference" && value instanceof firestore.DocumentReference) {
@@ -95,7 +93,7 @@ export default function PreviewComponent<T>({
     return (content ? content : null);
 };
 
-function renderMap<T>(property: MapProperty<T>, value: T) {
+function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
 
     if (!value) return null;
 
@@ -105,16 +103,41 @@ function renderMap<T>(property: MapProperty<T>, value: T) {
     }
 
     return (
-        <List>
-            {listProperties.map((key: string) => (
-                <ListItem key={property.title + key}>
-                    <PreviewComponent value={value[key] as any}
-                                      property={property.properties[key]}
-                                      small={true}/>
-                </ListItem>
-            ))}
-        </List>
+        <Table size="small">
+            <TableBody>
+                {listProperties &&
+                listProperties.map((key, index) => {
+                    return (
+                        <TableRow key={`table_${property.title}_${index}`}>
+                            {!small &&
+                            <TableCell key={`table-cell-title-${key}`}
+                                       component="th">
+                                {property.properties[key].title}
+                            </TableCell>}
+                            <TableCell key={`table-cell-${key}`} component="th">
+                                <PreviewComponent
+                                    value={value[key] as any}
+                                    property={property.properties[key]}
+                                    small={true}/>
+                            </TableCell>
+                        </TableRow>
+                    );
+                })}
+            </TableBody>
+        </Table>
     );
+
+    // return (
+    //     <List>
+    //         {listProperties.map((key: string) => (
+    //             <ListItem key={property.title + key}>
+    //                 <PreviewComponent value={value[key] as any}
+    //                                   property={property.properties[key]}
+    //                                   small={small}/>
+    //             </ListItem>
+    //         ))}
+    //     </List>
+    // );
 }
 
 function renderArrayOfMaps(properties: Properties, values: any[], previewProperties?: string[]) {
