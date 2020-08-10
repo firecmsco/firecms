@@ -15,6 +15,12 @@ export interface ReferencePreviewProps<S extends EntitySchema> {
 
     schema: S;
 
+    /**
+     * Limit the number of preview properties displayed to 3 (if
+     * previewProperties is not specified)
+     */
+    small: boolean;
+
     previewComponent: React.FunctionComponent<PreviewComponentProps<any>>;
     /**
      * Properties that need to be rendered when as a preview of this reference
@@ -27,6 +33,7 @@ export default function ReferencePreview<S extends EntitySchema>(
     {
         reference,
         schema,
+        small,
         previewComponent,
         previewProperties
     }: ReferencePreviewProps<S>) {
@@ -46,7 +53,9 @@ export default function ReferencePreview<S extends EntitySchema>(
 
     let listProperties = previewProperties;
     if (!listProperties || !listProperties.length) {
-        listProperties = Object.keys(schema.properties).slice(0, 3);
+        listProperties = Object.keys(schema.properties);
+        if (small)
+            listProperties = listProperties.slice(0, 3);
     }
 
 

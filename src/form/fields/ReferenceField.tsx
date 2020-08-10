@@ -146,6 +146,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                     <ReferencePreview
                         reference={value}
                         schema={schema}
+                        small={false}
                         previewProperties={previewProperties}
                         previewComponent={PreviewComponent}/>}
                     {!value &&

@@ -84,7 +84,7 @@ export default function PreviewComponent<T>({
         content = value && value.toLocaleString();
     } else if (property.dataType === "reference" && value instanceof firestore.DocumentReference) {
         const referenceProperty = property as ReferenceProperty;
-        content = value && renderReference(value, referenceProperty.schema, referenceProperty.previewProperties);
+        content = value && renderReference(value, referenceProperty.schema, small, referenceProperty.previewProperties);
     } else if (property.dataType === "boolean") {
         content = renderBoolean(!!value);
     } else {
@@ -288,7 +288,8 @@ function renderUrlVideo(url: string,
 function renderReference<S extends EntitySchema>(
     ref: firestore.DocumentReference,
     refSchema: S,
-    previewProperties?: (keyof S["properties"])[]
+    small:boolean,
+    previewProperties?: (keyof S["properties"])[],
 ) {
 
     if (!ref) return null;
@@ -299,6 +300,7 @@ function renderReference<S extends EntitySchema>(
             schema={refSchema}
             previewComponent={PreviewComponent}
             previewProperties={previewProperties}
+            small={small}
         />
     );
 }
