@@ -63,7 +63,7 @@ export default function PreviewComponent<T>({
     } else if (property.dataType === "array" && value instanceof Array) {
         const arrayProperty = property as ArrayProperty;
         if (arrayProperty.of.dataType === "map") {
-            content = renderArrayOfMaps(arrayProperty.of.properties, value, arrayProperty.of.previewProperties);
+            content = renderArrayOfMaps(arrayProperty.of.properties, value, small, arrayProperty.of.previewProperties);
         } else if (arrayProperty.of.dataType === "string") {
             if (arrayProperty.of.config?.enumValues) {
                 content = renderArrayEnumTableCell(
@@ -97,15 +97,17 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
 
     if (!value) return null;
 
-    let listProperties = property.previewProperties;
-    if (!listProperties || !listProperties.length) {
-        listProperties = Object.keys(property.properties).slice(0, 3);
+    let mapProperties = property.previewProperties;
+    if (!mapProperties || !mapProperties.length) {
+        mapProperties = Object.keys(property.properties);
+        if (small)
+            mapProperties = mapProperties.slice(0, 3);
     }
 
     if (small)
         return (
             <List>
-                {listProperties.map((key: string) => (
+                {mapProperties.map((key: string) => (
                     <ListItem key={property.title + key}>
                         <PreviewComponent value={value[key] as any}
                                           property={property.properties[key]}
@@ -118,8 +120,8 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
     return (
         <Table size="small">
             <TableBody>
-                {listProperties &&
-                listProperties.map((key, index) => {
+                {mapProperties &&
+                mapProperties.map((key, index) => {
                     return (
                         <TableRow key={`table_${property.title}_${index}`}>
                             <TableCell key={`table-cell-title-${key}`}
@@ -141,13 +143,15 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
 
 }
 
-function renderArrayOfMaps(properties: Properties, values: any[], previewProperties?: string[]) {
+function renderArrayOfMaps(properties: Properties, values: any[], small: boolean, previewProperties?: string[]) {
 
     if (!values) return null;
 
     let mapProperties = previewProperties;
     if (!mapProperties || !mapProperties.length) {
-        mapProperties = Object.keys(properties).slice(0, 3);
+        mapProperties = Object.keys(properties);
+        if (small)
+            mapProperties = mapProperties.slice(0, 3);
     }
 
     return (
@@ -288,8 +292,8 @@ function renderUrlVideo(url: string,
 function renderReference<S extends EntitySchema>(
     ref: firestore.DocumentReference,
     refSchema: S,
-    small:boolean,
-    previewProperties?: (keyof S["properties"])[],
+    small: boolean,
+    previewProperties?: (keyof S["properties"])[]
 ) {
 
     if (!ref) return null;

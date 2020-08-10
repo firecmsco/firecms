@@ -47,7 +47,7 @@ export default function SkeletonComponent<T>({
     } else if (property.dataType === "array") {
         const arrayProperty = property as ArrayProperty;
         if (arrayProperty.of.dataType === "map")
-            content = renderArrayOfMaps(arrayProperty.of.properties, arrayProperty.of.previewProperties);
+            content = renderArrayOfMaps(arrayProperty.of.properties, small, arrayProperty.of.previewProperties);
         else if (arrayProperty.of.dataType === "string") {
             if (arrayProperty.of.config?.enumValues) {
                 content = renderArrayEnumTableCell();
@@ -60,7 +60,7 @@ export default function SkeletonComponent<T>({
             content = renderGenericArrayCell(arrayProperty.of);
         }
     } else if (property.dataType === "map") {
-        content = renderMap(property as MapProperty);
+        content = renderMap(property as MapProperty, small);
     } else if (property.dataType === "timestamp") {
         content = renderSkeletonText();
     } else if (property.dataType === "reference") {
@@ -73,10 +73,12 @@ export default function SkeletonComponent<T>({
     return (content ? content : null);
 }
 
-function renderMap<T>(property: MapProperty<T>) {
+function renderMap<T>(property: MapProperty<T>, small: boolean) {
     let listProperties = property.previewProperties;
     if (!listProperties || !listProperties.length) {
-        listProperties = Object.keys(property.properties).slice(0, 3);
+        listProperties = Object.keys(property.properties);
+        if (small)
+            listProperties = listProperties.slice(0, 3);
     }
 
     return (
@@ -92,10 +94,12 @@ function renderMap<T>(property: MapProperty<T>) {
     );
 }
 
-function renderArrayOfMaps<P extends Properties>(properties: P, previewProperties?: (keyof P)[]) {
+function renderArrayOfMaps<P extends Properties>(properties: P, small:boolean, previewProperties?: (keyof P)[]) {
     let tableProperties = previewProperties;
     if (!tableProperties || !tableProperties.length) {
-        tableProperties = Object.keys(properties).slice(0, 3);
+        tableProperties = Object.keys(properties);
+        if (small)
+            tableProperties = tableProperties.slice(0, 3);
     }
 
     return (
