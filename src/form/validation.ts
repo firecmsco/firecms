@@ -70,6 +70,8 @@ function getYupStringSchema(property: StringProperty): StringSchema {
         if (validation.trim) schema = schema.trim();
         if (validation.lowercase) schema = schema.lowercase();
         if (validation.lowercase) schema = schema.uppercase();
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
@@ -88,6 +90,8 @@ function getYupNumberSchema(property: NumberProperty): NumberSchema {
         if (validation.positive) schema = schema.positive(`${property.title} must be positive`);
         if (validation.negative) schema = schema.negative(`${property.title} must be negative`);
         if (validation.integer) schema = schema.integer(`${property.title} must be an integer`);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
@@ -113,6 +117,8 @@ function getYupDateSchema(property: TimestampProperty): DateSchema {
             schema.notRequired().nullable(true);
         if (validation.min) schema = schema.min(validation.min, `${property.title} must be after ${validation.min}`);
         if (validation.max) schema = schema.max(validation.max, `${property.title} must be before ${validation.min}`);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
@@ -124,6 +130,8 @@ function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProper
         schema = validation.required ?
             schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
             schema.notRequired().nullable(true);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
@@ -135,6 +143,8 @@ function getYupBooleanSchema(property: BooleanProperty): BooleanSchema {
         schema = validation.required ?
             schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
             schema.notRequired().nullable(true);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
@@ -149,6 +159,8 @@ function getYupArraySchema<T>(property: ArrayProperty<T>): Schema<unknown> {
             schema.notRequired().nullable(true);
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} should be min ${validation.min} entries long`);
         if (validation.max) schema = schema.max(validation.max, `${property.title} should be max ${validation.min} entries long`);
+    } else {
+        schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
