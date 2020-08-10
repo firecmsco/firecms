@@ -34,10 +34,21 @@ export default function TextField({
     const showError = getIn(touched, field.name) && !!fieldError;
 
     let mediaType: MediaType | undefined;
-    if (property.dataType === "string")
+    let multiline: boolean | number | undefined;
+    if (property.dataType === "string") {
         mediaType = (property as StringProperty).config?.urlMediaType;
+        multiline = (property as StringProperty).config?.multiline;
+    }
+
+    const rows: number | undefined = !!multiline ?
+        (typeof multiline === "number" ? multiline as number : 4)
+        : undefined;
 
     const value = field.value ? field.value : (property.dataType === "string" ? "" : field.value === 0 ? 0 : "");
+
+    const valueIsInfinity = value === Infinity;
+    const inputType = !valueIsInfinity && property.dataType === "number" ? "number" : undefined;
+
     const updateValue = (newValue: typeof value) => {
 
         setFieldTouched(field.name);
@@ -60,9 +71,6 @@ export default function TextField({
             );
         }
     };
-
-    const valueIsInfinity = value === Infinity;
-    const inputType = !valueIsInfinity && property.dataType === "number" ? "number" : undefined;
     return (
         <React.Fragment>
 
@@ -74,6 +82,8 @@ export default function TextField({
                 <InputLabel>{property.title || field.name}</InputLabel>
                 <Input
                     type={inputType}
+                    multiline={!!multiline}
+                    rows={rows}
                     value={valueIsInfinity ? "Infinity" : value}
                     {...props}
                     disabled={valueIsInfinity}

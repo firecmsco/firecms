@@ -469,7 +469,7 @@ you can implement a Formik field.
 If you want your custom field to take the full width of the form, you can use
 the `forceFullWidth` property.
 
-See how it works in this [sample large text field](https://github.com/Camberi/firecms/blob/master/example/src/custom_field/CustomLargeTextField.tsx)
+See how it works in this [sample custom text field](https://github.com/Camberi/firecms/blob/master/example/src/custom_field/CustomColorTextField.tsx)
 
 
 #### Saving hooks

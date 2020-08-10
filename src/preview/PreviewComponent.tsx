@@ -19,6 +19,8 @@ import {
     Chip,
     Divider,
     Grid,
+    List,
+    ListItem,
     Table,
     TableBody,
     TableCell,
@@ -55,10 +57,8 @@ export default function PreviewComponent<T>({
             content = renderUrlComponent(stringProperty, value, small);
         } else if (stringProperty.config?.storageMeta) {
             content = renderStorageThumbnail(stringProperty, value as string, small);
-        } else if (stringProperty.config?.enumValues) {
-            content = stringProperty.config?.enumValues[value];
         } else {
-            content = value;
+            content = renderString(stringProperty, value, small);
         }
     } else if (property.dataType === "array" && value instanceof Array) {
         const arrayProperty = property as ArrayProperty;
@@ -102,6 +102,19 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
         listProperties = Object.keys(property.properties).slice(0, 3);
     }
 
+    if (small)
+        return (
+            <List>
+                {listProperties.map((key: string) => (
+                    <ListItem key={property.title + key}>
+                        <PreviewComponent value={value[key] as any}
+                                          property={property.properties[key]}
+                                          small={small}/>
+                    </ListItem>
+                ))}
+            </List>
+        );
+
     return (
         <Table size="small">
             <TableBody>
@@ -109,11 +122,10 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
                 listProperties.map((key, index) => {
                     return (
                         <TableRow key={`table_${property.title}_${index}`}>
-                            {!small &&
                             <TableCell key={`table-cell-title-${key}`}
                                        component="th">
                                 {property.properties[key].title}
-                            </TableCell>}
+                            </TableCell>
                             <TableCell key={`table-cell-${key}`} component="th">
                                 <PreviewComponent
                                     value={value[key] as any}
@@ -127,17 +139,6 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
         </Table>
     );
 
-    // return (
-    //     <List>
-    //         {listProperties.map((key: string) => (
-    //             <ListItem key={property.title + key}>
-    //                 <PreviewComponent value={value[key] as any}
-    //                                   property={property.properties[key]}
-    //                                   small={small}/>
-    //             </ListItem>
-    //         ))}
-    //     </List>
-    // );
 }
 
 function renderArrayOfMaps(properties: Properties, values: any[], previewProperties?: string[]) {
@@ -317,6 +318,25 @@ export function renderUrlComponent(property: StringProperty,
         return renderUrlVideo(url, small);
     }
     throw Error("URL component misconfiguration");
+}
+
+export function renderString(property: StringProperty,
+                             value: any,
+                             small: boolean = false) {
+
+    if (property.config?.enumValues) {
+        return property.config?.enumValues[value];
+    } else if (property.config?.multiline) {
+        return <Box minWidth={300}
+                    style={{ lineClamp: 5, textOverflow: "ellipsis" }}>
+            {value}
+        </Box>;
+    } else {
+        return <Box minWidth={120}>
+            {value}
+        </Box>;
+    }
+
 }
 
 export function renderStorageThumbnail(

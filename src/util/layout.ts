@@ -17,5 +17,9 @@ export function getColumnsForProperty(property: Property): 6 | 12 {
         return 12;
     }
 
+    if (property.dataType === "string" && (property.config?.multiline || property.config?.markdown)) {
+        return 12;
+    }
+
     return 6;
 }

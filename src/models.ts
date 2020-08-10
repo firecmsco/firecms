@@ -505,7 +505,22 @@ export interface FieldConfig<T> {
     customPreview?: React.ComponentType<PreviewComponentProps<T>>;
 }
 
+/**
+ * Possible configuration fields for a string property. Note that setting one
+ * config disables the others.
+ */
 export interface StringFieldConfig extends FieldConfig<string> {
+
+    /**
+     * Is this string property long enough so it should be displayed in
+     * a multiple line field. Defaults to false.
+     */
+    multiline?: boolean | number;
+
+    /**
+     * Should this string property be displayed as a markdown field
+     */
+    markdown?: boolean;
 
     /**
      * You can use the enum values providing a map of possible

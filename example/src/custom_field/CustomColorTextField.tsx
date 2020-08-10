@@ -8,17 +8,17 @@ import {
 import React, { ReactElement } from "react";
 import { CMSFieldProps, FieldDescription } from "@camberi/firecms";
 
-interface CustomLargeTextFieldProps extends CMSFieldProps<string> {
-    rows: number
+interface CustomColorTextFieldProps extends CMSFieldProps<string> {
+    color: string
 }
 
-export default function CustomLargeTextField({
+export default function CustomColorTextField({
                                                  property,
                                                  field,
-                                                 rows,
+                                                 color,
                                                  form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                                  ...props
-                                             }: CustomLargeTextFieldProps)
+                                             }: CustomColorTextFieldProps)
     : ReactElement {
 
     const fieldError = getIn(errors, field.name);
@@ -32,10 +32,12 @@ export default function CustomLargeTextField({
             error={showError}
             disabled={isSubmitting}
             fullWidth>
+
             <InputLabel>{property.title || field.name}</InputLabel>
+
             <Input
-                multiline
-                rows={rows}
+                style={{ backgroundColor: color }}
+                color={"secondary"}
                 defaultValue={value}
                 onChange={(evt) => {
                     setFieldTouched(field.name);

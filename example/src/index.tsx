@@ -21,7 +21,7 @@ import {
 } from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
-import CustomLargeTextField from "./custom_field/CustomLargeTextField";
+import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { User } from "firebase/app";
 import CustomBooleanPreview from "./custom_preview/CustomBooleanPreview";
 
@@ -180,16 +180,24 @@ const blogSchema = buildSchema({
             validation: { required: true },
             dataType: "string"
         },
+        gold_text: {
+            title: "Gold text",
+            description: "This field is using a custom component defined by the developer",
+            dataType: "string",
+            config: {
+                field: CustomColorTextField,
+                fieldProps: {
+                    color: "gold"
+                }
+            }
+        },
         long_text: {
             title: "Long text",
-            description: "This field is using a custom component",
+            description: "Example of a long text",
             validation: { required: true },
             dataType: "string",
             config: {
-                field: CustomLargeTextField,
-                fieldProps: {
-                    rows: 5
-                }
+                multiline: 4
             }
         },
         images: {
@@ -452,7 +460,7 @@ let navigation: EntityCollectionView<any>[] = [
         textSearchDelegate: client && new AlgoliaTextSearchDelegate(
             client,
             "blog"),
-        properties: ["name", "images", "status", "products"],
+        properties: ["name", "images", "status", "products", "long_text"],
         filterableProperties: ["name", "status"]
     }
 ];
