@@ -72,7 +72,7 @@ export default function StorageUploadField({
 
             <FormHelperText filled
                             required={property.validation?.required}>
-                {property.title || field.name}
+                {property.title}
             </FormHelperText>
 
             <StorageUpload value={value}
@@ -109,12 +109,21 @@ export function StorageUpload({
 
     const multipleFilesSupported = property.dataType === "array";
 
-    if (multipleFilesSupported && (property as ArrayProperty<string>).of.dataType !== "string") {
-        throw Error("Storage field using array must be of data type string");
+
+    if (multipleFilesSupported) {
+        const arrayProperty = property as ArrayProperty<string>;
+        if ("dataType" in arrayProperty.of) {
+            if (arrayProperty.of.dataType !== "string") {
+                throw Error("Storage field using array must be of data type string");
+            }
+        } else {
+            throw Error("Storage field using array must be of data type string");
+        }
     }
 
     const storageMeta: StorageMeta | undefined = property.dataType === "string" ? property.config?.storageMeta :
-        property.dataType === "array" && property.of.dataType === "string" ? property.of.config?.storageMeta :
+        property.dataType === "array" &&
+        (property.of as Property).dataType === "string" ? (property.of as StringProperty).config?.storageMeta :
             undefined;
 
     const metadata: storage.UploadMetadata | undefined = storageMeta?.metadata;
@@ -156,7 +165,10 @@ export function StorageUpload({
 
         let newInternalValue: StorageFieldItem[];
         if (multipleFilesSupported) {
-            newInternalValue = [...internalValue, ...acceptedFiles.map(file => ({ file, metadata }))];
+            newInternalValue = [...internalValue, ...acceptedFiles.map(file => ({
+                file,
+                metadata
+            }))];
         } else {
             newInternalValue = [{ file: acceptedFiles[0], metadata }];
         }
@@ -248,7 +260,7 @@ export function StorageUpload({
 
                     {internalValue.map(entry => {
                         if (entry.storagePath) {
-                            const renderProperty = multipleFilesSupported ? (property as ArrayProperty<string>).of : property;
+                            const renderProperty = multipleFilesSupported ? (property as ArrayProperty<string>).of as Property : property;
                             return <StorageItemPreview
                                 key={`storage_preview_${entry.storagePath}`}
                                 property={renderProperty}

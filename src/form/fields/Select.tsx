@@ -36,7 +36,7 @@ export default function Select<T extends EnumType>({
             error={showError}
         >
             <InputLabel
-                id={`${field.name}-label`}>{property.title || field.name}</InputLabel>
+                id={`${field.name}-label`}>{property.title}</InputLabel>
 
             <MuiSelect labelId={`${field.name}-label`}
                        value={!!value ? value : ""}

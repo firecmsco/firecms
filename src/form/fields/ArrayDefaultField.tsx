@@ -33,7 +33,7 @@ export default function ArrayDefaultField<T>({
 
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
-
+    console.log("value array" ,field.value);
     return <FieldArray
         name={field.name}
         render={arrayHelpers =>
@@ -43,17 +43,18 @@ export default function ArrayDefaultField<T>({
 
                     <FormHelperText filled
                                     required={property.validation?.required}>
-                        {property.title || field.name}
+                        {property.title}
                     </FormHelperText>
 
                     <Paper variant={"outlined"}
                            className={classes.paper}>
                         {hasValue ? (
-                            <Container maxWidth={"sm"}>
+                            <Container maxWidth={"md"}>
                                 {field.value.map((entryValue: any, index: number) => {
                                     return (
                                         <Box key={`field_${index}`}
                                              mb={1}
+                                             alignItems="flex-start"
                                              display={"flex"}>
                                             <Box flexGrow={1}
                                                  key={`field_${field.name}_entryValue`}>

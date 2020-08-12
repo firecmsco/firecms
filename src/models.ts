@@ -321,8 +321,10 @@ export interface ArrayProperty<T = any> extends BaseProperty<T[]> {
 
     /**
      * The property of this array. You can specify any property.
+     * You can also specify an array or properties if you need the array to have
+     * a specific limited shape such as [string, number, string]
      */
-    of: Property;
+    of: Property | Property[];
 
     /**
      * Rules for validating this property

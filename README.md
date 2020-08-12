@@ -437,6 +437,8 @@ Besides the common fields, some properties have specific configurations.
 ##### `array`
 
 * `of`: The property of this array. You can specify any property.
+        You can also specify an array or properties if you need the array to have
+        a specific limited shape such as [string, number, string]
 
 * `validation`: Rules for validating this property
     * `required`: Should this field be compulsory

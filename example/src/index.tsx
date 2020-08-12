@@ -24,6 +24,7 @@ import { firebaseConfig } from "./firebase_config";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { User } from "firebase/app";
 import CustomBooleanPreview from "./custom_preview/CustomBooleanPreview";
+import { Properties } from "../../src";
 
 const locales: EnumValues<string> = {
     "de-DE": "German",
@@ -211,7 +212,7 @@ const blogSchema = buildSchema({
                         storagePath: "images",
                         acceptedFiles: ["image/*"],
                         metadata: {
-                            cacheControl: "max-age=1000000",
+                            cacheControl: "max-age=1000000"
                         }
                     }
                 }
@@ -313,6 +314,12 @@ const usersSchema = buildSchema({
     }
 });
 
+const buckets = {
+    "restaurants": "Restaurants"
+    // "furniture": "Furniture",
+    // "bus_city": "Bus city"
+};
+
 export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
@@ -366,6 +373,37 @@ export const testEntitySchema = buildSchema({
                     mediaType: "image",
                     storagePath: "test",
                     acceptedFiles: ["image/*"]
+                }
+            }
+        },
+        form_conditions: {
+            dataType: "array",
+            title: "Form conditions",
+            of: {
+                dataType: "map",
+                properties: {
+                    type: {
+                        dataType: "string",
+                        title: "Type"
+                    },
+                    condition: {
+                        dataType: "map",
+                        title: "Condition",
+                        properties: Object.entries(buckets).map(([key, value]) => ({
+                            [key]: {
+                                dataType: "array",
+                                title: value,
+                                of: [{
+                                    dataType: "string",
+                                    title: "Test"
+                                }, {
+                                    dataType: "string"
+                                }, {
+                                    dataType: "number"
+                                }]
+                            }
+                        } as Properties)).reduce((a, b) => ({ ...a, ...b }))
+                    }
                 }
             }
         }

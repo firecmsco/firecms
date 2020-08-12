@@ -79,7 +79,7 @@ export default function TextField({
                 error={showError}
                 disabled={isSubmitting}
                 fullWidth>
-                <InputLabel>{property.title || field.name}</InputLabel>
+                <InputLabel>{property.title}</InputLabel>
                 <Input
                     type={inputType}
                     multiline={!!multiline}

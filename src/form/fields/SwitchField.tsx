@@ -37,7 +37,7 @@ export default function SwitchField({
                         }}/>
                 }
                 disabled={property.disabled || isSubmitting}
-                label={property.title || field.name}
+                label={property.title}
             />
 
             {includeDescription &&

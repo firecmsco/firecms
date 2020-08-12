@@ -43,6 +43,11 @@ export const useStyles = makeStyles((theme: Theme) =>
                 minHeight: 64
             }
         },
+        tableNoBottomBorder: {
+            "&:last-child td": {
+                borderBottom: 0,
+            },
+        },
         logo: {
             padding: theme.spacing(3),
             maxWidth: drawerWidth
@@ -145,9 +150,6 @@ export const collectionStyles = makeStyles((theme: Theme) =>
         },
         table: {
             minWidth: 750
-        },
-        tableWrapper: {
-            minHeight: `calc(100vh - 96px)`
         },
         highlight:
             theme.palette.type === "light"

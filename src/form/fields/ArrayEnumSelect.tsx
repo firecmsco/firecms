@@ -42,7 +42,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
         error={showError}
     >
         <InputLabel
-            id={`${field.name}-label`}>{property.title || field.name}
+            id={`${field.name}-label`}>{property.title}
         </InputLabel>
         <MuiSelect multiple
                    labelId={`${field.name}-label`}

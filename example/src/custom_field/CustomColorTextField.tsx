@@ -33,7 +33,7 @@ export default function CustomColorTextField({
             disabled={isSubmitting}
             fullWidth>
 
-            <InputLabel>{property.title || field.name}</InputLabel>
+            <InputLabel>{property.title}</InputLabel>
 
             <Input
                 style={{ backgroundColor: color }}

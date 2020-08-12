@@ -5,7 +5,10 @@ export function getColumnsForProperty(property: Property): 6 | 12 {
     if (property.config?.forceFullWidth)
         return 12;
 
-    if (property.dataType === "array" && property.of.dataType === "string" && property.of.config?.enumValues) {
+    if (property.dataType === "array" &&
+        "dataType" in property.of &&
+        property.of.dataType === "string" &&
+        property.of.config?.enumValues) {
         return 6;
     }
 

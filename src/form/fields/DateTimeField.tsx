@@ -30,7 +30,7 @@ export default function DateTimeField({
                 fullWidth
                 clearable
                 value={value}
-                label={property.title || field.name}
+                label={property.title}
                 error={showError}
                 disabled={property.disabled !== undefined ? property.disabled : isSubmitting}
                 helperText={showError ? fieldError : null}

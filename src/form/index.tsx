@@ -23,6 +23,7 @@ import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
 import { CMSFieldProps } from "./form_props";
+import ArrayShapedField from "./fields/ArrayShapedField";
 
 function buildField<P extends Property<T>, T = any>(name: string,
                                                     property: P,
@@ -72,14 +73,21 @@ export function createFormField(name: string,
     if (property.config?.field) {
         component = property.config?.field;
     } else if (property.dataType === "array") {
-        if ((property.of.dataType === "string" || property.of.dataType === "number") && property.of.config?.enumValues) {
-            component = ArrayEnumSelect;
-        } else if (property.of.dataType === "string" && property.of.config?.storageMeta) {
-            component = StorageUploadField;
-        } else if (property.of.dataType === "map") {
-            component = ArrayMapField;
-        } else {
-            component = ArrayDefaultField;
+
+        if ("dataType" in property.of) {
+            if ((property.of.dataType === "string" || property.of.dataType === "number") && property.of.config?.enumValues) {
+                component = ArrayEnumSelect;
+            } else if (property.of.dataType === "string" && property.of.config?.storageMeta) {
+                component = StorageUploadField;
+            }
+            // else if (property.of.dataType === "map") {
+            //     component = ArrayMapField;
+            // }
+            else {
+                component = ArrayDefaultField;
+            }
+        } else if (Array.isArray(property.of)) {
+            component = ArrayShapedField;
         }
     } else if (property.dataType === "map") {
         component = MapField;

@@ -20,7 +20,7 @@ export default function DisabledField<S extends EntitySchema>({ field, property,
 
             <FormHelperText filled
                             required={property.validation?.required}>
-                {property.title || field.name}
+                {property.title}
             </FormHelperText>
 
             <Paper elevation={0} className={classes.paper} variant={"outlined"}>

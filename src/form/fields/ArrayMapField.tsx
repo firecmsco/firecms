@@ -39,24 +39,23 @@ export default function ArrayMapField<T>({
 
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
+    const hasValue = field.value && field.value.length > 0;
 
     return <FieldArray
         name={field.name}
         render={arrayHelpers => {
 
-            const hasValue = field.value && field.value.length > 0;
-            const error = touched && property.validation?.required && !field.value;
 
             return (
 
-                <FormControl fullWidth error={error}>
+                <FormControl fullWidth error={showError}>
 
                     <FormHelperText filled
                                     required={property.validation?.required}>
-                        {property.title || field.name}
+                        {property.title}
                     </FormHelperText>
 
-                    <Paper elevation={0} className={classes.paper}>
+                    <Paper variant={"outlined"} className={classes.paper}>
 
                         {hasValue ? (
                             <Table>

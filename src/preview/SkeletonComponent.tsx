@@ -8,6 +8,7 @@ import {
 } from "../models";
 import React from "react";
 import {
+    Box, Divider,
     Grid,
     List,
     ListItem,
@@ -46,19 +47,25 @@ export default function SkeletonComponent<T>({
         }
     } else if (property.dataType === "array") {
         const arrayProperty = property as ArrayProperty;
-        if (arrayProperty.of.dataType === "map")
-            content = renderArrayOfMaps(arrayProperty.of.properties, small, arrayProperty.of.previewProperties);
-        else if (arrayProperty.of.dataType === "string") {
-            if (arrayProperty.of.config?.enumValues) {
-                content = renderArrayEnumTableCell();
-            } else if (arrayProperty.of.config?.storageMeta) {
-                content = renderGenericArrayCell(arrayProperty.of);
+
+        if ("dataType" in arrayProperty.of) {
+            if (arrayProperty.of.dataType === "map")
+                content = renderArrayOfMaps(arrayProperty.of.properties, small, arrayProperty.of.previewProperties);
+            else if (arrayProperty.of.dataType === "string") {
+                if (arrayProperty.of.config?.enumValues) {
+                    content = renderArrayEnumTableCell();
+                } else if (arrayProperty.of.config?.storageMeta) {
+                    content = renderGenericArrayCell(arrayProperty.of);
+                } else {
+                    content = renderArrayOfStrings();
+                }
             } else {
-                content = renderArrayOfStrings();
+                content = renderGenericArrayCell(arrayProperty.of);
             }
         } else {
-            content = renderGenericArrayCell(arrayProperty.of);
+            content = renderShapedArray(arrayProperty.of);
         }
+
     } else if (property.dataType === "map") {
         content = renderMap(property as MapProperty, small);
     } else if (property.dataType === "timestamp") {
@@ -94,7 +101,7 @@ function renderMap<T>(property: MapProperty<T>, small: boolean) {
     );
 }
 
-function renderArrayOfMaps<P extends Properties>(properties: P, small:boolean, previewProperties?: (keyof P)[]) {
+function renderArrayOfMaps<P extends Properties>(properties: P, small: boolean, previewProperties?: (keyof P)[]) {
     let tableProperties = previewProperties;
     if (!tableProperties || !tableProperties.length) {
         tableProperties = Object.keys(properties);
@@ -168,6 +175,28 @@ function renderGenericArrayCell(
                                            small={true}/>
                     </React.Fragment>
                 )}
+        </Grid>
+    );
+}
+
+function renderShapedArray<T extends EnumType>(
+    properties: Property[]
+) {
+
+    return (
+        <Grid>
+            {properties &&
+            properties.map((property, index) =>
+                <React.Fragment
+                    key={"preview_array_" + properties[index] + "_" + index}>
+                    {properties[index] && <Box m={1}>
+                        <SkeletonComponent
+                                          property={property}
+                                          small={true}/>
+                    </Box>}
+                    {properties[index] && index < properties.length - 1 && <Divider/>}
+                </React.Fragment>
+            )}
         </Grid>
     );
 }

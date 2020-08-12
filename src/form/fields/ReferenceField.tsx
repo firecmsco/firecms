@@ -3,6 +3,7 @@ import { getIn } from "formik";
 import {
     Box,
     Button,
+    Container,
     Dialog,
     DialogActions,
     DialogTitle,
@@ -46,26 +47,29 @@ export default function ReferenceField<S extends EntitySchema>({
     };
 
     const classes = formStyles();
-    const title = property.title || field.name;
+    const title = property.title;
     return (
         <FormControl error={showError} fullWidth>
-            <Paper elevation={0} className={classes.paper}
-                   variant={"outlined"}>
-                <Box my={1}>
-                    <Typography variant="caption"
-                                display="block"
-                                gutterBottom>
-                        {title}
-                    </Typography>
-                </Box>
-                <ReferenceDialog value={value}
-                                 title={title}
-                                 collectionPath={property.collectionPath}
-                                 schema={property.schema}
-                                 initialFilter={property.filter}
-                                 previewProperties={property.previewProperties}
-                                 onEntityClick={handleEntityClick}/>
-            </Paper>
+
+            <Container maxWidth={"sm"}>
+                <Paper elevation={0} className={classes.paper}
+                       variant={"outlined"}>
+                    {title && <Box my={1}>
+                        <Typography variant="caption"
+                                    display="block"
+                                    gutterBottom>
+                            {title}
+                        </Typography>
+                    </Box>}
+                    <ReferenceDialog value={value}
+                                     title={title}
+                                     collectionPath={property.collectionPath}
+                                     schema={property.schema}
+                                     initialFilter={property.filter}
+                                     previewProperties={property.previewProperties}
+                                     onEntityClick={handleEntityClick}/>
+                </Paper>
+            </Container>
 
             {includeDescription &&
             <FieldDescription property={property}/>}
@@ -137,11 +141,10 @@ export function ReferenceDialog<S extends EntitySchema>(
 
     return (
         <React.Fragment>
-            <Grid
-                justify="space-between"
-                container
-                spacing={2}>
-                <Grid item xs={10}>
+            <Box
+                justifyContent="space-between"
+                display="flex">
+                <Grid item>
                     {value &&
                     <ReferencePreview
                         reference={value}
@@ -152,7 +155,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                     {!value &&
                     <Box>No value set</Box>}
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item>
                     {value &&
                     <Tooltip title="Clear">
                         <IconButton
@@ -167,7 +170,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                         {value ? "Edit" : "Set"}
                     </Button>
                 </Grid>
-            </Grid>
+            </Box>
 
             <Dialog
                 onClose={handleClose}

@@ -41,7 +41,7 @@ function mapPropertyToYup(property: Property): Schema<unknown> {
     } else if (property.dataType === "reference") {
         return getYupReferenceSchema(property);
     }
-    throw Error("Unsupported data type in yup mapping");
+    throw Error("Unsupported data type in yup mapping: " + property["dataType"]);
 }
 
 export function getYupObjectSchema(properties: Properties): ObjectSchema<any> {
@@ -150,7 +150,18 @@ function getYupBooleanSchema(property: BooleanProperty): BooleanSchema {
 }
 
 function getYupArraySchema<T>(property: ArrayProperty<T>): Schema<unknown> {
-    let schema: NotRequiredArraySchema<any> | NotRequiredNullableArraySchema<any> = yup.array().of(mapPropertyToYup(property.of));
+
+    let schema: NotRequiredArraySchema<any> | NotRequiredNullableArraySchema<any>;
+    if ("dataType" in property.of)
+        schema = yup.array().of(mapPropertyToYup(property.of));
+    else if (Array.isArray(property.of)) {
+        schema = yup.array();
+        // const positionSchemas: Schema<any>[] = property.of.map((p) => mapPropertyToYup(p));
+        // schema = yup.array().test("Array shape",
+        //         "Validation error",
+        //         (value: any[]) => positionSchemas.every((s, i) => s.validate(value[i])));
+    } else throw Error("Yup array config error");
+
     const validation = property.validation;
 
     if (validation) {

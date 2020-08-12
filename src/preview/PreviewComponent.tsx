@@ -30,6 +30,7 @@ import {
 import StorageThumbnail from "./StorageThumbnail";
 import ReferencePreview from "./ReferencePreview";
 import { PreviewComponentProps } from "./PreviewComponentProps";
+import { useStyles } from "../styles";
 
 export default function PreviewComponent<T>({
                                                 value,
@@ -62,21 +63,26 @@ export default function PreviewComponent<T>({
         }
     } else if (property.dataType === "array" && value instanceof Array) {
         const arrayProperty = property as ArrayProperty;
-        if (arrayProperty.of.dataType === "map") {
-            content = renderArrayOfMaps(arrayProperty.of.properties, value, small, arrayProperty.of.previewProperties);
-        } else if (arrayProperty.of.dataType === "string") {
-            if (arrayProperty.of.config?.enumValues) {
-                content = renderArrayEnumTableCell(
-                    arrayProperty.of.config?.enumValues,
-                    value
-                );
-            } else if (arrayProperty.of.config?.storageMeta) {
-                content = renderGenericArray(arrayProperty.of, value);
+
+        if ("dataType" in arrayProperty.of) {
+            if (arrayProperty.of.dataType === "map") {
+                content = renderArrayOfMaps(arrayProperty.of.properties, value, small, arrayProperty.of.previewProperties);
+            } else if (arrayProperty.of.dataType === "string") {
+                if (arrayProperty.of.config?.enumValues) {
+                    content = renderArrayEnumTableCell(
+                        arrayProperty.of.config?.enumValues,
+                        value
+                    );
+                } else if (arrayProperty.of.config?.storageMeta) {
+                    content = renderGenericArray(arrayProperty.of, value);
+                } else {
+                    content = renderArrayOfStrings(value);
+                }
             } else {
-                content = renderArrayOfStrings(value);
+                content = renderGenericArray(arrayProperty.of, value);
             }
         } else {
-            content = renderGenericArray(arrayProperty.of, value);
+            content = renderShapedArray(arrayProperty.of, value);
         }
     } else if (property.dataType === "map" && typeof value === "object") {
         content = renderMap(property as MapProperty, value, small);
@@ -96,6 +102,8 @@ export default function PreviewComponent<T>({
 function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
 
     if (!value) return null;
+
+    const classes = useStyles();
 
     let mapProperties = property.previewProperties;
     if (!mapProperties || !mapProperties.length) {
@@ -118,7 +126,7 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
         );
 
     return (
-        <Table size="small">
+        <Table size="small" className={classes.tableNoBottomBorder}>
             <TableBody>
                 {mapProperties &&
                 mapProperties.map((key, index) => {
@@ -147,6 +155,8 @@ function renderArrayOfMaps(properties: Properties, values: any[], small: boolean
 
     if (!values) return null;
 
+    const classes = useStyles();
+
     let mapProperties = previewProperties;
     if (!mapProperties || !mapProperties.length) {
         mapProperties = Object.keys(properties);
@@ -155,7 +165,7 @@ function renderArrayOfMaps(properties: Properties, values: any[], small: boolean
     }
 
     return (
-        <Table size="small">
+        <Table size="small" className={classes.tableNoBottomBorder}>
             <TableBody>
                 {values &&
                 values.map((value, index) => {
@@ -243,6 +253,31 @@ function renderGenericArray<T extends EnumType>(
                                           small={true}/>
                     </Box>
                     {index < values.length - 1 && <Divider/>}
+                </React.Fragment>
+            )}
+        </Grid>
+    );
+}
+
+function renderShapedArray<T extends EnumType>(
+    properties: Property[],
+    values: T[]
+) {
+
+    if (!values) return null;
+
+    return (
+        <Grid>
+            {values &&
+            properties.map((property, index) =>
+                <React.Fragment
+                    key={"preview_array_" + values[index] + "_" + index}>
+                    {values[index] && <Box m={1}>
+                        <PreviewComponent value={values[index]}
+                                          property={property}
+                                          small={true}/>
+                    </Box>}
+                    {values[index] && index < values.length - 1 && <Divider/>}
                 </React.Fragment>
             )}
         </Grid>

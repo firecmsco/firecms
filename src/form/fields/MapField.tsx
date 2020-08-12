@@ -29,12 +29,13 @@ export default function MapField<S extends EntitySchema>({
     const mapProperties: Record<string, Property> = property.properties;
     const hasError = touched && property.validation?.required && !field.value;
 
+    console.log("value map" ,field.value);
     return (
         <FormControl fullWidth error={hasError}>
 
             <FormHelperText filled
                             required={property.validation?.required}>
-                {property.title || field.name}
+                {property.title}
             </FormHelperText>
 
             <Paper elevation={0} variant={"outlined"} className={classes.paper}>

@@ -358,7 +358,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     return (
 
-        <Paper elevation={1} className={classes.tableWrapper}>
+        <Paper elevation={1}>
 
             {props.includeToolbar &&
             <CollectionTableToolbar schema={props.schema}
