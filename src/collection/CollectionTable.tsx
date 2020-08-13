@@ -213,7 +213,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         setPage(0);
     };
 
-    const emptyRows = rowsPerPage ? data.length - rowsPerPage : 0;
+    const emptyRows = !data ? 0 : (rowsPerPage ? data.length - rowsPerPage : 0);
     let tableViewProperties = props.properties;
     if (!tableViewProperties) {
         tableViewProperties = Object.keys(props.schema.properties);
@@ -307,6 +307,14 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         );
     }
 
+    function buildEmptyView<S extends EntitySchema>() {
+        return (
+            <Box margin={4}>
+                This collection is empty
+            </Box>
+        );
+    }
+
     const skeletonBody = <TableBody>
         {[0, 1, 2, 3, 4]
             .map((_, index) => {
@@ -330,6 +338,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                 <TableCell colSpan={tableViewProperties.length}/>
             </TableRow>
         )}
+
     </TableBody>;
 
     const body =
@@ -385,6 +394,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                     </Grid>
                 </Box>}
 
+
                 {!dataLoadingError &&
 
                 <Table
@@ -407,6 +417,8 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                     {body}
                 </Table>
                 }
+
+                {!dataLoadingError && !textSearchInProgress && !data?.length && buildEmptyView()}
 
             </TableContainer>
 

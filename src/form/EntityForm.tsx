@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Button, Container, Grid, Paper } from "@material-ui/core";
+import {
+    Box,
+    Button,
+    Container,
+    Grid,
+    Paper,
+    Typography
+} from "@material-ui/core";
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
 import { formStyles, useStyles } from "../styles";
@@ -189,8 +196,11 @@ export default function EntityForm<S extends EntitySchema>({
 
                                 {savingError &&
                                 <Box textAlign="right">
-                                    {savingError}
+                                    <Typography color={"error"}>
+                                        Error saving to Firestore. Details in the console
+                                    </Typography>
                                 </Box>}
+
                                 <Box textAlign="right">
                                     {status === EntityStatus.existing &&
                                     <Button

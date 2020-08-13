@@ -34,29 +34,31 @@ function buildField<P extends Property<T>, T = any>(name: string,
 
     const additionalFieldProps: any = property.config?.fieldProps;
 
-    return <React.Fragment>
-
+    return (
         <Field
             required={property.validation?.required}
             name={`${name}`}
         >
-            {(fieldProps: FieldProps<T>) =>
-                React.createElement(component, {
-                    ...fieldProps,
-                    ...additionalFieldProps,
-                    includeDescription,
-                    property,
-                    createFormField
-                })}
+            {(fieldProps: FieldProps<T>) => (
+                <React.Fragment>
 
-        </Field>
+                    {React.createElement(component, {
+                        ...fieldProps,
+                        ...additionalFieldProps,
+                        includeDescription,
+                        property,
+                        createFormField
+                    })}
 
-        {underlyingValueHasChanged &&
-        <FormHelperText>
-            This value has been updated in Firestore
-        </FormHelperText>}
+                    {underlyingValueHasChanged && !fieldProps.form.isSubmitting &&
+                    <FormHelperText>
+                        This value has been updated in Firestore
+                    </FormHelperText>}
 
-    </React.Fragment>;
+                </React.Fragment>)
+            }
+
+        </Field>);
 }
 
 export function createFormField(name: string,
@@ -80,8 +82,8 @@ export function createFormField(name: string,
             } else if (property.of.dataType === "string" && property.of.config?.storageMeta) {
                 component = StorageUploadField;
             }
-            // else if (property.of.dataType === "map") {
-            //     component = ArrayMapField;
+                // else if (property.of.dataType === "map") {
+                //     component = ArrayMapField;
             // }
             else {
                 component = ArrayDefaultField;
@@ -163,7 +165,7 @@ export function createCustomIdField(schema: EntitySchema, formType: EntityStatus
                           onChange={(event) => onChange(event.target.value)}/>}
 
             <ErrorMessage name={"id"}
-                          component="div">{(s) => "You need to specify an ID"}</ErrorMessage>
+                          component="div">{(_) => "You need to specify an ID"}</ErrorMessage>
 
         </FormControl>
     );

@@ -56,6 +56,8 @@ function getYupStringSchema(property: StringProperty): StringSchema {
     let schema: StringSchema<any> = yup.string();
     const validation = property.validation;
     if (property.config?.enumValues) {
+        if (validation?.required)
+            schema = schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false);
         schema = schema.oneOf(Object.keys(property.config?.enumValues));
     }
     if (validation) {

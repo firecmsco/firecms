@@ -350,6 +350,12 @@ export interface MapProperty<T = any, P extends Properties = Properties> extends
      * Properties that need to be rendered when as a preview of this reference
      */
     previewProperties?: (keyof P)[];
+
+
+    /**
+     * Configure how this property field is displayed
+     */
+    config?: MapFieldConfig<T>;
 }
 
 export interface TimestampProperty extends BaseProperty<firebase.firestore.Timestamp> {
@@ -542,6 +548,23 @@ export interface StringFieldConfig extends FieldConfig<string> {
      * to render the content
      */
     urlMediaType?: MediaType;
+
+}
+
+/**
+ * Possible configuration fields for a string property. Note that setting one
+ * config disables the others.
+ */
+export interface MapFieldConfig<T> extends FieldConfig<T> {
+
+    /**
+     * Allow the user to add only some of the keys in this map.
+     * By default all properties of the map have the corresponding field in
+     * the form view. Setting this flag to true allows to pick only some.
+     * Useful for map that can have a lot of subproperties that may not be
+     * needed
+     */
+    pickOnlySomeKeys?: boolean;
 
 }
 

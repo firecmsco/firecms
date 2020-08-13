@@ -315,9 +315,9 @@ const usersSchema = buildSchema({
 });
 
 const buckets = {
-    "restaurants": "Restaurants"
-    // "furniture": "Furniture",
-    // "bus_city": "Bus city"
+    "restaurants": "Restaurants",
+    "furniture": "Furniture",
+    "bus_city": "Bus city"
 };
 
 export const testEntitySchema = buildSchema({
@@ -386,21 +386,19 @@ export const testEntitySchema = buildSchema({
                         dataType: "string",
                         title: "Type"
                     },
-                    condition: {
+                    available: {
                         dataType: "map",
-                        title: "Condition",
+                        title: "Available",
+                        config: {
+                            pickOnlySomeKeys: true
+                        },
                         properties: Object.entries(buckets).map(([key, value]) => ({
                             [key]: {
                                 dataType: "array",
                                 title: value,
-                                of: [{
-                                    dataType: "string",
-                                    title: "Test"
-                                }, {
+                                of: {
                                     dataType: "string"
-                                }, {
-                                    dataType: "number"
-                                }]
+                                }
                             }
                         } as Properties)).reduce((a, b) => ({ ...a, ...b }))
                     }
