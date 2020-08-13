@@ -130,11 +130,12 @@ export default function EntityForm<S extends EntitySchema>({
 
     }
 
+    const validationSchema = getYupObjectSchema(schema.properties);
     return (
         <Formik
             initialValues={baseValues as EntityValues<S>}
             onSubmit={saveValues}
-            validationSchema={getYupObjectSchema(schema.properties)}
+            validationSchema={validationSchema}
         >
             {({ values, touched, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
 
@@ -167,7 +168,7 @@ export default function EntityForm<S extends EntitySchema>({
                             const formField = createFormField(key, property, true, underlyingValueHasChanged);
                             const columns = getColumnsForProperty(property);
 
-                            return <Grid item sm={columns}
+                            return <Grid item sm={columns} xs={12}
                                          className={classes.field}
                                          key={`field_${schema.name}_${key}`}>
                                 {formField}

@@ -384,12 +384,20 @@ export const testEntitySchema = buildSchema({
                 properties: {
                     type: {
                         dataType: "string",
-                        title: "Type"
-                    },
-                    available: {
-                        dataType: "map",
-                        title: "Available",
+                        title: "Type",
                         config: {
+                            enumValues: {
+                                possible_ids: "Possible ids"
+                            }
+                        },
+                        validation: {
+                            required: true
+                        }
+                    },
+                    condition: {
+                        dataType: "map",
+                        title: "Condition",
+                        config:{
                             pickOnlySomeKeys: true
                         },
                         properties: Object.entries(buckets).map(([key, value]) => ({

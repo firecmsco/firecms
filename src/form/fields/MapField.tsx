@@ -101,7 +101,6 @@ export default function MapField<S extends EntitySchema>({
 
             </Paper>
 
-
             {includeDescription &&
             <FieldDescription property={property}/>}
 
