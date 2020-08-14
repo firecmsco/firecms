@@ -35,7 +35,10 @@ export default function MapField<S extends EntitySchema>({
     if (!pickOnlySomeKeys) {
         mapProperties = property.properties;
     } else if (field.value) {
-        mapProperties = pick(property.properties, ...Object.keys(field.value));
+        mapProperties = pick(property.properties,
+            ...Object.keys(field.value)
+                .filter(key => key in property.properties)
+        );
     } else {
         mapProperties = {};
     }
