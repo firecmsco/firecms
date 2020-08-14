@@ -197,7 +197,16 @@ export function CMSApp({
         },
         shape: {
             borderRadius: 2
-        }
+        },
+        overrides: {
+            MuiTableRow: {
+                root: {
+                    "&:last-child td": {
+                        borderBottom: 0,
+                    },
+                }
+            }
+        },
     });
 
 

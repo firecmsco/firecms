@@ -126,15 +126,17 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
         );
 
     return (
-        <Table size="small" className={classes.tableNoBottomBorder}>
+        <Table size="small" >
             <TableBody>
                 {mapProperties &&
                 mapProperties.map((key, index) => {
                     return (
-                        <TableRow key={`table_${property.title}_${index}`}>
+                        <TableRow key={`table_${property.title}_${index}`} className={classes.tableNoBottomBorder}>
                             <TableCell key={`table-cell-title-${key}`}
                                        component="th">
-                                {property.properties[key].title}
+                                <Typography variant={"body2"} color={"textSecondary"}>
+                                    {property.properties[key].title}
+                                </Typography>
                             </TableCell>
                             <TableCell key={`table-cell-${key}`} component="th">
                                 <PreviewComponent
@@ -165,12 +167,13 @@ function renderArrayOfMaps(properties: Properties, values: any[], small: boolean
     }
 
     return (
-        <Table size="small" className={classes.tableNoBottomBorder}>
+        <Table size="small" >
             <TableBody>
                 {values &&
                 values.map((value, index) => {
                     return (
-                        <TableRow key={`table_${value}_${index}`}>
+                        <TableRow key={`table_${value}_${index}`}
+                                  className={classes.tableNoBottomBorder}>
                             {mapProperties && mapProperties.map(
                                 (key, index) => (
                                     <TableCell

@@ -44,7 +44,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             }
         },
         tableNoBottomBorder: {
-            "&:last-child td": {
+            "&:last-child th, &:last-child td": {
                 borderBottom: 0,
             },
         },

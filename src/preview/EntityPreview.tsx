@@ -5,7 +5,7 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableRow
+    TableRow, Typography
 } from "@material-ui/core";
 import { Entity, EntitySchema } from "../models";
 import PreviewComponent from "./PreviewComponent";
@@ -30,7 +30,9 @@ export default function EntityPreview<S extends EntitySchema>(
                 <TableBody>
                     <TableRow key={"entity_prev_id"}>
                         <TableCell align="right" component="th" scope="row">
-                            Id
+                            <Typography variant={"body2"} color={"textSecondary"}>
+                                Id
+                            </Typography>
                         </TableCell>
                         <TableCell>
                             {entity.id}
@@ -39,7 +41,9 @@ export default function EntityPreview<S extends EntitySchema>(
                     {Object.entries(schema.properties).map(([key, property]) => (
                         <TableRow key={"entity_prev" + property.title + key}>
                             <TableCell align="right" component="th" scope="row">
-                                {property.title}
+                                <Typography variant={"body2"} color={"textSecondary"}>
+                                    {property.title}
+                                </Typography>
                             </TableCell>
                             <TableCell>
                                 <PreviewComponent
