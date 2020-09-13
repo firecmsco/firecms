@@ -73,6 +73,15 @@ export interface EntityCollectionView<S extends EntitySchema,
      * Properties that can be filtered in this view
      */
     filterableProperties?: Key[];
+
+    /**
+     * Hook called when the user initiates a delete operation.
+     * This is called after the entity is deleted in Firestore.
+     * 
+     * @param collectionPath the Firestore collection path.
+     * @param entity the entity being deleted.
+     */
+    onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
 }
 
 /**
@@ -125,7 +134,6 @@ export interface EntitySchema<Key extends string = string, P extends Properties<
      */
     onPreSave?(entitySaveProps: EntitySaveProps<this>)
         : Promise<EntityValues<this>> | EntityValues<this>
-
 }
 
 /**

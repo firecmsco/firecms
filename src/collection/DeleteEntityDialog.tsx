@@ -14,6 +14,7 @@ export interface DeleteEntityDialogProps<S extends EntitySchema> {
     entity?: Entity<S>,
     schema: S
     open: boolean;
+    afterDelete?: () => void;
     onClose: () => void;
 }
 
@@ -30,7 +31,10 @@ export default function DeleteEntityDialog<S extends EntitySchema>(props: Delete
         if (entity) {
             setOpenSnackbar(true);
             setLoading(true);
-            deleteEntity(entity).then(_ => setLoading(false));
+            deleteEntity(entity).then(_ => {
+                setLoading(false);
+                if(props.afterDelete) props.afterDelete()
+            });
             onClose();
         }
     };
