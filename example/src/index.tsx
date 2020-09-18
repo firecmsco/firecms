@@ -314,11 +314,11 @@ const usersSchema = buildSchema({
     }
 });
 
-const buckets = {
-    "restaurants": "Restaurants",
-    "furniture": "Furniture",
-    "bus_city": "Bus city"
-};
+const formQuestions =  [ 'birth_year',
+    'living_situation',
+    'electricity_monthly',
+    'heating_fuels_used',
+    'heating_fuels_consumption_monthly'];
 
 export const testEntitySchema = buildSchema({
     customId: true,
@@ -400,12 +400,15 @@ export const testEntitySchema = buildSchema({
                         config:{
                             pickOnlySomeKeys: true
                         },
-                        properties: Object.entries(buckets).map(([key, value]) => ({
-                            [key]: {
+                        properties: formQuestions.map((questionId) => ({
+                            [questionId]: {
                                 dataType: "array",
-                                title: value,
+                                title: questionId,
                                 of: {
-                                    dataType: "string"
+                                    dataType: "string",
+                                    validation:{
+                                        required: true
+                                    }
                                 }
                             }
                         } as Properties)).reduce((a, b) => ({ ...a, ...b }))

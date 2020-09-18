@@ -574,7 +574,8 @@ export function CMSApp({
                 {firebaseConfigError ?
                     <Box>
                         It seems like the provided Firebase config is not
-                        correct
+                        correct. If you are using the credentials provided automatically
+                        by Firebase Hosting, make sure you your Firebase app to Firebase Hosting.
                     </Box> :
                     (
                         authLoading ? (

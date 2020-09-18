@@ -88,8 +88,7 @@ export default function MapField<S extends EntitySchema>({
                     <Grid container spacing={2}>
                         {Object.entries(mapProperties)
                             .map(([entryKey, childProperty], index) => {
-                                    return <Grid item
-                                                 xs={getColumnsForProperty(childProperty)}
+                                    return <Grid item sm={getColumnsForProperty(childProperty)} xs={12}
                                                  key={`map-${field.name}-${index}`}>
                                         {createFormField(`${field.name}[${entryKey}]`,
                                             childProperty,
