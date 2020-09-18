@@ -567,23 +567,6 @@ export interface StringFieldConfig extends FieldConfig<string> {
 }
 
 /**
- * Possible configuration fields for a string property. Note that setting one
- * config disables the others.
- */
-export interface MapFieldConfig<T> extends FieldConfig<T> {
-
-    /**
-     * Allow the user to add only some of the keys in this map.
-     * By default all properties of the map have the corresponding field in
-     * the form view. Setting this flag to true allows to pick only some.
-     * Useful for map that can have a lot of subproperties that may not be
-     * needed
-     */
-    pickOnlySomeKeys?: boolean;
-
-}
-
-/**
  * Additional configuration related to Storage related fields
  */
 export interface StorageMeta {
@@ -607,6 +590,33 @@ export interface StorageMeta {
      * Specific metadata set in your uploaded file
      */
     metadata?: storage.UploadMetadata,
+
+    /**
+     * When set to true, this flag indicates that the download URL of the file
+     * will be saved in Firestore instead of the Cloud storage path.
+     * Note that the generated URL may use a token that, if disabled, may
+     * make the URL unusable and lose the original reference to Cloud Storage,
+     * so it is not encouraged to use this flag. Defaults to false
+     */
+    storeUrl?: boolean,
+
+}
+
+/**
+ * Possible configuration fields for a string property. Note that setting one
+ * config disables the others.
+ */
+export interface MapFieldConfig<T> extends FieldConfig<T> {
+
+    /**
+     * Allow the user to add only some of the keys in this map.
+     * By default all properties of the map have the corresponding field in
+     * the form view. Setting this flag to true allows to pick only some.
+     * Useful for map that can have a lot of subproperties that may not be
+     * needed
+     */
+    pickOnlySomeKeys?: boolean;
+
 }
 
 /**

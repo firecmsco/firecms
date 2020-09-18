@@ -392,7 +392,7 @@ export function renderStorageThumbnail(
 
     return (
         <StorageThumbnail
-            storagePath={storagePath}
+            storagePathOrDownloadUrl={storagePath}
             property={property}
             small={small}
             renderUrlComponent={renderUrlComponent}

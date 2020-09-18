@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert/Alert";
 
-import { uploadFile } from "../../firebase";
+import { getDownloadURL, uploadFile } from "../../firebase";
 import { storage } from "firebase/app";
 
 
@@ -43,7 +43,7 @@ type StorageUploadFieldProps = CMSFieldProps<string | string[]> ;
  * Or have a pending file being uploaded.
  */
 interface StorageFieldItem {
-    storagePath?: string;
+    storagePathOrDownloadUrl?: string;
     file?: File;
     metadata?: storage.UploadMetadata,
 }
@@ -109,7 +109,6 @@ export function StorageUpload({
 
     const multipleFilesSupported = property.dataType === "array";
 
-
     if (multipleFilesSupported) {
         const arrayProperty = property as ArrayProperty<string>;
         if ("dataType" in arrayProperty.of) {
@@ -133,16 +132,15 @@ export function StorageUpload({
 
     const classes = formStyles();
 
-    const internalInitialValue: StorageFieldItem[] = multipleFilesSupported ?
-        (value as string[]).map(v => (
+    const internalInitialValue: StorageFieldItem[] =
+        (multipleFilesSupported ?
+            value as string[]
+            : [value as string]).map(entry => (
             {
-                storagePath: v,
+                storagePathOrDownloadUrl:  entry,
                 metadata: metadata
             }
-        )) : [{
-            storagePath: value as string,
-            metadata: metadata
-        }];
+        ));
 
     const [initialValue, setInitialValue] = React.useState<string | string[]>(value);
     const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
@@ -155,7 +153,7 @@ export function StorageUpload({
     function removeDuplicates(items: StorageFieldItem[]) {
         return items.filter(
             (v, i) => {
-                return ((items.map((v) => v.storagePath).indexOf(v.storagePath) === i) || !v.storagePath)
+                return ((items.map((v) => v.storagePathOrDownloadUrl).indexOf(v.storagePathOrDownloadUrl) === i) || !v.storagePathOrDownloadUrl)
                     && ((items.map((v) => v.file).indexOf(v.file) === i) || !v.file);
             }
         );
@@ -179,15 +177,27 @@ export function StorageUpload({
         setInternalValue(newInternalValue);
     };
 
-    const onFileUploadComplete = (uploadedPath: string,
-                                  file: File,
-                                  metadata?: storage.UploadMetadata) => {
+    const onFileUploadComplete = async (uploadedPath: string,
+                                        file: File,
+                                        metadata?: storage.UploadMetadata) => {
+
         console.log("onFileUploadComplete", uploadedPath, file);
-        let item: StorageFieldItem | undefined = internalValue.find(entry => entry.file === file || entry.storagePath === uploadedPath);
+
+        let downloadUrl: string | undefined;
+        if (storageMeta.storeUrl) {
+            downloadUrl = await getDownloadURL(uploadedPath);
+        }
+
+        let item: StorageFieldItem | undefined = internalValue.find(
+            entry => entry.file === file
+                || entry.storagePathOrDownloadUrl === uploadedPath
+                || entry.storagePathOrDownloadUrl === downloadUrl);
+
         let newValue: StorageFieldItem[];
+
         if (!item) {
             item = {
-                storagePath: uploadedPath,
+                storagePathOrDownloadUrl: storageMeta.storeUrl ? downloadUrl : uploadedPath,
                 file: file,
                 metadata: metadata
             };
@@ -195,7 +205,7 @@ export function StorageUpload({
                 newValue = [...internalValue, item];
             else newValue = [item];
         } else {
-            item.storagePath = uploadedPath;
+            item.storagePathOrDownloadUrl = storageMeta.storeUrl ? downloadUrl : uploadedPath;
             item.file = file;
             item.metadata = metadata;
             newValue = [...internalValue];
@@ -203,7 +213,9 @@ export function StorageUpload({
         newValue = removeDuplicates(newValue);
         setInternalValue(newValue);
 
-        const fieldValue = newValue.filter(e => !!e.storagePath).map(e => e.storagePath as string);
+        const fieldValue = newValue
+            .filter(e => !!e.storagePathOrDownloadUrl)
+            .map(e => e.storagePathOrDownloadUrl as string);
 
         if (multipleFilesSupported) {
             onChange(fieldValue);
@@ -212,10 +224,10 @@ export function StorageUpload({
         }
     };
 
-    const onClear = (clearedStoragePath: string) => {
+    const onClear = (clearedStoragePathOrDownloadUrl: string) => {
         if (multipleFilesSupported) {
-            const newValue: StorageFieldItem[] = internalValue.filter(v => v.storagePath !== clearedStoragePath);
-            onChange(newValue.filter(v => !!v.storagePath).map(v => v.storagePath as string));
+            const newValue: StorageFieldItem[] = internalValue.filter(v => v.storagePathOrDownloadUrl !== clearedStoragePathOrDownloadUrl);
+            onChange(newValue.filter(v => !!v.storagePathOrDownloadUrl).map(v => v.storagePathOrDownloadUrl as string));
             setInternalValue(newValue);
         } else {
             onChange(null);
@@ -259,22 +271,27 @@ export function StorageUpload({
                      minHeight={250}>
 
                     {internalValue.map(entry => {
-                        if (entry.storagePath) {
-                            const renderProperty = multipleFilesSupported ? (property as ArrayProperty<string>).of as Property : property;
-                            return <StorageItemPreview
-                                key={`storage_preview_${entry.storagePath}`}
-                                property={renderProperty}
-                                value={entry.storagePath}
-                                onClear={onClear}/>;
+                        if (entry.storagePathOrDownloadUrl) {
+                            const renderProperty = multipleFilesSupported
+                                ? (property as ArrayProperty<string>).of as Property
+                                : property;
+                            return (
+                                <StorageItemPreview
+                                    key={`storage_preview_${entry.storagePathOrDownloadUrl}`}
+                                    property={renderProperty}
+                                    value={entry.storagePathOrDownloadUrl}
+                                    onClear={onClear}/>
+                            );
                         } else if (entry.file) {
-                            return <StorageUploadProgress
-                                key={`storage_upload_${entry.file.name}`}
-                                file={entry.file}
-                                metadata={metadata}
-                                storagePath={storageMeta.storagePath}
-                                onFileUploadComplete={(value, file, metadata) => {
-                                    onFileUploadComplete(value, file, metadata);
-                                }}/>;
+                            return (
+                                <StorageUploadProgress
+                                    key={`storage_upload_${entry.file.name}`}
+                                    file={entry.file}
+                                    metadata={metadata}
+                                    storagePath={storageMeta.storagePath}
+                                    onFileUploadComplete={onFileUploadComplete}
+                                />
+                            );
                         }
                         return null;
                     })

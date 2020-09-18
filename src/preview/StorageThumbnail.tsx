@@ -4,23 +4,25 @@ import { getDownloadURL } from "../firebase";
 import { renderImageThumbnail } from "./SkeletonComponent";
 
 interface StorageThumbnailProps {
-    storagePath: string | undefined;
+    storagePathOrDownloadUrl: string | undefined;
     property: StringProperty;
     small: boolean;
     renderUrlComponent: (property: StringProperty, url: any, small: boolean) => ReactElement;
 }
 
-export default function StorageThumbnail({ storagePath, property, renderUrlComponent, small }: StorageThumbnailProps) {
+export default function StorageThumbnail({ storagePathOrDownloadUrl, property, renderUrlComponent, small }: StorageThumbnailProps) {
 
     const [url, setUrl] = React.useState<string>();
 
     useEffect(() => {
-        if (storagePath)
-            getDownloadURL(storagePath).then(function(downloadURL) {
+        if (property.config?.storageMeta?.storeUrl)
+            setUrl(storagePathOrDownloadUrl);
+        else if (storagePathOrDownloadUrl)
+            getDownloadURL(storagePathOrDownloadUrl).then(function(downloadURL) {
                 console.debug("File available at", downloadURL);
                 setUrl(downloadURL);
             });
-    }, [storagePath]);
+    }, [storagePathOrDownloadUrl]);
 
     return url ?
         renderUrlComponent(property, url, small) :

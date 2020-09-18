@@ -376,6 +376,21 @@ export const testEntitySchema = buildSchema({
                 }
             }
         },
+        image_urls: {
+            title: "Image URLs",
+            dataType: "array",
+            of:{
+                dataType: "string",
+                config: {
+                    storageMeta: {
+                        mediaType: "image",
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"],
+                        storeUrl: true
+                    }
+                }
+            }
+        },
         form_conditions: {
             dataType: "array",
             title: "Form conditions",

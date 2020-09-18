@@ -22,7 +22,7 @@ export default function DateTimeField({
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
 
-    const value = field.value;
+    const value = field.value || null;
 
     return (
         <React.Fragment>

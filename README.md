@@ -367,6 +367,15 @@ Besides the common fields, some properties have specific configurations.
 * `config`:
     * `storageMeta`: You can specify a `StorageMeta` configuration. It is used to
             indicate that this string refers to a path in Google Cloud Storage.
+        * `mediaType`: Media type of this reference, used for displaying the preview
+        * `storagePath`: Absolute path in your bucket
+        * `acceptedFiles`: File MIME types that can be uploaded to this reference
+        * `metadata`: Specific metadata set in your uploaded file
+        * `storeUrl`:  When set to true, this flag indicates that the download URL of the file
+                       will be saved in Firestore instead of the Cloud storage path.
+                       Note that the generated URL may use a token that, if disabled, may
+                       make the URL unusable and lose the original reference to Cloud Storage,
+                       so it is not encouraged to use this flag. Defaults to false
     * `urlMediaType`: If the value of this property is a URL, we can use the
             urlMediaType to render the content
     * `enumValues`: You can use the enum values providing a map of possible
