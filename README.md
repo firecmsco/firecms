@@ -528,8 +528,13 @@ Firestore data schema.
 
 * `properties`: List of properties included in this collection. Defaults to all.
 
-* `filterableProperties`: List of properties that include a filter. Defaults to
+* `filterableProperties`: List of properties that include a filter widget. Defaults to
         none.
+
+* `initialFilter`: Initial filters applied to this collection. Consider that you
+        can filter any property, but only those included in
+        `filterableProperties` will include the corresponding filter widget.
+        Defaults to none.
 
 * `pagination`: Is pagination enabled in this view. Defaults to true
 
@@ -545,6 +550,8 @@ Firestore data schema.
 * `subcollections`: Following the Firestore document and collection schema,
         you can add subcollections to your entity in the same way you define
         the root collections.
+
+* `onEntityDelete`: Hook called after the entity gets deleted in Firestore.
 
 ### Additional columns
 

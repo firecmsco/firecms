@@ -314,11 +314,11 @@ const usersSchema = buildSchema({
     }
 });
 
-const formQuestions =  [ 'birth_year',
-    'living_situation',
-    'electricity_monthly',
-    'heating_fuels_used',
-    'heating_fuels_consumption_monthly'];
+const formQuestions = ["birth_year",
+    "living_situation",
+    "electricity_monthly",
+    "heating_fuels_used",
+    "heating_fuels_consumption_monthly"];
 
 export const testEntitySchema = buildSchema({
     customId: true,
@@ -397,7 +397,7 @@ export const testEntitySchema = buildSchema({
                     condition: {
                         dataType: "map",
                         title: "Condition",
-                        config:{
+                        config: {
                             pickOnlySomeKeys: true
                         },
                         properties: formQuestions.map((questionId) => ({
@@ -406,7 +406,7 @@ export const testEntitySchema = buildSchema({
                                 title: questionId,
                                 of: {
                                     dataType: "string",
-                                    validation:{
+                                    validation: {
                                         required: true
                                     }
                                 }
@@ -508,7 +508,13 @@ let navigation: EntityCollectionView<any>[] = [
             client,
             "blog"),
         properties: ["name", "images", "status", "products", "long_text"],
-        filterableProperties: ["name", "status"]
+        filterableProperties: ["name", "status"],
+        initialFilter: {
+            "status": ["==", "published"]
+        },
+        onEntityDelete: (path, entity) => {
+            console.log("Log from onEntityDelete hook", entity);
+        }
     }
 ];
 

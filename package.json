@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "0.12.3",
+    "version": "0.12.4",
     "description": "Awesome Firestore based CMS",
     "author": "camberi",
     "license": "GPL-3.0",
@@ -15,6 +15,9 @@
     "keywords": [
         "firebase",
         "cms",
+        "admin",
+        "admin panel",
+        "firebase panel",
         "firestore",
         "headless",
         "headless cms",

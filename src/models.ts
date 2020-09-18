@@ -75,9 +75,16 @@ export interface EntityCollectionView<S extends EntitySchema,
     filterableProperties?: Key[];
 
     /**
-     * Hook called when the user initiates a delete operation.
-     * This is called after the entity is deleted in Firestore.
-     * 
+     * Initial filters applied to this collection. Consider that you
+     * can filter any property, but only those included in
+     * `filterableProperties` will include the corresponding filter widget.
+     * Defaults to none.
+     */
+    initialFilter?: FilterValues<S>;
+
+    /**
+     * Hook called after the entity is deleted in Firestore.
+     *
      * @param collectionPath the Firestore collection path.
      * @param entity the entity being deleted.
      */
