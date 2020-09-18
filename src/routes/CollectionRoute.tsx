@@ -116,6 +116,7 @@ export function CollectionRoute<S extends EntitySchema>({
             <DeleteEntityDialog entity={deleteEntityClicked}
                                 schema={view.schema}
                                 open={!!deleteEntityClicked}
+                                afterDelete={() => view?.onEntityDelete ? view.onEntityDelete(collectionPath, deleteEntityClicked) : undefined}
                                 onClose={() => setDeleteEntityClicked(undefined)}/>}
 
         </React.Fragment>
