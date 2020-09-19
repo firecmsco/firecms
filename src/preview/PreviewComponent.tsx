@@ -31,6 +31,7 @@ import StorageThumbnail from "./StorageThumbnail";
 import ReferencePreview from "./ReferencePreview";
 import { PreviewComponentProps } from "./PreviewComponentProps";
 import { useStyles } from "../styles";
+import ScheduleIcon from "@material-ui/icons/Schedule";
 
 export default function PreviewComponent<T>({
                                                 value,
@@ -87,7 +88,7 @@ export default function PreviewComponent<T>({
     } else if (property.dataType === "map" && typeof value === "object") {
         content = renderMap(property as MapProperty, value, small);
     } else if (property.dataType === "timestamp" && value instanceof Date) {
-        content = value && value.toLocaleString();
+        content = value && renderTimestamp(value);
     } else if (property.dataType === "reference" && value instanceof firestore.DocumentReference) {
         const referenceProperty = property as ReferenceProperty;
         content = value && renderReference(value, referenceProperty.schema, small, referenceProperty.previewProperties);
@@ -126,15 +127,17 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
         );
 
     return (
-        <Table size="small" >
+        <Table size="small">
             <TableBody>
                 {mapProperties &&
                 mapProperties.map((key, index) => {
                     return (
-                        <TableRow key={`table_${property.title}_${index}`} className={classes.tableNoBottomBorder}>
+                        <TableRow key={`table_${property.title}_${index}`}
+                                  className={classes.tableNoBottomBorder}>
                             <TableCell key={`table-cell-title-${key}`}
                                        component="th">
-                                <Typography variant={"body2"} color={"textSecondary"}>
+                                <Typography variant={"body2"}
+                                            color={"textSecondary"}>
                                     {property.properties[key].title}
                                 </Typography>
                             </TableCell>
@@ -167,7 +170,7 @@ function renderArrayOfMaps(properties: Properties, values: any[], small: boolean
     }
 
     return (
-        <Table size="small" >
+        <Table size="small">
             <TableBody>
                 {values &&
                 values.map((value, index) => {
@@ -397,6 +400,19 @@ export function renderStorageThumbnail(
             small={small}
             renderUrlComponent={renderUrlComponent}
         />
+    );
+}
+
+export function renderTimestamp(value: Date) {
+    return (
+        <Box display="flex" alignItems="center">
+            <ScheduleIcon color="disabled" fontSize="small"/>
+            <Box pl={1}>
+                <Typography variant={"body2"} color="textSecondary">
+                    {value.toLocaleString()}
+                </Typography>
+            </Box>
+        </Box>
     );
 }
 

@@ -455,7 +455,7 @@ export function CMSApp({
                             to={buildDataPath(view.relativePath)}
                         >
                             <ListItemText
-                                primary={view.name}
+                                primary={view.name.toUpperCase()}
                                 primaryTypographyProps={{ variant: "subtitle2" }}/>
                         </ListItem>
                     ))}
