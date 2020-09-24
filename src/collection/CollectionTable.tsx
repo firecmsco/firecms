@@ -26,6 +26,8 @@ import { TextSearchDelegate } from "../text_search_delegate";
 import SearchBar from "./SearchBar";
 import PreviewComponent from "../preview/PreviewComponent";
 import SkeletonComponent, { renderSkeletonText } from "../preview/SkeletonComponent";
+import firebase from "firebase";
+import FieldPath = firebase.firestore.FieldPath;
 
 interface CollectionTableProps<S extends EntitySchema> {
     /**
@@ -159,7 +161,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         setOrderBy(undefined);
     };
 
-    const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
+    const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {
         if (filter) {
             const filterKeys = Object.keys(filter);
             if (filterKeys.length > 1 || filterKeys[0] !== property) {
@@ -449,9 +451,9 @@ type Order = "asc" | "desc" | undefined;
 
 interface CollectionTableHeadProps<S extends EntitySchema> {
     classes: ReturnType<typeof collectionStyles>;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: any) => void;
     order?: Order;
-    orderBy?: string;
+    orderBy?: any;
     sortable: boolean;
     schema: S;
     additionalColumns?: AdditionalColumnDelegate<S>[];
@@ -477,7 +479,7 @@ function CollectionTableHead<S extends EntitySchema>({
                                                      }: CollectionTableHeadProps<S>) {
 
 
-    const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
+    const createSortHandler = (property: any) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
 
@@ -492,6 +494,7 @@ function CollectionTableHead<S extends EntitySchema>({
             });
         });
 
+    const sortedById = orderBy === FieldPath.documentId();
     return (
         <TableHead>
             <TableRow>
@@ -499,7 +502,20 @@ function CollectionTableHead<S extends EntitySchema>({
                 <TableCell
                     key={"header-id"}
                     align={"center"}
-                    padding={"default"}>Id</TableCell>
+                    padding={"default"}>
+                    <TableSortLabel
+                        active={sortedById}
+                        direction={order}
+                        onClick={createSortHandler(FieldPath.documentId())}
+                    >
+                        Id
+                        {sortedById ?
+                            <span className={classes.visuallyHidden}>
+                                         {order === "desc" ? "Sorted descending" : (order === "asc" ? "Sorted ascending" : "")}
+                                    </span>
+                            : null}
+                    </TableSortLabel>
+                </TableCell>
 
                 {headCells.map(headCell => {
                     const active = sortable && orderBy === headCell.id;

@@ -8,7 +8,6 @@ import {
     Divider,
     Drawer,
     Grid,
-    Hidden,
     IconButton,
     List,
     ListItem,
@@ -53,6 +52,7 @@ import {
 import { useStyles } from "./styles";
 import { Authenticator } from "./authenticator";
 import { blue, pink, red } from "@material-ui/core/colors";
+import { AuthContext, FirebaseConfigContext } from "./contexts";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -115,6 +115,13 @@ export interface CMSAppProps {
      * Primary color of the theme of the CMS
      */
     secondaryColor?: string
+
+    /**
+     * Font family string
+     * e.g.
+     * '"Roboto", "Helvetica", "Arial", sans-serif'
+     */
+    fontFamily?: string
 }
 
 /**
@@ -141,8 +148,6 @@ export interface AdditionalView {
 
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
-export const AuthContext = React.createContext<User | null>(null);
-
 interface HideOnScrollProps {
     /**
      * Injected by the documentation to work in an iframe.
@@ -167,18 +172,19 @@ function HideOnScroll(props: HideOnScrollProps) {
 }
 
 export function CMSApp({
-                                   name,
-                                   logo,
-                                   navigation,
-                                   includeMedia,
-                                   authentication,
-                                   allowSkipLogin,
-                                   firebaseConfig,
-                                   additionalViews,
-                                   primaryColor,
-                                   secondaryColor,
-                                   ...props
-                               }: CMSAppProps) {
+                           name,
+                           logo,
+                           navigation,
+                           includeMedia,
+                           authentication,
+                           allowSkipLogin,
+                           firebaseConfig,
+                           additionalViews,
+                           primaryColor,
+                           secondaryColor,
+                           fontFamily,
+                           ...props
+                       }: CMSAppProps) {
     const classes = useStyles();
     const theme = createMuiTheme({
         palette: {
@@ -195,6 +201,9 @@ export function CMSApp({
                 main: red.A400
             }
         },
+        typography: {
+            "fontFamily": fontFamily ? fontFamily : `"Rubik", "Roboto", "Helvetica", "Arial", sans-serif`
+        },
         shape: {
             borderRadius: 2
         },
@@ -202,15 +211,15 @@ export function CMSApp({
             MuiTableRow: {
                 root: {
                     "&:last-child td": {
-                        borderBottom: 0,
-                    },
+                        borderBottom: 0
+                    }
                 }
             }
-        },
+        }
     });
 
 
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
 
     const [
         firebaseConfigInitialized,
@@ -291,7 +300,7 @@ export function CMSApp({
         }
     }, []);
 
-    const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
+    const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
 
     function googleSignIn() {
         setAuthProviderError(null);
@@ -493,78 +502,68 @@ export function CMSApp({
         );
 
         return (
-            <AuthContext.Provider value={loggedUser}>
-                <Router>
-                    <Box className={classes.root}>
-                        <CssBaseline/>
-                        <AppBar className={classes.appBar}>
-                            <Toolbar>
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="open drawer"
-                                    edge="start"
-                                    onClick={handleDrawerToggle}
-                                    className={classes.menuButton}
-                                >
-                                    <MenuIcon/>
-                                </IconButton>
-                                <Typography variant="h6" noWrap>
-                                    {name}
-                                </Typography>
-                                <Box className={classes.grow}/>
+            <FirebaseConfigContext.Provider value={firebaseConfig}>
+                <AuthContext.Provider value={loggedUser}>
+                    <Router>
+                        <Box className={classes.root}>
+                            <CssBaseline/>
+                            <AppBar>
+                                <Toolbar>
+                                    <IconButton
+                                        color="inherit"
+                                        aria-label="open drawer"
+                                        edge="start"
+                                        onClick={handleDrawerToggle}
+                                        className={classes.menuButton}
+                                    >
+                                        <MenuIcon/>
+                                    </IconButton>
+                                    <Typography variant="h6" noWrap>
+                                        {name}
+                                    </Typography>
+                                    <Box className={classes.grow}/>
 
-                                <Box p={2}>
-                                    {loggedUser && loggedUser.photoURL ?
-                                        <Avatar src={loggedUser.photoURL}/>
-                                        :
-                                        <Avatar>{loggedUser?.displayName ? loggedUser.displayName[0] : "A"}</Avatar>
-                                    }
-                                </Box>
+                                    <Box p={2}>
+                                        {loggedUser && loggedUser.photoURL ?
+                                            <Avatar src={loggedUser.photoURL}/>
+                                            :
+                                            <Avatar>{loggedUser?.displayName ? loggedUser.displayName[0] : "A"}</Avatar>
+                                        }
+                                    </Box>
 
-                                <Button variant="text" color="inherit"
-                                        onClick={onSignOut}>
-                                    Log Out
-                                </Button>
+                                    <Button variant="text" color="inherit"
+                                            onClick={onSignOut}>
+                                        Log Out
+                                    </Button>
 
-                            </Toolbar>
-                        </AppBar>
+                                </Toolbar>
+                            </AppBar>
 
-                        <nav className={classes.drawer}>
-                            <Hidden mdUp implementation="css">
+                            <nav className={classes.drawer}>
                                 <Drawer
                                     variant="temporary"
                                     anchor={theme.direction === "rtl" ? "right" : "left"}
-                                    open={mobileOpen}
+                                    open={drawerOpen}
                                     onClose={handleDrawerToggle}
                                     classes={{
                                         paper: classes.drawerPaper
                                     }}
                                     ModalProps={{
-                                        keepMounted: true // Better open performance on mobile.
+                                        keepMounted: true
                                     }}
                                 >
                                     {drawer}
                                 </Drawer>
-                            </Hidden>
-                            <Hidden smDown implementation="css">
-                                <Drawer
-                                    classes={{
-                                        paper: classes.drawerPaper
-                                    }}
-                                    variant="permanent"
-                                    open
-                                >
-                                    {drawer}
-                                </Drawer>
-                            </Hidden>
-                        </nav>
-                        <main className={classes.content}>
-                            <Box className={classes.toolbar}/>
-                            {getRouterSwitch(shouldIncludeMedia)}
-                        </main>
-                    </Box>
-                </Router>
-            </AuthContext.Provider>
+
+                            </nav>
+                            <main className={classes.content}>
+                                <Box className={classes.toolbar}/>
+                                {getRouterSwitch(shouldIncludeMedia)}
+                            </main>
+                        </Box>
+                    </Router>
+                </AuthContext.Provider>
+            </FirebaseConfigContext.Provider>
         );
     }
 
@@ -574,8 +573,11 @@ export function CMSApp({
                 {firebaseConfigError ?
                     <Box>
                         It seems like the provided Firebase config is not
-                        correct. If you are using the credentials provided automatically
-                        by Firebase Hosting, make sure you your Firebase app to Firebase Hosting.
+                        correct. If you are using the credentials provided
+                        automatically
+                        by Firebase Hosting, make sure you link
+                        your Firebase app to
+                        Firebase Hosting.
                     </Box> :
                     (
                         authLoading ? (

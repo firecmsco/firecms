@@ -13828,6 +13828,11 @@ typeface-roboto@^0.0.75:
   resolved "https://registry.yarnpkg.com/typeface-roboto/-/typeface-roboto-0.0.75.tgz#98d5ba35ec234bbc7172374c8297277099cc712b"
   integrity sha512-VrR/IiH00Z1tFP4vDGfwZ1esNqTiDMchBEXYY9kilT6wRGgFoCAlgkEUMHb1E3mB0FsfZhv756IF0+R+SFPfdg==
 
+typeface-rubik@^0.0.72:
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/typeface-rubik/-/typeface-rubik-0.0.72.tgz#85d028dc66e8388a941f8c7ce194fad963d1824e"
+  integrity sha512-dRJrtCEHfY3e39zq/U4JpFPVVbEogpDKCGnS70sXur253gnrwunjai26KCZbwdF3NEdMAYMTBu4CIn3hJp4xSA==
+
 typescript@^3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"

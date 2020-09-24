@@ -49,6 +49,7 @@
         "react-dropzone": "^11.2.0",
         "react-router-dom": "^5.2.0",
         "react-select": ">=3",
+        "typeface-rubik": "^0.0.72",
         "typeface-roboto": "^0.0.75",
         "yup": "^0.29.3"
     },

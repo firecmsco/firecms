@@ -14,8 +14,7 @@ import { firestore } from "firebase/app";
 
 import {
     Box,
-    CardMedia,
-    Checkbox,
+    CardMedia, Checkbox,
     Chip,
     Divider,
     Grid,
@@ -27,7 +26,10 @@ import {
     TableRow,
     Typography
 } from "@material-ui/core";
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import StorageThumbnail from "./StorageThumbnail";
+import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
 import ReferencePreview from "./ReferencePreview";
 import { PreviewComponentProps } from "./PreviewComponentProps";
 import { useStyles } from "../styles";
@@ -136,7 +138,7 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
                                   className={classes.tableNoBottomBorder}>
                             <TableCell key={`table-cell-title-${key}`}
                                        component="th">
-                                <Typography variant={"body2"}
+                                <Typography variant={"caption"}
                                             color={"textSecondary"}>
                                     {property.properties[key].title}
                                 </Typography>
@@ -303,18 +305,23 @@ function renderUrlAudioComponent(value: string) {
 function renderUrlImageThumbnail(url: string,
                                  small: boolean) {
     return (
-        <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            width={small ? 100 : 200}
-            height={small ? 100 : 200}>
-            <img src={url}
-                 style={{
-                     maxWidth: small ? 100 : 200,
-                     maxHeight: small ? 100 : 200
-                 }}/>
-        </Box>
+        <a href={url}
+           target="_blank"
+           onClick={(e) => e.stopPropagation()}
+        >
+            <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width={small ? 100 : 200}
+                height={small ? 100 : 200}>
+                <img src={url}
+                     style={{
+                         maxWidth: small ? 100 : 200,
+                         maxHeight: small ? 100 : 200
+                     }}/>
+            </Box>
+        </a>
     );
 }
 
@@ -327,6 +334,23 @@ function renderUrlVideo(url: string,
             controls
             image={url}
         />
+    );
+}
+
+function renderUrlFile(url: string, small: boolean) {
+    return (
+        <a href={url}
+           target="_blank"
+           onClick={(e) => e.stopPropagation()}>
+            <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width={small ? 100 : 200}
+                height={small ? 100 : 200}>
+                <DescriptionOutlinedIcon/>
+            </Box>
+        </a>
     );
 }
 
@@ -363,8 +387,9 @@ export function renderUrlComponent(property: StringProperty,
         return renderUrlAudioComponent(url);
     } else if (mediaType === "video") {
         return renderUrlVideo(url, small);
+    } else {
+        return renderUrlFile(url, small);
     }
-    throw Error("URL component misconfiguration");
 }
 
 export function renderString(property: StringProperty,
@@ -374,10 +399,12 @@ export function renderString(property: StringProperty,
     if (property.config?.enumValues) {
         return property.config?.enumValues[value];
     } else if (property.config?.multiline) {
-        return <Box minWidth={300}
-                    style={{ lineClamp: 5, textOverflow: "ellipsis" }}>
-            {value}
-        </Box>;
+        return (
+            <Box minWidth={300}
+                 style={{ lineClamp: 5, textOverflow: "ellipsis" }}>
+                {value}
+            </Box>
+        );
     } else {
         return <Box minWidth={120}>
             {value}
@@ -408,7 +435,7 @@ export function renderTimestamp(value: Date) {
         <Box display="flex" alignItems="center">
             <ScheduleIcon color="disabled" fontSize="small"/>
             <Box pl={1}>
-                <Typography variant={"body2"} color="textSecondary">
+                <Typography variant={"body2"}>
                     {value.toLocaleString()}
                 </Typography>
             </Box>

@@ -21,6 +21,7 @@ import { BreadcrumbContainer } from "../util";
 import DeleteEntityDialog from "../collection/DeleteEntityDialog";
 import EntityDetailDialog from "../preview/EntityDetailDialog";
 
+
 interface CollectionRouteProps<S extends EntitySchema> {
     view: EntityCollectionView<S>;
     entityPlaceholderPath: string,
@@ -107,11 +108,10 @@ export function CollectionRoute<S extends EntitySchema>({
                              filterableProperties={view.filterableProperties}
                              properties={view.properties}/>
 
-            {entityClicked &&
             <EntityDetailDialog entity={entityClicked}
                                 schema={view.schema}
                                 open={!!entityClicked}
-                                onClose={() => setEntityClicked(undefined)}/>}
+                                onClose={() => setEntityClicked(undefined)}/>
 
             {deleteEntityClicked &&
             <DeleteEntityDialog entity={deleteEntityClicked}

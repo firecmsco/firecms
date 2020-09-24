@@ -1,15 +1,19 @@
 import { Entity, EntitySchema } from "../models";
 import React, { useEffect, useState } from "react";
-import { listenEntityFromRef } from "../firebase/firestore";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { DialogContent } from "@material-ui/core";
+import { listenEntityFromRef } from "../firebase";
+
 import EntityPreview from "../preview/EntityPreview";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
+import {
+    Box,
+    Container,
+    Drawer,
+    IconButton,
+    Typography
+} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 
 export interface EntityDetailDialogProps<S extends EntitySchema> {
-    entity: Entity<S>,
+    entity?: Entity<S>,
     schema: S
     open: boolean;
     onClose: () => void;
@@ -19,52 +23,53 @@ export default function EntityDetailDialog<S extends EntitySchema>(props: Entity
 
     const { entity, schema, onClose, open, ...other } = props;
 
-    const [updatedEntity, setUpdatedEntity] = useState<Entity<S>>(entity);
+    const [updatedEntity, setUpdatedEntity] = useState<Entity<S> | undefined>(entity);
 
     useEffect(() => {
-        const cancelSubscription = listenEntityFromRef<S>(
-            entity?.reference,
-            schema,
-            (e) => {
-                if (e) {
-                    setUpdatedEntity(e);
-                    console.log("Updated entity from Firestore", e);
-                }
-            });
+        const cancelSubscription =
+            entity ?
+                listenEntityFromRef<S>(
+                    entity?.reference,
+                    schema,
+                    (e) => {
+                        if (e) {
+                            setUpdatedEntity(e);
+                            console.log("Updated entity from Firestore", e);
+                        }
+                    })
+                :
+                () => {
+                };
         return () => cancelSubscription();
     }, [entity]);
 
     return (
-        <React.Fragment>
+        <Drawer
+            anchor={"right"}
+            variant={"temporary"}
+            open={open}
+            onClose={onClose}
+        >
+            <Container maxWidth={"xs"} style={{ maxWidth: "100vw" }}>
+                <Box p={1} display="flex" alignItems={"center"}>
+                    <IconButton>
+                        <CloseIcon onClick={onClose}/>
+                    </IconButton>
+                    <Box p={3}>
+                        <Typography variant={"h6"}>
+                            {schema.name}
+                        </Typography>
+                    </Box>
+                </Box>
 
-            <Dialog
-                disableBackdropClick
-                disableEscapeKeyDown
-                maxWidth="md"
-                keepMounted
-                aria-labelledby="confirmation-dialog-title"
-                onBackdropClick={onClose}
-                open={open}
-                {...other}
-            >
-                <DialogTitle id="confirmation-dialog-title">
-                    {schema.name}
-                </DialogTitle>
+                {updatedEntity && <EntityPreview
+                    entity={updatedEntity}
+                    schema={schema}/>
+                }
 
-                <DialogContent dividers>
-                    {updatedEntity &&
-                    <EntityPreview entity={updatedEntity} schema={schema}/>}
-                </DialogContent>
+            </Container>
+        </Drawer>
 
-                <DialogActions>
-                    <Button onClick={onClose} color="primary">
-                        Ok
-                    </Button>
-                </DialogActions>
-
-            </Dialog>
-
-        </React.Fragment>
     );
 }
 

@@ -88,7 +88,7 @@ firebaseConfig specification, since it gets picked up automatically.
 import React from "react";
 import ReactDOM from "react-dom";
 
-import "typeface-roboto";
+import "typeface-rubik";
 
 import {
     Authenticator,
@@ -272,7 +272,7 @@ const myAuthenticator: Authenticator = (user?: User) => {
 
 ReactDOM.render(
     <CMSApp
-        name={"Test shop CMS"}
+        name={"My Online Shop"}
         authentication={myAuthenticator}
         navigation={navigation}
         firebaseConfig={firebaseConfig}

@@ -574,7 +574,7 @@ export interface StorageMeta {
     /**
      * Media type of this reference, used for displaying the preview
      */
-    mediaType: MediaType;
+    mediaType?: MediaType;
 
     /**
      * Absolute path in your bucket
@@ -628,7 +628,8 @@ export type StorageFileTypes =
     | "audio/*"
     | "application/*"
     | "text/*"
-    | "font/*" ;
+    | "font/*"
+    | string; // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 
 export interface NumberFieldConfig extends FieldConfig<number> {
 

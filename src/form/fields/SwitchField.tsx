@@ -1,4 +1,8 @@
-import { FormControlLabel, FormHelperText, Switch } from "@material-ui/core";
+import {
+    FormControlLabel,
+    FormHelperText,
+    Switch
+} from "@material-ui/core";
 import React from "react";
 
 import { CMSFieldProps } from "../form_props";

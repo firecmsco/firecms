@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import logo from "./images/test_shop_logo.png";
 import algoliasearch, { SearchClient } from "algoliasearch";
 
-import "typeface-roboto";
+import "typeface-rubik";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -376,6 +375,15 @@ export const testEntitySchema = buildSchema({
                 }
             }
         },
+        pdf: {
+            title: "Pdf",
+            dataType: "string",
+            config: {
+                storageMeta: {
+                    storagePath: "test"
+                }
+            }
+        },
         image_urls: {
             title: "Image URLs",
             dataType: "array",
@@ -550,7 +558,7 @@ const myAuthenticator: Authenticator = (user?: User) => {
 
 ReactDOM.render(
     <CMSApp
-        name={"Test shop CMS"}
+        name={"My Online Shop"}
         authentication={myAuthenticator}
         allowSkipLogin={true}
         logo={logo}

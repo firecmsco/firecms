@@ -11,10 +11,10 @@ export const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(3)
         },
         drawer: {
-            [theme.breakpoints.up("md")]: {
-                width: drawerWidth,
-                flexShrink: 0
-            }
+            // [theme.breakpoints.up("md")]: {
+            //     width: drawerWidth,
+            //     flexShrink: 0
+            // }
         },
         appBar: {
             [theme.breakpoints.up("md")]: {
@@ -24,9 +24,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         menuButton: {
             marginRight: theme.spacing(2),
-            [theme.breakpoints.up("md")]: {
-                display: "none"
-            }
+            // [theme.breakpoints.up("md")]: {
+            //     display: "none"
+            // }
         },
         grow: {
             flexGrow: 1

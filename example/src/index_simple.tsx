@@ -184,7 +184,7 @@ const myAuthenticator: Authenticator = (user?: User) => {
 
 ReactDOM.render(
     <CMSApp
-        name={"Test shop CMS"}
+        name={"My Online Shop"}
         authentication={myAuthenticator}
         navigation={navigation}
         firebaseConfig={firebaseConfig}
