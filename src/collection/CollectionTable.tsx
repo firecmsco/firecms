@@ -10,7 +10,13 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { collectionStyles } from "../styles";
-import { Box, Grid, IconButton, TableContainer } from "@material-ui/core";
+import {
+    Box,
+    Grid,
+    Hidden,
+    IconButton,
+    TableContainer
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import {
@@ -28,6 +34,7 @@ import PreviewComponent from "../preview/PreviewComponent";
 import SkeletonComponent, { renderSkeletonText } from "../preview/SkeletonComponent";
 import firebase from "firebase";
 import FieldPath = firebase.firestore.FieldPath;
+import { getIconForProperty } from "../util/property_icons";
 
 interface CollectionTableProps<S extends EntitySchema> {
     /**
@@ -197,7 +204,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     };
 
     const onFilterUpdate = (filterValues: FilterValues<S>) => {
-        if (orderBy) {
+        if (orderBy && filterValues) {
             const filterKeys = Object.keys(filterValues);
             if (filterKeys.length > 1 || filterKeys[0] !== orderBy) {
                 resetSort();
@@ -226,19 +233,22 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     const buildTableRowButtons = <S extends EntitySchema>(entity: Entity<S> | null, index: number) => (
         <TableCell key={`row-buttons-${index}`}>
-            <Box minWidth={96}>
-                <IconButton aria-label="edit"
-                            disabled={!entity || !editEnabled}
-                            onClick={editEnabled ? (event) => entity && onEntityEdit(event, entity) : undefined}>
-                    <EditIcon color={"action"}/>
-                </IconButton>
 
-                <IconButton aria-label="delete"
-                            disabled={!entity || !deleteEnabled}
-                            onClick={deleteEnabled ? (event) => entity && onEntityDelete(event, entity) : undefined}>
+            {(editEnabled || deleteEnabled) &&
+            <Box minWidth={96}>
+                {editEnabled && <IconButton aria-label="edit"
+                                            disabled={!entity || !editEnabled}
+                                            onClick={editEnabled ? (event) => entity && onEntityEdit(event, entity) : undefined}>
+                    <EditIcon color={"action"}/>
+                </IconButton>}
+
+                {deleteEnabled && <IconButton aria-label="delete"
+                                              disabled={!entity || !deleteEnabled}
+                                              onClick={deleteEnabled ? (event) => entity && onEntityDelete(event, entity) : undefined}>
                     <DeleteIcon/>
-                </IconButton>
+                </IconButton>}
             </Box>
+            }
 
             <Box maxWidth={96}
                  component="div"
@@ -268,11 +278,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
                 {tableViewProperties && tableViewProperties
                     .map((key, index) =>
-                        renderTableCell(index,
-                            entity.values[key as string],
-                            key as string,
-                            props.schema.properties[key as string] as Property,
-                            small))}
+                        renderTableCell(key as string, index, entity.values[key as string], props.schema.properties[key as string] as Property, small))}
 
                 {props.additionalColumns && props.additionalColumns
                     .map((delegate, index) =>
@@ -369,7 +375,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     return (
 
-        <Paper elevation={1}>
+        <Paper elevation={0}>
 
             {props.includeToolbar &&
             <CollectionTableToolbar schema={props.schema}
@@ -402,7 +408,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                 <Table
                     className={classes.table}
                     aria-labelledby="tableTitle"
-                    size={"medium"}
+                    size={"small"}
                     stickyHeader={true}
                     aria-label="enhanced table"
                 >
@@ -464,6 +470,7 @@ interface HeadCell {
     index: number;
     id: string;
     label: string;
+    icon: React.ReactNode;
     align: "right" | "left";
 }
 
@@ -490,6 +497,7 @@ function CollectionTableHead<S extends EntitySchema>({
                 index: index,
                 id: key as string,
                 align: getCellAlignment(property),
+                icon: getIconForProperty(property, "disabled"),
                 label: property.title || key as string
             });
         });
@@ -531,6 +539,10 @@ function CollectionTableHead<S extends EntitySchema>({
                                 direction={order}
                                 onClick={createSortHandler(headCell.id)}
                             >
+                                <Box display={"inherit"}
+                                     paddingLeft={headCell.align === "right" ? "10px" : "0px"}
+                                     paddingRight={headCell.align === "left" ? "10px" : "0px"}>{headCell.icon}</Box>
+
                                 {headCell.label}
                                 {active ?
                                     <span className={classes.visuallyHidden}>
@@ -582,16 +594,18 @@ function CollectionTableToolbar<S extends EntitySchema>(props: CollectionTableTo
                 justify="space-between"
                 alignItems="center"
             >
-                <Grid item>
-                    <Box className={classes.title}>
-                        <Typography variant="h6">
-                            {props.schema.name} list
-                        </Typography>
-                        <Typography variant={"caption"}>
-                            {props.collectionPath}
-                        </Typography>
-                    </Box>
-                </Grid>
+                <Hidden xsDown>
+                    <Grid item>
+                        <Box className={classes.title}>
+                            <Typography variant="h6">
+                                {props.schema.name} list
+                            </Typography>
+                            <Typography variant={"caption"}>
+                                {props.collectionPath}
+                            </Typography>
+                        </Box>
+                    </Grid>
+                </Hidden>
                 <Grid item>
                     {props.onTextSearch &&
                     <Box className={classes.searchBar}>
@@ -615,11 +629,12 @@ function CollectionTableToolbar<S extends EntitySchema>(props: CollectionTableTo
 }
 
 
-function renderTableCell(index: number, value: any, key: string, property: Property, small: boolean) {
+function renderTableCell(name: string, index: number, value: any, property: Property, small: boolean) {
     return (
-        <TableCell key={`table-cell-${key}`} component="th"
+        <TableCell key={`table-cell-${name}`} component="td"
                    align={getCellAlignment(property)}>
-            <PreviewComponent value={value}
+            <PreviewComponent name={name}
+                              value={value}
                               property={property}
                               small={small}/>
         </TableCell>
@@ -628,7 +643,7 @@ function renderTableCell(index: number, value: any, key: string, property: Prope
 
 function renderTableSkeletonCell(index: number, key: string, property: Property) {
     return (
-        <TableCell key={`table-cell-${key}`} component="th"
+        <TableCell key={`table-cell-${key}`} component="td"
                    align={getCellAlignment(property)}>
 
             <SkeletonComponent
@@ -640,7 +655,7 @@ function renderTableSkeletonCell(index: number, key: string, property: Property)
 
 function renderCustomTableCell(index: number, element: React.ReactNode) {
     return (
-        <TableCell key={`table-additional-${index}`} component="th">
+        <TableCell key={`table-additional-${index}`} component="td">
             {element}
         </TableCell>
     );

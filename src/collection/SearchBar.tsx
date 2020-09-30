@@ -37,7 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: "center"
         },
         inputRoot: {
-            color: "inherit"
+            color: "inherit",
+            minHeight: "inherit"
         },
         inputInput: {
             padding: theme.spacing(1, 1, 1, 0),

@@ -5,7 +5,7 @@ import {
     Grid,
     Input,
     MenuItem,
-    Select as MuiSelect,
+    Select as MuiSelect, TextField,
     Typography
 } from "@material-ui/core";
 import React, { useState } from "react";
@@ -62,6 +62,7 @@ export default function StringNumberFilterField({ name, property }: TextFieldPro
                             <Grid item xs={3}>
                                 <MuiSelect value={operation}
                                            autoWidth
+                                           variant={"outlined"}
                                            onChange={(evt: any) => {
                                                updateFilter(evt.target.value, internalValue);
                                            }}>
@@ -74,10 +75,11 @@ export default function StringNumberFilterField({ name, property }: TextFieldPro
                             </Grid>
 
                             {!enumValues && <Grid item xs={9}>
-                                <Input
+                                <TextField
                                     key={`filter-${name}`}
                                     type={property.dataType === "number" ? "number" : undefined}
                                     defaultValue={internalValue}
+                                    variant={"outlined"}
                                     onChange={(evt) => {
                                         const val = property.dataType === "number" ?
                                             parseFloat(evt.target.value)
@@ -91,6 +93,7 @@ export default function StringNumberFilterField({ name, property }: TextFieldPro
                                 <MuiSelect
                                     fullWidth
                                     key={`filter-${name}`}
+                                    variant={"outlined"}
                                     value={internalValue}
                                     onChange={(evt: any) => {
                                         updateFilter(operation, evt.target.value);

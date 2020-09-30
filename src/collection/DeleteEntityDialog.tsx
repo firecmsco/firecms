@@ -5,7 +5,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { DialogContent, Snackbar } from "@material-ui/core";
 import EntityPreview from "../preview/EntityPreview";
-import { CircularProgressCenter } from "../util";
+import { CircularProgressCenter } from "../components";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import MuiAlert from "@material-ui/lab/Alert/Alert";

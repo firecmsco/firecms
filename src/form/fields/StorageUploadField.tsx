@@ -32,7 +32,8 @@ import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
 import PreviewComponent from "../../preview/PreviewComponent";
 import deepEqual from "deep-equal";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
 
 type StorageUploadFieldProps = CMSFieldProps<string | string[]> ;
 
@@ -72,7 +73,7 @@ export default function StorageUploadField({
 
             <FormHelperText filled
                             required={property.validation?.required}>
-                {property.title}
+                <LabelWithIcon scaledIcon={true} property={property}/>
             </FormHelperText>
 
             <StorageUpload value={value}
@@ -137,7 +138,7 @@ export function StorageUpload({
             value as string[]
             : [value as string]).map(entry => (
             {
-                storagePathOrDownloadUrl:  entry,
+                storagePathOrDownloadUrl: entry,
                 metadata: metadata
             }
         ));
@@ -268,6 +269,7 @@ export function StorageUpload({
                      flexDirection="row"
                      flexWrap="wrap"
                      alignItems="center"
+                     justifyContent="center"
                      minHeight={250}>
 
                     {internalValue.map(entry => {
@@ -299,7 +301,8 @@ export function StorageUpload({
 
                     <Box
                         flexGrow={1}
-                        m={2}>
+                        m={2}
+                        maxWidth={"50%"}>
                         <Typography color={"textSecondary"}
                                     variant={"body2"}
                                     align={"center"}>
@@ -381,7 +384,7 @@ export function StorageUploadProgress({
 
         <React.Fragment>
 
-            <Box ml={2} mt={2} mb={2}>
+            <Box m={1}>
                 <Paper elevation={0}
                        className={classes.uploadItem}
                        variant={"outlined"}>
@@ -411,12 +414,14 @@ export function StorageUploadProgress({
 }
 
 interface StorageItemPreviewProps {
+    key: string;
     property: Property;
     value: string,
     onClear: (value: string) => void;
 }
 
 export function StorageItemPreview({
+                                       key,
                                        property,
                                        value,
                                        onClear
@@ -424,7 +429,7 @@ export function StorageItemPreview({
 
     const classes = formStyles();
     return (
-        <Box ml={2} mt={2} mb={2} position={"relative"}>
+        <Box m={1} position={"relative"}>
 
             <Paper
                 elevation={0}
@@ -446,7 +451,8 @@ export function StorageItemPreview({
                 </Box>
 
                 {value &&
-                <PreviewComponent value={value}
+                <PreviewComponent name={key}
+                                  value={value}
                                   property={property}
                                   small={false}/>}
 

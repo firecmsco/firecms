@@ -1,4 +1,4 @@
-import { Entity, EntitySchema } from "../models";
+import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import React, { useEffect, useState } from "react";
 import { listenEntityFromRef } from "../firebase";
 
@@ -8,24 +8,33 @@ import {
     Container,
     Drawer,
     IconButton,
-    Typography
+    Link,
+    Tab,
+    Tabs
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
+import CollectionTable from "../collection/CollectionTable";
+import EditIcon from "@material-ui/icons/Edit";
+import { Link as ReactLink } from "react-router-dom";
+import { useSelectedEntityContext } from "../selected_entity_controller";
 
-export interface EntityDetailDialogProps<S extends EntitySchema> {
-    entity?: Entity<S>,
-    schema: S
-    open: boolean;
-    onClose: () => void;
-}
+export default function EntityDetailDialog<S extends EntitySchema>() {
 
-export default function EntityDetailDialog<S extends EntitySchema>(props: EntityDetailDialogProps<S>) {
-
-    const { entity, schema, onClose, open, ...other } = props;
+    const selectedEntityContext = useSelectedEntityContext();
+    const {
+        isOpen,
+        tab,
+        entity,
+        schema,
+        subcollections,
+        close
+    } = selectedEntityContext;
 
     const [updatedEntity, setUpdatedEntity] = useState<Entity<S> | undefined>(entity);
+    const [tabsPosition, setTabsPosition] = React.useState(tab);
 
     useEffect(() => {
+        setTabsPosition(tab);
         const cancelSubscription =
             entity ?
                 listenEntityFromRef<S>(
@@ -43,31 +52,100 @@ export default function EntityDetailDialog<S extends EntitySchema>(props: Entity
         return () => cancelSubscription();
     }, [entity]);
 
+    function onSubcollectionEntityClick(collectionPath: string,
+                                        clickedEntity: Entity<any>,
+                                        clickedSchema: EntitySchema,
+                                        subcollections?: EntityCollectionView<any>[]) {
+        selectedEntityContext.open({
+            entity: clickedEntity,
+            schema: clickedSchema,
+            subcollections
+        });
+    }
+
     return (
         <Drawer
             anchor={"right"}
             variant={"temporary"}
-            open={open}
-            onClose={onClose}
+            open={isOpen}
+            onClose={(e) => close()}
         >
-            <Container maxWidth={"xs"} style={{ maxWidth: "100vw" }}>
-                <Box p={1} display="flex" alignItems={"center"}>
-                    <IconButton>
-                        <CloseIcon onClick={onClose}/>
-                    </IconButton>
-                    <Box p={3}>
-                        <Typography variant={"h6"}>
-                            {schema.name}
-                        </Typography>
+
+            <div
+                style={{ maxWidth: "100vw" }}>
+
+                <Container maxWidth={"md"}
+                           disableGutters={true}
+                           fixed={true}>
+                    <Box
+                        // bgcolor="white" position="fixed"
+                        pl={2} pr={2} pt={2} display="flex"
+                        alignItems={"center"}>
+
+                        <IconButton>
+                            <CloseIcon onClick={(e) => close()}/>
+                        </IconButton>
+
+                        {entity &&
+                        <Link color="inherit"
+                              component={ReactLink}
+                              to={entity.reference.path}>
+                            <IconButton>
+                                <EditIcon onClick={(e) => close()}/>
+                            </IconButton>
+                        </Link>
+                        }
+
+                        <Box p={3}>
+                            <Tabs
+                                value={tabsPosition}
+                                indicatorColor="primary"
+                                textColor="primary"
+                                onChange={(ev, value) => setTabsPosition(value)}
+                                aria-label="disabled tabs example"
+                            >
+                                <Tab label={schema ? schema.name : ""}/>
+
+                                {subcollections && subcollections.map(
+                                    (subcollection) =>
+                                        <Tab label={subcollection.name}/>
+                                )}
+                            </Tabs>
+
+                        </Box>
                     </Box>
-                </Box>
+                    <div>
+                        <Box
+                            mb={4}
+                            role="tabpanel"
+                            hidden={tabsPosition !== 0}>
+                            {updatedEntity && <EntityPreview
+                                entity={updatedEntity}
+                                schema={schema}/>
+                            }
+                        </Box>
 
-                {updatedEntity && <EntityPreview
-                    entity={updatedEntity}
-                    schema={schema}/>
-                }
-
-            </Container>
+                        {subcollections && subcollections.map(
+                            (subcollection, colIndex) =>
+                                <Box
+                                    role="tabpanel"
+                                    style={{ transition: "width 1s" }}
+                                    hidden={tabsPosition !== colIndex + 1}>
+                                    <CollectionTable
+                                        collectionPath={`${entity?.reference.path}/${subcollection.relativePath}`}
+                                        schema={subcollection.schema}
+                                        additionalColumns={subcollection.additionalColumns}
+                                        onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
+                                            onSubcollectionEntityClick(collectionPath, clickedEntity, subcollection.schema, subcollection.subcollections)}
+                                        includeToolbar={false}
+                                        paginationEnabled={false}
+                                        small={true}
+                                    />
+                                </Box>
+                        )}
+                    </div>
+                </Container>
+            </div>
         </Drawer>
 
     );

@@ -3,7 +3,6 @@ import { FieldArray, getIn } from "formik";
 import {
     Box,
     Button,
-    Container,
     FormControl,
     FormHelperText,
     IconButton,
@@ -13,7 +12,8 @@ import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
 import { CMSFieldProps } from "../form_props";
 import React from "react";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
 
 type ArrayDefaultFieldProps<T> = CMSFieldProps<T[]>;
 
@@ -43,46 +43,49 @@ export default function ArrayDefaultField<T>({
 
                     <FormHelperText filled
                                     required={property.validation?.required}>
-                        {property.title}
+                        <LabelWithIcon scaledIcon={true} property={property}/>
                     </FormHelperText>
 
-                    <Paper variant={"outlined"}
-                           className={classes.paper}>
+                    <Paper variant={"outlined"} className={classes.paper}>
                         {hasValue ? (
-                            <Container maxWidth={"md"}>
-                                {field.value.map((entryValue: any, index: number) => {
-                                    return (
-                                        <Box key={`field_${index}`}
-                                             mb={1}
-                                             alignItems="flex-start"
-                                             display={"flex"}>
-                                            <Box flexGrow={1}
-                                                 key={`field_${field.name}_entryValue`}>
-                                                {createFormField(`${field.name}[${index}]`, ofProperty, includeDescription)}
-                                            </Box>
-                                            <Box>
-                                                <IconButton
-                                                    aria-label="remove"
-                                                    onClick={() => arrayHelpers.remove(index)}>
-                                                    <Remove/>
-                                                </IconButton>
-                                            </Box>
-                                            <Box>
-                                                <IconButton
-                                                    aria-label="insert"
-                                                    onClick={() => arrayHelpers.insert(index + 1, undefined)}>
-                                                    <Add/>
-                                                </IconButton>
-                                            </Box>
+                            field.value.map((entryValue: any, index: number) => {
+                                return (
+                                    <Box key={`field_${index}`}
+                                         mb={1}
+                                         display="flex">
+                                        <Box flexGrow={1}
+                                             width={"100%"}
+                                             key={`field_${field.name}_entryValue`}>
+                                            {createFormField(`${field.name}[${index}]`, ofProperty, includeDescription)}
                                         </Box>
-                                    );
-                                })}
-                            </Container>
+                                        <Box width={"50px"}
+                                             display="flex"
+                                             flexDirection="column"
+                                             justifyContent="center"
+                                             alignItems="center">
+                                            <IconButton
+                                                size="small"
+                                                aria-label="insert"
+                                                onClick={() => arrayHelpers.insert(index + 1, undefined)}>
+                                                <Add/>
+                                            </IconButton>
+                                            <IconButton
+                                                size="small"
+                                                aria-label="remove"
+                                                onClick={() => arrayHelpers.remove(index)}>
+                                                <Remove/>
+                                            </IconButton>
+                                        </Box>
+                                    </Box>
+                                );
+                            })
                         ) : (
-                            <Box margin={2}>
-                                <Button
-                                    onClick={() => arrayHelpers.push(null)}>
-                                    {/* show this when user has removed all entries from the list */}
+                            <Box p={2}
+                                 justifyContent="center"
+                                 textAlign={"right"}>
+                                <Button variant="outlined"
+                                        color="primary"
+                                        onClick={() => arrayHelpers.push(null)}>
                                     Add
                                 </Button>
                             </Box>

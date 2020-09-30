@@ -1,10 +1,11 @@
 import React from "react";
-import { Box, Button, Container, Grid, Tab, Tabs } from "@material-ui/core";
+import { Box, Button, Grid, Paper, Tab, Tabs } from "@material-ui/core";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import CollectionTable from "./CollectionTable";
 import { Link as ReactLink } from "react-router-dom";
 import { getRouterNewEntityPath } from "../routes/navigation";
 import DeleteEntityDialog from "./DeleteEntityDialog";
+import { formStyles } from "../styles";
 
 
 interface SubCollectionViewProps<S extends EntitySchema> {
@@ -13,7 +14,15 @@ interface SubCollectionViewProps<S extends EntitySchema> {
     subcollections: EntityCollectionView<any>[];
     entity?: Entity<S>;
 
-    onEntityClick?(collectionPath: string, entity: Entity<any>): void;
+    onEntityClick?(collectionPath: string,
+                   entity: Entity<any>,
+                   schema: EntitySchema<any>,
+                   subcollections?: EntityCollectionView<any>[]): void;
+
+    onEntityEdit?(collectionPath: string,
+                  entity: Entity<any>,
+                  schema: EntitySchema<any>,
+                  subcollections?: EntityCollectionView<any>[]): void;
 }
 
 export default function SubCollectionsView<S extends EntitySchema>(
@@ -21,12 +30,15 @@ export default function SubCollectionsView<S extends EntitySchema>(
         parentCollectionPath,
         subcollections,
         entity,
-        onEntityClick
+        onEntityClick,
+        onEntityEdit
     }: SubCollectionViewProps<S>) {
 
     if (!subcollections) {
         throw Error("Subcollection view must use a schema with subcollection entries");
     }
+
+    const classes = formStyles();
 
     const firstSubcollection = Object.values(subcollections)[0];
     const [selectedView, setSelectedView] = React.useState<EntityCollectionView<any>>(firstSubcollection);
@@ -40,60 +52,73 @@ export default function SubCollectionsView<S extends EntitySchema>(
         subcollectionPath = `${parentCollectionPath}/${entity.id}/${selectedView.relativePath}`;
 
     return (
-        <React.Fragment>
 
-            <Container maxWidth={"md"}>
-                <Grid
-                    container
-                    direction="row"
-                    justify="space-between"
-                    alignItems="flex-end"
-                >
-                    <Tabs value={selectedView}
-                          onChange={(e, value) => _onViewClicked(value)}>
-                        {Object.entries(subcollections).map(([key, view]) => (
-                            <Tab label={view.name} value={view}
-                                 key={`wrapped-tab-${key}`}/>
-                        ))}
-                    </Tabs>
-                    <Box my={2} textAlign="right">
-                        {subcollectionPath && <Button
-                            component={ReactLink}
-                            to={getRouterNewEntityPath(subcollectionPath)}
-                            size="medium"
-                            variant="outlined"
-                            color="primary"
-                        >
-                            Add {selectedView.schema.name}
-                        </Button>}
-                    </Box>
-                </Grid>
-            </Container>
+        <Paper elevation={0}
+               className={classes.formPaper}
+               style={{ height: "100%" }}>
+            <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="flex-end"
+            >
+                <Tabs value={selectedView}
+                      onChange={(e, value) => _onViewClicked(value)}>
+                    {Object.entries(subcollections).map(([key, view]) => (
+                        <Tab label={view.name} value={view}
+                             key={`wrapped-tab-${key}`}/>
+                    ))}
+                </Tabs>
+                <Box my={2} textAlign="right">
+                    {subcollectionPath && <Button
+                        component={ReactLink}
+                        to={getRouterNewEntityPath(subcollectionPath)}
+                        size="medium"
+                        variant="outlined"
+                        color="primary"
+                    >
+                        Add {selectedView.schema.name}
+                    </Button>}
+                </Box>
+            </Grid>
 
-            {Object.entries(subcollections).map(([key, view]) => (
-                <TabPanel key={`wrapped-tab-content-${key}`}
-                          small={view.small === undefined ? false : view.small}
-                          selectedView={selectedView}
-                          thisView={view}
-                          onEntityClick={onEntityClick}
-                          subcollectionPath={subcollectionPath}/>
-            ))}
-
-        </React.Fragment>
+            {Object.entries(subcollections).map(([key, view]) => {
+                const onSubcollectionEntityClick = (collectionPath: string, entity: Entity<any>) => {
+                    if (onEntityClick)
+                        onEntityClick(collectionPath, entity, view.schema, view.subcollections);
+                };
+                const onSubcollectionEntityEdit = (collectionPath: string, entity: Entity<any>) => {
+                    if (onEntityEdit)
+                        onEntityEdit(collectionPath, entity, view.schema, view.subcollections);
+                };
+                return (
+                    <SubCollectionTabPanel
+                        key={`wrapped-tab-content-${key}`}
+                        small={view.small === undefined ? false : view.small}
+                        selectedView={selectedView}
+                        thisView={view}
+                        onEntityEdit={onSubcollectionEntityEdit}
+                        onEntityClick={onSubcollectionEntityClick}
+                        subcollectionPath={subcollectionPath}/>
+                );
+            })}
+        </Paper>
     );
 }
 
 
-interface TabPanelProps<S extends EntitySchema> {
+export interface SubCollectionTabPanelProps<S extends EntitySchema> {
     subcollectionPath: string | undefined;
     small: boolean;
     thisView: EntityCollectionView<S>;
     selectedView: EntityCollectionView<S>;
 
-    onEntityClick?(collectionPath: string, entity: Entity<S>): void;
+    onEntityEdit?(collectionPath: string, entity: Entity<any>): void;
+
+    onEntityClick?(collectionPath: string, entity: Entity<any>): void;
 }
 
-function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thisView, onEntityClick, small, ...props }: TabPanelProps<S>) {
+export function SubCollectionTabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thisView, onEntityEdit, onEntityClick, small, ...props }: SubCollectionTabPanelProps<S>) {
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
 
@@ -103,28 +128,35 @@ function TabPanel<S extends EntitySchema>({ subcollectionPath, selectedView, thi
 
     const deleteEnabled = thisView.deleteEnabled === undefined || thisView.deleteEnabled;
 
-    return <Grid
-        hidden={selectedView !== thisView}>
+    return (
+        <Grid
+            hidden={selectedView !== thisView}>
 
-        {subcollectionPath ?
-            <CollectionTable collectionPath={subcollectionPath}
-                             onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
-                             schema={thisView.schema}
-                             onEntityEdit={onEntityClick}
-                             includeToolbar={false}
-                             paginationEnabled={false}
-                             small={small}
-                             additionalColumns={thisView.additionalColumns}
-            />
-            :
-            <Grid container>
-                <Box m={3}>You need to save your entity before adding additional
-                    collections</Box>
-            </Grid>}
+            {subcollectionPath ?
+                <CollectionTable collectionPath={subcollectionPath}
+                                 onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
+                                 schema={thisView.schema}
+                                 onEntityEdit={onEntityEdit}
+                                 onEntityClick={onEntityClick}
+                                 includeToolbar={false}
+                                 paginationEnabled={false}
+                                 small={small}
+                                 additionalColumns={thisView.additionalColumns}
+                />
+                :
+                <Box m={3} display={"flex"}
+                     alignItems={"center"}
+                     justifyContent={"center"}>
+                    <Box>You need to save your entity before adding
+                        additional collections
+                    </Box>
+                </Box>
+            }
 
-        <DeleteEntityDialog entity={deleteEntityClicked}
-                            schema={thisView.schema}
-                            open={!!deleteEntityClicked}
-                            onClose={() => setDeleteEntityClicked(undefined)}/>
-    </Grid>;
+            <DeleteEntityDialog entity={deleteEntityClicked}
+                                schema={thisView.schema}
+                                open={!!deleteEntityClicked}
+                                onClose={() => setDeleteEntityClicked(undefined)}/>
+        </Grid>
+    );
 }

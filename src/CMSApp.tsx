@@ -1,23 +1,15 @@
 import React, { useEffect } from "react";
 import {
-    AppBar,
-    Avatar,
     Box,
     Button,
     CssBaseline,
     Divider,
     Drawer,
     Grid,
-    IconButton,
     List,
     ListItem,
-    ListItemText,
-    Slide,
-    Toolbar,
-    Typography,
-    useScrollTrigger
+    ListItemText
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
@@ -31,17 +23,16 @@ import {
 } from "react-router-dom";
 
 import * as firebase from "firebase/app";
-import { auth, User } from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 
-import { CircularProgressCenter } from "./util";
+import { CircularProgressCenter } from "./components";
 import { EntityCollectionView } from "./models";
 import {
     addInitialSlash,
-    buildDataPath,
+    buildCollectionPath,
     CollectionRoute,
     EntityFormRoute,
     getAllPaths,
@@ -52,7 +43,14 @@ import {
 import { useStyles } from "./styles";
 import { Authenticator } from "./authenticator";
 import { blue, pink, red } from "@material-ui/core/colors";
-import { AuthContext, FirebaseConfigContext } from "./contexts";
+import { FirebaseConfigContext } from "./contexts";
+import EntityDetailDialog from "./preview/EntityDetailDialog";
+import { SelectedEntityProvider } from "./selected_entity_controller";
+
+import "./styles.module.css";
+import { BreadcrumbsProvider } from "./breadcrumbs_controller";
+import { CMSAppBar } from "./components/CMSAppBar";
+import { AuthContext, AuthProvider } from "./auth";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -146,31 +144,6 @@ export interface AdditionalView {
 }
 
 
-const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-
-interface HideOnScrollProps {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window?: () => Window;
-    children: React.ReactElement;
-}
-
-function HideOnScroll(props: HideOnScrollProps) {
-    const { children, window } = props;
-    const trigger = useScrollTrigger({
-        target: window ? window() : undefined,
-        threshold: 100
-    });
-
-    return (
-        <Slide appear={false} direction="down" in={!trigger}>
-            {children}
-        </Slide>
-    );
-}
-
 export function CMSApp({
                            name,
                            logo,
@@ -189,7 +162,7 @@ export function CMSApp({
     const theme = createMuiTheme({
         palette: {
             background: {
-                default: "#f1f1f1"
+                default: "#ebedee"
             },
             primary: {
                 main: primaryColor ? primaryColor : blue["800"]
@@ -214,6 +187,24 @@ export function CMSApp({
                         borderBottom: 0
                     }
                 }
+            },
+            MuiInputLabel: {
+                formControl: {
+                    top: 0,
+                    left: 0,
+                    position: "absolute",
+                    transform: "translate(0, 16px) scale(1)"
+                }
+            },
+            MuiInputBase: {
+                root: {
+                    minHeight: "64px"
+                }
+            },
+            MuiFormControlLabel: {
+                label: {
+                    width: "100%"
+                }
             }
         }
     });
@@ -225,13 +216,9 @@ export function CMSApp({
         firebaseConfigInitialized,
         setFirebaseConfigInitialized
     ] = React.useState<boolean>(false);
+
     const [configError, setConfigError] = React.useState<string>();
 
-    const [authLoading, setAuthLoading] = React.useState(true);
-    const [loggedUser, setLoggedUser] = React.useState<User | null>(null);
-    const [loginSkipped, setLoginSkipped] = React.useState<boolean>(false);
-    const [authProviderError, setAuthProviderError] = React.useState<any>();
-    const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
     const [firebaseConfigError, setFirebaseConfigError] = React.useState<boolean>(false);
 
     const authenticationEnabled = authentication === undefined || !!authentication;
@@ -240,31 +227,10 @@ export function CMSApp({
     const authenticator: Authenticator | undefined
         = authentication instanceof Function ? authentication : undefined;
 
-    const onAuthStateChanged = async (user: User | null) => {
-
-        setNotAllowedError(false);
-
-        if (authenticator && user) {
-            const allowed = await authenticator(user);
-            if (allowed)
-                setLoggedUser(user);
-            else
-                setNotAllowedError(true);
-        } else {
-            setLoggedUser(user);
-        }
-
-        setAuthLoading(false);
-    };
-
     function initFirebase(config: Object) {
         try {
             firebase.initializeApp(config);
             firebase.analytics();
-            firebase.auth().onAuthStateChanged(
-                onAuthStateChanged,
-                error => setAuthProviderError(error)
-            );
             setFirebaseConfigError(false);
             setFirebaseConfigInitialized(true);
         } catch (e) {
@@ -274,13 +240,13 @@ export function CMSApp({
     }
 
     useEffect(() => {
-
         if (process.env.NODE_ENV === "production") {
             fetch("/__/firebase/init.json")
                 .then(async response => {
-                    console.log("Firebase init response", response);
+                    console.log("Firebase init response", response.status);
                     if (response && response.status < 300) {
                         const config = await response.json();
+                        console.log(config);
                         initFirebase(config);
                     }
                 })
@@ -300,295 +266,274 @@ export function CMSApp({
         }
     }, []);
 
-    const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
+    return <AuthProvider authenticator={authenticator}
+                         firebaseConfigInitialized={firebaseConfigInitialized}>
+        <AuthContext.Consumer>
+            {(authContext) => {
 
-    function googleSignIn() {
-        setAuthProviderError(null);
-        firebase
-            .auth()
-            .signInWithPopup(googleAuthProvider)
-            .then((_: auth.UserCredential) => {
-            })
-            .catch(error => setAuthProviderError(error));
-    }
+                const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
 
-    function skipLogin() {
-        setAuthProviderError(null);
-        setLoginSkipped(true);
-    }
-
-    function onSignOut() {
-        firebase.auth().signOut();
-        setLoginSkipped(false);
-    }
-
-    function renderLoginView() {
-        return (
-            <Grid
-                container
-                spacing={0}
-                direction="column"
-                alignItems="center"
-                justify="center"
-                style={{ minHeight: "100vh" }}
-            >
-                <Box className={classes.toolbar}>
-                    {logo && <img className={classes.logo} src={logo}/>}
-                </Box>
-
-                <Grid item xs={12}>
-                    <Button variant="contained"
-                            color="primary"
-                            onClick={googleSignIn}>
-                        Google login
-                    </Button>
-                </Grid>
-
-                {skipLoginButtonEnabled && <Grid item xs={12}>
-                    <Button onClick={skipLogin}>Skip login</Button>
-                </Grid>}
-
-                <Grid item xs={12}>
-
-                    {/* TODO: add link to https://console.firebase.google.com/u/0/project/[PROYECT_ID]/authentication/providers in order to enable google */}
-                    {/* in case the error code is auth/operation-not-allowed */}
-
-                    {notAllowedError &&
-                    <Box p={2}>It looks like you don't have access to the CMS,
-                        based
-                        on the specified Authenticator configuration</Box>}
-
-                    {/*{authProviderError && <Box>{authProviderError.code}</div>}*/}
-                    {authProviderError &&
-                    <Box p={2}>{authProviderError.message}</Box>}
-
-                </Grid>
-            </Grid>
-        );
-    }
-
-    function getRouterSwitch(shouldIncludeMedia: boolean) {
-
-        const allPaths = getAllPaths(navigation);
-
-        const firstCollectionPath = removeInitialSlash(navigation[0].relativePath);
-
-        return (
-            <Switch>
-                {allPaths
-                    .map(
-                        ({
-                             entries,
-                             entityPlaceholderPath,
-                             breadcrumbs,
-                             view
-                         }: PathConfiguration) =>
-                            entries.map(entry => (
-                                <Route
-                                    path={buildDataPath(entry.fullPath)}
-                                    key={`navigation_${entry.routeType}_${entry.placeHolderId}`}
-                                    render={props => {
-                                        if (entry.routeType === "entity")
-                                            return (
-                                                <EntityFormRoute
-                                                    {...props}
-                                                    view={view}
-                                                    breadcrumbs={breadcrumbs}
-                                                    entityPlaceholderPath={entityPlaceholderPath}
-                                                />
-                                            );
-                                        else if (entry.routeType === "collection")
-                                            return (
-                                                <CollectionRoute
-                                                    {...props}
-                                                    view={view}
-                                                    breadcrumbs={breadcrumbs}
-                                                    entityPlaceholderPath={entityPlaceholderPath}
-                                                />
-                                            );
-                                        else throw Error("No know routeType");
-                                    }}
-                                />
-                            ))
-                    )
-                    .flat()}
-
-                {shouldIncludeMedia && (
-                    <Route path="/media">
-                        <MediaRoute/>
-                    </Route>
-                )}
-
-                {additionalViews &&
-                additionalViews.map(additionalView => (
-                    <Route
-                        key={"additional_view_" + additionalView.path}
-                        path={addInitialSlash(additionalView.path)}
-                    >
-                        {additionalView.view}
-                    </Route>
-                ))}
-
-                <Redirect exact from="/"
-                          to={buildDataPath(firstCollectionPath)}/>
-            </Switch>
-        );
-    }
-
-    function renderMainView() {
-        if (configError) {
-            return <Box> {configError} </Box>;
-        }
-
-        if (!firebaseConfigInitialized) {
-            return <CircularProgressCenter/>;
-        }
-
-        const shouldIncludeMedia =
-            includeMedia !== undefined && includeMedia;
-
-        const drawer = (
-            <React.Fragment>
-
-                <Box className={classes.toolbar}>
-                    {logo && <img className={classes.logo} src={logo}/>}
-                </Box>
-
-                <Divider/>
-                <List>
-                    {Object.entries(navigation).map(([key, view], index) => (
-                        <ListItem
-                            button
-                            key={`navigation_${index}_${key}`}
-                            component={ReactLink}
-                            to={buildDataPath(view.relativePath)}
+                function renderLoginView() {
+                    return (
+                        <Grid
+                            container
+                            spacing={0}
+                            direction="column"
+                            alignItems="center"
+                            justify="center"
+                            style={{ minHeight: "100vh" }}
                         >
-                            <ListItemText
-                                primary={view.name.toUpperCase()}
-                                primaryTypographyProps={{ variant: "subtitle2" }}/>
-                        </ListItem>
-                    ))}
+                            <Box className={classes.toolbar}>
+                                {logo &&
+                                <img className={classes.logo} src={logo}/>}
+                            </Box>
 
-                    {shouldIncludeMedia && (
-                        <React.Fragment>
-                            <Divider/>
-                            <ListItem button component={ReactLink} to="/media">
-                                <ListItemText
-                                    primary="Media"
-                                    primaryTypographyProps={{ variant: "subtitle2" }}/>
-                            </ListItem>
-                        </React.Fragment>
-                    )}
+                            <Grid item xs={12}>
+                                <Button variant="contained"
+                                        color="primary"
+                                        onClick={authContext.googleSignIn}>
+                                    Google login
+                                </Button>
+                            </Grid>
 
-                    {additionalViews && (
-                        <React.Fragment>
-                            <Divider/>
-                            {additionalViews.map(additionalView => (
-                                <ListItem
-                                    button
-                                    key={`additional-view-${additionalView.path}`}
-                                    component={ReactLink}
-                                    to={addInitialSlash(additionalView.path)}
+                            {skipLoginButtonEnabled && <Grid item xs={12}>
+                                <Button onClick={authContext.skipLogin}>Skip
+                                    login</Button>
+                            </Grid>}
+
+                            <Grid item xs={12}>
+
+                                {/* TODO: add link to https://console.firebase.google.com/u/0/project/[PROYECT_ID]/authentication/providers in order to enable google */}
+                                {/* in case the error code is auth/operation-not-allowed */}
+
+                                {authContext.notAllowedError &&
+                                <Box p={2}>It looks like you don't have access
+                                    to
+                                    the CMS,
+                                    based
+                                    on the specified Authenticator
+                                    configuration</Box>}
+
+                                {/*{authProviderError && <Box>{authProviderError.code}</div>}*/}
+                                {authContext.authProviderError &&
+                                <Box
+                                    p={2}>{authContext.authProviderError.message}</Box>}
+
+                            </Grid>
+                        </Grid>
+                    );
+                }
+
+                function getRouterSwitch(shouldIncludeMedia: boolean) {
+
+                    const allPaths = getAllPaths(navigation);
+
+                    const firstCollectionPath = removeInitialSlash(navigation[0].relativePath);
+
+                    return (
+                        <Switch>
+                            {allPaths
+                                .map(
+                                    ({
+                                         entries,
+                                         entityPlaceholderPath,
+                                         breadcrumbs,
+                                         view
+                                     }: PathConfiguration) =>
+                                        entries.map(entry => (
+                                            <Route
+                                                path={buildCollectionPath(entry.fullPath)}
+                                                key={`navigation_${entry.routeType}_${entry.placeHolderId}`}
+                                                render={props => {
+                                                    if (entry.routeType === "entity")
+                                                        return (
+                                                            <EntityFormRoute
+                                                                {...props}
+                                                                view={view}
+                                                                breadcrumbs={breadcrumbs}
+                                                                entityPlaceholderPath={entityPlaceholderPath}
+                                                            />
+                                                        );
+                                                    else if (entry.routeType === "collection")
+                                                        return (
+                                                            <CollectionRoute
+                                                                {...props}
+                                                                view={view}
+                                                                breadcrumbs={breadcrumbs}
+                                                                entityPlaceholderPath={entityPlaceholderPath}
+                                                            />
+                                                        );
+                                                    else throw Error("No know routeType");
+                                                }}
+                                            />
+                                        ))
+                                )
+                                .flat()}
+
+                            {shouldIncludeMedia && (
+                                <Route path="/media">
+                                    <MediaRoute/>
+                                </Route>
+                            )}
+
+                            {additionalViews &&
+                            additionalViews.map(additionalView => (
+                                <Route
+                                    key={"additional_view_" + additionalView.path}
+                                    path={addInitialSlash(additionalView.path)}
                                 >
-                                    <ListItemText
-                                        primary={additionalView.name}
-                                        primaryTypographyProps={{ variant: "subtitle2" }}/>
-                                </ListItem>
+                                    {additionalView.view}
+                                </Route>
                             ))}
-                        </React.Fragment>
-                    )}
-                </List>
-            </React.Fragment>
-        );
 
-        return (
-            <FirebaseConfigContext.Provider value={firebaseConfig}>
-                <AuthContext.Provider value={loggedUser}>
-                    <Router>
-                        <Box className={classes.root}>
-                            <CssBaseline/>
-                            <AppBar>
-                                <Toolbar>
-                                    <IconButton
-                                        color="inherit"
-                                        aria-label="open drawer"
-                                        edge="start"
-                                        onClick={handleDrawerToggle}
-                                        className={classes.menuButton}
+                            <Redirect exact from="/"
+                                      to={buildCollectionPath(firstCollectionPath)}/>
+                        </Switch>
+                    );
+                }
+
+                function renderMainView() {
+                    if (configError) {
+                        return <Box> {configError} </Box>;
+                    }
+
+                    if (!firebaseConfigInitialized) {
+                        return <CircularProgressCenter/>;
+                    }
+
+                    const shouldIncludeMedia =
+                        includeMedia !== undefined && includeMedia;
+
+                    const drawer = (
+                        <React.Fragment>
+
+                            <Box className={classes.toolbar}>
+                                {logo &&
+                                <img className={classes.logo} src={logo}/>}
+                            </Box>
+
+                            <Divider/>
+                            <List>
+                                {Object.entries(navigation).map(([key, view], index) => (
+                                    <ListItem
+                                        button
+                                        key={`navigation_${index}_${key}`}
+                                        component={ReactLink}
+                                        to={buildCollectionPath(view.relativePath)}
                                     >
-                                        <MenuIcon/>
-                                    </IconButton>
-                                    <Typography variant="h6" noWrap>
-                                        {name}
-                                    </Typography>
-                                    <Box className={classes.grow}/>
+                                        <ListItemText
+                                            primary={view.name.toUpperCase()}
+                                            primaryTypographyProps={{ variant: "subtitle2" }}/>
+                                    </ListItem>
+                                ))}
 
-                                    <Box p={2}>
-                                        {loggedUser && loggedUser.photoURL ?
-                                            <Avatar src={loggedUser.photoURL}/>
-                                            :
-                                            <Avatar>{loggedUser?.displayName ? loggedUser.displayName[0] : "A"}</Avatar>
-                                        }
-                                    </Box>
+                                {shouldIncludeMedia && (
+                                    <React.Fragment>
+                                        <Divider/>
+                                        <ListItem button component={ReactLink}
+                                                  to="/media">
+                                            <ListItemText
+                                                primary="Media"
+                                                primaryTypographyProps={{ variant: "subtitle2" }}/>
+                                        </ListItem>
+                                    </React.Fragment>
+                                )}
 
-                                    <Button variant="text" color="inherit"
-                                            onClick={onSignOut}>
-                                        Log Out
-                                    </Button>
+                                {additionalViews && (
+                                    <React.Fragment>
+                                        <Divider/>
+                                        {additionalViews.map(additionalView => (
+                                            <ListItem
+                                                button
+                                                key={`additional-view-${additionalView.path}`}
+                                                component={ReactLink}
+                                                to={addInitialSlash(additionalView.path)}
+                                            >
+                                                <ListItemText
+                                                    primary={additionalView.name}
+                                                    primaryTypographyProps={{ variant: "subtitle2" }}/>
+                                            </ListItem>
+                                        ))}
+                                    </React.Fragment>
+                                )}
+                            </List>
 
-                                </Toolbar>
-                            </AppBar>
+                            <EntityDetailDialog/>
 
-                            <nav className={classes.drawer}>
-                                <Drawer
-                                    variant="temporary"
-                                    anchor={theme.direction === "rtl" ? "right" : "left"}
-                                    open={drawerOpen}
-                                    onClose={handleDrawerToggle}
-                                    classes={{
-                                        paper: classes.drawerPaper
-                                    }}
-                                    ModalProps={{
-                                        keepMounted: true
-                                    }}
-                                >
-                                    {drawer}
-                                </Drawer>
+                        </React.Fragment>
+                    );
 
-                            </nav>
-                            <main className={classes.content}>
-                                <Box className={classes.toolbar}/>
-                                {getRouterSwitch(shouldIncludeMedia)}
-                            </main>
-                        </Box>
-                    </Router>
-                </AuthContext.Provider>
-            </FirebaseConfigContext.Provider>
-        );
-    }
+                    return (
+                        <FirebaseConfigContext.Provider value={firebaseConfig}>
+                            <SelectedEntityProvider>
+                                <BreadcrumbsProvider>
+                                    <Router>
+                                        <Box className={classes.root}>
+                                            <CssBaseline/>
+                                            <CMSAppBar title={name}
+                                                       handleDrawerToggle={handleDrawerToggle}/>
 
-    return (
-        <ThemeProvider theme={theme}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                {firebaseConfigError ?
-                    <Box>
-                        It seems like the provided Firebase config is not
-                        correct. If you are using the credentials provided
-                        automatically
-                        by Firebase Hosting, make sure you link
-                        your Firebase app to
-                        Firebase Hosting.
-                    </Box> :
-                    (
-                        authLoading ? (
-                            <CircularProgressCenter/>
-                        ) : (!authenticationEnabled || loggedUser || loginSkipped) ? (
-                            renderMainView()
-                        ) : (
-                            renderLoginView()
-                        )
-                    )}
-            </MuiPickersUtilsProvider>
-        </ThemeProvider>
-    );
+                                            <nav className={classes.drawer}>
+                                                <Drawer
+                                                    variant="temporary"
+                                                    anchor={theme.direction === "rtl" ? "right" : "left"}
+                                                    open={drawerOpen}
+                                                    onClose={handleDrawerToggle}
+                                                    classes={{
+                                                        paper: classes.drawerPaper
+                                                    }}
+                                                    ModalProps={{
+                                                        keepMounted: true
+                                                    }}
+                                                >
+                                                    {drawer}
+                                                </Drawer>
+
+                                            </nav>
+                                            <main className={classes.content}>
+                                                <Box
+                                                    className={classes.toolbar}/>
+                                                {getRouterSwitch(shouldIncludeMedia)}
+                                            </main>
+                                        </Box>
+                                    </Router>
+                                </BreadcrumbsProvider>
+                            </SelectedEntityProvider>
+                        </FirebaseConfigContext.Provider>
+                    );
+                }
+
+                return (
+                    <ThemeProvider theme={theme}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            {firebaseConfigError ?
+                                <Box>
+                                    It seems like the provided Firebase config
+                                    is
+                                    not
+                                    correct. If you are using the credentials
+                                    provided
+                                    automatically by Firebase Hosting, make sure
+                                    you
+                                    link
+                                    your Firebase app to Firebase Hosting.
+                                </Box> :
+                                (
+                                    authContext.authLoading ? (
+                                        <CircularProgressCenter/>
+                                    ) : (!authenticationEnabled || authContext.loggedUser || authContext.loginSkipped) ? (
+                                        renderMainView()
+                                    ) : (
+                                        renderLoginView()
+                                    )
+                                )}
+                        </MuiPickersUtilsProvider>
+                    </ThemeProvider>
+                );
+            }
+
+            }
+        </AuthContext.Consumer>
+    </AuthProvider>;
+
 }

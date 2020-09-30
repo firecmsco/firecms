@@ -4,11 +4,12 @@ import React from "react";
 import { formStyles } from "../../styles";
 import { CMSFieldProps } from "../form_props";
 import PreviewComponent from "../../preview/PreviewComponent";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
 
 type DisabledFieldProps = CMSFieldProps<any> ;
 
-export default function DisabledField<S extends EntitySchema>({ field, property, includeDescription }: DisabledFieldProps) {
+export default function DisabledField<S extends EntitySchema>({  field, property, includeDescription }: DisabledFieldProps) {
 
     const classes = formStyles();
     const value = field.value;
@@ -16,21 +17,26 @@ export default function DisabledField<S extends EntitySchema>({ field, property,
 
     return (
 
-        <FormControl fullWidth disabled={true}>
+        <FormControl fullWidth disabled={true} style={{ minHeight: "64px" }}>
 
             <FormHelperText filled
                             required={property.validation?.required}>
-                {property.title}
+                <LabelWithIcon scaledIcon={false} property={property}/>
             </FormHelperText>
 
-            <Paper elevation={0} className={classes.paper} variant={"outlined"}>
+            <Paper elevation={0}
+                   className={`${classes.paper} ${classes.greyPaper}`}
+                   variant={"outlined"}>
 
-                {hasValue &&
-                <PreviewComponent value={value}
-                                  property={property}
-                                  small={false}/>}
+                <Box m={1}>
+                    {hasValue &&
+                    <PreviewComponent name={field.name}
+                                      value={value}
+                                      property={property}
+                                      small={false}/>}
 
-                {!hasValue && <Box>No value set</Box>}
+                    {!hasValue && <Box>No value set</Box>}
+                </Box>
 
             </Paper>
 

@@ -2093,6 +2093,11 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
+"@expo-google-fonts/baloo-tammudu-2@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/baloo-tammudu-2/-/baloo-tammudu-2-0.1.0.tgz#1ae28566315cd55634b32fa143efa3a66fb821ed"
+  integrity sha512-kenIIbPkl2XAFVuzlFv63GT1xFUPAhkQH0jVQwnmkpmWnQ+APY2rtQLo+stIHMc3/Ajd78zM+0l3qhKQ3xRPug==
+
 "@firebase/analytics-types@0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@firebase/analytics-types/-/analytics-types-0.4.0.tgz#d6716f9fa36a6e340bc0ecfe68af325aa6f60508"
@@ -13822,6 +13827,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typeface-baloo-tammudu@^0.0.71:
+  version "0.0.71"
+  resolved "https://registry.yarnpkg.com/typeface-baloo-tammudu/-/typeface-baloo-tammudu-0.0.71.tgz#d65b52f9b3dacd772bd9264ae02f1958f63ddd7a"
+  integrity sha512-l1B84oYPfz5O8kyaHr6Hv/sovnRDTLqtjVAdGX4ldVIVNk8mVHeoTSnxNggQhn/j6nMbf8s+SGwVop6QfvOi5Q==
 
 typeface-roboto@^0.0.75:
   version "0.0.75"

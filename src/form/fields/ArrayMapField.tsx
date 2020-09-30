@@ -16,7 +16,7 @@ import React from "react";
 import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
 import { CMSFieldProps } from "../form_props";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
 
 type ArrayMapFieldProps<T> = CMSFieldProps<T[]>;
 

@@ -30,7 +30,7 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
 
     function createFilterFields(values: any) {
         return (
-            <Box className={classes.filter} width={220}>
+            <Box className={classes.filter} width={300}>
                 {filterableProperties.map(
                     (key) => {
                         const formField = createFilterField(key as string, schema.properties[key as string]);

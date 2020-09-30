@@ -107,16 +107,13 @@ const productSchema = buildSchema({
             description: "Not mandatory but it'd be awesome if you filled this up",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
             dataType: "string",
-            config: {
-                forceFullWidth: true
+            config:{
+                multiline: true
             }
         },
         published: {
             title: "Published",
-            dataType: "boolean",
-            config: {
-                customPreview: CustomBooleanPreview
-            }
+            dataType: "boolean"
         },
         expires_on: {
             title: "Expires on",
@@ -228,6 +225,13 @@ const blogSchema = buildSchema({
                 }
             }
         },
+        reviewed: {
+            title: "Reviewed",
+            dataType: "boolean",
+            config: {
+                customPreview: CustomBooleanPreview
+            }
+        },
         status: {
             title: "Status",
             validation: { required: true },
@@ -331,17 +335,25 @@ export const testEntitySchema = buildSchema({
                 dataType: "string"
             }
         },
+        product: {
+            title: "Product",
+            validation: { required: true },
+            dataType: "reference",
+            collectionPath: "products",
+            schema: productSchema,
+            previewProperties: ["name", "image"]
+        },
         title: {
             title: "Title",
             description: "A catching title is important",
-            dataType: "string",
-            config: {
-                forceFullWidth: true
-            }
+            dataType: "string"
         },
         description: {
             title: "Description",
-            dataType: "string"
+            dataType: "string",
+            config:{
+                multiline: true
+            }
         },
         search_adjacent: {
             title: "Search adjacent",
@@ -530,7 +542,7 @@ let navigation: EntityCollectionView<any>[] = [
         textSearchDelegate: client && new AlgoliaTextSearchDelegate(
             client,
             "blog"),
-        properties: ["name", "images", "status", "products", "long_text"],
+        properties: ["name", "images", "status", "reviewed", "products", "long_text"],
         filterableProperties: ["name", "status"],
         initialFilter: {
             "status": ["==", "published"]

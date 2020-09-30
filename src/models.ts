@@ -166,6 +166,15 @@ export function buildSchema<Key extends string, P extends Properties<Key>>(schem
 }
 
 /**
+ * Identity function we use to defeat the type system of Typescript and preserve
+ * the properties keys
+ * @param properties
+ */
+export function buildProperties<Key extends string>(properties: Properties<Key>): Properties<Key> {
+    return properties;
+}
+
+/**
  * New or existing status
  */
 export enum EntityStatus { new = "new", existing = "existing"}
@@ -513,13 +522,6 @@ export interface FieldConfig<T> {
      * FireCMS or to the custom field
      */
     fieldProps?: any;
-
-    /**
-     * Whether if this field should take the full width in the field.
-     * Defaults to false, but some fields like images take full width by
-     * default.
-     */
-    forceFullWidth?: boolean;
 
     /**
      * Configure how a property is displayed as a preview, e.g. in the collection

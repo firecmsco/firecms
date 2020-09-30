@@ -23,7 +23,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             }
         },
         menuButton: {
-            marginRight: theme.spacing(2),
+            marginRight: theme.spacing(2)
             // [theme.breakpoints.up("md")]: {
             //     display: "none"
             // }
@@ -45,8 +45,8 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         tableNoBottomBorder: {
             "&:last-child th, &:last-child td": {
-                borderBottom: 0,
-            },
+                borderBottom: 0
+            }
         },
         logo: {
             padding: theme.spacing(3),
@@ -93,13 +93,22 @@ export const formStyles = makeStyles(theme => ({
             padding: theme.spacing(2)
         }
     },
+    greyPaper: {
+        backgroundColor: "rgba(0, 0, 0, 0.09)",
+    },
     dropZone: {
+        backgroundColor: "rgba(0, 0, 0, 0.09)",
         "&:hover": {
-            backgroundColor: "#f5f5f5"
+            backgroundColor: "#dedede"
         }
     },
+    inputLabel: {
+        display: "inline-flex",
+        alignItems: "center",
+        height: "14px"
+    },
     activeDrop: {
-        backgroundColor: "#f5f5f5"
+        backgroundColor: "#dedede"
     },
     acceptDrop: {
         borderColor: theme.palette.success.main
@@ -116,7 +125,9 @@ export const formStyles = makeStyles(theme => ({
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
         padding: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {}
+        [theme.breakpoints.up("md")]: {
+            padding: theme.spacing(1)
+        }
     },
     buttons: {
         display: "flex",

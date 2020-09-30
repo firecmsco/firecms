@@ -10,7 +10,7 @@ export default function CustomBooleanPreview({
     : ReactElement {
 
     return (
-        value ? <CheckBoxOutlined color="disabled"/> : <CheckBoxOutlineBlank color="disabled"/>
+        value ? <CheckBoxOutlined/> : <CheckBoxOutlineBlank/>
     );
 
 }

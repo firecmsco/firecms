@@ -10,11 +10,14 @@ import {
 import React from "react";
 
 import { CMSFieldProps } from "../form_props";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { renderPreviewEnumChip } from "../../preview/PreviewComponent";
 
 type SelectProps<T extends EnumType> = CMSFieldProps<T>;
 
 export default function Select<T extends EnumType>({
+                                                       name,
                                                        field,
                                                        form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                                        property,
@@ -35,24 +38,37 @@ export default function Select<T extends EnumType>({
             required={property.validation?.required}
             error={showError}
         >
-            <InputLabel
-                id={`${field.name}-label`}>{property.title}</InputLabel>
 
-            <MuiSelect labelId={`${field.name}-label`}
-                       value={!!value ? value : ""}
-                       onChange={(evt: any) => {
-                           const newValue = evt.target.value;
-                           setFieldTouched(field.name);
-                           return setFieldValue(
-                               field.name,
-                               newValue ? newValue : null
-                           );
-                       }}
-                       {...props}>
+            <div style={{ marginTop: "-4px" }}>
+                <InputLabel id={`${field.name}-select-label`} style={{
+                    marginLeft: "10px"
+                }}>
+                    <LabelWithIcon property={property}/>
+                </InputLabel>
+            </div>
+
+            <MuiSelect
+                variant={"filled"}
+                labelId={`${field.name}-select-label`}
+                style={{ minHeight: "64px", padding: "4px" }}
+                value={!!value ? value : ""}
+                onChange={(evt: any) => {
+                    const newValue = evt.target.value;
+                    setFieldTouched(field.name);
+                    return setFieldValue(
+                        field.name,
+                        newValue ? newValue : null
+                    );
+                }}
+                renderValue={(selected: any) =>
+                    renderPreviewEnumChip(field.name, enumValues, selected, false)
+                }
+                {...props}>
 
                 {Object.entries(enumValues).map(([key, value]) => (
-                    <MenuItem key={`select-${key}`}
-                              value={key}>{value as string}</MenuItem>
+                    <MenuItem key={`select-${key}`} value={key}>
+                        {renderPreviewEnumChip(field.name, enumValues, key as T, false)}
+                    </MenuItem>
                 ))}
             </MuiSelect>
 

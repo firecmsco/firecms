@@ -3,17 +3,14 @@ import { getIn } from "formik";
 import {
     Box,
     Button,
-    Container,
     Dialog,
     DialogActions,
     DialogTitle,
     FormControl,
     FormHelperText,
-    Grid,
     IconButton,
     Paper,
-    Tooltip,
-    Typography
+    Tooltip
 } from "@material-ui/core";
 import React from "react";
 import { formStyles } from "../../styles";
@@ -23,7 +20,8 @@ import CollectionTable from "../../collection/CollectionTable";
 import { CMSFieldProps } from "../form_props";
 
 import { PreviewComponent } from "../../preview";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
 
 type ReferenceFieldProps<S extends EntitySchema> = CMSFieldProps<firebase.firestore.DocumentReference> ;
 
@@ -51,25 +49,23 @@ export default function ReferenceField<S extends EntitySchema>({
     return (
         <FormControl error={showError} fullWidth>
 
-            <Container maxWidth={"sm"}>
-                <Paper elevation={0} className={classes.paper}
-                       variant={"outlined"}>
-                    {title && <Box my={1}>
-                        <Typography variant="caption"
-                                    display="block"
-                                    gutterBottom>
-                            {title}
-                        </Typography>
-                    </Box>}
-                    <ReferenceDialog value={value}
-                                     title={title}
-                                     collectionPath={property.collectionPath}
-                                     schema={property.schema}
-                                     initialFilter={property.filter}
-                                     previewProperties={property.previewProperties}
-                                     onEntityClick={handleEntityClick}/>
-                </Paper>
-            </Container>
+            <FormHelperText filled
+                            required={property.validation?.required}>
+                <LabelWithIcon scaledIcon={true} property={property}/>
+            </FormHelperText>
+
+            <Paper elevation={0}
+                   className={`${classes.paper}`}
+                   variant={"outlined"}>
+
+                <ReferenceDialog value={value}
+                                 title={title}
+                                 collectionPath={property.collectionPath}
+                                 schema={property.schema}
+                                 initialFilter={property.filter}
+                                 previewProperties={property.previewProperties}
+                                 onEntityClick={handleEntityClick}/>
+            </Paper>
 
             {includeDescription &&
             <FieldDescription property={property}/>}
@@ -141,36 +137,45 @@ export function ReferenceDialog<S extends EntitySchema>(
 
     return (
         <React.Fragment>
-            <Box
-                justifyContent="space-between"
-                display="flex">
-                <Grid item>
-                    {value &&
+            {value &&
+            <Box p={1}
+                 display="flex">
+                <Box flexGrow={1}>
                     <ReferencePreview
                         reference={value}
                         schema={schema}
                         small={false}
                         previewProperties={previewProperties}
-                        previewComponent={PreviewComponent}/>}
-                    {!value &&
-                    <Box>No value set</Box>}
-                </Grid>
-                <Grid item>
-                    {value &&
+                        previewComponent={PreviewComponent}/>
+                </Box>
+                <Box>
                     <Tooltip title="Clear">
                         <IconButton
-                            style={{ backgroundColor: "white" }}
                             onClick={clearValue}>
                             <ClearIcon/>
                         </IconButton>
-                    </Tooltip>}
+                    </Tooltip>
+                </Box>
+                <Box p={1}>
                     <Button variant="outlined"
                             color="primary"
                             onClick={handleClickOpen}>
-                        {value ? "Edit" : "Set"}
+                        Edit
                     </Button>
-                </Grid>
-            </Box>
+                </Box>
+            </Box>}
+
+            {!value &&
+            <Box p={2}
+                 justifyContent="center"
+                 display="flex">
+                <Box flexGrow={1} textAlign={"center"}>No value set</Box>
+                <Button variant="outlined"
+                        color="primary"
+                        onClick={handleClickOpen}>
+                    Set
+                </Button>
+            </Box>}
 
             <Dialog
                 onClose={handleClose}
