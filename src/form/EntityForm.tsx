@@ -9,11 +9,10 @@ import {
 } from "@material-ui/core";
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
-import { formStyles, useStyles } from "../styles";
+import { formStyles } from "../styles";
 import { createCustomIdField, createFormField } from "./index";
 import { initEntityValues } from "../firebase/firestore";
 import { getYupObjectSchema } from "./validation";
-import { getColumnsForProperty } from "../util/layout";
 import deepEqual from "deep-equal";
 
 interface EntityFormProps<S extends EntitySchema> {
@@ -131,6 +130,32 @@ export default function EntityForm<S extends EntitySchema>({
     }
 
     const validationSchema = getYupObjectSchema(schema.properties);
+
+    function buildButtons(isSubmitting: boolean) {
+        return <Box textAlign="right" mt={2} mb={2}>
+            {status === EntityStatus.existing &&
+            <Button
+                variant="text"
+                color="primary"
+                disabled={isSubmitting}
+                className={classes.button}
+                type="reset"
+            >
+                Discard
+            </Button>}
+            <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={isSubmitting}
+
+                className={classes.button}
+            >
+                Save
+            </Button>
+        </Box>;
+    }
+
     return (
         <Formik
             initialValues={baseValues as EntityValues<S>}
@@ -155,9 +180,7 @@ export default function EntityForm<S extends EntitySchema>({
 
                 function createFormFields(schema: EntitySchema) {
 
-                    const classes = useStyles();
-
-                    return <Grid container spacing={3}>
+                    return <Grid container spacing={4}>
                         {Object.entries(schema.properties).map(([key, property]) => {
 
                             const underlyingValueHasChanged: boolean =
@@ -166,10 +189,9 @@ export default function EntityForm<S extends EntitySchema>({
                                 && !!touched[key];
 
                             const formField = createFormField(key, property, true, underlyingValueHasChanged);
-                            const columns = getColumnsForProperty(property);
 
-                            return <Grid item sm={columns} xs={12}
-                                         className={classes.field}
+                            return <Grid item
+                                         xs={12}
                                          key={`field_${schema.name}_${key}`}>
                                 {formField}
                             </Grid>;
@@ -178,55 +200,40 @@ export default function EntityForm<S extends EntitySchema>({
                 }
 
                 return (
-                    <Paper elevation={1}>
-                        <Container maxWidth={"md"}
-                                   className={classes.formPaper}
-                                   disableGutters={true}>
+                    <Paper elevation={0}
+                           className={classes.formPaper}
+                           style={{ height: "100%" }}>
 
-                            <Box margin={1}>
+                        <Container maxWidth={"sm"}>
+
+                            <Box mt={2}>
+
                                 {createCustomIdField(schema, status, setCustomId, customIdError, entity?.id)}
-                            </Box>
 
-                            <Form className={classes.form}
-                                  onSubmit={handleSubmit}
-                                  noValidate>
+                                <Form className={classes.form}
+                                      onSubmit={handleSubmit}
+                                      noValidate>
 
-                                <Box padding={1}>
+                                    {buildButtons(isSubmitting)}
+
                                     {createFormFields(schema)}
-                                </Box>
 
-                                {savingError &&
-                                <Box textAlign="right">
-                                    <Typography color={"error"}>
-                                        Error saving to Firestore. Details in the console
-                                    </Typography>
-                                </Box>}
+                                    {savingError &&
+                                    <Box textAlign="right">
+                                        <Typography color={"error"}>
+                                            Error saving to Firestore. Details
+                                            in
+                                            the console
+                                        </Typography>
+                                    </Box>}
 
-                                <Box textAlign="right">
-                                    {status === EntityStatus.existing &&
-                                    <Button
-                                        variant="text"
-                                        color="primary"
-                                        disabled={isSubmitting}
-                                        className={classes.button}
-                                        type="reset"
-                                    >
-                                        Discard
-                                    </Button>}
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        type="submit"
-                                        disabled={isSubmitting}
+                                    {buildButtons(isSubmitting)}
 
-                                        className={classes.button}
-                                    >
-                                        Save
-                                    </Button>
-                                </Box>
-                            </Form>
+                                </Form>
 
+                            </Box>
                         </Container>
+
                     </Paper>
                 );
             }}

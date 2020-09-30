@@ -13,9 +13,9 @@ import React from "react";
 import { formStyles } from "../../styles";
 
 import { CMSFieldProps } from "../form_props";
-import { getColumnsForProperty } from "../../util/layout";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
 
 type MapFieldProps<S extends EntitySchema> = CMSFieldProps<object>;
 
@@ -80,15 +80,14 @@ export default function MapField<S extends EntitySchema>({
 
             <FormHelperText filled
                             required={property.validation?.required}>
-                {property.title}
+                <LabelWithIcon scaledIcon={true} property={property}/>
             </FormHelperText>
 
             <Paper elevation={0} variant={"outlined"} className={classes.paper}>
-                <Box m={1}>
                     <Grid container spacing={2}>
                         {Object.entries(mapProperties)
                             .map(([entryKey, childProperty], index) => {
-                                    return <Grid item sm={getColumnsForProperty(childProperty)} xs={12}
+                                    return <Grid item sm={12} xs={12}
                                                  key={`map-${field.name}-${index}`}>
                                         {createFormField(`${field.name}[${entryKey}]`,
                                             childProperty,
@@ -97,7 +96,6 @@ export default function MapField<S extends EntitySchema>({
                                 }
                             )}
                     </Grid>
-                </Box>
 
                 {pickOnlySomeKeys && buildPickKeysSelect()}
 

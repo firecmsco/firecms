@@ -3,27 +3,41 @@ import { getIn } from "formik";
 import {
     Box,
     Button,
-    Container,
+    createStyles,
     Dialog,
     DialogActions,
-    DialogTitle,
     FormControl,
     FormHelperText,
-    Grid,
     IconButton,
+    makeStyles,
     Paper,
-    Tooltip,
-    Typography
+    Tooltip
 } from "@material-ui/core";
 import React from "react";
-import { formStyles } from "../../styles";
 import ReferencePreview from "../../preview/ReferencePreview";
 import ClearIcon from "@material-ui/icons/Clear";
 import CollectionTable from "../../collection/CollectionTable";
 import { CMSFieldProps } from "../form_props";
 
 import { PreviewComponent } from "../../preview";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { TextSearchDelegate } from "../../text_search_delegate";
+
+
+export const useStyles = makeStyles(theme => createStyles({
+    paper: {
+        elevation: 0,
+        padding: theme.spacing(1),
+        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+            padding: theme.spacing(2)
+        }
+    },
+    dialogBody: {
+        flexGrow: 1,
+        overflow: "auto"
+    }
+}));
 
 type ReferenceFieldProps<S extends EntitySchema> = CMSFieldProps<firebase.firestore.DocumentReference> ;
 
@@ -46,30 +60,30 @@ export default function ReferenceField<S extends EntitySchema>({
         setFieldValue(field.name, ref);
     };
 
-    const classes = formStyles();
+    const classes = useStyles();
     const title = property.title;
+
     return (
         <FormControl error={showError} fullWidth>
 
-            <Container maxWidth={"sm"}>
-                <Paper elevation={0} className={classes.paper}
-                       variant={"outlined"}>
-                    {title && <Box my={1}>
-                        <Typography variant="caption"
-                                    display="block"
-                                    gutterBottom>
-                            {title}
-                        </Typography>
-                    </Box>}
-                    <ReferenceDialog value={value}
-                                     title={title}
-                                     collectionPath={property.collectionPath}
-                                     schema={property.schema}
-                                     initialFilter={property.filter}
-                                     previewProperties={property.previewProperties}
-                                     onEntityClick={handleEntityClick}/>
-                </Paper>
-            </Container>
+            <FormHelperText filled
+                            required={property.validation?.required}>
+                <LabelWithIcon scaledIcon={true} property={property}/>
+            </FormHelperText>
+
+            <Paper elevation={0}
+                   className={`${classes.paper}`}
+                   variant={"outlined"}>
+
+                <ReferenceDialog value={value}
+                                 title={title}
+                                 collectionPath={property.collectionPath}
+                                 schema={property.schema}
+                                 initialFilter={property.filter}
+                                 previewProperties={property.previewProperties}
+                                 textSearchDelegate={property.textSearchDelegate}
+                                 onEntityClick={handleEntityClick}/>
+            </Paper>
 
             {includeDescription &&
             <FieldDescription property={property}/>}
@@ -103,6 +117,8 @@ export interface ReferenceDialogProps<S extends EntitySchema> {
      */
     previewProperties?: (keyof S["properties"])[];
 
+    textSearchDelegate?: TextSearchDelegate;
+
     schema: S;
 
     onEntityClick(entity?: Entity<S>): void;
@@ -116,8 +132,11 @@ export function ReferenceDialog<S extends EntitySchema>(
         schema,
         initialFilter,
         previewProperties,
+        textSearchDelegate,
         collectionPath
     }: ReferenceDialogProps<S>) {
+
+    const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
 
@@ -141,50 +160,63 @@ export function ReferenceDialog<S extends EntitySchema>(
 
     return (
         <React.Fragment>
-            <Box
-                justifyContent="space-between"
-                display="flex">
-                <Grid item>
-                    {value &&
+            {value &&
+            <Box p={1}
+                 display="flex">
+                <Box flexGrow={1}>
                     <ReferencePreview
                         reference={value}
                         schema={schema}
                         small={false}
                         previewProperties={previewProperties}
-                        previewComponent={PreviewComponent}/>}
-                    {!value &&
-                    <Box>No value set</Box>}
-                </Grid>
-                <Grid item>
-                    {value &&
+                        previewComponent={PreviewComponent}/>
+                </Box>
+                <Box>
                     <Tooltip title="Clear">
                         <IconButton
-                            style={{ backgroundColor: "white" }}
                             onClick={clearValue}>
                             <ClearIcon/>
                         </IconButton>
-                    </Tooltip>}
+                    </Tooltip>
+                </Box>
+                <Box p={1}>
                     <Button variant="outlined"
                             color="primary"
                             onClick={handleClickOpen}>
-                        {value ? "Edit" : "Set"}
+                        Edit
                     </Button>
-                </Grid>
-            </Box>
+                </Box>
+            </Box>}
+
+            {!value &&
+            <Box p={2}
+                 justifyContent="center"
+                 display="flex">
+                <Box flexGrow={1} textAlign={"center"}>No value set</Box>
+                <Button variant="outlined"
+                        color="primary"
+                        onClick={handleClickOpen}>
+                    Set
+                </Button>
+            </Box>}
 
             <Dialog
                 onClose={handleClose}
                 maxWidth={"xl"}
+                scroll={"paper"}
                 open={open}>
-                <DialogTitle>Select {title}</DialogTitle>
-                <CollectionTable collectionPath={collectionPath}
-                                 schema={schema}
-                                 includeToolbar={false}
-                                 onEntityClick={handleEntityClick}
-                                 paginationEnabled={false}
-                                 small={true}
-                                 initialFilter={initialFilter}
-                />
+                <Box className={classes.dialogBody}>
+                    <CollectionTable collectionPath={collectionPath}
+                                     schema={schema}
+                                     includeToolbar={true}
+                                     onEntityClick={handleEntityClick}
+                                     paginationEnabled={false}
+                                     small={true}
+                                     overrideTitle={`Select ${title}`}
+                                     textSearchDelegate={textSearchDelegate}
+                                     initialFilter={initialFilter}
+                    />
+                </Box>
                 <DialogActions>
                     <Button autoFocus onClick={handleClose} color="primary">
                         Close

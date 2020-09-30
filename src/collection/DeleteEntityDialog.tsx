@@ -3,12 +3,13 @@ import React, { useState } from "react";
 import { deleteEntity } from "../firebase/firestore";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { DialogContent, Snackbar } from "@material-ui/core";
+import { DialogContent } from "@material-ui/core";
 import EntityPreview from "../preview/EntityPreview";
-import { CircularProgressCenter } from "../util";
+import { CircularProgressCenter } from "../components";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import MuiAlert from "@material-ui/lab/Alert/Alert";
+import { useSnackbarContext } from "../snackbar_controller";
+
 
 export interface DeleteEntityDialogProps<S extends EntitySchema> {
     entity?: Entity<S>,
@@ -19,9 +20,11 @@ export interface DeleteEntityDialogProps<S extends EntitySchema> {
 }
 
 export default function DeleteEntityDialog<S extends EntitySchema>(props: DeleteEntityDialogProps<S>) {
+
+    const snackbarContext = useSnackbarContext();
+
     const { entity, schema, onClose, open, ...other } = props;
     const [loading, setLoading] = useState(false);
-    const [openSnackBar, setOpenSnackbar] = React.useState<boolean>(false);
 
     const handleCancel = () => {
         onClose();
@@ -29,7 +32,10 @@ export default function DeleteEntityDialog<S extends EntitySchema>(props: Delete
 
     const handleOk = () => {
         if (entity) {
-            setOpenSnackbar(true);
+            snackbarContext.open({
+                type: "success",
+                message: "Deleted"
+            })
             setLoading(true);
             deleteEntity(entity).then(_ => {
                 setLoading(false);
@@ -75,13 +81,6 @@ export default function DeleteEntityDialog<S extends EntitySchema>(props: Delete
 
             </Dialog>
 
-            <Snackbar open={openSnackBar} autoHideDuration={3000}
-                      onClose={(_) => setOpenSnackbar(false)}>
-                <MuiAlert elevation={6} variant="filled"
-                          onClose={(_) => setOpenSnackbar(false)}>
-                    Deleted
-                </MuiAlert>
-            </Snackbar>
 
         </React.Fragment>
     );

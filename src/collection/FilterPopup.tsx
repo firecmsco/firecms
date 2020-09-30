@@ -1,15 +1,38 @@
 import { EntitySchema, FilterValues, Property } from "../models";
 import PopupState, { bindPopover, bindTrigger } from "material-ui-popup-state";
-import { Button, IconButton, Tooltip } from "@material-ui/core";
+import {
+    Button, createStyles,
+    IconButton, makeStyles,
+    Table,
+    TableBody,
+    TableCell as MuiTableCell,
+    TableRow, Theme,
+    Tooltip,
+    withStyles
+} from "@material-ui/core";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Popover from "@material-ui/core/Popover";
 import Box from "@material-ui/core/Box";
 import React from "react";
 import { Form, Formik } from "formik";
-import { initFilterValues } from "../firebase/firestore";
-import { useStyles } from "../styles";
 import ClearIcon from "@material-ui/icons/Clear";
 import StringNumberFilterField from "./filters/StringNumberFilterField";
+import BooleanFilterField from "./filters/BooleanFilterField";
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        filter: {
+            flexGrow: 1,
+            padding: theme.spacing(1)
+        }
+    })
+);
+
+
+const TableCell = withStyles({
+    root: {
+        borderBottom: "none"
+    }
+})(MuiTableCell);
 
 interface FilterPopupProps<S extends EntitySchema> {
     schema: S;
@@ -28,9 +51,37 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
 
     const classes = useStyles();
 
-    function createFilterFields(values: any) {
+    function createFilterFields() {
+
         return (
-            <Box className={classes.filter} width={220}>
+            <Table size="small">
+                <TableBody>
+                    {
+                        filterableProperties.map((key, index) => {
+                            return (
+                                <TableRow
+                                    key={`filter_table_${key}_${index}`}>
+                                    <TableCell
+                                        key={`table-cell-${key}`}
+                                        component="th"
+                                        align={"right"}
+                                    >
+                                        {schema.properties[key as string].title}
+                                    </TableCell>
+                                    <TableCell
+                                        key={`table-cell-${key}`}
+                                        component="th"
+                                    >
+                                        {createFilterField(key as string, schema.properties[key as string])}
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
+                </TableBody>
+            </Table>
+        );
+        return (
+            <Box className={classes.filter} width={300}>
                 {filterableProperties.map(
                     (key) => {
                         const formField = createFilterField(key as string, schema.properties[key as string]);
@@ -44,26 +95,38 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
         );
     }
 
-    const cleanedInitialValues = filterValues || initFilterValues(schema, filterableProperties);
+    const cleanedInitialValues: FilterValues<S> = filterValues || {};
+    // initFilterValues(schema, filterableProperties);
 
     return (
         <PopupState variant="popover" popupId="collection-filter">
             {(popupState) => {
 
-                function setFilters(filterValues: FilterValues<S>) {
-                    const filters = { ...filterValues };
-                    console.log("Updating filters", filters);
-                    Object.keys(filters).forEach(key => filters[key] === undefined && delete filters[key]);
-                    onFilterUpdate(filters);
+                function setFilters(filterValues?: FilterValues<S>) {
+                    if (!filterValues) {
+                        onFilterUpdate(undefined);
+                    } else {
+                        const filters = { ...filterValues };
+                        Object.keys(filters).forEach(key => filters[key] === undefined && delete filters[key]);
+                        onFilterUpdate(filters);
+                    }
                     popupState.close();
                 }
 
                 return (
-                    <React.Fragment>
+                    <Box display={"flex"}>
+
+                        <Tooltip title="Filter list">
+                            <IconButton
+                                color={filterValues ? "primary" : undefined}
+                                aria-label="filter list"  {...bindTrigger(popupState)} >
+                                <FilterListIcon/>
+                            </IconButton>
+                        </Tooltip>
+
                         {filterValues ?
                             <Tooltip title="Clear filter">
                                 <IconButton
-                                    size={"small"}
                                     aria-label="filter clear"
                                     onClick={() => onFilterUpdate(undefined)}>
                                     <ClearIcon fontSize={"small"}/>
@@ -71,22 +134,16 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                             </Tooltip>
                             :
                             <Box style={{ width: 26 }}/>}
-
-                        <Tooltip title="Filter list">
-                            <IconButton
-                                aria-label="filter list"  {...bindTrigger(popupState)} >
-                                <FilterListIcon/>
-                            </IconButton>
-                        </Tooltip>
                         <Popover
                             {...bindPopover(popupState)}
+                            elevation={1}
                             anchorOrigin={{
                                 vertical: "bottom",
-                                horizontal: "center"
+                                horizontal: "left"
                             }}
                             transformOrigin={{
                                 vertical: "top",
-                                horizontal: "center"
+                                horizontal: "left"
                             }}
                         >
                             <Box p={2}>
@@ -94,22 +151,31 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                                     initialValues={cleanedInitialValues}
                                     onSubmit={setFilters}
                                 >
-                                    {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => {
+                                    {({ values, resetForm, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => {
+                                        const reset = (e: any) => {
+                                            resetForm();
+                                            setFilters(undefined);
+                                        };
                                         return (
                                             <Form
                                                 onSubmit={handleSubmit}
+                                                onReset={() => onFilterUpdate(undefined)}
                                                 noValidate>
-                                                {createFilterFields(values)}
+                                                {createFilterFields()}
                                                 <Box display="flex"
-                                                     justifyContent="flex-end">
-                                                    <Box p={1}
-                                                         justifyContent="flex-end">
-                                                        <Button
-                                                            size={"small"}
-                                                            variant="outlined"
-                                                            color="primary"
-                                                            type="submit">Ok</Button>
-                                                    </Box>
+                                                     justifyContent="flex-end"
+                                                     m={2}
+                                                     mt={3}>
+                                                    <Button
+                                                        disabled={!filterValues && !Object.keys(values).length}
+                                                        color="primary"
+                                                        type="reset"
+                                                        aria-label="filter clear"
+                                                        onClick={reset}>Clear</Button>
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="primary"
+                                                        type="submit">Ok</Button>
                                                 </Box>
                                             </Form>
                                         );
@@ -117,7 +183,7 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                                 </Formik>
                             </Box>
                         </Popover>
-                    </React.Fragment>
+                    </Box>
                 );
             }}
         </PopupState>
@@ -128,6 +194,8 @@ function createFilterField(key: string, property: Property): JSX.Element {
 
     if (property.dataType === "number" || property.dataType === "string") {
         return <StringNumberFilterField name={key} property={property}/>;
+    } else if (property.dataType === "boolean") {
+        return <BooleanFilterField name={key} property={property}/>;
     }
 
     return (

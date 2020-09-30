@@ -9,8 +9,16 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import { collectionStyles } from "../styles";
-import { Box, Grid, IconButton, TableContainer } from "@material-ui/core";
+import {
+    Box,
+    createStyles,
+    Grid,
+    Hidden,
+    IconButton,
+    makeStyles,
+    TableContainer,
+    Theme
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import {
@@ -27,7 +35,53 @@ import SearchBar from "./SearchBar";
 import PreviewComponent from "../preview/PreviewComponent";
 import SkeletonComponent, { renderSkeletonText } from "../preview/SkeletonComponent";
 import firebase from "firebase";
+import { getIconForProperty } from "../util/property_icons";
+import { lighten } from "@material-ui/core/styles";
 import FieldPath = firebase.firestore.FieldPath;
+
+export const collectionStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        toolbar: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(1),
+            zIndex: 100,
+            backgroundColor: "white",
+            borderBottom: "1px solid rgba(224, 224, 224, 1)"
+        },
+        table: {},
+        root: {
+            height: "100%",
+            display: "flex",
+            flexDirection: "column"
+        },
+        tableContainer: {
+            height: "100%",
+            flexGrow: 1
+        },
+        highlight:
+            theme.palette.type === "light"
+                ? {
+                    color: theme.palette.secondary.main,
+                    backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+                }
+                : {
+                    color: theme.palette.text.primary,
+                    backgroundColor: theme.palette.secondary.dark
+                },
+        visuallyHidden: {
+            border: 0,
+            clip: "rect(0 0 0 0)",
+            height: 1,
+            margin: -1,
+            overflow: "hidden",
+            padding: 0,
+            position: "absolute",
+            top: 20,
+            width: 1
+        }
+    })
+);
+
 
 interface CollectionTableProps<S extends EntitySchema> {
     /**
@@ -44,6 +98,11 @@ interface CollectionTableProps<S extends EntitySchema> {
      * Show the toolbar in this collection
      */
     includeToolbar: boolean,
+
+    /**
+     * Override the title in the toolbar
+     */
+    overrideTitle?: string,
 
     /**
      * In case this table should have some filters set by default
@@ -81,6 +140,11 @@ interface CollectionTableProps<S extends EntitySchema> {
      * Properties that can be filtered
      */
     filterableProperties?: (keyof S["properties"])[];
+
+    /**
+     * Widget to display in the upper bar
+     */
+    actions?: React.ReactChild;
 
     /**
      * Should the table add an edit button
@@ -125,7 +189,6 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     useEffect(() => {
         const startAfter = pageKeys[page];
         setDataLoading(true);
-
         const cancelSubscription = listenCollection<S>(
             props.collectionPath,
             props.schema,
@@ -139,6 +202,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                 setData(entities);
             },
             (error) => {
+                console.log("ERROR", error);
                 setDataLoading(false);
                 setDataLoadingError(error);
             },
@@ -160,6 +224,8 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         setOrder(undefined);
         setOrderBy(undefined);
     };
+
+    const filterSet = filter && Object.keys(filter).length;
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {
         if (filter) {
@@ -197,7 +263,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     };
 
     const onFilterUpdate = (filterValues: FilterValues<S>) => {
-        if (orderBy) {
+        if (orderBy && filterValues) {
             const filterKeys = Object.keys(filterValues);
             if (filterKeys.length > 1 || filterKeys[0] !== orderBy) {
                 resetSort();
@@ -226,19 +292,22 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     const buildTableRowButtons = <S extends EntitySchema>(entity: Entity<S> | null, index: number) => (
         <TableCell key={`row-buttons-${index}`}>
-            <Box minWidth={96}>
-                <IconButton aria-label="edit"
-                            disabled={!entity || !editEnabled}
-                            onClick={editEnabled ? (event) => entity && onEntityEdit(event, entity) : undefined}>
-                    <EditIcon color={"action"}/>
-                </IconButton>
 
-                <IconButton aria-label="delete"
-                            disabled={!entity || !deleteEnabled}
-                            onClick={deleteEnabled ? (event) => entity && onEntityDelete(event, entity) : undefined}>
+            {(editEnabled || deleteEnabled) &&
+            <Box minWidth={96}>
+                {editEnabled && <IconButton aria-label="edit"
+                                            disabled={!entity || !editEnabled}
+                                            onClick={editEnabled ? (event) => entity && onEntityEdit(event, entity) : undefined}>
+                    <EditIcon color={"action"}/>
+                </IconButton>}
+
+                {deleteEnabled && <IconButton aria-label="delete"
+                                              disabled={!entity || !deleteEnabled}
+                                              onClick={deleteEnabled ? (event) => entity && onEntityDelete(event, entity) : undefined}>
                     <DeleteIcon/>
-                </IconButton>
+                </IconButton>}
             </Box>
+            }
 
             <Box maxWidth={96}
                  component="div"
@@ -268,11 +337,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
                 {tableViewProperties && tableViewProperties
                     .map((key, index) =>
-                        renderTableCell(index,
-                            entity.values[key as string],
-                            key as string,
-                            props.schema.properties[key as string] as Property,
-                            small))}
+                        renderTableCell(key as string, index, entity.values[key as string], props.schema.properties[key as string] as Property, small))}
 
                 {props.additionalColumns && props.additionalColumns
                     .map((delegate, index) =>
@@ -309,10 +374,22 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         );
     }
 
+    function buildErrorView<S extends EntitySchema>() {
+        return (
+            <Box display="flex"
+                 justifyContent="center"
+                 margin={6}>
+                {"Error fetching data from Firestore"}
+            </Box>
+        );
+    }
+
     function buildEmptyView<S extends EntitySchema>() {
         return (
-            <Box margin={4}>
-                This collection is empty
+            <Box display="flex"
+                 justifyContent="center"
+                 margin={6}>
+                {filterSet ? "No data with the selected filters" : "This collection is empty"}
             </Box>
         );
     }
@@ -369,7 +446,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     return (
 
-        <Paper elevation={1}>
+        <Paper elevation={0} className={classes.root}>
 
             {props.includeToolbar &&
             <CollectionTableToolbar schema={props.schema}
@@ -377,9 +454,12 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                                     onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                                     collectionPath={props.collectionPath}
                                     filterableProperties={props.filterableProperties}
+                                    actions={props.actions}
+                                    overrideTitle={props.overrideTitle}
                                     onFilterUpdate={onFilterUpdate}/>}
 
-            <TableContainer>
+            <TableContainer
+                className={classes.tableContainer}>
 
                 {dataLoadingError &&
                 <Box m={5}>
@@ -402,9 +482,9 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                 <Table
                     className={classes.table}
                     aria-labelledby="tableTitle"
-                    size={"medium"}
+                    size={"small"}
                     stickyHeader={true}
-                    aria-label="enhanced table"
+                    aria-label="Table"
                 >
                     <CollectionTableHead
                         classes={classes}
@@ -420,27 +500,30 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                 </Table>
                 }
 
+                {dataLoadingError && buildErrorView()}
                 {!dataLoadingError && !textSearchInProgress && !data?.length && buildEmptyView()}
 
-            </TableContainer>
+                {props.paginationEnabled
+                && !textSearchInProgress
+                && rowsPerPage
+                && <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={Infinity}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    backIconButtonProps={{
+                        "aria-label": "previous page"
+                    }}
+                    nextIconButtonProps={{
+                        "aria-label": "next page"
+                    }}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+                }
 
-            {props.paginationEnabled && !textSearchInProgress && rowsPerPage &&
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={Infinity}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                backIconButtonProps={{
-                    "aria-label": "previous page"
-                }}
-                nextIconButtonProps={{
-                    "aria-label": "next page"
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-            }
+            </TableContainer>
 
         </Paper>
     );
@@ -464,6 +547,7 @@ interface HeadCell {
     index: number;
     id: string;
     label: string;
+    icon: React.ReactNode;
     align: "right" | "left";
 }
 
@@ -490,6 +574,7 @@ function CollectionTableHead<S extends EntitySchema>({
                 index: index,
                 id: key as string,
                 align: getCellAlignment(property),
+                icon: getIconForProperty(property, "disabled", "small"),
                 label: property.title || key as string
             });
         });
@@ -531,6 +616,10 @@ function CollectionTableHead<S extends EntitySchema>({
                                 direction={order}
                                 onClick={createSortHandler(headCell.id)}
                             >
+                                <Box display={"inherit"}
+                                     paddingLeft={headCell.align === "right" ? "10px" : "0px"}
+                                     paddingRight={headCell.align === "left" ? "10px" : "0px"}>{headCell.icon}</Box>
+
                                 {headCell.label}
                                 {active ?
                                     <span className={classes.visuallyHidden}>
@@ -565,6 +654,12 @@ interface CollectionTableToolbarProps<S extends EntitySchema> {
     filterValues?: FilterValues<S>;
     onTextSearch?: (searchString?: string) => void;
     filterableProperties?: (keyof S["properties"])[];
+    actions?: React.ReactChild;
+
+    /**
+     * Override the title in the toolbar
+     */
+    overrideTitle?: string,
 
     onFilterUpdate?(filterValues: FilterValues<S>): void;
 }
@@ -572,54 +667,68 @@ interface CollectionTableToolbarProps<S extends EntitySchema> {
 function CollectionTableToolbar<S extends EntitySchema>(props: CollectionTableToolbarProps<S>) {
     const classes = collectionStyles();
 
+    const filterEnabled = props.onFilterUpdate && props.filterableProperties && props.filterableProperties.length > 0;
+    const filterView = filterEnabled && props.onFilterUpdate && props.filterableProperties &&
+        <FilterPopup schema={props.schema}
+                     filterValues={props.filterValues}
+                     onFilterUpdate={props.onFilterUpdate}
+                     filterableProperties={props.filterableProperties}/>
+    ;
+
     return (
         <Toolbar
             className={classes.toolbar}
         >
-            <Grid
-                container
-                direction="row"
-                justify="space-between"
+            <Box
+                display={"flex"}
+                flexDirection="row"
+                justifyContent="space-between"
                 alignItems="center"
+                width={"100%"}
             >
-                <Grid item>
-                    <Box className={classes.title}>
-                        <Typography variant="h6">
-                            {props.schema.name} list
-                        </Typography>
-                        <Typography variant={"caption"}>
-                            {props.collectionPath}
-                        </Typography>
+
+
+                <Hidden xsDown>
+                    <Box display={"flex"}
+                         alignItems="center">
+                        <Box mr={2}>
+                            <Typography variant="h6">
+                                {props.overrideTitle ? props.overrideTitle : `${props.schema.name} list`}
+                            </Typography>
+                            <Typography variant={"caption"}>
+                                {props.collectionPath}
+                            </Typography>
+                        </Box>
+
+                        {filterEnabled && filterView}
+
                     </Box>
-                </Grid>
-                <Grid item>
-                    {props.onTextSearch &&
-                    <Box className={classes.searchBar}>
-                        <SearchBar
-                            onTextSearch={props.onTextSearch}/>
-                    </Box>
-                    }
-                </Grid>
-                <Grid item>
-                    {props.onFilterUpdate && props.filterableProperties && props.filterableProperties.length > 0 &&
-                    <FilterPopup schema={props.schema}
-                                 filterValues={props.filterValues}
-                                 onFilterUpdate={props.onFilterUpdate}
-                                 filterableProperties={props.filterableProperties}/>
-                    }
-                </Grid>
-            </Grid>
+                </Hidden>
+
+                {filterEnabled && <Hidden smUp>
+                    {filterView}
+                </Hidden>}
+
+
+                {props.onTextSearch &&
+                <SearchBar
+                    onTextSearch={props.onTextSearch}/>
+                }
+
+                {props.actions}
+            </Box>
 
         </Toolbar>
     );
 }
 
 
-function renderTableCell(index: number, value: any, key: string, property: Property, small: boolean) {
+function renderTableCell(name: string, index: number, value: any, property: Property, small: boolean) {
     return (
-        <TableCell key={`table-cell-${key}`} component="th"
+        <TableCell key={`table-cell-${name}`} component="td"
                    align={getCellAlignment(property)}>
-            <PreviewComponent value={value}
+            <PreviewComponent name={name}
+                              value={value}
                               property={property}
                               small={small}/>
         </TableCell>
@@ -628,7 +737,7 @@ function renderTableCell(index: number, value: any, key: string, property: Prope
 
 function renderTableSkeletonCell(index: number, key: string, property: Property) {
     return (
-        <TableCell key={`table-cell-${key}`} component="th"
+        <TableCell key={`table-cell-${key}`} component="td"
                    align={getCellAlignment(property)}>
 
             <SkeletonComponent
@@ -640,7 +749,7 @@ function renderTableSkeletonCell(index: number, key: string, property: Property)
 
 function renderCustomTableCell(index: number, element: React.ReactNode) {
     return (
-        <TableCell key={`table-additional-${index}`} component="th">
+        <TableCell key={`table-additional-${index}`} component="td">
             {element}
         </TableCell>
     );

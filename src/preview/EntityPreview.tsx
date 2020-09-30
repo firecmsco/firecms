@@ -14,7 +14,8 @@ import PreviewComponent from "./PreviewComponent";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import IconButton from "@material-ui/core/IconButton";
 import { FirebaseConfigContext } from "../contexts";
-
+import { getIconForProperty } from "../util/property_icons";
+import FingerprintIcon from "@material-ui/icons/Fingerprint";
 
 export interface EntityPreviewProps<S extends EntitySchema> {
     entity: Entity<S>;
@@ -34,12 +35,17 @@ export default function EntityPreview<S extends EntitySchema>(
                     <Table aria-label="simple table">
                         <TableBody>
                             <TableRow key={"entity_prev_id"}>
-                                <TableCell align="right" component="th"
+                                <TableCell align="right"
+                                           component="td"
                                            scope="row">
                                     <Typography variant={"caption"}
                                                 color={"textSecondary"}>
                                         Id
                                     </Typography>
+                                </TableCell>
+                                <TableCell padding="none">
+                                    <FingerprintIcon color={"disabled"}
+                                                     fontSize={"small"}/>
                                 </TableCell>
                                 <TableCell>
                                     <Box display="flex" alignItems="center">
@@ -54,22 +60,31 @@ export default function EntityPreview<S extends EntitySchema>(
                                     </Box>
                                 </TableCell>
                             </TableRow>
-                            {Object.entries(schema.properties).map(([key, property]) => (
+                            {schema && Object.entries(schema.properties).map(([key, property]) => (
                                 <TableRow
                                     key={"entity_prev" + property.title + key}>
-                                    <TableCell align="right" component="th"
+                                    <TableCell align="right"
+                                               component="td"
                                                scope="row">
-                                        <Typography variant={"caption"}
-                                                    color={"textSecondary"}>
+                                        <Typography
+                                            style={{ paddingLeft: "16px" }}
+                                            variant={"caption"}
+                                            color={"textSecondary"}>
                                             {property.title}
                                         </Typography>
                                     </TableCell>
+
+                                    <TableCell padding="none">
+                                        {getIconForProperty(property, "disabled", "small")}
+                                    </TableCell>
                                     <TableCell>
                                         <PreviewComponent
+                                            name={key}
                                             value={entity.values[key as string]}
                                             property={property}
                                             small={false}/>
                                     </TableCell>
+
                                 </TableRow>
                             ))}
                         </TableBody>

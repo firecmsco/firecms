@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 backgroundColor: fade(theme.palette.common.black, 0.10)
             },
             marginLeft: 0,
-            width: "100%",
             [theme.breakpoints.up("sm")]: {
                 marginLeft: theme.spacing(1),
                 width: "auto"
@@ -37,7 +36,8 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: "center"
         },
         inputRoot: {
-            color: "inherit"
+            color: "inherit",
+            minHeight: "inherit"
         },
         inputInput: {
             padding: theme.spacing(1, 1, 1, 0),

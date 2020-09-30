@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EntityForm from "../form/EntityForm";
 import { RouteComponentProps } from "react-router";
-import { Link as ReactLink } from "react-router-dom";
 import {
     Entity,
     EntityCollectionView,
@@ -12,21 +11,45 @@ import {
 import { listenEntity, saveEntity } from "../firebase";
 import {
     Box,
-    Breadcrumbs,
-    Link,
+    createStyles,
+    Grid,
+    makeStyles,
     Snackbar,
+    Theme,
     Typography
 } from "@material-ui/core";
 import {
     BreadcrumbEntry,
-    buildDataPath,
     getEntityPath,
     getPlaceHolderIdForView,
     replacePathIdentifiers
 } from "./navigation";
-import { BreadcrumbContainer, CircularProgressCenter } from "../util";
+import { CircularProgressCenter } from "../components";
 import SubCollectionsView from "../collection/SubCollectionsView";
 import MuiAlert from "@material-ui/lab/Alert/Alert";
+import { useSelectedEntityContext } from "../selected_entity_controller";
+import { useBreadcrumbsContext } from "../breadcrumbs_controller";
+import { useSnackbarContext } from "../snackbar_controller";
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        content: {
+            padding: theme.spacing(5),
+            [theme.breakpoints.down("sm")]: {
+                paddingLeft: theme.spacing(2),
+                paddingRight: theme.spacing(2),
+                paddingTop: theme.spacing(3),
+                paddingBottom: theme.spacing(3),
+            },
+            [theme.breakpoints.down("xs")]: {
+                paddingLeft: theme.spacing(0),
+                paddingRight: theme.spacing(0),
+                paddingTop: theme.spacing(2),
+                paddingBottom: theme.spacing(2),
+            },
+        }
+    })
+);
 
 interface EntityRouteProps<S extends EntitySchema> {
     view: EntityCollectionView<S>;
@@ -51,12 +74,27 @@ export function EntityFormRoute<S extends EntitySchema>({
 
     const hashIdentifier = getPlaceHolderIdForView(entityPlaceholderPath, view);
     params = match.params;
+
     collectionPath = replacePathIdentifiers(params, entityPlaceholderPath);
+    console.debug("Entity collection path", collectionPath);
+
+    const classes = useStyles();
+    const snackbarContext = useSnackbarContext();
+
+    const breadcrumbsContext = useBreadcrumbsContext();
+    breadcrumbsContext.set({
+        breadcrumbs: breadcrumbs,
+        currentTitle: view.schema.name,
+        pathParams: match.params
+    });
+
     entityId = params[hashIdentifier];
 
     const [entity, setEntity] = useState<Entity<S>>();
     const [status, setStatus] = useState<EntityStatus | undefined>();
     const [loading, setLoading] = useState<boolean>(true);
+
+    const selectedEntityContext = useSelectedEntityContext();
 
     useEffect(() => {
         if (entityId) {
@@ -88,24 +126,23 @@ export function EntityFormRoute<S extends EntitySchema>({
         // }
     });
 
-    const handleCloseSuccessAlert = (event?: React.SyntheticEvent, reason?: string) => {
-        setOpenSuccessAlert(false);
-    };
 
-    const handleCloseErrorAlert = (event?: React.SyntheticEvent, reason?: string) => {
-        setSaveErrorAlert(undefined);
-        setPreSaveErrorAlert(undefined);
-        setPostSaveErrorAlert(undefined);
-    };
-
-    const [openSuccessAlert, setOpenSuccessAlert] = React.useState<boolean>(false);
-    const [saveErrorAlert, setSaveErrorAlert] = React.useState<Error | undefined>(undefined);
-    const [preSaveErrorAlert, setPreSaveErrorAlert] = React.useState<Error | undefined>(undefined);
-    const [postSaveErrorAlert, setPostSaveErrorAlert] = React.useState<Error | undefined>(undefined);
-
-    function onSubcollectionEntityClick(collectionPath: string, entity: Entity<S>) {
+    function onSubcollectionEntityEdit(collectionPath: string,
+                                       entity: Entity<S>,
+                                       schema: S,
+                                       subcollections?: EntityCollectionView<any>[]) {
         const entityPath = getEntityPath(entity.id, collectionPath);
         history.push(entityPath);
+    }
+
+    function onSubcollectionEntityClick(collectionPath: string,
+                                        entity: Entity<S>,
+                                        schema: S,
+                                        subcollections?: EntityCollectionView<any>[]) {
+
+        selectedEntityContext.open({
+            entity, schema, subcollections
+        });
     }
 
     async function onEntitySave(schema: S, collectionPath: string, id: string | undefined, values: EntityValues<S>): Promise<void> {
@@ -126,7 +163,11 @@ export function EntityFormRoute<S extends EntitySchema>({
                 });
             } catch (e) {
                 continueWithSave = false;
-                setPreSaveErrorAlert(e);
+                snackbarContext.open({
+                    type: "error",
+                    title: "Error before saving",
+                    message: e?.message
+                });
             }
         }
 
@@ -135,7 +176,11 @@ export function EntityFormRoute<S extends EntitySchema>({
 
         return saveEntity(collectionPath, id, values)
             .then((id) => {
-                setOpenSuccessAlert(true);
+
+                snackbarContext.open({
+                    type: "success",
+                    message: "The item has been saved correctly"
+                });
 
                 if (status === EntityStatus.new) {
                     setLoading(true);
@@ -154,7 +199,11 @@ export function EntityFormRoute<S extends EntitySchema>({
                             status
                         });
                     } catch (e) {
-                        setPostSaveErrorAlert(e);
+                        snackbarContext.open({
+                            type: "error",
+                            title: "Error after saving (entity is saved)",
+                            message: e?.message
+                        });
                     }
                 }
 
@@ -171,7 +220,12 @@ export function EntityFormRoute<S extends EntitySchema>({
                     });
                 }
 
-                setSaveErrorAlert(e);
+                snackbarContext.open({
+                    type: "error",
+                    title: "Error saving",
+                    message: e?.message
+                });
+
                 console.error("Error saving entity", collectionPath, entityId, values);
                 console.error(e);
             });
@@ -179,100 +233,50 @@ export function EntityFormRoute<S extends EntitySchema>({
 
     const existingEntity = status === EntityStatus.existing;
 
-    const formBody = <React.Fragment>
-        <Box mb={3}>
-            <BreadcrumbContainer>
-                <Breadcrumbs aria-label="breadcrumb">
-                    <Link key={`breadcrumb-home`} color="inherit"
-                          component={ReactLink}
-                          to="/">
-                        Home
-                    </Link>
-                    {breadcrumbs.map(entry =>
-                        (entry.placeHolderId && !params[entry.placeHolderId]) ?
-                            null :
-                            <Link
-                                key={`breadcrumb-${entry.entityPlaceholderPath}`}
-                                color="inherit"
-                                component={ReactLink}
-                                to={buildDataPath(replacePathIdentifiers(params, entry.entityPlaceholderPath))}>
-                                {entry.placeHolderId ? params[entry.placeHolderId] : entry.view.name}
-                            </Link>)
-                        .filter(c => !!c)}
-                    <Typography
-                        color="textPrimary">{existingEntity ? "Edit" : `Add New`}</Typography>
-                </Breadcrumbs>
-            </BreadcrumbContainer>
-        </Box>
-        <Box mb={3}>
-            <Typography variant="h5">
-                {existingEntity ? "Edit" : `Add New`} {view.schema.name}
-            </Typography>
-        </Box>
+    const form = <EntityForm
+        status={status as EntityStatus}
+        collectionPath={collectionPath}
+        schema={view.schema}
+        onEntitySave={onEntitySave}
+        entity={entity}/>;
 
-        <EntityForm
-            status={status as EntityStatus}
-            collectionPath={collectionPath}
-            schema={view.schema}
-            onEntitySave={onEntitySave}
-            entity={entity}/>
+    const subCollectionsView = view.subcollections && <SubCollectionsView
+        parentCollectionPath={collectionPath}
+        subcollections={view.subcollections}
+        entity={entity}
+        onEntityEdit={onSubcollectionEntityEdit}
+        onEntityClick={onSubcollectionEntityClick}/>;
 
-        {view.subcollections &&
-        <SubCollectionsView parentCollectionPath={collectionPath}
-                            subcollections={view.subcollections}
-                            entity={entity}
-                            onEntityClick={onSubcollectionEntityClick}/>
-        }
+    const mainBodyWide = (
+        <Box className={classes.content}>
 
-    </React.Fragment>;
+            <Box mb={3}>
+                <Typography variant="h5">
+                    {existingEntity ? "Edit" : `Add New`} {view.schema.name}
+                </Typography>
+            </Box>
 
-    return (
-        <React.Fragment>
-            {loading ?
+            <Grid container spacing={3}>
+                <Grid item xs={12}
+                    // lg={view.subcollections ? 5 : 12}
+                >
+                    {form}
+                </Grid>
+
+                {view.subcollections &&
+                <Grid item xs={12}
+                    // lg={7}
+                >
+                    {subCollectionsView}
+                </Grid>
+                }
+            </Grid>
+
+        </Box>);
+
+    return loading ?
                 <CircularProgressCenter/>
                 :
-                formBody
-            }
-
-            <Snackbar open={openSuccessAlert} autoHideDuration={3000}
-                      onClose={handleCloseSuccessAlert}>
-                <MuiAlert elevation={6} variant="filled"
-                          onClose={handleCloseSuccessAlert} severity="success">
-                    The item has been saved correctly
-                </MuiAlert>
-            </Snackbar>
-
-            <Snackbar open={!!saveErrorAlert} autoHideDuration={3000}
-                      onClose={handleCloseErrorAlert}>
-                <MuiAlert elevation={6} variant="filled"
-                          onClose={handleCloseErrorAlert}
-                          severity="error">
-                    <Box>Error saving</Box>
-                    <Box>{saveErrorAlert?.message}</Box>
-                </MuiAlert>
-            </Snackbar>
-
-            <Snackbar open={!!preSaveErrorAlert} autoHideDuration={3000}
-                      onClose={handleCloseErrorAlert}>
-                <MuiAlert elevation={6} variant="filled"
-                          onClose={handleCloseErrorAlert}
-                          severity="error">
-                    <Box>Error before saving</Box>
-                    <Box>{preSaveErrorAlert?.message}</Box>
-                </MuiAlert>
-            </Snackbar>
-
-            <Snackbar open={!!postSaveErrorAlert} autoHideDuration={3000}
-                      onClose={handleCloseErrorAlert}>
-                <MuiAlert elevation={6} variant="filled"
-                          onClose={handleCloseErrorAlert}
-                          severity="error">
-                    <Box>Error after saving</Box>
-                    <Box>The entity has been saved</Box>
-                    <Box>{postSaveErrorAlert?.message}</Box>
-                </MuiAlert>
-            </Snackbar>
-
-        </React.Fragment>
-    );
+                mainBodyWide
+          ;
 }

@@ -10,7 +10,7 @@ import {
 import { formStyles } from "../../styles";
 import { CMSFieldProps } from "../form_props";
 import React from "react";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
 
 type ArrayDefaultFieldProps = CMSFieldProps<any[]>;
 

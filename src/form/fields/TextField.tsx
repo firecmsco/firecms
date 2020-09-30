@@ -2,10 +2,10 @@ import { MediaType, StringProperty } from "../../models";
 import { getIn } from "formik";
 import {
     Box,
+    FilledInput,
     FormControl,
     FormControlLabel,
     FormHelperText,
-    Input,
     InputLabel,
     Switch,
     Typography
@@ -14,13 +14,15 @@ import React from "react";
 
 import { CMSFieldProps } from "../form_props";
 import PreviewComponent from "../../preview/PreviewComponent";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
 
 interface TextFieldProps extends CMSFieldProps<string | number> {
     allowInfinity?: boolean
 }
 
 export default function TextField({
+                                      name,
                                       field,
                                       form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                       property,
@@ -79,8 +81,15 @@ export default function TextField({
                 error={showError}
                 disabled={isSubmitting}
                 fullWidth>
-                <InputLabel>{property.title}</InputLabel>
-                <Input
+
+                <InputLabel style={{
+                    marginLeft: "8px",
+                    marginTop: "4px"
+                }}>
+                    <LabelWithIcon property={property}/>
+                </InputLabel>
+
+                <FilledInput
                     type={inputType}
                     multiline={!!multiline}
                     rows={rows}
@@ -92,39 +101,45 @@ export default function TextField({
                     }}
                 />
 
-                {allowInfinity &&
-                <FormControlLabel
-                    checked={valueIsInfinity}
-                    labelPlacement={"start"}
-                    control={
-                        <Switch
-                            size={"small"}
-                            type={"checkbox"}
-                            onChange={(evt) => {
-                                updateValue(
-                                    evt.target.checked ? Infinity : undefined);
-                            }}/>
-                    }
-                    disabled={property.disabled || isSubmitting}
-                    label={
-                        <Typography variant={"caption"}>
-                            Set value to Infinity
-                        </Typography>
-                    }
-                />
-                }
+                <Box display={"flex"}>
 
-                {showError && <FormHelperText
-                    id="component-error-text">{fieldError}</FormHelperText>}
+                    <Box flexGrow={1}>
+                        {showError && <FormHelperText
+                            id="component-error-text">{fieldError}</FormHelperText>}
 
-                {includeDescription &&
-                <FieldDescription property={property}/>}
+                        {includeDescription &&
+                        <FieldDescription property={property}/>}
+                    </Box>
+
+                    {allowInfinity &&
+                    <FormControlLabel
+                        checked={valueIsInfinity}
+                        labelPlacement={"start"}
+                        control={
+                            <Switch
+                                size={"small"}
+                                type={"checkbox"}
+                                onChange={(evt) => {
+                                    updateValue(
+                                        evt.target.checked ? Infinity : undefined);
+                                }}/>
+                        }
+                        disabled={property.disabled || isSubmitting}
+                        label={
+                            <Typography variant={"caption"}>
+                                Set value to Infinity
+                            </Typography>
+                        }
+                    />
+                    }
+                </Box>
 
             </FormControl>
 
             {mediaType && value &&
             <Box m={1}>
-                <PreviewComponent value={value}
+                <PreviewComponent name={field.name}
+                                  value={value}
                                   property={property}
                                   small={false}/>
             </Box>

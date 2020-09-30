@@ -3,20 +3,20 @@ import { Field } from "formik";
 import {
     FormControl,
     Grid,
-    Input,
     MenuItem,
     Select as MuiSelect,
+    TextField as MuiTextField,
     Typography
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { FieldProps } from "formik/dist/Field";
 
-interface TextFieldProps {
+interface StringNumberFilterFieldProps {
     name: string,
     property: StringProperty | NumberProperty,
 }
 
-export default function StringNumberFilterField({ name, property }: TextFieldProps) {
+export default function StringNumberFilterField({ name, property }: StringNumberFilterFieldProps) {
 
     const enumValues = property.config?.enumValues;
 
@@ -54,11 +54,7 @@ export default function StringNumberFilterField({ name, property }: TextFieldPro
 
                     <FormControl
                         fullWidth>
-                        <Typography variant={"caption"}>
-                            {property.title || name}
-                        </Typography>
                         <Grid container>
-
                             <Grid item xs={3}>
                                 <MuiSelect value={operation}
                                            autoWidth
@@ -74,7 +70,7 @@ export default function StringNumberFilterField({ name, property }: TextFieldPro
                             </Grid>
 
                             {!enumValues && <Grid item xs={9}>
-                                <Input
+                                <MuiTextField
                                     key={`filter-${name}`}
                                     type={property.dataType === "number" ? "number" : undefined}
                                     defaultValue={internalValue}

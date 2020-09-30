@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { RouteComponentProps } from "react-router";
-import { formStyles, useStyles } from "../styles";
-import { Button, Grid, Paper } from "@material-ui/core";
+import { formStyles } from "../styles";
+import {
+    Button,
+    createStyles,
+    Grid,
+    makeStyles,
+    Paper,
+    Theme
+} from "@material-ui/core";
 import { storage } from "firebase/app";
 
 import TreeView from "@material-ui/lab/TreeView";
@@ -10,6 +17,16 @@ import TreeItem from "@material-ui/lab/TreeItem";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { uploadFile } from "../firebase";
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        tree: {
+            height: 216,
+            flexGrow: 1,
+            maxWidth: 400
+        }
+    })
+);
 
 interface MediaRouteProps {
 }

@@ -1,16 +1,19 @@
 import { getIn } from "formik";
-import {
-    FormControl,
-    FormHelperText,
-    Input,
-    InputLabel
-} from "@material-ui/core";
+import { TextField, Theme, withStyles } from "@material-ui/core";
 import React, { ReactElement } from "react";
 import { CMSFieldProps, FieldDescription } from "@camberi/firecms";
 
 interface CustomColorTextFieldProps extends CMSFieldProps<string> {
     color: string
 }
+
+export const TextFieldWithStyles = withStyles((theme: Theme) => ({
+    root: (props:any) => ({
+        "& .MuiFilledInput-root": {
+            backgroundColor: props.customcolor,
+        }
+    })
+}))(TextField);
 
 export default function CustomColorTextField({
                                                  property,
@@ -27,33 +30,27 @@ export default function CustomColorTextField({
     const value = field.value;
 
     return (
-        <FormControl
-            required={property.validation?.required}
-            error={showError}
-            disabled={isSubmitting}
-            fullWidth>
-
-            <InputLabel>{property.title}</InputLabel>
-
-            <Input
-                style={{ backgroundColor: color }}
-                color={"secondary"}
-                defaultValue={value}
-                onChange={(evt) => {
-                    setFieldTouched(field.name);
-                    setFieldValue(
-                        field.name,
-                        evt.target.value
-                    );
-                }}
-            />
-
-            {showError && <FormHelperText
-                id="component-error-text">{fieldError}</FormHelperText>}
+        <>
+            <TextFieldWithStyles required={property.validation?.required}
+                                 error={showError}
+                                 disabled={isSubmitting}
+                                 label={property.title}
+                                 value={value ?? ""}
+                                 onChange={(evt:any) => {
+                                     setFieldTouched(field.name);
+                                     setFieldValue(
+                                         field.name,
+                                         evt.target.value
+                                     );
+                                 }}
+                                 helperText={showError && fieldError}
+                                 fullWidth
+                                 variant={"filled"}
+                                 customcolor={color} />
 
             <FieldDescription property={property}/>
+        </>
 
-        </FormControl>
     );
 
 }

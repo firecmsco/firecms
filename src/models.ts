@@ -166,6 +166,15 @@ export function buildSchema<Key extends string, P extends Properties<Key>>(schem
 }
 
 /**
+ * Identity function we use to defeat the type system of Typescript and preserve
+ * the properties keys
+ * @param properties
+ */
+export function buildProperties<Key extends string>(properties: Properties<Key>): Properties<Key> {
+    return properties;
+}
+
+/**
  * New or existing status
  */
 export enum EntityStatus { new = "new", existing = "existing"}
@@ -416,12 +425,18 @@ export interface ReferenceProperty<S extends EntitySchema = EntitySchema,
     filter?: FilterValues<S>;
 
     /**
+     * If a text search delegate is supplied, a search bar is displayed on top
+     */
+    textSearchDelegate?: TextSearchDelegate;
+
+    /**
      * Rules for validating this property
      */
     validation?: PropertyValidationSchema,
 
     /**
-     * Properties that need to be rendered when as a preview of this reference
+     * Properties that need to be rendered when displaying a preview of this
+     * reference
      */
     previewProperties?: Key[];
 }
@@ -430,7 +445,7 @@ export interface ReferenceProperty<S extends EntitySchema = EntitySchema,
 /**
  * Used to define filters applied in collections
  */
-export type FilterValues<S extends EntitySchema> = { [K in keyof Partial<S["properties"]>]: [WhereFilterOp, any] };
+export type FilterValues<S extends EntitySchema> = Partial<{ [K in keyof S["properties"]]: [WhereFilterOp, any] }>;
 
 /**
  * Filter conditions in a `Query.where()` clause are specified using the
@@ -513,13 +528,6 @@ export interface FieldConfig<T> {
      * FireCMS or to the custom field
      */
     fieldProps?: any;
-
-    /**
-     * Whether if this field should take the full width in the field.
-     * Defaults to false, but some fields like images take full width by
-     * default.
-     */
-    forceFullWidth?: boolean;
 
     /**
      * Configure how a property is displayed as a preview, e.g. in the collection

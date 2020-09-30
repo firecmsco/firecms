@@ -14,28 +14,44 @@ import { firestore } from "firebase/app";
 
 import {
     Box,
-    CardMedia, Checkbox,
-    Chip,
+    CardMedia,
+    createStyles,
     Divider,
     Grid,
     List,
     ListItem,
+    makeStyles,
     Table,
     TableBody,
     TableCell,
     TableRow,
+    Theme,
     Typography
 } from "@material-ui/core";
-import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import StorageThumbnail from "./StorageThumbnail";
 import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
 import ReferencePreview from "./ReferencePreview";
 import { PreviewComponentProps } from "./PreviewComponentProps";
-import { useStyles } from "../styles";
-import ScheduleIcon from "@material-ui/icons/Schedule";
+import CheckBox from "@material-ui/icons/CheckBox";
+import CheckBoxOutlineBlank from "@material-ui/icons/CheckBoxOutlineBlank";
+import ImagePreview from "./ImagePreview";
+import { CustomChip } from "./CustomChip";
+
+const MAX_PREVIEW_WIDTH = 400;
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        tableNoBottomBorder: {
+            "&:last-child th, &:last-child td": {
+                borderBottom: 0
+            }
+        }
+    })
+);
+
 
 export default function PreviewComponent<T>({
+                                                name,
                                                 value,
                                                 property,
                                                 small
@@ -51,6 +67,7 @@ export default function PreviewComponent<T>({
     if (property.config?.customPreview) {
         content = createElement(property.config.customPreview as React.ComponentType<PreviewComponentProps<T>>,
             {
+                name,
                 value,
                 property,
                 small
@@ -61,6 +78,8 @@ export default function PreviewComponent<T>({
             content = renderUrlComponent(stringProperty, value, small);
         } else if (stringProperty.config?.storageMeta) {
             content = renderStorageThumbnail(stringProperty, value as string, small);
+        } else if (stringProperty.config?.enumValues) {
+            content = renderPreviewEnumChip(name, stringProperty.config.enumValues, value, small);
         } else {
             content = renderString(stringProperty, value, small);
         }
@@ -73,19 +92,21 @@ export default function PreviewComponent<T>({
             } else if (arrayProperty.of.dataType === "string") {
                 if (arrayProperty.of.config?.enumValues) {
                     content = renderArrayEnumTableCell(
+                        name,
                         arrayProperty.of.config?.enumValues,
-                        value
+                        value,
+                        small
                     );
                 } else if (arrayProperty.of.config?.storageMeta) {
-                    content = renderGenericArray(arrayProperty.of, value);
+                    content = renderGenericArray(name, arrayProperty.of, value);
                 } else {
-                    content = renderArrayOfStrings(value);
+                    content = renderArrayOfStrings(name, value, small);
                 }
             } else {
-                content = renderGenericArray(arrayProperty.of, value);
+                content = renderGenericArray(name, arrayProperty.of, value);
             }
         } else {
-            content = renderShapedArray(arrayProperty.of, value);
+            content = renderShapedArray(name, arrayProperty.of, value);
         }
     } else if (property.dataType === "map" && typeof value === "object") {
         content = renderMap(property as MapProperty, value, small);
@@ -108,11 +129,14 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
 
     const classes = useStyles();
 
-    let mapProperties = property.previewProperties;
-    if (!mapProperties || !mapProperties.length) {
+    let mapProperties: string[];
+    if (!small) {
         mapProperties = Object.keys(property.properties);
-        if (small)
-            mapProperties = mapProperties.slice(0, 3);
+    } else {
+        if (property.previewProperties)
+            mapProperties = property.previewProperties;
+        else
+            mapProperties = Object.keys(property.properties).slice(0, 3);
     }
 
     if (small)
@@ -120,7 +144,8 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
             <List>
                 {mapProperties.map((key: string) => (
                     <ListItem key={property.title + key}>
-                        <PreviewComponent value={value[key] as any}
+                        <PreviewComponent name={key}
+                                          value={value[key] as any}
                                           property={property.properties[key]}
                                           small={small}/>
                     </ListItem>
@@ -145,6 +170,7 @@ function renderMap<T>(property: MapProperty<T>, value: T, small: boolean) {
                             </TableCell>
                             <TableCell key={`table-cell-${key}`} component="th">
                                 <PreviewComponent
+                                    name={key}
                                     value={value[key] as any}
                                     property={property.properties[key]}
                                     small={true}/>
@@ -186,6 +212,7 @@ function renderArrayOfMaps(properties: Properties, values: any[], small: boolean
                                         component="th"
                                     >
                                         <PreviewComponent
+                                            name={key}
                                             value={value[key] as any}
                                             property={properties[key]}
                                             small={true}/>
@@ -200,49 +227,52 @@ function renderArrayOfMaps(properties: Properties, values: any[], small: boolean
     );
 }
 
-function renderArrayOfStrings(values: string[]) {
+function renderArrayOfStrings(name: string, values: string[], small: boolean) {
 
     if (!values) return null;
 
     if (values && !Array.isArray(values)) {
         return <div>{`Unexpected value: ${values}`}</div>;
     }
+
     return (
         <Grid>
             {values &&
             values.map((value, index) => (
-                <Chip
-                    size="small"
-                    key={"preview_chip_" + value}
-                    label={
-                        <Typography variant="caption" color="textPrimary">
-                            {value}
-                        </Typography>
-                    }
-                />
+                <Box m={0.2}>
+                    <CustomChip
+                        value={name}
+                        label={value}
+                        small={small}
+                    />
+                </Box>
             ))}
         </Grid>
     );
 }
 
 function renderArrayEnumTableCell<T extends EnumType>(
+    name: string,
     enumValues: EnumValues<T>,
-    values: T[]
+    values: T[],
+    small: boolean
 ) {
 
     if (!values) return null;
 
     return (
-        <Grid>
+        <Box display={"flex"} flexWrap="wrap" maxWidth={MAX_PREVIEW_WIDTH}>
             {values &&
-            values.map((value, index) =>
-                renderPreviewEnumChip(enumValues, value)
+            values.map((value, index) => <Box m={0.2}>{
+                    renderPreviewEnumChip(name, enumValues, value, small)
+                }</Box>
             )}
-        </Grid>
+        </Box>
     );
 }
 
 function renderGenericArray<T extends EnumType>(
+    name: string,
     property: Property,
     values: T[]
 ) {
@@ -256,7 +286,8 @@ function renderGenericArray<T extends EnumType>(
             values.map((value, index) =>
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
                     <Box m={1}>
-                        <PreviewComponent value={value}
+                        <PreviewComponent name={name}
+                                          value={value}
                                           property={property}
                                           small={true}/>
                     </Box>
@@ -268,6 +299,7 @@ function renderGenericArray<T extends EnumType>(
 }
 
 function renderShapedArray<T extends EnumType>(
+    name: string,
     properties: Property[],
     values: T[]
 ) {
@@ -281,8 +313,9 @@ function renderShapedArray<T extends EnumType>(
                 <React.Fragment
                     key={"preview_array_" + values[index] + "_" + index}>
                     {values[index] && <Box m={1}>
-                        <PreviewComponent value={values[index]}
+                        <PreviewComponent name={name}
                                           property={property}
+                                          value={values[index]}
                                           small={true}/>
                     </Box>}
                     {values[index] && index < values.length - 1 && <Divider/>}
@@ -305,23 +338,7 @@ function renderUrlAudioComponent(value: string) {
 function renderUrlImageThumbnail(url: string,
                                  small: boolean) {
     return (
-        <a href={url}
-           target="_blank"
-           onClick={(e) => e.stopPropagation()}
-        >
-            <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                width={small ? 100 : 200}
-                height={small ? 100 : 200}>
-                <img src={url}
-                     style={{
-                         maxWidth: small ? 100 : 200,
-                         maxHeight: small ? 100 : 200
-                     }}/>
-            </Box>
-        </a>
+        <ImagePreview url={url} small={small}/>
     );
 }
 
@@ -400,13 +417,16 @@ export function renderString(property: StringProperty,
         return property.config?.enumValues[value];
     } else if (property.config?.multiline) {
         return (
-            <Box minWidth={300}
-                 style={{ lineClamp: 5, textOverflow: "ellipsis" }}>
+            <Box minWidth={300} maxWidth={MAX_PREVIEW_WIDTH}
+                 style={{
+                     lineClamp: small ? 5 : undefined,
+                     textOverflow: "ellipsis"
+                 }}>
                 {value}
             </Box>
         );
     } else {
-        return <Box minWidth={120}>
+        return <Box minWidth={120} maxWidth={MAX_PREVIEW_WIDTH}>
             {value}
         </Box>;
     }
@@ -432,42 +452,35 @@ export function renderStorageThumbnail(
 
 export function renderTimestamp(value: Date) {
     return (
-        <Box display="flex" alignItems="center">
-            <ScheduleIcon color="disabled" fontSize="small"/>
-            <Box pl={1}>
-                <Typography variant={"body2"}>
-                    {value.toLocaleString()}
-                </Typography>
-            </Box>
-        </Box>
+        <Typography variant={"body2"}>
+            {value.toLocaleString()}
+        </Typography>
     );
 }
 
 export function renderBoolean(
     value: boolean | undefined
 ) {
-    return <Checkbox disabled={true} checked={value}/>;
+    return value ? <CheckBox color="secondary"/> :
+        <CheckBoxOutlineBlank color="disabled"/>;
 }
 
 export function renderPreviewEnumChip<T extends EnumType>(
+    name: string,
     enumValues: EnumValues<T>,
-    value: any
+    value: T,
+    small: boolean
 ) {
     if (!value) return null;
-    const label = enumValues[value as T];
-    return (
-        <Chip
-            size="small"
-            key={"preview_chip_" + value}
-            label={
-                <Typography
-                    variant="caption"
-                    color={label ? "textPrimary" : "error"}
-                >
-                    {label || value}
-                </Typography>
-            }
-        />
-    );
+
+    const label = enumValues[value];
+    const key: string = typeof value == "number" ? `${name}_${value}` : value as string;
+
+    return <CustomChip value={key}
+                       label={label || value}
+                       error={!label}
+                       outlined={false}
+                       small={small}/>;
+
 }
 

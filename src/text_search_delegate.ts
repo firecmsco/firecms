@@ -22,7 +22,7 @@ export class AlgoliaTextSearchDelegate implements TextSearchDelegate {
     }
 
     performTextSearch(query: string): Promise<readonly string[]> {
-        console.log("Performing Algolia query", query);
+        console.log("Performing Algolia query", this.index, query);
         return this.index
             .search(query)
             .then(({ hits }: any) => {

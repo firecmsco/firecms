@@ -59,9 +59,13 @@ export function listenCollection<S extends EntitySchema<Key, P>, Key extends str
             .limit(limit);
 
     return collectionReference
-        .onSnapshot((colSnapshot) =>
-                onSnapshot(colSnapshot.docs.map((doc) => createEntityFromSchema(doc, schema))),
-            onError);
+        .onSnapshot({
+                next: (colSnapshot) =>
+                    onSnapshot(colSnapshot.docs.map(
+                        (doc) => createEntityFromSchema(doc, schema))),
+                error: onError
+            }
+        );
 }
 
 /**
@@ -78,7 +82,7 @@ export function fetchEntity<S extends EntitySchema,
     schema: S
 ): Promise<Entity<S, P, Key>> {
 
-    console.debug("fetch entity", path, entityId);
+    console.debug("Fetch entity", path, entityId);
 
     return firestore()
         .collection(path)

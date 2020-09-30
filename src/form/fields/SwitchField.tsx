@@ -1,33 +1,60 @@
 import {
+    createStyles,
+    FormControl,
     FormControlLabel,
     FormHelperText,
-    Switch
+    makeStyles,
+    Switch,
+    Theme
 } from "@material-ui/core";
 import React from "react";
-
 import { CMSFieldProps } from "../form_props";
 import { getIn } from "formik";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
+
+export const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        formControl: {
+            width: "100%",
+            minHeight: "64px",
+            paddingRight: "32px"
+        },
+        label: {
+            width: "100%",
+            height: "100%"
+        }
+    })
+);
+
 
 type SwitchFieldProps = CMSFieldProps<boolean>;
 
-export default function SwitchField({
-                                        field,
-                                        form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
-                                        property,
-                                        includeDescription,
-                                        createFormField,
-                                        ...props
-                                    }: SwitchFieldProps) {
 
+export default React.forwardRef(function SwitchField({
+                                                         field,
+                                                         form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
+                                                         property,
+                                                         includeDescription,
+                                                         createFormField,
+                                                         ...props
+                                                     }: SwitchFieldProps, ref) {
 
+    const classes = useStyles();
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
 
     return (
-        <React.Fragment>
+        <FormControl
+            className={"MuiFilledInput-root MuiFilledInput-underline MuiInputBase-formControl"}
+            fullWidth
+            error={showError}>
+
             <FormControlLabel
-                checked={field.value}
+                className={classes.formControl}
+                labelPlacement={"start"}
+                checked={!!field.value}
+                inputRef={ref}
                 control={
                     <Switch
                         {...props}
@@ -41,15 +68,22 @@ export default function SwitchField({
                         }}/>
                 }
                 disabled={property.disabled || isSubmitting}
-                label={property.title}
+                label={
+                    <div className={"MuiFormLabel-root"}
+                         style={{ width: "100%", marginLeft: "-4px" }}>
+                        <LabelWithIcon scaledIcon={true}
+                                       property={property}/>
+                    </div>}
             />
+
 
             {includeDescription &&
             <FieldDescription property={property}/>}
 
             {showError && <FormHelperText
                 id="component-error-text">{fieldError}</FormHelperText>}
-        </React.Fragment>
+
+        </FormControl>
     );
-}
+});
 

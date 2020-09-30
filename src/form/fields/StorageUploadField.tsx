@@ -6,7 +6,7 @@ import {
     FormControl,
     FormHelperText,
     IconButton,
-    LinearProgress,
+    LinearProgress, makeStyles,
     Paper,
     RootRef,
     Snackbar,
@@ -18,7 +18,6 @@ import { getDownloadURL, uploadFile } from "../../firebase";
 import { storage } from "firebase/app";
 
 
-import { formStyles } from "../../styles";
 import {
     ArrayProperty,
     Property,
@@ -32,7 +31,33 @@ import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
 import PreviewComponent from "../../preview/PreviewComponent";
 import deepEqual from "deep-equal";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { useSnackbarContext } from "../../snackbar_controller";
+
+export const useStyles = makeStyles(theme => ({
+    dropZone: {
+        backgroundColor: "rgba(0, 0, 0, 0.09)",
+        "&:hover": {
+            backgroundColor: "#dedede"
+        }
+    },
+    activeDrop: {
+        backgroundColor: "#dedede"
+    },
+    acceptDrop: {
+        borderColor: theme.palette.success.main
+    },
+    rejectDrop: {
+        borderColor: theme.palette.error.main
+    },
+    uploadItem: {
+        padding: theme.spacing(1),
+        minWidth: 220,
+        minHeight: 220
+    }
+}));
+
 
 type StorageUploadFieldProps = CMSFieldProps<string | string[]> ;
 
@@ -53,6 +78,7 @@ export default function StorageUploadField({
                                                form: { errors, touched, setFieldValue, setFieldTouched },
                                                property,
                                                includeDescription
+
                                            }: StorageUploadFieldProps) {
 
     const fieldError = getIn(errors, field.name);
@@ -72,7 +98,7 @@ export default function StorageUploadField({
 
             <FormHelperText filled
                             required={property.validation?.required}>
-                {property.title}
+                <LabelWithIcon scaledIcon={true} property={property}/>
             </FormHelperText>
 
             <StorageUpload value={value}
@@ -83,7 +109,8 @@ export default function StorageUploadField({
                                    field.name,
                                    newValue
                                );
-                           }}/>
+                           }}
+                           small={false}/>
 
             {includeDescription &&
             <FieldDescription property={property}/>}
@@ -99,12 +126,14 @@ interface StorageUploadProps {
     value: string | string[];
     property: StringProperty | ArrayProperty<string>;
     onChange: (value: string | string[] | null) => void;
+    small: boolean
 }
 
 export function StorageUpload({
                                   property,
                                   value,
-                                  onChange
+                                  onChange,
+                                  small
                               }: StorageUploadProps) {
 
     const multipleFilesSupported = property.dataType === "array";
@@ -130,14 +159,14 @@ export function StorageUpload({
     if (!storageMeta)
         throw Error("Storage meta must be specified");
 
-    const classes = formStyles();
+    const classes = useStyles();
 
     const internalInitialValue: StorageFieldItem[] =
         (multipleFilesSupported ?
             value as string[]
             : [value as string]).map(entry => (
             {
-                storagePathOrDownloadUrl:  entry,
+                storagePathOrDownloadUrl: entry,
                 metadata: metadata
             }
         ));
@@ -268,6 +297,7 @@ export function StorageUpload({
                      flexDirection="row"
                      flexWrap="wrap"
                      alignItems="center"
+                     justifyContent="center"
                      minHeight={250}>
 
                     {internalValue.map(entry => {
@@ -299,7 +329,8 @@ export function StorageUpload({
 
                     <Box
                         flexGrow={1}
-                        m={2}>
+                        m={2}
+                        maxWidth={small ? 100 : 200}>
                         <Typography color={"textSecondary"}
                                     variant={"body2"}
                                     align={"center"}>
@@ -332,11 +363,11 @@ export function StorageUploadProgress({
                                           onFileUploadComplete
                                       }: StorageUploadItemProps) {
 
-    const classes = formStyles();
+    const classes = useStyles();
+    const snackbarContext = useSnackbarContext();
 
     const [error, setError] = React.useState<string>();
     const [progress, setProgress] = React.useState<number>(-1);
-    const [openErrorAlert, setOpenErrorAlert] = React.useState<boolean>(false);
 
     useEffect(() => {
         if (file)
@@ -365,7 +396,12 @@ export function StorageUploadProgress({
             console.error("Upload error", e);
             setError(e.message);
             setProgress(-1);
-            setOpenErrorAlert(true);
+            snackbarContext.open({
+                type: "error",
+                title: "Error uploading file",
+                message: e.message
+            })
+
         }, () => {
             const fullPath = uploadTask.snapshot.ref.fullPath;
             setProgress(-1);
@@ -373,15 +409,11 @@ export function StorageUploadProgress({
         });
     }
 
-    const handleCloseErrorAlert = (event?: React.SyntheticEvent, reason?: string) => {
-        setOpenErrorAlert(false);
-    };
-
     return (
 
         <React.Fragment>
 
-            <Box ml={2} mt={2} mb={2}>
+            <Box m={1}>
                 <Paper elevation={0}
                        className={classes.uploadItem}
                        variant={"outlined"}>
@@ -395,36 +427,28 @@ export function StorageUploadProgress({
                 </Paper>
             </Box>
 
-
-            <Snackbar open={openErrorAlert} autoHideDuration={3000}
-                      onClose={handleCloseErrorAlert}>
-                <MuiAlert elevation={6} variant="filled"
-                          onClose={handleCloseErrorAlert}
-                          severity="error">
-                    {error}
-                </MuiAlert>
-            </Snackbar>
-
         </React.Fragment>
     );
 
 }
 
 interface StorageItemPreviewProps {
+    key: string;
     property: Property;
     value: string,
     onClear: (value: string) => void;
 }
 
 export function StorageItemPreview({
+                                       key,
                                        property,
                                        value,
                                        onClear
                                    }: StorageItemPreviewProps) {
 
-    const classes = formStyles();
+    const classes = useStyles();
     return (
-        <Box ml={2} mt={2} mb={2} position={"relative"}>
+        <Box m={1} position={"relative"}>
 
             <Paper
                 elevation={0}
@@ -446,7 +470,8 @@ export function StorageItemPreview({
                 </Box>
 
                 {value &&
-                <PreviewComponent value={value}
+                <PreviewComponent name={key}
+                                  value={value}
                                   property={property}
                                   small={false}/>}
 

@@ -10,17 +10,27 @@ import {
 } from "./navigation";
 import {
     Box,
-    Breadcrumbs,
-    Button,
-    Grid,
-    Link,
-    Typography
+    Button, createStyles,
+    makeStyles,
+    Theme,
+    useMediaQuery,
+    useTheme
 } from "@material-ui/core";
 import { Link as ReactLink } from "react-router-dom";
-import { BreadcrumbContainer } from "../util";
 import DeleteEntityDialog from "../collection/DeleteEntityDialog";
-import EntityDetailDialog from "../preview/EntityDetailDialog";
+import AddIcon from "@material-ui/icons/Add";
+import { useSelectedEntityContext } from "../selected_entity_controller";
+import { useBreadcrumbsContext } from "../breadcrumbs_controller";
 
+export const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            height: "100%",
+            display: "flex",
+            flexDirection: "column"
+        },
+    })
+);
 
 interface CollectionRouteProps<S extends EntitySchema> {
     view: EntityCollectionView<S>;
@@ -44,7 +54,15 @@ export function CollectionRoute<S extends EntitySchema>({
         throw Error("No match prop for some reason");
     }
 
-    const [entityClicked, setEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
+    const breadcrumbsContext = useBreadcrumbsContext();
+    breadcrumbsContext.set({
+        breadcrumbs: breadcrumbs,
+        currentTitle: view.schema.name,
+        pathParams: match.params
+    });
+
+    const selectedEntityContext = useSelectedEntityContext();
+
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
 
     function onEntityEdit(collectionPath: string, entity: Entity<S>) {
@@ -53,7 +71,11 @@ export function CollectionRoute<S extends EntitySchema>({
     }
 
     const onEntityClick = (collectionPath: string, entity: Entity<S>) => {
-        setEntityClicked(entity);
+        selectedEntityContext.open({
+            entity,
+            schema: view.schema,
+            subcollections: view.subcollections
+        });
     };
 
     const onEntityDelete = (collectionPath: string, entity: Entity<S>) => {
@@ -61,41 +83,39 @@ export function CollectionRoute<S extends EntitySchema>({
     };
 
     const deleteEnabled = view.deleteEnabled === undefined || view.deleteEnabled;
-    return (
-        <React.Fragment>
 
-            <Box mb={3}>
-                <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <BreadcrumbContainer>
-                            <Breadcrumbs aria-label="breadcrumb">
-                                <Link color="inherit" component={ReactLink}
-                                      to="/">
-                                    Home
-                                </Link>
-                                <Typography
-                                    color="textPrimary">{view.schema.name}</Typography>
-                            </Breadcrumbs>
-                        </BreadcrumbContainer>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Box textAlign="right">
-                            <Button
-                                component={ReactLink}
-                                to={getRouterNewEntityPath(collectionPath)}
-                                size="large"
-                                variant="contained"
-                                color="primary"
-                            >
-                                Add {view.schema.name}
-                            </Button>
-                        </Box>
-                    </Grid>
-                </Grid>
-            </Box>
+    const classes = useStyles();
+
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
+
+    function buildAddEntityButton() {
+        return matches ?
+            <Button
+                component={ReactLink}
+                startIcon={<AddIcon/>}
+                to={getRouterNewEntityPath(collectionPath)}
+                size="large"
+                variant="contained"
+                color="primary">
+                Add {view.schema.name}
+            </Button>
+            : <Button
+                component={ReactLink}
+                to={getRouterNewEntityPath(collectionPath)}
+                size="medium"
+                variant="contained"
+                color="primary"
+            ><AddIcon/>
+            </Button>;
+    }
+
+    return (
+        <Box className={classes.root}>
 
             <CollectionTable collectionPath={view.relativePath}
                              schema={view.schema}
+                             actions={buildAddEntityButton()}
                              textSearchDelegate={view.textSearchDelegate}
                              includeToolbar={true}
                              onEntityEdit={onEntityEdit}
@@ -108,11 +128,6 @@ export function CollectionRoute<S extends EntitySchema>({
                              filterableProperties={view.filterableProperties}
                              properties={view.properties}/>
 
-            <EntityDetailDialog entity={entityClicked}
-                                schema={view.schema}
-                                open={!!entityClicked}
-                                onClose={() => setEntityClicked(undefined)}/>
-
             {deleteEntityClicked &&
             <DeleteEntityDialog entity={deleteEntityClicked}
                                 schema={view.schema}
@@ -120,6 +135,6 @@ export function CollectionRoute<S extends EntitySchema>({
                                 afterDelete={() => view?.onEntityDelete ? view.onEntityDelete(collectionPath, deleteEntityClicked) : undefined}
                                 onClose={() => setDeleteEntityClicked(undefined)}/>}
 
-        </React.Fragment>
+        </Box>
     );
 }

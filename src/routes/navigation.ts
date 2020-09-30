@@ -1,4 +1,4 @@
-import { EntityCollectionView } from "../models";
+import { Entity, EntityCollectionView } from "../models";
 import hash from "object-hash";
 
 const DATA_PATH = `/c`;
@@ -17,7 +17,7 @@ export interface PathConfiguration {
 }
 
 export interface BreadcrumbEntry {
-    entityPlaceholderPath: string; // path with placeholders instead of ids
+    relativePlaceholderPath: string; // path with placeholders instead of ids
     view: EntityCollectionView<any>;
     placeHolderId?: string;
 }
@@ -43,14 +43,15 @@ export function getAllPaths(entityCollectionView: EntityCollectionView<any>[],
         const breadcrumbs = [
             ...previousBreadcrumbs,
             {
-                entityPlaceholderPath: path,
+                relativePlaceholderPath: path,
                 view
             },
             {
-                entityPlaceholderPath: entityPath,
+                relativePlaceholderPath: entityPath,
                 placeHolderId,
                 view
-            }];
+            }
+            ];
 
         const pathConfiguration: PathConfiguration = {
             entries: [
@@ -103,7 +104,7 @@ export function getRouterNewEntityPath(basePath: string) {
     return `${DATA_PATH}/${basePath}/new`;
 }
 
-export function buildDataPath(absolutePath: string) {
+export function buildCollectionPath(absolutePath: string) {
     return `${DATA_PATH}/${removeInitialSlash(absolutePath)}`;
 
 }
@@ -118,4 +119,9 @@ export function addInitialSlash(s: string) {
     if (s.startsWith("/"))
         return s;
     else return `/${s}`;
+}
+
+export function getCollectionEditPath(entity:Entity<any>){
+    const fbPath = entity.reference.path;
+    return `${DATA_PATH}/${fbPath}`;
 }

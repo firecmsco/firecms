@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import logo from "./images/test_shop_logo.png";
-import algoliasearch, { SearchClient } from "algoliasearch";
 
 import "typeface-rubik";
 
@@ -9,7 +8,6 @@ import * as serviceWorker from "./serviceWorker";
 
 import {
     AdditionalColumnDelegate,
-    AlgoliaTextSearchDelegate,
     AsyncPreviewComponent,
     Authenticator,
     buildSchema,
@@ -24,6 +22,11 @@ import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { User } from "firebase/app";
 import CustomBooleanPreview from "./custom_preview/CustomBooleanPreview";
 import { Properties } from "../../src";
+import {
+    blogSearchDelegate,
+    productsSearchDelegate,
+    usersSearchDelegate
+} from "./algolia_utils";
 
 const locales: EnumValues<string> = {
     "de-DE": "German",
@@ -107,16 +110,13 @@ const productSchema = buildSchema({
             description: "Not mandatory but it'd be awesome if you filled this up",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
             dataType: "string",
-            config: {
-                forceFullWidth: true
+            config:{
+                multiline: true
             }
         },
         published: {
             title: "Published",
-            dataType: "boolean",
-            config: {
-                customPreview: CustomBooleanPreview
-            }
+            dataType: "boolean"
         },
         expires_on: {
             title: "Expires on",
@@ -228,6 +228,13 @@ const blogSchema = buildSchema({
                 }
             }
         },
+        reviewed: {
+            title: "Reviewed",
+            dataType: "boolean",
+            config: {
+                customPreview: CustomBooleanPreview
+            }
+        },
         status: {
             title: "Status",
             validation: { required: true },
@@ -255,6 +262,7 @@ const blogSchema = buildSchema({
                 dataType: "reference",
                 collectionPath: "products",
                 schema: productSchema,
+                textSearchDelegate: productsSearchDelegate,
                 previewProperties: ["name", "image"]
             }
         }
@@ -331,17 +339,26 @@ export const testEntitySchema = buildSchema({
                 dataType: "string"
             }
         },
+        product: {
+            title: "Product",
+            validation: { required: true },
+            dataType: "reference",
+            collectionPath: "products",
+            schema: productSchema,
+            textSearchDelegate: productsSearchDelegate,
+            previewProperties: ["name", "image"]
+        },
         title: {
             title: "Title",
             description: "A catching title is important",
-            dataType: "string",
-            config: {
-                forceFullWidth: true
-            }
+            dataType: "string"
         },
         description: {
             title: "Description",
-            dataType: "string"
+            dataType: "string",
+            config:{
+                multiline: true
+            }
         },
         search_adjacent: {
             title: "Search adjacent",
@@ -454,13 +471,6 @@ const productAdditionalColumn: AdditionalColumnDelegate<typeof productSchema> = 
 };
 
 
-let client: SearchClient | undefined = undefined;
-if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
-    client = algoliasearch(process.env.REACT_APP_ALGOLIA_APP_ID, process.env.REACT_APP_ALGOLIA_SEARCH_KEY);
-} else {
-    console.error("REACT_APP_ALGOLIA_APP_ID or REACT_APP_ALGOLIA_SEARCH_KEY env variables not specified");
-    console.error("Text search not enabled");
-}
 
 const localeSchema = buildSchema({
     customId: locales,
@@ -501,14 +511,13 @@ const localeCollection: EntityCollectionView<typeof localeSchema> =
     }
 ;
 
+
 let navigation: EntityCollectionView<any>[] = [
     {
         relativePath: "products",
         schema: productSchema,
         name: "Products",
-        textSearchDelegate: client && new AlgoliaTextSearchDelegate(
-            client,
-            "products"),
+        textSearchDelegate: productsSearchDelegate,
         additionalColumns: [productAdditionalColumn],
         subcollections: [localeCollection],
         properties: ["name", "price", "status", "categories", "image", "tags", "published", "expires_on", "publisher", "available_locales"],
@@ -518,19 +527,15 @@ let navigation: EntityCollectionView<any>[] = [
         relativePath: "users",
         schema: usersSchema,
         name: "Users",
-        textSearchDelegate: client && new AlgoliaTextSearchDelegate(
-            client,
-            "users"),
+        textSearchDelegate: usersSearchDelegate,
         properties: ["first_name", "last_name", "email", "phone", "picture"]
     },
     {
         relativePath: "blog",
         schema: blogSchema,
         name: "Blog",
-        textSearchDelegate: client && new AlgoliaTextSearchDelegate(
-            client,
-            "blog"),
-        properties: ["name", "images", "status", "products", "long_text"],
+        textSearchDelegate: blogSearchDelegate,
+        properties: ["name", "images", "status", "reviewed", "products", "long_text"],
         filterableProperties: ["name", "status"],
         initialFilter: {
             "status": ["==", "published"]
@@ -545,7 +550,8 @@ if (process.env.NODE_ENV !== "production") {
     navigation.push({
         relativePath: "test_entity",
         schema: testEntitySchema,
-        name: "Test entity"
+        name: "Test entity",
+        filterableProperties: ["difficulty", "search_adjacent", "description"]
     });
 }
 

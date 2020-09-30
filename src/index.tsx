@@ -50,7 +50,7 @@ export { AlgoliaTextSearchDelegate } from "./text_search_delegate";
 
 export {
     FieldDescription
-} from "./util";
+} from "./components";
 
 export type {
     Authenticator

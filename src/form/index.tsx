@@ -45,6 +45,7 @@ function buildField<P extends Property<T>, T = any>(name: string,
                     {React.createElement(component, {
                         ...fieldProps,
                         ...additionalFieldProps,
+                        name: fieldProps.field.name,
                         includeDescription,
                         property,
                         createFormField

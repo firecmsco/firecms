@@ -12,7 +12,8 @@ import {
 import React from "react";
 import { CMSFieldProps } from "../form_props";
 import { renderPreviewEnumChip } from "../../preview/PreviewComponent";
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
 
 type ArrayEnumSelectProps<T extends EnumType> = CMSFieldProps<T[]>;
 
@@ -41,12 +42,18 @@ export default function ArrayEnumSelect<T extends EnumType>({
         required={property.validation?.required}
         error={showError}
     >
-        <InputLabel
-            id={`${field.name}-label`}>{property.title}
-        </InputLabel>
+        <div style={{ marginTop: "-4px" }}>
+            <InputLabel id={`${field.name}-multiselect-label`} style={{
+                marginLeft: "10px"
+            }}>
+                <LabelWithIcon property={property}/>
+            </InputLabel>
+        </div>
         <MuiSelect multiple
-                   labelId={`${field.name}-label`}
+                   variant={"filled"}
+                   labelId={`${field.name}-multiselect-label`}
                    value={!!field.value ? field.value : []}
+                   style={{minHeight: "64px",padding: "4px" }}
                    onChange={(evt: any) => {
                        setFieldTouched(field.name);
                        return setFieldValue(
@@ -57,7 +64,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
                    renderValue={(selected: any) => (
                        <div>
                            {selected.map((value: any) => {
-                               return renderPreviewEnumChip(enumValues, value);
+                               return renderPreviewEnumChip(field.name, enumValues, value, false);
                            })}
                        </div>
                    )}>
@@ -67,7 +74,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
                         <Checkbox
                             checked={!!field.value && field.value.indexOf(key as any) > -1}/>
                         <ListItemText
-                            primary={enumValues[key]}/>
+                            primary={renderPreviewEnumChip(field.name, enumValues, key, false)}/>
                     </MenuItem>
                 );
             })}

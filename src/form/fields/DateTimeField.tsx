@@ -5,7 +5,8 @@ import { DateTimePicker } from "@material-ui/pickers";
 import { CMSFieldProps } from "../form_props";
 import "firebase/firestore";
 
-import { FieldDescription } from "../../util";
+import { FieldDescription } from "../../components";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
 
 type DateTimeFieldProps = CMSFieldProps<firebase.firestore.Timestamp> ;
 
@@ -26,11 +27,12 @@ export default function DateTimeField({
 
     return (
         <React.Fragment>
+
             <DateTimePicker
                 fullWidth
                 clearable
                 value={value}
-                label={property.title}
+                label={<LabelWithIcon scaledIcon={false} property={property}/>}
                 error={showError}
                 disabled={property.disabled !== undefined ? property.disabled : isSubmitting}
                 helperText={showError ? fieldError : null}
@@ -41,10 +43,14 @@ export default function DateTimeField({
                         dateValue
                     );
                 }}
+                inputVariant={"filled"}
+                InputProps={{ style: { padding: "4px" } }}
                 {...props}
             />
+
             {includeDescription &&
             <FieldDescription property={property}/>}
+
         </React.Fragment>
     );
 }
