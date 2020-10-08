@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
+
 import {
     Box,
     createStyles,
@@ -34,10 +32,12 @@ import { TextSearchDelegate } from "../text_search_delegate";
 import SearchBar from "./SearchBar";
 import PreviewComponent from "../preview/PreviewComponent";
 import SkeletonComponent, { renderSkeletonText } from "../preview/SkeletonComponent";
-import firebase from "firebase";
-import { getIconForProperty } from "../util/property_icons";
 import { lighten } from "@material-ui/core/styles";
-import FieldPath = firebase.firestore.FieldPath;
+import { CollectionTableHead } from "./CollectionTableHead";
+import { getCellAlignment } from "./common";
+
+const PAGE_SIZE = 100;
+const PIXEL_NEXT_PAGE_OFFSET = 600;
 
 export const collectionStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -76,7 +76,7 @@ export const collectionStyles = makeStyles((theme: Theme) =>
             overflow: "hidden",
             padding: 0,
             position: "absolute",
-            top: 20,
+            top: PAGE_SIZE,
             width: 1
         }
     })
@@ -173,6 +173,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
     const [data, setData] = React.useState<Entity<S>[]>([]);
     const [dataLoading, setDataLoading] = React.useState<boolean>();
+    const [noMoreToLoad, setNoMoreToLoad] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
 
     const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
@@ -182,24 +183,21 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
     const [filter, setFilter] = React.useState<FilterValues<S> | undefined>(props.initialFilter);
     const [order, setOrder] = React.useState<Order>();
     const [orderBy, setOrderBy] = React.useState<string>();
-    const [page, setPage] = React.useState<number>(0);
-    const [pageKeys, setPageKeys] = React.useState<any[]>([]);
-    const [rowsPerPage, setRowsPerPage] = React.useState<number | undefined>(props.paginationEnabled ? 10 : undefined);
+    const [itemCount, setItemCount] = React.useState<number>(PAGE_SIZE);
+
+    const tableRef = useRef<Element>();
 
     useEffect(() => {
-        const startAfter = pageKeys[page];
         setDataLoading(true);
+        console.log("useEffect", itemCount);
         const cancelSubscription = listenCollection<S>(
             props.collectionPath,
             props.schema,
             entities => {
                 setDataLoading(false);
                 setDataLoadingError(undefined);
-                if (entities.length) {
-                    const lastEntity = entities[entities.length - 1];
-                    pageKeys[page + 1] = orderBy ? lastEntity.values[orderBy] : lastEntity.snapshot;
-                }
                 setData(entities);
+                setNoMoreToLoad(entities.length < itemCount);
             },
             (error) => {
                 console.log("ERROR", error);
@@ -207,17 +205,23 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                 setDataLoadingError(error);
             },
             filter,
-            rowsPerPage,
-            startAfter,
+            itemCount,
+            undefined,
             orderBy,
             order);
 
         return () => cancelSubscription();
-    }, [props.collectionPath, props.schema, rowsPerPage, page, order, orderBy, pageKeys, filter]);
+    }, [props.collectionPath, props.schema, itemCount, order, orderBy, filter]);
+
+    const loadNextPage = () => {
+        if (dataLoading || noMoreToLoad)
+            return;
+        console.log("loadNextPage", itemCount);
+        setItemCount(itemCount + PAGE_SIZE);
+    };
 
     const resetPagination = () => {
-        setPage(0);
-        setPageKeys([]);
+        setItemCount(PAGE_SIZE);
     };
 
     const resetSort = () => {
@@ -272,16 +276,7 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         setFilter(filterValues);
     };
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
 
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    const emptyRows = !data ? 0 : (rowsPerPage ? data.length - rowsPerPage : 0);
     let tableViewProperties = props.properties;
     if (!tableViewProperties) {
         tableViewProperties = Object.keys(props.schema.properties);
@@ -394,34 +389,22 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         );
     }
 
-    const skeletonBody = <TableBody>
-        {[0, 1, 2, 3, 4]
-            .map((_, index) => {
-                return buildTableRowSkeleton(index);
-            })}
-    </TableBody>;
-
-    const tableBody = <TableBody>
-        {textSearchInProgress && textSearchData
-            .map((entity, index) => {
+    const tableBody =
+        <TableBody>
+            {!textSearchInProgress && data.map((entity, index) => {
                 return buildTableRow(entity, index, props.small);
             })}
 
-        {!textSearchInProgress && data
-            .map((entity, index) => {
-                return buildTableRow(entity, index, props.small);
-            })}
+            {textSearchInProgress && !textSearchLoading && textSearchData
+                .map((entity, index) => {
+                    return buildTableRow(entity, index, props.small);
+                })}
 
-        {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={tableViewProperties.length}/>
-            </TableRow>
-        )}
-
-    </TableBody>;
-
-    const body =
-        (dataLoading || textSearchLoading) ? skeletonBody : tableBody;
+            {dataLoading && [0, 1, 2, 3, 4]
+                .map((_, index) => {
+                    return buildTableRowSkeleton(index);
+                })}
+        </TableBody>;
 
     const textSearchEnabled = !!props.textSearchDelegate;
 
@@ -444,6 +427,13 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
         }
     }
 
+    const onTableScroll = () => {
+        if (tableRef.current && tableRef.current.getBoundingClientRect().bottom <= window.innerHeight + PIXEL_NEXT_PAGE_OFFSET) {
+            loadNextPage();
+        }
+
+    };
+
     return (
 
         <Paper elevation={0} className={classes.root}>
@@ -458,7 +448,9 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                                     overrideTitle={props.overrideTitle}
                                     onFilterUpdate={onFilterUpdate}/>}
 
+
             <TableContainer
+                onScroll={onTableScroll}
                 className={classes.tableContainer}>
 
                 {dataLoadingError &&
@@ -476,16 +468,17 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                     </Grid>
                 </Box>}
 
-
                 {!dataLoadingError &&
 
                 <Table
+                    innerRef={tableRef}
                     className={classes.table}
                     aria-labelledby="tableTitle"
                     size={"small"}
                     stickyHeader={true}
                     aria-label="Table"
                 >
+
                     <CollectionTableHead
                         classes={classes}
                         schema={props.schema}
@@ -496,32 +489,12 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
                         additionalColumns={props.additionalColumns}
                         onRequestSort={handleRequestSort}
                     />
-                    {body}
+                    {tableBody}
                 </Table>
                 }
 
                 {dataLoadingError && buildErrorView()}
                 {!dataLoadingError && !textSearchInProgress && !data?.length && buildEmptyView()}
-
-                {props.paginationEnabled
-                && !textSearchInProgress
-                && rowsPerPage
-                && <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={Infinity}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    backIconButtonProps={{
-                        "aria-label": "previous page"
-                    }}
-                    nextIconButtonProps={{
-                        "aria-label": "next page"
-                    }}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-                }
 
             </TableContainer>
 
@@ -532,121 +505,6 @@ export default function CollectionTable<S extends EntitySchema>(props: Collectio
 
 type Order = "asc" | "desc" | undefined;
 
-interface CollectionTableHeadProps<S extends EntitySchema> {
-    classes: ReturnType<typeof collectionStyles>;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: any) => void;
-    order?: Order;
-    orderBy?: any;
-    sortable: boolean;
-    schema: S;
-    additionalColumns?: AdditionalColumnDelegate<S>[];
-    tableViewProperties: (keyof S["properties"])[];
-}
-
-interface HeadCell {
-    index: number;
-    id: string;
-    label: string;
-    icon: React.ReactNode;
-    align: "right" | "left";
-}
-
-function CollectionTableHead<S extends EntitySchema>({
-                                                         classes,
-                                                         order,
-                                                         orderBy,
-                                                         sortable,
-                                                         onRequestSort,
-                                                         schema,
-                                                         tableViewProperties,
-                                                         additionalColumns
-                                                     }: CollectionTableHeadProps<S>) {
-
-
-    const createSortHandler = (property: any) => (event: React.MouseEvent<unknown>) => {
-        onRequestSort(event, property);
-    };
-
-    const headCells: HeadCell[] = tableViewProperties
-        .map((key, index) => {
-            const property = schema.properties[key as string];
-            return ({
-                index: index,
-                id: key as string,
-                align: getCellAlignment(property),
-                icon: getIconForProperty(property, "disabled", "small"),
-                label: property.title || key as string
-            });
-        });
-
-    const sortedById = orderBy === FieldPath.documentId();
-    return (
-        <TableHead>
-            <TableRow>
-
-                <TableCell
-                    key={"header-id"}
-                    align={"center"}
-                    padding={"default"}>
-                    <TableSortLabel
-                        active={sortedById}
-                        direction={order}
-                        onClick={createSortHandler(FieldPath.documentId())}
-                    >
-                        Id
-                        {sortedById ?
-                            <span className={classes.visuallyHidden}>
-                                         {order === "desc" ? "Sorted descending" : (order === "asc" ? "Sorted ascending" : "")}
-                                    </span>
-                            : null}
-                    </TableSortLabel>
-                </TableCell>
-
-                {headCells.map(headCell => {
-                    const active = sortable && orderBy === headCell.id;
-                    return (
-                        <TableCell
-                            key={headCell.id}
-                            align={headCell.align}
-                            padding={"default"}
-                            sortDirection={active ? order : false}
-                        >
-                            <TableSortLabel
-                                active={active}
-                                direction={order}
-                                onClick={createSortHandler(headCell.id)}
-                            >
-                                <Box display={"inherit"}
-                                     paddingLeft={headCell.align === "right" ? "10px" : "0px"}
-                                     paddingRight={headCell.align === "left" ? "10px" : "0px"}>{headCell.icon}</Box>
-
-                                {headCell.label}
-                                {active ?
-                                    <span className={classes.visuallyHidden}>
-                                         {order === "desc" ? "Sorted descending" : (order === "asc" ? "Sorted ascending" : "")}
-                                    </span>
-                                    : null}
-                            </TableSortLabel>
-                        </TableCell>
-                    );
-                })}
-
-                {additionalColumns && additionalColumns.map((additionalColumn, index) => {
-                    return (
-                        <TableCell
-                            key={`head-additional-${index}`}
-                            align={"left"}
-                            padding={"default"}
-                        >
-                            {additionalColumn.title}
-                        </TableCell>
-                    );
-                })}
-
-            </TableRow>
-        </TableHead>
-    );
-}
 
 interface CollectionTableToolbarProps<S extends EntitySchema> {
     collectionPath: string;
@@ -753,8 +611,4 @@ function renderCustomTableCell(index: number, element: React.ReactNode) {
             {element}
         </TableCell>
     );
-}
-
-function getCellAlignment(property: Property): "right" | "left" {
-    return property.dataType === "number" || property.dataType === "timestamp" ? "right" : "left";
 }

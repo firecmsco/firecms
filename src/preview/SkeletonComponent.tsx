@@ -8,16 +8,30 @@ import {
 } from "../models";
 import React from "react";
 import {
-    Box, Divider,
+    Box,
+    createStyles,
+    Divider,
     Grid,
     List,
     ListItem,
+    makeStyles,
     Table,
     TableBody,
     TableCell,
-    TableRow
+    TableRow,
+    Theme
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        tableNoBottomBorder: {
+            "&:last-child th, &:last-child td": {
+                borderBottom: 0
+            }
+        }
+    })
+);
 
 export interface SkeletonComponentProps<T> {
     property: Property,
@@ -81,24 +95,56 @@ export default function SkeletonComponent<T>({
 }
 
 function renderMap<T>(property: MapProperty<T>, small: boolean) {
-    let listProperties = property.previewProperties;
-    if (!listProperties || !listProperties.length) {
-        listProperties = Object.keys(property.properties);
-        if (small)
-            listProperties = listProperties.slice(0, 3);
+
+    const classes = useStyles();
+
+    let mapProperties: string[];
+    if (!small) {
+        mapProperties = Object.keys(property.properties);
+    } else {
+        if (property.previewProperties)
+            mapProperties = property.previewProperties;
+        else
+            mapProperties = Object.keys(property.properties).slice(0, 3);
     }
 
+    if (small)
+        return (
+            <List>
+                {mapProperties && mapProperties.map((key: string) => (
+                    <ListItem key={property.title + key}>
+                        <SkeletonComponent
+                            property={property.properties[key]}
+                            small={true}/>
+                    </ListItem>
+                ))}
+            </List>
+        );
+
     return (
-        <List>
-            {listProperties && listProperties.map((key: string) => (
-                <ListItem key={property.title + key}>
-                    <SkeletonComponent
-                        property={property.properties[key]}
-                        small={true}/>
-                </ListItem>
-            ))}
-        </List>
+        <Table size="small">
+            <TableBody>
+                {mapProperties &&
+                mapProperties.map((key, index) => {
+                    return (
+                        <TableRow key={`table_${property.title}_${index}`}
+                                  className={classes.tableNoBottomBorder}>
+                            <TableCell key={`table-cell-title-${key}`}
+                                       component="th">
+                                <Skeleton variant="text"/>
+                            </TableCell>
+                            <TableCell key={`table-cell-${key}`} component="th">
+                                <SkeletonComponent
+                                    property={property.properties[key]}
+                                    small={true}/>
+                            </TableCell>
+                        </TableRow>
+                    );
+                })}
+            </TableBody>
+        </Table>
     );
+
 }
 
 function renderArrayOfMaps<P extends Properties>(properties: P, small: boolean, previewProperties?: (keyof P)[]) {
@@ -191,10 +237,11 @@ function renderShapedArray<T extends EnumType>(
                     key={"preview_array_" + properties[index] + "_" + index}>
                     {properties[index] && <Box m={1}>
                         <SkeletonComponent
-                                          property={property}
-                                          small={true}/>
+                            property={property}
+                            small={true}/>
                     </Box>}
-                    {properties[index] && index < properties.length - 1 && <Divider/>}
+                    {properties[index] && index < properties.length - 1 &&
+                    <Divider/>}
                 </React.Fragment>
             )}
         </Grid>
