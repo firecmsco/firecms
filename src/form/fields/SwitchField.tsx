@@ -37,7 +37,6 @@ export default React.forwardRef(function SwitchField({
                                                          property,
                                                          includeDescription,
                                                          createFormField,
-                                                         ...props
                                                      }: SwitchFieldProps, ref) {
 
     const classes = useStyles();
@@ -46,37 +45,35 @@ export default React.forwardRef(function SwitchField({
 
     return (
         <FormControl
-            className={"MuiFilledInput-root MuiFilledInput-underline MuiInputBase-formControl"}
             fullWidth
             error={showError}>
-
-            <FormControlLabel
-                className={classes.formControl}
-                labelPlacement={"start"}
-                checked={!!field.value}
-                inputRef={ref}
-                control={
-                    <Switch
-                        {...props}
-                        type={"checkbox"}
-                        onChange={(evt) => {
-                            setFieldTouched(field.name);
-                            setFieldValue(
-                                field.name,
-                                evt.target.checked
-                            );
-                        }}/>
-                }
-                disabled={property.disabled || isSubmitting}
-                label={
-                    <div className={"MuiFormLabel-root"}
-                         style={{ width: "100%", marginLeft: "-4px" }}>
-                        <LabelWithIcon scaledIcon={true}
-                                       property={property}/>
-                    </div>}
-            />
-
-
+            <div
+                className={"MuiFilledInput-root MuiFilledInput-underline MuiInputBase-formControl"}>
+                <FormControlLabel
+                    className={classes.formControl}
+                    labelPlacement={"start"}
+                    checked={!!field.value}
+                    inputRef={ref}
+                    control={
+                        <Switch
+                            type={"checkbox"}
+                            onChange={(evt) => {
+                                setFieldTouched(field.name);
+                                setFieldValue(
+                                    field.name,
+                                    evt.target.checked
+                                );
+                            }}/>
+                    }
+                    disabled={property.disabled || isSubmitting}
+                    label={
+                        <div className={"MuiFormLabel-root"}
+                             style={{ width: "100%", marginLeft: "-4px" }}>
+                            <LabelWithIcon scaledIcon={true}
+                                           property={property}/>
+                        </div>}
+                />
+            </div>
             {includeDescription &&
             <FieldDescription property={property}/>}
 
@@ -84,6 +81,7 @@ export default React.forwardRef(function SwitchField({
                 id="component-error-text">{fieldError}</FormHelperText>}
 
         </FormControl>
+
     );
 });
 

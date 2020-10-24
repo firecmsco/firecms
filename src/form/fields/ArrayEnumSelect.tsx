@@ -23,6 +23,9 @@ export default function ArrayEnumSelect<T extends EnumType>({
                                                                 property,
                                                                 includeDescription
                                                             }: ArrayEnumSelectProps<T>) {
+    if(!("dataType" in property.of)){
+        throw Error("Using wrong component ArrayEnumSelect");
+    }
 
     if (property.of.dataType !== "string" && property.of.dataType !== "number") {
         throw Error("Field misconfiguration: array field of type string or number");
@@ -64,7 +67,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
                    renderValue={(selected: any) => (
                        <div>
                            {selected.map((value: any) => {
-                               return renderPreviewEnumChip(field.name, enumValues, value, false);
+                               return renderPreviewEnumChip(field.name, enumValues, value, "regular");
                            })}
                        </div>
                    )}>
@@ -74,7 +77,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
                         <Checkbox
                             checked={!!field.value && field.value.indexOf(key as any) > -1}/>
                         <ListItemText
-                            primary={renderPreviewEnumChip(field.name, enumValues, key, false)}/>
+                            primary={renderPreviewEnumChip(field.name, enumValues, key, "regular")}/>
                     </MenuItem>
                 );
             })}

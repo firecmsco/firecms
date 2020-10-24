@@ -1,4 +1,4 @@
-import { Property } from "../../models";
+import { BaseProperty, Property } from "../../models";
 import { FieldArray, getIn } from "formik";
 import {
     Box,
@@ -22,12 +22,14 @@ export default function ArrayDefaultField<T>({
                                                  form: { errors, touched },
                                                  property,
                                                  createFormField,
-                                                 includeDescription
+                                                 includeDescription,
+                                                 underlyingValueHasChanged,
+                                                 entitySchema
                                              }: ArrayDefaultFieldProps<T>) {
 
     const classes = formStyles();
 
-    const ofProperty: Property = property.of;
+    const ofProperty: Property = property.of as Property;
 
     const hasValue = field.value && field.value.length > 0;
 
@@ -56,7 +58,7 @@ export default function ArrayDefaultField<T>({
                                         <Box flexGrow={1}
                                              width={"100%"}
                                              key={`field_${field.name}_entryValue`}>
-                                            {createFormField(`${field.name}[${index}]`, ofProperty, includeDescription)}
+                                            {createFormField(`${field.name}[${index}]`, ofProperty, includeDescription, underlyingValueHasChanged, entitySchema)}
                                         </Box>
                                         <Box width={"50px"}
                                              display="flex"

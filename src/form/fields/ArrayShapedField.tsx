@@ -19,7 +19,9 @@ export default function ArrayShapedField<T>({
                                                 form: { errors, touched },
                                                 property,
                                                 createFormField,
-                                                includeDescription
+                                                includeDescription,
+                                                underlyingValueHasChanged,
+                                                entitySchema
                                             }: ArrayDefaultFieldProps) {
 
     const classes = formStyles();
@@ -50,7 +52,9 @@ export default function ArrayShapedField<T>({
                                              key={`array-shape-${field.name}-${index}`}>
                                     {createFormField(`${field.name}[${index}]`,
                                         childProperty,
-                                        includeDescription)}
+                                        includeDescription,
+                                        underlyingValueHasChanged,
+                                        entitySchema)}
                                 </Grid>;
                             }
                         )}

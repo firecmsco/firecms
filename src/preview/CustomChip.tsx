@@ -3,20 +3,22 @@ import React from "react";
 import { getColorSchemeForKey } from "../util/chip_utils";
 
 type EnumChipProps = {
-    value: string,
+    name: string,
     label: string | number,
     error?: boolean,
     outlined?: boolean,
     small: boolean
 };
 
-export function CustomChip({ value, label, error, outlined, small }: EnumChipProps) {
+export function CustomChip({ name, label, error, outlined, small }: EnumChipProps) {
 
-    const schema = getColorSchemeForKey(value);
+    const schema = getColorSchemeForKey(name);
 
     const StyledChip = withStyles({
         root: {
-            backgroundColor: schema.color
+            maxWidth: "100%",
+            backgroundColor: schema.color,
+            fontWeight: 400
         },
         label: {
             color: error ? "red" : schema.text
@@ -26,7 +28,7 @@ export function CustomChip({ value, label, error, outlined, small }: EnumChipPro
     return (
         <StyledChip
             size={small ? "small" : "medium"}
-            key={"preview_chip_" + value}
+            key={"preview_chip_" + name}
             variant={outlined ? "outlined" : "default"}
             label={label}
         />

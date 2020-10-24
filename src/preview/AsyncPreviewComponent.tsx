@@ -2,6 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { EntitySchema } from "../models";
 import { Box, CircularProgress } from "@material-ui/core";
+import { renderSkeletonText } from "./SkeletonComponent";
 
 export interface AsyncPreviewComponentProps<S extends EntitySchema> {
 
@@ -16,31 +17,37 @@ export interface AsyncPreviewComponentProps<S extends EntitySchema> {
  * @param buildComponent that needs to do some async
  * @constructor
  */
-export default function AsyncPreviewComponent<S extends EntitySchema>(
+function AsyncPreviewComponent<S extends EntitySchema>(
     {
         builder
     }: AsyncPreviewComponentProps<S>): JSX.Element {
 
     const [loading, setLoading] = useState<boolean>(true);
     const [result, setResult] = useState<React.ReactNode>(null);
+    let unmounted = false;
 
     useEffect(() => {
         builder
             .then((res) => {
-                setLoading(false);
-                setResult(res);
+                if (!unmounted) {
+                    setLoading(false);
+                    setResult(res);
+                }
             })
             .catch(error => {
                 setLoading(false);
                 console.error(error);
             });
+        return () => {
+            unmounted = true;
+        };
     }, [builder]);
 
     if (loading)
-        return <Box m="auto" style={{ minWidth: 80 }}>
-            <CircularProgress size={24}/>
-        </Box>;
+        return renderSkeletonText();
 
     return <React.Fragment>{result}</React.Fragment>;
 
 }
+
+export default React.memo(AsyncPreviewComponent);

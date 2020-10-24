@@ -1,10 +1,40 @@
-import React, { useState } from "react";
+import React, { CSSProperties, useState } from "react";
 import { Box, IconButton } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+import {
+    getThumbnailMeasure,
+    PreviewSize
+} from "./PreviewComponentProps";
 
-function ImagePreview({ small, url }: { small: boolean, url: string }) {
+type ImagePreviewProps = { size: PreviewSize, url: string };
+
+function ImagePreview({ size, url }: ImagePreviewProps) {
 
     const [onHover, setOnHover] = useState(false);
+
+    const imageSize =   getThumbnailMeasure(size);
+
+    if(size === "tiny"){
+        return (
+            <img src={url}
+                 key={"tiny_image_preview_" + url}
+                 style={        {
+                     position: "relative",
+                     objectFit: "cover",
+                     width: imageSize,
+                     height: imageSize,
+                     borderRadius: "4px"
+                 }
+                 }/>
+        );
+    }
+
+    const imageStyle: CSSProperties =
+        {
+            maxWidth: "100%",
+            maxHeight: "100%",
+            borderRadius: "4px"
+        };
 
     return (
         <Box
@@ -13,19 +43,19 @@ function ImagePreview({ small, url }: { small: boolean, url: string }) {
             alignItems="center"
             justifyContent="center"
             style={{
-                position: "relative"
+                position: "relative",
+                maxWidth: "100%",
+                maxHeight: "100%"
             }}
 
             onMouseEnter={() => setOnHover(true)}
             onMouseMove={() => setOnHover(true)}
             onMouseLeave={() => setOnHover(false)}
-            width={small ? 100 : 200}
-            height={small ? 100 : 200}>
+            width={imageSize}
+            height={imageSize}>
+
             <img src={url}
-                 style={{
-                     maxWidth: small ? 100 : 200,
-                     maxHeight: small ? 100 : 200
-                 }}/>
+                 style={imageStyle}/>
 
             {onHover && (
                 <a style={{

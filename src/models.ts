@@ -10,8 +10,8 @@ import { storage } from "firebase";
  * menu navigation.
  */
 export interface EntityCollectionView<S extends EntitySchema,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>> {
+    Key extends string = Extract<keyof S["properties"], string>,
+    P extends Properties = Properties<Key>> {
 
     /**
      * Plural name of the view. E.g. 'products'
@@ -68,6 +68,13 @@ export interface EntityCollectionView<S extends EntitySchema,
      * every property is displayed
      */
     properties?: Key[];
+
+    /**
+     * Properties that should NOT get displayed in the collection view.
+     * All the other properties from the the entity are displayed
+     * It has no effect if the properties value is set.
+     */
+    excludedProperties?: Key[];
 
     /**
      * Properties that can be filtered in this view
@@ -147,13 +154,24 @@ export interface EntitySchema<Key extends string = string, P extends Properties<
  *
  */
 export interface EntitySaveProps<S extends EntitySchema,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>> {
+    Key extends string = Extract<keyof S["properties"], string>,
+    P extends Properties<Key> = S["properties"]> {
     schema: S;
     collectionPath: string;
     id?: string;
     values: EntityValues<S, P, Key>;
     status: EntityStatus;
+}
+
+/**
+ * Identity function we use to defeat the type system of Typescript and build
+ * collection views with all its properties
+ * @param collectionView
+ */
+export function buildCollection<S extends EntitySchema,
+    Key extends string = Extract<keyof S["properties"], string>,
+    P extends Properties = Properties<Key>>(collectionView: EntityCollectionView<S,Key, P>): EntityCollectionView<S,Key, P> {
+    return collectionView;
 }
 
 /**
@@ -167,7 +185,8 @@ export function buildSchema<Key extends string, P extends Properties<Key>>(schem
 
 /**
  * Identity function we use to defeat the type system of Typescript and preserve
- * the properties keys
+ * the properties keys. It can be useful if you have entity schemas with the
+ * same properties
  * @param properties
  */
 export function buildProperties<Key extends string>(properties: Properties<Key>): Properties<Key> {
@@ -224,7 +243,14 @@ export interface AdditionalColumnDelegate<S extends EntitySchema,
     P extends Properties = S["properties"],
     Key extends string = Extract<keyof P, string>> {
 
+    id: string;
+
     title: string;
+
+    /**
+     * Width of the generated column in pixels
+     */
+    width?: number;
 
     builder: (entity: Entity<S, P, Key>) => React.ReactNode;
 
@@ -272,7 +298,7 @@ export interface BaseProperty<T> {
 
 }
 
-export type EnumType = number | string ;
+export type EnumType = number | string;
 
 /**
  * We use this interface to define mapping between string or number values in
@@ -348,7 +374,7 @@ export interface ArrayProperty<T = any> extends BaseProperty<T[]> {
      * You can also specify an array or properties if you need the array to have
      * a specific limited shape such as [string, number, string]
      */
-    of: Property | Property[];
+    of: Property<T> | Property[];
 
     /**
      * Rules for validating this property
@@ -356,7 +382,9 @@ export interface ArrayProperty<T = any> extends BaseProperty<T[]> {
     validation?: ArrayPropertyValidationSchema,
 }
 
-export interface MapProperty<T = any, P extends Properties = Properties> extends BaseProperty<T> {
+export interface MapProperty<T = any,
+    Key extends string = Extract<keyof T, string>,
+    P extends Properties = Properties<Key>> extends BaseProperty<T> {
 
     dataType: "map";
 
@@ -371,10 +399,9 @@ export interface MapProperty<T = any, P extends Properties = Properties> extends
     validation?: PropertyValidationSchema,
 
     /**
-     * Properties that need to be rendered when as a preview of this reference
+     * Properties that are displayed when as a preview
      */
-    previewProperties?: (keyof P)[];
-
+    previewProperties?: Key[];
 
     /**
      * Configure how this property field is displayed
@@ -402,8 +429,8 @@ export interface GeopointProperty extends BaseProperty<firebase.firestore.GeoPoi
 }
 
 export interface ReferenceProperty<S extends EntitySchema = EntitySchema,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>>
+    Key extends string = Extract<keyof S["properties"], string>,
+    P extends Properties = Properties<Key>>
     extends BaseProperty<firebase.firestore.DocumentReference> {
 
     dataType: "reference";
@@ -415,8 +442,10 @@ export interface ReferenceProperty<S extends EntitySchema = EntitySchema,
 
     /**
      * Schema of the entity this reference points to.
+     * You can use the value 'self' instead of a schema definition if this
+     * reference points the the entity defining it.
      */
-    schema: S,
+    schema: S | "self",
 
     /**
      * When the dialog for selecting the value of this reference, should
@@ -567,10 +596,15 @@ export interface StringFieldConfig extends FieldConfig<string> {
     storageMeta?: StorageMeta;
 
     /**
-     * If the value of this property is a URL, we can use the urlMediaType
-     * to render the content
+     * If the value of this property is a URL, you can set this flag to true
+     * to add a link, or one of the supported media types to render a preview
      */
-    urlMediaType?: MediaType;
+    url?: boolean | MediaType;
+
+    /**
+     * Should this string be rendered as a tag instead of just text.
+     */
+    previewAsTag?: boolean;
 
 }
 

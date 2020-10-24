@@ -1,5 +1,4 @@
 import React from "react";
-import CollectionTable from "../collection/CollectionTable";
 import { RouteComponentProps } from "react-router";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import {
@@ -21,6 +20,7 @@ import DeleteEntityDialog from "../collection/DeleteEntityDialog";
 import AddIcon from "@material-ui/icons/Add";
 import { useSelectedEntityContext } from "../selected_entity_controller";
 import { useBreadcrumbsContext } from "../breadcrumbs_controller";
+import { CollectionTable } from "../collection/CollectionTable";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,10 +55,12 @@ export function CollectionRoute<S extends EntitySchema>({
     }
 
     const breadcrumbsContext = useBreadcrumbsContext();
-    breadcrumbsContext.set({
-        breadcrumbs: breadcrumbs,
-        currentTitle: view.schema.name,
-        pathParams: match.params
+    React.useEffect(() => {
+        breadcrumbsContext.set({
+            breadcrumbs: breadcrumbs,
+            currentTitle: view.schema.name,
+            pathParams: match.params
+        });
     });
 
     const selectedEntityContext = useSelectedEntityContext();
@@ -126,7 +128,8 @@ export function CollectionRoute<S extends EntitySchema>({
                              paginationEnabled={view.pagination === undefined ? true : view.pagination}
                              initialFilter={view.initialFilter}
                              filterableProperties={view.filterableProperties}
-                             properties={view.properties}/>
+                             properties={view.properties}
+                             excludedProperties={view.excludedProperties}/>
 
             {deleteEntityClicked &&
             <DeleteEntityDialog entity={deleteEntityClicked}

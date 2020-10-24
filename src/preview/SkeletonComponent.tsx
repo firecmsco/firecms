@@ -22,6 +22,7 @@ import {
     Theme
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
+import { getThumbnailMeasure, PreviewSize } from "./PreviewComponentProps";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -35,27 +36,27 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface SkeletonComponentProps<T> {
     property: Property,
-    small: boolean
+    size: PreviewSize
 }
 
 
 export default function SkeletonComponent<T>({
                                                  property,
-                                                 small
+                                                 size
                                              }: SkeletonComponentProps<T>
 ) {
 
     if (!property) {
-        console.error("No property assigned for skeleton component", property, small);
+        console.error("No property assigned for skeleton component", property, size);
     }
 
     let content: JSX.Element | any;
     if (property.dataType === "string") {
         const stringProperty = property as StringProperty;
-        if (stringProperty.config?.urlMediaType) {
-            content = renderUrlComponent(stringProperty, small);
+        if (stringProperty.config?.url) {
+            content = renderUrlComponent(stringProperty, size);
         } else if (stringProperty.config?.storageMeta) {
-            content = renderImageThumbnail(small);
+            content = renderSkeletonImageThumbnail(size);
         } else {
             content = renderSkeletonText();
         }
@@ -64,7 +65,7 @@ export default function SkeletonComponent<T>({
 
         if ("dataType" in arrayProperty.of) {
             if (arrayProperty.of.dataType === "map")
-                content = renderArrayOfMaps(arrayProperty.of.properties, small, arrayProperty.of.previewProperties);
+                content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewProperties);
             else if (arrayProperty.of.dataType === "string") {
                 if (arrayProperty.of.config?.enumValues) {
                     content = renderArrayEnumTableCell();
@@ -81,7 +82,7 @@ export default function SkeletonComponent<T>({
         }
 
     } else if (property.dataType === "map") {
-        content = renderMap(property as MapProperty, small);
+        content = renderMap(property as MapProperty, size);
     } else if (property.dataType === "timestamp") {
         content = renderSkeletonText();
     } else if (property.dataType === "reference") {
@@ -94,12 +95,12 @@ export default function SkeletonComponent<T>({
     return (content ? content : null);
 }
 
-function renderMap<T>(property: MapProperty<T>, small: boolean) {
+function renderMap<T>(property: MapProperty<T>, size: PreviewSize) {
 
     const classes = useStyles();
 
     let mapProperties: string[];
-    if (!small) {
+    if (!size) {
         mapProperties = Object.keys(property.properties);
     } else {
         if (property.previewProperties)
@@ -108,21 +109,21 @@ function renderMap<T>(property: MapProperty<T>, small: boolean) {
             mapProperties = Object.keys(property.properties).slice(0, 3);
     }
 
-    if (small)
+    if (size)
         return (
             <List>
                 {mapProperties && mapProperties.map((key: string) => (
                     <ListItem key={property.title + key}>
                         <SkeletonComponent
                             property={property.properties[key]}
-                            small={true}/>
+                            size={"small"}/>
                     </ListItem>
                 ))}
             </List>
         );
 
     return (
-        <Table size="small">
+        <Table size={"small"}>
             <TableBody>
                 {mapProperties &&
                 mapProperties.map((key, index) => {
@@ -136,7 +137,7 @@ function renderMap<T>(property: MapProperty<T>, small: boolean) {
                             <TableCell key={`table-cell-${key}`} component="th">
                                 <SkeletonComponent
                                     property={property.properties[key]}
-                                    small={true}/>
+                                    size={"small"}/>
                             </TableCell>
                         </TableRow>
                     );
@@ -147,16 +148,16 @@ function renderMap<T>(property: MapProperty<T>, small: boolean) {
 
 }
 
-function renderArrayOfMaps<P extends Properties>(properties: P, small: boolean, previewProperties?: (keyof P)[]) {
+function renderArrayOfMaps<P extends Properties>(properties: P, size: PreviewSize, previewProperties?: (keyof P)[]) {
     let tableProperties = previewProperties;
     if (!tableProperties || !tableProperties.length) {
         tableProperties = Object.keys(properties);
-        if (small)
+        if (size)
             tableProperties = tableProperties.slice(0, 3);
     }
 
     return (
-        <Table size="small">
+        <Table size={"small"}>
             <TableBody>
                 {
                     [0, 1, 2].map((value, index) => {
@@ -170,7 +171,7 @@ function renderArrayOfMaps<P extends Properties>(properties: P, small: boolean, 
                                         >
                                             <SkeletonComponent
                                                 property={properties[key as string]}
-                                                small={true}/>
+                                                size={"small"}/>
                                         </TableCell>
                                     )
                                 )}
@@ -218,7 +219,7 @@ function renderGenericArrayCell(
                 [0, 1].map((value, index) =>
                     <React.Fragment key={"skeleton_array_" + value}>
                         <SkeletonComponent property={property}
-                                           small={true}/>
+                                           size={"small"}/>
                     </React.Fragment>
                 )}
         </Grid>
@@ -238,7 +239,7 @@ function renderShapedArray<T extends EnumType>(
                     {properties[index] && <Box m={1}>
                         <SkeletonComponent
                             property={property}
-                            small={true}/>
+                            size={"small"}/>
                     </Box>}
                     {properties[index] && index < properties.length - 1 &&
                     <Divider/>}
@@ -254,18 +255,18 @@ function renderUrlAudioComponent() {
                      height={100}/>;
 }
 
-export function renderImageThumbnail(small: boolean) {
+export function renderSkeletonImageThumbnail(size: PreviewSize) {
+    const imageSize = size === "tiny" ? 40 : size === "small" ? 100 : 200;
     return <Skeleton variant="rect"
-                     width={small ? 100 : 200}
-                     height={small ? 100 : 200}/>;
+                     width={imageSize}
+                     height={imageSize}/>;
 }
 
-function renderUrlVideo(
-    small: boolean) {
+function renderUrlVideo(size: PreviewSize) {
 
     return <Skeleton variant="rect"
-                     width={small ? 300 : 500}
-                     height={small ? 200 : 250}/>;
+                     width={size !== "regular" ? 300 : 500}
+                     height={size !== "regular" ? 200 : 250}/>;
 }
 
 function renderReference() {
@@ -275,18 +276,41 @@ function renderReference() {
 }
 
 
-function renderUrlComponent(property: StringProperty, small: boolean = false) {
-    const mediaType = property.config?.urlMediaType || property.config?.storageMeta?.mediaType;
+function renderUrlComponent(property: StringProperty, size: PreviewSize = "regular") {
+
+    if (typeof property.config?.url === "boolean" && property.config.url) {
+        return <div style={{
+            display: "flex"
+        }}>
+            {renderSkeletonIcon()}
+            {renderSkeletonText()}
+        </div>;
+    }
+
+    const mediaType = property.config?.url || property.config?.storageMeta?.mediaType;
     if (mediaType === "image") {
-        return renderImageThumbnail(small);
+        return renderSkeletonImageThumbnail(size);
     } else if (mediaType === "audio") {
         return renderUrlAudioComponent();
     } else if (mediaType === "video") {
-        return renderUrlVideo(small);
+        return renderUrlVideo(size);
+    } else {
+        return renderUrlFile(size);
     }
-    throw Error("URL component misconfiguration");
 }
 
+function renderUrlFile(size: PreviewSize) {
+    return (
+        <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            width={getThumbnailMeasure(size)}
+            height={getThumbnailMeasure(size)}>
+            {renderSkeletonIcon()}
+        </Box>
+    );
+}
 
 export function renderSkeletonText(index?: number) {
     return <Skeleton key={"skeleton_text_" + index} variant="text"/>;

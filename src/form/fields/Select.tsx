@@ -23,7 +23,6 @@ export default function Select<T extends EnumType>({
                                                        property,
                                                        createFormField,
                                                        includeDescription,
-                                                       ...props
                                                    }: SelectProps<T>) {
 
     const enumValues = property.config?.enumValues as EnumValues<T>;
@@ -59,13 +58,12 @@ export default function Select<T extends EnumType>({
                     );
                 }}
                 renderValue={(selected: any) =>
-                    renderPreviewEnumChip(field.name, enumValues, selected, false)
-                }
-                {...props}>
+                    renderPreviewEnumChip(field.name, enumValues, selected, "regular")
+                }>
 
                 {Object.entries(enumValues).map(([key, value]) => (
                     <MenuItem key={`select-${key}`} value={key}>
-                        {renderPreviewEnumChip(field.name, enumValues, key as T, false)}
+                        {renderPreviewEnumChip(field.name, enumValues, key as T, "regular")}
                     </MenuItem>
                 ))}
             </MuiSelect>

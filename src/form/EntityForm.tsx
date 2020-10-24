@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Box,
     Button,
@@ -43,6 +43,16 @@ interface EntityFormProps<S extends EntitySchema> {
      */
     onEntitySave(schema: S, collectionPath: string, id: string | undefined, values: EntityValues<S>): Promise<void>;
 
+    /**
+     * The callback function called when discard is clicked
+     */
+    onDiscard(schema: S, collectionPath: string, id: string | undefined): void;
+
+    /**
+     * The callback function when the form original values have been modified
+     */
+    onModified(dirty: boolean): void;
+
 }
 
 export default function EntityForm<S extends EntitySchema>({
@@ -50,7 +60,9 @@ export default function EntityForm<S extends EntitySchema>({
                                                                collectionPath,
                                                                schema,
                                                                entity,
-                                                               onEntitySave
+                                                               onEntitySave,
+                                                               onDiscard,
+                                                               onModified
                                                            }: EntityFormProps<S>) {
     const classes = formStyles();
 
@@ -58,6 +70,8 @@ export default function EntityForm<S extends EntitySchema>({
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
     const [initialValues, setInitialValues] = React.useState<EntityValues<S> | undefined>(entity?.values);
+    // have the original values of the form changed
+    const [isModified, setModified] = React.useState(false);
 
     /**
      * Base values are the ones this view is initialized from, we use them to
@@ -67,10 +81,14 @@ export default function EntityForm<S extends EntitySchema>({
     if (status === EntityStatus.new) {
         baseValues = (initEntityValues(schema));
     } else if (status === EntityStatus.existing && entity) {
-        baseValues = entity.values as EntityValues<S>;
+        baseValues = entity.values as EntityValues<S> || initEntityValues(schema);
     } else {
         throw new Error("Form configured wrong");
     }
+
+    useEffect(() => {
+        onModified(isModified);
+    }, [isModified]);
 
     let underlyingChanges: Partial<EntityValues<S>> | undefined;
     if (initialValues) {
@@ -162,7 +180,9 @@ export default function EntityForm<S extends EntitySchema>({
             onSubmit={saveValues}
             validationSchema={validationSchema}
         >
-            {({ values, touched, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
+            {({ values, touched, dirty, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
+
+                setModified(dirty);
 
                 if (underlyingChanges && entity) {
 
@@ -188,7 +208,7 @@ export default function EntityForm<S extends EntitySchema>({
                                 && Object.keys(underlyingChanges).includes(key)
                                 && !!touched[key];
 
-                            const formField = createFormField(key, property, true, underlyingValueHasChanged);
+                            const formField = createFormField(key, property, true, underlyingValueHasChanged, schema);
 
                             return <Grid item
                                          xs={12}

@@ -6,6 +6,7 @@ import {
     CMSApp,
     EntityCollectionView,
     buildSchema,
+    buildCollection,
 } from "@camberi/firecms";
 import { User } from "firebase/app";
 import "typeface-roboto";
@@ -160,7 +161,7 @@ const localeSchema = buildSchema({
 });
 
 const navigation: EntityCollectionView<any>[] = [
-    {
+    buildCollection({
         relativePath: "products",
         schema: productSchema,
         name: "Products",
@@ -171,7 +172,7 @@ const navigation: EntityCollectionView<any>[] = [
                 schema: localeSchema
             }
         ]
-    }
+    })
 ];
 
 const myAuthenticator: Authenticator = (user?: User) => {

@@ -25,10 +25,12 @@ export default function ArrayMapField<T>({
                                              form: { errors, touched },
                                              property,
                                              createFormField,
-                                             includeDescription
+                                             includeDescription,
+                                             underlyingValueHasChanged,
+                                             entitySchema
                                          }: ArrayMapFieldProps<T>) {
 
-    if (property.of.dataType !== "map") {
+    if (!("dataType" in property.of) || property.of.dataType !== "map") {
         console.error(property);
         throw Error("Field misconfiguration: this array field should have type map");
     }
@@ -68,7 +70,9 @@ export default function ArrayMapField<T>({
                                                         key={`field_${arrayKey}`}>
                                                         {createFormField(`${field.name}[${index}].${arrayKey}`,
                                                             childProperty,
-                                                            includeDescription)}
+                                                            includeDescription,
+                                                            underlyingValueHasChanged,
+                                                            entitySchema)}
                                                     </TableCell>
                                                 );
                                             })}

@@ -16,6 +16,7 @@ import { CMSFieldProps } from "../form_props";
 import PreviewComponent from "../../preview/PreviewComponent";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { ErrorBoundary } from "../../components/ErrorBoundary";
 
 interface TextFieldProps extends CMSFieldProps<string | number> {
     allowInfinity?: boolean
@@ -29,7 +30,7 @@ export default function TextField({
                                       includeDescription,
                                       allowInfinity,
                                       createFormField,
-                                      ...props
+                                      entitySchema,
                                   }: TextFieldProps) {
 
     const fieldError = getIn(errors, field.name);
@@ -38,7 +39,8 @@ export default function TextField({
     let mediaType: MediaType | undefined;
     let multiline: boolean | number | undefined;
     if (property.dataType === "string") {
-        mediaType = (property as StringProperty).config?.urlMediaType;
+        const url = (property as StringProperty).config?.url;
+        mediaType = typeof url === "string" ? url : undefined;
         multiline = (property as StringProperty).config?.multiline;
     }
 
@@ -51,7 +53,7 @@ export default function TextField({
     const valueIsInfinity = value === Infinity;
     const inputType = !valueIsInfinity && property.dataType === "number" ? "number" : undefined;
 
-    const updateValue = (newValue: typeof value) => {
+    const updateValue = (newValue: typeof value | undefined) => {
 
         setFieldTouched(field.name);
 
@@ -61,7 +63,7 @@ export default function TextField({
                 null
             );
         } else if (inputType === "number") {
-            const numValue = parseFloat(newValue);
+            const numValue = parseFloat(newValue as string);
             setFieldValue(
                 field.name,
                 numValue
@@ -94,7 +96,6 @@ export default function TextField({
                     multiline={!!multiline}
                     rows={rows}
                     value={valueIsInfinity ? "Infinity" : value}
-                    {...props}
                     disabled={valueIsInfinity}
                     onChange={(evt) => {
                         updateValue(evt.target.value);
@@ -114,6 +115,7 @@ export default function TextField({
                     {allowInfinity &&
                     <FormControlLabel
                         checked={valueIsInfinity}
+                        style={{ marginRight: 0 }}
                         labelPlacement={"start"}
                         control={
                             <Switch
@@ -137,12 +139,15 @@ export default function TextField({
             </FormControl>
 
             {mediaType && value &&
-            <Box m={1}>
-                <PreviewComponent name={field.name}
-                                  value={value}
-                                  property={property}
-                                  small={false}/>
-            </Box>
+            <ErrorBoundary>
+                <Box m={1}>
+                    <PreviewComponent name={field.name}
+                                      value={value}
+                                      property={property}
+                                      size={"regular"}
+                                      entitySchema={entitySchema}/>
+                </Box>
+            </ErrorBoundary>
             }
         </React.Fragment>
     );

@@ -106,7 +106,6 @@ export function getRouterNewEntityPath(basePath: string) {
 
 export function buildCollectionPath(absolutePath: string) {
     return `${DATA_PATH}/${removeInitialSlash(absolutePath)}`;
-
 }
 
 export function removeInitialSlash(s: string) {

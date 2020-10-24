@@ -8,6 +8,11 @@ export function uploadFile(file: File,
     return storage().ref().child(`${path}/${file.name}`).put(file, metadata);
 }
 
+const memo = {};
 export function getDownloadURL(storagePath: string): Promise<string> {
-    return storage().ref(storagePath).getDownloadURL();
+    if (memo[storagePath])
+        return memo[storagePath];
+    const downloadURL = storage().ref(storagePath).getDownloadURL();
+    memo[storagePath] = downloadURL;
+    return downloadURL;
 }

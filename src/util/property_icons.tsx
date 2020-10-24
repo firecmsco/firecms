@@ -10,11 +10,18 @@ import React from "react";
 import RoomIcon from "@material-ui/icons/Room";
 import ViewListIcon from "@material-ui/icons/ViewList";
 import LinkIcon from "@material-ui/icons/Link";
-import CheckIcon from "@material-ui/icons/Check";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
-import PhotoIcon from '@material-ui/icons/Photo';
-import HttpIcon from '@material-ui/icons/Http';
-import FlagIcon from '@material-ui/icons/Flag';
+import PhotoIcon from "@material-ui/icons/Photo";
+import HttpIcon from "@material-ui/icons/Http";
+import FlagIcon from "@material-ui/icons/Flag";
+import AdjustIcon from "@material-ui/icons/Adjust";
+
+export function getIdIcon(
+    color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
+    fontSize: "inherit" | "default" | "small" | "large" = "default"): React.ReactNode {
+    return <AdjustIcon color={color} fontSize={fontSize}/>;
+}
+
 export function getIconForProperty(
     property: Property,
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
@@ -26,9 +33,9 @@ export function getIconForProperty(
             if (property.config.storageMeta.mediaType === "image")
                 return <PhotoIcon color={color} fontSize={fontSize}/>;
             return <AttachmentIcon color={color} fontSize={fontSize}/>;
-        } else if (property.config?.urlMediaType) {
+        } else if (property.config?.url) {
             return <HttpIcon color={color} fontSize={fontSize}/>;
-        }else if (property.config?.enumValues) {
+        } else if (property.config?.enumValues) {
             return <ListIcon color={color} fontSize={fontSize}/>;
         } else {
             return <ShortTextIcon color={color} fontSize={fontSize}/>;

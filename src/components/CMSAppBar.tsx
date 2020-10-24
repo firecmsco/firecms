@@ -14,7 +14,11 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { BreadcrumbContainer } from "./BreadcrumbContainer";
 import { Link as ReactLink } from "react-router-dom";
 import { useBreadcrumbsContext } from "../breadcrumbs_controller";
-import { buildCollectionPath, replacePathIdentifiers } from "../routes";
+import {
+    BreadcrumbEntry,
+    buildCollectionPath,
+    replacePathIdentifiers
+} from "../routes";
 import { useAuthContext } from "../auth";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -41,9 +45,14 @@ export const CMSAppBar: React.FunctionComponent<BreadcrumbProps> = ({ title, han
     const breadcrumbsContext = useBreadcrumbsContext();
     const { breadcrumbs, pathParams } = breadcrumbsContext;
 
+    const [internalBreadCrumbs, setInternalBreadcrumbs] = React.useState<BreadcrumbEntry[]>(breadcrumbs);
+    React.useEffect(() => {
+        setInternalBreadcrumbs(breadcrumbs);
+    }, [breadcrumbs]);
+
     const authContext = useAuthContext();
     return (
-        <AppBar position={"relative"}>
+        <AppBar position={"relative"} elevation={2}>
 
             <Toolbar>
                 <IconButton
@@ -65,11 +74,11 @@ export const CMSAppBar: React.FunctionComponent<BreadcrumbProps> = ({ title, han
                 <Box ml={3} mr={3}>
                     <BreadcrumbContainer>
                         <Breadcrumbs aria-label="breadcrumb">
-                            <Link color="inherit" component={ReactLink}
-                                  to="/">
-                                Home
-                            </Link>
-                            {breadcrumbs.map(entry =>
+                            {/*<Link color="inherit" component={ReactLink}*/}
+                            {/*      to="/">*/}
+                            {/*    Home*/}
+                            {/*</Link>*/}
+                            {internalBreadCrumbs.map(entry =>
                                 (entry.placeHolderId && !pathParams[entry.placeHolderId]) ?
                                     null :
                                     <Link

@@ -369,11 +369,12 @@ Besides the common fields, some properties have specific configurations.
                        Note that the generated URL may use a token that, if disabled, may
                        make the URL unusable and lose the original reference to Cloud Storage,
                        so it is not encouraged to use this flag. Defaults to false
-    * `urlMediaType`: If the value of this property is a URL, we can use the
-            urlMediaType to render the content
+    * `url`: If the value of this property is a URL, you can set this flag to true
+            to add a link, or one of the supported media types to render a preview
     * `enumValues`: You can use the enum values providing a map of possible
             exclusive values the property can take, mapped to the label that it is
             displayed in the dropdown.
+    * `previewAsTag`: Should this string be rendered as a tag instead of just text.
 
 * `validation`: Rules for validating this property:
     * `required`: Should this field be compulsory
@@ -425,6 +426,8 @@ Besides the common fields, some properties have specific configurations.
 * `collectionPath`: Absolute collection path.
 
 * `schema`: Schema of the entity this reference points to.
+         You can use the value 'self' instead of a schema definition if this
+         reference points the the entity defining it.
 
 * `filter`: When the dialog for selecting the value of this reference, should
          a filter be applied to the possible entities.
@@ -525,7 +528,12 @@ Firestore data schema.
 
 * `schema`: Schema representing the entities of this view
 
-* `properties`: List of properties included in this collection. Defaults to all.
+* `properties`: Properties displayed in this collection. If this property is not set
+        every property is displayed
+
+* `excludedProperties`: Properties that should NOT get displayed in the collection view.
+        All the other properties from the the entity are displayed
+        It has no effect if the properties value is set.
 
 * `filterableProperties`: List of properties that include a filter widget. Defaults to
         none.
@@ -556,7 +564,7 @@ Firestore data schema.
 
 If you would like to include a column that does not map directly to a property,
 you can use the `additionalColumns` field, providing a
-`AdditionalColumnDelegate`, which includes a title and a builder that receives
+`AdditionalColumnDelegate`, which includes an id, a title and a builder that receives
 the corresponding entity.
 
 In the builder you can return any React Component.

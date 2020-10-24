@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, Button, Grid, Paper, Tab, Tabs } from "@material-ui/core";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
-import CollectionTable from "./CollectionTable";
 import { Link as ReactLink } from "react-router-dom";
 import { getRouterNewEntityPath } from "../routes/navigation";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { formStyles } from "../styles";
+import { CollectionTable } from "./CollectionTable";
 
 
 interface SubCollectionViewProps<S extends EntitySchema> {
@@ -129,7 +129,8 @@ export function SubCollectionTabPanel<S extends EntitySchema>({ subcollectionPat
     const deleteEnabled = thisView.deleteEnabled === undefined || thisView.deleteEnabled;
 
     return (
-        <Grid
+        <Box
+            style={{height: "400px"}}
             hidden={selectedView !== thisView}>
 
             {subcollectionPath ?
@@ -144,10 +145,12 @@ export function SubCollectionTabPanel<S extends EntitySchema>({ subcollectionPat
                                  additionalColumns={thisView.additionalColumns}
                 />
                 :
-                <Box m={3} display={"flex"}
+                <Box m={3}
+                     display={"flex"}
                      alignItems={"center"}
                      justifyContent={"center"}>
-                    <Box>You need to save your entity before adding
+                    <Box>
+                        You need to save your entity before adding
                         additional collections
                     </Box>
                 </Box>
@@ -157,6 +160,6 @@ export function SubCollectionTabPanel<S extends EntitySchema>({ subcollectionPat
                                 schema={thisView.schema}
                                 open={!!deleteEntityClicked}
                                 onClose={() => setDeleteEntityClicked(undefined)}/>
-        </Grid>
+        </Box>
     );
 }

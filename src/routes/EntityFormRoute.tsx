@@ -26,10 +26,10 @@ import {
 } from "./navigation";
 import { CircularProgressCenter } from "../components";
 import SubCollectionsView from "../collection/SubCollectionsView";
-import MuiAlert from "@material-ui/lab/Alert/Alert";
 import { useSelectedEntityContext } from "../selected_entity_controller";
 import { useBreadcrumbsContext } from "../breadcrumbs_controller";
 import { useSnackbarContext } from "../snackbar_controller";
+import { Prompt } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -82,10 +82,12 @@ export function EntityFormRoute<S extends EntitySchema>({
     const snackbarContext = useSnackbarContext();
 
     const breadcrumbsContext = useBreadcrumbsContext();
-    breadcrumbsContext.set({
-        breadcrumbs: breadcrumbs,
-        currentTitle: view.schema.name,
-        pathParams: match.params
+    useEffect(() => {
+        breadcrumbsContext.set({
+            breadcrumbs: breadcrumbs,
+            currentTitle: view.schema.name,
+            pathParams: match.params
+        });
     });
 
     entityId = params[hashIdentifier];
@@ -93,6 +95,9 @@ export function EntityFormRoute<S extends EntitySchema>({
     const [entity, setEntity] = useState<Entity<S>>();
     const [status, setStatus] = useState<EntityStatus | undefined>();
     const [loading, setLoading] = useState<boolean>(true);
+
+    // have the original values of the form changed
+    const [isModified, setModified] = useState(false);
 
     const selectedEntityContext = useSelectedEntityContext();
 
@@ -118,13 +123,6 @@ export function EntityFormRoute<S extends EntitySchema>({
         return () => {
         };
     }, [collectionPath, entityId, view]);
-
-    const backListener = history.listen(location => {
-        // console.log("new location", location);
-        // if (location.action === "POP") {
-        //     // Do your stuff
-        // }
-    });
 
 
     function onSubcollectionEntityEdit(collectionPath: string,
@@ -205,6 +203,7 @@ export function EntityFormRoute<S extends EntitySchema>({
                             message: e?.message
                         });
                     }
+                    history.goBack();
                 }
 
             })
@@ -231,6 +230,10 @@ export function EntityFormRoute<S extends EntitySchema>({
             });
     }
 
+    function onDiscard(schema: S, collectionPath: string, id: string | undefined) {
+
+    }
+
     const existingEntity = status === EntityStatus.existing;
 
     const form = <EntityForm
@@ -238,6 +241,8 @@ export function EntityFormRoute<S extends EntitySchema>({
         collectionPath={collectionPath}
         schema={view.schema}
         onEntitySave={onEntitySave}
+        onDiscard={onDiscard}
+        onModified={setModified}
         entity={entity}/>;
 
     const subCollectionsView = view.subcollections && <SubCollectionsView
@@ -271,6 +276,13 @@ export function EntityFormRoute<S extends EntitySchema>({
                 </Grid>
                 }
             </Grid>
+
+            <Prompt
+                when={isModified}
+                message={location =>
+                    `You have unsaved changes in this ${view.schema.name}. Are you sure you want to leave this page?`
+                }
+            />
 
         </Box>);
 

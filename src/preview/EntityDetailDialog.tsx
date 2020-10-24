@@ -9,16 +9,16 @@ import {
     createStyles,
     Drawer,
     IconButton,
-    Link,
     makeStyles,
     Tab,
     Tabs
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import CollectionTable from "../collection/CollectionTable";
 import EditIcon from "@material-ui/icons/Edit";
 import { Link as ReactLink } from "react-router-dom";
 import { useSelectedEntityContext } from "../selected_entity_controller";
+import { CollectionTable } from "../collection/CollectionTable";
+import { buildCollectionPath } from "../routes";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -30,6 +30,7 @@ export const useStyles = makeStyles(theme => createStyles({
     },
     flexGrow: {
         flexGrow: 1,
+        height: "100%",
         overflow: "auto"
     },
     header: {
@@ -97,7 +98,6 @@ export default function EntityDetailDialog<S extends EntitySchema>() {
         >
 
             <Container
-
                 className={classes.root}
                 maxWidth={"md"}
                 disableGutters={true}
@@ -106,21 +106,19 @@ export default function EntityDetailDialog<S extends EntitySchema>() {
                 <Box
                     className={classes.header}>
 
-                    <IconButton>
-                        <CloseIcon onClick={(e) => close()}/>
+                    <IconButton onClick={(e) => close()}>
+                        <CloseIcon/>
                     </IconButton>
 
                     {entity &&
-                    <Link color="inherit"
-                          component={ReactLink}
-                          to={entity.reference.path}>
-                        <IconButton>
-                            <EditIcon onClick={(e) => close()}/>
+                        <IconButton onClick={() => close()}
+                                    component={ReactLink}
+                                    to={buildCollectionPath(entity.reference.path)}>
+                            <EditIcon/>
                         </IconButton>
-                    </Link>
                     }
 
-                    <Box p={3}>
+                    <Box paddingTop={2} paddingLeft={2} paddingRight={2}>
                         <Tabs
                             value={tabsPosition}
                             indicatorColor="primary"
@@ -153,7 +151,8 @@ export default function EntityDetailDialog<S extends EntitySchema>() {
                         (subcollection, colIndex) =>
                             <Box
                                 role="tabpanel"
-                                style={{ transition: "width 1s" }}
+                                flexGrow={1}
+                                height={"100%"}
                                 hidden={tabsPosition !== colIndex + 1}>
                                 <CollectionTable
                                     collectionPath={`${entity?.reference.path}/${subcollection.relativePath}`}

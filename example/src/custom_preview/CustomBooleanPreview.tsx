@@ -5,7 +5,7 @@ import CheckBoxOutlineBlank from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxOutlined from "@material-ui/icons/CheckBoxOutlined";
 
 export default function CustomBooleanPreview({
-                                                 value, property, small
+                                                 value, property, size
                                              }: PreviewComponentProps<boolean>)
     : ReactElement {
 

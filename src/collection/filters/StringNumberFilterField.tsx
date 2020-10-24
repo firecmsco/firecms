@@ -5,11 +5,11 @@ import {
     Grid,
     MenuItem,
     Select as MuiSelect,
-    TextField as MuiTextField,
-    Typography
+    TextField as MuiTextField
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { FieldProps } from "formik/dist/Field";
+import { renderPreviewEnumChip } from "../../preview/PreviewComponent";
 
 interface StringNumberFilterFieldProps {
     name: string,
@@ -36,7 +36,7 @@ export default function StringNumberFilterField({ name, property }: StringNumber
 
                 function updateFilter(op: string, val: string | number) {
                     setOperation(op);
-                    setInternalValue(internalValue);
+                    setInternalValue(val);
                     if (op && val) {
                         setFieldValue(
                             name,
@@ -73,7 +73,7 @@ export default function StringNumberFilterField({ name, property }: StringNumber
                                 <MuiTextField
                                     key={`filter-${name}`}
                                     type={property.dataType === "number" ? "number" : undefined}
-                                    defaultValue={internalValue}
+                                    value={internalValue}
                                     onChange={(evt) => {
                                         const val = property.dataType === "number" ?
                                             parseFloat(evt.target.value)
@@ -87,13 +87,15 @@ export default function StringNumberFilterField({ name, property }: StringNumber
                                 <MuiSelect
                                     fullWidth
                                     key={`filter-${name}`}
-                                    value={internalValue}
+                                    value={!!internalValue ? internalValue : ""}
                                     onChange={(evt: any) => {
                                         updateFilter(operation, evt.target.value);
                                     }}>
                                     {Object.entries(enumValues).map(([key, value]) => (
                                         <MenuItem key={`select-${key}`}
-                                                  value={key}>{value as string}</MenuItem>
+                                                  value={key}>
+                                            {renderPreviewEnumChip(field.name, enumValues, key, "regular")}
+                                        </MenuItem>
                                     ))}
                                 </MuiSelect>
                             </Grid>}

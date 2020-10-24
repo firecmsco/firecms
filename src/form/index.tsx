@@ -29,7 +29,8 @@ function buildField<P extends Property<T>, T = any>(name: string,
                                                     property: P,
                                                     includeDescription: boolean,
                                                     component: React.ComponentType<CMSFieldProps<T>>,
-                                                    underlyingValueHasChanged: boolean
+                                                    underlyingValueHasChanged: boolean,
+                                                    entitySchema: EntitySchema
 ) {
 
     const additionalFieldProps: any = property.config?.fieldProps;
@@ -48,7 +49,9 @@ function buildField<P extends Property<T>, T = any>(name: string,
                         name: fieldProps.field.name,
                         includeDescription,
                         property,
-                        createFormField
+                        createFormField,
+                        underlyingValueHasChanged,
+                        entitySchema
                     })}
 
                     {underlyingValueHasChanged && !fieldProps.form.isSubmitting &&
@@ -62,16 +65,17 @@ function buildField<P extends Property<T>, T = any>(name: string,
         </Field>);
 }
 
-export function createFormField(name: string,
+export function createFormField<T>(name: string,
                                 property: Property,
                                 includeDescription: boolean,
-                                underlyingValueHasChanged: boolean): JSX.Element {
+                                underlyingValueHasChanged: boolean,
+                                entitySchema: EntitySchema): JSX.Element {
 
     if (property.disabled) {
-        return buildField(name, property, includeDescription, DisabledField, underlyingValueHasChanged);
+        return buildField(name, property, includeDescription, DisabledField, underlyingValueHasChanged, entitySchema);
     }
 
-    let component: React.ComponentType<CMSFieldProps<any>> | undefined;
+    let component: React.ComponentType<CMSFieldProps<T>> | undefined;
 
     if (property.config?.field) {
         component = property.config?.field;
@@ -82,11 +86,7 @@ export function createFormField(name: string,
                 component = ArrayEnumSelect;
             } else if (property.of.dataType === "string" && property.of.config?.storageMeta) {
                 component = StorageUploadField;
-            }
-                // else if (property.of.dataType === "map") {
-                //     component = ArrayMapField;
-            // }
-            else {
+            } else {
                 component = ArrayDefaultField;
             }
         } else if (Array.isArray(property.of)) {
@@ -116,7 +116,7 @@ export function createFormField(name: string,
         }
     }
     if (component)
-        return buildField(name, property, includeDescription, component, underlyingValueHasChanged);
+        return buildField(name, property, includeDescription, component, underlyingValueHasChanged, entitySchema);
 
     return (
         <div>{`Currently the field ${property.dataType} is not supported`}</div>

@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexGrow: 1,
             width: "100%",
             height: "100%",
-            overflow: "scroll"
+            overflow: "auto"
         },
         toolbar: {
             minHeight: 56,
@@ -215,7 +215,7 @@ export function CMSApp({
     const theme = createMuiTheme({
         palette: {
             background: {
-                default: "#ebedee"
+                default: "#f6f8f9"
             },
             primary: {
                 main: primaryColor ? primaryColor : blue["800"]

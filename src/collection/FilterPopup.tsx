@@ -62,14 +62,14 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                                 <TableRow
                                     key={`filter_table_${key}_${index}`}>
                                     <TableCell
-                                        key={`table-cell-${key}`}
+                                        key={`filter-cell-title-${key}`}
                                         component="th"
                                         align={"right"}
                                     >
                                         {schema.properties[key as string].title}
                                     </TableCell>
                                     <TableCell
-                                        key={`table-cell-${key}`}
+                                        key={`filter-cell-field-${key}`}
                                         component="th"
                                     >
                                         {createFilterField(key as string, schema.properties[key as string])}

@@ -16,7 +16,6 @@ export default function DateTimeField({
                                           property,
                                           createFormField,
                                           includeDescription,
-                                          ...props
                                       }: DateTimeFieldProps) {
 
 
@@ -45,7 +44,6 @@ export default function DateTimeField({
                 }}
                 inputVariant={"filled"}
                 InputProps={{ style: { padding: "4px" } }}
-                {...props}
             />
 
             {includeDescription &&

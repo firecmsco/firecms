@@ -24,7 +24,9 @@ export default function MapField<S extends EntitySchema>({
                                                              form: { isSubmitting, errors, touched, setFieldValue },
                                                              property,
                                                              includeDescription,
-                                                             createFormField
+                                                             createFormField,
+                                                             underlyingValueHasChanged,
+                                                             entitySchema
                                                          }: MapFieldProps<S>) {
 
     const classes = formStyles();
@@ -91,7 +93,9 @@ export default function MapField<S extends EntitySchema>({
                                                  key={`map-${field.name}-${index}`}>
                                         {createFormField(`${field.name}[${entryKey}]`,
                                             childProperty,
-                                            includeDescription)}
+                                            includeDescription,
+                                            underlyingValueHasChanged,
+                                            entitySchema)}
                                     </Grid>;
                                 }
                             )}

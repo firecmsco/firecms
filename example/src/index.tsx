@@ -10,6 +10,7 @@ import {
     AdditionalColumnDelegate,
     AsyncPreviewComponent,
     Authenticator,
+    buildCollection,
     buildSchema,
     CMSApp,
     EntityCollectionView,
@@ -27,100 +28,207 @@ import {
     productsSearchDelegate,
     usersSearchDelegate
 } from "./algolia_utils";
+import PriceTextPreview from "./custom_preview/PriceTextPreview";
 
 const locales: EnumValues<string> = {
-    "de-DE": "German",
-    "en-US": "English (United States)",
-    "es-ES": "Spanish (Spain)",
-    "es-419": "Spanish (South America)"
+    "es": "Spanish",
+    "de": "German",
+    "en": "English",
+    "it": "Italian",
+    "fr": "French"
+};
+
+const categories: EnumValues<string> = {
+    art_and_decoration: "Art and decoration",
+    art_design_books: "Art and design books",
+    babys: "Babies and kids",
+    backpacks: "Backpacks and bags",
+    bath: "Bath",
+    bicycle: "Bicycle",
+    books: "Books",
+    cameras: "Cameras",
+    clothing_man: "Clothing man",
+    clothing_woman: "Clothing woman",
+    coffee_and_tea: "Coffee and tea",
+    cookbooks: "Cookbooks",
+    delicatessen: "Delicatessen",
+    desk_accessories: "Desk accessories",
+    exercise_equipment: "Exercise equipment",
+    furniture: "Furniture",
+    gardening: "Gardening",
+    headphones: "Headphones",
+    home_accessories: "Home accessories",
+    home_storage: "Home storage",
+    kitchen: "Kitchen",
+    lighting: "Lighting",
+    music: "Music",
+    outdoors: "Outdoors",
+    personal_care: "Personal care",
+    photography_books: "Photography books",
+    serveware: "Serveware",
+    smart_home: "Smart Home",
+    sneakers: "Sneakers",
+    speakers: "Speakers",
+    sunglasses: "Sunglasses",
+    toys_and_games: "Toys and games",
+    watches: "Watches"
 };
 
 const productSchema = buildSchema({
-    customId: true,
     name: "Product",
     properties: {
         name: {
+            dataType: "string",
             title: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        price: {
-            title: "Price",
             validation: {
-                required: true,
-                requiredMessage: "You must set a price between 0 and 1000",
-                min: 0,
-                max: 1000
-            },
-            description: "Price with range validation",
-            dataType: "number"
+                required: true
+            }
         },
-        status: {
-            title: "Status",
-            validation: { required: true },
+        main_image: {
             dataType: "string",
-            description: "Should this product be visible in the website",
-            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            config: {
-                enumValues: {
-                    private: "Private",
-                    public: "Public"
-                }
-            }
-        },
-        categories: {
-            title: "Categories",
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "string",
-                config: {
-                    enumValues: {
-                        electronics: "Electronics",
-                        books: "Books",
-                        furniture: "Furniture",
-                        clothing: "Clothing",
-                        food: "Food"
-                    }
-                }
-            }
-        },
-        image: {
             title: "Image",
-            dataType: "string",
             config: {
                 storageMeta: {
                     mediaType: "image",
                     storagePath: "images",
-                    acceptedFiles: ["image/*"]
+                    acceptedFiles: ["image/*"],
+                    metadata: {
+                        cacheControl: "max-age=1000000"
+                    }
                 }
+            },
+            description: "Upload field for images",
+            validation: {
+                required: true
             }
         },
-        tags: {
-            title: "Tags",
-            description: "Example of generic array",
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "string"
+        category: {
+            dataType: "string",
+            title: "Category",
+            config: {
+                enumValues: categories
+            }
+        },
+        price: {
+            dataType: "number",
+            title: "Price",
+            validation: {
+                requiredMessage: "You must set a price between 0 and 1000",
+                min: 0,
+                max: 1000
+            },
+            config: {
+                customPreview: PriceTextPreview
+            },
+            description: "Price with range validation"
+        },
+        currency: {
+            dataType: "string",
+            title: "Currency",
+            config: {
+                enumValues: {
+                    EUR: "Euros",
+                    DOL: "Dollars"
+                }
+            },
+            validation: {
+                required: true
+            }
+        },
+        added_on: {
+            dataType: "timestamp",
+            title: "Added on",
+            disabled: true
+        },
+        public: {
+            dataType: "boolean",
+            title: "Public",
+            description: "Should this product be visible in the website",
+            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros."
+        },
+        brand: {
+            dataType: "string",
+            title: "Brand",
+            validation: {
+                required: true
             }
         },
         description: {
-            title: "Description",
-            description: "Not mandatory but it'd be awesome if you filled this up",
-            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
             dataType: "string",
-            config:{
+            title: "Description",
+            config: {
                 multiline: true
             }
         },
-        published: {
-            title: "Published",
-            dataType: "boolean"
+        available: {
+            dataType: "boolean",
+            title: "Available"
         },
-        expires_on: {
-            title: "Expires on",
-            dataType: "timestamp"
+        amazon_link: {
+            dataType: "string",
+            title: "Amazon link",
+            config: {
+                url: true
+            }
+        },
+        images: {
+            dataType: "array",
+            title: "Images",
+            of: {
+                dataType: "string",
+                config: {
+                    storageMeta: {
+                        mediaType: "image",
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"],
+                        metadata: {
+                            cacheControl: "max-age=1000000"
+                        }
+                    }
+                }
+            },
+            description: "This fields allows uploading multiple images at once"
+        },
+        related_products: {
+            dataType: "array",
+            title: "Related products",
+            description: "Reference to self",
+            of: {
+                dataType: "reference",
+                collectionPath: "dadaki",
+                schema: "self"
+            }
+        },
+        min_known_price: {
+            dataType: "number",
+            title: "Min known price",
+            disabled: true,
+            description: "Minimum price this product has ever had"
+        },
+        prime_eligible: {
+            dataType: "boolean",
+            title: "Prime eligible",
+            disabled: true
+        },
+        available_locales: {
+            title: "Available locales",
+            description:
+                "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
+            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
+            dataType: "array",
+            disabled: true,
+            of: {
+                dataType: "string",
+                config: {
+                    previewAsTag: true
+                }
+            }
+        },
+        uppercase_name: {
+            title: "Uppercase Name",
+            dataType: "string",
+            disabled: true,
+            description: "This field gets updated with a preSave hook"
         },
         publisher: {
             title: "Publisher",
@@ -136,41 +244,11 @@ const productSchema = buildSchema({
                     dataType: "string"
                 }
             }
-        },
-        available_locales: {
-            title: "Available locales",
-            description:
-                "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
-            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            dataType: "array",
-            disabled: true,
-            of: {
-                dataType: "string"
-            }
-        },
-        uppercase_name: {
-            title: "Uppercase Name",
-            dataType: "string",
-            disabled: true,
-            description: "This field gets updated with a preSave hook"
         }
+
     }
 });
 
-productSchema.onPreSave = ({
-                               schema,
-                               collectionPath,
-                               id,
-                               values,
-                               status
-                           }: EntitySaveProps<typeof productSchema>) => {
-    values.uppercase_name = values.name.toUpperCase();
-    return values;
-};
-
-productSchema.onSaveSuccess = () => {
-    console.log("onSaveSuccess");
-};
 
 const blogSchema = buildSchema({
     name: "Blog entry",
@@ -263,7 +341,18 @@ const blogSchema = buildSchema({
                 collectionPath: "products",
                 schema: productSchema,
                 textSearchDelegate: productsSearchDelegate,
-                previewProperties: ["name", "image"]
+                previewProperties: ["name", "main_image"]
+            }
+        },
+        tags: {
+            title: "Tags",
+            description: "Example of generic array",
+            dataType: "array",
+            of: {
+                dataType: "string",
+                config: {
+                    previewAsTag: true
+                }
             }
         }
     }
@@ -299,7 +388,7 @@ const usersSchema = buildSchema({
                     title: "Large",
                     dataType: "string",
                     config: {
-                        urlMediaType: "image"
+                        url: "image"
                     },
                     validation: {
                         url: true
@@ -309,7 +398,7 @@ const usersSchema = buildSchema({
                     title: "Thumbnail",
                     dataType: "string",
                     config: {
-                        urlMediaType: "image"
+                        url: "image"
                     },
                     validation: {
                         url: true
@@ -321,7 +410,7 @@ const usersSchema = buildSchema({
     }
 });
 
-const formQuestions = ["birth_year",
+const formQuestions: string[] = ["birth_year",
     "living_situation",
     "electricity_monthly",
     "heating_fuels_used",
@@ -346,7 +435,7 @@ export const testEntitySchema = buildSchema({
             collectionPath: "products",
             schema: productSchema,
             textSearchDelegate: productsSearchDelegate,
-            previewProperties: ["name", "image"]
+            previewProperties: ["name", "main_image"]
         },
         title: {
             title: "Title",
@@ -356,7 +445,7 @@ export const testEntitySchema = buildSchema({
         description: {
             title: "Description",
             dataType: "string",
-            config:{
+            config: {
                 multiline: true
             }
         },
@@ -404,7 +493,7 @@ export const testEntitySchema = buildSchema({
         image_urls: {
             title: "Image URLs",
             dataType: "array",
-            of:{
+            of: {
                 dataType: "string",
                 config: {
                     storageMeta: {
@@ -460,24 +549,29 @@ export const testEntitySchema = buildSchema({
 });
 
 const productAdditionalColumn: AdditionalColumnDelegate<typeof productSchema> = {
+    id: "spanish_title",
     title: "Spanish title",
     builder: (entity) =>
         <AsyncPreviewComponent builder={
             entity.reference.collection("locales")
-                .doc("es-ES")
+                .doc("es")
                 .get()
-                .then((snapshot: any) => snapshot.get("title") as string)
+                .then((snapshot: any) => snapshot.get("name") as string)
         }/>
 };
-
 
 
 const localeSchema = buildSchema({
     customId: locales,
     name: "Locale",
     properties: {
-        title: {
-            title: "Title",
+        name: {
+            title: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        description: {
+            title: "Description",
             validation: { required: true },
             dataType: "string"
         },
@@ -501,66 +595,83 @@ const localeSchema = buildSchema({
     }
 });
 
+productSchema.onPreSave = ({
+                               schema,
+                               collectionPath,
+                               id,
+                               values,
+                               status
+                           }: EntitySaveProps<typeof productSchema>) => {
+    values.uppercase_name = values.name.toUpperCase();
+    return values;
+};
+
+productSchema.onSaveSuccess = () => {
+    console.log("onSaveSuccess");
+};
 
 const localeCollection: EntityCollectionView<typeof localeSchema> =
-    {
+    buildCollection({
         name: "Locales",
         relativePath: "locales",
         deleteEnabled: false,
         schema: localeSchema
-    }
+    })
 ;
 
+const productsCollection = buildCollection({
+    relativePath: "products",
+    schema: productSchema,
+    name: "Products",
+    textSearchDelegate: productsSearchDelegate,
+    additionalColumns: [productAdditionalColumn],
+    subcollections: [localeCollection],
+    excludedProperties: ["images", "related_products"],
+    filterableProperties: ["price"]
+});
 
-let navigation: EntityCollectionView<any>[] = [
-    {
-        relativePath: "products",
-        schema: productSchema,
-        name: "Products",
-        textSearchDelegate: productsSearchDelegate,
-        additionalColumns: [productAdditionalColumn],
-        subcollections: [localeCollection],
-        properties: ["name", "price", "status", "categories", "image", "tags", "published", "expires_on", "publisher", "available_locales"],
-        filterableProperties: ["price"]
+const usersCollection = buildCollection({
+    relativePath: "users",
+    schema: usersSchema,
+    name: "Users",
+    textSearchDelegate: usersSearchDelegate,
+    properties: ["first_name", "last_name", "email", "phone", "picture"]
+});
+
+const blogCollection = buildCollection({
+    relativePath: "blog",
+    schema: blogSchema,
+    name: "Blog",
+    textSearchDelegate: blogSearchDelegate,
+    properties: ["name", "images", "status", "reviewed", "products", "long_text"],
+    filterableProperties: ["name", "status"],
+    initialFilter: {
+        "status": ["==", "published"]
     },
-    {
-        relativePath: "users",
-        schema: usersSchema,
-        name: "Users",
-        textSearchDelegate: usersSearchDelegate,
-        properties: ["first_name", "last_name", "email", "phone", "picture"]
-    },
-    {
-        relativePath: "blog",
-        schema: blogSchema,
-        name: "Blog",
-        textSearchDelegate: blogSearchDelegate,
-        properties: ["name", "images", "status", "reviewed", "products", "long_text"],
-        filterableProperties: ["name", "status"],
-        initialFilter: {
-            "status": ["==", "published"]
-        },
-        onEntityDelete: (path, entity) => {
-            console.log("Log from onEntityDelete hook", entity);
-        }
+    onEntityDelete: (path, entity) => {
+        console.log("Log from onEntityDelete hook", entity);
     }
+});
+
+const navigation: EntityCollectionView<any>[] = [
+    productsCollection,
+    usersCollection,
+    blogCollection
 ];
 
 if (process.env.NODE_ENV !== "production") {
-    navigation.push({
+    navigation.push(buildCollection({
         relativePath: "test_entity",
         schema: testEntitySchema,
         name: "Test entity",
         filterableProperties: ["difficulty", "search_adjacent", "description"]
-    });
+    }));
 }
-
 
 const myAuthenticator: Authenticator = (user?: User) => {
     console.log("Allowing access to", user?.email);
     return true;
 };
-
 
 ReactDOM.render(
     <CMSApp

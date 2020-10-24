@@ -10,42 +10,57 @@ import {
     FormHelperText,
     IconButton,
     makeStyles,
-    Paper,
     Tooltip
 } from "@material-ui/core";
-import React from "react";
-import ReferencePreview from "../../preview/ReferencePreview";
+import React, { useEffect } from "react";
+import ErrorIcon from "@material-ui/icons/Error";
 import ClearIcon from "@material-ui/icons/Clear";
-import CollectionTable from "../../collection/CollectionTable";
-import { CMSFieldProps } from "../form_props";
 
-import { PreviewComponent } from "../../preview";
+import { CMSFieldProps } from "../form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { TextSearchDelegate } from "../../text_search_delegate";
+import { CollectionTable } from "../../collection/CollectionTable";
+import { useSelectedEntityContext } from "../../selected_entity_controller";
+import { listenEntityFromRef } from "../../firebase";
+import SkeletonComponent from "../../preview/SkeletonComponent";
+import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
+import { PreviewComponent } from "../../preview";
+import { ErrorBoundary } from "../../components/ErrorBoundary";
 
 
 export const useStyles = makeStyles(theme => createStyles({
-    paper: {
+    root: {
         elevation: 0,
+        width: "100%",
         padding: theme.spacing(1),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-            padding: theme.spacing(2)
-        }
+        position: "relative",
+        transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+        borderTopLeftRadius: "2px",
+        borderTopRightRadius: "2px",
+        backgroundColor: "rgba(0, 0, 0, 0.09)",
+        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+        "&:hover": {
+            backgroundColor: "#dedede"
+        },
+        color: "#838383",
+        fontWeight: 500
     },
     dialogBody: {
         flexGrow: 1,
-        overflow: "auto"
+        overflow: "auto",
+        minWidth: "85vw"
     }
 }));
 
-type ReferenceFieldProps<S extends EntitySchema> = CMSFieldProps<firebase.firestore.DocumentReference> ;
+type ReferenceFieldProps<S extends EntitySchema> = CMSFieldProps<firebase.firestore.DocumentReference>;
 
 export default function ReferenceField<S extends EntitySchema>({
                                                                    field,
                                                                    form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                                                    property,
-                                                                   includeDescription
+                                                                   includeDescription,
+                                                                   entitySchema
                                                                }: ReferenceFieldProps<S>) {
 
 
@@ -71,19 +86,18 @@ export default function ReferenceField<S extends EntitySchema>({
                 <LabelWithIcon scaledIcon={true} property={property}/>
             </FormHelperText>
 
-            <Paper elevation={0}
-                   className={`${classes.paper}`}
-                   variant={"outlined"}>
-
+            <Box className={`${classes.root}`}>
                 <ReferenceDialog value={value}
                                  title={title}
                                  collectionPath={property.collectionPath}
-                                 schema={property.schema}
+                                 schema={property.schema === "self" ? entitySchema : property.schema}
                                  initialFilter={property.filter}
                                  previewProperties={property.previewProperties}
                                  textSearchDelegate={property.textSearchDelegate}
-                                 onEntityClick={handleEntityClick}/>
-            </Paper>
+                                 onEntityClick={handleEntityClick}
+                                 entitySchema={entitySchema}/>
+
+            </Box>
 
             {includeDescription &&
             <FieldDescription property={property}/>}
@@ -96,11 +110,11 @@ export default function ReferenceField<S extends EntitySchema>({
 }
 
 
-export interface ReferenceDialogProps<S extends EntitySchema> {
+export interface ReferenceDialogProps<S extends EntitySchema<Key>, Key extends string = string> {
 
-    value: any;
+    value?: any;
 
-    title: string,
+    title?: string,
 
     /**
      * Absolute collection path
@@ -113,16 +127,19 @@ export interface ReferenceDialogProps<S extends EntitySchema> {
     initialFilter?: FilterValues<S>;
 
     /**
-     * Properties that need to be rendered when as a preview of this reference
+     * Properties that are displayed when as a preview
      */
-    previewProperties?: (keyof S["properties"])[];
+    previewProperties?: Key[];
 
     textSearchDelegate?: TextSearchDelegate;
 
     schema: S;
 
     onEntityClick(entity?: Entity<S>): void;
+
+    entitySchema: EntitySchema;
 }
+
 
 export function ReferenceDialog<S extends EntitySchema>(
     {
@@ -133,12 +150,15 @@ export function ReferenceDialog<S extends EntitySchema>(
         initialFilter,
         previewProperties,
         textSearchDelegate,
-        collectionPath
+        collectionPath,
+        entitySchema
     }: ReferenceDialogProps<S>) {
 
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
+    const [entity, setEntity] = React.useState<Entity<S>>();
+    const selectedEntityContext = useSelectedEntityContext();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -149,28 +169,113 @@ export function ReferenceDialog<S extends EntitySchema>(
         onEntityClick(entity);
     };
 
-    const clearValue = () => {
+    const clearValue = (e: React.MouseEvent) => {
+        e.stopPropagation();
         setOpen(false);
         onEntityClick(undefined);
+    };
+
+    const seeEntityDetails = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (entity)
+            selectedEntityContext.open({
+                entity,
+                schema
+            });
     };
 
     const handleClose = () => {
         setOpen(false);
     };
 
-    return (
-        <React.Fragment>
-            {value &&
-            <Box p={1}
-                 display="flex">
-                <Box flexGrow={1}>
-                    <ReferencePreview
-                        reference={value}
-                        schema={schema}
-                        small={false}
-                        previewProperties={previewProperties}
-                        previewComponent={PreviewComponent}/>
+    useEffect(() => {
+        if (value) {
+            const cancel = listenEntityFromRef<S>(value, schema, (e => {
+                setEntity(e);
+            }));
+            return () => cancel();
+        } else {
+            setEntity(undefined);
+            return () => {
+            };
+        }
+    }, [value, schema]);
+
+    function buildEntityView() {
+
+        const allProperties = Object.keys(schema.properties);
+        let listProperties = previewProperties?.filter(p => allProperties.includes(p));
+        if (!listProperties || !listProperties.length) {
+            listProperties = allProperties;
+        }
+        listProperties = listProperties.slice(0, 3);
+
+        console.log("ReferenceDialog", listProperties);
+
+        const missingEntity = entity && !entity.values;
+
+        let body: JSX.Element;
+        if (missingEntity) {
+            body = (
+                <Tooltip title={value.path}>
+                    <Box
+                        display={"flex"}
+                        alignItems={"center"}
+                        p={1}
+                        flexGrow={1}>
+                        <ErrorIcon fontSize={"small"} color={"error"}/>
+                        <Box marginLeft={1}>Missing
+                            reference {entity && entity.id}</Box>
+                    </Box>
+                </Tooltip>
+            );
+        } else {
+            body = (
+                <Box display={"flex"}
+                     flexDirection={"column"}
+                     flexGrow={1}
+                     m={1}>
+                    {listProperties && listProperties.map((key, index) => {
+                        const property = schema.properties[key as string];
+                        return (
+                            <Box key={"ref_prev_" + key + index}
+                                 m={1}>
+                                <ErrorBoundary>{
+                                    entity ?
+                                        React.createElement(PreviewComponent, {
+                                            name: key as string,
+                                            value: entity.values[key as string],
+                                            property: property,
+                                            size: "tiny",
+                                            entitySchema: entitySchema
+                                        })
+                                        :
+                                        <SkeletonComponent
+                                            property={property}
+                                            size={"tiny"}/>}
+                                </ErrorBoundary>
+                            </Box>
+                        );
+                    })}
                 </Box>
+            );
+        }
+
+        return (
+            <Box onClick={handleClickOpen}
+                 display="flex">
+
+                {body}
+
+                {!missingEntity && <Box>
+                    <Tooltip title="See details">
+                        <IconButton
+                            onClick={seeEntityDetails}>
+                            <KeyboardTabIcon/>
+                        </IconButton>
+                    </Tooltip>
+                </Box>}
+
                 <Box>
                     <Tooltip title="Clear">
                         <IconButton
@@ -179,23 +284,23 @@ export function ReferenceDialog<S extends EntitySchema>(
                         </IconButton>
                     </Tooltip>
                 </Box>
-                <Box p={1}>
-                    <Button variant="outlined"
-                            color="primary"
-                            onClick={handleClickOpen}>
-                        Edit
-                    </Button>
-                </Box>
-            </Box>}
+            </Box>
+        );
+    }
+
+    return (
+        <React.Fragment>
+
+            {value && buildEntityView()}
 
             {!value &&
             <Box p={2}
+                 onClick={handleClickOpen}
                  justifyContent="center"
                  display="flex">
                 <Box flexGrow={1} textAlign={"center"}>No value set</Box>
                 <Button variant="outlined"
-                        color="primary"
-                        onClick={handleClickOpen}>
+                        color="primary">
                     Set
                 </Button>
             </Box>}

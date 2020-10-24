@@ -27,11 +27,11 @@ export type BreadcrumbsStatus = {
 export const BreadcrumbContext = React.createContext<BreadcrumbsStatus>(DEFAULT_NAVIGATION);
 export const useBreadcrumbsContext = () => useContext(BreadcrumbContext);
 
-interface IBreadcrumbsProviderProps {
+interface BreadcrumbsProviderProps {
     children: React.ReactNode;
 }
 
-export const BreadcrumbsProvider: React.FC<IBreadcrumbsProviderProps> = ({ children }) => {
+export const BreadcrumbsProvider: React.FC<BreadcrumbsProviderProps> = ({ children }) => {
 
     const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbEntry[]>([]);
     const [currentTitle, setCurrentTitle] = useState<string | undefined>(undefined);

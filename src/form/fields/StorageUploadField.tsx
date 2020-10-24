@@ -6,13 +6,12 @@ import {
     FormControl,
     FormHelperText,
     IconButton,
-    LinearProgress, makeStyles,
+    LinearProgress,
+    makeStyles,
     Paper,
     RootRef,
-    Snackbar,
     Typography
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert/Alert";
 
 import { getDownloadURL, uploadFile } from "../../firebase";
 import { storage } from "firebase/app";
@@ -20,6 +19,7 @@ import { storage } from "firebase/app";
 
 import {
     ArrayProperty,
+    EntitySchema,
     Property,
     StorageMeta,
     StringProperty
@@ -34,10 +34,16 @@ import deepEqual from "deep-equal";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { useSnackbarContext } from "../../snackbar_controller";
+import { ErrorBoundary } from "../../components/ErrorBoundary";
 
 export const useStyles = makeStyles(theme => ({
     dropZone: {
+        position: "relative",
+        transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+        borderTopLeftRadius: "2px",
+        borderTopRightRadius: "2px",
         backgroundColor: "rgba(0, 0, 0, 0.09)",
+        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
         "&:hover": {
             backgroundColor: "#dedede"
         }
@@ -59,7 +65,7 @@ export const useStyles = makeStyles(theme => ({
 }));
 
 
-type StorageUploadFieldProps = CMSFieldProps<string | string[]> ;
+type StorageUploadFieldProps = CMSFieldProps<string | string[]>;
 
 /**
  * Internal representation of an item in the storage field.
@@ -77,8 +83,8 @@ export default function StorageUploadField({
                                                field,
                                                form: { errors, touched, setFieldValue, setFieldTouched },
                                                property,
-                                               includeDescription
-
+                                               includeDescription,
+                                               entitySchema
                                            }: StorageUploadFieldProps) {
 
     const fieldError = getIn(errors, field.name);
@@ -110,6 +116,7 @@ export default function StorageUploadField({
                                    newValue
                                );
                            }}
+                           entitySchema={entitySchema}
                            small={false}/>
 
             {includeDescription &&
@@ -126,14 +133,16 @@ interface StorageUploadProps {
     value: string | string[];
     property: StringProperty | ArrayProperty<string>;
     onChange: (value: string | string[] | null) => void;
-    small: boolean
+    small: boolean;
+    entitySchema: EntitySchema;
 }
 
 export function StorageUpload({
                                   property,
                                   value,
                                   onChange,
-                                  small
+                                  small,
+                                  entitySchema
                               }: StorageUploadProps) {
 
     const multipleFilesSupported = property.dataType === "array";
@@ -286,10 +295,9 @@ export function StorageUpload({
 
         <RootRef rootRef={ref}>
 
-            <Paper elevation={0}
-                   {...rootProps}
-                   className={`${classes.dropZone} ${isDragActive ? classes.activeDrop : ""} ${isDragReject ? classes.rejectDrop : ""} ${isDragAccept ? classes.acceptDrop : ""}`}
-                   variant={"outlined"}>
+            <div {...rootProps}
+                 className={`${classes.dropZone} ${isDragActive ? classes.activeDrop : ""} ${isDragReject ? classes.rejectDrop : ""} ${isDragAccept ? classes.acceptDrop : ""}`}
+            >
 
                 <input {...getInputProps()} />
 
@@ -300,17 +308,19 @@ export function StorageUpload({
                      justifyContent="center"
                      minHeight={250}>
 
-                    {internalValue.map(entry => {
+                    {internalValue.map((entry,index) => {
                         if (entry.storagePathOrDownloadUrl) {
                             const renderProperty = multipleFilesSupported
                                 ? (property as ArrayProperty<string>).of as Property
                                 : property;
                             return (
                                 <StorageItemPreview
-                                    key={`storage_preview_${entry.storagePathOrDownloadUrl}`}
+                                    key={`storage_preview_${index}`}
+                                    name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                     property={renderProperty}
                                     value={entry.storagePathOrDownloadUrl}
-                                    onClear={onClear}/>
+                                    onClear={onClear}
+                                    entitySchema={entitySchema}/>
                             );
                         } else if (entry.file) {
                             return (
@@ -340,7 +350,7 @@ export function StorageUpload({
 
                 </Box>
 
-            </Paper>
+            </div>
         </RootRef>
     );
 
@@ -400,7 +410,7 @@ export function StorageUploadProgress({
                 type: "error",
                 title: "Error uploading file",
                 message: e.message
-            })
+            });
 
         }, () => {
             const fullPath = uploadTask.snapshot.ref.fullPath;
@@ -411,39 +421,38 @@ export function StorageUploadProgress({
 
     return (
 
-        <React.Fragment>
+        <Box m={1}>
+            <Paper elevation={0}
+                   className={classes.uploadItem}
+                   variant={"outlined"}>
 
-            <Box m={1}>
-                <Paper elevation={0}
-                       className={classes.uploadItem}
-                       variant={"outlined"}>
+                {progress > -1 &&
+                <LinearProgress variant="indeterminate"
+                                value={progress}/>}
 
-                    {progress > -1 &&
-                    <LinearProgress variant="indeterminate"
-                                    value={progress}/>}
+                {error && <p>Error uploading file: {error}</p>}
 
-                    {error && <p>Error uploading file: {error}</p>}
+            </Paper>
+        </Box>
 
-                </Paper>
-            </Box>
-
-        </React.Fragment>
     );
 
 }
 
 interface StorageItemPreviewProps {
-    key: string;
+    name: string;
     property: Property;
     value: string,
     onClear: (value: string) => void;
+    entitySchema: EntitySchema;
 }
 
 export function StorageItemPreview({
-                                       key,
+                                       name,
                                        property,
                                        value,
-                                       onClear
+                                       onClear,
+                                       entitySchema
                                    }: StorageItemPreviewProps) {
 
     const classes = useStyles();
@@ -470,11 +479,14 @@ export function StorageItemPreview({
                 </Box>
 
                 {value &&
-                <PreviewComponent name={key}
-                                  value={value}
-                                  property={property}
-                                  small={false}/>}
-
+                <ErrorBoundary>
+                    <PreviewComponent name={name}
+                                      value={value}
+                                      property={property}
+                                      size={"regular"}
+                                      entitySchema={entitySchema}/>
+                </ErrorBoundary>
+                }
             </Paper>
 
         </Box>
