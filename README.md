@@ -512,7 +512,6 @@ productSchema.onPreSave = ({
 };
 ```
 
-
 Collection configuration
 ------------------------
 Once you have defined at least one entity schema, you can include it in a
