@@ -34,7 +34,7 @@ import deepEqual from "deep-equal";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { useSnackbarContext } from "../../snackbar_controller";
-import { ErrorBoundary } from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../components/ErrorBoundary";
 
 export const useStyles = makeStyles(theme => ({
     dropZone: {

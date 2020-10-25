@@ -27,7 +27,7 @@ import { CollectionTableToolbar } from "./CollectionTableToolbar";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SkeletonComponent, { renderSkeletonText } from "../preview/SkeletonComponent";
-import { ErrorBoundary } from "../components/ErrorBoundary";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;

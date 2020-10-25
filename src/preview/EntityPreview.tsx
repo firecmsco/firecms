@@ -18,7 +18,7 @@ import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import IconButton from "@material-ui/core/IconButton";
 import { FirebaseConfigContext } from "../contexts";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
-import { ErrorBoundary } from "../components/ErrorBoundary";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({

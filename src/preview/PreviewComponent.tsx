@@ -43,7 +43,7 @@ import CheckBoxOutlineBlank from "@material-ui/icons/CheckBoxOutlineBlank";
 import ImagePreview from "./ImagePreview";
 import { CustomChip } from "./CustomChip";
 
-import { ErrorBoundary } from "../components/ErrorBoundary";
+import ErrorBoundary from "../components/ErrorBoundary";
 import { EmptyValue } from "../components/EmptyValue";
 
 const useStyles = makeStyles((theme: Theme) =>

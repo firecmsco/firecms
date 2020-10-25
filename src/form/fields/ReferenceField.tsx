@@ -26,7 +26,7 @@ import { listenEntityFromRef } from "../../firebase";
 import SkeletonComponent from "../../preview/SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { PreviewComponent } from "../../preview";
-import { ErrorBoundary } from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../components/ErrorBoundary";
 
 
 export const useStyles = makeStyles(theme => createStyles({

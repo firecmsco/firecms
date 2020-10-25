@@ -16,7 +16,7 @@ import { CMSFieldProps } from "../form_props";
 import PreviewComponent from "../../preview/PreviewComponent";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
-import { ErrorBoundary } from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../components/ErrorBoundary";
 
 interface TextFieldProps extends CMSFieldProps<string | number> {
     allowInfinity?: boolean
