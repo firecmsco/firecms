@@ -69,12 +69,12 @@ firebaseConfig specification, since it gets picked up automatically.
 - [ ] Geopoint field
 - [ ] Allow set up of a project using a CLI create-firecms-app
 - [x] Real-time Collection view for entities
-- [ ] Encoding pagination in URL for improved navigation
+- [x] Collection text search integration
+- [x] Infinite scrolling in collections
 - [x] Custom additional views in main navigation
 - [x] Custom fields defined by the developer.
-- [ ] Improve error handling when unexpected formats come from Firestore
 - [x] Subcollection support
-- [x] Filters (only for string and numbers)
+- [x] Filters (only for string, numbers and booleans)
 - [ ] Filters for arrays, dates
 - [x] Custom authenticator
 - [x] Validation for required fields using yup
@@ -88,15 +88,15 @@ firebaseConfig specification, since it gets picked up automatically.
 import React from "react";
 import ReactDOM from "react-dom";
 
-import "typeface-rubik";
-
 import {
     Authenticator,
     CMSApp,
     EntityCollectionView,
     buildSchema,
+    buildCollection,
 } from "@camberi/firecms";
 import { User } from "firebase/app";
+import "typeface-roboto";
 
 // Replace with your config
 const firebaseConfig = {
@@ -190,7 +190,7 @@ const productSchema = buildSchema({
             title: "Description",
             description: "Not mandatory but it'd be awesome if you filled this up",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            dataType: "string"
+            dataType: "string",
         },
         published: {
             title: "Published",
@@ -248,7 +248,7 @@ const localeSchema = buildSchema({
 });
 
 const navigation: EntityCollectionView<any>[] = [
-    {
+    buildCollection({
         relativePath: "products",
         schema: productSchema,
         name: "Products",
@@ -259,7 +259,7 @@ const navigation: EntityCollectionView<any>[] = [
                 schema: localeSchema
             }
         ]
-    }
+    })
 ];
 
 const myAuthenticator: Authenticator = (user?: User) => {
@@ -532,8 +532,8 @@ Firestore data schema.
         every property is displayed
 
 * `excludedProperties`: Properties that should NOT get displayed in the collection view.
-        All the other properties from the the entity are displayed
-        It has no effect if the properties value is set.
+        All the other properties from the entity are displayed.
+        It has no effect if the `properties` value is set.
 
 * `filterableProperties`: List of properties that include a filter widget. Defaults to
         none.
@@ -582,7 +582,7 @@ using the field `subcollections`.
 
 ### Filters
 
-Filtering support is currently limited to string and number values, including
+Filtering support is currently limited to string, number and boolean values, including
 enum types. If you want a property to be filterable, you can mark it as such in
 the entity schema.
 
@@ -600,6 +600,12 @@ credentials and index. For this to work you need to set up an AlgoliaSearch
 account and manage the indexing of your documents. There is a full backend
 example included in the code, which indexes documents with Cloud Functions.
 
+You can also implement your own `TextSearchDelegate`, and would love to hear how
+you come around this problem.
+
+
+## Contact
+`francesco@camberi.com`
 
 ## License
 

@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "0.14.0",
+    "version": "0.14.1",
     "description": "Awesome Firestore based CMS",
     "author": "camberi",
     "license": "GPL-3.0",
@@ -26,7 +26,7 @@
     "scripts": {
         "build": "microbundle-crl --no-compress --format modern,cjs",
         "start": "microbundle-crl watch --no-compress --format modern,cjs",
-        "prepublish": "run-s build",
+        "prepublishOnly": "run-s build",
         "test": "run-s test:unit test:lint test:build",
         "test:build": "run-s build",
         "test:lint": "eslint .",
