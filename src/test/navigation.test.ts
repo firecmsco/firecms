@@ -1,9 +1,9 @@
-import { getAllPaths, PathConfiguration } from "../routes";
+import { getNavigationPaths, PathConfiguration } from "../routes";
 import { siteConfig } from "./test_site_config";
 
 it("model routes are correct", () => {
 
-    const allPaths: PathConfiguration[] = getAllPaths(siteConfig.navigation);
+    const allPaths: PathConfiguration[] = getNavigationPaths(siteConfig.navigation);
     const pathEntries = allPaths.map((p: PathConfiguration) => p.entries);
     console.log(pathEntries);
     expect(pathEntries).toEqual(

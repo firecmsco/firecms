@@ -23,14 +23,14 @@ export interface BreadcrumbEntry {
 }
 
 /**
- * Generate all paths related to a list of entity views
+ * Generate all navigation paths related to a list of entity views
  * @param entityCollectionView
  * @param basePath
  * @param previousBreadcrumbs
  */
-export function getAllPaths(entityCollectionView: EntityCollectionView<any>[],
-                            basePath: string = "",
-                            previousBreadcrumbs: BreadcrumbEntry[] = []): PathConfiguration[] {
+export function getNavigationPaths(entityCollectionView: EntityCollectionView<any>[],
+                                   basePath: string = "",
+                                   previousBreadcrumbs: BreadcrumbEntry[] = []): PathConfiguration[] {
 
     const pathConfigurations: PathConfiguration[] = [];
     entityCollectionView.forEach((view) => {
@@ -39,6 +39,7 @@ export function getAllPaths(entityCollectionView: EntityCollectionView<any>[],
         const path = removeInitialSlash(`${basePath}/${viewPath}`);
         const placeHolderId = getPlaceHolderIdForView(path || "", view);
         const entityPath = `${path}/:${placeHolderId}`;
+        const entityPathNew = `${path}/new`;
 
         const breadcrumbs = [
             ...previousBreadcrumbs,
@@ -58,7 +59,7 @@ export function getAllPaths(entityCollectionView: EntityCollectionView<any>[],
                 {
                     routeType: "entity",
                     placeHolderId,
-                    fullPath: `${path}/new`
+                    fullPath: entityPathNew
                 },
                 {
                     routeType: "entity",
@@ -78,7 +79,7 @@ export function getAllPaths(entityCollectionView: EntityCollectionView<any>[],
 
         // The order in which this routes are added matters
         if (view.subcollections) {
-            getAllPaths(view.subcollections, entityPath, breadcrumbs)
+            getNavigationPaths(view.subcollections, entityPath, breadcrumbs)
                 .forEach((pathConfiguration) => pathConfigurations.push(pathConfiguration));
         }
         pathConfigurations.push(pathConfiguration);

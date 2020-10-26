@@ -34,11 +34,11 @@ export type SelectedEntity<S extends EntitySchema> = {
 export const SelectedEntityContext = React.createContext<SelectedEntity<any>>(DEFAULT_SELECTED_ENTITY);
 export const useSelectedEntityContext = () => useContext(SelectedEntityContext);
 
-interface ISelectedEntityProviderProps {
+interface SelectedEntityProviderProps {
     children: React.ReactNode;
 }
 
-export const SelectedEntityProvider: React.FC<ISelectedEntityProviderProps> = ({ children }) => {
+export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ children }) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [tab, setTab] = useState(0);

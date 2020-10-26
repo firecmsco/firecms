@@ -9,7 +9,8 @@ import {
 } from "./navigation";
 import {
     Box,
-    Button, createStyles,
+    Button,
+    createStyles,
     makeStyles,
     Theme,
     useMediaQuery,
@@ -115,7 +116,7 @@ export function CollectionRoute<S extends EntitySchema>({
     return (
         <Box className={classes.root}>
 
-            <CollectionTable collectionPath={view.relativePath}
+            <CollectionTable collectionPath={collectionPath}
                              schema={view.schema}
                              actions={buildAddEntityButton()}
                              textSearchDelegate={view.textSearchDelegate}

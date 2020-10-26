@@ -38,7 +38,7 @@ import {
     buildCollectionPath,
     CollectionRoute,
     EntityFormRoute,
-    getAllPaths,
+    getNavigationPaths,
     MediaRoute,
     PathConfiguration,
     removeInitialSlash
@@ -384,7 +384,7 @@ export function CMSApp({
 
                 function getRouterSwitch(shouldIncludeMedia: boolean) {
 
-                    const allPaths = getAllPaths(navigation);
+                    const allPaths = getNavigationPaths(navigation);
 
                     const firstCollectionPath = removeInitialSlash(navigation[0].relativePath);
 
@@ -524,10 +524,11 @@ export function CMSApp({
 
                     return (
                         <FirebaseConfigContext.Provider value={firebaseConfig}>
-                            <SelectedEntityProvider>
-                                <BreadcrumbsProvider>
-                                    <SnackbarProvider>
-                                        <Router>
+                            <Router>
+                                <SelectedEntityProvider>
+                                    <BreadcrumbsProvider>
+                                        <SnackbarProvider>
+
                                             <nav>
                                                 <Drawer
                                                     variant="temporary"
@@ -543,7 +544,6 @@ export function CMSApp({
                                                 >
                                                     {drawer}
                                                 </Drawer>
-
                                             </nav>
 
                                             <Box className={classes.main}>
@@ -557,10 +557,10 @@ export function CMSApp({
                                                 </main>
                                             </Box>
 
-                                        </Router>
-                                    </SnackbarProvider>
-                                </BreadcrumbsProvider>
-                            </SelectedEntityProvider>
+                                        </SnackbarProvider>
+                                    </BreadcrumbsProvider>
+                                </SelectedEntityProvider>
+                            </Router>
                         </FirebaseConfigContext.Provider>
                     );
                 }
