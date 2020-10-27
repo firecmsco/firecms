@@ -4,9 +4,13 @@ import {
     Avatar,
     Box,
     Breadcrumbs,
-    Button, createStyles, Hidden,
+    Button,
+    createStyles,
+    Hidden,
     IconButton,
-    Link, makeStyles, Theme,
+    Link,
+    makeStyles,
+    Theme,
     Toolbar,
     Typography
 } from "@material-ui/core";
@@ -14,11 +18,6 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { BreadcrumbContainer } from "./BreadcrumbContainer";
 import { Link as ReactLink } from "react-router-dom";
 import { useBreadcrumbsContext } from "../breadcrumbs_controller";
-import {
-    BreadcrumbEntry,
-    buildCollectionPath,
-    replacePathIdentifiers
-} from "../routes";
 import { useAuthContext } from "../auth";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -43,12 +42,9 @@ export const CMSAppBar: React.FunctionComponent<BreadcrumbProps> = ({ title, han
     const classes = useStyles();
 
     const breadcrumbsContext = useBreadcrumbsContext();
-    const { breadcrumbs, pathParams } = breadcrumbsContext;
+    const { breadcrumbs } = breadcrumbsContext;
 
-    const [internalBreadCrumbs, setInternalBreadcrumbs] = React.useState<BreadcrumbEntry[]>(breadcrumbs);
-    React.useEffect(() => {
-        setInternalBreadcrumbs(breadcrumbs);
-    }, [breadcrumbs]);
+    console.log("CMSAppBar", breadcrumbs);
 
     const authContext = useAuthContext();
     return (
@@ -74,21 +70,16 @@ export const CMSAppBar: React.FunctionComponent<BreadcrumbProps> = ({ title, han
                 <Box ml={3} mr={3}>
                     <BreadcrumbContainer>
                         <Breadcrumbs aria-label="breadcrumb">
-                            {/*<Link color="inherit" component={ReactLink}*/}
-                            {/*      to="/">*/}
-                            {/*    Home*/}
-                            {/*</Link>*/}
-                            {internalBreadCrumbs.map(entry =>
-                                (entry.placeHolderId && !pathParams[entry.placeHolderId]) ?
-                                    null :
+                            {breadcrumbs.map((entry, index) =>(
+
                                     <Link
-                                        key={`breadcrumb-${entry.relativePlaceholderPath}`}
+                                        key={`breadcrumb-${index}`}
                                         color="inherit"
                                         component={ReactLink}
-                                        to={buildCollectionPath(replacePathIdentifiers(pathParams, entry.relativePlaceholderPath))}>
-                                        {entry.placeHolderId ? pathParams[entry.placeHolderId] : entry.view.name}
-                                    </Link>)
-                                .filter(c => !!c)}
+                                        to={entry.url}>
+                                        { entry.title}
+                                    </Link>))
+                            }
                         </Breadcrumbs>
                     </BreadcrumbContainer>
                 </Box>

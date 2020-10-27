@@ -282,6 +282,12 @@ export interface BaseProperty<T> {
     longDescription?: string;
 
     /**
+     * Width in pixels of this column in the collection view. If not set
+     * the width is inferred based on the other configurations
+     */
+    columnWidth?: number;
+
+    /**
      * Is this a read only property
      */
     disabled?: boolean;
@@ -294,7 +300,7 @@ export interface BaseProperty<T> {
     /**
      * Rules for validating this property
      */
-    validation?: PropertyValidationSchema,
+    validation?: PropertyValidationSchema;
 
 }
 

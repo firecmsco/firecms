@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { EntitySchema } from "../models";
-import { Box, CircularProgress } from "@material-ui/core";
 import { renderSkeletonText } from "./SkeletonComponent";
 
 export interface AsyncPreviewComponentProps<S extends EntitySchema> {

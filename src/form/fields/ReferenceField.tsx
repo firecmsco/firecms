@@ -210,8 +210,6 @@ export function ReferenceDialog<S extends EntitySchema>(
         }
         listProperties = listProperties.slice(0, 3);
 
-        console.log("ReferenceDialog", listProperties);
-
         const missingEntity = entity && !entity.values;
 
         let body: JSX.Element;

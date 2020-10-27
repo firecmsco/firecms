@@ -1,4 +1,4 @@
-import { BaseProperty, Property } from "../../models";
+import { Property } from "../../models";
 import { FieldArray, getIn } from "formik";
 import {
     Box,

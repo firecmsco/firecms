@@ -34,7 +34,7 @@ export function listenCollection<S extends EntitySchema<Key, P>, Key extends str
     order?: "desc" | "asc"
 ): Function {
 
-    console.log("Listening collection", path, limit, filter, startAfter, orderBy, order);
+    console.debug("Listening collection", path, limit, filter, startAfter, orderBy, order);
 
     let collectionReference: firestore.Query = firestore()
         .collection(path);
@@ -236,7 +236,7 @@ export function saveEntity(
     data: { [fieldKey: string]: any }
 ): Promise<string> {
 
-    console.log("Saving entity", path, entityId, data);
+    console.debug("Saving entity", path, entityId, data);
 
     let documentReference: firestore.DocumentReference<firestore.DocumentData>;
     if (entityId)

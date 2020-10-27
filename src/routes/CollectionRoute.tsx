@@ -1,68 +1,57 @@
 import React from "react";
-import { RouteComponentProps } from "react-router";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import {
     BreadcrumbEntry,
     getEntityPath,
-    getRouterNewEntityPath,
-    replacePathIdentifiers
+    getRouterNewEntityPath
 } from "./navigation";
 import {
     Box,
     Button,
     createStyles,
     makeStyles,
-    Theme,
     useMediaQuery,
     useTheme
 } from "@material-ui/core";
-import { Link as ReactLink } from "react-router-dom";
+import { Link as ReactLink, useHistory, useRouteMatch } from "react-router-dom";
 import DeleteEntityDialog from "../collection/DeleteEntityDialog";
 import AddIcon from "@material-ui/icons/Add";
 import { useSelectedEntityContext } from "../selected_entity_controller";
 import { useBreadcrumbsContext } from "../breadcrumbs_controller";
 import { CollectionTable } from "../collection/CollectionTable";
 
-export const useStyles = makeStyles((theme: Theme) =>
+export const useStyles = makeStyles(() =>
     createStyles({
         root: {
             height: "100%",
             display: "flex",
             flexDirection: "column"
-        },
+        }
     })
 );
 
 interface CollectionRouteProps<S extends EntitySchema> {
     view: EntityCollectionView<S>;
-    entityPlaceholderPath: string,
-    breadcrumbs: BreadcrumbEntry[]
+    collectionPath: string;
+    breadcrumbs: BreadcrumbEntry[];
 }
 
 export function CollectionRoute<S extends EntitySchema>({
                                                             view,
-                                                            entityPlaceholderPath,
-                                                            breadcrumbs,
-                                                            match,
-                                                            history
+                                                            collectionPath,
+                                                            breadcrumbs
                                                         }
-                                                            : CollectionRouteProps<S> & RouteComponentProps) {
-    let collectionPath: string;
+                                                            : CollectionRouteProps<S>) {
 
-    if (match) {
-        collectionPath = replacePathIdentifiers(match.params, entityPlaceholderPath);
-    } else {
-        throw Error("No match prop for some reason");
-    }
+    const { path, url } = useRouteMatch();
+    const history = useHistory();
 
     const breadcrumbsContext = useBreadcrumbsContext();
     React.useEffect(() => {
         breadcrumbsContext.set({
-            breadcrumbs: breadcrumbs,
-            currentTitle: view.schema.name,
-            pathParams: match.params
+            breadcrumbs: breadcrumbs
         });
-    });
+    }, [url]);
 
     const selectedEntityContext = useSelectedEntityContext();
 
@@ -114,31 +103,31 @@ export function CollectionRoute<S extends EntitySchema>({
     }
 
     return (
-        <Box className={classes.root}>
+                <Box className={classes.root}>
 
-            <CollectionTable collectionPath={collectionPath}
-                             schema={view.schema}
-                             actions={buildAddEntityButton()}
-                             textSearchDelegate={view.textSearchDelegate}
-                             includeToolbar={true}
-                             onEntityEdit={onEntityEdit}
-                             onEntityClick={onEntityClick}
-                             onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
-                             additionalColumns={view.additionalColumns}
-                             small={view.small === undefined ? false : view.small}
-                             paginationEnabled={view.pagination === undefined ? true : view.pagination}
-                             initialFilter={view.initialFilter}
-                             filterableProperties={view.filterableProperties}
-                             properties={view.properties}
-                             excludedProperties={view.excludedProperties}/>
+                    <CollectionTable collectionPath={collectionPath}
+                                     schema={view.schema}
+                                     actions={buildAddEntityButton()}
+                                     textSearchDelegate={view.textSearchDelegate}
+                                     includeToolbar={true}
+                                     onEntityEdit={onEntityEdit}
+                                     onEntityClick={onEntityClick}
+                                     onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
+                                     additionalColumns={view.additionalColumns}
+                                     small={view.small === undefined ? false : view.small}
+                                     paginationEnabled={view.pagination === undefined ? true : view.pagination}
+                                     initialFilter={view.initialFilter}
+                                     filterableProperties={view.filterableProperties}
+                                     properties={view.properties}
+                                     excludedProperties={view.excludedProperties}/>
 
-            {deleteEntityClicked &&
-            <DeleteEntityDialog entity={deleteEntityClicked}
-                                schema={view.schema}
-                                open={!!deleteEntityClicked}
-                                afterDelete={() => view?.onEntityDelete ? view.onEntityDelete(collectionPath, deleteEntityClicked) : undefined}
-                                onClose={() => setDeleteEntityClicked(undefined)}/>}
+                    {deleteEntityClicked &&
+                    <DeleteEntityDialog entity={deleteEntityClicked}
+                                        schema={view.schema}
+                                        open={!!deleteEntityClicked}
+                                        afterDelete={() => view?.onEntityDelete ? view.onEntityDelete(collectionPath, deleteEntityClicked) : undefined}
+                                        onClose={() => setDeleteEntityClicked(undefined)}/>}
 
-        </Box>
+                </Box>
     );
 }

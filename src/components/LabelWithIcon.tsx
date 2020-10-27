@@ -2,7 +2,6 @@ import React from "react";
 import { Property } from "../models";
 
 import { formStyles } from "../styles";
-import { Typography } from "@material-ui/core";
 import { getIconForProperty } from "../util/property_icons";
 
 interface LabelWithIconProps {

@@ -1,10 +1,5 @@
 import { ArrayProperty, Property, StringProperty } from "../models";
 
-export const ID_WIDTH = 140;
-export const CUSTOM_COL_WIDTH = 200;
-
-export type Order = "asc" | "desc" | undefined;
-
 export function getCellAlignment<T>(property: Property<T>): "right" | "left" | "center" {
     if (property.dataType === "boolean") {
         return "center";
@@ -15,14 +10,17 @@ export function getCellAlignment<T>(property: Property<T>): "right" | "left" | "
     }
 }
 
-
 export function getPreviewWidth<T>(property: Property<T>, small: boolean): number {
 
-     if (property.dataType === "string") {
+    if (property.columnWidth) {
+        return property.columnWidth;
+    }
+
+    if (property.dataType === "string") {
         const stringProperty = property as StringProperty;
         if (stringProperty.config?.url) {
             if (stringProperty.config?.url === "video")
-                return 300;
+                return 340;
             return 240;
         } else if (stringProperty.config?.storageMeta) {
             return 220;

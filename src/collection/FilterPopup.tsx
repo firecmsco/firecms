@@ -1,12 +1,15 @@
 import { EntitySchema, FilterValues, Property } from "../models";
 import PopupState, { bindPopover, bindTrigger } from "material-ui-popup-state";
 import {
-    Button, createStyles,
-    IconButton, makeStyles,
+    Button,
+    createStyles,
+    IconButton,
+    makeStyles,
     Table,
     TableBody,
     TableCell as MuiTableCell,
-    TableRow, Theme,
+    TableRow,
+    Theme,
     Tooltip,
     withStyles
 } from "@material-ui/core";
@@ -18,6 +21,7 @@ import { Form, Formik } from "formik";
 import ClearIcon from "@material-ui/icons/Clear";
 import StringNumberFilterField from "./filters/StringNumberFilterField";
 import BooleanFilterField from "./filters/BooleanFilterField";
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         filter: {

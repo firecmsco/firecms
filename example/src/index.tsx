@@ -158,11 +158,13 @@ const productSchema = buildSchema({
             title: "Description",
             config: {
                 multiline: true
-            }
+            },
+            columnWidth: 300
         },
         available: {
             dataType: "boolean",
-            title: "Available"
+            title: "Available",
+            columnWidth: 100
         },
         amazon_link: {
             dataType: "string",
@@ -275,7 +277,7 @@ const blogSchema = buildSchema({
             validation: { required: true },
             dataType: "string",
             config: {
-                multiline: 4
+                multiline: 6
             }
         },
         images: {
@@ -590,7 +592,8 @@ const localeSchema = buildSchema({
                     storagePath: "videos",
                     acceptedFiles: ["video/*"]
                 }
-            }
+            },
+            columnWidth: 400
         }
     }
 });

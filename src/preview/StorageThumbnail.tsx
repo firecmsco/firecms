@@ -26,7 +26,6 @@ export default function StorageThumbnail({ storagePathOrDownloadUrl, property, r
         else if (storagePathOrDownloadUrl)
             getDownloadURL(storagePathOrDownloadUrl)
                 .then(function(downloadURL) {
-                    console.debug("File available at", downloadURL);
                     if (!unmounted)
                         setUrl(downloadURL);
                 });

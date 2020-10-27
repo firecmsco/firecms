@@ -33,16 +33,7 @@ import "firebase/firestore";
 
 import { CircularProgressCenter } from "./components";
 import { EntityCollectionView } from "./models";
-import {
-    addInitialSlash,
-    buildCollectionPath,
-    CollectionRoute,
-    EntityFormRoute,
-    getNavigationPaths,
-    MediaRoute,
-    PathConfiguration,
-    removeInitialSlash
-} from "./routes";
+import { addInitialSlash, buildCollectionPath, MediaRoute } from "./routes";
 import { Authenticator } from "./authenticator";
 import { blue, pink, red } from "@material-ui/core/colors";
 import { FirebaseConfigContext } from "./contexts";
@@ -54,6 +45,7 @@ import { BreadcrumbsProvider } from "./breadcrumbs_controller";
 import { CMSAppBar } from "./components/CMSAppBar";
 import { AuthContext, AuthProvider } from "./auth";
 import { SnackbarProvider } from "./snackbar_controller";
+import { CMSRoute } from "./routes/CMSRoute";
 
 const drawerWidth = 240;
 
@@ -384,49 +376,22 @@ export function CMSApp({
 
                 function getRouterSwitch(shouldIncludeMedia: boolean) {
 
-                    const allPaths = getNavigationPaths(navigation);
-
-                    const firstCollectionPath = removeInitialSlash(navigation[0].relativePath);
+                    const firstCollectionPath = buildCollectionPath(navigation[0].relativePath);
 
                     return (
                         <Switch>
-                            {allPaths
-                                .map(
-                                    ({
-                                         entries,
-                                         entityPlaceholderPath,
-                                         breadcrumbs,
-                                         view
-                                     }: PathConfiguration) =>
-                                        entries.map(entry => (
-                                            <Route
-                                                path={buildCollectionPath(entry.fullPath)}
-                                                key={`navigation_${entry.routeType}_${entry.placeHolderId}`}
-                                                render={props => {
-                                                    if (entry.routeType === "entity")
-                                                        return (
-                                                            <EntityFormRoute
-                                                                {...props}
-                                                                view={view}
-                                                                breadcrumbs={breadcrumbs}
-                                                                entityPlaceholderPath={entityPlaceholderPath}
-                                                            />
-                                                        );
-                                                    else if (entry.routeType === "collection")
-                                                        return (
-                                                            <CollectionRoute
-                                                                {...props}
-                                                                view={view}
-                                                                breadcrumbs={breadcrumbs}
-                                                                entityPlaceholderPath={entityPlaceholderPath}
-                                                            />
-                                                        );
-                                                    else throw Error("No know routeType");
-                                                }}
-                                            />
-                                        ))
+
+                            {navigation.map(entityCollectionView => (
+                                    <Route path={buildCollectionPath(entityCollectionView.relativePath)}
+                                           key={`navigation_${entityCollectionView.relativePath}`}>
+                                        <CMSRoute
+                                            type={"collection"}
+                                            collectionPath={entityCollectionView.relativePath}
+                                            view={entityCollectionView}
+                                        />
+                                    </Route>
                                 )
-                                .flat()}
+                            )}
 
                             {shouldIncludeMedia && (
                                 <Route path="/media">
@@ -445,7 +410,7 @@ export function CMSApp({
                             ))}
 
                             <Redirect exact from="/"
-                                      to={buildCollectionPath(firstCollectionPath)}/>
+                                      to={firstCollectionPath}/>
                         </Switch>
                     );
                 }

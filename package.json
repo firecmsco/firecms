@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "0.14.1",
+    "version": "0.14.2",
     "description": "Awesome Firestore based CMS",
     "author": "camberi",
     "license": "GPL-3.0",
@@ -27,6 +27,7 @@
         "build": "microbundle-crl --no-compress --format modern,cjs",
         "start": "microbundle-crl watch --no-compress --format modern,cjs",
         "prepublishOnly": "run-s build",
+        "postpublish" : "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags",
         "test": "run-s test:unit test:lint test:build",
         "test:build": "run-s build",
         "test:lint": "eslint .",
@@ -40,8 +41,6 @@
         "@material-ui/data-grid": "^4.0.0-alpha.6",
         "@material-ui/lab": "latest",
         "@types/deep-equal": "^1.0.1",
-        "@types/react-virtualized": "^9.21.10",
-        "@types/react-window": "^1.8.2",
         "date-fns": "^2.10.0",
         "deep-equal": "^2.0.3",
         "formik": "^2.1.5",
@@ -52,8 +51,6 @@
         "react-dropzone": "^11.2.0",
         "react-router-dom": "^5.2.0",
         "react-select": ">=3",
-        "react-virtualized": "^9.22.2",
-        "react-window": "^1.8.5",
         "typeface-roboto": "^0.0.75",
         "typeface-rubik": "^0.0.72",
         "yup": "^0.29.3"

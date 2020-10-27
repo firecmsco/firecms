@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import EntityForm from "../form/EntityForm";
-import { RouteComponentProps } from "react-router";
 import {
     Entity,
     EntityCollectionView,
@@ -14,22 +13,16 @@ import {
     createStyles,
     Grid,
     makeStyles,
-    Snackbar,
     Theme,
     Typography
 } from "@material-ui/core";
-import {
-    BreadcrumbEntry,
-    getEntityPath,
-    getPlaceHolderIdForView,
-    replacePathIdentifiers
-} from "./navigation";
+import { BreadcrumbEntry, getEntityPath } from "./navigation";
 import { CircularProgressCenter } from "../components";
 import SubCollectionsView from "../collection/SubCollectionsView";
 import { useSelectedEntityContext } from "../selected_entity_controller";
 import { useBreadcrumbsContext } from "../breadcrumbs_controller";
 import { useSnackbarContext } from "../snackbar_controller";
-import { Prompt } from "react-router-dom";
+import { Prompt, useHistory, useParams, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,58 +32,43 @@ const useStyles = makeStyles((theme: Theme) =>
                 paddingLeft: theme.spacing(2),
                 paddingRight: theme.spacing(2),
                 paddingTop: theme.spacing(3),
-                paddingBottom: theme.spacing(3),
+                paddingBottom: theme.spacing(3)
             },
             [theme.breakpoints.down("xs")]: {
                 paddingLeft: theme.spacing(0),
                 paddingRight: theme.spacing(0),
                 paddingTop: theme.spacing(2),
-                paddingBottom: theme.spacing(2),
-            },
+                paddingBottom: theme.spacing(2)
+            }
         }
     })
 );
 
 interface EntityRouteProps<S extends EntitySchema> {
     view: EntityCollectionView<S>;
-    entityPlaceholderPath: string,
-    breadcrumbs: BreadcrumbEntry[]
+    collectionPath: string;
+    breadcrumbs: BreadcrumbEntry[];
 }
-
-type EntityParamsProps = Record<string, string>;
-
 
 export function EntityFormRoute<S extends EntitySchema>({
                                                             view,
-                                                            entityPlaceholderPath,
-                                                            breadcrumbs,
-                                                            match,
-                                                            history,
-                                                            ...props
-                                                        }: EntityRouteProps<S> & RouteComponentProps<EntityParamsProps>) {
-    let entityId: string | undefined;
-    let collectionPath: string;
-    let params: Record<string, string>;
+                                                            collectionPath,
+                                                            breadcrumbs
+                                                        }: EntityRouteProps<S>) {
 
-    const hashIdentifier = getPlaceHolderIdForView(entityPlaceholderPath, view);
-    params = match.params;
+    const entityId: string = useParams()["entityId"];
 
-    collectionPath = replacePathIdentifiers(params, entityPlaceholderPath);
-    console.debug("Entity collection path", collectionPath);
+    const { path, url } = useRouteMatch();
+    const history = useHistory();
 
     const classes = useStyles();
     const snackbarContext = useSnackbarContext();
-
     const breadcrumbsContext = useBreadcrumbsContext();
     useEffect(() => {
         breadcrumbsContext.set({
             breadcrumbs: breadcrumbs,
-            currentTitle: view.schema.name,
-            pathParams: match.params
         });
-    });
-
-    entityId = params[hashIdentifier];
+    }, [url]);
 
     const [entity, setEntity] = useState<Entity<S>>();
     const [status, setStatus] = useState<EntityStatus | undefined>();
@@ -104,7 +82,8 @@ export function EntityFormRoute<S extends EntitySchema>({
     useEffect(() => {
         if (entityId) {
             console.log("Listening entity", entityId);
-            const cancelSubscription = listenEntity<S>(collectionPath,
+            const cancelSubscription = listenEntity<S>(
+                collectionPath,
                 entityId,
                 view.schema,
                 (e) => {
@@ -122,7 +101,7 @@ export function EntityFormRoute<S extends EntitySchema>({
         }
         return () => {
         };
-    }, [collectionPath, entityId, view]);
+    }, [entityId, view]);
 
 
     function onSubcollectionEntityEdit(collectionPath: string,
@@ -287,8 +266,7 @@ export function EntityFormRoute<S extends EntitySchema>({
         </Box>);
 
     return loading ?
-                <CircularProgressCenter/>
-                :
-                mainBodyWide
-          ;
+        <CircularProgressCenter/>
+        :
+        mainBodyWide;
 }

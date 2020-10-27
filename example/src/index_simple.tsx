@@ -3,10 +3,10 @@ import ReactDOM from "react-dom";
 
 import {
     Authenticator,
-    CMSApp,
-    EntityCollectionView,
-    buildSchema,
     buildCollection,
+    buildSchema,
+    CMSApp,
+    EntityCollectionView
 } from "@camberi/firecms";
 import { User } from "firebase/app";
 import "typeface-roboto";
@@ -55,7 +55,7 @@ const productSchema = buildSchema({
             dataType: "string",
             description: "Should this product be visible in the website",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            config:{
+            config: {
                 enumValues: {
                     private: "Private",
                     public: "Public"
@@ -68,7 +68,7 @@ const productSchema = buildSchema({
             dataType: "array",
             of: {
                 dataType: "string",
-                config:{
+                config: {
                     enumValues: {
                         electronics: "Electronics",
                         books: "Books",
@@ -82,7 +82,7 @@ const productSchema = buildSchema({
         image: {
             title: "Image",
             dataType: "string",
-            config:{
+            config: {
                 storageMeta: {
                     mediaType: "image",
                     storagePath: "images",
@@ -104,10 +104,12 @@ const productSchema = buildSchema({
             description: "Not mandatory but it'd be awesome if you filled this up",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
             dataType: "string",
+            columnWidth: 300
         },
         published: {
             title: "Published",
-            dataType: "boolean"
+            dataType: "boolean",
+            columnWidth: 100
         },
         expires_on: {
             title: "Expires on",
@@ -149,7 +151,7 @@ const localeSchema = buildSchema({
             title: "Video",
             dataType: "string",
             validation: { required: false },
-            config:{
+            config: {
                 storageMeta: {
                     mediaType: "video",
                     storagePath: "videos",

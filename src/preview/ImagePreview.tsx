@@ -1,10 +1,7 @@
 import React, { CSSProperties, useState } from "react";
 import { Box, IconButton } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
-import {
-    getThumbnailMeasure,
-    PreviewSize
-} from "./PreviewComponentProps";
+import { getThumbnailMeasure, PreviewSize } from "./PreviewComponentProps";
 
 type ImagePreviewProps = { size: PreviewSize, url: string };
 
