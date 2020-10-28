@@ -16,6 +16,7 @@ import { CMSFieldProps } from "../form_props";
 import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { getIn } from "formik";
 
 type MapFieldProps<S extends EntitySchema> = CMSFieldProps<object>;
 
@@ -45,7 +46,7 @@ export default function MapField<S extends EntitySchema>({
         mapProperties = {};
     }
 
-    const hasError = touched && property.validation?.required && !field.value;
+    const hasError = getIn(touched, field.name) && property.validation?.required && !field.value;
 
     function buildPickKeysSelect() {
 
