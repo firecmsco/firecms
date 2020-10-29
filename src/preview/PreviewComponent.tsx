@@ -432,6 +432,7 @@ function renderUrlFile(url: string, size: PreviewSize) {
     return (
         <a
             href={url}
+            rel="noopener noreferrer"
             target="_blank"
             onClick={(e) => e.stopPropagation()}>
             <Box

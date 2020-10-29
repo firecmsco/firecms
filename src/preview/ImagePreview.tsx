@@ -61,6 +61,7 @@ function ImagePreview({ size, url }: ImagePreviewProps) {
                     right: 4
                 }}
                    href={url}
+                   rel="noopener noreferrer"
                    target="_blank"
                    onClick={(e) => e.stopPropagation()}
                 >
