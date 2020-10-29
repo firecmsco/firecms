@@ -9,11 +9,11 @@ export interface BreadcrumbEntry {
 }
 
 export function getEntityPath(entityId: string, basePath: string) {
-    return `${DATA_PATH}/${basePath}/${entityId}`;
+    return `${DATA_PATH}/${removeInitialSlash(basePath)}/${entityId}`;
 }
 
 export function getRouterNewEntityPath(basePath: string) {
-    return `${DATA_PATH}/${basePath}/new`;
+    return `${DATA_PATH}/${removeInitialSlash(basePath)}/new`;
 }
 
 export function buildCollectionPath(absolutePath: string) {

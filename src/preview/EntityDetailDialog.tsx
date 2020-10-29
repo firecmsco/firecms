@@ -18,7 +18,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import { Link as ReactLink } from "react-router-dom";
 import { useSelectedEntityContext } from "../selected_entity_controller";
 import { CollectionTable } from "../collection/CollectionTable";
-import { buildCollectionPath } from "../routes";
+import { buildCollectionPath, removeInitialSlash } from "../routes";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -155,7 +155,7 @@ export default function EntityDetailDialog<S extends EntitySchema>() {
                                 height={"100%"}
                                 hidden={tabsPosition !== colIndex + 1}>
                                 <CollectionTable
-                                    collectionPath={`${entity?.reference.path}/${subcollection.relativePath}`}
+                                    collectionPath={`${entity?.reference.path}/${removeInitialSlash(subcollection.relativePath)}`}
                                     schema={subcollection.schema}
                                     additionalColumns={subcollection.additionalColumns}
                                     onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>

@@ -1,6 +1,6 @@
 import React from "react";
 import { EntityCollectionView, EntitySchema } from "../models";
-import { BreadcrumbEntry } from "./navigation";
+import { BreadcrumbEntry, removeInitialSlash } from "./navigation";
 import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 import { EntityFormRoute } from "./EntityFormRoute";
 import { CollectionRoute } from "./CollectionRoute";
@@ -78,11 +78,11 @@ export function CMSRoute<S extends EntitySchema>({
             {type === "entity" && <Switch>
                 {view.subcollections && view.subcollections.map(entityCollectionView => (
                         <Route
-                            path={`${path}/${entityCollectionView.relativePath}`}
+                            path={`${path}/${removeInitialSlash(entityCollectionView.relativePath)}`}
                             key={`navigation_sub_${entityCollectionView.relativePath}`}>
                             <CMSRoute
                                 type={"collection"}
-                                collectionPath={`${collectionPath}/${entityId}/${entityCollectionView.relativePath}`}
+                                collectionPath={`${collectionPath}/${entityId}/${removeInitialSlash(entityCollectionView.relativePath)}`}
                                 view={entityCollectionView}
                                 previousBreadcrumbs={breadcrumbs}
                             />

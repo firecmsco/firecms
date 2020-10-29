@@ -2,7 +2,10 @@ import React from "react";
 import { Box, Button, Grid, Paper, Tab, Tabs } from "@material-ui/core";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import { Link as ReactLink } from "react-router-dom";
-import { getRouterNewEntityPath } from "../routes/navigation";
+import {
+    getRouterNewEntityPath,
+    removeInitialSlash
+} from "../routes/navigation";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { formStyles } from "../styles";
 import { CollectionTable } from "./CollectionTable";
@@ -49,7 +52,7 @@ export default function SubCollectionsView<S extends EntitySchema>(
 
     let subcollectionPath: string | undefined = undefined;
     if (entity)
-        subcollectionPath = `${parentCollectionPath}/${entity.id}/${selectedView.relativePath}`;
+        subcollectionPath = `${parentCollectionPath}/${entity.id}/${removeInitialSlash(selectedView.relativePath)}`;
 
     return (
 
