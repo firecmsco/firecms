@@ -38,7 +38,18 @@ const useStyles = makeStyles((theme: Theme) =>
                 paddingLeft: theme.spacing(0),
                 paddingRight: theme.spacing(0),
                 paddingTop: theme.spacing(2),
+                paddingBottom: theme.spacing(1)
+            }
+        },
+        title: {
+            paddingTop: theme.spacing(2),
+            paddingBottom: theme.spacing(3),
+            [theme.breakpoints.down("sm")]: {
+                paddingTop: theme.spacing(1),
                 paddingBottom: theme.spacing(2)
+            },
+            [theme.breakpoints.down("xs")]: {
+                padding: theme.spacing(1)
             }
         }
     })
@@ -66,7 +77,7 @@ export function EntityFormRoute<S extends EntitySchema>({
     const breadcrumbsContext = useBreadcrumbsContext();
     useEffect(() => {
         breadcrumbsContext.set({
-            breadcrumbs: breadcrumbs,
+            breadcrumbs: breadcrumbs
         });
     }, [url]);
 
@@ -209,8 +220,9 @@ export function EntityFormRoute<S extends EntitySchema>({
             });
     }
 
-    function onDiscard(schema: S, collectionPath: string, id: string | undefined) {
-
+    function onDiscard() {
+        console.log("onDiscard");
+        history.goBack();
     }
 
     const existingEntity = status === EntityStatus.existing;
@@ -234,11 +246,9 @@ export function EntityFormRoute<S extends EntitySchema>({
     const mainBodyWide = (
         <Box className={classes.content}>
 
-            <Box mb={3}>
-                <Typography variant="h5">
-                    {existingEntity ? "Edit" : `Add New`} {view.schema.name}
-                </Typography>
-            </Box>
+            <Typography variant="h5" className={classes.title}>
+                {existingEntity ? "Edit" : `Add New`} {view.schema.name}
+            </Typography>
 
             <Grid container spacing={3}>
                 <Grid item xs={12}

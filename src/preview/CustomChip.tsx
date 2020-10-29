@@ -17,7 +17,7 @@ export function CustomChip({ name, label, error, outlined, small }: EnumChipProp
     const StyledChip = withStyles({
         root: {
             maxWidth: "100%",
-            backgroundColor: schema.color,
+            backgroundColor: error ? "#eee" : schema.color,
             fontWeight: 400
         },
         label: {

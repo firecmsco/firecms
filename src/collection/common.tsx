@@ -21,6 +21,8 @@ export function getPreviewWidth<T>(property: Property<T>, small: boolean): numbe
         if (stringProperty.config?.url) {
             if (stringProperty.config?.url === "video")
                 return 340;
+            else if (stringProperty.config?.url === "audio")
+                return 300;
             return 240;
         } else if (stringProperty.config?.storageMeta) {
             return 220;
@@ -43,7 +45,7 @@ export function getPreviewWidth<T>(property: Property<T>, small: boolean): numbe
     } else if (property.dataType === "number") {
         return 140;
     } else if (property.dataType === "map") {
-        return 240;
+        return 280;
     } else if (property.dataType === "timestamp") {
         return 140;
     } else if (property.dataType === "reference") {

@@ -46,7 +46,7 @@ interface EntityFormProps<S extends EntitySchema> {
     /**
      * The callback function called when discard is clicked
      */
-    onDiscard(schema: S, collectionPath: string, id: string | undefined): void;
+    onDiscard(): void;
 
     /**
      * The callback function when the form original values have been modified
@@ -70,8 +70,7 @@ export default function EntityForm<S extends EntitySchema>({
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
     const [initialValues, setInitialValues] = React.useState<EntityValues<S> | undefined>(entity?.values);
-    // have the original values of the form changed
-    const [isModified, setModified] = React.useState(false);
+
 
     /**
      * Base values are the ones this view is initialized from, we use them to
@@ -86,9 +85,6 @@ export default function EntityForm<S extends EntitySchema>({
         throw new Error("Form configured wrong");
     }
 
-    useEffect(() => {
-        onModified(isModified);
-    }, [isModified]);
 
     let underlyingChanges: Partial<EntityValues<S>> | undefined;
     if (initialValues) {
@@ -179,10 +175,13 @@ export default function EntityForm<S extends EntitySchema>({
             initialValues={baseValues as EntityValues<S>}
             onSubmit={saveValues}
             validationSchema={validationSchema}
+            onReset={() => onDiscard && onDiscard()}
         >
             {({ values, touched, dirty, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
 
-                setModified(dirty);
+                useEffect(() => {
+                    onModified(dirty);
+                }, [dirty]);
 
                 if (underlyingChanges && entity) {
 

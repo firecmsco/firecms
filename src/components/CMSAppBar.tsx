@@ -44,8 +44,6 @@ export const CMSAppBar: React.FunctionComponent<BreadcrumbProps> = ({ title, han
     const breadcrumbsContext = useBreadcrumbsContext();
     const { breadcrumbs } = breadcrumbsContext;
 
-    console.log("CMSAppBar", breadcrumbs);
-
     const authContext = useAuthContext();
     return (
         <AppBar position={"relative"} elevation={2}>

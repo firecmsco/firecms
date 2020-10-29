@@ -226,6 +226,11 @@ export function CMSApp({
             borderRadius: 2
         },
         overrides: {
+            MuiButton: {
+                root: {
+                    borderRadius: 4
+                }
+            },
             MuiTableRow: {
                 root: {
                     "&:last-child td": {
@@ -322,6 +327,7 @@ export function CMSApp({
             {(authContext) => {
 
                 const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
+                const closeDrawer = () => setDrawerOpen(false);
 
                 function renderLoginView() {
                     return (
@@ -382,8 +388,9 @@ export function CMSApp({
                         <Switch>
 
                             {navigation.map(entityCollectionView => (
-                                    <Route path={buildCollectionPath(entityCollectionView.relativePath)}
-                                           key={`navigation_${entityCollectionView.relativePath}`}>
+                                    <Route
+                                        path={buildCollectionPath(entityCollectionView.relativePath)}
+                                        key={`navigation_${entityCollectionView.relativePath}`}>
                                         <CMSRoute
                                             type={"collection"}
                                             collectionPath={entityCollectionView.relativePath}
@@ -430,10 +437,8 @@ export function CMSApp({
                     const drawer = (
                         <React.Fragment>
 
-                            <Box className={classes.toolbar}>
-                                {logo &&
-                                <img className={classes.logo} src={logo}/>}
-                            </Box>
+                            {logo &&
+                            <img className={classes.logo} src={logo}/>}
 
                             <Divider/>
                             <List>
@@ -447,7 +452,7 @@ export function CMSApp({
                                         <ListItemText
                                             primary={view.name.toUpperCase()}
                                             primaryTypographyProps={{ variant: "subtitle2" }}
-                                            onClick={handleDrawerToggle}/>
+                                            onClick={closeDrawer}/>
                                     </ListItem>
                                 ))}
 
@@ -499,7 +504,7 @@ export function CMSApp({
                                                     variant="temporary"
                                                     anchor={theme.direction === "rtl" ? "right" : "left"}
                                                     open={drawerOpen}
-                                                    onClose={handleDrawerToggle}
+                                                    onClose={closeDrawer}
                                                     classes={{
                                                         paper: classes.drawerPaper
                                                     }}
