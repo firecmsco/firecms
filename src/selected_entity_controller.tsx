@@ -1,12 +1,10 @@
 import { Entity, EntityCollectionView, EntitySchema } from "./models";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
+import { useHistory, useLocation } from "react-router-dom";
+import { getEntityPathFrom } from "./routes/navigation";
 
 const DEFAULT_SELECTED_ENTITY = {
     isOpen: false,
-    tab: 0,
-    entity: undefined,
-    schema: undefined,
-    subcollections: [],
     close: () => {
     },
     open: (props: {
@@ -19,10 +17,6 @@ const DEFAULT_SELECTED_ENTITY = {
 
 export type SelectedEntity<S extends EntitySchema> = {
     isOpen: boolean;
-    tab: number;
-    entity?: Entity<S>;
-    schema?: S;
-    subcollections?: EntityCollectionView<any>[];
     close: () => void;
     open: (props: {
         entity: Entity<any>;
@@ -40,18 +34,15 @@ interface SelectedEntityProviderProps {
 
 export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ children }) => {
 
-    const [isOpen, setIsOpen] = useState(false);
-    const [tab, setTab] = useState(0);
-    const [entity, setEntity] = useState<Entity<any> | undefined>(undefined);
-    const [schema, setSchema] = useState<EntitySchema | undefined>(undefined);
-    const [subcollections, setSubcollections] = useState<EntityCollectionView<any>[] | undefined>(undefined);
+    const location = useLocation();
+    const history = useHistory();
+
+    const isOpen = !!(location.state && location.state["side_menu_locations"]);
+    const sideMenuLocationsCount = location.state && location.state["side_menu_locations"] ? location.state["side_menu_locations"] : 0;
+    const main_location = isOpen && location.state ? location.state["main_location"] : location;
 
     const close = () => {
-        setIsOpen(false);
-        setTab(0);
-        setEntity(undefined);
-        setSchema(undefined);
-        setSubcollections(undefined);
+        history.go(-sideMenuLocationsCount);
     };
 
     const open = (props: {
@@ -59,22 +50,20 @@ export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ 
         schema: EntitySchema,
         subcollections?: EntityCollectionView<any>[],
     }) => {
-        const { entity, schema, subcollections } = props;
-        setEntity(entity);
-        setSchema(schema);
-        setTab(0);
-        setIsOpen(true);
-        setSubcollections(subcollections);
+        const { entity } = props;
+        history.push(
+            getEntityPathFrom(entity.reference.path),
+            {
+                main_location: main_location,
+                side_menu_locations: sideMenuLocationsCount + 1
+            }
+        );
     };
 
     return (
         <SelectedEntityContext.Provider
             value={{
                 isOpen,
-                tab,
-                entity,
-                schema,
-                subcollections,
                 close,
                 open
             }}

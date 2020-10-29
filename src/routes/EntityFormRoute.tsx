@@ -16,7 +16,7 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-import { BreadcrumbEntry, getEntityPath } from "./navigation";
+import { BreadcrumbEntry, getEntityEditPath } from "./navigation";
 import { CircularProgressCenter } from "../components";
 import SubCollectionsView from "../collection/SubCollectionsView";
 import { useSelectedEntityContext } from "../selected_entity_controller";
@@ -119,7 +119,7 @@ export function EntityFormRoute<S extends EntitySchema>({
                                        entity: Entity<S>,
                                        schema: S,
                                        subcollections?: EntityCollectionView<any>[]) {
-        const entityPath = getEntityPath(entity.id, collectionPath);
+        const entityPath = getEntityEditPath(entity.id, collectionPath);
         history.push(entityPath);
     }
 
@@ -174,7 +174,7 @@ export function EntityFormRoute<S extends EntitySchema>({
                     setLoading(true);
                     setEntity(undefined);
                     setStatus(undefined);
-                    history.replace(getEntityPath(id, collectionPath));
+                    history.replace(getEntityEditPath(id, collectionPath));
                 }
 
                 if (schema.onSaveSuccess) {

@@ -2,7 +2,7 @@ import React from "react";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import {
     BreadcrumbEntry,
-    getEntityPath,
+    getEntityEditPath,
     getRouterNewEntityPath
 } from "./navigation";
 import {
@@ -59,7 +59,7 @@ export function CollectionRoute<S extends EntitySchema>({
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
 
     function onEntityEdit(collectionPath: string, entity: Entity<S>) {
-        const entityPath = getEntityPath(entity.id, collectionPath);
+        const entityPath = getEntityEditPath(entity.id, collectionPath);
         history.push(entityPath);
     }
 

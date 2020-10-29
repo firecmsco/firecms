@@ -1,6 +1,7 @@
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import React, { useEffect, useState } from "react";
 import { listenEntityFromRef } from "../firebase";
+import { Link as ReactLink, Route, Switch } from "react-router-dom";
 
 import EntityPreview from "../preview/EntityPreview";
 import {
@@ -16,10 +17,14 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
-import { Link as ReactLink } from "react-router-dom";
 import { useSelectedEntityContext } from "../selected_entity_controller";
 import { CollectionTable } from "../collection/CollectionTable";
-import { buildCollectionPath, removeInitialSlash } from "../routes";
+import {
+    buildCollectionPath,
+    getEntityEditPathFrom,
+    removeInitialSlash
+} from "../routes";
+import { SideCMSRoute } from "../routes/CMSRoute";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -39,10 +44,11 @@ export const useStyles = makeStyles(theme => createStyles({
             width: "100vw"
         }
     },
-    flexGrow: {
+    container: {
         flexGrow: 1,
         height: "100%",
-        overflow: "auto"
+        overflow: "auto",
+        scrollBehavior: "smooth"
     },
     header: {
         paddingLeft: theme.spacing(2),
@@ -53,25 +59,55 @@ export const useStyles = makeStyles(theme => createStyles({
     }
 }));
 
-export default function EntityDetailDialog<S extends EntitySchema>() {
+export default function EntityDetailDialog<S extends EntitySchema>({ navigation }: { navigation: EntityCollectionView<any>[] }) {
 
     const selectedEntityContext = useSelectedEntityContext();
-    const {
-        isOpen,
-        tab,
-        entity,
-        schema,
-        subcollections,
-        close
-    } = selectedEntityContext;
+    const isOpen = selectedEntityContext.isOpen;
+
+    return (
+        <Drawer
+            anchor={"right"}
+            variant={"temporary"}
+            open={isOpen}
+            onClose={(_) => selectedEntityContext.close()}
+        >
+            <Switch>
+
+                {navigation.map(entityCollectionView => (
+                        <Route
+                            path={buildCollectionPath(entityCollectionView.relativePath)}
+                            key={`navigation_${entityCollectionView.relativePath}`}>
+                            <SideCMSRoute
+                                type={"collection"}
+                                collectionPath={entityCollectionView.relativePath}
+                                view={entityCollectionView}
+                            />
+                        </Route>
+                    )
+                )}
+            </Switch>
+        </Drawer>
+
+    );
+}
+
+export function EntityDetailView<S extends EntitySchema>({ entity, schema, subcollections }: {
+    entity?: Entity<S>,
+    schema: S,
+    subcollections?: EntityCollectionView<any>[];
+}) {
 
     const classes = useStyles();
+    const selectedEntityContext = useSelectedEntityContext();
 
     const [updatedEntity, setUpdatedEntity] = useState<Entity<S> | undefined>(entity);
-    const [tabsPosition, setTabsPosition] = React.useState(tab);
+    const [tabsPosition, setTabsPosition] = React.useState(0);
+
+    const ref = React.createRef<HTMLDivElement>();
 
     useEffect(() => {
-        setTabsPosition(tab);
+        setTabsPosition(0);
+        ref.current!.scrollTo({ top: 0 });
         const cancelSubscription =
             entity ?
                 listenEntityFromRef<S>(
@@ -80,7 +116,6 @@ export default function EntityDetailDialog<S extends EntitySchema>() {
                     (e) => {
                         if (e) {
                             setUpdatedEntity(e);
-                            console.log("Updated entity from Firestore", e);
                         }
                     })
                 :
@@ -100,95 +135,84 @@ export default function EntityDetailDialog<S extends EntitySchema>() {
         });
     }
 
-    return (
-        <Drawer
-            anchor={"right"}
-            variant={"temporary"}
-            open={isOpen}
-            onClose={(e) => close()}
-        >
+    return <Container
+        className={classes.root}
+        disableGutters={true}
+        fixed={true}>
 
-            <Container
-                className={classes.root}
-                disableGutters={true}
-                fixed={true}>
+        <Box
+            className={classes.header}>
 
-                <Box
-                    className={classes.header}>
+            <IconButton onClick={(e) => selectedEntityContext.close()}>
+                <CloseIcon/>
+            </IconButton>
 
-                    <IconButton onClick={(e) => close()}>
-                        <CloseIcon/>
-                    </IconButton>
+            {entity &&
+            <IconButton onClick={() => close()}
+                        component={ReactLink}
+                        to={getEntityEditPathFrom(entity.reference.path)}>
+                <EditIcon/>
+            </IconButton>
+            }
 
-                    {entity &&
-                    <IconButton onClick={() => close()}
-                                component={ReactLink}
-                                to={buildCollectionPath(entity.reference.path)}>
-                        <EditIcon/>
-                    </IconButton>
-                    }
-
-                    <Box paddingTop={2} paddingLeft={2} paddingRight={2}>
-                        <Tabs
-                            value={tabsPosition}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            onChange={(ev, value) => setTabsPosition(value)}
-                            aria-label="disabled tabs example"
-                        >
-                            <Tab label={schema ? schema.name : ""}/>
-
-                            {subcollections && subcollections.map(
-                                (subcollection) =>
-                                    <Tab label={subcollection.name}/>
-                            )}
-                        </Tabs>
-
-                    </Box>
-                </Box>
-                <div className={classes.flexGrow}>
-                    <Box
-                        mb={4}
-                        role="tabpanel"
-                        hidden={tabsPosition !== 0}>
-                        {updatedEntity && <EntityPreview
-                            entity={updatedEntity}
-                            schema={schema}/>
-                        }
-                    </Box>
+            <Box paddingTop={2} paddingLeft={2} paddingRight={2}>
+                <Tabs
+                    value={tabsPosition}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    onChange={(ev, value) => setTabsPosition(value)}
+                >
+                    <Tab label={schema ? schema.name : ""}/>
 
                     {subcollections && subcollections.map(
-                        (subcollection, colIndex) => {
-                            const collectionPath = `${entity?.reference.path}/${removeInitialSlash(subcollection.relativePath)}`;
-                            return <Box
-                                role="tabpanel"
-                                flexGrow={1}
-                                height={"100%"}
-                                width={"100%"}
-                                hidden={tabsPosition !== colIndex + 1}>
-                                <CollectionTable
-                                    collectionPath={collectionPath}
-                                    schema={subcollection.schema}
-                                    additionalColumns={subcollection.additionalColumns}
-                                    onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
-                                        onSubcollectionEntityClick(collectionPath, clickedEntity, subcollection.schema, subcollection.subcollections)}
-                                    includeToolbar={true}
-                                    paginationEnabled={false}
-                                    defaultSize={subcollection.defaultSize}
-                                    title={
-                                        <Typography variant={"caption"}
-                                                    color={"textSecondary"}>
-                                            {`/${collectionPath}`}
-                                        </Typography>
-                                    }
-                                />
-                            </Box>;
-                        }
+                        (subcollection) =>
+                            <Tab label={subcollection.name}/>
                     )}
-                </div>
-            </Container>
-        </Drawer>
+                </Tabs>
 
-    );
+            </Box>
+        </Box>
+
+        <div className={classes.container}
+             ref={ref}>
+            <Box
+                mb={4}
+                role="tabpanel"
+                hidden={tabsPosition !== 0}>
+                {updatedEntity && <EntityPreview
+                    entity={updatedEntity}
+                    schema={schema}/>
+                }
+            </Box>
+
+            {subcollections && subcollections.map(
+                (subcollection, colIndex) => {
+                    const collectionPath = `${entity?.reference.path}/${removeInitialSlash(subcollection.relativePath)}`;
+                    return <Box
+                        role="tabpanel"
+                        flexGrow={1}
+                        height={"100%"}
+                        width={"100%"} hidden={tabsPosition !== colIndex + 1}>
+                        <CollectionTable
+                            collectionPath={collectionPath}
+                            schema={subcollection.schema}
+                            additionalColumns={subcollection.additionalColumns}
+                            onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
+                                onSubcollectionEntityClick(collectionPath, clickedEntity, subcollection.schema, subcollection.subcollections)}
+                            includeToolbar={true}
+                            paginationEnabled={false}
+                            defaultSize={subcollection.defaultSize}
+                            title={
+                                <Typography variant={"caption"}
+                                            color={"textSecondary"}>
+                                    {`/${collectionPath}`}
+                                </Typography>}
+                        />
+                    </Box>;
+                }
+            )}
+        </div>
+    </Container>;
 }
+
 

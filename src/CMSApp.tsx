@@ -487,7 +487,7 @@ export function CMSApp({
                                 )}
                             </List>
 
-                            <EntityDetailDialog/>
+                            <EntityDetailDialog navigation={navigation}/>
 
                         </React.Fragment>
                     );
