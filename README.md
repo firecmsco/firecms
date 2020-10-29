@@ -550,7 +550,8 @@ Firestore data schema.
         `filterableProperties` will include the corresponding filter widget.
         Defaults to none.
 
-* `pagination`: Is pagination enabled in this view. Defaults to true
+* `pagination`: If enabled, content is loaded in batch. If `false` all entities in the
+        collection are loaded. Defaults to `true`
 
 * `additionalColumns`: You can add additional columns to the collection view
         by implementing an additional column delegate.

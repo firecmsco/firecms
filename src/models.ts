@@ -36,7 +36,8 @@ export interface EntityCollectionView<S extends EntitySchema,
     small?: boolean;
 
     /**
-     * Is pagination enabled in this view. True if not specified
+     * If enabled, content is loaded in batch. If `false` all entities in the
+     * collection are loaded. Defaults to `true`
      */
     pagination?: boolean;
 

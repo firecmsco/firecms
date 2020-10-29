@@ -100,7 +100,7 @@ interface CollectionTableProps<S extends EntitySchema,
     initialFilter?: FilterValues<S>;
 
     /**
-     * Is pagination enabled in the bottom of the table
+     * If enabled, content is loaded in batch
      */
     paginationEnabled: boolean,
 
@@ -182,6 +182,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                      onEntityClick,
                                                      onEntityDelete,
                                                      onEntityEdit,
+                                                     paginationEnabled,
                                                      properties,
                                                      excludedProperties,
                                                      textSearchDelegate,
@@ -212,10 +213,10 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const [scroll, setScroll] = React.useState<number>(0);
     const scrollToTop = () => {
         setScroll(0);
-        if(tableRef.current) {
+        if (tableRef.current) {
             tableRef.current.scrollToTop(0);
         }
-    }
+    };
 
     const additionalColumnsMap: Record<string, AdditionalColumnDelegate<S>> = useMemo(() => {
         return additionalColumns ?
@@ -286,7 +287,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                 setDataLoading(false);
                 setDataLoadingError(undefined);
                 setData(entities);
-                setNoMoreToLoad(entities.length < itemCount);
+                setNoMoreToLoad(!paginationEnabled || entities.length < itemCount);
             },
             (error) => {
                 console.error("ERROR", error);
@@ -294,7 +295,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                 setDataLoadingError(error);
             },
             filter,
-            itemCount,
+            paginationEnabled ? itemCount : undefined,
             undefined,
             orderByProperty,
             currentOrder);
@@ -357,7 +358,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const deleteEnabled = !!onEntityDelete;
 
     const loadNextPage = () => {
-        if (dataLoading || noMoreToLoad)
+        if (!paginationEnabled || dataLoading || noMoreToLoad)
             return;
         console.log("loadNextPage", itemCount);
         setItemCount(itemCount + PAGE_SIZE);
