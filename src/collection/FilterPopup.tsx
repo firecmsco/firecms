@@ -118,7 +118,7 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                 }
 
                 return (
-                    <Box display={"flex"}>
+                    <Box display={"flex"} ml={1}>
 
                         <Tooltip title="Filter list">
                             <IconButton

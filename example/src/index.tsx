@@ -575,7 +575,10 @@ const localeSchema = buildSchema({
         description: {
             title: "Description",
             validation: { required: true },
-            dataType: "string"
+            dataType: "string",
+            config: {
+                multiline: true
+            }
         },
         selectable: {
             title: "Selectable",
@@ -618,7 +621,8 @@ const localeCollection: EntityCollectionView<typeof localeSchema> =
         name: "Locales",
         relativePath: "locales",
         deleteEnabled: false,
-        schema: localeSchema
+        schema: localeSchema,
+        defaultSize: "l"
     })
 ;
 

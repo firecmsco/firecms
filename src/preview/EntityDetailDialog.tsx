@@ -11,7 +11,8 @@ import {
     IconButton,
     makeStyles,
     Tab,
-    Tabs
+    Tabs,
+    Typography
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
@@ -24,9 +25,19 @@ import { buildCollectionPath, removeInitialSlash } from "../routes";
 export const useStyles = makeStyles(theme => createStyles({
     root: {
         height: "100%",
-        maxWidth: "100vw",
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        width: "50vw",
+        maxWidth: "900px",
+        [theme.breakpoints.down("md")]: {
+            width: "65vw"
+        },
+        [theme.breakpoints.down("sm")]: {
+            width: "85vw"
+        },
+        [theme.breakpoints.down("xs")]: {
+            width: "100vw"
+        }
     },
     flexGrow: {
         flexGrow: 1,
@@ -99,7 +110,6 @@ export default function EntityDetailDialog<S extends EntitySchema>() {
 
             <Container
                 className={classes.root}
-                maxWidth={"md"}
                 disableGutters={true}
                 fixed={true}>
 
@@ -111,11 +121,11 @@ export default function EntityDetailDialog<S extends EntitySchema>() {
                     </IconButton>
 
                     {entity &&
-                        <IconButton onClick={() => close()}
-                                    component={ReactLink}
-                                    to={buildCollectionPath(entity.reference.path)}>
-                            <EditIcon/>
-                        </IconButton>
+                    <IconButton onClick={() => close()}
+                                component={ReactLink}
+                                to={buildCollectionPath(entity.reference.path)}>
+                        <EditIcon/>
+                    </IconButton>
                     }
 
                     <Box paddingTop={2} paddingLeft={2} paddingRight={2}>
@@ -148,23 +158,32 @@ export default function EntityDetailDialog<S extends EntitySchema>() {
                     </Box>
 
                     {subcollections && subcollections.map(
-                        (subcollection, colIndex) =>
-                            <Box
+                        (subcollection, colIndex) => {
+                            const collectionPath = `${entity?.reference.path}/${removeInitialSlash(subcollection.relativePath)}`;
+                            return <Box
                                 role="tabpanel"
                                 flexGrow={1}
                                 height={"100%"}
+                                width={"100%"}
                                 hidden={tabsPosition !== colIndex + 1}>
                                 <CollectionTable
-                                    collectionPath={`${entity?.reference.path}/${removeInitialSlash(subcollection.relativePath)}`}
+                                    collectionPath={collectionPath}
                                     schema={subcollection.schema}
                                     additionalColumns={subcollection.additionalColumns}
                                     onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
                                         onSubcollectionEntityClick(collectionPath, clickedEntity, subcollection.schema, subcollection.subcollections)}
-                                    includeToolbar={false}
+                                    includeToolbar={true}
                                     paginationEnabled={false}
-                                    small={true}
+                                    defaultSize={subcollection.defaultSize}
+                                    title={
+                                        <Typography variant={"caption"}
+                                                    color={"textSecondary"}>
+                                            {`/${collectionPath}`}
+                                        </Typography>
+                                    }
                                 />
-                            </Box>
+                            </Box>;
+                        }
                     )}
                 </div>
             </Container>

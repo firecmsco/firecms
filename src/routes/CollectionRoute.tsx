@@ -19,6 +19,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { useSelectedEntityContext } from "../selected_entity_controller";
 import { useBreadcrumbsContext } from "../breadcrumbs_controller";
 import { CollectionTable } from "../collection/CollectionTable";
+import Typography from "@material-ui/core/Typography/Typography";
 
 export const useStyles = makeStyles(() =>
     createStyles({
@@ -102,32 +103,42 @@ export function CollectionRoute<S extends EntitySchema>({
             </Button>;
     }
 
+    const title = <React.Fragment>
+        <Typography variant="h6">
+            {`${view.schema.name} list`}
+        </Typography>
+        <Typography variant={"caption"} color={"textSecondary"}>
+            {`/${collectionPath}`}
+        </Typography>
+    </React.Fragment>;
+
     return (
-                <Box className={classes.root}>
+        <Box className={classes.root}>
 
-                    <CollectionTable collectionPath={collectionPath}
-                                     schema={view.schema}
-                                     actions={buildAddEntityButton()}
-                                     textSearchDelegate={view.textSearchDelegate}
-                                     includeToolbar={true}
-                                     onEntityEdit={onEntityEdit}
-                                     onEntityClick={onEntityClick}
-                                     onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
-                                     additionalColumns={view.additionalColumns}
-                                     small={view.small === undefined ? false : view.small}
-                                     paginationEnabled={view.pagination === undefined ? true : view.pagination}
-                                     initialFilter={view.initialFilter}
-                                     filterableProperties={view.filterableProperties}
-                                     properties={view.properties}
-                                     excludedProperties={view.excludedProperties}/>
+            <CollectionTable collectionPath={collectionPath}
+                             schema={view.schema}
+                             actions={buildAddEntityButton()}
+                             textSearchDelegate={view.textSearchDelegate}
+                             includeToolbar={true}
+                             onEntityEdit={onEntityEdit}
+                             onEntityClick={onEntityClick}
+                             onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
+                             additionalColumns={view.additionalColumns}
+                             defaultSize={view.defaultSize}
+                             paginationEnabled={view.pagination === undefined ? true : view.pagination}
+                             initialFilter={view.initialFilter}
+                             filterableProperties={view.filterableProperties}
+                             properties={view.properties}
+                             excludedProperties={view.excludedProperties}
+                             title={title}/>
 
-                    {deleteEntityClicked &&
-                    <DeleteEntityDialog entity={deleteEntityClicked}
-                                        schema={view.schema}
-                                        open={!!deleteEntityClicked}
-                                        afterDelete={() => view?.onEntityDelete ? view.onEntityDelete(collectionPath, deleteEntityClicked) : undefined}
-                                        onClose={() => setDeleteEntityClicked(undefined)}/>}
+            {deleteEntityClicked &&
+            <DeleteEntityDialog entity={deleteEntityClicked}
+                                schema={view.schema}
+                                open={!!deleteEntityClicked}
+                                afterDelete={() => view?.onEntityDelete ? view.onEntityDelete(collectionPath, deleteEntityClicked) : undefined}
+                                onClose={() => setDeleteEntityClicked(undefined)}/>}
 
-                </Box>
+        </Box>
     );
 }

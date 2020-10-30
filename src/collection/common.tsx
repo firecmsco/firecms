@@ -1,4 +1,9 @@
-import { ArrayProperty, Property, StringProperty } from "../models";
+import {
+    ArrayProperty,
+    CollectionSize,
+    Property,
+    StringProperty
+} from "../models";
 
 export function getCellAlignment<T>(property: Property<T>): "right" | "left" | "center" {
     if (property.dataType === "boolean") {
@@ -10,7 +15,7 @@ export function getCellAlignment<T>(property: Property<T>): "right" | "left" | "
     }
 }
 
-export function getPreviewWidth<T>(property: Property<T>, small: boolean): number {
+export function getPreviewWidth<T>(property: Property<T>, size: CollectionSize): number {
 
     if (property.columnWidth) {
         return property.columnWidth;
@@ -38,7 +43,7 @@ export function getPreviewWidth<T>(property: Property<T>, small: boolean): numbe
     } else if (property.dataType === "array") {
         const arrayProperty = property as ArrayProperty;
         if ("dataType" in arrayProperty.of) {
-            return getPreviewWidth(arrayProperty.of, small);
+            return getPreviewWidth(arrayProperty.of, size);
         } else {
             return 300;
         }
@@ -54,5 +59,22 @@ export function getPreviewWidth<T>(property: Property<T>, small: boolean): numbe
         return 140;
     } else {
         return 200;
+    }
+}
+
+export function getRowHeight(size:CollectionSize) : number{
+    switch (size){
+        case "xl":
+            return 400;
+        case "l":
+            return 280;
+        case "m":
+            return 140;
+        case "s":
+            return 80;
+        case "xs":
+            return 54;
+        default:
+            throw Error("Missing mapping for collection size -> height");
     }
 }

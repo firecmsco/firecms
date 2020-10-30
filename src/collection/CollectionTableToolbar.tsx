@@ -1,4 +1,4 @@
-import { EntitySchema, FilterValues } from "../models";
+import { CollectionSize, EntitySchema, FilterValues } from "../models";
 import React from "react";
 import FilterPopup from "./FilterPopup";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -7,10 +7,13 @@ import {
     CircularProgress,
     createStyles,
     Hidden,
+    InputBase,
     makeStyles,
-    Theme
+    MenuItem,
+    Select,
+    Theme,
+    withStyles
 } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
 import SearchBar from "./SearchBar";
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -29,6 +32,8 @@ export const useStyles = makeStyles((theme: Theme) =>
 interface CollectionTableToolbarProps<S extends EntitySchema> {
     collectionPath: string;
     schema: S;
+    size: CollectionSize;
+    onSizeChanged: (size: CollectionSize) => void;
     filterValues?: FilterValues<S>;
     onTextSearch?: (searchString?: string) => void;
     filterableProperties?: (keyof S["properties"])[];
@@ -36,10 +41,7 @@ interface CollectionTableToolbarProps<S extends EntitySchema> {
 
     loading: boolean;
 
-    /**
-     * Override the title in the toolbar
-     */
-    overrideTitle?: string,
+    title?: React.ReactChild,
 
     onFilterUpdate?(filterValues: FilterValues<S>): void;
 }
@@ -55,6 +57,81 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
                      filterableProperties={props.filterableProperties}/>
     ;
 
+
+    const SizeInput = withStyles((theme: Theme) =>
+        createStyles({
+            root: {
+                "label + &": {
+                    marginTop: theme.spacing(3)
+                }
+            },
+            input: {
+                borderRadius: 4,
+                position: "relative",
+                backgroundColor: "#e3e3e3",
+                fontSize: 14,
+                fontWeight: 500,
+                padding: "10px 26px 10px 12px",
+                transition: theme.transitions.create(["border-color", "box-shadow"]),
+                "&:focus": {
+                    borderRadius: 4
+                    // boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+                }
+            }
+        })
+    )(InputBase);
+
+    const SizeMenuItem = withStyles((theme) => (
+        createStyles({
+            root: {
+                backgroundColor: "#f5f5f5",
+                fontSize: 14,
+                fontWeight: 500,
+                paddingTop: theme.spacing(1),
+                paddingBottom: theme.spacing(1),
+                "&:hover": {
+                    backgroundColor: "#eeeeee"
+                },
+                "&:focus": {
+                    backgroundColor: "#e3e3e3",
+                    "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+                        color: theme.palette.common.white
+                    }
+                }
+            }
+        })))(MenuItem);
+
+    const sizeSelect = <Select
+        value={props.size}
+        label={"Size"}
+        style={{ width: 56 }}
+        onChange={(evt: any) => {
+            props.onSizeChanged(evt.target.value);
+        }}
+        MenuProps={{
+            MenuListProps: {
+                disablePadding: true,
+                style: {
+                    borderRadius: 4
+                }
+            },
+            elevation: 1,
+            anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "left"
+            },
+            getContentAnchorEl: null
+        }}
+        input={<SizeInput/>}
+        renderValue={(value: any) => value.toUpperCase()}>
+        {["xs", "s", "m", "l", "xl"].map((value) => (
+            <SizeMenuItem
+                key={`size-select-${value}`} value={value}>
+                {value.toUpperCase()}
+            </SizeMenuItem>
+        ))}
+    </Select>;
+
     return (
         <Toolbar
             className={classes.toolbar}
@@ -67,27 +144,20 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
                 width={"100%"}
             >
 
+                <Box display={"flex"}
+                     alignItems="center">
 
-                <Hidden xsDown>
-                    <Box display={"flex"}
-                         alignItems="center">
+                    {props.title && <Hidden xsDown>
                         <Box mr={2}>
-                            <Typography variant="h6">
-                                {props.overrideTitle ? props.overrideTitle : `${props.schema.name} list`}
-                            </Typography>
-                            <Typography variant={"caption"}>
-                                {props.collectionPath}
-                            </Typography>
+                            {props.title}
                         </Box>
+                    </Hidden>}
 
-                        {filterEnabled && filterView}
+                    {props.onSizeChanged && sizeSelect}
 
-                    </Box>
-                </Hidden>
+                    {filterEnabled && filterView}
 
-                {filterEnabled && <Hidden smUp>
-                    {filterView}
-                </Hidden>}
+                </Box>
 
 
                 {props.onTextSearch &&
@@ -97,7 +167,8 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
 
                 <Box display={"flex"} alignItems={"center"}>
                     <Box width={20} marginRight={1}>
-                        {props.loading && <CircularProgress size={16} thickness={8}/>}
+                        {props.loading &&
+                        <CircularProgress size={16} thickness={8}/>}
                     </Box>
                     {props.actions}
                 </Box>

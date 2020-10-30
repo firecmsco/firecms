@@ -26,9 +26,12 @@ export const useStyles = makeStyles((theme: Theme) =>
             display: "flex"
         },
         valuePreview: {
-            width: "358px",
             height: "72px",
             padding: theme.spacing(2, 3)
+        },
+        titleCell: {
+            width: "25%",
+            padding: theme.spacing(1)
         }
     })
 );
@@ -55,7 +58,8 @@ export default function EntityPreview<S extends EntitySchema>(
                             <TableRow key={"entity_prev_id"}>
                                 <TableCell align="right"
                                            component="td"
-                                           scope="row">
+                                           scope="row"
+                                           className={classes.titleCell}>
                                     <Typography variant={"caption"}
                                                 color={"textSecondary"}>
                                         Id
@@ -87,7 +91,8 @@ export default function EntityPreview<S extends EntitySchema>(
                                         key={"entity_prev" + property.title + key}>
                                         <TableCell align="right"
                                                    component="td"
-                                                   scope="row">
+                                                   scope="row"
+                                                   className={classes.titleCell}>
                                             <Typography
                                                 style={{ paddingLeft: "16px" }}
                                                 variant={"caption"}

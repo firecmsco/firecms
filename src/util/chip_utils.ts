@@ -55,7 +55,6 @@ export function getColorSchemeForKey(key: string): ChipColorSchema {
     const hash: number = hashString(key);
     const colorKeys = Object.keys(CHIP_COLORS);
     const index = hash % colorKeys.length;
-    const chipcolor = CHIP_COLORS[colorKeys[index]];
-    return chipcolor;
+    return CHIP_COLORS[colorKeys[index]];
 }
 

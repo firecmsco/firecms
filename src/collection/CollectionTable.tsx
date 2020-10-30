@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import {
     AdditionalColumnDelegate,
+    CollectionSize,
     Entity,
     EntitySchema,
     FilterValues,
@@ -20,7 +21,7 @@ import {
 } from "../models";
 import { TextSearchDelegate } from "../text_search_delegate";
 import { fetchEntity, listenCollection } from "../firebase";
-import { getCellAlignment, getPreviewWidth } from "./common";
+import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import { PreviewComponent } from "../preview";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
@@ -28,11 +29,16 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SkeletonComponent, { renderSkeletonText } from "../preview/SkeletonComponent";
 import ErrorBoundary from "../components/ErrorBoundary";
+import { getPreviewSizeFrom } from "../preview/PreviewComponentProps";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
 
-const useStyles = makeStyles((theme: Theme) =>
+export interface StyleProps {
+    size: CollectionSize;
+}
+
+const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
     createStyles({
         root: {
             height: "100%",
@@ -64,7 +70,17 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: "auto",
             marginBottom: "auto",
             width: "100%",
-            padding: theme.spacing(1)
+            padding: ({ size }) => {
+                switch (size) {
+                    case "xs":
+                        return theme.spacing(0);
+                    case "l":
+                    case "xl":
+                        return theme.spacing(2);
+                    default:
+                        return theme.spacing(1);
+                }
+            }
         },
         column: {
             overflow: "auto !important"
@@ -92,7 +108,7 @@ interface CollectionTableProps<S extends EntitySchema,
     /**
      * Override the title in the toolbar
      */
-    overrideTitle?: string,
+    title?: React.ReactChild;
 
     /**
      * In case this table should have some filters set by default
@@ -105,9 +121,9 @@ interface CollectionTableProps<S extends EntitySchema,
     paginationEnabled: boolean,
 
     /**
-     * Should the table be rendered in small format
+     * Default table size before being changed with the selector
      */
-    small: boolean,
+    defaultSize?: CollectionSize,
 
     /**
      * If a text search delegate is provided, a searchbar is displayed
@@ -188,17 +204,17 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                      textSearchDelegate,
                                                      additionalColumns,
                                                      filterableProperties,
-                                                     overrideTitle,
+                                                     title,
                                                      actions,
-                                                     small
+                                                     defaultSize = "m"
                                                  }: CollectionTableProps<S>) {
 
-    const classes = useStyles();
 
     const [data, setData] = React.useState<Entity<S>[]>([]);
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [noMoreToLoad, setNoMoreToLoad] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
+    const [size, setSize] = React.useState<CollectionSize>(defaultSize);
 
     const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
     const [textSearchLoading, setTextSearchLoading] = React.useState<boolean>(false);
@@ -210,13 +226,13 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const [itemCount, setItemCount] = React.useState<number>(PAGE_SIZE);
 
     const tableRef = useRef<BaseTable>(null);
-    const [scroll, setScroll] = React.useState<number>(0);
     const scrollToTop = () => {
-        setScroll(0);
         if (tableRef.current) {
             tableRef.current.scrollToTop(0);
         }
     };
+
+    const classes = useStyles({size});
 
     const additionalColumnsMap: Record<string, AdditionalColumnDelegate<S>> = useMemo(() => {
         return additionalColumns ?
@@ -237,7 +253,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                     icon: getIconForProperty(property, "disabled", "small"),
                     label: property.title || key as string,
                     sortable: true,
-                    width: getPreviewWidth(property, small)
+                    width: getPreviewWidth(property, size)
                 });
             });
 
@@ -322,18 +338,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         scrollToTop();
     };
 
-    const onScroll = ({
-                          scrollTop
-                      }: {
-        scrollLeft: number;
-        scrollTop: number;
-        horizontalScrollDirection: "forward" | "backward";
-        verticalScrollDirection: "forward" | "backward";
-        scrollUpdateWasRequested: boolean;
-    }) => {
-        setScroll(scrollTop);
-    };
-
     const textSearchEnabled = !!textSearchDelegate;
 
     async function onTextSearch(searchString?: string) {
@@ -414,12 +418,12 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                             <PreviewComponent name={propertyKey}
                                               value={entity.values[propertyKey]}
                                               property={property}
-                                              size={"small"}
+                                              size={getPreviewSizeFrom(size)}
                                               entitySchema={schema}/>
                         </ErrorBoundary>
                         :
                         <SkeletonComponent property={property}
-                                           size={"small"}/>}
+                                           size={getPreviewSizeFrom(size)}/>}
 
                 </Box>
             );
@@ -465,11 +469,11 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                         </IconButton>}
                     </Box>}
 
-                    <Box width={96}
-                         component="div"
-                         textAlign="center"
-                         textOverflow="ellipsis"
-                         overflow="hidden">
+                    {size !== "xs" && <Box width={96}
+                                           component="div"
+                                           textAlign="center"
+                                           textOverflow="ellipsis"
+                                           overflow="hidden">
 
                         {entity ?
                             <Typography
@@ -478,7 +482,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                             :
                             renderSkeletonText()
                         }
-                    </Box>
+                    </Box>}
 
                 </Box>
             </ErrorBoundary>
@@ -564,7 +568,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                     width={width}
                     height={height}
                     fixed
-                    rowHeight={140}
+                    rowHeight={getRowHeight(size)}
                     ref={tableRef}
                     sortBy={currentOrder && orderByProperty ? {
                         key: orderByProperty,
@@ -572,7 +576,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                     } : undefined}
                     overscanRowCount={4}
                     onColumnSort={onColumnSort}
-                    onScroll={onScroll}
                     onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
                     onEndReached={loadNextPage}
                     rowEventHandlers={{ onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S>) }}>
@@ -597,6 +600,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                 flexGrow={1}
                                 flexShrink={0}
                                 resizable={true}
+                                size={size}
                                 sortable={column.sortable}
                                 dataKey={column.id}
                                 width={column.width}/>)
@@ -617,14 +621,14 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                     collectionPath={collectionPath}
                                     filterableProperties={filterableProperties}
                                     actions={actions}
-                                    overrideTitle={overrideTitle}
+                                    size={size}
+                                    onSizeChanged={setSize}
+                                    title={title}
                                     loading={loading}
                                     onFilterUpdate={onFilterUpdate}/>}
 
             <div className={classes.tableContainer}>
-                <ErrorBoundary>
-                    {body}
-                </ErrorBoundary>
+                {body}
             </div>
         </Paper>
     );

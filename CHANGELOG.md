@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.14.3] - 2020-10-30
+### Added
+- Dropdown in entity collections to change row height. Added `defaultSize` to
+config.
+
+### Changed
+- Removed `small` property in collections in favor of `defaultSize`.
 
 ## [0.14.2] - 2020-10-27
 ### Added

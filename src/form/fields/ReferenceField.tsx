@@ -314,8 +314,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                                      includeToolbar={true}
                                      onEntityClick={handleEntityClick}
                                      paginationEnabled={false}
-                                     small={true}
-                                     overrideTitle={`Select ${title}`}
+                                     title={`Select ${title}`}
                                      textSearchDelegate={textSearchDelegate}
                                      initialFilter={initialFilter}
                     />

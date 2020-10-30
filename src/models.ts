@@ -5,6 +5,11 @@ import { PreviewComponentProps } from "./preview";
 import { storage } from "firebase";
 
 /**
+ * Sizes in which a collection can be rendered
+ */
+export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
+
+/**
  * This interface represents a view that includes a collection of entities.
  * It can be in the root level of the configuration, defining the main
  * menu navigation.
@@ -31,9 +36,9 @@ export interface EntityCollectionView<S extends EntitySchema,
     schema: S;
 
     /**
-     * Should the table be rendered in small format
+     * Default size of the rendered collection
      */
-    small?: boolean;
+    defaultSize?: CollectionSize;
 
     /**
      * If enabled, content is loaded in batch. If `false` all entities in the
