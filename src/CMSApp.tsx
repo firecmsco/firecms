@@ -37,7 +37,6 @@ import { addInitialSlash, buildCollectionPath, MediaRoute } from "./routes";
 import { Authenticator } from "./authenticator";
 import { blue, pink, red } from "@material-ui/core/colors";
 import { FirebaseConfigContext } from "./contexts";
-import EntityDetailDialog from "./preview/EntityDetailDialog";
 import { SelectedEntityProvider } from "./selected_entity_controller";
 
 import "./styles.module.css";
@@ -46,6 +45,7 @@ import { CMSAppBar } from "./components/CMSAppBar";
 import { AuthContext, AuthProvider } from "./auth";
 import { SnackbarProvider } from "./snackbar_controller";
 import { CMSRoute } from "./routes/CMSRoute";
+import EntityDetailDialog from "./routes/SideCMSRoute";
 
 const drawerWidth = 240;
 
@@ -487,7 +487,7 @@ export function CMSApp({
                                 )}
                             </List>
 
-                            <EntityDetailDialog/>
+                            <EntityDetailDialog navigation={navigation}/>
 
                         </React.Fragment>
                     );
@@ -502,7 +502,7 @@ export function CMSApp({
                                             <nav>
                                                 <Drawer
                                                     variant="temporary"
-                                                    anchor={theme.direction === "rtl" ? "right" : "left"}
+                                                    anchor={"left"}
                                                     open={drawerOpen}
                                                     onClose={closeDrawer}
                                                     classes={{

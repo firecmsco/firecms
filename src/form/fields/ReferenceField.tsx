@@ -179,7 +179,8 @@ export function ReferenceDialog<S extends EntitySchema>(
         e.stopPropagation();
         if (entity)
             selectedEntityContext.open({
-                entity,
+                entityId: entity.id,
+                collectionPath,
                 schema
             });
     };

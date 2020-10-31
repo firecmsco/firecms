@@ -29,6 +29,9 @@ export const useStyles = makeStyles((theme: Theme) =>
             height: "72px",
             padding: theme.spacing(2, 3)
         },
+        iconCell: {
+            paddingTop: theme.spacing(1)
+        },
         titleCell: {
             width: "25%",
             padding: theme.spacing(1)
@@ -65,7 +68,8 @@ export default function EntityPreview<S extends EntitySchema>(
                                         Id
                                     </Typography>
                                 </TableCell>
-                                <TableCell padding="none">
+                                <TableCell padding="none"
+                                           className={classes.iconCell}>
                                     {getIdIcon("disabled", "small")}
                                 </TableCell>
                                 <TableCell className={classes.valuePreview}>
@@ -101,7 +105,8 @@ export default function EntityPreview<S extends EntitySchema>(
                                             </Typography>
                                         </TableCell>
 
-                                        <TableCell padding="none">
+                                        <TableCell padding="none"
+                                                   className={classes.iconCell}>
                                             {getIconForProperty(property, "disabled", "small")}
                                         </TableCell>
 

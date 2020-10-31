@@ -169,7 +169,8 @@ export default function ReferencePreview<S extends EntitySchema>(
                                 e.stopPropagation();
                                 if (entity)
                                     selectedEntityContext.open({
-                                        entity,
+                                        entityId: entity.id,
+                                        collectionPath: reference.parent.path,
                                         schema
                                     });
                             }}>

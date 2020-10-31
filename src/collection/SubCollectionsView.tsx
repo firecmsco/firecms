@@ -99,50 +99,51 @@ export default function SubCollectionsView<S extends EntitySchema>(
                 const deleteEnabled = view.deleteEnabled === undefined || view.deleteEnabled;
 
                 return (
-                <Box
-                    style={{ height: "500px" }}
-                    hidden={selectedView !== view}>
+                    <Box
+                        key={`subcollection_entry_${key}`}
+                        style={{ height: "500px" }}
+                        hidden={selectedView !== view}>
 
-                    {subcollectionPath ?
-                        <CollectionTable collectionPath={subcollectionPath}
-                                         title={title}
-                                         onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
-                                         schema={view.schema}
-                                         onEntityEdit={onSubcollectionEntityEdit}
-                                         onEntityClick={onSubcollectionEntityClick}
-                                         includeToolbar={true}
-                                         paginationEnabled={false}
-                                         additionalColumns={view.additionalColumns}
-                                         defaultSize={view.defaultSize}
-                                         actions={
-                                             <Button
-                                                 component={ReactLink}
-                                                 to={getRouterNewEntityPath(subcollectionPath)}
-                                                 size="medium"
-                                                 variant="outlined"
-                                                 color="primary"
-                                             >
-                                                 Add {selectedView.schema.name}
-                                             </Button>
-                                         }
-                        />
-                        :
-                        <Box m={3}
-                             display={"flex"}
-                             alignItems={"center"}
-                             justifyContent={"center"}>
-                            <Box>
-                                You need to save your entity before adding
-                                additional collections
+                        {subcollectionPath ?
+                            <CollectionTable collectionPath={subcollectionPath}
+                                             title={title}
+                                             onEntityDelete={deleteEnabled ? onEntityDelete : undefined}
+                                             schema={view.schema}
+                                             onEntityEdit={onSubcollectionEntityEdit}
+                                             onEntityClick={onSubcollectionEntityClick}
+                                             includeToolbar={true}
+                                             paginationEnabled={false}
+                                             additionalColumns={view.additionalColumns}
+                                             defaultSize={view.defaultSize}
+                                             actions={
+                                                 <Button
+                                                     component={ReactLink}
+                                                     to={getRouterNewEntityPath(subcollectionPath)}
+                                                     size="medium"
+                                                     variant="outlined"
+                                                     color="primary"
+                                                 >
+                                                     Add {selectedView.schema.name}
+                                                 </Button>
+                                             }
+                            />
+                            :
+                            <Box m={3}
+                                 display={"flex"}
+                                 alignItems={"center"}
+                                 justifyContent={"center"}>
+                                <Box>
+                                    You need to save your entity before adding
+                                    additional collections
+                                </Box>
                             </Box>
-                        </Box>
-                    }
+                        }
 
-                    <DeleteEntityDialog entity={deleteEntityClicked}
-                                        schema={view.schema}
-                                        open={!!deleteEntityClicked}
-                                        onClose={() => setDeleteEntityClicked(undefined)}/>
-                </Box>
+                        <DeleteEntityDialog entity={deleteEntityClicked}
+                                            schema={view.schema}
+                                            open={!!deleteEntityClicked}
+                                            onClose={() => setDeleteEntityClicked(undefined)}/>
+                    </Box>
                 );
             })}
 

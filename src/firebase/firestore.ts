@@ -106,6 +106,7 @@ export function listenEntity<S extends EntitySchema<Key, P>,
     schema: S,
     onSnapshot: (entity: Entity<S, P, Key>) => void
 ): Function {
+    console.debug("Listening entity", path, entityId);
     return firestore()
         .collection(path)
         .doc(entityId)
