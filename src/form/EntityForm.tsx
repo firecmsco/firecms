@@ -3,17 +3,40 @@ import {
     Box,
     Button,
     Container,
+    createStyles,
     Grid,
-    Paper,
+    makeStyles,
     Typography
 } from "@material-ui/core";
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
-import { formStyles } from "../styles";
 import { createCustomIdField, createFormField } from "./index";
 import { initEntityValues } from "../firebase/firestore";
 import { getYupObjectSchema } from "./validation";
 import deepEqual from "deep-equal";
+
+
+export const useStyles = makeStyles(theme => createStyles({
+    stickyButtons: {
+        marginTop: theme.spacing(2),
+        backgroundColor: "#ffffffb8",
+        borderTop: "solid 1px #f9f9f9",
+        position: "sticky",
+        bottom: 0,
+        zIndex: 200
+    },
+    container: {
+        height: "100%",
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2)
+    },
+    button: {
+        margin: theme.spacing(1)
+    },
+    form: {
+        marginTop: theme.spacing(2)
+    }
+}));
 
 interface EntityFormProps<S extends EntitySchema> {
 
@@ -64,13 +87,12 @@ export default function EntityForm<S extends EntitySchema>({
                                                                onDiscard,
                                                                onModified
                                                            }: EntityFormProps<S>) {
-    const classes = formStyles();
+    const classes = useStyles();
 
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
     const [initialValues, setInitialValues] = React.useState<EntityValues<S> | undefined>(entity?.values);
-
 
     /**
      * Base values are the ones this view is initialized from, we use them to
@@ -146,7 +168,7 @@ export default function EntityForm<S extends EntitySchema>({
     const validationSchema = getYupObjectSchema(schema.properties);
 
     function buildButtons(isSubmitting: boolean) {
-        return <Box textAlign="right" mt={2} mb={2}>
+        return <Box textAlign="right">
             {status === EntityStatus.existing &&
             <Button
                 variant="text"
@@ -219,41 +241,37 @@ export default function EntityForm<S extends EntitySchema>({
                 }
 
                 return (
-                    <Paper elevation={0}
-                           className={classes.formPaper}
-                           style={{ height: "100%" }}>
 
-                        <Container maxWidth={"sm"}>
+                    <Container maxWidth={"sm"}
+                               className={classes.container}>
 
-                            <Box mt={2}>
+                        {createCustomIdField(schema, status, setCustomId, customIdError, entity)}
 
-                                {createCustomIdField(schema, status, setCustomId, customIdError, entity?.id)}
+                        <Box pt={3}>
 
-                                <Form className={classes.form}
-                                      onSubmit={handleSubmit}
-                                      noValidate>
+                            <Form className={classes.form}
+                                  onSubmit={handleSubmit}
+                                  noValidate>
 
+                                {createFormFields(schema)}
+
+                                {savingError &&
+                                <Box textAlign="right">
+                                    <Typography color={"error"}>
+                                        Error saving to Firestore. Details
+                                        in
+                                        the console
+                                    </Typography>
+                                </Box>}
+
+                                <Box className={classes.stickyButtons}>
                                     {buildButtons(isSubmitting)}
+                                </Box>
 
-                                    {createFormFields(schema)}
+                            </Form>
 
-                                    {savingError &&
-                                    <Box textAlign="right">
-                                        <Typography color={"error"}>
-                                            Error saving to Firestore. Details
-                                            in
-                                            the console
-                                        </Typography>
-                                    </Box>}
-
-                                    {buildButtons(isSubmitting)}
-
-                                </Form>
-
-                            </Box>
-                        </Container>
-
-                    </Paper>
+                        </Box>
+                    </Container>
                 );
             }}
         </Formik>

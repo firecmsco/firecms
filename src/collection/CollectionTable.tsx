@@ -1,7 +1,6 @@
 import React, { MouseEvent, useEffect, useMemo, useRef } from "react";
 import BaseTable, { AutoResizer, Column } from "react-base-table";
 import "react-base-table/styles.css";
-
 import {
     Box,
     createStyles,
@@ -11,6 +10,7 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
+
 import {
     AdditionalColumnDelegate,
     CollectionSize,
@@ -22,14 +22,16 @@ import {
 import { TextSearchDelegate } from "../text_search_delegate";
 import { fetchEntity, listenCollection } from "../firebase";
 import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
-import { getIconForProperty, getIdIcon } from "../util/property_icons";
+import { getIconForProperty } from "../util/property_icons";
 import { PreviewComponent } from "../preview";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
-import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import SkeletonComponent, { renderSkeletonText } from "../preview/SkeletonComponent";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { getPreviewSizeFrom } from "../preview/PreviewComponentProps";
+import DeleteEntityDialog from "./DeleteEntityDialog";
+import { useSelectedEntityContext } from "../SelectedEntityContext";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -62,8 +64,10 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
         tableRow: {
             display: "flex",
             alignItems: "center",
-            cursor: "pointer",
             fontSize: "0.875rem"
+        },
+        clickableTableRow: {
+            cursor: "pointer"
         },
         tableCell: {
             overflow: "auto",
@@ -108,7 +112,7 @@ interface CollectionTableProps<S extends EntitySchema,
     /**
      * Override the title in the toolbar
      */
-    title?: React.ReactChild;
+    title?: React.ReactNode;
 
     /**
      * In case this table should have some filters set by default
@@ -157,22 +161,22 @@ interface CollectionTableProps<S extends EntitySchema,
     /**
      * Widget to display in the upper bar
      */
-    actions?: React.ReactChild;
+    actions?: React.ReactNode;
 
     /**
      * Should the table add an edit button
      */
-    onEntityEdit?(collectionPath: string, entity: Entity<S>): void;
+    editEnabled?: boolean;
+
+    /**
+     * Should the table add a delete button
+     */
+    deleteEnabled?: boolean;
 
     /**
      * Callback when anywhere on the table is clicked
      */
     onEntityClick?(collectionPath: string, entity: Entity<S>): void;
-
-    /**
-     * Callback when the delete button of an entity is clicked
-     */
-    onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
 
 }
 
@@ -196,10 +200,10 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                      collectionPath,
                                                      schema,
                                                      onEntityClick,
-                                                     onEntityDelete,
-                                                     onEntityEdit,
                                                      paginationEnabled,
                                                      properties,
+                                                     deleteEnabled,
+                                                     editEnabled,
                                                      excludedProperties,
                                                      textSearchDelegate,
                                                      additionalColumns,
@@ -215,6 +219,8 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const [noMoreToLoad, setNoMoreToLoad] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
     const [size, setSize] = React.useState<CollectionSize>(defaultSize);
+
+    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
 
     const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
     const [textSearchLoading, setTextSearchLoading] = React.useState<boolean>(false);
@@ -232,7 +238,8 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         }
     };
 
-    const classes = useStyles({size});
+    const selectedEntityContext = useSelectedEntityContext();
+    const classes = useStyles({ size });
 
     const additionalColumnsMap: Record<string, AdditionalColumnDelegate<S>> = useMemo(() => {
         return additionalColumns ?
@@ -358,13 +365,11 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         }
     }
 
-    const editEnabled = !!onEntityEdit;
-    const deleteEnabled = !!onEntityDelete;
 
     const loadNextPage = () => {
         if (!paginationEnabled || dataLoading || noMoreToLoad)
             return;
-        console.log("loadNextPage", itemCount);
+        console.debug("collection loadNextPage", itemCount);
         setItemCount(itemCount + PAGE_SIZE);
     };
 
@@ -451,19 +456,20 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                         <IconButton
                             onClick={(event: MouseEvent) => {
                                 event.stopPropagation();
-                                if (onEntityEdit)
-                                    onEntityEdit(collectionPath, entity);
+                                selectedEntityContext.open({
+                                    entityId: entity.id,
+                                    collectionPath
+                                });
                             }}
                         >
-                            <EditIcon/>
+                            <KeyboardTabIcon/>
                         </IconButton>
                         }
 
                         {deleteEnabled && <IconButton
                             onClick={(event: MouseEvent) => {
                                 event.stopPropagation();
-                                if (onEntityDelete)
-                                    onEntityDelete(collectionPath, entity);
+                                setDeleteEntityClicked(entity);
                             }}>
                             <DeleteIcon/>
                         </IconButton>}
@@ -498,14 +504,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
             <ErrorBoundary>
                 {columnIndex === 0 ?
                     <Box className={classes.header}>
-                        <Box display={"inherit"}
-                             paddingRight={"10px"}>
-                            {getIdIcon("disabled", "small")}
-                        </Box>
-                        <Box display={"inherit"}
-                             paddingRight={"10px"}>
-                            Id
-                        </Box>
+                        Id
                     </Box>
                     :
                     <Box className={classes.header}>
@@ -563,7 +562,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         body = <AutoResizer>
             {({ width, height }) => (
                 <BaseTable
-                    rowClassName={classes.tableRow}
+                    rowClassName={`${classes.tableRow} ${onEntityClick ? classes.clickableTableRow : ""}`}
                     data={currentData}
                     width={width}
                     height={height}
@@ -578,7 +577,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                     onColumnSort={onColumnSort}
                     onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
                     onEndReached={loadNextPage}
-                    rowEventHandlers={{ onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S>) }}>
+                    rowEventHandlers={onEntityClick ? { onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S>) } : undefined}>
 
                     <Column headerRenderer={headerRenderer}
                             cellRenderer={cellRenderer}
@@ -611,26 +610,35 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     }
 
     return (
-        <Paper className={classes.root}
-               style={{ height: "100%", width: "100%" }}>
+        <React.Fragment>
 
-            {includeToolbar &&
-            <CollectionTableToolbar schema={schema}
-                                    filterValues={filter}
-                                    onTextSearch={textSearchEnabled ? onTextSearch : undefined}
-                                    collectionPath={collectionPath}
-                                    filterableProperties={filterableProperties}
-                                    actions={actions}
-                                    size={size}
-                                    onSizeChanged={setSize}
-                                    title={title}
-                                    loading={loading}
-                                    onFilterUpdate={onFilterUpdate}/>}
+            <DeleteEntityDialog entity={deleteEntityClicked}
+                                schema={schema}
+                                open={!!deleteEntityClicked}
+                                onClose={() => setDeleteEntityClicked(undefined)}/>
 
-            <div className={classes.tableContainer}>
-                {body}
-            </div>
-        </Paper>
+            <Paper className={classes.root}
+                   style={{ height: "100%", width: "100%" }}>
+
+                {includeToolbar &&
+                <CollectionTableToolbar schema={schema}
+                                        filterValues={filter}
+                                        onTextSearch={textSearchEnabled ? onTextSearch : undefined}
+                                        collectionPath={collectionPath}
+                                        filterableProperties={filterableProperties}
+                                        actions={actions}
+                                        size={size}
+                                        onSizeChanged={setSize}
+                                        title={title}
+                                        loading={loading}
+                                        onFilterUpdate={onFilterUpdate}/>}
+
+                <div className={classes.tableContainer}>
+                    {body}
+                </div>
+
+            </Paper>
+        </React.Fragment>
     );
 
 }

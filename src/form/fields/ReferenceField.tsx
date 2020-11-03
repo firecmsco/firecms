@@ -21,7 +21,7 @@ import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { TextSearchDelegate } from "../../text_search_delegate";
 import { CollectionTable } from "../../collection/CollectionTable";
-import { useSelectedEntityContext } from "../../selected_entity_controller";
+import { useSelectedEntityContext } from "../../SelectedEntityContext";
 import { listenEntityFromRef } from "../../firebase";
 import SkeletonComponent from "../../preview/SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
@@ -180,8 +180,7 @@ export function ReferenceDialog<S extends EntitySchema>(
         if (entity)
             selectedEntityContext.open({
                 entityId: entity.id,
-                collectionPath,
-                schema
+                collectionPath
             });
     };
 

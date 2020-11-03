@@ -16,7 +16,7 @@ import { listenEntityFromRef } from "../firebase";
 import { PreviewComponentProps, PreviewSize } from "./PreviewComponentProps";
 import SkeletonComponent from "./SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import { useSelectedEntityContext } from "../selected_entity_controller";
+import { useSelectedEntityContext } from "../SelectedEntityContext";
 import Box from "@material-ui/core/Box/Box";
 import ErrorIcon from "@material-ui/icons/Error";
 
@@ -170,8 +170,7 @@ export default function ReferencePreview<S extends EntitySchema>(
                                 if (entity)
                                     selectedEntityContext.open({
                                         entityId: entity.id,
-                                        collectionPath: reference.parent.path,
-                                        schema
+                                        collectionPath: reference.parent.path
                                     });
                             }}>
                             <KeyboardTabIcon fontSize={"small"}/>

@@ -22,7 +22,8 @@ import {
     Link as ReactLink,
     Redirect,
     Route,
-    Switch
+    Switch,
+    useLocation
 } from "react-router-dom";
 
 import * as firebase from "firebase/app";
@@ -33,14 +34,14 @@ import "firebase/firestore";
 
 import { CircularProgressCenter } from "./components";
 import { EntityCollectionView } from "./models";
-import { addInitialSlash, buildCollectionPath, MediaRoute } from "./routes";
+import { addInitialSlash, buildCollectionPath } from "./routes";
 import { Authenticator } from "./authenticator";
 import { blue, pink, red } from "@material-ui/core/colors";
 import { FirebaseConfigContext } from "./contexts";
-import { SelectedEntityProvider } from "./selected_entity_controller";
+import { SelectedEntityProvider } from "./SelectedEntityContext";
 
 import "./styles.module.css";
-import { BreadcrumbsProvider } from "./breadcrumbs_controller";
+import { BreadcrumbsProvider } from "./BreacrumbsContext";
 import { CMSAppBar } from "./components/CMSAppBar";
 import { AuthContext, AuthProvider } from "./auth";
 import { SnackbarProvider } from "./snackbar_controller";
@@ -62,15 +63,6 @@ const useStyles = makeStyles((theme: Theme) =>
             width: "100%",
             height: "100%",
             overflow: "auto"
-        },
-        toolbar: {
-            minHeight: 56,
-            [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
-                minHeight: 48
-            },
-            [theme.breakpoints.up("sm")]: {
-                minHeight: 64
-            }
         },
         tableNoBottomBorder: {
             "&:last-child th, &:last-child td": {
@@ -96,7 +88,6 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-
 /**
  * Main entry point that defines the CMS configuration
  */
@@ -117,11 +108,6 @@ export interface CMSAppProps {
      * generates an entry in the main menu.
      */
     navigation: EntityCollectionView<any>[];
-
-    /**
-     * Should the CMS include the Media view (WIP, do not use yet)
-     */
-    includeMedia?: boolean;
 
     /**
      * Do the users need to log in to access the CMS.
@@ -165,6 +151,12 @@ export interface CMSAppProps {
      * '"Roboto", "Helvetica", "Arial", sans-serif'
      */
     fontFamily?: string
+
+    /**
+     * A component that gets rendered on the upper side of the main toolbar
+     */
+    toolbarExtraWidget?: React.ReactNode;
+
 }
 
 /**
@@ -185,7 +177,7 @@ export interface AdditionalView {
     /**
      * Component to be rendered
      */
-    view: React.ReactChild;
+    view: React.ReactNode;
 }
 
 
@@ -193,7 +185,6 @@ export function CMSApp({
                            name,
                            logo,
                            navigation,
-                           includeMedia,
                            authentication,
                            allowSkipLogin,
                            firebaseConfig,
@@ -201,6 +192,7 @@ export function CMSApp({
                            primaryColor,
                            secondaryColor,
                            fontFamily,
+                           toolbarExtraWidget,
                            ...props
                        }: CMSAppProps) {
     const classes = useStyles();
@@ -263,7 +255,6 @@ export function CMSApp({
             }
         }
     });
-
 
     const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -339,23 +330,23 @@ export function CMSApp({
                             justify="center"
                             style={{ minHeight: "100vh" }}
                         >
-                            <Box className={classes.toolbar}>
+                            <Box m={1}>
                                 {logo &&
                                 <img className={classes.logo} src={logo}/>}
                             </Box>
 
-                            <Grid item xs={12}>
                                 <Button variant="contained"
                                         color="primary"
                                         onClick={authContext.googleSignIn}>
                                     Google login
                                 </Button>
-                            </Grid>
 
-                            {skipLoginButtonEnabled && <Grid item xs={12}>
+                            {skipLoginButtonEnabled &&
+                                <Box m={2}>
                                 <Button onClick={authContext.skipLogin}>Skip
                                     login</Button>
-                            </Grid>}
+                                </Box>
+                            }
 
                             <Grid item xs={12}>
 
@@ -380,48 +371,6 @@ export function CMSApp({
                     );
                 }
 
-                function getRouterSwitch(shouldIncludeMedia: boolean) {
-
-                    const firstCollectionPath = buildCollectionPath(navigation[0].relativePath);
-
-                    return (
-                        <Switch>
-
-                            {navigation.map(entityCollectionView => (
-                                    <Route
-                                        path={buildCollectionPath(entityCollectionView.relativePath)}
-                                        key={`navigation_${entityCollectionView.relativePath}`}>
-                                        <CMSRoute
-                                            type={"collection"}
-                                            collectionPath={entityCollectionView.relativePath}
-                                            view={entityCollectionView}
-                                        />
-                                    </Route>
-                                )
-                            )}
-
-                            {shouldIncludeMedia && (
-                                <Route path="/media">
-                                    <MediaRoute/>
-                                </Route>
-                            )}
-
-                            {additionalViews &&
-                            additionalViews.map(additionalView => (
-                                <Route
-                                    key={"additional_view_" + additionalView.path}
-                                    path={addInitialSlash(additionalView.path)}
-                                >
-                                    {additionalView.view}
-                                </Route>
-                            ))}
-
-                            <Redirect exact from="/"
-                                      to={firstCollectionPath}/>
-                        </Switch>
-                    );
-                }
-
                 function renderMainView() {
                     if (configError) {
                         return <Box> {configError} </Box>;
@@ -430,9 +379,6 @@ export function CMSApp({
                     if (!firebaseConfigInitialized) {
                         return <CircularProgressCenter/>;
                     }
-
-                    const shouldIncludeMedia =
-                        includeMedia !== undefined && includeMedia;
 
                     const drawer = (
                         <React.Fragment>
@@ -455,18 +401,6 @@ export function CMSApp({
                                             onClick={closeDrawer}/>
                                     </ListItem>
                                 ))}
-
-                                {shouldIncludeMedia && (
-                                    <React.Fragment>
-                                        <Divider/>
-                                        <ListItem button component={ReactLink}
-                                                  to="/media">
-                                            <ListItemText
-                                                primary="Media"
-                                                primaryTypographyProps={{ variant: "subtitle2" }}/>
-                                        </ListItem>
-                                    </React.Fragment>
-                                )}
 
                                 {additionalViews && (
                                     <React.Fragment>
@@ -519,11 +453,14 @@ export function CMSApp({
                                             <Box className={classes.main}>
                                                 <CssBaseline/>
                                                 <CMSAppBar title={name}
-                                                           handleDrawerToggle={handleDrawerToggle}/>
+                                                           handleDrawerToggle={handleDrawerToggle}
+                                                           toolbarExtraWidget={toolbarExtraWidget}/>
 
                                                 <main
                                                     className={classes.content}>
-                                                    {getRouterSwitch(shouldIncludeMedia)}
+                                                    <CMSRouterSwitch
+                                                        navigation={navigation}
+                                                        additionalViews={additionalViews}/>
                                                 </main>
                                             </Box>
 
@@ -565,3 +502,46 @@ export function CMSApp({
     </AuthProvider>;
 
 }
+
+function CMSRouterSwitch({ navigation, additionalViews }: {
+    navigation: EntityCollectionView<any>[],
+    additionalViews?: AdditionalView[];
+}) {
+
+    const location = useLocation();
+    const mainLocation = location.state && location.state["main_location"] ? location.state["main_location"] : location;
+
+    const firstCollectionPath = buildCollectionPath(navigation[0].relativePath);
+
+    return (
+        <Switch location={mainLocation}>
+
+            {navigation.map(entityCollectionView => (
+                    <Route
+                        path={buildCollectionPath(entityCollectionView.relativePath)}
+                        key={`navigation_${entityCollectionView.relativePath}`}>
+                        <CMSRoute
+                            type={"collection"}
+                            collectionPath={entityCollectionView.relativePath}
+                            view={entityCollectionView}
+                        />
+                    </Route>
+                )
+            )}
+
+            {additionalViews &&
+            additionalViews.map(additionalView => (
+                <Route
+                    key={"additional_view_" + additionalView.path}
+                    path={addInitialSlash(additionalView.path)}
+                >
+                    {additionalView.view}
+                </Route>
+            ))}
+
+            <Redirect exact from="/"
+                      to={firstCollectionPath}/>
+        </Switch>
+    );
+}
+

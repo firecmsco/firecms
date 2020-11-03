@@ -111,10 +111,6 @@ const productSchema = buildSchema({
             dataType: "boolean",
             columnWidth: 100
         },
-        expires_on: {
-            title: "Expires on",
-            dataType: "timestamp"
-        },
         publisher: {
             title: "Publisher",
             description: "This is an example of a map property",
@@ -129,6 +125,10 @@ const productSchema = buildSchema({
                     dataType: "string"
                 }
             }
+        },
+        expires_on: {
+            title: "Expires on",
+            dataType: "timestamp"
         }
     }
 });

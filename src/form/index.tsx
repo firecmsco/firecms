@@ -2,15 +2,18 @@ import React from "react";
 import {
     FormControl,
     FormHelperText,
+    IconButton,
+    InputAdornment,
     InputLabel,
     MenuItem,
     Select as MuiSelect,
-    TextField as MuiTextField
+    TextField as MuiTextField,
+    Tooltip
 } from "@material-ui/core";
-import { EntitySchema, EntityStatus, Property } from "../models";
-
+import { Entity, EntitySchema, EntityStatus, Property } from "../models";
 import { ErrorMessage, Field, FieldProps } from "formik";
 
+import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import Select from "./fields/Select";
 import ArrayEnumSelect from "./fields/ArrayEnumSelect";
 import StorageUploadField from "./fields/StorageUploadField";
@@ -24,6 +27,9 @@ import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
 import { CMSFieldProps } from "./form_props";
 import ArrayShapedField from "./fields/ArrayShapedField";
+import { FirebaseConfigContext } from "../contexts";
+import { useClipboard } from "use-clipboard-hook";
+import { useSnackbarContext } from "../snackbar_controller";
 
 function buildField<P extends Property<T>, T = any>(name: string,
                                                     property: P,
@@ -66,10 +72,10 @@ function buildField<P extends Property<T>, T = any>(name: string,
 }
 
 export function createFormField<T>(name: string,
-                                property: Property,
-                                includeDescription: boolean,
-                                underlyingValueHasChanged: boolean,
-                                entitySchema: EntitySchema): JSX.Element {
+                                   property: Property,
+                                   includeDescription: boolean,
+                                   underlyingValueHasChanged: boolean,
+                                   entitySchema: EntitySchema): JSX.Element {
 
     if (property.disabled) {
         return buildField(name, property, includeDescription, DisabledField, underlyingValueHasChanged, entitySchema);
@@ -124,23 +130,63 @@ export function createFormField<T>(name: string,
 }
 
 
-export function createCustomIdField(schema: EntitySchema, formType: EntityStatus, onChange: Function, error: boolean, id: string | undefined) {
+export function createCustomIdField<S extends EntitySchema>(schema: EntitySchema, formType: EntityStatus, onChange: Function, error: boolean, entity: Entity<S> | undefined) {
 
     const disabled = formType !== EntityStatus.new || !schema.customId;
 
     const hasEnumValues = typeof schema.customId === "object";
+
+    const snackbarContext = useSnackbarContext();
+    const {ref, copy, cut} = useClipboard({
+        onSuccess: (text) =>             snackbarContext.open({
+            type: "success",
+            message: `Copied ${text}`
+        }),
+    });
+
+    const inputProps = entity ? {
+        endAdornment: (
+            <FirebaseConfigContext.Consumer>
+                {config => (
+                    <InputAdornment position="end">
+                        <IconButton
+                            onClick={(e) => copy(entity.id)}
+                            aria-label="copy-id">
+                            <Tooltip title={"Copy"}>
+                                <svg
+                                    className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
+                                    width="20" height="20" viewBox="0 0 24 24">
+                                    <path
+                                        d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                            </Tooltip>
+                        </IconButton>
+                        <a href={`https://console.firebase.google.com/project/${config["projectId"]}/firestore/data/${entity.reference.path}`}
+                           rel="noopener noreferrer"
+                           target="_blank">
+                            <IconButton
+                                aria-label="go-to-firestore">
+                                <Tooltip title={"Open in Firestore console"}>
+                                    <OpenInNewIcon
+                                        fontSize={"small"}/>
+                                </Tooltip>
+                            </IconButton>
+                        </a>
+                    </InputAdornment>)}
+            </FirebaseConfigContext.Consumer>)
+    } : undefined;
 
     const fieldProps: any = {
         label: (formType === EntityStatus.new && disabled) ? "Id is set automatically" : "Id",
         disabled: disabled,
         name: "id",
         type: null,
-        value: id,
-        variant: "outlined"
+        value: entity ? entity.id : undefined,
+        variant: "filled",
     };
-
     return (
-        <FormControl fullWidth error={error} {...fieldProps}
+        <FormControl fullWidth error={error}
+                     {...fieldProps}
                      key={"custom-id-field"}>
 
             {hasEnumValues && schema.customId &&
@@ -163,6 +209,7 @@ export function createCustomIdField(schema: EntitySchema, formType: EntityStatus
             {!hasEnumValues &&
             <MuiTextField {...fieldProps}
                           error={error}
+                          InputProps={inputProps}
                           onChange={(event) => onChange(event.target.value)}/>}
 
             <ErrorMessage name={"id"}

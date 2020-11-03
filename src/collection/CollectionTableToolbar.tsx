@@ -12,6 +12,7 @@ import {
     MenuItem,
     Select,
     Theme,
+    Tooltip,
     withStyles
 } from "@material-ui/core";
 import SearchBar from "./SearchBar";
@@ -37,11 +38,11 @@ interface CollectionTableToolbarProps<S extends EntitySchema> {
     filterValues?: FilterValues<S>;
     onTextSearch?: (searchString?: string) => void;
     filterableProperties?: (keyof S["properties"])[];
-    actions?: React.ReactChild;
+    actions?: React.ReactNode;
 
     loading: boolean;
 
-    title?: React.ReactChild,
+    title?: React.ReactNode,
 
     onFilterUpdate?(filterValues: FilterValues<S>): void;
 }
@@ -101,36 +102,38 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
             }
         })))(MenuItem);
 
-    const sizeSelect = <Select
-        value={props.size}
-        label={"Size"}
-        style={{ width: 56 }}
-        onChange={(evt: any) => {
-            props.onSizeChanged(evt.target.value);
-        }}
-        MenuProps={{
-            MenuListProps: {
-                disablePadding: true,
-                style: {
-                    borderRadius: 4
-                }
-            },
-            elevation: 1,
-            anchorOrigin: {
-                vertical: "bottom",
-                horizontal: "left"
-            },
-            getContentAnchorEl: null
-        }}
-        input={<SizeInput/>}
-        renderValue={(value: any) => value.toUpperCase()}>
-        {["xs", "s", "m", "l", "xl"].map((value) => (
-            <SizeMenuItem
-                key={`size-select-${value}`} value={value}>
-                {value.toUpperCase()}
-            </SizeMenuItem>
-        ))}
-    </Select>;
+    const sizeSelect = (
+        <Tooltip title="Table size">
+            <Select
+                value={props.size}
+                style={{ width: 56 }}
+                onChange={(evt: any) => {
+                    props.onSizeChanged(evt.target.value);
+                }}
+                MenuProps={{
+                    MenuListProps: {
+                        disablePadding: true,
+                        style: {
+                            borderRadius: 4
+                        }
+                    },
+                    elevation: 1,
+                    anchorOrigin: {
+                        vertical: "bottom",
+                        horizontal: "left"
+                    },
+                    getContentAnchorEl: null
+                }}
+                input={<SizeInput/>}
+                renderValue={(value: any) => value.toUpperCase()}>
+                {["xs", "s", "m", "l", "xl"].map((value) => (
+                    <SizeMenuItem
+                        key={`size-select-${value}`} value={value}>
+                        {value.toUpperCase()}
+                    </SizeMenuItem>
+                ))}
+            </Select>
+        </Tooltip>);
 
     return (
         <Toolbar

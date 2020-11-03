@@ -32,7 +32,12 @@ export function CMSRoute<S extends EntitySchema>({
     const location = useLocation();
     const { path, url } = useRouteMatch();
 
-    const currentBreadcrumb = type === "entity" ? {
+    const thisType = location.state && location.state["main_location"] ? "collection" : type;
+    const thisLocation = location.state ? location.state["main_location"] : location;
+    const thisPath = location.state ? location.state["main_path"] : path;
+    const thisUrl = location.state ? location.state["main_url"] : url;
+
+    const currentBreadcrumb = thisType === "entity" ? {
         title: entityId ? entityId : "New",
         url,
         view
@@ -47,14 +52,12 @@ export function CMSRoute<S extends EntitySchema>({
         currentBreadcrumb
     ];
 
-    const thisLocation = location.state ? location.state["main_location"] : location;
-
     return (
 
         <React.Fragment>
-            {type === "collection" && <Switch location={thisLocation}>
+            {thisType === "collection" && <Switch location={thisLocation}>
 
-                <Route path={`${path}/new`}>
+                <Route path={`${thisPath}/new`}>
                     <CMSRoute
                         type={"entity"}
                         collectionPath={collectionPath}
@@ -63,7 +66,7 @@ export function CMSRoute<S extends EntitySchema>({
                     />
                 </Route>
 
-                <Route path={`${path}/:entityId/edit`}>
+                <Route path={`${thisPath}/:entityId`}>
                     <CMSRoute
                         type={"entity"}
                         collectionPath={collectionPath}
@@ -72,16 +75,7 @@ export function CMSRoute<S extends EntitySchema>({
                     />
                 </Route>
 
-                <Route path={`${url}/:entityId`}>
-                    <CMSRoute
-                        type={"entity"}
-                        collectionPath={collectionPath}
-                        view={view}
-                        previousBreadcrumbs={breadcrumbs}
-                    />
-                </Route>
-
-                <Route path={url}>
+                <Route path={thisPath}>
                     <CollectionRoute
                         collectionPath={collectionPath}
                         view={view}
@@ -92,7 +86,7 @@ export function CMSRoute<S extends EntitySchema>({
 
             </Switch>}
 
-            {type === "entity" && <Switch location={thisLocation}>
+            {thisType === "entity" && <Switch location={thisLocation}>
                 {view.subcollections && view.subcollections.map(entityCollectionView => (
                         <Route
                             path={`${url}/${removeInitialSlash(entityCollectionView.relativePath)}`}
@@ -106,11 +100,13 @@ export function CMSRoute<S extends EntitySchema>({
                         </Route>
                     )
                 )}
-                <Route path={path}>
+                <Route path={thisPath}>
                     <EntityFormRoute
+                        key={`form-route-${path}-${entityId ? entityId : "new"}`}
                         collectionPath={collectionPath}
                         view={view}
                         breadcrumbs={breadcrumbs}
+                        context={"main"}
                     />
                 </Route>
             </Switch>}

@@ -17,8 +17,9 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import { BreadcrumbContainer } from "./BreadcrumbContainer";
 import { Link as ReactLink } from "react-router-dom";
-import { useBreadcrumbsContext } from "../breadcrumbs_controller";
+import { useBreadcrumbsContext } from "../BreacrumbsContext";
 import { useAuthContext } from "../auth";
+import ErrorBoundary from "./ErrorBoundary";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,17 +28,25 @@ const useStyles = makeStyles((theme: Theme) =>
             // [theme.breakpoints.up("md")]: {
             //     display: "none"
             // }
-        },
+        }
     })
 );
 
 
-interface BreadcrumbProps {
+interface CMSAppBarProps {
     title: string;
-    handleDrawerToggle: () => void
+    handleDrawerToggle: () => void,
+    /**
+     * A component that gets rendered on the upper side of the main toolbar
+     */
+    toolbarExtraWidget?: React.ReactNode;
 }
 
-export const CMSAppBar: React.FunctionComponent<BreadcrumbProps> = ({ title, handleDrawerToggle }) => {
+export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
+                                                                       title,
+                                                                       handleDrawerToggle,
+                                                                       toolbarExtraWidget
+                                                                   }) => {
 
     const classes = useStyles();
 
@@ -68,23 +77,30 @@ export const CMSAppBar: React.FunctionComponent<BreadcrumbProps> = ({ title, han
                 <Box ml={3} mr={3}>
                     <BreadcrumbContainer>
                         <Breadcrumbs aria-label="breadcrumb">
-                            {breadcrumbs.map((entry, index) =>(
+                            {breadcrumbs.map((entry, index) => (
 
-                                    <Link
-                                        key={`breadcrumb-${index}`}
-                                        color="inherit"
-                                        component={ReactLink}
-                                        to={entry.url}>
-                                        { entry.title}
-                                    </Link>))
+                                <Link
+                                    key={`breadcrumb-${index}`}
+                                    color="inherit"
+                                    component={ReactLink}
+                                    to={entry.url}>
+                                    {entry.title}
+                                </Link>))
                             }
                         </Breadcrumbs>
                     </BreadcrumbContainer>
                 </Box>
 
-                <Box flexGrow={1} />
+                <Box flexGrow={1}/>
 
-                <Box p={2}>
+                {toolbarExtraWidget &&
+                <ErrorBoundary>
+                    {
+                        toolbarExtraWidget
+                    }
+                </ErrorBoundary>}
+
+                <Box p={1} mr={1}>
                     {authContext.loggedUser && authContext.loggedUser.photoURL ?
                         <Avatar
                             src={authContext.loggedUser.photoURL}/>

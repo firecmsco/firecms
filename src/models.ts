@@ -4,10 +4,6 @@ import { CMSFieldProps } from "./form/form_props";
 import { PreviewComponentProps } from "./preview";
 import { storage } from "firebase";
 
-/**
- * Sizes in which a collection can be rendered
- */
-export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -103,6 +99,11 @@ export interface EntityCollectionView<S extends EntitySchema,
      */
     onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
 }
+
+/**
+ * Sizes in which a collection can be rendered
+ */
+export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
 /**
  * Specification for defining an entity
@@ -249,8 +250,15 @@ export interface AdditionalColumnDelegate<S extends EntitySchema,
     P extends Properties = S["properties"],
     Key extends string = Extract<keyof P, string>> {
 
+    /**
+     * Id of this column, you can use this id in the `properties` field of the
+     * colletion in any order you want
+     */
     id: string;
 
+    /**
+     * Header of this column
+     */
     title: string;
 
     /**
@@ -258,6 +266,9 @@ export interface AdditionalColumnDelegate<S extends EntitySchema,
      */
     width?: number;
 
+    /**
+     * Builder for the content of the cell for this column
+     */
     builder: (entity: Entity<S, P, Key>) => React.ReactNode;
 
 }

@@ -8,8 +8,8 @@ import {
     useParams,
     useRouteMatch
 } from "react-router-dom";
-import { EntityDetailRoute } from "./EntityDetailRoute";
-import { useSelectedEntityContext } from "../selected_entity_controller";
+import { EntityFormRoute } from "./EntityFormRoute";
+import { useSelectedEntityContext } from "../SelectedEntityContext";
 import { createStyles, Drawer, makeStyles } from "@material-ui/core";
 
 
@@ -37,6 +37,14 @@ export function SideCMSRoute<S extends EntitySchema>({
         <React.Fragment>
             {type === "collection" && <Switch location={location}>
 
+                <Route path={`${path}/new`}>
+                    <SideCMSRoute
+                        type={"entity"}
+                        collectionPath={collectionPath}
+                        view={view}
+                    />
+                </Route>
+
                 <Route path={`${path}/:entityId`}>
                     <SideCMSRoute
                         type={"entity"}
@@ -63,11 +71,14 @@ export function SideCMSRoute<S extends EntitySchema>({
                 )}
 
                 <Route path={path} exact={true}>
-                    <EntityDetailRoute
+                    <EntityFormRoute
+                        key={`side-form-route-${path}-${entityId}`}
                         collectionPath={collectionPath}
                         view={view}
+                        context={"side"}
                     />
                 </Route>
+
             </Switch>}
 
         </React.Fragment>
@@ -78,8 +89,7 @@ export const useStyles = makeStyles(theme => createStyles({
     root: {
         width: "45vw",
         height: "100%",
-        maxWidth: "900px",
-        padding: theme.spacing(1),
+        maxWidth: "1000px",
         [theme.breakpoints.down("md")]: {
             width: "60vw"
         },

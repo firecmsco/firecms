@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Paper } from "@material-ui/core";
 
 interface BreadcrumbProps {
-    children: React.ReactChild;
+    children: React.ReactNode;
 }
 
 export const BreadcrumbContainer: React.FunctionComponent<BreadcrumbProps> = ({ children }) => {

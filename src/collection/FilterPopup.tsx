@@ -100,7 +100,6 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
     }
 
     const cleanedInitialValues: FilterValues<S> = filterValues || {};
-    // initFilterValues(schema, filterableProperties);
 
     return (
         <PopupState variant="popover" popupId="collection-filter">

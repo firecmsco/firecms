@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import logo from "./images/test_shop_logo.png";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
 import "typeface-rubik";
 
@@ -29,6 +30,7 @@ import {
     usersSearchDelegate
 } from "./algolia_utils";
 import PriceTextPreview from "./custom_preview/PriceTextPreview";
+import { IconButton, Tooltip } from "@material-ui/core";
 
 const locales: EnumValues<string> = {
     "es": "Spanish",
@@ -135,11 +137,6 @@ const productSchema = buildSchema({
                 required: true
             }
         },
-        added_on: {
-            dataType: "timestamp",
-            title: "Added on",
-            disabled: true
-        },
         public: {
             dataType: "boolean",
             title: "Public",
@@ -173,6 +170,11 @@ const productSchema = buildSchema({
                 url: true
             }
         },
+        added_on: {
+            dataType: "timestamp",
+            title: "Added on",
+            disabled: true
+        },
         images: {
             dataType: "array",
             title: "Images",
@@ -197,8 +199,23 @@ const productSchema = buildSchema({
             description: "Reference to self",
             of: {
                 dataType: "reference",
-                collectionPath: "dadaki",
+                collectionPath: "products",
                 schema: "self"
+            }
+        },
+        publisher: {
+            title: "Publisher",
+            description: "This is an example of a map property",
+            dataType: "map",
+            properties: {
+                name: {
+                    title: "Name",
+                    dataType: "string"
+                },
+                external_id: {
+                    title: "External id",
+                    dataType: "string"
+                }
             }
         },
         min_known_price: {
@@ -231,21 +248,6 @@ const productSchema = buildSchema({
             dataType: "string",
             disabled: true,
             description: "This field gets updated with a preSave hook"
-        },
-        publisher: {
-            title: "Publisher",
-            description: "This is an example of a map property",
-            dataType: "map",
-            properties: {
-                name: {
-                    title: "Name",
-                    dataType: "string"
-                },
-                external_id: {
-                    title: "External id",
-                    dataType: "string"
-                }
-            }
         }
 
     }
@@ -424,7 +426,6 @@ export const testEntitySchema = buildSchema({
     properties: {
         tags: {
             title: "Tags",
-            // validation: { required: true },
             dataType: "array",
             of: {
                 dataType: "string"
@@ -432,7 +433,6 @@ export const testEntitySchema = buildSchema({
         },
         product: {
             title: "Product",
-            validation: { required: true },
             dataType: "reference",
             collectionPath: "products",
             schema: productSchema,
@@ -441,6 +441,7 @@ export const testEntitySchema = buildSchema({
         },
         title: {
             title: "Title",
+            validation: { required: true },
             description: "A catching title is important",
             dataType: "string"
         },
@@ -462,7 +463,6 @@ export const testEntitySchema = buildSchema({
         range: {
             title: "Range",
             validation: {
-                required: true,
                 min: 0,
                 max: 3
             },
@@ -583,6 +583,7 @@ const localeSchema = buildSchema({
         selectable: {
             title: "Selectable",
             description: "Is this locale selectable",
+            longDescription: "Changing this value triggers a cloud function that updates the parent product",
             dataType: "boolean"
         },
         video: {
@@ -620,7 +621,7 @@ const localeCollection: EntityCollectionView<typeof localeSchema> =
     buildCollection({
         name: "Locales",
         relativePath: "locales",
-        deleteEnabled: false,
+        deleteEnabled: true,
         schema: localeSchema,
         defaultSize: "l"
     })
@@ -680,6 +681,18 @@ const myAuthenticator: Authenticator = (user?: User) => {
     return true;
 };
 
+const githubLink = (
+    <Tooltip title="See this project on GitHub. This button is only present in this demo">
+        <IconButton
+            href={"https://github.com/Camberi/firecms"}
+            rel="noopener noreferrer"
+            target="_blank"
+            component={"a"}>
+            <GitHubIcon/>
+        </IconButton>
+    </Tooltip>
+);
+
 ReactDOM.render(
     <CMSApp
         name={"My Online Shop"}
@@ -688,6 +701,7 @@ ReactDOM.render(
         logo={logo}
         navigation={navigation}
         firebaseConfig={firebaseConfig}
+        toolbarExtraWidget={githubLink}
     />,
     document.getElementById("root")
 );

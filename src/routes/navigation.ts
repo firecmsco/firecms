@@ -16,14 +16,6 @@ export function getEntityPathFrom(fullPath: string) {
     return `${DATA_PATH}/${fullPath}`;
 }
 
-export function getEntityEditPathFrom(fullPath: string) {
-    return `${DATA_PATH}/${fullPath}/edit`;
-}
-
-export function getEntityEditPath(entityId: string, basePath: string) {
-    return getEntityEditPathFrom(`${basePath}/${entityId}`);
-}
-
 export function getRouterNewEntityPath(basePath: string) {
     return `${DATA_PATH}/${removeInitialSlash(basePath)}/new`;
 }

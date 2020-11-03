@@ -35,6 +35,7 @@ import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { useSnackbarContext } from "../../snackbar_controller";
 import ErrorBoundary from "../../components/ErrorBoundary";
+import { PreviewSize } from "../../preview/PreviewComponentProps";
 
 export const useStyles = makeStyles(theme => ({
     dropZone: {
@@ -61,6 +62,11 @@ export const useStyles = makeStyles(theme => ({
         padding: theme.spacing(1),
         minWidth: 220,
         minHeight: 220
+    },
+    uploadItemSmall: {
+        padding: theme.spacing(1),
+        minWidth: 118,
+        minHeight: 118
     }
 }));
 
@@ -77,6 +83,7 @@ interface StorageFieldItem {
     storagePathOrDownloadUrl?: string;
     file?: File;
     metadata?: storage.UploadMetadata,
+    size: PreviewSize
 }
 
 export default function StorageUploadField({
@@ -170,13 +177,16 @@ export function StorageUpload({
 
     const classes = useStyles();
 
+    const size = multipleFilesSupported ? "small" : "regular";
+
     const internalInitialValue: StorageFieldItem[] =
         (multipleFilesSupported ?
             value as string[]
             : [value as string]).map(entry => (
             {
                 storagePathOrDownloadUrl: entry,
-                metadata: metadata
+                metadata: metadata,
+                size: size
             }
         ));
 
@@ -201,12 +211,18 @@ export function StorageUpload({
 
         let newInternalValue: StorageFieldItem[];
         if (multipleFilesSupported) {
-            newInternalValue = [...internalValue, ...acceptedFiles.map(file => ({
-                file,
-                metadata
-            }))];
+            newInternalValue = [...internalValue,
+                ...(acceptedFiles.map(file => ({
+                    file,
+                    metadata,
+                    size: size
+                } as StorageFieldItem)))];
         } else {
-            newInternalValue = [{ file: acceptedFiles[0], metadata }];
+            newInternalValue = [{
+                file: acceptedFiles[0],
+                metadata,
+                size: size
+            }];
         }
 
         // Remove either storage path or file duplicates
@@ -219,7 +235,7 @@ export function StorageUpload({
                                         file: File,
                                         metadata?: storage.UploadMetadata) => {
 
-        console.log("onFileUploadComplete", uploadedPath, file);
+        console.debug("onFileUploadComplete", uploadedPath, file);
 
         let downloadUrl: string | undefined;
         if (storageMeta.storeUrl) {
@@ -237,7 +253,8 @@ export function StorageUpload({
             item = {
                 storagePathOrDownloadUrl: storageMeta.storeUrl ? downloadUrl : uploadedPath,
                 file: file,
-                metadata: metadata
+                metadata: metadata,
+                size: size
             };
             if (multipleFilesSupported)
                 newValue = [...internalValue, item];
@@ -308,7 +325,7 @@ export function StorageUpload({
                      justifyContent="center"
                      minHeight={250}>
 
-                    {internalValue.map((entry,index) => {
+                    {internalValue.map((entry, index) => {
                         if (entry.storagePathOrDownloadUrl) {
                             const renderProperty = multipleFilesSupported
                                 ? (property as ArrayProperty<string>).of as Property
@@ -320,7 +337,8 @@ export function StorageUpload({
                                     property={renderProperty}
                                     value={entry.storagePathOrDownloadUrl}
                                     onClear={onClear}
-                                    entitySchema={entitySchema}/>
+                                    entitySchema={entitySchema}
+                                    size={entry.size}/>
                             );
                         } else if (entry.file) {
                             return (
@@ -330,6 +348,7 @@ export function StorageUpload({
                                     metadata={metadata}
                                     storagePath={storageMeta.storagePath}
                                     onFileUploadComplete={onFileUploadComplete}
+                                    size={size}
                                 />
                             );
                         }
@@ -364,13 +383,15 @@ interface StorageUploadItemProps {
     onFileUploadComplete: (value: string,
                            file: File,
                            metadata?: storage.UploadMetadata) => void;
+    size: PreviewSize;
 }
 
 export function StorageUploadProgress({
                                           storagePath,
                                           file,
                                           metadata,
-                                          onFileUploadComplete
+                                          onFileUploadComplete,
+                                          size
                                       }: StorageUploadItemProps) {
 
     const classes = useStyles();
@@ -423,7 +444,7 @@ export function StorageUploadProgress({
 
         <Box m={1}>
             <Paper elevation={0}
-                   className={classes.uploadItem}
+                   className={size === "regular" ? classes.uploadItem : classes.uploadItemSmall}
                    variant={"outlined"}>
 
                 {progress > -1 &&
@@ -435,7 +456,8 @@ export function StorageUploadProgress({
             </Paper>
         </Box>
 
-    );
+    )
+        ;
 
 }
 
@@ -445,6 +467,7 @@ interface StorageItemPreviewProps {
     value: string,
     onClear: (value: string) => void;
     entitySchema: EntitySchema;
+    size: PreviewSize;
 }
 
 export function StorageItemPreview({
@@ -452,7 +475,8 @@ export function StorageItemPreview({
                                        property,
                                        value,
                                        onClear,
-                                       entitySchema
+                                       entitySchema,
+                                       size
                                    }: StorageItemPreviewProps) {
 
     const classes = useStyles();
@@ -461,7 +485,7 @@ export function StorageItemPreview({
 
             <Paper
                 elevation={0}
-                className={classes.uploadItem}
+                className={size === "regular" ? classes.uploadItem : classes.uploadItemSmall}
                 variant={"outlined"}>
 
                 <Box position={"absolute"}
@@ -483,7 +507,7 @@ export function StorageItemPreview({
                     <PreviewComponent name={name}
                                       value={value}
                                       property={property}
-                                      size={"regular"}
+                                      size={size}
                                       entitySchema={entitySchema}/>
                 </ErrorBoundary>
                 }

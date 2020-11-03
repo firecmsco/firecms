@@ -16,9 +16,9 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
-import { useSelectedEntityContext } from "../selected_entity_controller";
+import { useSelectedEntityContext } from "../SelectedEntityContext";
 import { CollectionTable } from "../collection/CollectionTable";
-import { getEntityEditPathFrom, removeInitialSlash } from "../routes";
+import { getEntityPathFrom, removeInitialSlash } from "../routes";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -81,9 +81,7 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
                                         subcollections?: EntityCollectionView<any>[]) {
         selectedEntityContext.open({
             entityId: clickedEntity.id,
-            collectionPath,
-            schema: clickedSchema,
-            subcollections
+            collectionPath
         });
     }
 
@@ -100,9 +98,9 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
             </IconButton>
 
             {entity &&
-            <IconButton onClick={() => close()}
+            <IconButton
                         component={ReactLink}
-                        to={getEntityEditPathFrom(entity.reference.path)}>
+                        to={getEntityPathFrom(entity.reference.path)}>
                 <EditIcon/>
             </IconButton>
             }

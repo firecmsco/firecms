@@ -10,24 +10,63 @@ import {
 import { listenEntity, saveEntity } from "../firebase";
 import {
     Box,
+    Button,
     createStyles,
     Grid,
+    IconButton,
     makeStyles,
+    Paper,
+    Tab,
+    Tabs,
     Theme,
     Typography
 } from "@material-ui/core";
-import { BreadcrumbEntry, getEntityEditPath } from "./navigation";
+import {
+    BreadcrumbEntry,
+    getEntityPath,
+    getRouterNewEntityPath,
+    removeInitialSlash
+} from "./navigation";
 import { CircularProgressCenter } from "../components";
-import SubCollectionsView from "../collection/SubCollectionsView";
-import { useSelectedEntityContext } from "../selected_entity_controller";
-import { useBreadcrumbsContext } from "../breadcrumbs_controller";
+import { useSelectedEntityContext } from "../SelectedEntityContext";
+import { useBreadcrumbsContext } from "../BreacrumbsContext";
 import { useSnackbarContext } from "../snackbar_controller";
-import { Prompt, useHistory, useParams, useRouteMatch } from "react-router-dom";
+import {
+    Link as ReactLink,
+    Prompt,
+    useHistory,
+    useParams,
+    useRouteMatch
+} from "react-router-dom";
+import CloseIcon from "@material-ui/icons/Close";
+import OpenInBrowserIcon from "@material-ui/icons/OpenInBrowser";
+import { CollectionTable } from "../collection/CollectionTable";
 
-const useStyles = makeStyles((theme: Theme) =>
+
+const useStylesSide = makeStyles((theme: Theme) =>
     createStyles({
-        content: {
-            padding: theme.spacing(5),
+        root: {
+            height: "100%",
+            display: "flex",
+            flexDirection: "column"
+        },
+        container: {
+            flexGrow: 1,
+            height: "100%",
+            overflow: "auto"
+        },
+        tabBar: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+            paddingTop: theme.spacing(1),
+            [theme.breakpoints.down("sm")]: {
+                paddingLeft: theme.spacing(1),
+                paddingRight: theme.spacing(1),
+                paddingTop: theme.spacing(0)
+            }
+        },
+        form: {
+            padding: theme.spacing(3),
             [theme.breakpoints.down("sm")]: {
                 paddingLeft: theme.spacing(2),
                 paddingRight: theme.spacing(2),
@@ -41,6 +80,46 @@ const useStyles = makeStyles((theme: Theme) =>
                 paddingBottom: theme.spacing(1)
             }
         },
+        header: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+            paddingTop: theme.spacing(2),
+            display: "flex",
+            alignItems: "center",
+            backgroundColor: theme.palette.common.white
+        }
+
+    })
+);
+
+const useStylesMain = makeStyles((theme: Theme) =>
+    createStyles({
+        content: {
+            padding: theme.spacing(3),
+            [theme.breakpoints.down("sm")]: {
+                paddingLeft: theme.spacing(2),
+                paddingRight: theme.spacing(2),
+                paddingTop: theme.spacing(3),
+                paddingBottom: theme.spacing(3)
+            },
+            [theme.breakpoints.down("xs")]: {
+                paddingLeft: theme.spacing(0),
+                paddingRight: theme.spacing(0),
+                paddingTop: theme.spacing(2),
+                paddingBottom: theme.spacing(1)
+            }
+        },
+        formPaper: {
+            marginTop: theme.spacing(2),
+            marginBottom: theme.spacing(2),
+            padding: theme.spacing(4),
+            [theme.breakpoints.down("md")]: {
+                padding: theme.spacing(2)
+            },
+            [theme.breakpoints.down("xs")]: {
+                padding: theme.spacing(1)
+            }
+        },
         title: {
             paddingTop: theme.spacing(2),
             paddingBottom: theme.spacing(3),
@@ -51,20 +130,31 @@ const useStyles = makeStyles((theme: Theme) =>
             [theme.breakpoints.down("xs")]: {
                 padding: theme.spacing(1)
             }
+        },
+        subcollections: {
+            height: "calc(100vh - 148px)"
         }
+
     })
 );
+
+/**
+ * Is this form displayed as the main route or in the lateral menu
+ */
+type FormContext = "main" | "side";
 
 interface EntityRouteProps<S extends EntitySchema> {
     view: EntityCollectionView<S>;
     collectionPath: string;
-    breadcrumbs: BreadcrumbEntry[];
+    breadcrumbs?: BreadcrumbEntry[];
+    context: FormContext;
 }
 
 export function EntityFormRoute<S extends EntitySchema>({
                                                             view,
                                                             collectionPath,
-                                                            breadcrumbs
+                                                            breadcrumbs,
+                                                            context
                                                         }: EntityRouteProps<S>) {
 
     const entityId: string = useParams()["entityId"];
@@ -72,18 +162,22 @@ export function EntityFormRoute<S extends EntitySchema>({
     const { path, url } = useRouteMatch();
     const history = useHistory();
 
-    const classes = useStyles();
+    const sideClasses = useStylesSide();
+    const mainClasses = useStylesMain();
+
     const snackbarContext = useSnackbarContext();
     const breadcrumbsContext = useBreadcrumbsContext();
     useEffect(() => {
-        breadcrumbsContext.set({
-            breadcrumbs: breadcrumbs
-        });
+        if (breadcrumbs)
+            breadcrumbsContext.set({
+                breadcrumbs: breadcrumbs
+            });
     }, [url]);
 
     const [entity, setEntity] = useState<Entity<S>>();
     const [status, setStatus] = useState<EntityStatus | undefined>();
     const [loading, setLoading] = useState<boolean>(true);
+    const [tabsPosition, setTabsPosition] = React.useState(0);
 
     // have the original values of the form changed
     const [isModified, setModified] = useState(false);
@@ -114,14 +208,6 @@ export function EntityFormRoute<S extends EntitySchema>({
     }, [entityId, view]);
 
 
-    function onSubcollectionEntityEdit(collectionPath: string,
-                                       entity: Entity<S>,
-                                       schema: S,
-                                       subcollections?: EntityCollectionView<any>[]) {
-        const entityPath = getEntityEditPath(entity.id, collectionPath);
-        history.push(entityPath);
-    }
-
     function onSubcollectionEntityClick(collectionPath: string,
                                         entity: Entity<S>,
                                         schema: S,
@@ -129,9 +215,7 @@ export function EntityFormRoute<S extends EntitySchema>({
 
         selectedEntityContext.open({
             entityId: entity.id,
-            collectionPath,
-            schema,
-            subcollections
+            collectionPath
         });
     }
 
@@ -169,14 +253,21 @@ export function EntityFormRoute<S extends EntitySchema>({
 
                 snackbarContext.open({
                     type: "success",
-                    message: "The item has been saved correctly"
+                    message: `${schema.name}: Saved correctly`
                 });
 
                 if (status === EntityStatus.new) {
                     setLoading(true);
                     setEntity(undefined);
                     setStatus(undefined);
-                    history.replace(getEntityEditPath(id, collectionPath));
+                    if (context === "main")
+                        history.replace(getEntityPath(id, collectionPath));
+                    else if (context === "side")
+                        selectedEntityContext.replace({
+                            entityId: id,
+                            collectionPath
+                        });
+                    else throw Error("Missing mapping for entity context when saving");
                 }
 
                 if (schema.onSaveSuccess) {
@@ -191,7 +282,7 @@ export function EntityFormRoute<S extends EntitySchema>({
                     } catch (e) {
                         snackbarContext.open({
                             type: "error",
-                            title: "Error after saving (entity is saved)",
+                            title: `${schema.name}: Error after saving (entity is saved)`,
                             message: e?.message
                         });
                     }
@@ -213,7 +304,7 @@ export function EntityFormRoute<S extends EntitySchema>({
 
                 snackbarContext.open({
                     type: "error",
-                    title: "Error saving",
+                    title: `${schema.name}: Error saving`,
                     message: e?.message
                 });
 
@@ -223,7 +314,6 @@ export function EntityFormRoute<S extends EntitySchema>({
     }
 
     function onDiscard() {
-        console.log("onDiscard");
         history.goBack();
     }
 
@@ -238,35 +328,180 @@ export function EntityFormRoute<S extends EntitySchema>({
         onModified={setModified}
         entity={entity}/>;
 
-    const subCollectionsView = view.subcollections && <SubCollectionsView
-        parentCollectionPath={collectionPath}
-        subcollections={view.subcollections}
-        entity={entity}
-        onEntityEdit={onSubcollectionEntityEdit}
-        onEntityClick={onSubcollectionEntityClick}/>;
+    const subCollectionsView = view.subcollections && view.subcollections.map(
+        (subcollectionView, colIndex) => {
 
-    const mainBodyWide = (
-        <Box className={classes.content}>
+            const collectionPath = entity ? `${entity?.reference.path}/${removeInitialSlash(subcollectionView.relativePath)}` : undefined;
 
-            <Typography variant="h5" className={classes.title}>
-                {existingEntity ? "Edit" : `Add New`} {view.schema.name}
-            </Typography>
-
-            <Grid container spacing={3}>
-                <Grid item xs={12}
-                    // lg={view.subcollections ? 5 : 12}
-                >
-                    {form}
-                </Grid>
-
-                {view.subcollections &&
-                <Grid item xs={12}
-                    // lg={7}
-                >
-                    {subCollectionsView}
-                </Grid>
+            return <Box
+                key={`entity_detail_tab_content_${subcollectionView.name}`}
+                role="tabpanel"
+                flexGrow={1}
+                height={"100%"}
+                width={"100%"}
+                hidden={tabsPosition !== colIndex + (context === "side" ? 1 : 0)}>
+                {entity && collectionPath ?
+                    <CollectionTable
+                        collectionPath={collectionPath}
+                        schema={subcollectionView.schema}
+                        additionalColumns={subcollectionView.additionalColumns}
+                        editEnabled={true}
+                        onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
+                            onSubcollectionEntityClick(collectionPath, clickedEntity, subcollectionView.schema, subcollectionView.subcollections)}
+                        includeToolbar={true}
+                        paginationEnabled={false}
+                        defaultSize={subcollectionView.defaultSize}
+                        title={
+                            <Typography variant={"caption"}
+                                        color={"textSecondary"}>
+                                {`/${collectionPath}`}
+                            </Typography>}
+                        actions={
+                            <Button
+                                component={ReactLink}
+                                to={getRouterNewEntityPath(collectionPath)}
+                                size="medium"
+                                variant="outlined"
+                                color="primary"
+                            >
+                                Add {subcollectionView.schema.name}
+                            </Button>
+                        }
+                    />
+                    :
+                    <Box m={3}
+                         display={"flex"}
+                         alignItems={"center"}
+                         justifyContent={"center"}>
+                        <Box>
+                            You need to save your entity before
+                            adding
+                            additional collections
+                        </Box>
+                    </Box>
                 }
-            </Grid>
+            </Box>;
+        }
+    );
+
+    function buildMainView() {
+
+        return (
+            <Box className={mainClasses.content}>
+
+                <Typography variant="h5" className={mainClasses.title}>
+                    {existingEntity ? "Edit" : `Add New`} {view.schema.name}
+                </Typography>
+
+                <Grid container spacing={3}>
+                    <Grid item xs={12}
+                        // lg={view.subcollections ? 5 : 12}
+                    >
+                        <Paper
+                            className={mainClasses.formPaper}>
+                            {form}
+                        </Paper>
+                    </Grid>
+
+                    {view.subcollections &&
+                    <Grid item xs={12}
+                        // lg={7}
+                    >
+                        <Paper
+                            style={{ height: "100%" }}>
+
+                            <Tabs value={tabsPosition}
+                                  variant="scrollable"
+                                  scrollButtons="auto"
+                                  indicatorColor="secondary"
+                                  textColor="inherit"
+                                  onChange={(ev, value) => setTabsPosition(value)}>
+                                {view.subcollections && view.subcollections.map(
+                                    (subcollection) =>
+                                        <Tab
+                                            key={`entity_detail_tab_${subcollection.name}`}
+                                            label={subcollection.name}/>
+                                )}
+                            </Tabs>
+                            <Box
+                                className={mainClasses.subcollections}>
+                                {subCollectionsView}
+                            </Box>
+                        </Paper>
+                    </Grid>
+                    }
+                </Grid>
+
+            </Box>);
+    }
+
+    function buildSideView() {
+
+        return (
+            <Box className={sideClasses.root}>
+
+                <Paper elevation={0} variant={"outlined"}>
+                    <Box
+                        className={sideClasses.header}>
+
+                        <IconButton
+                            onClick={(e) => selectedEntityContext.close()}>
+                            <CloseIcon/>
+                        </IconButton>
+
+                        {entity &&
+                        <IconButton component={ReactLink}
+                                    to={getEntityPath(entityId, collectionPath)}>
+                            <OpenInBrowserIcon/>
+                        </IconButton>
+                        }
+
+                        <Tabs
+                            value={tabsPosition}
+                            indicatorColor="secondary"
+                            textColor="inherit"
+                            onChange={(ev, value) => setTabsPosition(value)}
+                            className={sideClasses.tabBar}
+                            variant="scrollable"
+                            scrollButtons="auto"
+                        >
+                            <Tab
+                                label={`${existingEntity ? "Edit" : `Add New`} ${view.schema.name}`
+                                }/>
+
+                            {view.subcollections && view.subcollections.map(
+                                (subcollection) =>
+                                    <Tab
+                                        key={`entity_detail_tab_${subcollection.name}`}
+                                        label={subcollection.name}/>
+                            )}
+                        </Tabs>
+                    </Box>
+
+                </Paper>
+
+                <div className={sideClasses.container}>
+                    <Box
+                        role="tabpanel"
+                        hidden={tabsPosition !== 0}
+                        className={sideClasses.form}>
+                        {form}
+                    </Box>
+
+                    {subCollectionsView}
+                </div>
+
+            </Box>);
+    }
+
+
+    return loading ?
+        <CircularProgressCenter/>
+        :
+        <React.Fragment>
+
+            {context === "side" && buildSideView()}
+            {context === "main" && buildMainView()}
 
             <Prompt
                 when={isModified}
@@ -274,11 +509,5 @@ export function EntityFormRoute<S extends EntitySchema>({
                     `You have unsaved changes in this ${view.schema.name}. Are you sure you want to leave this page?`
                 }
             />
-
-        </Box>);
-
-    return loading ?
-        <CircularProgressCenter/>
-        :
-        mainBodyWide;
+        </React.Fragment>;
 }

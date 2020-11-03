@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "0.14.3",
+    "version": "0.15.0",
     "description": "Awesome Firestore based CMS",
     "author": "camberi",
     "license": "GPL-3.0",
@@ -27,7 +27,7 @@
         "build": "microbundle-crl --no-compress --format modern,cjs",
         "start": "microbundle-crl watch --no-compress --format modern,cjs",
         "prepublishOnly": "run-s build",
-        "createTag" : "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags",
+        "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags",
         "test": "run-s test:unit test:lint test:build",
         "test:build": "run-s build",
         "test:lint": "eslint .",
@@ -53,6 +53,7 @@
         "react-select": ">=3",
         "typeface-roboto": "^0.0.75",
         "typeface-rubik": "^0.0.72",
+        "use-clipboard-hook": "^1.1.1",
         "yup": "^0.29.3"
     },
     "peerDependencies": {
