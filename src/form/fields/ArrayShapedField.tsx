@@ -50,11 +50,15 @@ export default function ArrayShapedField<T>({
                                 return <Grid item
                                              xs={12}
                                              key={`array-shape-${field.name}-${index}`}>
-                                    {createFormField(`${field.name}[${index}]`,
-                                        childProperty,
-                                        includeDescription,
-                                        underlyingValueHasChanged,
-                                        entitySchema)}
+                                    {createFormField(
+                                        {
+                                            name:`${field.name}[${index}]`,
+                                            property:childProperty,
+                                            includeDescription,
+                                            underlyingValueHasChanged,
+                                            entitySchema,
+                                            partOfArray: false
+                                        })}
                                 </Grid>;
                             }
                         )}

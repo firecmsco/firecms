@@ -1,23 +1,27 @@
 import { EntitySchema, Property } from "../models";
 import { ReactElement } from "react";
 import { FieldProps as FormikFieldProps } from "formik/dist/Field";
+import { FormFieldProps } from "./index";
 
 interface BaseCMSFieldProps<T> extends FormikFieldProps<T> {
     name: string,
     property: Property<T>,
     includeDescription: boolean,
-    createFormField: (name: string,
-                      property: Property,
-                      includeDescription: boolean,
-                      underlyingValueHasChanged: boolean,
-                      entitySchema: EntitySchema) => ReactElement,
+    createFormField: ({
+                          name,
+                          property,
+                          includeDescription,
+                          underlyingValueHasChanged,
+                          entitySchema
+                      }: FormFieldProps) => ReactElement,
     underlyingValueHasChanged: boolean;
     /**
      * Full schema of the entity
      */
     entitySchema: EntitySchema,
 
-    [key: string]: any
+    partOfArray: boolean,
+
 }
 
 export type CMSFieldProps<T> = any & BaseCMSFieldProps<T>;

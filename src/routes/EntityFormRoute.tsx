@@ -286,8 +286,9 @@ export function EntityFormRoute<S extends EntitySchema>({
                             message: e?.message
                         });
                     }
-                    history.goBack();
                 }
+
+                history.goBack();
 
             })
             .catch((e) => {

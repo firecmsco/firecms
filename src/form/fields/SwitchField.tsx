@@ -36,7 +36,6 @@ export default React.forwardRef(function SwitchField({
                                                          form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                                          property,
                                                          includeDescription,
-                                                         createFormField,
                                                      }: SwitchFieldProps, ref) {
 
     const classes = useStyles();

@@ -1,4 +1,9 @@
-import { Entity, EntitySchema, FilterValues } from "../../models";
+import {
+    Entity,
+    EntitySchema,
+    FilterValues,
+    ReferenceProperty
+} from "../../models";
 import { getIn } from "formik";
 import {
     Box,
@@ -60,7 +65,8 @@ export default function ReferenceField<S extends EntitySchema>({
                                                                    form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                                                    property,
                                                                    includeDescription,
-                                                                   entitySchema
+                                                                   entitySchema,
+                                                                   partOfArray
                                                                }: ReferenceFieldProps<S>) {
 
 
@@ -81,20 +87,18 @@ export default function ReferenceField<S extends EntitySchema>({
     return (
         <FormControl error={showError} fullWidth>
 
-            <FormHelperText filled
-                            required={property.validation?.required}>
-                <LabelWithIcon scaledIcon={true} property={property}/>
-            </FormHelperText>
-
             <Box className={`${classes.root}`}>
+
                 <ReferenceDialog value={value}
                                  title={title}
+                                 property={property}
                                  collectionPath={property.collectionPath}
                                  schema={property.schema === "self" ? entitySchema : property.schema}
                                  initialFilter={property.filter}
                                  previewProperties={property.previewProperties}
                                  textSearchDelegate={property.textSearchDelegate}
                                  onEntityClick={handleEntityClick}
+                                 partOfArray={partOfArray}
                                  entitySchema={entitySchema}/>
 
             </Box>
@@ -115,6 +119,8 @@ export interface ReferenceDialogProps<S extends EntitySchema<Key>, Key extends s
     value?: any;
 
     title?: string,
+
+    property: ReferenceProperty;
 
     /**
      * Absolute collection path
@@ -138,6 +144,8 @@ export interface ReferenceDialogProps<S extends EntitySchema<Key>, Key extends s
     onEntityClick(entity?: Entity<S>): void;
 
     entitySchema: EntitySchema;
+
+    partOfArray:boolean
 }
 
 
@@ -146,12 +154,14 @@ export function ReferenceDialog<S extends EntitySchema>(
         onEntityClick,
         value,
         title,
+        property,
         schema,
         initialFilter,
         previewProperties,
         textSearchDelegate,
         collectionPath,
-        entitySchema
+        entitySchema,
+        partOfArray
     }: ReferenceDialogProps<S>) {
 
     const classes = useStyles();
@@ -233,23 +243,25 @@ export function ReferenceDialog<S extends EntitySchema>(
                      flexDirection={"column"}
                      flexGrow={1}
                      m={1}>
+
                     {listProperties && listProperties.map((key, index) => {
-                        const property = schema.properties[key as string];
+                        const propertyKey = schema.properties[key as string];
                         return (
                             <Box key={"ref_prev_" + key + index}
-                                 m={1}>
+                                 mt={0.5}
+                                 mb={0.5}>
                                 <ErrorBoundary>{
                                     entity ?
                                         React.createElement(PreviewComponent, {
                                             name: key as string,
                                             value: entity.values[key as string],
-                                            property: property,
+                                            property: propertyKey,
                                             size: "tiny",
                                             entitySchema: entitySchema
                                         })
                                         :
                                         <SkeletonComponent
-                                            property={property}
+                                            property={propertyKey}
                                             size={"tiny"}/>}
                                 </ErrorBoundary>
                             </Box>
@@ -263,7 +275,21 @@ export function ReferenceDialog<S extends EntitySchema>(
             <Box onClick={handleClickOpen}
                  display="flex">
 
-                {body}
+                <Box display={"flex"}
+                     flexDirection={"column"}
+                     flexGrow={1}>
+
+                    <Tooltip title={value.path}>
+                        <FormHelperText filled
+                                        required={property.validation?.required}>
+                            <LabelWithIcon scaledIcon={true}
+                                           property={property}/>
+                        </FormHelperText>
+                    </Tooltip>
+
+                    {body}
+
+                </Box>
 
                 {!missingEntity && <Box>
                     <Tooltip title="See details">
@@ -274,14 +300,14 @@ export function ReferenceDialog<S extends EntitySchema>(
                     </Tooltip>
                 </Box>}
 
-                <Box>
+                {!partOfArray && <Box>
                     <Tooltip title="Clear">
                         <IconButton
                             onClick={clearValue}>
                             <ClearIcon/>
                         </IconButton>
                     </Tooltip>
-                </Box>
+                </Box>}
             </Box>
         );
     }
@@ -292,7 +318,7 @@ export function ReferenceDialog<S extends EntitySchema>(
             {value && buildEntityView()}
 
             {!value &&
-            <Box p={2}
+            <Box p={1}
                  onClick={handleClickOpen}
                  justifyContent="center"
                  display="flex">

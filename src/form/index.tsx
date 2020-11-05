@@ -11,7 +11,7 @@ import {
     Tooltip
 } from "@material-ui/core";
 import { Entity, EntitySchema, EntityStatus, Property } from "../models";
-import { ErrorMessage, Field, FieldProps } from "formik";
+import { ErrorMessage, FastField, FieldProps } from "formik";
 
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import Select from "./fields/Select";
@@ -31,54 +31,26 @@ import { FirebaseConfigContext } from "../contexts";
 import { useClipboard } from "use-clipboard-hook";
 import { useSnackbarContext } from "../snackbar_controller";
 
-function buildField<P extends Property<T>, T = any>(name: string,
-                                                    property: P,
-                                                    includeDescription: boolean,
-                                                    component: React.ComponentType<CMSFieldProps<T>>,
-                                                    underlyingValueHasChanged: boolean,
-                                                    entitySchema: EntitySchema
-) {
-
-    const additionalFieldProps: any = property.config?.fieldProps;
-
-    return (
-        <Field
-            required={property.validation?.required}
-            name={`${name}`}
-        >
-            {(fieldProps: FieldProps<T>) => (
-                <React.Fragment>
-
-                    {React.createElement(component, {
-                        ...fieldProps,
-                        ...additionalFieldProps,
-                        name: fieldProps.field.name,
-                        includeDescription,
-                        property,
-                        createFormField,
-                        underlyingValueHasChanged,
-                        entitySchema
-                    })}
-
-                    {underlyingValueHasChanged && !fieldProps.form.isSubmitting &&
-                    <FormHelperText>
-                        This value has been updated in Firestore
-                    </FormHelperText>}
-
-                </React.Fragment>)
-            }
-
-        </Field>);
+export interface FormFieldProps {
+    name: string,
+    property: Property,
+    includeDescription: boolean,
+    underlyingValueHasChanged: boolean,
+    entitySchema: EntitySchema,
+    partOfArray: boolean,
 }
 
-export function createFormField<T>(name: string,
-                                   property: Property,
-                                   includeDescription: boolean,
-                                   underlyingValueHasChanged: boolean,
-                                   entitySchema: EntitySchema): JSX.Element {
+export function createFormField<T>({
+                                       name,
+                                       property,
+                                       includeDescription,
+                                       underlyingValueHasChanged,
+                                       entitySchema,
+                                       partOfArray
+                                   }: FormFieldProps): JSX.Element {
 
     if (property.disabled) {
-        return buildField(name, property, includeDescription, DisabledField, underlyingValueHasChanged, entitySchema);
+        return buildFieldInternal(name, property, includeDescription, DisabledField, underlyingValueHasChanged, entitySchema, partOfArray);
     }
 
     let component: React.ComponentType<CMSFieldProps<T>> | undefined;
@@ -122,11 +94,53 @@ export function createFormField<T>(name: string,
         }
     }
     if (component)
-        return buildField(name, property, includeDescription, component, underlyingValueHasChanged, entitySchema);
+        return buildFieldInternal(name, property, includeDescription, component, underlyingValueHasChanged, entitySchema, partOfArray);
 
     return (
         <div>{`Currently the field ${property.dataType} is not supported`}</div>
     );
+}
+
+function buildFieldInternal<P extends Property<T>, T = any>(name: string,
+                                                      property: P,
+                                                      includeDescription: boolean,
+                                                      component: React.ComponentType<CMSFieldProps<T>>,
+                                                      underlyingValueHasChanged: boolean,
+                                                      entitySchema: EntitySchema,
+                                                      partOfArray:boolean
+) {
+
+    const additionalFieldProps: any = property.config?.fieldProps;
+
+    return (
+        <FastField
+            required={property.validation?.required}
+            name={`${name}`}
+        >
+            {(fieldProps: FieldProps<T>) => (
+                <React.Fragment>
+
+                    {React.createElement(component, {
+                        ...fieldProps,
+                        ...additionalFieldProps,
+                        name: fieldProps.field.name,
+                        includeDescription,
+                        property,
+                        createFormField,
+                        underlyingValueHasChanged,
+                        entitySchema,
+                        partOfArray
+                    })}
+
+                    {underlyingValueHasChanged && !fieldProps.form.isSubmitting &&
+                    <FormHelperText>
+                        This value has been updated in Firestore
+                    </FormHelperText>}
+
+                </React.Fragment>)
+            }
+
+        </FastField>);
 }
 
 
@@ -137,11 +151,11 @@ export function createCustomIdField<S extends EntitySchema>(schema: EntitySchema
     const hasEnumValues = typeof schema.customId === "object";
 
     const snackbarContext = useSnackbarContext();
-    const {ref, copy, cut} = useClipboard({
-        onSuccess: (text) =>             snackbarContext.open({
+    const { ref, copy, cut } = useClipboard({
+        onSuccess: (text) => snackbarContext.open({
             type: "success",
             message: `Copied ${text}`
-        }),
+        })
     });
 
     const inputProps = entity ? {
@@ -182,7 +196,7 @@ export function createCustomIdField<S extends EntitySchema>(schema: EntitySchema
         name: "id",
         type: null,
         value: entity ? entity.id : undefined,
-        variant: "filled",
+        variant: "filled"
     };
     return (
         <FormControl fullWidth error={error}

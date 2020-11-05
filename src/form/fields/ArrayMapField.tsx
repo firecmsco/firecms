@@ -17,6 +17,7 @@ import { Add, Remove } from "@material-ui/icons";
 import { formStyles } from "../../styles";
 import { CMSFieldProps } from "../form_props";
 import { FieldDescription } from "../../components";
+import { FormFieldProps } from "../index";
 
 type ArrayMapFieldProps<T> = CMSFieldProps<T[]>;
 
@@ -68,11 +69,15 @@ export default function ArrayMapField<T>({
                                                 return (
                                                     <TableCell
                                                         key={`field_${arrayKey}`}>
-                                                        {createFormField(`${field.name}[${index}].${arrayKey}`,
-                                                            childProperty,
-                                                            includeDescription,
-                                                            underlyingValueHasChanged,
-                                                            entitySchema)}
+                                                        {createFormField(
+                                                            {
+                                                                name:`${field.name}[${index}].${arrayKey}`,
+                                                                property:childProperty,
+                                                                includeDescription,
+                                                                underlyingValueHasChanged,
+                                                                entitySchema,
+                                                                partOfArray: false
+                                                            })}
                                                     </TableCell>
                                                 );
                                             })}

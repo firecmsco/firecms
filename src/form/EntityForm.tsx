@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
-import { createCustomIdField, createFormField } from "./index";
+import { createCustomIdField, createFormField, FormFieldProps } from "./index";
 import { initEntityValues } from "../firebase/firestore";
 import { getYupObjectSchema } from "./validation";
 import deepEqual from "deep-equal";
@@ -87,6 +87,7 @@ export default function EntityForm<S extends EntitySchema>({
                                                                onDiscard,
                                                                onModified
                                                            }: EntityFormProps<S>) {
+
     const classes = useStyles();
 
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
@@ -229,7 +230,15 @@ export default function EntityForm<S extends EntitySchema>({
                                 && Object.keys(underlyingChanges).includes(key)
                                 && !!touched[key];
 
-                            const formField = createFormField(key, property, true, underlyingValueHasChanged, schema);
+                            const formField = createFormField(
+                                {
+                                    name : key,
+                                    property,
+                                    includeDescription:true ,
+                                    underlyingValueHasChanged,
+                                    entitySchema:schema,
+                                    partOfArray: false
+                                });
 
                             return <Grid item
                                          xs={12}

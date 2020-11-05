@@ -29,7 +29,6 @@ export default function TextField({
                                       property,
                                       includeDescription,
                                       allowInfinity,
-                                      createFormField,
                                       entitySchema,
                                   }: TextFieldProps) {
 

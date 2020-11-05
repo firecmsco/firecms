@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import {
     Box,
     Button,
@@ -47,6 +48,7 @@ import { AuthContext, AuthProvider } from "./auth";
 import { SnackbarProvider } from "./snackbar_controller";
 import { CMSRoute } from "./routes/CMSRoute";
 import EntityDetailDialog from "./routes/SideCMSRoute";
+import { DndProvider } from "react-dnd";
 
 const drawerWidth = 240;
 
@@ -335,17 +337,17 @@ export function CMSApp({
                                 <img className={classes.logo} src={logo}/>}
                             </Box>
 
-                                <Button variant="contained"
-                                        color="primary"
-                                        onClick={authContext.googleSignIn}>
-                                    Google login
-                                </Button>
+                            <Button variant="contained"
+                                    color="primary"
+                                    onClick={authContext.googleSignIn}>
+                                Google login
+                            </Button>
 
                             {skipLoginButtonEnabled &&
-                                <Box m={2}>
+                            <Box m={2}>
                                 <Button onClick={authContext.skipLogin}>Skip
                                     login</Button>
-                                </Box>
+                            </Box>
                             }
 
                             <Grid item xs={12}>
@@ -475,23 +477,27 @@ export function CMSApp({
                 return (
                     <ThemeProvider theme={theme}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            {firebaseConfigError ?
-                                <Box>
-                                    It seems like the provided Firebase config
-                                    is not correct. If you are using the
-                                    credentials provided automatically by
-                                    Firebase Hosting, make sure you link your
-                                    Firebase app to Firebase Hosting.
-                                </Box> :
-                                (
-                                    authContext.authLoading ? (
-                                        <CircularProgressCenter/>
-                                    ) : (!authenticationEnabled || authContext.loggedUser || authContext.loginSkipped) ? (
-                                        renderMainView()
-                                    ) : (
-                                        renderLoginView()
-                                    )
-                                )}
+                            <DndProvider backend={HTML5Backend}>
+                                {firebaseConfigError ?
+                                    <Box>
+                                        It seems like the provided Firebase
+                                        config
+                                        is not correct. If you are using the
+                                        credentials provided automatically by
+                                        Firebase Hosting, make sure you link
+                                        your
+                                        Firebase app to Firebase Hosting.
+                                    </Box> :
+                                    (
+                                        authContext.authLoading ? (
+                                            <CircularProgressCenter/>
+                                        ) : (!authenticationEnabled || authContext.loggedUser || authContext.loginSkipped) ? (
+                                            renderMainView()
+                                        ) : (
+                                            renderLoginView()
+                                        )
+                                    )}
+                            </DndProvider>
                         </MuiPickersUtilsProvider>
                     </ThemeProvider>
                 );
