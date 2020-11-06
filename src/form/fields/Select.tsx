@@ -48,6 +48,7 @@ export default function Select<T extends EnumType>({
                 variant={"filled"}
                 labelId={`${field.name}-select-label`}
                 value={!!value ? value : ""}
+                disabled={isSubmitting}
                 onChange={(evt: any) => {
                     const newValue = evt.target.value;
                     setFieldTouched(field.name);

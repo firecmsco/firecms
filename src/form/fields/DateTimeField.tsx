@@ -23,6 +23,7 @@ export default function DateTimeField({
 
     const value = field.value || null;
 
+    const disabled = property.disabled !== undefined ? property.disabled : isSubmitting || !!property.autoValue;
     return (
         <React.Fragment>
 
@@ -32,7 +33,7 @@ export default function DateTimeField({
                 value={value}
                 label={<LabelWithIcon scaledIcon={false} property={property}/>}
                 error={showError}
-                disabled={property.disabled !== undefined ? property.disabled : isSubmitting}
+                disabled={disabled}
                 helperText={showError ? fieldError : null}
                 onChange={(dateValue) => {
                     setFieldTouched(field.name);

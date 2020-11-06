@@ -114,7 +114,8 @@ export default function StorageUploadField({
                 <LabelWithIcon scaledIcon={true} property={property}/>
             </FormHelperText>
 
-            <StorageUpload value={value}
+            <StorageUpload
+                           value={value}
                            property={property}
                            onChange={(newValue) => {
                                setFieldTouched(field.name);
@@ -316,7 +317,8 @@ export function StorageUpload({
                  className={`${classes.dropZone} ${isDragActive ? classes.activeDrop : ""} ${isDragReject ? classes.rejectDrop : ""} ${isDragAccept ? classes.acceptDrop : ""}`}
             >
 
-                <input {...getInputProps()} />
+                <input
+                    {...getInputProps()} />
 
                 <Box display="flex"
                      flexDirection="row"

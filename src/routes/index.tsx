@@ -2,9 +2,7 @@ export {
     CollectionRoute
 } from "./CollectionRoute";
 
-export {
-    EntityFormRoute
-} from "./EntityFormRoute";
+export { default as EntityFormRoute } from "./EntityFormRoute";
 
 export {
     MediaRoute

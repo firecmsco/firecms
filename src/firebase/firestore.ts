@@ -2,6 +2,7 @@ import { firestore } from "firebase/app";
 import {
     Entity,
     EntitySchema,
+    EntityStatus,
     EntityValues,
     FilterValues,
     Properties,
@@ -192,10 +193,60 @@ export function createEntityFromSchema<S extends EntitySchema<Key, P>,
         : undefined;
     return {
         id: doc.id,
-        snapshot: doc,
         reference: doc.ref,
         values: data
     };
+}
+
+/**
+ * Save entity to the specified path. Note that Firestore does not allow
+ * undefined values.
+ * @param path
+ * @param entityId
+ * @param data
+ * @param schema
+ */
+export function saveEntity<S extends EntitySchema>(
+    path: string,
+    entityId: string | undefined,
+    data: EntityValues<S>,
+    schema: S,
+    status: EntityStatus
+): Promise<Entity<S>> {
+
+    const values = updateAutoValues(data, schema.properties, status);
+    console.debug("Saving entity", path, entityId, values);
+
+    let documentReference: firestore.DocumentReference<firestore.DocumentData>;
+    if (entityId)
+        documentReference = firestore()
+            .collection(path)
+            .doc(entityId);
+    else
+        documentReference = firestore()
+            .collection(path)
+            .doc();
+
+    const entity: Entity<S> = {
+        id: documentReference.id,
+        reference: documentReference,
+        values: values
+    };
+
+    return documentReference
+        .set(values, { merge: true })
+        .then(() => entity);
+}
+
+/**
+ * Delete an entity
+ * @param entity
+ */
+export function deleteEntity(
+    entity: Entity<any, any, any>
+): Promise<void> {
+    console.debug("Deleting entity", entity);
+    return entity.reference.delete();
 }
 
 /**
@@ -206,10 +257,73 @@ export function initEntityValues<S extends EntitySchema<Key, P>,
     Key extends string,
     P extends Properties<Key>>
 (schema: S): EntityValues<S> {
-    return Object.entries(schema.properties)
-        .filter(([_, property]) => (property as Property).validation?.required)
-        .map(([key, _]) => ({ [key]: undefined }))
-        .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<S>;
+    return initWithProperties(schema.properties, schema.defaultValues);
+}
+
+type PropertiesValues<P extends Properties, Key extends string = Extract<keyof P, string>> = {
+    [K in Key]: P[K] extends Property<infer T> ? T : any;
+};
+
+function initWithProperties<P extends Properties,
+    Key extends string = Extract<keyof P, string>>
+(properties: P, defaultValues?: Partial<PropertiesValues<P, Key>>): PropertiesValues<P, Key> {
+    return Object.entries(properties)
+        .map(([key, property]) => {
+            const propertyDefaultValue = defaultValues && key in defaultValues ? defaultValues[key] : null;
+            const value = initPropertyValue(key, property, propertyDefaultValue);
+            return ({ [key]: value });
+        })
+        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<P, Key>;
+}
+
+function initPropertyValue(key: string, property: Property, defaultValue: any) {
+    let value: any;
+    if (property.dataType === "map") {
+        value = initWithProperties(property.properties, defaultValue);
+    } else {
+        value = defaultValue;
+    }
+    return value;
+}
+
+function updateAutoValue(inputValue: any, property: Property,
+                         status: EntityStatus): any {
+
+    let value;
+    if (property.dataType === "map") {
+        value = updateAutoValues(inputValue, property.properties, status);
+    } else if (property.dataType === "array") {
+        if ("dataType" in property.of && Array.isArray(inputValue)) {
+            value = inputValue.map((e) => updateAutoValue(e, property.of as Property, status));
+        } else {
+            value = inputValue;
+        }
+
+    } else if (property.dataType === "timestamp") {
+        if (status == EntityStatus.existing && property.autoValue === "on_update") {
+            value = firestore.FieldValue.serverTimestamp();
+        } else if (status == EntityStatus.new && (property.autoValue === "on_update" || property.autoValue === "on_create")) {
+            value = firestore.FieldValue.serverTimestamp();
+        } else {
+            value = inputValue;
+        }
+    } else {
+        value = inputValue;
+    }
+
+    return value;
+}
+
+function updateAutoValues<P extends Properties, Key extends string = Extract<keyof P, string>>
+(inputValues: PropertiesValues<P, Key>, properties: P, status: EntityStatus): PropertiesValues<P, Key> {
+    return Object.entries(properties)
+        .map(([key, property]) => {
+            const inputValue = inputValues && inputValues[key];
+            const updatedValue = updateAutoValue(inputValue, property, status);
+            if (updatedValue === undefined) return {};
+            return ({ [key]: updatedValue });
+        })
+        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<P, Key>;
 }
 
 /**
@@ -222,44 +336,4 @@ export function initFilterValues<S extends EntitySchema<Key, P>, Key extends str
     return filterableProperties
         .map((key) => ({ [key]: undefined }))
         .reduce((a: any, b: any) => ({ ...a, ...b }), {});
-}
-
-/**
- * Save entity to the specified path. Note that Firestore does not allow
- * undefined values.
- * @param path
- * @param entityId
- * @param data
- */
-export function saveEntity(
-    path: string,
-    entityId: string | undefined,
-    data: { [fieldKey: string]: any }
-): Promise<string> {
-
-    console.debug("Saving entity", path, entityId, data);
-
-    let documentReference: firestore.DocumentReference<firestore.DocumentData>;
-    if (entityId)
-        documentReference = firestore()
-            .collection(path)
-            .doc(entityId);
-    else
-        documentReference = firestore()
-            .collection(path)
-            .doc();
-    return documentReference
-        .set(data, { merge: true })
-        .then(() => documentReference.id);
-}
-
-/**
- * Delete an entity
- * @param entity
- */
-export function deleteEntity(
-    entity: Entity<any, any, any>
-): Promise<void> {
-    console.debug("Deleting entity", entity);
-    return entity.reference.delete();
 }

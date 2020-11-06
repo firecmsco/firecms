@@ -23,7 +23,6 @@ import { firebaseConfig } from "./firebase_config";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { User } from "firebase/app";
 import CustomBooleanPreview from "./custom_preview/CustomBooleanPreview";
-import { Properties } from "../../src";
 import {
     blogSearchDelegate,
     productsSearchDelegate,
@@ -31,6 +30,7 @@ import {
 } from "./algolia_utils";
 import PriceTextPreview from "./custom_preview/PriceTextPreview";
 import { IconButton, Tooltip } from "@material-ui/core";
+import { Properties } from "../../src";
 
 const locales: EnumValues<string> = {
     "es": "Spanish",
@@ -173,7 +173,8 @@ const productSchema = buildSchema({
         added_on: {
             dataType: "timestamp",
             title: "Added on",
-            disabled: true
+            disabled: true,
+            serverTimestamp: "on_create"
         },
         images: {
             dataType: "array",
@@ -250,6 +251,12 @@ const productSchema = buildSchema({
             description: "This field gets updated with a preSave hook"
         }
 
+    },
+    defaultValues: {
+        currency: "EUR",
+        publisher: {
+            name: "Default publisher"
+        }
     }
 });
 
@@ -359,6 +366,10 @@ const blogSchema = buildSchema({
                 }
             }
         }
+    },
+    defaultValues: {
+        status: "draft",
+        tags: ["default tag"]
     }
 });
 
@@ -414,6 +425,76 @@ const usersSchema = buildSchema({
     }
 });
 
+
+const productAdditionalColumn: AdditionalColumnDelegate<typeof productSchema> = {
+    id: "spanish_title",
+    title: "Spanish title",
+    builder: (entity) =>
+        <AsyncPreviewComponent builder={
+            entity.reference.collection("locales")
+                .doc("es")
+                .get()
+                .then((snapshot: any) => snapshot.get("name") as string)
+        }/>
+};
+
+
+const localeSchema = buildSchema({
+    customId: locales,
+    name: "Locale",
+    properties: {
+        name: {
+            title: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        description: {
+            title: "Description",
+            validation: { required: true },
+            dataType: "string",
+            config: {
+                multiline: true
+            }
+        },
+        selectable: {
+            title: "Selectable",
+            description: "Is this locale selectable",
+            longDescription: "Changing this value triggers a cloud function that updates the parent product",
+            dataType: "boolean"
+        },
+        video: {
+            title: "Video",
+            dataType: "string",
+            validation: { required: false },
+            config: {
+                storageMeta: {
+                    mediaType: "video",
+                    storagePath: "videos",
+                    acceptedFiles: ["video/*"]
+                }
+            },
+            columnWidth: 400
+        }
+    }
+});
+
+productSchema.onPreSave = ({
+                               schema,
+                               collectionPath,
+                               id,
+                               values,
+                               status
+                           }: EntitySaveProps<typeof productSchema>) => {
+    values.uppercase_name = values.name.toUpperCase();
+    return values;
+};
+
+productSchema.onSaveSuccess = () => {
+    console.log("onSaveSuccess");
+};
+
+
+
 const formQuestions: string[] = ["birth_year",
     "living_situation",
     "electricity_monthly",
@@ -439,6 +520,16 @@ export const testEntitySchema = buildSchema({
             textSearchDelegate: productsSearchDelegate,
             previewProperties: ["name", "main_image"]
         },
+        created_at: {
+            title: "Created at",
+            dataType: "timestamp",
+            autoValue: "on_create"
+        },
+        updated_on: {
+            title: "Updated on",
+            dataType: "timestamp",
+            autoValue: "on_update"
+        },
         title: {
             title: "Title",
             validation: { required: true },
@@ -458,7 +549,10 @@ export const testEntitySchema = buildSchema({
         },
         difficulty: {
             title: "Difficulty",
-            dataType: "number"
+            dataType: "number",
+            validation:{
+                required:true
+            }
         },
         range: {
             title: "Range",
@@ -467,10 +561,6 @@ export const testEntitySchema = buildSchema({
                 max: 3
             },
             dataType: "number"
-        },
-        created_at: {
-            title: "Created at",
-            dataType: "timestamp"
         },
         image: {
             title: "Image",
@@ -550,73 +640,6 @@ export const testEntitySchema = buildSchema({
     }
 });
 
-const productAdditionalColumn: AdditionalColumnDelegate<typeof productSchema> = {
-    id: "spanish_title",
-    title: "Spanish title",
-    builder: (entity) =>
-        <AsyncPreviewComponent builder={
-            entity.reference.collection("locales")
-                .doc("es")
-                .get()
-                .then((snapshot: any) => snapshot.get("name") as string)
-        }/>
-};
-
-
-const localeSchema = buildSchema({
-    customId: locales,
-    name: "Locale",
-    properties: {
-        name: {
-            title: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        description: {
-            title: "Description",
-            validation: { required: true },
-            dataType: "string",
-            config: {
-                multiline: true
-            }
-        },
-        selectable: {
-            title: "Selectable",
-            description: "Is this locale selectable",
-            longDescription: "Changing this value triggers a cloud function that updates the parent product",
-            dataType: "boolean"
-        },
-        video: {
-            title: "Video",
-            dataType: "string",
-            validation: { required: false },
-            config: {
-                storageMeta: {
-                    mediaType: "video",
-                    storagePath: "videos",
-                    acceptedFiles: ["video/*"]
-                }
-            },
-            columnWidth: 400
-        }
-    }
-});
-
-productSchema.onPreSave = ({
-                               schema,
-                               collectionPath,
-                               id,
-                               values,
-                               status
-                           }: EntitySaveProps<typeof productSchema>) => {
-    values.uppercase_name = values.name.toUpperCase();
-    return values;
-};
-
-productSchema.onSaveSuccess = () => {
-    console.log("onSaveSuccess");
-};
-
 const localeCollection: EntityCollectionView<typeof localeSchema> =
     buildCollection({
         name: "Locales",
@@ -672,7 +695,13 @@ if (process.env.NODE_ENV !== "production") {
         relativePath: "test_entity",
         schema: testEntitySchema,
         name: "Test entity",
-        filterableProperties: ["difficulty", "search_adjacent", "description"]
+        filterableProperties: ["difficulty", "search_adjacent", "description"],
+        subcollections : [{
+            relativePath: "test_subcollection",
+            schema: testEntitySchema,
+            name: "Test entity",
+            filterableProperties: ["difficulty", "search_adjacent", "description"],
+        }]
     }));
 }
 
@@ -682,7 +711,8 @@ const myAuthenticator: Authenticator = (user?: User) => {
 };
 
 const githubLink = (
-    <Tooltip title="See this project on GitHub. This button is only present in this demo">
+    <Tooltip
+        title="See this project on GitHub. This button is only present in this demo">
         <IconButton
             href={"https://github.com/Camberi/firecms"}
             rel="noopener noreferrer"
@@ -711,3 +741,5 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 // serviceWorker.register();
 serviceWorker.unregister();
+
+

@@ -8,7 +8,7 @@ import {
     useParams,
     useRouteMatch
 } from "react-router-dom";
-import { EntityFormRoute } from "./EntityFormRoute";
+import  EntityFormRoute  from "./EntityFormRoute";
 import { CollectionRoute } from "./CollectionRoute";
 
 interface CMSRouteProps<S extends EntitySchema> {

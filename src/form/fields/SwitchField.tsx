@@ -42,6 +42,7 @@ export default React.forwardRef(function SwitchField({
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
 
+    const disabled = property.disabled || isSubmitting;
     return (
         <FormControl
             fullWidth
@@ -56,6 +57,7 @@ export default React.forwardRef(function SwitchField({
                     control={
                         <Switch
                             type={"checkbox"}
+                            disabled={disabled}
                             onChange={(evt) => {
                                 setFieldTouched(field.name);
                                 setFieldValue(
@@ -64,7 +66,7 @@ export default React.forwardRef(function SwitchField({
                                 );
                             }}/>
                     }
-                    disabled={property.disabled || isSubmitting}
+                    disabled={disabled}
                     label={
                         <div className={"MuiFormLabel-root"}
                              style={{ width: "100%", marginLeft: "-4px" }}>

@@ -24,7 +24,6 @@ import {
 import {
     BreadcrumbEntry,
     getEntityPath,
-    getRouterNewEntityPath,
     removeInitialSlash
 } from "./navigation";
 import { CircularProgressCenter } from "../components";
@@ -150,7 +149,7 @@ interface EntityRouteProps<S extends EntitySchema> {
     context: FormContext;
 }
 
-export function EntityFormRoute<S extends EntitySchema>({
+function EntityFormRoute<S extends EntitySchema>({
                                                             view,
                                                             collectionPath,
                                                             breadcrumbs,
@@ -248,8 +247,10 @@ export function EntityFormRoute<S extends EntitySchema>({
         if (!continueWithSave)
             return;
 
-        return saveEntity(collectionPath, id, values)
-            .then((id) => {
+        return saveEntity(collectionPath, id, values, schema, status)
+            .then((updatedEntity) => {
+
+                setEntity(updatedEntity);
 
                 snackbarContext.open({
                     type: "success",
@@ -261,10 +262,10 @@ export function EntityFormRoute<S extends EntitySchema>({
                     setEntity(undefined);
                     setStatus(undefined);
                     if (context === "main")
-                        history.replace(getEntityPath(id, collectionPath));
+                        history.replace(getEntityPath(updatedEntity.id, collectionPath));
                     else if (context === "side")
                         selectedEntityContext.replace({
-                            entityId: id,
+                            entityId: updatedEntity.id,
                             collectionPath
                         });
                     else throw Error("Missing mapping for entity context when saving");
@@ -288,6 +289,7 @@ export function EntityFormRoute<S extends EntitySchema>({
                     }
                 }
 
+                setModified(false);
                 history.goBack();
 
             })
@@ -320,6 +322,8 @@ export function EntityFormRoute<S extends EntitySchema>({
 
     const existingEntity = status === EntityStatus.existing;
 
+    const containerRef = React.useRef<HTMLDivElement>(null);
+
     const form = <EntityForm
         status={status as EntityStatus}
         collectionPath={collectionPath}
@@ -327,13 +331,17 @@ export function EntityFormRoute<S extends EntitySchema>({
         onEntitySave={onEntitySave}
         onDiscard={onDiscard}
         onModified={setModified}
-        entity={entity}/>;
+        entity={entity}
+        containerRef={containerRef}/>;
 
     const subCollectionsView = view.subcollections && view.subcollections.map(
         (subcollectionView, colIndex) => {
 
             const collectionPath = entity ? `${entity?.reference.path}/${removeInitialSlash(subcollectionView.relativePath)}` : undefined;
-
+            const onClick = (e: React.MouseEvent) => {
+                e.stopPropagation();
+                return collectionPath && selectedEntityContext.openNew({ collectionPath });
+            };
             return <Box
                 key={`entity_detail_tab_content_${subcollectionView.name}`}
                 role="tabpanel"
@@ -359,8 +367,10 @@ export function EntityFormRoute<S extends EntitySchema>({
                             </Typography>}
                         actions={
                             <Button
-                                component={ReactLink}
-                                to={getRouterNewEntityPath(collectionPath)}
+                                disabled={!collectionPath}
+                                // component={ReactLink}
+                                onClick={onClick}
+                                // to={getRouterNewEntityPath(collectionPath)}
                                 size="medium"
                                 variant="outlined"
                                 color="primary"
@@ -481,7 +491,7 @@ export function EntityFormRoute<S extends EntitySchema>({
 
                 </Paper>
 
-                <div className={sideClasses.container}>
+                <div className={sideClasses.container} ref={containerRef}>
                     <Box
                         role="tabpanel"
                         hidden={tabsPosition !== 0}
@@ -490,6 +500,7 @@ export function EntityFormRoute<S extends EntitySchema>({
                     </Box>
 
                     {subCollectionsView}
+
                 </div>
 
             </Box>);
@@ -512,3 +523,5 @@ export function EntityFormRoute<S extends EntitySchema>({
             />
         </React.Fragment>;
 }
+
+export default React.memo(EntityFormRoute);

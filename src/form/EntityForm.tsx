@@ -10,11 +10,11 @@ import {
 } from "@material-ui/core";
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
-import { createCustomIdField, createFormField, FormFieldProps } from "./index";
+import { createCustomIdField, createFormField } from "./index";
 import { initEntityValues } from "../firebase/firestore";
 import { getYupObjectSchema } from "./validation";
 import deepEqual from "deep-equal";
-
+import { ErrorFocus } from "./ErrorFocus";
 
 export const useStyles = makeStyles(theme => createStyles({
     stickyButtons: {
@@ -76,24 +76,22 @@ interface EntityFormProps<S extends EntitySchema> {
      */
     onModified(dirty: boolean): void;
 
+    containerRef: React.RefObject<HTMLDivElement>
+
 }
 
-export default function EntityForm<S extends EntitySchema>({
-                                                               status,
-                                                               collectionPath,
-                                                               schema,
-                                                               entity,
-                                                               onEntitySave,
-                                                               onDiscard,
-                                                               onModified
-                                                           }: EntityFormProps<S>) {
+function EntityForm<S extends EntitySchema>({
+                                                status,
+                                                collectionPath,
+                                                schema,
+                                                entity,
+                                                onEntitySave,
+                                                onDiscard,
+                                                onModified,
+                                                containerRef
+                                            }: EntityFormProps<S>) {
 
     const classes = useStyles();
-
-    const [customId, setCustomId] = React.useState<string | undefined>(undefined);
-    const [customIdError, setCustomIdError] = React.useState<boolean>(false);
-    const [savingError, setSavingError] = React.useState<any>();
-    const [initialValues, setInitialValues] = React.useState<EntityValues<S> | undefined>(entity?.values);
 
     /**
      * Base values are the ones this view is initialized from, we use them to
@@ -108,6 +106,10 @@ export default function EntityForm<S extends EntitySchema>({
         throw new Error("Form configured wrong");
     }
 
+    const [customId, setCustomId] = React.useState<string | undefined>(undefined);
+    const [customIdError, setCustomIdError] = React.useState<boolean>(false);
+    const [savingError, setSavingError] = React.useState<any>();
+    const [initialValues, setInitialValues] = React.useState<EntityValues<S> | undefined>(entity?.values);
 
     let underlyingChanges: Partial<EntityValues<S>> | undefined;
     if (initialValues) {
@@ -185,7 +187,6 @@ export default function EntityForm<S extends EntitySchema>({
                 color="primary"
                 type="submit"
                 disabled={isSubmitting}
-
                 className={classes.button}
             >
                 Save
@@ -207,7 +208,6 @@ export default function EntityForm<S extends EntitySchema>({
                 }, [dirty]);
 
                 if (underlyingChanges && entity) {
-
                     // we update the form fields from the Firestore data
                     // if they were not touched
                     Object.entries(underlyingChanges).forEach(([key, value]) => {
@@ -217,12 +217,12 @@ export default function EntityForm<S extends EntitySchema>({
                             setFieldTouched(key, false);
                         }
                     });
-
                 }
 
                 function createFormFields(schema: EntitySchema) {
 
                     return <Grid container spacing={4}>
+
                         {Object.entries(schema.properties).map(([key, property]) => {
 
                             const underlyingValueHasChanged: boolean =
@@ -232,25 +232,26 @@ export default function EntityForm<S extends EntitySchema>({
 
                             const formField = createFormField(
                                 {
-                                    name : key,
+                                    name: key,
                                     property,
-                                    includeDescription:true ,
+                                    includeDescription: true,
                                     underlyingValueHasChanged,
-                                    entitySchema:schema,
+                                    entitySchema: schema,
                                     partOfArray: false
                                 });
 
                             return <Grid item
                                          xs={12}
+                                         id={`form_field_${key}`}
                                          key={`field_${schema.name}_${key}`}>
                                 {formField}
                             </Grid>;
                         })}
+
                     </Grid>;
                 }
 
                 return (
-
                     <Container maxWidth={"sm"}
                                className={classes.container}>
 
@@ -280,9 +281,14 @@ export default function EntityForm<S extends EntitySchema>({
                             </Form>
 
                         </Box>
+
+                        <ErrorFocus containerRef={containerRef}/>
+
                     </Container>
                 );
             }}
         </Formik>
     );
 }
+
+export default React.memo<EntityFormProps<any>>(EntityForm);

@@ -43,7 +43,7 @@ type ArrayDefaultFieldProps<T> = CMSFieldProps<T[]>;
 
 export default function ArrayDefaultField<T>({
                                                  field,
-                                                 form: { errors, touched },
+                                                 form: { errors, touched, isSubmitting },
                                                  property,
                                                  createFormField,
                                                  includeDescription,
@@ -94,6 +94,7 @@ export default function ArrayDefaultField<T>({
                 arrayHelpers.remove(index);
             };
 
+            const disabled = isSubmitting;
             return (
 
                 <FormControl fullWidth error={showError}>
@@ -127,6 +128,7 @@ export default function ArrayDefaultField<T>({
                              textAlign={"left"}>
                             <Button variant="outlined"
                                     color="primary"
+                                    disabled={disabled}
                                     onClick={insertInEnd}>
                                 Add
                             </Button>
@@ -178,7 +180,6 @@ function ArrayEntry<T>(props: {
 
     const classes = useStyles();
     const ref = React.useRef<HTMLDivElement>(null);
-    // const refContainer = React.useRef<HTMLDivElement>(null);
 
     const [, drop] = useDrop({
         accept: type,

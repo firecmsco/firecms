@@ -134,6 +134,11 @@ export interface EntitySchema<Key extends string = string, P extends Properties<
     properties: P;
 
     /**
+     * When creating a new entity, set some values as already initialized
+     */
+    defaultValues?: Partial<EntityValues<this>>;
+
+    /**
      * Hook called when save is successful
      * @param entitySaveProps
      */
@@ -212,7 +217,6 @@ export interface Entity<S extends EntitySchema,
     P extends Properties = S["properties"],
     Key extends string = Extract<keyof P, string>> {
     id: string;
-    snapshot: firebase.firestore.DocumentSnapshot;
     reference: firebase.firestore.DocumentReference;
     values: EntityValues<S, P, Key>;
 }
@@ -438,7 +442,15 @@ export interface TimestampProperty extends BaseProperty<firebase.firestore.Times
     /**
      * Rules for validating this property
      */
-    validation?: DatePropertyValidationSchema,
+    validation?: DatePropertyValidationSchema;
+
+    /**
+     * If this flag is  set to `on_create` or `on_update` this timestamp is
+     * updated automatically on creation of the entity only or on every
+     * update (including creation). Useful for creating `created_on` or
+     * `updated_on` fields
+     */
+    autoValue?: "on_create" | "on_update"
 }
 
 // TODO: currently this is the only unsupported field

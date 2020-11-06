@@ -57,12 +57,12 @@ function getYupStringSchema(property: StringProperty): StringSchema {
     const validation = property.validation;
     if (property.config?.enumValues) {
         if (validation?.required)
-            schema = schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false);
+            schema = schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required");
         schema = schema.oneOf(Object.keys(property.config?.enumValues));
     }
     if (validation) {
         schema = validation.required ?
-            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
+            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true) :
             schema.notRequired().nullable(true);
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} must be min ${validation.min} characters long`);
         if (validation.max) schema = schema.max(validation.max, `${property.title} must be max ${validation.min} characters long`);
@@ -102,20 +102,22 @@ function getYupGeoPointSchema(property: GeopointProperty): ObjectSchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation?.required) {
-        schema = schema.required(validation.requiredMessage)
-            .nullable(false);
+        schema = schema.required(validation.requiredMessage);
     } else {
         schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
 
-function getYupDateSchema(property: TimestampProperty): DateSchema {
+function getYupDateSchema(property: TimestampProperty): ObjectSchema<any> | DateSchema {
+    if (property.autoValue) {
+        return yup.object().nullable(true);
+    }
     let schema: DateSchema<any> = yup.date();
     const validation = property.validation;
     if (validation) {
         schema = validation.required ?
-            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
+            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required") :
             schema.notRequired().nullable(true);
         if (validation.min) schema = schema.min(validation.min, `${property.title} must be after ${validation.min}`);
         if (validation.max) schema = schema.max(validation.max, `${property.title} must be before ${validation.min}`);
@@ -130,7 +132,7 @@ function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProper
     const validation = property.validation;
     if (validation) {
         schema = validation.required ?
-            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
+            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required") :
             schema.notRequired().nullable(true);
     } else {
         schema = schema.notRequired().nullable(true);
@@ -143,7 +145,7 @@ function getYupBooleanSchema(property: BooleanProperty): BooleanSchema {
     const validation = property.validation;
     if (validation) {
         schema = validation.required ?
-            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
+            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required") :
             schema.notRequired().nullable(true);
     } else {
         schema = schema.notRequired().nullable(true);
@@ -168,7 +170,7 @@ function getYupArraySchema<T>(property: ArrayProperty<T>): Schema<unknown> {
 
     if (validation) {
         schema = validation.required ?
-            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(false) :
+            schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required") :
             schema.notRequired().nullable(true);
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} should be min ${validation.min} entries long`);
         if (validation.max) schema = schema.max(validation.max, `${property.title} should be max ${validation.min} entries long`);

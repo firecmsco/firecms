@@ -74,13 +74,14 @@ export default function TextField({
             );
         }
     };
+    const disabled = valueIsInfinity || isSubmitting;
     return (
         <React.Fragment>
 
             <FormControl
                 required={property.validation?.required}
                 error={showError}
-                disabled={isSubmitting}
+                disabled={valueIsInfinity}
                 fullWidth>
 
                 <InputLabel style={{
@@ -95,7 +96,7 @@ export default function TextField({
                     multiline={!!multiline}
                     rows={rows}
                     value={valueIsInfinity ? "Infinity" : value}
-                    disabled={valueIsInfinity}
+                    disabled={disabled}
                     onChange={(evt) => {
                         updateValue(evt.target.value);
                     }}

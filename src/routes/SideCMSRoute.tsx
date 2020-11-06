@@ -8,7 +8,7 @@ import {
     useParams,
     useRouteMatch
 } from "react-router-dom";
-import { EntityFormRoute } from "./EntityFormRoute";
+import  EntityFormRoute  from "./EntityFormRoute";
 import { useSelectedEntityContext } from "../SelectedEntityContext";
 import { createStyles, Drawer, makeStyles } from "@material-ui/core";
 

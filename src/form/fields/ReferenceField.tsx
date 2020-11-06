@@ -51,6 +51,11 @@ export const useStyles = makeStyles(theme => createStyles({
         color: "#838383",
         fontWeight: 500
     },
+    disabled: {
+        backgroundColor: "rgba(0, 0, 0, 0.12)",
+        color: "rgba(0, 0, 0, 0.38)",
+        borderBottomStyle: "dotted"
+    },
     dialogBody: {
         flexGrow: 1,
         overflow: "auto",
@@ -84,10 +89,12 @@ export default function ReferenceField<S extends EntitySchema>({
     const classes = useStyles();
     const title = property.title;
 
+    const disabled = isSubmitting;
     return (
         <FormControl error={showError} fullWidth>
 
-            <Box className={`${classes.root}`}>
+            <Box
+                className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
 
                 <ReferenceDialog value={value}
                                  title={title}
@@ -99,6 +106,7 @@ export default function ReferenceField<S extends EntitySchema>({
                                  textSearchDelegate={property.textSearchDelegate}
                                  onEntityClick={handleEntityClick}
                                  partOfArray={partOfArray}
+                                 disabled={disabled}
                                  entitySchema={entitySchema}/>
 
             </Box>
@@ -145,7 +153,9 @@ export interface ReferenceDialogProps<S extends EntitySchema<Key>, Key extends s
 
     entitySchema: EntitySchema;
 
-    partOfArray:boolean
+    partOfArray: boolean,
+
+    disabled: boolean
 }
 
 
@@ -161,7 +171,8 @@ export function ReferenceDialog<S extends EntitySchema>(
         textSearchDelegate,
         collectionPath,
         entitySchema,
-        partOfArray
+        partOfArray,
+        disabled
     }: ReferenceDialogProps<S>) {
 
     const classes = useStyles();
@@ -225,7 +236,7 @@ export function ReferenceDialog<S extends EntitySchema>(
         let body: JSX.Element;
         if (missingEntity) {
             body = (
-                <Tooltip title={value.path}>
+                <Tooltip title={value && value.path}>
                     <Box
                         display={"flex"}
                         alignItems={"center"}
@@ -237,73 +248,87 @@ export function ReferenceDialog<S extends EntitySchema>(
                     </Box>
                 </Tooltip>
             );
-        } else {
+        } else if (value) {
             body = (
-                <Box display={"flex"}
-                     flexDirection={"column"}
-                     flexGrow={1}
-                     m={1}>
+                <Tooltip title={value && value.path}>
+                    <Box display={"flex"}
+                         flexDirection={"column"}
+                         flexGrow={1}
+                         m={1}>
 
-                    {listProperties && listProperties.map((key, index) => {
-                        const propertyKey = schema.properties[key as string];
-                        return (
-                            <Box key={"ref_prev_" + key + index}
-                                 mt={0.5}
-                                 mb={0.5}>
-                                <ErrorBoundary>{
-                                    entity ?
-                                        React.createElement(PreviewComponent, {
-                                            name: key as string,
-                                            value: entity.values[key as string],
-                                            property: propertyKey,
-                                            size: "tiny",
-                                            entitySchema: entitySchema
-                                        })
-                                        :
-                                        <SkeletonComponent
-                                            property={propertyKey}
-                                            size={"tiny"}/>}
-                                </ErrorBoundary>
-                            </Box>
-                        );
-                    })}
-                </Box>
+                        {listProperties && listProperties.map((key, index) => {
+                            const propertyKey = schema.properties[key as string];
+                            return (
+                                <Box key={"ref_prev_" + key + index}
+                                     mt={0.5}
+                                     mb={0.5}>
+                                    <ErrorBoundary>{
+                                        entity ?
+                                            React.createElement(PreviewComponent, {
+                                                name: key as string,
+                                                value: entity.values[key as string],
+                                                property: propertyKey,
+                                                size: "tiny",
+                                                entitySchema: entitySchema
+                                            })
+                                            :
+                                            <SkeletonComponent
+                                                property={propertyKey}
+                                                size={"tiny"}/>}
+                                    </ErrorBoundary>
+                                </Box>
+                            );
+                        })}
+                    </Box>
+                </Tooltip>
             );
+        } else {
+            body = <Box p={1}
+                        onClick={disabled ? undefined : handleClickOpen}
+                        justifyContent="center"
+                        display="flex">
+                <Box flexGrow={1} textAlign={"center"}>No value set</Box>
+                <Button variant="outlined"
+                        color="primary">
+                    Set
+                </Button>
+            </Box>;
         }
 
         return (
-            <Box onClick={handleClickOpen}
-                 display="flex">
+            <Box
+                onClick={disabled ? undefined : handleClickOpen}
+                display="flex">
 
                 <Box display={"flex"}
                      flexDirection={"column"}
                      flexGrow={1}>
 
-                    <Tooltip title={value.path}>
-                        <FormHelperText filled
-                                        required={property.validation?.required}>
-                            <LabelWithIcon scaledIcon={true}
-                                           property={property}/>
-                        </FormHelperText>
-                    </Tooltip>
+                    <FormHelperText filled
+                                    required={property.validation?.required}>
+                        <LabelWithIcon scaledIcon={true}
+                                       property={property}/>
+                    </FormHelperText>
 
                     {body}
 
                 </Box>
 
-                {!missingEntity && <Box>
+                {!missingEntity && value && <Box>
                     <Tooltip title="See details">
                         <IconButton
-                            onClick={seeEntityDetails}>
+                            disabled={disabled}
+                            onClick={disabled ? undefined : seeEntityDetails}>
                             <KeyboardTabIcon/>
                         </IconButton>
                     </Tooltip>
                 </Box>}
 
-                {!partOfArray && <Box>
+                {!partOfArray && value && <Box>
                     <Tooltip title="Clear">
                         <IconButton
-                            onClick={clearValue}>
+                            disabled={disabled}
+                            onClick={disabled ? undefined : clearValue}>
                             <ClearIcon/>
                         </IconButton>
                     </Tooltip>
@@ -315,19 +340,8 @@ export function ReferenceDialog<S extends EntitySchema>(
     return (
         <React.Fragment>
 
-            {value && buildEntityView()}
+            {buildEntityView()}
 
-            {!value &&
-            <Box p={1}
-                 onClick={handleClickOpen}
-                 justifyContent="center"
-                 display="flex">
-                <Box flexGrow={1} textAlign={"center"}>No value set</Box>
-                <Button variant="outlined"
-                        color="primary">
-                    Set
-                </Button>
-            </Box>}
 
             <Dialog
                 onClose={handleClose}
