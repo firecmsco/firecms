@@ -157,7 +157,6 @@ function renderMap<T>(property: MapProperty<T>,
             mapProperties = mapProperties.slice(0, 1);
     }
 
-
     if (size !== "regular")
         return (
             <React.Fragment>

@@ -23,9 +23,9 @@ function AsyncPreviewComponent<S extends EntitySchema>(
 
     const [loading, setLoading] = useState<boolean>(true);
     const [result, setResult] = useState<React.ReactNode>(null);
-    let unmounted = false;
 
     useEffect(() => {
+        let unmounted = false;
         builder
             .then((res) => {
                 if (!unmounted) {

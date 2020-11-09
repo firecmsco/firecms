@@ -17,7 +17,7 @@ import {
 } from "@material-ui/core";
 import SearchBar from "./SearchBar";
 
-export const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         toolbar: {
             paddingLeft: theme.spacing(2),

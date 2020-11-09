@@ -30,6 +30,7 @@ import ArrayShapedField from "./fields/ArrayShapedField";
 import { FirebaseConfigContext } from "../contexts";
 import { useClipboard } from "use-clipboard-hook";
 import { useSnackbarContext } from "../snackbar_controller";
+import MarkDownField from "./fields/MarkdownField";
 
 export interface FormFieldProps {
     name: string,
@@ -87,6 +88,8 @@ export function createFormField<T>({
     } else if (property.dataType === "string") {
         if (property.config?.storageMeta) {
             component = StorageUploadField;
+        } else if (property.config?.markdown) {
+            component = MarkDownField;
         } else if (property.config?.enumValues) {
             component = Select;
         } else {
@@ -102,12 +105,12 @@ export function createFormField<T>({
 }
 
 function buildFieldInternal<P extends Property<T>, T = any>(name: string,
-                                                      property: P,
-                                                      includeDescription: boolean,
-                                                      component: React.ComponentType<CMSFieldProps<T>>,
-                                                      underlyingValueHasChanged: boolean,
-                                                      entitySchema: EntitySchema,
-                                                      partOfArray:boolean
+                                                            property: P,
+                                                            includeDescription: boolean,
+                                                            component: React.ComponentType<CMSFieldProps<T>>,
+                                                            underlyingValueHasChanged: boolean,
+                                                            entitySchema: EntitySchema,
+                                                            partOfArray: boolean
 ) {
 
     const additionalFieldProps: any = property.config?.fieldProps;

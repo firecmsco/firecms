@@ -493,8 +493,6 @@ productSchema.onSaveSuccess = () => {
     console.log("onSaveSuccess");
 };
 
-
-
 const formQuestions: string[] = ["birth_year",
     "living_situation",
     "electricity_monthly",
@@ -505,6 +503,13 @@ export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
     properties: {
+        mark: {
+            title: "Mark",
+            dataType: "string",
+            config: {
+                markdown: true
+            }
+        },
         tags: {
             title: "Tags",
             dataType: "array",

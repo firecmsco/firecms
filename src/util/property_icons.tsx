@@ -27,7 +27,7 @@ export function getIconForProperty(
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
     fontSize: "inherit" | "default" | "small" | "large" = "default"): React.ReactNode {
     if (property.dataType === "string") {
-        if (property.config?.multiline) {
+        if (property.config?.multiline || property.config?.markdown) {
             return <SubjectIcon color={color} fontSize={fontSize}/>;
         } else if (property.config?.storageMeta) {
             if (property.config.storageMeta.mediaType === "image")
