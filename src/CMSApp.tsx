@@ -176,8 +176,8 @@ export function CMSApp(props: CMSAppProps) {
         setFirebaseConfigInitialized
     ] = React.useState<boolean>(false);
 
+    const [usedFirebaseConfig, setUsedFirebaseConfig] = React.useState<Object>();
     const [configError, setConfigError] = React.useState<string>();
-
     const [firebaseConfigError, setFirebaseConfigError] = React.useState<boolean>(false);
 
     const authenticationEnabled = authentication === undefined || !!authentication;
@@ -190,6 +190,7 @@ export function CMSApp(props: CMSAppProps) {
         try {
             firebase.initializeApp(config);
             firebase.analytics();
+            setUsedFirebaseConfig(config);
             setFirebaseConfigError(false);
             setFirebaseConfigInitialized(true);
         } catch (e) {
@@ -339,50 +340,50 @@ export function CMSApp(props: CMSAppProps) {
                         </React.Fragment>
                     );
 
-                    return (
-                        <AppConfigProvider cmsAppConfig={props}>
-                            <Router>
-                                <SelectedEntityProvider>
-                                    <BreadcrumbsProvider>
-                                        <SnackbarProvider>
+                    return firebaseConfig &&
+                    <AppConfigProvider cmsAppConfig={props}
+                                       firebaseConfig={firebaseConfig}>
+                        <Router>
+                            <SelectedEntityProvider>
+                                <BreadcrumbsProvider>
+                                    <SnackbarProvider>
 
-                                            <nav>
-                                                <Drawer
-                                                    variant="temporary"
-                                                    anchor={"left"}
-                                                    open={drawerOpen}
-                                                    onClose={closeDrawer}
-                                                    classes={{
-                                                        paper: classes.drawerPaper
-                                                    }}
-                                                    ModalProps={{
-                                                        keepMounted: true
-                                                    }}
-                                                >
-                                                    {drawer}
-                                                </Drawer>
-                                            </nav>
+                                        <nav>
+                                            <Drawer
+                                                variant="temporary"
+                                                anchor={"left"}
+                                                open={drawerOpen}
+                                                onClose={closeDrawer}
+                                                classes={{
+                                                    paper: classes.drawerPaper
+                                                }}
+                                                ModalProps={{
+                                                    keepMounted: true
+                                                }}
+                                            >
+                                                {drawer}
+                                            </Drawer>
+                                        </nav>
 
-                                            <Box className={classes.main}>
-                                                <CssBaseline/>
-                                                <CMSAppBar title={name}
-                                                           handleDrawerToggle={handleDrawerToggle}
-                                                           toolbarExtraWidget={toolbarExtraWidget}/>
+                                        <Box className={classes.main}>
+                                            <CssBaseline/>
+                                            <CMSAppBar title={name}
+                                                       handleDrawerToggle={handleDrawerToggle}
+                                                       toolbarExtraWidget={toolbarExtraWidget}/>
 
-                                                <main
-                                                    className={classes.content}>
-                                                    <CMSRouterSwitch
-                                                        navigation={navigation}
-                                                        additionalViews={additionalViews}/>
-                                                </main>
-                                            </Box>
+                                            <main
+                                                className={classes.content}>
+                                                <CMSRouterSwitch
+                                                    navigation={navigation}
+                                                    additionalViews={additionalViews}/>
+                                            </main>
+                                        </Box>
 
-                                        </SnackbarProvider>
-                                    </BreadcrumbsProvider>
-                                </SelectedEntityProvider>
-                            </Router>
-                        </AppConfigProvider>
-                    );
+                                    </SnackbarProvider>
+                                </BreadcrumbsProvider>
+                            </SelectedEntityProvider>
+                        </Router>
+                    </AppConfigProvider>;
                 }
 
                 return (

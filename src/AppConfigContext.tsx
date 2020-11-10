@@ -13,13 +13,14 @@ export const useAppConfigContext = () => useContext(AppConfigContext);
 interface AppConfigsProviderProps {
     cmsAppConfig: CMSAppProps;
     children: React.ReactNode;
+    firebaseConfig: Object
 }
 
-export const AppConfigProvider: React.FC<AppConfigsProviderProps> = ({ children, cmsAppConfig }) => {
+export const AppConfigProvider: React.FC<AppConfigsProviderProps> = ({ children, firebaseConfig, cmsAppConfig }) => {
 
     return (
         <AppConfigContext.Provider
-            value={cmsAppConfig}
+            value={{ ...cmsAppConfig, firebaseConfig }}
         >
             {children}
         </AppConfigContext.Provider>

@@ -153,8 +153,9 @@ const productSchema = buildSchema({
         description: {
             dataType: "string",
             title: "Description",
+            description: "Example of a markdown field",
             config: {
-                multiline: true
+                markdown: true
             },
             columnWidth: 300
         },

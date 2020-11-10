@@ -45,6 +45,7 @@ import { CustomChip } from "./CustomChip";
 
 import ErrorBoundary from "../components/ErrorBoundary";
 import { EmptyValue } from "../components/EmptyValue";
+import ReactMarkdown from "react-markdown";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -87,6 +88,8 @@ function PreviewComponent<T>({
             content = renderStorageThumbnail(stringProperty, value as string, size, entitySchema);
         } else if (stringProperty.config?.enumValues) {
             content = renderPreviewEnumChip(name, stringProperty.config.enumValues, value, size);
+        } else if (stringProperty.config?.markdown) {
+            content = renderStringMarkdown(name, stringProperty, value);
         } else {
             content = renderString(name, stringProperty, value, size, entitySchema);
         }
@@ -161,7 +164,8 @@ function renderMap<T>(property: MapProperty<T>,
         return (
             <React.Fragment>
                 {mapProperties.map((key, index) => (
-                    <ListItem key={"map_preview_" + property.title + key + index}>
+                    <ListItem
+                        key={"map_preview_" + property.title + key + index}>
                         <ErrorBoundary>
                             <PreviewComponent name={key}
                                               value={value[key] as any}
@@ -300,9 +304,9 @@ function renderArrayOfReferences(name: string,
         <Box>
             {values &&
             values.map((value, index) =>
-                    <Box m={0.2} key={`preview_array_ref_${name}_${index}`}>
-                        {renderReference(value, childSize, entitySchema, property.previewProperties)}
-                    </Box>
+                <Box m={0.2} key={`preview_array_ref_${name}_${index}`}>
+                    {renderReference(value, childSize, entitySchema, property.previewProperties)}
+                </Box>
             )}
         </Box>
     );
@@ -546,6 +550,14 @@ export function renderString(name: string,
     } else {
         return (value);
     }
+}
+
+export function renderStringMarkdown(name: string,
+                                     property: StringProperty,
+                                     value: any) {
+    return <ErrorBoundary>
+        <ReactMarkdown>{value}</ReactMarkdown>
+    </ErrorBoundary>;
 
 }
 

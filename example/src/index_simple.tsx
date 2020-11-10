@@ -9,7 +9,7 @@ import {
     EntityCollectionView
 } from "@camberi/firecms";
 import { User } from "firebase/app";
-import "typeface-roboto";
+import "typeface-rubik";
 
 // Replace with your config
 const firebaseConfig = {
@@ -168,11 +168,11 @@ const navigation: EntityCollectionView[] = [
         schema: productSchema,
         name: "Products",
         subcollections: [
-            {
+            buildCollection({
                 name: "Locales",
                 relativePath: "locales",
                 schema: localeSchema
-            }
+            })
         ]
     })
 ];

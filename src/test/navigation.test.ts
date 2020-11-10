@@ -1,19 +1,17 @@
 import { getCollectionViewFromPath } from "../routes/navigation";
 import {
-    localeCollection,
-    productsCollection,
     siteConfig
 } from "./test_site_config";
 
 it("collection view matches ok", () => {
 
     expect(
-        getCollectionViewFromPath("products", siteConfig.navigation)
-    ).toEqual(productsCollection);
+        getCollectionViewFromPath("products", siteConfig.navigation).relativePath
+    ).toEqual("products");
 
     expect(
-        getCollectionViewFromPath("products/irrelevant/locales", siteConfig.navigation)
-    ).toEqual(localeCollection);
+        getCollectionViewFromPath("products/irrelevant/locales", siteConfig.navigation).relativePath
+    ).toEqual("locales");
 
     expect(
         () => getCollectionViewFromPath("products/irrelevant/not_existing", siteConfig.navigation)

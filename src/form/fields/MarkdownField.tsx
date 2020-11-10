@@ -7,7 +7,7 @@ import {
     makeStyles,
     Paper,
     Theme,
-    Typography,
+    Typography
 } from "@material-ui/core";
 import React from "react";
 
@@ -22,7 +22,7 @@ import "codemirror/theme/base16-light.css";
 
 require("codemirror/mode/markdown/markdown");
 
-interface MarkDownFieldProps extends CMSFieldProps<string | number> {
+interface MarkDownFieldProps extends CMSFieldProps<string> {
 }
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -40,9 +40,16 @@ export const useStyles = makeStyles((theme: Theme) =>
                 color: "currentColor",
                 "&:hover": {
                     backgroundColor: "rgb(222 222 222)"
-                },
+                }
             }
         },
+        preview: {
+            padding: theme.spacing(2)
+        },
+        previewGutter: {
+            width: "28px",
+            background: "#f5f5f5"
+        }
     })
 );
 
@@ -52,7 +59,6 @@ export default function MarkDownField({
                                           form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                           property,
                                           includeDescription,
-                                          allowInfinity,
                                           entitySchema
                                       }: MarkDownFieldProps) {
 
@@ -109,6 +115,24 @@ export default function MarkDownField({
                     />
                 </div>
 
+                <Box mt={1}>
+                    <Paper variant={"outlined"}>
+                        <Box display={"flex"}>
+                            <Box className={classes.previewGutter}/>
+                            <Box className={classes.preview}>
+                                {field.value &&
+                                <ReactMarkdown>{field.value}</ReactMarkdown>}
+                                {!field.value &&
+                                <Typography variant={"caption"}
+                                            color={"textSecondary"}>
+                                    <p>Preview for {property.title}</p>
+                                </Typography>}
+                            </Box>
+                        </Box>
+                    </Paper>
+                </Box>
+
+
                 <Box display={"flex"}>
                     <Box flexGrow={1}>
                         {showError && <FormHelperText
@@ -120,17 +144,6 @@ export default function MarkDownField({
 
             </FormControl>
 
-            <Paper variant={"outlined"}>
-                <Box p={2}>
-                    {field.value &&
-                    <ReactMarkdown>{field.value}</ReactMarkdown>}
-                    {!field.value &&
-                    <Typography variant={"body2"} color={"textSecondary"}>
-                        <p>Here you can see the preview of the Markdown
-                            editor</p>
-                    </Typography>}
-                </Box>
-            </Paper>
         </React.Fragment>
     );
 

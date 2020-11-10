@@ -472,7 +472,9 @@ export interface ReferenceProperty<S extends EntitySchema = EntitySchema,
 
     /**
      * Absolute collection path of the collection this reference points to.
-     * The schema of the entity is inferred based on the root navigation.
+     * The schema of the entity is inferred based on the root navigation, so
+     * the filters and search delegate existing there are applied to this view
+     * as well.
      */
     collectionPath: string;
 
@@ -592,7 +594,9 @@ export interface StringFieldConfig extends FieldConfig<string> {
     multiline?: boolean | number;
 
     /**
-     * Should this string property be displayed as a markdown field
+     * Should this string property be displayed as a markdown field. If true,
+     * the field is rendered as a text editors that supports markdown highlight
+     * syntax. It also includes a preview of the result.
      */
     markdown?: boolean;
 

@@ -160,13 +160,13 @@ const subcollections = [
 export const siteConfig: CMSAppProps = {
     name: "Test site",
     navigation: [
-        {
+        buildCollection({
             relativePath: "products",
             schema: productSchema,
             name: "Products",
             subcollections: subcollections,
             properties: ["name", "price", "status", "categories", "tags", "description", "published", "added_on", "publisher", "available_locales", "image"]
-        }
+        })
     ]
 };
 

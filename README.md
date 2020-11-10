@@ -32,6 +32,10 @@ gets periodically restored.
 
 https://firecms-demo-27150.web.app/
 
+### Changelog
+
+https://github.com/Camberi/firecms/blob/master/CHANGELOG.md
+
 ## Install
 
 ```bash
@@ -96,7 +100,7 @@ import {
     EntityCollectionView
 } from "@camberi/firecms";
 import { User } from "firebase/app";
-import "typeface-roboto";
+import "typeface-rubik";
 
 // Replace with your config
 const firebaseConfig = {
@@ -198,10 +202,6 @@ const productSchema = buildSchema({
             dataType: "boolean",
             columnWidth: 100
         },
-        expires_on: {
-            title: "Expires on",
-            dataType: "timestamp"
-        },
         publisher: {
             title: "Publisher",
             description: "This is an example of a map property",
@@ -216,6 +216,10 @@ const productSchema = buildSchema({
                     dataType: "string"
                 }
             }
+        },
+        expires_on: {
+            title: "Expires on",
+            dataType: "timestamp"
         }
     }
 });
@@ -255,11 +259,11 @@ const navigation: EntityCollectionView[] = [
         schema: productSchema,
         name: "Products",
         subcollections: [
-            {
+            buildCollection({
                 name: "Locales",
                 relativePath: "locales",
                 schema: localeSchema
-            }
+            })
         ]
     })
 ];
@@ -278,8 +282,6 @@ ReactDOM.render(
     />,
     document.getElementById("root")
 );
-
-
 ```
 
 #### Included example
@@ -358,6 +360,8 @@ fields, common to all data types:
 
 * `onPreSave`: Hook called when saving fails
 
+* `defaultValues`: Object defining the initial values of the entity on creation
+
 
 #### Property configurations
 
@@ -382,6 +386,11 @@ Besides the common fields, some properties have specific configurations.
     * `enumValues`: You can use the enum values providing a map of possible
             exclusive values the property can take, mapped to the label that it is
             displayed in the dropdown.
+    * `multiline`: Is this string property long enough so it should be displayed in
+            a multiple line field. Defaults to false.
+    * `markdown`: Should this string property be displayed as a markdown field. If true,
+            the field is rendered as a text editors that supports markdown highlight
+            syntax. It also includes a preview of the result.
     * `previewAsTag`: Should this string be rendered as a tag instead of just text.
 
 * `validation`: Rules for validating this property:
@@ -431,14 +440,10 @@ Besides the common fields, some properties have specific configurations.
 
 ##### `reference`
 
-* `collectionPath`: Absolute collection path.
-
-* `schema`: Schema of the entity this reference points to.
-         You can use the value 'self' instead of a schema definition if this
-         reference points the the entity defining it.
-
-* `filter`: When the dialog for selecting the value of this reference, should
-         a filter be applied to the possible entities.
+* `collectionPath`: Absolute collection path of the collection this reference points to.
+         The schema of the entity is inferred based on the root navigation, so
+         the filters and search delegate existing there are applied to this view
+         as well.
 
 * `previewProperties`: List of properties rendered as this reference preview.
         Defaults to first 3.

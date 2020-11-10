@@ -35,6 +35,8 @@ export function getPreviewWidth<T>(property: Property<T>, size: CollectionSize):
             return 180;
         } else if (stringProperty.config?.multiline) {
             return 300;
+        } else if (stringProperty.config?.markdown) {
+            return 300;
         } else if (stringProperty.validation?.email) {
             return 200;
         } else {
