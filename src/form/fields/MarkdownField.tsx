@@ -48,6 +48,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         previewGutter: {
             width: "28px",
+            minWidth: "28px",
             background: "#f5f5f5"
         }
     })
@@ -105,6 +106,7 @@ export default function MarkDownField({
                             highlightFormatting: true,
                             theme: "base16-light",
                             lineNumbers: true,
+                            lineWrapping: true,
                             readOnly: disabled
                         }}
                         onBeforeChange={(editor, data, value) => {
