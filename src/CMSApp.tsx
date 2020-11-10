@@ -38,7 +38,6 @@ import { EntityCollectionView } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes";
 import { Authenticator } from "./authenticator";
 import { blue, pink, red } from "@material-ui/core/colors";
-import { FirebaseConfigContext } from "./contexts";
 import { SelectedEntityProvider } from "./SelectedEntityContext";
 
 import "./styles.module.css";
@@ -49,6 +48,8 @@ import { SnackbarProvider } from "./snackbar_controller";
 import { CMSRoute } from "./routes/CMSRoute";
 import EntityDetailDialog from "./routes/SideCMSRoute";
 import { DndProvider } from "react-dnd";
+import { AdditionalView, CMSAppProps } from "./CMSAppProps";
+import { AppConfigProvider } from "./AppConfigContext";
 
 const drawerWidth = 240;
 
@@ -90,113 +91,23 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-/**
- * Main entry point that defines the CMS configuration
- */
-export interface CMSAppProps {
-    /**
-     * Name of the service, displayed as the main title and in the tab title
-     */
-    name: string;
 
-    /**
-     * Logo to be displayed in the drawer of the CMS
-     */
-    logo?: string;
+export function CMSApp(props: CMSAppProps) {
 
-    /**
-     * List of the views in the CMS. Each view relates to a collection in the
-     * root Firestore database. Each of the navigation entries in this field
-     * generates an entry in the main menu.
-     */
-    navigation: EntityCollectionView<any>[];
+    const {
+        name,
+        logo,
+        navigation,
+        authentication,
+        allowSkipLogin,
+        firebaseConfig,
+        additionalViews,
+        primaryColor,
+        secondaryColor,
+        fontFamily,
+        toolbarExtraWidget,
+    } = props;
 
-    /**
-     * Do the users need to log in to access the CMS.
-     * You can specify an Authenticator function to discriminate which users can
-     * access the CMS or not.
-     * If not specified authentication is enabled but no user restrictions apply
-     */
-    authentication?: boolean | Authenticator;
-
-    /**
-     * If authentication is enabled, allow the user to access the content
-     * without login.
-     */
-    allowSkipLogin?: boolean;
-
-    /**
-     * Custom additional views created by the developer, added to the main
-     * navigation
-     */
-    additionalViews?: AdditionalView[];
-
-    /**
-     * Firebase configuration of the project. If you afe deploying the app to
-     * Firebase hosting, you don't need to specify this value
-     */
-    firebaseConfig?: Object;
-
-    /**
-     * Primary color of the theme of the CMS
-     */
-    primaryColor?: string;
-
-    /**
-     * Primary color of the theme of the CMS
-     */
-    secondaryColor?: string
-
-    /**
-     * Font family string
-     * e.g.
-     * '"Roboto", "Helvetica", "Arial", sans-serif'
-     */
-    fontFamily?: string
-
-    /**
-     * A component that gets rendered on the upper side of the main toolbar
-     */
-    toolbarExtraWidget?: React.ReactNode;
-
-}
-
-/**
- * Custom additional views created by the developer, added to the main
- * navigation
- */
-export interface AdditionalView {
-    /**
-     * CMS Path
-     */
-    path: string;
-
-    /**
-     * Name of this view
-     */
-    name: string;
-
-    /**
-     * Component to be rendered
-     */
-    view: React.ReactNode;
-}
-
-
-export function CMSApp({
-                           name,
-                           logo,
-                           navigation,
-                           authentication,
-                           allowSkipLogin,
-                           firebaseConfig,
-                           additionalViews,
-                           primaryColor,
-                           secondaryColor,
-                           fontFamily,
-                           toolbarExtraWidget,
-                           ...props
-                       }: CMSAppProps) {
     const classes = useStyles();
     const theme = createMuiTheme({
         palette: {
@@ -429,7 +340,7 @@ export function CMSApp({
                     );
 
                     return (
-                        <FirebaseConfigContext.Provider value={firebaseConfig}>
+                        <AppConfigProvider cmsAppConfig={props}>
                             <Router>
                                 <SelectedEntityProvider>
                                     <BreadcrumbsProvider>
@@ -470,7 +381,7 @@ export function CMSApp({
                                     </BreadcrumbsProvider>
                                 </SelectedEntityProvider>
                             </Router>
-                        </FirebaseConfigContext.Provider>
+                        </AppConfigProvider>
                     );
                 }
 
@@ -510,7 +421,7 @@ export function CMSApp({
 }
 
 function CMSRouterSwitch({ navigation, additionalViews }: {
-    navigation: EntityCollectionView<any>[],
+    navigation: EntityCollectionView[],
     additionalViews?: AdditionalView[];
 }) {
 

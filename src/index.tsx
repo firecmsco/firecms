@@ -3,7 +3,7 @@ import { Authenticator } from "./authenticator";
 export { CMSApp } from "./CMSApp";
 export type {
     CMSAppProps, AdditionalView
-} from "./CMSApp";
+} from "./CMSAppProps";
 
 export {
     listenCollection,

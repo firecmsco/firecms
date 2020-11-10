@@ -689,7 +689,7 @@ const blogCollection = buildCollection({
     }
 });
 
-const navigation: EntityCollectionView<any>[] = [
+const navigation: EntityCollectionView[] = [
     productsCollection,
     usersCollection,
     blogCollection

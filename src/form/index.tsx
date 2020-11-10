@@ -27,10 +27,11 @@ import ArrayMapField from "./fields/ArrayMapField";
 import DisabledField from "./fields/DisabledField";
 import { CMSFieldProps } from "./form_props";
 import ArrayShapedField from "./fields/ArrayShapedField";
-import { FirebaseConfigContext } from "../contexts";
 import { useClipboard } from "use-clipboard-hook";
 import { useSnackbarContext } from "../snackbar_controller";
 import MarkDownField from "./fields/MarkdownField";
+import { useAppConfigContext } from "../AppConfigContext";
+import { CMSAppProps } from "../CMSAppProps";
 
 export interface FormFieldProps {
     name: string,
@@ -161,37 +162,37 @@ export function createCustomIdField<S extends EntitySchema>(schema: EntitySchema
         })
     });
 
+    const appConfig: CMSAppProps | undefined = useAppConfigContext();
     const inputProps = entity ? {
-        endAdornment: (
-            <FirebaseConfigContext.Consumer>
-                {config => (
-                    <InputAdornment position="end">
+            endAdornment: (<InputAdornment position="end">
+                    <IconButton
+                        onClick={(e) => copy(entity.id)}
+                        aria-label="copy-id">
+                        <Tooltip title={"Copy"}>
+                            <svg
+                                className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
+                                width="20" height="20" viewBox="0 0 24 24">
+                                <path
+                                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                            </svg>
+                        </Tooltip>
+                    </IconButton>
+                    {appConfig?.firebaseConfig &&
+                    <a href={`https://console.firebase.google.com/project/${appConfig.firebaseConfig["projectId"]}/firestore/data/${entity.reference.path}`}
+                       rel="noopener noreferrer"
+                       target="_blank">
                         <IconButton
-                            onClick={(e) => copy(entity.id)}
-                            aria-label="copy-id">
-                            <Tooltip title={"Copy"}>
-                                <svg
-                                    className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
-                                    width="20" height="20" viewBox="0 0 24 24">
-                                    <path
-                                        d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                                </svg>
+                            aria-label="go-to-firestore">
+                            <Tooltip title={"Open in Firestore console"}>
+                                <OpenInNewIcon
+                                    fontSize={"small"}/>
                             </Tooltip>
                         </IconButton>
-                        <a href={`https://console.firebase.google.com/project/${config["projectId"]}/firestore/data/${entity.reference.path}`}
-                           rel="noopener noreferrer"
-                           target="_blank">
-                            <IconButton
-                                aria-label="go-to-firestore">
-                                <Tooltip title={"Open in Firestore console"}>
-                                    <OpenInNewIcon
-                                        fontSize={"small"}/>
-                                </Tooltip>
-                            </IconButton>
-                        </a>
-                    </InputAdornment>)}
-            </FirebaseConfigContext.Consumer>)
-    } : undefined;
+                    </a>}
+                </InputAdornment>
+            )
+        } :
+        undefined;
 
     const fieldProps: any = {
         label: (formType === EntityStatus.new && disabled) ? "Id is set automatically" : "Id",

@@ -1,5 +1,5 @@
 import { buildCollection, buildSchema, EnumValues } from "../models";
-import { CMSAppProps } from "../CMSApp";
+import { CMSAppProps } from "../CMSAppProps";
 
 const status = {
     private: "Private",

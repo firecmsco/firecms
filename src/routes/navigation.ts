@@ -5,7 +5,7 @@ const DATA_PATH = `/c`;
 export interface BreadcrumbEntry {
     title: string;
     url: string;
-    view: EntityCollectionView<any>;
+    view: EntityCollectionView;
 }
 
 export function getEntityPath(entityId: string, basePath: string) {

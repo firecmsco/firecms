@@ -249,7 +249,7 @@ const localeSchema = buildSchema({
     }
 });
 
-const navigation: EntityCollectionView<any>[] = [
+const navigation: EntityCollectionView[] = [
     buildCollection({
         relativePath: "products",
         schema: productSchema,

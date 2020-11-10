@@ -208,9 +208,7 @@ function EntityFormRoute<S extends EntitySchema>({
 
 
     function onSubcollectionEntityClick(collectionPath: string,
-                                        entity: Entity<S>,
-                                        schema: S,
-                                        subcollections?: EntityCollectionView<any>[]) {
+                                        entity: Entity<S>) {
 
         selectedEntityContext.open({
             entityId: entity.id,
@@ -356,7 +354,7 @@ function EntityFormRoute<S extends EntitySchema>({
                         additionalColumns={subcollectionView.additionalColumns}
                         editEnabled={true}
                         onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
-                            onSubcollectionEntityClick(collectionPath, clickedEntity, subcollectionView.schema, subcollectionView.subcollections)}
+                            onSubcollectionEntityClick(collectionPath, clickedEntity)}
                         includeToolbar={true}
                         paginationEnabled={false}
                         defaultSize={subcollectionView.defaultSize}

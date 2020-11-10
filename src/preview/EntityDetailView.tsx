@@ -45,7 +45,7 @@ export const useStyles = makeStyles(theme => createStyles({
 export function EntityDetailView<S extends EntitySchema>({ entity, schema, subcollections }: {
     entity?: Entity<S>,
     schema: S,
-    subcollections?: EntityCollectionView<any>[];
+    subcollections?: EntityCollectionView[];
 }) {
 
     const classes = useStyles();
@@ -78,7 +78,7 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
     function onSubcollectionEntityClick(collectionPath: string,
                                         clickedEntity: Entity<any>,
                                         clickedSchema: EntitySchema,
-                                        subcollections?: EntityCollectionView<any>[]) {
+                                        subcollections?: EntityCollectionView[]) {
         selectedEntityContext.open({
             entityId: clickedEntity.id,
             collectionPath

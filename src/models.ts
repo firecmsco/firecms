@@ -10,7 +10,7 @@ import { storage } from "firebase";
  * It can be in the root level of the configuration, defining the main
  * menu navigation.
  */
-export interface EntityCollectionView<S extends EntitySchema,
+export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>,
     P extends Properties = Properties<Key>> {
 
@@ -63,7 +63,7 @@ export interface EntityCollectionView<S extends EntitySchema,
      * subcollections to your entity in the same way you define the root
      * collections.
      */
-    subcollections?: EntityCollectionView<any>[];
+    subcollections?: EntityCollectionView[];
 
     /**
      * Properties displayed in this collection. If this property is not set

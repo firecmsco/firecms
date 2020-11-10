@@ -102,7 +102,7 @@ export const useStyles = makeStyles(theme => createStyles({
     }
 }));
 
-export default function EntityDetailDialog<S extends EntitySchema>({ navigation }: { navigation: EntityCollectionView<any>[] }) {
+export default function EntityDetailDialog<S extends EntitySchema>({ navigation }: { navigation: EntityCollectionView[] }) {
 
     const selectedEntityContext = useSelectedEntityContext();
     const isOpen = selectedEntityContext.isOpen;

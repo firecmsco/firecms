@@ -16,9 +16,10 @@ import { Entity, EntitySchema } from "../models";
 import PreviewComponent from "./PreviewComponent";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import IconButton from "@material-ui/core/IconButton";
-import { FirebaseConfigContext } from "../contexts";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import ErrorBoundary from "../components/ErrorBoundary";
+import { CMSAppProps } from "../CMSAppProps";
+import { useAppConfigContext } from "../AppConfigContext";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -52,84 +53,82 @@ export default function EntityPreview<S extends EntitySchema>(
 
     const classes = useStyles();
 
+    const appConfig: CMSAppProps | undefined = useAppConfigContext();
     return (
-        <FirebaseConfigContext.Consumer>
-            {config => (
-                <TableContainer>
-                    <Table aria-label="entity table">
-                        <TableBody>
-                            <TableRow key={"entity_prev_id"}>
+        <TableContainer>
+            <Table aria-label="entity table">
+                <TableBody>
+                    <TableRow key={"entity_prev_id"}>
+                        <TableCell align="right"
+                                   component="td"
+                                   scope="row"
+                                   className={classes.titleCell}>
+                            <Typography variant={"caption"}
+                                        color={"textSecondary"}>
+                                Id
+                            </Typography>
+                        </TableCell>
+                        <TableCell padding="none"
+                                   className={classes.iconCell}>
+                            {getIdIcon("disabled", "small")}
+                        </TableCell>
+                        <TableCell className={classes.valuePreview}>
+                            <Box display="flex" alignItems="center">
+                                {entity.id}
+                                {appConfig?.firebaseConfig &&
+                                <a href={`https://console.firebase.google.com/project/${appConfig.firebaseConfig["projectId"]}/firestore/data/${entity.reference.path}`}
+                                   rel="noopener noreferrer"
+                                   target="_blank">
+                                    <IconButton
+                                        aria-label="go-to-firestore">
+                                        <OpenInNewIcon
+                                            fontSize={"small"}/>
+                                    </IconButton>
+                                </a>}
+                            </Box>
+                        </TableCell>
+                    </TableRow>
+
+                    {schema && Object.entries(schema.properties).map(([key, property]) => {
+                        const value = entity.values[key as string];
+                        return (
+                            <TableRow
+                                key={"entity_prev" + property.title + key}>
                                 <TableCell align="right"
                                            component="td"
                                            scope="row"
                                            className={classes.titleCell}>
-                                    <Typography variant={"caption"}
-                                                color={"textSecondary"}>
-                                        Id
+                                    <Typography
+                                        style={{ paddingLeft: "16px" }}
+                                        variant={"caption"}
+                                        color={"textSecondary"}>
+                                        {property.title}
                                     </Typography>
                                 </TableCell>
+
                                 <TableCell padding="none"
                                            className={classes.iconCell}>
-                                    {getIdIcon("disabled", "small")}
+                                    {getIconForProperty(property, "disabled", "small")}
                                 </TableCell>
-                                <TableCell className={classes.valuePreview}>
-                                    <Box display="flex" alignItems="center">
-                                        {entity.id}
-                                        <a href={`https://console.firebase.google.com/project/${config["projectId"]}/firestore/data/${entity.reference.path}`}
-                                           rel="noopener noreferrer"
-                                           target="_blank">
-                                            <IconButton
-                                                aria-label="go-to-firestore">
-                                                <OpenInNewIcon
-                                                    fontSize={"small"}/>
-                                            </IconButton>
-                                        </a>
-                                    </Box>
+
+                                <TableCell
+                                    className={classes.valuePreview}>
+                                    <ErrorBoundary>
+                                        <PreviewComponent
+                                            name={key}
+                                            value={value}
+                                            property={property}
+                                            size={"regular"}
+                                            entitySchema={schema}/>
+                                    </ErrorBoundary>
                                 </TableCell>
+
                             </TableRow>
-
-                            {schema && Object.entries(schema.properties).map(([key, property]) => {
-                                const value = entity.values[key as string];
-                                return (
-                                    <TableRow
-                                        key={"entity_prev" + property.title + key}>
-                                        <TableCell align="right"
-                                                   component="td"
-                                                   scope="row"
-                                                   className={classes.titleCell}>
-                                            <Typography
-                                                style={{ paddingLeft: "16px" }}
-                                                variant={"caption"}
-                                                color={"textSecondary"}>
-                                                {property.title}
-                                            </Typography>
-                                        </TableCell>
-
-                                        <TableCell padding="none"
-                                                   className={classes.iconCell}>
-                                            {getIconForProperty(property, "disabled", "small")}
-                                        </TableCell>
-
-                                        <TableCell
-                                            className={classes.valuePreview}>
-                                            <ErrorBoundary>
-                                                <PreviewComponent
-                                                    name={key}
-                                                    value={value}
-                                                    property={property}
-                                                    size={"regular"}
-                                                    entitySchema={schema}/>
-                                            </ErrorBoundary>
-                                        </TableCell>
-
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            )}
-        </FirebaseConfigContext.Consumer>
+                        );
+                    })}
+                </TableBody>
+            </Table>
+        </TableContainer>
 
     );
 
