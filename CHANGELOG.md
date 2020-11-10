@@ -7,6 +7,7 @@ timestamps to update the date to the current one either `on_create` (only
 when the entity is created) or `on_update` (every time it is saved)
 - Markdown field with preview for string properties. Set the flag `markdown` to
 true in the CMS field config.
+- Drag and drop feature for default arrays, allowing reorder
 
 ### Changed
 - Reference field do not need to provide a schema or filter or search delegate
