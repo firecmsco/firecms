@@ -123,7 +123,7 @@ function PreviewComponent<T>({
         content = value && renderTimestamp(value);
     } else if (property.dataType === "reference" && value instanceof firestore.DocumentReference) {
         const referenceProperty = property as ReferenceProperty;
-        content = value && renderReference(value, referenceProperty.schema, size, entitySchema, referenceProperty.previewProperties);
+        content = value && renderReference(value, size, entitySchema, referenceProperty.previewProperties);
     } else if (property.dataType === "boolean") {
         content = renderBoolean(!!value);
     } else if (property.dataType === "number") {
@@ -301,7 +301,7 @@ function renderArrayOfReferences(name: string,
             {values &&
             values.map((value, index) =>
                     <Box m={0.2} key={`preview_array_ref_${name}_${index}`}>
-                        {renderReference(value, property.schema, childSize, entitySchema, property.previewProperties)}
+                        {renderReference(value, childSize, entitySchema, property.previewProperties)}
                     </Box>
             )}
         </Box>
@@ -448,7 +448,6 @@ function renderUrlFile(url: string, size: PreviewSize) {
 
 function renderReference(
     ref: firestore.DocumentReference,
-    refSchema: EntitySchema | "self",
     size: PreviewSize,
     entitySchema: EntitySchema,
     previewProperties?: string[]
@@ -459,7 +458,6 @@ function renderReference(
     return (
         <ReferencePreview
             reference={ref}
-            schema={refSchema === "self" ? entitySchema : refSchema}
             previewComponent={PreviewComponent}
             previewProperties={previewProperties}
             entitySchema={entitySchema}

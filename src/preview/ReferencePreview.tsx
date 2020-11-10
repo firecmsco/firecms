@@ -10,7 +10,7 @@ import {
     Theme,
     Tooltip
 } from "@material-ui/core";
-import { Entity, EntitySchema } from "../models";
+import { Entity, EntityCollectionView, EntitySchema } from "../models";
 
 import { listenEntityFromRef } from "../firebase";
 import { PreviewComponentProps, PreviewSize } from "./PreviewComponentProps";
@@ -19,6 +19,9 @@ import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { useSelectedEntityContext } from "../SelectedEntityContext";
 import Box from "@material-ui/core/Box/Box";
 import ErrorIcon from "@material-ui/icons/Error";
+import { getCollectionPathFrom, getCollectionViewFromPath } from "../routes/navigation";
+import { CMSAppProps } from "../CMSAppProps";
+import { useAppConfigContext } from "../AppConfigContext";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -52,8 +55,6 @@ export interface ReferencePreviewProps<S extends EntitySchema> {
 
     reference: firebase.firestore.DocumentReference;
 
-    schema: S;
-
     /**
      * Limit the number of preview properties displayed base on the size of the
      * preview
@@ -74,7 +75,6 @@ export interface ReferencePreviewProps<S extends EntitySchema> {
 export default function ReferencePreview<S extends EntitySchema>(
     {
         reference,
-        schema,
         size,
         previewComponent,
         previewProperties,
@@ -86,6 +86,11 @@ export default function ReferencePreview<S extends EntitySchema>(
 
     const classes = useStyles();
 
+    const appConfig:CMSAppProps = useAppConfigContext();
+    const collectionPath = getCollectionPathFrom(reference.path);
+    const collectionView: EntityCollectionView<any> = getCollectionViewFromPath(collectionPath, appConfig.navigation);
+
+    const schema = collectionView.schema;
     const [entity, setEntity] = React.useState<Entity<typeof schema>>();
 
     const selectedEntityContext = useSelectedEntityContext();

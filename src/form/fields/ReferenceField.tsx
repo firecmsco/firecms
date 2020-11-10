@@ -1,5 +1,6 @@
 import {
     Entity,
+    EntityCollectionView,
     EntitySchema,
     FilterValues,
     ReferenceProperty
@@ -24,7 +25,6 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { CMSFieldProps } from "../form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
-import { TextSearchDelegate } from "../../text_search_delegate";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { useSelectedEntityContext } from "../../SelectedEntityContext";
 import { listenEntityFromRef } from "../../firebase";
@@ -32,6 +32,9 @@ import SkeletonComponent from "../../preview/SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { PreviewComponent } from "../../preview";
 import ErrorBoundary from "../../components/ErrorBoundary";
+import { getCollectionViewFromPath } from "../../routes/navigation";
+import { useAppConfigContext } from "../../AppConfigContext";
+import { CMSAppProps } from "../../CMSAppProps";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -89,6 +92,9 @@ export default function ReferenceField<S extends EntitySchema>({
     const classes = useStyles();
     const title = property.title;
 
+    const appConfig:CMSAppProps = useAppConfigContext();
+    const collectionView: EntityCollectionView<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
+
     const disabled = isSubmitting;
     return (
         <FormControl error={showError} fullWidth>
@@ -96,18 +102,20 @@ export default function ReferenceField<S extends EntitySchema>({
             <Box
                 className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
 
-                <ReferenceDialog value={value}
-                                 title={title}
-                                 property={property}
-                                 collectionPath={property.collectionPath}
-                                 schema={property.schema === "self" ? entitySchema : property.schema}
-                                 initialFilter={property.filter}
-                                 previewProperties={property.previewProperties}
-                                 textSearchDelegate={property.textSearchDelegate}
-                                 onEntityClick={handleEntityClick}
-                                 partOfArray={partOfArray}
-                                 disabled={disabled}
-                                 entitySchema={entitySchema}/>
+                {collectionView && <ReferenceDialog value={value}
+                                                    title={title}
+                                                    property={property}
+                                                    collectionPath={property.collectionPath}
+                                                    collectionView={collectionView}
+                                                    initialFilter={property.filter}
+                                                    previewProperties={property.previewProperties}
+                                                    onEntityClick={handleEntityClick}
+                                                    partOfArray={partOfArray}
+                                                    disabled={disabled}
+                                                    entitySchema={entitySchema}/>}
+
+                {!collectionView &&
+                <Box>Reference field configured wrong. Check console</Box>}
 
             </Box>
 
@@ -145,9 +153,7 @@ export interface ReferenceDialogProps<S extends EntitySchema<Key>, Key extends s
      */
     previewProperties?: Key[];
 
-    textSearchDelegate?: TextSearchDelegate;
-
-    schema: S;
+    collectionView: EntityCollectionView<S>;
 
     onEntityClick(entity?: Entity<S>): void;
 
@@ -165,10 +171,9 @@ export function ReferenceDialog<S extends EntitySchema>(
         value,
         title,
         property,
-        schema,
+        collectionView,
         initialFilter,
         previewProperties,
-        textSearchDelegate,
         collectionPath,
         entitySchema,
         partOfArray,
@@ -176,6 +181,8 @@ export function ReferenceDialog<S extends EntitySchema>(
     }: ReferenceDialogProps<S>) {
 
     const classes = useStyles();
+    const schema = collectionView.schema;
+    const textSearchDelegate = collectionView.textSearchDelegate;
 
     const [open, setOpen] = React.useState(false);
     const [entity, setEntity] = React.useState<Entity<S>>();

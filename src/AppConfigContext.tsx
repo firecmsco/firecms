@@ -1,8 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { CMSAppProps } from "./CMSAppProps";
 
 
-export const AppConfigContext = React.createContext<CMSAppProps|undefined>(undefined);
+export const AppConfigContext = React.createContext<CMSAppProps>({
+        name: "",
+        navigation: []
+    }
+);
+
 export const useAppConfigContext = () => useContext(AppConfigContext);
 
 interface AppConfigsProviderProps {

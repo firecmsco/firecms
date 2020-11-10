@@ -255,8 +255,8 @@ export interface AdditionalColumnDelegate<S extends EntitySchema,
     Key extends string = Extract<keyof P, string>> {
 
     /**
-     * Id of this column, you can use this id in the `properties` field of the
-     * colletion in any order you want
+     * Id of this column. You can use this id in the `properties` field of the
+     * collection in any order you want
      */
     id: string;
 
@@ -471,36 +471,15 @@ export interface ReferenceProperty<S extends EntitySchema = EntitySchema,
     dataType: "reference";
 
     /**
-     * Absolute collection path.
+     * Absolute collection path of the collection this reference points to.
+     * The schema of the entity is inferred based on the root navigation.
      */
     collectionPath: string;
 
     /**
-     * Schema of the entity this reference points to.
-     * You can use the value 'self' instead of a schema definition if this
-     * reference points the the entity defining it.
-     */
-    schema: S | "self",
-
-    /**
-     * When the dialog for selecting the value of this reference, should
-     * a filter be applied to the possible entities.
-     */
-    filter?: FilterValues<S>;
-
-    /**
-     * If a text search delegate is supplied, a search bar is displayed on top
-     */
-    textSearchDelegate?: TextSearchDelegate;
-
-    /**
-     * Rules for validating this property
-     */
-    validation?: PropertyValidationSchema,
-
-    /**
      * Properties that need to be rendered when displaying a preview of this
-     * reference
+     * reference. If not specified the first 3 are used. Only the first 3
+     * specified values are considered.
      */
     previewProperties?: Key[];
 }
