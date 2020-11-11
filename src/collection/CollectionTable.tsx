@@ -32,6 +32,7 @@ import ErrorBoundary from "../components/ErrorBoundary";
 import { getPreviewSizeFrom } from "../preview/PreviewComponentProps";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { useSelectedEntityContext } from "../SelectedEntityContext";
+import { default as CollectionCell } from "./CollectionCell";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -68,23 +69,6 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
         },
         clickableTableRow: {
             cursor: "pointer"
-        },
-        tableCell: {
-            overflow: "auto",
-            marginTop: "auto",
-            marginBottom: "auto",
-            width: "100%",
-            padding: ({ size }) => {
-                switch (size) {
-                    case "xs":
-                        return theme.spacing(0);
-                    case "l":
-                    case "xl":
-                        return theme.spacing(2);
-                    default:
-                        return theme.spacing(1);
-                }
-            }
         },
         column: {
             overflow: "auto !important"
@@ -416,28 +400,27 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         const property = schema.properties[propertyKey];
 
         if (column.type === "property")
-            return (
-                <Box className={classes.tableCell}>
-                    {entity ?
-                        <ErrorBoundary>
-                            <PreviewComponent name={propertyKey}
-                                              value={entity.values[propertyKey]}
-                                              property={property}
-                                              size={getPreviewSizeFrom(size)}
-                                              entitySchema={schema}/>
-                        </ErrorBoundary>
-                        :
-                        <SkeletonComponent property={property}
-                                           size={getPreviewSizeFrom(size)}/>}
-
-                </Box>
-            );
+            return entity ?
+                <ErrorBoundary>
+                    <CollectionCell size={size}
+                                    align={column.align}>
+                        <PreviewComponent name={propertyKey}
+                                          value={entity.values[propertyKey]}
+                                          property={property}
+                                          size={getPreviewSizeFrom(size)}
+                                          entitySchema={schema}/>
+                    </CollectionCell>
+                </ErrorBoundary>
+                :
+                <SkeletonComponent property={property}
+                                   size={getPreviewSizeFrom(size)}/>;
         else if (column.type === "additional")
             return (
                 <ErrorBoundary>
-                    <Box className={classes.tableCell}>
+                    <CollectionCell size={size}
+                                    align={column.align}>
                         {additionalColumnsMap[column.dataKey].builder(entity)}
-                    </Box>
+                    </CollectionCell>
                 </ErrorBoundary>
             );
         else

@@ -156,8 +156,7 @@ const productSchema = buildSchema({
             description: "Example of a markdown field",
             config: {
                 markdown: true
-            },
-            columnWidth: 300
+            }
         },
         available: {
             dataType: "boolean",

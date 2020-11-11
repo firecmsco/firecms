@@ -103,7 +103,7 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
         })))(MenuItem);
 
     const sizeSelect = (
-        <Tooltip title="Table size">
+        <Tooltip title="Table size" placement={"top"}>
             <Select
                 value={props.size}
                 style={{ width: 56 }}
