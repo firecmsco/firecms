@@ -503,6 +503,31 @@ export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
     properties: {
+        images: {
+            title: "Image URLs",
+            dataType: "array",
+            of: {
+                dataType: "string",
+                config: {
+                    storageMeta: {
+                        mediaType: "image",
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"],
+                    }
+                }
+            }
+        },
+        image: {
+            title: "Image",
+            dataType: "string",
+            config: {
+                storageMeta: {
+                    mediaType: "image",
+                    storagePath: "test",
+                    acceptedFiles: ["image/*"]
+                }
+            }
+        },
         mark: {
             title: "Mark",
             dataType: "string",
@@ -567,38 +592,12 @@ export const testEntitySchema = buildSchema({
             },
             dataType: "number"
         },
-        image: {
-            title: "Image",
-            dataType: "string",
-            config: {
-                storageMeta: {
-                    mediaType: "image",
-                    storagePath: "test",
-                    acceptedFiles: ["image/*"]
-                }
-            }
-        },
         pdf: {
             title: "Pdf",
             dataType: "string",
             config: {
                 storageMeta: {
                     storagePath: "test"
-                }
-            }
-        },
-        image_urls: {
-            title: "Image URLs",
-            dataType: "array",
-            of: {
-                dataType: "string",
-                config: {
-                    storageMeta: {
-                        mediaType: "image",
-                        storagePath: "images",
-                        acceptedFiles: ["image/*"],
-                        storeUrl: true
-                    }
                 }
             }
         },

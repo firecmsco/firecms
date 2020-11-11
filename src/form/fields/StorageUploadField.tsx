@@ -37,25 +37,43 @@ import { useSnackbarContext } from "../../snackbar_controller";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { PreviewSize } from "../../preview/PreviewComponentProps";
 
+import clsx from "clsx";
+import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
+
 export const useStyles = makeStyles(theme => ({
     dropZone: {
         position: "relative",
-        transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+        paddingTop: "2px",
+        minHeight: "254px",
+        outline: 0,
         borderTopLeftRadius: "2px",
         borderTopRightRadius: "2px",
         backgroundColor: "rgba(0, 0, 0, 0.09)",
         borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+        boxSizing: "border-box",
+        transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+        "&:focus": {
+            borderBottom: `2px solid ${theme.palette.primary.dark}`
+        }
+    },
+    nonActiveDrop: {
         "&:hover": {
             backgroundColor: "#dedede"
         }
     },
     activeDrop: {
-        backgroundColor: "#dedede"
+        paddingTop: "0px",
+        boxSizing: "border-box",
+        border: "2px solid"
     },
     acceptDrop: {
+        transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+        background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.09) 10px, rgba(0, 0, 0, 0.12) 10px, rgba(0, 0, 0, 0.12) 20px) !important",
+        border: "2px solid",
         borderColor: theme.palette.success.main
     },
     rejectDrop: {
+        border: "2px solid",
         borderColor: theme.palette.error.main
     },
     uploadItem: {
@@ -66,7 +84,19 @@ export const useStyles = makeStyles(theme => ({
     uploadItemSmall: {
         padding: theme.spacing(1),
         minWidth: 118,
-        minHeight: 118
+        minHeight: 118,
+        boxSizing: "border-box"
+    },
+    arrayEntry: {
+        border: "1px dashed transparent"
+    },
+    arrayEntryHovered: {
+        opacity: 0.5,
+        border: "1px dashed gray",
+        boxSizing: "border-box"
+    },
+    arrayEntryDragging: {
+        cursor: "move"
     }
 }));
 
@@ -80,6 +110,7 @@ type StorageUploadFieldProps = CMSFieldProps<string | string[]>;
  * Or have a pending file being uploaded.
  */
 interface StorageFieldItem {
+    id: number; // generated on the fly for internal use only
     storagePathOrDownloadUrl?: string;
     file?: File;
     metadata?: storage.UploadMetadata,
@@ -115,17 +146,19 @@ export default function StorageUploadField({
             </FormHelperText>
 
             <StorageUpload
-                           value={value}
-                           property={property}
-                           onChange={(newValue) => {
-                               setFieldTouched(field.name);
-                               setFieldValue(
-                                   field.name,
-                                   newValue
-                               );
-                           }}
-                           entitySchema={entitySchema}
-                           small={false}/>
+                value={value}
+                name={field.name}
+                property={property}
+                onChange={(newValue) => {
+                    setFieldTouched(field.name);
+                    setFieldValue(
+                        field.name,
+                        newValue
+                    );
+                }}
+                multipleFilesSupported={multipleFilesSupported}
+                entitySchema={entitySchema}
+                small={false}/>
 
             {includeDescription &&
             <FieldDescription property={property}/>}
@@ -139,21 +172,24 @@ export default function StorageUploadField({
 
 interface StorageUploadProps {
     value: string | string[];
+    name: string;
     property: StringProperty | ArrayProperty<string>;
     onChange: (value: string | string[] | null) => void;
+    multipleFilesSupported: boolean;
     small: boolean;
-    entitySchema: EntitySchema;
+    entitySchema: EntitySchema
 }
 
 export function StorageUpload({
                                   property,
+                                  name,
                                   value,
                                   onChange,
+                                  multipleFilesSupported,
                                   small,
                                   entitySchema
                               }: StorageUploadProps) {
 
-    const multipleFilesSupported = property.dataType === "array";
 
     if (multipleFilesSupported) {
         const arrayProperty = property as ArrayProperty<string>;
@@ -185,6 +221,7 @@ export function StorageUpload({
             value as string[]
             : [value as string]).map(entry => (
             {
+                id: getRandomId(),
                 storagePathOrDownloadUrl: entry,
                 metadata: metadata,
                 size: size
@@ -193,11 +230,28 @@ export function StorageUpload({
 
     const [initialValue, setInitialValue] = React.useState<string | string[]>(value);
     const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
+    const [hoveredIndex, setHoveredIndex] = React.useState<number | undefined>(undefined);
 
     if (!deepEqual(initialValue, value)) {
         setInitialValue(value);
         setInternalValue(internalInitialValue);
     }
+
+    function getRandomId() {
+        return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
+    }
+
+    const moveItem = (fromIndex: number, toIndex: number) => {
+        const newValue = [...internalValue];
+        const item = newValue[fromIndex];
+        newValue.splice(fromIndex, 1);
+        newValue.splice(toIndex, 0, item);
+        setInternalValue(newValue);
+        const fieldValue = newValue
+            .filter(e => !!e.storagePathOrDownloadUrl)
+            .map(e => e.storagePathOrDownloadUrl as string);
+        onChange(fieldValue);
+    };
 
     function removeDuplicates(items: StorageFieldItem[]) {
         return items.filter(
@@ -208,18 +262,23 @@ export function StorageUpload({
         );
     }
 
-    const onDrop = (acceptedFiles: File[]) => {
+    const onExternalDrop = (acceptedFiles: File[]) => {
+
+        if (!acceptedFiles.length)
+            return;
 
         let newInternalValue: StorageFieldItem[];
         if (multipleFilesSupported) {
             newInternalValue = [...internalValue,
                 ...(acceptedFiles.map(file => ({
+                    id: getRandomId(),
                     file,
                     metadata,
                     size: size
                 } as StorageFieldItem)))];
         } else {
             newInternalValue = [{
+                id: getRandomId(),
                 file: acceptedFiles[0],
                 metadata,
                 size: size
@@ -228,44 +287,27 @@ export function StorageUpload({
 
         // Remove either storage path or file duplicates
         newInternalValue = removeDuplicates(newInternalValue);
-
         setInternalValue(newInternalValue);
     };
 
     const onFileUploadComplete = async (uploadedPath: string,
-                                        file: File,
+                                        entry: StorageFieldItem,
                                         metadata?: storage.UploadMetadata) => {
 
-        console.debug("onFileUploadComplete", uploadedPath, file);
+        console.debug("onFileUploadComplete", uploadedPath, entry);
 
         let downloadUrl: string | undefined;
         if (storageMeta.storeUrl) {
             downloadUrl = await getDownloadURL(uploadedPath);
         }
 
-        let item: StorageFieldItem | undefined = internalValue.find(
-            entry => entry.file === file
-                || entry.storagePathOrDownloadUrl === uploadedPath
-                || entry.storagePathOrDownloadUrl === downloadUrl);
-
         let newValue: StorageFieldItem[];
 
-        if (!item) {
-            item = {
-                storagePathOrDownloadUrl: storageMeta.storeUrl ? downloadUrl : uploadedPath,
-                file: file,
-                metadata: metadata,
-                size: size
-            };
-            if (multipleFilesSupported)
-                newValue = [...internalValue, item];
-            else newValue = [item];
-        } else {
-            item.storagePathOrDownloadUrl = storageMeta.storeUrl ? downloadUrl : uploadedPath;
-            item.file = file;
-            item.metadata = metadata;
-            newValue = [...internalValue];
-        }
+        entry.storagePathOrDownloadUrl = storageMeta.storeUrl ? downloadUrl : uploadedPath;
+        entry.file = entry.file;
+        entry.metadata = metadata;
+        newValue = [...internalValue];
+
         newValue = removeDuplicates(newValue);
         setInternalValue(newValue);
 
@@ -299,7 +341,7 @@ export function StorageUpload({
         isDragReject
     } = useDropzone({
             accept: storageMeta.acceptedFiles,
-            onDrop: onDrop
+            onDrop: onExternalDrop
         }
     );
 
@@ -314,11 +356,15 @@ export function StorageUpload({
         <RootRef rootRef={ref}>
 
             <div {...rootProps}
-                 className={`${classes.dropZone} ${isDragActive ? classes.activeDrop : ""} ${isDragReject ? classes.rejectDrop : ""} ${isDragAccept ? classes.acceptDrop : ""}`}
+                 className={clsx(classes.dropZone, {
+                     [classes.nonActiveDrop]: !isDragActive,
+                     [classes.activeDrop]: isDragActive,
+                     [classes.rejectDrop]: isDragReject,
+                     [classes.acceptDrop]: isDragAccept
+                 })}
             >
 
-                <input
-                    {...getInputProps()} />
+                <input                        {...getInputProps()} />
 
                 <Box display="flex"
                      flexDirection="row"
@@ -328,13 +374,13 @@ export function StorageUpload({
                      minHeight={250}>
 
                     {internalValue.map((entry, index) => {
+                        let child;
                         if (entry.storagePathOrDownloadUrl) {
                             const renderProperty = multipleFilesSupported
                                 ? (property as ArrayProperty<string>).of as Property
                                 : property;
-                            return (
+                            child = (
                                 <StorageItemPreview
-                                    key={`storage_preview_${index}`}
                                     name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                     property={renderProperty}
                                     value={entry.storagePathOrDownloadUrl}
@@ -343,10 +389,9 @@ export function StorageUpload({
                                     size={entry.size}/>
                             );
                         } else if (entry.file) {
-                            return (
+                            child = (
                                 <StorageUploadProgress
-                                    key={`storage_upload_${entry.file.name}`}
-                                    file={entry.file}
+                                    entry={entry}
                                     metadata={metadata}
                                     storagePath={storageMeta.storagePath}
                                     onFileUploadComplete={onFileUploadComplete}
@@ -354,7 +399,17 @@ export function StorageUpload({
                                 />
                             );
                         }
-                        return null;
+
+                        return <StorageEntry
+                            key={`storage_entry_${index}`}
+                            entry={entry}
+                            index={index}
+                            dragType={"storage_card_" + name}
+                            moveItem={moveItem}
+                            onHover={setHoveredIndex}
+                            hovered={hoveredIndex === index}>
+                            {child}
+                        </StorageEntry>;
                     })
                     }
 
@@ -377,20 +432,121 @@ export function StorageUpload({
 
 }
 
+export function StorageEntry({
+                                 children,
+                                 entry,
+                                 index,
+                                 moveItem,
+                                 dragType,
+                                 hovered,
+                                 onHover
+                             }: {
+    entry: StorageFieldItem,
+    children: React.ReactNode;
+    index: number,
+    dragType: string,
+    moveItem: (dragIndex: number, hoverIndex: number) => void,
+    hovered: boolean;
+    onHover: (index?: number) => void;
+}) {
+
+    const classes = useStyles();
+    const ref = React.useRef<HTMLDivElement>(null);
+
+    const [, drop] = useDrop({
+        accept: dragType,
+        hover(item: {
+                  id: number
+                  index: number,
+                  type: string
+              },
+              monitor: DropTargetMonitor) {
+
+            if (!ref.current) {
+                return;
+            }
+            const dragIndex = item.index;
+            const hoverIndex = index;
+
+            // Don't replace items with themselves
+            if (dragIndex === hoverIndex) {
+                return;
+            }
+
+            if (!ref.current) {
+                onHover(undefined);
+                return;
+            }
+
+            const hoverBoundingRect = ref.current.getBoundingClientRect();
+            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+            const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
+
+            // Determine mouse position
+            const clientOffset = monitor.getClientOffset();
+            const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+            const hoverClientX = (clientOffset as XYCoord).x - hoverBoundingRect.left;
+
+            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY - 50 && hoverClientX < hoverMiddleX - 50) {
+                onHover(undefined);
+                return;
+            }
+
+            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY + 50 && hoverClientX > hoverMiddleX - 50) {
+                onHover(undefined);
+                return;
+            }
+
+            onHover(hoverIndex);
+
+            // Time to actually perform the action
+            moveItem(dragIndex, hoverIndex);
+
+            // Note: we're mutating the monitor item here!
+            // Generally it's better to avoid mutations,
+            // but it's good here for the sake of performance
+            // to avoid expensive index searches.
+            item.index = hoverIndex;
+        },
+        drop() {
+            onHover(undefined);
+        }
+    });
+
+    const [{ isDragging }, drag, preview] = useDrag({
+        item: { type: dragType, id: entry.id, index },
+        collect: (monitor: any) => ({
+            isDragging: monitor.isDragging()
+        })
+    });
+
+    drag(drop(ref));
+
+    return <div ref={ref}
+                className={clsx({
+                    [classes.arrayEntryDragging]: isDragging,
+                    [classes.arrayEntryHovered]: hovered,
+                    [classes.arrayEntry]: !hovered
+                })}>
+        {children}
+    </div>;
+
+}
+
 
 interface StorageUploadItemProps {
     storagePath: string;
     metadata?: storage.UploadMetadata,
-    file: File,
+    entry: StorageFieldItem,
     onFileUploadComplete: (value: string,
-                           file: File,
+                           entry: StorageFieldItem,
                            metadata?: storage.UploadMetadata) => void;
     size: PreviewSize;
 }
 
 export function StorageUploadProgress({
                                           storagePath,
-                                          file,
+                                          entry,
                                           metadata,
                                           onFileUploadComplete,
                                           size
@@ -403,8 +559,8 @@ export function StorageUploadProgress({
     const [progress, setProgress] = React.useState<number>(-1);
 
     useEffect(() => {
-        if (file)
-            upload(file);
+        if (entry.file)
+            upload(entry.file);
     }, []);
 
     function upload(file: File) {
@@ -438,7 +594,7 @@ export function StorageUploadProgress({
         }, () => {
             const fullPath = uploadTask.snapshot.ref.fullPath;
             setProgress(-1);
-            onFileUploadComplete(fullPath, file, metadata);
+            onFileUploadComplete(fullPath, entry, metadata);
         });
     }
 
@@ -458,8 +614,7 @@ export function StorageUploadProgress({
             </Paper>
         </Box>
 
-    )
-        ;
+    );
 
 }
 

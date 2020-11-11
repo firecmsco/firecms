@@ -71,7 +71,7 @@ export default function ArrayDefaultField<T>({
         name={field.name}
         render={arrayHelpers => {
 
-            const moveCard = (dragIndex: number, hoverIndex: number) => {
+            const moveItem = (dragIndex: number, hoverIndex: number) => {
                 const newValue = [...internalValue];
                 const temp = newValue[dragIndex];
                 newValue[dragIndex] = newValue[hoverIndex];
@@ -111,8 +111,8 @@ export default function ArrayDefaultField<T>({
                             <ArrayEntry
                                 key={`array_field_${field.name}_${entry}`}
                                 id={entry}
-                                type={"card_" + field.name}
-                                moveCard={moveCard}
+                                type={"array_card_" + field.name}
+                                moveItem={moveItem}
                                 index={index}
                                 field={field}
                                 createFormField={createFormField}
@@ -147,7 +147,7 @@ export default function ArrayDefaultField<T>({
 
 function ArrayEntry<T>(props: {
     id: any
-    moveCard: (dragIndex: number, hoverIndex: number) => void,
+    moveItem: (dragIndex: number, hoverIndex: number) => void,
     type: string
     index: number,
     field: FieldInputProps<T>,
@@ -166,7 +166,7 @@ function ArrayEntry<T>(props: {
 }) {
     const {
         id,
-        moveCard,
+        moveItem,
         type,
         index,
         field,
@@ -227,7 +227,7 @@ function ArrayEntry<T>(props: {
             }
 
             // Time to actually perform the action
-            moveCard(dragIndex, hoverIndex);
+            moveItem(dragIndex, hoverIndex);
 
             // Note: we're mutating the monitor item here!
             // Generally it's better to avoid mutations,

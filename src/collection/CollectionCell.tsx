@@ -4,7 +4,6 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Measure from "react-measure";
 import { getRowHeight } from "./common";
 import clsx from "clsx";
-import { PreviewComponentProps } from "../preview";
 
 const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
     createStyles({
