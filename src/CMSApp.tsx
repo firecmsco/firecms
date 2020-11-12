@@ -5,12 +5,7 @@ import {
     Button,
     createStyles,
     CssBaseline,
-    Divider,
-    Drawer,
     Grid,
-    List,
-    ListItem,
-    ListItemText,
     makeStyles,
     Theme
 } from "@material-ui/core";
@@ -20,7 +15,6 @@ import DateFnsUtils from "@date-io/date-fns";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {
     BrowserRouter as Router,
-    Link as ReactLink,
     Redirect,
     Route,
     Switch,
@@ -35,7 +29,7 @@ import "firebase/firestore";
 
 import { CircularProgressCenter } from "./components";
 import { EntityCollectionView } from "./models";
-import { addInitialSlash, buildCollectionPath } from "./routes";
+import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import { Authenticator } from "./authenticator";
 import { blue, pink, red } from "@material-ui/core/colors";
 import { SelectedEntityProvider } from "./SelectedEntityContext";
@@ -46,15 +40,18 @@ import { CMSAppBar } from "./components/CMSAppBar";
 import { AuthContext, AuthProvider } from "./auth";
 import { SnackbarProvider } from "./snackbar_controller";
 import { CMSRoute } from "./routes/CMSRoute";
-import EntityDetailDialog from "./routes/SideCMSRoute";
 import { DndProvider } from "react-dnd";
 import { AdditionalView, CMSAppProps } from "./CMSAppProps";
 import { AppConfigProvider } from "./AppConfigContext";
-
-const drawerWidth = 240;
+import { CMSDrawer } from "./CMSDrawer";
+import EntityDetailDialog from "./routes/SideCMSRoute";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        logo: {
+            padding: theme.spacing(3),
+            maxWidth: 240
+        },
         main: {
             display: "flex",
             flexDirection: "column",
@@ -72,13 +69,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 borderBottom: 0
             }
         },
-        logo: {
-            padding: theme.spacing(3),
-            maxWidth: drawerWidth
-        },
-        drawerPaper: {
-            width: drawerWidth
-        },
         filter: {
             flexGrow: 1,
             padding: theme.spacing(1)
@@ -90,7 +80,6 @@ const useStyles = makeStyles((theme: Theme) =>
         }
     })
 );
-
 
 export function CMSApp(props: CMSAppProps) {
 
@@ -105,7 +94,7 @@ export function CMSApp(props: CMSAppProps) {
         primaryColor,
         secondaryColor,
         fontFamily,
-        toolbarExtraWidget,
+        toolbarExtraWidget
     } = props;
 
     const classes = useStyles();
@@ -294,96 +283,43 @@ export function CMSApp(props: CMSAppProps) {
                         return <CircularProgressCenter/>;
                     }
 
-                    const drawer = (
-                        <React.Fragment>
-
-                            {logo &&
-                            <img className={classes.logo} src={logo}/>}
-
-                            <Divider/>
-                            <List>
-                                {Object.entries(navigation).map(([key, view], index) => (
-                                    <ListItem
-                                        button
-                                        key={`navigation_${index}_${key}`}
-                                        component={ReactLink}
-                                        to={buildCollectionPath(view.relativePath)}
-                                    >
-                                        <ListItemText
-                                            primary={view.name.toUpperCase()}
-                                            primaryTypographyProps={{ variant: "subtitle2" }}
-                                            onClick={closeDrawer}/>
-                                    </ListItem>
-                                ))}
-
-                                {additionalViews && (
-                                    <React.Fragment>
-                                        <Divider/>
-                                        {additionalViews.map(additionalView => (
-                                            <ListItem
-                                                button
-                                                key={`additional-view-${additionalView.path}`}
-                                                component={ReactLink}
-                                                to={addInitialSlash(additionalView.path)}
-                                            >
-                                                <ListItemText
-                                                    primary={additionalView.name}
-                                                    primaryTypographyProps={{ variant: "subtitle2" }}/>
-                                            </ListItem>
-                                        ))}
-                                    </React.Fragment>
-                                )}
-                            </List>
-
-                            <EntityDetailDialog navigation={navigation}/>
-
-                        </React.Fragment>
-                    );
-
                     return firebaseConfig &&
-                    <AppConfigProvider cmsAppConfig={props}
-                                       firebaseConfig={firebaseConfig}>
-                        <Router>
-                            <SelectedEntityProvider>
-                                <BreadcrumbsProvider>
-                                    <SnackbarProvider>
+                        <AppConfigProvider cmsAppConfig={props}
+                                           firebaseConfig={firebaseConfig}>
+                            <Router>
+                                <SelectedEntityProvider>
+                                    <BreadcrumbsProvider>
+                                        <SnackbarProvider>
 
-                                        <nav>
-                                            <Drawer
-                                                variant="temporary"
-                                                anchor={"left"}
-                                                open={drawerOpen}
-                                                onClose={closeDrawer}
-                                                classes={{
-                                                    paper: classes.drawerPaper
-                                                }}
-                                                ModalProps={{
-                                                    keepMounted: true
-                                                }}
-                                            >
-                                                {drawer}
-                                            </Drawer>
-                                        </nav>
+                                            <nav>
+                                                <CMSDrawer logo={logo}
+                                                           drawerOpen={drawerOpen}
+                                                           navigation={navigation}
+                                                           closeDrawer={closeDrawer}
+                                                           additionalViews={additionalViews}/>
+                                            </nav>
 
-                                        <Box className={classes.main}>
-                                            <CssBaseline/>
-                                            <CMSAppBar title={name}
-                                                       handleDrawerToggle={handleDrawerToggle}
-                                                       toolbarExtraWidget={toolbarExtraWidget}/>
+                                            <Box className={classes.main}>
+                                                <CssBaseline/>
+                                                <CMSAppBar title={name}
+                                                           handleDrawerToggle={handleDrawerToggle}
+                                                           toolbarExtraWidget={toolbarExtraWidget}/>
 
-                                            <main
-                                                className={classes.content}>
-                                                <CMSRouterSwitch
-                                                    navigation={navigation}
-                                                    additionalViews={additionalViews}/>
-                                            </main>
-                                        </Box>
+                                                <main
+                                                    className={classes.content}>
+                                                    <CMSRouterSwitch
+                                                        navigation={navigation}
+                                                        additionalViews={additionalViews}/>
+                                                </main>
+                                            </Box>
 
-                                    </SnackbarProvider>
-                                </BreadcrumbsProvider>
-                            </SelectedEntityProvider>
-                        </Router>
-                    </AppConfigProvider>;
+                                            <EntityDetailDialog navigation={navigation}/>
+
+                                        </SnackbarProvider>
+                                    </BreadcrumbsProvider>
+                                </SelectedEntityProvider>
+                            </Router>
+                        </AppConfigProvider>;
                 }
 
                 return (

@@ -137,6 +137,7 @@ const useStylesMain = makeStyles((theme: Theme) =>
     })
 );
 
+
 /**
  * Is this form displayed as the main route or in the lateral menu
  */
@@ -147,14 +148,16 @@ interface EntityRouteProps<S extends EntitySchema> {
     collectionPath: string;
     breadcrumbs?: BreadcrumbEntry[];
     context: FormContext;
+    onViewSelected?: (selected: "form" | "collection") => void;
 }
 
 function EntityFormRoute<S extends EntitySchema>({
-                                                            view,
-                                                            collectionPath,
-                                                            breadcrumbs,
-                                                            context
-                                                        }: EntityRouteProps<S>) {
+                                                     view,
+                                                     collectionPath,
+                                                     breadcrumbs,
+                                                     context,
+                                                     onViewSelected
+                                                 }: EntityRouteProps<S>) {
 
     const entityId: string = useParams()["entityId"];
 
@@ -206,6 +209,10 @@ function EntityFormRoute<S extends EntitySchema>({
         };
     }, [entityId, view]);
 
+    useEffect(() => {
+        if (onViewSelected)
+            onViewSelected(tabsPosition === 0 ? "form" : "collection");
+    }, [tabsPosition]);
 
     function onSubcollectionEntityClick(collectionPath: string,
                                         entity: Entity<S>) {
@@ -464,6 +471,8 @@ function EntityFormRoute<S extends EntitySchema>({
                             <OpenInBrowserIcon/>
                         </IconButton>
                         }
+
+                        <Box flexGrow={1}/>
 
                         <Tabs
                             value={tabsPosition}

@@ -538,7 +538,15 @@ Firestore data schema.
         If this view is in the root the path is equal to the absolute one.
         This path also determines the URL in FireCMS
 
-* `schema`: Schema representing the entities of this view
+* `defaultSize`: Default size of the rendered collection
+
+* `size`: Optional field used to group top level navigation entries under a
+        navigation view. If you set this value in a subcollection it has no
+        effect.
+
+* `group`: Optional field used to group top level navigation entries under a
+        navigation view. If you set this value in a subcollection it has no
+        effect.
 
 * `properties`: Properties displayed in this collection. If this property is not set
         every property is displayed

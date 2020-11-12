@@ -90,7 +90,6 @@ export default function ReferenceField<S extends EntitySchema>({
     };
 
     const classes = useStyles();
-    const title = property.title;
 
     const appConfig:CMSAppProps = useAppConfigContext();
     const collectionView: EntityCollectionView<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
@@ -103,7 +102,6 @@ export default function ReferenceField<S extends EntitySchema>({
                 className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
 
                 {collectionView && <ReferenceDialog value={value}
-                                                    title={title}
                                                     property={property}
                                                     collectionPath={property.collectionPath}
                                                     collectionView={collectionView}
@@ -133,8 +131,6 @@ export default function ReferenceField<S extends EntitySchema>({
 export interface ReferenceDialogProps<S extends EntitySchema<Key>, Key extends string = string> {
 
     value?: any;
-
-    title?: string,
 
     property: ReferenceProperty;
 
@@ -169,7 +165,6 @@ export function ReferenceDialog<S extends EntitySchema>(
     {
         onEntityClick,
         value,
-        title,
         property,
         collectionView,
         initialFilter,
@@ -183,6 +178,7 @@ export function ReferenceDialog<S extends EntitySchema>(
     const classes = useStyles();
     const schema = collectionView.schema;
     const textSearchDelegate = collectionView.textSearchDelegate;
+    const filterableProperties = collectionView.filterableProperties;
 
     const [open, setOpen] = React.useState(false);
     const [entity, setEntity] = React.useState<Entity<S>>();
@@ -349,7 +345,6 @@ export function ReferenceDialog<S extends EntitySchema>(
 
             {buildEntityView()}
 
-
             <Dialog
                 onClose={handleClose}
                 maxWidth={"xl"}
@@ -361,7 +356,8 @@ export function ReferenceDialog<S extends EntitySchema>(
                                      includeToolbar={true}
                                      onEntityClick={handleEntityClick}
                                      paginationEnabled={false}
-                                     title={`Select ${title}`}
+                                     title={`Select ${schema.name}`}
+                                     filterableProperties={filterableProperties}
                                      textSearchDelegate={textSearchDelegate}
                                      initialFilter={initialFilter}
                     />

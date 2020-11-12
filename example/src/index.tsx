@@ -305,7 +305,7 @@ const blogSchema = buildSchema({
                     }
                 }
             },
-            description: "This fields allows uploading multiple images at once"
+            description: "This fields allows uploading multiple images at once and reordering"
         },
         priority: {
             title: "Priority",
@@ -698,6 +698,7 @@ if (process.env.NODE_ENV !== "production") {
     navigation.push(buildCollection({
         relativePath: "test_entity",
         schema: testEntitySchema,
+        group: "Test group",
         name: "Test entity",
         filterableProperties: ["difficulty", "search_adjacent", "description"],
         subcollections : [{

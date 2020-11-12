@@ -37,6 +37,13 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
     defaultSize?: CollectionSize;
 
     /**
+     * Optional field used to group top level navigation entries under a
+     * navigation view. If you set this value in a subcollection it has no
+     * effect.
+     */
+    group?: string;
+
+    /**
      * If enabled, content is loaded in batch. If `false` all entities in the
      * collection are loaded. Defaults to `true`
      */

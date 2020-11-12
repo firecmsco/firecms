@@ -12,20 +12,21 @@ import {
     makeStyles,
     Tab,
     Tabs,
+    Tooltip,
     Typography
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import { useSelectedEntityContext } from "../SelectedEntityContext";
 import { CollectionTable } from "../collection/CollectionTable";
-import { getEntityPathFrom, removeInitialSlash } from "../routes";
+import { getEntityPathFrom, removeInitialSlash } from "../routes/navigation";
 
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
         height: "100%",
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "column"
     },
     container: {
         flexGrow: 1,
@@ -93,16 +94,20 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
         <Box
             className={classes.header}>
 
-            <IconButton onClick={(e) => selectedEntityContext.close()}>
-                <CloseIcon/>
-            </IconButton>
+            <Tooltip title={"Close"}>
+                <IconButton onClick={(e) => selectedEntityContext.close()}>
+                    <CloseIcon/>
+                </IconButton>
+            </Tooltip>
 
             {entity &&
-            <IconButton
-                        component={ReactLink}
-                        to={getEntityPathFrom(entity.reference.path)}>
-                <EditIcon/>
-            </IconButton>
+            <Tooltip title={"Full size"}>
+                <IconButton
+                    component={ReactLink}
+                    to={getEntityPathFrom(entity.reference.path)}>
+                    <EditIcon/>
+                </IconButton>
+            </Tooltip>
             }
 
             <Box paddingTop={2} paddingLeft={2} paddingRight={2}>

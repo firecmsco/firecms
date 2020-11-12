@@ -1,5 +1,17 @@
 # Change Log
 
+## [0.16.2] - 2020-11-12
+### Added
+- Drag and drop reordering for storage fields
+- `group` field in root navigation entries allow to group items into
+subcategories.
+
+### Changed
+- Adaptive wider size to subcollections seen in the entity side menu, which
+allows for a better layout of the table.
+- Collection cells fade out if overflowed, instead of allowing scrolling
+
+
 ## [0.16.0] - 2020-11-10
 ### Added
 - Auto values for timestamps. You can now set the `autoValue` property to

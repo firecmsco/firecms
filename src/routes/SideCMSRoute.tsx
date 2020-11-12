@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { EntityCollectionView, EntitySchema } from "../models";
 import { buildCollectionPath, removeInitialSlash } from "./navigation";
 import {
@@ -8,7 +8,7 @@ import {
     useParams,
     useRouteMatch
 } from "react-router-dom";
-import  EntityFormRoute  from "./EntityFormRoute";
+import EntityFormRoute from "./EntityFormRoute";
 import { useSelectedEntityContext } from "../SelectedEntityContext";
 import { createStyles, Drawer, makeStyles } from "@material-ui/core";
 
@@ -19,18 +19,21 @@ interface SideCMSRouteProps<S extends EntitySchema> {
     view: EntityCollectionView<S>;
     collectionPath: string;
     type: CMSRouteType;
+    onViewSelected: (selected: "form" | "collection") => void;
 }
 
 export function SideCMSRoute<S extends EntitySchema>({
                                                          view,
                                                          collectionPath,
-                                                         type
+                                                         type,
+                                                         onViewSelected
                                                      }: SideCMSRouteProps<S>) {
 
     const entityId: string = useParams()["entityId"];
 
     const location = useLocation();
     const { path, url } = useRouteMatch();
+
 
     return (
 
@@ -42,6 +45,7 @@ export function SideCMSRoute<S extends EntitySchema>({
                         type={"entity"}
                         collectionPath={collectionPath}
                         view={view}
+                        onViewSelected={onViewSelected}
                     />
                 </Route>
 
@@ -50,6 +54,7 @@ export function SideCMSRoute<S extends EntitySchema>({
                         type={"entity"}
                         collectionPath={collectionPath}
                         view={view}
+                        onViewSelected={onViewSelected}
                     />
                 </Route>
 
@@ -65,6 +70,7 @@ export function SideCMSRoute<S extends EntitySchema>({
                                 type={"collection"}
                                 collectionPath={`${collectionPath}/${entityId}/${removeInitialSlash(entityCollectionView.relativePath)}`}
                                 view={entityCollectionView}
+                                onViewSelected={onViewSelected}
                             />
                         </Route>
                     )
@@ -76,6 +82,7 @@ export function SideCMSRoute<S extends EntitySchema>({
                         collectionPath={collectionPath}
                         view={view}
                         context={"side"}
+                        onViewSelected={onViewSelected}
                     />
                 </Route>
 
@@ -98,14 +105,34 @@ export const useStyles = makeStyles(theme => createStyles({
         },
         [theme.breakpoints.down("xs")]: {
             width: "100vw"
-        }
+        },
+        transition: "width 150ms cubic-bezier(0.33, 1, 0.68, 1)"
+    },
+    wide: {
+        width: "65vw",
+        height: "100%",
+        maxWidth: "1500px",
+        [theme.breakpoints.down("md")]: {
+            width: "80vw"
+        },
+        [theme.breakpoints.down("sm")]: {
+            width: "95vw"
+        },
+        [theme.breakpoints.down("xs")]: {
+            width: "100vw"
+        },
+        transition: "width 150ms cubic-bezier(0.33, 1, 0.68, 1)"
     }
 }));
 
-export default function EntityDetailDialog<S extends EntitySchema>({ navigation }: { navigation: EntityCollectionView[] }) {
+export default function EntityDetailDialog<S extends EntitySchema>({ navigation }: {
+    navigation: EntityCollectionView[]
+}) {
 
     const selectedEntityContext = useSelectedEntityContext();
     const isOpen = selectedEntityContext.isOpen;
+
+    const [selectedView, setSelectedView] = useState<"form" | "collection">("form");
 
     const classes = useStyles();
 
@@ -115,13 +142,16 @@ export default function EntityDetailDialog<S extends EntitySchema>({ navigation 
             anchor={"right"}
             variant={"temporary"}
             open={isOpen}
-            onClose={(_) => selectedEntityContext.close()}
+            onClose={(_) => {
+                setSelectedView("form");
+                selectedEntityContext.close();
+            }}
             ModalProps={{
                 keepMounted: true
             }}
         >
             <div
-                className={classes.root}>
+                className={selectedView === "form" ? classes.root : classes.wide}>
                 <Switch>
                     {navigation.map(entityCollectionView => (
                             <Route
@@ -131,6 +161,7 @@ export default function EntityDetailDialog<S extends EntitySchema>({ navigation 
                                     type={"collection"}
                                     collectionPath={entityCollectionView.relativePath}
                                     view={entityCollectionView}
+                                    onViewSelected={setSelectedView}
                                 />
                             </Route>
                         )

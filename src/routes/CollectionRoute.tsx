@@ -1,6 +1,6 @@
 import React from "react";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
-import { BreadcrumbEntry, getRouterNewEntityPath } from "./navigation";
+import { BreadcrumbEntry } from "./navigation";
 import {
     Box,
     Button,
@@ -9,7 +9,7 @@ import {
     useMediaQuery,
     useTheme
 } from "@material-ui/core";
-import { Link as ReactLink, useHistory, useRouteMatch } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import { useBreadcrumbsContext } from "../BreacrumbsContext";
 import { CollectionTable } from "../collection/CollectionTable";
@@ -53,7 +53,7 @@ export function CollectionRoute<S extends EntitySchema>({
     const onEntityClick = (collectionPath: string, entity: Entity<S>) => {
         selectedEntityContext.open({
             entityId: entity.id,
-            collectionPath,
+            collectionPath
         });
     };
 
@@ -65,7 +65,7 @@ export function CollectionRoute<S extends EntitySchema>({
     const matches = useMediaQuery(theme.breakpoints.up("md"));
 
     function buildAddEntityButton() {
-        const onClick =(e:React.MouseEvent) => {
+        const onClick = (e: React.MouseEvent) => {
             e.stopPropagation();
             return selectedEntityContext.openNew({ collectionPath });
         };
@@ -112,7 +112,7 @@ export function CollectionRoute<S extends EntitySchema>({
                              includeToolbar={true}
                              editEnabled={true}
                              deleteEnabled={deleteEnabled}
-                onEntityClick={onEntityClick}
+                             onEntityClick={onEntityClick}
                              additionalColumns={view.additionalColumns}
                              defaultSize={view.defaultSize}
                              paginationEnabled={view.pagination === undefined ? true : view.pagination}
