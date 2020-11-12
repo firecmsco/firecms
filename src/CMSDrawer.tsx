@@ -18,7 +18,6 @@ import "firebase/firestore";
 import { EntityCollectionView } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import "./styles.module.css";
-import EntityDetailDialog from "./routes/SideCMSRoute";
 import { AdditionalView } from "./CMSAppProps";
 import Box from "@material-ui/core/Box/Box";
 
@@ -49,8 +48,9 @@ interface CMSDrawerProps {
 export function CMSDrawer({ logo, navigation, closeDrawer, drawerOpen, additionalViews }: CMSDrawerProps) {
 
     const classes = useStyles();
-
-    const groups: string[] = Object.values(navigation).map(e => e.group).filter(Boolean) as string[];
+    const groups: string[] = Array.from(new Set(
+        Object.values(navigation).map(e => e.group).filter(Boolean) as string[]
+    ).values());
     const ungroupedNavigationViews = Object.values(navigation).filter(e => !e.group);
 
     function createNavigationEntry(index: number, group: string, view: EntityCollectionView) {
