@@ -16,7 +16,8 @@ import {
     FormHelperText,
     IconButton,
     makeStyles,
-    Tooltip
+    Tooltip,
+    Typography
 } from "@material-ui/core";
 import React, { useEffect } from "react";
 import ErrorIcon from "@material-ui/icons/Error";
@@ -28,7 +29,7 @@ import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { useSelectedEntityContext } from "../../SelectedEntityContext";
 import { listenEntityFromRef } from "../../firebase";
-import SkeletonComponent from "../../preview/SkeletonComponent";
+import SkeletonComponent, { renderSkeletonCaptionText } from "../../preview/SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { PreviewComponent } from "../../preview";
 import ErrorBoundary from "../../components/ErrorBoundary";
@@ -49,6 +50,7 @@ export const useStyles = makeStyles(theme => createStyles({
         backgroundColor: "rgba(0, 0, 0, 0.09)",
         borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
         "&:hover": {
+            cursor: "pointer",
             backgroundColor: "#dedede"
         },
         color: "#838383",
@@ -91,7 +93,7 @@ export default function ReferenceField<S extends EntitySchema>({
 
     const classes = useStyles();
 
-    const appConfig:CMSAppProps = useAppConfigContext();
+    const appConfig: CMSAppProps = useAppConfigContext();
     const collectionView: EntityCollectionView<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
 
     const disabled = isSubmitting;
@@ -253,37 +255,36 @@ export function ReferenceDialog<S extends EntitySchema>(
             );
         } else if (value) {
             body = (
-                <Tooltip title={value && value.path}>
-                    <Box display={"flex"}
-                         flexDirection={"column"}
-                         flexGrow={1}
-                         m={1}>
+                <Box display={"flex"}
+                     flexDirection={"column"}
+                     flexGrow={1}
+                     ml={1}
+                     mr={1}>
 
-                        {listProperties && listProperties.map((key, index) => {
-                            const propertyKey = schema.properties[key as string];
-                            return (
-                                <Box key={"ref_prev_" + key + index}
-                                     mt={0.5}
-                                     mb={0.5}>
-                                    <ErrorBoundary>{
-                                        entity ?
-                                            React.createElement(PreviewComponent, {
-                                                name: key as string,
-                                                value: entity.values[key as string],
-                                                property: propertyKey,
-                                                size: "tiny",
-                                                entitySchema: entitySchema
-                                            })
-                                            :
-                                            <SkeletonComponent
-                                                property={propertyKey}
-                                                size={"tiny"}/>}
-                                    </ErrorBoundary>
-                                </Box>
-                            );
-                        })}
-                    </Box>
-                </Tooltip>
+                    {listProperties && listProperties.map((key, index) => {
+                        const propertyKey = schema.properties[key as string];
+                        return (
+                            <Box key={"ref_prev_" + key + index}
+                                 mt={0.5}
+                                 mb={0.5}>
+                                <ErrorBoundary>{
+                                    entity ?
+                                        React.createElement(PreviewComponent, {
+                                            name: key as string,
+                                            value: entity.values[key as string],
+                                            property: propertyKey,
+                                            size: "tiny",
+                                            entitySchema: entitySchema
+                                        })
+                                        :
+                                        <SkeletonComponent
+                                            property={propertyKey}
+                                            size={"tiny"}/>}
+                                </ErrorBoundary>
+                            </Box>
+                        );
+                    })}
+                </Box>
             );
         } else {
             body = <Box p={1}
@@ -307,35 +308,53 @@ export function ReferenceDialog<S extends EntitySchema>(
                      flexDirection={"column"}
                      flexGrow={1}>
 
-                    <FormHelperText filled
-                                    required={property.validation?.required}>
-                        <LabelWithIcon scaledIcon={true}
-                                       property={property}/>
-                    </FormHelperText>
+                    <Box display={"flex"}
+                         flexDirection={"row"}
+                         flexGrow={1}>
+
+                        <Box flexGrow={1}>
+                            <FormHelperText filled
+                                            required={property.validation?.required}>
+                                <LabelWithIcon scaledIcon={true}
+                                               property={property}/>
+                            </FormHelperText>
+                        </Box>
+
+                        {!missingEntity && <Box key={"ref_prev_id"}
+                                                alignSelf={"center"}
+                                                m={1}>
+                            <Tooltip title={value && value.path}>
+                                <Typography variant={"caption"}>
+                                    {entity ? entity.id : renderSkeletonCaptionText()}
+                                </Typography>
+                            </Tooltip>
+                        </Box>}
+
+                        {!missingEntity && entity && value && <Box>
+                            <Tooltip title={`See details for ${entity.id}`}>
+                                <IconButton
+                                    disabled={disabled}
+                                    onClick={disabled ? undefined : seeEntityDetails}>
+                                    <KeyboardTabIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Box>}
+
+                        {!partOfArray && value && <Box>
+                            <Tooltip title="Clear">
+                                <IconButton
+                                    disabled={disabled}
+                                    onClick={disabled ? undefined : clearValue}>
+                                    <ClearIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Box>}
+
+                    </Box>
 
                     {body}
 
                 </Box>
-
-                {!missingEntity && value && <Box>
-                    <Tooltip title="See details">
-                        <IconButton
-                            disabled={disabled}
-                            onClick={disabled ? undefined : seeEntityDetails}>
-                            <KeyboardTabIcon/>
-                        </IconButton>
-                    </Tooltip>
-                </Box>}
-
-                {!partOfArray && value && <Box>
-                    <Tooltip title="Clear">
-                        <IconButton
-                            disabled={disabled}
-                            onClick={disabled ? undefined : clearValue}>
-                            <ClearIcon/>
-                        </IconButton>
-                    </Tooltip>
-                </Box>}
             </Box>
         );
     }
@@ -363,7 +382,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                     />
                 </Box>
                 <DialogActions>
-                    <Button autoFocus onClick={handleClose} color="primary">
+                    <Button onClick={handleClose} color="primary">
                         Close
                     </Button>
                 </DialogActions>

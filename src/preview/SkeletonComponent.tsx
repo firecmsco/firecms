@@ -316,6 +316,12 @@ export function renderSkeletonText(index?: number) {
     return <Skeleton key={"skeleton_text_" + index} variant="text"/>;
 }
 
+export function renderSkeletonCaptionText(index?: number) {
+    return <Skeleton key={"skeleton_text_" + index}
+                     height={20}
+                     variant="text"/>;
+}
+
 export function renderSkeletonIcon() {
     return <Skeleton variant="rect" width={24} height={24}/>;
 }

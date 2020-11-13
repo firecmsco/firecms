@@ -3,16 +3,17 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import {
     Box,
     Button,
+    createMuiTheme,
     createStyles,
     CssBaseline,
     Grid,
     makeStyles,
-    Theme
+    Theme,
+    ThemeProvider
 } from "@material-ui/core";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {
     BrowserRouter as Router,
     Redirect,
@@ -235,7 +236,7 @@ export function CMSApp(props: CMSAppProps) {
                         >
                             <Box m={1}>
                                 {logo &&
-                                <img className={classes.logo} src={logo}/>}
+                                <img className={classes.logo} src={logo} alt={"Logo"}/>}
                             </Box>
 
                             <Button variant="contained"
@@ -283,9 +284,9 @@ export function CMSApp(props: CMSAppProps) {
                         return <CircularProgressCenter/>;
                     }
 
-                    return firebaseConfig &&
+                    return usedFirebaseConfig &&
                         <AppConfigProvider cmsAppConfig={props}
-                                           firebaseConfig={firebaseConfig}>
+                                           firebaseConfig={usedFirebaseConfig}>
                             <Router>
                                 <SelectedEntityProvider>
                                     <BreadcrumbsProvider>
@@ -313,7 +314,8 @@ export function CMSApp(props: CMSAppProps) {
                                                 </main>
                                             </Box>
 
-                                            <EntityDetailDialog navigation={navigation}/>
+                                            <EntityDetailDialog
+                                                navigation={navigation}/>
 
                                         </SnackbarProvider>
                                     </BreadcrumbsProvider>

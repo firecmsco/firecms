@@ -1,7 +1,6 @@
 import { CollectionSize, EntitySchema, FilterValues } from "../models";
 import React from "react";
 import FilterPopup from "./FilterPopup";
-import Toolbar from "@material-ui/core/Toolbar";
 import {
     Box,
     CircularProgress,
@@ -13,7 +12,8 @@ import {
     Select,
     Theme,
     Tooltip,
-    withStyles
+    withStyles,
+    Toolbar
 } from "@material-ui/core";
 import SearchBar from "./SearchBar";
 

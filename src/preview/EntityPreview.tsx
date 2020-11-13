@@ -8,6 +8,7 @@ import {
     TableBody,
     TableCell,
     TableContainer,
+    IconButton,
     TableRow,
     Theme,
     Typography
@@ -15,7 +16,6 @@ import {
 import { Entity, EntitySchema } from "../models";
 import PreviewComponent from "./PreviewComponent";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
-import IconButton from "@material-ui/core/IconButton";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { CMSAppProps } from "../CMSAppProps";

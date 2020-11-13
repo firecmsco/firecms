@@ -1,25 +1,29 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { CSSProperties, useEffect } from "react";
 import clsx from "clsx";
 
 import {
+    Box,
     createStyles,
     IconButton,
     makeStyles,
     Paper,
     Theme,
-    Tooltip
+    Tooltip,
+    Typography
 } from "@material-ui/core";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 
 import { listenEntityFromRef } from "../firebase";
 import { PreviewComponentProps, PreviewSize } from "./PreviewComponentProps";
-import SkeletonComponent from "./SkeletonComponent";
+import SkeletonComponent, { renderSkeletonCaptionText } from "./SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { useSelectedEntityContext } from "../SelectedEntityContext";
-import Box from "@material-ui/core/Box/Box";
 import ErrorIcon from "@material-ui/icons/Error";
-import { getCollectionPathFrom, getCollectionViewFromPath } from "../routes/navigation";
+import {
+    getCollectionPathFrom,
+    getCollectionViewFromPath
+} from "../routes/navigation";
 import { CMSAppProps } from "../CMSAppProps";
 import { useAppConfigContext } from "../AppConfigContext";
 
@@ -86,7 +90,7 @@ export default function ReferencePreview<S extends EntitySchema>(
 
     const classes = useStyles();
 
-    const appConfig:CMSAppProps = useAppConfigContext();
+    const appConfig: CMSAppProps = useAppConfigContext();
     const collectionPath = getCollectionPathFrom(reference.path);
     const collectionView: EntityCollectionView<any> = getCollectionViewFromPath(collectionPath, appConfig.navigation);
 
@@ -128,6 +132,16 @@ export default function ReferencePreview<S extends EntitySchema>(
             </Tooltip>
         );
     } else {
+
+        const style: CSSProperties = size !== "regular" ?
+            {
+                display: "block",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis"
+            } : {};
+        style.margin = size !== "tiny" ? 0.5 : 0;
+
         body = (
             <React.Fragment>
                 <Box display={"flex"}
@@ -136,19 +150,19 @@ export default function ReferencePreview<S extends EntitySchema>(
                      maxWidth={"calc(100% - 60px)"}
                      m={1}>
 
+                    {size !== "tiny" && <Box key={"ref_prev_id"}
+                          style={style}>
+                        <Typography variant={"caption"}>
+                            {entity ? entity.id : renderSkeletonCaptionText()}
+                        </Typography>
+                    </Box>}
+
                     {listProperties && listProperties.map((key) => {
                         const property = schema.properties[key as string];
 
                         return (
                             <Box key={"ref_prev" + property.title + key}
-                                 m={size !== "tiny" ? 0.5 : 0}
-                                 style={size !== "regular" ?
-                                     {
-                                         display: "block",
-                                         whiteSpace: "nowrap",
-                                         overflow: "hidden",
-                                         textOverflow: "ellipsis"
-                                     } : undefined}>
+                                 style={style}>
                                 {entity ?
                                     React.createElement(previewComponent, {
                                         name: key as string,
@@ -167,20 +181,19 @@ export default function ReferencePreview<S extends EntitySchema>(
 
                 </Box>
                 <Box margin={"auto"}>
-                    <Tooltip title="See details">
+                    {entity && <Tooltip title={`See details for ${entity.id}`}>
                         <IconButton
                             size={size === "tiny" ? "small" : "medium"}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                if (entity)
-                                    selectedEntityContext.open({
-                                        entityId: entity.id,
-                                        collectionPath: reference.parent.path
-                                    });
+                                selectedEntityContext.open({
+                                    entityId: entity.id,
+                                    collectionPath: reference.parent.path
+                                });
                             }}>
                             <KeyboardTabIcon fontSize={"small"}/>
                         </IconButton>
-                    </Tooltip>
+                    </Tooltip>}
                 </Box>
             </React.Fragment>
         );

@@ -1,6 +1,7 @@
 import React from "react";
 import {
     createStyles,
+    Box,
     Divider,
     Drawer,
     List,
@@ -19,7 +20,6 @@ import { EntityCollectionView } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import "./styles.module.css";
 import { AdditionalView } from "./CMSAppProps";
-import Box from "@material-ui/core/Box/Box";
 
 
 const drawerWidth = 240;
@@ -81,7 +81,7 @@ export function CMSDrawer({ logo, navigation, closeDrawer, drawerOpen, additiona
     >
 
         {logo &&
-        <img className={classes.logo} src={logo}/>}
+        <img className={classes.logo} src={logo} alt={"Logo"}/>}
 
         <Divider/>
         <List>

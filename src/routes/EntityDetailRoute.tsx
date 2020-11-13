@@ -3,7 +3,6 @@ import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import { listenEntity } from "../firebase";
 import { useParams } from "react-router-dom";
 import { EntityDetailView } from "../preview/EntityDetailView";
-import Box from "@material-ui/core/Box";
 
 interface EntityDetailRoute<S extends EntitySchema> {
     view: EntityCollectionView<S>;
@@ -40,7 +39,7 @@ export function EntityDetailRoute<S extends EntitySchema>({
         };
     }, [entityId, view]);
 
-    return loading ? <Box></Box> : <EntityDetailView entity={entity}
+    return loading ? <div/> : <EntityDetailView entity={entity}
                                                      schema={view.schema}
                                                      subcollections={view.subcollections}/>;
 }

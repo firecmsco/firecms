@@ -7,13 +7,13 @@ import {
     createStyles,
     makeStyles,
     useMediaQuery,
-    useTheme
+    useTheme,
+    Typography
 } from "@material-ui/core";
 import { useRouteMatch } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import { useBreadcrumbsContext } from "../BreacrumbsContext";
 import { CollectionTable } from "../collection/CollectionTable";
-import Typography from "@material-ui/core/Typography/Typography";
 import { useSelectedEntityContext } from "../SelectedEntityContext";
 
 export const useStyles = makeStyles(() =>

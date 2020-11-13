@@ -1,10 +1,12 @@
 import { EntitySchema, FilterValues, Property } from "../models";
 import PopupState, { bindPopover, bindTrigger } from "material-ui-popup-state";
 import {
+    Box,
     Button,
     createStyles,
     IconButton,
     makeStyles,
+    Popover,
     Table,
     TableBody,
     TableCell as MuiTableCell,
@@ -14,8 +16,6 @@ import {
     withStyles
 } from "@material-ui/core";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import Popover from "@material-ui/core/Popover";
-import Box from "@material-ui/core/Box";
 import React from "react";
 import { Form, Formik } from "formik";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -83,19 +83,6 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                         })}
                 </TableBody>
             </Table>
-        );
-        return (
-            <Box className={classes.filter} width={300}>
-                {filterableProperties.map(
-                    (key) => {
-                        const formField = createFilterField(key as string, schema.properties[key as string]);
-                        return (
-                            <Box key={`filter_${key}`} mb={1}>
-                                {formField}
-                            </Box>
-                        );
-                    })}
-            </Box>
         );
     }
 
