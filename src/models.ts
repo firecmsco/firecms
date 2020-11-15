@@ -408,7 +408,7 @@ export interface ArrayProperty<T = any> extends BaseProperty<T[]> {
      * You can also specify an array or properties if you need the array to have
      * a specific limited shape such as [string, number, string]
      */
-    of: Property<T> | Property[];
+    of: Property<T>;
 
     /**
      * Rules for validating this property
@@ -507,6 +507,7 @@ export type WhereFilterOp =
     | "<"
     | "<="
     | "=="
+    | "!="
     | ">="
     | ">"
     | "array-contains"

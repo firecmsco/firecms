@@ -240,7 +240,7 @@ const productSchema = buildSchema({
             of: {
                 dataType: "string",
                 config: {
-                    previewAsTag: true
+                    enumValues: locales
                 }
             }
         },
@@ -662,7 +662,7 @@ const productsCollection = buildCollection({
     additionalColumns: [productAdditionalColumn],
     subcollections: [localeCollection],
     excludedProperties: ["images", "related_products"],
-    filterableProperties: ["price"]
+    filterableProperties: ["price", "available_locales"]
 });
 
 const usersCollection = buildCollection({

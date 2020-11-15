@@ -53,8 +53,6 @@ interface FilterPopupProps<S extends EntitySchema> {
 
 export default function FilterPopup<S extends EntitySchema>({ schema, filterValues, onFilterUpdate, filterableProperties }: FilterPopupProps<S>) {
 
-    const classes = useStyles();
-
     function createFilterFields() {
 
         return (
@@ -69,6 +67,7 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                                         key={`filter-cell-title-${key}`}
                                         component="th"
                                         align={"right"}
+                                        width={80}
                                     >
                                         {schema.properties[key as string].title}
                                     </TableCell>
@@ -103,6 +102,14 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                     popupState.close();
                 }
 
+                const clearSetFiltersView = <Tooltip title="Clear filter">
+                    <IconButton
+                        aria-label="filter clear"
+                        onClick={() => onFilterUpdate(undefined)}>
+                        <ClearIcon fontSize={"small"}/>
+                    </IconButton>
+                </Tooltip>;
+
                 return (
                     <Box display={"flex"} ml={1}>
 
@@ -114,16 +121,8 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                             </IconButton>
                         </Tooltip>
 
-                        {filterValues ?
-                            <Tooltip title="Clear filter">
-                                <IconButton
-                                    aria-label="filter clear"
-                                    onClick={() => onFilterUpdate(undefined)}>
-                                    <ClearIcon fontSize={"small"}/>
-                                </IconButton>
-                            </Tooltip>
-                            :
-                            <Box style={{ width: 26 }}/>}
+                        {filterValues && clearSetFiltersView}
+
                         <Popover
                             {...bindPopover(popupState)}
                             elevation={1}
@@ -156,12 +155,14 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                                                      justifyContent="flex-end"
                                                      m={2}
                                                      mt={3}>
-                                                    <Button
-                                                        disabled={!filterValues && !Object.keys(values).length}
-                                                        color="primary"
-                                                        type="reset"
-                                                        aria-label="filter clear"
-                                                        onClick={reset}>Clear</Button>
+                                                    <Box mr={1}>
+                                                        <Button
+                                                            disabled={!filterValues && !Object.keys(values).length}
+                                                            color="primary"
+                                                            type="reset"
+                                                            aria-label="filter clear"
+                                                            onClick={reset}>Clear</Button>
+                                                    </Box>
                                                     <Button
                                                         variant="outlined"
                                                         color="primary"
@@ -184,6 +185,9 @@ function createFilterField(key: string, property: Property): JSX.Element {
 
     if (property.dataType === "number" || property.dataType === "string") {
         return <StringNumberFilterField name={key} property={property}/>;
+    } else if (property.dataType === "array") {
+        if (property.of.dataType === "number" || property.of.dataType === "string")
+            return <StringNumberFilterField name={key} property={property}/>;
     } else if (property.dataType === "boolean") {
         return <BooleanFilterField name={key} property={property}/>;
     }
