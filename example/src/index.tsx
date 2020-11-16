@@ -735,7 +735,8 @@ ReactDOM.render(
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}
-        firebaseConfig={firebaseConfig}
+        // In the production environment
+        firebaseConfig={process.env.NODE_ENV !== "production" ? firebaseConfig : undefined}
         toolbarExtraWidget={githubLink}
     />,
     document.getElementById("root")

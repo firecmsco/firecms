@@ -190,13 +190,15 @@ export function CMSApp(props: CMSAppProps) {
     }
 
     useEffect(() => {
-        if (process.env.NODE_ENV === "production") {
+        if (firebaseConfig) {
+            initFirebase(firebaseConfig);
+        } else if (process.env.NODE_ENV === "production") {
             fetch("/__/firebase/init.json")
                 .then(async response => {
                     console.log("Firebase init response", response.status);
                     if (response && response.status < 300) {
                         const config = await response.json();
-                        console.log(config);
+                        console.log("Using config", config);
                         initFirebase(config);
                     }
                 })
@@ -207,8 +209,6 @@ export function CMSApp(props: CMSAppProps) {
                         e.toString()
                     )
                 );
-        } else if (firebaseConfig) {
-            initFirebase(firebaseConfig);
         } else {
             setConfigError(
                 "You need to deploy the app to Firebase hosting or specify a Firebase configuration object"
@@ -236,7 +236,8 @@ export function CMSApp(props: CMSAppProps) {
                         >
                             <Box m={1}>
                                 {logo &&
-                                <img className={classes.logo} src={logo} alt={"Logo"}/>}
+                                <img className={classes.logo} src={logo}
+                                     alt={"Logo"}/>}
                             </Box>
 
                             <Button variant="contained"
