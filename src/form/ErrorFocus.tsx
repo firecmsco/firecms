@@ -3,12 +3,14 @@ import { useFormikContext } from "formik";
 
 export const ErrorFocus = ({ containerRef }:
                                { containerRef?: React.RefObject<HTMLDivElement> }) => {
-    // Get the context for the Formik form this component is rendered into.
     const { isSubmitting, isValidating, errors } = useFormikContext();
+    if (errors) {
+        console.debug("Form errors", errors);
+    }
 
     useEffect(() => {
-        // Get all keys of the error messages.
         const keys = Object.keys(errors);
+
         // Whenever there are errors and the form is submitting but finished validating.
         if (keys.length > 0 && isSubmitting && !isValidating) {
             const errorElement = containerRef?.current?.querySelector<HTMLDivElement>(
@@ -16,6 +18,7 @@ export const ErrorFocus = ({ containerRef }:
             );
 
             if (errorElement && containerRef?.current) {
+                console.debug("Scrolling to error", keys[0]);
                 containerRef.current.scrollTo({
                     top: containerRef.current?.scrollTop + errorElement.getBoundingClientRect().top - 64,
                     behavior: "smooth"
