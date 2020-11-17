@@ -1,4 +1,5 @@
-import firebase from 'firebase/app';
+import firebase from "firebase/app";
+
 export function uploadFile(file: File,
                            path?: string,
                            metadata?: firebase.storage.UploadMetadata)

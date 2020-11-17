@@ -1,5 +1,4 @@
 import { EnumType, EnumValues } from "../../models";
-import { getIn } from "formik";
 import {
     Checkbox,
     FormControl,
@@ -19,12 +18,17 @@ import { CustomChip } from "../../preview/components/CustomChip";
 type ArrayEnumSelectProps<T extends EnumType> = CMSFieldProps<T[]>;
 
 export default function ArrayEnumSelect<T extends EnumType>({
-                                                                field,
-                                                                form: { errors, touched, setFieldValue, setFieldTouched, isSubmitting },
+                                                                name,
+                                                                value,
+                                                                setValue,
+                                                                error,
+                                                                showError,
+                                                                isSubmitting,
+                                                                touched,
                                                                 property,
                                                                 includeDescription
                                                             }: ArrayEnumSelectProps<T>) {
-    if(!("dataType" in property.of)){
+    if (!("dataType" in property.of)) {
         throw Error("Using wrong component ArrayEnumSelect");
     }
 
@@ -38,16 +42,13 @@ export default function ArrayEnumSelect<T extends EnumType>({
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");
     }
 
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
-
     return <FormControl
         fullWidth
         required={property.validation?.required}
         error={showError}
     >
         <div style={{ marginTop: "-4px" }}>
-            <InputLabel id={`${field.name}-multiselect-label`} style={{
+            <InputLabel id={`${name}-multiselect-label`} style={{
                 marginLeft: "10px"
             }}>
                 <LabelWithIcon property={property}/>
@@ -55,21 +56,19 @@ export default function ArrayEnumSelect<T extends EnumType>({
         </div>
         <MuiSelect multiple
                    variant={"filled"}
-                   labelId={`${field.name}-multiselect-label`}
-                   value={!!field.value ? field.value : []}
-                   style={{minHeight: "64px",padding: "4px" }}
+                   labelId={`${name}-multiselect-label`}
+                   value={!!value && Array.isArray(value) ? value : []}
+                   style={{ minHeight: "64px", padding: "4px" }}
                    disabled={isSubmitting}
                    onChange={(evt: any) => {
-                       setFieldTouched(field.name);
-                       return setFieldValue(
-                           `${field.name}`,
+                       return setValue(
                            evt.target.value
                        );
                    }}
                    renderValue={(selected: any) => (
                        <div>
                            {selected && selected.map((value: any) => {
-                               return renderPreviewEnumChip(field.name, enumValues, value, "regular");
+                               return renderPreviewEnumChip(name, enumValues, value, "regular");
                            })}
                        </div>
                    )}>
@@ -77,14 +76,14 @@ export default function ArrayEnumSelect<T extends EnumType>({
                 return (
                     <MenuItem key={key} value={key}>
                         <Checkbox
-                            checked={!!field.value && field.value.indexOf(key as any) > -1}/>
+                            checked={!!value && value.indexOf(key as any) > -1}/>
                         <ListItemText
-                            primary={renderPreviewEnumChip(field.name, enumValues, key, "regular")}/>
+                            primary={renderPreviewEnumChip(name, enumValues, key, "regular")}/>
                     </MenuItem>
                 );
             })}
         </MuiSelect>
-        <FormHelperText>{fieldError}</FormHelperText>
+        <FormHelperText>{error}</FormHelperText>
 
         {includeDescription &&
         <FieldDescription property={property}/>}

@@ -6,7 +6,6 @@ import {
     ReferenceProperty
 } from "../../models";
 import firebase from "firebase/app";
-import { getIn } from "formik";
 import {
     Box,
     Button,
@@ -24,7 +23,7 @@ import React, { useEffect } from "react";
 import ErrorIcon from "@material-ui/icons/Error";
 import ClearIcon from "@material-ui/icons/Clear";
 
-import { CMSFieldProps } from "../form_props";
+import { CMSFieldProps, FormFieldBuilder } from "../form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { CollectionTable } from "../../collection/CollectionTable";
@@ -71,24 +70,24 @@ export const useStyles = makeStyles(theme => createStyles({
 
 
 export default function ReferenceField<S extends EntitySchema>({
-                                                                   field,
-                                                                   form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
+                                                                   name,
+                                                                   value,
+                                                                   setValue,
+                                                                   error,
+                                                                   showError,
+                                                                   isSubmitting,
+                                                                   touched,
+                                                                   autoFocus,
                                                                    property,
                                                                    includeDescription,
                                                                    entitySchema,
-                                                                   partOfArray
+                                                                   partOfArray,
+                                                                   createFormField
                                                                }: CMSFieldProps<firebase.firestore.DocumentReference>) {
-
-
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
-
-    const value = field.value;
 
     const handleEntityClick = (entity: Entity<S>) => {
         const ref = entity ? entity.reference : null;
-        setFieldTouched(field.name);
-        setFieldValue(field.name, ref);
+        setValue(ref);
     };
 
     const classes = useStyles();
@@ -107,12 +106,15 @@ export default function ReferenceField<S extends EntitySchema>({
                                                     property={property}
                                                     collectionPath={property.collectionPath}
                                                     collectionView={collectionView}
-                                                    initialFilter={property.filter}
+                                                    initialFilter={collectionView.initialFilter}
                                                     previewProperties={property.previewProperties}
+                                                    autoFocus={autoFocus}
                                                     onEntityClick={handleEntityClick}
                                                     partOfArray={partOfArray}
                                                     disabled={disabled}
-                                                    entitySchema={entitySchema}/>}
+                                                    entitySchema={entitySchema}
+                                                    createFormField={createFormField}
+                />}
 
                 {!collectionView &&
                 <Box>Reference field configured wrong. Check console</Box>}
@@ -123,7 +125,7 @@ export default function ReferenceField<S extends EntitySchema>({
             <FieldDescription property={property}/>}
 
             {showError && <FormHelperText
-                id="component-error-text">{fieldError}</FormHelperText>}
+                id="component-error-text">{error}</FormHelperText>}
 
         </FormControl>
     );
@@ -151,6 +153,11 @@ export interface ReferenceDialogProps<S extends EntitySchema<Key>, Key extends s
      */
     previewProperties?: Key[];
 
+    /**
+     * Open on mount
+     */
+    autoFocus:boolean;
+
     collectionView: EntityCollectionView<S>;
 
     onEntityClick(entity?: Entity<S>): void;
@@ -159,7 +166,9 @@ export interface ReferenceDialogProps<S extends EntitySchema<Key>, Key extends s
 
     partOfArray: boolean,
 
-    disabled: boolean
+    disabled: boolean,
+
+    createFormField: FormFieldBuilder,
 }
 
 
@@ -168,13 +177,15 @@ export function ReferenceDialog<S extends EntitySchema>(
         onEntityClick,
         value,
         property,
+        autoFocus,
         collectionView,
         initialFilter,
         previewProperties,
         collectionPath,
         entitySchema,
         partOfArray,
-        disabled
+        disabled,
+        createFormField
     }: ReferenceDialogProps<S>) {
 
     const classes = useStyles();
@@ -182,7 +193,7 @@ export function ReferenceDialog<S extends EntitySchema>(
     const textSearchDelegate = collectionView.textSearchDelegate;
     const filterableProperties = collectionView.filterableProperties;
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(autoFocus);
     const [entity, setEntity] = React.useState<Entity<S>>();
     const selectedEntityContext = useSelectedEntityContext();
 
@@ -372,6 +383,8 @@ export function ReferenceDialog<S extends EntitySchema>(
                 open={open}>
                 <Box className={classes.dialogBody}>
                     <CollectionTable collectionPath={collectionPath}
+                                     editEnabled={false}
+                                     deleteEnabled={false}
                                      schema={schema}
                                      includeToolbar={true}
                                      onEntityClick={handleEntityClick}
@@ -380,6 +393,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                                      filterableProperties={filterableProperties}
                                      textSearchDelegate={textSearchDelegate}
                                      initialFilter={initialFilter}
+                                     createFormField={createFormField}
                     />
                 </Box>
                 <DialogActions>

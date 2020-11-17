@@ -1,5 +1,5 @@
 import { EntitySchema, Property } from "../../models";
-import { FieldArray, FieldInputProps, getIn } from "formik";
+import { FieldArray } from "formik";
 import {
     Box,
     Button,
@@ -13,14 +13,13 @@ import {
 import ClearIcon from "@material-ui/icons/Clear";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import { formStyles } from "../../styles";
-import { CMSFieldProps } from "../form_props";
+import { CMSFieldProps, FormFieldBuilder } from "../form_props";
 import React, { useState } from "react";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { XYCoord } from "dnd-core";
-import { FormFieldProps } from "../index";
 
 
 const useStyles = makeStyles(theme => createStyles({
@@ -42,8 +41,14 @@ const useStyles = makeStyles(theme => createStyles({
 type ArrayDefaultFieldProps<T> = CMSFieldProps<T[]>;
 
 export default function ArrayDefaultField<T>({
-                                                 field,
-                                                 form: { errors, touched, isSubmitting },
+                                                 name,
+                                                 value,
+                                                 error,
+                                                 showError,
+                                                 isSubmitting,
+                                                 autoFocus,
+                                                 touched,
+                                                 tableMode,
                                                  property,
                                                  createFormField,
                                                  includeDescription,
@@ -51,48 +56,46 @@ export default function ArrayDefaultField<T>({
                                                  entitySchema
                                              }: ArrayDefaultFieldProps<T>) {
 
-
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name)
-        && fieldError
-        && (!Array.isArray(fieldError) || !!fieldError.filter((e: any) => !!e).length);
-
     const ofProperty: Property = property.of as Property;
     const classes = formStyles();
-    const hasValue = field.value && field.value.length > 0;
+    const hasValue = value && value.length > 0;
 
-    const [internalValue, setInternalValue] = useState<number[]>(
-        field.value ?
-            (field.value as T[]).map((v, index) => getRandomId()) : []);
+    const [internalIds, setInternalIds] = useState<number[]>(
+        value
+            ? (value as T[]).map((v, index) => getRandomId())
+            : []);
+
+    const [lastAddedId, setLastAddedId] = useState<number | undefined>();
 
     function getRandomId() {
         return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
     }
 
     return <FieldArray
-        name={field.name}
+        name={name}
         render={arrayHelpers => {
 
             const moveItem = (dragIndex: number, hoverIndex: number) => {
-                const newValue = [...internalValue];
-                const temp = newValue[dragIndex];
-                newValue[dragIndex] = newValue[hoverIndex];
-                newValue[hoverIndex] = temp;
-                setInternalValue(newValue);
+                const newIds = [...internalIds];
+                const temp = newIds[dragIndex];
+                newIds[dragIndex] = newIds[hoverIndex];
+                newIds[hoverIndex] = temp;
+                setInternalIds(newIds);
                 arrayHelpers.move(dragIndex, hoverIndex);
             };
 
             const insertInEnd = () => {
-                const newValue: number[] =
-                    [...internalValue, getRandomId()];
-                setInternalValue(newValue);
+                const id = getRandomId();
+                const newIds: number[] = [...internalIds, id];
+                setLastAddedId(id);
+                setInternalIds(newIds);
                 arrayHelpers.push(null);
             };
 
             const remove = (index: number) => {
-                const newValue = [...internalValue];
+                const newValue = [...internalIds];
                 newValue.splice(index, 1);
-                setInternalValue(newValue);
+                setInternalIds(newValue);
                 arrayHelpers.remove(index);
             };
 
@@ -101,23 +104,24 @@ export default function ArrayDefaultField<T>({
 
                 <FormControl fullWidth error={showError}>
 
-                    <FormHelperText filled
-                                    required={property.validation?.required}>
+                    {!tableMode && <FormHelperText filled
+                                                   required={property.validation?.required}>
                         <LabelWithIcon scaledIcon={true} property={property}/>
-                    </FormHelperText>
+                    </FormHelperText>}
 
                     <Paper variant={"outlined"}
                            className={classes.paper}>
 
-                        {hasValue && internalValue.map((entry: number, index: number) => (
+                        {hasValue && internalIds.map((internalId: number, index: number) => (
                             <ArrayEntry
-                                key={`array_field_${field.name}_${entry}`}
-                                id={entry}
-                                type={"array_card_" + field.name}
+                                key={`array_field_${name}_${internalId}`}
+                                name={name}
+                                id={internalId}
+                                type={"array_card_" + name}
                                 moveItem={moveItem}
                                 index={index}
-                                field={field}
                                 createFormField={createFormField}
+                                autoFocus={internalId === lastAddedId}
                                 includeDescription={includeDescription}
                                 underlyingValueHasChanged={underlyingValueHasChanged}
                                 entitySchema={entitySchema}
@@ -142,8 +146,8 @@ export default function ArrayDefaultField<T>({
                     <FieldDescription property={property}/>}
 
                     {showError
-                    && typeof fieldError === "string"
-                    && <FormHelperText>{fieldError}</FormHelperText>}
+                    && typeof error === "string"
+                    && <FormHelperText>{error}</FormHelperText>}
 
                 </FormControl>
             );
@@ -153,30 +157,26 @@ export default function ArrayDefaultField<T>({
 
 function ArrayEntry<T>(props: {
     id: any
+    name: string,
     moveItem: (dragIndex: number, hoverIndex: number) => void,
     type: string
     index: number,
-    field: FieldInputProps<T>,
     ofProperty: Property,
+    autoFocus: boolean,
     includeDescription: boolean,
-    createFormField: ({
-                          name,
-                          property,
-                          includeDescription,
-                          underlyingValueHasChanged,
-                          entitySchema
-                      }: FormFieldProps) => React.ReactNode,
+    createFormField: FormFieldBuilder,
     underlyingValueHasChanged: boolean;
     entitySchema: EntitySchema,
     remove: (index: number) => void,
 }) {
     const {
         id,
+        name,
         moveItem,
         type,
         index,
-        field,
         createFormField,
+        autoFocus,
         includeDescription,
         underlyingValueHasChanged,
         entitySchema,
@@ -260,15 +260,17 @@ function ArrayEntry<T>(props: {
                  display="flex">
                 <Box flexGrow={1}
                      width={"100%"}
-                     key={`field_${field.name}_entryValue`}>
+                     key={`field_${name}_entryValue`}>
                     {createFormField(
                         {
-                            name: `${field.name}[${index}]`,
+                            name: `${name}[${index}]`,
                             property: ofProperty,
                             includeDescription,
                             underlyingValueHasChanged,
                             entitySchema,
-                            partOfArray: true
+                            tableMode: false,
+                            partOfArray: true,
+                            autoFocus
                         })}
                 </Box>
                 <Box width={"48px"}

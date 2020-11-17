@@ -72,16 +72,13 @@ export function ReferencePreview<S extends EntitySchema>(
     }: PreviewComponentProps<firebase.firestore.DocumentReference> & PreviewComponentFactoryProps) {
 
     // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed and replace with instance check of DocumentReference
-    const isFirestoreReference = typeof value === "object" && "firestore" in value && typeof value["firestore"] === "object";
-    if (!isFirestoreReference) {
-        return <span>Wrong value for reference</span>;
-    }
+    // const isFirestoreReference = value
+    //     && typeof value === "object"
+    //     && "firestore" in value
+    //     && typeof value["firestore"] === "object";
 
     const reference: firebase.firestore.DocumentReference = value;
     const previewProperties = property.previewProperties;
-
-    if (!reference)
-        throw Error("Reference previews should be initialized with a value");
 
     const classes = useStyles();
 
@@ -113,17 +110,26 @@ export function ReferencePreview<S extends EntitySchema>(
 
     let body: JSX.Element;
 
-    // non existing entity
-    if (entity && !entity.values) {
+    function buildError(error: string) {
+        return <Box
+            display={"flex"}
+            alignItems={"center"}
+            m={1}>
+            <ErrorIcon fontSize={"small"} color={"error"}/>
+            <Box marginLeft={1}>{error}</Box>
+        </Box>;
+    }
+
+    if (!value) {
+        body = buildError("Reference not set");
+    }
+    // currently not happening since this gets filtered out in PreviewComponent
+    else if (!(value instanceof firebase.firestore.DocumentReference)) {
+        body = buildError("Unexpected value");
+    } else if (entity && !entity.values) {
         body = (
             <Tooltip title={reference.path}>
-                <Box
-                    display={"flex"}
-                    alignItems={"center"}
-                    m={1}>
-                    <ErrorIcon fontSize={"small"} color={"error"}/>
-                    <Box marginLeft={1}>Missing reference</Box>
-                </Box>
+                {buildError("Reference does not exist")}
             </Tooltip>
         );
     } else {

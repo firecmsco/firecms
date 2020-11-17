@@ -20,7 +20,6 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 
-import "./styles.module.css";
 import "typeface-space-mono";
 
 import { CircularProgressCenter } from "./components";
@@ -40,6 +39,7 @@ import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./components/CMSAppBar";
 import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
+import { TableSelectedCellProvider } from "./collection/SelectedCellContext";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -202,6 +202,7 @@ export function CMSApp(props: CMSAppProps) {
             return;
 
         if (firebaseConfig) {
+            console.log("Using specified config", firebaseConfig);
             initFirebase(firebaseConfig);
         } else if (process.env.NODE_ENV === "production") {
             fetch("/__/firebase/init.json")
@@ -209,7 +210,7 @@ export function CMSApp(props: CMSAppProps) {
                     console.log("Firebase init response", response.status);
                     if (response && response.status < 300) {
                         const config = await response.json();
-                        console.log("Using config", config);
+                        console.log("Using fetched config", config);
                         initFirebase(config);
                     }
                 })
@@ -239,39 +240,40 @@ export function CMSApp(props: CMSAppProps) {
         return (
             <Router>
                 <SelectedEntityProvider>
-                    <BreadcrumbsProvider>
-                        <MuiPickersUtilsProvider
-                            utils={DateFnsUtils}>
-                            <DndProvider backend={HTML5Backend}>
-                                <nav>
-                                    <CMSDrawer logo={logo}
-                                               drawerOpen={drawerOpen}
-                                               navigation={navigation}
-                                               closeDrawer={closeDrawer}
-                                               additionalViews={additionalViews}/>
-                                </nav>
+                    <TableSelectedCellProvider>
+                        <BreadcrumbsProvider>
+                            <MuiPickersUtilsProvider
+                                utils={DateFnsUtils}>
+                                <DndProvider backend={HTML5Backend}>
 
-                                <Box
-                                    className={classes.main}>
-                                    <CssBaseline/>
-                                    <CMSAppBar title={name}
-                                               handleDrawerToggle={handleDrawerToggle}
-                                               toolbarExtraWidget={toolbarExtraWidget}/>
+                                    <nav>
+                                        <CMSDrawer logo={logo}
+                                                   drawerOpen={drawerOpen}
+                                                   navigation={navigation}
+                                                   closeDrawer={closeDrawer}
+                                                   additionalViews={additionalViews}/>
+                                    </nav>
 
-                                    <main
-                                        className={classes.content}>
-                                        <CMSRouterSwitch
-                                            navigation={navigation}
-                                            additionalViews={additionalViews}/>
-                                    </main>
-                                </Box>
+                                    <Box className={classes.main}>
+                                        <CMSAppBar title={name}
+                                                   handleDrawerToggle={handleDrawerToggle}
+                                                   toolbarExtraWidget={toolbarExtraWidget}/>
 
-                                <EntitySideDialogs
-                                    navigation={navigation}/>
+                                        <main
+                                            className={classes.content}>
+                                            <CMSRouterSwitch
+                                                navigation={navigation}
+                                                additionalViews={additionalViews}/>
+                                        </main>
+                                    </Box>
 
-                            </DndProvider>
-                        </MuiPickersUtilsProvider>
-                    </BreadcrumbsProvider>
+                                    <EntitySideDialogs
+                                        navigation={navigation}/>
+
+                                </DndProvider>
+                            </MuiPickersUtilsProvider>
+                        </BreadcrumbsProvider>
+                    </TableSelectedCellProvider>
                 </SelectedEntityProvider>
             </Router>
         );
@@ -308,15 +310,17 @@ export function CMSApp(props: CMSAppProps) {
 
                                 const hasAccessToMainView = !authenticationEnabled || authContext.loggedUser || authContext.loginSkipped;
 
-                                return (
-                                    authContext.authLoading ?
-                                        <CircularProgressCenter/>
-                                        : (
-                                            hasAccessToMainView ?
-                                                renderMainView()
-                                                :
-                                                renderLoginView()
-                                        )
+                                return (<>
+                                        <CssBaseline/>
+                                        {authContext.authLoading ?
+                                            <CircularProgressCenter/>
+                                            : (
+                                                hasAccessToMainView ?
+                                                    renderMainView()
+                                                    :
+                                                    renderLoginView()
+                                            )}
+                                    </>
                                 );
 
                             }

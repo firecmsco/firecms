@@ -159,6 +159,8 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                                      value={value}
                                      property={property as NumberProperty}/>;
         } else {
+            console.debug("Unexpected value for property", property, value);
+            console.debug("typeof value", typeof value);
             content = buildWrongValueType();
         }
     } else {

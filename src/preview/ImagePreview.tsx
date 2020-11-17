@@ -9,13 +9,13 @@ function ImagePreview({ size, url }: ImagePreviewProps) {
 
     const [onHover, setOnHover] = useState(false);
 
-    const imageSize =   getThumbnailMeasure(size);
+    const imageSize = getThumbnailMeasure(size);
 
-    if(size === "tiny"){
+    if (size === "tiny") {
         return (
             <img src={url}
                  key={"tiny_image_preview_" + url}
-                 style={        {
+                 style={{
                      position: "relative",
                      objectFit: "cover",
                      width: imageSize,

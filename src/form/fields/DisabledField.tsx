@@ -7,39 +7,40 @@ import PreviewComponent from "../../preview/PreviewComponent";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import { getIn } from "formik";
 
 type DisabledFieldProps = CMSFieldProps<any>;
 
 export default function DisabledField<S extends EntitySchema>({
-                                                                  field,
-                                                                  form: { isSubmitting, errors, touched, setFieldValue },
+                                                                  name,
+                                                                  value,
+                                                                  setValue,
+                                                                  error,
+                                                                  showError,
+                                                                  isSubmitting,
+                                                                  touched,
+                                                                  tableMode,
                                                                   property,
                                                                   includeDescription,
                                                                   entitySchema
                                                               }: DisabledFieldProps) {
 
     const classes = formStyles();
-    const value = field.value;
-
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
 
     return (
 
         <FormControl fullWidth error={showError}>
 
-            <FormHelperText filled
-                            required={property.validation?.required}>
+            {!tableMode && <FormHelperText filled
+                                           required={property.validation?.required}>
                 <LabelWithIcon scaledIcon={true} property={property}/>
-            </FormHelperText>
+            </FormHelperText>}
 
             <Paper
                 className={`${classes.paper} ${classes.largePadding}`}
                 variant={"outlined"}>
 
                 <ErrorBoundary>
-                    <PreviewComponent name={field.name}
+                    <PreviewComponent name={name}
                                       value={value}
                                       property={property}
                                       size={"regular"}
@@ -49,7 +50,7 @@ export default function DisabledField<S extends EntitySchema>({
             </Paper>
 
             {showError && <FormHelperText
-                id="component-error-text">{fieldError}</FormHelperText>}
+                id="component-error-text">{error}</FormHelperText>}
 
             {includeDescription &&
             <FieldDescription property={property}/>}

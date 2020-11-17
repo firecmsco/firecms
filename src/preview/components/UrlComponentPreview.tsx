@@ -1,4 +1,7 @@
-import { PreviewComponentProps, getThumbnailMeasure } from "../PreviewComponentProps";
+import {
+    getThumbnailMeasure,
+    PreviewComponentProps
+} from "../PreviewComponentProps";
 import React from "react";
 import { MediaType } from "../../models";
 import ImagePreview from "../ImagePreview";

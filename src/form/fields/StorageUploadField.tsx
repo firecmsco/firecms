@@ -23,7 +23,6 @@ import {
     StorageMeta,
     StringProperty
 } from "../../models";
-import { getIn } from "formik";
 
 import { CMSFieldProps } from "../form_props";
 import { useDropzone } from "react-dropzone";
@@ -103,7 +102,7 @@ export const useStyles = makeStyles(theme => ({
 type StorageUploadFieldProps = CMSFieldProps<string | string[]>;
 
 /**
- * Internal representation of an item in the storage field.
+ * Internal representation of an item in the storage
  * It can have two states, having a storagePath set, which means the file has
  * been uploaded and it is rendered as a preview
  * Or have a pending file being uploaded.
@@ -117,21 +116,25 @@ interface StorageFieldItem {
 }
 
 export default function StorageUploadField({
-                                               field,
-                                               form: { errors, touched, setFieldValue, setFieldTouched },
+                                               name,
+                                               value,
+                                               setValue,
+                                               error,
+                                               showError,
+                                               autoFocus,
+                                               isSubmitting,
+                                               touched,
+                                               tableMode,
                                                property,
                                                includeDescription,
                                                entitySchema
                                            }: StorageUploadFieldProps) {
 
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
-
     const multipleFilesSupported = property.dataType === "array";
 
-    const value = multipleFilesSupported ?
-        (Array.isArray(field.value) ? field.value : []) :
-        field.value;
+    const internalValue = multipleFilesSupported ?
+        (Array.isArray(value) ? value : []) :
+        value;
 
     return (
 
@@ -139,19 +142,18 @@ export default function StorageUploadField({
                      required={property.validation?.required}
                      error={showError}>
 
+            {!tableMode &&
             <FormHelperText filled
                             required={property.validation?.required}>
                 <LabelWithIcon scaledIcon={true} property={property}/>
-            </FormHelperText>
+            </FormHelperText>}
 
             <StorageUpload
-                value={value}
-                name={field.name}
+                value={internalValue}
+                name={name}
                 property={property}
                 onChange={(newValue) => {
-                    setFieldTouched(field.name);
-                    setFieldValue(
-                        field.name,
+                    setValue(
                         newValue
                     );
                 }}
@@ -163,7 +165,7 @@ export default function StorageUploadField({
             <FieldDescription property={property}/>}
 
             {showError && <FormHelperText
-                id="component-error-text">{fieldError}</FormHelperText>}
+                id="component-error-text">{error}</FormHelperText>}
 
         </FormControl>
     );
@@ -360,7 +362,7 @@ export function StorageUpload({
              })}
         >
 
-            <input                        {...getInputProps()} />
+            <input {...getInputProps()} />
 
             <Box display="flex"
                  flexDirection="row"
@@ -645,6 +647,7 @@ export function StorageItemPreview({
                      right={-8}
                      style={{ zIndex: 100 }}>
                     <IconButton
+                        size={"small"}
                         style={{ backgroundColor: "white" }}
                         onClick={(event) => {
                             event.stopPropagation();

@@ -188,7 +188,7 @@ function sanitizeData<S extends EntitySchema,
     let result: any = values;
     Object.entries(schema.properties).forEach(([key, property]) => {
         if (values && values[key]) result[key] = values[key];
-        else if ((property as Property).validation?.required) result[key] = undefined;
+        else if ((property as Property).validation?.required) result[key] = null;
     });
     return result;
 }
@@ -228,11 +228,11 @@ export async function saveEntity<S extends EntitySchema>(
     { collectionPath, id, values, schema, status, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError }: {
         collectionPath: string,
         id: string | undefined,
-        values: EntityValues<S>,
+        values: Partial<EntityValues<S>>,
         schema: S,
         status: EntityStatus,
-        onSaveSuccess: (entity: Entity<S>) => void,
-        onSaveFailure: (e: Error) => void,
+        onSaveSuccess?: (entity: Entity<S>) => void,
+        onSaveFailure?: (e: Error) => void,
         onPreSaveHookError?: (e: Error) => void,
         onSaveSuccessHookError?: (e: Error) => void
     }): Promise<void> {
@@ -277,8 +277,10 @@ export async function saveEntity<S extends EntitySchema>(
     console.debug("Right before save", collectionPath, id, updatedValues);
     await documentReference
         .set(updatedValues, { merge: true })
-        .then(() => onSaveSuccess(entity))
-        .catch(onSaveFailure);
+        .then(() => onSaveSuccess && onSaveSuccess(entity))
+        .catch((e) => {
+            if(onSaveFailure) onSaveFailure(e);
+        });
 
     try {
         if (schema.onSaveSuccess) {
@@ -295,6 +297,7 @@ export async function saveEntity<S extends EntitySchema>(
             onSaveSuccessHookError(e);
     }
 }
+
 
 /**
  * Delete an entity
@@ -374,7 +377,7 @@ function updateAutoValue(inputValue: any,
 }
 
 export function updateAutoValues<P extends Properties, Key extends string = Extract<keyof P, string>>
-(inputValues: PropertiesValues<P, Key>, properties: P, status: EntityStatus): PropertiesValues<P, Key> {
+(inputValues: Partial<PropertiesValues<P, Key>>, properties: P, status: EntityStatus): PropertiesValues<P, Key> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && inputValues[key];

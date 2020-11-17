@@ -1,5 +1,4 @@
 import { MediaType, StringProperty } from "../../models";
-import { getIn } from "formik";
 import {
     Box,
     FilledInput,
@@ -24,16 +23,18 @@ interface TextFieldProps extends CMSFieldProps<string | number> {
 
 export default function TextField({
                                       name,
-                                      field,
-                                      form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
+                                      value,
+                                      setValue,
+                                      error,
+                                      showError,
+                                      isSubmitting,
+                                      autoFocus,
+                                      touched,
                                       property,
                                       includeDescription,
                                       allowInfinity,
                                       entitySchema
                                   }: TextFieldProps) {
-
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
 
     let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
@@ -45,29 +46,24 @@ export default function TextField({
 
     const isMultiline = !!multiline;
 
-    const value = field.value ? field.value : (property.dataType === "string" ? "" : field.value === 0 ? 0 : "");
+    const internalValue = value ?? (property.dataType === "string" ? "" : value === 0 ? 0 : "");
 
-    const valueIsInfinity = value === Infinity;
+    const valueIsInfinity = internalValue === Infinity;
     const inputType = !valueIsInfinity && property.dataType === "number" ? "number" : undefined;
 
-    const updateValue = (newValue: typeof value | undefined) => {
-
-        setFieldTouched(field.name);
+    const updateValue = (newValue: typeof internalValue | undefined) => {
 
         if (!newValue) {
-            setFieldValue(
-                field.name,
+            setValue(
                 null
             );
         } else if (inputType === "number") {
             const numValue = parseFloat(newValue as string);
-            setFieldValue(
-                field.name,
+            setValue(
                 numValue
             );
         } else {
-            setFieldValue(
-                field.name,
+            setValue(
                 newValue
             );
         }
@@ -76,12 +72,13 @@ export default function TextField({
 
     const filledInput = (
         <FilledInput
+            autoFocus={autoFocus}
             type={inputType}
             multiline={isMultiline}
             inputProps={{
                 rows: 4
             }}
-            value={valueIsInfinity ? "Infinity" : value}
+            value={valueIsInfinity ? "Infinity" : (value ?? "")}
             disabled={disabled}
             onChange={(evt) => {
                 updateValue(evt.target.value);
@@ -90,7 +87,7 @@ export default function TextField({
         );
 
     return (
-        <React.Fragment>
+        <>
 
             <FormControl
                 required={property.validation?.required}
@@ -111,7 +108,7 @@ export default function TextField({
 
                     <Box flexGrow={1}>
                         {showError && <FormHelperText
-                            id="component-error-text">{fieldError}</FormHelperText>}
+                            id="component-error-text">{error}</FormHelperText>}
 
                         {includeDescription &&
                         <FieldDescription property={property}/>}
@@ -143,18 +140,18 @@ export default function TextField({
 
             </FormControl>
 
-            {mediaType && value &&
+            {mediaType && internalValue &&
             <ErrorBoundary>
                 <Box m={1}>
-                    <PreviewComponent name={field.name}
-                                      value={value}
+                    <PreviewComponent name={name}
+                                      value={internalValue}
                                       property={property}
                                       size={"regular"}
                                       entitySchema={entitySchema}/>
                 </Box>
             </ErrorBoundary>
             }
-        </React.Fragment>
+        </>
     );
 
 }

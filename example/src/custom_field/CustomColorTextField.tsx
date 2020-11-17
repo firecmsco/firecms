@@ -1,4 +1,3 @@
-import { getIn } from "formik";
 import { TextField, Theme, withStyles } from "@material-ui/core";
 import React, { ReactElement } from "react";
 import { CMSFieldProps, FieldDescription } from "@camberi/firecms";
@@ -8,26 +7,25 @@ interface CustomColorTextFieldProps extends CMSFieldProps<string> {
 }
 
 export const TextFieldWithStyles = withStyles((theme: Theme) => ({
-    root: (props:any) => ({
+    root: (props: any) => ({
         "& .MuiFilledInput-root": {
-            backgroundColor: props.customcolor,
+            backgroundColor: props.customcolor
         }
     })
 }))(TextField);
 
 export default function CustomColorTextField({
                                                  property,
-                                                 field,
+                                                 value,
                                                  color,
-                                                 form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
+                                                 touched,
+                                                 error,
+                                                 showError,
+                                                 isSubmitting,
+                                                 setValue,
                                                  ...props
                                              }: CustomColorTextFieldProps)
     : ReactElement {
-
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
-
-    const value = field.value;
 
     return (
         <>
@@ -36,17 +34,15 @@ export default function CustomColorTextField({
                                  disabled={isSubmitting}
                                  label={property.title}
                                  value={value ?? ""}
-                                 onChange={(evt:any) => {
-                                     setFieldTouched(field.name);
-                                     setFieldValue(
-                                         field.name,
+                                 onChange={(evt: any) => {
+                                     setValue(
                                          evt.target.value
                                      );
                                  }}
-                                 helperText={showError && fieldError}
+                                 helperText={showError && error}
                                  fullWidth
                                  variant={"filled"}
-                                 customcolor={color} />
+                                 customcolor={color}/>
 
             <FieldDescription property={property}/>
         </>

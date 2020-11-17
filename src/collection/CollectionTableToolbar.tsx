@@ -11,9 +11,9 @@ import {
     MenuItem,
     Select,
     Theme,
+    Toolbar,
     Tooltip,
-    withStyles,
-    Toolbar
+    withStyles
 } from "@material-ui/core";
 import SearchBar from "./SearchBar";
 

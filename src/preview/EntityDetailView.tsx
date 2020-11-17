@@ -20,6 +20,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
 import { CollectionTable } from "../collection/CollectionTable";
 import { getEntityPathFrom, removeInitialSlash } from "../routes/navigation";
+import { createFormField } from "../form/form_factory";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -144,6 +145,10 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
             {subcollections && subcollections.map(
                 (subcollection, colIndex) => {
                     const collectionPath = `${entity?.reference.path}/${removeInitialSlash(subcollection.relativePath)}`;
+
+                    const deleteEnabled = subcollection.deleteEnabled === undefined || subcollection.deleteEnabled;
+                    const editEnabled = subcollection.editEnabled === undefined || subcollection.editEnabled;
+
                     return <Box
                         key={`entity_detail_tab_content_${subcollection.name}`}
                         role="tabpanel"
@@ -154,11 +159,14 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
                             collectionPath={collectionPath}
                             schema={subcollection.schema}
                             additionalColumns={subcollection.additionalColumns}
+                            editEnabled={editEnabled}
+                            deleteEnabled={deleteEnabled}
                             onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
                                 onSubcollectionEntityClick(collectionPath, clickedEntity, subcollection.schema, subcollection.subcollections)}
                             includeToolbar={true}
                             paginationEnabled={false}
                             defaultSize={subcollection.defaultSize}
+                            createFormField={createFormField}
                             title={
                                 <Typography variant={"caption"}
                                             color={"textSecondary"}>

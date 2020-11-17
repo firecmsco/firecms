@@ -15,6 +15,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { useBreadcrumbsContext } from "../contexts/BreacrumbsContext";
 import { CollectionTable } from "../collection/CollectionTable";
 import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
+import { createFormField } from "../form/form_factory";
 
 export const useStyles = makeStyles(() =>
     createStyles({
@@ -58,6 +59,7 @@ export function CollectionRoute<S extends EntitySchema>({
     };
 
     const deleteEnabled = view.deleteEnabled === undefined || view.deleteEnabled;
+    const editEnabled = view.editEnabled === undefined || view.editEnabled;
 
     const classes = useStyles();
 
@@ -106,7 +108,7 @@ export function CollectionRoute<S extends EntitySchema>({
                              actions={buildAddEntityButton()}
                              textSearchDelegate={view.textSearchDelegate}
                              includeToolbar={true}
-                             editEnabled={true}
+                             editEnabled={editEnabled}
                              deleteEnabled={deleteEnabled}
                              onEntityClick={onEntityClick}
                              additionalColumns={view.additionalColumns}
@@ -123,7 +125,8 @@ export function CollectionRoute<S extends EntitySchema>({
                                      id: entity.id,
                                      entity: entity
                                  })}
-                             title={title}/>
+                             title={title}
+                             createFormField={createFormField}/>
 
         </Box>
     );

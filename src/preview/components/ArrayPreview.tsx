@@ -1,7 +1,7 @@
-import { ArrayProperty, MapProperty } from "../../models";
 import {
     PreviewComponentFactoryProps,
-    PreviewComponentProps, PreviewSize
+    PreviewComponentProps,
+    PreviewSize
 } from "../PreviewComponentProps";
 import ErrorBoundary from "../../components/ErrorBoundary";
 
@@ -13,10 +13,6 @@ import {
     Divider,
     Grid,
     makeStyles,
-    Table,
-    TableBody,
-    TableCell,
-    TableRow,
     Theme
 } from "@material-ui/core";
 import { PreviewComponent } from "../PreviewComponent";

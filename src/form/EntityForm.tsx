@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
-import { createCustomIdField, createFormField } from "./index";
+import { createCustomIdField, createFormField } from "./form_factory";
 import { initEntityValues } from "../firebase/firestore";
 import { getYupObjectSchema } from "./validation";
 import deepEqual from "deep-equal";
@@ -129,8 +129,6 @@ function EntityForm<S extends EntitySchema>({
 
     function saveValues(values: EntityValues<S>, actions: FormikHelpers<EntityValues<S>>) {
 
-        console.log("Saving values", values);
-
         if (mustSetCustomId && !customId) {
             console.error("Missing custom Id");
             setCustomIdError(true);
@@ -240,7 +238,9 @@ function EntityForm<S extends EntitySchema>({
                                     includeDescription: true,
                                     underlyingValueHasChanged,
                                     entitySchema: schema,
-                                    partOfArray: false
+                                    tableMode: false,
+                                    partOfArray: false,
+                                    autoFocus: false
                                 });
 
                             return <Grid item

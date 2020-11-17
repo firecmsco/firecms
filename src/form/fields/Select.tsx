@@ -1,5 +1,4 @@
 import { EnumType, EnumValues } from "../../models";
-import { getIn } from "formik";
 import {
     FormControl,
     FormHelperText,
@@ -18,18 +17,19 @@ type SelectProps<T extends EnumType> = CMSFieldProps<T>;
 
 export default function Select<T extends EnumType>({
                                                        name,
-                                                       field,
-                                                       form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
+                                                       value,
+                                                       setValue,
+                                                       error,
+                                                       showError,
+                                                       isSubmitting,
+                                                       autoFocus,
+                                                       touched,
                                                        property,
                                                        includeDescription
                                                    }: SelectProps<T>) {
 
     const enumValues = property.config?.enumValues as EnumValues<T>;
 
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
-
-    const value = field.value;
     return (
         <FormControl
             fullWidth
@@ -37,7 +37,7 @@ export default function Select<T extends EnumType>({
             error={showError}
         >
 
-            <InputLabel id={`${field.name}-select-label`} style={{
+            <InputLabel id={`${name}-select-label`} style={{
                 marginTop: "4px",
                 marginLeft: "10px"
             }}>
@@ -46,20 +46,19 @@ export default function Select<T extends EnumType>({
 
             <MuiSelect
                 variant={"filled"}
-                labelId={`${field.name}-select-label`}
+                labelId={`${name}-select-label`}
+                autoFocus={autoFocus}
                 value={!!value ? value : ""}
                 disabled={isSubmitting}
                 onChange={(evt: any) => {
                     const newValue = evt.target.value;
-                    setFieldTouched(field.name);
-                    return setFieldValue(
-                        field.name,
+                    return setValue(
                         newValue ? newValue : null
                     );
                 }}
                 renderValue={(v: any) =>
                     <CustomChip
-                        colorKey={typeof v == "number" ? `${field.name}_${v}` : v as string}
+                        colorKey={typeof v == "number" ? `${name}_${v}` : v as string}
                         label={enumValues[v] || v}
                         error={!enumValues[v]}
                         outlined={false}
@@ -69,7 +68,7 @@ export default function Select<T extends EnumType>({
                 {Object.entries(enumValues).map(([key, value]) => (
                     <MenuItem key={`select-${key}`} value={key}>
                         <CustomChip
-                            colorKey={typeof key === "number" ? `${field.name}_${key}` : key as string}
+                            colorKey={typeof key === "number" ? `${name}_${key}` : key as string}
                             label={value as string}
                             error={!value}
                             outlined={false}
@@ -82,7 +81,7 @@ export default function Select<T extends EnumType>({
             <FieldDescription property={property}/>}
 
             {showError && <FormHelperText
-                id="component-error-text">{fieldError}</FormHelperText>}
+                id="component-error-text">{error}</FormHelperText>}
 
         </FormControl>
     );

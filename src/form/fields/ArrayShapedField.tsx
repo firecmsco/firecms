@@ -1,5 +1,4 @@
 import { Property } from "../../models";
-import { getIn } from "formik";
 import {
     Box,
     FormControl,
@@ -15,8 +14,12 @@ import { FieldDescription } from "../../components";
 type ArrayDefaultFieldProps = CMSFieldProps<any[]>;
 
 export default function ArrayShapedField<T>({
-                                                field,
-                                                form: { errors, touched },
+                                                name,
+                                                value,
+                                                error,
+                                                showError,
+                                                isSubmitting,
+                                                touched,
                                                 property,
                                                 createFormField,
                                                 includeDescription,
@@ -32,9 +35,6 @@ export default function ArrayShapedField<T>({
 
     const ofProperties: Property[] = property.of;
 
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
-
     return (
         <FormControl fullWidth error={showError}>
 
@@ -49,15 +49,17 @@ export default function ArrayShapedField<T>({
                         {ofProperties.map((childProperty, index) => {
                                 return <Grid item
                                              xs={12}
-                                             key={`array-shape-${field.name}-${index}`}>
+                                             key={`array-shape-${name}-${index}`}>
                                     {createFormField(
                                         {
-                                            name:`${field.name}[${index}]`,
+                                            name:`${name}[${index}]`,
                                             property:childProperty,
                                             includeDescription,
                                             underlyingValueHasChanged,
                                             entitySchema,
-                                            partOfArray: false
+                                            tableMode: false,
+                                            partOfArray: false,
+                                            autoFocus: false
                                         })}
                                 </Grid>;
                             }
@@ -70,7 +72,7 @@ export default function ArrayShapedField<T>({
             <FieldDescription property={property}/>}
 
             {showError && <FormHelperText
-                id="component-error-text">{fieldError}</FormHelperText>}
+                id="component-error-text">{error}</FormHelperText>}
 
         </FormControl>
     );

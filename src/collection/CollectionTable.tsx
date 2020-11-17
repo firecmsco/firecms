@@ -17,13 +17,13 @@ import {
     Entity,
     EntitySchema,
     FilterValues,
-    Properties, Property
+    Properties,
+    Property
 } from "../models";
 import { TextSearchDelegate } from "../text_search_delegate";
 import { fetchEntity, listenCollection } from "../firebase";
 import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
 import { getIconForProperty } from "../util/property_icons";
-import { PreviewComponent } from "../preview";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
 import DeleteIcon from "@material-ui/icons/Delete";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
@@ -32,7 +32,13 @@ import ErrorBoundary from "../components/ErrorBoundary";
 import { getPreviewSizeFrom } from "../preview/PreviewComponentProps";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
-import { default as CollectionCell } from "./CollectionCell";
+import TableCell from "./fields/TableCell";
+import { SelectedCell, useSelectedCellContext } from "./SelectedCellContext";
+import PopupFormField from "./popup_field/PopupFormField";
+import { OutsideAlerter } from "../util/OutsideAlerter";
+import { FormFieldBuilder } from "../form/form_props";
+import DisabledTableCell from "./fields/DisabledTableCell";
+import { PreviewComponent } from "../preview/PreviewComponent";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -67,11 +73,13 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
             alignItems: "center",
             fontSize: "0.875rem"
         },
-        clickableTableRow: {
-            cursor: "pointer"
-        },
         column: {
-            overflow: "auto !important"
+            padding: "0px !important"
+        },
+        selected: {
+            backgroundColor: "#eee",
+            border: `2px solid ${theme.palette.primary.dark}`,
+            padding: theme.spacing(2)
         }
     }));
 
@@ -150,7 +158,7 @@ interface CollectionTableProps<S extends EntitySchema,
     /**
      * Should the table add an edit button
      */
-    editEnabled?: boolean;
+    editEnabled: boolean;
 
     /**
      * Should the table add a delete button
@@ -167,6 +175,9 @@ interface CollectionTableProps<S extends EntitySchema,
      */
     onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
 
+
+    createFormField: FormFieldBuilder,
+
 }
 
 interface CMSColumn {
@@ -181,6 +192,7 @@ interface CMSColumn {
 
 type Order = "asc" | "desc" | undefined;
 
+
 export function CollectionTable<S extends EntitySchema<Key, P>,
     Key extends string = string,
     P extends Properties<Key> = Properties<Key>>({
@@ -188,21 +200,21 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                      initialFilter,
                                                      collectionPath,
                                                      schema,
-                                                     onEntityClick,
                                                      paginationEnabled,
                                                      properties,
-                                                     deleteEnabled,
-                                                     editEnabled,
+                                                     deleteEnabled = true,
+                                                     editEnabled = true,
                                                      excludedProperties,
                                                      textSearchDelegate,
                                                      additionalColumns,
                                                      filterableProperties,
                                                      title,
                                                      actions,
+                                                     onEntityClick,
                                                      onEntityDelete,
-                                                     defaultSize = "m"
+                                                     defaultSize = "m",
+                                                     createFormField
                                                  }: CollectionTableProps<S>) {
-
 
     const [data, setData] = React.useState<Entity<S>[]>([]);
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
@@ -221,15 +233,19 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const [orderByProperty, setOrderProperty] = React.useState<string>();
     const [itemCount, setItemCount] = React.useState<number>(PAGE_SIZE);
 
+    const [tableKey] = React.useState<string>(Math.random().toString(36));
     const tableRef = useRef<BaseTable>(null);
-    const scrollToTop = () => {
-        if (tableRef.current) {
-            tableRef.current.scrollToTop(0);
-        }
-    };
+
+    const textSearchEnabled = !!textSearchDelegate;
+
+    const currentData = textSearchInProgress ? textSearchData : data;
+    const loading = textSearchInProgress ? textSearchLoading : dataLoading;
+    const filterSet = filter && Object.keys(filter).length;
 
     const selectedEntityContext = useSelectedEntityContext();
     const classes = useStyles({ size });
+
+    const selectedCell: SelectedCell = useSelectedCellContext();
 
     const additionalColumnsMap: Record<string, AdditionalColumnDelegate<S>> = useMemo(() => {
         return additionalColumns ?
@@ -238,6 +254,29 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                 .reduce((a, b) => ({ ...a, ...b }))
             : {};
     }, [additionalColumns]);
+
+    const scrollToTop = () => {
+        if (tableRef.current) {
+            tableRef.current.scrollToTop(0);
+        }
+    };
+
+    const handleClickOutside = () => {
+        selectedCell.unselect(tableKey);
+    };
+
+    // on ESC key press
+    useEffect(() => {
+        const escFunction = (event: any) => {
+            if (event.keyCode === 27) {
+                selectedCell.unselect(tableKey);
+            }
+        };
+        document.addEventListener("keydown", escFunction, false);
+        return () => {
+            document.removeEventListener("keydown", escFunction, false);
+        };
+    });
 
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as string[])
@@ -283,11 +322,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         return result;
 
     }, [properties, excludedProperties]);
-
-
-    const currentData = textSearchInProgress ? textSearchData : data;
-    const loading = textSearchInProgress ? textSearchLoading : dataLoading;
-    const filterSet = filter && Object.keys(filter).length;
 
     useEffect(() => {
 
@@ -335,7 +369,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         scrollToTop();
     };
 
-    const textSearchEnabled = !!textSearchDelegate;
 
     async function onTextSearch(searchString?: string) {
         if (!!textSearchDelegate) {
@@ -405,32 +438,53 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         const propertyKey = column.dataKey;
         const property = schema.properties[propertyKey];
 
-        if (column.type === "property")
-            return entity ?
-                <ErrorBoundary>
-                    <CollectionCell size={size}
-                                    align={column.align}>
-                        <PreviewComponent name={propertyKey}
-                                          value={entity.values[propertyKey]}
-                                          property={property}
-                                          size={getPreviewSizeFrom(size)}
-                                          entitySchema={schema}/>
-                    </CollectionCell>
-                </ErrorBoundary>
-                :
-                <SkeletonComponent property={property}
-                                   size={getPreviewSizeFrom(size)}/>;
-        else if (column.type === "additional")
+        if (column.type === "property") {
+            if (property.disabled || !editEnabled) {
+                return (
+                    <DisabledTableCell
+                        size={size}
+                        align={column.align}>
+                        <PreviewComponent
+                            name={propertyKey}
+                            value={entity.values[propertyKey]}
+                            property={property}
+                            size={getPreviewSizeFrom(size)}
+                            entitySchema={schema}
+                        />
+                    </DisabledTableCell>
+                );
+            } else {
+                return entity ?
+                    <TableCell tableKey={tableKey}
+                               editEnabled={editEnabled}
+                               size={size}
+                               align={column.align}
+                               name={propertyKey}
+                               path={collectionPath}
+                               entity={entity}
+                               schema={schema}
+                               value={entity.values[propertyKey]}
+                               columnIndex={columnIndex}
+                               rowIndex={rowIndex}
+                               property={property}
+                               width={column.width}
+                               height={column.height}/>
+                    :
+                    <SkeletonComponent property={property}
+                                       size={getPreviewSizeFrom(size)}/>;
+            }
+
+        } else if (column.type === "additional") {
             return (
-                <ErrorBoundary>
-                    <CollectionCell size={size}
-                                    align={column.align}>
-                        {additionalColumnsMap[column.dataKey].builder(entity)}
-                    </CollectionCell>
-                </ErrorBoundary>
+                <DisabledTableCell
+                    size={size}
+                    align={"left"}>
+                    {additionalColumnsMap[column.dataKey].builder(entity)}
+                </DisabledTableCell>
             );
-        else
+        } else {
             return <Box>Internal ERROR</Box>;
+        }
     };
 
     const buildTableRowButtons = ({ entity }: any) => {
@@ -549,55 +603,65 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     }
 
     if (!body) {
-        body = <AutoResizer>
-            {({ width, height }) => (
-                <BaseTable
-                    rowClassName={`${classes.tableRow} ${onEntityClick ? classes.clickableTableRow : ""}`}
-                    data={currentData}
-                    width={width}
-                    height={height}
-                    fixed
-                    rowHeight={getRowHeight(size)}
-                    ref={tableRef}
-                    sortBy={currentOrder && orderByProperty ? {
-                        key: orderByProperty,
-                        order: currentOrder
-                    } : undefined}
-                    overscanRowCount={4}
-                    onColumnSort={onColumnSort}
-                    onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
-                    onEndReached={loadNextPage}
-                    rowEventHandlers={onEntityClick ? { onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S>) } : undefined}>
+        body =
+            (
+                <AutoResizer>
+                    {({ width, height }) => (
+                        <BaseTable
+                            rowClassName={`${classes.tableRow}`}
+                            data={currentData}
+                            width={width}
+                            height={height}
+                            fixed
+                            rowHeight={getRowHeight(size)}
+                            ref={tableRef}
+                            sortBy={currentOrder && orderByProperty ? {
+                                key: orderByProperty,
+                                order: currentOrder
+                            } : undefined}
+                            overscanRowCount={6}
+                            onColumnSort={onColumnSort}
+                            onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
+                            onEndReached={loadNextPage}
+                            rowEventHandlers={!editEnabled && onEntityClick ? { onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S>) } : undefined}
+                        >
 
-                    <Column headerRenderer={headerRenderer}
-                            cellRenderer={cellRenderer}
-                            align={"center"}
-                            key={"header-id"}
-                            dataKey={"id"}
-                            flexShrink={0}
-                            frozen={"left"}
-                            width={130}/>
-
-                    {columns.map((column) =>
-                        <Column key={column.id}
-                                type={column.type}
-                                title={column.label}
-                                className={classes.column}
+                            <Column
                                 headerRenderer={headerRenderer}
                                 cellRenderer={cellRenderer}
-                                align={column.align}
-                                flexGrow={1}
+                                align={"center"}
+                                key={"header-id"}
+                                dataKey={"id"}
                                 flexShrink={0}
-                                resizable={true}
-                                size={size}
-                                sortable={column.sortable}
-                                dataKey={column.id}
-                                width={column.width}/>)
+                                frozen={"left"}
+                                width={130}/>
+
+                            {columns.map((column) =>
+                                <Column
+                                    key={column.id}
+                                    type={column.type}
+                                    title={column.label}
+                                    className={classes.column}
+                                    headerRenderer={headerRenderer}
+                                    cellRenderer={cellRenderer}
+                                    height={getRowHeight(size)}
+                                    align={column.align}
+                                    flexGrow={1}
+                                    flexShrink={0}
+                                    resizable={true}
+                                    size={size}
+                                    sortable={column.sortable}
+                                    dataKey={column.id}
+                                    width={column.width}/>)
+                            }
+                        </BaseTable>
+                    )
                     }
-                </BaseTable>)
-            }
-        </AutoResizer>;
+                </AutoResizer>
+
+            );
     }
+
 
     return (
         <React.Fragment>
@@ -625,9 +689,20 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                         loading={loading}
                                         onFilterUpdate={onFilterUpdate}/>}
 
-                <div className={classes.tableContainer}>
-                    {body}
-                </div>
+                <OutsideAlerter enabled={!selectedCell.preventOutsideClick}
+                                onOutsideClick={handleClickOutside}>
+
+                    <PopupFormField
+                        tableKey={tableKey}
+                        schema={schema}
+                        createFormField={createFormField}
+                        entity={selectedCell.rowIndex != undefined ? data[selectedCell.rowIndex] : undefined}/>
+
+                    <div className={classes.tableContainer}>
+                        {body}
+                    </div>
+
+                </OutsideAlerter>
 
             </Paper>
         </React.Fragment>

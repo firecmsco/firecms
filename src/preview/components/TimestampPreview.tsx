@@ -1,7 +1,7 @@
 import { PreviewComponentProps } from "../PreviewComponentProps";
 import React from "react";
 import { Typography } from "@material-ui/core";
-import firebase from 'firebase/app';
+import firebase from "firebase/app";
 
 export function TimestampPreview({
                                      name,

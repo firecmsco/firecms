@@ -1,28 +1,28 @@
-import { getIn } from "formik";
 import React from "react";
 import { DateTimePicker } from "@material-ui/pickers";
 
 import { CMSFieldProps } from "../form_props";
-import firebase from 'firebase/app';
-import "firebase/firestore";
 
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 
-type DateTimeFieldProps = CMSFieldProps<firebase.firestore.Timestamp> ;
+type DateTimeFieldProps = CMSFieldProps<Date>;
 
 export default function DateTimeField({
-                                          field,
-                                          form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
+                                          name,
+                                          value,
+                                          setValue,
+                                          autoFocus,
+                                          error,
+                                          showError,
+                                          isSubmitting,
+                                          touched,
                                           property,
-                                          includeDescription,
+                                          includeDescription
                                       }: DateTimeFieldProps) {
 
 
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
-
-    const value = field.value || null;
+    const internalValue = value || null;
 
     const disabled = property.disabled !== undefined ? property.disabled : isSubmitting || !!property.autoValue;
     return (
@@ -31,15 +31,14 @@ export default function DateTimeField({
             <DateTimePicker
                 fullWidth
                 clearable
-                value={value}
+                autoFocus={autoFocus}
+                value={internalValue}
                 label={<LabelWithIcon scaledIcon={false} property={property}/>}
                 error={showError}
                 disabled={disabled}
-                helperText={showError ? fieldError : null}
+                helperText={showError ? error : null}
                 onChange={(dateValue) => {
-                    setFieldTouched(field.name);
-                    return setFieldValue(
-                        field.name,
+                    return setValue(
                         dateValue
                     );
                 }}

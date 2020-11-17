@@ -1,5 +1,5 @@
 import { MapProperty, Properties } from "../../models";
-import { FieldArray, getIn } from "formik";
+import { FieldArray } from "formik";
 import {
     Box,
     Button,
@@ -21,8 +21,12 @@ import { FieldDescription } from "../../components";
 type ArrayMapFieldProps<T> = CMSFieldProps<T[]>;
 
 export default function ArrayMapField<T>({
-                                             field,
-                                             form: { errors, touched },
+                                             name,
+                                             value,
+                                             error,
+                                             showError,
+                                             isSubmitting,
+                                             touched,
                                              property,
                                              createFormField,
                                              includeDescription,
@@ -39,12 +43,10 @@ export default function ArrayMapField<T>({
     const mapProperty: MapProperty<T> = property.of as MapProperty<T>;
     const properties: Properties = mapProperty.properties;
 
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
-    const hasValue = field.value && field.value.length > 0;
+    const hasValue = value && value.length > 0;
 
     return <FieldArray
-        name={field.name}
+        name={name}
         render={arrayHelpers => {
 
 
@@ -62,7 +64,7 @@ export default function ArrayMapField<T>({
                         {hasValue ? (
                             <Table>
                                 <TableBody>
-                                    {field.value.map((entryValue: any, index: number) => (
+                                    {value.map((entryValue: any, index: number) => (
                                         <TableRow key={`field_${index}`}>
                                             {Object.entries(properties).map(([arrayKey, childProperty]) => {
                                                 return (
@@ -70,12 +72,14 @@ export default function ArrayMapField<T>({
                                                         key={`field_${arrayKey}`}>
                                                         {createFormField(
                                                             {
-                                                                name:`${field.name}[${index}].${arrayKey}`,
+                                                                name:`${name}[${index}].${arrayKey}`,
                                                                 property:childProperty,
                                                                 includeDescription,
                                                                 underlyingValueHasChanged,
                                                                 entitySchema,
-                                                                partOfArray: false
+                                                                tableMode: false,
+                                                                partOfArray: false,
+                                                                autoFocus: false
                                                             })}
                                                     </TableCell>
                                                 );
@@ -112,7 +116,7 @@ export default function ArrayMapField<T>({
                     <FieldDescription property={property}/>}
 
                     {showError && <FormHelperText
-                        id="component-error-text">{fieldError}</FormHelperText>}
+                        id="component-error-text">{error}</FormHelperText>}
 
                 </FormControl>
             );

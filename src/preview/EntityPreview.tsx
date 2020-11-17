@@ -3,12 +3,12 @@ import * as React from "react";
 import {
     Box,
     createStyles,
+    IconButton,
     makeStyles,
     Table,
     TableBody,
     TableCell,
     TableContainer,
-    IconButton,
     TableRow,
     Theme,
     Typography

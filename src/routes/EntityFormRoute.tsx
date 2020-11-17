@@ -41,6 +41,7 @@ import {
 import CloseIcon from "@material-ui/icons/Close";
 import OpenInBrowserIcon from "@material-ui/icons/OpenInBrowser";
 import { CollectionTable } from "../collection/CollectionTable";
+import { createFormField } from "../form/form_factory";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>
@@ -401,6 +402,7 @@ function EntityFormRoute<S extends EntitySchema>({
                                 Add {subcollectionView.schema.name}
                             </Button>
                         }
+                        createFormField={createFormField}
                     />
                     :
                     <Box m={3}

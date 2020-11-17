@@ -8,6 +8,7 @@ import {
     buildCollection,
     buildSchema,
     CMSApp,
+    Entity,
     EntityCollectionView,
     EntitySaveProps,
     EnumValues
@@ -171,7 +172,7 @@ function App() {
                 dataType: "timestamp",
                 title: "Added on",
                 disabled: true,
-                serverTimestamp: "on_create"
+                autoValue: "on_create"
             },
             images: {
                 dataType: "array",
@@ -302,6 +303,10 @@ function App() {
                 },
                 description: "This fields allows uploading multiple images at once and reordering"
             },
+            publish_date: {
+                title: "Publish date",
+                dataType: "timestamp"
+            },
             priority: {
                 title: "Priority",
                 description: "This field allows the selection of Infinity as a value",
@@ -421,7 +426,7 @@ function App() {
     const productAdditionalColumn: AdditionalColumnDelegate<typeof productSchema> = {
         id: "spanish_title",
         title: "Spanish title",
-        builder: (entity) =>
+        builder: (entity: Entity<typeof productSchema>) =>
             <AsyncPreviewComponent builder={
                 entity.reference.collection("locales")
                     .doc("es")
@@ -501,6 +506,19 @@ function App() {
                 dataType: "array",
                 of: {
                     dataType: "string"
+                }
+            },
+            available_locales: {
+                title: "Available locales",
+                description:
+                    "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
+                longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
+                dataType: "array",
+                of: {
+                    dataType: "string",
+                    config: {
+                        enumValues: locales
+                    }
                 }
             },
             available_dates: {

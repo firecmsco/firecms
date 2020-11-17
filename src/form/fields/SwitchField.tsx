@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { CMSFieldProps } from "../form_props";
-import { getIn } from "formik";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 
@@ -32,15 +31,19 @@ type SwitchFieldProps = CMSFieldProps<boolean>;
 
 
 export default React.forwardRef(function SwitchField({
-                                                         field,
-                                                         form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
+                                                         name,
+                                                         value,
+                                                         setValue,
+                                                         error,
+                                                         showError,
+                                                         autoFocus,
+                                                         isSubmitting,
+                                                         touched,
                                                          property,
                                                          includeDescription,
                                                      }: SwitchFieldProps, ref) {
 
     const classes = useStyles();
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
 
     const disabled = property.disabled || isSubmitting;
     return (
@@ -52,16 +55,15 @@ export default React.forwardRef(function SwitchField({
                 <FormControlLabel
                     className={classes.formControl}
                     labelPlacement={"start"}
-                    checked={!!field.value}
+                    checked={!!value}
                     inputRef={ref}
                     control={
                         <Switch
                             type={"checkbox"}
+                            autoFocus={autoFocus}
                             disabled={disabled}
                             onChange={(evt) => {
-                                setFieldTouched(field.name);
-                                setFieldValue(
-                                    field.name,
+                                setValue(
                                     evt.target.checked
                                 );
                             }}/>
@@ -79,7 +81,7 @@ export default React.forwardRef(function SwitchField({
             <FieldDescription property={property}/>}
 
             {showError && <FormHelperText
-                id="component-error-text">{fieldError}</FormHelperText>}
+                id="component-error-text">{error}</FormHelperText>}
 
         </FormControl>
 

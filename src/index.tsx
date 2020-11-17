@@ -18,6 +18,7 @@ export {
 export * from "./models";
 
 export type {
+    FormFieldBuilder,
     CMSFieldProps
 } from "./form/form_props";
 
@@ -33,7 +34,7 @@ export {
     StorageUploadField,
     SwitchField,
     TextField
-} from "./form";
+} from "./form/index";
 
 export {
     PreviewComponent,

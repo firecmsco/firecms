@@ -2,7 +2,7 @@ import { EntitySchema } from "../models";
 import React, { useContext } from "react";
 import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { getEntityPath, getRouterNewEntityPath } from "../routes/navigation";
-import * as H from 'history';
+import * as H from "history";
 
 const DEFAULT_SELECTED_ENTITY = {
     sideLocations: [],

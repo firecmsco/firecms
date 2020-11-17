@@ -18,7 +18,6 @@ import "firebase/storage";
 import "firebase/firestore";
 import { EntityCollectionView } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
-import "./styles.module.css";
 import { AdditionalView } from "./CMSAppProps";
 
 

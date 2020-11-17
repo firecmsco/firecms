@@ -1,4 +1,3 @@
-import { getIn } from "formik";
 import {
     Box,
     createStyles,
@@ -56,42 +55,41 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 export default function MarkDownField({
                                           name,
-                                          field,
-                                          form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
+                                          value,
+                                          setValue,
+                                          error,
+                                          showError,
+                                          isSubmitting,
+                                          autoFocus,
+                                          touched,
                                           property,
+                                          tableMode,
                                           includeDescription,
                                           entitySchema
                                       }: MarkDownFieldProps) {
 
-    const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && !!fieldError;
     const classes = useStyles();
 
-
     const updateValue = (newValue: string) => {
-
-        setFieldTouched(field.name);
-
         if (!newValue) {
-            setFieldValue(
-                field.name,
+            setValue(
                 null
             );
         } else {
-            setFieldValue(
-                field.name,
+            setValue(
                 newValue
             );
         }
     };
+
     const disabled = isSubmitting;
     return (
         <React.Fragment>
 
-            <FormHelperText filled
-                            required={property.validation?.required}>
+            {!tableMode && <FormHelperText filled
+                                           required={property.validation?.required}>
                 <LabelWithIcon scaledIcon={true} property={property}/>
-            </FormHelperText>
+            </FormHelperText>}
 
             <FormControl
                 required={property.validation?.required}
@@ -100,14 +98,15 @@ export default function MarkDownField({
 
                 <div className={classes.root}>
                     <CodeMirror
-                        value={field.value}
+                        value={value}
                         options={{
                             mode: "markdown",
                             highlightFormatting: true,
                             theme: "base16-light",
                             lineNumbers: true,
                             lineWrapping: true,
-                            readOnly: disabled
+                            readOnly: disabled,
+                            autoFocus:autoFocus
                         }}
                         onBeforeChange={(editor, data, value) => {
                             updateValue(value);
@@ -117,14 +116,14 @@ export default function MarkDownField({
                     />
                 </div>
 
-                <Box mt={1}>
+                {!tableMode && <Box mt={1}>
                     <Paper variant={"outlined"}>
                         <Box display={"flex"}>
                             <Box className={classes.previewGutter}/>
                             <Box className={classes.preview}>
-                                {field.value &&
-                                <ReactMarkdown>{field.value}</ReactMarkdown>}
-                                {!field.value &&
+                                {value &&
+                                <ReactMarkdown>{value}</ReactMarkdown>}
+                                {!value &&
                                 <Typography variant={"caption"}
                                             color={"textSecondary"}>
                                     <p>Preview for {property.title}</p>
@@ -132,13 +131,13 @@ export default function MarkDownField({
                             </Box>
                         </Box>
                     </Paper>
-                </Box>
+                </Box>}
 
 
                 <Box display={"flex"}>
                     <Box flexGrow={1}>
                         {showError && <FormHelperText
-                            id="component-error-text">{fieldError}</FormHelperText>}
+                            id="component-error-text">{error}</FormHelperText>}
                         {includeDescription &&
                         <FieldDescription property={property}/>}
                     </Box>

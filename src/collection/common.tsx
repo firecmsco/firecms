@@ -54,7 +54,7 @@ export function getPreviewWidth<T>(property: Property<T>, size: CollectionSize):
     } else if (property.dataType === "map") {
         return 280;
     } else if (property.dataType === "timestamp") {
-        return 140;
+        return 160;
     } else if (property.dataType === "reference") {
         return 220;
     } else if (property.dataType === "boolean") {

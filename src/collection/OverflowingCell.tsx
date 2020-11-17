@@ -13,35 +13,17 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
             display: "flex",
             height: "100%",
             width: "100%",
-            justifyContent: ({ align }) => {
-                switch (align) {
-                    case "right":
-                        return "flex-end";
-                    case "center":
-                        return "center";
-                    case "left":
-                    default:
-                        return "flex-start";
-                }
-            },
-            padding: ({ size }) => {
-                switch (size) {
-                    case "xs":
-                        return theme.spacing(0);
-                    case "l":
-                    case "xl":
-                        return theme.spacing(2);
-                    default:
-                        return theme.spacing(1);
-                }
-            }
         },
-        regular: {
+        centered: {
             alignItems: "center"
         },
-        overflowed: {
+        faded: {
             "-webkit-mask-image": "linear-gradient(to bottom, black 70%, transparent 98%)",
             maskImage: "linear-gradient(to bottom, black 70%, transparent 98%)",
+            alignItems: "start"
+        },
+        scrollable: {
+            overflow: "auto",
             alignItems: "start"
         }
     })
@@ -52,22 +34,31 @@ export interface StyleProps {
     align: "right" | "left" | "center";
 }
 
-interface CollectionCellProps<S extends EntitySchema> {
+interface OverflowingCellProps<S extends EntitySchema> {
     children: React.ReactNode;
+    onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+    onDoubleClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+    allowScroll: boolean;
 }
 
-function CollectionCell<S extends EntitySchema>({ children, size, align }: CollectionCellProps<S> & StyleProps) {
+function OverflowingCell<S extends EntitySchema>(
+    { children, size, align, onClick, onDoubleClick, allowScroll }: OverflowingCellProps<S> & StyleProps) {
 
     const classes = useStyles({ size, align });
     const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
+
     const maxHeight = getRowHeight(size);
+
     return (
         <div className={clsx(
             classes.tableCell,
             {
-                [classes.overflowed]: isOverflowing,
-                [classes.regular]: !isOverflowing
-            })}>
+                [classes.centered]: !isOverflowing,
+                [classes.faded]: !allowScroll && isOverflowing,
+                [classes.scrollable]: allowScroll && isOverflowing
+            })}
+             onClick={onClick}
+             onDoubleClick={onDoubleClick}>
             <Measure
                 bounds
                 onResize={contentRect => {
@@ -76,14 +67,14 @@ function CollectionCell<S extends EntitySchema>({ children, size, align }: Colle
                 }}
             >
                 {({ measureRef }) => (
-                    <div ref={measureRef} style={{width: "100%"}}>
+                    <div ref={measureRef} style={{ width: "100%" }}>
                         {children}
                     </div>
                 )}
             </Measure>
-        </div>
 
+        </div>
     );
 }
 
-export default React.memo<CollectionCellProps<any> & StyleProps>(CollectionCell);
+export default React.memo<OverflowingCellProps<any> & StyleProps>(OverflowingCell);
