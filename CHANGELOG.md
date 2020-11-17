@@ -1,5 +1,19 @@
 # Change Log
 
+## [0.16.4] - 2020-11-17
+### Added
+- Reference fields now include the reference key
+- You can now filter array properties
+
+### Changed
+- Fix for initializing values to null, was colliding with enum validation.
+- If you specify both a firebase config and are running in Firebase hosting, the
+specified config has now priority over the one found in the environment.
+
+## [0.16.3] - 2020-11-13
+### Added
+- Allowing grouping of main navigation entries
+
 ## [0.16.2] - 2020-11-12
 ### Added
 - Drag and drop reordering for storage fields
