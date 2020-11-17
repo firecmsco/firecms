@@ -199,6 +199,7 @@ function EntityForm<S extends EntitySchema>({
             initialValues={baseValues as EntityValues<S>}
             onSubmit={saveValues}
             validationSchema={validationSchema}
+            validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}
         >
             {({ values, touched, dirty, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {

@@ -7,17 +7,27 @@ import PreviewComponent from "../../preview/PreviewComponent";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
+import { getIn } from "formik";
 
 type DisabledFieldProps = CMSFieldProps<any>;
 
-export default function DisabledField<S extends EntitySchema>({ field, property, includeDescription, entitySchema }: DisabledFieldProps) {
+export default function DisabledField<S extends EntitySchema>({
+                                                                  field,
+                                                                  form: { isSubmitting, errors, touched, setFieldValue },
+                                                                  property,
+                                                                  includeDescription,
+                                                                  entitySchema
+                                                              }: DisabledFieldProps) {
 
     const classes = formStyles();
     const value = field.value;
 
+    const fieldError = getIn(errors, field.name);
+    const showError = getIn(touched, field.name) && !!fieldError;
+
     return (
 
-        <FormControl fullWidth>
+        <FormControl fullWidth error={showError}>
 
             <FormHelperText filled
                             required={property.validation?.required}>
@@ -37,6 +47,9 @@ export default function DisabledField<S extends EntitySchema>({ field, property,
                 </ErrorBoundary>
 
             </Paper>
+
+            {showError && <FormHelperText
+                id="component-error-text">{fieldError}</FormHelperText>}
 
             {includeDescription &&
             <FieldDescription property={property}/>}

@@ -4,9 +4,6 @@ import { useFormikContext } from "formik";
 export const ErrorFocus = ({ containerRef }:
                                { containerRef?: React.RefObject<HTMLDivElement> }) => {
     const { isSubmitting, isValidating, errors } = useFormikContext();
-    if (errors) {
-        console.debug("Form errors", errors);
-    }
 
     useEffect(() => {
         const keys = Object.keys(errors);

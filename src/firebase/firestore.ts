@@ -271,7 +271,7 @@ function initWithProperties<P extends Properties,
         .map(([key, property]) => {
             const propertyDefaultValue = defaultValues && key in defaultValues ? defaultValues[key] : null;
             const value = initPropertyValue(key, property, propertyDefaultValue);
-            return ({ [key]: value });
+            return value === null ? {} : { [key]: value };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<P, Key>;
 }
