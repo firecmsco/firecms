@@ -201,30 +201,56 @@ export function createEntityFromSchema<S extends EntitySchema<Key, P>,
 /**
  * Save entity to the specified path. Note that Firestore does not allow
  * undefined values.
- * @param path
- * @param entityId
+ * @param collectionPath
+ * @param id
  * @param data
  * @param schema
+ * @param status
+ * @param onSaveSuccess
+ * @param onSaveFailure
+ * @param onPreSaveHookError
+ * @param onSaveSuccessHookError
  */
-export function saveEntity<S extends EntitySchema>(
-    path: string,
-    entityId: string | undefined,
+export async function saveEntity<S extends EntitySchema>(
+    collectionPath: string,
+    id: string | undefined,
     data: EntityValues<S>,
     schema: S,
-    status: EntityStatus
-): Promise<Entity<S>> {
+    status: EntityStatus,
+    onSaveSuccess: (entity: Entity<S>) => void,
+    onSaveFailure: (e: Error) => void,
+    onPreSaveHookError?: (e: Error) => void,
+    onSaveSuccessHookError?: (e: Error) => void
+): Promise<void> {
 
-    const values = updateAutoValues(data, schema.properties, status);
-    console.debug("Saving entity", path, entityId, values);
+    let values = updateAutoValues(data, schema.properties, status);
+    console.debug("Saving entity", collectionPath, id, values);
+
+    if (schema.onPreSave) {
+        try {
+            values = await schema.onPreSave({
+                schema,
+                collectionPath,
+                id: id,
+                values,
+                status
+            });
+        } catch (e) {
+            console.error(e);
+            if (onPreSaveHookError)
+                onPreSaveHookError(e);
+            return;
+        }
+    }
 
     let documentReference: firestore.DocumentReference<firestore.DocumentData>;
-    if (entityId)
+    if (id)
         documentReference = firestore()
-            .collection(path)
-            .doc(entityId);
+            .collection(collectionPath)
+            .doc(id);
     else
         documentReference = firestore()
-            .collection(path)
+            .collection(collectionPath)
             .doc();
 
     const entity: Entity<S> = {
@@ -233,9 +259,25 @@ export function saveEntity<S extends EntitySchema>(
         values: values
     };
 
-    return documentReference
+    await documentReference
         .set(values, { merge: true })
-        .then(() => entity);
+        .then(() => onSaveSuccess(entity))
+        .catch(onSaveFailure);
+
+    try {
+        if (schema.onSaveSuccess) {
+            schema.onSaveSuccess({
+                schema,
+                collectionPath,
+                id: id,
+                values,
+                status
+            });
+        }
+    } catch (e) {
+        if (onSaveSuccessHookError)
+            onSaveSuccessHookError(e);
+    }
 }
 
 /**

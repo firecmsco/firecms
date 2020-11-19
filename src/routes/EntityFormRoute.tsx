@@ -228,97 +228,87 @@ function EntityFormRoute<S extends EntitySchema>({
         if (!status)
             return;
 
-        let continueWithSave = true;
-
         if (schema.onPreSave) {
             try {
                 values = await schema.onPreSave({
                     schema,
                     collectionPath,
-                    id,
+                    id: id,
                     values,
                     status
                 });
             } catch (e) {
-                continueWithSave = false;
-                snackbarContext.open({
-                    type: "error",
-                    title: "Error before saving",
-                    message: e?.message
-                });
+                return;
             }
         }
 
-        if (!continueWithSave)
-            return;
-
-        return saveEntity(collectionPath, id, values, schema, status)
-            .then((updatedEntity) => {
-
-                setEntity(updatedEntity);
-
-                snackbarContext.open({
-                    type: "success",
-                    message: `${schema.name}: Saved correctly`
-                });
-
-                if (status === EntityStatus.new) {
-                    setLoading(true);
-                    setEntity(undefined);
-                    setStatus(undefined);
-                    if (context === "main")
-                        history.replace(getEntityPath(updatedEntity.id, collectionPath));
-                    else if (context === "side")
-                        selectedEntityContext.replace({
-                            entityId: updatedEntity.id,
-                            collectionPath
-                        });
-                    else throw Error("Missing mapping for entity context when saving");
-                }
-
-                if (schema.onSaveSuccess) {
-                    try {
-                        schema.onSaveSuccess({
-                            schema,
-                            collectionPath,
-                            id,
-                            values,
-                            status
-                        });
-                    } catch (e) {
-                        snackbarContext.open({
-                            type: "error",
-                            title: `${schema.name}: Error after saving (entity is saved)`,
-                            message: e?.message
-                        });
-                    }
-                }
-
-                setModified(false);
-                history.goBack();
-
-            })
-            .catch((e) => {
-
-                if (schema.onSaveFailure) {
-                    schema.onSaveFailure({
-                        schema,
-                        collectionPath,
-                        id,
-                        values,
-                        status
-                    });
-                }
-
-                snackbarContext.open({
-                    type: "error",
-                    title: `${schema.name}: Error saving`,
-                    message: e?.message
-                });
-
-                console.error("Error saving entity", collectionPath, entityId, values);
-                console.error(e);
+        const onPreSaveHookError = (e: Error) => {
+            snackbarContext.open({
+                type: "error",
+                title: "Error before saving",
+                message: e?.message
             });
+        };
+
+        const onSaveSuccessHookError = (e: Error) => {
+            snackbarContext.open({
+                type: "error",
+                title: `${schema.name}: Error after saving (entity is saved)`,
+                message: e?.message
+            });
+        };
+
+        const onSaveSuccess = (updatedEntity: Entity<S>) => {
+
+            setEntity(updatedEntity);
+
+            snackbarContext.open({
+                type: "success",
+                message: `${schema.name}: Saved correctly`
+            });
+
+            if (status === EntityStatus.new) {
+                setLoading(true);
+                setEntity(undefined);
+                setStatus(undefined);
+                if (context === "main")
+                    history.replace(getEntityPath(updatedEntity.id, collectionPath));
+                else if (context === "side")
+                    selectedEntityContext.replace({
+                        entityId: updatedEntity.id,
+                        collectionPath
+                    });
+                else throw Error("Missing mapping for entity context when saving");
+            }
+
+            setModified(false);
+            history.goBack();
+
+        };
+
+        const onSaveFailure = (e: Error) => {
+
+            if (schema.onSaveFailure) {
+                schema.onSaveFailure({
+                    schema,
+                    collectionPath,
+                    id: id,
+                    values,
+                    status
+                });
+            }
+
+            snackbarContext.open({
+                type: "error",
+                title: `${schema.name}: Error saving`,
+                message: e?.message
+            });
+
+            console.error("Error saving entity", collectionPath, entityId, values);
+            console.error(e);
+        };
+
+        return saveEntity(collectionPath, id, values, schema, status, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError);
     }
 
     function onDiscard() {
