@@ -166,6 +166,13 @@ export const siteConfig: CMSAppProps = {
             name: "Products",
             subcollections: subcollections,
             properties: ["name", "price", "status", "categories", "tags", "description", "published", "added_on", "publisher", "available_locales", "image"]
+        }),
+        buildCollection({
+            relativePath: "sites/es/products",
+            schema: productSchema,
+            name: "Products",
+            subcollections: subcollections,
+            properties: ["name", "price", "status", "categories", "tags", "description", "published", "added_on", "publisher", "available_locales", "image"]
         })
     ]
 };

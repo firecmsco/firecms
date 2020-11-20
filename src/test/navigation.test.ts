@@ -1,4 +1,6 @@
-import { getCollectionViewFromPath } from "../routes/navigation";
+import {
+    getCollectionViewFromPath
+} from "../routes/navigation";
 import { siteConfig } from "./test_site_config";
 
 it("collection view matches ok", () => {
@@ -8,19 +10,27 @@ it("collection view matches ok", () => {
     ).toEqual("products");
 
     expect(
-        getCollectionViewFromPath("products/irrelevant/locales", siteConfig.navigation).relativePath
+        getCollectionViewFromPath("products/pid/locales", siteConfig.navigation).relativePath
     ).toEqual("locales");
 
     expect(
-        () => getCollectionViewFromPath("products/irrelevant/not_existing", siteConfig.navigation)
+        getCollectionViewFromPath("sites/es/products", siteConfig.navigation).relativePath
+    ).toEqual("sites/es/products");
+
+    expect(
+        getCollectionViewFromPath("sites/es/products/pid/locales", siteConfig.navigation).relativePath
+    ).toEqual("locales");
+
+    expect(
+        () => getCollectionViewFromPath("products/pid/not_existing", siteConfig.navigation)
     ).toThrow(
-        "Couldn't find the corresponding collection view for the path: not_existing"
+        "Couldn't find the corresponding collection view for the path: products/pid/not_existing"
     );
 
     expect(
-        () => getCollectionViewFromPath("products/irrelevant", siteConfig.navigation)
+        () => getCollectionViewFromPath("products/pid", siteConfig.navigation)
     ).toThrow(
-        "Collection paths must have an odd number of segments: products/irrelevant"
+        "Collection paths must have an odd number of segments: products/pid"
     );
 
     expect(

@@ -30,6 +30,16 @@ export function removeInitialSlash(s: string) {
     else return s;
 }
 
+export function removeTrailingSlash(s: string) {
+    if (s.endsWith("/"))
+        return s.slice(0, -1);
+    else return s;
+}
+
+export function removeInitialAndTrailingSlashes(s: string) {
+    return removeInitialSlash(removeTrailingSlash(s));
+}
+
 export function addInitialSlash(s: string) {
     if (s.startsWith("/"))
         return s;
@@ -41,25 +51,59 @@ export function getCollectionPathFrom(s: string) {
 }
 
 export function getCollectionViewFromPath(path: string, collectionViews: EntityCollectionView<any>[]): EntityCollectionView<any> {
-    const subpaths = removeInitialSlash(path).split("/");
+
+    const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     if (subpaths.length % 2 === 0) {
         throw Error(`Collection paths must have an odd number of segments: ${path}`);
     }
-    const firstPath = subpaths[0];
-    if (firstPath) {
-        const navigationEntry = collectionViews && collectionViews.find((entry) => entry.relativePath === firstPath);
-        if (!navigationEntry) {
-            throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
-        }
-        if (subpaths.length > 1) {
-            if (!navigationEntry.subcollections) {
-                throw Error(`Provided path is longer than the navigation collections configuration: ${path}`);
-            }
-            return getCollectionViewFromPath(subpaths.splice(2).join("/"), navigationEntry.subcollections);
-        } else {
-            return navigationEntry;
-        }
-    } else {
-        throw Error(`Provided path is shorter than the navigation collections configuration: ${path}`);
+
+    let result: EntityCollectionView<any> | undefined = getCollectionViewFromPathInternal(path, collectionViews);
+
+    if (!result) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
+    return result;
+
+}
+
+function getCollectionViewFromPathInternal(path: string, collectionViews: EntityCollectionView<any>[]): EntityCollectionView<any> | undefined {
+
+    const subpaths = removeInitialAndTrailingSlashes(path).split("/");
+    const subpathCombinations = getCollectionPathsCombinations(subpaths);
+
+    let result: EntityCollectionView<any> | undefined = undefined;
+    for (let i = 0; i < subpathCombinations.length; i++) {
+        const subpathCombination = subpathCombinations[i];
+        const navigationEntry = collectionViews && collectionViews.find((entry) => entry.relativePath === subpathCombination);
+
+        if (navigationEntry) {
+            if (subpathCombination === path) {
+                result = navigationEntry;
+            } else if (navigationEntry.subcollections) {
+                const newPath = path.replace(subpathCombination, "").split("/").slice(2).join("/");
+                result = getCollectionViewFromPathInternal(newPath, navigationEntry.subcollections);
+            }
+        }
+
+        if (result) break;
+    }
+    return result;
+}
+
+
+/**
+ * Get the subcollection combinations from a path:
+ * "sites/es/locales" => ["sites/es/locales", "sites"]
+ * @param subpaths
+ */
+function getCollectionPathsCombinations(subpaths: string[]): string[] {
+
+    const length = subpaths.length;
+    const result: string[] = [];
+    for (let i = length; i > 0; i = i - 2) {
+        result.push(subpaths.slice(0, i).join("/"));
+    }
+    console.log("getCollectionPathsCombinations", result);
+    return result;
+
 }
