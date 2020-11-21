@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.16.6] - 2020-11-21
+
+### Changed
+- Fix for bug that was causing values not mapped as properties not to be saved.
+- Internal refactor of preview properties
+- Changed API for saveEntity
+
 ## [0.16.5] - 2020-11-20
 
 ### Changed
