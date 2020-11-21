@@ -308,7 +308,17 @@ function EntityFormRoute<S extends EntitySchema>({
             console.error(e);
         };
 
-        return saveEntity(collectionPath, id, values, schema, status, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError);
+        return saveEntity({
+            collectionPath,
+            id,
+            values,
+            schema,
+            status,
+            onSaveSuccess,
+            onSaveFailure,
+            onPreSaveHookError,
+            onSaveSuccessHookError
+        });
     }
 
     function onDiscard() {

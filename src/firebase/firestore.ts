@@ -212,27 +212,29 @@ export function createEntityFromSchema<S extends EntitySchema<Key, P>,
  * @param onSaveSuccessHookError
  */
 export async function saveEntity<S extends EntitySchema>(
-    collectionPath: string,
-    id: string | undefined,
-    data: EntityValues<S>,
-    schema: S,
-    status: EntityStatus,
-    onSaveSuccess: (entity: Entity<S>) => void,
-    onSaveFailure: (e: Error) => void,
-    onPreSaveHookError?: (e: Error) => void,
-    onSaveSuccessHookError?: (e: Error) => void
-): Promise<void> {
+    { collectionPath, id, values, schema, status, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError }: {
+        collectionPath: string,
+        id: string | undefined,
+        values: EntityValues<S>,
+        schema: S,
+        status: EntityStatus,
+        onSaveSuccess: (entity: Entity<S>) => void,
+        onSaveFailure: (e: Error) => void,
+        onPreSaveHookError?: (e: Error) => void,
+        onSaveSuccessHookError?: (e: Error) => void
+    }): Promise<void> {
 
-    let values = updateAutoValues(data, schema.properties, status);
-    console.debug("Saving entity", collectionPath, id, values);
+    console.debug("Value before", collectionPath, id, values);
+    let updatedValues = updateAutoValues(values, schema.properties, status);
+    console.debug("Saving entity", collectionPath, id, updatedValues);
 
     if (schema.onPreSave) {
         try {
-            values = await schema.onPreSave({
+            updatedValues = await schema.onPreSave({
                 schema,
                 collectionPath,
                 id: id,
-                values,
+                values: updatedValues,
                 status
             });
         } catch (e) {
@@ -244,23 +246,20 @@ export async function saveEntity<S extends EntitySchema>(
     }
 
     let documentReference: firestore.DocumentReference<firestore.DocumentData>;
-    if (id)
-        documentReference = firestore()
-            .collection(collectionPath)
-            .doc(id);
-    else
-        documentReference = firestore()
-            .collection(collectionPath)
-            .doc();
+    documentReference = firestore()
+        .collection(collectionPath)
+        .doc(id ?? undefined);
+
 
     const entity: Entity<S> = {
         id: documentReference.id,
         reference: documentReference,
-        values: values
+        values: updatedValues
     };
 
+    console.debug("Right before save", collectionPath, id, updatedValues);
     await documentReference
-        .set(values, { merge: true })
+        .set(updatedValues, { merge: true })
         .then(() => onSaveSuccess(entity))
         .catch(onSaveFailure);
 
@@ -269,8 +268,8 @@ export async function saveEntity<S extends EntitySchema>(
             schema.onSaveSuccess({
                 schema,
                 collectionPath,
-                id: id,
-                values,
+                id,
+                values: updatedValues,
                 status
             });
         }
@@ -328,7 +327,8 @@ function initPropertyValue(key: string, property: Property, defaultValue: any) {
     return value;
 }
 
-function updateAutoValue(inputValue: any, property: Property,
+function updateAutoValue(inputValue: any,
+                         property: Property,
                          status: EntityStatus): any {
 
     let value;
@@ -356,9 +356,9 @@ function updateAutoValue(inputValue: any, property: Property,
     return value;
 }
 
-function updateAutoValues<P extends Properties, Key extends string = Extract<keyof P, string>>
+export function updateAutoValues<P extends Properties, Key extends string = Extract<keyof P, string>>
 (inputValues: PropertiesValues<P, Key>, properties: P, status: EntityStatus): PropertiesValues<P, Key> {
-    return Object.entries(properties)
+    const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && inputValues[key];
             const updatedValue = updateAutoValue(inputValue, property, status);
@@ -366,6 +366,7 @@ function updateAutoValues<P extends Properties, Key extends string = Extract<key
             return ({ [key]: updatedValue });
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<P, Key>;
+    return { ...inputValues, ...updatedValues };
 }
 
 /**
