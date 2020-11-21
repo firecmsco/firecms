@@ -1,26 +1,27 @@
-import { EntitySchema, StringProperty } from "../models";
-import React, { ReactElement, useEffect } from "react";
+import React, { useEffect } from "react";
 import { getDownloadURL } from "../firebase";
 import { renderSkeletonImageThumbnail } from "./SkeletonComponent";
-import { PreviewSize } from "./PreviewComponentProps";
+import {
+    PreviewComponentFactoryProps,
+    PreviewComponentProps
+} from "./PreviewComponentProps";
+import { UrlComponentPreview } from "./components/UrlComponentPreview";
 
-interface StorageThumbnailProps {
-    storagePathOrDownloadUrl: string | undefined;
-    property: StringProperty;
-    size: PreviewSize;
-    renderUrlComponent: (property: StringProperty,
-                         url: any,
-                         size: PreviewSize,
-                         entitySchema: EntitySchema) => ReactElement;
-    entitySchema: EntitySchema;
-}
+export default function StorageThumbnail({ name,
+                                             value,
+                                             property,
+                                             PreviewComponent,
+                                             size,
+                                             entitySchema }: PreviewComponentProps<string> & PreviewComponentFactoryProps) {
 
-export default function StorageThumbnail({ storagePathOrDownloadUrl, property, renderUrlComponent, size, entitySchema }: StorageThumbnailProps) {
+    const storagePathOrDownloadUrl = value;
+
+    if (!storagePathOrDownloadUrl) return null;
 
     const [url, setUrl] = React.useState<string>();
-    let unmounted = false;
 
     useEffect(() => {
+        let unmounted = false;
         if (property.config?.storageMeta?.storeUrl)
             setUrl(storagePathOrDownloadUrl);
         else if (storagePathOrDownloadUrl)
@@ -35,6 +36,10 @@ export default function StorageThumbnail({ storagePathOrDownloadUrl, property, r
     }, [storagePathOrDownloadUrl]);
 
     return url ?
-        renderUrlComponent(property, url, size, entitySchema) :
+        <UrlComponentPreview name={name}
+                          value={url}
+                          property={property}
+                          size={size}
+                          entitySchema={entitySchema}/> :
         renderSkeletonImageThumbnail(size);
 }

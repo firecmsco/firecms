@@ -396,8 +396,8 @@ function CMSRouterSwitch({ navigation, additionalViews }: {
                 </Route>
             ))}
 
-            <Redirect exact from="/"
-                      to={firstCollectionPath}/>
+            <Redirect to={firstCollectionPath}/>
+
         </Switch>
     );
 }

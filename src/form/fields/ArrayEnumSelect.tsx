@@ -11,9 +11,10 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { CMSFieldProps } from "../form_props";
-import { renderPreviewEnumChip } from "../../preview/PreviewComponent";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { PreviewSize } from "../../preview/PreviewComponentProps";
+import { CustomChip } from "../../preview/components/CustomChip";
 
 type ArrayEnumSelectProps<T extends EnumType> = CMSFieldProps<T[]>;
 
@@ -89,4 +90,23 @@ export default function ArrayEnumSelect<T extends EnumType>({
         <FieldDescription property={property}/>}
 
     </FormControl>;
+}
+
+function renderPreviewEnumChip<T extends EnumType>(
+    name: string,
+    enumValues: EnumValues<T>,
+    value: T,
+    size: PreviewSize
+) {
+    if (!value) return null;
+
+    const label = enumValues[value];
+    const key: string = typeof value == "number" ? `${name}_${value}` : value as string;
+
+    return <CustomChip colorKey={key}
+                       label={label || value}
+                       error={!label}
+                       outlined={false}
+                       small={size !== "regular"}/>;
+
 }

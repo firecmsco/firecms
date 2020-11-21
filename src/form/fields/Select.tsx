@@ -12,7 +12,7 @@ import React from "react";
 import { CMSFieldProps } from "../form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
-import { renderPreviewEnumChip } from "../../preview/PreviewComponent";
+import { CustomChip } from "../../preview/components/CustomChip";
 
 type SelectProps<T extends EnumType> = CMSFieldProps<T>;
 
@@ -21,7 +21,7 @@ export default function Select<T extends EnumType>({
                                                        field,
                                                        form: { isSubmitting, errors, touched, setFieldValue, setFieldTouched },
                                                        property,
-                                                       includeDescription,
+                                                       includeDescription
                                                    }: SelectProps<T>) {
 
     const enumValues = property.config?.enumValues as EnumValues<T>;
@@ -57,13 +57,23 @@ export default function Select<T extends EnumType>({
                         newValue ? newValue : null
                     );
                 }}
-                renderValue={(selected: any) =>
-                    renderPreviewEnumChip(field.name, enumValues, selected, "regular")
+                renderValue={(v: any) =>
+                    <CustomChip
+                        colorKey={typeof v == "number" ? `${field.name}_${v}` : v as string}
+                        label={enumValues[v] || v}
+                        error={!enumValues[v]}
+                        outlined={false}
+                        small={false}/>
                 }>
 
                 {Object.entries(enumValues).map(([key, value]) => (
                     <MenuItem key={`select-${key}`} value={key}>
-                        {renderPreviewEnumChip(field.name, enumValues, key as T, "regular")}
+                        <CustomChip
+                            colorKey={field.name}
+                            label={value as string}
+                            error={!value}
+                            outlined={false}
+                            small={false}/>
                     </MenuItem>
                 ))}
             </MuiSelect>

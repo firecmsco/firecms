@@ -68,7 +68,6 @@ export const useStyles = makeStyles(theme => createStyles({
     }
 }));
 
-type ReferenceFieldProps<S extends EntitySchema> = CMSFieldProps<firebase.firestore.DocumentReference>;
 
 export default function ReferenceField<S extends EntitySchema>({
                                                                    field,
@@ -77,7 +76,7 @@ export default function ReferenceField<S extends EntitySchema>({
                                                                    includeDescription,
                                                                    entitySchema,
                                                                    partOfArray
-                                                               }: ReferenceFieldProps<S>) {
+                                                               }: CMSFieldProps<firebase.firestore.DocumentReference>) {
 
 
     const fieldError = getIn(errors, field.name);
@@ -269,13 +268,12 @@ export function ReferenceDialog<S extends EntitySchema>(
                                  mb={0.5}>
                                 <ErrorBoundary>{
                                     entity ?
-                                        React.createElement(PreviewComponent, {
-                                            name: key as string,
-                                            value: entity.values[key as string],
-                                            property: propertyKey,
-                                            size: "tiny",
-                                            entitySchema: entitySchema
-                                        })
+                                        <PreviewComponent
+                                            name={key}
+                                            value={entity.values[key as string]}
+                                            property={propertyKey}
+                                            size={"tiny"}
+                                            entitySchema={entitySchema}/>
                                         :
                                         <SkeletonComponent
                                             property={propertyKey}

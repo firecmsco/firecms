@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { EntitySchema } from "../models";
 import { renderSkeletonText } from "./SkeletonComponent";
 
+
 export interface AsyncPreviewComponentProps<S extends EntitySchema> {
 
     builder: Promise<React.ReactNode>;

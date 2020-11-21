@@ -12,20 +12,23 @@ import {
     Tooltip,
     Typography
 } from "@material-ui/core";
-import { Entity, EntityCollectionView, EntitySchema } from "../models";
+import { Entity, EntityCollectionView, EntitySchema } from "../../models";
 
-import { listenEntityFromRef } from "../firebase";
-import { PreviewComponentProps, PreviewSize } from "./PreviewComponentProps";
-import SkeletonComponent, { renderSkeletonCaptionText } from "./SkeletonComponent";
+import { listenEntityFromRef } from "../../firebase";
+import {
+    PreviewComponentFactoryProps,
+    PreviewComponentProps
+} from "../PreviewComponentProps";
+import SkeletonComponent, { renderSkeletonCaptionText } from "../SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import { useSelectedEntityContext } from "../SelectedEntityContext";
+import { useSelectedEntityContext } from "../../SelectedEntityContext";
 import ErrorIcon from "@material-ui/icons/Error";
 import {
     getCollectionPathFrom,
     getCollectionViewFromPath
-} from "../routes/navigation";
-import { CMSAppProps } from "../CMSAppProps";
-import { useAppConfigContext } from "../AppConfigContext";
+} from "../../routes/navigation";
+import { CMSAppProps } from "../../CMSAppProps";
+import { useAppConfigContext } from "../../AppConfigContext";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,35 +58,18 @@ const useStyles = makeStyles((theme: Theme) =>
     }));
 
 
-export interface ReferencePreviewProps<S extends EntitySchema> {
-
-    reference: firebase.firestore.DocumentReference;
-
-    /**
-     * Limit the number of preview properties displayed base on the size of the
-     * preview
-     */
-    size: PreviewSize;
-
-    previewComponent: React.FunctionComponent<PreviewComponentProps>;
-
-    /**
-     * Properties that are displayed when as a preview
-     */
-    previewProperties?: (keyof S["properties"])[];
-
-    entitySchema: EntitySchema;
-
-}
-
-export default function ReferencePreview<S extends EntitySchema>(
+export function ReferencePreview<S extends EntitySchema>(
     {
-        reference,
+        name,
+        value,
+        property,
+        PreviewComponent,
         size,
-        previewComponent,
-        previewProperties,
         entitySchema
-    }: ReferencePreviewProps<S>) {
+    }: PreviewComponentProps<firebase.firestore.DocumentReference> & PreviewComponentFactoryProps) {
+
+    const reference = value;
+    const previewProperties = property.previewProperties;
 
     if (!reference)
         throw Error("Reference previews should be initialized with a value");
@@ -151,7 +137,7 @@ export default function ReferencePreview<S extends EntitySchema>(
                      m={1}>
 
                     {size !== "tiny" && <Box key={"ref_prev_id"}
-                          style={style}>
+                                             style={style}>
                         <Typography variant={"caption"}>
                             {entity ? entity.id : renderSkeletonCaptionText()}
                         </Typography>
@@ -163,14 +149,12 @@ export default function ReferencePreview<S extends EntitySchema>(
                         return (
                             <Box key={"ref_prev" + property.title + key}
                                  style={style}>
-                                {entity ?
-                                    React.createElement(previewComponent, {
-                                        name: key as string,
-                                        value: entity.values[key as string],
-                                        property: property,
-                                        size: "tiny",
-                                        entitySchema: entitySchema
-                                    })
+                                {entity && PreviewComponent ?
+                                    <PreviewComponent name={key as string}
+                                                      value={entity.values[key as string]}
+                                                      property={property}
+                                                      size={"tiny"}
+                                                      entitySchema={entitySchema}/>
                                     :
                                     <SkeletonComponent property={property}
                                                        size={"tiny"}/>

@@ -50,6 +50,11 @@ export function getCollectionPathFrom(s: string) {
     return s.substr(0, s.lastIndexOf("/"));
 }
 
+/**
+ * Find the corresponding view at any depth for a given path.
+ * @param path
+ * @param collectionViews
+ */
 export function getCollectionViewFromPath(path: string, collectionViews: EntityCollectionView<any>[]): EntityCollectionView<any> {
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -103,7 +108,6 @@ function getCollectionPathsCombinations(subpaths: string[]): string[] {
     for (let i = length; i > 0; i = i - 2) {
         result.push(subpaths.slice(0, i).join("/"));
     }
-    console.log("getCollectionPathsCombinations", result);
     return result;
 
 }

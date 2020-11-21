@@ -1,18 +1,18 @@
 import { Chip, withStyles } from "@material-ui/core";
 import React from "react";
-import { getColorSchemeForKey } from "../util/chip_utils";
+import { getColorSchemeForKey } from "../../util/chip_utils";
 
 type EnumChipProps = {
-    name: string,
+    colorKey: string,
     label: string | number,
     error?: boolean,
     outlined?: boolean,
     small: boolean
 };
 
-export function CustomChip({ name, label, error, outlined, small }: EnumChipProps) {
+export function CustomChip({ colorKey, label, error, outlined, small }: EnumChipProps) {
 
-    const schema = getColorSchemeForKey(name);
+    const schema = getColorSchemeForKey(colorKey);
 
     const StyledChip = withStyles({
         root: {
@@ -28,7 +28,7 @@ export function CustomChip({ name, label, error, outlined, small }: EnumChipProp
     return (
         <StyledChip
             size={small ? "small" : "medium"}
-            key={"preview_chip_" + name}
+            key={"preview_chip_" + colorKey}
             variant={outlined ? "outlined" : "default"}
             label={label}
         />

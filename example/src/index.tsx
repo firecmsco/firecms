@@ -16,7 +16,8 @@ import {
     CMSApp,
     EntityCollectionView,
     EntitySaveProps,
-    EnumValues
+    EnumValues,
+    Properties
 } from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
@@ -30,7 +31,6 @@ import {
 } from "./algolia_utils";
 import PriceTextPreview from "./custom_preview/PriceTextPreview";
 import { IconButton, Tooltip } from "@material-ui/core";
-import { Properties } from "../../src";
 
 const locales: EnumValues<string> = {
     "es": "Spanish",

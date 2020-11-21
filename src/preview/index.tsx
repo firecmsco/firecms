@@ -1,7 +1,7 @@
 import React from "react";
 
 
-import ReferencePreview from "./ReferencePreview";
+import { ReferencePreview } from "./components/ReferencePreview";
 import StorageThumbnail from "./StorageThumbnail";
 import AsyncPreviewComponent from "./AsyncPreviewComponent";
 import EntityPreview from "./EntityPreview";
@@ -15,4 +15,4 @@ export {
     EntityPreview
 };
 
-export type { PreviewComponentProps } from "./PreviewComponentProps";
+export type { PreviewComponentProps, PreviewComponentFactoryProps } from "./PreviewComponentProps";

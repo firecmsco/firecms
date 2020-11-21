@@ -11,8 +11,8 @@ import {
 import ClearIcon from "@material-ui/icons/Clear";
 import React, { useState } from "react";
 import { FieldProps } from "formik/dist/Field";
-import { renderPreviewEnumChip } from "../../preview/PreviewComponent";
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
+import { CustomChip } from "../../preview/components/CustomChip";
 
 interface StringNumberFilterFieldProps {
     name: string,
@@ -137,15 +137,24 @@ export default function StringNumberFilterField({ name, property }: StringNumber
                                     renderValue={multiple ? (selected: any) =>
                                         (
                                             <div>
-                                                {selected.map((value: any) => {
-                                                    return renderPreviewEnumChip(field.name, enumValues, value, "regular");
-                                                })}
+                                                {selected.map((v: any) =>
+                                                    <CustomChip
+                                                        colorKey={ v as string}
+                                                        label={enumValues[v] || v}
+                                                        error={!enumValues[v]}
+                                                        outlined={false}
+                                                        small={true}/>)}
                                             </div>
                                         ) : undefined}>
                                     {Object.entries(enumValues).map(([key, value]) => (
                                         <MenuItem key={`select-${key}`}
                                                   value={key}>
-                                            {renderPreviewEnumChip(field.name, enumValues, key, "small")}
+                                            <CustomChip
+                                                colorKey={value as string}
+                                                label={value}
+                                                error={!value}
+                                                outlined={false}
+                                                small={true}/>
                                         </MenuItem>
                                     ))}
                                 </MuiSelect>}

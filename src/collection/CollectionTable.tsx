@@ -17,7 +17,7 @@ import {
     Entity,
     EntitySchema,
     FilterValues,
-    Properties
+    Properties, Property
 } from "../models";
 import { TextSearchDelegate } from "../text_search_delegate";
 import { fetchEntity, listenCollection } from "../firebase";
@@ -236,7 +236,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as string[])
             .map((key, index) => {
-                const property = schema.properties[key as string];
+                const property = schema.properties[key as string] as Property;
                 return ({
                     id: key as string,
                     type: "property",

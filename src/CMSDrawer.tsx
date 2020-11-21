@@ -1,7 +1,7 @@
 import React from "react";
 import {
-    createStyles,
     Box,
+    createStyles,
     Divider,
     Drawer,
     List,
@@ -88,7 +88,8 @@ export function CMSDrawer({ logo, navigation, closeDrawer, drawerOpen, additiona
 
             {ungroupedNavigationViews.map((view, index) => createNavigationEntry(index, "none", view))}
 
-            {groups.map((group) => <React.Fragment>
+            {groups.map((group) => <React.Fragment
+                key={`drawer_group_${group}`}>
                 <Divider key={`divider_${group}`}/>
                 <Box pt={2} pl={2} pr={2} pb={0.5}>
                     <Typography variant={"caption"}

@@ -2,12 +2,16 @@ import { CollectionSize, EntitySchema, Property } from "../models";
 
 export type PreviewSize = "regular" | "small" | "tiny";
 
+export interface PreviewComponentFactoryProps{
+    PreviewComponent: React.ComponentType<PreviewComponentProps<any>>
+}
+
 export interface PreviewComponentProps<T = any> {
     name: string,
     value: T,
     property: Property<T>,
     size: PreviewSize,
-    entitySchema: EntitySchema
+    entitySchema: EntitySchema;
 }
 
 export const TINY_THUMBNAIL = 40;

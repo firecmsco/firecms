@@ -3,6 +3,7 @@ import { TextSearchDelegate } from "./text_search_delegate";
 import { CMSFieldProps } from "./form/form_props";
 import { PreviewComponentProps } from "./preview";
 import { storage } from "firebase";
+import { PreviewComponentFactoryProps } from "./preview/PreviewComponentProps";
 
 
 /**
@@ -189,7 +190,7 @@ export interface EntitySaveProps<S extends EntitySchema,
  */
 export function buildCollection<S extends EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties = Properties<Key>>(collectionView: EntityCollectionView<S,Key, P>): EntityCollectionView<S,Key, P> {
+    P extends Properties = Properties<Key>>(collectionView: EntityCollectionView<S, Key, P>): EntityCollectionView<S, Key, P> {
     return collectionView;
 }
 
@@ -247,11 +248,12 @@ export type Property<T = any, ArrayT = any> =
     T extends string ? StringProperty :
         T extends number ? NumberProperty :
             T extends boolean ? BooleanProperty :
-                T extends firebase.firestore.Timestamp ? TimestampProperty :
-                    T extends firebase.firestore.GeoPoint ? GeopointProperty :
-                        T extends firebase.firestore.DocumentReference ? ReferenceProperty<EntitySchema> :
-                            T extends Array<ArrayT> ? ArrayProperty<ArrayT> :
-                                MapProperty<T>;
+                T extends Date ? TimestampProperty :
+                    T extends firebase.firestore.Timestamp ? TimestampProperty :
+                        T extends firebase.firestore.GeoPoint ? GeopointProperty :
+                            T extends firebase.firestore.DocumentReference ? ReferenceProperty<EntitySchema> :
+                                T extends Array<ArrayT> ? ArrayProperty<ArrayT> :
+                                    T extends object ? MapProperty<T> : never;
 
 /**
  * Use this interface for adding additional columns to entity collection views.
@@ -287,7 +289,7 @@ export interface AdditionalColumnDelegate<S extends EntitySchema,
 /**
  * Interface including all common properties of a CMS property
  */
-export interface BaseProperty<T> {
+export interface BaseProperty {
 
     /**
      * Firestore datatype of the property
@@ -320,10 +322,6 @@ export interface BaseProperty<T> {
      */
     disabled?: boolean;
 
-    /**
-     * Configure how this property field is displayed
-     */
-    config?: FieldConfig<T>;
 
     /**
      * Rules for validating this property
@@ -358,7 +356,7 @@ export type EntityValues<S extends EntitySchema,
     [K in Key]: P[K] extends Property<infer T> ? T : any;
 };
 
-export interface NumberProperty extends BaseProperty<number> {
+export interface NumberProperty extends BaseProperty {
 
     dataType: "number";
 
@@ -374,7 +372,7 @@ export interface NumberProperty extends BaseProperty<number> {
 
 }
 
-export interface BooleanProperty extends BaseProperty<boolean> {
+export interface BooleanProperty extends BaseProperty {
 
     dataType: "boolean";
 
@@ -382,9 +380,14 @@ export interface BooleanProperty extends BaseProperty<boolean> {
      * Rules for validating this property
      */
     validation?: PropertyValidationSchema,
+
+    /**
+     * Configure how this property field is displayed
+     */
+    config?: FieldConfig<boolean>;
 }
 
-export interface StringProperty extends BaseProperty<string> {
+export interface StringProperty extends BaseProperty {
 
     dataType: "string";
 
@@ -399,7 +402,7 @@ export interface StringProperty extends BaseProperty<string> {
     validation?: StringPropertyValidationSchema,
 }
 
-export interface ArrayProperty<T = any> extends BaseProperty<T[]> {
+export interface ArrayProperty<T = any> extends BaseProperty {
 
     dataType: "array";
 
@@ -414,11 +417,16 @@ export interface ArrayProperty<T = any> extends BaseProperty<T[]> {
      * Rules for validating this property
      */
     validation?: ArrayPropertyValidationSchema,
+
+    /**
+     * Configure how this property field is displayed
+     */
+    config?: FieldConfig<T[]>;
 }
 
 export interface MapProperty<T = any,
     Key extends string = Extract<keyof T, string>,
-    P extends Properties = Properties<Key>> extends BaseProperty<T> {
+    P extends Properties = Properties<Key>> extends BaseProperty {
 
     dataType: "map";
 
@@ -443,7 +451,7 @@ export interface MapProperty<T = any,
     config?: MapFieldConfig<T>;
 }
 
-export interface TimestampProperty extends BaseProperty<firebase.firestore.Timestamp> {
+export interface TimestampProperty extends BaseProperty {
     dataType: "timestamp";
 
     /**
@@ -458,22 +466,32 @@ export interface TimestampProperty extends BaseProperty<firebase.firestore.Times
      * `updated_on` fields
      */
     autoValue?: "on_create" | "on_update"
+
+    /**
+     * Configure how this property field is displayed
+     */
+    config?: FieldConfig<firebase.firestore.Timestamp>;
 }
 
 // TODO: currently this is the only unsupported field
-export interface GeopointProperty extends BaseProperty<firebase.firestore.GeoPoint> {
+export interface GeopointProperty extends BaseProperty {
     dataType: "geopoint";
 
     /**
      * Rules for validating this property
      */
     validation?: PropertyValidationSchema,
+
+    /**
+     * Configure how this property field is displayed
+     */
+    config?: FieldConfig<firebase.firestore.GeoPoint>;
 }
 
 export interface ReferenceProperty<S extends EntitySchema = EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>,
     P extends Properties = Properties<Key>>
-    extends BaseProperty<firebase.firestore.DocumentReference> {
+    extends BaseProperty {
 
     dataType: "reference";
 
@@ -491,6 +509,11 @@ export interface ReferenceProperty<S extends EntitySchema = EntitySchema,
      * specified values are considered.
      */
     previewProperties?: Key[];
+
+    /**
+     * Configure how this property field is displayed
+     */
+    config?: FieldConfig<firebase.firestore.DocumentReference>;
 }
 
 
@@ -586,7 +609,7 @@ export interface FieldConfig<T> {
      * Configure how a property is displayed as a preview, e.g. in the collection
      * view
      */
-    customPreview?: React.ComponentType<PreviewComponentProps<T>>;
+    customPreview?: React.ComponentType<PreviewComponentProps<T>> & Partial<PreviewComponentFactoryProps>;
 }
 
 /**
