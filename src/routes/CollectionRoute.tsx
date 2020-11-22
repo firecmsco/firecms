@@ -14,7 +14,7 @@ import { useRouteMatch } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import { useBreadcrumbsContext } from "../BreacrumbsContext";
 import { CollectionTable } from "../collection/CollectionTable";
-import { useSelectedEntityContext } from "../SelectedEntityContext";
+import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
 
 export const useStyles = makeStyles(() =>
     createStyles({
@@ -67,23 +67,19 @@ export function CollectionRoute<S extends EntitySchema>({
     function buildAddEntityButton() {
         const onClick = (e: React.MouseEvent) => {
             e.stopPropagation();
-            return selectedEntityContext.openNew({ collectionPath });
+            return selectedEntityContext.open({ collectionPath });
         };
         return matches ?
             <Button
-                // component={ReactLink}
                 onClick={onClick}
                 startIcon={<AddIcon/>}
-                // to={getRouterNewEntityPath(collectionPath)}
                 size="large"
                 variant="contained"
                 color="primary">
                 Add {view.schema.name}
             </Button>
             : <Button
-                // component={ReactLink}
                 onClick={onClick}
-                // to={getRouterNewEntityPath(collectionPath)}
                 size="medium"
                 variant="contained"
                 color="primary"

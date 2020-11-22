@@ -31,7 +31,7 @@ import SkeletonComponent, { renderSkeletonText } from "../preview/SkeletonCompon
 import ErrorBoundary from "../components/ErrorBoundary";
 import { getPreviewSizeFrom } from "../preview/PreviewComponentProps";
 import DeleteEntityDialog from "./DeleteEntityDialog";
-import { useSelectedEntityContext } from "../SelectedEntityContext";
+import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
 import { default as CollectionCell } from "./CollectionCell";
 
 const PAGE_SIZE = 50;

@@ -21,7 +21,7 @@ import {
 } from "../PreviewComponentProps";
 import SkeletonComponent, { renderSkeletonCaptionText } from "../SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import { useSelectedEntityContext } from "../../SelectedEntityContext";
+import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
 import ErrorIcon from "@material-ui/icons/Error";
 import {
     getCollectionPathFrom,

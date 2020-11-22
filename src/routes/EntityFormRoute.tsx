@@ -27,7 +27,7 @@ import {
     removeInitialSlash
 } from "./navigation";
 import { CircularProgressCenter } from "../components";
-import { useSelectedEntityContext } from "../SelectedEntityContext";
+import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
 import { useBreadcrumbsContext } from "../BreacrumbsContext";
 import { useSnackbarContext } from "../snackbar_controller";
 import {
@@ -149,7 +149,6 @@ interface EntityRouteProps<S extends EntitySchema> {
     collectionPath: string;
     breadcrumbs?: BreadcrumbEntry[];
     context: FormContext;
-    onViewSelected?: (selected: "form" | "collection") => void;
 }
 
 function EntityFormRoute<S extends EntitySchema>({
@@ -157,7 +156,6 @@ function EntityFormRoute<S extends EntitySchema>({
                                                      collectionPath,
                                                      breadcrumbs,
                                                      context,
-                                                     onViewSelected
                                                  }: EntityRouteProps<S>) {
 
     const entityId: string = useParams()["entityId"];
@@ -210,21 +208,6 @@ function EntityFormRoute<S extends EntitySchema>({
         return () => {
         };
     }, [entityId, view]);
-
-    useEffect(() => {
-        if (onViewSelected)
-            onViewSelected(tabsPosition === 0 ? "form" : "collection");
-    }, [tabsPosition]);
-
-    useEffect(() => {
-        const path = hash.startsWith("#") ? hash.slice(1) : hash;
-        if (view.subcollections){
-            const index = view.subcollections
-                .map((c) => c.relativePath)
-                .findIndex((p) => p === path);
-            setTabsPosition(index + 1);
-        }
-    }, [hash]);
 
 
     function onSubcollectionEntityClick(collectionPath: string,
@@ -355,9 +338,9 @@ function EntityFormRoute<S extends EntitySchema>({
         (subcollectionView, colIndex) => {
 
             const collectionPath = entity ? `${entity?.reference.path}/${removeInitialSlash(subcollectionView.relativePath)}` : undefined;
-            const onClick = (e: React.MouseEvent) => {
+            const onNewClick = (e: React.MouseEvent) => {
                 e.stopPropagation();
-                return collectionPath && selectedEntityContext.openNew({ collectionPath });
+                return collectionPath && selectedEntityContext.open({ collectionPath });
             };
             return <Box
                 key={`entity_detail_tab_content_${subcollectionView.name}`}
@@ -385,7 +368,7 @@ function EntityFormRoute<S extends EntitySchema>({
                         actions={
                             <Button
                                 disabled={!collectionPath}
-                                onClick={onClick}
+                                onClick={onNewClick}
                                 size="medium"
                                 variant="outlined"
                                 color="primary"
@@ -467,7 +450,7 @@ function EntityFormRoute<S extends EntitySchema>({
             selectedEntityContext.replace({
                 collectionPath,
                 entityId,
-                hash: value !== 0
+                subcollection: value !== 0
                     ? view.subcollections[value - 1].relativePath
                     : undefined
             });

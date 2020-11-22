@@ -10,8 +10,8 @@ export interface BreadcrumbEntry {
 
 export function getEntityPath(entityId: string,
                               basePath: string,
-                              hash?: string) {
-    return `${DATA_PATH}/${removeInitialSlash(basePath)}/${entityId}${hash ? "#" + hash : ""}`;
+                              subcollection?: string) {
+    return `${DATA_PATH}/${removeInitialSlash(basePath)}/${entityId}${subcollection ? "/" + subcollection : ""}`;
 }
 
 export function getEntityPathFrom(fullPath: string) {

@@ -17,7 +17,7 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
-import { useSelectedEntityContext } from "../SelectedEntityContext";
+import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
 import { CollectionTable } from "../collection/CollectionTable";
 import { getEntityPathFrom, removeInitialSlash } from "../routes/navigation";
 

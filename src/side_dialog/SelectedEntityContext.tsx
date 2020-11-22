@@ -1,43 +1,36 @@
-import { EntitySchema } from "./models";
+import { EntitySchema } from "../models";
 import React, { useContext } from "react";
 import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import { getEntityPath, getRouterNewEntityPath } from "./routes/navigation";
+import { getEntityPath, getRouterNewEntityPath } from "../routes/navigation";
 
 const DEFAULT_SELECTED_ENTITY = {
-    isOpen: false,
+    sideLocations: [],
     close: () => {
     },
     open: (props: {
         collectionPath: string,
-        entityId: string
+        entityId?: string
     }) => {
     },
     replace: (props: {
         collectionPath: string,
         entityId: string,
-        hash?: string
-    }) => {
-    },
-    openNew: (props: {
-        collectionPath: string
+        subcollection?: string
     }) => {
     }
 };
 
 export type SelectedEntity<S extends EntitySchema> = {
-    isOpen: boolean;
     close: () => void;
+    sideLocations: Location[];
     open: (props: {
         collectionPath: string,
-        entityId: string
+        entityId?: string
     }) => void;
     replace: (props: {
         collectionPath: string,
         entityId: string,
-        hash?: string
-    }) => void;
-    openNew: (props: {
-        collectionPath: string,
+        subcollection?: string
     }) => void;
 };
 
@@ -54,26 +47,30 @@ export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ 
     const history = useHistory();
     const { path, url } = useRouteMatch();
 
-    const isOpen = !!(location.state && location.state["side_menu_locations"]);
-    const sideMenuLocationsCount = location.state && location.state["side_menu_locations"] ? location.state["side_menu_locations"] : 0;
+    const sideLocations = location.state && location.state["side_menu_locations"] ? location.state["side_menu_locations"] : [];
+    const isOpen = !!(location.state && sideLocations.length);
     const mainLocation = isOpen && location.state ? location.state["main_location"] : location;
 
     const close = () => {
-        history.go(-sideMenuLocationsCount);
+        history.go(-1);
     };
 
     const open = (props: {
         collectionPath: string,
-        entityId: string
+        entityId?: string
     }) => {
         const { collectionPath, entityId } = props;
+        const newPath = entityId ? getEntityPath(entityId, collectionPath) : getRouterNewEntityPath(collectionPath);
+        const thisLocation = {
+            pathname: newPath
+        };
         history.push(
-            getEntityPath(entityId, collectionPath),
+            newPath,
             {
                 main_location: mainLocation,
                 main_path: path,
                 main_url: url,
-                side_menu_locations: sideMenuLocationsCount + 1
+                side_menu_locations: [...sideLocations, thisLocation]
             }
         );
     };
@@ -81,31 +78,21 @@ export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ 
     const replace = (props: {
         collectionPath: string,
         entityId: string,
-        hash?: string
+        subcollection?: string
     }) => {
-        const { collectionPath, entityId, hash } = props;
+        const { collectionPath, entityId, subcollection } = props;
+        const thisLocation = {
+            pathname: getEntityPath(entityId, collectionPath),
+            subcollection: subcollection
+        };
+        console.log("thisLocation", thisLocation);
         history.replace(
-            getEntityPath(entityId, collectionPath, hash),
+            getEntityPath(entityId, collectionPath, subcollection),
             {
                 main_location: mainLocation,
                 main_path: path,
                 main_url: url,
-                side_menu_locations: sideMenuLocationsCount
-            }
-        );
-    };
-
-    const openNew = (props: {
-        collectionPath: string,
-    }) => {
-        const { collectionPath } = props;
-        history.push(
-            getRouterNewEntityPath(collectionPath),
-            {
-                main_location: mainLocation,
-                main_path: path,
-                main_url: url,
-                side_menu_locations: sideMenuLocationsCount + 1
+                side_menu_locations: [...[...sideLocations].slice(0, -1), thisLocation]
             }
         );
     };
@@ -113,11 +100,10 @@ export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ 
     return (
         <SelectedEntityContext.Provider
             value={{
-                isOpen,
+                sideLocations,
                 close,
                 open,
-                replace,
-                openNew
+                replace
             }}
         >
             {children}

@@ -27,7 +27,7 @@ import { CMSFieldProps } from "../form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { CollectionTable } from "../../collection/CollectionTable";
-import { useSelectedEntityContext } from "../../SelectedEntityContext";
+import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
 import { listenEntityFromRef } from "../../firebase";
 import SkeletonComponent, { renderSkeletonCaptionText } from "../../preview/SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";

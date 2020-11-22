@@ -33,7 +33,7 @@ import { EntityCollectionView } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import { Authenticator } from "./authenticator";
 import { blue, pink, red } from "@material-ui/core/colors";
-import { SelectedEntityProvider } from "./SelectedEntityContext";
+import { SelectedEntityProvider } from "./side_dialog/SelectedEntityContext";
 
 import "./styles.module.css";
 import { BreadcrumbsProvider } from "./BreacrumbsContext";
@@ -45,7 +45,7 @@ import { DndProvider } from "react-dnd";
 import { AdditionalView, CMSAppProps } from "./CMSAppProps";
 import { AppConfigProvider } from "./AppConfigContext";
 import { CMSDrawer } from "./CMSDrawer";
-import EntityDetailDialog from "./routes/SideCMSRoute";
+import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -315,7 +315,7 @@ export function CMSApp(props: CMSAppProps) {
                                                 </main>
                                             </Box>
 
-                                            <EntityDetailDialog
+                                            <EntitySideDialogs
                                                 navigation={navigation}/>
 
                                         </SnackbarProvider>
