@@ -8,8 +8,10 @@ export interface BreadcrumbEntry {
     view: EntityCollectionView;
 }
 
-export function getEntityPath(entityId: string, basePath: string) {
-    return `${DATA_PATH}/${removeInitialSlash(basePath)}/${entityId}`;
+export function getEntityPath(entityId: string,
+                              basePath: string,
+                              hash?: string) {
+    return `${DATA_PATH}/${removeInitialSlash(basePath)}/${entityId}${hash ? "#" + hash : ""}`;
 }
 
 export function getEntityPathFrom(fullPath: string) {

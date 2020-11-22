@@ -735,7 +735,7 @@ ReactDOM.render(
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}
-        // In the production environment
+        // In the production environment, the configuration is fetched from the environment automatically
         firebaseConfig={process.env.NODE_ENV !== "production" ? firebaseConfig : undefined}
         toolbarExtraWidget={githubLink}
     />,

@@ -14,7 +14,8 @@ const DEFAULT_SELECTED_ENTITY = {
     },
     replace: (props: {
         collectionPath: string,
-        entityId: string
+        entityId: string,
+        hash?: string
     }) => {
     },
     openNew: (props: {
@@ -32,7 +33,8 @@ export type SelectedEntity<S extends EntitySchema> = {
     }) => void;
     replace: (props: {
         collectionPath: string,
-        entityId: string
+        entityId: string,
+        hash?: string
     }) => void;
     openNew: (props: {
         collectionPath: string,
@@ -78,11 +80,12 @@ export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ 
 
     const replace = (props: {
         collectionPath: string,
-        entityId: string
+        entityId: string,
+        hash?: string
     }) => {
-        const { collectionPath, entityId } = props;
+        const { collectionPath, entityId, hash } = props;
         history.replace(
-            getEntityPath(entityId, collectionPath),
+            getEntityPath(entityId, collectionPath, hash),
             {
                 main_location: mainLocation,
                 main_path: path,

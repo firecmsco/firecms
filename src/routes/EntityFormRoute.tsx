@@ -34,6 +34,7 @@ import {
     Link as ReactLink,
     Prompt,
     useHistory,
+    useLocation,
     useParams,
     useRouteMatch
 } from "react-router-dom";
@@ -161,14 +162,17 @@ function EntityFormRoute<S extends EntitySchema>({
 
     const entityId: string = useParams()["entityId"];
 
+    const { hash } = useLocation();
     const { path, url } = useRouteMatch();
     const history = useHistory();
 
     const sideClasses = useStylesSide();
     const mainClasses = useStylesMain();
 
+    const selectedEntityContext = useSelectedEntityContext();
     const snackbarContext = useSnackbarContext();
     const breadcrumbsContext = useBreadcrumbsContext();
+
     useEffect(() => {
         if (breadcrumbs)
             breadcrumbsContext.set({
@@ -183,8 +187,6 @@ function EntityFormRoute<S extends EntitySchema>({
 
     // have the original values of the form changed
     const [isModified, setModified] = useState(false);
-
-    const selectedEntityContext = useSelectedEntityContext();
 
     useEffect(() => {
         if (entityId) {
@@ -214,9 +216,19 @@ function EntityFormRoute<S extends EntitySchema>({
             onViewSelected(tabsPosition === 0 ? "form" : "collection");
     }, [tabsPosition]);
 
+    useEffect(() => {
+        const path = hash.startsWith("#") ? hash.slice(1) : hash;
+        if (view.subcollections){
+            const index = view.subcollections
+                .map((c) => c.relativePath)
+                .findIndex((p) => p === path);
+            setTabsPosition(index + 1);
+        }
+    }, [hash]);
+
+
     function onSubcollectionEntityClick(collectionPath: string,
                                         entity: Entity<S>) {
-
         selectedEntityContext.open({
             entityId: entity.id,
             collectionPath
@@ -373,9 +385,7 @@ function EntityFormRoute<S extends EntitySchema>({
                         actions={
                             <Button
                                 disabled={!collectionPath}
-                                // component={ReactLink}
                                 onClick={onClick}
-                                // to={getRouterNewEntityPath(collectionPath)}
                                 size="medium"
                                 variant="outlined"
                                 color="primary"
@@ -451,6 +461,19 @@ function EntityFormRoute<S extends EntitySchema>({
             </Box>);
     }
 
+    function onSideTabClick(value: number) {
+        setTabsPosition(value);
+        if (view.subcollections) {
+            selectedEntityContext.replace({
+                collectionPath,
+                entityId,
+                hash: value !== 0
+                    ? view.subcollections[value - 1].relativePath
+                    : undefined
+            });
+        }
+    }
+
     function buildSideView() {
 
         return (
@@ -478,7 +501,9 @@ function EntityFormRoute<S extends EntitySchema>({
                             value={tabsPosition}
                             indicatorColor="secondary"
                             textColor="inherit"
-                            onChange={(ev, value) => setTabsPosition(value)}
+                            onChange={(ev, value) => {
+                                onSideTabClick(value);
+                            }}
                             className={sideClasses.tabBar}
                             variant="scrollable"
                             scrollButtons="auto"
