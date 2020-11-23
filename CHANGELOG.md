@@ -1,6 +1,10 @@
 # Change Log
 
 
+## [0.17.1] - 2020-11-23
+### Changed
+- Minor side navigation fix
+
 ## [0.17.0] - 2020-11-23
 ### Added
 - Side navigation now stacks subcollections

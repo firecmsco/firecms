@@ -155,13 +155,17 @@ function EntityFormRoute<S extends EntitySchema>({
                                                      view,
                                                      collectionPath,
                                                      breadcrumbs,
-                                                     context,
+                                                     context
                                                  }: EntityRouteProps<S>) {
 
     const entityId: string = useParams()["entityId"];
 
-    const { hash } = useLocation();
+    const location = useLocation();
     const { path, url } = useRouteMatch();
+    console.log("path", path);
+    console.log("url", url);
+    console.log("location", location);
+
     const history = useHistory();
 
     const sideClasses = useStylesSide();
@@ -208,6 +212,15 @@ function EntityFormRoute<S extends EntitySchema>({
         return () => {
         };
     }, [entityId, view]);
+
+    useEffect(() => {
+        if (view.subcollections && location["subcollection"]){
+            const index = view.subcollections
+                .map((c) => c.relativePath)
+                .findIndex((p) => p === location["subcollection"]);
+            setTabsPosition(index + 1);
+        }
+    }, [location["subcollection"]]);
 
 
     function onSubcollectionEntityClick(collectionPath: string,
