@@ -1,14 +1,17 @@
 # Change Log
 
-## [0.16.6] - 2020-11-21
 
+## [0.17.0] - 2020-11-23
+### Added
+- Side navigation now stacks subcollections
+
+## [0.16.6] - 2020-11-21
 ### Changed
 - Fix for bug that was causing values not mapped as properties not to be saved.
 - Internal refactor of preview properties
 - Changed API for saveEntity
 
 ## [0.16.5] - 2020-11-20
-
 ### Changed
 - Fix for composite reference paths such as "sites/en/product" References
 pointing to collection with a composite path were failing to locate the proper
