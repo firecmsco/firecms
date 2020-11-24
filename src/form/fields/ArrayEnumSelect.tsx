@@ -68,7 +68,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
                    }}
                    renderValue={(selected: any) => (
                        <div>
-                           {selected.map((value: any) => {
+                           {selected && selected.map((value: any) => {
                                return renderPreviewEnumChip(field.name, enumValues, value, "regular");
                            })}
                        </div>
