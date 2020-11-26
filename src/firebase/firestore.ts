@@ -246,10 +246,14 @@ export async function saveEntity<S extends EntitySchema>(
     }
 
     let documentReference: firestore.DocumentReference<firestore.DocumentData>;
-    documentReference = firestore()
-        .collection(collectionPath)
-        .doc(id ?? undefined);
-
+    if (id)
+        documentReference = firestore()
+            .collection(collectionPath)
+            .doc(id);
+    else
+        documentReference = firestore()
+            .collection(collectionPath)
+            .doc();
 
     const entity: Entity<S> = {
         id: documentReference.id,

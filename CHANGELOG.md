@@ -1,6 +1,10 @@
 # Change Log
 
 
+## [0.17.2] - 2020-11-26
+### Changed
+- Fixed error when saving new entities
+
 ## [0.17.1] - 2020-11-23
 ### Changed
 - Minor side navigation fix
