@@ -85,7 +85,6 @@ export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ 
             pathname: getEntityPath(entityId, collectionPath),
             subcollection: subcollection
         };
-        console.log("thisLocation", thisLocation);
         history.replace(
             getEntityPath(entityId, collectionPath, subcollection),
             {

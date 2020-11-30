@@ -99,13 +99,6 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
      */
     initialFilter?: FilterValues<S>;
 
-    /**
-     * Hook called after the entity is deleted in Firestore.
-     *
-     * @param collectionPath the Firestore collection path.
-     * @param entity the entity being deleted.
-     */
-    onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
 }
 
 /**
@@ -168,10 +161,17 @@ export interface EntitySchema<Key extends string = string, P extends Properties<
      */
     onPreSave?(entitySaveProps: EntitySaveProps<this>)
         : Promise<EntityValues<this>> | EntityValues<this>
+
+    /**
+     * Hook called after the entity is deleted in Firestore.
+     *
+     * @param entityDeleteProps
+     */
+    onDelete?(entityDeleteProps: EntityDeleteProps<this>): void;
 }
 
 /**
- *
+ * Parameters passed to hooks when an entity is saved
  */
 export interface EntitySaveProps<S extends EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>,
@@ -181,6 +181,17 @@ export interface EntitySaveProps<S extends EntitySchema,
     id?: string;
     values: EntityValues<S, P, Key>;
     status: EntityStatus;
+}
+
+/**
+ * Parameters passed to hooks when an entity is saved
+ */
+export interface EntityDeleteProps<S extends EntitySchema,
+    Key extends string = Extract<keyof S["properties"], string>,
+    P extends Properties<Key> = S["properties"]> {
+    schema: S;
+    collectionPath: string;
+    id: string;
 }
 
 /**

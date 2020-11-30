@@ -30,8 +30,6 @@ export function SideCMSRoute<S extends EntitySchema>({
     const location = useLocation();
     const { path, url } = useRouteMatch();
 
-    console.log("sr", path, url);
-
     return (
 
         <React.Fragment>

@@ -489,8 +489,12 @@ productSchema.onPreSave = ({
     return values;
 };
 
-productSchema.onSaveSuccess = () => {
-    console.log("onSaveSuccess");
+productSchema.onSaveSuccess = (props) => {
+    console.log("onSaveSuccess", props);
+};
+
+productSchema.onDelete = (props) => {
+    console.log("onDelete", props);
 };
 
 const formQuestions: string[] = ["birth_year",
@@ -682,9 +686,6 @@ const blogCollection = buildCollection({
     filterableProperties: ["name", "status"],
     initialFilter: {
         "status": ["==", "published"]
-    },
-    onEntityDelete: (path, entity) => {
-        console.log("Log from onEntityDelete hook", entity);
     }
 });
 

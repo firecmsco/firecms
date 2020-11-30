@@ -116,6 +116,12 @@ export function CollectionRoute<S extends EntitySchema>({
                              filterableProperties={view.filterableProperties}
                              properties={view.properties}
                              excludedProperties={view.excludedProperties}
+                             onEntityDelete={(collectionPath: string, entity: Entity<any>) =>
+                                 view.schema.onDelete && view.schema.onDelete({
+                                     schema: view.schema,
+                                     collectionPath,
+                                     id: entity.id
+                                 })}
                              title={title}/>
 
         </Box>

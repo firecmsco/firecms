@@ -162,6 +162,11 @@ interface CollectionTableProps<S extends EntitySchema,
      */
     onEntityClick?(collectionPath: string, entity: Entity<S>): void;
 
+    /**
+     * Callback when anywhere on the table is clicked
+     */
+    onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
+
 }
 
 interface CMSColumn {
@@ -194,6 +199,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                      filterableProperties,
                                                      title,
                                                      actions,
+                                                     onEntityDelete,
                                                      defaultSize = "m"
                                                  }: CollectionTableProps<S>) {
 
@@ -596,8 +602,10 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         <React.Fragment>
 
             <DeleteEntityDialog entity={deleteEntityClicked}
+                                collectionPath={collectionPath}
                                 schema={schema}
                                 open={!!deleteEntityClicked}
+                                onEntityDelete={onEntityDelete}
                                 onClose={() => setDeleteEntityClicked(undefined)}/>
 
             <Paper className={classes.root}

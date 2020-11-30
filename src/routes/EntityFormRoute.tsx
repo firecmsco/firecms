@@ -162,9 +162,6 @@ function EntityFormRoute<S extends EntitySchema>({
 
     const location = useLocation();
     const { path, url } = useRouteMatch();
-    console.log("path", path);
-    console.log("url", url);
-    console.log("location", location);
 
     const history = useHistory();
 
@@ -214,7 +211,7 @@ function EntityFormRoute<S extends EntitySchema>({
     }, [entityId, view]);
 
     useEffect(() => {
-        if (view.subcollections && location["subcollection"]){
+        if (view.subcollections && location["subcollection"]) {
             const index = view.subcollections
                 .map((c) => c.relativePath)
                 .findIndex((p) => p === location["subcollection"]);
@@ -366,13 +363,24 @@ function EntityFormRoute<S extends EntitySchema>({
                     <CollectionTable
                         collectionPath={collectionPath}
                         schema={subcollectionView.schema}
+                        deleteEnabled={subcollectionView.deleteEnabled}
                         additionalColumns={subcollectionView.additionalColumns}
+                        defaultSize={subcollectionView.defaultSize}
+                        properties={subcollectionView.properties}
+                        excludedProperties={subcollectionView.excludedProperties}
+                        filterableProperties={subcollectionView.filterableProperties}
+                        initialFilter={subcollectionView.initialFilter}
+                        onEntityDelete={(collectionPath: string, entity: Entity<any>) =>
+                            subcollectionView.schema.onDelete && subcollectionView.schema.onDelete({
+                                schema: subcollectionView.schema,
+                                collectionPath,
+                                id: entity.id
+                            })}
                         editEnabled={true}
                         onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
                             onSubcollectionEntityClick(collectionPath, clickedEntity)}
                         includeToolbar={true}
                         paginationEnabled={false}
-                        defaultSize={subcollectionView.defaultSize}
                         title={
                             <Typography variant={"caption"}
                                         color={"textSecondary"}>

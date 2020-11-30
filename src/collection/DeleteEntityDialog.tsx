@@ -15,17 +15,26 @@ import { useSnackbarContext } from "../snackbar_controller";
 
 export interface DeleteEntityDialogProps<S extends EntitySchema> {
     entity?: Entity<S>,
+    collectionPath: string,
     schema: S
     open: boolean;
-    afterDelete?: () => void;
+
+    onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
+
     onClose: () => void;
 }
 
-export default function DeleteEntityDialog<S extends EntitySchema>(props: DeleteEntityDialogProps<S>) {
+export default function DeleteEntityDialog<S extends EntitySchema>({ entity,
+                                                                       schema,
+                                                                       onClose,
+                                                                       open,
+                                                                       onEntityDelete,
+                                                                       collectionPath,
+                                                                       ...other }
+                                                                       : DeleteEntityDialogProps<S>) {
 
     const snackbarContext = useSnackbarContext();
 
-    const { entity, schema, onClose, open, ...other } = props;
     const [loading, setLoading] = useState(false);
 
     const handleCancel = () => {
@@ -37,11 +46,12 @@ export default function DeleteEntityDialog<S extends EntitySchema>(props: Delete
             snackbarContext.open({
                 type: "success",
                 message: "Deleted"
-            })
+            });
             setLoading(true);
             deleteEntity(entity).then(_ => {
                 setLoading(false);
-                if(props.afterDelete) props.afterDelete()
+                if (onEntityDelete && entity)
+                    onEntityDelete(collectionPath, entity);
             });
             onClose();
         }

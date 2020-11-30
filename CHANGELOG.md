@@ -1,6 +1,11 @@
 # Change Log
 
 
+## [0.18.0] - 2020-11-30
+### Changed
+- [BREAKING] The deletion hook has been moved from the collection view to the
+entity schema.
+
 ## [0.17.2] - 2020-11-26
 ### Changed
 - Fixed error when saving new entities
