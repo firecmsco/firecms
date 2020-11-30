@@ -36,7 +36,7 @@ export function ArrayOfStorageComponentsPreview({
                     <PreviewComponent
                         name={name}
                         value={v}
-                        property={property}
+                        property={property.of}
                         size={childSize}
                         entitySchema={entitySchema}/>
                 </ErrorBoundary>
