@@ -352,6 +352,7 @@ function EntityFormRoute<S extends EntitySchema>({
                 e.stopPropagation();
                 return collectionPath && selectedEntityContext.open({ collectionPath });
             };
+
             return <Box
                 key={`entity_detail_tab_content_${subcollectionView.name}`}
                 role="tabpanel"
@@ -363,7 +364,7 @@ function EntityFormRoute<S extends EntitySchema>({
                     <CollectionTable
                         collectionPath={collectionPath}
                         schema={subcollectionView.schema}
-                        deleteEnabled={subcollectionView.deleteEnabled}
+                        deleteEnabled={subcollectionView.deleteEnabled === undefined || subcollectionView.deleteEnabled}
                         additionalColumns={subcollectionView.additionalColumns}
                         defaultSize={subcollectionView.defaultSize}
                         properties={subcollectionView.properties}
