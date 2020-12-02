@@ -69,7 +69,7 @@ export default function Select<T extends EnumType>({
                 {Object.entries(enumValues).map(([key, value]) => (
                     <MenuItem key={`select-${key}`} value={key}>
                         <CustomChip
-                            colorKey={field.name}
+                            colorKey={typeof key === "number" ? `${field.name}_${key}` : key as string}
                             label={value as string}
                             error={!value}
                             outlined={false}
