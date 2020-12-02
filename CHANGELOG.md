@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.18.1] - 2020-12-02
+### Changed
+- Array of enums fix when the value coming from Firestore is not an array
+- Cosmetic fix for enum chips.
+- Added deleted entity on delete hook
 
 ## [0.18.0] - 2020-11-30
 ### Changed
