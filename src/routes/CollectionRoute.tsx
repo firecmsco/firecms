@@ -6,9 +6,9 @@ import {
     Button,
     createStyles,
     makeStyles,
+    Typography,
     useMediaQuery,
-    useTheme,
-    Typography
+    useTheme
 } from "@material-ui/core";
 import { useRouteMatch } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
@@ -120,7 +120,8 @@ export function CollectionRoute<S extends EntitySchema>({
                                  view.schema.onDelete && view.schema.onDelete({
                                      schema: view.schema,
                                      collectionPath,
-                                     id: entity.id
+                                     id: entity.id,
+                                     entity: entity
                                  })}
                              title={title}/>
 

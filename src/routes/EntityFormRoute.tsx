@@ -375,7 +375,8 @@ function EntityFormRoute<S extends EntitySchema>({
                             subcollectionView.schema.onDelete && subcollectionView.schema.onDelete({
                                 schema: subcollectionView.schema,
                                 collectionPath,
-                                id: entity.id
+                                id: entity.id,
+                                entity
                             })}
                         editEnabled={true}
                         onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>

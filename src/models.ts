@@ -189,9 +189,20 @@ export interface EntitySaveProps<S extends EntitySchema,
 export interface EntityDeleteProps<S extends EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>,
     P extends Properties<Key> = S["properties"]> {
-    schema: S;
+    /**
+     * Firestore path of the parent collection
+     */
     collectionPath: string;
+    /**
+     * Deleted entity id
+     */
     id: string;
+    /**
+     * Deleted entity
+     */
+    entity: Entity<S>;
+
+    schema: S;
 }
 
 /**
