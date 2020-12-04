@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.19.0] - 2020-12-03
+### Changed
+- Added grouping and breadcrumbs to additional views and redesign.
+
 ## [0.18.1] - 2020-12-02
 ### Changed
 - Array of enums fix when the value coming from Firestore is not an array

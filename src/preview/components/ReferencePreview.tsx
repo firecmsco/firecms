@@ -30,6 +30,9 @@ import {
 import { CMSAppProps } from "../../CMSAppProps";
 import { useAppConfigContext } from "../../AppConfigContext";
 
+import firebase from "firebase/app";
+import "firebase/firestore";
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         paper: {
@@ -68,7 +71,13 @@ export function ReferencePreview<S extends EntitySchema>(
         entitySchema
     }: PreviewComponentProps<firebase.firestore.DocumentReference> & PreviewComponentFactoryProps) {
 
-    const reference = value;
+    // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed and replace with instance check of DocumentReference
+    const isFirestoreReference = typeof value === "object" && "firestore" in value && typeof value["firestore"] === "object";
+    if (!isFirestoreReference) {
+        return "Wrong value for reference";
+    }
+
+    const reference: firebase.firestore.DocumentReference = value;
     const previewProperties = property.previewProperties;
 
     if (!reference)

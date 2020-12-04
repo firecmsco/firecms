@@ -1,10 +1,8 @@
 import * as React from "react";
 import { TextSearchDelegate } from "./text_search_delegate";
 import { CMSFieldProps } from "./form/form_props";
-import { PreviewComponentProps } from "./preview";
-import { storage } from "firebase";
-import { PreviewComponentFactoryProps } from "./preview/PreviewComponentProps";
-
+import { PreviewComponentProps, PreviewComponentFactoryProps } from "./preview";
+import firebase from 'firebase/app';
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -702,7 +700,7 @@ export interface StorageMeta {
     /**
      * Specific metadata set in your uploaded file
      */
-    metadata?: storage.UploadMetadata,
+    metadata?: firebase.storage.UploadMetadata,
 
     /**
      * When set to true, this flag indicates that the download URL of the file

@@ -75,10 +75,11 @@ firebaseConfig specification, since it gets picked up automatically.
 - [x] Real-time Collection view for entities
 - [x] Collection text search integration
 - [x] Infinite scrolling in collections
+- [x] Drag and drop reordering of arrays
 - [x] Custom additional views in main navigation
 - [x] Custom fields defined by the developer.
 - [x] Subcollection support
-- [x] Filters (only for string, numbers and booleans)
+- [x] Filters (string, numbers and booleans)
 - [ ] Filters for arrays, dates
 - [x] Custom authenticator
 - [x] Validation for required fields using yup
@@ -99,7 +100,7 @@ import {
     CMSApp,
     EntityCollectionView
 } from "@camberi/firecms";
-import { User } from "firebase/app";
+import firebase from "firebase/app";
 import "typeface-rubik";
 
 // Replace with your config
@@ -268,7 +269,7 @@ const navigation: EntityCollectionView[] = [
     })
 ];
 
-const myAuthenticator: Authenticator = (user?: User) => {
+const myAuthenticator: Authenticator = (user?: firebase.User) => {
     console.log("Allowing access to", user?.email);
     return true;
 };
@@ -306,6 +307,41 @@ Function after saving an entity that modifies some values, and you want to get
 real time updates.
 
 
+## CMSApp level configuration
+
+The entry point for setting up a FireCMS app is the CMSApp, where you can define
+the following specs:
+
+  - `name`: Name of the app, displayed as the main title and in the tab title
+
+  - `navigation`: List of the views in the CMS. Each view relates to a collection in the
+          root Firestore database. Each of the navigation entries in this field
+          generates an entry in the main menu.
+
+  - `logo`: Logo to be displayed in the drawer of the CMS
+
+  - `authentication`: Do the users need to log in to access the CMS.
+          You can specify an Authenticator function to discriminate which users can
+          access the CMS or not.
+          If not specified, authentication is enabled but no user restrictions apply
+
+  - `allowSkipLogin`: If authentication is enabled, allow the user to access the content
+          without login.
+
+  - `additionalViews`: Custom additional views created by the developer, added to the main
+          navigation
+
+  - `firebaseConfig`: Firebase configuration of the project. If you afe deploying the app to
+          Firebase hosting, you don't need to specify this value
+
+  - `primaryColor`: Primary color of the theme of the CMS
+
+  - `secondaryColor`: Primary color of the theme of the CMS
+
+  - `fontFamily`: Font family string. e.g. '"Roboto", "Helvetica", "Arial", sans-serif'
+
+  - `toolbarExtraWidget`: A component that gets rendered on the upper side of the main toolbar
+
 ## Entities configuration
 
 The core of the CMS are entities, which are defined by an `EntitySchema`. In the
@@ -324,8 +360,7 @@ schema you define the properties, which are related to the Firestore data types.
   - `properties`: Object defining the properties for the entity schema
 
 
-Entity properties
------------------
+### Entity properties
 
 You can specify the properties of an entity, using the following configuration
 fields, common to all data types:
@@ -525,8 +560,8 @@ productSchema.onPreSave = ({
 };
 ```
 
-Collection configuration
-------------------------
+## Collection configuration
+
 Once you have defined at least one entity schema, you can include it in a
 collection. You can find collection views as the first level of navigation in
 the main menu, or as subcollections inside other collections, following the

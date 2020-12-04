@@ -1,7 +1,6 @@
-import * as firebase from "firebase/app";
+import firebase from 'firebase/app';
 import "firebase/auth";
 
-import { auth, User } from "firebase";
 import React, { useContext, useEffect } from "react";
 import { Authenticator } from "./authenticator";
 
@@ -14,7 +13,7 @@ interface AuthProviderProps {
 }
 
 interface AuthContextState {
-    loggedUser: User | null;
+    loggedUser: firebase.User | null;
     authProviderError: any;
     authLoading: boolean;
     loginSkipped: boolean;
@@ -46,7 +45,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
         firebaseConfigInitialized
     }) => {
 
-    const [loggedUser, setLoggedUser] = React.useState<User | null>(null);
+    const [loggedUser, setLoggedUser] = React.useState<firebase.User | null>(null);
     const [authProviderError, setAuthProviderError] = React.useState<any>();
 
     const [authLoading, setAuthLoading] = React.useState(true);
@@ -64,7 +63,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
         };
     }, [firebaseConfigInitialized]);
 
-    const onAuthStateChanged = async (user: User | null) => {
+    const onAuthStateChanged = async (user: firebase.User | null) => {
 
         setNotAllowedError(false);
 
@@ -86,7 +85,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
         firebase
             .auth()
             .signInWithPopup(googleAuthProvider)
-            .then((_: auth.UserCredential) => {
+            .then((_: firebase.auth.UserCredential) => {
             })
             .catch(error => setAuthProviderError(error));
     }

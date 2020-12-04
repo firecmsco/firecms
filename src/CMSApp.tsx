@@ -21,8 +21,8 @@ import {
     Switch,
     useLocation
 } from "react-router-dom";
+import firebase from 'firebase/app';
 
-import * as firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
@@ -46,6 +46,7 @@ import { AdditionalView, CMSAppProps } from "./CMSAppProps";
 import { AppConfigProvider } from "./AppConfigContext";
 import { CMSDrawer } from "./CMSDrawer";
 import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
+import AdditionalViewRoute from "./routes/AdditionalViewRoute";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -392,7 +393,9 @@ function CMSRouterSwitch({ navigation, additionalViews }: {
                     key={"additional_view_" + additionalView.path}
                     path={addInitialSlash(additionalView.path)}
                 >
-                    {additionalView.view}
+                    <AdditionalViewRoute
+                        additionalView={additionalView}
+                    />
                 </Route>
             ))}
 

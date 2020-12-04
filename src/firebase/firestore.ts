@@ -1,4 +1,6 @@
-import { firestore } from "firebase/app";
+import firebase from "firebase/app";
+import "firebase/firestore";
+
 import {
     Entity,
     EntitySchema,
@@ -37,8 +39,7 @@ export function listenCollection<S extends EntitySchema<Key, P>, Key extends str
 
     console.debug("Listening collection", path, limit, filter, startAfter, orderBy, order);
 
-    let collectionReference: firestore.Query = firestore()
-        .collection(path);
+    let collectionReference: firebase.firestore.Query = firebase.firestore().collection(path);
 
     if (filter)
         Object.entries(filter)
@@ -84,7 +85,7 @@ export function fetchEntity<S extends EntitySchema<Key, P>,
 
     console.debug("Fetch entity", path, entityId);
 
-    return firestore()
+    return firebase.firestore()
         .collection(path)
         .doc(entityId)
         .get()
@@ -108,7 +109,7 @@ export function listenEntity<S extends EntitySchema<Key, P>,
     onSnapshot: (entity: Entity<S, P, Key>) => void
 ): Function {
     console.debug("Listening entity", path, entityId);
-    return firestore()
+    return firebase.firestore()
         .collection(path)
         .doc(entityId)
         .onSnapshot((docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema)));
@@ -124,7 +125,7 @@ export function listenEntity<S extends EntitySchema<Key, P>,
 export function listenEntityFromRef<S extends EntitySchema<Key, P>,
     P extends Properties = S["properties"],
     Key extends string = Extract<keyof P, string>>(
-    ref: firestore.DocumentReference,
+    ref: firebase.firestore.DocumentReference,
     schema: S,
     onSnapshot: (entity: Entity<S, P, Key>) => void
 ): Function {
@@ -140,13 +141,20 @@ export function listenEntityFromRef<S extends EntitySchema<Key, P>,
  */
 function replaceTimestampsWithDates(data: any) {
 
+    if (data === null)
+        return null;
+
+    // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed
+    if (typeof data === "object" && "firestore" in data && typeof data["firestore"] === "object")
+        return data;
+
     if (data && typeof data === "object"
-        && !(data instanceof firestore.DocumentReference)
-        && !(data instanceof firestore.GeoPoint)) {
+        && !(data instanceof firebase.firestore.DocumentReference)
+        && !(data instanceof firebase.firestore.GeoPoint)) {
 
         let result: any = {};
         Object.entries(data).forEach(([k, v]) => {
-            if (v && v instanceof firestore.Timestamp) {
+            if (v && v instanceof firebase.firestore.Timestamp) {
                 v = v.toDate();
             } else if (Array.isArray(v)) {
                 v = v.map(a => replaceTimestampsWithDates(a));
@@ -185,9 +193,10 @@ export function createEntityFromSchema<S extends EntitySchema<Key, P>,
     P extends Properties = S["properties"],
     Key extends string = Extract<keyof P, string>>
 (
-    doc: firestore.DocumentSnapshot,
+    doc: firebase.firestore.DocumentSnapshot,
     schema: S
 ): Entity<S, P, Key> {
+
     const data = doc.data() ?
         sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, P, Key>, schema)
         : undefined;
@@ -245,13 +254,13 @@ export async function saveEntity<S extends EntitySchema>(
         }
     }
 
-    let documentReference: firestore.DocumentReference<firestore.DocumentData>;
+    let documentReference: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
     if (id)
-        documentReference = firestore()
+        documentReference = firebase.firestore()
             .collection(collectionPath)
             .doc(id);
     else
-        documentReference = firestore()
+        documentReference = firebase.firestore()
             .collection(collectionPath)
             .doc();
 
@@ -347,9 +356,9 @@ function updateAutoValue(inputValue: any,
 
     } else if (property.dataType === "timestamp") {
         if (status == EntityStatus.existing && property.autoValue === "on_update") {
-            value = firestore.FieldValue.serverTimestamp();
+            value = firebase.firestore.FieldValue.serverTimestamp();
         } else if (status == EntityStatus.new && (property.autoValue === "on_update" || property.autoValue === "on_create")) {
-            value = firestore.FieldValue.serverTimestamp();
+            value = firebase.firestore.FieldValue.serverTimestamp();
         } else {
             value = inputValue;
         }

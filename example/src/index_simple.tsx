@@ -8,7 +8,7 @@ import {
     CMSApp,
     EntityCollectionView
 } from "@camberi/firecms";
-import { User } from "firebase/app";
+import firebase from "firebase/app";
 import "typeface-rubik";
 
 // Replace with your config
@@ -177,7 +177,7 @@ const navigation: EntityCollectionView[] = [
     })
 ];
 
-const myAuthenticator: Authenticator = (user?: User) => {
+const myAuthenticator: Authenticator = (user?: firebase.User) => {
     console.log("Allowing access to", user?.email);
     return true;
 };

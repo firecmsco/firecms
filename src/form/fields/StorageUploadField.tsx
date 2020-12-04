@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 
 import { getDownloadURL, uploadFile } from "../../firebase";
-import { storage } from "firebase/app";
+import firebase from 'firebase/app';
 
 
 import {
@@ -113,7 +113,7 @@ interface StorageFieldItem {
     id: number; // generated on the fly for internal use only
     storagePathOrDownloadUrl?: string;
     file?: File;
-    metadata?: storage.UploadMetadata,
+    metadata?: firebase.storage.UploadMetadata,
     size: PreviewSize
 }
 
@@ -207,7 +207,7 @@ export function StorageUpload({
         (property.of as Property).dataType === "string" ? (property.of as StringProperty).config?.storageMeta :
             undefined;
 
-    const metadata: storage.UploadMetadata | undefined = storageMeta?.metadata;
+    const metadata: firebase.storage.UploadMetadata | undefined = storageMeta?.metadata;
 
     if (!storageMeta)
         throw Error("Storage meta must be specified");
@@ -292,7 +292,7 @@ export function StorageUpload({
 
     const onFileUploadComplete = async (uploadedPath: string,
                                         entry: StorageFieldItem,
-                                        metadata?: storage.UploadMetadata) => {
+                                        metadata?: firebase.storage.UploadMetadata) => {
 
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
@@ -536,11 +536,11 @@ export function StorageEntry({
 
 interface StorageUploadItemProps {
     storagePath: string;
-    metadata?: storage.UploadMetadata,
+    metadata?: firebase.storage.UploadMetadata,
     entry: StorageFieldItem,
     onFileUploadComplete: (value: string,
                            entry: StorageFieldItem,
-                           metadata?: storage.UploadMetadata) => void;
+                           metadata?: firebase.storage.UploadMetadata) => void;
     size: PreviewSize;
 }
 
@@ -574,10 +574,10 @@ export function StorageUploadProgress({
             setProgress(currentProgress);
             console.debug("Upload is " + currentProgress + "% done");
             switch (snapshot.state) {
-                case storage.TaskState.PAUSED: // or 'paused'
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
                     console.debug("Upload is paused");
                     break;
-                case storage.TaskState.RUNNING: // or 'running'
+                case firebase.storage.TaskState.RUNNING: // or 'running'
                     console.debug("Upload is running");
                     break;
             }

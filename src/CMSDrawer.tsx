@@ -45,23 +45,43 @@ interface CMSDrawerProps {
     additionalViews: AdditionalView[] | undefined;
 }
 
+interface NavigationEntry {
+    url: string;
+    name: string;
+    group?: string;
+}
+
 export function CMSDrawer({ logo, navigation, closeDrawer, drawerOpen, additionalViews }: CMSDrawerProps) {
 
     const classes = useStyles();
-    const groups: string[] = Array.from(new Set(
-        Object.values(navigation).map(e => e.group).filter(Boolean) as string[]
-    ).values());
-    const ungroupedNavigationViews = Object.values(navigation).filter(e => !e.group);
 
-    function createNavigationEntry(index: number, group: string, view: EntityCollectionView) {
+    const navigationEntries: NavigationEntry[] = [
+        ...navigation.map(view => ({
+            url: buildCollectionPath(view.relativePath),
+            name: view.name,
+            group: view.group
+        })),
+        ...(additionalViews ?? []).map(additionalView => ({
+            url: addInitialSlash(additionalView.path),
+            name: additionalView.name,
+            group: additionalView.group
+        }))
+    ];
+
+    const groups: string[] = Array.from(new Set(
+        Object.values(navigationEntries).map(e => e.group).filter(Boolean) as string[]
+    ).values());
+    const ungroupedNavigationViews: NavigationEntry[] = Object.values(navigationEntries).filter(e => !e.group);
+
+    function createNavigationEntry(index: number, group: string, entry: NavigationEntry) {
         return <ListItem
             button
             key={`navigation_${index}`}
             component={ReactLink}
-            to={buildCollectionPath(view.relativePath)}
+            to={entry.url}
         >
             <ListItemText
-                primary={view.name.toUpperCase()}
+                primary={entry.name.toUpperCase()}
                 primaryTypographyProps={{ variant: "subtitle2" }}
                 onClick={closeDrawer}/>
         </ListItem>;
@@ -88,35 +108,22 @@ export function CMSDrawer({ logo, navigation, closeDrawer, drawerOpen, additiona
 
             {ungroupedNavigationViews.map((view, index) => createNavigationEntry(index, "none", view))}
 
-            {groups.map((group) => <React.Fragment
-                key={`drawer_group_${group}`}>
-                <Divider key={`divider_${group}`}/>
-                <Box pt={2} pl={2} pr={2} pb={0.5}>
-                    <Typography variant={"caption"}
-                                color={"textSecondary"}>
-                        {group.toUpperCase()}
-                    </Typography>
-                </Box>
-                {Object.values(navigation).filter(e => e.group === group).map((view, index) => createNavigationEntry(index, group, view))}
-            </React.Fragment>)}
-
-            {additionalViews && (
-                <React.Fragment>
-                    <Divider/>
-                    {additionalViews.map(additionalView => (
-                        <ListItem
-                            button
-                            key={`additional-view-${additionalView.path}`}
-                            component={ReactLink}
-                            to={addInitialSlash(additionalView.path)}
-                        >
-                            <ListItemText
-                                primary={additionalView.name}
-                                primaryTypographyProps={{ variant: "subtitle2" }}/>
-                        </ListItem>
-                    ))}
+            {groups.map((group) => (
+                <React.Fragment
+                    key={`drawer_group_${group}`}>
+                    <Divider key={`divider_${group}`}/>
+                    <Box pt={2} pl={2} pr={2} pb={0.5}>
+                        <Typography variant={"caption"}
+                                    color={"textSecondary"}>
+                            {group.toUpperCase()}
+                        </Typography>
+                    </Box>
+                    {Object.values(navigationEntries)
+                        .filter(e => e.group === group)
+                        .map((view, index) => createNavigationEntry(index, group, view))}
                 </React.Fragment>
-            )}
+            ))}
+
         </List>
 
     </Drawer>;

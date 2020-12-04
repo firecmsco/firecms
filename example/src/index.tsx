@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import logo from "./images/test_shop_logo.png";
-import GitHubIcon from "@material-ui/icons/GitHub";
+
+import firebase from "firebase";
 
 import "typeface-rubik";
 
@@ -9,6 +9,7 @@ import * as serviceWorker from "./serviceWorker";
 
 import {
     AdditionalColumnDelegate,
+    AdditionalView,
     AsyncPreviewComponent,
     Authenticator,
     buildCollection,
@@ -20,9 +21,11 @@ import {
     Properties
 } from "@camberi/firecms";
 
+import { IconButton, Tooltip } from "@material-ui/core";
+import GitHubIcon from "@material-ui/icons/GitHub";
+
 import { firebaseConfig } from "./firebase_config";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
-import { User } from "firebase/app";
 import CustomBooleanPreview from "./custom_preview/CustomBooleanPreview";
 import {
     blogSearchDelegate,
@@ -30,7 +33,9 @@ import {
     usersSearchDelegate
 } from "./algolia_utils";
 import PriceTextPreview from "./custom_preview/PriceTextPreview";
-import { IconButton, Tooltip } from "@material-ui/core";
+import { ExampleAdditionalView } from "./ExampleAdditionalView";
+import logo from "./images/test_shop_logo.png";
+
 
 const locales: EnumValues<string> = {
     "es": "Spanish",
@@ -516,7 +521,7 @@ export const testEntitySchema = buildSchema({
                     storageMeta: {
                         mediaType: "image",
                         storagePath: "images",
-                        acceptedFiles: ["image/*"],
+                        acceptedFiles: ["image/*"]
                     }
                 }
             }
@@ -584,8 +589,8 @@ export const testEntitySchema = buildSchema({
         difficulty: {
             title: "Difficulty",
             dataType: "number",
-            validation:{
-                required:true
+            validation: {
+                required: true
             }
         },
         range: {
@@ -681,6 +686,7 @@ const blogCollection = buildCollection({
     relativePath: "blog",
     schema: blogSchema,
     name: "Blog",
+    group: "Content",
     textSearchDelegate: blogSearchDelegate,
     properties: ["name", "images", "status", "reviewed", "products", "long_text"],
     filterableProperties: ["name", "status"],
@@ -702,16 +708,16 @@ if (process.env.NODE_ENV !== "production") {
         group: "Test group",
         name: "Test entity",
         filterableProperties: ["difficulty", "search_adjacent", "description"],
-        subcollections : [{
+        subcollections: [{
             relativePath: "test_subcollection",
             schema: testEntitySchema,
             name: "Test entity",
-            filterableProperties: ["difficulty", "search_adjacent", "description"],
+            filterableProperties: ["difficulty", "search_adjacent", "description"]
         }]
     }));
 }
 
-const myAuthenticator: Authenticator = (user?: User) => {
+const myAuthenticator: Authenticator = (user?: firebase.User) => {
     console.log("Allowing access to", user?.email);
     return true;
 };
@@ -729,6 +735,13 @@ const githubLink = (
     </Tooltip>
 );
 
+const additionalViews: AdditionalView[] = [{
+    path: "additional",
+    name: "Additional",
+    group: "Content",
+    view: <ExampleAdditionalView/>
+}];
+
 ReactDOM.render(
     <CMSApp
         name={"My Online Shop"}
@@ -736,6 +749,7 @@ ReactDOM.render(
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}
+        additionalViews={additionalViews}
         // In the production environment, the configuration is fetched from the environment automatically
         firebaseConfig={process.env.NODE_ENV !== "production" ? firebaseConfig : undefined}
         toolbarExtraWidget={githubLink}

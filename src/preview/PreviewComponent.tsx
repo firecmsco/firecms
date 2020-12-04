@@ -8,7 +8,6 @@ import {
     TimestampProperty
 } from "../models";
 import React, { createElement } from "react";
-import { firestore } from "firebase/app";
 import StorageThumbnail from "./StorageThumbnail";
 import {
     PreviewComponentFactoryProps,
@@ -29,6 +28,8 @@ import { UrlComponentPreview } from "./components/UrlComponentPreview";
 import { ArrayOfStorageComponentsPreview } from "./components/ArrayOfStorageComponentsPreview";
 import { ArrayOfStringsPreview } from "./components/ArrayOfStringsPreview";
 import { NumberPreview } from "./components/NumberPreview";
+
+import firebase from "firebase/app";
 
 export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
@@ -111,7 +112,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
         content = <TimestampPreview {...fieldProps}
                                     value={value}
                                     property={property as TimestampProperty}/>;
-    } else if (property.dataType === "reference" && value instanceof firestore.DocumentReference) {
+    } else if (property.dataType === "reference" && value instanceof firebase.firestore.DocumentReference) {
         content = <ReferencePreview
             {...fieldProps}
             value={value}

@@ -11,7 +11,7 @@ import { Authenticator } from "./authenticator";
  */
 export interface CMSAppProps {
     /**
-     * Name of the service, displayed as the main title and in the tab title
+     * Name of the app, displayed as the main title and in the tab title
      */
     name: string;
 
@@ -31,7 +31,8 @@ export interface CMSAppProps {
      * Do the users need to log in to access the CMS.
      * You can specify an Authenticator function to discriminate which users can
      * access the CMS or not.
-     * If not specified authentication is enabled but no user restrictions apply
+     * If not specified, authentication is enabled but no user restrictions
+     * apply
      */
     authentication?: boolean | Authenticator;
 
@@ -97,4 +98,10 @@ export interface AdditionalView {
      * Component to be rendered
      */
     view: React.ReactNode;
+
+    /**
+     * Optional field used to group top level navigation entries under a
+     * navigation view.
+     */
+    group?: string;
 }

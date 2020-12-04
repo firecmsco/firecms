@@ -5,17 +5,20 @@ import {
     Box,
     Breadcrumbs,
     Button,
+    Chip,
     createStyles,
+    emphasize,
     Hidden,
     IconButton,
     Link,
     makeStyles,
     Theme,
     Toolbar,
-    Typography
+    Typography,
+    withStyles
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import { BreadcrumbContainer } from "./BreadcrumbContainer";
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { useBreadcrumbsContext } from "../BreacrumbsContext";
 import { useAuthContext } from "../auth";
@@ -69,26 +72,31 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                 </IconButton>
 
                 <Hidden smDown>
-                    <Typography variant="h6" noWrap>
-                        {title}
-                    </Typography>
+                    <Box mr={3}>
+                        <Typography variant="h6" noWrap>
+                            {title}
+                        </Typography>
+                    </Box>
                 </Hidden>
 
-                <Box ml={3} mr={3}>
-                    <BreadcrumbContainer>
-                        <Breadcrumbs aria-label="breadcrumb">
-                            {breadcrumbs.map((entry, index) => (
-
-                                <Link
-                                    key={`breadcrumb-${index}`}
-                                    color="inherit"
-                                    component={ReactLink}
-                                    to={entry.url}>
-                                    {entry.title}
-                                </Link>))
-                            }
-                        </Breadcrumbs>
-                    </BreadcrumbContainer>
+                <Box mr={2}>
+                    <Breadcrumbs
+                        separator={<NavigateNextIcon htmlColor={"rgb(0,0,0,0.87)"}
+                                                     fontSize="small"/>}
+                        aria-label="breadcrumb">
+                        {breadcrumbs.map((entry, index) => (
+                            <Link
+                                key={`breadcrumb-${index}`}
+                                color="inherit"
+                                component={ReactLink}
+                                to={entry.url}>
+                                <StyledBreadcrumb
+                                    label={entry.title}
+                                />
+                            </Link>)
+                        )
+                        }
+                    </Breadcrumbs>
                 </Box>
 
                 <Box flexGrow={1}/>
@@ -119,3 +127,21 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
         </AppBar>
     );
 };
+
+
+const StyledBreadcrumb = withStyles((theme: Theme) => ({
+    root: {
+        backgroundColor: theme.palette.grey[100],
+        height: theme.spacing(3),
+        color: theme.palette.grey[800],
+        fontWeight: theme.typography.fontWeightMedium,
+        "&:hover, &:focus": {
+            cursor: "pointer",
+            backgroundColor: theme.palette.grey[300]
+        },
+        "&:active": {
+            boxShadow: theme.shadows[1],
+            backgroundColor: emphasize(theme.palette.grey[300], 0.12)
+        }
+    }
+}))(Chip) as typeof Chip;

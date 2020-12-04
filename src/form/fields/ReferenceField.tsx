@@ -5,6 +5,7 @@ import {
     FilterValues,
     ReferenceProperty
 } from "../../models";
+import firebase from "firebase/app";
 import { getIn } from "formik";
 import {
     Box,

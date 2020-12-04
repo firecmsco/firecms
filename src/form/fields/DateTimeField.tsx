@@ -3,6 +3,7 @@ import React from "react";
 import { DateTimePicker } from "@material-ui/pickers";
 
 import { CMSFieldProps } from "../form_props";
+import firebase from 'firebase/app';
 import "firebase/firestore";
 
 import { FieldDescription } from "../../components";
