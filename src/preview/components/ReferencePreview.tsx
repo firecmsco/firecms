@@ -74,7 +74,7 @@ export function ReferencePreview<S extends EntitySchema>(
     // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed and replace with instance check of DocumentReference
     const isFirestoreReference = typeof value === "object" && "firestore" in value && typeof value["firestore"] === "object";
     if (!isFirestoreReference) {
-        return "Wrong value for reference";
+        return <span>Wrong value for reference</span>;
     }
 
     const reference: firebase.firestore.DocumentReference = value;
