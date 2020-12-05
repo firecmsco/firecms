@@ -8,7 +8,6 @@ import {
     FormHelperText,
     InputLabel,
     Switch,
-    TextareaAutosize,
     Typography
 } from "@material-ui/core";
 import React from "react";
@@ -74,6 +73,22 @@ export default function TextField({
         }
     };
     const disabled = valueIsInfinity || isSubmitting;
+
+    const filledInput = (
+        <FilledInput
+            type={inputType}
+            multiline={isMultiline}
+            inputProps={{
+                rows: 4
+            }}
+            value={valueIsInfinity ? "Infinity" : value}
+            disabled={disabled}
+            onChange={(evt) => {
+                updateValue(evt.target.value);
+            }}
+        />
+        );
+
     return (
         <React.Fragment>
 
@@ -90,17 +105,7 @@ export default function TextField({
                     <LabelWithIcon property={property}/>
                 </InputLabel>
 
-                <FilledInput
-                    type={inputType}
-                    inputComponent={isMultiline ? TextareaAutosize : undefined}
-                    multiline={isMultiline}
-                    rows={4}
-                    value={valueIsInfinity ? "Infinity" : value}
-                    disabled={disabled}
-                    onChange={(evt) => {
-                        updateValue(evt.target.value);
-                    }}
-                />
+                {filledInput}
 
                 <Box display={"flex"}>
 

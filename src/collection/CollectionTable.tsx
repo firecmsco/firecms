@@ -472,6 +472,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
                         {entity ?
                             <Typography
+                                className={"mono"}
                                 variant={"caption"}
                                 color={"textSecondary"}> {entity.id} </Typography>
                             :

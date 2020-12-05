@@ -164,7 +164,9 @@ export function createCustomIdField<S extends EntitySchema>(schema: EntitySchema
 
     const appConfig: CMSAppProps | undefined = useAppConfigContext();
     const inputProps = entity ? {
-            endAdornment: (<InputAdornment position="end">
+            className: "mono",
+            endAdornment: (
+                <InputAdornment position="end">
                     <IconButton
                         onClick={(e) => copy(entity.id)}
                         aria-label="copy-id">
@@ -212,6 +214,7 @@ export function createCustomIdField<S extends EntitySchema>(schema: EntitySchema
                 <InputLabel id={`id-label`}>{fieldProps.label}</InputLabel>
                 <MuiSelect
                     labelId={`id-label`}
+                    className={"mono"}
                     error={error}
                     {...fieldProps}
                     onChange={(event: any) => onChange(event.target.value)}>
@@ -226,8 +229,10 @@ export function createCustomIdField<S extends EntitySchema>(schema: EntitySchema
 
             {!hasEnumValues &&
             <MuiTextField {...fieldProps}
+                          className={"mono"}
                           error={error}
                           InputProps={inputProps}
+
                           onChange={(event) => onChange(event.target.value)}/>}
 
             <ErrorMessage name={"id"}

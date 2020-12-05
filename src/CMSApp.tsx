@@ -21,6 +21,7 @@ import "firebase/storage";
 import "firebase/firestore";
 
 import "./styles.module.css";
+import "typeface-space-mono";
 
 import { CircularProgressCenter } from "./components";
 import { Authenticator } from "./authenticator";
@@ -126,6 +127,13 @@ export function CMSApp(props: CMSAppProps) {
                     }
                 }
             },
+            MuiTypography: {
+                root: {
+                    "&.mono": {
+                        fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                    }
+                }
+            },
             MuiInputLabel: {
                 formControl: {
                     top: 0,
@@ -137,6 +145,11 @@ export function CMSApp(props: CMSAppProps) {
             MuiInputBase: {
                 formControl: {
                     minHeight: "64px"
+                },
+                root: {
+                    "&.mono": {
+                        fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                    }
                 }
             },
             MuiFormControlLabel: {
