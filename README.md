@@ -422,7 +422,8 @@ Besides the common fields, some properties have specific configurations.
             exclusive values the property can take, mapped to the label that it is
             displayed in the dropdown.
     * `multiline`: Is this string property long enough so it should be displayed in
-            a multiple line field. Defaults to false.
+            a multiple line field. Defaults to false. If set to true,
+            the number of lines adapts to the content.
     * `markdown`: Should this string property be displayed as a markdown field. If true,
             the field is rendered as a text editors that supports markdown highlight
             syntax. It also includes a preview of the result.
@@ -635,6 +636,8 @@ Subcollections are collections of entities that are found under another entity.
 For example, you can have a collection named "translations" under the entity
 "Article". You just need to use the same format as for defining your collection
 using the field `subcollections`.
+
+Subcollections are easily accessible from the side view while editing an entity
 
 ### Filters
 

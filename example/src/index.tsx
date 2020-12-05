@@ -291,7 +291,7 @@ const blogSchema = buildSchema({
             validation: { required: true },
             dataType: "string",
             config: {
-                multiline: 6
+                multiline: true
             }
         },
         images: {

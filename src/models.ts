@@ -640,9 +640,10 @@ export interface StringFieldConfig extends FieldConfig<string> {
 
     /**
      * Is this string property long enough so it should be displayed in
-     * a multiple line field. Defaults to false.
+     * a multiple line field. Defaults to false. If set to true,
+     * the number of lines adapts to the content
      */
-    multiline?: boolean | number;
+    multiline?: boolean;
 
     /**
      * Should this string property be displayed as a markdown field. If true,

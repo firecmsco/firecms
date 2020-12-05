@@ -8,6 +8,7 @@ import {
     FormHelperText,
     InputLabel,
     Switch,
+    TextareaAutosize,
     Typography
 } from "@material-ui/core";
 import React from "react";
@@ -29,23 +30,21 @@ export default function TextField({
                                       property,
                                       includeDescription,
                                       allowInfinity,
-                                      entitySchema,
+                                      entitySchema
                                   }: TextFieldProps) {
 
     const fieldError = getIn(errors, field.name);
     const showError = getIn(touched, field.name) && !!fieldError;
 
     let mediaType: MediaType | undefined;
-    let multiline: boolean | number | undefined;
+    let multiline: boolean | undefined;
     if (property.dataType === "string") {
         const url = (property as StringProperty).config?.url;
         mediaType = typeof url === "string" ? url : undefined;
         multiline = (property as StringProperty).config?.multiline;
     }
 
-    const rows: number | undefined = !!multiline ?
-        (typeof multiline === "number" ? multiline as number : 4)
-        : undefined;
+    const isMultiline = !!multiline;
 
     const value = field.value ? field.value : (property.dataType === "string" ? "" : field.value === 0 ? 0 : "");
 
@@ -93,8 +92,9 @@ export default function TextField({
 
                 <FilledInput
                     type={inputType}
-                    multiline={!!multiline}
-                    rows={rows}
+                    inputComponent={isMultiline ? TextareaAutosize : undefined}
+                    multiline={isMultiline}
+                    rows={4}
                     value={valueIsInfinity ? "Infinity" : value}
                     disabled={disabled}
                     onChange={(evt) => {

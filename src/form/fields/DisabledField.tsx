@@ -31,7 +31,7 @@ export default function DisabledField<S extends EntitySchema>({
 
             <FormHelperText filled
                             required={property.validation?.required}>
-                <LabelWithIcon scaledIcon={false} property={property}/>
+                <LabelWithIcon scaledIcon={true} property={property}/>
             </FormHelperText>
 
             <Paper

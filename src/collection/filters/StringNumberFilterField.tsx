@@ -150,7 +150,7 @@ export default function StringNumberFilterField({ name, property }: StringNumber
                                         <MenuItem key={`select-${key}`}
                                                   value={key}>
                                             <CustomChip
-                                                colorKey={value as string}
+                                                colorKey={key as string}
                                                 label={value}
                                                 error={!value}
                                                 outlined={false}

@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.19.1] - 2020-12-*
+### Changed
+- Internal refactor of CMSApp.tsx and contexts.
+- [BREAKING] String properties config multiline value can no longer take a number
+and only accepts boolean values. Numbers used to be used to indicate the number
+of rows but TextField now grow automatically based on the content.
+
 ## [0.19.0] - 2020-12-03
 ### Changed
 - Added grouping and breadcrumbs to additional views and redesign.
