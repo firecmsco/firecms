@@ -28,7 +28,7 @@ import {
     getCollectionViewFromPath
 } from "../../routes/navigation";
 import { CMSAppProps } from "../../CMSAppProps";
-import { useAppConfigContext } from "../../AppConfigContext";
+import { useAppConfigContext } from "../../contexts/AppConfigContext";
 
 import firebase from "firebase/app";
 import "firebase/firestore";

@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import EntityPreview from "../preview/EntityPreview";
 import { CircularProgressCenter } from "../components";
-import { useSnackbarContext } from "../snackbar_controller";
+import { useSnackbarContext } from "../contexts/SnackbarContext";
 
 
 export interface DeleteEntityDialogProps<S extends EntitySchema> {

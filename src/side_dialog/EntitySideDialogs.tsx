@@ -59,7 +59,7 @@ export function EntitySideDialogs<S extends EntitySchema>({ navigation }: {
         })),
         { open: false }]; // we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed
 
-    return <React.Fragment>
+    return <>
         {
             sidePanels.map((panel, index) => {
                 const selectedView: "form" | "collection" = panel.location?.subcollection ? "collection" : "form";
@@ -94,6 +94,6 @@ export function EntitySideDialogs<S extends EntitySchema>({ navigation }: {
                 );
             })
         }
-    </React.Fragment>;
+    </>;
 }
 

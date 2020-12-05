@@ -28,9 +28,9 @@ import DisabledField from "./fields/DisabledField";
 import { CMSFieldProps } from "./form_props";
 import ArrayShapedField from "./fields/ArrayShapedField";
 import { useClipboard } from "use-clipboard-hook";
-import { useSnackbarContext } from "../snackbar_controller";
+import { useSnackbarContext } from "../contexts/SnackbarContext";
 import MarkDownField from "./fields/MarkdownField";
-import { useAppConfigContext } from "../AppConfigContext";
+import { useAppConfigContext } from "../contexts/AppConfigContext";
 import { CMSAppProps } from "../CMSAppProps";
 
 export interface FormFieldProps {

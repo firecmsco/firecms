@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { BreadcrumbEntry } from "./navigation";
-import { useBreadcrumbsContext } from "../BreacrumbsContext";
+import { useBreadcrumbsContext } from "../contexts/BreacrumbsContext";
 import { useRouteMatch } from "react-router-dom";
 import { AdditionalView } from "../CMSAppProps";
 

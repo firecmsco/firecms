@@ -35,7 +35,7 @@ import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { PreviewComponent } from "../../preview";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { getCollectionViewFromPath } from "../../routes/navigation";
-import { useAppConfigContext } from "../../AppConfigContext";
+import { useAppConfigContext } from "../../contexts/AppConfigContext";
 import { CMSAppProps } from "../../CMSAppProps";
 
 

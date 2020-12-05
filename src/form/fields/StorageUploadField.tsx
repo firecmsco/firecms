@@ -33,7 +33,7 @@ import PreviewComponent from "../../preview/PreviewComponent";
 import deepEqual from "deep-equal";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
-import { useSnackbarContext } from "../../snackbar_controller";
+import { useSnackbarContext } from "../../contexts/SnackbarContext";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { PreviewSize } from "../../preview/PreviewComponentProps";
 

@@ -28,8 +28,8 @@ import {
 } from "./navigation";
 import { CircularProgressCenter } from "../components";
 import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
-import { useBreadcrumbsContext } from "../BreacrumbsContext";
-import { useSnackbarContext } from "../snackbar_controller";
+import { useBreadcrumbsContext } from "../contexts/BreacrumbsContext";
+import { useSnackbarContext } from "../contexts/SnackbarContext";
 import {
     Link as ReactLink,
     Prompt,

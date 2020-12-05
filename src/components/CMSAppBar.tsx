@@ -12,6 +12,7 @@ import {
     IconButton,
     Link,
     makeStyles,
+    Slide,
     Theme,
     Toolbar,
     Typography,
@@ -20,8 +21,8 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
-import { useBreadcrumbsContext } from "../BreacrumbsContext";
-import { useAuthContext } from "../auth";
+import { useBreadcrumbsContext } from "../contexts/BreacrumbsContext";
+import { useAuthContext } from "../contexts/AuthContext";
 import ErrorBoundary from "./ErrorBoundary";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -58,73 +59,77 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
 
     const authContext = useAuthContext();
     return (
-        <AppBar position={"relative"} elevation={2}>
 
-            <Toolbar>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                    onClick={handleDrawerToggle}
-                    className={classes.menuButton}
-                >
-                    <MenuIcon/>
-                </IconButton>
+        <Slide direction="down" in={true} mountOnEnter unmountOnExit>
+            <AppBar position={"relative"} elevation={2}>
 
-                <Hidden smDown>
-                    <Box mr={3}>
-                        <Typography variant="h6" noWrap>
-                            {title}
-                        </Typography>
-                    </Box>
-                </Hidden>
-
-                <Box mr={2}>
-                    <Breadcrumbs
-                        separator={<NavigateNextIcon htmlColor={"rgb(0,0,0,0.87)"}
-                                                     fontSize="small"/>}
-                        aria-label="breadcrumb">
-                        {breadcrumbs.map((entry, index) => (
-                            <Link
-                                key={`breadcrumb-${index}`}
-                                color="inherit"
-                                component={ReactLink}
-                                to={entry.url}>
-                                <StyledBreadcrumb
-                                    label={entry.title}
-                                />
-                            </Link>)
-                        )
-                        }
-                    </Breadcrumbs>
-                </Box>
-
-                <Box flexGrow={1}/>
-
-                {toolbarExtraWidget &&
-                <ErrorBoundary>
-                    {
-                        toolbarExtraWidget
-                    }
-                </ErrorBoundary>}
-
-                <Box p={1} mr={1}>
-                    {authContext.loggedUser && authContext.loggedUser.photoURL ?
-                        <Avatar
-                            src={authContext.loggedUser.photoURL}/>
-                        :
-                        <Avatar>{authContext.loggedUser?.displayName ? authContext.loggedUser.displayName[0] : "A"}</Avatar>
-                    }
-                </Box>
-
-                <Button variant="text"
+                <Toolbar>
+                    <IconButton
                         color="inherit"
-                        onClick={authContext.onSignOut}>
-                    Log Out
-                </Button>
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        className={classes.menuButton}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
 
-            </Toolbar>
-        </AppBar>
+                    <Hidden smDown>
+                        <Box mr={3}>
+                            <Typography variant="h6" noWrap>
+                                {title}
+                            </Typography>
+                        </Box>
+                    </Hidden>
+
+                    <Box mr={2}>
+                        <Breadcrumbs
+                            separator={<NavigateNextIcon
+                                htmlColor={"rgb(0,0,0,0.87)"}
+                                fontSize="small"/>}
+                            aria-label="breadcrumb">
+                            {breadcrumbs.map((entry, index) => (
+                                <Link
+                                    key={`breadcrumb-${index}`}
+                                    color="inherit"
+                                    component={ReactLink}
+                                    to={entry.url}>
+                                    <StyledBreadcrumb
+                                        label={entry.title}
+                                    />
+                                </Link>)
+                            )
+                            }
+                        </Breadcrumbs>
+                    </Box>
+
+                    <Box flexGrow={1}/>
+
+                    {toolbarExtraWidget &&
+                    <ErrorBoundary>
+                        {
+                            toolbarExtraWidget
+                        }
+                    </ErrorBoundary>}
+
+                    <Box p={1} mr={1}>
+                        {authContext.loggedUser && authContext.loggedUser.photoURL ?
+                            <Avatar
+                                src={authContext.loggedUser.photoURL}/>
+                            :
+                            <Avatar>{authContext.loggedUser?.displayName ? authContext.loggedUser.displayName[0] : "A"}</Avatar>
+                        }
+                    </Box>
+
+                    <Button variant="text"
+                            color="inherit"
+                            onClick={authContext.onSignOut}>
+                        Log Out
+                    </Button>
+
+                </Toolbar>
+            </AppBar>
+        </Slide>
     );
 };
 

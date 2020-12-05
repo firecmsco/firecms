@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { useRouteMatch } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
-import { useBreadcrumbsContext } from "../BreacrumbsContext";
+import { useBreadcrumbsContext } from "../contexts/BreacrumbsContext";
 import { CollectionTable } from "../collection/CollectionTable";
 import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
 

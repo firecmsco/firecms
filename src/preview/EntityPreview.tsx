@@ -19,7 +19,7 @@ import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { CMSAppProps } from "../CMSAppProps";
-import { useAppConfigContext } from "../AppConfigContext";
+import { useAppConfigContext } from "../contexts/AppConfigContext";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({

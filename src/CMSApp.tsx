@@ -2,11 +2,9 @@ import React, { useEffect } from "react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import {
     Box,
-    Button,
     createMuiTheme,
     createStyles,
     CssBaseline,
-    Grid,
     makeStyles,
     Theme,
     ThemeProvider
@@ -14,39 +12,33 @@ import {
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
-import {
-    BrowserRouter as Router,
-    Redirect,
-    Route,
-    Switch,
-    useLocation
-} from "react-router-dom";
-import firebase from 'firebase/app';
+import { BrowserRouter as Router } from "react-router-dom";
 
+import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 
+import "./styles.module.css";
+
 import { CircularProgressCenter } from "./components";
-import { EntityCollectionView } from "./models";
-import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import { Authenticator } from "./authenticator";
 import { blue, pink, red } from "@material-ui/core/colors";
-import { SelectedEntityProvider } from "./side_dialog/SelectedEntityContext";
 
-import "./styles.module.css";
-import { BreadcrumbsProvider } from "./BreacrumbsContext";
-import { CMSAppBar } from "./components/CMSAppBar";
-import { AuthContext, AuthProvider } from "./auth";
-import { SnackbarProvider } from "./snackbar_controller";
-import { CMSRoute } from "./routes/CMSRoute";
+import { SelectedEntityProvider } from "./side_dialog/SelectedEntityContext";
+import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
+import { AuthContext, AuthProvider } from "./contexts/AuthContext";
+import { SnackbarProvider } from "./contexts/SnackbarContext";
+import { AppConfigProvider } from "./contexts/AppConfigContext";
+
 import { DndProvider } from "react-dnd";
-import { AdditionalView, CMSAppProps } from "./CMSAppProps";
-import { AppConfigProvider } from "./AppConfigContext";
+import { CMSAppProps } from "./CMSAppProps";
+import { LoginView } from "./LoginView";
 import { CMSDrawer } from "./CMSDrawer";
+import { CMSRouterSwitch } from "./CMSRouterSwitch";
+import { CMSAppBar } from "./components/CMSAppBar";
 import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
-import AdditionalViewRoute from "./routes/AdditionalViewRoute";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -217,191 +209,106 @@ export function CMSApp(props: CMSAppProps) {
         }
     }, []);
 
-    return <AuthProvider authenticator={authenticator}
-                         firebaseConfigInitialized={firebaseConfigInitialized}>
-        <AuthContext.Consumer>
-            {(authContext) => {
+    const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
+    const closeDrawer = () => setDrawerOpen(false);
 
-                const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
-                const closeDrawer = () => setDrawerOpen(false);
+    function renderLoginView() {
+        return <LoginView logo={logo}
+                          skipLoginButtonEnabled={skipLoginButtonEnabled}/>;
+    }
 
-                function renderLoginView() {
-                    return (
-                        <Grid
-                            container
-                            spacing={0}
-                            direction="column"
-                            alignItems="center"
-                            justify="center"
-                            style={{ minHeight: "100vh" }}
-                        >
-                            <Box m={1}>
-                                {logo &&
-                                <img className={classes.logo} src={logo}
-                                     alt={"Logo"}/>}
-                            </Box>
-
-                            <Button variant="contained"
-                                    color="primary"
-                                    onClick={authContext.googleSignIn}>
-                                Google login
-                            </Button>
-
-                            {skipLoginButtonEnabled &&
-                            <Box m={2}>
-                                <Button onClick={authContext.skipLogin}>Skip
-                                    login</Button>
-                            </Box>
-                            }
-
-                            <Grid item xs={12}>
-
-                                {/* TODO: add link to https://console.firebase.google.com/u/0/project/[PROYECT_ID]/authentication/providers in order to enable google */}
-                                {/* in case the error code is auth/operation-not-allowed */}
-
-                                {authContext.notAllowedError &&
-                                <Box p={2}>It looks like you don't have access
-                                    to
-                                    the CMS,
-                                    based
-                                    on the specified Authenticator
-                                    configuration</Box>}
-
-                                {authContext.authProviderError &&
-                                <Box p={2}>
-                                    {authContext.authProviderError.message}
-                                </Box>}
-
-                            </Grid>
-                        </Grid>
-                    );
-                }
-
-                function renderMainView() {
-                    if (configError) {
-                        return <Box> {configError} </Box>;
-                    }
-
-                    if (!firebaseConfigInitialized) {
-                        return <CircularProgressCenter/>;
-                    }
-
-                    return usedFirebaseConfig &&
-                        <AppConfigProvider cmsAppConfig={props}
-                                           firebaseConfig={usedFirebaseConfig}>
-                            <Router>
-                                <SelectedEntityProvider>
-                                    <BreadcrumbsProvider>
-                                        <SnackbarProvider>
-
-                                            <nav>
-                                                <CMSDrawer logo={logo}
-                                                           drawerOpen={drawerOpen}
-                                                           navigation={navigation}
-                                                           closeDrawer={closeDrawer}
-                                                           additionalViews={additionalViews}/>
-                                            </nav>
-
-                                            <Box className={classes.main}>
-                                                <CssBaseline/>
-                                                <CMSAppBar title={name}
-                                                           handleDrawerToggle={handleDrawerToggle}
-                                                           toolbarExtraWidget={toolbarExtraWidget}/>
-
-                                                <main
-                                                    className={classes.content}>
-                                                    <CMSRouterSwitch
-                                                        navigation={navigation}
-                                                        additionalViews={additionalViews}/>
-                                                </main>
-                                            </Box>
-
-                                            <EntitySideDialogs
-                                                navigation={navigation}/>
-
-                                        </SnackbarProvider>
-                                    </BreadcrumbsProvider>
-                                </SelectedEntityProvider>
-                            </Router>
-                        </AppConfigProvider>;
-                }
-
-                return (
-                    <ThemeProvider theme={theme}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    function renderMainView() {
+        return (
+            <Router>
+                <SelectedEntityProvider>
+                    <BreadcrumbsProvider>
+                        <MuiPickersUtilsProvider
+                            utils={DateFnsUtils}>
                             <DndProvider backend={HTML5Backend}>
-                                {firebaseConfigError ?
-                                    <Box>
-                                        It seems like the provided Firebase
-                                        config
-                                        is not correct. If you are using the
-                                        credentials provided automatically by
-                                        Firebase Hosting, make sure you link
-                                        your
-                                        Firebase app to Firebase Hosting.
-                                    </Box> :
-                                    (
-                                        authContext.authLoading ? (
-                                            <CircularProgressCenter/>
-                                        ) : (!authenticationEnabled || authContext.loggedUser || authContext.loginSkipped) ? (
-                                            renderMainView()
-                                        ) : (
-                                            renderLoginView()
-                                        )
-                                    )}
+                                <nav>
+                                    <CMSDrawer logo={logo}
+                                               drawerOpen={drawerOpen}
+                                               navigation={navigation}
+                                               closeDrawer={closeDrawer}
+                                               additionalViews={additionalViews}/>
+                                </nav>
+
+                                <Box
+                                    className={classes.main}>
+                                    <CssBaseline/>
+                                    <CMSAppBar title={name}
+                                               handleDrawerToggle={handleDrawerToggle}
+                                               toolbarExtraWidget={toolbarExtraWidget}/>
+
+                                    <main
+                                        className={classes.content}>
+                                        <CMSRouterSwitch
+                                            navigation={navigation}
+                                            additionalViews={additionalViews}/>
+                                    </main>
+                                </Box>
+
+                                <EntitySideDialogs
+                                    navigation={navigation}/>
+
                             </DndProvider>
                         </MuiPickersUtilsProvider>
-                    </ThemeProvider>
-                );
-            }
+                    </BreadcrumbsProvider>
+                </SelectedEntityProvider>
+            </Router>
+        );
+    }
 
-            }
-        </AuthContext.Consumer>
-    </AuthProvider>;
 
-}
+    if (configError) {
+        return <Box> {configError} </Box>;
+    }
 
-function CMSRouterSwitch({ navigation, additionalViews }: {
-    navigation: EntityCollectionView[],
-    additionalViews?: AdditionalView[];
-}) {
+    if (firebaseConfigError) {
+        return <Box>
+            It seems like the provided Firebase config is not correct. If you
+            are using the credentials provided automatically by Firebase
+            Hosting, make sure you link your Firebase app to Firebase
+            Hosting.
+        </Box>;
+    }
 
-    const location = useLocation();
-    const mainLocation = location.state && location.state["main_location"] ? location.state["main_location"] : location;
+    if (!firebaseConfigInitialized || !usedFirebaseConfig) {
+        return <CircularProgressCenter/>;
+    }
 
-    const firstCollectionPath = buildCollectionPath(navigation[0].relativePath);
+    return usedFirebaseConfig &&
+        <AppConfigProvider cmsAppConfig={props}
+                           firebaseConfig={usedFirebaseConfig}>
 
-    return (
-        <Switch location={mainLocation}>
+            <ThemeProvider theme={theme}>
+                <SnackbarProvider>
+                    <AuthProvider authenticator={authenticator}
+                                  firebaseConfigInitialized={firebaseConfigInitialized}>
+                        <AuthContext.Consumer>
+                            {(authContext) => {
 
-            {navigation.map(entityCollectionView => (
-                    <Route
-                        path={buildCollectionPath(entityCollectionView.relativePath)}
-                        key={`navigation_${entityCollectionView.relativePath}`}>
-                        <CMSRoute
-                            type={"collection"}
-                            collectionPath={entityCollectionView.relativePath}
-                            view={entityCollectionView}
-                        />
-                    </Route>
-                )
-            )}
+                                const hasAccessToMainView = !authenticationEnabled || authContext.loggedUser || authContext.loginSkipped;
 
-            {additionalViews &&
-            additionalViews.map(additionalView => (
-                <Route
-                    key={"additional_view_" + additionalView.path}
-                    path={addInitialSlash(additionalView.path)}
-                >
-                    <AdditionalViewRoute
-                        additionalView={additionalView}
-                    />
-                </Route>
-            ))}
+                                return (
+                                    authContext.authLoading ?
+                                        <CircularProgressCenter/>
+                                        : (
+                                            hasAccessToMainView ?
+                                                renderMainView()
+                                                :
+                                                renderLoginView()
+                                        )
+                                );
 
-            <Redirect to={firstCollectionPath}/>
+                            }
 
-        </Switch>
-    );
+                            }
+                        </AuthContext.Consumer>
+                    </AuthProvider>
+                </SnackbarProvider>
+            </ThemeProvider>
+        </AppConfigProvider>;
+
 }
 
