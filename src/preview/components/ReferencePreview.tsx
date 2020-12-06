@@ -19,7 +19,7 @@ import {
     PreviewComponentFactoryProps,
     PreviewComponentProps
 } from "../PreviewComponentProps";
-import SkeletonComponent, { renderSkeletonCaptionText } from "../SkeletonComponent";
+import SkeletonComponent from "../SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
 import ErrorIcon from "@material-ui/icons/Error";
@@ -145,10 +145,11 @@ export function ReferencePreview<S extends EntitySchema>(
                      maxWidth={"calc(100% - 60px)"}
                      m={1}>
 
-                    {size !== "tiny" && <Box key={"ref_prev_id"}
-                                             style={style}>
-                        <Typography variant={"caption"}>
-                            {entity ? entity.id : renderSkeletonCaptionText()}
+                    {size !== "tiny" && entity &&
+                    <Box key={"ref_prev_id"}
+                         style={style}>
+                        <Typography variant={"caption"} className={"mono"}>
+                            {entity.id}
                         </Typography>
                     </Box>}
 

@@ -30,7 +30,7 @@ import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
 import { listenEntityFromRef } from "../../firebase";
-import SkeletonComponent, { renderSkeletonCaptionText } from "../../preview/SkeletonComponent";
+import SkeletonComponent from "../../preview/SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { PreviewComponent } from "../../preview";
 import ErrorBoundary from "../../components/ErrorBoundary";
@@ -319,12 +319,14 @@ export function ReferenceDialog<S extends EntitySchema>(
                             </FormHelperText>
                         </Box>
 
-                        {!missingEntity && <Box key={"ref_prev_id"}
-                                                alignSelf={"center"}
-                                                m={1}>
+                        {entity &&
+                        <Box key={"ref_prev_id"}
+                             alignSelf={"center"}
+                             m={1}>
                             <Tooltip title={value && value.path}>
-                                <Typography variant={"caption"}>
-                                    {entity ? entity.id : renderSkeletonCaptionText()}
+                                <Typography variant={"caption"}
+                                            className={"mono"}>
+                                    {entity.id}
                                 </Typography>
                             </Tooltip>
                         </Box>}
