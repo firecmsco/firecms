@@ -139,7 +139,7 @@ export function listenEntityFromRef<S extends EntitySchema<Key, P>,
  * bindings.
  * @param data
  */
-function replaceTimestampsWithDates(data: any) {
+export function replaceTimestampsWithDates(data: any):any {
 
     if (data === null)
         return null;
@@ -147,6 +147,10 @@ function replaceTimestampsWithDates(data: any) {
     // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed
     if (typeof data === "object" && "firestore" in data && typeof data["firestore"] === "object")
         return data;
+
+    if (data instanceof firebase.firestore.Timestamp) {
+        return data.toDate();
+    }
 
     if (data && typeof data === "object"
         && !(data instanceof firebase.firestore.DocumentReference)

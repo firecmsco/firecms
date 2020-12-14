@@ -1,52 +1,24 @@
-import { updateAutoValues } from "../firebase/firestore";
-import { buildProperties, EntityStatus } from "../models";
+import firebase from "firebase/app";
+import { replaceTimestampsWithDates } from "../firebase/firestore";
 
-const properties = buildProperties({
-    title:{
-        dataType: "string"
-    },
-    conditions: {
-        dataType: "array",
-        of: {
-            dataType: "map",
-            properties: {
-                type: { dataType: "string" },
-                values: {
-                    dataType: "array",
-                    of: {
-                        dataType: "string"
-                    }
-                }
-            }
-        }
-    }
+
+it("timestamp conversion", () => {
+
+    const timestamp = firebase.firestore.Timestamp.now();
+    const date = timestamp.toDate();
+    expect(
+        replaceTimestampsWithDates({ created_at: timestamp })
+    ).toEqual({ created_at: date });
 });
 
-it("autovalues complex update", () => {
+it("timestamp array conversion", () => {
 
-    const inputValues = {
-        conditions: [
-            { type: "ids", values: ["yes", "no"] }
-        ]
-    };
+    const timestamp = firebase.firestore.Timestamp.now();
+    const date = timestamp.toDate();
 
     expect(
-        updateAutoValues(inputValues, properties, EntityStatus.existing)
-    ).toEqual(inputValues);
+        replaceTimestampsWithDates({ o: [{ created_at: timestamp }] })
+    ).toEqual({ o: [{ created_at: date }] });
 
 });
 
-it("autovalues preserve values not in properties", () => {
-
-    const inputValues = {
-        newProperty: "!",
-        conditions: [
-            { type: "ids", values: ["yes", "no"] }
-        ]
-    };
-
-    expect(
-        updateAutoValues(inputValues, properties, EntityStatus.existing)
-    ).toEqual(inputValues);
-
-});

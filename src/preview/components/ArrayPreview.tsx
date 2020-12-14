@@ -60,7 +60,7 @@ export function ArrayPreview({
                             <PreviewComponent
                                 name={name}
                                 value={value}
-                                property={property}
+                                property={property.of}
                                 size={childSize}
                                 entitySchema={entitySchema}/>
                         </ErrorBoundary>

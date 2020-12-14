@@ -512,6 +512,16 @@ export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
     properties: {
+        available_dates: {
+            dataType: "array",
+            title: "Available Dates",
+            validation: {
+                required: true
+            },
+            of:{
+                dataType: "timestamp",
+            }
+        },
         images: {
             title: "Image URLs",
             dataType: "array",

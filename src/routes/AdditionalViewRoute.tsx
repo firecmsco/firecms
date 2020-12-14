@@ -23,7 +23,6 @@ function AdditionalViewRoute({
     const breadcrumbsContext = useBreadcrumbsContext();
 
     useEffect(() => {
-        console.log("BC", breadcrumb);
         breadcrumbsContext.set({
             breadcrumbs: [breadcrumb]
         });
