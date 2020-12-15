@@ -2,6 +2,7 @@ import { EntitySchema } from "../models";
 import React, { useContext } from "react";
 import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { getEntityPath, getRouterNewEntityPath } from "../routes/navigation";
+import * as H from 'history';
 
 const DEFAULT_SELECTED_ENTITY = {
     sideLocations: [],
@@ -22,7 +23,7 @@ const DEFAULT_SELECTED_ENTITY = {
 
 export type SelectedEntity<S extends EntitySchema> = {
     close: () => void;
-    sideLocations: Location[];
+    sideLocations: H.Location[];
     open: (props: {
         collectionPath: string,
         entityId?: string
@@ -43,7 +44,7 @@ interface SelectedEntityProviderProps {
 
 export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ children }) => {
 
-    const location = useLocation();
+    const location:any = useLocation();
     const history = useHistory();
     const { path, url } = useRouteMatch();
 

@@ -62,7 +62,6 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
 
         <Slide direction="down" in={true} mountOnEnter unmountOnExit>
             <AppBar position={"relative"} elevation={2}>
-
                 <Toolbar>
                     <IconButton
                         color="inherit"

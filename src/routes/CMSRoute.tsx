@@ -29,7 +29,7 @@ export function CMSRoute<S extends EntitySchema>({
 
     const entityId: string = useParams()["entityId"];
 
-    const location = useLocation();
+    const location:any = useLocation();
     const { path, url } = useRouteMatch();
 
     const thisType = location.state && location.state["main_location"] ? "collection" : type;

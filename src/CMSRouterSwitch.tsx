@@ -15,7 +15,7 @@ export function CMSRouterSwitch({ navigation, additionalViews }: {
     additionalViews?: AdditionalView[];
 }) {
 
-    const location = useLocation();
+    const location:any = useLocation();
     const mainLocation = location.state && location.state["main_location"] ? location.state["main_location"] : location;
 
     const firstCollectionPath = buildCollectionPath(navigation[0].relativePath);
