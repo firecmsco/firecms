@@ -3,7 +3,7 @@
     "extends": [
         "standard",
         "standard-react",
-        "plugin:prettier/recommended",
+//        "plugin:prettier/recommended",
         "prettier/standard",
         "prettier/react"
     ],
@@ -19,7 +19,7 @@
     },
     "settings": {
         "react": {
-            "version": "16"
+            "version": "17"
         }
     },
     "rules": {

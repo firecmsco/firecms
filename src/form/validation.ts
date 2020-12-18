@@ -12,18 +12,17 @@ import {
 } from "../models";
 import * as yup from "yup";
 import {
+    AnySchema,
+    ArraySchema,
     BooleanSchema,
     DateSchema,
-    NotRequiredArraySchema,
-    NotRequiredNullableArraySchema,
     NumberSchema,
     ObjectSchema,
-    Schema,
     StringSchema
 } from "yup";
 
 
-function mapPropertyToYup(property: Property): Schema<unknown> {
+export function mapPropertyToYup(property: Property): AnySchema<unknown> {
     if (property.dataType === "string") {
         return getYupStringSchema(property);
     } else if (property.dataType === "number") {
@@ -98,7 +97,7 @@ function getYupNumberSchema(property: NumberProperty): NumberSchema {
     return schema;
 }
 
-function getYupGeoPointSchema(property: GeopointProperty): ObjectSchema {
+function getYupGeoPointSchema(property: GeopointProperty): AnySchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation?.required) {
@@ -109,7 +108,7 @@ function getYupGeoPointSchema(property: GeopointProperty): ObjectSchema {
     return schema;
 }
 
-function getYupDateSchema(property: TimestampProperty): ObjectSchema<any> | DateSchema {
+function getYupDateSchema(property: TimestampProperty): AnySchema | DateSchema {
     if (property.autoValue) {
         return yup.object().nullable(true);
     }
@@ -127,7 +126,7 @@ function getYupDateSchema(property: TimestampProperty): ObjectSchema<any> | Date
     return schema;
 }
 
-function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProperty<S>): ObjectSchema {
+function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProperty<S>): AnySchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {
@@ -153,19 +152,9 @@ function getYupBooleanSchema(property: BooleanProperty): BooleanSchema {
     return schema;
 }
 
-function getYupArraySchema<T>(property: ArrayProperty<T>): Schema<unknown> {
+function getYupArraySchema<T>(property: ArrayProperty<T>): ArraySchema<any> {
 
-    let schema: NotRequiredArraySchema<any> | NotRequiredNullableArraySchema<any>;
-    if ("dataType" in property.of)
-        schema = yup.array().of(mapPropertyToYup(property.of));
-    else if (Array.isArray(property.of)) {
-        schema = yup.array();
-        // const positionSchemas: Schema<any>[] = property.of.map((p) => mapPropertyToYup(p));
-        // schema = yup.array().test("Array shape",
-        //         "Validation error",
-        //         (value: any[]) => positionSchemas.every((s, i) => s.validate(value[i])));
-    } else throw Error("Yup array config error");
-
+    let schema: ArraySchema<any> = yup.array().of(mapPropertyToYup(property.of));
     const validation = property.validation;
 
     if (validation) {
