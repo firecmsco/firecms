@@ -183,19 +183,24 @@ export function CMSApp(props: CMSAppProps) {
         = authentication instanceof Function ? authentication : undefined;
 
     function initFirebase(config: Object) {
-        try {
-            firebase.initializeApp(config);
-            firebase.analytics();
-            setUsedFirebaseConfig(config);
-            setFirebaseConfigError(false);
-            setFirebaseConfigInitialized(true);
-        } catch (e) {
-            console.error(e);
-            setFirebaseConfigError(true);
-        }
+        if (firebase.apps.length === 0)
+            try {
+                firebase.initializeApp(config);
+                firebase.analytics();
+                setUsedFirebaseConfig(config);
+                setFirebaseConfigError(false);
+                setFirebaseConfigInitialized(true);
+            } catch (e) {
+                console.error(e);
+                setFirebaseConfigError(true);
+            }
     }
 
     useEffect(() => {
+
+        if (firebase.apps.length > 0)
+            return;
+
         if (firebaseConfig) {
             initFirebase(firebaseConfig);
         } else if (process.env.NODE_ENV === "production") {

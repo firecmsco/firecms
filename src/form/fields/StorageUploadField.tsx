@@ -9,12 +9,11 @@ import {
     LinearProgress,
     makeStyles,
     Paper,
-    RootRef,
     Typography
 } from "@material-ui/core";
 
 import { getDownloadURL, uploadFile } from "../../firebase";
-import firebase from 'firebase/app';
+import firebase from "firebase/app";
 
 
 import {
@@ -345,89 +344,85 @@ export function StorageUpload({
         }
     );
 
-    const { ref, ...rootProps } = getRootProps();
+    const { ...rootProps } = getRootProps();
 
     const helpText = multipleFilesSupported ?
         "Drag 'n' drop some files here, or click to select files" :
         "Drag 'n' drop a file here, or click to select one";
 
     return (
+        <div {...rootProps}
+             className={clsx(classes.dropZone, {
+                 [classes.nonActiveDrop]: !isDragActive,
+                 [classes.activeDrop]: isDragActive,
+                 [classes.rejectDrop]: isDragReject,
+                 [classes.acceptDrop]: isDragAccept
+             })}
+        >
 
-        <RootRef rootRef={ref}>
+            <input                        {...getInputProps()} />
 
-            <div {...rootProps}
-                 className={clsx(classes.dropZone, {
-                     [classes.nonActiveDrop]: !isDragActive,
-                     [classes.activeDrop]: isDragActive,
-                     [classes.rejectDrop]: isDragReject,
-                     [classes.acceptDrop]: isDragAccept
-                 })}
-            >
+            <Box display="flex"
+                 flexDirection="row"
+                 flexWrap="wrap"
+                 alignItems="center"
+                 justifyContent="center"
+                 minHeight={250}>
 
-                <input                        {...getInputProps()} />
-
-                <Box display="flex"
-                     flexDirection="row"
-                     flexWrap="wrap"
-                     alignItems="center"
-                     justifyContent="center"
-                     minHeight={250}>
-
-                    {internalValue.map((entry, index) => {
-                        let child;
-                        if (entry.storagePathOrDownloadUrl) {
-                            const renderProperty = multipleFilesSupported
-                                ? (property as ArrayProperty<string>).of as Property
-                                : property;
-                            child = (
-                                <StorageItemPreview
-                                    name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
-                                    property={renderProperty}
-                                    value={entry.storagePathOrDownloadUrl}
-                                    onClear={onClear}
-                                    entitySchema={entitySchema}
-                                    size={entry.size}/>
-                            );
-                        } else if (entry.file) {
-                            child = (
-                                <StorageUploadProgress
-                                    entry={entry}
-                                    metadata={metadata}
-                                    storagePath={storageMeta.storagePath}
-                                    onFileUploadComplete={onFileUploadComplete}
-                                    size={size}
-                                />
-                            );
-                        }
-
-                        return <StorageEntry
-                            key={`storage_entry_${index}`}
-                            entry={entry}
-                            index={index}
-                            dragType={"storage_card_" + name}
-                            moveItem={moveItem}
-                            onHover={setHoveredIndex}
-                            hovered={hoveredIndex === index}>
-                            {child}
-                        </StorageEntry>;
-                    })
+                {internalValue.map((entry, index) => {
+                    let child;
+                    if (entry.storagePathOrDownloadUrl) {
+                        const renderProperty = multipleFilesSupported
+                            ? (property as ArrayProperty<string>).of as Property
+                            : property;
+                        child = (
+                            <StorageItemPreview
+                                name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
+                                property={renderProperty}
+                                value={entry.storagePathOrDownloadUrl}
+                                onClear={onClear}
+                                entitySchema={entitySchema}
+                                size={entry.size}/>
+                        );
+                    } else if (entry.file) {
+                        child = (
+                            <StorageUploadProgress
+                                entry={entry}
+                                metadata={metadata}
+                                storagePath={storageMeta.storagePath}
+                                onFileUploadComplete={onFileUploadComplete}
+                                size={size}
+                            />
+                        );
                     }
 
-                    <Box
-                        flexGrow={1}
-                        m={2}
-                        maxWidth={small ? 100 : 200}>
-                        <Typography color={"textSecondary"}
-                                    variant={"body2"}
-                                    align={"center"}>
-                            {helpText}
-                        </Typography>
-                    </Box>
+                    return <StorageEntry
+                        key={`storage_entry_${index}`}
+                        entry={entry}
+                        index={index}
+                        dragType={"storage_card_" + name}
+                        moveItem={moveItem}
+                        onHover={setHoveredIndex}
+                        hovered={hoveredIndex === index}>
+                        {child}
+                    </StorageEntry>;
+                })
+                }
 
+                <Box
+                    flexGrow={1}
+                    m={2}
+                    maxWidth={small ? 100 : 200}>
+                    <Typography color={"textSecondary"}
+                                variant={"body2"}
+                                align={"center"}>
+                        {helpText}
+                    </Typography>
                 </Box>
 
-            </div>
-        </RootRef>
+            </Box>
+
+        </div>
     );
 
 }

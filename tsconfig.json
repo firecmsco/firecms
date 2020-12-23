@@ -4,6 +4,7 @@
         "module": "esnext",
         "lib": [
             "dom",
+            "dom.iterable",
             "esnext"
         ],
         "moduleResolution": "node",
@@ -28,7 +29,8 @@
         "noEmit": true
     },
     "include": [
-        "src"
+        "src",
+        "./src/**/*.ts"
     ],
     "exclude": [
         "node_modules",

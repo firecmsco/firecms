@@ -334,15 +334,17 @@ function EntityFormRoute<S extends EntitySchema>({
 
     const containerRef = React.useRef<HTMLDivElement>(null);
 
-    const form = <EntityForm
-        status={status as EntityStatus}
-        collectionPath={collectionPath}
-        schema={view.schema}
-        onEntitySave={onEntitySave}
-        onDiscard={onDiscard}
-        onModified={setModified}
-        entity={entity}
-        containerRef={containerRef}/>;
+    const form = (
+        <EntityForm
+            status={status as EntityStatus}
+            collectionPath={collectionPath}
+            schema={view.schema}
+            onEntitySave={onEntitySave}
+            onDiscard={onDiscard}
+            onModified={setModified}
+            entity={entity}
+            containerRef={containerRef}/>
+    );
 
     const subCollectionsView = view.subcollections && view.subcollections.map(
         (subcollectionView, colIndex) => {

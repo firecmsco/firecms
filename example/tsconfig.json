@@ -20,9 +20,6 @@
         "noEmit": true,
         "jsx": "react-jsx"
     },
-    "setupFiles": [
-        "core-js"
-    ],
     "include": [
         "src"
     ]

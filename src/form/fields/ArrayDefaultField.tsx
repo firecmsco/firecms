@@ -53,7 +53,9 @@ export default function ArrayDefaultField<T>({
 
 
     const fieldError = getIn(errors, field.name);
-    const showError = getIn(touched, field.name) && fieldError && !!fieldError.filter((e: any) => !!e).length;
+    const showError = getIn(touched, field.name)
+        && fieldError
+        && (!Array.isArray(fieldError) || !!fieldError.filter((e: any) => !!e).length);
 
     const ofProperty: Property = property.of as Property;
     const classes = formStyles();
@@ -138,6 +140,10 @@ export default function ArrayDefaultField<T>({
 
                     {includeDescription &&
                     <FieldDescription property={property}/>}
+
+                    {showError
+                    && typeof fieldError === "string"
+                    && <FormHelperText>{fieldError}</FormHelperText>}
 
                 </FormControl>
             );

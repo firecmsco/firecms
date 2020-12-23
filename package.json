@@ -71,6 +71,12 @@
         "react-dom": "^17.0.1",
         "react-scripts": "^4.0.1"
     },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
     "devDependencies": {
         "@types/jest": "^26.0.14",
         "@types/node": "^14.14.14",

@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import {
     Authenticator,
@@ -33,11 +32,11 @@ const locales = {
 const productSchema = buildSchema({
     name: "Product",
     properties: {
-        name: {
-            title: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
+        // name: {
+        //     title: "Name",
+        //     validation: { required: true },
+        //     dataType: "string"
+        // },
         price: {
             title: "Price",
             validation: {
@@ -162,33 +161,33 @@ const localeSchema = buildSchema({
     }
 });
 
-const navigation: EntityCollectionView[] = [
-    buildCollection({
-        relativePath: "products",
-        schema: productSchema,
-        name: "Products",
-        subcollections: [
-            buildCollection({
-                name: "Locales",
-                relativePath: "locales",
-                schema: localeSchema
-            })
-        ]
-    })
-];
+export function SimpleApp() {
 
-const myAuthenticator: Authenticator = (user?: firebase.User) => {
-    console.log("Allowing access to", user?.email);
-    return true;
-};
+    const navigation: EntityCollectionView[] = [
+        buildCollection({
+            relativePath: "products",
+            schema: productSchema,
+            name: "Products",
+            subcollections: [
+                buildCollection({
+                    name: "Locales",
+                    relativePath: "locales",
+                    schema: localeSchema
+                })
+            ]
+        })
+    ];
 
-ReactDOM.render(
-    <CMSApp
+    const myAuthenticator: Authenticator = (user?: firebase.User) => {
+        console.log("Allowing access to", user?.email);
+        return true;
+    };
+
+    return <CMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
         navigation={navigation}
         firebaseConfig={firebaseConfig}
-    />,
-    document.getElementById("root")
-);
+    />;
+}
 

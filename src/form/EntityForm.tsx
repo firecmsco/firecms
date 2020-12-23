@@ -194,6 +194,7 @@ function EntityForm<S extends EntitySchema>({
         </Box>;
     }
 
+    console.log("baseValues", baseValues);
     return (
         <Formik
             initialValues={baseValues as EntityValues<S>}
@@ -203,6 +204,8 @@ function EntityForm<S extends EntitySchema>({
             onReset={() => onDiscard && onDiscard()}
         >
             {({ values, touched, dirty, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
+
+                // console.log("touched", touched, dirty);
 
                 useEffect(() => {
                     onModified(dirty);
