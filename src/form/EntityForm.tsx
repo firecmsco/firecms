@@ -97,11 +97,11 @@ function EntityForm<S extends EntitySchema>({
      * Base values are the ones this view is initialized from, we use them to
      * compare them with underlying changes in Firestore
      */
-    let baseValues: EntityValues<S>;
+    let baseFirestoreValues: EntityValues<S>;
     if (status === EntityStatus.new) {
-        baseValues = (initEntityValues(schema));
+        baseFirestoreValues = (initEntityValues(schema));
     } else if (status === EntityStatus.existing && entity) {
-        baseValues = entity.values as EntityValues<S> || initEntityValues(schema);
+        baseFirestoreValues = entity.values as EntityValues<S>;
     } else {
         throw new Error("Form configured wrong");
     }
@@ -109,14 +109,14 @@ function EntityForm<S extends EntitySchema>({
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
-    const [initialValues, setInitialValues] = React.useState<EntityValues<S> | undefined>(entity?.values);
+    const [initialValues, setInitialValues] = React.useState<EntityValues<S>>(entity?.values || initEntityValues(schema));
 
     let underlyingChanges: Partial<EntityValues<S>> | undefined;
     if (initialValues) {
         underlyingChanges = Object.keys(schema.properties)
             .map((key) => {
                 const initialValue = initialValues[key];
-                const latestValue = baseValues[key];
+                const latestValue = baseFirestoreValues[key];
                 if (!deepEqual(initialValue, latestValue)) {
                     return { [key]: latestValue };
                 }
@@ -194,22 +194,20 @@ function EntityForm<S extends EntitySchema>({
         </Box>;
     }
 
-    console.log("baseValues", baseValues);
     return (
         <Formik
-            initialValues={baseValues as EntityValues<S>}
+            initialValues={initialValues as EntityValues<S>}
             onSubmit={saveValues}
             validationSchema={validationSchema}
             validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}
         >
-            {({ values, touched, dirty, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
+            {({ values, touched, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
 
-                // console.log("touched", touched, dirty);
-
+                const modified = !deepEqual(entity?.values, values);
                 useEffect(() => {
-                    onModified(dirty);
-                }, [dirty]);
+                    onModified(modified);
+                }, [modified]);
 
                 if (underlyingChanges && entity) {
                     // we update the form fields from the Firestore data
@@ -217,6 +215,7 @@ function EntityForm<S extends EntitySchema>({
                     Object.entries(underlyingChanges).forEach(([key, value]) => {
                         const formValue = values[key];
                         if (!deepEqual(value, formValue) && !touched[key]) {
+                            console.debug("Updated value from Firestore:", key, value)
                             setFieldValue(key, !!value ? value : null);
                             setFieldTouched(key, false);
                         }

@@ -1,5 +1,4 @@
 import React from "react";
-// import './App.css';
 import { firebaseConfig } from "./firebase_config";
 import {
     AdditionalColumnDelegate,
@@ -11,8 +10,7 @@ import {
     CMSApp,
     EntityCollectionView,
     EntitySaveProps,
-    EnumValues,
-    Properties
+    EnumValues
 } from "@camberi/firecms";
 import PriceTextPreview from "./custom_preview/PriceTextPreview";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
@@ -494,6 +492,17 @@ function App() {
         customId: true,
         name: "Test entity",
         properties: {
+            title: {
+                dataType: "string",
+                title: "Title"
+            },
+            tags: {
+                title: "Tags",
+                dataType: "array",
+                of: {
+                    dataType: "string"
+                }
+            },
             available_dates: {
                 dataType: "array",
                 title: "Available Dates",
@@ -533,13 +542,6 @@ function App() {
                     markdown: true
                 }
             },
-            tags: {
-                title: "Tags",
-                dataType: "array",
-                of: {
-                    dataType: "string"
-                }
-            },
             product: {
                 title: "Product",
                 dataType: "reference",
@@ -555,11 +557,6 @@ function App() {
                 title: "Updated on",
                 dataType: "timestamp",
                 autoValue: "on_update"
-            },
-            title: {
-                title: "Title",
-                description: "A catching title is important",
-                dataType: "string"
             },
             description: {
                 title: "Description",
