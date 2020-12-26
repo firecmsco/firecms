@@ -15,8 +15,7 @@ import {
     Slide,
     Theme,
     Toolbar,
-    Typography,
-    withStyles
+    Typography
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
@@ -29,9 +28,20 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         menuButton: {
             marginRight: theme.spacing(2)
-            // [theme.breakpoints.up("md")]: {
-            //     display: "none"
-            // }
+        },
+        breadcrumb: {
+            backgroundColor: theme.palette.grey[100],
+            height: theme.spacing(3),
+            color: theme.palette.grey[800],
+            fontWeight: theme.typography.fontWeightMedium,
+            "&:hover, &:focus": {
+                cursor: "pointer",
+                backgroundColor: theme.palette.grey[300]
+            },
+            "&:active": {
+                boxShadow: theme.shadows[1],
+                backgroundColor: emphasize(theme.palette.grey[300], 0.12)
+            }
         }
     })
 );
@@ -93,7 +103,8 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                                     color="inherit"
                                     component={ReactLink}
                                     to={entry.url}>
-                                    <StyledBreadcrumb
+                                    <Chip
+                                        classes={{root: classes.breadcrumb}}
                                         label={entry.title}
                                     />
                                 </Link>)
@@ -131,21 +142,3 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
         </Slide>
     );
 };
-
-
-const StyledBreadcrumb = withStyles((theme: Theme) => ({
-    root: {
-        backgroundColor: theme.palette.grey[100],
-        height: theme.spacing(3),
-        color: theme.palette.grey[800],
-        fontWeight: theme.typography.fontWeightMedium,
-        "&:hover, &:focus": {
-            cursor: "pointer",
-            backgroundColor: theme.palette.grey[300]
-        },
-        "&:active": {
-            boxShadow: theme.shadows[1],
-            backgroundColor: emphasize(theme.palette.grey[300], 0.12)
-        }
-    }
-}))(Chip) as typeof Chip;

@@ -39,7 +39,6 @@ import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./components/CMSAppBar";
 import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
-import { TableSelectedCellProvider } from "./collection/SelectedCellContext";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -240,7 +239,6 @@ export function CMSApp(props: CMSAppProps) {
         return (
             <Router>
                 <SelectedEntityProvider>
-                    <TableSelectedCellProvider>
                         <BreadcrumbsProvider>
                             <MuiPickersUtilsProvider
                                 utils={DateFnsUtils}>
@@ -273,7 +271,6 @@ export function CMSApp(props: CMSAppProps) {
                                 </DndProvider>
                             </MuiPickersUtilsProvider>
                         </BreadcrumbsProvider>
-                    </TableSelectedCellProvider>
                 </SelectedEntityProvider>
             </Router>
         );

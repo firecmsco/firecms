@@ -1,17 +1,9 @@
-import {
-    Entity,
-    EntityCollectionView,
-    EntitySchema,
-    FilterValues,
-    ReferenceProperty
-} from "../../models";
+import { Entity, EntityCollectionView, EntitySchema } from "../../models";
 import firebase from "firebase/app";
 import {
     Box,
     Button,
     createStyles,
-    Dialog,
-    DialogActions,
     FormControl,
     FormHelperText,
     IconButton,
@@ -20,23 +12,23 @@ import {
     Typography
 } from "@material-ui/core";
 import React, { useEffect } from "react";
-import ErrorIcon from "@material-ui/icons/Error";
-import ClearIcon from "@material-ui/icons/Clear";
 
-import { CMSFieldProps, FormFieldBuilder } from "../form_props";
+import { CMSFieldProps } from "../form_props";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../../components/LabelWithIcon";
-import { CollectionTable } from "../../collection/CollectionTable";
-import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
-import { listenEntityFromRef } from "../../firebase";
-import SkeletonComponent from "../../preview/SkeletonComponent";
-import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import { PreviewComponent } from "../../preview";
-import ErrorBoundary from "../../components/ErrorBoundary";
 import { getCollectionViewFromPath } from "../../routes/navigation";
 import { useAppConfigContext } from "../../contexts/AppConfigContext";
 import { CMSAppProps } from "../../CMSAppProps";
+import { ReferenceDialog } from "../../references/ReferenceDialog";
+import ErrorBoundary from "../../components/ErrorBoundary";
+import { PreviewComponent, SkeletonComponent } from "../../preview";
+import { LabelWithIcon } from "../../components/LabelWithIcon";
 
+import ErrorIcon from "@material-ui/icons/Error";
+import ClearIcon from "@material-ui/icons/Clear";
+import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
+import { listenEntityFromRef } from "../../firebase";
+import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
+import { CollectionTable } from "../../collection/CollectionTable";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -60,11 +52,6 @@ export const useStyles = makeStyles(theme => createStyles({
         backgroundColor: "rgba(0, 0, 0, 0.12)",
         color: "rgba(0, 0, 0, 0.38)",
         borderBottomStyle: "dotted"
-    },
-    dialogBody: {
-        flexGrow: 1,
-        overflow: "auto",
-        minWidth: "85vw"
     }
 }));
 
@@ -74,7 +61,6 @@ export default function ReferenceField<S extends EntitySchema>({
                                                                    value,
                                                                    setValue,
                                                                    error,
-                                                                   showError,
                                                                    isSubmitting,
                                                                    touched,
                                                                    autoFocus,
@@ -86,112 +72,21 @@ export default function ReferenceField<S extends EntitySchema>({
                                                                }: CMSFieldProps<firebase.firestore.DocumentReference>) {
 
     const handleEntityClick = (entity: Entity<S>) => {
+        if (isSubmitting)
+            return;
         const ref = entity ? entity.reference : null;
         setValue(ref);
+        setOpen(false);
     };
+
 
     const classes = useStyles();
 
     const appConfig: CMSAppProps = useAppConfigContext();
     const collectionView: EntityCollectionView<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
 
-    const disabled = isSubmitting;
-    return (
-        <FormControl error={showError} fullWidth>
-
-            <Box
-                className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
-
-                {collectionView && <ReferenceDialog value={value}
-                                                    property={property}
-                                                    collectionPath={property.collectionPath}
-                                                    collectionView={collectionView}
-                                                    initialFilter={collectionView.initialFilter}
-                                                    previewProperties={property.previewProperties}
-                                                    autoFocus={autoFocus}
-                                                    onEntityClick={handleEntityClick}
-                                                    partOfArray={partOfArray}
-                                                    disabled={disabled}
-                                                    entitySchema={entitySchema}
-                                                    createFormField={createFormField}
-                />}
-
-                {!collectionView &&
-                <Box>Reference field configured wrong. Check console</Box>}
-
-            </Box>
-
-            {includeDescription &&
-            <FieldDescription property={property}/>}
-
-            {showError && <FormHelperText
-                id="component-error-text">{error}</FormHelperText>}
-
-        </FormControl>
-    );
-}
-
-
-export interface ReferenceDialogProps<S extends EntitySchema<Key>, Key extends string = string> {
-
-    value?: any;
-
-    property: ReferenceProperty;
-
-    /**
-     * Absolute collection path
-     */
-    collectionPath: string,
-
-    /**
-     * In case this table should have some filters set
-     */
-    initialFilter?: FilterValues<S>;
-
-    /**
-     * Properties that are displayed when as a preview
-     */
-    previewProperties?: Key[];
-
-    /**
-     * Open on mount
-     */
-    autoFocus:boolean;
-
-    collectionView: EntityCollectionView<S>;
-
-    onEntityClick(entity?: Entity<S>): void;
-
-    entitySchema: EntitySchema;
-
-    partOfArray: boolean,
-
-    disabled: boolean,
-
-    createFormField: FormFieldBuilder,
-}
-
-
-export function ReferenceDialog<S extends EntitySchema>(
-    {
-        onEntityClick,
-        value,
-        property,
-        autoFocus,
-        collectionView,
-        initialFilter,
-        previewProperties,
-        collectionPath,
-        entitySchema,
-        partOfArray,
-        disabled,
-        createFormField
-    }: ReferenceDialogProps<S>) {
-
-    const classes = useStyles();
     const schema = collectionView.schema;
-    const textSearchDelegate = collectionView.textSearchDelegate;
-    const filterableProperties = collectionView.filterableProperties;
+    const collectionPath = property.collectionPath;
 
     const [open, setOpen] = React.useState(autoFocus);
     const [entity, setEntity] = React.useState<Entity<S>>();
@@ -201,15 +96,10 @@ export function ReferenceDialog<S extends EntitySchema>(
         setOpen(true);
     };
 
-    const handleEntityClick = (collectionPath: string, entity: Entity<S>) => {
-        setOpen(false);
-        onEntityClick(entity);
-    };
-
     const clearValue = (e: React.MouseEvent) => {
         e.stopPropagation();
         setOpen(false);
-        onEntityClick(undefined);
+        setEntity(undefined);
     };
 
     const seeEntityDetails = (e: React.MouseEvent) => {
@@ -221,7 +111,7 @@ export function ReferenceDialog<S extends EntitySchema>(
             });
     };
 
-    const handleClose = () => {
+    const onClose = () => {
         setOpen(false);
     };
 
@@ -241,7 +131,7 @@ export function ReferenceDialog<S extends EntitySchema>(
     function buildEntityView() {
 
         const allProperties = Object.keys(schema.properties);
-        let listProperties = previewProperties?.filter(p => allProperties.includes(p));
+        let listProperties = property.previewProperties?.filter(p => allProperties.includes(p));
         if (!listProperties || !listProperties.length) {
             listProperties = allProperties;
         }
@@ -298,7 +188,7 @@ export function ReferenceDialog<S extends EntitySchema>(
             );
         } else {
             body = <Box p={1}
-                        onClick={disabled ? undefined : handleClickOpen}
+                        onClick={isSubmitting ? undefined : handleClickOpen}
                         justifyContent="center"
                         display="flex">
                 <Box flexGrow={1} textAlign={"center"}>No value set</Box>
@@ -311,7 +201,7 @@ export function ReferenceDialog<S extends EntitySchema>(
 
         return (
             <Box
-                onClick={disabled ? undefined : handleClickOpen}
+                onClick={isSubmitting ? undefined : handleClickOpen}
                 display="flex">
 
                 <Box display={"flex"}
@@ -345,8 +235,8 @@ export function ReferenceDialog<S extends EntitySchema>(
                         {!missingEntity && entity && value && <Box>
                             <Tooltip title={`See details for ${entity.id}`}>
                                 <IconButton
-                                    disabled={disabled}
-                                    onClick={disabled ? undefined : seeEntityDetails}>
+                                    disabled={isSubmitting}
+                                    onClick={isSubmitting ? undefined : seeEntityDetails}>
                                     <KeyboardTabIcon/>
                                 </IconButton>
                             </Tooltip>
@@ -355,8 +245,8 @@ export function ReferenceDialog<S extends EntitySchema>(
                         {!partOfArray && value && <Box>
                             <Tooltip title="Clear">
                                 <IconButton
-                                    disabled={disabled}
-                                    onClick={disabled ? undefined : clearValue}>
+                                    disabled={isSubmitting}
+                                    onClick={isSubmitting ? undefined : clearValue}>
                                     <ClearIcon/>
                                 </IconButton>
                             </Tooltip>
@@ -372,39 +262,35 @@ export function ReferenceDialog<S extends EntitySchema>(
     }
 
     return (
-        <React.Fragment>
+        <FormControl error={!!error} fullWidth>
 
-            {buildEntityView()}
+            <Box
+                className={`${classes.root} ${isSubmitting ? classes.disabled : ""}`}>
 
-            <Dialog
-                onClose={handleClose}
-                maxWidth={"xl"}
-                scroll={"paper"}
-                open={open}>
-                <Box className={classes.dialogBody}>
-                    <CollectionTable collectionPath={collectionPath}
-                                     editEnabled={false}
-                                     deleteEnabled={false}
-                                     schema={schema}
-                                     includeToolbar={true}
-                                     onEntityClick={handleEntityClick}
-                                     paginationEnabled={false}
-                                     title={`Select ${schema.name}`}
-                                     filterableProperties={filterableProperties}
-                                     textSearchDelegate={textSearchDelegate}
-                                     initialFilter={initialFilter}
-                                     createFormField={createFormField}
-                    />
-                </Box>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                {buildEntityView()}
 
-        </React.Fragment>
+                {collectionView && <ReferenceDialog open={open}
+                                                    collectionPath={collectionPath}
+                                                    collectionView={collectionView}
+                                                    onClose={onClose}
+                                                    onEntityClick={handleEntityClick}
+                                                    createFormField={createFormField}
+                                                    CollectionTable={CollectionTable}
+                />}
+
+                {!collectionView &&
+                <Box>Reference field configured wrong. Check console</Box>}
+
+            </Box>
+
+            {includeDescription &&
+            <FieldDescription property={property}/>}
+
+            {error && <FormHelperText
+                id="component-error-text">{error}</FormHelperText>}
+
+        </FormControl>
     );
-
 }
+
 

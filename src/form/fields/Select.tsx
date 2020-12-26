@@ -20,7 +20,6 @@ export default function Select<T extends EnumType>({
                                                        value,
                                                        setValue,
                                                        error,
-                                                       showError,
                                                        isSubmitting,
                                                        autoFocus,
                                                        touched,
@@ -34,7 +33,7 @@ export default function Select<T extends EnumType>({
         <FormControl
             fullWidth
             required={property.validation?.required}
-            error={showError}
+            error={!!error}
         >
 
             <InputLabel id={`${name}-select-label`} style={{
@@ -80,7 +79,7 @@ export default function Select<T extends EnumType>({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-            {showError && <FormHelperText
+            {error && <FormHelperText
                 id="component-error-text">{error}</FormHelperText>}
 
         </FormControl>

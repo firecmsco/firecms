@@ -148,6 +148,7 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
 
                     const deleteEnabled = subcollection.deleteEnabled === undefined || subcollection.deleteEnabled;
                     const editEnabled = subcollection.editEnabled === undefined || subcollection.editEnabled;
+                    const inlineEditing = editEnabled && (subcollection.inlineEditing === undefined || subcollection.inlineEditing);
 
                     return <Box
                         key={`entity_detail_tab_content_${subcollection.name}`}
@@ -160,6 +161,7 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
                             schema={subcollection.schema}
                             additionalColumns={subcollection.additionalColumns}
                             editEnabled={editEnabled}
+                            inlineEditing={inlineEditing}
                             deleteEnabled={deleteEnabled}
                             onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
                                 onSubcollectionEntityClick(collectionPath, clickedEntity, subcollection.schema, subcollection.subcollections)}

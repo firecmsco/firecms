@@ -1,4 +1,3 @@
-import { NumberProperty, StringProperty } from "../../models";
 import React, { useEffect, useState } from "react";
 import { Input } from "@material-ui/core";
 import clsx from "clsx";
@@ -6,7 +5,6 @@ import { useInputStyles } from "./styles";
 
 export function NumberTableInput(props: {
     error: Error | undefined,
-    property: StringProperty | NumberProperty,
     value: number,
     align: "right" | "left" | "center",
     updateValue: (newValue: (number | null)) => void,
@@ -14,15 +12,17 @@ export function NumberTableInput(props: {
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>
 }) {
 
-    const { align, property, value, updateValue, focused, onBlur } = props;
+    const { align, value, updateValue, focused, onBlur } = props;
     const [internalValue, setInternalValue] = useState<string | null>(typeof value === "number" ? value.toString() : "");
 
     useEffect(
         () => {
             const handler = setTimeout(() => {
-                if (internalValue) {
+                if (internalValue !== undefined && internalValue !== null) {
                     const numberValue = parseFloat(internalValue);
-                    if (numberValue)
+                    if (isNaN(numberValue))
+                        return;
+                    if (numberValue !== undefined && numberValue !== null)
                         updateValue(numberValue);
                 } else {
                     updateValue(null);
@@ -45,7 +45,7 @@ export function NumberTableInput(props: {
         }
     }, [focused]);
 
-    const regexp = new RegExp("^[0-9]+[,.]?[0-9]*$");
+    const regexp = new RegExp("^\-?[0-9]+[,.]?[0-9]*$");
 
     return (
         <Input
@@ -74,7 +74,7 @@ export function NumberTableInput(props: {
                 const newValue = evt.target.value.replace(",", ".");
                 if (newValue.length === 0)
                     setInternalValue(null);
-                if (regexp.test(newValue))
+                if (regexp.test(newValue) || newValue.startsWith("-"))
                     setInternalValue(newValue);
             }}
         />

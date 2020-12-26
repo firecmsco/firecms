@@ -7,9 +7,16 @@ import {
 
 import React from "react";
 
-import { Box } from "@material-ui/core";
-import { ReferencePreview } from "./ReferencePreview";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { default as ReferencePreview } from "./ReferencePreview";
 
+export const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            margin: 0.2,
+        }
+    })
+);
 
 export function ArrayOfReferencesPreview({
                                              name,
@@ -23,13 +30,14 @@ export function ArrayOfReferencesPreview({
     if (property.dataType !== "array" || property.of.dataType !== "reference")
         throw Error("Picked wrong preview component ArrayOfReferencesPreview");
 
+    const classes = useStyles();
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
-        <Box>
+        <>
             {value &&
             value.map((v, index) =>
-                <Box m={0.2} key={`preview_array_ref_${name}_${index}`}>
+                <div className={classes.root} key={`preview_array_ref_${name}_${index}`}>
                     <ReferencePreview
                         name={`${name}[${index}]`}
                         entitySchema={entitySchema}
@@ -38,8 +46,8 @@ export function ArrayOfReferencesPreview({
                         property={property.of as ReferenceProperty}
                         PreviewComponent={PreviewComponent}
                     />
-                </Box>
+                </div>
             )}
-        </Box>
+        </>
     );
 }

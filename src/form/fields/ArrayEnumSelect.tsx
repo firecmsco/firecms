@@ -22,7 +22,6 @@ export default function ArrayEnumSelect<T extends EnumType>({
                                                                 value,
                                                                 setValue,
                                                                 error,
-                                                                showError,
                                                                 isSubmitting,
                                                                 touched,
                                                                 property,
@@ -45,7 +44,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
     return <FormControl
         fullWidth
         required={property.validation?.required}
-        error={showError}
+        error={!!error}
     >
         <div style={{ marginTop: "-4px" }}>
             <InputLabel id={`${name}-multiselect-label`} style={{

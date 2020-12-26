@@ -18,14 +18,14 @@ export function CMSRouterSwitch({ navigation, additionalViews }: {
     const location:any = useLocation();
     const mainLocation = location.state && location.state["main_location"] ? location.state["main_location"] : location;
 
-    const firstCollectionPath = buildCollectionPath(navigation[0].relativePath);
+    const firstCollectionPath = buildCollectionPath(navigation[0]);
 
     return (
         <Switch location={mainLocation}>
 
             {navigation.map(entityCollectionView => (
                     <Route
-                        path={buildCollectionPath(entityCollectionView.relativePath)}
+                        path={buildCollectionPath(entityCollectionView)}
                         key={`navigation_${entityCollectionView.relativePath}`}>
                         <CMSRoute
                             type={"collection"}

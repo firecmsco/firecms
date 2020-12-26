@@ -1,6 +1,5 @@
 import { PreviewComponentProps } from "../PreviewComponentProps";
 import React from "react";
-import { Typography } from "@material-ui/core";
 import firebase from "firebase/app";
 
 export function TimestampPreview({
@@ -11,8 +10,9 @@ export function TimestampPreview({
                                      entitySchema
                                  }: PreviewComponentProps<firebase.firestore.Timestamp | Date>): React.ReactElement {
 
-
-    return <Typography variant={"body2"}>
-        {value.toLocaleString()}
-    </Typography>;
+    return (
+        <>
+            {value.toLocaleString()}
+        </>
+    );
 }

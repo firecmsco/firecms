@@ -11,9 +11,7 @@ import {
     MenuItem,
     Select,
     Theme,
-    Toolbar,
-    Tooltip,
-    withStyles
+    Toolbar
 } from "@material-ui/core";
 import SearchBar from "./SearchBar";
 
@@ -29,6 +27,43 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+const useSizeSelectStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            "label + &": {
+                marginTop: theme.spacing(3)
+            }
+        },
+        input: {
+            borderRadius: 4,
+            position: "relative",
+            backgroundColor: "#e3e3e3",
+            fontSize: 14,
+            fontWeight: 500,
+            padding: "10px 26px 10px 12px",
+            transition: theme.transitions.create(["border-color", "box-shadow"]),
+            "&:focus": {
+                borderRadius: 4
+            }
+        },
+        item: {
+            backgroundColor: "#f5f5f5",
+            fontSize: 14,
+            fontWeight: 500,
+            paddingTop: theme.spacing(1),
+            paddingBottom: theme.spacing(1),
+            "&:hover": {
+                backgroundColor: "#eeeeee"
+            },
+            "&:focus": {
+                backgroundColor: "#e3e3e3",
+                "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+                    color: theme.palette.common.white
+                }
+            }
+        }
+    })
+);
 
 interface CollectionTableToolbarProps<S extends EntitySchema> {
     collectionPath: string;
@@ -49,61 +84,16 @@ interface CollectionTableToolbarProps<S extends EntitySchema> {
 
 export function CollectionTableToolbar<S extends EntitySchema>(props: CollectionTableToolbarProps<S>) {
     const classes = useStyles();
+    const sizeClasses = useSizeSelectStyles();
 
     const filterEnabled = props.onFilterUpdate && props.filterableProperties && props.filterableProperties.length > 0;
     const filterView = filterEnabled && props.onFilterUpdate && props.filterableProperties &&
         <FilterPopup schema={props.schema}
                      filterValues={props.filterValues}
                      onFilterUpdate={props.onFilterUpdate}
-                     filterableProperties={props.filterableProperties}/>
-    ;
-
-
-    const SizeInput = withStyles((theme: Theme) =>
-        createStyles({
-            root: {
-                "label + &": {
-                    marginTop: theme.spacing(3)
-                }
-            },
-            input: {
-                borderRadius: 4,
-                position: "relative",
-                backgroundColor: "#e3e3e3",
-                fontSize: 14,
-                fontWeight: 500,
-                padding: "10px 26px 10px 12px",
-                transition: theme.transitions.create(["border-color", "box-shadow"]),
-                "&:focus": {
-                    borderRadius: 4
-                    // boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-                }
-            }
-        })
-    )(InputBase);
-
-    const SizeMenuItem = withStyles((theme) => (
-        createStyles({
-            root: {
-                backgroundColor: "#f5f5f5",
-                fontSize: 14,
-                fontWeight: 500,
-                paddingTop: theme.spacing(1),
-                paddingBottom: theme.spacing(1),
-                "&:hover": {
-                    backgroundColor: "#eeeeee"
-                },
-                "&:focus": {
-                    backgroundColor: "#e3e3e3",
-                    "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-                        color: theme.palette.common.white
-                    }
-                }
-            }
-        })))(MenuItem);
+                     filterableProperties={props.filterableProperties}/>    ;
 
     const sizeSelect = (
-        <Tooltip title="Table size" placement={"top"}>
             <Select
                 value={props.size}
                 style={{ width: 56 }}
@@ -124,16 +114,23 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
                     },
                     getContentAnchorEl: null
                 }}
-                input={<SizeInput/>}
-                renderValue={(value: any) => value.toUpperCase()}>
+                input={<InputBase classes={{
+                    root: sizeClasses.root,
+                    input:sizeClasses.input
+                }}/>}
+                renderValue={(value: any) => value.toUpperCase()}
+            >
                 {["xs", "s", "m", "l", "xl"].map((value) => (
-                    <SizeMenuItem
+                    <MenuItem
+                        classes={{
+                            root: sizeClasses.item
+                        }}
                         key={`size-select-${value}`} value={value}>
                         {value.toUpperCase()}
-                    </SizeMenuItem>
+                    </MenuItem>
                 ))}
             </Select>
-        </Tooltip>);
+    );
 
     return (
         <Toolbar

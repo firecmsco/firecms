@@ -23,7 +23,6 @@ export default function MapField<S extends EntitySchema>({
                                                              name,
                                                              value,
                                                              error,
-                                                             showError,
                                                              isSubmitting,
                                                              touched,
                                                              property,
@@ -82,7 +81,7 @@ export default function MapField<S extends EntitySchema>({
     }
 
     return (
-        <FormControl fullWidth error={showError}>
+        <FormControl fullWidth error={!!error}>
 
             {!tableMode && <FormHelperText filled
                              required={property.validation?.required}>

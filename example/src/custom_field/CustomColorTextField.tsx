@@ -20,7 +20,6 @@ export default function CustomColorTextField({
                                                  color,
                                                  touched,
                                                  error,
-                                                 showError,
                                                  isSubmitting,
                                                  setValue,
                                                  ...props
@@ -30,7 +29,7 @@ export default function CustomColorTextField({
     return (
         <>
             <TextFieldWithStyles required={property.validation?.required}
-                                 error={showError}
+                                 error={!!error}
                                  disabled={isSubmitting}
                                  label={property.title}
                                  value={value ?? ""}
@@ -39,7 +38,7 @@ export default function CustomColorTextField({
                                          evt.target.value
                                      );
                                  }}
-                                 helperText={showError && error}
+                                 helperText={error}
                                  fullWidth
                                  variant={"filled"}
                                  customcolor={color}/>

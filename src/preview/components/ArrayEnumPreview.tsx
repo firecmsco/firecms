@@ -5,20 +5,35 @@ import {
 
 import React from "react";
 
-import { Box } from "@material-ui/core";
+import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { EnumValues, NumberProperty, StringProperty } from "../../models";
 import { CustomChip } from "./CustomChip";
+
+export const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            display: "flex",
+            flexWrap: "wrap"
+        },
+        item: {
+            m: 0.2,
+        }
+    })
+);
 
 export function buildArrayEnumPreview(value: string[] | number[],
                                name: string,
                                enumValues: EnumValues<string> | EnumValues<number>,
                                size: "regular" | "small" | "tiny") {
+
+    const classes = useStyles();
+
     return (
-        <Box display={"flex"} flexWrap="wrap">
+        <div className={classes.root}>
             {value &&
             (value as any[]).map((v, index) => (
-                    <Box m={0.2} key={`preview_array_ref_${name}_${index}`}>
+                    <div className={classes.item} key={`preview_array_ref_${name}_${index}`}>
                         <ErrorBoundary>
                             <CustomChip
                                 colorKey={typeof v == "number" ? `${name}_${v}` : v as string}
@@ -27,10 +42,10 @@ export function buildArrayEnumPreview(value: string[] | number[],
                                 outlined={false}
                                 small={size !== "regular"}/>
                         </ErrorBoundary>
-                    </Box>
+                    </div>
                 )
             )}
-        </Box>
+        </div>
     );
 }
 

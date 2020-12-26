@@ -24,4 +24,6 @@ export {
     TextField
 };
 
+export type { FormFieldBuilder } from "./form_props";
+
 

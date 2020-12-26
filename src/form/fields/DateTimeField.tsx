@@ -14,7 +14,6 @@ export default function DateTimeField({
                                           setValue,
                                           autoFocus,
                                           error,
-                                          showError,
                                           isSubmitting,
                                           touched,
                                           property,
@@ -34,9 +33,9 @@ export default function DateTimeField({
                 autoFocus={autoFocus}
                 value={internalValue}
                 label={<LabelWithIcon scaledIcon={false} property={property}/>}
-                error={showError}
+                error={!!error}
                 disabled={disabled}
-                helperText={showError ? error : null}
+                helperText={error}
                 onChange={(dateValue) => {
                     return setValue(
                         dateValue

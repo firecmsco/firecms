@@ -1,4 +1,4 @@
-import { EntityCollectionView } from "../models";
+import { EntityCollectionView, EntitySchema } from "../models";
 
 const DATA_PATH = `/c`;
 
@@ -21,8 +21,8 @@ export function getRouterNewEntityPath(basePath: string) {
     return `${DATA_PATH}/${removeInitialSlash(basePath)}/new`;
 }
 
-export function buildCollectionPath(absolutePath: string) {
-    return `${DATA_PATH}/${removeInitialSlash(absolutePath)}`;
+export function buildCollectionPath(view: EntityCollectionView) {
+    return `${DATA_PATH}/${removeInitialSlash(view.relativePath)}`;
 }
 
 export function removeInitialSlash(s: string) {
@@ -56,14 +56,14 @@ export function getCollectionPathFrom(s: string) {
  * @param path
  * @param collectionViews
  */
-export function getCollectionViewFromPath(path: string, collectionViews: EntityCollectionView<any>[]): EntityCollectionView<any> {
+export function getCollectionViewFromPath(path: string, collectionViews: EntityCollectionView[]): EntityCollectionView {
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     if (subpaths.length % 2 === 0) {
         throw Error(`Collection paths must have an odd number of segments: ${path}`);
     }
 
-    let result: EntityCollectionView<any> | undefined = getCollectionViewFromPathInternal(path, collectionViews);
+    let result: EntityCollectionView | undefined = getCollectionViewFromPathInternal(path, collectionViews);
 
     if (!result) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
@@ -72,12 +72,12 @@ export function getCollectionViewFromPath(path: string, collectionViews: EntityC
 
 }
 
-function getCollectionViewFromPathInternal(path: string, collectionViews: EntityCollectionView<any>[]): EntityCollectionView<any> | undefined {
+function getCollectionViewFromPathInternal<S extends EntitySchema>(path: string, collectionViews: EntityCollectionView[]): EntityCollectionView | undefined {
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
 
-    let result: EntityCollectionView<any> | undefined = undefined;
+    let result: EntityCollectionView | undefined = undefined;
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
         const navigationEntry = collectionViews && collectionViews.find((entry) => entry.relativePath === subpathCombination);

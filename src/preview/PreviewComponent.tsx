@@ -20,7 +20,7 @@ import { MapPreview } from "./components/MapPreview";
 import { StringPreview } from "./components/StringPreview";
 import { BooleanPreview } from "./components/BooleanPreview";
 import { TimestampPreview } from "./components/TimestampPreview";
-import { ReferencePreview } from "./components/ReferencePreview";
+import { default as ReferencePreview } from "./components/ReferencePreview";
 import { ArrayOfReferencesPreview } from "./components/ArrayOfReferencesPreview";
 import { ArrayEnumPreview } from "./components/ArrayEnumPreview";
 import { ArrayPreview } from "./components/ArrayPreview";

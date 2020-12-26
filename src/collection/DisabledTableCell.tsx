@@ -1,8 +1,8 @@
-import { EntitySchema } from "../../models";
+import { EntitySchema } from "../models";
 import React, { useState } from "react";
 import clsx from "clsx";
-import OverflowingCell from "../OverflowingCell";
-import ErrorBoundary from "../../components/ErrorBoundary";
+import OverflowingCell from "./OverflowingCell";
+import ErrorBoundary from "../components/ErrorBoundary";
 import { StyleProps, useCellStyles } from "./styles";
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 

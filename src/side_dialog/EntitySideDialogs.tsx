@@ -78,7 +78,7 @@ export function EntitySideDialogs<S extends EntitySchema>({ navigation }: {
                             <Switch location={panel.location as any}>
                                 {navigation.map(entityCollectionView => (
                                         <Route
-                                            path={buildCollectionPath(entityCollectionView.relativePath)}
+                                            path={buildCollectionPath(entityCollectionView)}
                                             key={`navigation_${entityCollectionView.relativePath}`}>
                                             <SideCMSRoute
                                                 type={"collection"}

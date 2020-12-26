@@ -42,6 +42,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import OpenInBrowserIcon from "@material-ui/icons/OpenInBrowser";
 import { CollectionTable } from "../collection/CollectionTable";
 import { createFormField } from "../form/form_factory";
+import { EntityPreview } from "../preview";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>
@@ -335,7 +336,8 @@ function EntityFormRoute<S extends EntitySchema>({
 
     const containerRef = React.useRef<HTMLDivElement>(null);
 
-    const form = (
+    const editEnabled = view.editEnabled == undefined || view.editEnabled;
+    const form = editEnabled ? (
         <EntityForm
             status={status as EntityStatus}
             collectionPath={collectionPath}
@@ -345,6 +347,10 @@ function EntityFormRoute<S extends EntitySchema>({
             onModified={setModified}
             entity={entity}
             containerRef={containerRef}/>
+    ) : (
+        <EntityPreview
+            entity={entity as any}
+            schema={view.schema}/>
     );
 
     const subCollectionsView = view.subcollections && view.subcollections.map(
@@ -355,6 +361,11 @@ function EntityFormRoute<S extends EntitySchema>({
                 e.stopPropagation();
                 return collectionPath && selectedEntityContext.open({ collectionPath });
             };
+
+
+            const deleteEnabled = subcollectionView.deleteEnabled === undefined || subcollectionView.deleteEnabled;
+            const editEnabled = subcollectionView.editEnabled === undefined || subcollectionView.editEnabled;
+            const inlineEditing = editEnabled && (subcollectionView.inlineEditing === undefined || subcollectionView.inlineEditing);
 
             return <Box
                 key={`entity_detail_tab_content_${subcollectionView.name}`}
@@ -367,7 +378,6 @@ function EntityFormRoute<S extends EntitySchema>({
                     <CollectionTable
                         collectionPath={collectionPath}
                         schema={subcollectionView.schema}
-                        deleteEnabled={subcollectionView.deleteEnabled === undefined || subcollectionView.deleteEnabled}
                         additionalColumns={subcollectionView.additionalColumns}
                         defaultSize={subcollectionView.defaultSize}
                         properties={subcollectionView.properties}
@@ -381,7 +391,9 @@ function EntityFormRoute<S extends EntitySchema>({
                                 id: entity.id,
                                 entity
                             })}
-                        editEnabled={true}
+                        editEnabled={editEnabled}
+                        inlineEditing={inlineEditing}
+                        deleteEnabled={deleteEnabled}
                         onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
                             onSubcollectionEntityClick(collectionPath, clickedEntity)}
                         includeToolbar={true}
@@ -392,7 +404,7 @@ function EntityFormRoute<S extends EntitySchema>({
                                 {`/${collectionPath}`}
                             </Typography>}
                         actions={
-                            <Button
+                            editEnabled && <Button
                                 disabled={!collectionPath}
                                 onClick={onNewClick}
                                 size="medium"
@@ -519,7 +531,7 @@ function EntityFormRoute<S extends EntitySchema>({
                             scrollButtons="auto"
                         >
                             <Tab
-                                label={`${existingEntity ? "Edit" : `Add New`} ${view.schema.name}`
+                                label={`${editEnabled ? (existingEntity ? "Edit" : `Add New`) : ""} ${view.schema.name}`
                                 }/>
 
                             {view.subcollections && view.subcollections.map(

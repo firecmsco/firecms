@@ -58,7 +58,6 @@ export default function MarkDownField({
                                           value,
                                           setValue,
                                           error,
-                                          showError,
                                           isSubmitting,
                                           autoFocus,
                                           touched,
@@ -84,68 +83,66 @@ export default function MarkDownField({
 
     const disabled = isSubmitting;
     return (
-        <React.Fragment>
+
+        <FormControl
+            required={property.validation?.required}
+            error={!!error}
+            fullWidth>
 
             {!tableMode && <FormHelperText filled
                                            required={property.validation?.required}>
                 <LabelWithIcon scaledIcon={true} property={property}/>
             </FormHelperText>}
 
-            <FormControl
-                required={property.validation?.required}
-                error={showError}
-                fullWidth>
+            <div className={classes.root}>
+                <CodeMirror
+                    value={value}
+                    options={{
+                        mode: "markdown",
+                        highlightFormatting: true,
+                        theme: "base16-light",
+                        lineNumbers: true,
+                        lineWrapping: true,
+                        readOnly: disabled,
+                        autoFocus: autoFocus
+                    }}
+                    onBeforeChange={(editor, data, value) => {
+                        updateValue(value);
+                    }}
+                    onChange={(editor, data, value) => {
+                    }}
+                />
+            </div>
 
-                <div className={classes.root}>
-                    <CodeMirror
-                        value={value}
-                        options={{
-                            mode: "markdown",
-                            highlightFormatting: true,
-                            theme: "base16-light",
-                            lineNumbers: true,
-                            lineWrapping: true,
-                            readOnly: disabled,
-                            autoFocus:autoFocus
-                        }}
-                        onBeforeChange={(editor, data, value) => {
-                            updateValue(value);
-                        }}
-                        onChange={(editor, data, value) => {
-                        }}
-                    />
-                </div>
-
-                {!tableMode && <Box mt={1}>
-                    <Paper variant={"outlined"}>
-                        <Box display={"flex"}>
-                            <Box className={classes.previewGutter}/>
-                            <Box className={classes.preview}>
-                                {value &&
-                                <ReactMarkdown>{value}</ReactMarkdown>}
-                                {!value &&
-                                <Typography variant={"caption"}
-                                            color={"textSecondary"}>
-                                    <p>Preview for {property.title}</p>
-                                </Typography>}
-                            </Box>
+            {!tableMode && <Box mt={1}>
+                <Paper variant={"outlined"}>
+                    <Box display={"flex"}>
+                        <Box className={classes.previewGutter}/>
+                        <Box className={classes.preview}>
+                            {value &&
+                            <ReactMarkdown>{value}</ReactMarkdown>}
+                            {!value &&
+                            <Typography variant={"caption"}
+                                        color={"textSecondary"}>
+                                <p>Preview for {property.title}</p>
+                            </Typography>}
                         </Box>
-                    </Paper>
-                </Box>}
-
-
-                <Box display={"flex"}>
-                    <Box flexGrow={1}>
-                        {showError && <FormHelperText
-                            id="component-error-text">{error}</FormHelperText>}
-                        {includeDescription &&
-                        <FieldDescription property={property}/>}
                     </Box>
+                </Paper>
+            </Box>}
+
+
+            <Box display={"flex"}>
+                <Box flexGrow={1}>
+                    {error
+                    && typeof error === "string"
+                    && <FormHelperText>{error}</FormHelperText>}
+                    {includeDescription &&
+                    <FieldDescription property={property}/>}
                 </Box>
+            </Box>
 
-            </FormControl>
-
-        </React.Fragment>
+        </FormControl>
     );
 
 }

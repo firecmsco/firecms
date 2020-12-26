@@ -1,5 +1,21 @@
 # Change Log
 
+## [0.21.0] - 2020-12-15
+### Added
+- Inline editing of tables. Tables are now editable by default. There are two new
+parameters you can set in entity collection views.
+  - `editEnabled` defaults to true. If false, the users will not be able to
+  edit or create new entities.
+  - `inlineEditing` defaults to true. If false, the users can still edit the
+  content, but the inline editing is disabled. The side panel is still enabled.
+
+### Changed
+- [BREAKING] The custom fields API has been refactored and simplified. The Formik
+props have been abstracted away and only the relevant fields are exposed.
+You can find the new props [here](https://github.com/Camberi/firecms/blob/master/src/form/form_props.tsx) an example of the new implementation
+[here](https://github.com/Camberi/firecms/blob/master/example/src/custom_field/CustomColorTextField.tsx)
+- Fixed date autovalues generating modified form prompt, even if it wasn't
+
 ## [0.20.0] - 2020-12-15
 ### Changed
 - Internal refactor of CMSApp.tsx and contexts.
@@ -17,7 +33,7 @@ are of an unexpected type.
 ## [0.18.1] - 2020-12-02
 ### Changed
 - Array of enums fix when the value coming from Firestore is not an array
-- Cosmetic fix for enum chips.
+- A cosmetic fix for enum chips.
 - Added deleted entity on delete hook
 
 ## [0.18.0] - 2020-11-30
@@ -129,3 +145,6 @@ config.
 - Changed the layout of forms to single column. Removed `forceFullWidth` flag in
  properties.
 - Renamed `urlMediaType` to `url` in the string property configuration.
+
+
+[here]: https://github.com/Camberi/firecms/blob/master/example/src/custom_field/CustomColorTextField.tsx

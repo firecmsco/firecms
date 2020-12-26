@@ -120,10 +120,7 @@ export default function StorageUploadField({
                                                value,
                                                setValue,
                                                error,
-                                               showError,
                                                autoFocus,
-                                               isSubmitting,
-                                               touched,
                                                tableMode,
                                                property,
                                                includeDescription,
@@ -140,7 +137,7 @@ export default function StorageUploadField({
 
         <FormControl fullWidth
                      required={property.validation?.required}
-                     error={showError}>
+                     error={!!error}>
 
             {!tableMode &&
             <FormHelperText filled
@@ -151,6 +148,7 @@ export default function StorageUploadField({
             <StorageUpload
                 value={internalValue}
                 name={name}
+                autoFocus={autoFocus}
                 property={property}
                 onChange={(newValue) => {
                     setValue(
@@ -164,7 +162,7 @@ export default function StorageUploadField({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-            {showError && <FormHelperText
+            {error && <FormHelperText
                 id="component-error-text">{error}</FormHelperText>}
 
         </FormControl>
@@ -177,6 +175,7 @@ interface StorageUploadProps {
     property: StringProperty | ArrayProperty<string>;
     onChange: (value: string | string[] | null) => void;
     multipleFilesSupported: boolean;
+    autoFocus: boolean;
     small: boolean;
     entitySchema: EntitySchema
 }
@@ -188,6 +187,7 @@ export function StorageUpload({
                                   onChange,
                                   multipleFilesSupported,
                                   small,
+                                  autoFocus,
                                   entitySchema
                               }: StorageUploadProps) {
 
@@ -362,7 +362,7 @@ export function StorageUpload({
              })}
         >
 
-            <input {...getInputProps()} />
+            <input autoFocus={autoFocus} {...getInputProps()} />
 
             <Box display="flex"
                  flexDirection="row"

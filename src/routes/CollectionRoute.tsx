@@ -10,7 +10,7 @@ import {
     useMediaQuery,
     useTheme
 } from "@material-ui/core";
-import { useRouteMatch } from "react-router-dom";
+import { useLocation, useRouteMatch } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import { useBreadcrumbsContext } from "../contexts/BreacrumbsContext";
 import { CollectionTable } from "../collection/CollectionTable";
@@ -40,7 +40,8 @@ export function CollectionRoute<S extends EntitySchema>({
                                                         }
                                                             : CollectionRouteProps<S>) {
 
-    const { path, url } = useRouteMatch();
+    const { url } = useRouteMatch();
+
 
     const breadcrumbsContext = useBreadcrumbsContext();
     React.useEffect(() => {
@@ -60,6 +61,7 @@ export function CollectionRoute<S extends EntitySchema>({
 
     const deleteEnabled = view.deleteEnabled === undefined || view.deleteEnabled;
     const editEnabled = view.editEnabled === undefined || view.editEnabled;
+    const inlineEditing = editEnabled && (view.inlineEditing === undefined || view.inlineEditing);
 
     const classes = useStyles();
 
@@ -105,10 +107,11 @@ export function CollectionRoute<S extends EntitySchema>({
 
             <CollectionTable collectionPath={collectionPath}
                              schema={view.schema}
-                             actions={buildAddEntityButton()}
+                             actions={editEnabled && buildAddEntityButton()}
                              textSearchDelegate={view.textSearchDelegate}
                              includeToolbar={true}
                              editEnabled={editEnabled}
+                             inlineEditing={inlineEditing}
                              deleteEnabled={deleteEnabled}
                              onEntityClick={onEntityClick}
                              additionalColumns={view.additionalColumns}

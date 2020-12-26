@@ -1,4 +1,10 @@
-import React, { MouseEvent, useEffect, useMemo, useRef } from "react";
+import React, {
+    MouseEvent,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef
+} from "react";
 import BaseTable, { AutoResizer, Column } from "react-base-table";
 import "react-base-table/styles.css";
 import {
@@ -20,7 +26,6 @@ import {
     Properties,
     Property
 } from "../models";
-import { TextSearchDelegate } from "../text_search_delegate";
 import { fetchEntity, listenCollection } from "../firebase";
 import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
 import { getIconForProperty } from "../util/property_icons";
@@ -32,13 +37,15 @@ import ErrorBoundary from "../components/ErrorBoundary";
 import { getPreviewSizeFrom } from "../preview/PreviewComponentProps";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
-import TableCell from "./fields/TableCell";
-import { SelectedCell, useSelectedCellContext } from "./SelectedCellContext";
+import TableCell from "./TableCell";
 import PopupFormField from "./popup_field/PopupFormField";
 import { OutsideAlerter } from "../util/OutsideAlerter";
-import { FormFieldBuilder } from "../form/form_props";
-import DisabledTableCell from "./fields/DisabledTableCell";
+import DisabledTableCell from "./DisabledTableCell";
 import { PreviewComponent } from "../preview/PreviewComponent";
+import { PreviewTableCell } from "./PreviewTableCell";
+import { CollectionTableProps } from "./CollectionTableProps";
+import { TableCellProps } from "./SelectedCellContext";
+import { useHistory } from "react-router-dom";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -83,102 +90,6 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
         }
     }));
 
-interface CollectionTableProps<S extends EntitySchema,
-    Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties = Properties<Key>> {
-    /**
-     * Absolute collection path
-     */
-    collectionPath: string;
-
-    /**
-     * Schema of the entity displayed by this collection
-     */
-    schema: S;
-
-    /**
-     * Show the toolbar in this collection
-     */
-    includeToolbar: boolean,
-
-    /**
-     * Override the title in the toolbar
-     */
-    title?: React.ReactNode;
-
-    /**
-     * In case this table should have some filters set by default
-     */
-    initialFilter?: FilterValues<S>;
-
-    /**
-     * If enabled, content is loaded in batch
-     */
-    paginationEnabled: boolean,
-
-    /**
-     * Default table size before being changed with the selector
-     */
-    defaultSize?: CollectionSize,
-
-    /**
-     * If a text search delegate is provided, a searchbar is displayed
-     */
-    textSearchDelegate?: TextSearchDelegate,
-
-    /**
-     * Properties displayed in this collection. If this property is not set
-     * every property is displayed
-     */
-    properties?: Key[];
-
-    /**
-     * Properties that should NOT get displayed in the collection view.
-     * All the other properties from the the entity are displayed
-     * It has no effect if the properties value is set.
-     */
-    excludedProperties?: Key[];
-
-    /**
-     * You can add additional columns to the collection view by implementing
-     * an additional column delegate.
-     */
-    additionalColumns?: AdditionalColumnDelegate<S>[];
-
-    /**
-     * Properties that can be filtered
-     */
-    filterableProperties?: (keyof S["properties"])[];
-
-    /**
-     * Widget to display in the upper bar
-     */
-    actions?: React.ReactNode;
-
-    /**
-     * Should the table add an edit button
-     */
-    editEnabled: boolean;
-
-    /**
-     * Should the table add a delete button
-     */
-    deleteEnabled?: boolean;
-
-    /**
-     * Callback when anywhere on the table is clicked
-     */
-    onEntityClick?(collectionPath: string, entity: Entity<S>): void;
-
-    /**
-     * Callback when anywhere on the table is clicked
-     */
-    onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
-
-
-    createFormField: FormFieldBuilder,
-
-}
 
 interface CMSColumn {
     id: string;
@@ -208,6 +119,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                      textSearchDelegate,
                                                      additionalColumns,
                                                      filterableProperties,
+                                                     inlineEditing,
                                                      title,
                                                      actions,
                                                      onEntityClick,
@@ -245,7 +157,29 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const selectedEntityContext = useSelectedEntityContext();
     const classes = useStyles({ size });
 
-    const selectedCell: SelectedCell = useSelectedCellContext();
+    const [selectedCell, setSelectedCell] = React.useState<TableCellProps>(undefined);
+    const [focused, setFocused] = React.useState<boolean>(false);
+
+    const [formPopupOpen, setFormPopupOpen] = React.useState<boolean>(false);
+    const [preventOutsideClick, setPreventOutsideClick] = React.useState<boolean>(false);
+
+    const history = useHistory();
+    history.listen(() => {
+        setFormPopupOpen(false);
+    });
+
+    const select = useCallback((cell: TableCellProps) => {
+        setSelectedCell(cell);
+        setFocused(true);
+        setFormPopupOpen(false);
+    }, []);
+
+    const unselect = useCallback(() => {
+        setSelectedCell(undefined);
+        setFocused(false);
+        setFormPopupOpen(false);
+        setPreventOutsideClick(false);
+    }, []);
 
     const additionalColumnsMap: Record<string, AdditionalColumnDelegate<S>> = useMemo(() => {
         return additionalColumns ?
@@ -262,14 +196,14 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     };
 
     const handleClickOutside = () => {
-        selectedCell.unselect(tableKey);
+        unselect();
     };
 
     // on ESC key press
     useEffect(() => {
         const escFunction = (event: any) => {
             if (event.keyCode === 27) {
-                selectedCell.unselect(tableKey);
+                unselect();
             }
         };
         document.addEventListener("keydown", escFunction, false);
@@ -415,15 +349,29 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         setFilter(filterValues);
     };
 
+    // const selectedCell = {
+    //     tableKey: selectedCell?.tableKey,
+    //     columnIndex: selectedCell?.columnIndex,
+    //     rowIndex: selectedCell?.rowIndex,
+    //     entity: selectedCell?.entity,
+    //     name: selectedCell?.name,
+    //     property: selectedCell?.property,
+    //     cellRect: selectedCell?.cellRect,
+    //     focused,
+    //     select,
+    //     unselect,
+    //     focus,
+    //     formPopupOpen,
+    //     setFormPopupOpen,
+    //     preventOutsideClick,
+    //     setPreventOutsideClick
+    // };
+
     const cellRenderer = ({
-                              cellData,
-                              columns,
                               column,
                               columnIndex,
                               rowData,
-                              rowIndex,
-                              container,
-                              isScrolling
+                              rowIndex
                           }: any) => {
 
         const entity: Entity<S> = rowData;
@@ -439,7 +387,19 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         const property = schema.properties[propertyKey];
 
         if (column.type === "property") {
-            if (property.disabled || !editEnabled) {
+            if (!editEnabled || !inlineEditing) {
+                return <PreviewTableCell
+                    size={size}
+                    align={column.align}>
+                    <PreviewComponent
+                        name={propertyKey}
+                        value={entity.values[propertyKey]}
+                        property={property}
+                        size={getPreviewSizeFrom(size)}
+                        entitySchema={schema}
+                    />
+                </PreviewTableCell>;
+            } else if (property.disabled || !editEnabled) {
                 return (
                     <DisabledTableCell
                         size={size}
@@ -454,21 +414,49 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                     </DisabledTableCell>
                 );
             } else {
+
+                const openPopup = () => {
+                    setFormPopupOpen(true);
+                };
+
+                const onSelect = (cellRect: DOMRect) => {
+                    select({
+                        columnIndex,
+                        rowIndex,
+                        width: column.width,
+                        height: column.height,
+                        entity,
+                        cellRect,
+                        name: propertyKey,
+                        property
+                    });
+                };
+
+                const selected = selectedCell?.columnIndex === columnIndex
+                    && selectedCell?.rowIndex === rowIndex;
+
+                const isFocused = selected && focused;
+
                 return entity ?
                     <TableCell tableKey={tableKey}
-                               editEnabled={editEnabled}
                                size={size}
                                align={column.align}
                                name={propertyKey}
                                path={collectionPath}
                                entity={entity}
                                schema={schema}
+                               selected={selected}
+                               focused={isFocused}
+                               setPreventOutsideClick={setPreventOutsideClick}
+                               setFocused={setFocused}
                                value={entity.values[propertyKey]}
                                columnIndex={columnIndex}
                                rowIndex={rowIndex}
+                               CollectionTable={CollectionTable}
                                property={property}
-                               width={column.width}
-                               height={column.height}/>
+                               openPopup={openPopup}
+                               select={onSelect}
+                               createFormField={createFormField}/>
                     :
                     <SkeletonComponent property={property}
                                        size={getPreviewSizeFrom(size)}/>;
@@ -509,7 +497,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                         </IconButton>
                         }
 
-                        {deleteEnabled && <IconButton
+                        {deleteEnabled && editEnabled && <IconButton
                             onClick={(event: MouseEvent) => {
                                 event.stopPropagation();
                                 setDeleteEntityClicked(entity);
@@ -613,6 +601,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                             width={width}
                             height={height}
                             fixed
+                            ignoreFunctionInColumnCompare={false}
                             rowHeight={getRowHeight(size)}
                             ref={tableRef}
                             sortBy={currentOrder && orderByProperty ? {
@@ -623,7 +612,12 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                             onColumnSort={onColumnSort}
                             onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
                             onEndReached={loadNextPage}
-                            rowEventHandlers={!editEnabled && onEntityClick ? { onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S>) } : undefined}
+                            rowEventHandlers={
+                                !editEnabled && !inlineEditing &&
+                                onEntityClick ?
+                                    { onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S>) }
+                                    : undefined
+                            }
                         >
 
                             <Column
@@ -682,21 +676,27 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                         onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                                         collectionPath={collectionPath}
                                         filterableProperties={filterableProperties}
-                                        actions={actions}
+                                        actions={editEnabled && actions}
                                         size={size}
                                         onSizeChanged={setSize}
                                         title={title}
                                         loading={loading}
                                         onFilterUpdate={onFilterUpdate}/>}
 
-                <OutsideAlerter enabled={!selectedCell.preventOutsideClick}
+                <OutsideAlerter enabled={!preventOutsideClick}
                                 onOutsideClick={handleClickOutside}>
-
                     <PopupFormField
                         tableKey={tableKey}
                         schema={schema}
                         createFormField={createFormField}
-                        entity={selectedCell.rowIndex != undefined ? data[selectedCell.rowIndex] : undefined}/>
+                        cellRect={selectedCell?.cellRect}
+                        formPopupOpen={formPopupOpen}
+                        setFormPopupOpen={setFormPopupOpen}
+                        rowIndex={selectedCell?.rowIndex}
+                        name={selectedCell?.name}
+                        property={selectedCell?.property}
+                        setPreventOutsideClick={setPreventOutsideClick}
+                        entity={selectedCell?.rowIndex != undefined ? data[selectedCell.rowIndex] : undefined}/>
 
                     <div className={classes.tableContainer}>
                         {body}

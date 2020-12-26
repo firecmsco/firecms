@@ -198,7 +198,7 @@ function App() {
                 description: "Reference to self",
                 of: {
                     dataType: "reference",
-                    collectionPath: "products",
+                    collectionPath: "products"
                 }
             },
             publisher: {
@@ -508,6 +508,12 @@ function App() {
                     dataType: "string"
                 }
             },
+            product: {
+                title: "Product",
+                dataType: "reference",
+                collectionPath: "products",
+                previewProperties: ["name", "main_image"]
+            },
             available_locales: {
                 title: "Available locales",
                 description:
@@ -529,7 +535,7 @@ function App() {
                 }
             },
             images: {
-                title: "Image URLs",
+                title: "Images",
                 dataType: "array",
                 of: {
                     dataType: "string",
@@ -560,12 +566,6 @@ function App() {
                     markdown: true
                 }
             },
-            product: {
-                title: "Product",
-                dataType: "reference",
-                collectionPath: "products",
-                previewProperties: ["name", "main_image"]
-            },
             created_at: {
                 title: "Created at",
                 dataType: "timestamp",
@@ -589,7 +589,7 @@ function App() {
             },
             difficulty: {
                 title: "Difficulty",
-                dataType: "number",
+                dataType: "number"
             },
             range: {
                 title: "Range",
@@ -708,7 +708,8 @@ function App() {
         navigation={navigation}
         additionalViews={additionalViews}
         // In the production environment, the configuration is fetched from the environment automatically
-        firebaseConfig={process.env.NODE_ENV !== "production" ? firebaseConfig : undefined}
+        firebaseConfig={firebaseConfig}
+        // firebaseConfig={process.env.NODE_ENV !== "production" ? firebaseConfig : undefined}
         toolbarExtraWidget={githubLink}
     />;
 }

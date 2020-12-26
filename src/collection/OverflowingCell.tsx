@@ -1,7 +1,7 @@
 import { CollectionSize, EntitySchema } from "../models";
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import Measure from "react-measure";
+import Measure, { ContentRect } from "react-measure";
 import { getRowHeight } from "./common";
 import clsx from "clsx";
 
@@ -12,14 +12,14 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
             overflow: "hidden",
             display: "flex",
             height: "100%",
-            width: "100%",
+            width: "100%"
         },
         centered: {
             alignItems: "center"
         },
         faded: {
-            "-webkit-mask-image": "linear-gradient(to bottom, black 70%, transparent 98%)",
-            maskImage: "linear-gradient(to bottom, black 70%, transparent 98%)",
+            "-webkit-mask-image": "linear-gradient(to bottom, black 60%, transparent 100%)",
+            maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
             alignItems: "start"
         },
         scrollable: {
@@ -47,7 +47,12 @@ function OverflowingCell<S extends EntitySchema>(
     const classes = useStyles({ size, align });
     const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
 
-    const maxHeight = getRowHeight(size);
+    const maxHeight = useMemo(() => getRowHeight(size), [size]);
+
+    const onMeasure = useCallback((contentRect: ContentRect) => {
+        if (contentRect?.bounds)
+            setIsOverflowing(contentRect.bounds.height > maxHeight);
+    }, [maxHeight]);
 
     return (
         <div className={clsx(
@@ -61,10 +66,7 @@ function OverflowingCell<S extends EntitySchema>(
              onDoubleClick={onDoubleClick}>
             <Measure
                 bounds
-                onResize={contentRect => {
-                    if (contentRect?.bounds)
-                        setIsOverflowing(contentRect.bounds.height - 16 > maxHeight);
-                }}
+                onResize={onMeasure}
             >
                 {({ measureRef }) => (
                     <div ref={measureRef} style={{ width: "100%" }}>

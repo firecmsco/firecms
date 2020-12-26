@@ -139,7 +139,7 @@ export function listenEntityFromRef<S extends EntitySchema<Key, P>,
  * bindings.
  * @param data
  */
-export function replaceTimestampsWithDates(data: any):any {
+export function replaceTimestampsWithDates(data: any): any {
 
     if (data === null)
         return null;
@@ -237,9 +237,7 @@ export async function saveEntity<S extends EntitySchema>(
         onSaveSuccessHookError?: (e: Error) => void
     }): Promise<void> {
 
-    console.debug("Value before", collectionPath, id, values);
     let updatedValues = updateAutoValues(values, schema.properties, status);
-    console.debug("Saving entity", collectionPath, id, updatedValues);
 
     if (schema.onPreSave) {
         try {
@@ -258,6 +256,8 @@ export async function saveEntity<S extends EntitySchema>(
         }
     }
 
+    console.debug("Saving entity", collectionPath, id, updatedValues);
+
     let documentReference: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
     if (id)
         documentReference = firebase.firestore()
@@ -274,12 +274,11 @@ export async function saveEntity<S extends EntitySchema>(
         values: updatedValues
     };
 
-    console.debug("Right before save", collectionPath, id, updatedValues);
     await documentReference
         .set(updatedValues, { merge: true })
         .then(() => onSaveSuccess && onSaveSuccess(entity))
         .catch((e) => {
-            if(onSaveFailure) onSaveFailure(e);
+            if (onSaveFailure) onSaveFailure(e);
         });
 
     try {
@@ -341,8 +340,12 @@ function initPropertyValue(key: string, property: Property, defaultValue: any) {
     let value: any;
     if (property.dataType === "map") {
         value = initWithProperties(property.properties, defaultValue);
-    } else {
+    } else if (defaultValue) {
         value = defaultValue;
+    } else if (property.dataType === "array") {
+        value = [];
+    } else if (property.dataType === "boolean") {
+        value = false;
     }
     return value;
 }

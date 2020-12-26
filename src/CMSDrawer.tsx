@@ -56,7 +56,7 @@ export function CMSDrawer({ logo, navigation, closeDrawer, drawerOpen, additiona
 
     const navigationEntries: NavigationEntry[] = [
         ...navigation.map(view => ({
-            url: buildCollectionPath(view.relativePath),
+            url: buildCollectionPath(view),
             name: view.name,
             group: view.group
         })),

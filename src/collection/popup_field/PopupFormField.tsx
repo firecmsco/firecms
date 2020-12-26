@@ -1,25 +1,17 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 
-import ClearIcon from "@material-ui/icons/Clear";
 import { Box, IconButton, Portal } from "@material-ui/core";
-
+import ClearIcon from "@material-ui/icons/Clear";
 import deepEqual from "deep-equal";
-import { Entity, EntitySchema, EntityStatus } from "../../models";
+
+import { Entity, EntitySchema, EntityStatus, Property } from "../../models";
 import { Formik, useFormikContext } from "formik";
-import { SelectedCell, useSelectedCellContext } from "../SelectedCellContext";
+import { Draggable } from "./Draggable";
 import { getYupObjectSchema } from "../../form/validation";
 import { saveEntity } from "../../firebase";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../util/useWindowSize";
-import { Draggable } from "./Draggable";
-import { FormFieldBuilder } from "../../form/form_props";
-
-interface PopupFormFieldProps<S extends EntitySchema> {
-    entity?: Entity<S>,
-    schema: S,
-    tableKey: string,
-    createFormField: FormFieldBuilder,
-}
+import { FormFieldBuilder } from "../../form";
 
 const AutoSubmitToken = ({ name, onSubmit }: { name: string, onSubmit: (values: any) => void }) => {
     const { values, errors, submitForm } = useFormikContext();
@@ -35,17 +27,40 @@ const AutoSubmitToken = ({ name, onSubmit }: { name: string, onSubmit: (values: 
     return null;
 };
 
-function PopupFormField<S extends EntitySchema>({ entity, schema, tableKey, createFormField }: PopupFormFieldProps<S>) {
+interface PopupFormFieldProps<S extends EntitySchema> {
+    entity?: Entity<S>,
+    schema: S,
+    tableKey: string,
+    createFormField: FormFieldBuilder,
+    cellRect?: DOMRect;
+    formPopupOpen: boolean;
+    setFormPopupOpen: (value:boolean) => void;
+    rowIndex?: number;
+    name?: string;
+    property?: Property;
+    setPreventOutsideClick: (value: any) => void;
+}
+
+function PopupFormField<S extends EntitySchema>({
+                                                    tableKey,
+                                                    entity,
+                                                    name,
+                                                    property,
+                                                    schema,
+                                                    cellRect,
+                                                    createFormField,
+                                                    setPreventOutsideClick,
+                                                    formPopupOpen,
+                                                    setFormPopupOpen,
+                                                    rowIndex
+                                                }: PopupFormFieldProps<S>) {
 
     const [internalValue, setInternalValue] = useState<any>(entity?.values);
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
 
     const windowSize = useWindowSize();
-    const selectedCell: SelectedCell = useSelectedCellContext();
-    const active = selectedCell.tableKey === tableKey;
 
-    const cellRect = selectedCell.cellRect;
     useEffect(
         () => {
             if (cellRect && draggableBoundingRect)
@@ -71,9 +86,9 @@ function PopupFormField<S extends EntitySchema>({ entity, schema, tableKey, crea
 
     useEffect(
         () => {
-            selectedCell.setPreventOutsideClick(selectedCell.popup.open);
+            setPreventOutsideClick(formPopupOpen);
         },
-        [selectedCell.popup.open]
+        [formPopupOpen]
     );
 
     useLayoutEffect(
@@ -134,7 +149,7 @@ function PopupFormField<S extends EntitySchema>({ entity, schema, tableKey, crea
 
     const form = entity && (
         <div
-            key={`${selectedCell.tableKey}_${entity.id}_${selectedCell.rowIndex}`}
+            key={`${tableKey}_${entity.id}_${rowIndex}`}
             style={{
                 width: 470,
                 maxWidth: "100vw",
@@ -153,10 +168,19 @@ function PopupFormField<S extends EntitySchema>({ entity, schema, tableKey, crea
                         enabled={true}
                         onOutsideClick={onOutsideClick}>
 
-                        {selectedCell.fieldProps && createFormField(selectedCell.fieldProps)}
+                        {name && property && createFormField({
+                            name: name as string,
+                            property: property,
+                            includeDescription: false,
+                            underlyingValueHasChanged: false,
+                            entitySchema: schema,
+                            tableMode: true,
+                            partOfArray: false,
+                            autoFocus: formPopupOpen
+                        })}
 
-                        {selectedCell.fieldProps && <AutoSubmitToken
-                            name={selectedCell.fieldProps.name}
+                        {name && <AutoSubmitToken
+                            name={name}
                             onSubmit={(values) => {
                                 setInternalValue(values);
                             }}/>}
@@ -167,14 +191,12 @@ function PopupFormField<S extends EntitySchema>({ entity, schema, tableKey, crea
         </div>
     );
 
-    if (!active) return null;
-
     return (
         <Portal container={document.body}>
             <Draggable
                 x={popupLocation?.x}
                 y={popupLocation?.y}
-                open={selectedCell.popup.open}
+                open={formPopupOpen}
                 onMove={(x, y) => onMove({ x, y })}
                 onMeasure={(rect) => setDraggableBoundingRect(rect)}
             >
@@ -189,7 +211,7 @@ function PopupFormField<S extends EntitySchema>({ entity, schema, tableKey, crea
                         style={{ backgroundColor: "#666" }}
                         onClick={(event) => {
                             event.stopPropagation();
-                            selectedCell.closePopup();
+                            setFormPopupOpen(false);
                         }}>
                         <ClearIcon style={{ color: "white" }}
                                    fontSize={"small"}/>

@@ -11,14 +11,13 @@ export function TableSelect(props: {
     error: Error | undefined,
     multiple: boolean,
     internalValue: string | number | string[] | number[] | undefined,
-    ref?: React.Ref<HTMLInputElement>,
     updateValue: (newValue: (string | number | string[] | number[] | undefined)) => void,
     focused: boolean,
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>,
     setPreventOutsideClick: (value: any) => void;
 }) {
 
-    const { name, enumValues, error, internalValue, ref, updateValue, multiple, setPreventOutsideClick } = props;
+    const { name, enumValues, error, internalValue, focused, updateValue, multiple, setPreventOutsideClick } = props;
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => {
@@ -36,8 +35,20 @@ export function TableSelect(props: {
     const validValue = (Array.isArray(internalValue) && multiple) ||
         (!Array.isArray(internalValue) && !multiple);
 
+    // TODO: this is bugged in MUI 4.0, change if this commit is merged https://github.com/mui-org/material-ui/commit/6cfcae3ab3b2fc1045562002752304f9cf8bdca5
+    // const ref = React.createRef<HTMLInputElement>();
+    // useEffect(() => {
+    //     if (ref.current && focused) {
+    //         console.log("select focus", ref.current);
+    //         ref.current?.focus({ preventScroll: true });
+    //     }
+    // }, [focused, ref.current]);
+
     return (
         <Select
+            // TODO: related to prev. replace autofocus with ref, it makes the scroll jump when rendered
+            autoFocus
+            // inputRef={ref}
             className={classes.select}
             classes={{ root: classes.selectRoot }}
             open={open}
@@ -51,7 +62,6 @@ export function TableSelect(props: {
                 }
             }}
             disableUnderline
-            inputRef={ref}
             error={!!error}
             value={validValue ? internalValue : (multiple ? [] : "")}
             onChange={(evt) => {

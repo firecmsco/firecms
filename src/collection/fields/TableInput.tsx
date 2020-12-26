@@ -9,10 +9,8 @@ export function TableInput(props: {
     multiline: boolean,
     focused: boolean,
     updateValue: (newValue: (string | undefined)) => void,
-    onFocus?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>,
-    onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>
 }) {
-    const { error, value, multiline, updateValue, onFocus, onBlur, focused } = props;
+    const { error, value, multiline, updateValue, focused } = props;
     const [internalValue, setInternalValue] = useState<typeof value>(value);
 
     useEffect(
@@ -47,8 +45,6 @@ export function TableInput(props: {
             ref={ref}
             className={clsx(classes.input)}
             value={internalValue ?? ""}
-            onFocus={onFocus}
-            onBlur={onBlur}
             onChange={(evt) => {
                 const newValue = evt.target.value as string;
                 if (multiline || !newValue.endsWith("\n"))

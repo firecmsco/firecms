@@ -60,12 +60,19 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
     textSearchDelegate?: TextSearchDelegate;
 
     /**
-     * Can the elements in this collection be added and edited. Defaults to true
+     * Can the elements in this collection be added and edited. Defaults to `true`
      */
     editEnabled?: boolean;
 
     /**
-     * Can the elements in this collection be deleted. Defaults to true
+     * Can the elements in this collection be edited inline in the collection
+     * view. If this flag is set to false but `editEnabled` is `true`, entities
+     * can still be edited in the side panel
+     */
+    inlineEditing?: boolean;
+
+    /**
+     * Can the elements in this collection be deleted. Defaults to `true`
      */
     deleteEnabled?: boolean;
 

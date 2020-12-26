@@ -26,7 +26,6 @@ export default function TextField({
                                       value,
                                       setValue,
                                       error,
-                                      showError,
                                       isSubmitting,
                                       autoFocus,
                                       touched,
@@ -91,7 +90,7 @@ export default function TextField({
 
             <FormControl
                 required={property.validation?.required}
-                error={showError}
+                error={!!error}
                 disabled={valueIsInfinity}
                 fullWidth>
 
@@ -107,7 +106,7 @@ export default function TextField({
                 <Box display={"flex"}>
 
                     <Box flexGrow={1}>
-                        {showError && <FormHelperText
+                        {error && <FormHelperText
                             id="component-error-text">{error}</FormHelperText>}
 
                         {includeDescription &&

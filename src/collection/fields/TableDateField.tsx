@@ -9,14 +9,13 @@ export function TableDateField(props: {
     name: string,
     error: Error | undefined,
     internalValue: Date | undefined | null,
-    ref?: React.Ref<HTMLInputElement>,
     updateValue: (newValue: (Date | null)) => void,
     focused: boolean,
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>,
     setPreventOutsideClick: (value: any) => void;
 }) {
 
-    const { name, error, internalValue, ref, setPreventOutsideClick, updateValue } = props;
+    const { name, error, internalValue, setPreventOutsideClick, updateValue } = props;
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => {

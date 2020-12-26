@@ -17,7 +17,6 @@ export default function ArrayShapedField<T>({
                                                 name,
                                                 value,
                                                 error,
-                                                showError,
                                                 isSubmitting,
                                                 touched,
                                                 property,
@@ -36,7 +35,7 @@ export default function ArrayShapedField<T>({
     const ofProperties: Property[] = property.of;
 
     return (
-        <FormControl fullWidth error={showError}>
+        <FormControl fullWidth error={!!error}>
 
             <FormHelperText filled
                             required={property.validation?.required}>
@@ -71,8 +70,9 @@ export default function ArrayShapedField<T>({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-            {showError && <FormHelperText
-                id="component-error-text">{error}</FormHelperText>}
+            {error
+            && typeof error === "string"
+            && <FormHelperText>{error}</FormHelperText>}
 
         </FormControl>
     );
