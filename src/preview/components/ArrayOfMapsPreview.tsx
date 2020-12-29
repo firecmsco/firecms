@@ -16,16 +16,7 @@ import {
     TableRow,
     Theme
 } from "@material-ui/core";
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        tableNoBottomBorder: {
-            "&:last-child th, &:last-child td": {
-                borderBottom: 0
-            }
-        }
-    })
-);
+import { useStyles } from "./styles";
 
 export function ArrayOfMapsPreview({
                                        name,

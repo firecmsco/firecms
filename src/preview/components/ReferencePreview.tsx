@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import clsx from "clsx";
 
 import {
-    Box,
     createStyles,
     IconButton,
     makeStyles,
@@ -20,7 +19,7 @@ import {
     PreviewComponentProps,
     PreviewSize
 } from "../PreviewComponentProps";
-import SkeletonComponent from "../SkeletonComponent";
+import SkeletonComponent from "./SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
 import ErrorIcon from "@material-ui/icons/Error";
@@ -31,8 +30,9 @@ import { useAppConfigContext } from "../../contexts/AppConfigContext";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { PreviewComponent } from "../PreviewComponent";
+import { useStyles } from "./styles";
 
-const useStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Theme) =>
+const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Theme) =>
     createStyles({
         paper: {
             display: "flex",
@@ -95,7 +95,8 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
             entitySchema
         }: PreviewComponentProps<firebase.firestore.DocumentReference> & PreviewComponentFactoryProps) {
 
-        const classes = useStyles({ size });
+        const referenceClasses = useReferenceStyles({ size });
+        const classes = useStyles();
 
         // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed and replace with instance check of DocumentReference
         const isFirestoreReference = value
@@ -135,13 +136,13 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
         let body: JSX.Element;
 
         function buildError(error: string) {
-            return <Box
-                display={"flex"}
-                alignItems={"center"}
-                m={1}>
+            return <div
+                className={clsx(classes.flexCenter, classes.smallMargin)}>
                 <ErrorIcon fontSize={"small"} color={"error"}/>
-                <Box marginLeft={1}>{error}</Box>
-            </Box>;
+                <div style={{
+                    marginLeft: 1
+                }}>{error}</div>
+            </div>;
         }
 
         if (!value) {
@@ -160,11 +161,10 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
 
             body = (
                 <>
-                    <div className={classes.root}>
+                    <div className={referenceClasses.root}>
 
                         {size !== "tiny" && entity &&
-                        <div key={"ref_prev_id"}
-                             className={classes.inner}>
+                        <div className={referenceClasses.inner}>
                             <Typography variant={"caption"} className={"mono"}>
                                 {entity.id}
                             </Typography>
@@ -175,7 +175,7 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
 
                             return (
                                 <div key={"ref_prev" + property.title + key}
-                                     className={classes.inner}>
+                                     className={referenceClasses.inner}>
                                     {entity && PreviewComponent ?
                                         <PreviewComponent name={key as string}
                                                           value={entity.values[key as string]}
@@ -191,7 +191,7 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
                         })}
 
                     </div>
-                    <div className={classes.marginAuto}>
+                    <div className={referenceClasses.marginAuto}>
                         {entity &&
                         <Tooltip title={`See details for ${entity.id}`}>
                             <IconButton
@@ -212,12 +212,12 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
         }
 
         return (
-            <Paper elevation={0} className={clsx(classes.paper,
+            <Paper elevation={0} className={clsx(referenceClasses.paper,
                 {
-                    [classes.regular]: size === "regular",
-                    [classes.small]: size === "small",
-                    [classes.tiny]: size === "tiny",
-                    [classes.clickable]: !!onClick
+                    [referenceClasses.regular]: size === "regular",
+                    [referenceClasses.small]: size === "small",
+                    [referenceClasses.tiny]: size === "tiny",
+                    [referenceClasses.clickable]: !!onClick
                 })}
                    onClick={onClick}>
 

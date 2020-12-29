@@ -19,6 +19,6 @@ export function NumberPreview({
                            outlined={false}
                            small={size !== "regular"}/>;
     } else {
-        return <React.Fragment>{value}</React.Fragment>;
+        return <>{value}</>;
     }
 }

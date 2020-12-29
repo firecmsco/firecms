@@ -48,6 +48,7 @@ export function TableSelect(props: {
         <Select
             // TODO: related to prev. replace autofocus with ref, it makes the scroll jump when rendered
             autoFocus
+            key={`table_select_${name}`}
             // inputRef={ref}
             className={classes.select}
             classes={{ root: classes.selectRoot }}
@@ -88,7 +89,7 @@ export function TableSelect(props: {
                     small={true}/>;
                 if (multiple) {
                     return (
-                        <MenuItem key={`select-${key}`}
+                        <MenuItem key={`select-${name}-${key}`}
                                   value={key}
                                   dense={true}>
                             <Checkbox
@@ -98,7 +99,7 @@ export function TableSelect(props: {
                     );
                 } else {
                     return (
-                        <MenuItem key={`select-${key}`} value={key}
+                        <MenuItem key={`select-${name}-${key}`} value={key}
                                   dense={true}>
                             {chip}
                         </MenuItem>

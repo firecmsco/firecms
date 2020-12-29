@@ -398,16 +398,18 @@ export function StorageUpload({
                         );
                     }
 
-                    return <StorageEntry
-                        key={`storage_entry_${index}`}
-                        entry={entry}
-                        index={index}
-                        dragType={"storage_card_" + name}
-                        moveItem={moveItem}
-                        onHover={setHoveredIndex}
-                        hovered={hoveredIndex === index}>
-                        {child}
-                    </StorageEntry>;
+                    return (
+                        <StorageEntry
+                            key={`storage_entry_${name}_${index}`}
+                            entry={entry}
+                            index={index}
+                            dragType={"storage_card_" + name}
+                            moveItem={moveItem}
+                            onHover={setHoveredIndex}
+                            hovered={hoveredIndex === index}>
+                            {child}
+                        </StorageEntry>
+                    );
                 })
                 }
 

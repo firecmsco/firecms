@@ -149,7 +149,7 @@ function PopupFormField<S extends EntitySchema>({
 
     const form = entity && (
         <div
-            key={`${tableKey}_${entity.id}_${rowIndex}`}
+            key={`popup_form_${tableKey}_${entity.id}_${rowIndex}`}
             style={{
                 width: 470,
                 maxWidth: "100vw",
@@ -194,6 +194,7 @@ function PopupFormField<S extends EntitySchema>({
     return (
         <Portal container={document.body}>
             <Draggable
+                key={`draggable_${name}_${rowIndex}`}
                 x={popupLocation?.x}
                 y={popupLocation?.y}
                 open={formPopupOpen}

@@ -26,7 +26,7 @@ function AdditionalViewRoute({
         breadcrumbsContext.set({
             breadcrumbs: [breadcrumb]
         });
-    }, [url]);
+    }, []);
 
     return <React.Fragment>
         {additionalView.view}

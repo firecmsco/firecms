@@ -35,7 +35,6 @@ export function CustomChip({ colorKey, label, error, outlined, small }: EnumChip
                 label: classes.label
             }}
             size={small ? "small" : "medium"}
-            key={"preview_chip_" + colorKey}
             variant={outlined ? "outlined" : "default"}
             label={label}
         />

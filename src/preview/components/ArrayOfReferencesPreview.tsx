@@ -9,14 +9,7 @@ import React from "react";
 
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import { default as ReferencePreview } from "./ReferencePreview";
-
-export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            margin: 0.2,
-        }
-    })
-);
+import { useStyles } from "./styles";
 
 export function ArrayOfReferencesPreview({
                                              name,
@@ -37,7 +30,7 @@ export function ArrayOfReferencesPreview({
         <>
             {value &&
             value.map((v, index) =>
-                <div className={classes.root} key={`preview_array_ref_${name}_${index}`}>
+                <div className={classes.arrayItem} key={`preview_array_ref_${name}_${index}`}>
                     <ReferencePreview
                         name={`${name}[${index}]`}
                         entitySchema={entitySchema}

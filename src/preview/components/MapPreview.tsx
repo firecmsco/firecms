@@ -59,7 +59,7 @@ export function MapPreview<T>({
 
     if (size !== "regular")
         return (
-            <React.Fragment>
+            <>
                 {mapProperties.map((key, index) => (
                     <ListItem
                         key={"map_preview_" + mapProperty.title + key + index}>
@@ -72,7 +72,7 @@ export function MapPreview<T>({
                         </ErrorBoundary>
                     </ListItem>
                 ))}
-            </React.Fragment>
+            </>
         );
 
     return (
@@ -82,16 +82,16 @@ export function MapPreview<T>({
                 mapProperties.map((key, index) => {
                     return (
                         <TableRow
-                            key={`map_preview_table_${mapProperty.title}_${index}`}
+                            key={`map_preview_table_${name}_${index}`}
                             className={classes.tableNoBottomBorder}>
-                            <TableCell key={`table-cell-title-${key}`}
+                            <TableCell key={`table-cell-title-${name}-${key}`}
                                        component="th">
                                 <Typography variant={"caption"}
                                             color={"textSecondary"}>
                                     {mapProperty.properties[key].title}
                                 </Typography>
                             </TableCell>
-                            <TableCell key={`table-cell-${key}`} component="th">
+                            <TableCell key={`table-cell-${name}-${key}`} component="th">
                                 <ErrorBoundary>
                                     <PreviewComponent
                                         name={key}

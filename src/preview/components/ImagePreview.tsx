@@ -1,15 +1,20 @@
-import React, { CSSProperties, useState } from "react";
-import { Box, IconButton } from "@material-ui/core";
+import React, { CSSProperties, useMemo, useState } from "react";
+import clsx from "clsx";
+import { IconButton } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
-import { getThumbnailMeasure, PreviewSize } from "./PreviewComponentProps";
+import { getThumbnailMeasure, PreviewSize } from "../PreviewComponentProps";
+import { useStyles } from "./styles";
 
 type ImagePreviewProps = { size: PreviewSize, url: string };
 
 function ImagePreview({ size, url }: ImagePreviewProps) {
 
+
+    const classes = useStyles();
+
     const [onHover, setOnHover] = useState(false);
 
-    const imageSize = getThumbnailMeasure(size);
+    const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
 
     if (size === "tiny") {
         return (
@@ -34,22 +39,16 @@ function ImagePreview({ size, url }: ImagePreviewProps) {
         };
 
     return (
-        <Box
+        <div
+            className={clsx(classes.flexCenter, classes.imageWrap)}
             key={"image_preview_" + url}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
             style={{
-                position: "relative",
-                maxWidth: "100%",
-                maxHeight: "100%"
+                width: imageSize,
+                height: imageSize
             }}
-
             onMouseEnter={() => setOnHover(true)}
             onMouseMove={() => setOnHover(true)}
-            onMouseLeave={() => setOnHover(false)}
-            width={imageSize}
-            height={imageSize}>
+            onMouseLeave={() => setOnHover(false)}>
 
             <img src={url}
                  style={imageStyle}/>
@@ -71,7 +70,7 @@ function ImagePreview({ size, url }: ImagePreviewProps) {
                     </IconButton>
                 </a>
             )}
-        </Box>
+        </div>
 
     );
 }

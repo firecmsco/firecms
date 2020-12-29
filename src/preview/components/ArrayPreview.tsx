@@ -16,17 +16,7 @@ import {
     Theme
 } from "@material-ui/core";
 import { PreviewComponent } from "../PreviewComponent";
-
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        tableNoBottomBorder: {
-            "&:last-child th, &:last-child td": {
-                borderBottom: 0
-            }
-        }
-    })
-);
+import { useStyles } from "./styles";
 
 export function ArrayPreview({
                                        name,
@@ -36,6 +26,8 @@ export function ArrayPreview({
                                        entitySchema,
                                        PreviewComponent
                                    }: PreviewComponentProps<any[]> & PreviewComponentFactoryProps) {
+
+    const classes = useStyles();
 
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayPreview");
@@ -47,11 +39,11 @@ export function ArrayPreview({
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
-        <Grid>
+        <>
             {values &&
             values.map((value, index) =>
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
-                    <Box p={1}>
+                    <div className={classes.arrayItemBig} >
                         <ErrorBoundary>
                             <PreviewComponent
                                 name={name}
@@ -60,10 +52,10 @@ export function ArrayPreview({
                                 size={childSize}
                                 entitySchema={entitySchema}/>
                         </ErrorBoundary>
-                    </Box>
+                    </div>
                     {index < values.length - 1 && <Divider/>}
                 </React.Fragment>
             )}
-        </Grid>
+        </>
     );
 }

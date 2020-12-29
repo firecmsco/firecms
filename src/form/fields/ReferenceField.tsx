@@ -165,7 +165,7 @@ export default function ReferenceField<S extends EntitySchema>({
                     {listProperties && listProperties.map((key, index) => {
                         const propertyKey = schema.properties[key as string];
                         return (
-                            <Box key={"ref_prev_" + key + index}
+                            <Box
                                  mt={0.5}
                                  mb={0.5}>
                                 <ErrorBoundary>{
@@ -221,7 +221,7 @@ export default function ReferenceField<S extends EntitySchema>({
                         </Box>
 
                         {entity &&
-                        <Box key={"ref_prev_id"}
+                        <Box
                              alignSelf={"center"}
                              m={1}>
                             <Tooltip title={value && value.path}>

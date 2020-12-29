@@ -29,6 +29,6 @@ export function StringPreview({
                 />
             </ErrorBoundary>);
     } else {
-        return <React.Fragment>{value}</React.Fragment>;
+        return <>{value}</>;
     }
 }

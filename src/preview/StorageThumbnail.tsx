@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { getDownloadURL } from "../firebase";
-import { renderSkeletonImageThumbnail } from "./SkeletonComponent";
+import { renderSkeletonImageThumbnail } from "./components/SkeletonComponent";
 import {
     PreviewComponentFactoryProps,
     PreviewComponentProps

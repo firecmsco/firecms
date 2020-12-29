@@ -6,10 +6,9 @@ import {
 
 import React from "react";
 
-import { Box } from "@material-ui/core";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { StringPreview } from "./StringPreview";
-
+import { useStyles } from "./styles";
 
 export function ArrayOfStringsPreview({
                                           name,
@@ -18,6 +17,8 @@ export function ArrayOfStringsPreview({
                                           size,
                                           entitySchema
                                       }: PreviewComponentProps<string[]> & PreviewComponentFactoryProps) {
+
+    const classes = useStyles();
 
     if (property.dataType !== "array" || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStringsPreview");
@@ -28,11 +29,10 @@ export function ArrayOfStringsPreview({
     const stringProperty = property.of as StringProperty;
 
     return (
-        <Box display={stringProperty.config?.previewAsTag ? "flex" : "block"}
-             flexWrap={"wrap"}>
+        <div className={classes.arrayRoot}>
             {value &&
             value.map((v, index) =>
-                <Box m={stringProperty.config?.previewAsTag ? 0.2 : 0.5}
+                <div className={classes.arrayItem}
                      key={`preview_array_strings_${name}_${index}`}>
                     <ErrorBoundary>
                         <StringPreview name={name}
@@ -41,8 +41,8 @@ export function ArrayOfStringsPreview({
                                        size={size}
                                        entitySchema={entitySchema}/>
                     </ErrorBoundary>
-                </Box>
+                </div>
             )}
-        </Box>
+        </div>
     );
 }

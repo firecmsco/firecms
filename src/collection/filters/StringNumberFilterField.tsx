@@ -105,7 +105,7 @@ export default function StringNumberFilterField({ name, property }: StringNumber
                                            }}>
                                     {possibleOperations.map((op) =>
                                         <MenuItem
-                                            key={`filter_op_${op}`}
+                                            key={`filter_op_${name}_${op}`}
                                             value={op}>{operationLabels[op]}</MenuItem>
                                     )}
 
@@ -116,7 +116,7 @@ export default function StringNumberFilterField({ name, property }: StringNumber
 
                                 {!enumValues && <Input
                                     fullWidth
-                                    key={`filter-${name}`}
+                                    key={`filter_${name}`}
                                     type={dataType === "number" ? "number" : undefined}
                                     value={internalValue ? internalValue : ""}
                                     onChange={(evt) => {
@@ -147,7 +147,7 @@ export default function StringNumberFilterField({ name, property }: StringNumber
                                             </div>
                                         ) : undefined}>
                                     {Object.entries(enumValues).map(([key, value]) => (
-                                        <MenuItem key={`select-${key}`}
+                                        <MenuItem key={`select_${name}_${key}`}
                                                   value={key}>
                                             <CustomChip
                                                 colorKey={key as string}

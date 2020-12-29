@@ -5,22 +5,11 @@ import {
 
 import React from "react";
 
-import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { EnumValues, NumberProperty, StringProperty } from "../../models";
 import { CustomChip } from "./CustomChip";
+import { useStyles } from "./styles";
 
-export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: "flex",
-            flexWrap: "wrap"
-        },
-        item: {
-            m: 0.2,
-        }
-    })
-);
 
 export function buildArrayEnumPreview(value: string[] | number[],
                                name: string,
@@ -30,10 +19,10 @@ export function buildArrayEnumPreview(value: string[] | number[],
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
+        <div className={classes.arrayRoot}>
             {value &&
             (value as any[]).map((v, index) => (
-                    <div className={classes.item} key={`preview_array_ref_${name}_${index}`}>
+                    <div className={classes.arrayItem} key={`preview_array_ref_${name}_${index}`}>
                         <ErrorBoundary>
                             <CustomChip
                                 colorKey={typeof v == "number" ? `${name}_${v}` : v as string}

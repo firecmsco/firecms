@@ -58,7 +58,7 @@ export default function EntityPreview<S extends EntitySchema>(
         <TableContainer>
             <Table aria-label="entity table">
                 <TableBody>
-                    <TableRow key={"entity_prev_id"}>
+                    <TableRow >
                         <TableCell align="right"
                                    component="td"
                                    scope="row"

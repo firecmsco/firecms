@@ -5,40 +5,26 @@ import {
     Properties,
     Property,
     StringProperty
-} from "../models";
+} from "../../models";
 import React from "react";
 import {
-    Box,
-    createStyles,
     Divider,
     Grid,
     List,
     ListItem,
-    makeStyles,
     Table,
     TableBody,
     TableCell,
-    TableRow,
-    Theme
+    TableRow
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import { getThumbnailMeasure, PreviewSize } from "./PreviewComponentProps";
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        tableNoBottomBorder: {
-            "&:last-child th, &:last-child td": {
-                borderBottom: 0
-            }
-        }
-    })
-);
+import { getThumbnailMeasure, PreviewSize } from "../PreviewComponentProps";
+import { useStyles } from "./styles";
 
 export interface SkeletonComponentProps<T> {
     property: Property,
     size: PreviewSize
 }
-
 
 export default function SkeletonComponent<T>({
                                                  property,
@@ -188,9 +174,9 @@ function renderArrayOfStrings() {
         <Grid>
             {
                 [0, 1].map((value, index) => (
-                    <React.Fragment key={"skeleton_array_strings_" + value}>
+                    <>
                         {renderSkeletonText(index)}
-                    </React.Fragment>
+                    </>
                 ))}
         </Grid>
     );
@@ -201,9 +187,9 @@ function renderArrayEnumTableCell<T extends EnumType>() {
         <Grid>
             {
                 [0, 1].map((value, index) =>
-                    <React.Fragment key={"skeleton_array_enum_" + value}>
+                    <>
                         {renderSkeletonText(index)}
-                    </React.Fragment>
+                    </>
                 )}
         </Grid>
     );
@@ -217,10 +203,10 @@ function renderGenericArrayCell(
 
             {
                 [0, 1].map((value, index) =>
-                    <React.Fragment key={"skeleton_array_" + value}>
+                    <>
                         <SkeletonComponent property={property}
                                            size={"small"}/>
-                    </React.Fragment>
+                    </>
                 )}
         </Grid>
     );
@@ -230,17 +216,21 @@ function renderShapedArray<T extends EnumType>(
     properties: Property[]
 ) {
 
+    const classes = useStyles();
+
     return (
         <Grid>
             {properties &&
             properties.map((property, index) =>
                 <React.Fragment
                     key={"preview_array_" + properties[index] + "_" + index}>
-                    {properties[index] && <Box m={1}>
-                        <SkeletonComponent
-                            property={property}
-                            size={"small"}/>
-                    </Box>}
+                    {properties[index] && (
+                        <div className={classes.smallMargin}>
+                            <SkeletonComponent
+                                property={property}
+                                size={"small"}/>
+                        </div>
+                    )}
                     {properties[index] && index < properties.length - 1 &&
                     <Divider/>}
                 </React.Fragment>
@@ -300,26 +290,29 @@ function renderUrlComponent(property: StringProperty, size: PreviewSize = "regul
 }
 
 function renderUrlFile(size: PreviewSize) {
+
+    const classes = useStyles();
+
     return (
-        <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            width={getThumbnailMeasure(size)}
-            height={getThumbnailMeasure(size)}>
+        <div
+            className={(classes as any)}
+            style={{
+                width: getThumbnailMeasure(size),
+                height: getThumbnailMeasure(size)
+            }}>
             {renderSkeletonIcon()}
-        </Box>
+        </div>
     );
 }
 
 export function renderSkeletonText(index?: number) {
-    return <Skeleton key={"skeleton_text_" + index} variant="text"/>;
+    return <Skeleton variant="text"/>;
 }
 
 export function renderSkeletonCaptionText(index?: number) {
-    return <Skeleton key={"skeleton_text_" + index}
-                     height={20}
-                     variant="text"/>;
+    return <Skeleton
+        height={20}
+        variant="text"/>;
 }
 
 export function renderSkeletonIcon() {

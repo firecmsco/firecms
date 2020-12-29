@@ -6,7 +6,7 @@ import StorageThumbnail from "./StorageThumbnail";
 import AsyncPreviewComponent from "./AsyncPreviewComponent";
 import EntityPreview from "./EntityPreview";
 import PreviewComponent from "./PreviewComponent";
-import SkeletonComponent from "./SkeletonComponent";
+import SkeletonComponent from "./components/SkeletonComponent";
 
 export {
     PreviewComponent,

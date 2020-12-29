@@ -32,7 +32,7 @@ import { getIconForProperty } from "../util/property_icons";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
 import DeleteIcon from "@material-ui/icons/Delete";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import SkeletonComponent, { renderSkeletonText } from "../preview/SkeletonComponent";
+import SkeletonComponent, { renderSkeletonText } from "../preview/components/SkeletonComponent";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { getPreviewSizeFrom } from "../preview/PreviewComponentProps";
 import DeleteEntityDialog from "./DeleteEntityDialog";
@@ -388,20 +388,24 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
         if (column.type === "property") {
             if (!editEnabled || !inlineEditing) {
-                return <PreviewTableCell
-                    size={size}
-                    align={column.align}>
-                    <PreviewComponent
-                        name={propertyKey}
-                        value={entity.values[propertyKey]}
-                        property={property}
-                        size={getPreviewSizeFrom(size)}
-                        entitySchema={schema}
-                    />
-                </PreviewTableCell>;
+                return (
+                    <PreviewTableCell
+                        key={`preview_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
+                        size={size}
+                        align={column.align}>
+                        <PreviewComponent
+                            name={`preview_${propertyKey}_${rowIndex}_${columnIndex}`}
+                            value={entity.values[propertyKey]}
+                            property={property}
+                            size={getPreviewSizeFrom(size)}
+                            entitySchema={schema}
+                        />
+                    </PreviewTableCell>
+                );
             } else if (property.disabled || !editEnabled) {
                 return (
                     <DisabledTableCell
+                        key={`disabled_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
                         size={size}
                         align={column.align}>
                         <PreviewComponent
@@ -438,25 +442,27 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                 const isFocused = selected && focused;
 
                 return entity ?
-                    <TableCell tableKey={tableKey}
-                               size={size}
-                               align={column.align}
-                               name={propertyKey}
-                               path={collectionPath}
-                               entity={entity}
-                               schema={schema}
-                               selected={selected}
-                               focused={isFocused}
-                               setPreventOutsideClick={setPreventOutsideClick}
-                               setFocused={setFocused}
-                               value={entity.values[propertyKey]}
-                               columnIndex={columnIndex}
-                               rowIndex={rowIndex}
-                               CollectionTable={CollectionTable}
-                               property={property}
-                               openPopup={openPopup}
-                               select={onSelect}
-                               createFormField={createFormField}/>
+                    <TableCell
+                        key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
+                        tableKey={tableKey}
+                        size={size}
+                        align={column.align}
+                        name={propertyKey}
+                        path={collectionPath}
+                        entity={entity}
+                        schema={schema}
+                        selected={selected}
+                        focused={isFocused}
+                        setPreventOutsideClick={setPreventOutsideClick}
+                        setFocused={setFocused}
+                        value={entity.values[propertyKey]}
+                        columnIndex={columnIndex}
+                        rowIndex={rowIndex}
+                        CollectionTable={CollectionTable}
+                        property={property}
+                        openPopup={openPopup}
+                        select={onSelect}
+                        createFormField={createFormField}/>
                     :
                     <SkeletonComponent property={property}
                                        size={getPreviewSizeFrom(size)}/>;
@@ -608,7 +614,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                 key: orderByProperty,
                                 order: currentOrder
                             } : undefined}
-                            overscanRowCount={6}
+                            overscanRowCount={2}
                             onColumnSort={onColumnSort}
                             onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
                             onEndReached={loadNextPage}
@@ -632,7 +638,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
                             {columns.map((column) =>
                                 <Column
-                                    key={column.id}
+                                    key={`column_${tableKey}_${column.id}`}
                                     type={column.type}
                                     title={column.label}
                                     className={classes.column}

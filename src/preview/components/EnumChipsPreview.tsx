@@ -13,7 +13,7 @@ export function EnumChipsPreview({
                               }: PreviewComponentProps<string>):React.ReactElement {
 
     if (property.config?.enumValues) {
-        return <React.Fragment>{property.config?.enumValues[value]}</React.Fragment>;
+        return <>{property.config?.enumValues[value]}</>;
     } else if (property.config?.previewAsTag) {
         return (
             <ErrorBoundary>
@@ -24,6 +24,6 @@ export function EnumChipsPreview({
                 />
             </ErrorBoundary>);
     } else {
-        return <React.Fragment>{value}</React.Fragment>;
+        return <>{value}</>;
     }
 }

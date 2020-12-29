@@ -4,20 +4,23 @@ import {
 } from "../PreviewComponentProps";
 import React from "react";
 import { MediaType } from "../../models";
-import ImagePreview from "../ImagePreview";
+import ImagePreview from "./ImagePreview";
 
 
-import { Box, CardMedia, Link } from "@material-ui/core";
+import { CardMedia, Link } from "@material-ui/core";
 import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+import { useStyles } from "./styles";
 
 export function UrlComponentPreview({
-                                  name,
-                                  value,
-                                  property,
-                                  size,
-                                  entitySchema
-                              }: PreviewComponentProps<string>):React.ReactElement {
+                                        name,
+                                        value,
+                                        property,
+                                        size,
+                                        entitySchema
+                                    }: PreviewComponentProps<string>): React.ReactElement {
+
+    const classes = useStyles();
 
     if (!value) return <div/>;
     const url = value;
@@ -60,14 +63,13 @@ export function UrlComponentPreview({
             rel="noopener noreferrer"
             target="_blank"
             onClick={(e) => e.stopPropagation()}>
-            <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                width={getThumbnailMeasure(size)}
-                height={getThumbnailMeasure(size)}>
+            <div className={classes.flexCenter}
+                 style={{
+                     width: getThumbnailMeasure(size),
+                     height: getThumbnailMeasure(size)
+                 }}>
                 <DescriptionOutlinedIcon/>
-            </Box>
+            </div>
         </a>;
     }
 }

@@ -1,6 +1,10 @@
 # Change Log
 
-## [0.21.0] - 2020-12-15
+## [0.21.1] - 2020-12-30
+### Changed
+- Table performance improvements
+
+## [0.21.0] - 2020-12-29
 ### Added
 - Inline editing of tables. Tables are now editable by default. There are two new
 parameters you can set in entity collection views.
@@ -8,7 +12,6 @@ parameters you can set in entity collection views.
   edit or create new entities.
   - `inlineEditing` defaults to true. If false, the users can still edit the
   content, but the inline editing is disabled. The side panel is still enabled.
-
 ### Changed
 - [BREAKING] The custom fields API has been refactored and simplified. The Formik
 props have been abstracted away and only the relevant fields are exposed.

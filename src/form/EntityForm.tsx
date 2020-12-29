@@ -19,7 +19,8 @@ import { ErrorFocus } from "./ErrorFocus";
 export const useStyles = makeStyles(theme => createStyles({
     stickyButtons: {
         marginTop: theme.spacing(2),
-        backgroundColor: "#ffffffb8",
+        background: "rgba(255,255,255,0.6)",
+        backdropFilter: "blur(3px)",
         borderTop: "solid 1px #f9f9f9",
         position: "sticky",
         bottom: 0,
@@ -213,7 +214,7 @@ function EntityForm<S extends EntitySchema>({
                     Object.entries(underlyingChanges).forEach(([key, value]) => {
                         const formValue = values[key];
                         if (!deepEqual(value, formValue) && !touched[key]) {
-                            console.debug("Updated value from Firestore:", key, value)
+                            console.debug("Updated value from Firestore:", key, value);
                             setFieldValue(key, !!value ? value : null);
                             setFieldTouched(key, false);
                         }
