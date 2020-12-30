@@ -80,6 +80,9 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
             alignItems: "center",
             fontSize: "0.875rem"
         },
+        tableRowClickable: {
+            cursor: "pointer"
+        },
         column: {
             padding: "0px !important"
         },
@@ -162,6 +165,8 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
     const [formPopupOpen, setFormPopupOpen] = React.useState<boolean>(false);
     const [preventOutsideClick, setPreventOutsideClick] = React.useState<boolean>(false);
+
+    const clickableRows = (!editEnabled || !inlineEditing) && onEntityClick;
 
     const history = useHistory();
     history.listen(() => {
@@ -348,24 +353,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         }
         setFilter(filterValues);
     };
-
-    // const selectedCell = {
-    //     tableKey: selectedCell?.tableKey,
-    //     columnIndex: selectedCell?.columnIndex,
-    //     rowIndex: selectedCell?.rowIndex,
-    //     entity: selectedCell?.entity,
-    //     name: selectedCell?.name,
-    //     property: selectedCell?.property,
-    //     cellRect: selectedCell?.cellRect,
-    //     focused,
-    //     select,
-    //     unselect,
-    //     focus,
-    //     formPopupOpen,
-    //     setFormPopupOpen,
-    //     preventOutsideClick,
-    //     setPreventOutsideClick
-    // };
 
     const cellRenderer = ({
                               column,
@@ -600,62 +587,63 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         body =
             (
                 <AutoResizer>
-                    {({ width, height }) => (
-                        <BaseTable
-                            rowClassName={`${classes.tableRow}`}
-                            data={currentData}
-                            width={width}
-                            height={height}
-                            fixed
-                            ignoreFunctionInColumnCompare={false}
-                            rowHeight={getRowHeight(size)}
-                            ref={tableRef}
-                            sortBy={currentOrder && orderByProperty ? {
-                                key: orderByProperty,
-                                order: currentOrder
-                            } : undefined}
-                            overscanRowCount={2}
-                            onColumnSort={onColumnSort}
-                            onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
-                            onEndReached={loadNextPage}
-                            rowEventHandlers={
-                                !editEnabled && !inlineEditing &&
-                                onEntityClick ?
-                                    { onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S>) }
-                                    : undefined
-                            }
-                        >
+                    {({ width, height }) => {
+                        return (
+                            <BaseTable
+                                rowClassName={`${classes.tableRow} ${classes.tableRowClickable}`}
+                                data={currentData}
+                                width={width}
+                                height={height}
+                                fixed
+                                ignoreFunctionInColumnCompare={false}
+                                rowHeight={getRowHeight(size)}
+                                ref={tableRef}
+                                sortBy={currentOrder && orderByProperty ? {
+                                    key: orderByProperty,
+                                    order: currentOrder
+                                } : undefined}
+                                overscanRowCount={2}
+                                onColumnSort={onColumnSort}
+                                onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
+                                onEndReached={loadNextPage}
+                                rowEventHandlers={
+                                    clickableRows ?
+                                        { onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S>) }
+                                        : undefined
+                                }
+                            >
 
-                            <Column
-                                headerRenderer={headerRenderer}
-                                cellRenderer={cellRenderer}
-                                align={"center"}
-                                key={"header-id"}
-                                dataKey={"id"}
-                                flexShrink={0}
-                                frozen={"left"}
-                                width={130}/>
-
-                            {columns.map((column) =>
                                 <Column
-                                    key={`column_${tableKey}_${column.id}`}
-                                    type={column.type}
-                                    title={column.label}
-                                    className={classes.column}
                                     headerRenderer={headerRenderer}
                                     cellRenderer={cellRenderer}
-                                    height={getRowHeight(size)}
-                                    align={column.align}
-                                    flexGrow={1}
+                                    align={"center"}
+                                    key={"header-id"}
+                                    dataKey={"id"}
                                     flexShrink={0}
-                                    resizable={true}
-                                    size={size}
-                                    sortable={column.sortable}
-                                    dataKey={column.id}
-                                    width={column.width}/>)
-                            }
-                        </BaseTable>
-                    )
+                                    frozen={"left"}
+                                    width={130}/>
+
+                                {columns.map((column) =>
+                                    <Column
+                                        key={`column_${tableKey}_${column.id}`}
+                                        type={column.type}
+                                        title={column.label}
+                                        className={classes.column}
+                                        headerRenderer={headerRenderer}
+                                        cellRenderer={cellRenderer}
+                                        height={getRowHeight(size)}
+                                        align={column.align}
+                                        flexGrow={1}
+                                        flexShrink={0}
+                                        resizable={true}
+                                        size={size}
+                                        sortable={column.sortable}
+                                        dataKey={column.id}
+                                        width={column.width}/>)
+                                }
+                            </BaseTable>
+                        );
+                    }
                     }
                 </AutoResizer>
 
