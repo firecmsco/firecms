@@ -1,10 +1,15 @@
 # Change Log
 
-## [0.21.1] - 2020-12-30
+## [0.21.2] - 2020-12-30
+### Changed
+- Fixed click behaviour of tables when inline editing is disabled.
+- More consistent map property previews
+
+## [0.21.1] - 2020-12-29
 ### Changed
 - Table performance improvements
 
-## [0.21.0] - 2020-12-29
+## [0.21.0] - 2020-12-28
 ### Added
 - Inline editing of tables. Tables are now editable by default. There are two new
 parameters you can set in entity collection views.
