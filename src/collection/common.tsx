@@ -52,7 +52,7 @@ export function getPreviewWidth<T>(property: Property<T>, size: CollectionSize):
     } else if (property.dataType === "number") {
         return 140;
     } else if (property.dataType === "map") {
-        return 280;
+        return 360;
     } else if (property.dataType === "timestamp") {
         return 160;
     } else if (property.dataType === "reference") {

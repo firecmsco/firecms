@@ -381,6 +381,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                         size={size}
                         align={column.align}>
                         <PreviewComponent
+                            key={`table_preview_${entity.id}_${propertyKey}`}
                             name={`preview_${propertyKey}_${rowIndex}_${columnIndex}`}
                             value={entity.values[propertyKey]}
                             property={property}
@@ -396,6 +397,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                         size={size}
                         align={column.align}>
                         <PreviewComponent
+                            key={`table_preview_${entity.id}_${propertyKey}`}
                             name={propertyKey}
                             value={entity.values[propertyKey]}
                             property={property}

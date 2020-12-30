@@ -7,7 +7,6 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import React from "react";
 import {
     createStyles,
-    ListItem,
     Table,
     TableBody,
     TableCell,
@@ -23,6 +22,9 @@ const useStyles = makeStyles(() =>
             "&:last-child th, &:last-child td": {
                 borderBottom: 0
             }
+        },
+        verticalAlignTop: {
+            verticalAlign: "top"
         }
     })
 );
@@ -46,22 +48,22 @@ export function MapPreview<T>({
 
     const classes = useStyles();
 
-    let mapProperties: string[];
+    let mapPropertyKeys: string[];
     if (size === "regular") {
-        mapProperties = Object.keys(mapProperty.properties);
+        mapPropertyKeys = Object.keys(mapProperty.properties);
     } else {
-        mapProperties = mapProperty.previewProperties || Object.keys(mapProperty.properties);
+        mapPropertyKeys = mapProperty.previewProperties || Object.keys(mapProperty.properties);
         if (size === "small")
-            mapProperties = mapProperties.slice(0, 3);
+            mapPropertyKeys = mapPropertyKeys.slice(0, 3);
         else if (size === "tiny")
-            mapProperties = mapProperties.slice(0, 1);
+            mapPropertyKeys = mapPropertyKeys.slice(0, 1);
     }
 
     if (size !== "regular")
         return (
             <>
-                {mapProperties.map((key, index) => (
-                    <ListItem
+                {mapPropertyKeys.map((key, index) => (
+                    <div
                         key={"map_preview_" + mapProperty.title + key + index}>
                         <ErrorBoundary>
                             <PreviewComponent name={key}
@@ -70,7 +72,7 @@ export function MapPreview<T>({
                                               size={size}
                                               entitySchema={entitySchema}/>
                         </ErrorBoundary>
-                    </ListItem>
+                    </div>
                 ))}
             </>
         );
@@ -78,20 +80,25 @@ export function MapPreview<T>({
     return (
         <Table size="small" key={`map_preview_${name}`}>
             <TableBody>
-                {mapProperties &&
-                mapProperties.map((key, index) => {
+                {mapPropertyKeys &&
+                mapPropertyKeys.map((key, index) => {
                     return (
                         <TableRow
                             key={`map_preview_table_${name}_${index}`}
                             className={classes.tableNoBottomBorder}>
                             <TableCell key={`table-cell-title-${name}-${key}`}
+                                       className={classes.verticalAlignTop}
+                                       width="30%"
                                        component="th">
                                 <Typography variant={"caption"}
                                             color={"textSecondary"}>
                                     {mapProperty.properties[key].title}
                                 </Typography>
                             </TableCell>
-                            <TableCell key={`table-cell-${name}-${key}`} component="th">
+                            <TableCell key={`table-cell-${name}-${key}`}
+                                       width="70%"
+                                       className={classes.verticalAlignTop}
+                                       component="th">
                                 <ErrorBoundary>
                                     <PreviewComponent
                                         name={key}
