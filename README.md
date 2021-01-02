@@ -27,7 +27,7 @@ FireCMS is based on this great technologies:
 
 ### Demo
 
-Check the demo with all the core functionalities. You can modify the data but it
+Check the demo with all the core functionalities. You can modify the data, but it
 gets periodically restored.
 
 https://firecms-demo-27150.web.app/
@@ -44,7 +44,7 @@ npm install --save firecms
 
 ## Use
 
-FireCMS is a purely a React app that uses your Firebase project as a backend
+FireCMS is a purely a React app that uses your Firebase project as a backend,
 so you do not need a specific backend to make it run. Just build your project
 following the installation instructions and deploy it in the way you prefer.
 A very easy way is using Firebase Hosting.
@@ -56,7 +56,7 @@ If you have enabled authentication in the CMS config you need to enable Google
 authentication in your project.
 
 Also, if you are using storage fields in your string properties, you need to
-enable Firebase Storage
+enable Firebase Storage.
 
 
 ### Deployment to Firebase hosting
@@ -296,7 +296,7 @@ You can access the code for the demo project under
 every feature provided by this CMS.
 
 To get going you just need to set you Firebase config in `firebase_config.ts`
-and run `yarn start`
+and run `yarn start`.
 
 
 #### Real time support
@@ -316,52 +316,55 @@ real time updates.
 The entry point for setting up a FireCMS app is the CMSApp, where you can define
 the following specs:
 
-  - `name`: Name of the app, displayed as the main title and in the tab title
+  - `name` Name of the app, displayed as the main title and in the tab title.
 
-  - `navigation`: List of the views in the CMS. Each view relates to a collection in the
+  - `navigation` List of the views in the CMS. Each view relates to a collection in the
           root Firestore database. Each of the navigation entries in this field
           generates an entry in the main menu.
 
-  - `logo`: Logo to be displayed in the drawer of the CMS
+  - `logo` Logo to be displayed in the drawer of the CMS.
 
-  - `authentication`: Do the users need to log in to access the CMS.
+  - `authentication` Do the users need to log in to access the CMS.
           You can specify an Authenticator function to discriminate which users can
           access the CMS or not.
-          If not specified, authentication is enabled but no user restrictions apply
+          If not specified, authentication is enabled but no user restrictions apply.
 
-  - `allowSkipLogin`: If authentication is enabled, allow the user to access the content
+  - `allowSkipLogin` If authentication is enabled, allow the user to access the content
           without login.
 
-  - `additionalViews`: Custom additional views created by the developer, added to the main
-          navigation
+  - `additionalViews` Custom additional views created by the developer, added to the main
+          navigation.
 
-  - `firebaseConfig`: Firebase configuration of the project. If you afe deploying the app to
-          Firebase hosting, you don't need to specify this value
+  - `firebaseConfig` Firebase configuration of the project. If you afe deploying the app to
+          Firebase hosting, you don't need to specify this value.
 
-  - `primaryColor`: Primary color of the theme of the CMS
+  - `onFirebaseInit` An optional callback after Firebase has been initialised. Useful for
+          using the local emulator or retrieving the used configuration.
 
-  - `secondaryColor`: Primary color of the theme of the CMS
+  - `primaryColor` Primary color of the theme of the CMS.
 
-  - `fontFamily`: Font family string. e.g. '"Roboto", "Helvetica", "Arial", sans-serif'
+  - `secondaryColor` Primary color of the theme of the CMS.
 
-  - `toolbarExtraWidget`: A component that gets rendered on the upper side of the main toolbar
+  - `fontFamily` Font family string. e.g. '"Roboto", "Helvetica", "Arial", sans-serif'.
+
+  - `toolbarExtraWidget` A component that gets rendered on the upper side of the main toolbar.
 
 ## Entities configuration
 
 The core of the CMS are entities, which are defined by an `EntitySchema`. In the
 schema you define the properties, which are related to the Firestore data types.
 
-  - `name`: A singular name of the entity as displayed in an Add button.
+  - `name` A singular name of the entity as displayed in an Add button.
         E.g. Product
 
-  - `description`: Description of this entity
+  - `description` Description of this entity.
 
-  - `customId`: When not specified, Firestore will create a random ID.
+  - `customId` When not specified, Firestore will create a random ID.
         You can set the value to `true` to allow the users to choose the ID.
         You can also pass a set of values (as an `EnumValues` object) to allow them
         to pick from only those.
 
-  - `properties`: Object defining the properties for the entity schema
+  - `properties` Object defining the properties for the entity schema.
 
 
 ### Entity properties
@@ -369,152 +372,152 @@ schema you define the properties, which are related to the Firestore data types.
 You can specify the properties of an entity, using the following configuration
 fields, common to all data types:
 
-* `dataType`: Firestore datatype of the property
+* `dataType` Firestore datatype of the property.
 
-* `title`: Property title (e.g. Product)
+* `title` Property title (e.g. Product).
 
-* `description`: Property description
+* `description` Property description.
 
-* `longDescription`: Width in pixels of this column in the collection view. If not set
+* `longDescription` Width in pixels of this column in the collection view. If not set
         the width is inferred based on the other configurations.
 
-* `columnWidth`: Longer description of a field, displayed under a popover
+* `columnWidth` Longer description of a field, displayed under a popover.
 
-* `disabled`: Is this a read only property
+* `disabled` Is this a read only property.
 
-* `config`:
-    * `field`: If you need to render a custom field, you can pass a React
-        component taking CMSFieldProps as props. More details below
+* `config`
+    * `field` If you need to render a custom field, you can pass a React
+        component taking CMSFieldProps as props. More details below.
 
-    * `fieldProps`: Additional props that are passed to the default field
-        generated by FireCMS or to the custom field
+    * `fieldProps` Additional props that are passed to the default field
+        generated by FireCMS or to the custom field.
 
-    * `customPreview`: Configure how a property is displayed as a preview,
-        e.g. in the collection view
+    * `customPreview` Configure how a property is displayed as a preview,
+        e.g. in the collection view.
 
-* `onPreSave`: Hook called before saving, you need to return the values that
+* `onPreSave` Hook called before saving, you need to return the values that
         will get saved. If you throw an error in this method the process stops,
         and an error snackbar gets displayed. (example bellow)
 
-* `onSaveSuccess`: Hook called when save is successful
+* `onSaveSuccess` Hook called when save is successful.
 
-* `onPreSave`: Hook called when saving fails
+* `onPreSave` Hook called when saving fails.
 
-* `defaultValues`: Object defining the initial values of the entity on creation
+* `defaultValues` Object defining the initial values of the entity on creation.
 
 
 #### Property configurations
 
-Besides the common fields, some properties have specific configurations.
+Beside the common fields, some properties have specific configurations.
 
 ##### `string`
 
-* `config`:
-    * `storageMeta`: You can specify a `StorageMeta` configuration. It is used to
+* `config`
+    * `storageMeta` You can specify a `StorageMeta` configuration. It is used to
             indicate that this string refers to a path in Google Cloud Storage.
-        * `mediaType`: Media type of this reference, used for displaying the preview
-        * `storagePath`: Absolute path in your bucket
-        * `acceptedFiles`: File MIME types that can be uploaded to this reference
-        * `metadata`: Specific metadata set in your uploaded file
-        * `storeUrl`:  When set to `true`, this flag indicates that the download URL of the file
+        * `mediaType` Media type of this reference, used for displaying the preview.
+        * `storagePath` Absolute path in your bucket.
+        * `acceptedFiles` File MIME types that can be uploaded to this reference.
+        * `metadata` Specific metadata set in your uploaded file.
+        * `storeUrl`  When set to `true`, this flag indicates that the download URL of the file
                        will be saved in Firestore instead of the Cloud storage path.
                        Note that the generated URL may use a token that, if disabled, may
                        make the URL unusable and lose the original reference to Cloud Storage,
-                       so it is not encouraged to use this flag. Defaults to false
-    * `url`: If the value of this property is a URL, you can set this flag to `true`
-            to add a link, or one of the supported media types to render a preview
-    * `enumValues`: You can use the enum values providing a map of possible
+                       so it is not encouraged to use this flag. Defaults to false.
+    * `url` If the value of this property is a URL, you can set this flag to `true`
+            to add a link, or one of the supported media types to render a preview.
+    * `enumValues` You can use the enum values providing a map of possible
             exclusive values the property can take, mapped to the label that it is
             displayed in the dropdown.
-    * `multiline`: Is this string property long enough so it should be displayed in
+    * `multiline` Is this string property long enough, so it should be displayed in
             a multiple line field. Defaults to false. If set to `true`,
             the number of lines adapts to the content.
-    * `markdown`: Should this string property be displayed as a markdown field. If `true`,
+    * `markdown` Should this string property be displayed as a markdown field. If `true`,
             the field is rendered as a text editors that supports markdown highlight
             syntax. It also includes a preview of the result.
-    * `previewAsTag`: Should this string be rendered as a tag instead of just text.
+    * `previewAsTag` Should this string be rendered as a tag instead of just text.
 
-* `validation`: Rules for validating this property:
-    * `required`: Should this field be compulsory
-    * `requiredMessage`: Message to be displayed as a validation error
-    * `length`: Set a required length for the string value
-    * `min`: Set a minimum length limit for the string value
-    * `max`: Set a maximum length limit for the string value
-    * `matches`: Provide an arbitrary regex to match the value against
-    * `email`: Validates the value as an email address via a regex
-    * `url`: Validates the value as a valid URL via a regex
-    * `trim`: Transforms string values by removing leading and trailing whitespace
-    * `lowercase`: Transforms the string value to lowercase
-    * `uppercase`: Transforms the string value to uppercase
+* `validation` Rules for validating this property:
+    * `required` Should this field be compulsory.
+    * `requiredMessage` Message to be displayed as a validation error.
+    * `length` Set a required length for the string value.
+    * `min` Set a minimum length limit for the string value.
+    * `max` Set a maximum length limit for the string value.
+    * `matches` Provide an arbitrary regex to match the value against.
+    * `email` Validates the value as an email address via a regex.
+    * `url` Validates the value as a valid URL via a regex.
+    * `trim` Transforms string values by removing leading and trailing whitespace.
+    * `lowercase` Transforms the string value to lowercase.
+    * `uppercase` Transforms the string value to uppercase.
 
 ##### `number`
 
-* `config`:
-    * `enumValues`: You can use the enum values providing a map of possible
+* `config`
+    * `enumValues` You can use the enum values providing a map of possible
         exclusive values the property can take, mapped to the label that it is
         displayed in the dropdown.
 
-* `validation`: Rules for validating this property
-    * `required`: Should this field be compulsory
-    * `requiredMessage`: Message to be displayed as a validation error
-    * `min`: Set the minimum value allowed
-    * `max`: Set the maximum value allowed
-    * `lessThan`: Value must be less than
-    * `moreThan`: Value must be more than
-    * `positive`: Value must be a positive number
-    * `negative`: Value must be a negative number
-    * `integer`: Value must be an integer
+* `validation` Rules for validating this property.
+    * `required` Should this field be compulsory.
+    * `requiredMessage` Message to be displayed as a validation error.
+    * `min` Set the minimum value allowed.
+    * `max` Set the maximum value allowed.
+    * `lessThan` Value must be less than.
+    * `moreThan` Value must be more than.
+    * `positive` Value must be a positive number.
+    * `negative` Value must be a negative number.
+    * `integer` Value must be an integer.
 
 ##### `boolean`
 
-* `validation`: Rules for validating this property
-    * `required`: Should this field be compulsory
-    * `requiredMessage`: Message to be displayed as a validation error
+* `validation` Rules for validating this property.
+    * `required` Should this field be compulsory.
+    * `requiredMessage` Message to be displayed as a validation error.
 
 ##### `timestamp`
 
-* `validation`: Rules for validating this property
-    * `required`: Should this field be compulsory
-    * `requiredMessage`: Message to be displayed as a validation error
-    * `min`: Set the minimum date allowed
-    * `max`: Set the maximum date allowed
+* `validation` Rules for validating this property.
+    * `required` Should this field be compulsory.
+    * `requiredMessage` Message to be displayed as a validation error.
+    * `min` Set the minimum date allowed.
+    * `max` Set the maximum date allowed.
 
 ##### `reference`
 
-* `collectionPath`: Absolute collection path of the collection this reference points to.
+* `collectionPath` Absolute collection path of the collection this reference points to.
          The schema of the entity is inferred based on the root navigation, so
          the filters and search delegate existing there are applied to this view
          as well.
 
-* `previewProperties`: List of properties rendered as this reference preview.
+* `previewProperties` List of properties rendered as this reference preview.
         Defaults to first 3.
 
-* `validation`: Rules for validating this property
-    * `required`: Should this field be compulsory
-    * `requiredMessage`: Message to be displayed as a validation error
+* `validation` Rules for validating this property.
+    * `required` Should this field be compulsory.
+    * `requiredMessage` Message to be displayed as a validation error.
 
 ##### `array`
 
-* `of`: The property of this array. You can specify any property.
+* `of` The property of this array. You can specify any property.
         You can also specify an array or properties if you need the array to have
-        a specific limited shape such as [string, number, string]
+        a specific limited shape such as [string, number, string].
 
-* `validation`: Rules for validating this property
-    * `required`: Should this field be compulsory
-    * `requiredMessage`: Message to be displayed as a validation error
-    * `min`: Set the minimum length allowed
-    * `max`: Set the maximum length allowed
+* `validation` Rules for validating this property.
+    * `required` Should this field be compulsory.
+    * `requiredMessage` Message to be displayed as a validation error.
+    * `min` Set the minimum length allowed.
+    * `max` Set the maximum length allowed.
 
 ##### `map`
 
-* `properties`: Record of properties included in this map.
+* `properties` Record of properties included in this map.
 
-* `previewProperties`: List of properties rendered as this map preview.
+* `previewProperties` List of properties rendered as this map preview.
         Defaults to first 3.
 
-* `validation`: Rules for validating this property
-    * `required`: Should this field be compulsory
-    * `requiredMessage`: Message to be displayed as a validation error
+* `validation` Rules for validating this property.
+    * `required` Should this field be compulsory.
+    * `requiredMessage` Message to be displayed as a validation error.
 
 ##### `geopoint`
 *THIS PROPERTY IS CURRENTLY NOT SUPPORTED*
@@ -534,7 +537,7 @@ You can find the all the `CMSFieldProps` [here](https://github.com/Camberi/firec
 #### Saving hooks
 
 When you are saving an entity you can attach different hooks before and after
-it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`
+it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
 
 ```
 const productSchema = buildSchema({
@@ -574,67 +577,67 @@ collection. You can find collection views as the first level of navigation in
 the main menu, or as subcollections inside other collections, following the
 Firestore data schema.
 
-* `name`: The plural name of the view. E.g. 'products'.
+* `name` The plural name of the view. E.g. 'products'.
 
-* `relativePath`: Relative Firestore path of this view to its parent.
+* `relativePath` Relative Firestore path of this view to its parent.
         If this view is in the root the path is equal to the absolute one.
-        This path also determines the URL in FireCMS
+        This path also determines the URL in FireCMS.
 
-* `defaultSize`: Default size of the rendered collection
+* `defaultSize` Default size of the rendered collection.
 
-* `size`: Optional field used to group top level navigation entries under a
+* `size` Optional field used to group top level navigation entries under a
         navigation view. If you set this value in a subcollection it has no
         effect.
 
-* `group`: Optional field used to group top level navigation entries under a
+* `group` Optional field used to group top level navigation entries under a
         navigation view. If you set this value in a subcollection it has no
         effect.
 
-* `properties`: Properties displayed in this collection. If this property is not set
-        every property is displayed
+* `properties` Properties displayed in this collection. If this property is not set
+        every property is displayed.
 
-* `excludedProperties`: Properties that should NOT get displayed in the collection view.
+* `excludedProperties` Properties that should NOT get displayed in the collection view.
         All the other properties from the entity are displayed.
         It has no effect if the `properties` value is set.
 
-* `filterableProperties`: List of properties that include a filter widget. Defaults to
+* `filterableProperties` List of properties that include a filter widget. Defaults to
         none.
 
-* `initialFilter`: Initial filters applied to this collection. Consider that you
+* `initialFilter` Initial filters applied to this collection. Consider that you
         can filter any property, but only those included in
         `filterableProperties` will include the corresponding filter widget.
         Defaults to none.
 
-* `pagination`: If enabled, content is loaded in batch. If `false` all entities in the
-        collection are loaded. Defaults to `true`
+* `pagination` If enabled, content is loaded in batch. If `false` all entities in the
+        collection are loaded. Defaults to `true`.
 
-* `additionalColumns`: You can add additional columns to the collection view
+* `additionalColumns` You can add additional columns to the collection view
         by implementing an additional column delegate.
 
-* `textSearchDelegate`: If a text search delegate is supplied, a search bar
+* `textSearchDelegate` If a text search delegate is supplied, a search bar
         is displayed on top.
 
-* `editEnabled`: Can the elements in this collection be added and edited.
-        Defaults to `true`
+* `editEnabled` Can the elements in this collection be added and edited.
+        Defaults to `true`.
 
-* `inlineEditing`: Can the elements in this collection be edited inline in the collection
+* `inlineEditing` Can the elements in this collection be edited inline in the collection
         view. If this flag is set to false but `editEnabled` is `true`, entities
-        can still be edited in the side panel
+        can still be edited in the side panel.
 
-* `deleteEnabled`: Can the elements in this collection be deleted.
-        Defaults to `true`
+* `deleteEnabled` Can the elements in this collection be deleted.
+        Defaults to `true`.
 
-* `subcollections`: Following the Firestore document and collection schema,
+* `subcollections` Following the Firestore document and collection schema,
         you can add subcollections to your entity in the same way you define
         the root collections.
 
-* `onEntityDelete`: Hook called after the entity gets deleted in Firestore.
+* `onEntityDelete` Hook called after the entity gets deleted in Firestore.
 
 ### Additional columns
 
 If you would like to include a column that does not map directly to a property,
 you can use the `additionalColumns` field, providing a
-`AdditionalColumnDelegate`, which includes an id, a title and a builder that receives
+`AdditionalColumnDelegate`, which includes an id, a title, and a builder that receives
 the corresponding entity.
 
 In the builder you can return any React Component.
@@ -650,7 +653,7 @@ For example, you can have a collection named "translations" under the entity
 "Article". You just need to use the same format as for defining your collection
 using the field `subcollections`.
 
-Subcollections are easily accessible from the side view while editing an entity
+Subcollections are easily accessible from the side view while editing an entity.
 
 ### Filters
 

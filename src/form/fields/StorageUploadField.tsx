@@ -120,6 +120,7 @@ export default function StorageUploadField({
                                                value,
                                                setValue,
                                                error,
+                                               showError,
                                                autoFocus,
                                                tableMode,
                                                property,
@@ -137,7 +138,7 @@ export default function StorageUploadField({
 
         <FormControl fullWidth
                      required={property.validation?.required}
-                     error={!!error}>
+                     error={showError}>
 
             {!tableMode &&
             <FormHelperText filled
@@ -162,7 +163,7 @@ export default function StorageUploadField({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-            {error && <FormHelperText
+            {showError && <FormHelperText
                 id="component-error-text">{error}</FormHelperText>}
 
         </FormControl>

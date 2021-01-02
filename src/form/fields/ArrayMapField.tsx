@@ -24,6 +24,7 @@ export default function ArrayMapField<T>({
                                              name,
                                              value,
                                              error,
+                                             showError,
                                              isSubmitting,
                                              touched,
                                              property,
@@ -51,7 +52,7 @@ export default function ArrayMapField<T>({
 
             return (
 
-                <FormControl fullWidth error={!!error}>
+                <FormControl fullWidth error={showError}>
 
                     <FormHelperText filled
                                     required={property.validation?.required}>
@@ -114,7 +115,7 @@ export default function ArrayMapField<T>({
                     {includeDescription &&
                     <FieldDescription property={property}/>}
 
-                    {error
+                    {showError
                     && typeof error === "string"
                     && <FormHelperText>{error}</FormHelperText>}
 

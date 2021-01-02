@@ -1,5 +1,9 @@
 import firebase from "firebase/app";
-import { replaceTimestampsWithDates } from "../firebase/firestore";
+import {
+    initEntityValues,
+    replaceTimestampsWithDates
+} from "../firebase/firestore";
+import { productSchema } from "./test_site_config";
 
 
 it("timestamp conversion", () => {
@@ -19,6 +23,16 @@ it("timestamp array conversion", () => {
     expect(
         replaceTimestampsWithDates({ o: [{ created_at: timestamp }] })
     ).toEqual({ o: [{ created_at: date }] });
+
+});
+
+it("Initial values", () => {
+
+    const initialisedValues = initEntityValues(productSchema);
+    console.log(initialisedValues);
+    expect(
+        Object.values(initialisedValues).filter((v) => v === undefined)
+    ).toHaveLength(0);
 
 });
 

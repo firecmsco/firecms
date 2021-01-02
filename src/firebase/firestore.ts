@@ -346,6 +346,8 @@ function initPropertyValue(key: string, property: Property, defaultValue: any) {
         value = [];
     } else if (property.dataType === "boolean") {
         value = false;
+    } else {
+        value = null;
     }
     return value;
 }

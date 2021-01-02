@@ -35,6 +35,7 @@ export default React.forwardRef(function SwitchField({
                                                          value,
                                                          setValue,
                                                          error,
+                                                         showError,
                                                          autoFocus,
                                                          isSubmitting,
                                                          touched,
@@ -48,7 +49,7 @@ export default React.forwardRef(function SwitchField({
     return (
         <FormControl
             fullWidth
-            error={!!error}>
+            error={showError}>
             <div
                 className={"MuiFilledInput-root MuiFilledInput-underline MuiInputBase-formControl"}>
                 <FormControlLabel
@@ -79,7 +80,7 @@ export default React.forwardRef(function SwitchField({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-            {error && <FormHelperText
+            {showError && <FormHelperText
                 id="component-error-text">{error}</FormHelperText>}
 
         </FormControl>

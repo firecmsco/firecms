@@ -86,8 +86,8 @@ export const SnackbarProvider: React.FC<ISelectedEntityProviderProps> = ({ child
                           onClose={(_) => close()}
                           severity={type}>
 
-                    {title && <Box>{title}</Box>}
-                    {message && <Box>{message}</Box>}
+                    {title && <div>{title}</div>}
+                    {message && <div>{message}</div>}
 
                 </MuiAlert>
             </Snackbar>

@@ -5,7 +5,8 @@ import React, {
     useMemo,
     useRef
 } from "react";
-import BaseTable, { AutoResizer, Column } from "react-base-table";
+import BaseTable, { Column } from "react-base-table";
+import Measure, { ContentRect } from "react-measure";
 import "react-base-table/styles.css";
 import {
     Box,
@@ -46,6 +47,7 @@ import { PreviewTableCell } from "./PreviewTableCell";
 import { CollectionTableProps } from "./CollectionTableProps";
 import { TableCellProps } from "./SelectedCellContext";
 import { useHistory } from "react-router-dom";
+import { CircularProgressCenter } from "../components";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -58,6 +60,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
     createStyles({
         root: {
             height: "100%",
+            width: "100%",
             display: "flex",
             flexDirection: "column"
         },
@@ -90,6 +93,19 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
             backgroundColor: "#eee",
             border: `2px solid ${theme.palette.primary.dark}`,
             padding: theme.spacing(2)
+        },
+        headerItem: {
+            display: "inherit",
+            paddingRight: theme.spacing(1)
+        },
+        cellButtons: {
+            minWidth: 96
+        },
+        cellButtonsId: {
+            width: 96,
+            textAlign: "center",
+            textOverflow: "ellipsis",
+            overflow: "hidden"
         }
     }));
 
@@ -147,6 +163,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const [currentOrder, setOrder] = React.useState<Order>();
     const [orderByProperty, setOrderProperty] = React.useState<string>();
     const [itemCount, setItemCount] = React.useState<number>(PAGE_SIZE);
+    const [tableSize, setTableSize] = React.useState<ContentRect | undefined>();
 
     const [tableKey] = React.useState<string>(Math.random().toString(36));
     const tableRef = useRef<BaseTable>(null);
@@ -289,8 +306,13 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         return () => cancelSubscription();
     }, [collectionPath, schema, itemCount, currentOrder, orderByProperty, filter]);
 
+    const onMeasure = useCallback((contentRect: ContentRect) => {
+        setTableSize(contentRect);
+    }, []);
+
     const onColumnSort = ({ key, order }: any) => {
 
+        console.log("onColumnSort", key);
         const property = key;
         if (filter) {
             const filterKeys = Object.keys(filter);
@@ -474,10 +496,10 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
         return (
             <ErrorBoundary>
-                <Box>
+                <div>
 
                     {(editEnabled || deleteEnabled) &&
-                    <Box minWidth={96}>
+                    <div className={classes.cellButtons}>
                         {editEnabled &&
                         <IconButton
                             onClick={(event: MouseEvent) => {
@@ -499,25 +521,23 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                             }}>
                             <DeleteIcon/>
                         </IconButton>}
-                    </Box>}
+                    </div>}
 
-                    {size !== "xs" && <Box width={96}
-                                           component="div"
-                                           textAlign="center"
-                                           textOverflow="ellipsis"
-                                           overflow="hidden">
+                    {size !== "xs" && (
+                        <div className={classes.cellButtonsId}>
 
-                        {entity ?
-                            <Typography
-                                className={"mono"}
-                                variant={"caption"}
-                                color={"textSecondary"}> {entity.id} </Typography>
-                            :
-                            renderSkeletonText()
-                        }
-                    </Box>}
+                            {entity ?
+                                <Typography
+                                    className={"mono"}
+                                    variant={"caption"}
+                                    color={"textSecondary"}> {entity.id} </Typography>
+                                :
+                                renderSkeletonText()
+                            }
+                        </div>
+                    )}
 
-                </Box>
+                </div>
             </ErrorBoundary>
         );
     };
@@ -530,20 +550,18 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
             <ErrorBoundary>
                 {columnIndex === 0 ?
-                    <Box className={classes.header}>
+                    <div className={classes.header}>
                         Id
-                    </Box>
+                    </div>
                     :
-                    <Box className={classes.header}>
-                        <Box display={"inherit"}
-                             paddingRight={"10px"}>
+                    <div className={classes.header}>
+                        <div className={classes.headerItem}>
                             {headCell.icon}
-                        </Box>
-                        <Box display={"inherit"}
-                             paddingRight={"10px"}>
+                        </div>
+                        <div className={classes.headerItem}>
                             {headCell.label}
-                        </Box>
-                    </Box>
+                        </div>
+                    </div>
                 }
             </ErrorBoundary>
         );
@@ -564,38 +582,38 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     }
 
     function buildEmptyView<S extends EntitySchema>() {
+        if (loading)
+            return <CircularProgressCenter/>;
         return (
-            <Paper className={classes.root}
-                   style={{ height: "100%", width: "100%" }}>
-                <Box display="flex"
-                     justifyContent="center"
-                     margin={6}>
-                    {filterSet ? "No data with the selected filters" : "This collection is empty"}
-                </Box>
-            </Paper>
+            <Box display="flex"
+                 justifyContent="center"
+                 margin={6}>
+                {textSearchInProgress ? "No results" : (filterSet ? "No data with the selected filters" : "This collection is empty")}
+            </Box>
         );
     }
 
     let body;
 
-    if (!loading) {
-        if (dataLoadingError)
-            body = buildErrorView();
-        else if (!textSearchInProgress && !data?.length)
-            body = buildEmptyView();
-    }
-
-    if (!body) {
+    if (!loading && dataLoadingError) {
+        body = buildErrorView();
+    } else {
         body =
             (
-                <AutoResizer>
-                    {({ width, height }) => {
-                        return (
+                <Measure
+                    bounds
+                    onResize={setTableSize}>
+                    {({ measureRef }) => (
+                        <div ref={measureRef}
+                             className={classes.tableContainer}>
+
+                            {tableSize?.bounds &&
                             <BaseTable
                                 rowClassName={`${classes.tableRow} ${classes.tableRowClickable}`}
                                 data={currentData}
-                                width={width}
-                                height={height}
+                                width={tableSize.bounds.width}
+                                height={tableSize.bounds.height}
+                                emptyRenderer={buildEmptyView()}
                                 fixed
                                 ignoreFunctionInColumnCompare={false}
                                 rowHeight={getRowHeight(size)}
@@ -627,7 +645,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
                                 {columns.map((column) =>
                                     <Column
-                                        key={`column_${tableKey}_${column.id}`}
+                                        key={column.id}
                                         type={column.type}
                                         title={column.label}
                                         className={classes.column}
@@ -643,18 +661,17 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                         dataKey={column.id}
                                         width={column.width}/>)
                                 }
-                            </BaseTable>
-                        );
-                    }
-                    }
-                </AutoResizer>
+                            </BaseTable>}
+                        </div>
+                    )}
+                </Measure>
 
             );
     }
 
 
     return (
-        <React.Fragment>
+        <>
 
             <DeleteEntityDialog entity={deleteEntityClicked}
                                 collectionPath={collectionPath}
@@ -663,8 +680,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                 onEntityDelete={onEntityDelete}
                                 onClose={() => setDeleteEntityClicked(undefined)}/>
 
-            <Paper className={classes.root}
-                   style={{ height: "100%", width: "100%" }}>
+            <Paper className={classes.root}>
 
                 {includeToolbar &&
                 <CollectionTableToolbar schema={schema}
@@ -679,29 +695,26 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                         loading={loading}
                                         onFilterUpdate={onFilterUpdate}/>}
 
+                <PopupFormField
+                    tableKey={tableKey}
+                    schema={schema}
+                    createFormField={createFormField}
+                    cellRect={selectedCell?.cellRect}
+                    formPopupOpen={formPopupOpen}
+                    setFormPopupOpen={setFormPopupOpen}
+                    rowIndex={selectedCell?.rowIndex}
+                    name={selectedCell?.name}
+                    property={selectedCell?.property}
+                    setPreventOutsideClick={setPreventOutsideClick}
+                    entity={selectedCell?.rowIndex != undefined ? data[selectedCell.rowIndex] : undefined}/>
+
                 <OutsideAlerter enabled={!preventOutsideClick}
                                 onOutsideClick={handleClickOutside}>
-                    <PopupFormField
-                        tableKey={tableKey}
-                        schema={schema}
-                        createFormField={createFormField}
-                        cellRect={selectedCell?.cellRect}
-                        formPopupOpen={formPopupOpen}
-                        setFormPopupOpen={setFormPopupOpen}
-                        rowIndex={selectedCell?.rowIndex}
-                        name={selectedCell?.name}
-                        property={selectedCell?.property}
-                        setPreventOutsideClick={setPreventOutsideClick}
-                        entity={selectedCell?.rowIndex != undefined ? data[selectedCell.rowIndex] : undefined}/>
-
-                    <div className={classes.tableContainer}>
-                        {body}
-                    </div>
-
+                    {body}
                 </OutsideAlerter>
 
             </Paper>
-        </React.Fragment>
+        </>
     );
 
 }

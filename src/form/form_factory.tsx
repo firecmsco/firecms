@@ -123,7 +123,6 @@ function buildFieldInternal<P extends Property<T>, T = any>(
             name={`${name}`}
         >
             {(fieldProps: FieldProps<T>) => {
-
                 const error = getIn(fieldProps.form.errors, name);
                 const touched = getIn(fieldProps.form.touched, name);
                 const showError: boolean = error && touched && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
@@ -135,8 +134,8 @@ function buildFieldInternal<P extends Property<T>, T = any>(
                             name: fieldProps.field.name,
                             value: fieldProps.field.value,
                             setValue: (value) => {
-                                fieldProps.form.setFieldValue(fieldProps.field.name, value);
                                 fieldProps.form.setFieldTouched(fieldProps.field.name);
+                                fieldProps.form.setFieldValue(fieldProps.field.name, value);
                             },
                             error,
                             touched,

@@ -17,6 +17,9 @@ import { useAppConfigContext } from "../../contexts/AppConfigContext";
 import { FormFieldBuilder } from "../../form";
 import { CollectionTableProps } from "../CollectionTableProps";
 
+import firebase from "firebase/app";
+import "firebase/firestore";
+
 export function TableReferenceField<S extends EntitySchema>(props: {
     name: string,
     internalValue: firebase.firestore.DocumentReference | undefined | null,

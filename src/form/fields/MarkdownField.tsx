@@ -58,6 +58,7 @@ export default function MarkDownField({
                                           value,
                                           setValue,
                                           error,
+                                          showError,
                                           isSubmitting,
                                           autoFocus,
                                           touched,
@@ -86,7 +87,7 @@ export default function MarkDownField({
 
         <FormControl
             required={property.validation?.required}
-            error={!!error}
+            error={showError}
             fullWidth>
 
             {!tableMode && <FormHelperText filled
@@ -134,7 +135,7 @@ export default function MarkDownField({
 
             <Box display={"flex"}>
                 <Box flexGrow={1}>
-                    {error
+                    {showError
                     && typeof error === "string"
                     && <FormHelperText>{error}</FormHelperText>}
                     {includeDescription &&

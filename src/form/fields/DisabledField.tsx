@@ -15,6 +15,7 @@ export default function DisabledField<S extends EntitySchema>({
                                                                   value,
                                                                   setValue,
                                                                   error,
+                                                                  showError,
                                                                   isSubmitting,
                                                                   touched,
                                                                   tableMode,
@@ -27,7 +28,7 @@ export default function DisabledField<S extends EntitySchema>({
 
     return (
 
-        <FormControl fullWidth error={!!error}>
+        <FormControl fullWidth error={showError}>
 
             {!tableMode && <FormHelperText filled
                                            required={property.validation?.required}>
@@ -48,7 +49,7 @@ export default function DisabledField<S extends EntitySchema>({
 
             </Paper>
 
-            {error
+            {showError
             && typeof error === "string"
             && <FormHelperText>{error}</FormHelperText>}
 

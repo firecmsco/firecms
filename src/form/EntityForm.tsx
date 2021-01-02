@@ -244,12 +244,14 @@ function EntityForm<S extends EntitySchema>({
                                     autoFocus: false
                                 });
 
-                            return <Grid item
-                                         xs={12}
-                                         id={`form_field_${key}`}
-                                         key={`field_${schema.name}_${key}`}>
-                                {formField}
-                            </Grid>;
+                            return (
+                                <Grid item
+                                      xs={12}
+                                      id={`form_field_${key}`}
+                                      key={`field_${schema.name}_${key}`}>
+                                    {formField}
+                                </Grid>
+                            );
                         })}
 
                     </Grid>;
@@ -272,15 +274,14 @@ function EntityForm<S extends EntitySchema>({
                                 {savingError &&
                                 <Box textAlign="right">
                                     <Typography color={"error"}>
-                                        Error saving to Firestore. Details
-                                        in
+                                        Error saving to Firestore. Details in
                                         the console
                                     </Typography>
                                 </Box>}
 
-                                <Box className={classes.stickyButtons}>
+                                <div className={classes.stickyButtons}>
                                     {buildButtons(isSubmitting)}
-                                </Box>
+                                </div>
 
                             </Form>
 

@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.22.0] - 2021-01-02
+### Added
+- `onFirebaseInit` callback on the CMSApp called after Firebase initialisation.
+Useful for using the local emulator.
+
+### Changed
+- Fixed initial values bug when creating new entities and validation.
+- Added `showError` prop to CMSFieldProps
+
 ## [0.21.2] - 2020-12-30
 ### Changed
 - Fixed click behaviour of tables when inline editing is disabled.

@@ -44,6 +44,7 @@ export default function ArrayDefaultField<T>({
                                                  name,
                                                  value,
                                                  error,
+                                                 showError,
                                                  isSubmitting,
                                                  autoFocus,
                                                  touched,
@@ -101,7 +102,7 @@ export default function ArrayDefaultField<T>({
             const disabled = isSubmitting;
             return (
 
-                <FormControl fullWidth error={!!error}>
+                <FormControl fullWidth error={showError}>
 
                     {!tableMode && <FormHelperText filled
                                                    required={property.validation?.required}>
@@ -144,7 +145,7 @@ export default function ArrayDefaultField<T>({
                     {includeDescription &&
                     <FieldDescription property={property}/>}
 
-                    {error
+                    {showError
                     && typeof error === "string"
                     && <FormHelperText>{error}</FormHelperText>}
 

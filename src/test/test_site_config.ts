@@ -1,19 +1,6 @@
 import { buildCollection, buildSchema, EnumValues } from "../models";
 import { CMSAppProps } from "../CMSAppProps";
 
-const status = {
-    private: "Private",
-    public: "Public"
-};
-
-const categories: EnumValues<string> = {
-    electronics: "Electronics",
-    books: "Books",
-    furniture: "Furniture",
-    clothing: "Clothing",
-    food: "Food"
-};
-
 const locales: EnumValues<string> = {
     "de-DE": "German",
     "en-US": "English (United States)",
@@ -21,7 +8,7 @@ const locales: EnumValues<string> = {
     "es-419": "Spanish (South America)"
 };
 
-const productSchema = buildSchema({
+export const productSchema = buildSchema({
     name: "Product",
     properties: {
         name: {

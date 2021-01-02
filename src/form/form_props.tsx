@@ -32,6 +32,13 @@ export interface CMSFieldProps<T> {
      * the field, replacing values with a string containing the error.
      * It takes the value `null` if there is no error
      */
+    showError: boolean;
+
+    /**
+     * Is there an error in this field. The error field has the same shape as
+     * the field, replacing values with a string containing the error.
+     * It takes the value `null` if there is no error
+     */
     error: any | null;
 
     /**

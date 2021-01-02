@@ -26,6 +26,7 @@ export default function TextField({
                                       value,
                                       setValue,
                                       error,
+                                      showError,
                                       isSubmitting,
                                       autoFocus,
                                       touched,
@@ -34,6 +35,8 @@ export default function TextField({
                                       allowInfinity,
                                       entitySchema
                                   }: TextFieldProps) {
+
+    console.log(name, showError, value);
 
     let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
@@ -90,7 +93,7 @@ export default function TextField({
 
             <FormControl
                 required={property.validation?.required}
-                error={!!error}
+                error={showError}
                 disabled={valueIsInfinity}
                 fullWidth>
 
@@ -106,7 +109,7 @@ export default function TextField({
                 <Box display={"flex"}>
 
                     <Box flexGrow={1}>
-                        {error && <FormHelperText
+                        {showError && <FormHelperText
                             id="component-error-text">{error}</FormHelperText>}
 
                         {includeDescription &&

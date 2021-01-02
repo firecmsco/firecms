@@ -55,6 +55,13 @@ export interface CMSAppProps {
     firebaseConfig?: Object;
 
     /**
+     * Optional callback after Firebase has been initialised. Useful for
+     * using the local emulator or retrieving the used configuration.
+     * @param config
+     */
+    onFirebaseInit?: (config:object) => void;
+
+    /**
      * Primary color of the theme of the CMS
      */
     primaryColor?: string;

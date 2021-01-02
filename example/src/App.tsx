@@ -700,6 +700,10 @@ function App() {
         view: <ExampleAdditionalView/>
     }];
 
+    const onFirebaseInit = (config:Object) => {
+        // firebase.firestore().useEmulator("localhost", 8080);
+    };
+
     return <CMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
@@ -709,6 +713,7 @@ function App() {
         additionalViews={additionalViews}
         // In the production environment, the configuration is fetched from the environment automatically
         firebaseConfig={firebaseConfig}
+        onFirebaseInit={onFirebaseInit}
         // firebaseConfig={process.env.NODE_ENV !== "production" ? firebaseConfig : undefined}
         toolbarExtraWidget={githubLink}
     />;

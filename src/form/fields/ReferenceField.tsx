@@ -61,6 +61,7 @@ export default function ReferenceField<S extends EntitySchema>({
                                                                    value,
                                                                    setValue,
                                                                    error,
+                                                                   showError,
                                                                    isSubmitting,
                                                                    touched,
                                                                    autoFocus,
@@ -262,7 +263,7 @@ export default function ReferenceField<S extends EntitySchema>({
     }
 
     return (
-        <FormControl error={!!error} fullWidth>
+        <FormControl error={showError} fullWidth>
 
             <Box
                 className={`${classes.root} ${isSubmitting ? classes.disabled : ""}`}>
@@ -286,7 +287,7 @@ export default function ReferenceField<S extends EntitySchema>({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-            {error && <FormHelperText
+            {showError && <FormHelperText
                 id="component-error-text">{error}</FormHelperText>}
 
         </FormControl>

@@ -112,7 +112,7 @@ export default function SearchBar({ onTextSearch }: SearchBarProps) {
                         onClick={clearText}>
                         <ClearIcon fontSize={"small"}/>
                     </IconButton> :
-                    <Box style={{ width: 26 }}/>
+                    <div style={{ width: 26 }}/>
                 }
                 inputProps={{ "aria-label": "search" }}
             />

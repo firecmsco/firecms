@@ -103,7 +103,7 @@ export function CollectionRoute<S extends EntitySchema>({
     );
 
     return (
-        <Box className={classes.root}>
+        <div className={classes.root}>
 
             <CollectionTable collectionPath={collectionPath}
                              schema={view.schema}
@@ -131,6 +131,6 @@ export function CollectionRoute<S extends EntitySchema>({
                              title={title}
                              createFormField={createFormField}/>
 
-        </Box>
+        </div>
     );
 }

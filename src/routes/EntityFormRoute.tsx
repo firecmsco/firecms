@@ -435,7 +435,7 @@ function EntityFormRoute<S extends EntitySchema>({
     function buildMainView() {
 
         return (
-            <Box className={mainClasses.content}>
+            <div className={mainClasses.content}>
 
                 <Typography variant="h5" className={mainClasses.title}>
                     {existingEntity ? "Edit" : `Add New`} {view.schema.name}
@@ -471,16 +471,16 @@ function EntityFormRoute<S extends EntitySchema>({
                                             label={subcollection.name}/>
                                 )}
                             </Tabs>
-                            <Box
+                            <div
                                 className={mainClasses.subcollections}>
                                 {subCollectionsView}
-                            </Box>
+                            </div>
                         </Paper>
                     </Grid>
                     }
                 </Grid>
 
-            </Box>);
+            </div>);
     }
 
     function onSideTabClick(value: number) {
@@ -499,11 +499,10 @@ function EntityFormRoute<S extends EntitySchema>({
     function buildSideView() {
 
         return (
-            <Box className={sideClasses.root}>
+            <div className={sideClasses.root}>
 
                 <Paper elevation={0} variant={"outlined"}>
-                    <Box
-                        className={sideClasses.header}>
+                    <div className={sideClasses.header}>
 
                         <IconButton
                             onClick={(e) => selectedEntityContext.close()}>
@@ -541,7 +540,7 @@ function EntityFormRoute<S extends EntitySchema>({
                                         label={subcollection.name}/>
                             )}
                         </Tabs>
-                    </Box>
+                    </div>
 
                 </Paper>
 
@@ -557,7 +556,7 @@ function EntityFormRoute<S extends EntitySchema>({
 
                 </div>
 
-            </Box>);
+            </div>);
     }
 
 

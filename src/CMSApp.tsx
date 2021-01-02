@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import {
-    Box,
     createMuiTheme,
     createStyles,
     CssBaseline,
@@ -84,6 +83,7 @@ export function CMSApp(props: CMSAppProps) {
         authentication,
         allowSkipLogin,
         firebaseConfig,
+        onFirebaseInit,
         additionalViews,
         primaryColor,
         secondaryColor,
@@ -189,6 +189,8 @@ export function CMSApp(props: CMSAppProps) {
                 setUsedFirebaseConfig(config);
                 setFirebaseConfigError(false);
                 setFirebaseConfigInitialized(true);
+                if (onFirebaseInit)
+                    onFirebaseInit(config);
             } catch (e) {
                 console.error(e);
                 setFirebaseConfigError(true);
@@ -239,38 +241,38 @@ export function CMSApp(props: CMSAppProps) {
         return (
             <Router>
                 <SelectedEntityProvider>
-                        <BreadcrumbsProvider>
-                            <MuiPickersUtilsProvider
-                                utils={DateFnsUtils}>
-                                <DndProvider backend={HTML5Backend}>
+                    <BreadcrumbsProvider>
+                        <MuiPickersUtilsProvider
+                            utils={DateFnsUtils}>
+                            <DndProvider backend={HTML5Backend}>
 
-                                    <nav>
-                                        <CMSDrawer logo={logo}
-                                                   drawerOpen={drawerOpen}
-                                                   navigation={navigation}
-                                                   closeDrawer={closeDrawer}
-                                                   additionalViews={additionalViews}/>
-                                    </nav>
+                                <nav>
+                                    <CMSDrawer logo={logo}
+                                               drawerOpen={drawerOpen}
+                                               navigation={navigation}
+                                               closeDrawer={closeDrawer}
+                                               additionalViews={additionalViews}/>
+                                </nav>
 
-                                    <Box className={classes.main}>
-                                        <CMSAppBar title={name}
-                                                   handleDrawerToggle={handleDrawerToggle}
-                                                   toolbarExtraWidget={toolbarExtraWidget}/>
+                                <div className={classes.main}>
+                                    <CMSAppBar title={name}
+                                               handleDrawerToggle={handleDrawerToggle}
+                                               toolbarExtraWidget={toolbarExtraWidget}/>
 
-                                        <main
-                                            className={classes.content}>
-                                            <CMSRouterSwitch
-                                                navigation={navigation}
-                                                additionalViews={additionalViews}/>
-                                        </main>
-                                    </Box>
+                                    <main
+                                        className={classes.content}>
+                                        <CMSRouterSwitch
+                                            navigation={navigation}
+                                            additionalViews={additionalViews}/>
+                                    </main>
+                                </div>
 
-                                    <EntitySideDialogs
-                                        navigation={navigation}/>
+                                <EntitySideDialogs
+                                    navigation={navigation}/>
 
-                                </DndProvider>
-                            </MuiPickersUtilsProvider>
-                        </BreadcrumbsProvider>
+                            </DndProvider>
+                        </MuiPickersUtilsProvider>
+                    </BreadcrumbsProvider>
                 </SelectedEntityProvider>
             </Router>
         );
@@ -278,16 +280,22 @@ export function CMSApp(props: CMSAppProps) {
 
 
     if (configError) {
-        return <Box> {configError} </Box>;
+        return <div> {configError} </div>;
     }
 
     if (firebaseConfigError) {
-        return <Box>
-            It seems like the provided Firebase config is not correct. If you
-            are using the credentials provided automatically by Firebase
-            Hosting, make sure you link your Firebase app to Firebase
-            Hosting.
-        </Box>;
+        return <>
+            <div>
+                It seems like the provided Firebase config is not correct. If
+                you
+                are using the credentials provided automatically by Firebase
+                Hosting, make sure you link your Firebase app to Firebase
+                Hosting.
+            </div>
+            <div>
+                {JSON.stringify(firebaseConfigError)}
+            </div>
+        </>;
     }
 
     if (!firebaseConfigInitialized || !usedFirebaseConfig) {

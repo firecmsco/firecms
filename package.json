@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "0.21.2",
+    "version": "0.22.0",
     "description": "Awesome Firestore based CMS",
     "author": "camberi",
     "license": "GPL-3.0",
@@ -46,7 +46,7 @@
         "codemirror": "^5.58.2",
         "date-fns": "^2.10.0",
         "deep-equal": "^2.0.3",
-        "formik": "^2.1.5",
+        "formik": "^2.2.6",
         "material-ui-popup-state": "^1.7.1",
         "object-hash": "^2.0.3",
         "react-base-table": "^1.12.0",
@@ -66,7 +66,7 @@
     },
     "peerDependencies": {
         "algoliasearch": "^4.5.1",
-        "firebase": "^7.21.0",
+        "firebase": "^7.21.0 | ^8.0.0",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "react-scripts": "^4.0.1"

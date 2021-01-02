@@ -35,6 +35,9 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 import { FormFieldBuilder } from "../form";
 import { CollectionTableProps } from "./CollectionTableProps";
 
+import firebase from "firebase/app";
+import "firebase/firestore";
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         arrow: {

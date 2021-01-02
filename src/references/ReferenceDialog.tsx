@@ -65,7 +65,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                 maxWidth={"xl"}
                 scroll={"paper"}
                 open={open}>
-                <Box className={classes.dialogBody}>
+                <div className={classes.dialogBody}>
                     <CollectionTable collectionPath={collectionPath}
                                      editEnabled={false}
                                      inlineEditing={false}
@@ -75,12 +75,14 @@ export function ReferenceDialog<S extends EntitySchema>(
                                      onEntityClick={(collectionPath, entity) => onEntityClick(entity)}
                                      paginationEnabled={false}
                                      title={`Select ${schema.name}`}
+                                     properties={collectionView.properties}
+                                     excludedProperties={collectionView.excludedProperties}
                                      filterableProperties={filterableProperties}
                                      textSearchDelegate={textSearchDelegate}
                                      initialFilter={initialFilter}
                                      createFormField={createFormField}
                     />
-                </Box>
+                </div>
                 <DialogActions>
                     <Button onClick={onClose} color="primary">
                         Close
