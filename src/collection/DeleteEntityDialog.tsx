@@ -13,6 +13,7 @@ import { CircularProgressCenter } from "../components";
 import { useSnackbarContext } from "../contexts/SnackbarContext";
 
 
+
 export interface DeleteEntityDialogProps<S extends EntitySchema> {
     entity?: Entity<S>,
     collectionPath: string,

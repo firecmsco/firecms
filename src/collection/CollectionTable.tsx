@@ -17,7 +17,7 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-
+import Checkbox from "@material-ui/core/Checkbox";
 import {
     AdditionalColumnDelegate,
     CollectionSize,
@@ -48,6 +48,10 @@ import { CollectionTableProps } from "./CollectionTableProps";
 import { TableCellProps } from "./SelectedCellContext";
 import { useHistory } from "react-router-dom";
 import { CircularProgressCenter } from "../components";
+import {FileCopy} from "@material-ui/icons";
+import firebase from "firebase";
+import {copyEntity, deleteEntities} from "../firebase/firestore";
+
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -148,6 +152,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                  }: CollectionTableProps<S>) {
 
     const [data, setData] = React.useState<Entity<S>[]>([]);
+    const [selectedItems, setSelectedItems] = React.useState<Entity<S>[]>([]);
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [noMoreToLoad, setNoMoreToLoad] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
@@ -195,7 +200,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         setFocused(true);
         setFormPopupOpen(false);
     }, []);
-
     const unselect = useCallback(() => {
         setSelectedCell(undefined);
         setFocused(false);
@@ -219,6 +223,33 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
     const handleClickOutside = () => {
         unselect();
+    };
+
+    const toggleEntitySelection = (entity: Entity<S>) => () => {
+      if (selectedItems.indexOf(entity) > -1){
+          setSelectedItems([...selectedItems.filter((item: Entity<S>) =>item !== entity)]);
+      }  else {
+          setSelectedItems([...selectedItems, entity]);
+      }
+    };
+
+
+    const onDeleteClicked = () => {
+        setDataLoading(true);
+
+        deleteEntities(selectedItems, collectionPath).then(()=>{
+           setSelectedItems([]);
+           setDataLoading(false);
+        });
+    }
+
+    const onCopyEntityClicked = (entity: Entity<S>) => () => {
+
+        setDataLoading(true);
+        copyEntity<S>(entity, collectionPath).then(()=>{
+            //TODO Maybe add a toast?
+            setDataLoading(false);
+        });
     };
 
     // on ESC key press
@@ -278,6 +309,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         return result;
 
     }, [properties, excludedProperties]);
+
 
     useEffect(() => {
 
@@ -494,10 +526,12 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
     const buildTableRowButtons = ({ entity }: any) => {
 
+        const isSelected = selectedItems.indexOf(entity) > -1;
+
+
         return (
             <ErrorBoundary>
                 <div>
-
                     {(editEnabled || deleteEnabled) &&
                     <div className={classes.cellButtons}>
                         {editEnabled &&
@@ -513,6 +547,15 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                             <KeyboardTabIcon/>
                         </IconButton>
                         }
+
+                        <Checkbox
+                            checked={isSelected}
+                            onChange={toggleEntitySelection(entity)}
+                        />
+
+                        {editEnabled && <IconButton onClick={onCopyEntityClicked(entity)}>
+                            <FileCopy />
+                        </IconButton>}
 
                         {deleteEnabled && editEnabled && <IconButton
                             onClick={(event: MouseEvent) => {
@@ -693,6 +736,9 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                         onSizeChanged={setSize}
                                         title={title}
                                         loading={loading}
+                                        selectedItems={selectedItems}
+                                        onDeleteClicked={onDeleteClicked}
+                                        deleteEnabled={deleteEnabled}
                                         onFilterUpdate={onFilterUpdate}/>}
 
                 <PopupFormField

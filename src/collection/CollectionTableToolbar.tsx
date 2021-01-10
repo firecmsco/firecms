@@ -1,4 +1,4 @@
-import { CollectionSize, EntitySchema, FilterValues } from "../models";
+import {CollectionSize, Entity, EntitySchema, FilterValues} from "../models";
 import React from "react";
 import FilterPopup from "./FilterPopup";
 import {
@@ -14,6 +14,8 @@ import {
     Toolbar
 } from "@material-ui/core";
 import SearchBar from "./SearchBar";
+import Button from "@material-ui/core/Button";
+import {Delete} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -74,9 +76,10 @@ interface CollectionTableToolbarProps<S extends EntitySchema> {
     onTextSearch?: (searchString?: string) => void;
     filterableProperties?: (keyof S["properties"])[];
     actions?: React.ReactNode;
-
+    onDeleteClicked: () => void;
     loading: boolean;
-
+    selectedItems: Entity<S>[];
+    deleteEnabled: boolean;
     title?: React.ReactNode,
 
     onFilterUpdate?(filterValues: FilterValues<S>): void;
@@ -165,13 +168,29 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
                     onTextSearch={props.onTextSearch}/>
                 }
 
+
+
                 <Box display={"flex"} alignItems={"center"}>
+                    <Box>
+                        <Button
+                            disabled={!(props.deleteEnabled && props.onDeleteClicked && props.selectedItems?.length)}
+                            onClick={props.onDeleteClicked}
+                            variant={'contained'}
+                            color={'secondary'}
+                        >
+                            <Delete />
+                            &nbsp;
+                            Delete ({props.selectedItems?.length})
+                        </Button>
+                    </Box>
                     <Box width={20} marginRight={1}>
                         {props.loading &&
                         <CircularProgress size={16} thickness={8}/>}
                     </Box>
                     {props.actions}
                 </Box>
+
+
 
             </Box>
 

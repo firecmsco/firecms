@@ -212,6 +212,25 @@ export function createEntityFromSchema<S extends EntitySchema<Key, P>,
 }
 
 /**
+ * Presumably there is no need for validation
+ * @param entity
+ * @param collectionPath
+ */
+export async function copyEntity<S extends EntitySchema>(entity: Entity<S>, collectionPath: string){
+
+    //TODO Maybe it makes sense to copy files into separate ones to avoid multiple things leading to one file
+    return firebase.firestore().collection(collectionPath).add(entity.values);
+}
+
+export async function deleteEntities<S extends EntitySchema>(entities: Entity<S>[], collectionPath: string){
+
+    for (const entity of entities){
+        await firebase.firestore().collection(collectionPath).doc(entity.id).delete();
+    }
+
+}
+
+/**
  * Save entity to the specified path. Note that Firestore does not allow
  * undefined values.
  * @param collectionPath
