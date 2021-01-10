@@ -10,7 +10,6 @@ import {
 import { listenEntity, saveEntity } from "../firebase";
 import {
     Box,
-    Button,
     createStyles,
     Grid,
     IconButton,
@@ -362,10 +361,27 @@ function EntityFormRoute<S extends EntitySchema>({
                 return collectionPath && selectedEntityContext.open({ collectionPath });
             };
 
-
             const deleteEnabled = subcollectionView.deleteEnabled === undefined || subcollectionView.deleteEnabled;
             const editEnabled = subcollectionView.editEnabled === undefined || subcollectionView.editEnabled;
             const inlineEditing = editEnabled && (subcollectionView.inlineEditing === undefined || subcollectionView.inlineEditing);
+
+            const onEntityDelete = (collectionPath: string, entity: Entity<any>) =>
+                subcollectionView.schema.onDelete && subcollectionView.schema.onDelete({
+                    schema: subcollectionView.schema,
+                    collectionPath,
+                    id: entity.id,
+                    entity
+                });
+
+            const onEntityClick = (collectionPath: string, clickedEntity: Entity<any>) =>
+                onSubcollectionEntityClick(collectionPath, clickedEntity);
+
+            const title = (
+                <Typography variant={"caption"}
+                            color={"textSecondary"}>
+                    {`/${collectionPath}`}
+                </Typography>
+            );
 
             return <Box
                 key={`entity_detail_tab_content_${subcollectionView.name}`}
@@ -384,36 +400,16 @@ function EntityFormRoute<S extends EntitySchema>({
                         excludedProperties={subcollectionView.excludedProperties}
                         filterableProperties={subcollectionView.filterableProperties}
                         initialFilter={subcollectionView.initialFilter}
-                        onEntityDelete={(collectionPath: string, entity: Entity<any>) =>
-                            subcollectionView.schema.onDelete && subcollectionView.schema.onDelete({
-                                schema: subcollectionView.schema,
-                                collectionPath,
-                                id: entity.id,
-                                entity
-                            })}
+                        onEntityDelete={onEntityDelete}
                         editEnabled={editEnabled}
                         inlineEditing={inlineEditing}
                         deleteEnabled={deleteEnabled}
-                        onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
-                            onSubcollectionEntityClick(collectionPath, clickedEntity)}
+                        onEntityClick={onEntityClick}
                         includeToolbar={true}
                         paginationEnabled={false}
-                        title={
-                            <Typography variant={"caption"}
-                                        color={"textSecondary"}>
-                                {`/${collectionPath}`}
-                            </Typography>}
-                        actions={
-                            editEnabled && <Button
-                                disabled={!collectionPath}
-                                onClick={onNewClick}
-                                size="medium"
-                                variant="outlined"
-                                color="primary"
-                            >
-                                Add {subcollectionView.schema.name}
-                            </Button>
-                        }
+                        extraActions={subcollectionView.extraActions ? subcollectionView.extraActions(subcollectionView) : undefined}
+                        title={title}
+                        onNewClick={onNewClick}
                         createFormField={createFormField}
                     />
                     :

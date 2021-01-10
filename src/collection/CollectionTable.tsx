@@ -10,13 +10,17 @@ import Measure, { ContentRect } from "react-measure";
 import "react-base-table/styles.css";
 import {
     Box,
+    Button,
     createStyles,
     IconButton,
     makeStyles,
     Paper,
     Theme,
-    Typography
+    Typography,
+    useMediaQuery,
+    useTheme
 } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 
 import {
     AdditionalColumnDelegate,
@@ -139,8 +143,9 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                      additionalColumns,
                                                      filterableProperties,
                                                      inlineEditing,
+                                                     onNewClick,
+                                                     extraActions,
                                                      title,
-                                                     actions,
                                                      onEntityClick,
                                                      onEntityDelete,
                                                      defaultSize = "m",
@@ -184,6 +189,26 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const [preventOutsideClick, setPreventOutsideClick] = React.useState<boolean>(false);
 
     const clickableRows = (!editEnabled || !inlineEditing) && onEntityClick;
+
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
+    const actions = editEnabled && onNewClick && (matches ?
+        <Button
+            onClick={onNewClick}
+            startIcon={<AddIcon/>}
+            size="large"
+            variant="contained"
+            color="primary">
+            Add {schema.name}
+        </Button>
+        : <Button
+            onClick={onNewClick}
+            size="medium"
+            variant="contained"
+            color="primary"
+        ><AddIcon/>
+        </Button>);
+
 
     const history = useHistory();
     history.listen(() => {
@@ -689,6 +714,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                         collectionPath={collectionPath}
                                         filterableProperties={filterableProperties}
                                         actions={editEnabled && actions}
+                                        extraActions={extraActions}
                                         size={size}
                                         onSizeChanged={setSize}
                                         title={title}

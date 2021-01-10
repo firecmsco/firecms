@@ -1,6 +1,7 @@
 import {
     AdditionalColumnDelegate,
-    CollectionSize, Entity,
+    CollectionSize,
+    Entity, EntityCollectionView,
     EntitySchema,
     FilterValues,
     Properties
@@ -76,9 +77,15 @@ export interface CollectionTableProps<S extends EntitySchema,
     filterableProperties?: (keyof S["properties"])[];
 
     /**
-     * Widget to display in the upper bar
+     * Callback when add entity is clicked
      */
-    actions?: React.ReactNode;
+    onNewClick?: (e: React.MouseEvent) => void;
+
+    /**
+     * Additional components such as buttons in the
+     * collection toolbar
+     */
+    extraActions?: React.ReactNode;
 
     /**
      * Should the table add an edit button

@@ -160,9 +160,9 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
                             collectionPath={collectionPath}
                             schema={subcollection.schema}
                             additionalColumns={subcollection.additionalColumns}
-                            editEnabled={editEnabled}
-                            inlineEditing={inlineEditing}
-                            deleteEnabled={deleteEnabled}
+                            editEnabled={false}
+                            inlineEditing={false}
+                            deleteEnabled={false}
                             onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
                                 onSubcollectionEntityClick(collectionPath, clickedEntity, subcollection.schema, subcollection.subcollections)}
                             includeToolbar={true}

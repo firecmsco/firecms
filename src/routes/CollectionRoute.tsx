@@ -1,18 +1,9 @@
 import React from "react";
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import { BreadcrumbEntry } from "./navigation";
-import {
-    Box,
-    Button,
-    createStyles,
-    makeStyles,
-    Typography,
-    useMediaQuery,
-    useTheme
-} from "@material-ui/core";
-import { useLocation, useRouteMatch } from "react-router-dom";
-import AddIcon from "@material-ui/icons/Add";
-import { useBreadcrumbsContext } from "../contexts/BreacrumbsContext";
+import { createStyles, makeStyles, Typography } from "@material-ui/core";
+import { useRouteMatch } from "react-router-dom";
+import { useBreadcrumbsContext } from "../contexts";
 import { CollectionTable } from "../collection/CollectionTable";
 import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
 import { createFormField } from "../form/form_factory";
@@ -65,31 +56,10 @@ export function CollectionRoute<S extends EntitySchema>({
 
     const classes = useStyles();
 
-    const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up("md"));
-
-    function buildAddEntityButton() {
-        const onClick = (e: React.MouseEvent) => {
-            e.stopPropagation();
-            return selectedEntityContext.open({ collectionPath });
-        };
-        return matches ?
-            <Button
-                onClick={onClick}
-                startIcon={<AddIcon/>}
-                size="large"
-                variant="contained"
-                color="primary">
-                Add {view.schema.name}
-            </Button>
-            : <Button
-                onClick={onClick}
-                size="medium"
-                variant="contained"
-                color="primary"
-            ><AddIcon/>
-            </Button>;
-    }
+    const onNewClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        return selectedEntityContext.open({ collectionPath });
+    };
 
     const title = (
         <React.Fragment>
@@ -107,7 +77,7 @@ export function CollectionRoute<S extends EntitySchema>({
 
             <CollectionTable collectionPath={collectionPath}
                              schema={view.schema}
-                             actions={editEnabled && buildAddEntityButton()}
+                             onNewClick={onNewClick}
                              textSearchDelegate={view.textSearchDelegate}
                              includeToolbar={true}
                              editEnabled={editEnabled}
@@ -128,6 +98,7 @@ export function CollectionRoute<S extends EntitySchema>({
                                      id: entity.id,
                                      entity: entity
                                  })}
+                             extraActions={view.extraActions ? view.extraActions(view) : undefined}
                              title={title}
                              createFormField={createFormField}/>
 

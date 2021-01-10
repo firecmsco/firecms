@@ -109,6 +109,13 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
      */
     initialFilter?: FilterValues<S>;
 
+    /**
+     * Builder for rendering additional components such as buttons in the
+     * collection toolbar
+     * @param entityCollectionView this collection view
+     */
+    extraActions?: (entityCollectionView: EntityCollectionView) => React.ReactNode
+
 }
 
 /**

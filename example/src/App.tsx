@@ -11,7 +11,8 @@ import {
     Entity,
     EntityCollectionView,
     EntitySaveProps,
-    EnumValues
+    EnumValues,
+    useSnackbarContext
 } from "@camberi/firecms";
 import PriceTextPreview from "./custom_preview/PriceTextPreview";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
@@ -22,7 +23,7 @@ import {
     usersSearchDelegate
 } from "./algolia_utils";
 import firebase from "firebase";
-import { IconButton, Tooltip } from "@material-ui/core";
+import { Button, IconButton, Tooltip } from "@material-ui/core";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import { ExampleAdditionalView } from "./ExampleAdditionalView";
 import logo from "./images/test_shop_logo.png";
@@ -611,6 +612,17 @@ function App() {
         }
     });
 
+    const productExtraActionBuilder = (view: EntityCollectionView) => {
+        const onClick = (event: React.MouseEvent) => {
+            alert("User defined code here!");
+        };
+        return (
+            <Button onClick={onClick} color="primary">
+                Extra action
+            </Button>
+        );
+    };
+
     const localeCollection: EntityCollectionView<typeof localeSchema> =
         buildCollection({
             name: "Locales",
@@ -627,6 +639,7 @@ function App() {
         name: "Products",
         textSearchDelegate: productsSearchDelegate,
         additionalColumns: [productAdditionalColumn],
+        extraActions: productExtraActionBuilder,
         subcollections: [localeCollection],
         excludedProperties: ["images", "related_products"],
         filterableProperties: ["price", "available_locales"]
@@ -700,7 +713,7 @@ function App() {
         view: <ExampleAdditionalView/>
     }];
 
-    const onFirebaseInit = (config:Object) => {
+    const onFirebaseInit = (config: Object) => {
         // firebase.firestore().useEmulator("localhost", 8080);
     };
 

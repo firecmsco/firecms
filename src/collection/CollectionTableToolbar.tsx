@@ -74,11 +74,9 @@ interface CollectionTableToolbarProps<S extends EntitySchema> {
     onTextSearch?: (searchString?: string) => void;
     filterableProperties?: (keyof S["properties"])[];
     actions?: React.ReactNode;
-
+    extraActions?: React.ReactNode;
     loading: boolean;
-
     title?: React.ReactNode,
-
     onFilterUpdate?(filterValues: FilterValues<S>): void;
 }
 
@@ -91,45 +89,45 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
         <FilterPopup schema={props.schema}
                      filterValues={props.filterValues}
                      onFilterUpdate={props.onFilterUpdate}
-                     filterableProperties={props.filterableProperties}/>    ;
+                     filterableProperties={props.filterableProperties}/>;
 
     const sizeSelect = (
-            <Select
-                value={props.size}
-                style={{ width: 56 }}
-                onChange={(evt: any) => {
-                    props.onSizeChanged(evt.target.value);
-                }}
-                MenuProps={{
-                    MenuListProps: {
-                        disablePadding: true,
-                        style: {
-                            borderRadius: 4
-                        }
-                    },
-                    elevation: 1,
-                    anchorOrigin: {
-                        vertical: "bottom",
-                        horizontal: "left"
-                    },
-                    getContentAnchorEl: null
-                }}
-                input={<InputBase classes={{
-                    root: sizeClasses.root,
-                    input:sizeClasses.input
-                }}/>}
-                renderValue={(value: any) => value.toUpperCase()}
-            >
-                {["xs", "s", "m", "l", "xl"].map((value) => (
-                    <MenuItem
-                        classes={{
-                            root: sizeClasses.item
-                        }}
-                        key={`size-select-${value}`} value={value}>
-                        {value.toUpperCase()}
-                    </MenuItem>
-                ))}
-            </Select>
+        <Select
+            value={props.size}
+            style={{ width: 56 }}
+            onChange={(evt: any) => {
+                props.onSizeChanged(evt.target.value);
+            }}
+            MenuProps={{
+                MenuListProps: {
+                    disablePadding: true,
+                    style: {
+                        borderRadius: 4
+                    }
+                },
+                elevation: 1,
+                anchorOrigin: {
+                    vertical: "bottom",
+                    horizontal: "left"
+                },
+                getContentAnchorEl: null
+            }}
+            input={<InputBase classes={{
+                root: sizeClasses.root,
+                input: sizeClasses.input
+            }}/>}
+            renderValue={(value: any) => value.toUpperCase()}
+        >
+            {["xs", "s", "m", "l", "xl"].map((value) => (
+                <MenuItem
+                    classes={{
+                        root: sizeClasses.item
+                    }}
+                    key={`size-select-${value}`} value={value}>
+                    {value.toUpperCase()}
+                </MenuItem>
+            ))}
+        </Select>
     );
 
     return (
@@ -170,6 +168,11 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
                         {props.loading &&
                         <CircularProgress size={16} thickness={8}/>}
                     </Box>
+
+                    {props.extraActions && <Box marginRight={1}>
+                        {props.extraActions}
+                    </Box>}
+
                     {props.actions}
                 </Box>
 

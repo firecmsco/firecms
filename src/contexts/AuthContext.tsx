@@ -12,7 +12,7 @@ interface AuthProviderProps {
     children: React.ReactNode;
 }
 
-interface AuthContextState {
+export interface AuthContextState {
     loggedUser: firebase.User | null;
     authProviderError: any;
     authLoading: boolean;
@@ -36,7 +36,7 @@ export const AuthContext = React.createContext<AuthContextState>({
     onSignOut: () => {
     }
 });
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuthContext = () => useContext<AuthContextState>(AuthContext);
 
 export const AuthProvider: React.FC<AuthProviderProps> = (
     {

@@ -10,13 +10,13 @@ export const AppConfigContext = React.createContext<CMSAppProps>({
 
 export const useAppConfigContext = () => useContext(AppConfigContext);
 
-interface AppConfigsProviderProps {
+export interface AppConfigsProviderState {
     cmsAppConfig: CMSAppProps;
     children: React.ReactNode;
     firebaseConfig: Object
 }
 
-export const AppConfigProvider: React.FC<AppConfigsProviderProps> = ({ children, firebaseConfig, cmsAppConfig }) => {
+export const AppConfigProvider: React.FC<AppConfigsProviderState> = ({ children, firebaseConfig, cmsAppConfig }) => {
 
     return (
         <AppConfigContext.Provider

@@ -1,12 +1,9 @@
 import React, { useContext, useState } from "react";
-import { Box, Snackbar } from "@material-ui/core";
+import { Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert/Alert";
 
 const DEFAULT_STATE = {
     isOpen: false,
-    type: undefined,
-    title: undefined,
-    message: undefined,
     close: () => {
     },
     open: (props: {
@@ -20,9 +17,6 @@ type MessageType = "success" | "info" | "warning" | "error";
 
 export type SnackbarState = {
     isOpen: boolean;
-    type?: MessageType;
-    title?: string;
-    message?: string;
     close: () => void;
     open: (props: {
         type: MessageType;
@@ -32,7 +26,7 @@ export type SnackbarState = {
 };
 
 export const SnackbarContext = React.createContext<SnackbarState>(DEFAULT_STATE);
-export const useSnackbarContext = () => useContext(SnackbarContext);
+export const useSnackbarContext = () => useContext<SnackbarState>(SnackbarContext);
 
 interface ISelectedEntityProviderProps {
     children: React.ReactNode;
@@ -68,9 +62,6 @@ export const SnackbarProvider: React.FC<ISelectedEntityProviderProps> = ({ child
         <SnackbarContext.Provider
             value={{
                 isOpen,
-                title,
-                message,
-                type,
                 close,
                 open
             }}
