@@ -110,7 +110,12 @@ function EntityForm<S extends EntitySchema>({
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
+    const [isModified, setIsModified] = React.useState<boolean>(false);
     const [initialValues, setInitialValues] = React.useState<EntityValues<S>>(entity?.values || initEntityValues(schema));
+
+    useEffect(() => {
+        onModified(isModified);
+    }, [isModified]);
 
     let underlyingChanges: Partial<EntityValues<S>> | undefined;
     if (initialValues) {
@@ -128,14 +133,15 @@ function EntityForm<S extends EntitySchema>({
 
     const mustSetCustomId: boolean = status === EntityStatus.new && !!schema.customId;
 
-    function saveValues(values: EntityValues<S>, actions: FormikHelpers<EntityValues<S>>) {
+    function saveValues(values: EntityValues<S>, formikActions: FormikHelpers<EntityValues<S>>) {
 
         if (mustSetCustomId && !customId) {
             console.error("Missing custom Id");
             setCustomIdError(true);
-            actions.setSubmitting(false);
+            formikActions.setSubmitting(false);
             return;
         }
+
         setSavingError(null);
         setCustomIdError(false);
 
@@ -155,14 +161,14 @@ function EntityForm<S extends EntitySchema>({
         onEntitySave(schema, collectionPath, id, values)
             .then(_ => {
                 setInitialValues(values);
-                actions.setTouched({});
+                formikActions.setTouched({});
             })
             .catch(e => {
                 console.error(e);
                 setSavingError(e);
             })
             .finally(() => {
-                actions.setSubmitting(false);
+                formikActions.setSubmitting(false);
             });
 
     }
@@ -175,7 +181,7 @@ function EntityForm<S extends EntitySchema>({
             <Button
                 variant="text"
                 color="primary"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !isModified}
                 className={classes.button}
                 type="reset"
             >
@@ -185,7 +191,7 @@ function EntityForm<S extends EntitySchema>({
                 variant="contained"
                 color="primary"
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !isModified}
                 className={classes.button}
             >
                 Save
@@ -201,12 +207,17 @@ function EntityForm<S extends EntitySchema>({
             validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}
         >
-            {({ values, touched, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
+            {({
+                  values,
+                  touched,
+                  setFieldValue,
+                  setFieldTouched,
+                  handleSubmit,
+                  isSubmitting
+              }) => {
 
                 const modified = !deepEqual(entity?.values, values);
-                useEffect(() => {
-                    onModified(modified);
-                }, [modified]);
+                setIsModified(modified);
 
                 if (underlyingChanges && entity) {
                     // we update the form fields from the Firestore data

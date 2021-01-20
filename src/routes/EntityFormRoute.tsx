@@ -314,6 +314,11 @@ function EntityFormRoute<S extends EntitySchema>({
             console.error(e);
         };
 
+        if (!isModified) {
+            history.goBack();
+            return;
+        }
+
         return saveEntity({
             collectionPath,
             id,
