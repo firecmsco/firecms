@@ -14,7 +14,8 @@ import "firebase/firestore";
 import { useAuthContext } from "./contexts/AuthContext";
 import { useAppConfigContext } from "./contexts/AppConfigContext";
 import { CMSAppProps } from "./CMSAppProps";
-
+import firebase from "firebase";
+import * as firebaseui from "firebaseui";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -66,6 +67,23 @@ export function LoginView({ skipLoginButtonEnabled, logo }: LoginViewProps) {
         }
     }
 
+    React.useEffect(() => {
+        const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
+
+        const uiConfig: firebaseui.auth.Config = {
+            callbacks: {
+                signInSuccessWithAuthResult: (authResult, redirectUrl) => true,
+                uiShown: () => authContext.setAuthLoading(false)
+            },
+            signInFlow: 'popup',
+            signInOptions: [
+                // more auth providers can be added here
+                firebase.auth.EmailAuthProvider.PROVIDER_ID
+            ],
+        };
+        ui.start("#firebase-ui", uiConfig);
+    });
+
     return (
         <Grid
             container
@@ -81,11 +99,7 @@ export function LoginView({ skipLoginButtonEnabled, logo }: LoginViewProps) {
                      alt={"Logo"}/>}
             </Box>
 
-            <Button variant="contained"
-                    color="primary"
-                    onClick={authContext.googleSignIn}>
-                Google login
-            </Button>
+            <div id="firebase-ui"></div>
 
             {skipLoginButtonEnabled &&
             <Box m={2}>
