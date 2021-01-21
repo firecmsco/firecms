@@ -46,6 +46,7 @@
         "codemirror": "^5.58.2",
         "date-fns": "^2.10.0",
         "deep-equal": "^2.0.3",
+        "firebaseui": "^4.7.1",
         "formik": "^2.2.6",
         "material-ui-popup-state": "^1.7.1",
         "object-hash": "^2.0.3",

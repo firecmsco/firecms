@@ -16,6 +16,7 @@ import { useAppConfigContext } from "./contexts/AppConfigContext";
 import { CMSAppProps } from "./CMSAppProps";
 import firebase from "firebase";
 import * as firebaseui from "firebaseui";
+import "firebaseui/dist/firebaseui.css";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
