@@ -4,14 +4,19 @@ import { Box, IconButton, Portal } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import deepEqual from "deep-equal";
 
-import { Entity, EntitySchema, EntityStatus, Property } from "../../models";
+import {
+    Entity,
+    EntitySchema,
+    EntityStatus,
+    Property
+} from "../../models";
 import { Formik, useFormikContext } from "formik";
 import { Draggable } from "./Draggable";
 import { getYupObjectSchema } from "../../form/validation";
-import { saveEntity } from "../../firebase";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../util/useWindowSize";
 import { FormFieldBuilder } from "../../form";
+import { saveEntity } from "../../models";
 
 const AutoSubmitToken = ({ name, onSubmit }: { name: string, onSubmit: (values: any) => void }) => {
     const { values, errors, submitForm } = useFormikContext();

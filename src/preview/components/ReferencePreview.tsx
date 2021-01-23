@@ -11,26 +11,30 @@ import {
     Tooltip,
     Typography
 } from "@material-ui/core";
-import { Entity, EntityCollectionView, EntitySchema } from "../../models";
+import {
+    Entity,
+    EntityCollectionView,
+    EntitySchema
+} from "../../models";
 
-import { listenEntityFromRef } from "../../firebase";
 import {
     PreviewComponentFactoryProps,
     PreviewComponentProps,
     PreviewSize
-} from "../PreviewComponentProps";
+} from "../../models/preview_component_props";
 import SkeletonComponent from "./SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
 import ErrorIcon from "@material-ui/icons/Error";
 import { getCollectionViewFromPath } from "../../routes/navigation";
 import { CMSAppProps } from "../../CMSAppProps";
-import { useAppConfigContext } from "../../contexts/AppConfigContext";
+import { useAppConfigContext } from "../../contexts";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { PreviewComponent } from "../PreviewComponent";
 import { useStyles } from "./styles";
+import { listenEntityFromRef } from "../../models";
 
 const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Theme) =>
     createStyles({
@@ -103,7 +107,7 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
             && typeof value === "object"
             && "firestore" in value
             && typeof value["firestore"] === "object";
-        // const isFirestoreReference = value instanceof firebase.firestore.DocumentReference;
+        // const isFirestoreReference = value instanceof models.firestore.DocumentReference;
 
         const reference: firebase.firestore.DocumentReference = value;
         const previewProperties = property.previewProperties;

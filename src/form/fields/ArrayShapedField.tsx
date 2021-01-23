@@ -7,7 +7,7 @@ import {
     Paper
 } from "@material-ui/core";
 import { formStyles } from "../../styles";
-import { CMSFieldProps } from "../form_props";
+import { CMSFieldProps } from "../../models/form_props";
 import React from "react";
 import { FieldDescription } from "../../components";
 

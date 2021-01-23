@@ -1,4 +1,4 @@
-import { AlgoliaTextSearchDelegate } from "../text_search_delegate";
+import { AlgoliaTextSearchDelegate } from "../models/text_search_delegate";
 import algoliasearch from "algoliasearch";
 
 it("Test Algolia search", async () => {

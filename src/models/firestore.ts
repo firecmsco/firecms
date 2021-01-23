@@ -10,7 +10,7 @@ import {
     Properties,
     Property,
     WhereFilterOp
-} from "../models";
+} from "./models";
 
 /**
  * Listen to a entities in a Firestore path
@@ -225,7 +225,17 @@ export function createEntityFromSchema<S extends EntitySchema<Key, P>,
  * @param onSaveSuccessHookError
  */
 export async function saveEntity<S extends EntitySchema>(
-    { collectionPath, id, values, schema, status, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError }: {
+    {
+        collectionPath,
+        id,
+        values,
+        schema,
+        status,
+        onSaveSuccess,
+        onSaveFailure,
+        onPreSaveHookError,
+        onSaveSuccessHookError
+    }: {
         collectionPath: string,
         id: string | undefined,
         values: Partial<EntityValues<S>>,
@@ -274,48 +284,108 @@ export async function saveEntity<S extends EntitySchema>(
         values: updatedValues
     };
 
-    await documentReference
+    return documentReference
         .set(updatedValues, { merge: true })
-        .then(() => onSaveSuccess && onSaveSuccess(entity))
+        .then(() => {
+            try {
+                if (schema.onSaveSuccess) {
+                    schema.onSaveSuccess({
+                        schema,
+                        collectionPath,
+                        id,
+                        values: updatedValues,
+                        status
+                    });
+                }
+            } catch (e) {
+                if (onSaveSuccessHookError)
+                    onSaveSuccessHookError(e);
+            }
+            onSaveSuccess && onSaveSuccess(entity);
+        })
         .catch((e) => {
+            if (schema.onSaveFailure) {
+                schema.onSaveFailure({
+                    schema,
+                    collectionPath,
+                    id: id,
+                    values: updatedValues,
+                    status
+                });
+            }
             if (onSaveFailure) onSaveFailure(e);
         });
 
-    try {
-        if (schema.onSaveSuccess) {
-            schema.onSaveSuccess({
-                schema,
-                collectionPath,
-                id,
-                values: updatedValues,
-                status
-            });
-        }
-    } catch (e) {
-        if (onSaveSuccessHookError)
-            onSaveSuccessHookError(e);
-    }
 }
 
 /**
  * Delete an entity
  * @param entity
+ * @param schema
+ * @param collectionPath
+ * @param onDeleteSuccess
+ * @param onDeleteFailure
+ * @param onPreDeleteHookError
+ * @param onDeleteSuccessHookError
+ * @return was the whole deletion flow successful
  */
-export function deleteEntity(
-    entity: Entity<any, any, any>
-): Promise<void> {
+export async function deleteEntity<S extends EntitySchema>(
+    {
+        entity,
+        schema,
+        collectionPath,
+        onDeleteSuccess,
+        onDeleteFailure,
+        onPreDeleteHookError,
+        onDeleteSuccessHookError
+    }: {
+        entity: Entity<S, any, any>,
+        collectionPath: string,
+        schema: S,
+        onDeleteSuccess?: (entity: Entity<S>) => void,
+        onDeleteFailure?: (entity:Entity<S>,e: Error) => void,
+        onPreDeleteHookError?: (entity:Entity<S>,e: Error) => void,
+        onDeleteSuccessHookError?: (entity:Entity<S>,e: Error) => void,
+    }
+): Promise<boolean> {
     console.debug("Deleting entity", entity);
-    return entity.reference.delete();
+
+    const entityDeleteProps = {
+        id: entity.id,
+        entity,
+        schema,
+        collectionPath
+    };
+
+    if (schema.onPreDelete) {
+        try {
+            await schema.onPreDelete(entityDeleteProps);
+        } catch (e) {
+            console.error(e);
+            if (onPreDeleteHookError)
+                onPreDeleteHookError(entity, e);
+            return false;
+        }
+    }
+
+    return entity.reference.delete().then(() => {
+        onDeleteSuccess && onDeleteSuccess(entity);
+        try {
+            if (schema.onDelete) {
+                schema.onDelete(entityDeleteProps);
+            }
+            return true;
+        } catch (e) {
+            if (onDeleteSuccessHookError)
+                onDeleteSuccessHookError(entity, e);
+            return false;
+        }
+    }).catch((e) => {
+        if (onDeleteFailure) onDeleteFailure(entity, e);
+        return false;
+    });
 }
 
-/**
- * Delete multiple entities
- * @param entities
- */
-export async function deleteEntities<S extends EntitySchema>(entities: Entity<S>[]){
-    console.debug("Deleting multiple entities", entities);
-    return Promise.all(entities.map((entity) => entity.reference.delete()))
-}
 
 /**
  * Functions used to set required fields to undefined in the initially created entity

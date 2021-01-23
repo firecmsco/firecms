@@ -1,4 +1,4 @@
-import { PreviewComponentProps } from "../PreviewComponentProps";
+import { PreviewComponentProps } from "../../models/preview_component_props";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import React from "react";
 import { CustomChip } from "./CustomChip";

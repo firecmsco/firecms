@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { FormFieldProps } from "../form/form_props";
+import React from "react";
 import { Entity, Property } from "../models";
 
 

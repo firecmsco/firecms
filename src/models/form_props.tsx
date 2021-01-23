@@ -1,4 +1,4 @@
-import { EntitySchema, Property } from "../models";
+import { EntitySchema, Property } from "./models";
 import { ReactElement } from "react";
 
 /**

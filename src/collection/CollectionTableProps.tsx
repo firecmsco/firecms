@@ -6,7 +6,7 @@ import {
     FilterValues,
     Properties
 } from "../models";
-import { TextSearchDelegate } from "../text_search_delegate";
+import { TextSearchDelegate } from "../models/text_search_delegate";
 import { FormFieldBuilder } from "../form";
 
 export interface CollectionTableProps<S extends EntitySchema,

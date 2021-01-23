@@ -20,13 +20,12 @@ import {
     Properties,
     Property
 } from "../models";
-import { fetchEntity, listenCollection } from "../firebase";
+import { fetchEntity, listenCollection } from "../models/firestore";
 import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
 import { getIconForProperty } from "../util/property_icons";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
 import SkeletonComponent from "../preview/components/SkeletonComponent";
 import ErrorBoundary from "../components/ErrorBoundary";
-import { getPreviewSizeFrom } from "../preview/PreviewComponentProps";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import TableCell from "./TableCell";
 import PopupFormField from "./popup_field/PopupFormField";
@@ -40,6 +39,7 @@ import { useHistory } from "react-router-dom";
 import { CircularProgressCenter } from "../components";
 import { useTableStyles } from "./styles";
 import { CollectionRowActions } from "./CollectionRowActions";
+import { getPreviewSizeFrom } from "../preview/util";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -634,6 +634,18 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     }
 
 
+    const internalOnEntityDelete = (collectionPath: string, entity: Entity<S>) => {
+        if (onEntityDelete)
+            onEntityDelete(collectionPath, entity);
+        setSelectedItems(selectedItems.filter((e) => e.id !== entity.id));
+    };
+
+    const internalOnMultipleEntitiesDelete = (collectionPath: string, entities: Entity<S>[]) => {
+        if (onMultipleEntitiesDelete)
+            onMultipleEntitiesDelete(collectionPath, entities);
+        setSelectedItems([]);
+    };
+
     return (
         <>
 
@@ -641,8 +653,8 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                 collectionPath={collectionPath}
                                 schema={schema}
                                 open={!!deleteEntityClicked}
-                                onEntityDelete={onEntityDelete}
-                                onMultipleEntitiesDelete={onMultipleEntitiesDelete}
+                                onEntityDelete={internalOnEntityDelete}
+                                onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
                                 onClose={() => setDeleteEntityClicked(undefined)}/>
 
             <Paper className={classes.root}>

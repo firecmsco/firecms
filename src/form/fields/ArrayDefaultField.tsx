@@ -13,7 +13,7 @@ import {
 import ClearIcon from "@material-ui/icons/Clear";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import { formStyles } from "../../styles";
-import { CMSFieldProps, FormFieldBuilder } from "../form_props";
+import { CMSFieldProps, FormFieldBuilder } from "../../models/form_props";
 import React, { useState } from "react";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";

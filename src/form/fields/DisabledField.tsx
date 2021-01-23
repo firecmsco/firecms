@@ -2,7 +2,7 @@ import { EntitySchema } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React from "react";
 import { formStyles } from "../../styles";
-import { CMSFieldProps } from "../form_props";
+import { CMSFieldProps } from "../../models/form_props";
 import PreviewComponent from "../../preview/PreviewComponent";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";

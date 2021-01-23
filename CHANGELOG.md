@@ -1,5 +1,15 @@
 # Change Log
 
+## [0.23.0] - 2021-01-23
+### Added
+- Users are able to select entities now
+- Developers can now define custom actions in the collections, using a builder.
+- Possibility to copy existing entities
+- Two internal contexts are now exposed in the library: `useSnackbarController`
+and `useAuthContext`. More details in the README file
+- Thanks to @faizaand and @Snivik for the PRs!
+
+
 ## [0.22.0] - 2021-01-02
 ### Added
 - `onFirebaseInit` callback on the CMSApp called after Firebase initialisation.

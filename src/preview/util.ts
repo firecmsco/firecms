@@ -1,20 +1,5 @@
-import { MouseEventHandler } from "react";
-import { CollectionSize, EntitySchema, Property } from "../models";
-
-export type PreviewSize = "regular" | "small" | "tiny";
-
-export interface PreviewComponentFactoryProps{
-    PreviewComponent: React.ComponentType<PreviewComponentProps<any>>
-}
-
-export interface PreviewComponentProps<T = any> {
-    name: string,
-    value: T,
-    property: Property<T>,
-    onClick?: MouseEventHandler<any>,
-    size: PreviewSize,
-    entitySchema: EntitySchema;
-}
+import { CollectionSize } from "../models";
+import { PreviewSize } from "../models/preview_component_props";
 
 export const TINY_THUMBNAIL = 40;
 export const SMALL_THUMBNAIL = 100;

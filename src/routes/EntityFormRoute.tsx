@@ -7,7 +7,7 @@ import {
     EntityStatus,
     EntityValues
 } from "../models";
-import { listenEntity, saveEntity } from "../firebase";
+import { listenEntity, saveEntity } from "../models/firestore";
 import {
     Box,
     createStyles,
@@ -20,14 +20,10 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-import {
-    BreadcrumbEntry,
-    getEntityPath,
-    removeInitialSlash
-} from "./navigation";
+import { BreadcrumbEntry, getEntityPath } from "./navigation";
 import { CircularProgressCenter } from "../components";
 import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
-import { useBreadcrumbsContext, useSnackbarContext } from "../contexts";
+import { useBreadcrumbsContext, useSnackbarController } from "../contexts";
 import {
     Link as ReactLink,
     Prompt,
@@ -176,7 +172,7 @@ function EntityFormRoute<S extends EntitySchema>({
     const mainClasses = useStylesMain();
 
     const selectedEntityContext = useSelectedEntityContext();
-    const snackbarContext = useSnackbarContext();
+    const snackbarContext = useSnackbarController();
     const breadcrumbsContext = useBreadcrumbsContext();
 
     useEffect(() => {
@@ -243,26 +239,13 @@ function EntityFormRoute<S extends EntitySchema>({
         if (!status)
             return;
 
-        if (schema.onPreSave) {
-            try {
-                values = await schema.onPreSave({
-                    schema,
-                    collectionPath,
-                    id: id,
-                    values,
-                    status
-                });
-            } catch (e) {
-                return;
-            }
-        }
-
         const onPreSaveHookError = (e: Error) => {
             snackbarContext.open({
                 type: "error",
                 title: "Error before saving",
                 message: e?.message
             });
+            console.error(e);
         };
 
         const onSaveSuccessHookError = (e: Error) => {
@@ -271,6 +254,7 @@ function EntityFormRoute<S extends EntitySchema>({
                 title: `${schema.name}: Error after saving (entity is saved)`,
                 message: e?.message
             });
+            console.error(e);
         };
 
         const onSaveSuccess = (updatedEntity: Entity<S>) => {
@@ -302,16 +286,6 @@ function EntityFormRoute<S extends EntitySchema>({
         };
 
         const onSaveFailure = (e: Error) => {
-
-            if (schema.onSaveFailure) {
-                schema.onSaveFailure({
-                    schema,
-                    collectionPath,
-                    id: id,
-                    values,
-                    status
-                });
-            }
 
             snackbarContext.open({
                 type: "error",
@@ -370,7 +344,7 @@ function EntityFormRoute<S extends EntitySchema>({
         (subcollectionView, colIndex) => {
             return EntityFormSubCollection({
                 entity: entity as Entity<S>,
-                subcollectionView,
+                view: subcollectionView,
                 onSubcollectionEntityClick,
                 tabsPosition,
                 colIndex,

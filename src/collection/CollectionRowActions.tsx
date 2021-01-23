@@ -15,7 +15,7 @@ import {
     MenuItem,
     Typography
 } from "@material-ui/core";
-import { Delete, KeyboardTab, MoreVert, FileCopy } from "@material-ui/icons";
+import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
 
 export function CollectionRowActions<S extends EntitySchema>({
                                                                  entity,

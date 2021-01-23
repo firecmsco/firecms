@@ -15,9 +15,21 @@ const DEFAULT_STATE = {
 
 type MessageType = "success" | "info" | "warning" | "error";
 
-export type SnackbarState = {
+export type SnackbarController = {
+    /**
+     * Is there currently an open snackbar
+     */
     isOpen: boolean;
+
+    /**
+     * Close the currently open snackbar
+     */
     close: () => void;
+
+    /**
+     * Display a new snackbar. You need to specify the type and message.
+     * You can optionally specify a title
+     */
     open: (props: {
         type: MessageType;
         title?: string;
@@ -25,8 +37,8 @@ export type SnackbarState = {
     }) => void;
 };
 
-export const SnackbarContext = React.createContext<SnackbarState>(DEFAULT_STATE);
-export const useSnackbarContext = () => useContext<SnackbarState>(SnackbarContext);
+export const SnackbarContext = React.createContext<SnackbarController>(DEFAULT_STATE);
+export const useSnackbarController = () => useContext<SnackbarController>(SnackbarContext);
 
 interface ISelectedEntityProviderProps {
     children: React.ReactNode;

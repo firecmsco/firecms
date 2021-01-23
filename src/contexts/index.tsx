@@ -1,8 +1,8 @@
 export type {
-    SnackbarState,
+    SnackbarController,
 } from "./SnackbarContext";
 export  {
-    useSnackbarContext
+    useSnackbarController
 } from "./SnackbarContext";
 
 export type {
@@ -13,7 +13,7 @@ export {
 } from "./AppConfigContext";
 
 export type {
-    AuthContextState
+    AuthContextController
 } from "./AuthContext";
 export {
     useAuthContext

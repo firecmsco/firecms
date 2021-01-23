@@ -2,20 +2,12 @@ import { ArrayProperty, MapProperty } from "../../models";
 import {
     PreviewComponentFactoryProps,
     PreviewComponentProps
-} from "../PreviewComponentProps";
+} from "../../models/preview_component_props";
 import ErrorBoundary from "../../components/ErrorBoundary";
 
 import React from "react";
 
-import {
-    createStyles,
-    makeStyles,
-    Table,
-    TableBody,
-    TableCell,
-    TableRow,
-    Theme
-} from "@material-ui/core";
+import { Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { useStyles } from "./styles";
 
 export function ArrayOfMapsPreview({

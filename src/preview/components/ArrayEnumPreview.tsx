@@ -1,12 +1,16 @@
 import {
     PreviewComponentFactoryProps,
     PreviewComponentProps
-} from "../PreviewComponentProps";
+} from "../../models/preview_component_props";
 
 import React from "react";
 
 import ErrorBoundary from "../../components/ErrorBoundary";
-import { EnumValues, NumberProperty, StringProperty } from "../../models";
+import {
+    EnumValues,
+    NumberProperty,
+    StringProperty
+} from "../../models";
 import { CustomChip } from "./CustomChip";
 import { useStyles } from "./styles";
 

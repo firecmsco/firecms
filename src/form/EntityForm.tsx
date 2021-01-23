@@ -8,10 +8,15 @@ import {
     makeStyles,
     Typography
 } from "@material-ui/core";
-import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
+import {
+    Entity,
+    EntitySchema,
+    EntityStatus,
+    EntityValues
+} from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
 import { createCustomIdField, createFormField } from "./form_factory";
-import { initEntityValues } from "../firebase/firestore";
+import { initEntityValues } from "../models/firestore";
 import { getYupObjectSchema } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
@@ -93,7 +98,6 @@ function EntityForm<S extends EntitySchema>({
                                             }: EntityFormProps<S>) {
 
     const classes = useStyles();
-    console.log("sss", status);
 
     /**
      * Base values are the ones this view is initialized from, we use them to

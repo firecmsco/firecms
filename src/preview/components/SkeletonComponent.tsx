@@ -18,8 +18,9 @@ import {
     TableRow
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import { getThumbnailMeasure, PreviewSize } from "../PreviewComponentProps";
+import { PreviewSize } from "../../models/preview_component_props";
 import { useStyles } from "./styles";
+import { getThumbnailMeasure } from "../util";
 
 export interface SkeletonComponentProps<T> {
     property: Property,

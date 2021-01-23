@@ -9,10 +9,10 @@ import {
     Select as MuiSelect
 } from "@material-ui/core";
 import React from "react";
-import { CMSFieldProps } from "../form_props";
+import { CMSFieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
-import { PreviewSize } from "../../preview/PreviewComponentProps";
+import { PreviewSize } from "../../models/preview_component_props";
 import { CustomChip } from "../../preview/components/CustomChip";
 
 type ArrayEnumSelectProps<T extends EnumType> = CMSFieldProps<T[]>;

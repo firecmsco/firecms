@@ -1,7 +1,4 @@
-import {
-    getThumbnailMeasure,
-    PreviewComponentProps
-} from "../PreviewComponentProps";
+import { PreviewComponentProps } from "../../models/preview_component_props";
 import React from "react";
 import { MediaType } from "../../models";
 import ImagePreview from "./ImagePreview";
@@ -11,6 +8,7 @@ import { CardMedia, Link } from "@material-ui/core";
 import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { useStyles } from "./styles";
+import { getThumbnailMeasure } from "../util";
 
 export function UrlComponentPreview({
                                         name,

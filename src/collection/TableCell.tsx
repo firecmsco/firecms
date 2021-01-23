@@ -19,10 +19,9 @@ import {
 } from "@material-ui/core";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { mapPropertyToYup } from "../form/validation";
-import { saveEntity } from "../firebase";
+import { saveEntity } from "../models/firestore";
 import clsx from "clsx";
 import OverflowingCell from "./OverflowingCell";
-import { getPreviewSizeFrom } from "../preview/PreviewComponentProps";
 import { TableInput } from "./fields/TableInput";
 import { TableSelect } from "./fields/TableSelect";
 import { NumberTableInput } from "./fields/TableNumberInput";
@@ -37,6 +36,7 @@ import { CollectionTableProps } from "./CollectionTableProps";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { getPreviewSizeFrom } from "../preview/util";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -133,7 +133,7 @@ const TableCell = <T, S extends EntitySchema<string>>({
     };
 
     const onSaveFailure = (e: Error) => {
-
+        setError(e);
     };
 
     const onBlur = () => {
