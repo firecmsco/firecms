@@ -1,4 +1,8 @@
-import { ArrayProperty, NumberProperty, StringProperty } from "../../models";
+import {
+    ArrayProperty,
+    NumberProperty,
+    StringProperty
+} from "../../models";
 import { Field } from "formik";
 import {
     Box,

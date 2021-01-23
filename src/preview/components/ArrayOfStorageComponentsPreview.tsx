@@ -2,11 +2,9 @@ import {
     PreviewComponentFactoryProps,
     PreviewComponentProps,
     PreviewSize
-} from "../PreviewComponentProps";
+} from "../../models/preview_component_props";
 
 import React from "react";
-
-import { Box } from "@material-ui/core";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { PreviewComponent } from "../PreviewComponent";
 import { useStyles } from "./styles";

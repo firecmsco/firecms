@@ -3,11 +3,9 @@ import {
     PreviewComponentFactoryProps,
     PreviewComponentProps,
     PreviewSize
-} from "../PreviewComponentProps";
+} from "../../models/preview_component_props";
 
 import React from "react";
-
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import { default as ReferencePreview } from "./ReferencePreview";
 import { useStyles } from "./styles";
 

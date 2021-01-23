@@ -2,7 +2,7 @@ import firebase from "firebase/app";
 import {
     initEntityValues,
     replaceTimestampsWithDates
-} from "../firebase/firestore";
+} from "../models/firestore";
 import { productSchema } from "./test_site_config";
 
 

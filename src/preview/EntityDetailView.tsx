@@ -1,6 +1,6 @@
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import React, { useEffect, useState } from "react";
-import { listenEntityFromRef } from "../firebase";
+import { listenEntityFromRef } from "../models/firestore";
 import { Link as ReactLink } from "react-router-dom";
 
 import EntityPreview from "../preview/EntityPreview";

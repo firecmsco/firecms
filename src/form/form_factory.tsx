@@ -24,9 +24,9 @@ import ReferenceField from "./fields/ReferenceField";
 import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
 import DisabledField from "./fields/DisabledField";
-import { CMSFieldProps, FormFieldProps } from "./form_props";
+import { CMSFieldProps, FormFieldProps } from "../models/form_props";
 import { useClipboard } from "use-clipboard-hook";
-import { useSnackbarContext } from "../contexts/SnackbarContext";
+import { useSnackbarController } from "../contexts/SnackbarContext";
 import MarkDownField from "./fields/MarkdownField";
 import { useAppConfigContext } from "../contexts/AppConfigContext";
 import { CMSAppProps } from "../CMSAppProps";
@@ -169,7 +169,7 @@ export function createCustomIdField<S extends EntitySchema>(schema: EntitySchema
 
     const hasEnumValues = typeof schema.customId === "object";
 
-    const snackbarContext = useSnackbarContext();
+    const snackbarContext = useSnackbarController();
     const { ref, copy, cut } = useClipboard({
         onSuccess: (text) => snackbarContext.open({
             type: "success",

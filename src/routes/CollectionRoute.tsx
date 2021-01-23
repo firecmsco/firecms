@@ -79,9 +79,25 @@ export function CollectionRoute<S extends EntitySchema>({
         selectedEntities
     }) : undefined;
 
-    function onSelection(collectionPath:string, entities?:Entity<S>[]) {
+    function onSelection(collectionPath: string, entities?: Entity<S>[]) {
         setSelectedEntities(entities);
     }
+
+    const onEntityDelete = (collectionPath: string, entity: Entity<any>) =>
+        view.schema.onDelete && view.schema.onDelete({
+            schema: view.schema,
+            collectionPath,
+            id: entity.id,
+            entity: entity
+        });
+
+    const onMultipleEntitiesDelete = (collectionPath: string, entities: Entity<any>[]) =>
+        entities.forEach((entity) => view.schema.onDelete && view.schema.onDelete({
+            schema: view.schema,
+            collectionPath,
+            id: entity.id,
+            entity
+        }));
 
     return (
         <div className={classes.root}>
@@ -104,13 +120,8 @@ export function CollectionRoute<S extends EntitySchema>({
                              properties={view.properties}
                              excludedProperties={view.excludedProperties}
                              onSelection={onSelection}
-                             onEntityDelete={(collectionPath: string, entity: Entity<any>) =>
-                                 view.schema.onDelete && view.schema.onDelete({
-                                     schema: view.schema,
-                                     collectionPath,
-                                     id: entity.id,
-                                     entity: entity
-                                 })}
+                             onEntityDelete={onEntityDelete}
+                             onMultipleEntitiesDelete={onMultipleEntitiesDelete}
                              extraActions={extraActions}
                              title={title}
                              createFormField={createFormField}/>

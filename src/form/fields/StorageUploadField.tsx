@@ -12,7 +12,6 @@ import {
     Typography
 } from "@material-ui/core";
 
-import { getDownloadURL, uploadFile } from "../../firebase";
 import firebase from "firebase/app";
 
 
@@ -24,19 +23,20 @@ import {
     StringProperty
 } from "../../models";
 
-import { CMSFieldProps } from "../form_props";
+import { CMSFieldProps } from "../../models/form_props";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
 import PreviewComponent from "../../preview/PreviewComponent";
 import deepEqual from "deep-equal";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
-import { useSnackbarContext } from "../../contexts/SnackbarContext";
+import { useSnackbarController } from "../../contexts/SnackbarContext";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import { PreviewSize } from "../../preview/PreviewComponentProps";
+import { PreviewSize } from "../../models/preview_component_props";
 
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
+import { getDownloadURL, uploadFile } from "../../models";
 
 export const useStyles = makeStyles(theme => ({
     dropZone: {
@@ -553,7 +553,7 @@ export function StorageUploadProgress({
                                       }: StorageUploadItemProps) {
 
     const classes = useStyles();
-    const snackbarContext = useSnackbarContext();
+    const snackbarContext = useSnackbarController();
 
     const [error, setError] = React.useState<string>();
     const [progress, setProgress] = React.useState<number>(-1);

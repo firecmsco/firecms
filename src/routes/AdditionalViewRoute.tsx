@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { BreadcrumbEntry } from "./navigation";
-import { useBreadcrumbsContext } from "../contexts/BreacrumbsContext";
 import { useRouteMatch } from "react-router-dom";
+import { BreadcrumbEntry } from "./navigation";
+import { useBreadcrumbsContext } from "../contexts";
 import { AdditionalView } from "../CMSAppProps";
 
 
@@ -26,7 +26,7 @@ function AdditionalViewRoute({
         breadcrumbsContext.set({
             breadcrumbs: [breadcrumb]
         });
-    }, []);
+    }, [url]);
 
     return <React.Fragment>
         {additionalView.view}

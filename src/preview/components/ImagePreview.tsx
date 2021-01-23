@@ -2,8 +2,9 @@ import React, { CSSProperties, useMemo, useState } from "react";
 import clsx from "clsx";
 import { IconButton } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
-import { getThumbnailMeasure, PreviewSize } from "../PreviewComponentProps";
+import { PreviewSize } from "../../models/preview_component_props";
 import { useStyles } from "./styles";
+import { getThumbnailMeasure } from "../util";
 
 type ImagePreviewProps = { size: PreviewSize, url: string };
 

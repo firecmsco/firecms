@@ -8,7 +8,7 @@ import React, { useState } from "react";
 
 type EntitySubCollectionProps<S extends EntitySchema> = {
     entity: Entity<S>;
-    subcollectionView: EntityCollectionView<any>;
+    view: EntityCollectionView<any>;
     onSubcollectionEntityClick: (collectionPath: string, entity: Entity<S>) => void;
     tabsPosition: number;
     colIndex: number;
@@ -17,7 +17,7 @@ type EntitySubCollectionProps<S extends EntitySchema> = {
 
 export function EntityFormSubCollection<S extends EntitySchema>({
                                                                     entity,
-                                                                    subcollectionView,
+                                                                    view,
                                                                     onSubcollectionEntityClick,
                                                                     tabsPosition,
                                                                     colIndex,
@@ -25,24 +25,41 @@ export function EntityFormSubCollection<S extends EntitySchema>({
                                                                 }: EntitySubCollectionProps<S>
 ) {
     const selectedEntityContext = useSelectedEntityContext();
-    const collectionPath = entity ? `${entity?.reference.path}/${removeInitialSlash(subcollectionView.relativePath)}` : undefined;
+    const collectionPath = entity ? `${entity?.reference.path}/${removeInitialSlash(view.relativePath)}` : undefined;
     const onNewClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         return collectionPath && selectedEntityContext.open({ collectionPath });
     };
 
-    const deleteEnabled = subcollectionView.deleteEnabled === undefined || subcollectionView.deleteEnabled;
-    const editEnabled = subcollectionView.editEnabled === undefined || subcollectionView.editEnabled;
-    const inlineEditing = editEnabled && (subcollectionView.inlineEditing === undefined || subcollectionView.inlineEditing);
+    const deleteEnabled = view.deleteEnabled === undefined || view.deleteEnabled;
+    const editEnabled = view.editEnabled === undefined || view.editEnabled;
+    const inlineEditing = editEnabled && (view.inlineEditing === undefined || view.inlineEditing);
     const [selectedEntities, setSelectedEntities] = useState<Entity<S>[] | undefined>();
 
-    const onEntityDelete = (collectionPath: string, entity: Entity<any>) =>
-        subcollectionView.schema.onDelete && subcollectionView.schema.onDelete({
-            schema: subcollectionView.schema,
+    const onEntityPreDelete = (collectionPath: string, entity: Entity<any>) =>
+        view.schema.onDelete && view.schema.onPreDelete({
+            schema: view.schema,
             collectionPath,
             id: entity.id,
             entity
         });
+
+    const onEntityDelete = (collectionPath: string, entity: Entity<any>) =>
+        view.schema.onDelete && view.schema.onDelete({
+            schema: view.schema,
+            collectionPath,
+            id: entity.id,
+            entity
+        });
+
+    const onMultipleEntitiesDelete = (collectionPath: string, entities: Entity<any>[]) =>
+        view.schema.onDelete &&
+        entities.forEach((entity) => view.schema.onDelete({
+            schema: view.schema,
+            collectionPath,
+            id: entity.id,
+            entity
+        }));
 
     const onEntityClick = (collectionPath: string, clickedEntity: Entity<any>) =>
         onSubcollectionEntityClick(collectionPath, clickedEntity);
@@ -54,8 +71,8 @@ export function EntityFormSubCollection<S extends EntitySchema>({
         </Typography>
     );
 
-    const extraActions = subcollectionView.extraActions ? subcollectionView.extraActions({
-        view: subcollectionView,
+    const extraActions = view.extraActions ? view.extraActions({
+        view: view,
         selectedEntities
     }) : undefined;
 
@@ -64,7 +81,7 @@ export function EntityFormSubCollection<S extends EntitySchema>({
     }
 
     return <Box
-        key={`entity_detail_tab_content_${subcollectionView.name}`}
+        key={`entity_detail_tab_content_${view.name}`}
         role="tabpanel"
         flexGrow={1}
         height={"100%"}
@@ -73,15 +90,16 @@ export function EntityFormSubCollection<S extends EntitySchema>({
         {entity && collectionPath ?
             <CollectionTable
                 collectionPath={collectionPath}
-                schema={subcollectionView.schema}
-                additionalColumns={subcollectionView.additionalColumns}
-                defaultSize={subcollectionView.defaultSize}
-                properties={subcollectionView.properties}
-                excludedProperties={subcollectionView.excludedProperties}
-                filterableProperties={subcollectionView.filterableProperties}
-                initialFilter={subcollectionView.initialFilter}
+                schema={view.schema}
+                additionalColumns={view.additionalColumns}
+                defaultSize={view.defaultSize}
+                properties={view.properties}
+                excludedProperties={view.excludedProperties}
+                filterableProperties={view.filterableProperties}
+                initialFilter={view.initialFilter}
                 onSelection={onSelection}
                 onEntityDelete={onEntityDelete}
+                onMultipleEntitiesDelete={onMultipleEntitiesDelete}
                 editEnabled={editEnabled}
                 inlineEditing={inlineEditing}
                 deleteEnabled={deleteEnabled}

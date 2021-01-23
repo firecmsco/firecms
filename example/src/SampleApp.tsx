@@ -23,13 +23,14 @@ import {
     usersSearchDelegate
 } from "./algolia_utils";
 import firebase from "firebase";
-import { Button, IconButton, Tooltip } from "@material-ui/core";
+import {  IconButton, Tooltip } from "@material-ui/core";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import { ExampleAdditionalView } from "./ExampleAdditionalView";
 import logo from "./images/test_shop_logo.png";
+import { SampleExtraActions } from "./SampleExtraActions";
 
 
-function App() {
+function SampleApp() {
 
     const locales: EnumValues<string> = {
         "es": "Spanish",
@@ -255,6 +256,9 @@ function App() {
             publisher: {
                 name: "Default publisher"
             }
+        },
+        onPreDelete: () => {
+            throw Error("Product deletion not allowed in this demo");
         }
     });
 
@@ -613,14 +617,8 @@ function App() {
     });
 
     const productExtraActionBuilder = ({ view, selectedEntities}:ExtraActionsParams) => {
-        const onClick = (event: React.MouseEvent) => {
-            const count = selectedEntities ? selectedEntities.length : 0;
-            alert(`User defined code here! ${count} producs selected`);
-        };
         return (
-            <Button onClick={onClick} color="primary">
-                Extra action
-            </Button>
+            <SampleExtraActions selectedEntities={selectedEntities}/>
         );
     };
 
@@ -715,7 +713,7 @@ function App() {
     }];
 
     const onFirebaseInit = (config: Object) => {
-        // firebase.firestore().useEmulator("localhost", 8080);
+        // models.firestore().useEmulator("localhost", 8080);
     };
 
     return <CMSApp
@@ -733,4 +731,5 @@ function App() {
     />;
 }
 
-export default App;
+export default SampleApp;
+

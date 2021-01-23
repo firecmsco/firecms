@@ -2,7 +2,7 @@ import { StringProperty } from "../../models";
 import {
     PreviewComponentFactoryProps,
     PreviewComponentProps
-} from "../PreviewComponentProps";
+} from "../../models/preview_component_props";
 
 import React from "react";
 

@@ -12,7 +12,7 @@ import StorageThumbnail from "./StorageThumbnail";
 import {
     PreviewComponentFactoryProps,
     PreviewComponentProps
-} from "./PreviewComponentProps";
+} from "../models/preview_component_props";
 import { EmptyValue } from "../components/EmptyValue";
 import ReactMarkdown from "react-markdown";
 import { ArrayOfMapsPreview } from "./components/ArrayOfMapsPreview";

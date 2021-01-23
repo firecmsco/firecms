@@ -1,6 +1,6 @@
 import { Entity, EntitySchema } from "../models";
 import React, { useState } from "react";
-import { deleteEntities, deleteEntity } from "../firebase/firestore";
+import { deleteEntity } from "../models/firestore";
 import {
     Button,
     Dialog,
@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import EntityPreview from "../preview/EntityPreview";
 import { CircularProgressCenter } from "../components";
-import { useSnackbarContext } from "../contexts";
+import { useSnackbarController } from "../contexts";
 
 
 export interface DeleteEntityDialogProps<S extends EntitySchema> {
@@ -38,7 +38,7 @@ export default function DeleteEntityDialog<S extends EntitySchema>({
                                                                    }
                                                                        : DeleteEntityDialogProps<S>) {
 
-    const snackbarContext = useSnackbarContext();
+    const snackbarContext = useSnackbarController();
     const [loading, setLoading] = useState(false);
 
     const entityOrEntitiesRef = React.useRef<Entity<S> | Entity<S>[]>();
@@ -59,32 +59,95 @@ export default function DeleteEntityDialog<S extends EntitySchema>({
         onClose();
     };
 
-    const handleOk = () => {
+    const onDeleteSuccess = (entity: Entity<any>) => {
+        console.log(entity);
+    };
+
+    const onDeleteFailure = (entity: Entity<any>, e: Error) => {
+        snackbarContext.open({
+            type: "error",
+            title: `${schema.name}: Error deleting`,
+            message: e?.message
+        });
+
+        console.error("Error deleting entity");
+        console.error(e);
+    };
+
+    const onPreDeleteHookError = (entity: Entity<any>, e: Error) => {
+        snackbarContext.open({
+            type: "error",
+            title: `${schema.name}: Error before deleting`,
+            message: e?.message
+        });
+        console.error(e);
+    };
+
+    const onDeleteSuccessHookError = (entity: Entity<any>, e: Error) => {
+        snackbarContext.open({
+            type: "error",
+            title: `${schema.name}: Error after deleting (entity is deleted)`,
+            message: e?.message
+        });
+        console.error(e);
+    };
+
+    function performDelete(entity: Entity<S>): Promise<boolean> {
+        return deleteEntity({
+            entity,
+            schema,
+            collectionPath,
+            onDeleteSuccess,
+            onDeleteFailure,
+            onPreDeleteHookError,
+            onDeleteSuccessHookError
+        });
+    }
+
+    const handleOk = async () => {
         if (entityOrEntities) {
 
             setLoading(true);
 
             if (multipleEntities) {
-                deleteEntities(entityOrEntities as Entity<S>[]).then(_ => {
+                Promise.all((entityOrEntities as Entity<S>[]).map(performDelete)).then((results) => {
+
                     setLoading(false);
+
                     if (onMultipleEntitiesDelete && entityOrEntities)
                         onMultipleEntitiesDelete(collectionPath, entityOrEntities as Entity<S>[]);
-                    snackbarContext.open({
-                        type: "success",
-                        message: "Entities deleted"
-                    });
+
+                    if (results.every(Boolean)) {
+                        snackbarContext.open({
+                            type: "success",
+                            message: `${schema.name}: multiple deleted`
+                        });
+                    } else if (results.some(Boolean)) {
+                        snackbarContext.open({
+                            type: "warning",
+                            message: `${schema.name}: Some of the entities have been deleted, but not all`
+                        });
+                    } else {
+                        snackbarContext.open({
+                            type: "error",
+                            message: `${schema.name}: Error deleting entities`
+                        });
+                    }
                     onClose();
                 });
+
             } else {
-                deleteEntity(entityOrEntities as Entity<S>).then(_ => {
+                performDelete(entityOrEntities as Entity<S>).then((success) => {
                     setLoading(false);
-                    if (onEntityDelete && entityOrEntities)
-                        onEntityDelete(collectionPath, entityOrEntities as Entity<S>);
-                    snackbarContext.open({
-                        type: "success",
-                        message: "Entity deleted"
-                    });
-                    onClose();
+                    if (success) {
+                        if (onEntityDelete && entityOrEntities)
+                            onEntityDelete(collectionPath, entityOrEntities as Entity<S>);
+                        snackbarContext.open({
+                            type: "success",
+                            message: `${schema.name} deleted`
+                        });
+                        onClose();
+                    }
                 });
             }
         }
@@ -100,8 +163,6 @@ export default function DeleteEntityDialog<S extends EntitySchema>({
 
     return (
         <Dialog
-            disableBackdropClick
-            disableEscapeKeyDown
             maxWidth="md"
             aria-labelledby="delete-dialog"
             open={open}

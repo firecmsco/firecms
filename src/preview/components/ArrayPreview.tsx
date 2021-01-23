@@ -2,7 +2,7 @@ import {
     PreviewComponentFactoryProps,
     PreviewComponentProps,
     PreviewSize
-} from "../PreviewComponentProps";
+} from "../../models/preview_component_props";
 import ErrorBoundary from "../../components/ErrorBoundary";
 
 import React from "react";

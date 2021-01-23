@@ -4,7 +4,7 @@ import clsx from "clsx";
 import OverflowingCell from "./OverflowingCell";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { CellStyleProps, useCellStyles } from "./styles";
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 
 interface DisabledTableCellProps<T, S extends EntitySchema<string>> {
     children: React.ReactNode

@@ -4,7 +4,7 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 import { EntityCollectionView } from "./models";
-import { Authenticator } from "./authenticator";
+import { Authenticator } from "./models/authenticator";
 
 /**
  * Main entry point that defines the CMS configuration

@@ -2,7 +2,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 
 import React, { useContext, useEffect } from "react";
-import { Authenticator } from "../authenticator";
+import { Authenticator } from "../models";
 
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
@@ -12,18 +12,50 @@ interface AuthProviderProps {
     children: React.ReactNode;
 }
 
-export interface AuthContextState {
+export interface AuthContextController {
+
+    /**
+     * The Firebase user currently logged in
+     */
     loggedUser: firebase.User | null;
+
+    /**
+     * Error dispatched by the auth provider
+     */
     authProviderError: any;
+
+    /**
+     * Is the login process ongoing
+     */
     authLoading: boolean;
+
+    /**
+     * Is the login skipped
+     */
     loginSkipped: boolean;
+
+    /**
+     * The current user was not allowed access
+     */
     notAllowedError: boolean;
+
+    /**
+     * Start Google sign in flow
+     */
     googleSignIn: () => void;
+
+    /**
+     * Skip login
+     */
     skipLogin: () => void;
-    onSignOut: () => void;
+
+    /**
+     * Sign out
+     */
+    signOut: () => void;
 }
 
-export const AuthContext = React.createContext<AuthContextState>({
+export const AuthContext = React.createContext<AuthContextController>({
     loggedUser: null,
     authProviderError: null,
     authLoading: false,
@@ -33,10 +65,10 @@ export const AuthContext = React.createContext<AuthContextState>({
     },
     skipLogin: () => {
     },
-    onSignOut: () => {
+    signOut: () => {
     }
 });
-export const useAuthContext = () => useContext<AuthContextState>(AuthContext);
+export const useAuthContext = () => useContext<AuthContextController>(AuthContext);
 
 export const AuthProvider: React.FC<AuthProviderProps> = (
     {
@@ -91,13 +123,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
     }
 
     function skipLogin() {
-        setAuthProviderError(null);
+        setNotAllowedError(false);
         setLoginSkipped(true);
+        setLoggedUser(null);
+        setAuthProviderError(null);
     }
 
-    function onSignOut() {
-        firebase.auth().signOut();
-        setLoginSkipped(false);
+    function signOut() {
+        firebase.auth().signOut()
+            .then(_ => {
+                setNotAllowedError(false);
+                setLoginSkipped(false);
+                setLoggedUser(null);
+                setAuthProviderError(null);
+            });
     }
 
     return (
@@ -110,7 +149,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
                 notAllowedError,
                 googleSignIn,
                 skipLogin,
-                onSignOut
+                signOut
             }}
         >
             {children}

@@ -8,17 +8,17 @@ import {
     EntitySchema,
     ReferenceProperty
 } from "../../models";
-import { getPreviewSizeFrom } from "../../preview/PreviewComponentProps";
 import { PreviewComponent } from "../../preview/PreviewComponent";
 import { ReferenceDialog } from "../../references/ReferenceDialog";
 import { getCollectionViewFromPath } from "../../routes/navigation";
 import { CMSAppProps } from "../../CMSAppProps";
-import { useAppConfigContext } from "../../contexts/AppConfigContext";
+import { useAppConfigContext } from "../../contexts";
 import { FormFieldBuilder } from "../../form";
 import { CollectionTableProps } from "../CollectionTableProps";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { getPreviewSizeFrom } from "../../preview/util";
 
 export function TableReferenceField<S extends EntitySchema>(props: {
     name: string,

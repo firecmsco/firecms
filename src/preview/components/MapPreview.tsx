@@ -2,7 +2,7 @@ import { MapProperty } from "../../models";
 import {
     PreviewComponentFactoryProps,
     PreviewComponentProps
-} from "../PreviewComponentProps";
+} from "../../models/preview_component_props";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import React from "react";
 import {

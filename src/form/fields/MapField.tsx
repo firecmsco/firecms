@@ -12,7 +12,7 @@ import {
 import React from "react";
 import { formStyles } from "../../styles";
 
-import { CMSFieldProps } from "../form_props";
+import { CMSFieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
 import { LabelWithIcon } from "../../components/LabelWithIcon";

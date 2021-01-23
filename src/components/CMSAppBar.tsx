@@ -133,7 +133,7 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
 
                     <Button variant="text"
                             color="inherit"
-                            onClick={authContext.onSignOut}>
+                            onClick={authContext.signOut}>
                         Log Out
                     </Button>
 

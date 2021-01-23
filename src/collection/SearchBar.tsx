@@ -6,7 +6,7 @@ import {
     makeStyles,
     Theme
 } from "@material-ui/core/styles";
-import { Box, IconButton } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 
 import SearchIcon from "@material-ui/icons/Search";
 import ClearIcon from "@material-ui/icons/Clear";

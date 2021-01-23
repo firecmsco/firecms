@@ -1,6 +1,5 @@
 import { Entity, EntityCollectionView, EntitySchema } from "../models";
 import {
-    Box,
     Button,
     createStyles,
     Dialog,
@@ -18,6 +17,9 @@ export const useStyles = makeStyles(theme => createStyles({
         flexGrow: 1,
         overflow: "auto",
         minWidth: "85vw"
+    },
+    paper: {
+        height: "100%"
     }
 }));
 
@@ -58,39 +60,43 @@ export function ReferenceDialog<S extends EntitySchema>(
     const initialFilter = collectionView.initialFilter;
 
     return (
-        <>
 
-            <Dialog
-                onClose={onClose}
-                maxWidth={"xl"}
-                scroll={"paper"}
-                open={open}>
-                <div className={classes.dialogBody}>
-                    <CollectionTable collectionPath={collectionPath}
-                                     editEnabled={false}
-                                     inlineEditing={false}
-                                     deleteEnabled={false}
-                                     schema={schema}
-                                     includeToolbar={true}
-                                     onEntityClick={(collectionPath, entity) => onEntityClick(entity)}
-                                     paginationEnabled={false}
-                                     title={`Select ${schema.name}`}
-                                     properties={collectionView.properties}
-                                     excludedProperties={collectionView.excludedProperties}
-                                     filterableProperties={filterableProperties}
-                                     textSearchDelegate={textSearchDelegate}
-                                     initialFilter={initialFilter}
-                                     createFormField={createFormField}
-                    />
-                </div>
-                <DialogActions>
-                    <Button onClick={onClose} color="primary">
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
+        <Dialog
+            onClose={onClose}
+            classes={{
+                paper: classes.paper
+            }}
+            maxWidth={"xl"}
+            scroll={"paper"}
+            open={open}>
 
-        </>
+            <div className={classes.dialogBody}>
+                <CollectionTable collectionPath={collectionPath}
+                                 editEnabled={false}
+                                 inlineEditing={false}
+                                 deleteEnabled={false}
+                                 schema={schema}
+                                 includeToolbar={true}
+                                 onEntityClick={(collectionPath, entity) => onEntityClick(entity)}
+                                 paginationEnabled={false}
+                                 title={`Select ${schema.name}`}
+                                 properties={collectionView.properties}
+                                 excludedProperties={collectionView.excludedProperties}
+                                 filterableProperties={filterableProperties}
+                                 textSearchDelegate={textSearchDelegate}
+                                 initialFilter={initialFilter}
+                                 createFormField={createFormField}
+                />
+            </div>
+
+            <DialogActions>
+                <Button onClick={onClose} color="primary">
+                    Close
+                </Button>
+            </DialogActions>
+
+        </Dialog>
+
     );
 
 }

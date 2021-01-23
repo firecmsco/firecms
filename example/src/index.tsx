@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import "typeface-rubik";
-import App from "./App";
+import SampleApp from "./SampleApp";
 
 ReactDOM.render(
     <React.StrictMode>
-        <App/>
+        <SampleApp/>
     </React.StrictMode>,
     document.getElementById("root")
 );

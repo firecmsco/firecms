@@ -1,4 +1,8 @@
-import { Entity, EntityCollectionView, EntitySchema } from "../../models";
+import {
+    Entity,
+    EntityCollectionView,
+    EntitySchema
+} from "../../models";
 import firebase from "firebase/app";
 import {
     Box,
@@ -13,7 +17,7 @@ import {
 } from "@material-ui/core";
 import React, { useEffect } from "react";
 
-import { CMSFieldProps } from "../form_props";
+import { CMSFieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { getCollectionViewFromPath } from "../../routes/navigation";
 import { useAppConfigContext } from "../../contexts/AppConfigContext";
@@ -26,7 +30,7 @@ import { LabelWithIcon } from "../../components/LabelWithIcon";
 import ErrorIcon from "@material-ui/icons/Error";
 import ClearIcon from "@material-ui/icons/Clear";
 import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
-import { listenEntityFromRef } from "../../firebase";
+import { listenEntityFromRef } from "../../models/firestore";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { CollectionTable } from "../../collection/CollectionTable";
 

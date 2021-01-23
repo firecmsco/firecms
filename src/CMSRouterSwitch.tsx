@@ -9,6 +9,7 @@ import { EntityCollectionView } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import { CMSRoute } from "./routes/CMSRoute";
 import { AdditionalView } from "./CMSAppProps";
+import AdditionalViewRoute from "./routes/AdditionalViewRoute";
 
 export function CMSRouterSwitch({ navigation, additionalViews }: {
     navigation: EntityCollectionView[],
@@ -42,7 +43,7 @@ export function CMSRouterSwitch({ navigation, additionalViews }: {
                     key={"additional_view_" + additionalView.path}
                     path={addInitialSlash(additionalView.path)}
                 >
-                    {additionalView.view}
+                    <AdditionalViewRoute additionalView={additionalView}/>
                 </Route>
             ))}
 

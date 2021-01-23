@@ -17,4 +17,4 @@ export {
     SkeletonComponent
 };
 
-export type { PreviewComponentProps, PreviewComponentFactoryProps } from "./PreviewComponentProps";
+export type { PreviewComponentProps, PreviewComponentFactoryProps } from "../models/preview_component_props";

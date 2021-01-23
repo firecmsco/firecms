@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { getDownloadURL } from "../firebase";
 import { renderSkeletonImageThumbnail } from "./components/SkeletonComponent";
 import {
     PreviewComponentFactoryProps,
     PreviewComponentProps
-} from "./PreviewComponentProps";
+} from "../models/preview_component_props";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";
+import { getDownloadURL } from "../models";
 
 export default function StorageThumbnail({ name,
                                              value,
