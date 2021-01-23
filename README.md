@@ -608,6 +608,10 @@ Firestore data schema.
         `filterableProperties` will include the corresponding filter widget.
         Defaults to none.
 
+* `extraActions` Builder for rendering additional components such as buttons in the
+        collection toolbar. The builder takes an object with props `entityCollectionView`
+        and `selectedEntities` if any are set by the end user.
+
 * `pagination` If enabled, content is loaded in batch. If `false` all entities in the
         collection are loaded. Defaults to `true`.
 

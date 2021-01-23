@@ -30,7 +30,7 @@ import { TableSwitch } from "./fields/TableSwitch";
 import { TableDateField } from "./fields/TableDateField";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { PreviewComponent } from "../preview";
-import { StyleProps, useCellStyles } from "./styles";
+import { CellStyleProps, useCellStyles } from "./styles";
 import { TableReferenceField } from "./fields/TableReferenceField";
 import { FormFieldBuilder } from "../form";
 import { CollectionTableProps } from "./CollectionTableProps";
@@ -92,7 +92,7 @@ const TableCell = <T, S extends EntitySchema<string>>({
                                                           align,
                                                           createFormField,
                                                           CollectionTable
-                                                      }: TableCellProps<T, S> & StyleProps) => {
+                                                      }: TableCellProps<T, S> & CellStyleProps) => {
 
     const ref = React.createRef<HTMLDivElement>();
     const [internalValue, setInternalValue] = useState<any | null>(value);
@@ -372,6 +372,6 @@ const TableCell = <T, S extends EntitySchema<string>>({
 };
 
 // const TableCellMemo = React.memo<TableCellProps<any, any> & StyleProps>(TableCell) as React.FunctionComponent<TableCellProps<any, any> & StyleProps>;
-export default React.memo<TableCellProps<any, any> & StyleProps>(TableCell) as React.FunctionComponent<TableCellProps<any, any> & StyleProps>;
+export default React.memo<TableCellProps<any, any> & CellStyleProps>(TableCell) as React.FunctionComponent<TableCellProps<any, any> & CellStyleProps>;
 
 

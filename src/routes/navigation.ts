@@ -13,6 +13,11 @@ export function getEntityPath(entityId: string,
     return `${DATA_PATH}/${removeInitialSlash(basePath)}/${entityId}${subcollection ? "/" + subcollection : ""}`;
 }
 
+export function getEntityCopyPath(entityId: string,
+                              basePath: string) {
+    return `${DATA_PATH}/${removeInitialSlash(basePath)}/${entityId}?copy=true`;
+}
+
 export function getEntityPathFrom(fullPath: string) {
     return `${DATA_PATH}/${fullPath}`;
 }

@@ -113,10 +113,23 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
      * Builder for rendering additional components such as buttons in the
      * collection toolbar
      * @param entityCollectionView this collection view
+     * @param selectedEntities current selected entities by the end user or
+     * undefined if none
      */
-    extraActions?: (entityCollectionView: EntityCollectionView) => React.ReactNode
+    extraActions?: (extraActionsParams: ExtraActionsParams<S>) => React.ReactNode;
+
+    /**
+     * Are the entities in this collection selectable. Defaults to true
+     */
+    selectionEnabled?: boolean;
 
 }
+
+export type ExtraActionsParams<S extends EntitySchema = EntitySchema> = {
+    view: EntityCollectionView,
+    selectedEntities?: Entity<S>[]
+};
+
 
 /**
  * Sizes in which a collection can be rendered
@@ -255,7 +268,7 @@ export function buildProperties<Key extends string>(properties: Properties<Key>)
 /**
  * New or existing status
  */
-export enum EntityStatus { new = "new", existing = "existing"}
+export enum EntityStatus { new = "new", existing = "existing", copy = "copy"}
 
 /**
  * Representation of an entity fetched from Firestore

@@ -155,11 +155,6 @@ export function CMSApp(props: CMSAppProps) {
                 label: {
                     width: "100%"
                 }
-            },
-            MuiDialog: {
-                paper: {
-                    height: "100%"
-                }
             }
         }
     });

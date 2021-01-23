@@ -77,7 +77,7 @@ interface EntityFormProps<S extends EntitySchema> {
      */
     onModified(dirty: boolean): void;
 
-    containerRef: React.RefObject<HTMLDivElement>
+    containerRef: React.RefObject<HTMLDivElement>;
 
 }
 
@@ -93,19 +93,21 @@ function EntityForm<S extends EntitySchema>({
                                             }: EntityFormProps<S>) {
 
     const classes = useStyles();
+    console.log("sss", status);
 
     /**
      * Base values are the ones this view is initialized from, we use them to
      * compare them with underlying changes in Firestore
      */
     let baseFirestoreValues: EntityValues<S>;
-    if (status === EntityStatus.new) {
-        baseFirestoreValues = (initEntityValues(schema));
-    } else if (status === EntityStatus.existing && entity) {
+    if ((status === EntityStatus.existing || status === EntityStatus.copy) && entity) {
         baseFirestoreValues = entity.values as EntityValues<S>;
+    } else if (status === EntityStatus.new) {
+        baseFirestoreValues = (initEntityValues(schema));
     } else {
         throw new Error("Form configured wrong");
     }
+
 
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
@@ -131,7 +133,7 @@ function EntityForm<S extends EntitySchema>({
             .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<S>;
     }
 
-    const mustSetCustomId: boolean = status === EntityStatus.new && !!schema.customId;
+    const mustSetCustomId: boolean = (status === EntityStatus.new || status === EntityStatus.copy) && !!schema.customId;
 
     function saveValues(values: EntityValues<S>, formikActions: FormikHelpers<EntityValues<S>>) {
 
@@ -149,7 +151,7 @@ function EntityForm<S extends EntitySchema>({
         if (status === EntityStatus.existing) {
             if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
             id = entity.id;
-        } else if (status === EntityStatus.new) {
+        } else if (status === EntityStatus.new || status === EntityStatus.copy) {
             if (schema.customId) {
                 if (!customId) throw Error("Form misconfiguration when saving, customId should be set");
                 id = customId;
@@ -176,12 +178,13 @@ function EntityForm<S extends EntitySchema>({
     const validationSchema = getYupObjectSchema(schema.properties);
 
     function buildButtons(isSubmitting: boolean) {
+        const disabled = isSubmitting || (!isModified && status === EntityStatus.existing);
         return <Box textAlign="right">
             {status === EntityStatus.existing &&
             <Button
                 variant="text"
                 color="primary"
-                disabled={isSubmitting || !isModified}
+                disabled={disabled}
                 className={classes.button}
                 type="reset"
             >
@@ -191,10 +194,12 @@ function EntityForm<S extends EntitySchema>({
                 variant="contained"
                 color="primary"
                 type="submit"
-                disabled={isSubmitting || !isModified}
+                disabled={disabled}
                 className={classes.button}
             >
-                Save
+                {status === EntityStatus.existing && "Save"}
+                {status === EntityStatus.copy && "Create copy"}
+                {status === EntityStatus.new && "Create"}
             </Button>
         </Box>;
     }

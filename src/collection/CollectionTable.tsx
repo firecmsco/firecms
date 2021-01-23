@@ -8,19 +8,8 @@ import React, {
 import BaseTable, { Column } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
 import "react-base-table/styles.css";
-import {
-    Box,
-    Button,
-    createStyles,
-    IconButton,
-    makeStyles,
-    Paper,
-    Theme,
-    Typography,
-    useMediaQuery,
-    useTheme
-} from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
+import { Box, Button, Paper, useMediaQuery, useTheme } from "@material-ui/core";
+import { Add, Delete } from "@material-ui/icons";
 
 import {
     AdditionalColumnDelegate,
@@ -35,13 +24,10 @@ import { fetchEntity, listenCollection } from "../firebase";
 import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
 import { getIconForProperty } from "../util/property_icons";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
-import DeleteIcon from "@material-ui/icons/Delete";
-import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import SkeletonComponent, { renderSkeletonText } from "../preview/components/SkeletonComponent";
+import SkeletonComponent from "../preview/components/SkeletonComponent";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { getPreviewSizeFrom } from "../preview/PreviewComponentProps";
 import DeleteEntityDialog from "./DeleteEntityDialog";
-import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
 import TableCell from "./TableCell";
 import PopupFormField from "./popup_field/PopupFormField";
 import { OutsideAlerter } from "../util/OutsideAlerter";
@@ -52,66 +38,11 @@ import { CollectionTableProps } from "./CollectionTableProps";
 import { TableCellProps } from "./SelectedCellContext";
 import { useHistory } from "react-router-dom";
 import { CircularProgressCenter } from "../components";
+import { useTableStyles } from "./styles";
+import { CollectionRowActions } from "./CollectionRowActions";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
-
-export interface StyleProps {
-    size: CollectionSize;
-}
-
-const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
-    createStyles({
-        root: {
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column"
-        },
-        tableContainer: {
-            width: "100%",
-            height: "100%",
-            flexGrow: 1
-        },
-        header: {
-            display: "flex",
-            flexDirection: "row",
-            fontWeight: 500,
-            lineHeight: "0.9rem",
-            alignItems: "center",
-            paddingLeft: theme.spacing(1),
-            paddingRight: theme.spacing(1)
-        },
-        tableRow: {
-            display: "flex",
-            alignItems: "center",
-            fontSize: "0.875rem"
-        },
-        tableRowClickable: {
-            cursor: "pointer"
-        },
-        column: {
-            padding: "0px !important"
-        },
-        selected: {
-            backgroundColor: "#eee",
-            border: `2px solid ${theme.palette.primary.dark}`,
-            padding: theme.spacing(2)
-        },
-        headerItem: {
-            display: "inherit",
-            paddingRight: theme.spacing(1)
-        },
-        cellButtons: {
-            minWidth: 96
-        },
-        cellButtonsId: {
-            width: 96,
-            textAlign: "center",
-            textOverflow: "ellipsis",
-            overflow: "hidden"
-        }
-    }));
 
 
 interface CMSColumn {
@@ -146,10 +77,13 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                      onNewClick,
                                                      extraActions,
                                                      title,
+                                                     onSelection,
                                                      onEntityClick,
                                                      onEntityDelete,
+                                                     onMultipleEntitiesDelete,
                                                      defaultSize = "m",
-                                                     createFormField
+                                                     createFormField,
+                                                     selectionEnabled = true
                                                  }: CollectionTableProps<S>) {
 
     const [data, setData] = React.useState<Entity<S>[]>([]);
@@ -158,7 +92,9 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
     const [size, setSize] = React.useState<CollectionSize>(defaultSize);
 
-    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | undefined>(undefined);
+    const [selectedItems, setSelectedItems] = React.useState<Entity<S>[]>([]);
+
+    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | Entity<S>[] | undefined>(undefined);
 
     const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
     const [textSearchLoading, setTextSearchLoading] = React.useState<boolean>(false);
@@ -179,8 +115,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const loading = textSearchInProgress ? textSearchLoading : dataLoading;
     const filterSet = filter && Object.keys(filter).length;
 
-    const selectedEntityContext = useSelectedEntityContext();
-    const classes = useStyles({ size });
+    const classes = useTableStyles({ size });
 
     const [selectedCell, setSelectedCell] = React.useState<TableCellProps>(undefined);
     const [focused, setFocused] = React.useState<boolean>(false);
@@ -191,24 +126,49 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const clickableRows = (!editEnabled || !inlineEditing) && onEntityClick;
 
     const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up("md"));
-    const actions = editEnabled && onNewClick && (matches ?
-        <Button
-            onClick={onNewClick}
-            startIcon={<AddIcon/>}
-            size="large"
-            variant="contained"
-            color="primary">
-            Add {schema.name}
-        </Button>
-        : <Button
-            onClick={onNewClick}
-            size="medium"
-            variant="contained"
-            color="primary"
-        ><AddIcon/>
-        </Button>);
+    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
+    function buildActions() {
+        const addButton = editEnabled && onNewClick && (largeLayout ?
+            <Button
+                onClick={onNewClick}
+                startIcon={<Add/>}
+                size="large"
+                variant="contained"
+                color="primary">
+                Add {schema.name}
+            </Button>
+            : <Button
+                onClick={onNewClick}
+                size="medium"
+                variant="contained"
+                color="primary"
+            >
+                <Add/>
+            </Button>);
+
+        const multipleDeleteButton = selectionEnabled && deleteEnabled &&
+            <Button
+                disabled={!(selectedItems?.length)}
+                startIcon={<Delete/>}
+                onClick={(event: MouseEvent) => {
+                    event.stopPropagation();
+                    setDeleteEntityClicked(selectedItems);
+                }}
+                color={"primary"}
+            >
+                <p style={{ minWidth: 24 }}>({selectedItems?.length})</p>
+            </Button>;
+
+        return (
+            <>
+                {multipleDeleteButton}
+                {addButton}
+            </>
+        );
+    }
+
+    const actions = buildActions();
 
     const history = useHistory();
     history.listen(() => {
@@ -227,6 +187,19 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         setFormPopupOpen(false);
         setPreventOutsideClick(false);
     }, []);
+
+    const toggleEntitySelection = (entity: Entity<S>) => {
+        let newValue;
+        if (selectedItems.indexOf(entity) > -1) {
+            newValue = selectedItems.filter((item: Entity<S>) => item !== entity);
+        } else {
+            newValue = [...selectedItems, entity];
+        }
+        setSelectedItems(newValue);
+        if (onSelection)
+            onSelection(collectionPath, newValue);
+    };
+
 
     const additionalColumnsMap: Record<string, AdditionalColumnDelegate<S>> = useMemo(() => {
         return additionalColumns ?
@@ -261,7 +234,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as string[])
-            .map((key, index) => {
+            .map((key) => {
                 const property = schema.properties[key as string] as Property;
                 return ({
                     id: key as string,
@@ -331,11 +304,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         return () => cancelSubscription();
     }, [collectionPath, schema, itemCount, currentOrder, orderByProperty, filter]);
 
-    const onMeasure = useCallback((contentRect: ContentRect) => {
-        setTableSize(contentRect);
-    }, []);
-
-    const onColumnSort = ({ key, order }: any) => {
+    const onColumnSort = ({ key }: any) => {
 
         console.log("onColumnSort", key);
         const property = key;
@@ -519,52 +488,22 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
     const buildTableRowButtons = ({ entity }: any) => {
 
+        const isSelected = selectedItems.indexOf(entity) > -1;
+
         return (
-            <ErrorBoundary>
-                <div>
-
-                    {(editEnabled || deleteEnabled) &&
-                    <div className={classes.cellButtons}>
-                        {editEnabled &&
-                        <IconButton
-                            onClick={(event: MouseEvent) => {
-                                event.stopPropagation();
-                                selectedEntityContext.open({
-                                    entityId: entity.id,
-                                    collectionPath
-                                });
-                            }}
-                        >
-                            <KeyboardTabIcon/>
-                        </IconButton>
-                        }
-
-                        {deleteEnabled && editEnabled && <IconButton
-                            onClick={(event: MouseEvent) => {
-                                event.stopPropagation();
-                                setDeleteEntityClicked(entity);
-                            }}>
-                            <DeleteIcon/>
-                        </IconButton>}
-                    </div>}
-
-                    {size !== "xs" && (
-                        <div className={classes.cellButtonsId}>
-
-                            {entity ?
-                                <Typography
-                                    className={"mono"}
-                                    variant={"caption"}
-                                    color={"textSecondary"}> {entity.id} </Typography>
-                                :
-                                renderSkeletonText()
-                            }
-                        </div>
-                    )}
-
-                </div>
-            </ErrorBoundary>
+            <CollectionRowActions
+                entity={entity}
+                isSelected={isSelected}
+                collectionPath={collectionPath}
+                editEnabled={editEnabled}
+                deleteEnabled={deleteEnabled}
+                selectionEnabled={selectionEnabled}
+                size={size}
+                toggleEntitySelection={toggleEntitySelection}
+                onDeleteClicked={setDeleteEntityClicked}
+            />
         );
+
     };
 
     const headerRenderer = ({ columnIndex }: any) => {
@@ -666,7 +605,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                     dataKey={"id"}
                                     flexShrink={0}
                                     frozen={"left"}
-                                    width={130}/>
+                                    width={160}/>
 
                                 {columns.map((column) =>
                                     <Column
@@ -698,11 +637,12 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     return (
         <>
 
-            <DeleteEntityDialog entity={deleteEntityClicked}
+            <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 collectionPath={collectionPath}
                                 schema={schema}
                                 open={!!deleteEntityClicked}
                                 onEntityDelete={onEntityDelete}
+                                onMultipleEntitiesDelete={onMultipleEntitiesDelete}
                                 onClose={() => setDeleteEntityClicked(undefined)}/>
 
             <Paper className={classes.root}>

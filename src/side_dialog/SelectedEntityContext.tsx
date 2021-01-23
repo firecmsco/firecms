@@ -1,7 +1,11 @@
 import { EntitySchema } from "../models";
 import React, { useContext } from "react";
 import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import { getEntityPath, getRouterNewEntityPath } from "../routes/navigation";
+import {
+    getEntityCopyPath,
+    getEntityPath,
+    getRouterNewEntityPath
+} from "../routes/navigation";
 import * as H from "history";
 
 const DEFAULT_SELECTED_ENTITY = {
@@ -10,7 +14,8 @@ const DEFAULT_SELECTED_ENTITY = {
     },
     open: (props: {
         collectionPath: string,
-        entityId?: string
+        entityId?: string,
+        copy?: boolean
     }) => {
     },
     replace: (props: {
@@ -26,7 +31,8 @@ export type SelectedEntity<S extends EntitySchema> = {
     sideLocations: H.Location[];
     open: (props: {
         collectionPath: string,
-        entityId?: string
+        entityId?: string,
+        copy?: boolean
     }) => void;
     replace: (props: {
         collectionPath: string,
@@ -44,7 +50,7 @@ interface SelectedEntityProviderProps {
 
 export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ children }) => {
 
-    const location:any = useLocation();
+    const location: any = useLocation();
     const history = useHistory();
     const { path, url } = useRouteMatch();
 
@@ -58,10 +64,16 @@ export const SelectedEntityProvider: React.FC<SelectedEntityProviderProps> = ({ 
 
     const open = (props: {
         collectionPath: string,
-        entityId?: string
+        entityId?: string,
+        copy?: boolean
     }) => {
-        const { collectionPath, entityId } = props;
-        const newPath = entityId ? getEntityPath(entityId, collectionPath) : getRouterNewEntityPath(collectionPath);
+        const { collectionPath, entityId, copy } = props;
+        if (copy && !entityId) {
+            throw  Error("When copying an entity you need an entityId");
+        }
+        const newPath = copy && entityId ? getEntityCopyPath(entityId, collectionPath) : (
+            entityId ? getEntityPath(entityId, collectionPath) : getRouterNewEntityPath(collectionPath)
+        );
         const thisLocation = {
             pathname: newPath
         };

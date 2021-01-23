@@ -297,7 +297,6 @@ export async function saveEntity<S extends EntitySchema>(
     }
 }
 
-
 /**
  * Delete an entity
  * @param entity
@@ -307,6 +306,15 @@ export function deleteEntity(
 ): Promise<void> {
     console.debug("Deleting entity", entity);
     return entity.reference.delete();
+}
+
+/**
+ * Delete multiple entities
+ * @param entities
+ */
+export async function deleteEntities<S extends EntitySchema>(entities: Entity<S>[]){
+    console.debug("Deleting multiple entities", entities);
+    return Promise.all(entities.map((entity) => entity.reference.delete()))
 }
 
 /**
@@ -369,7 +377,7 @@ function updateAutoValue(inputValue: any,
     } else if (property.dataType === "timestamp") {
         if (status == EntityStatus.existing && property.autoValue === "on_update") {
             value = firebase.firestore.FieldValue.serverTimestamp();
-        } else if (status == EntityStatus.new && (property.autoValue === "on_update" || property.autoValue === "on_create")) {
+        } else if (status == EntityStatus.new || status == EntityStatus.copy && (property.autoValue === "on_update" || property.autoValue === "on_create")) {
             value = firebase.firestore.FieldValue.serverTimestamp();
         } else {
             value = inputValue;

@@ -17,10 +17,10 @@ export const useStyles = makeStyles((theme: Theme) =>
             flexWrap: "wrap"
         },
         arrayItem: {
-            m: 0.2,
+            margin: theme.spacing(0.5),
         },
         arrayItemBig: {
-            m: theme.spacing(1),
+            margin: theme.spacing(1),
         },
         tableNoBottomBorder: {
             "&:last-child th, &:last-child td": {

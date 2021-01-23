@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import OverflowingCell from "./OverflowingCell";
 import ErrorBoundary from "../components/ErrorBoundary";
-import { StyleProps, useCellStyles } from "./styles";
+import { CellStyleProps, useCellStyles } from "./styles";
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 
 interface PreviewTableCellProps<T, S extends EntitySchema<string>> {
@@ -14,7 +14,7 @@ export function PreviewTableCell<T, S extends EntitySchema>({
                                                                  children,
                                                                  size,
                                                                  align
-                                                             }: PreviewTableCellProps<T, S> & StyleProps) {
+                                                             }: PreviewTableCellProps<T, S> & CellStyleProps) {
 
     const classes = useCellStyles({ size, align, disabled: true });
 
@@ -29,6 +29,6 @@ export function PreviewTableCell<T, S extends EntitySchema>({
     </div>;
 }
 
-export default React.memo<PreviewTableCellProps<any, any> & StyleProps>(PreviewTableCell);
+export default React.memo<PreviewTableCellProps<any, any> & CellStyleProps>(PreviewTableCell);
 
 

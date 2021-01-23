@@ -36,8 +36,6 @@ export default function TextField({
                                       entitySchema
                                   }: TextFieldProps) {
 
-    console.log(name, showError, value);
-
     let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
     if (property.dataType === "string") {

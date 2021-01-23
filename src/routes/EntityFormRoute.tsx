@@ -27,8 +27,7 @@ import {
 } from "./navigation";
 import { CircularProgressCenter } from "../components";
 import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
-import { useBreadcrumbsContext } from "../contexts/BreacrumbsContext";
-import { useSnackbarContext } from "../contexts/SnackbarContext";
+import { useBreadcrumbsContext, useSnackbarContext } from "../contexts";
 import {
     Link as ReactLink,
     Prompt,
@@ -39,9 +38,8 @@ import {
 } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
 import OpenInBrowserIcon from "@material-ui/icons/OpenInBrowser";
-import { CollectionTable } from "../collection/CollectionTable";
-import { createFormField } from "../form/form_factory";
 import { EntityPreview } from "../preview";
+import { EntityFormSubCollection } from "../collection/EntitySubcollection";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>
@@ -152,6 +150,7 @@ interface EntityRouteProps<S extends EntitySchema> {
     context: FormContext;
 }
 
+
 function EntityFormRoute<S extends EntitySchema>({
                                                      view,
                                                      collectionPath,
@@ -159,10 +158,17 @@ function EntityFormRoute<S extends EntitySchema>({
                                                      context
                                                  }: EntityRouteProps<S>) {
 
-    const entityId: string = useParams()["entityId"];
+    // React router is not able to parse path and query parameters, so
+    // we need to add this hack, WTF
+    let entityId: string = useParams()["entityId"];
+    if (entityId && entityId.includes("?"))
+        entityId = entityId.substring(0, entityId.indexOf("?"));
 
     const location = useLocation();
-    const { path, url } = useRouteMatch();
+    const query = new URLSearchParams(window.location.search);
+    const { path, url, params } = useRouteMatch();
+
+    const copyEntityMode = window.location.search?.includes("copy");
 
     const history = useHistory();
 
@@ -196,7 +202,10 @@ function EntityFormRoute<S extends EntitySchema>({
                 view.schema,
                 (e) => {
                     if (e) {
-                        setStatus(EntityStatus.existing);
+                        if (copyEntityMode)
+                            setStatus(EntityStatus.copy);
+                        else
+                            setStatus(EntityStatus.existing);
                         setEntity(e);
                         console.debug("Updated entity from Firestore", e);
                     }
@@ -209,7 +218,7 @@ function EntityFormRoute<S extends EntitySchema>({
         }
         return () => {
         };
-    }, [entityId, view]);
+    }, [entityId, view, copyEntityMode]);
 
     useEffect(() => {
         if (view.subcollections && location["subcollection"]) {
@@ -273,7 +282,7 @@ function EntityFormRoute<S extends EntitySchema>({
                 message: `${schema.name}: Saved correctly`
             });
 
-            if (status === EntityStatus.new) {
+            if (status === EntityStatus.new || status === EntityStatus.copy) {
                 setLoading(true);
                 setEntity(undefined);
                 setStatus(undefined);
@@ -314,7 +323,7 @@ function EntityFormRoute<S extends EntitySchema>({
             console.error(e);
         };
 
-        if (!isModified) {
+        if (status === EntityStatus.existing && !isModified) {
             history.goBack();
             return;
         }
@@ -359,77 +368,14 @@ function EntityFormRoute<S extends EntitySchema>({
 
     const subCollectionsView = view.subcollections && view.subcollections.map(
         (subcollectionView, colIndex) => {
-
-            const collectionPath = entity ? `${entity?.reference.path}/${removeInitialSlash(subcollectionView.relativePath)}` : undefined;
-            const onNewClick = (e: React.MouseEvent) => {
-                e.stopPropagation();
-                return collectionPath && selectedEntityContext.open({ collectionPath });
-            };
-
-            const deleteEnabled = subcollectionView.deleteEnabled === undefined || subcollectionView.deleteEnabled;
-            const editEnabled = subcollectionView.editEnabled === undefined || subcollectionView.editEnabled;
-            const inlineEditing = editEnabled && (subcollectionView.inlineEditing === undefined || subcollectionView.inlineEditing);
-
-            const onEntityDelete = (collectionPath: string, entity: Entity<any>) =>
-                subcollectionView.schema.onDelete && subcollectionView.schema.onDelete({
-                    schema: subcollectionView.schema,
-                    collectionPath,
-                    id: entity.id,
-                    entity
-                });
-
-            const onEntityClick = (collectionPath: string, clickedEntity: Entity<any>) =>
-                onSubcollectionEntityClick(collectionPath, clickedEntity);
-
-            const title = (
-                <Typography variant={"caption"}
-                            color={"textSecondary"}>
-                    {`/${collectionPath}`}
-                </Typography>
-            );
-
-            return <Box
-                key={`entity_detail_tab_content_${subcollectionView.name}`}
-                role="tabpanel"
-                flexGrow={1}
-                height={"100%"}
-                width={"100%"}
-                hidden={tabsPosition !== colIndex + (context === "side" ? 1 : 0)}>
-                {entity && collectionPath ?
-                    <CollectionTable
-                        collectionPath={collectionPath}
-                        schema={subcollectionView.schema}
-                        additionalColumns={subcollectionView.additionalColumns}
-                        defaultSize={subcollectionView.defaultSize}
-                        properties={subcollectionView.properties}
-                        excludedProperties={subcollectionView.excludedProperties}
-                        filterableProperties={subcollectionView.filterableProperties}
-                        initialFilter={subcollectionView.initialFilter}
-                        onEntityDelete={onEntityDelete}
-                        editEnabled={editEnabled}
-                        inlineEditing={inlineEditing}
-                        deleteEnabled={deleteEnabled}
-                        onEntityClick={onEntityClick}
-                        includeToolbar={true}
-                        paginationEnabled={false}
-                        extraActions={subcollectionView.extraActions ? subcollectionView.extraActions(subcollectionView) : undefined}
-                        title={title}
-                        onNewClick={onNewClick}
-                        createFormField={createFormField}
-                    />
-                    :
-                    <Box m={3}
-                         display={"flex"}
-                         alignItems={"center"}
-                         justifyContent={"center"}>
-                        <Box>
-                            You need to save your entity before
-                            adding
-                            additional collections
-                        </Box>
-                    </Box>
-                }
-            </Box>;
+            return EntityFormSubCollection({
+                entity: entity as Entity<S>,
+                subcollectionView,
+                onSubcollectionEntityClick,
+                tabsPosition,
+                colIndex,
+                context
+            });
         }
     );
 

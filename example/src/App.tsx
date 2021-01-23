@@ -12,7 +12,7 @@ import {
     EntityCollectionView,
     EntitySaveProps,
     EnumValues,
-    useSnackbarContext
+    ExtraActionsParams
 } from "@camberi/firecms";
 import PriceTextPreview from "./custom_preview/PriceTextPreview";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
@@ -612,9 +612,10 @@ function App() {
         }
     });
 
-    const productExtraActionBuilder = (view: EntityCollectionView) => {
+    const productExtraActionBuilder = ({ view, selectedEntities}:ExtraActionsParams) => {
         const onClick = (event: React.MouseEvent) => {
-            alert("User defined code here!");
+            const count = selectedEntities ? selectedEntities.length : 0;
+            alert(`User defined code here! ${count} producs selected`);
         };
         return (
             <Button onClick={onClick} color="primary">

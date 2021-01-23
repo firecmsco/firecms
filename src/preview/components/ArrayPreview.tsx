@@ -7,14 +7,7 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 
 import React from "react";
 
-import {
-    Box,
-    createStyles,
-    Divider,
-    Grid,
-    makeStyles,
-    Theme
-} from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 import { PreviewComponent } from "../PreviewComponent";
 import { useStyles } from "./styles";
 

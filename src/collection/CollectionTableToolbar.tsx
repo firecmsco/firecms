@@ -23,6 +23,13 @@ const useStyles = makeStyles((theme: Theme) =>
             zIndex: 100,
             backgroundColor: "white",
             borderBottom: "1px solid rgba(224, 224, 224, 1)"
+        },
+        actions: {
+            display: "flex",
+            alignItems: "center",
+            "& > *": {
+                marginRight: theme.spacing(1)
+            }
         }
     })
 );
@@ -77,6 +84,7 @@ interface CollectionTableToolbarProps<S extends EntitySchema> {
     extraActions?: React.ReactNode;
     loading: boolean;
     title?: React.ReactNode,
+
     onFilterUpdate?(filterValues: FilterValues<S>): void;
 }
 
@@ -163,18 +171,18 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
                     onTextSearch={props.onTextSearch}/>
                 }
 
-                <Box display={"flex"} alignItems={"center"}>
-                    <Box width={20} marginRight={1}>
+                <div className={classes.actions}>
+
+                    <Box width={20}>
                         {props.loading &&
                         <CircularProgress size={16} thickness={8}/>}
                     </Box>
 
-                    {props.extraActions && <Box marginRight={1}>
-                        {props.extraActions}
-                    </Box>}
+                    {props.extraActions}
 
                     {props.actions}
-                </Box>
+
+                </div>
 
             </Box>
 

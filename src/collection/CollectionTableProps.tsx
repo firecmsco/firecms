@@ -1,7 +1,7 @@
 import {
     AdditionalColumnDelegate,
     CollectionSize,
-    Entity, EntityCollectionView,
+    Entity,
     EntitySchema,
     FilterValues,
     Properties
@@ -25,7 +25,7 @@ export interface CollectionTableProps<S extends EntitySchema,
     /**
      * Show the toolbar in this collection
      */
-    includeToolbar: boolean,
+    includeToolbar: boolean;
 
     /**
      * Override the title in the toolbar
@@ -40,17 +40,17 @@ export interface CollectionTableProps<S extends EntitySchema,
     /**
      * If enabled, content is loaded in batch
      */
-    paginationEnabled: boolean,
+    paginationEnabled: boolean;
 
     /**
      * Default table size before being changed with the selector
      */
-    defaultSize?: CollectionSize,
+    defaultSize?: CollectionSize;
 
     /**
      * If a text search delegate is provided, a searchbar is displayed
      */
-    textSearchDelegate?: TextSearchDelegate,
+    textSearchDelegate?: TextSearchDelegate;
 
     /**
      * Properties displayed in this collection. If this property is not set
@@ -74,7 +74,7 @@ export interface CollectionTableProps<S extends EntitySchema,
     /**
      * Properties that can be filtered
      */
-    filterableProperties?: (keyof S["properties"])[];
+    filterableProperties?: Key[];
 
     /**
      * Callback when add entity is clicked
@@ -88,7 +88,8 @@ export interface CollectionTableProps<S extends EntitySchema,
     extraActions?: React.ReactNode;
 
     /**
-     * Should the table add an edit button
+     * Should the table add an edit button. If set to false `inlineEditing`
+     * has no effect.
      */
     editEnabled: boolean;
 
@@ -103,18 +104,33 @@ export interface CollectionTableProps<S extends EntitySchema,
     deleteEnabled?: boolean;
 
     /**
+     * Are the entities in this collection selectable
+     */
+    selectionEnabled?: boolean;
+
+    /**
+     * Callback when entities get selected
+     */
+    onSelection?(collectionPath: string, entities?: Entity<S>[]): void;
+
+    /**
      * Callback when anywhere on the table is clicked
      */
     onEntityClick?(collectionPath: string, entity: Entity<S>): void;
 
     /**
-     * Callback when anywhere on the table is clicked
+     * Callback when an entity gets deleted
      */
     onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
 
     /**
+     * Callback when a multiple entities gets deleted
+     */
+    onMultipleEntitiesDelete?(collectionPath: string, entities: Entity<S>[]): void;
+
+    /**
      * Factory method for creating form fields
      */
-    createFormField: FormFieldBuilder,
+    createFormField: FormFieldBuilder;
 
 }
