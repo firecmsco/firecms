@@ -16,6 +16,7 @@ export interface AuthContextState {
     loggedUser: firebase.User | null;
     authProviderError: any;
     authLoading: boolean;
+    setAuthLoading: React.Dispatch<React.SetStateAction<boolean>>;
     loginSkipped: boolean;
     notAllowedError: boolean;
     googleSignIn: () => void;
@@ -27,6 +28,7 @@ export const AuthContext = React.createContext<AuthContextState>({
     loggedUser: null,
     authProviderError: null,
     authLoading: false,
+    setAuthLoading: () => {},
     loginSkipped: false,
     notAllowedError: false,
     googleSignIn: () => {
@@ -106,6 +108,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
                 loggedUser,
                 authProviderError,
                 authLoading,
+                setAuthLoading,
                 loginSkipped,
                 notAllowedError,
                 googleSignIn,
