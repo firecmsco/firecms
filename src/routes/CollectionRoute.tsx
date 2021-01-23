@@ -4,6 +4,7 @@ import { BreadcrumbEntry } from "./navigation";
 import {
     Box,
     Button,
+    ButtonGroup,
     createStyles,
     makeStyles,
     Typography,
@@ -101,13 +102,23 @@ export function CollectionRoute<S extends EntitySchema>({
             </Typography>
         </React.Fragment>
     );
+    
+    const addButton = buildAddEntityButton();
+    
+    let actions: React.ReactNode[] = [];
+    if(view.customActions && view.customActions.length > 0)
+        if(editEnabled) actions = [...view.customActions, addButton];
+        else actions = view.customActions;
+    else if(editEnabled) actions = [addButton];
+
+    const actionGroup = <ButtonGroup>{...actions}</ButtonGroup>
 
     return (
         <div className={classes.root}>
 
             <CollectionTable collectionPath={collectionPath}
                              schema={view.schema}
-                             actions={editEnabled && buildAddEntityButton()}
+                             actions={actionGroup}
                              textSearchDelegate={view.textSearchDelegate}
                              includeToolbar={true}
                              editEnabled={editEnabled}

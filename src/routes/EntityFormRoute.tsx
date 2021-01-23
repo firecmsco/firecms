@@ -11,6 +11,7 @@ import { listenEntity, saveEntity } from "../firebase";
 import {
     Box,
     Button,
+    ButtonGroup,
     createStyles,
     Grid,
     IconButton,
@@ -367,6 +368,23 @@ function EntityFormRoute<S extends EntitySchema>({
             const editEnabled = subcollectionView.editEnabled === undefined || subcollectionView.editEnabled;
             const inlineEditing = editEnabled && (subcollectionView.inlineEditing === undefined || subcollectionView.inlineEditing);
 
+            const addButton = <Button
+                    disabled={!collectionPath}
+                    onClick={onNewClick}
+                    size="medium"
+                    variant="outlined"
+                    color="primary"
+                >
+                    Add {subcollectionView.schema.name}
+                </Button>;
+
+            let actions: React.ReactNode[] = [];
+            if(subcollectionView.customActions && subcollectionView.customActions.length > 0)
+                actions = subcollectionView.customActions;
+            if(editEnabled && !actions.includes(addButton)) actions.push(addButton);
+
+            const actionGroup = <ButtonGroup>{...actions}</ButtonGroup>
+
             return <Box
                 key={`entity_detail_tab_content_${subcollectionView.name}`}
                 role="tabpanel"
@@ -403,17 +421,7 @@ function EntityFormRoute<S extends EntitySchema>({
                                         color={"textSecondary"}>
                                 {`/${collectionPath}`}
                             </Typography>}
-                        actions={
-                            editEnabled && <Button
-                                disabled={!collectionPath}
-                                onClick={onNewClick}
-                                size="medium"
-                                variant="outlined"
-                                color="primary"
-                            >
-                                Add {subcollectionView.schema.name}
-                            </Button>
-                        }
+                        actions={actionGroup}
                         createFormField={createFormField}
                     />
                     :

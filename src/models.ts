@@ -109,6 +109,11 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
      */
     initialFilter?: FilterValues<S>;
 
+    /**
+     * Custom actions to show in the toolbar.
+     * Defaults to none.
+     */
+    customActions?: React.ReactNode[];
 }
 
 /**
