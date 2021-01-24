@@ -24,11 +24,29 @@ export interface AuthContextController {
      */
     authProviderError: any;
 
+    setAuthProviderError: (error: any) => void;
+
     /**
      * Is the login process ongoing
      */
     authLoading: boolean;
-    setAuthLoading: React.Dispatch<React.SetStateAction<boolean>>;
+
+    /**
+     *
+     * @param loading
+     */
+    setAuthLoading: (loading: boolean) => void;
+
+    /**
+     * Authentication result
+     */
+    authResult: any;
+
+    /**
+     * Change authentication result
+     * @param authResult
+     */
+    setAuthResult: (authResult: any) => void;
 
     /**
      * Is the login skipped
@@ -39,11 +57,6 @@ export interface AuthContextController {
      * The current user was not allowed access
      */
     notAllowedError: boolean;
-
-    /**
-     * Start Google sign in flow
-     */
-    googleSignIn: () => void;
 
     /**
      * Skip login
@@ -59,12 +72,16 @@ export interface AuthContextController {
 export const AuthContext = React.createContext<AuthContextController>({
     loggedUser: null,
     authProviderError: null,
+    setAuthProviderError: (error: Error) => {
+    },
     authLoading: false,
-    setAuthLoading: () => {},
+    setAuthLoading: () => {
+    },
+    authResult: null,
+    setAuthResult: () => {
+    },
     loginSkipped: false,
     notAllowedError: false,
-    googleSignIn: () => {
-    },
     skipLogin: () => {
     },
     signOut: () => {
@@ -83,6 +100,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
     const [authProviderError, setAuthProviderError] = React.useState<any>();
 
     const [authLoading, setAuthLoading] = React.useState(true);
+    const [authResult, setAuthResult] = React.useState<any>();
     const [loginSkipped, setLoginSkipped] = React.useState<boolean>(false);
     const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
 
@@ -114,16 +132,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
         setAuthLoading(false);
     };
 
-    function googleSignIn() {
-        setAuthProviderError(null);
-        firebase
-            .auth()
-            .signInWithPopup(googleAuthProvider)
-            .then((_: firebase.auth.UserCredential) => {
-            })
-            .catch(error => setAuthProviderError(error));
-    }
-
     function skipLogin() {
         setNotAllowedError(false);
         setLoginSkipped(true);
@@ -146,11 +154,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
             value={{
                 loggedUser,
                 authProviderError,
+                setAuthProviderError,
                 authLoading,
                 setAuthLoading,
+                authResult,
+                setAuthResult,
                 loginSkipped,
                 notAllowedError,
-                googleSignIn,
                 skipLogin,
                 signOut
             }}

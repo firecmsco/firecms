@@ -44,7 +44,9 @@ In your React project, simply install the dependency.
 ```bash
 npm install @camberi/firecms
 ```
+
 or
+
 ```bash
 yarn add @camberi/firecms
 ```
@@ -332,6 +334,13 @@ the following specs:
   specify an Authenticator function to discriminate which users can access the
   CMS or not. If not specified, authentication is enabled but no user
   restrictions apply.
+
+- `signInOptions` List of sign in options that will be displayed in the login
+  view if `authentication` is enabled. You can pass google providers strings,
+  such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or full configuration
+  objects such as specified
+  in https://firebase.google.com/docs/auth/web/firebaseui
+  Defaults to Google sign in only.
 
 - `allowSkipLogin` If authentication is enabled, allow the user to access the
   content without login.
@@ -712,7 +721,6 @@ The props provided by this context are:
 * `authLoading` Is the login process ongoing
 * `loginSkipped` Is the login skipped
 * `notAllowedError` The current user was not allowed access
-* `googleSignIn()` Start Google sign in flow
 * `skipLogin()` Skip login
 * `signOut()` Sign out
 
@@ -727,10 +735,12 @@ export function ExampleAdditionalView() {
 
     const authContext = useAuthContext();
 
-    return authContext.loggedUser ?
-        <div>Logged in as {authContext.loggedUser.displayName}</div>
-        :
-        <div>You are not logged in</div>;
+    return (
+        authContext.loggedUser ?
+            <div>Logged in as {authContext.loggedUser.displayName}</div>
+            :
+            <div>You are not logged in</div>
+    );
 }
 ```
 

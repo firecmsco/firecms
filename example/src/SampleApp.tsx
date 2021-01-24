@@ -1,5 +1,4 @@
 import React from "react";
-import { firebaseConfig } from "./firebase_config";
 import {
     AdditionalColumnDelegate,
     AdditionalView,
@@ -14,20 +13,22 @@ import {
     EnumValues,
     ExtraActionsParams
 } from "@camberi/firecms";
+import firebase from "firebase";
+import { IconButton, Tooltip } from "@material-ui/core";
+import { GitHub } from "@material-ui/icons";
+
+import { firebaseConfig } from "./firebase_config";
+import { ExampleAdditionalView } from "./ExampleAdditionalView";
+import { SampleExtraActions } from "./SampleExtraActions";
 import PriceTextPreview from "./custom_preview/PriceTextPreview";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
 import CustomBooleanPreview from "./custom_preview/CustomBooleanPreview";
+import logo from "./images/test_shop_logo.png";
 import {
     blogSearchDelegate,
     productsSearchDelegate,
     usersSearchDelegate
 } from "./algolia_utils";
-import firebase from "firebase";
-import {  IconButton, Tooltip } from "@material-ui/core";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import { ExampleAdditionalView } from "./ExampleAdditionalView";
-import logo from "./images/test_shop_logo.png";
-import { SampleExtraActions } from "./SampleExtraActions";
 
 
 function SampleApp() {
@@ -616,7 +617,10 @@ function SampleApp() {
         }
     });
 
-    const productExtraActionBuilder = ({ view, selectedEntities}:ExtraActionsParams) => {
+    const productExtraActionBuilder = ({
+                                           view,
+                                           selectedEntities
+                                       }: ExtraActionsParams) => {
         return (
             <SampleExtraActions selectedEntities={selectedEntities}/>
         );
@@ -672,19 +676,20 @@ function SampleApp() {
     ];
 
     if (process.env.NODE_ENV !== "production") {
-        navigation.push(buildCollection({
-            relativePath: "test_entity",
-            schema: testEntitySchema,
-            group: "Test group",
-            name: "Test entity",
-            filterableProperties: ["difficulty", "search_adjacent", "description"],
-            subcollections: [{
-                relativePath: "test_subcollection",
+        navigation.push(
+            buildCollection({
+                relativePath: "test_entity",
                 schema: testEntitySchema,
+                group: "Test group",
                 name: "Test entity",
-                filterableProperties: ["difficulty", "search_adjacent", "description"]
-            }]
-        }));
+                filterableProperties: ["difficulty", "search_adjacent", "description"],
+                subcollections: [{
+                    relativePath: "test_subcollection",
+                    schema: testEntitySchema,
+                    name: "Test entity",
+                    filterableProperties: ["difficulty", "search_adjacent", "description"]
+                }]
+            }));
     }
 
     const myAuthenticator: Authenticator = (user?: firebase.User) => {
@@ -700,7 +705,7 @@ function SampleApp() {
                 rel="noopener noreferrer"
                 target="_blank"
                 component={"a"}>
-                <GitHubIcon/>
+                <GitHub/>
             </IconButton>
         </Tooltip>
     );
@@ -719,6 +724,7 @@ function SampleApp() {
     return <CMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
+        signInOptions={[firebase.auth.GoogleAuthProvider.PROVIDER_ID]}
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}
