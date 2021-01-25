@@ -3,8 +3,7 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
-import { EntityCollectionView } from "./models";
-import { Authenticator } from "./models/authenticator";
+import { Authenticator, EntityCollectionView } from "./models";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -37,6 +36,15 @@ export interface CMSAppProps {
     authentication?: boolean | Authenticator;
 
     /**
+     * List of sign in options that will be displayed in the login
+     * view if `authentication` is enabled. You can pass google providers strings,
+     * such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or full configuration
+     * objects such as specified in https://firebase.google.com/docs/auth/web/firebaseui
+     * Defaults to Google sign in only.
+     */
+    signInOptions?: Array<string | any>;
+
+    /**
      * If authentication is enabled, allow the user to access the content
      * without login.
      */
@@ -59,7 +67,7 @@ export interface CMSAppProps {
      * using the local emulator or retrieving the used configuration.
      * @param config
      */
-    onFirebaseInit?: (config:object) => void;
+    onFirebaseInit?: (config: object) => void;
 
     /**
      * Primary color of the theme of the CMS

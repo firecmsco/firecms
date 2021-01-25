@@ -22,7 +22,7 @@ import "firebase/firestore";
 import "typeface-space-mono";
 
 import { CircularProgressCenter } from "./components";
-import { Authenticator } from "./models/authenticator";
+import { Authenticator } from "./models";
 import { blue, pink, red } from "@material-ui/core/colors";
 
 import { SelectedEntityProvider } from "./side_dialog/SelectedEntityContext";
@@ -88,7 +88,10 @@ export function CMSApp(props: CMSAppProps) {
         primaryColor,
         secondaryColor,
         fontFamily,
-        toolbarExtraWidget
+        toolbarExtraWidget,
+        signInOptions = [
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        ]
     } = props;
 
     const classes = useStyles();
@@ -229,7 +232,8 @@ export function CMSApp(props: CMSAppProps) {
 
     function renderLoginView() {
         return <LoginView logo={logo}
-                          skipLoginButtonEnabled={skipLoginButtonEnabled}/>;
+                          skipLoginButtonEnabled={skipLoginButtonEnabled}
+                          signInOptions={signInOptions}/>;
     }
 
     function renderMainView() {

@@ -20,6 +20,7 @@ import { initEntityValues } from "../models/firestore";
 import { getYupObjectSchema } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
+import { FormContext } from "../models/form_props";
 
 export const useStyles = makeStyles(theme => createStyles({
     stickyButtons: {
@@ -241,41 +242,45 @@ function EntityForm<S extends EntitySchema>({
                     });
                 }
 
-                function createFormFields(schema: EntitySchema) {
-
-                    return <Grid container spacing={4}>
-
-                        {Object.entries(schema.properties).map(([key, property]) => {
-
-                            const underlyingValueHasChanged: boolean =
-                                !!underlyingChanges
-                                && Object.keys(underlyingChanges).includes(key)
-                                && !!touched[key];
-
-                            const formField = createFormField(
-                                {
-                                    name: key,
-                                    property,
-                                    includeDescription: true,
-                                    underlyingValueHasChanged,
-                                    entitySchema: schema,
-                                    tableMode: false,
-                                    partOfArray: false,
-                                    autoFocus: false
-                                });
-
-                            return (
-                                <Grid item
-                                      xs={12}
-                                      id={`form_field_${key}`}
-                                      key={`field_${schema.name}_${key}`}>
-                                    {formField}
-                                </Grid>
-                            );
-                        })}
-
-                    </Grid>;
+                const context:FormContext<S> = {
+                    entitySchema: schema,
+                    values
                 }
+
+                const formFields = (
+                    <Grid container spacing={4}>
+
+                    {Object.entries(schema.properties).map(([key, property]) => {
+
+                        const underlyingValueHasChanged: boolean =
+                            !!underlyingChanges
+                            && Object.keys(underlyingChanges).includes(key)
+                            && !!touched[key];
+
+                        const formField = createFormField(
+                            {
+                                name: key,
+                                property,
+                                includeDescription: true,
+                                underlyingValueHasChanged,
+                                context,
+                                tableMode: false,
+                                partOfArray: false,
+                                autoFocus: false
+                            });
+
+                        return (
+                            <Grid item
+                                  xs={12}
+                                  id={`form_field_${key}`}
+                                  key={`field_${schema.name}_${key}`}>
+                                {formField}
+                            </Grid>
+                        );
+                    })}
+
+                </Grid>
+                );
 
                 return (
                     <Container maxWidth={"sm"}
@@ -289,7 +294,7 @@ function EntityForm<S extends EntitySchema>({
                                   onSubmit={handleSubmit}
                                   noValidate>
 
-                                {createFormFields(schema)}
+                                {formFields}
 
                                 {savingError &&
                                 <Box textAlign="right">

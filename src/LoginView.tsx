@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Box,
     Button,
@@ -7,14 +7,15 @@ import {
     makeStyles,
     Theme
 } from "@material-ui/core";
-import "firebase/analytics";
+
+import firebase from "firebase";
 import "firebase/auth";
-import "firebase/storage";
-import "firebase/firestore";
-import { useAuthContext } from "./contexts/AuthContext";
-import { useAppConfigContext } from "./contexts/AppConfigContext";
+
+import { useAppConfigContext, useAuthContext } from "./contexts";
 import { CMSAppProps } from "./CMSAppProps";
 
+import * as firebaseui from "firebaseui";
+import "firebaseui/dist/firebaseui.css";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,48 +29,81 @@ const useStyles = makeStyles((theme: Theme) =>
 interface LoginViewProps {
     skipLoginButtonEnabled?: boolean,
     logo?: string,
+    // Any of the sign in string or configuration objects defined in https://firebase.google.com/docs/auth/web/firebaseui
+    signInOptions: Array<string | any>;
 }
 
-export function LoginView({ skipLoginButtonEnabled, logo }: LoginViewProps) {
+export function LoginView({
+                              skipLoginButtonEnabled,
+                              logo,
+                              signInOptions
+                          }: LoginViewProps) {
 
     const classes = useStyles();
 
     const authContext = useAuthContext();
     const appConfigContext: CMSAppProps | undefined = useAppConfigContext();
 
-    let errorView: any;
-    if (authContext.authProviderError) {
-        if (authContext.authProviderError.code === "auth/operation-not-allowed") {
-            errorView =
-                <>
-                    <Box p={2}>
-                        You need to enable Google login in your project
-                    </Box>
+    useEffect(() => {
+        const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
 
-                    {appConfigContext?.firebaseConfig &&
+        const uiConfig: firebaseui.auth.Config = {
+            callbacks: {
+                signInSuccessWithAuthResult: (authResult) => {
+                    authContext.setAuthResult(authResult);
+                    return true;
+                },
+                uiShown: () => authContext.setAuthLoading(false),
+                signInFailure: async (e) => {
+                    console.error("signInFailure", e);
+                    authContext.setAuthProviderError(e);
+                }
+            },
+            signInFlow: "popup",
+            signInOptions: signInOptions,
+            credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+        };
+        ui.start("#firebase-ui", uiConfig);
+    });
+
+    function buildErrorView() {
+        let errorView: any;
+        if (authContext.authProviderError) {
+            if (authContext.authProviderError.code === "auth/operation-not-allowed") {
+                errorView =
+                    <>
+                        <Box p={2}>
+                            You need to enable the corresponding login provider
+                            in
+                            your Firebase project
+                        </Box>
+
+                        {appConfigContext?.firebaseConfig &&
+                        <Box p={2}>
+                            <a href={`https://console.firebase.google.com/project/${appConfigContext.firebaseConfig["projectId"]}/authentication/providers`}
+                               rel="noopener noreferrer"
+                               target="_blank">
+                                <Button variant="outlined"
+                                        color="primary">
+                                    Open Firebase configuration
+                                </Button>
+                            </a>
+                        </Box>}
+                    </>;
+            } else {
+                errorView =
                     <Box p={2}>
-                        <a href={`https://console.firebase.google.com/project/${appConfigContext.firebaseConfig["projectId"]}/authentication/providers`}
-                           rel="noopener noreferrer"
-                           target="_blank">
-                            <Button variant="outlined"
-                                    color="primary">
-                                Open Firebase configuration
-                            </Button>
-                        </a>
-                    </Box>}
-                </>;
-        } else {
-            errorView =
-                <Box p={2}>
-                    {authContext.authProviderError.message}
-                </Box>;
+                        {authContext.authProviderError.message}
+                    </Box>;
+            }
         }
+        return errorView;
     }
 
     return (
         <Grid
             container
-            spacing={0}
+            spacing={1}
             direction="column"
             alignItems="center"
             justify="center"
@@ -77,37 +111,30 @@ export function LoginView({ skipLoginButtonEnabled, logo }: LoginViewProps) {
         >
             <Box m={1}>
                 {logo &&
-                <img className={classes.logo} src={logo}
+                <img className={classes.logo}
+                     src={logo}
                      alt={"Logo"}/>}
             </Box>
 
-            <Button variant="contained"
-                    color="primary"
-                    onClick={authContext.googleSignIn}>
-                Google login
-            </Button>
+            <div id="firebase-ui"/>
 
             {skipLoginButtonEnabled &&
             <Box m={2}>
-                <Button onClick={authContext.skipLogin}>Skip
-                    login</Button>
+                <Button onClick={authContext.skipLogin}>
+                    Skip login
+                </Button>
             </Box>
             }
 
             <Grid item xs={12}>
 
-                {/* TODO: add link to https://console.firebase.google.com/u/0/project/[PROYECT_ID]/authentication/providers in order to enable google */}
-                {/* in case the error code is auth/operation-not-allowed */}
-
                 {authContext.notAllowedError &&
-                <Box p={2}>It looks like you don't have access
-                    to
-                    the CMS,
-                    based
-                    on the specified Authenticator
-                    configuration</Box>}
+                <Box p={2}>
+                    It looks like you don't have access to the CMS, based
+                    on the specified Authenticator configuration
+                </Box>}
 
-                {errorView}
+                {buildErrorView()}
 
             </Grid>
         </Grid>

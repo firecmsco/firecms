@@ -44,7 +44,9 @@ In your React project, simply install the dependency.
 ```bash
 npm install @camberi/firecms
 ```
+
 or
+
 ```bash
 yarn add @camberi/firecms
 ```
@@ -67,19 +69,19 @@ enable Firebase Storage.
 
 ### Deployment to Firebase hosting
 
-If you are deploying this project to firebase hosting, you can omit the
-firebaseConfig specification, since it gets picked up automatically.
+If you are deploying this project to firebase hosting, and the app it properly
+linked to ir, you can omit the firebaseConfig specification, since it gets
+picked up automatically.
 
-## Feature roadmap
+## Features
 
 - [x] Create, read, update, delete views
 - [x] Form for editing entities
 - [x] Implementation of fields for every property (except Geopoint)
-- [x] Hooks on pre and post saving of entities
 - [x] Native support for Google Storage references and file upload.
-- [ ] Geopoint field
-- [ ] Allow set up of a project using a CLI create-firecms-app
 - [x] Real-time Collection view for entities
+- [x] Inline editing
+- [x] Hooks on pre and post saving and deletion of entities
 - [x] Collection text search integration
 - [x] Infinite scrolling in collections
 - [x] Drag and drop reordering of arrays
@@ -88,10 +90,10 @@ firebaseConfig specification, since it gets picked up automatically.
 - [x] Subcollection support
 - [x] Filters (string, numbers and booleans)
 - [ ] Filters for arrays, dates
-- [x] Custom authenticator
+- [x] All login methods supported by Firebase
+- [x] Custom authenticator to control access
 - [x] Validation for required fields using yup
-- [ ] Conditional validation based on other fields
-- [ ] Unit testing
+- [ ] Allow set up of a project using a CLI create-firecms-app
 
 ## Quick example
 
@@ -333,6 +335,13 @@ the following specs:
   CMS or not. If not specified, authentication is enabled but no user
   restrictions apply.
 
+- `signInOptions` List of sign in options that will be displayed in the login
+  view if `authentication` is enabled. You can pass google providers strings,
+  such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or full configuration
+  objects such as specified
+  in https://firebase.google.com/docs/auth/web/firebaseui
+  Defaults to Google sign in only.
+
 - `allowSkipLogin` If authentication is enabled, allow the user to access the
   content without login.
 
@@ -541,13 +550,19 @@ accept the props of type `CMSFieldProps`, which you can extend with your own
 props. The bare minimum you need to implement is a field that displays the
 received `value` and uses the `setValue` callback.
 
-See how it works in
-this [sample custom text field](https://github.com/Camberi/firecms/blob/master/example/src/custom_field/CustomColorTextField.tsx)
+See how it works in this
+[sample custom text field](https://github.com/Camberi/firecms/blob/master/example/src/custom_field/CustomColorTextField.tsx)
 
 You can find the all
 the `CMSFieldProps` [here](https://github.com/Camberi/firecms/blob/master/src/form/form_props.tsx)
 
-#### Saving hooks
+You can also pass custom props to your custom field, which you then receive in
+the `customProps`.
+
+If you are developing a custom field and need to access the values of the entity,
+you can use the `context` field in CMSFieldProps.
+
+#### Saving callbacks
 
 When you are saving an entity you can attach different hooks before and after it
 gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
@@ -712,7 +727,6 @@ The props provided by this context are:
 * `authLoading` Is the login process ongoing
 * `loginSkipped` Is the login skipped
 * `notAllowedError` The current user was not allowed access
-* `googleSignIn()` Start Google sign in flow
 * `skipLogin()` Skip login
 * `signOut()` Sign out
 
@@ -727,10 +741,12 @@ export function ExampleAdditionalView() {
 
     const authContext = useAuthContext();
 
-    return authContext.loggedUser ?
-        <div>Logged in as {authContext.loggedUser.displayName}</div>
-        :
-        <div>You are not logged in</div>;
+    return (
+        authContext.loggedUser ?
+            <div>Logged in as {authContext.loggedUser.displayName}</div>
+            :
+            <div>You are not logged in</div>
+    );
 }
 ```
 

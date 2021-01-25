@@ -1,4 +1,6 @@
 import React, { ComponentType } from "react";
+
+import { useClipboard } from "use-clipboard-hook";
 import {
     FormControl,
     FormHelperText,
@@ -10,10 +12,18 @@ import {
     TextField as MuiTextField,
     Tooltip
 } from "@material-ui/core";
-import { Entity, EntitySchema, EntityStatus, Property } from "../models";
-import { ErrorMessage, FastField, FieldProps, getIn } from "formik";
-
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+
+import { ErrorMessage, Field, FastField, FieldProps, getIn } from "formik";
+
+import {
+    CMSFieldProps,
+    Entity,
+    EntitySchema,
+    EntityStatus,
+    FormFieldProps,
+    Property
+} from "../models";
 import Select from "./fields/Select";
 import ArrayEnumSelect from "./fields/ArrayEnumSelect";
 import StorageUploadField from "./fields/StorageUploadField";
@@ -24,24 +34,23 @@ import ReferenceField from "./fields/ReferenceField";
 import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
 import DisabledField from "./fields/DisabledField";
-import { CMSFieldProps, FormFieldProps } from "../models/form_props";
-import { useClipboard } from "use-clipboard-hook";
-import { useSnackbarController } from "../contexts/SnackbarContext";
 import MarkDownField from "./fields/MarkdownField";
-import { useAppConfigContext } from "../contexts/AppConfigContext";
+import { useAppConfigContext, useSnackbarController } from "../contexts";
+
 import { CMSAppProps } from "../CMSAppProps";
+import { FormContext } from "../models/form_props";
 
 
-export function createFormField<T>({
-                                       name,
-                                       property,
-                                       includeDescription,
-                                       underlyingValueHasChanged,
-                                       entitySchema,
-                                       tableMode,
-                                       partOfArray,
-                                       autoFocus
-                                   }: FormFieldProps): JSX.Element {
+export function createFormField<T, S extends EntitySchema = EntitySchema>({
+                                                                              name,
+                                                                              property,
+                                                                              includeDescription,
+                                                                              underlyingValueHasChanged,
+                                                                              context,
+                                                                              tableMode,
+                                                                              partOfArray,
+                                                                              autoFocus
+                                                                          }: FormFieldProps<S>): JSX.Element {
 
     let component: ComponentType<CMSFieldProps<any>> | undefined;
     if (property.disabled) {
@@ -88,7 +97,7 @@ export function createFormField<T>({
             property,
             includeDescription,
             underlyingValueHasChanged,
-            entitySchema,
+            context,
             tableMode,
             partOfArray,
             autoFocus
@@ -100,24 +109,28 @@ export function createFormField<T>({
     );
 }
 
-function buildFieldInternal<P extends Property<T>, T = any>(
+function buildFieldInternal<P extends Property, T = any, S extends EntitySchema = EntitySchema>(
     component: ComponentType<CMSFieldProps<any>>,
     {
         name,
         property,
         includeDescription,
         underlyingValueHasChanged,
-        entitySchema,
         tableMode,
         partOfArray,
-        autoFocus
-    }: FormFieldProps
+        autoFocus,
+        context
+    }: FormFieldProps<S>
 ) {
 
-    const additionalFieldProps: any = property.config?.fieldProps;
+    const customFieldProps: any = property.config?.fieldProps;
+
+    // we use the standard Field for user defined fields, since it rebuilds
+    // when there are changes in other values, in contrast to FastField
+    const FieldComponent = property.config?.field ? Field : FastField;
 
     return (
-        <FastField
+        <FieldComponent
             key={`form_field_${name}`}
             required={property.validation?.required}
             name={`${name}`}
@@ -126,29 +139,34 @@ function buildFieldInternal<P extends Property<T>, T = any>(
                 const error = getIn(fieldProps.form.errors, name);
                 const touched = getIn(fieldProps.form.touched, name);
                 const showError: boolean = error && touched && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
+                const isSubmitting = fieldProps.form.isSubmitting;
+
+                const cmsFieldProps: CMSFieldProps<T> = {
+                    name: fieldProps.field.name,
+                    value: fieldProps.field.value,
+                    setValue: (value: T | null) => {
+                        fieldProps.form.setFieldTouched(fieldProps.field.name);
+                        fieldProps.form.setFieldValue(fieldProps.field.name, value);
+                    },
+                    error,
+                    touched,
+                    showError,
+                    isSubmitting,
+                    includeDescription,
+                    property: property as Property<T>,
+                    createFormField,
+                    underlyingValueHasChanged,
+                    tableMode,
+                    partOfArray,
+                    autoFocus,
+                    customProps: customFieldProps,
+                    context
+                };
+
                 return (
                     <>
 
-                        {React.createElement(component, {
-                            ...additionalFieldProps,
-                            name: fieldProps.field.name,
-                            value: fieldProps.field.value,
-                            setValue: (value) => {
-                                fieldProps.form.setFieldTouched(fieldProps.field.name);
-                                fieldProps.form.setFieldValue(fieldProps.field.name, value);
-                            },
-                            error,
-                            touched,
-                            showError,
-                            includeDescription,
-                            property,
-                            createFormField,
-                            underlyingValueHasChanged,
-                            entitySchema,
-                            tableMode,
-                            partOfArray,
-                            autoFocus
-                        })}
+                        {React.createElement(component, cmsFieldProps)}
 
                         {underlyingValueHasChanged && !fieldProps.form.isSubmitting &&
                         <FormHelperText>
@@ -159,7 +177,7 @@ function buildFieldInternal<P extends Property<T>, T = any>(
             }
             }
 
-        </FastField>);
+        </FieldComponent>);
 }
 
 

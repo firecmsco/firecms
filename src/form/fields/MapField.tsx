@@ -32,7 +32,7 @@ export default function MapField<S extends EntitySchema>({
                                                              includeDescription,
                                                              createFormField,
                                                              underlyingValueHasChanged,
-                                                             entitySchema
+                                                             context
                                                          }: MapFieldProps<S>) {
 
     const classes = formStyles();
@@ -101,7 +101,7 @@ export default function MapField<S extends EntitySchema>({
                                             property: childProperty,
                                             includeDescription,
                                             underlyingValueHasChanged,
-                                            entitySchema,
+                                            context,
                                             tableMode: false,
                                             partOfArray: false,
                                             autoFocus: false

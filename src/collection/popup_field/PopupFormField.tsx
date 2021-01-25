@@ -7,8 +7,9 @@ import deepEqual from "deep-equal";
 import {
     Entity,
     EntitySchema,
-    EntityStatus,
-    Property
+    EntityStatus, EntityValues,
+    Property,
+    saveEntity
 } from "../../models";
 import { Formik, useFormikContext } from "formik";
 import { Draggable } from "./Draggable";
@@ -16,9 +17,12 @@ import { getYupObjectSchema } from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../util/useWindowSize";
 import { FormFieldBuilder } from "../../form";
-import { saveEntity } from "../../models";
+import { FormContext } from "../../models/form_props";
 
-const AutoSubmitToken = ({ name, onSubmit }: { name: string, onSubmit: (values: any) => void }) => {
+const AutoSubmitToken = ({
+                             name,
+                             onSubmit
+                         }: { name: string, onSubmit: (values: any) => void }) => {
     const { values, errors, submitForm } = useFormikContext();
 
     React.useEffect(() => {
@@ -39,7 +43,7 @@ interface PopupFormFieldProps<S extends EntitySchema> {
     createFormField: FormFieldBuilder,
     cellRect?: DOMRect;
     formPopupOpen: boolean;
-    setFormPopupOpen: (value:boolean) => void;
+    setFormPopupOpen: (value: boolean) => void;
     rowIndex?: number;
     name?: string;
     property?: Property;
@@ -168,7 +172,22 @@ function PopupFormField<S extends EntitySchema>({
                     setInternalValue(values);
                 }}
             >
-                {({ handleChange, values, touched, dirty, setFieldValue, setFieldTouched, handleSubmit, isSubmitting }) => {
+                {({
+                      handleChange,
+                      values,
+                      touched,
+                      dirty,
+                      setFieldValue,
+                      setFieldTouched,
+                      handleSubmit,
+                      isSubmitting
+                  }) => {
+
+                    const context:FormContext<S> ={
+                        entitySchema:schema,
+                        values
+                    }
+
                     return <OutsideAlerter
                         enabled={true}
                         onOutsideClick={onOutsideClick}>
@@ -178,10 +197,10 @@ function PopupFormField<S extends EntitySchema>({
                             property: property,
                             includeDescription: false,
                             underlyingValueHasChanged: false,
-                            entitySchema: schema,
+                            context,
                             tableMode: true,
                             partOfArray: false,
-                            autoFocus: formPopupOpen
+                            autoFocus: formPopupOpen,
                         })}
 
                         {name && <AutoSubmitToken

@@ -33,7 +33,7 @@ export default function TextField({
                                       property,
                                       includeDescription,
                                       allowInfinity,
-                                      entitySchema
+                                      context
                                   }: TextFieldProps) {
 
     let mediaType: MediaType | undefined;
@@ -147,7 +147,7 @@ export default function TextField({
                                       value={internalValue}
                                       property={property}
                                       size={"regular"}
-                                      entitySchema={entitySchema}/>
+                                      entitySchema={context.entitySchema}/>
                 </Box>
             </ErrorBoundary>
             }

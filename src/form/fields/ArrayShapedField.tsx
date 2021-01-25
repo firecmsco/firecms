@@ -24,7 +24,7 @@ export default function ArrayShapedField<T>({
                                                 createFormField,
                                                 includeDescription,
                                                 underlyingValueHasChanged,
-                                                entitySchema
+                                                context
                                             }: ArrayDefaultFieldProps) {
 
     const classes = formStyles();
@@ -56,7 +56,7 @@ export default function ArrayShapedField<T>({
                                             property:childProperty,
                                             includeDescription,
                                             underlyingValueHasChanged,
-                                            entitySchema,
+                                            context,
                                             tableMode: false,
                                             partOfArray: false,
                                             autoFocus: false
