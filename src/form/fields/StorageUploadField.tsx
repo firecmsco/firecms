@@ -23,14 +23,14 @@ import {
     StringProperty
 } from "../../models";
 
-import { CMSFieldProps } from "../../models/form_props";
+import { CMSFieldProps } from "../../models";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
 import PreviewComponent from "../../preview/PreviewComponent";
 import deepEqual from "deep-equal";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
-import { useSnackbarController } from "../../contexts/SnackbarContext";
+import { useSnackbarController } from "../../contexts";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { PreviewSize } from "../../models/preview_component_props";
 
@@ -125,7 +125,7 @@ export default function StorageUploadField({
                                                tableMode,
                                                property,
                                                includeDescription,
-                                               entitySchema
+                                               context
                                            }: StorageUploadFieldProps) {
 
     const multipleFilesSupported = property.dataType === "array";
@@ -157,7 +157,7 @@ export default function StorageUploadField({
                     );
                 }}
                 multipleFilesSupported={multipleFilesSupported}
-                entitySchema={entitySchema}
+                entitySchema={context.entitySchema}
                 small={false}/>
 
             {includeDescription &&

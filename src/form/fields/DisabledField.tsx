@@ -21,7 +21,7 @@ export default function DisabledField<S extends EntitySchema>({
                                                                   tableMode,
                                                                   property,
                                                                   includeDescription,
-                                                                  entitySchema
+                                                                  context
                                                               }: DisabledFieldProps) {
 
     const classes = formStyles();
@@ -44,7 +44,7 @@ export default function DisabledField<S extends EntitySchema>({
                                       value={value}
                                       property={property}
                                       size={"regular"}
-                                      entitySchema={entitySchema}/>
+                                      entitySchema={context.entitySchema}/>
                 </ErrorBoundary>
 
             </Paper>

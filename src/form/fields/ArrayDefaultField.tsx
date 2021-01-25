@@ -13,7 +13,11 @@ import {
 import ClearIcon from "@material-ui/icons/Clear";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import { formStyles } from "../../styles";
-import { CMSFieldProps, FormFieldBuilder } from "../../models/form_props";
+import {
+    CMSFieldProps,
+    FormContext,
+    FormFieldBuilder
+} from "../../models/form_props";
 import React, { useState } from "react";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
@@ -53,7 +57,7 @@ export default function ArrayDefaultField<T>({
                                                  createFormField,
                                                  includeDescription,
                                                  underlyingValueHasChanged,
-                                                 entitySchema
+                                                 context
                                              }: ArrayDefaultFieldProps<T>) {
 
     const ofProperty: Property = property.of as Property;
@@ -124,7 +128,7 @@ export default function ArrayDefaultField<T>({
                                 autoFocus={internalId === lastAddedId}
                                 includeDescription={includeDescription}
                                 underlyingValueHasChanged={underlyingValueHasChanged}
-                                entitySchema={entitySchema}
+                                context={context}
                                 ofProperty={ofProperty}
                                 remove={remove}
                             />))}
@@ -166,7 +170,7 @@ function ArrayEntry<T>(props: {
     includeDescription: boolean,
     createFormField: FormFieldBuilder,
     underlyingValueHasChanged: boolean;
-    entitySchema: EntitySchema,
+    context: FormContext<any>,
     remove: (index: number) => void,
 }) {
     const {
@@ -179,7 +183,7 @@ function ArrayEntry<T>(props: {
         autoFocus,
         includeDescription,
         underlyingValueHasChanged,
-        entitySchema,
+        context,
         ofProperty,
         remove
     } = props;
@@ -267,10 +271,10 @@ function ArrayEntry<T>(props: {
                             property: ofProperty,
                             includeDescription,
                             underlyingValueHasChanged,
-                            entitySchema,
+                            context,
                             tableMode: false,
                             partOfArray: true,
-                            autoFocus
+                            autoFocus,
                         })}
                 </Box>
                 <Box width={"48px"}

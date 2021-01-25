@@ -724,7 +724,10 @@ function SampleApp() {
     return <CMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
-        signInOptions={[firebase.auth.GoogleAuthProvider.PROVIDER_ID]}
+        signInOptions={[
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            firebase.auth.EmailAuthProvider.PROVIDER_ID
+        ]}
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}

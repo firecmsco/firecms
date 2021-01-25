@@ -31,7 +31,7 @@ export default function ArrayMapField<T>({
                                              createFormField,
                                              includeDescription,
                                              underlyingValueHasChanged,
-                                             entitySchema
+                                             context
                                          }: ArrayMapFieldProps<T>) {
 
     if (!("dataType" in property.of) || property.of.dataType !== "map") {
@@ -76,7 +76,7 @@ export default function ArrayMapField<T>({
                                                                 property:childProperty,
                                                                 includeDescription,
                                                                 underlyingValueHasChanged,
-                                                                entitySchema,
+                                                                context,
                                                                 tableMode: false,
                                                                 partOfArray: false,
                                                                 autoFocus: false

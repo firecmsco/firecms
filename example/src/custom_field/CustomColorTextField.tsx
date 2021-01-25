@@ -2,7 +2,7 @@ import { TextField, Theme, withStyles } from "@material-ui/core";
 import React, { ReactElement } from "react";
 import { CMSFieldProps, FieldDescription } from "@camberi/firecms";
 
-interface CustomColorTextFieldProps extends CMSFieldProps<string> {
+interface CustomColorTextFieldProps {
     color: string
 }
 
@@ -17,13 +17,14 @@ export const TextFieldWithStyles = withStyles((theme: Theme) => ({
 export default function CustomColorTextField({
                                                  property,
                                                  value,
-                                                 color,
+                                                 setValue,
+                                                 customProps,
                                                  touched,
                                                  error,
                                                  isSubmitting,
-                                                 setValue,
+                                                 context, // the rest of the entity values here
                                                  ...props
-                                             }: CustomColorTextFieldProps)
+                                             }: CMSFieldProps<string, CustomColorTextFieldProps>)
     : ReactElement {
 
     return (
@@ -41,7 +42,7 @@ export default function CustomColorTextField({
                                  helperText={error}
                                  fullWidth
                                  variant={"filled"}
-                                 customcolor={color}/>
+                                 customcolor={customProps.color}/>
 
             <FieldDescription property={property}/>
         </>

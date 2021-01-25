@@ -1,21 +1,21 @@
-import { EntitySchema, Property } from "./models";
+import { EntitySchema, EntityValues, Property } from "./models";
 import { ReactElement } from "react";
 
 /**
  * When building a custom field you need to create a React Element that takes
  * this interface as props.
  */
-export interface CMSFieldProps<T> {
+export interface CMSFieldProps<T, CustomProps = any, S extends EntitySchema = EntitySchema> {
 
     /**
      * Name of the property
      */
-    name: string,
+    name: string;
 
     /**
      * Current value of this field
      */
-    value: T,
+    value: T;
 
     /**
      * Set value of field directly
@@ -47,20 +47,20 @@ export interface CMSFieldProps<T> {
     touched: boolean;
 
     /**
-     * Property
+     * Property related to this field
      */
-    property: Property<T>,
+    property: Property<T>;
 
     /**
      * Should this field include a description
      */
-    includeDescription: boolean,
+    includeDescription: boolean;
 
     /**
      * Builder in case this fields needs to build additional fields,
      * e.g. arrays or maps
      */
-    createFormField: FormFieldBuilder,
+    createFormField: FormFieldBuilder;
 
     /**
      * Flag to indicate that the underlying value has been updated in Firestore
@@ -68,45 +68,58 @@ export interface CMSFieldProps<T> {
     underlyingValueHasChanged: boolean;
 
     /**
-     * Full schema of the entity
-     */
-    entitySchema: EntitySchema,
-
-    /**
      * Is this field part of an array
      */
-    partOfArray: boolean,
+    partOfArray: boolean;
 
     /**
      * Is this field being rendered in the table
      */
-    tableMode: boolean,
+    tableMode: boolean;
 
     /**
      * Should this field autofocus on mount
      */
-    autoFocus: boolean,
+    autoFocus: boolean;
 
     /**
      * Additional properties set by the developer
      */
-    [additional:string]: any
+    customProps: CustomProps
 
+    /**
+     * Additional values related to the state of the form or the entity
+     */
+    context: FormContext<S>;
+
+}
+
+export interface FormContext<S extends EntitySchema> {
+
+    /**
+     * Schema of the entity being modified
+     */
+    entitySchema: S;
+
+    /**
+     * Current values of the entity
+     */
+    values: EntityValues<S>;
 }
 
 /**
  * If you receive a FormFieldBuilder, you can use it to build subfields inside
  * another field. This is the pattern used for arrays or maps.
  */
-export type FormFieldBuilder = (props: FormFieldProps) => ReactElement;
+export type FormFieldBuilder<S extends EntitySchema = EntitySchema> = (props: FormFieldProps<S>) => ReactElement;
 
-export interface FormFieldProps {
-    name: string,
-    property: Property,
-    includeDescription: boolean,
-    underlyingValueHasChanged: boolean,
-    entitySchema: EntitySchema,
-    tableMode: boolean,
-    partOfArray: boolean,
-    autoFocus:boolean,
+export interface FormFieldProps<S extends EntitySchema> {
+    name: string;
+    property: Property;
+    includeDescription: boolean;
+    underlyingValueHasChanged: boolean;
+    context: FormContext<S>;
+    tableMode: boolean;
+    partOfArray: boolean;
+    autoFocus: boolean;
 }

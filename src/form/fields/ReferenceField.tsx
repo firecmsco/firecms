@@ -71,7 +71,7 @@ export default function ReferenceField<S extends EntitySchema>({
                                                                    autoFocus,
                                                                    property,
                                                                    includeDescription,
-                                                                   entitySchema,
+                                                                   context,
                                                                    partOfArray,
                                                                    createFormField
                                                                }: CMSFieldProps<firebase.firestore.DocumentReference>) {
@@ -180,7 +180,7 @@ export default function ReferenceField<S extends EntitySchema>({
                                             value={entity.values[key as string]}
                                             property={propertyKey}
                                             size={"tiny"}
-                                            entitySchema={entitySchema}/>
+                                            entitySchema={context.entitySchema}/>
                                         :
                                         <SkeletonComponent
                                             property={propertyKey}

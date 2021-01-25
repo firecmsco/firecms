@@ -65,7 +65,7 @@ export default function MarkDownField({
                                           property,
                                           tableMode,
                                           includeDescription,
-                                          entitySchema
+                                          context
                                       }: MarkDownFieldProps) {
 
     const classes = useStyles();
