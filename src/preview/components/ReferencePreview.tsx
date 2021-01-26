@@ -178,7 +178,7 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
                             const property = schema.properties[key as string];
 
                             return (
-                                <div key={"ref_prev" + property.title + key}
+                                <div key={"ref_prev_" + key}
                                      className={referenceClasses.inner}>
                                     {entity && PreviewComponent ?
                                         <PreviewComponent name={key as string}

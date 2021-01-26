@@ -48,6 +48,13 @@ export const useTableStyles = makeStyles<Theme, TableStyleProps>(theme => create
         display: "inherit",
         paddingRight: theme.spacing(1)
     },
+    cellButtonsWrap: {
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column"
+    },
     cellButtons: {
         minWidth: 138
     },
@@ -103,10 +110,6 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
         selected: {
             backgroundColor: "#f9f9f9",
             border: "2px solid #5E9ED6"
-        },
-        selected2: {
-            border: "2px solid -webkit-focus-ring-color"
-            // border: `2px solid ${theme.palette.primary.dark}`
         },
         disabled: {
             alpha: 0.8

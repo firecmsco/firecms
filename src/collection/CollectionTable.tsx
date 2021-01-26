@@ -8,7 +8,14 @@ import React, {
 import BaseTable, { Column } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
 import "react-base-table/styles.css";
-import { Box, Button, Paper, useMediaQuery, useTheme } from "@material-ui/core";
+import {
+    Box,
+    Button,
+    Paper,
+    Typography,
+    useMediaQuery,
+    useTheme
+} from "@material-ui/core";
 import { Add, Delete } from "@material-ui/icons";
 
 import {
@@ -534,13 +541,22 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     function buildErrorView<S extends EntitySchema>() {
         return (
 
-            <Paper className={classes.root}
-                   style={{ height: "100%", width: "100%" }}>
+            <Paper className={classes.root}>
                 <Box display="flex"
                      justifyContent="center"
                      margin={6}>
-                    {"Error fetching data from Firestore"}
+                    <Typography variant={"h6"}>
+                        {"Error fetching data from Firestore"}
+                    </Typography>
+                    {dataLoadingError?.name && <Typography>
+                        {dataLoadingError?.name}
+                    </Typography>}
+                    {dataLoadingError?.message && <Typography>
+                        {dataLoadingError?.message}
+                    </Typography>}
                 </Box>
+
+
             </Paper>
         );
     }

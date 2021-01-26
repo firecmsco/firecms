@@ -31,6 +31,11 @@ export const useStyles = makeStyles((theme: Theme) =>
             position: "relative",
             maxWidth: "100%",
             maxHeight: "100%"
+        }   ,
+        imageTiny:{
+            position: "relative",
+            maxWidth: "100%",
+            maxHeight: "100%"
         }
     })
 );

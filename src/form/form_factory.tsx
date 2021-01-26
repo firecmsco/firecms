@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 
-import { ErrorMessage, Field, FastField, FieldProps, getIn } from "formik";
+import { ErrorMessage, FastField, Field, FieldProps, getIn } from "formik";
 
 import {
     CMSFieldProps,
@@ -38,8 +38,6 @@ import MarkDownField from "./fields/MarkdownField";
 import { useAppConfigContext, useSnackbarController } from "../contexts";
 
 import { CMSAppProps } from "../CMSAppProps";
-import { FormContext } from "../models/form_props";
-
 
 export function createFormField<T, S extends EntitySchema = EntitySchema>({
                                                                               name,
@@ -181,7 +179,11 @@ function buildFieldInternal<P extends Property, T = any, S extends EntitySchema 
 }
 
 
-export function createCustomIdField<S extends EntitySchema>(schema: EntitySchema, entityStatus: EntityStatus, onChange: Function, error: boolean, entity: Entity<S> | undefined) {
+export function createCustomIdField<S extends EntitySchema>(schema: S,
+                                                            entityStatus: EntityStatus,
+                                                            onChange: Function,
+                                                            error: boolean,
+                                                            entity: Entity<S> | undefined) {
 
     const disabled = entityStatus === EntityStatus.existing || !schema.customId;
 
@@ -265,7 +267,9 @@ export function createCustomIdField<S extends EntitySchema>(schema: EntitySchema
                           onChange={(event) => onChange(event.target.value)}/>}
 
             <ErrorMessage name={"id"}
-                          component="div">{(_) => "You need to specify an ID"}</ErrorMessage>
+                          component="div">
+                {(_) => "You need to specify an ID"}
+            </ErrorMessage>
 
         </FormControl>
     );

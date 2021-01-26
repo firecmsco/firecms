@@ -24,9 +24,9 @@ export function getPreviewWidth<T>(property: Property<T>, size: CollectionSize):
     if (property.dataType === "string") {
         const stringProperty = property as StringProperty;
         if (stringProperty.config?.url) {
-            if (stringProperty.config?.url === "video")
+            if (stringProperty.config?.url === "video" || stringProperty.config?.storageMeta?.mediaType === "video")
                 return 340;
-            else if (stringProperty.config?.url === "audio")
+            else if (stringProperty.config?.url === "audio" || stringProperty.config?.storageMeta?.mediaType === "audio")
                 return 300;
             return 240;
         } else if (stringProperty.config?.storageMeta) {

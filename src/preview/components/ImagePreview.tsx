@@ -26,7 +26,8 @@ function ImagePreview({ size, url }: ImagePreviewProps) {
                      objectFit: "cover",
                      width: imageSize,
                      height: imageSize,
-                     borderRadius: "4px"
+                     borderRadius: "4px",
+                     maxHeight: "100%"
                  }
                  }/>
         );
