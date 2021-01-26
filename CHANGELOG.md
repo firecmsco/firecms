@@ -1,11 +1,12 @@
 # Change Log
 
-## [0.24.0] - 2021-01-23
+## [0.24.0] - 2021-01-26
 ### Added
 - Implemented FirebaseUi to allow for all Possible Firebase login types.
-- Added a `context` object in the `CMSFormFields` that allows developers to
+- Added a `context` object in the `CMSFieldProps` that allows developers to
 access the context of the form, such as other field values. This is useful for
 creating conditional fields.
+- Fix for buttons in rows of tables with no inline editing.
 
 ### Changed
 - [BREAKING] The developer defined props in custom fields can be accessed now
