@@ -38,6 +38,11 @@ export interface CollectionTableProps<S extends EntitySchema,
     initialFilter?: FilterValues<S>;
 
     /**
+     * Default sort applied to this collection
+     */
+    initialSort?: [Key, "asc" | "desc"];
+
+    /**
      * If enabled, content is loaded in batch
      */
     paginationEnabled: boolean;

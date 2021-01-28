@@ -23,11 +23,12 @@ import {
     CollectionSize,
     Entity,
     EntitySchema,
+    fetchEntity,
     FilterValues,
+    listenCollection,
     Properties,
     Property
 } from "../models";
-import { fetchEntity, listenCollection } from "../models/firestore";
 import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
 import { getIconForProperty } from "../util/property_icons";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
@@ -70,6 +71,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     P extends Properties<Key> = Properties<Key>>({
                                                      includeToolbar,
                                                      initialFilter,
+                                                     initialSort,
                                                      collectionPath,
                                                      schema,
                                                      paginationEnabled,
@@ -108,8 +110,8 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const [textSearchData, setTextSearchData] = React.useState<Entity<S>[]>([]);
 
     const [filter, setFilter] = React.useState<FilterValues<S> | undefined>(initialFilter);
-    const [currentOrder, setOrder] = React.useState<Order>();
-    const [orderByProperty, setOrderProperty] = React.useState<string>();
+    const [currentSort, setSort] = React.useState<Order>(initialSort ? initialSort[1] : undefined);
+    const [sortByProperty, setSortProperty] = React.useState<string | undefined>(initialSort ? initialSort[0] as string : undefined);
     const [itemCount, setItemCount] = React.useState<number>(PAGE_SIZE);
     const [tableSize, setTableSize] = React.useState<ContentRect | undefined>();
 
@@ -305,15 +307,15 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
             filter,
             paginationEnabled ? itemCount : undefined,
             undefined,
-            orderByProperty,
-            currentOrder);
+            sortByProperty,
+            currentSort);
 
         return () => cancelSubscription();
-    }, [collectionPath, schema, itemCount, currentOrder, orderByProperty, filter]);
+    }, [collectionPath, schema, itemCount, currentSort, sortByProperty, filter]);
 
     const onColumnSort = ({ key }: any) => {
 
-        console.log("onColumnSort", key);
+        console.debug("onColumnSort", key);
         const property = key;
         if (filter) {
             const filterKeys = Object.keys(filter);
@@ -323,10 +325,10 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         }
         resetPagination();
 
-        const isDesc = orderByProperty === property && currentOrder === "desc";
-        const isAsc = orderByProperty === property && currentOrder === "asc";
-        setOrder(isDesc ? "asc" : (isAsc ? undefined : "desc"));
-        setOrderProperty(isAsc ? undefined : property);
+        const isDesc = sortByProperty === property && currentSort === "desc";
+        const isAsc = sortByProperty === property && currentSort === "asc";
+        setSort(isDesc ? "asc" : (isAsc ? undefined : "desc"));
+        setSortProperty(isAsc ? undefined : property);
 
         scrollToTop();
     };
@@ -363,14 +365,14 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     };
 
     const resetSort = () => {
-        setOrder(undefined);
-        setOrderProperty(undefined);
+        setSort(undefined);
+        setSortProperty(undefined);
     };
 
     const onFilterUpdate = (filterValues: FilterValues<S>) => {
-        if (orderByProperty && filterValues) {
+        if (sortByProperty && filterValues) {
             const filterKeys = Object.keys(filterValues);
-            if (filterKeys.length > 1 || filterKeys[0] !== orderByProperty) {
+            if (filterKeys.length > 1 || filterKeys[0] !== sortByProperty) {
                 resetSort();
             }
         }
@@ -598,9 +600,9 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                 ignoreFunctionInColumnCompare={false}
                                 rowHeight={getRowHeight(size)}
                                 ref={tableRef}
-                                sortBy={currentOrder && orderByProperty ? {
-                                    key: orderByProperty,
-                                    order: currentOrder
+                                sortBy={currentSort && sortByProperty ? {
+                                    key: sortByProperty,
+                                    order: currentSort
                                 } : undefined}
                                 overscanRowCount={2}
                                 onColumnSort={onColumnSort}

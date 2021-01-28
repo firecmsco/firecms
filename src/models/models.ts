@@ -113,6 +113,11 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
     initialFilter?: FilterValues<S>;
 
     /**
+     * Default sort applied to this collection
+     */
+    initialSort?: [Key, "asc" | "desc"];
+
+    /**
      * Builder for rendering additional components such as buttons in the
      * collection toolbar
      * @param entityCollectionView this collection view
@@ -321,7 +326,7 @@ export type Property<T = any, ArrayT = any> =
                 T extends Date ? TimestampProperty :
                     T extends firebase.firestore.Timestamp ? TimestampProperty :
                         T extends firebase.firestore.GeoPoint ? GeopointProperty :
-                            T extends firebase.firestore.DocumentReference ? ReferenceProperty<EntitySchema> :
+                            T extends firebase.firestore.DocumentReference ? ReferenceProperty :
                                 T extends Array<ArrayT> ? ArrayProperty<ArrayT> :
                                     T extends object ? MapProperty<T> : never;
 

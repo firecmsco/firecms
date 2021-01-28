@@ -160,6 +160,8 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
                             collectionPath={collectionPath}
                             schema={subcollection.schema}
                             additionalColumns={subcollection.additionalColumns}
+                            initialFilter={subcollection.initialFilter}
+                            initialSort={subcollection.initialSort}
                             editEnabled={false}
                             inlineEditing={false}
                             deleteEnabled={false}

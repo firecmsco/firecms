@@ -116,6 +116,7 @@ export function CollectionRoute<S extends EntitySchema>({
                              defaultSize={view.defaultSize}
                              paginationEnabled={view.pagination === undefined ? true : view.pagination}
                              initialFilter={view.initialFilter}
+                             initialSort={view.initialSort}
                              filterableProperties={view.filterableProperties}
                              properties={view.properties}
                              excludedProperties={view.excludedProperties}

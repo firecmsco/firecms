@@ -97,6 +97,7 @@ export function EntityFormSubCollection<S extends EntitySchema>({
                 excludedProperties={view.excludedProperties}
                 filterableProperties={view.filterableProperties}
                 initialFilter={view.initialFilter}
+                initialSort={view.initialSort}
                 onSelection={onSelection}
                 onEntityDelete={onEntityDelete}
                 onMultipleEntitiesDelete={onMultipleEntitiesDelete}

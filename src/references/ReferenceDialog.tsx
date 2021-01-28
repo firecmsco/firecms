@@ -10,6 +10,7 @@ import React from "react";
 
 import { FormFieldBuilder } from "../form";
 import { CollectionTableProps } from "../collection/CollectionTableProps";
+import { CollectionTable } from "../collection/CollectionTable";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -85,6 +86,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                                  filterableProperties={filterableProperties}
                                  textSearchDelegate={textSearchDelegate}
                                  initialFilter={initialFilter}
+                                 initialSort={collectionView.initialSort}
                                  createFormField={createFormField}
                 />
             </div>

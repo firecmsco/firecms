@@ -8,6 +8,7 @@ import {
     buildSchema,
     CMSApp,
     Entity,
+    EntitySchema,
     EntityCollectionView,
     EntitySaveProps,
     EnumValues,
@@ -77,7 +78,7 @@ function SampleApp() {
         watches: "Watches"
     };
 
-    const productSchema = buildSchema({
+    const productSchema:EntitySchema = buildSchema({
         name: "Product",
         properties: {
             name: {
@@ -676,20 +677,22 @@ function SampleApp() {
     ];
 
     if (process.env.NODE_ENV !== "production") {
-        navigation.push(
-            buildCollection({
-                relativePath: "test_entity",
+        const newVar:EntityCollectionView = {
+            relativePath: "test_entity",
+            schema: testEntitySchema,
+            group: "Test group",
+            name: "Test entity",
+            filterableProperties: ["difficulty", "search_adjacent", "description"],
+            initialSort: ["title", "desc"],
+            subcollections: [{
+                relativePath: "test_subcollection",
                 schema: testEntitySchema,
-                group: "Test group",
                 name: "Test entity",
-                filterableProperties: ["difficulty", "search_adjacent", "description"],
-                subcollections: [{
-                    relativePath: "test_subcollection",
-                    schema: testEntitySchema,
-                    name: "Test entity",
-                    filterableProperties: ["difficulty", "search_adjacent", "description"]
-                }]
-            }));
+                filterableProperties: ["difficulty", "search_adjacent", "description"]
+            }]
+        };
+        navigation.push(
+            buildCollection(newVar));
     }
 
     const myAuthenticator: Authenticator = (user?: firebase.User) => {

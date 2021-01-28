@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.25.0] - 2021-02
+### Added
+- `initialSort` to collections views
+
+
 ## [0.24.0] - 2021-01-26
 ### Added
 - Implemented FirebaseUi to allow for all Possible Firebase login types.

@@ -564,7 +564,8 @@ you can use the `context` field in CMSFieldProps.
 
 #### Saving callbacks
 
-When you are saving an entity you can attach different hooks before and after it
+When you are saving an entity you can attach diff
+erent hooks before and after it
 gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
 
 ```
@@ -632,7 +633,10 @@ Firestore data schema.
 * `initialFilter` Initial filters applied to this collection. Consider that you
   can filter any property, but only those included in
   `filterableProperties` will include the corresponding filter widget. Defaults
-  to none.
+  to none
+
+* `initialSort` Default sort applied to this collection. It takes tuples in the
+  shape `["property_name", "asc"]` or `["property_name", "desc"]`
 
 * `extraActions` Builder for rendering additional components such as buttons in
   the collection toolbar. The builder takes an object with
