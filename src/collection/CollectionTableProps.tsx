@@ -4,14 +4,16 @@ import {
     Entity,
     EntitySchema,
     FilterValues,
-    Properties
+    Properties,
+    TextSearchDelegate
 } from "../models";
-import { TextSearchDelegate } from "../models/text_search_delegate";
 import { FormFieldBuilder } from "../form";
+import React from "react";
 
 export interface CollectionTableProps<S extends EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>,
     P extends Properties = Properties<Key>> {
+
     /**
      * Absolute collection path
      */
@@ -21,11 +23,6 @@ export interface CollectionTableProps<S extends EntitySchema,
      * Schema of the entity displayed by this collection
      */
     schema: S;
-
-    /**
-     * Show the toolbar in this collection
-     */
-    includeToolbar: boolean;
 
     /**
      * Override the title in the toolbar
@@ -82,17 +79,6 @@ export interface CollectionTableProps<S extends EntitySchema,
     filterableProperties?: Key[];
 
     /**
-     * Callback when add entity is clicked
-     */
-    onNewClick?: (e: React.MouseEvent) => void;
-
-    /**
-     * Additional components such as buttons in the
-     * collection toolbar
-     */
-    extraActions?: React.ReactNode;
-
-    /**
      * Should the table add an edit button. If set to false `inlineEditing`
      * has no effect.
      */
@@ -107,16 +93,6 @@ export interface CollectionTableProps<S extends EntitySchema,
      * Should the table add a delete button
      */
     deleteEnabled?: boolean;
-
-    /**
-     * Are the entities in this collection selectable
-     */
-    selectionEnabled?: boolean;
-
-    /**
-     * Callback when entities get selected
-     */
-    onSelection?(collectionPath: string, entities?: Entity<S>[]): void;
 
     /**
      * Callback when anywhere on the table is clicked
@@ -137,5 +113,21 @@ export interface CollectionTableProps<S extends EntitySchema,
      * Factory method for creating form fields
      */
     createFormField: FormFieldBuilder;
+
+    /**
+     * Additional components builder such as buttons in the
+     * collection toolbar
+     */
+    toolbarWidgetBuilder?: ({ size }: { size: CollectionSize }) => React.ReactNode;
+
+    /**
+     * Builder for creating the buttons in each row
+     * @param entity
+     * @param size
+     */
+    tableRowWidgetBuilder?: ({
+                                  entity,
+                                  size
+                              }: { entity: Entity<S>, size: CollectionSize }) => React.ReactNode;
 
 }

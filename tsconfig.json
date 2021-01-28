@@ -36,6 +36,7 @@
     "node_modules",
     "dist",
     "example",
+    "example_backend",
     "test"
   ]
 }

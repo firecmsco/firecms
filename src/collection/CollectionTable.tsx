@@ -1,22 +1,8 @@
-import React, {
-    MouseEvent,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import BaseTable, { Column } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
 import "react-base-table/styles.css";
-import {
-    Box,
-    Button,
-    Paper,
-    Typography,
-    useMediaQuery,
-    useTheme
-} from "@material-ui/core";
-import { Add, Delete } from "@material-ui/icons";
+import { Box, Paper, Typography } from "@material-ui/core";
 
 import {
     AdditionalColumnDelegate,
@@ -34,7 +20,6 @@ import { getIconForProperty } from "../util/property_icons";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
 import SkeletonComponent from "../preview/components/SkeletonComponent";
 import ErrorBoundary from "../components/ErrorBoundary";
-import DeleteEntityDialog from "./DeleteEntityDialog";
 import TableCell from "./TableCell";
 import PopupFormField from "./popup_field/PopupFormField";
 import { OutsideAlerter } from "../util/OutsideAlerter";
@@ -46,7 +31,6 @@ import { TableCellProps } from "./SelectedCellContext";
 import { useHistory } from "react-router-dom";
 import { CircularProgressCenter } from "../components";
 import { useTableStyles } from "./styles";
-import { CollectionRowActions } from "./CollectionRowActions";
 import { getPreviewSizeFrom } from "../preview/util";
 
 const PAGE_SIZE = 50;
@@ -69,30 +53,24 @@ type Order = "asc" | "desc" | undefined;
 export function CollectionTable<S extends EntitySchema<Key, P>,
     Key extends string = string,
     P extends Properties<Key> = Properties<Key>>({
-                                                     includeToolbar,
                                                      initialFilter,
                                                      initialSort,
                                                      collectionPath,
                                                      schema,
                                                      paginationEnabled,
                                                      properties,
-                                                     deleteEnabled = true,
                                                      editEnabled = true,
                                                      excludedProperties,
                                                      textSearchDelegate,
                                                      additionalColumns,
                                                      filterableProperties,
                                                      inlineEditing,
-                                                     onNewClick,
-                                                     extraActions,
+                                                     toolbarWidgetBuilder,
                                                      title,
-                                                     onSelection,
+                                                     tableRowWidgetBuilder,
                                                      onEntityClick,
-                                                     onEntityDelete,
-                                                     onMultipleEntitiesDelete,
                                                      defaultSize = "m",
-                                                     createFormField,
-                                                     selectionEnabled = true
+                                                     createFormField
                                                  }: CollectionTableProps<S>) {
 
     const [data, setData] = React.useState<Entity<S>[]>([]);
@@ -101,9 +79,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
     const [size, setSize] = React.useState<CollectionSize>(defaultSize);
 
-    const [selectedItems, setSelectedItems] = React.useState<Entity<S>[]>([]);
-
-    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | Entity<S>[] | undefined>(undefined);
 
     const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
     const [textSearchLoading, setTextSearchLoading] = React.useState<boolean>(false);
@@ -134,50 +109,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
     const clickableRows = (!editEnabled || !inlineEditing) && onEntityClick;
 
-    const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
-
-    function buildActions() {
-        const addButton = editEnabled && onNewClick && (largeLayout ?
-            <Button
-                onClick={onNewClick}
-                startIcon={<Add/>}
-                size="large"
-                variant="contained"
-                color="primary">
-                Add {schema.name}
-            </Button>
-            : <Button
-                onClick={onNewClick}
-                size="medium"
-                variant="contained"
-                color="primary"
-            >
-                <Add/>
-            </Button>);
-
-        const multipleDeleteButton = selectionEnabled && deleteEnabled &&
-            <Button
-                disabled={!(selectedItems?.length)}
-                startIcon={<Delete/>}
-                onClick={(event: MouseEvent) => {
-                    event.stopPropagation();
-                    setDeleteEntityClicked(selectedItems);
-                }}
-                color={"primary"}
-            >
-                <p style={{ minWidth: 24 }}>({selectedItems?.length})</p>
-            </Button>;
-
-        return (
-            <>
-                {multipleDeleteButton}
-                {addButton}
-            </>
-        );
-    }
-
-    const actions = buildActions();
+    const actions = toolbarWidgetBuilder && toolbarWidgetBuilder({ size });
 
     const history = useHistory();
     history.listen(() => {
@@ -196,19 +128,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         setFormPopupOpen(false);
         setPreventOutsideClick(false);
     }, []);
-
-    const toggleEntitySelection = (entity: Entity<S>) => {
-        let newValue;
-        if (selectedItems.indexOf(entity) > -1) {
-            newValue = selectedItems.filter((item: Entity<S>) => item !== entity);
-        } else {
-            newValue = [...selectedItems, entity];
-        }
-        setSelectedItems(newValue);
-        if (onSelection)
-            onSelection(collectionPath, newValue);
-    };
-
 
     const additionalColumnsMap: Record<string, AdditionalColumnDelegate<S>> = useMemo(() => {
         return additionalColumns ?
@@ -388,9 +307,9 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
         const entity: Entity<S> = rowData;
 
-        if (columnIndex === 0) {
-            return buildTableRowButtons({
-                rowIndex,
+        if (columnIndex === 0 && tableRowWidgetBuilder) {
+            return tableRowWidgetBuilder({
+                size,
                 entity
             });
         }
@@ -495,25 +414,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         }
     };
 
-    const buildTableRowButtons = ({ entity }: any) => {
-
-        const isSelected = selectedItems.indexOf(entity) > -1;
-
-        return (
-            <CollectionRowActions
-                entity={entity}
-                isSelected={isSelected}
-                collectionPath={collectionPath}
-                editEnabled={editEnabled}
-                deleteEnabled={deleteEnabled}
-                selectionEnabled={selectionEnabled}
-                size={size}
-                toggleEntitySelection={toggleEntitySelection}
-                onDeleteClicked={setDeleteEntityClicked}
-            />
-        );
-
-    };
 
     const headerRenderer = ({ columnIndex }: any) => {
 
@@ -651,45 +551,22 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
             );
     }
 
-
-    const internalOnEntityDelete = (collectionPath: string, entity: Entity<S>) => {
-        if (onEntityDelete)
-            onEntityDelete(collectionPath, entity);
-        setSelectedItems(selectedItems.filter((e) => e.id !== entity.id));
-    };
-
-    const internalOnMultipleEntitiesDelete = (collectionPath: string, entities: Entity<S>[]) => {
-        if (onMultipleEntitiesDelete)
-            onMultipleEntitiesDelete(collectionPath, entities);
-        setSelectedItems([]);
-    };
-
     return (
         <>
 
-            <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
-                                collectionPath={collectionPath}
-                                schema={schema}
-                                open={!!deleteEntityClicked}
-                                onEntityDelete={internalOnEntityDelete}
-                                onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
-                                onClose={() => setDeleteEntityClicked(undefined)}/>
-
             <Paper className={classes.root}>
 
-                {includeToolbar &&
                 <CollectionTableToolbar schema={schema}
                                         filterValues={filter}
                                         onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                                         collectionPath={collectionPath}
                                         filterableProperties={filterableProperties}
-                                        actions={editEnabled && actions}
-                                        extraActions={extraActions}
+                                        actions={actions}
                                         size={size}
                                         onSizeChanged={setSize}
                                         title={title}
                                         loading={loading}
-                                        onFilterUpdate={onFilterUpdate}/>}
+                                        onFilterUpdate={onFilterUpdate}/>
 
                 <PopupFormField
                     tableKey={tableKey}

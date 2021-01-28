@@ -20,7 +20,11 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-import { BreadcrumbEntry, getEntityPath } from "./navigation";
+import {
+    BreadcrumbEntry,
+    getEntityPath,
+    removeInitialSlash
+} from "./navigation";
 import { CircularProgressCenter } from "../components";
 import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
 import { useBreadcrumbsContext, useSnackbarController } from "../contexts";
@@ -35,7 +39,7 @@ import {
 import CloseIcon from "@material-ui/icons/Close";
 import OpenInBrowserIcon from "@material-ui/icons/OpenInBrowser";
 import { EntityPreview } from "../preview";
-import { EntityFormSubCollection } from "../collection/EntitySubcollection";
+import { EntityCollectionTable } from "../collection/EntityCollectionTable";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>
@@ -226,14 +230,6 @@ function EntityFormRoute<S extends EntitySchema>({
     }, [location["subcollection"]]);
 
 
-    function onSubcollectionEntityClick(collectionPath: string,
-                                        entity: Entity<S>) {
-        selectedEntityContext.open({
-            entityId: entity.id,
-            collectionPath
-        });
-    }
-
     async function onEntitySave(schema: S, collectionPath: string, id: string | undefined, values: EntityValues<S>): Promise<void> {
 
         if (!status)
@@ -342,14 +338,34 @@ function EntityFormRoute<S extends EntitySchema>({
 
     const subCollectionsView = view.subcollections && view.subcollections.map(
         (subcollectionView, colIndex) => {
-            return EntityFormSubCollection({
-                entity: entity as Entity<S>,
-                view: subcollectionView,
-                onSubcollectionEntityClick,
-                tabsPosition,
-                colIndex,
-                context
-            });
+            const collectionPath = entity ? `${entity?.reference.path}/${removeInitialSlash(subcollectionView.relativePath)}` : undefined;
+
+            return (
+                <Box
+                    key={`entity_detail_tab_content_${view.name}`}
+                    role="tabpanel"
+                    flexGrow={1}
+                    height={"100%"}
+                    width={"100%"}
+                    hidden={tabsPosition !== colIndex + (context === "side" ? 1 : 0)}>
+                    {entity && collectionPath ?
+                        <EntityCollectionTable collectionPath={collectionPath}
+                                               view={subcollectionView}
+                        />
+                        :
+                        <Box m={3}
+                             display={"flex"}
+                             alignItems={"center"}
+                             justifyContent={"center"}>
+                            <Box>
+                                You need to save your entity before
+                                adding
+                                additional collections
+                            </Box>
+                        </Box>
+                    }
+                </Box>
+            );
         }
     );
 

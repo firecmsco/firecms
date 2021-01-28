@@ -81,7 +81,6 @@ interface CollectionTableToolbarProps<S extends EntitySchema> {
     onTextSearch?: (searchString?: string) => void;
     filterableProperties?: (keyof S["properties"])[];
     actions?: React.ReactNode;
-    extraActions?: React.ReactNode;
     loading: boolean;
     title?: React.ReactNode,
 
@@ -177,8 +176,6 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
                         {props.loading &&
                         <CircularProgress size={16} thickness={8}/>}
                     </Box>
-
-                    {props.extraActions}
 
                     {props.actions}
 
