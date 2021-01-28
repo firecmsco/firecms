@@ -1,5 +1,5 @@
 export type{
-    EntityCollectionView,
+    EntityCollection,
     ExtraActionsParams,
     CollectionSize,
     EntitySchema,
@@ -36,6 +36,9 @@ export type{
     StorageFileTypes,
     NumberFieldConfig
 } from "./models";
+
+// EntityCollectionView is deprecated, use EntityCollection instead
+export type {EntityCollection as EntityCollectionView} from "./models";
 
 export {
     EntityStatus,

@@ -5,14 +5,14 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
-import { EntityCollectionView } from "./models";
+import { EntityCollection } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import { CMSRoute } from "./routes/CMSRoute";
 import { AdditionalView } from "./CMSAppProps";
 import AdditionalViewRoute from "./routes/AdditionalViewRoute";
 
 export function CMSRouterSwitch({ navigation, additionalViews }: {
-    navigation: EntityCollectionView[],
+    navigation: EntityCollection[],
     additionalViews?: AdditionalView[];
 }) {
 
@@ -24,14 +24,14 @@ export function CMSRouterSwitch({ navigation, additionalViews }: {
     return (
         <Switch location={mainLocation}>
 
-            {navigation.map(entityCollectionView => (
+            {navigation.map(entityCollection => (
                     <Route
-                        path={buildCollectionPath(entityCollectionView)}
-                        key={`navigation_${entityCollectionView.relativePath}`}>
+                        path={buildCollectionPath(entityCollection)}
+                        key={`navigation_${entityCollection.relativePath}`}>
                         <CMSRoute
                             type={"collection"}
-                            collectionPath={entityCollectionView.relativePath}
-                            view={entityCollectionView}
+                            collectionPath={entityCollection.relativePath}
+                            view={entityCollection}
                         />
                     </Route>
                 )

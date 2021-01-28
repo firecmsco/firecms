@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Entity, EntityCollectionView, EntitySchema } from "../models";
+import { Entity, EntityCollection, EntitySchema } from "../models";
 import { BreadcrumbEntry } from "./navigation";
 import { createStyles, makeStyles, Typography } from "@material-ui/core";
 import { useRouteMatch } from "react-router-dom";
@@ -20,7 +20,7 @@ export const useStyles = makeStyles(() =>
 );
 
 interface CollectionRouteProps<S extends EntitySchema> {
-    view: EntityCollectionView<S>;
+    view: EntityCollection<S>;
     collectionPath: string;
     breadcrumbs: BreadcrumbEntry[];
 }

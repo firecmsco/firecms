@@ -1,5 +1,5 @@
 import React from "react";
-import { EntityCollectionView, EntitySchema } from "../models";
+import { EntityCollection, EntitySchema } from "../models";
 import { Route, Switch } from "react-router-dom";
 import { useSelectedEntityContext } from "./SelectedEntityContext";
 import { createStyles, makeStyles } from "@material-ui/core";
@@ -46,7 +46,7 @@ interface SidePanel {
 }
 
 export function EntitySideDialogs<S extends EntitySchema>({ navigation }: {
-    navigation: EntityCollectionView[]
+    navigation: EntityCollection[]
 }) {
 
     const selectedEntityContext = useSelectedEntityContext();
@@ -76,14 +76,14 @@ export function EntitySideDialogs<S extends EntitySchema>({ navigation }: {
                             className={selectedView === "form" ? classes.root : classes.wide}>
                             {panel.location &&
                             <Switch location={panel.location as any}>
-                                {navigation.map(entityCollectionView => (
+                                {navigation.map(entityCollection => (
                                         <Route
-                                            path={buildCollectionPath(entityCollectionView)}
-                                            key={`navigation_${entityCollectionView.relativePath}`}>
+                                            path={buildCollectionPath(entityCollection)}
+                                            key={`navigation_${entityCollection.relativePath}`}>
                                             <SideCMSRoute
                                                 type={"collection"}
-                                                collectionPath={entityCollectionView.relativePath}
-                                                view={entityCollectionView}
+                                                collectionPath={entityCollection.relativePath}
+                                                view={entityCollection}
                                             />
                                         </Route>
                                     )

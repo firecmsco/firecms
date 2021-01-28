@@ -5,7 +5,7 @@ import {
     buildCollection,
     buildSchema,
     CMSApp,
-    EntityCollectionView
+    EntityCollection
 } from "@camberi/firecms";
 import firebase from "firebase/app";
 import "typeface-rubik";
@@ -163,7 +163,7 @@ const localeSchema = buildSchema({
 
 export function SimpleApp() {
 
-    const navigation: EntityCollectionView[] = [
+    const navigation: EntityCollection[] = [
         buildCollection({
             relativePath: "products",
             schema: productSchema,

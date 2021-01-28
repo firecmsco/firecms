@@ -3,7 +3,7 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
-import { Authenticator, EntityCollectionView } from "./models";
+import { Authenticator, EntityCollection } from "./models";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -24,7 +24,7 @@ export interface CMSAppProps {
      * root Firestore database. Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    navigation: EntityCollectionView[];
+    navigation: EntityCollection[];
 
     /**
      * Do the users need to log in to access the CMS.

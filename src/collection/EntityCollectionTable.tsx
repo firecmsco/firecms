@@ -1,7 +1,7 @@
 import {
     CollectionSize,
     Entity,
-    EntityCollectionView,
+    EntityCollection,
     EntitySchema
 } from "../models";
 import { CollectionTable } from "./CollectionTable";
@@ -15,7 +15,7 @@ import DeleteEntityDialog from "./DeleteEntityDialog";
 
 type EntitySubCollectionProps<S extends EntitySchema> = {
     collectionPath: string;
-    view: EntityCollectionView<any>;
+    view: EntityCollection<any>;
 }
 
 export function EntityCollectionTable<S extends EntitySchema>({

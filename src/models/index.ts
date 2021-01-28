@@ -1,5 +1,5 @@
 export type{
-    EntityCollectionView,
+    EntityCollection,
     ExtraActionsParams,
     CollectionSize,
     EntitySchema,

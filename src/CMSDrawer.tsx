@@ -16,7 +16,7 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
-import { EntityCollectionView } from "./models";
+import { EntityCollection } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import { AdditionalView } from "./CMSAppProps";
 
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface CMSDrawerProps {
     logo: string | undefined,
-    navigation: EntityCollectionView[],
+    navigation: EntityCollection[],
     drawerOpen: boolean,
     closeDrawer: () => any,
     additionalViews: AdditionalView[] | undefined;

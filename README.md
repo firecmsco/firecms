@@ -105,7 +105,7 @@ import {
     buildCollection,
     buildSchema,
     CMSApp,
-    EntityCollectionView
+    EntityCollection
 } from "@camberi/firecms";
 import firebase from "firebase/app";
 import "typeface-rubik";
@@ -263,7 +263,7 @@ const localeSchema = buildSchema({
 
 export function SimpleApp() {
 
-    const navigation: EntityCollectionView[] = [
+    const navigation: EntityCollection[] = [
         buildCollection({
             relativePath: "products",
             schema: productSchema,
@@ -640,7 +640,7 @@ Firestore data schema.
 
 * `extraActions` Builder for rendering additional components such as buttons in
   the collection toolbar. The builder takes an object with
-  props `entityCollectionView`  and `selectedEntities` if any are set by the end
+  props `entityCollection`  and `selectedEntities` if any are set by the end
   user.
 
 * `pagination` If enabled, content is loaded in batch. If `false` all entities

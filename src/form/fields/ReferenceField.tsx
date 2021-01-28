@@ -1,6 +1,6 @@
 import {
     Entity,
-    EntityCollectionView,
+    EntityCollection,
     EntitySchema
 } from "../../models";
 import firebase from "firebase/app";
@@ -88,7 +88,7 @@ export default function ReferenceField<S extends EntitySchema>({
     const classes = useStyles();
 
     const appConfig: CMSAppProps = useAppConfigContext();
-    const collectionView: EntityCollectionView<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
+    const collectionView: EntityCollection<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
 
     const schema = collectionView.schema;
     const collectionPath = property.collectionPath;

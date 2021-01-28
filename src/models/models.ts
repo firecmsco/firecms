@@ -12,7 +12,7 @@ import firebase from "firebase/app";
  * It can be in the root level of the configuration, defining the main
  * menu navigation.
  */
-export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
+export interface EntityCollection<S extends EntitySchema = EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>,
     P extends Properties = Properties<Key>> {
 
@@ -84,7 +84,7 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
      * subcollections to your entity in the same way you define the root
      * collections.
      */
-    subcollections?: EntityCollectionView[];
+    subcollections?: EntityCollection[];
 
     /**
      * Properties displayed in this collection. If this property is not set
@@ -120,7 +120,7 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
     /**
      * Builder for rendering additional components such as buttons in the
      * collection toolbar
-     * @param entityCollectionView this collection view
+     * @param entityCollection this collection view
      * @param selectedEntities current selected entities by the end user or
      * undefined if none
      */
@@ -134,7 +134,7 @@ export interface EntityCollectionView<S extends EntitySchema = EntitySchema,
 }
 
 export type ExtraActionsParams<S extends EntitySchema = EntitySchema> = {
-    view: EntityCollectionView,
+    view: EntityCollection,
     selectedEntities?: Entity<S>[]
 };
 
@@ -265,7 +265,7 @@ export interface EntityDeleteProps<S extends EntitySchema,
  */
 export function buildCollection<S extends EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties = Properties<Key>>(collectionView: EntityCollectionView<S, Key, P>): EntityCollectionView<S, Key, P> {
+    P extends Properties = Properties<Key>>(collectionView: EntityCollection<S, Key, P>): EntityCollection<S, Key, P> {
     return collectionView;
 }
 

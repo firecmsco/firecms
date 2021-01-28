@@ -9,7 +9,7 @@ import {
     CMSApp,
     Entity,
     EntitySchema,
-    EntityCollectionView,
+    EntityCollection,
     EntitySaveProps,
     EnumValues,
     ExtraActionsParams
@@ -627,7 +627,7 @@ function SampleApp() {
         );
     };
 
-    const localeCollection: EntityCollectionView<typeof localeSchema> =
+    const localeCollection: EntityCollection<typeof localeSchema> =
         buildCollection({
             name: "Locales",
             relativePath: "locales",
@@ -670,14 +670,14 @@ function SampleApp() {
         }
     });
 
-    const navigation: EntityCollectionView[] = [
+    const navigation: EntityCollection[] = [
         productsCollection,
         usersCollection,
         blogCollection
     ];
 
     if (process.env.NODE_ENV !== "production") {
-        const newVar:EntityCollectionView = {
+        const newVar:EntityCollection = {
             relativePath: "test_entity",
             schema: testEntitySchema,
             group: "Test group",

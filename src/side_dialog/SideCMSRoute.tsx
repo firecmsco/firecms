@@ -1,5 +1,5 @@
 import React from "react";
-import { EntityCollectionView, EntitySchema } from "../models";
+import { EntityCollection, EntitySchema } from "../models";
 import {
     Route,
     Switch,
@@ -14,7 +14,7 @@ import { removeInitialSlash } from "../routes/navigation";
 export type CMSRouteType = "collection" | "entity";
 
 interface SideCMSRouteProps<S extends EntitySchema> {
-    view: EntityCollectionView<S>;
+    view: EntityCollection<S>;
     collectionPath: string;
     type: CMSRouteType;
 }
@@ -56,10 +56,10 @@ export function SideCMSRoute<S extends EntitySchema>({
 
             {type === "entity" && <Switch location={location}>
                 {/* Entity view with selected subcollection*/}
-                {view.subcollections && view.subcollections.map(entityCollectionView => (
+                {view.subcollections && view.subcollections.map(entityCollection => (
                         <Route exact
-                               path={`${url}/${removeInitialSlash(entityCollectionView.relativePath)}`}
-                               key={`navigation_sub_${entityCollectionView.relativePath}`}>
+                               path={`${url}/${removeInitialSlash(entityCollection.relativePath)}`}
+                               key={`navigation_sub_${entityCollection.relativePath}`}>
                             <EntityFormRoute
                                 key={`side-form-route-${path}-${entityId}`}
                                 collectionPath={collectionPath}
@@ -71,14 +71,14 @@ export function SideCMSRoute<S extends EntitySchema>({
                 )}
 
                 {/* Subcollection path */}
-                {view.subcollections && view.subcollections.map(entityCollectionView => (
+                {view.subcollections && view.subcollections.map(entityCollection => (
                         <Route
-                            path={`${url}/${removeInitialSlash(entityCollectionView.relativePath)}`}
-                            key={`navigation_sub_${entityCollectionView.relativePath}`}>
+                            path={`${url}/${removeInitialSlash(entityCollection.relativePath)}`}
+                            key={`navigation_sub_${entityCollection.relativePath}`}>
                             <SideCMSRoute
                                 type={"collection"}
-                                collectionPath={`${collectionPath}/${entityId}/${removeInitialSlash(entityCollectionView.relativePath)}`}
-                                view={entityCollectionView}
+                                collectionPath={`${collectionPath}/${entityId}/${removeInitialSlash(entityCollection.relativePath)}`}
+                                view={entityCollection}
                             />
                         </Route>
                     )

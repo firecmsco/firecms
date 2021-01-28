@@ -1,4 +1,4 @@
-import { Entity, EntityCollectionView, EntitySchema } from "../models";
+import { Entity, EntityCollection, EntitySchema } from "../models";
 import {
     Button,
     createStyles,
@@ -31,7 +31,7 @@ export interface ReferenceDialogProps<S extends EntitySchema<Key>, Key extends s
 
     collectionPath: string;
 
-    collectionView: EntityCollectionView<S>;
+    collectionView: EntityCollection<S>;
 
     onEntityClick(entity?: Entity<S>): void;
 
@@ -77,7 +77,6 @@ export function ReferenceDialog<S extends EntitySchema>(
                                  inlineEditing={false}
                                  deleteEnabled={false}
                                  schema={schema}
-                                 includeToolbar={true}
                                  onEntityClick={(collectionPath, entity) => onEntityClick(entity)}
                                  paginationEnabled={false}
                                  title={`Select ${schema.name}`}

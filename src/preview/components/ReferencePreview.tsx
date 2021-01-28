@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import {
     Entity,
-    EntityCollectionView,
+    EntityCollection,
     EntitySchema
 } from "../../models";
 
@@ -113,7 +113,7 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
         const previewProperties = property.previewProperties;
 
         const appConfig: CMSAppProps = useAppConfigContext();
-        const collectionView: EntityCollectionView<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
+        const collectionView: EntityCollection<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
 
         const schema = collectionView.schema;
         const [entity, setEntity] = React.useState<Entity<typeof schema>>();

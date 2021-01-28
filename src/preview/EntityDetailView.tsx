@@ -1,4 +1,4 @@
-import { Entity, EntityCollectionView, EntitySchema } from "../models";
+import { Entity, EntityCollection, EntitySchema } from "../models";
 import React, { useEffect, useState } from "react";
 import { listenEntityFromRef } from "../models/firestore";
 import { Link as ReactLink } from "react-router-dom";
@@ -47,7 +47,7 @@ export const useStyles = makeStyles(theme => createStyles({
 export function EntityDetailView<S extends EntitySchema>({ entity, schema, subcollections }: {
     entity?: Entity<S>,
     schema: S,
-    subcollections?: EntityCollectionView[];
+    subcollections?: EntityCollection[];
 }) {
 
     const classes = useStyles();
@@ -80,7 +80,7 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
     function onSubcollectionEntityClick(collectionPath: string,
                                         clickedEntity: Entity<any>,
                                         clickedSchema: EntitySchema,
-                                        subcollections?: EntityCollectionView[]) {
+                                        subcollections?: EntityCollection[]) {
         selectedEntityContext.open({
             entityId: clickedEntity.id,
             collectionPath
@@ -167,7 +167,6 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
                             deleteEnabled={false}
                             onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
                                 onSubcollectionEntityClick(collectionPath, clickedEntity, subcollection.schema, subcollection.subcollections)}
-                            includeToolbar={true}
                             paginationEnabled={false}
                             defaultSize={subcollection.defaultSize}
                             createFormField={createFormField}

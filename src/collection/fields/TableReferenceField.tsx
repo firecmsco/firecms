@@ -4,7 +4,7 @@ import { ReferencePreview } from "../../preview";
 import {
     CollectionSize,
     Entity,
-    EntityCollectionView,
+    EntityCollection,
     EntitySchema,
     ReferenceProperty
 } from "../../models";
@@ -47,8 +47,8 @@ export function TableReferenceField<S extends EntitySchema>(props: {
     const collectionPath = property.collectionPath;
 
     const appConfig: CMSAppProps = useAppConfigContext();
-    const collectionView: EntityCollectionView<S> =
-        getCollectionViewFromPath(property.collectionPath, appConfig.navigation) as EntityCollectionView<S>;
+    const collectionView: EntityCollection<S> =
+        getCollectionViewFromPath(property.collectionPath, appConfig.navigation) as EntityCollection<S>;
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = (event: React.MouseEvent) => {

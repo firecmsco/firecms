@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import EntityForm from "../form/EntityForm";
 import {
     Entity,
-    EntityCollectionView,
+    EntityCollection,
     EntitySchema,
     EntityStatus,
     EntityValues
@@ -144,7 +144,7 @@ const useStylesMain = makeStyles((theme: Theme) =>
 type FormContext = "main" | "side";
 
 interface EntityRouteProps<S extends EntitySchema> {
-    view: EntityCollectionView<S>;
+    view: EntityCollection<S>;
     collectionPath: string;
     breadcrumbs?: BreadcrumbEntry[];
     context: FormContext;
