@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import {
+    AdditionalColumnDelegate,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -7,11 +9,11 @@ import {
 import { CollectionTable } from "./CollectionTable";
 import { createFormField } from "../form/form_factory";
 import { Button, Typography, useMediaQuery, useTheme } from "@material-ui/core";
-import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
-import React, { useState } from "react";
 import { Add, Delete } from "@material-ui/icons";
 import { CollectionRowActions } from "./CollectionRowActions";
 import DeleteEntityDialog from "./DeleteEntityDialog";
+import { getSubcollectionColumnId, useColumnIds } from "./common";
+import { useSideEntityController } from "../side_dialog/SideEntityContext";
 
 type EntitySubCollectionProps<S extends EntitySchema> = {
     collectionPath: string;
@@ -23,7 +25,7 @@ export function EntityCollectionTable<S extends EntitySchema>({
                                                                   view
                                                               }: EntitySubCollectionProps<S>
 ) {
-    const selectedEntityContext = useSelectedEntityContext();
+    const selectedEntityContext = useSideEntityController();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
@@ -36,8 +38,32 @@ export function EntityCollectionTable<S extends EntitySchema>({
     const inlineEditing = editEnabled && (view.inlineEditing === undefined || view.inlineEditing);
     const selectionEnabled = view.selectionEnabled === undefined || view.selectionEnabled;
     const paginationEnabled = view.pagination === undefined || view.pagination;
+    const displayedProperties = useColumnIds(view, true);
 
-    const onEntityClick = (collectionPath: string, entity: Entity<S>) => {
+    const subcollectionColumns: AdditionalColumnDelegate<any>[] = view.subcollections?.map((subcollection) => {
+        return {
+            id: getSubcollectionColumnId(subcollection),
+            title: subcollection.name,
+            width: 200,
+            builder: (entity: Entity<any>) => (
+                <Button color={"primary"}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            selectedEntityContext.open({
+                                collectionPath: collectionPath,
+                                entityId: entity.id,
+                                selectedSubcollection: subcollection.relativePath
+                            });
+                        }}>
+                    {subcollection.name}
+                </Button>
+            )
+        };
+    }) ?? [];
+
+    const additionalColumns = [...view.additionalColumns ?? [], ...subcollectionColumns];
+
+    const onEntityClick = inlineEditing ? undefined : (collectionPath: string, entity: Entity<S>) => {
         selectedEntityContext.open({
             entityId: entity.id,
             collectionPath
@@ -153,22 +179,21 @@ export function EntityCollectionTable<S extends EntitySchema>({
             <CollectionTable
                 collectionPath={collectionPath}
                 schema={view.schema}
-                additionalColumns={view.additionalColumns}
+                additionalColumns={additionalColumns}
                 defaultSize={view.defaultSize}
-                properties={view.properties}
-                excludedProperties={view.excludedProperties}
+                displayedProperties={displayedProperties}
                 filterableProperties={view.filterableProperties}
                 initialFilter={view.initialFilter}
                 initialSort={view.initialSort}
-                editEnabled={editEnabled}
                 inlineEditing={inlineEditing}
-                deleteEnabled={deleteEnabled}
                 onEntityClick={onEntityClick}
+                textSearchDelegate={view.textSearchDelegate}
                 tableRowWidgetBuilder={tableRowButtonsBuilder}
                 paginationEnabled={paginationEnabled}
                 toolbarWidgetBuilder={toolbarActionsBuilder}
                 title={title}
                 createFormField={createFormField}
+                frozenIdColumn={largeLayout}
             />
 
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}

@@ -14,7 +14,8 @@ import {
 import {
     Entity,
     EntityCollection,
-    EntitySchema
+    EntitySchema,
+    listenEntityFromRef
 } from "../../models";
 
 import {
@@ -24,8 +25,6 @@ import {
 } from "../../models/preview_component_props";
 import SkeletonComponent from "./SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
-import ErrorIcon from "@material-ui/icons/Error";
 import { getCollectionViewFromPath } from "../../routes/navigation";
 import { CMSAppProps } from "../../CMSAppProps";
 import { useAppConfigContext } from "../../contexts";
@@ -34,7 +33,9 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import { PreviewComponent } from "../PreviewComponent";
 import { useStyles } from "./styles";
-import { listenEntityFromRef } from "../../models";
+import { useSideEntityController } from "../../side_dialog/SideEntityContext";
+import { PreviewError } from "./PreviewError";
+import { Skeleton } from "@material-ui/lab";
 
 const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Theme) =>
     createStyles({
@@ -44,7 +45,7 @@ const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Them
             backgroundColor: "rgba(0, 0, 0, 0.02)",
             borderRadius: "2px",
             overflow: "hidden",
-            fontWeight: 500
+            fontWeight: theme.typography.fontWeightMedium
         },
         root: {
             display: "flex",
@@ -62,7 +63,6 @@ const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Them
         },
         tiny: {
             width: "100%",
-            height: 36,
             itemsAlign: "center"
         },
         clamp: {
@@ -79,9 +79,13 @@ const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Them
             margin: ({ size }) => size !== "tiny" ? theme.spacing(0.2) : theme.spacing(0)
         },
         clickable: {
+            tabindex: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.09)",
+            transition: "background-color 300ms ease, box-shadow 300ms ease",
             "&:hover": {
                 cursor: "pointer",
-                backgroundColor: "#dedede"
+                backgroundColor: "#e7e7e7",
+                boxShadow: "0 0 0 2px rgba(0,0,0,0.1)"
             }
         }
     }));
@@ -90,7 +94,6 @@ const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Them
 export default React.memo<PreviewComponentProps<firebase.firestore.DocumentReference> & PreviewComponentFactoryProps>(
     function ReferencePreview<S extends EntitySchema>(
         {
-            name,
             value,
             property,
             PreviewComponent,
@@ -100,7 +103,6 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
         }: PreviewComponentProps<firebase.firestore.DocumentReference> & PreviewComponentFactoryProps) {
 
         const referenceClasses = useReferenceStyles({ size });
-        const classes = useStyles();
 
         // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed and replace with instance check of DocumentReference
         const isFirestoreReference = value
@@ -118,7 +120,7 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
         const schema = collectionView.schema;
         const [entity, setEntity] = React.useState<Entity<typeof schema>>();
 
-        const selectedEntityContext = useSelectedEntityContext();
+        const selectedEntityContext = useSideEntityController();
 
         useEffect(() => {
             const cancel = listenEntityFromRef(reference, schema, (e => {
@@ -139,14 +141,8 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
 
         let body: JSX.Element;
 
-        function buildError(error: string) {
-            return <div
-                className={clsx(classes.flexCenter, classes.smallMargin)}>
-                <ErrorIcon fontSize={"small"} color={"error"}/>
-                <div style={{
-                    marginLeft: 1
-                }}>{error}</div>
-            </div>;
+        function buildError(error: string, tooltip?: string) {
+            return <PreviewError error={error} tooltip={tooltip}/>;
         }
 
         if (!value) {
@@ -154,25 +150,25 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
         }
         // currently not happening since this gets filtered out in PreviewComponent
         else if (!(value instanceof firebase.firestore.DocumentReference)) {
-            body = buildError("Unexpected value");
+            body = buildError("Unexpected value", JSON.stringify(value));
         } else if (entity && !entity.values) {
-            body = (
-                <Tooltip title={reference.path}>
-                    {buildError("Reference does not exist")}
-                </Tooltip>
-            );
+            body = buildError("Reference does not exist", reference.path);
         } else {
 
             body = (
                 <>
                     <div className={referenceClasses.root}>
 
-                        {size !== "tiny" && entity &&
-                        <div className={referenceClasses.inner}>
-                            <Typography variant={"caption"} className={"mono"}>
-                                {entity.id}
-                            </Typography>
-                        </div>}
+                        {size !== "tiny" && (
+                            value ?
+                                <div className={referenceClasses.inner}>
+                                    <Typography variant={"caption"}
+                                                className={"mono"}>
+                                        {value.id}
+                                    </Typography>
+                                </div>
+                                : <Skeleton variant="text"/>)}
+
 
                         {listProperties && listProperties.map((key) => {
                             const property = schema.properties[key as string];
@@ -180,7 +176,7 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
                             return (
                                 <div key={"ref_prev_" + key}
                                      className={referenceClasses.inner}>
-                                    {entity && PreviewComponent ?
+                                    {entity ?
                                         <PreviewComponent name={key as string}
                                                           value={entity.values[key as string]}
                                                           property={property}

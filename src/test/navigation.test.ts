@@ -1,4 +1,7 @@
-import { getCollectionViewFromPath } from "../routes/navigation";
+import {
+    getCollectionViewFromPath,
+    getCollectionViewsFromPath
+} from "../routes/navigation";
 import { siteConfig } from "./test_site_config";
 
 it("collection view matches ok", () => {
@@ -36,4 +39,12 @@ it("collection view matches ok", () => {
     ).toThrow(
         "Couldn't find the corresponding collection view for the path: products"
     );
+});
+it("build entity collection array", () => {
+
+    const collections = getCollectionViewsFromPath("products/pid", siteConfig.navigation);
+    console.log(collections);
+    // expect(
+    //     collections.map((collection) => collection.relativePath)
+    // ).toEqual(["products", "locales"]);
 });

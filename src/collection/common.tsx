@@ -1,6 +1,8 @@
+import { useMemo } from "react";
 import {
     ArrayProperty,
     CollectionSize,
+    EntityCollection,
     Property,
     StringProperty
 } from "../models";
@@ -64,8 +66,8 @@ export function getPreviewWidth<T>(property: Property<T>, size: CollectionSize):
     }
 }
 
-export function getRowHeight(size:CollectionSize) : number{
-    switch (size){
+export function getRowHeight(size: CollectionSize): number {
+    switch (size) {
         case "xl":
             return 400;
         case "l":
@@ -79,4 +81,38 @@ export function getRowHeight(size:CollectionSize) : number{
         default:
             throw Error("Missing mapping for collection size -> height");
     }
+}
+
+export function getSubcollectionColumnId(collection: EntityCollection) {
+    return `subcollection_${collection.relativePath}`;
+}
+
+export function useColumnIds(view: EntityCollection, includeSubcollections: boolean) {
+    const initialDisplayedProperties = view.properties;
+    const excludedProperties = view.excludedProperties;
+    const additionalColumns = view.additionalColumns ?? [];
+    const subCollections: EntityCollection[] = view.subcollections ?? [];
+
+    return useMemo(() => {
+        const subcollectionIds = subCollections.map((collection) => getSubcollectionColumnId(collection));
+        const columnIds: string[] = [
+            ...Object.keys(view.schema.properties) as string[],
+            ...additionalColumns.map((column) => column.id)
+        ];
+        let result: string[];
+        if (initialDisplayedProperties) {
+            result = initialDisplayedProperties
+                .map((p) => {
+                    return columnIds.find(id => id === p);
+                }).filter(c => !!c) as string[];
+        } else if (excludedProperties) {
+            result = columnIds
+                .filter(id => !(excludedProperties as string[]).includes(id));
+        } else {
+            result = columnIds;
+        }
+        if (includeSubcollections)
+            result.push(...subcollectionIds);
+        return result;
+    }, []);
 }

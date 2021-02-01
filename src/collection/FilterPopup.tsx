@@ -125,7 +125,7 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
 
                         <Popover
                             {...bindPopover(popupState)}
-                            elevation={1}
+                            elevation={2}
                             anchorOrigin={{
                                 vertical: "bottom",
                                 horizontal: "left"

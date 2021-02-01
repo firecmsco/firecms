@@ -12,7 +12,20 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
             overflow: "hidden",
             display: "flex",
             height: "100%",
-            width: "100%"
+            width: "100%",
+            padding: ({ size }) => {
+                switch (size) {
+                    case "l":
+                    case "xl":
+                        return theme.spacing(2);
+                    case "m":
+                        return theme.spacing(1);
+                    case "s":
+                        return theme.spacing(0.5);
+                    default:
+                        return theme.spacing(0.25);
+                }
+            }
         },
         centered: {
             alignItems: "center"
@@ -25,7 +38,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
         scrollable: {
             overflow: "auto",
             alignItems: "start"
-        }
+        },
     })
 );
 

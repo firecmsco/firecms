@@ -1,0 +1,141 @@
+import { FieldArray } from "formik";
+import { Box, Button } from "@material-ui/core";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { ArrayEntry } from "./ArrayEntry";
+import hash from "object-hash";
+import firebase from "firebase";
+
+interface ArrayContainerProps<T> {
+    value: T[];
+    name: string;
+    buildEntry: (index: number, internalId: number) => React.ReactNode;
+    disabled: boolean;
+    onInternalIdAdded?: (id: number) => void;
+    includeAddButton?: boolean;
+}
+
+export default function ArrayContainer<T>({
+                                              name,
+                                              value,
+                                              disabled,
+                                              buildEntry,
+                                              onInternalIdAdded,
+                                              includeAddButton
+                                          }: ArrayContainerProps<T>) {
+
+    const hasValue = value && value.length > 0;
+
+    const internalIdsMap: Record<string, number> = useMemo(() =>
+        value ? value.map(v => ({
+            [getHashValue(v)]: getRandomId()
+        })).reduce((a, b) => ({ ...a, ...b }), {}) : {}, [value]);
+    const internalIdsRef = useRef<Record<string, number>>(internalIdsMap);
+
+    function getHashValue<T>(v: T) {
+        if ("id" in v)
+            return v["id"];
+        else if (v instanceof firebase.firestore.DocumentReference)
+            return v.id;
+        else if (v instanceof firebase.firestore.Timestamp)
+            return v.toMillis();
+        else if (v instanceof firebase.firestore.GeoPoint)
+            return hash({ latitude: v.latitude, longitude: v.longitude });
+        return hash(v, { ignoreUnknown: true });
+    }
+
+    useEffect(() => {
+        if (value && value.length != internalIds.length) {
+            const newInternalIds = value.map(v => {
+                const hashValue = getHashValue(v);
+                if (hashValue in internalIdsRef.current) {
+                    return internalIdsRef.current[hashValue];
+                } else {
+                    const newInternalId = getRandomId();
+                    internalIdsRef.current[hashValue] = newInternalId;
+                    return newInternalId;
+                }
+            });
+            setInternalIds(newInternalIds);
+        }
+    }, [value]);
+
+    const [internalIds, setInternalIds] = useState<number[]>(
+        value
+            ? Object.values(internalIdsRef.current)
+            : []);
+
+    // const [internalIds, setInternalIds] = useState<number[]>(
+    //     value
+    //         ? (value as T[]).map((v, index) => getRandomId())
+    //         : []);
+
+    function getRandomId() {
+        return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
+    }
+
+    return <FieldArray
+        name={name}
+        render={arrayHelpers => {
+
+            const moveItem = (dragIndex: number, hoverIndex: number) => {
+                const newIds = [...internalIds];
+                const temp = newIds[dragIndex];
+                newIds[dragIndex] = newIds[hoverIndex];
+                newIds[hoverIndex] = temp;
+                setInternalIds(newIds);
+                arrayHelpers.move(dragIndex, hoverIndex);
+            };
+
+            const insertInEnd = () => {
+                const id = getRandomId();
+                const newIds: number[] = [...internalIds, id];
+                if (onInternalIdAdded)
+                    onInternalIdAdded(id);
+                setInternalIds(newIds);
+                arrayHelpers.push(null);
+            };
+
+            const remove = (index: number) => {
+                const newValue = [...internalIds];
+                newValue.splice(index, 1);
+                setInternalIds(newValue);
+                arrayHelpers.remove(index);
+            };
+
+            return (
+                <>
+
+                    {hasValue && internalIds.map((internalId: number, index: number) => {
+
+                        const formField = buildEntry(index, internalId);
+                        return (
+                            <ArrayEntry
+                                key={`array_field_${name}_${internalId}`}
+                                name={name}
+                                id={internalId}
+                                type={"array_card_" + name}
+                                moveItem={moveItem}
+                                index={index}
+                                remove={remove}
+                            >
+                                {formField}
+                            </ArrayEntry>);
+                    })}
+
+                    {includeAddButton && <Box p={1}
+                                              justifyContent="center"
+                                              textAlign={"left"}>
+                        <Button variant="outlined"
+                                color="primary"
+                                disabled={disabled}
+                                onClick={insertInEnd}>
+                            Add
+                        </Button>
+                    </Box>}
+                </>
+            );
+        }}
+    />;
+}
+
+

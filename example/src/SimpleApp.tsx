@@ -32,11 +32,11 @@ const locales = {
 const productSchema = buildSchema({
     name: "Product",
     properties: {
-        // name: {
-        //     title: "Name",
-        //     validation: { required: true },
-        //     dataType: "string"
-        // },
+        name: {
+            title: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
         price: {
             title: "Price",
             validation: {

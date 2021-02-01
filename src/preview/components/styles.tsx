@@ -36,6 +36,11 @@ export const useStyles = makeStyles((theme: Theme) =>
             position: "relative",
             maxWidth: "100%",
             maxHeight: "100%"
+        },
+        link:{
+            display: "flex",
+            wordBreak: "break-word",
+            fontWeight: theme.typography.fontWeightMedium
         }
     })
 );

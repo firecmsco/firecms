@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
     Box,
     Button,
@@ -8,12 +8,7 @@ import {
     makeStyles,
     Typography
 } from "@material-ui/core";
-import {
-    Entity,
-    EntitySchema,
-    EntityStatus,
-    EntityValues
-} from "../models";
+import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
 import { createCustomIdField, createFormField } from "./form_factory";
 import { initEntityValues } from "../models/firestore";
@@ -113,30 +108,35 @@ function EntityForm<S extends EntitySchema>({
         throw new Error("Form configured wrong");
     }
 
-
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
-    const [isModified, setIsModified] = React.useState<boolean>(false);
-    const [initialValues, setInitialValues] = React.useState<EntityValues<S>>(entity?.values || initEntityValues(schema));
 
+    const initialValuesRef = React.useRef<EntityValues<S>>(entity?.values ?? initEntityValues(schema));
+    const initialValues = initialValuesRef.current;
+
+    const [isModified, setIsModified] = React.useState<boolean>(false);
     useEffect(() => {
         onModified(isModified);
     }, [isModified]);
 
-    let underlyingChanges: Partial<EntityValues<S>> | undefined;
-    if (initialValues) {
-        underlyingChanges = Object.keys(schema.properties)
-            .map((key) => {
-                const initialValue = initialValues[key];
-                const latestValue = baseFirestoreValues[key];
-                if (!deepEqual(initialValue, latestValue)) {
-                    return { [key]: latestValue };
-                }
-                return {};
-            })
-            .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<S>;
-    }
+    let underlyingChanges: Partial<EntityValues<S>> = useMemo(() => {
+        if (initialValues && status === EntityStatus.existing) {
+            return Object.keys(schema.properties)
+                .map((key) => {
+                    const initialValue = initialValues[key];
+                    const latestValue = baseFirestoreValues[key];
+                    if (!deepEqual(initialValue, latestValue)) {
+                        return { [key]: latestValue };
+                    }
+                    return {};
+                })
+                .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<S>;
+        } else {
+            return {};
+        }
+    }, [initialValues, baseFirestoreValues]);
+
 
     const mustSetCustomId: boolean = (status === EntityStatus.new || status === EntityStatus.copy) && !!schema.customId;
 
@@ -167,7 +167,7 @@ function EntityForm<S extends EntitySchema>({
 
         onEntitySave(schema, collectionPath, id, values)
             .then(_ => {
-                setInitialValues(values);
+                initialValuesRef.current = values;
                 formikActions.setTouched({});
             })
             .catch(e => {
@@ -182,8 +182,8 @@ function EntityForm<S extends EntitySchema>({
 
     const validationSchema = getYupObjectSchema(schema.properties);
 
-    function buildButtons(isSubmitting: boolean) {
-        const disabled = isSubmitting || (!isModified && status === EntityStatus.existing);
+    function buildButtons(isSubmitting: boolean, modified: boolean) {
+        const disabled = isSubmitting || (!modified && status === EntityStatus.existing);
         return <Box textAlign="right">
             {status === EntityStatus.existing &&
             <Button
@@ -211,11 +211,12 @@ function EntityForm<S extends EntitySchema>({
 
     return (
         <Formik
-            initialValues={initialValues as EntityValues<S>}
+            initialValues={initialValues}
             onSubmit={saveValues}
             validationSchema={validationSchema}
             validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}
+
         >
             {({
                   values,
@@ -223,10 +224,11 @@ function EntityForm<S extends EntitySchema>({
                   setFieldValue,
                   setFieldTouched,
                   handleSubmit,
-                  isSubmitting
+                  isSubmitting,
+                  dirty
               }) => {
 
-                const modified = !deepEqual(entity?.values, values);
+                const modified = !deepEqual(baseFirestoreValues, values);
                 setIsModified(modified);
 
                 if (underlyingChanges && entity) {
@@ -242,44 +244,44 @@ function EntityForm<S extends EntitySchema>({
                     });
                 }
 
-                const context:FormContext<S> = {
+                const context: FormContext<S> = {
                     entitySchema: schema,
                     values
-                }
+                };
 
                 const formFields = (
                     <Grid container spacing={4}>
 
-                    {Object.entries(schema.properties).map(([key, property]) => {
+                        {Object.entries(schema.properties).map(([key, property]) => {
 
-                        const underlyingValueHasChanged: boolean =
-                            !!underlyingChanges
-                            && Object.keys(underlyingChanges).includes(key)
-                            && !!touched[key];
+                            const underlyingValueHasChanged: boolean =
+                                !!underlyingChanges
+                                && Object.keys(underlyingChanges).includes(key)
+                                && !!touched[key];
 
-                        const formField = createFormField(
-                            {
-                                name: key,
-                                property,
-                                includeDescription: true,
-                                underlyingValueHasChanged,
-                                context,
-                                tableMode: false,
-                                partOfArray: false,
-                                autoFocus: false
-                            });
+                            const formField = createFormField(
+                                {
+                                    name: key,
+                                    property,
+                                    includeDescription: true,
+                                    underlyingValueHasChanged,
+                                    context,
+                                    tableMode: false,
+                                    partOfArray: false,
+                                    autoFocus: false
+                                });
 
-                        return (
-                            <Grid item
-                                  xs={12}
-                                  id={`form_field_${key}`}
-                                  key={`field_${schema.name}_${key}`}>
-                                {formField}
-                            </Grid>
-                        );
-                    })}
+                            return (
+                                <Grid item
+                                      xs={12}
+                                      id={`form_field_${key}`}
+                                      key={`field_${schema.name}_${key}`}>
+                                    {formField}
+                                </Grid>
+                            );
+                        })}
 
-                </Grid>
+                    </Grid>
                 );
 
                 return (
@@ -305,7 +307,7 @@ function EntityForm<S extends EntitySchema>({
                                 </Box>}
 
                                 <div className={classes.stickyButtons}>
-                                    {buildButtons(isSubmitting)}
+                                    {buildButtons(isSubmitting, modified)}
                                 </div>
 
                             </Form>

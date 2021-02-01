@@ -7,9 +7,9 @@ import "firebase/storage";
 import "firebase/firestore";
 import { EntityCollection } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
-import { CMSRoute } from "./routes/CMSRoute";
 import { AdditionalView } from "./CMSAppProps";
 import AdditionalViewRoute from "./routes/AdditionalViewRoute";
+import { CollectionRoute } from "./routes";
 
 export function CMSRouterSwitch({ navigation, additionalViews }: {
     navigation: EntityCollection[],
@@ -28,8 +28,7 @@ export function CMSRouterSwitch({ navigation, additionalViews }: {
                     <Route
                         path={buildCollectionPath(entityCollection)}
                         key={`navigation_${entityCollection.relativePath}`}>
-                        <CMSRoute
-                            type={"collection"}
+                        <CollectionRoute
                             collectionPath={entityCollection.relativePath}
                             view={entityCollection}
                         />

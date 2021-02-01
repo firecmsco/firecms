@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import { Entity, EntityCollection, EntitySchema } from "../models";
-import { BreadcrumbEntry } from "./navigation";
-import { createStyles, makeStyles, Typography } from "@material-ui/core";
+import React from "react";
+import { EntityCollection, EntitySchema } from "../models";
+import { createStyles, makeStyles } from "@material-ui/core";
 import { useRouteMatch } from "react-router-dom";
 import { useBreadcrumbsContext } from "../contexts";
-import { CollectionTable } from "../collection/CollectionTable";
-import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
-import { createFormField } from "../form/form_factory";
 import { EntityCollectionTable } from "../collection/EntityCollectionTable";
 
 export const useStyles = makeStyles(() =>
@@ -21,14 +17,12 @@ export const useStyles = makeStyles(() =>
 
 interface CollectionRouteProps<S extends EntitySchema> {
     view: EntityCollection<S>;
-    collectionPath: string;
-    breadcrumbs: BreadcrumbEntry[];
+    collectionPath: string
 }
 
 export function CollectionRoute<S extends EntitySchema>({
                                                             view,
                                                             collectionPath,
-                                                            breadcrumbs
                                                         }
                                                             : CollectionRouteProps<S>) {
 
@@ -36,7 +30,10 @@ export function CollectionRoute<S extends EntitySchema>({
     const breadcrumbsContext = useBreadcrumbsContext();
     React.useEffect(() => {
         breadcrumbsContext.set({
-            breadcrumbs: breadcrumbs
+            breadcrumbs:  [{
+                title: view.name,
+                url: url
+            }]
         });
     }, [url]);
 

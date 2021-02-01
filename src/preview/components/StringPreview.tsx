@@ -23,12 +23,12 @@ export function StringPreview({
         return (
             <ErrorBoundary>
                 <CustomChip
-                    colorKey={name}
+                    colorKey={name ?? ""}
                     label={value}
                     small={size !== "regular"}
                 />
             </ErrorBoundary>);
     } else {
-        return <>{value}</>;
+        return <>{value && (value.includes('\n') ? value.split('\n').map(str => <div>{str}</div>) : value)}</>;
     }
 }

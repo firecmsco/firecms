@@ -67,9 +67,10 @@ export default function ArrayEnumSelect<T extends EnumType>({
                    }}
                    renderValue={(selected: any) => (
                        <div>
-                           {selected && selected.map((value: any) => {
-                               return renderPreviewEnumChip(name, enumValues, value, "regular");
-                           })}
+                           {selected && selected.map((value: any) => (
+                               <React.Fragment key={`select_value_${value}`}>{
+                                   renderPreviewEnumChip(name, enumValues, value, "regular")
+                               }</React.Fragment>))}
                        </div>
                    )}>
             {Object.keys(enumValues).map(key => {

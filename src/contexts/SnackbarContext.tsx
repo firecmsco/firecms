@@ -84,7 +84,7 @@ export const SnackbarProvider: React.FC<ISelectedEntityProviderProps> = ({ child
             <Snackbar open={isOpen}
                       autoHideDuration={3000}
                       onClose={(_) => close()}>
-                <MuiAlert elevation={3}
+                <MuiAlert elevation={1}
                           variant="filled"
                           onClose={(_) => close()}
                           severity={type}>

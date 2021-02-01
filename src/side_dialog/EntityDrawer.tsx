@@ -6,10 +6,9 @@ import {
     makeStyles,
     Modal,
     Paper,
-    Slide,
     Theme
 } from "@material-ui/core";
-import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import { SlideFade } from "./SlideFadeTransition";
 
 export interface EntityDrawerProps {
 
@@ -24,9 +23,9 @@ export interface EntityDrawerProps {
      * @param {object} event The event source of the callback.
      */
     onClose?: () => void,
+
     /**
      * If `true`, the drawer is open.
-     * @default false
      */
     open: boolean,
 
@@ -36,7 +35,7 @@ export interface EntityDrawerProps {
      */
     offsetPosition: number;
 
-    paperStyle?: CSSProperties;
+    onExitAnimation?: () => void;
 
 }
 
@@ -71,9 +70,10 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => createStyles({
 
 
 const defaultTransitionDuration = {
-    enter: 225,
+    enter: 255,
     exit: 195
 };
+
 /**
  * The props of the [Modal](/api/modal/) component are available
  * when `variant="temporary"` is set.
@@ -83,16 +83,16 @@ export const EntityDrawer = React.forwardRef<HTMLDivElement, EntityDrawerProps>(
     const {
         children,
         onClose,
-        open = false,
-        offsetPosition
+        open,
+        offsetPosition,
+        onExitAnimation
     } = props;
 
     const classes = useStyles({ offsetPosition });
-    const TransitionComponent = Slide;
 
     const drawer = (
         <Paper
-            elevation={8}
+            elevation={1}
             square
             style={{
                 transition: "transform 1000ms cubic-bezier(0.33, 1, 0.68, 1)",
@@ -107,16 +107,16 @@ export const EntityDrawer = React.forwardRef<HTMLDivElement, EntityDrawerProps>(
         </Paper>
     );
 
+
     const slidingDrawer = (
-        <TransitionComponent
+        <SlideFade
             in={open}
-            direction={"left"}
             timeout={defaultTransitionDuration}
+            onExitAnimation={onExitAnimation}
         >
             {drawer}
-        </TransitionComponent>
+        </SlideFade>
     );
-
 
     return (
         <Modal

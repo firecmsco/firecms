@@ -7,23 +7,28 @@ export interface BreadcrumbEntry {
     url: string;
 }
 
+export function isCollectionPath(path: string) {
+    return path.startsWith(`${DATA_PATH}/`);
+}
+
+export function getEntityOrCollectionPath(path: string) {
+    if (path.startsWith(`${DATA_PATH}/`))
+        return path.replace(`${DATA_PATH}/`, "");
+    throw Error("Expected path starting with " + DATA_PATH);
+}
+
 export function getEntityPath(entityId: string,
                               basePath: string,
                               subcollection?: string) {
     return `${DATA_PATH}/${removeInitialSlash(basePath)}/${entityId}${subcollection ? "/" + subcollection : ""}`;
 }
 
-export function getEntityCopyPath(entityId: string,
-                              basePath: string) {
-    return `${DATA_PATH}/${removeInitialSlash(basePath)}/${entityId}?copy=true`;
-}
-
-export function getEntityPathFrom(fullPath: string) {
-    return `${DATA_PATH}/${fullPath}`;
+export function getCMSPathFrom(fullPath: string) {
+    return `${DATA_PATH}/${removeInitialSlash(fullPath)}`;
 }
 
 export function getRouterNewEntityPath(basePath: string) {
-    return `${DATA_PATH}/${removeInitialSlash(basePath)}/new`;
+    return `${DATA_PATH}/${removeInitialSlash(basePath)}#new`;
 }
 
 export function buildCollectionPath(view: EntityCollection) {
@@ -68,7 +73,7 @@ export function getCollectionViewFromPath(path: string, collectionViews: EntityC
         throw Error(`Collection paths must have an odd number of segments: ${path}`);
     }
 
-    let result: EntityCollection | undefined = getCollectionViewFromPathInternal(path, collectionViews);
+    let result: EntityCollection | undefined = getCollectionViewFromPathInternal(removeInitialAndTrailingSlashes(path), collectionViews);
 
     if (!result) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
@@ -88,19 +93,19 @@ function getCollectionViewFromPathInternal<S extends EntitySchema>(path: string,
         const navigationEntry = collectionViews && collectionViews.find((entry) => entry.relativePath === subpathCombination);
 
         if (navigationEntry) {
+
             if (subpathCombination === path) {
                 result = navigationEntry;
             } else if (navigationEntry.subcollections) {
                 const newPath = path.replace(subpathCombination, "").split("/").slice(2).join("/");
-                result = getCollectionViewFromPathInternal(newPath, navigationEntry.subcollections);
+                if (newPath.length > 0)
+                    result = getCollectionViewFromPathInternal(newPath, navigationEntry.subcollections);
             }
         }
-
         if (result) break;
     }
     return result;
 }
-
 
 /**
  * Get the subcollection combinations from a path:
@@ -108,12 +113,61 @@ function getCollectionViewFromPathInternal<S extends EntitySchema>(path: string,
  * @param subpaths
  */
 function getCollectionPathsCombinations(subpaths: string[]): string[] {
+    const entries = subpaths.length > 0 && subpaths.length % 2 == 0 ? subpaths.splice(0, subpaths.length - 1) : subpaths;
 
-    const length = subpaths.length;
+    const length = entries.length;
     const result: string[] = [];
     for (let i = length; i > 0; i = i - 2) {
-        result.push(subpaths.slice(0, i).join("/"));
+        result.push(entries.slice(0, i).join("/"));
     }
     return result;
 
+}
+
+export type NavigationEntry = NavigationEntryEntity | NavigationEntryCollection;
+
+interface NavigationEntryEntity {
+    type: "entity";
+    entityId: string;
+    parentCollection: EntityCollection;
+}
+
+interface NavigationEntryCollection {
+    type: "collection";
+    collection: EntityCollection;
+}
+
+export function getCollectionViewsFromPath<S extends EntitySchema>(path: string, allCollections: EntityCollection[]): NavigationEntry[] {
+
+    const subpaths = removeInitialAndTrailingSlashes(path).split("/");
+    const subpathCombinations = getCollectionPathsCombinations(subpaths);
+
+    let result: NavigationEntry[] = [];
+    for (let i = 0; i < subpathCombinations.length; i++) {
+        const subpathCombination = subpathCombinations[i];
+        const collection = allCollections && allCollections.find((entry) => entry.relativePath === subpathCombination);
+        if (collection) {
+            result.push({
+                type: "collection",
+                collection
+            });
+            const restOfThePath = removeInitialAndTrailingSlashes(path.replace(subpathCombination, ""));
+            const nextSegments = restOfThePath.length > 0 ? restOfThePath.split("/") : [];
+            if (nextSegments.length > 0) {
+                const entityId = nextSegments[0];
+                result.push({
+                    type: "entity",
+                    entityId: entityId,
+                    parentCollection: collection
+                });
+            }
+            if (collection.subcollections && nextSegments.length > 1) {
+                const newPath = nextSegments.slice(1).join("/");
+                result.push(...getCollectionViewsFromPath(newPath, collection.subcollections));
+            }
+            break;
+        }
+
+    }
+    return result;
 }

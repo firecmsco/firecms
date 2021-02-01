@@ -110,6 +110,7 @@ export interface FormContext<S extends EntitySchema> {
 /**
  * If you receive a FormFieldBuilder, you can use it to build subfields inside
  * another field. This is the pattern used for arrays or maps.
+ * Only for advanced use cases
  */
 export type FormFieldBuilder<S extends EntitySchema = EntitySchema> = (props: FormFieldProps<S>) => ReactElement;
 

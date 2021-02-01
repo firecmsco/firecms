@@ -38,6 +38,8 @@ import MarkDownField from "./fields/MarkdownField";
 import { useAppConfigContext, useSnackbarController } from "../contexts";
 
 import { CMSAppProps } from "../CMSAppProps";
+import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
+import ArrayDefaultFieldOld from "./fields/delete";
 
 export function createFormField<T, S extends EntitySchema = EntitySchema>({
                                                                               name,
@@ -60,6 +62,8 @@ export function createFormField<T, S extends EntitySchema = EntitySchema>({
             component = ArrayEnumSelect as ComponentType<CMSFieldProps<any>>;
         } else if (property.of.dataType === "string" && property.of.config?.storageMeta) {
             component = StorageUploadField as ComponentType<CMSFieldProps<any>>;
+        } else if (property.of.dataType === "reference") {
+            component = ArrayOfReferencesField as ComponentType<CMSFieldProps<any>>;
         } else {
             component = ArrayDefaultField as ComponentType<CMSFieldProps<any>>;
         }
@@ -186,6 +190,7 @@ export function createCustomIdField<S extends EntitySchema>(schema: S,
                                                             entity: Entity<S> | undefined) {
 
     const disabled = entityStatus === EntityStatus.existing || !schema.customId;
+    const idSetAutomatically = entityStatus !== EntityStatus.existing && !schema.customId;
 
     const hasEnumValues = typeof schema.customId === "object";
 
@@ -230,7 +235,7 @@ export function createCustomIdField<S extends EntitySchema>(schema: S,
         undefined;
 
     const fieldProps: any = {
-        label: (entityStatus === EntityStatus.new || entityStatus === EntityStatus.copy && disabled) ? "Id is set automatically" : "Id",
+        label: idSetAutomatically ? "Id is set automatically" : "Id",
         disabled: disabled,
         name: "id",
         type: null,

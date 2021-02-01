@@ -424,7 +424,7 @@ export type Properties<Key extends string = string, T extends any = any> = Recor
  * This type represents a record of key value pairs as described in an
  * entity schema.
  */
-export type EntityValues<S extends EntitySchema,
+export type EntityValues<S extends EntitySchema = EntitySchema,
     P extends Properties = S["properties"],
     Key extends string = Extract<keyof P, string>>
     = {

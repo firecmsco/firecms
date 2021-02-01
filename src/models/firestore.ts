@@ -35,7 +35,7 @@ export function listenCollection<S extends EntitySchema<Key, P>, Key extends str
     startAfter?: any[],
     orderBy?: string,
     order?: "desc" | "asc"
-): Function {
+): () => void {
 
     console.debug("Listening collection", path, limit, filter, startAfter, orderBy, order);
 

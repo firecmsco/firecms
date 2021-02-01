@@ -1,8 +1,4 @@
-import {
-    Entity,
-    EntityCollection,
-    EntitySchema
-} from "../../models";
+import { Entity, EntityCollection, EntitySchema } from "../../models";
 import firebase from "firebase/app";
 import {
     Box,
@@ -22,17 +18,17 @@ import { FieldDescription } from "../../components";
 import { getCollectionViewFromPath } from "../../routes/navigation";
 import { useAppConfigContext } from "../../contexts/AppConfigContext";
 import { CMSAppProps } from "../../CMSAppProps";
-import { ReferenceDialog } from "../../references/ReferenceDialog";
+import { ReferenceDialog } from "../../components/ReferenceDialog";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { PreviewComponent, SkeletonComponent } from "../../preview";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 
 import ErrorIcon from "@material-ui/icons/Error";
 import ClearIcon from "@material-ui/icons/Clear";
-import { useSelectedEntityContext } from "../../side_dialog/SelectedEntityContext";
 import { listenEntityFromRef } from "../../models/firestore";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { CollectionTable } from "../../collection/CollectionTable";
+import { useSideEntityController } from "../../side_dialog/SideEntityContext";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -50,7 +46,7 @@ export const useStyles = makeStyles(theme => createStyles({
             backgroundColor: "#dedede"
         },
         color: "#838383",
-        fontWeight: 500
+        fontWeight: theme.typography.fontWeightMedium
     },
     disabled: {
         backgroundColor: "rgba(0, 0, 0, 0.12)",
@@ -84,7 +80,6 @@ export default function ReferenceField<S extends EntitySchema>({
         setOpen(false);
     };
 
-
     const classes = useStyles();
 
     const appConfig: CMSAppProps = useAppConfigContext();
@@ -95,7 +90,7 @@ export default function ReferenceField<S extends EntitySchema>({
 
     const [open, setOpen] = React.useState(autoFocus);
     const [entity, setEntity] = React.useState<Entity<S>>();
-    const selectedEntityContext = useSelectedEntityContext();
+    const selectedEntityContext = useSideEntityController();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -171,8 +166,9 @@ export default function ReferenceField<S extends EntitySchema>({
                         const propertyKey = schema.properties[key as string];
                         return (
                             <Box
-                                 mt={0.5}
-                                 mb={0.5}>
+                                key={`reference_previews_${key}`}
+                                mt={0.5}
+                                mb={0.5}>
                                 <ErrorBoundary>{
                                     entity ?
                                         <PreviewComponent
@@ -227,8 +223,8 @@ export default function ReferenceField<S extends EntitySchema>({
 
                         {entity &&
                         <Box
-                             alignSelf={"center"}
-                             m={1}>
+                            alignSelf={"center"}
+                            m={1}>
                             <Tooltip title={value && value.path}>
                                 <Typography variant={"caption"}
                                             className={"mono"}>
@@ -239,21 +235,25 @@ export default function ReferenceField<S extends EntitySchema>({
 
                         {!missingEntity && entity && value && <Box>
                             <Tooltip title={`See details for ${entity.id}`}>
+                                <span>
                                 <IconButton
                                     disabled={isSubmitting}
                                     onClick={isSubmitting ? undefined : seeEntityDetails}>
                                     <KeyboardTabIcon/>
                                 </IconButton>
+                                    </span>
                             </Tooltip>
                         </Box>}
 
                         {!partOfArray && value && <Box>
                             <Tooltip title="Clear">
+                                <span>
                                 <IconButton
                                     disabled={isSubmitting}
                                     onClick={isSubmitting ? undefined : clearValue}>
                                     <ClearIcon/>
                                 </IconButton>
+                                </span>
                             </Tooltip>
                         </Box>}
 
@@ -275,10 +275,11 @@ export default function ReferenceField<S extends EntitySchema>({
                 {buildEntityView()}
 
                 {collectionView && <ReferenceDialog open={open}
+                                                    multiselect={false}
                                                     collectionPath={collectionPath}
                                                     collectionView={collectionView}
                                                     onClose={onClose}
-                                                    onEntityClick={handleEntityClick}
+                                                    onSingleEntitySelected={handleEntityClick}
                                                     createFormField={createFormField}
                                                     CollectionTable={CollectionTable}
                 />}

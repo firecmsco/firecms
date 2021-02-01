@@ -22,7 +22,7 @@ export const useTableStyles = makeStyles<Theme, TableStyleProps>(theme => create
     header: {
         display: "flex",
         flexDirection: "row",
-        fontWeight: 500,
+        fontWeight: theme.typography.fontWeightMedium,
         lineHeight: "0.9rem",
         alignItems: "center",
         paddingLeft: theme.spacing(1),
@@ -94,15 +94,6 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
                         return "flex-start";
                 }
             },
-            padding: ({ size }) => {
-                switch (size) {
-                    case "l":
-                    case "xl":
-                        return theme.spacing(2);
-                    default:
-                        return theme.spacing(1);
-                }
-            }
         },
         error: {
             border: `2px solid ${theme.palette.error.light} !important`

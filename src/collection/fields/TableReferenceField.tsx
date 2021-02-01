@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@material-ui/core";
 import { ReferencePreview } from "../../preview";
 import {
+    ArrayProperty,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -9,7 +10,7 @@ import {
     ReferenceProperty
 } from "../../models";
 import { PreviewComponent } from "../../preview/PreviewComponent";
-import { ReferenceDialog } from "../../references/ReferenceDialog";
+import { ReferenceDialog } from "../../components/ReferenceDialog";
 import { getCollectionViewFromPath } from "../../routes/navigation";
 import { CMSAppProps } from "../../CMSAppProps";
 import { useAppConfigContext } from "../../contexts";
@@ -19,12 +20,15 @@ import { CollectionTableProps } from "../CollectionTableProps";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { getPreviewSizeFrom } from "../../preview/util";
+import { useInputStyles } from "./styles";
+import { PreviewError } from "../../preview/components/PreviewError";
+
 
 export function TableReferenceField<S extends EntitySchema>(props: {
     name: string,
-    internalValue: firebase.firestore.DocumentReference | undefined | null,
-    updateValue: (newValue: (firebase.firestore.DocumentReference | null)) => void,
-    property: ReferenceProperty;
+    internalValue: firebase.firestore.DocumentReference | firebase.firestore.DocumentReference[] | undefined | null,
+    updateValue: (newValue: (firebase.firestore.DocumentReference | firebase.firestore.DocumentReference [] | null)) => void,
+    property: ReferenceProperty | ArrayProperty<firebase.firestore.DocumentReference>;
     size: CollectionSize;
     schema: S,
     setPreventOutsideClick: (value: any) => void;
@@ -44,64 +48,125 @@ export function TableReferenceField<S extends EntitySchema>(props: {
         CollectionTable
     } = props;
 
-    const collectionPath = property.collectionPath;
+    let usedProperty: ReferenceProperty;
+    let multiselect;
+    if (property.dataType === "reference") {
+        usedProperty = property;
+        multiselect = false;
+    } else if (property.dataType === "array" && property.of.dataType === "reference") {
+        usedProperty = property.of;
+        multiselect = true;
+    } else {
+        throw Error("TableReferenceField misconfiguration");
+    }
+
+    const classes = useInputStyles();
+    const collectionPath = usedProperty.collectionPath;
 
     const appConfig: CMSAppProps = useAppConfigContext();
     const collectionView: EntityCollection<S> =
-        getCollectionViewFromPath(property.collectionPath, appConfig.navigation) as EntityCollection<S>;
+        getCollectionViewFromPath(usedProperty.collectionPath, appConfig.navigation) as EntityCollection<S>;
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = (event: React.MouseEvent) => {
-        event.stopPropagation();
-        console.trace("handleOpen");
-        setPreventOutsideClick(true);
-        setOpen(true);
+        if (event.detail <= 1) {
+            event.stopPropagation();
+            setPreventOutsideClick(true);
+            setOpen(true);
+        }
     };
 
     const handleClose = () => {
-        console.log("handleClose");
         setPreventOutsideClick(false);
         setOpen(false);
     };
 
-    const handleEntityClick = (entity: Entity<any>) => {
-        console.log("handleEntityClick", entity);
+    const onSingleValueSet = (entity: Entity<any>) => {
         const ref = entity ? entity.reference : null;
         updateValue(ref);
         setPreventOutsideClick(false);
         setOpen(false);
     };
 
+    const onMultipleEntitiesSelected = (entities: Entity<any>[]) => {
+        updateValue(entities.map((e) => e.reference));
+    };
+
+    const selectedIds = internalValue ?
+        (Array.isArray(internalValue) ?
+            internalValue.map((ref) => ref.id) :
+            internalValue.id ? [internalValue.id] : [])
+        : [];
+    const valueNotSet = !internalValue || (Array.isArray(internalValue) && internalValue.length === 0);
+
+    function buildSingleReferenceField() {
+        if (internalValue instanceof firebase.firestore.DocumentReference)
+            return <ReferencePreview name={name}
+                onClick={handleOpen}
+                                     value={internalValue as firebase.firestore.DocumentReference}
+                                     property={usedProperty}
+                                     size={getPreviewSizeFrom(size)}
+                                     entitySchema={schema}
+                                     PreviewComponent={PreviewComponent}/>;
+        else
+            return <PreviewError error={"Data is not a reference"}/>;
+    }
+
+    function buildMultipleReferenceField() {
+        if (Array.isArray(internalValue))
+            return <>
+                {internalValue.map((v, index) =>
+                    <div className={classes.arrayItem}
+                         key={`preview_array_ref_${name}_${index}`}>
+                        <ReferencePreview
+                            name={`${name}[${index}]`}
+                            onClick={handleOpen}
+                            entitySchema={schema}
+                            size={"tiny"}
+                            value={v}
+                            property={usedProperty}
+                            PreviewComponent={PreviewComponent}
+                        />
+                    </div>
+                )
+                }
+            </>;
+        else
+            return <PreviewError error={"Data is not an array of references"}/>;
+    }
 
     return (
         <>
-            {internalValue &&
-            <ReferencePreview name={name}
-                              onClick={handleOpen}
-                              value={internalValue}
-                              property={property}
-                              size={getPreviewSizeFrom(size)}
-                              entitySchema={schema}
-                              PreviewComponent={PreviewComponent}/>
+
+            {internalValue && !multiselect &&
+            buildSingleReferenceField()
             }
 
-            {!internalValue &&
+            {internalValue && multiselect &&
+            buildMultipleReferenceField()
+            }
+
+            {valueNotSet &&
             <Button
-                size={"small"}
                 onClick={handleOpen}
+                size={"small"}
                 variant="outlined"
                 color="primary">
-                Set {property.title}
+                Edit {property.title}
             </Button>}
 
             {collectionView && open && <ReferenceDialog open={open}
+                                                        multiselect={multiselect}
                                                         collectionPath={collectionPath}
                                                         onClose={handleClose}
+                                                        onMultipleEntitiesSelected={onMultipleEntitiesSelected}
                                                         collectionView={collectionView}
-                                                        onEntityClick={handleEntityClick}
+                                                        onSingleEntitySelected={onSingleValueSet}
                                                         createFormField={createFormField}
                                                         CollectionTable={CollectionTable}
+                                                        selectedEntityIds={selectedIds}
             />}
+
         </>
     );
 }

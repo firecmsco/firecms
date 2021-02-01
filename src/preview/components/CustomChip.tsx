@@ -7,10 +7,10 @@ const useStyles = makeStyles<Theme, { schema: ChipColorSchema, error: any }>((th
         root: {
             maxWidth: "100%",
             backgroundColor: ({ schema, error }) => error ? "#eee" : schema.color,
-            fontWeight: 400
         },
         label: {
-            color: ({ schema, error }) => error ? "red" : schema.text
+            color: ({ schema, error }) => error ? "red" : schema.text,
+            fontWeight: theme.typography.fontWeightRegular,
         }
     })
 );

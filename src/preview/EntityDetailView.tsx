@@ -12,15 +12,13 @@ import {
     makeStyles,
     Tab,
     Tabs,
-    Tooltip,
-    Typography
+    Tooltip
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
-import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
-import { CollectionTable } from "../collection/CollectionTable";
-import { getEntityPathFrom, removeInitialSlash } from "../routes/navigation";
-import { createFormField } from "../form/form_factory";
+import { getCMSPathFrom, removeInitialSlash } from "../routes/navigation";
+import { EntityCollectionTable } from "../collection/EntityCollectionTable";
+import { useSideEntityController } from "../side_dialog/SideEntityContext";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -44,14 +42,15 @@ export const useStyles = makeStyles(theme => createStyles({
     }
 }));
 
-export function EntityDetailView<S extends EntitySchema>({ entity, schema, subcollections }: {
+export function EntityDetailView<S extends EntitySchema>({ entity, schema, collectionPath, subcollections }: {
     entity?: Entity<S>,
+    collectionPath: string;
     schema: S,
     subcollections?: EntityCollection[];
 }) {
 
     const classes = useStyles();
-    const selectedEntityContext = useSelectedEntityContext();
+    const selectedEntityContext = useSideEntityController();
 
     const [updatedEntity, setUpdatedEntity] = useState<Entity<S> | undefined>(entity);
     const [tabsPosition, setTabsPosition] = React.useState(0);
@@ -77,16 +76,6 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
         return () => cancelSubscription();
     }, [entity]);
 
-    function onSubcollectionEntityClick(collectionPath: string,
-                                        clickedEntity: Entity<any>,
-                                        clickedSchema: EntitySchema,
-                                        subcollections?: EntityCollection[]) {
-        selectedEntityContext.open({
-            entityId: clickedEntity.id,
-            collectionPath
-        });
-    }
-
     return <Container
         className={classes.root}
         disableGutters={true}
@@ -105,7 +94,7 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
             <Tooltip title={"Full size"}>
                 <IconButton
                     component={ReactLink}
-                    to={getEntityPathFrom(entity.reference.path)}>
+                    to={getCMSPathFrom(entity.reference.path)}>
                     <EditIcon/>
                 </IconButton>
             </Tooltip>
@@ -145,36 +134,15 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, subco
             {subcollections && subcollections.map(
                 (subcollection, colIndex) => {
                     const collectionPath = `${entity?.reference.path}/${removeInitialSlash(subcollection.relativePath)}`;
-
-                    const deleteEnabled = subcollection.deleteEnabled === undefined || subcollection.deleteEnabled;
-                    const editEnabled = subcollection.editEnabled === undefined || subcollection.editEnabled;
-                    const inlineEditing = editEnabled && (subcollection.inlineEditing === undefined || subcollection.inlineEditing);
-
                     return <Box
                         key={`entity_detail_tab_content_${subcollection.name}`}
                         role="tabpanel"
                         flexGrow={1}
                         height={"100%"}
                         width={"100%"} hidden={tabsPosition !== colIndex + 1}>
-                        <CollectionTable
+                        <EntityCollectionTable
                             collectionPath={collectionPath}
-                            schema={subcollection.schema}
-                            additionalColumns={subcollection.additionalColumns}
-                            initialFilter={subcollection.initialFilter}
-                            initialSort={subcollection.initialSort}
-                            editEnabled={false}
-                            inlineEditing={false}
-                            deleteEnabled={false}
-                            onEntityClick={(collectionPath: string, clickedEntity: Entity<any>) =>
-                                onSubcollectionEntityClick(collectionPath, clickedEntity, subcollection.schema, subcollection.subcollections)}
-                            paginationEnabled={false}
-                            defaultSize={subcollection.defaultSize}
-                            createFormField={createFormField}
-                            title={
-                                <Typography variant={"caption"}
-                                            color={"textSecondary"}>
-                                    {`/${collectionPath}`}
-                                </Typography>}
+                            view={subcollection}
                         />
                     </Box>;
                 }

@@ -16,7 +16,7 @@ import { useStyles } from "./styles";
 
 
 export function buildArrayEnumPreview(value: string[] | number[],
-                               name: string,
+                               name: string | undefined,
                                enumValues: EnumValues<string> | EnumValues<number>,
                                size: "regular" | "small" | "tiny") {
 

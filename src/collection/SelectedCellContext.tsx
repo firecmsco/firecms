@@ -5,7 +5,6 @@ import { Entity, Property } from "../models";
 export type TableCellProps =
     {
         columnIndex: number,
-        rowIndex: number,
         cellRect: DOMRect;
         width: number,
         height: number,

@@ -8,10 +8,10 @@ export interface PreviewComponentFactoryProps{
 }
 
 export interface PreviewComponentProps<T = any> {
-    name: string,
+    name?: string,
     value: T,
     property: Property<T>,
     onClick?: MouseEventHandler<any>,
     size: PreviewSize,
-    entitySchema: EntitySchema;
+    entitySchema?: EntitySchema;
 }

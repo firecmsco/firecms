@@ -34,6 +34,7 @@ import firebase from "firebase/app";
 import { Box } from "@material-ui/core";
 import { useStyles } from "./components/styles";
 import clsx from "clsx";
+import { PreviewError } from "./components/PreviewError";
 
 export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
@@ -173,14 +174,8 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
 }
 
 function buildWrongValueType() {
-
-    const classes = useStyles();
     return (
-        <div
-            className={clsx(classes.flexCenter, classes.smallMargin)}>
-            <ErrorIcon fontSize={"small"} color={"error"}/>
-            <Box marginLeft={1}>Unexpected value</Box>
-        </div>
+        <PreviewError error={"Unexpected value"}/>
     );
 }
 

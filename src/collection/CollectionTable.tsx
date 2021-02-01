@@ -32,6 +32,7 @@ import { useHistory } from "react-router-dom";
 import { CircularProgressCenter } from "../components";
 import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../preview/util";
+import { CollectionRowActions } from "./CollectionRowActions";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -58,9 +59,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                      collectionPath,
                                                      schema,
                                                      paginationEnabled,
-                                                     properties,
-                                                     editEnabled = true,
-                                                     excludedProperties,
+                                                     displayedProperties,
                                                      textSearchDelegate,
                                                      additionalColumns,
                                                      filterableProperties,
@@ -70,15 +69,21 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                                      tableRowWidgetBuilder,
                                                      onEntityClick,
                                                      defaultSize = "m",
-                                                     createFormField
+                                                     entitiesDisplayedFirst,
+                                                     createFormField,
+                                                     frozenIdColumn
                                                  }: CollectionTableProps<S>) {
 
-    const [data, setData] = React.useState<Entity<S>[]>([]);
+    if (inlineEditing && onEntityClick) {
+        console.error("You have set both `inlineEditing` and `onEntityClick` in a CollectionTable. `onEntityClick` will have no effect.");
+    }
+
+    const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];
+    const [data, setData] = React.useState<Entity<S>[]>(initialEntities);
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [noMoreToLoad, setNoMoreToLoad] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
     const [size, setSize] = React.useState<CollectionSize>(defaultSize);
-
 
     const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
     const [textSearchLoading, setTextSearchLoading] = React.useState<boolean>(false);
@@ -107,14 +112,28 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const [formPopupOpen, setFormPopupOpen] = React.useState<boolean>(false);
     const [preventOutsideClick, setPreventOutsideClick] = React.useState<boolean>(false);
 
-    const clickableRows = (!editEnabled || !inlineEditing) && onEntityClick;
+    const clickableRows = !inlineEditing && onEntityClick;
 
     const actions = toolbarWidgetBuilder && toolbarWidgetBuilder({ size });
 
     const history = useHistory();
+    const updatePopup = (value: boolean) => {
+        setFocused(!value);
+        setFormPopupOpen(value);
+    };
+
     history.listen(() => {
         setFormPopupOpen(false);
     });
+
+    const updateData = (entities: Entity<S>[]) => {
+        if (!initialEntities) {
+            setData(entities);
+        } else {
+            const displayedFirstId = new Set(initialEntities.map((e) => e.id));
+            setData([...initialEntities, ...entities.filter((e) => !displayedFirstId.has(e.id))]);
+        }
+    };
 
     const select = useCallback((cell: TableCellProps) => {
         setSelectedCell(cell);
@@ -133,7 +152,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         return additionalColumns ?
             additionalColumns
                 .map((aC) => ({ [aC.id]: aC }))
-                .reduce((a, b) => ({ ...a, ...b }))
+                .reduce((a, b) => ({ ...a, ...b }), [])
             : {};
     }, [additionalColumns]);
 
@@ -160,6 +179,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         };
     });
 
+
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as string[])
             .map((key) => {
@@ -183,27 +203,19 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                     align: "left",
                     sortable: false,
                     label: additionalColumn.title,
-                    width: additionalColumn.width ? additionalColumn.width : 200
+                    width: additionalColumn.width ?? 200
                 }));
             allColumns.push(...items);
         }
 
-        let result: CMSColumn[];
-        if (properties) {
-            result = properties
-                .map((p) => {
-                    return allColumns.find(c => c.id === p);
-                }).filter(c => !!c) as CMSColumn[];
-        } else if (excludedProperties) {
-            result = allColumns
-                .filter(c => !(excludedProperties as string[]).includes(c.id));
-        } else {
-            result = allColumns;
-        }
+        const result: CMSColumn[] = displayedProperties
+            .map((p) => {
+                return allColumns.find(c => c.id === p);
+            }).filter(c => !!c) as CMSColumn[];
 
         return result;
 
-    }, [properties, excludedProperties]);
+    }, [displayedProperties]);
 
     useEffect(() => {
 
@@ -215,7 +227,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
             entities => {
                 setDataLoading(false);
                 setDataLoadingError(undefined);
-                setData(entities);
+                updateData(entities);
                 setNoMoreToLoad(!paginationEnabled || entities.length < itemCount);
             },
             (error) => {
@@ -229,7 +241,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
             sortByProperty,
             currentSort);
 
-        return () => cancelSubscription();
+        return cancelSubscription;
     }, [collectionPath, schema, itemCount, currentSort, sortByProperty, filter]);
 
     const onColumnSort = ({ key }: any) => {
@@ -275,7 +287,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     const loadNextPage = () => {
         if (!paginationEnabled || dataLoading || noMoreToLoad)
             return;
-        console.debug("collection loadNextPage", itemCount);
         setItemCount(itemCount + PAGE_SIZE);
     };
 
@@ -298,6 +309,16 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         setFilter(filterValues);
     };
 
+    const buildIdColumn = (props: {
+        entity: Entity<S>, size: CollectionSize, collectionPath: string
+    }) => {
+        if (tableRowWidgetBuilder)
+            return tableRowWidgetBuilder(props);
+        else
+            return <CollectionRowActions {...props}/>;
+
+    };
+
     const cellRenderer = ({
                               column,
                               columnIndex,
@@ -307,10 +328,11 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
 
         const entity: Entity<S> = rowData;
 
-        if (columnIndex === 0 && tableRowWidgetBuilder) {
-            return tableRowWidgetBuilder({
+        if (columnIndex === 0) {
+            return buildIdColumn({
                 size,
-                entity
+                entity,
+                collectionPath
             });
         }
 
@@ -318,14 +340,13 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
         const property = schema.properties[propertyKey];
 
         if (column.type === "property") {
-            if (!editEnabled || !inlineEditing) {
+            if (!inlineEditing) {
                 return (
                     <PreviewTableCell
                         key={`preview_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
                         size={size}
                         align={column.align}>
                         <PreviewComponent
-                            key={`table_preview_${entity.id}_${propertyKey}`}
                             name={`preview_${propertyKey}_${rowIndex}_${columnIndex}`}
                             value={entity.values[propertyKey]}
                             property={property}
@@ -334,14 +355,13 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                         />
                     </PreviewTableCell>
                 );
-            } else if (property.disabled || !editEnabled) {
+            } else if (property.disabled) {
                 return (
                     <DisabledTableCell
                         key={`disabled_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
                         size={size}
                         align={column.align}>
                         <PreviewComponent
-                            key={`table_preview_${entity.id}_${propertyKey}`}
                             name={propertyKey}
                             value={entity.values[propertyKey]}
                             property={property}
@@ -353,13 +373,13 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
             } else {
 
                 const openPopup = () => {
-                    setFormPopupOpen(true);
+                    updatePopup(true);
                 };
 
                 const onSelect = (cellRect: DOMRect) => {
                     select({
                         columnIndex,
-                        rowIndex,
+                        // rowIndex,
                         width: column.width,
                         height: column.height,
                         entity,
@@ -370,7 +390,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                 };
 
                 const selected = selectedCell?.columnIndex === columnIndex
-                    && selectedCell?.rowIndex === rowIndex;
+                    && selectedCell?.entity.id === entity.id;
 
                 const isFocused = selected && focused;
 
@@ -522,7 +542,7 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                                     key={"header-id"}
                                     dataKey={"id"}
                                     flexShrink={0}
-                                    frozen={"left"}
+                                    frozen={frozenIdColumn ? "left" : undefined}
                                     width={160}/>
 
                                 {columns.map((column) =>
@@ -574,12 +594,12 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                     createFormField={createFormField}
                     cellRect={selectedCell?.cellRect}
                     formPopupOpen={formPopupOpen}
-                    setFormPopupOpen={setFormPopupOpen}
-                    rowIndex={selectedCell?.rowIndex}
+                    setFormPopupOpen={updatePopup}
+                    columnIndex={selectedCell?.columnIndex}
                     name={selectedCell?.name}
                     property={selectedCell?.property}
                     setPreventOutsideClick={setPreventOutsideClick}
-                    entity={selectedCell?.rowIndex != undefined ? data[selectedCell.rowIndex] : undefined}/>
+                    entity={selectedCell?.entity}/>
 
                 <OutsideAlerter enabled={!preventOutsideClick}
                                 onOutsideClick={handleClickOutside}>

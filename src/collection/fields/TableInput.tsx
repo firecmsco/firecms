@@ -15,18 +15,30 @@ export function TableInput(props: {
 
     useEffect(
         () => {
-            const handler = setTimeout(() => {
+            const doUpdate = () => {
                 const emptyInitialValue = !value || value.length === 0;
                 if (emptyInitialValue && !internalValue)
                     return;
-                updateValue(internalValue);
-            }, 300);
+                if (internalValue !== value)
+                    updateValue(internalValue);
+            };
+            const handler = setTimeout(doUpdate, 300);
 
             return () => {
+                doUpdate();
                 clearTimeout(handler);
             };
+
         },
         [internalValue]
+    );
+
+    useEffect(
+        () => {
+            if (!focused && value !== internalValue)
+                setInternalValue(value);
+        },
+        [value, focused]
     );
 
     const classes = useInputStyles();

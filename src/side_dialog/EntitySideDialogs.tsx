@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { EntityCollection, EntitySchema } from "../models";
-import { Route, Switch } from "react-router-dom";
-import { useSelectedEntityContext } from "./SelectedEntityContext";
 import { createStyles, makeStyles } from "@material-ui/core";
-import { SideCMSRoute } from "./SideCMSRoute";
 import { EntityDrawer } from "./EntityDrawer";
-import { buildCollectionPath } from "../routes/navigation";
+import EntityView from "./EntityView";
+import { SidePanelProps, useSideEntityController } from "./SideEntityContext";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -21,7 +19,7 @@ export const useStyles = makeStyles(theme => createStyles({
         [theme.breakpoints.down("xs")]: {
             width: "100vw"
         },
-        transition: "width 150ms cubic-bezier(0.33, 1, 0.68, 1)"
+        transition: "width 155ms cubic-bezier(0.33, 1, 0.68, 1)"
     },
     wide: {
         width: "65vw",
@@ -40,60 +38,52 @@ export const useStyles = makeStyles(theme => createStyles({
     }
 }));
 
-interface SidePanel {
-    open: boolean;
-    location?: any
-}
 
-export function EntitySideDialogs<S extends EntitySchema>({ navigation }: {
-    navigation: EntityCollection[]
-}) {
+export function EntitySideDialogs<S extends EntitySchema>({ navigation }: { navigation: EntityCollection[] }) {
 
-    const selectedEntityContext = useSelectedEntityContext();
+    const sideEntityContext = useSideEntityController();
     const classes = useStyles();
 
-    const sidePanels: SidePanel[] = [
-        ...selectedEntityContext.sideLocations.map((location) => ({
-            open: true,
-            location
-        })),
-        { open: false }]; // we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed
+    const sidePanels = sideEntityContext.sidePanels;
+    // const [sidePanelBeingClosed, setSidePanelBeingClosed] = useState<SidePanelProps | undefined>();
 
-    return <>
-        {
-            sidePanels.map((panel, index) => {
-                const selectedView: "form" | "collection" = panel.location?.subcollection ? "collection" : "form";
-                return (
-                    <EntityDrawer
-                        key={`side_menu_${index}`}
-                        open={panel.open}
-                        onClose={() => {
-                            selectedEntityContext.close();
-                        }}
-                        offsetPosition={sidePanels.length - index - 2}
-                    >
-                        <div
-                            className={selectedView === "form" ? classes.root : classes.wide}>
-                            {panel.location &&
-                            <Switch location={panel.location as any}>
-                                {navigation.map(entityCollection => (
-                                        <Route
-                                            path={buildCollectionPath(entityCollection)}
-                                            key={`navigation_${entityCollection.relativePath}`}>
-                                            <SideCMSRoute
-                                                type={"collection"}
-                                                collectionPath={entityCollection.relativePath}
-                                                view={entityCollection}
-                                            />
-                                        </Route>
-                                    )
-                                )}
-                            </Switch>}
-                        </div>
-                    </EntityDrawer>
-                );
-            })
-        }
-    </>;
+    const onExitAnimation = () => {
+        // setSidePanelBeingClosed(undefined);
+    };
+
+    // const extraSidePanel = sidePanelBeingClosed;
+
+    const allPanels = [...sidePanels, undefined];
+    return (
+        <>
+            {/* we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed */}
+            {
+                allPanels.map((panel: SidePanelProps | undefined, index) =>
+                    (
+                        <EntityDrawer
+                            key={`side_menu_${index}`}
+                            open={panel !== undefined}
+                            onClose={() => {
+                                // setSidePanelBeingClosed(panel);
+                                sideEntityContext.close();
+                            }}
+                            offsetPosition={sidePanels.length - index - 1}
+                            onExitAnimation={onExitAnimation}
+                        >
+                            <div
+                                className={panel === undefined || !panel.selectedSubcollection ? classes.root : classes.wide}>
+
+                                {panel && <EntityView
+                                    key={`side-form-route-${panel.entityId}`}
+                                    navigation={navigation}
+                                    {...panel}/>
+                                }
+                            </div>
+                        </EntityDrawer>
+                    ))
+            }
+
+        </>
+    );
 }
 

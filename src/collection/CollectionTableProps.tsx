@@ -56,20 +56,14 @@ export interface CollectionTableProps<S extends EntitySchema,
 
     /**
      * Properties displayed in this collection. If this property is not set
-     * every property is displayed
+     * every property is displayed, you can filter
      */
-    properties?: Key[];
-
-    /**
-     * Properties that should NOT get displayed in the collection view.
-     * All the other properties from the the entity are displayed
-     * It has no effect if the properties value is set.
-     */
-    excludedProperties?: Key[];
+    displayedProperties: string[];
 
     /**
      * You can add additional columns to the collection view by implementing
      * an additional column delegate.
+     * Usually defined by the end user.
      */
     additionalColumns?: AdditionalColumnDelegate<S>[];
 
@@ -79,20 +73,9 @@ export interface CollectionTableProps<S extends EntitySchema,
     filterableProperties?: Key[];
 
     /**
-     * Should the table add an edit button. If set to false `inlineEditing`
-     * has no effect.
-     */
-    editEnabled: boolean;
-
-    /**
      * Can the table be edited inline
      */
     inlineEditing: boolean;
-
-    /**
-     * Should the table add a delete button
-     */
-    deleteEnabled?: boolean;
 
     /**
      * Callback when anywhere on the table is clicked
@@ -115,6 +98,12 @@ export interface CollectionTableProps<S extends EntitySchema,
     createFormField: FormFieldBuilder;
 
     /**
+     * List of entities that will be displayed on top, no matter the ordering.
+     * This is used for reference fields selection
+     */
+    entitiesDisplayedFirst?: Entity<S>[];
+
+    /**
      * Additional components builder such as buttons in the
      * collection toolbar
      */
@@ -126,8 +115,13 @@ export interface CollectionTableProps<S extends EntitySchema,
      * @param size
      */
     tableRowWidgetBuilder?: ({
-                                  entity,
-                                  size
-                              }: { entity: Entity<S>, size: CollectionSize }) => React.ReactNode;
+                                 collectionPath,
+                                 entity,
+                                 size
+                             }: { collectionPath: string, entity: Entity<S>, size: CollectionSize }) => React.ReactNode;
 
+    /**
+     * Is the id column frozen to the left.
+     */
+    frozenIdColumn?: boolean;
 }

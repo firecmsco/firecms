@@ -1,7 +1,6 @@
 import { CollectionSize, Entity, EntitySchema } from "../models";
 import { renderSkeletonText } from "../preview/components/SkeletonComponent";
 import { useTableStyles } from "./styles";
-import { useSelectedEntityContext } from "../side_dialog/SelectedEntityContext";
 
 import React, { MouseEvent } from "react";
 import "react-base-table/styles.css";
@@ -12,9 +11,11 @@ import {
     ListItemText,
     Menu,
     MenuItem,
+    Tooltip,
     Typography
 } from "@material-ui/core";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
+import { useSideEntityController } from "../side_dialog/SideEntityContext";
 
 export function CollectionRowActions<S extends EntitySchema>({
                                                                  entity,
@@ -29,39 +30,40 @@ export function CollectionRowActions<S extends EntitySchema>({
                                                              }:
                                                                  {
                                                                      entity: Entity<S>,
-                                                                     isSelected: boolean,
                                                                      collectionPath: string,
-                                                                     editEnabled: boolean,
-                                                                     deleteEnabled: boolean,
-                                                                     selectionEnabled: boolean,
                                                                      size: CollectionSize,
-                                                                     toggleEntitySelection: (entity: Entity<S>) => void
-                                                                     onDeleteClicked: (entity: Entity<S>) => void
+                                                                     isSelected?: boolean,
+                                                                     editEnabled?: boolean,
+                                                                     deleteEnabled?: boolean,
+                                                                     selectionEnabled?: boolean,
+                                                                     toggleEntitySelection?: (entity: Entity<S>) => void
+                                                                     onDeleteClicked?: (entity: Entity<S>) => void
                                                                  }) {
 
-
-    const selectedEntityContext = useSelectedEntityContext();
+    const selectedEntityContext = useSideEntityController();
     const classes = useTableStyles({ size });
 
     const [anchorEl, setAnchorEl] = React.useState<any | null>(null);
 
-    const handleClick = (event: React.MouseEvent) => {
+    const openMenu = (event: React.MouseEvent) => {
         setAnchorEl(event.currentTarget);
         event.stopPropagation();
     };
 
-    const handleClose = () => {
+    const closeMenu = () => {
         setAnchorEl(null);
     };
 
     const onCheckboxChange = (event: React.ChangeEvent) => {
-        toggleEntitySelection(entity);
+        if (toggleEntitySelection)
+            toggleEntitySelection(entity);
         event.stopPropagation();
     };
 
     const onDeleteClick = (event: MouseEvent) => {
         event.stopPropagation();
-        onDeleteClicked(entity);
+        if (onDeleteClicked)
+            onDeleteClicked(entity);
         setAnchorEl(null);
     };
 
@@ -75,31 +77,34 @@ export function CollectionRowActions<S extends EntitySchema>({
         setAnchorEl(null);
     };
 
-    const onDivClick = selectionEnabled ?
+    const onContainerClick = selectionEnabled ?
         (event: MouseEvent) => {
-            toggleEntitySelection(entity);
+            if (toggleEntitySelection)
+                toggleEntitySelection(entity);
             event.stopPropagation();
         } : undefined;
 
     return (
-        <div onClick={onDivClick}
+        <div onClick={onContainerClick}
              className={classes.cellButtonsWrap}>
 
-            {(editEnabled || deleteEnabled) &&
+            {(editEnabled || deleteEnabled || selectionEnabled) &&
             <div className={classes.cellButtons}
             >
                 {editEnabled &&
-                <IconButton
-                    onClick={(event: MouseEvent) => {
-                        event.stopPropagation();
-                        selectedEntityContext.open({
-                            entityId: entity.id,
-                            collectionPath
-                        });
-                    }}
-                >
-                    <KeyboardTab/>
-                </IconButton>
+                <Tooltip title={"Edit"}>
+                    <IconButton
+                        onClick={(event: MouseEvent) => {
+                            event.stopPropagation();
+                            selectedEntityContext.open({
+                                entityId: entity.id,
+                                collectionPath
+                            });
+                        }}
+                    >
+                        <KeyboardTab/>
+                    </IconButton>
+                </Tooltip>
                 }
 
                 {selectionEnabled && <Checkbox
@@ -109,7 +114,7 @@ export function CollectionRowActions<S extends EntitySchema>({
 
                 {editEnabled &&
                 <IconButton
-                    onClick={handleClick}
+                    onClick={openMenu}
                 >
                     <MoreVert/>
                 </IconButton>
@@ -117,9 +122,9 @@ export function CollectionRowActions<S extends EntitySchema>({
 
                 {editEnabled && <Menu
                     anchorEl={anchorEl}
-                    // keepMounted
                     open={Boolean(anchorEl)}
-                    onClose={handleClose}
+                    onClose={closeMenu}
+                    elevation={2}
                 >
                     {deleteEnabled &&
                     <MenuItem onClick={onDeleteClick}>

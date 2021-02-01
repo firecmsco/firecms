@@ -6,7 +6,7 @@ import {
     makeStyles,
     Theme
 } from "@material-ui/core/styles";
-import { IconButton } from "@material-ui/core";
+import { FormControl, IconButton } from "@material-ui/core";
 
 import SearchIcon from "@material-ui/icons/Search";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -92,30 +92,30 @@ export default function SearchBar({ onTextSearch }: SearchBarProps) {
     }
 
     return (
-        <div className={classes.search}>
-            <div className={classes.searchIcon}>
-                <SearchIcon/>
+            <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                    <SearchIcon/>
+                </div>
+                <InputBase
+                    placeholder="Search"
+                    value={searchText}
+                    onChange={(event) => {
+                        setSearchText(event.target.value);
+                    }}
+                    classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput
+                    }}
+                    endAdornment={searchText ?
+                        <IconButton
+                            size={"small"}
+                            onClick={clearText}>
+                            <ClearIcon fontSize={"small"}/>
+                        </IconButton> :
+                        <div style={{ width: 26 }}/>
+                    }
+                    inputProps={{ "aria-label": "search" }}
+                />
             </div>
-            <InputBase
-                placeholder="Search"
-                value={searchText}
-                onChange={(event) => {
-                    setSearchText(event.target.value);
-                }}
-                classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput
-                }}
-                endAdornment={searchText ?
-                    <IconButton
-                        size={"small"}
-                        onClick={clearText}>
-                        <ClearIcon fontSize={"small"}/>
-                    </IconButton> :
-                    <div style={{ width: 26 }}/>
-                }
-                inputProps={{ "aria-label": "search" }}
-            />
-        </div>
     );
 }

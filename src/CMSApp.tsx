@@ -24,8 +24,6 @@ import "typeface-space-mono";
 import { CircularProgressCenter } from "./components";
 import { Authenticator } from "./models";
 import { blue, pink, red } from "@material-ui/core/colors";
-
-import { SelectedEntityProvider } from "./side_dialog/SelectedEntityContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { SnackbarProvider } from "./contexts/SnackbarContext";
@@ -38,6 +36,7 @@ import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./components/CMSAppBar";
 import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
+import { SideEntityProvider } from "./side_dialog/SideEntityContext";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -95,72 +94,86 @@ export function CMSApp(props: CMSAppProps) {
     } = props;
 
     const classes = useStyles();
-    const theme = createMuiTheme({
-        palette: {
-            background: {
-                default: "#f6f8f9"
-            },
-            primary: {
-                main: primaryColor ? primaryColor : blue["800"]
-            },
-            secondary: {
-                main: secondaryColor ? secondaryColor : pink["400"]
-            },
-            error: {
-                main: red.A400
-            }
-        },
-        typography: {
-            "fontFamily": fontFamily ? fontFamily : `"Rubik", "Roboto", "Helvetica", "Arial", sans-serif`
-        },
-        shape: {
-            borderRadius: 2
-        },
-        overrides: {
-            MuiButton: {
-                root: {
-                    borderRadius: 4
-                }
-            },
-            MuiTableRow: {
-                root: {
-                    "&:last-child td": {
-                        borderBottom: 0
-                    }
-                }
-            },
-            MuiTypography: {
-                root: {
-                    "&.mono": {
-                        fontFamily: "'Space Mono', 'Lucida Console', monospace"
-                    }
-                }
-            },
-            MuiInputLabel: {
-                formControl: {
-                    top: 0,
-                    left: 0,
-                    position: "absolute",
-                    transform: "translate(0, 16px) scale(1)"
-                }
-            },
-            MuiInputBase: {
-                formControl: {
-                    minHeight: "64px"
+
+    const makeTheme = () => {
+
+        const original = createMuiTheme({
+            palette: {
+                background: {
+                    default: "#f6f8f9"
                 },
-                root: {
-                    "&.mono": {
-                        fontFamily: "'Space Mono', 'Lucida Console', monospace"
-                    }
+                primary: {
+                    main: primaryColor ? primaryColor : blue["800"]
+                },
+                secondary: {
+                    main: secondaryColor ? secondaryColor : pink["400"]
+                },
+                error: {
+                    main: red.A400
                 }
             },
-            MuiFormControlLabel: {
-                label: {
-                    width: "100%"
+            typography: {
+                "fontFamily": fontFamily ? fontFamily : `"Rubik", "Roboto", "Helvetica", "Arial", sans-serif`,
+                fontWeightMedium: 500
+            },
+            shape: {
+                borderRadius: 2
+            },
+            overrides: {
+                MuiButton: {
+                    root: {
+                        borderRadius: 4
+                    }
+                },
+                MuiTableRow: {
+                    root: {
+                        "&:last-child td": {
+                            borderBottom: 0
+                        }
+                    }
+                },
+                MuiTypography: {
+                    root: {
+                        "&.mono": {
+                            fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                        }
+                    }
+                },
+                MuiInputLabel: {
+                    formControl: {
+                        top: 0,
+                        left: 0,
+                        position: "absolute",
+                        transform: "translate(0, 16px) scale(1)"
+                    }
+                },
+                MuiInputBase: {
+                    formControl: {
+                        minHeight: "64px"
+                    },
+                    root: {
+                        "&.mono": {
+                            fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                        }
+                    }
+                },
+                MuiFormControlLabel: {
+                    label: {
+                        width: "100%"
+                    }
                 }
             }
-        }
-    });
+        });
+
+        return {
+            ...original,
+            shadows: original.shadows.map((value, index) => {
+                if (index == 1) return "0 1px 1px 0 rgb(0 0 0 / 16%)";
+                else return value;
+            })
+        };
+    };
+    const theme = makeTheme();
 
     const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -239,7 +252,7 @@ export function CMSApp(props: CMSAppProps) {
     function renderMainView() {
         return (
             <Router>
-                <SelectedEntityProvider>
+                <SideEntityProvider navigation={navigation}>
                     <BreadcrumbsProvider>
                         <MuiPickersUtilsProvider
                             utils={DateFnsUtils}>
@@ -266,13 +279,12 @@ export function CMSApp(props: CMSAppProps) {
                                     </main>
                                 </div>
 
-                                <EntitySideDialogs
-                                    navigation={navigation}/>
+                                <EntitySideDialogs navigation={navigation}/>
 
                             </DndProvider>
                         </MuiPickersUtilsProvider>
                     </BreadcrumbsProvider>
-                </SelectedEntityProvider>
+                </SideEntityProvider>
             </Router>
         );
     }

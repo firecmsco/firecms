@@ -30,6 +30,9 @@ export const useInputStyles = makeStyles<Theme>(theme => createStyles({
         },
         numberInput: {
             textAlign: "right"
+        },
+        arrayItem: {
+            margin: theme.spacing(0.5)
         }
     })
 );

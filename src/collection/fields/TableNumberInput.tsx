@@ -13,27 +13,40 @@ export function NumberTableInput(props: {
 }) {
 
     const { align, value, updateValue, focused, onBlur } = props;
-    const [internalValue, setInternalValue] = useState<string | null>(typeof value === "number" ? value.toString() : "");
+    const propStringValue = typeof value === "number" ? value.toString() : "";
+    const [internalValue, setInternalValue] = useState<string | null>(propStringValue);
 
     useEffect(
         () => {
-            const handler = setTimeout(() => {
-                if (internalValue !== undefined && internalValue !== null) {
-                    const numberValue = parseFloat(internalValue);
-                    if (isNaN(numberValue))
-                        return;
-                    if (numberValue !== undefined && numberValue !== null)
-                        updateValue(numberValue);
-                } else {
-                    updateValue(null);
+            const doUpdate = () => {
+                if(internalValue !== propStringValue) {
+                    if (internalValue !== undefined && internalValue !== null) {
+                        const numberValue = parseFloat(internalValue);
+                        if (isNaN(numberValue))
+                            return;
+                        if (numberValue !== undefined && numberValue !== null)
+                            updateValue(numberValue);
+                    } else {
+                        updateValue(null);
+                    }
                 }
-            }, 300);
+            };
+            const handler = setTimeout(doUpdate, 300);
 
             return () => {
+                doUpdate();
                 clearTimeout(handler);
             };
         },
         [internalValue]
+    );
+
+    useEffect(
+        () => {
+            if (!focused && propStringValue !== internalValue)
+                setInternalValue(value.toString());
+        },
+        [value, focused]
     );
 
     const ref = React.createRef<HTMLInputElement>();

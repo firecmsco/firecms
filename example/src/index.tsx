@@ -5,8 +5,6 @@ import "typeface-rubik";
 import SampleApp from "./SampleApp";
 
 ReactDOM.render(
-    <React.StrictMode>
-        <SampleApp/>
-    </React.StrictMode>,
+    <SampleApp/>,
     document.getElementById("root")
 );

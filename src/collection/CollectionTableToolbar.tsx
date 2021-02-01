@@ -46,7 +46,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
             position: "relative",
             backgroundColor: "#e3e3e3",
             fontSize: 14,
-            fontWeight: 500,
+            fontWeight: theme.typography.fontWeightMedium,
             padding: "10px 26px 10px 12px",
             transition: theme.transitions.create(["border-color", "box-shadow"]),
             "&:focus": {
@@ -56,7 +56,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
         item: {
             backgroundColor: "#f5f5f5",
             fontSize: 14,
-            fontWeight: 500,
+            fontWeight: theme.typography.fontWeightMedium,
             paddingTop: theme.spacing(1),
             paddingBottom: theme.spacing(1),
             "&:hover": {
@@ -138,7 +138,7 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
     );
 
     return (
-        <Toolbar
+        <div
             className={classes.toolbar}
         >
             <Box
@@ -152,7 +152,7 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
                 <Box display={"flex"}
                      alignItems="center">
 
-                    {props.title && <Hidden xsDown>
+                    {props.title && <Hidden smDown>
                         <Box mr={2}>
                             {props.title}
                         </Box>
@@ -183,6 +183,6 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
 
             </Box>
 
-        </Toolbar>
+        </div>
     );
 }

@@ -1,6 +1,5 @@
-import { PreviewComponentProps } from "../../models/preview_component_props";
+import { MediaType, PreviewComponentProps } from "../../models";
 import React from "react";
-import { MediaType } from "../../models";
 import ImagePreview from "./ImagePreview";
 
 
@@ -9,6 +8,7 @@ import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
+
 
 export function UrlComponentPreview({
                                         name,
@@ -23,26 +23,29 @@ export function UrlComponentPreview({
     if (!value) return <div/>;
     const url = value;
     if (typeof property.config?.url === "boolean" && property.config.url) {
-        return <Link style={{
-            display: "flex",
-            wordBreak: "break-word",
-            fontWeight: 500
-        }}
-                     href={url}
-                     onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                     target="_blank">
-            <OpenInNewIcon style={{ marginRight: 8 }} fontSize={"small"}/>
-            {url}
-        </Link>;
+        return (
+            <Link className={classes.link}
+                  href={url}
+                  onMouseDown={(e: React.MouseEvent) => {
+                      e.preventDefault();
+                  }}
+                  target="_blank">
+                <OpenInNewIcon style={{ marginRight: 8 }} fontSize={"small"}/>
+                {url}
+            </Link>
+        );
     }
 
     const mediaType: MediaType = property.config?.url as MediaType
         || property.config?.storageMeta?.mediaType;
     if (mediaType === "image") {
-        return <ImagePreview key={`image_preview_${url}_${size}`} url={url}
+        return <ImagePreview key={`image_preview_${url}_${size}`}
+                             url={url}
                              size={size}/>;
     } else if (mediaType === "audio") {
-        return <audio controls src={url} key={`audio_preview_${url}_${size}`}>
+        return <audio controls
+                      src={url}
+                      key={`audio_preview_${url}_${size}`}>
             Your browser does not support the
             <code>audio</code> element.
         </audio>;

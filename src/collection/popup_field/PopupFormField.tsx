@@ -7,11 +7,12 @@ import deepEqual from "deep-equal";
 import {
     Entity,
     EntitySchema,
-    EntityStatus, EntityValues,
+    EntityStatus,
+    EntityValues,
     Property,
     saveEntity
 } from "../../models";
-import { Formik, useFormikContext } from "formik";
+import { Formik, FormikProps, useFormikContext } from "formik";
 import { Draggable } from "./Draggable";
 import { getYupObjectSchema } from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
@@ -19,34 +20,18 @@ import { useWindowSize } from "../../util/useWindowSize";
 import { FormFieldBuilder } from "../../form";
 import { FormContext } from "../../models/form_props";
 
-const AutoSubmitToken = ({
-                             name,
-                             onSubmit
-                         }: { name: string, onSubmit: (values: any) => void }) => {
-    const { values, errors, submitForm } = useFormikContext();
-
-    React.useEffect(() => {
-        const fieldError = errors[name];
-        const shouldSave = !fieldError || (Array.isArray(fieldError) && !fieldError.filter((e: any) => !!e).length);
-        if (shouldSave) {
-            onSubmit(values);
-            submitForm();
-        }
-    }, [values, submitForm, errors]);
-    return null;
-};
 
 interface PopupFormFieldProps<S extends EntitySchema> {
     entity?: Entity<S>,
     schema: S,
     tableKey: string,
+    name?: string;
+    property?: Property;
     createFormField: FormFieldBuilder,
     cellRect?: DOMRect;
     formPopupOpen: boolean;
     setFormPopupOpen: (value: boolean) => void;
-    rowIndex?: number;
-    name?: string;
-    property?: Property;
+    columnIndex?: number;
     setPreventOutsideClick: (value: any) => void;
 }
 
@@ -61,10 +46,10 @@ function PopupFormField<S extends EntitySchema>({
                                                     setPreventOutsideClick,
                                                     formPopupOpen,
                                                     setFormPopupOpen,
-                                                    rowIndex
+                                                    columnIndex
                                                 }: PopupFormFieldProps<S>) {
 
-    const [internalValue, setInternalValue] = useState<any>(entity?.values);
+    const [internalValue, setInternalValue] = useState<EntityValues<S> | undefined>(entity?.values);
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
 
@@ -80,13 +65,15 @@ function PopupFormField<S extends EntitySchema>({
 
     useEffect(
         () => {
-            const handler = setTimeout(() => {
+            const saveIfChanged = () => {
                 if (internalValue && !deepEqual(entity?.values, internalValue)) {
                     saveValue(internalValue);
                 }
-            }, 300);
+            };
+            const handler = setTimeout(saveIfChanged, 300);
 
             return () => {
+                saveIfChanged();
                 clearTimeout(handler);
             };
         },
@@ -156,9 +143,50 @@ function PopupFormField<S extends EntitySchema>({
     if (!entity)
         return <></>;
 
+    const renderForm = ({
+                            handleChange,
+                            values,
+                            touched,
+                            dirty,
+                            setFieldValue,
+                            setFieldTouched,
+                            handleSubmit,
+                            isSubmitting
+                        }: FormikProps<EntityValues<S>>) => {
+
+        const context: FormContext<S> = {
+            entitySchema: schema,
+            values
+        };
+
+        return <OutsideAlerter
+            enabled={true}
+            onOutsideClick={onOutsideClick}>
+
+            {name && property && createFormField({
+                name: name as string,
+                property: property,
+                includeDescription: false,
+                underlyingValueHasChanged: false,
+                context,
+                tableMode: true,
+                partOfArray: false,
+                autoFocus: formPopupOpen
+            })}
+
+            {name && <AutoSubmitToken
+                name={name}
+                onSubmit={(values) => {
+                    setInternalValue(values);
+                }}/>}
+
+        </OutsideAlerter>;
+    };
+
+
     const form = entity && (
         <div
-            key={`popup_form_${tableKey}_${entity.id}_${rowIndex}`}
+            key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
             style={{
                 width: 470,
                 maxWidth: "100vw",
@@ -168,49 +196,11 @@ function PopupFormField<S extends EntitySchema>({
             <Formik
                 initialValues={entity.values}
                 validationSchema={validationSchema}
-                onSubmit={(values) => {
-                    setInternalValue(values);
+                onSubmit={async (values) => {
+                    return Promise.resolve();
                 }}
             >
-                {({
-                      handleChange,
-                      values,
-                      touched,
-                      dirty,
-                      setFieldValue,
-                      setFieldTouched,
-                      handleSubmit,
-                      isSubmitting
-                  }) => {
-
-                    const context:FormContext<S> ={
-                        entitySchema:schema,
-                        values
-                    }
-
-                    return <OutsideAlerter
-                        enabled={true}
-                        onOutsideClick={onOutsideClick}>
-
-                        {name && property && createFormField({
-                            name: name as string,
-                            property: property,
-                            includeDescription: false,
-                            underlyingValueHasChanged: false,
-                            context,
-                            tableMode: true,
-                            partOfArray: false,
-                            autoFocus: formPopupOpen,
-                        })}
-
-                        {name && <AutoSubmitToken
-                            name={name}
-                            onSubmit={(values) => {
-                                setInternalValue(values);
-                            }}/>}
-
-                    </OutsideAlerter>;
-                }}
+                {renderForm}
             </Formik>
         </div>
     );
@@ -218,7 +208,7 @@ function PopupFormField<S extends EntitySchema>({
     return (
         <Portal container={document.body}>
             <Draggable
-                key={`draggable_${name}_${rowIndex}`}
+                key={`draggable_${name}_${entity.id}`}
                 x={popupLocation?.x}
                 y={popupLocation?.y}
                 open={formPopupOpen}
@@ -248,5 +238,21 @@ function PopupFormField<S extends EntitySchema>({
     );
 
 }
+
+const AutoSubmitToken = ({
+                             name,
+                             onSubmit
+                         }: { name: string, onSubmit: (values: any) => void }) => {
+    const { values, errors, submitForm } = useFormikContext();
+
+    React.useEffect(() => {
+        const fieldError = errors[name];
+        const shouldSave = !fieldError || (Array.isArray(fieldError) && !fieldError.filter((e: any) => !!e).length);
+        if (shouldSave) {
+            onSubmit(values);
+        }
+    }, [values, submitForm, errors]);
+    return null;
+};
 
 export default PopupFormField;

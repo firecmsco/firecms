@@ -12,7 +12,7 @@ const useStyles = makeStyles<Theme>((theme: Theme) =>
             zIndex: 1300,
             boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
             borderRadius: "6px",
-            backgroundColor: "#f9f9f9",
+            backgroundColor: "white",
             padding: theme.spacing(2)
         },
         hidden: {

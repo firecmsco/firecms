@@ -72,27 +72,27 @@ interface TableCellProps<T, S extends EntitySchema<string>> {
 }
 
 
-const TableCell = <T, S extends EntitySchema<string>>({
-                                                          selected,
-                                                          focused,
-                                                          tableKey,
-                                                          columnIndex,
-                                                          rowIndex,
-                                                          name,
-                                                          path,
-                                                          setPreventOutsideClick,
-                                                          setFocused,
-                                                          entity,
-                                                          select,
-                                                          openPopup,
-                                                          schema,
-                                                          value,
-                                                          property,
-                                                          size,
-                                                          align,
-                                                          createFormField,
-                                                          CollectionTable
-                                                      }: TableCellProps<T, S> & CellStyleProps) => {
+const TableCell = <T, S extends EntitySchema>({
+                                                  selected,
+                                                  focused,
+                                                  tableKey,
+                                                  columnIndex,
+                                                  rowIndex,
+                                                  name,
+                                                  path,
+                                                  setPreventOutsideClick,
+                                                  setFocused,
+                                                  entity,
+                                                  select,
+                                                  openPopup,
+                                                  schema,
+                                                  value,
+                                                  property,
+                                                  size,
+                                                  align,
+                                                  createFormField,
+                                                  CollectionTable
+                                              }: TableCellProps<T, S> & CellStyleProps) => {
 
     const ref = React.createRef<HTMLDivElement>();
     const [internalValue, setInternalValue] = useState<any | null>(value);
@@ -118,11 +118,14 @@ const TableCell = <T, S extends EntitySchema<string>>({
 
     const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (event.detail > 1) event.preventDefault();
+    };
+
+    const onFocus = (event: React.SyntheticEvent<HTMLDivElement>) => {
         onSelect();
+        event.stopPropagation();
     };
 
     const onDoubleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        onSelect();
         openPopup();
     };
 
@@ -191,6 +194,7 @@ const TableCell = <T, S extends EntitySchema<string>>({
 
     let component;
     let inputComponent;
+    let allowScroll = false;
 
     if (selected && property.dataType === "number") {
         const numberProperty = property as NumberProperty;
@@ -214,6 +218,7 @@ const TableCell = <T, S extends EntitySchema<string>>({
                 value={internalValue as number}
                 updateValue={updateValue}
             />;
+            allowScroll=true;
         }
     } else if (selected && property.dataType === "string") {
         const stringProperty = property as StringProperty;
@@ -237,6 +242,7 @@ const TableCell = <T, S extends EntitySchema<string>>({
                                              value={internalValue as string}
                                              updateValue={updateValue}
                 />;
+                allowScroll=true;
             }
         }
     } else if (property.dataType === "boolean") {
@@ -246,7 +252,7 @@ const TableCell = <T, S extends EntitySchema<string>>({
                                       updateValue={updateValue}
         />;
     } else if (property.dataType === "timestamp") {
-        if (!(property as TimestampProperty).autoValue)
+        if (!(property as TimestampProperty).autoValue) {
             inputComponent = <TableDateField name={name as string}
                                              error={error}
                                              focused={focused}
@@ -254,6 +260,8 @@ const TableCell = <T, S extends EntitySchema<string>>({
                                              updateValue={updateValue}
                                              setPreventOutsideClick={setPreventOutsideClick}
             />;
+            allowScroll=true;
+        }
     } else if (property.dataType === "reference") {
         inputComponent = <TableReferenceField name={name as string}
                                               internalValue={internalValue as firebase.firestore.DocumentReference}
@@ -265,6 +273,7 @@ const TableCell = <T, S extends EntitySchema<string>>({
                                               property={property as ReferenceProperty}
                                               setPreventOutsideClick={setPreventOutsideClick}
         />;
+        allowScroll=true;
     } else if (property.dataType === "array") {
         const arrayProperty = (property as ArrayProperty);
         if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
@@ -279,31 +288,42 @@ const TableCell = <T, S extends EntitySchema<string>>({
                                               updateValue={updateValue}
                                               setPreventOutsideClick={setPreventOutsideClick}
                 />;
+                allowScroll=true;
             }
+        } else if (arrayProperty.of.dataType === "reference") {
+            inputComponent = <TableReferenceField name={name as string}
+                                                  internalValue={internalValue as firebase.firestore.DocumentReference[]}
+                                                  updateValue={updateValue}
+                                                  size={size}
+                                                  createFormField={createFormField}
+                                                  CollectionTable={CollectionTable}
+                                                  schema={schema}
+                                                  property={property as ReferenceProperty}
+                                                  setPreventOutsideClick={setPreventOutsideClick}
+            />;
+            allowScroll=false;
         }
     }
 
-    const previewComponent = (
-        <OverflowingCell allowScroll={false}
-                         size={size}
-                         align={align}>
-            <ErrorBoundary>
-                <PreviewComponent
-                    name={name as string}
-                    value={internalValue}
-                    property={property}
-                    size={getPreviewSizeFrom(size)}
-                    entitySchema={schema}
-                />
-            </ErrorBoundary>
-        </OverflowingCell>);
-
-
     if (!inputComponent) {
-        component = previewComponent;
+        component = (
+            <OverflowingCell allowScroll={false}
+                             size={size}
+                             align={align}>
+                <ErrorBoundary>
+                    <PreviewComponent
+                        name={name as string}
+                        value={internalValue}
+                        property={property}
+                        size={getPreviewSizeFrom(size)}
+                        entitySchema={schema}
+                    />
+                </ErrorBoundary>
+            </OverflowingCell>
+        );
     } else {
         component = (
-            <OverflowingCell allowScroll={true}
+            <OverflowingCell allowScroll={allowScroll}
                              size={size}
                              align={align}>
                 {inputComponent}
@@ -317,7 +337,7 @@ const TableCell = <T, S extends EntitySchema<string>>({
             tabIndex={selected ? undefined : 0}
             key={`$table_cell_${tableKey}_${rowIndex}_${columnIndex}`}
             ref={ref}
-            onFocus={onSelect}
+            onFocus={onFocus}
             onClick={onClick}
             onDoubleClick={onDoubleClick}
             className={clsx(
@@ -371,7 +391,6 @@ const TableCell = <T, S extends EntitySchema<string>>({
     );
 };
 
-// const TableCellMemo = React.memo<TableCellProps<any, any> & StyleProps>(TableCell) as React.FunctionComponent<TableCellProps<any, any> & StyleProps>;
 export default React.memo<TableCellProps<any, any> & CellStyleProps>(TableCell) as React.FunctionComponent<TableCellProps<any, any> & CellStyleProps>;
 
 

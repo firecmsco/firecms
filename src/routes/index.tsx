@@ -2,7 +2,6 @@ export {
     CollectionRoute
 } from "./CollectionRoute";
 
-export { default as EntityFormRoute } from "./EntityFormRoute";
 
 
 
