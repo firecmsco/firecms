@@ -1,17 +1,17 @@
 import React from "react";
 import {
     Box,
-    createStyles,
     Divider,
     Drawer,
     Link,
     List,
     ListItem,
     ListItemText,
-    makeStyles,
     Theme,
-    Typography
+    Typography,
 } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { Link as ReactLink } from "react-router-dom";
 import "firebase/analytics";
 import "firebase/auth";

@@ -124,7 +124,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
         };
     }) ?? [];
 
-    const additionalColumns = [...collectionConfig.additionalColumns ?? [], ...subcollectionColumns];
+    const additionalColumns = [...(collectionConfig.additionalColumns ?? []), ...subcollectionColumns];
 
     const onEntityClick = (entity: Entity<M>) => {
         sideEntityController.open({
@@ -195,7 +195,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             <Typography
                 variant="h6"
                 style={{
-                    lineHeight: "1.1",
+                    lineHeight: "1.0",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
                     overflow: "hidden",
@@ -211,6 +211,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             </Typography>
             <Typography
                 style={{
+                    display: "block",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
                     overflow: "hidden",
@@ -369,7 +370,8 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                     <IconButton
                         color={"primary"}
                         disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                        onClick={onMultipleDeleteClick}>
+                        onClick={onMultipleDeleteClick}
+                        size="large">
                         <Delete/>
                     </IconButton>}
                 </span>

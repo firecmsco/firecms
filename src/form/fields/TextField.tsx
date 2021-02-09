@@ -42,7 +42,6 @@ export default function TextField<T extends string | number>({
                                                                  dependsOnOtherProperties
                                                              }: TextFieldProps<T>) {
 
-
     const classes = formStyles();
 
     let mediaType: MediaType | undefined;
@@ -86,6 +85,7 @@ export default function TextField<T extends string | number>({
 
     const filledInput = (
         <FilledInput
+            id="component-filled"
             className={classes.input}
             autoFocus={autoFocus}
             type={inputType}
@@ -105,15 +105,13 @@ export default function TextField<T extends string | number>({
         <>
 
             <FormControl
+                variant="filled"
                 required={property.validation?.required}
                 error={showError}
                 disabled={valueIsInfinity}
                 fullWidth>
 
-                <InputLabel style={{
-                    marginLeft: "8px",
-                    marginTop: "4px"
-                }}>
+                <InputLabel className={classes.inputLabel}>
                     <LabelWithIcon property={property}/>
                 </InputLabel>
 
@@ -122,8 +120,7 @@ export default function TextField<T extends string | number>({
                 <Box display={"flex"}>
 
                     <Box flexGrow={1}>
-                        {showError && <FormHelperText
-                            id="component-error-text">{error}</FormHelperText>}
+                        {showError && <FormHelperText>{error}</FormHelperText>}
 
                         {includeDescription &&
                         <FieldDescription property={property}/>}

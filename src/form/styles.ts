@@ -1,17 +1,19 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
+import { Theme } from "@material-ui/core";
 
 
-export const formStyles = makeStyles(theme => createStyles({
+export const formStyles = makeStyles((theme: Theme) => createStyles({
     paper: {
         elevation: 0,
-        padding: theme.spacing(1),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+        padding: theme.spacing(2),
+        [theme.breakpoints.up("md")]: {
             padding: theme.spacing(2)
         }
     },
     largePadding: {
         padding: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+        [theme.breakpoints.up("md")]: {
             padding: theme.spacing(3)
         }
     },
@@ -19,9 +21,11 @@ export const formStyles = makeStyles(theme => createStyles({
         backgroundColor: "rgba(0, 0, 0, 0.09)"
     },
     inputLabel: {
-        display: "inline-flex",
-        alignItems: "center",
-        height: "14px"
+        marginTop: "4px",
+        marginLeft: "4px"
+        // display: "inline-flex",
+        // alignItems: "center",
+        // height: "14px"
     },
     stickyButtons: {
         marginTop: theme.spacing(2),
@@ -43,6 +47,11 @@ export const formStyles = makeStyles(theme => createStyles({
     },
     input: {
         minHeight: "64px"
+    },
+    select: {
+        minHeight: "64px",
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1)
     },
     oneOfInput: {
         marginBottom: theme.spacing(2)

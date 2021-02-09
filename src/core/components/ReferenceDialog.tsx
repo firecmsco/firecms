@@ -6,15 +6,15 @@ import {
 } from "../../models";
 import {
     Button,
-    createStyles,
     Dialog,
     DialogActions,
     Divider,
-    makeStyles,
     Typography,
     useMediaQuery,
-    useTheme
+    useTheme,
 } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import React, { useEffect, useState } from "react";
 
 import CollectionTable from "../../collection/components/CollectionTable";

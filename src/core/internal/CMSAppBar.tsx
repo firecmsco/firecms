@@ -6,17 +6,17 @@ import {
     Breadcrumbs,
     Button,
     Chip,
-    createStyles,
     emphasize,
     Hidden,
     IconButton,
     Link,
-    makeStyles,
     Slide,
     Theme,
     Toolbar,
-    Typography
+    Typography,
 } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import MenuIcon from "@material-ui/icons/Menu";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
@@ -69,7 +69,6 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
     const authController = useAuthController();
 
     return (
-
         <Slide direction="down" in={true} mountOnEnter unmountOnExit>
             <AppBar position={"relative"} elevation={2}>
                 <Toolbar>
@@ -79,13 +78,14 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                         edge="start"
                         onClick={handleDrawerToggle}
                         className={classes.menuButton}
-                    >
+                        size="large">
                         <MenuIcon/>
                     </IconButton>
 
-                    <Hidden smDown>
+                    <Hidden lgDown>
                         <Box mr={3}>
                             <Link
+                                underline={"none"}
                                 key={`breadcrumb-home`}
                                 color="inherit"
                                 component={ReactLink}
@@ -105,6 +105,7 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                             aria-label="breadcrumb">
                             {breadcrumbs.map((entry, index) => (
                                 <Link
+                                    underline={"none"}
                                     key={`breadcrumb-${index}`}
                                     color="inherit"
                                     component={ReactLink}

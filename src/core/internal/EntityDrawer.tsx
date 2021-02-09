@@ -1,13 +1,8 @@
 import * as React from "react";
 import clsx from "clsx";
-import {
-    Backdrop,
-    createStyles,
-    makeStyles,
-    Modal,
-    Paper,
-    Theme
-} from "@material-ui/core";
+import { Backdrop, Modal, Paper, Theme } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { SlideFade } from "./SlideFadeTransition";
 
 export interface EntityDrawerProps {
@@ -49,9 +44,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => createStyles({
     /* Styles applied to the `Paper` component. */
     paper: {
         height: "100%",
-        zIndex: theme.zIndex.drawer,
         WebkitOverflowScrolling: "touch", // Add iOS momentum scrolling.
-        // temporary style
         position: "fixed",
         outline: 0
     },

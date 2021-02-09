@@ -1,6 +1,7 @@
 import React from "react";
 import { EntityCollection, EntitySchema } from "../../models";
-import { createStyles, makeStyles } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { useRouteMatch } from "react-router-dom";
 import { useBreadcrumbsContext } from "../../contexts";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";

@@ -1,13 +1,9 @@
 import React from "react";
-import {
-    createStyles,
-    CssBaseline,
-    makeStyles,
-    Theme,
-    ThemeProvider
-} from "@material-ui/core";
 import firebase from "firebase/app";
 import "firebase/auth";
+
+import { Theme} from "@material-ui/core";
+import {createStyles, makeStyles} from "@material-ui/styles";
 
 import CircularProgressCenter from "./internal/CircularProgressCenter";
 import { CMSDrawer } from "./CMSDrawer";
@@ -15,12 +11,14 @@ import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./internal/CMSAppBar";
 import { useAuthController, useCMSAppContext } from "../contexts";
 import { LoginView } from "./LoginView";
+import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
+import LocalizationProvider from "@material-ui/lab/LocalizationProvider";
 
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import * as locales from "date-fns/locale";
+
 
 /**
  * @category Core
@@ -110,7 +108,6 @@ export function CMSMainView(props: CMSMainViewProps) {
     } = props;
 
     const cmsAppContext = useCMSAppContext();
-    const theme = cmsAppContext.theme;
     const signInOptions = cmsAppContext.cmsAppConfig.signInOptions ?? DEFAULT_SIGN_IN_OPTIONS;
     const locale = cmsAppContext.cmsAppConfig.locale;
 
@@ -183,17 +180,14 @@ export function CMSMainView(props: CMSMainViewProps) {
 
 
     return (
-
-        <MuiPickersUtilsProvider
+        <LocalizationProvider
+            dateAdapter={AdapterDateFns}
             utils={DateFnsUtils}
             locale={dateUtilsLocale}>
             <DndProvider backend={HTML5Backend}>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline/>
-                    {view}
-                </ThemeProvider>
+                {view}
             </DndProvider>
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
     );
 
 

@@ -27,8 +27,6 @@ import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import { EntitySideDialogs } from "./internal/EntitySideDialogs";
 
-import { pink, red } from "@material-ui/core/colors";
-import { createMuiTheme } from "@material-ui/core";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -132,10 +130,6 @@ export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
         fontFamily
     } = props;
 
-
-    const mode: "light" | "dark" = "light";
-    const theme = makeTheme({ mode, primaryColor, secondaryColor, fontFamily });
-
     const [navigation, setNavigation] = React.useState<Navigation | undefined>(undefined);
     const [navigationLoadingError, setNavigationLoadingError] = React.useState<Error | undefined>(undefined);
 
@@ -163,8 +157,7 @@ export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
                     <CMSAppContextProvider cmsAppConfig={props}
                                            firebaseConfig={firebaseConfig}
                                            navigation={navigation}
-                                           navigationLoadingError={navigationLoadingError}
-                                           theme={theme}>
+                                           navigationLoadingError={navigationLoadingError}>
 
                         <Router>
                             <SideEntityProvider
@@ -199,97 +192,5 @@ async function getNavigation(navigationOrCollections: Navigation | NavigationBui
     }
 }
 
-const makeTheme = (
-    { mode, primaryColor, secondaryColor, fontFamily }: {
-        mode: "light" | "dark";
-        primaryColor?: string;
-        secondaryColor?: string;
-        fontFamily?: string;
-    }) => {
-
-    const original = createMuiTheme({
-        palette: {
-            type: mode,
-            background: {
-                // @ts-ignore
-                default: mode === "dark" ? "#424242" : "#f6f8f9"
-            },
-            primary: {
-                main: primaryColor ? primaryColor : "#0070f4"
-            },
-            secondary: {
-                main: secondaryColor ? secondaryColor : pink["400"]
-            },
-            error: {
-                main: red.A400
-            }
-        },
-        typography: {
-            "fontFamily": fontFamily ? fontFamily : `"Rubik", "Roboto", "Helvetica", "Arial", sans-serif`,
-            fontWeightMedium: 500,
-            h6: {
-                fontWeight: 500,
-                fontSize: "1.15rem"
-            }
-        },
-        overrides: {
-            MuiButton: {
-                root: {
-                    borderRadius: 4
-                }
-            },
-            MuiTableRow: {
-                root: {
-                    "&:last-child td": {
-                        borderBottom: 0
-                    }
-                }
-            },
-            MuiTypography: {
-                root: {
-                    "&.mono": {
-                        fontFamily: "'Space Mono', 'Lucida Console', monospace"
-                    },
-                    "&.weight-500": {
-                        fontWeight: 500
-                    }
-                }
-            },
-            MuiInputLabel: {
-                formControl: {
-                    top: 0,
-                    left: 0,
-                    position: "absolute",
-                    transform: "translate(0, 16px) scale(1)"
-                }
-            },
-            MuiFilledInput: {
-                input: {
-                    minHeight: "27px"
-                }
-            },
-            MuiInputBase: {
-                root: {
-                    "&.mono": {
-                        fontFamily: "'Space Mono', 'Lucida Console', monospace"
-                    }
-                }
-            },
-            MuiFormControlLabel: {
-                label: {
-                    width: "100%"
-                }
-            }
-        }
-    });
-
-    return {
-        ...original,
-        shadows: original.shadows.map((value, index) => {
-            if (index == 1) return "0 1px 1px 0 rgb(0 0 0 / 16%)";
-            else return value;
-        })
-    };
-};
 
 

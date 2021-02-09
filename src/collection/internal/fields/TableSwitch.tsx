@@ -20,6 +20,7 @@ export function TableSwitch(props: {
     return (
         <Switch
             inputRef={ref}
+            color={"secondary"}
             checked={!!internalValue}
             disabled={disabled}
             onChange={(evt) => {

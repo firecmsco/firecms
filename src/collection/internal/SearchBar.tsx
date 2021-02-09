@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import InputBase from "@material-ui/core/InputBase";
-import {
-    createStyles,
-    fade,
-    makeStyles,
-    Theme
-} from "@material-ui/core/styles";
+import { alpha, Theme } from "@material-ui/core/styles";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { FormControl, IconButton } from "@material-ui/core";
 
 import SearchIcon from "@material-ui/icons/Search";
@@ -20,9 +17,9 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: "center",
             height: 40,
             borderRadius: theme.shape.borderRadius,
-            backgroundColor: fade(theme.palette.common.black, 0.05),
+            backgroundColor: alpha(theme.palette.common.black, 0.05),
             "&:hover": {
-                backgroundColor: fade(theme.palette.common.black, 0.10)
+                backgroundColor: alpha(theme.palette.common.black, 0.10)
             },
             marginLeft: theme.spacing(1),
             [theme.breakpoints.up("sm")]: {
@@ -46,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
         inputInput: {
             padding: theme.spacing(1, 1, 1, 0),
             // vertical padding + font size from searchIcon
-            paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+            paddingLeft: `calc(1em + ${theme.spacing(4)})`,
             transition: theme.transitions.create("width"),
             width: "100%",
             [theme.breakpoints.up("sm")]: {

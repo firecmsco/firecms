@@ -59,10 +59,12 @@
         "yup": "^0.32.9"
     },
     "peerDependencies": {
-        "@material-ui/core": "^4.11.4",
-        "@material-ui/icons": "^4.11.2",
-        "@material-ui/lab": "^4.0.0-alpha.58",
-        "@material-ui/pickers": "^3.3.10",
+        "@emotion/react": "latest",
+        "@emotion/styled": "latest",
+        "@material-ui/core": "next",
+        "@material-ui/styles": "next",
+        "@material-ui/icons": "^5.0.0-beta.1",
+        "@material-ui/lab": "^5.0.0-alpha.41",
         "algoliasearch": "^4.9.1",
         "firebase": "^8.0.0 || ^7.0.0",
         "react": "^17.0.2",
@@ -76,10 +78,12 @@
         ]
     },
     "devDependencies": {
-        "@material-ui/core": "^4.11.4",
-        "@material-ui/icons": "^4.11.2",
-        "@material-ui/lab": "^4.0.0-alpha.58",
-        "@material-ui/pickers": "^3.3.10",
+        "@emotion/react": "latest",
+        "@emotion/styled": "latest",
+        "@material-ui/core": "next",
+        "@material-ui/styles": "next",
+        "@material-ui/icons": "^5.0.0-beta.1",
+        "@material-ui/lab": "^5.0.0-alpha.41",
         "@rollup/plugin-typescript": "^8.2.1",
         "@types/jest": "^26.0.23",
         "@types/node": "^15.0.2",

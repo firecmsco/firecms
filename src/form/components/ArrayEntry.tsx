@@ -3,10 +3,14 @@ import ClearIcon from "@material-ui/icons/Clear";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
-import { Box, createStyles, IconButton, makeStyles } from "@material-ui/core";
+import { Box, IconButton, Theme } from "@material-ui/core";
 
 
-const useStyles = makeStyles(theme => createStyles({
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
+
+
+const useStyles = makeStyles((theme:Theme) => createStyles({
     arrayEntry: {
         marginBottom: theme.spacing(1),
         borderRadius: "4px",
@@ -144,6 +148,6 @@ export function ArrayEntry({
             </Box>
         </div>
     );
-};
+}
 
 export default ArrayEntry;

@@ -3,12 +3,13 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
     Box,
     Button,
-    createStyles,
     IconButton,
-    makeStyles,
     Portal,
+    Theme,
     Typography
 } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import ClearIcon from "@material-ui/icons/Clear";
 
 import {
@@ -33,7 +34,7 @@ import { buildPropertyField } from "../../../form/form_factory";
 import clsx from "clsx";
 import ElementResizeListener from "./ElementResizeListener";
 
-export const useStyles = makeStyles(theme => createStyles({
+export const useStyles = makeStyles((theme:Theme) => createStyles({
     form: {
         display: "flex",
         flexDirection: "column"

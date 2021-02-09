@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     Box,
     CircularProgress,
-    createStyles,
     IconButton,
-    makeStyles,
     Paper,
     Tab,
     Tabs,
@@ -12,6 +10,8 @@ import {
     useMediaQuery,
     useTheme
 } from "@material-ui/core";
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 import CloseIcon from "@material-ui/icons/Close";
 import { Prompt } from "react-router-dom";
 import clsx from "clsx";
@@ -38,12 +38,7 @@ import CircularProgressCenter from "./CircularProgressCenter";
 import EntityPreview from "../components/EntityPreview";
 import { canEdit } from "../../util/permissions";
 
-import {
-    CONTAINER_FULL_WIDTH,
-    CONTAINER_WIDTH,
-    TAB_WIDTH,
-    TAB_WIDTH_LG
-} from "./common";
+import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
 import ErrorBoundary from "./ErrorBoundary";
 
 
@@ -62,9 +57,6 @@ const useStylesSide = makeStyles((theme: Theme) =>
         containerWide: {
             width: `calc(${TAB_WIDTH} + ${CONTAINER_WIDTH})`,
             [theme.breakpoints.down("lg")]: {
-                width: `calc(${TAB_WIDTH_LG} + ${CONTAINER_WIDTH})`
-            },
-            [theme.breakpoints.down("md")]: {
                 width: CONTAINER_FULL_WIDTH
             }
         },
@@ -74,9 +66,6 @@ const useStylesSide = makeStyles((theme: Theme) =>
             overflow: "auto",
             borderLeft: "1px solid #eeeeee",
             [theme.breakpoints.down("lg")]: {
-                width: TAB_WIDTH_LG
-            },
-            [theme.breakpoints.down("md")]: {
                 borderLeft: "inherit",
                 width: CONTAINER_FULL_WIDTH
             }
@@ -86,9 +75,6 @@ const useStylesSide = makeStyles((theme: Theme) =>
             height: "100%",
             width: `calc(${TAB_WIDTH} + ${CONTAINER_WIDTH})`,
             [theme.breakpoints.down("lg")]: {
-                width: `calc(${TAB_WIDTH_LG} + ${CONTAINER_WIDTH})`
-            },
-            [theme.breakpoints.down("md")]: {
                 width: CONTAINER_FULL_WIDTH
             },
             display: "flex",
@@ -415,8 +401,8 @@ function EntityView<M extends { [Key: string]: any }>({
     const header = <Paper elevation={0} variant={"outlined"}>
         <div className={classes.header}>
 
-            <IconButton
-                onClick={(e) => sideEntityController.close()}>
+            <IconButton onClick={(e) => sideEntityController.close()}
+                        size="large">
                 <CloseIcon/>
             </IconButton>
 

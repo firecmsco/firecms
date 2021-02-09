@@ -9,11 +9,12 @@ import {
     FormControl,
     IconButton,
     MenuItem,
-    Select as MuiSelect
+    Select as MuiSelect,
+    Input
 } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
-import { KeyboardDateTimePicker } from "@material-ui/pickers";
+import DateTimePicker  from "@material-ui/lab/DateTimePicker";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { useInputStyles } from "../fields/styles";
 
@@ -110,16 +111,18 @@ export default function DateTimeFilterField({
 
             <Box flexGrow={1} ml={1}>
 
-                <KeyboardDateTimePicker
+                <DateTimePicker
                     clearable
-                    inputVariant="standard"
                     InputProps={{
                         // disableUnderline: true,
                     }}
-                    keyboardIcon={<CalendarTodayIcon fontSize={"small"}/>}
-                    KeyboardButtonProps={{
-                        size: "small"
-                    }}
+                    renderInput={(props) => (
+                        <Input
+                            startAdornment={
+                                <CalendarTodayIcon fontSize={"small"}/>
+                            }
+                        />
+                    )}
                     value={internalValue ?? null}
                     onChange={(dateValue: Date | null) => {
                         updateFilter(operation, dateValue === null ? undefined : dateValue);

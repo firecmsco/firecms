@@ -129,7 +129,8 @@ function SampleApp() {
                 href={"https://github.com/Camberi/firecms"}
                 rel="noopener noreferrer"
                 target="_blank"
-                component={"a"}>
+                component={"a"}
+                size="large">
                 <GitHub/>
             </IconButton>
         </Tooltip>

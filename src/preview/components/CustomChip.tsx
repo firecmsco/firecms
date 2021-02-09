@@ -1,4 +1,6 @@
-import { Chip, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { Chip, Theme } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import React, { useMemo } from "react";
 import {
     ChipColorSchema,
@@ -87,7 +89,7 @@ export default function CustomChip({
                 label: classes.label
             }}
             size={small ? "small" : "medium"}
-            variant={outlined ? "outlined" : "default"}
+            variant={outlined ? "outlined" : "filled"}
             label={label}
         />
     );

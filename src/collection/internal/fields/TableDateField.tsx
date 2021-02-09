@@ -1,10 +1,10 @@
 import React from "react";
 import { useInputStyles } from "./styles";
-import { KeyboardDateTimePicker } from "@material-ui/pickers";
-import { Box, Typography } from "@material-ui/core";
+import { Box, TextField as MuiTextField, Typography } from "@material-ui/core";
 import { EmptyValue, TimestampPreview } from "../../../preview";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { TimestampProperty } from "../../../models";
+import DateTimePicker from "@material-ui/lab/DateTimePicker";
 
 export function TableDateField(props: {
     name: string;
@@ -50,25 +50,28 @@ export function TableDateField(props: {
             </Box>
 
             <Box width={40}>
-                <KeyboardDateTimePicker
+                <DateTimePicker
                     clearable
                     disabled={disabled}
-                    inputVariant="standard"
-                    InputProps={{
-                        disableUnderline: true,
-                        classes: {
-                            input: classes.hidden
-                        }
-                    }}
-                    keyboardIcon={<CalendarTodayIcon fontSize={"small"}/>}
-                    KeyboardButtonProps={{
-                        size: "small"
-                    }}
-                    inputProps={{
-                        style: {
-                            height: "100%"
-                        }
-                    }}
+                    renderInput={(props) => (
+                        <MuiTextField
+                            style={{
+                                height: "100%"
+                            }}
+                            variant={"standard"}
+                            error={!!error}
+                            InputProps={{
+                                startAdornment: (
+                                    <CalendarTodayIcon fontSize={"small"}/>
+                                ),
+                                classes: {
+                                    input: classes.hidden
+                                },
+                                disableUnderline: true
+                            }}
+                        />
+
+                    )}
                     InputAdornmentProps={{
                         style: {
                             height: 26
@@ -77,7 +80,6 @@ export function TableDateField(props: {
                     onOpen={handleOpen}
                     onClose={handleClose}
                     value={internalValue ?? null}
-                    error={!!error}
                     onChange={(dateValue: Date | null) => {
                         updateValue(dateValue);
                     }}

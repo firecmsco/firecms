@@ -3,11 +3,12 @@ import {
     Box,
     Button,
     Container,
-    createStyles,
     Grid,
-    makeStyles,
+    Theme,
     Typography
 } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import {
     CMSFormFieldProps,
     Entity,
@@ -19,7 +20,7 @@ import {
     Property
 } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
-import { buildPropertyField, createCustomIdField } from "./form_factory";
+import { buildPropertyField } from "./form_factory";
 import {
     checkUniqueField,
     computeSchemaProperties,
@@ -29,8 +30,9 @@ import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
 import { isReadOnly } from "../models/utils";
+import { CustomIdField } from "./CustomIdField";
 
-export const useStyles = makeStyles(theme => createStyles({
+export const useStyles = makeStyles((theme:Theme) => createStyles({
     stickyButtons: {
         marginTop: theme.spacing(2),
         background: "rgba(255,255,255,0.6)",
@@ -45,13 +47,13 @@ export const useStyles = makeStyles(theme => createStyles({
         padding: theme.spacing(4),
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
-        [theme.breakpoints.down("sm")]: {
+        [theme.breakpoints.down('lg')]: {
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(2),
             paddingTop: theme.spacing(3),
             paddingBottom: theme.spacing(3)
         },
-        [theme.breakpoints.down("xs")]: {
+        [theme.breakpoints.down('md')]: {
             padding: theme.spacing(2),
         }
     },
@@ -109,7 +111,7 @@ interface EntityFormProps<M extends { [Key: string]: any }> {
 
 }
 
-function EntityForm<M extends { [Key: string]: any }>({
+function EntityForm<M>({
                                                                                                                   status,
                                                                                                                   collectionPath,
                                                                                                                   schema,
@@ -127,7 +129,7 @@ function EntityForm<M extends { [Key: string]: any }>({
      * Base values are the ones this view is initialized from, we use them to
      * compare them with underlying changes in Firestore
      */
-    let baseFirestoreValues: EntityValues<M>;
+    let baseFirestoreValues: Partial<EntityValues<M>>;
     if ((status === "existing" || status === "copy") && entity) {
         baseFirestoreValues = entity.values ?? {};
     } else if (status === "new") {
@@ -140,7 +142,7 @@ function EntityForm<M extends { [Key: string]: any }>({
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
 
-    const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseFirestoreValues);
+    const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseFirestoreValues  as EntityValues<M>);
     const initialValues = initialValuesRef.current;
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
 
@@ -333,8 +335,11 @@ function EntityForm<M extends { [Key: string]: any }>({
                     <Container maxWidth={"sm"}
                                className={classes.container}>
 
-                        {createCustomIdField(schema, status, setCustomId, customIdError, entity)}
-
+                        <CustomIdField schema={schema as EntitySchema<any>}
+                                       status={status}
+                                       onChange={setCustomId}
+                                       error={customIdError}
+                                       entity={entity}/>
 
                         <Form className={classes.form}
                               onSubmit={handleSubmit}
