@@ -10,6 +10,8 @@ import {
     Paper,
     Select
 } from "@material-ui/core";
+import { SelectChangeEvent } from '@material-ui/core/Select';
+
 import { formStyles } from "../styles";
 import { pick } from "../../util/objects";
 import LabelWithIcon from "../components/LabelWithIcon";
@@ -68,7 +70,8 @@ export default function MapField<T extends object>({
         const keys = Object.keys(property.properties!)
             .filter((key) => !value || !(key in value));
 
-        const handleAddProperty = (event: React.ChangeEvent<{ value: unknown }>) => {
+
+        const handleAddProperty = (event: SelectChangeEvent) => {
             setValue({
                 ...value,
                 [event.target.value as string]: null
@@ -81,6 +84,7 @@ export default function MapField<T extends object>({
             <FormControl fullWidth>
                 <InputLabel>Add property</InputLabel>
                 <Select
+                    variant={"standard"}
                     value={""}
                     disabled={disabled}
                     onChange={handleAddProperty}>

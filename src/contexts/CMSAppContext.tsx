@@ -17,13 +17,11 @@ export interface CMSAppContext {
     schemasRegistryController: SchemasRegistryController;
     cmsAppConfig: CMSAppProviderProps;
     firebaseConfig: Object;
-    theme: any;
 }
 
 const CMSAppContextInstance = React.createContext<CMSAppContext>({
     schemasRegistryController: {} as any,
     cmsAppConfig: {} as any,
-    theme: {} as any,
     firebaseConfig: {}
 });
 
@@ -48,7 +46,6 @@ interface CMSAppContextProps {
     firebaseConfig: Object;
     navigation?: Navigation;
     navigationLoadingError?: Error;
-    theme: any;
 }
 
 export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
@@ -57,7 +54,6 @@ export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
                                                                         cmsAppConfig,
                                                                         navigation,
                                                                         navigationLoadingError,
-                                                                        theme
                                                                     }) => {
 
     const schemasRegistryController = useSchemasRegistry();
@@ -70,7 +66,6 @@ export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
                 navigation,
                 navigationLoadingError,
                 schemasRegistryController,
-                theme
             }}
         >
             {children}

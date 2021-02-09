@@ -7,10 +7,12 @@ import {
     FormHelperText,
     IconButton,
     LinearProgress,
-    makeStyles,
     Paper,
+    Theme,
     Typography
 } from "@material-ui/core";
+
+import makeStyles from "@material-ui/styles/makeStyles";
 
 import firebase from "firebase/app";
 import "firebase/storage";
@@ -38,7 +40,7 @@ import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
 import { useClearRestoreValue } from "../../hooks";
 import { isReadOnly } from "../../models/utils";
 
-export const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles((theme: Theme) => ({
     dropZone: {
         position: "relative",
         paddingTop: "2px",
@@ -46,12 +48,12 @@ export const useStyles = makeStyles(theme => ({
         outline: 0,
         borderTopLeftRadius: "2px",
         borderTopRightRadius: "2px",
-        backgroundColor: "rgba(0, 0, 0, 0.09)",
+        backgroundColor: "rgba(0, 0, 0, 0.06)",
         borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
         boxSizing: "border-box",
         transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
         "&:focus": {
-            borderBottom: `2px solid ${theme.palette.primary.dark}`
+            borderBottom: `2px solid ${theme.palette.primary.main}`
         }
     },
     disabled: {
@@ -61,7 +63,7 @@ export const useStyles = makeStyles(theme => ({
     },
     nonActiveDrop: {
         "&:hover": {
-            backgroundColor: "#dedede"
+            backgroundColor: "rgba(0, 0, 0, 0.09)"
         }
     },
     activeDrop: {
@@ -222,8 +224,7 @@ export default function StorageUploadField({
             {includeDescription &&
             <FieldDescription property={property as any}/>}
 
-            {showError && <FormHelperText
-                id="component-error-text">{error}</FormHelperText>}
+            {showError && <FormHelperText>{error}</FormHelperText>}
 
         </FormControl>
     );

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Transition } from "react-transition-group";
 import { debounce, ownerWindow, useForkRef } from "@material-ui/core";
-import { useTheme } from "@material-ui/core/styles";
+import { useTheme } from "@material-ui/core";
 
 // Translate the node so it can't be seen on the screen.
 // Later, we're going to translate the node back to its original location with `none`.

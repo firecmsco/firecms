@@ -12,6 +12,7 @@ import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
+import { formStyles } from "../styles";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -37,6 +38,7 @@ export default function Select<T extends EnumType>({
                                                        dependsOnOtherProperties
                                                    }: SelectProps<T>) {
 
+    const classes = formStyles();
     const enumValues = property.config?.enumValues as EnumValues;
 
     useClearRestoreValue({
@@ -47,20 +49,20 @@ export default function Select<T extends EnumType>({
 
     return (
         <FormControl
+            variant="filled"
             fullWidth
             required={property.validation?.required}
             error={showError}
             disabled={disabled}
         >
 
-            <InputLabel id={`${name}-select-label`} style={{
-                marginTop: "4px",
-                marginLeft: "10px"
-            }}>
+            <InputLabel id={`${name}-select-label`}
+                        className={classes.inputLabel}>
                 <LabelWithIcon property={property}/>
             </InputLabel>
 
             <MuiSelect
+                className={classes.select}
                 variant={"filled"}
                 labelId={`${name}-select-label`}
                 autoFocus={autoFocus}
@@ -99,8 +101,7 @@ export default function Select<T extends EnumType>({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-            {showError && <FormHelperText
-                id="component-error-text">{error}</FormHelperText>}
+            {showError && <FormHelperText>{error}</FormHelperText>}
 
         </FormControl>
     );

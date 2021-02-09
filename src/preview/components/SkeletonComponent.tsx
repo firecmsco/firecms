@@ -16,7 +16,7 @@ import {
     TableCell,
     TableRow
 } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
+import { Skeleton } from '@material-ui/core';
 import { PreviewSize } from "../../preview";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
@@ -215,29 +215,33 @@ function renderGenericArrayCell(
 }
 
 function renderUrlAudioComponent() {
-    return <Skeleton variant="rect"
-                     width={300}
-                     height={100}/>;
+    return (
+        <Skeleton variant="rectangular"
+                         width={300}
+                         height={100}/>
+    );
 }
 
 export function renderSkeletonImageThumbnail(size: PreviewSize) {
     const imageSize = size === "tiny" ? 40 : size === "small" ? 100 : 200;
-    return <Skeleton variant="rect"
-                     width={imageSize}
-                     height={imageSize}/>;
+    return (
+        <Skeleton variant="rectangular"
+                         width={imageSize}
+                         height={imageSize}/>
+    );
 }
 
 function renderUrlVideo(size: PreviewSize) {
 
-    return <Skeleton variant="rect"
-                     width={size !== "regular" ? 300 : 500}
-                     height={size !== "regular" ? 200 : 250}/>;
+    return (
+        <Skeleton variant="rectangular"
+                         width={size !== "regular" ? 300 : 500}
+                         height={size !== "regular" ? 200 : 250}/>
+    );
 }
 
 function renderReference() {
-    return (
-        <Skeleton variant="rect" width={200} height={100}/>
-    );
+    return <Skeleton variant="rectangular" width={200} height={100}/>;
 }
 
 
@@ -291,6 +295,6 @@ export function renderSkeletonCaptionText(index?: number) {
 }
 
 export function renderSkeletonIcon() {
-    return <Skeleton variant="rect" width={24} height={24}/>;
+    return <Skeleton variant="rectangular" width={24} height={24}/>;
 }
 

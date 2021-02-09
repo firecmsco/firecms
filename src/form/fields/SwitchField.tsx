@@ -1,13 +1,15 @@
 import {
-    createStyles,
     FormControl,
     FormControlLabel,
     FormHelperText,
-    makeStyles,
     Switch,
-    Theme
+    Theme,
+    Typography
 } from "@material-ui/core";
-import React from "react";
+import clsx from "clsx";
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
+import React, { useState } from "react";
 import { FieldProps } from "../../models";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
@@ -16,13 +18,53 @@ import { useClearRestoreValue } from "../../hooks";
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         formControl: {
+            justifyContent: "space-between",
+            margin: 0,
             width: "100%",
             minHeight: "64px",
-            paddingRight: "32px"
+            paddingLeft: "16px",
+            paddingRight: "24px",
+            color: "rgba(0, 0, 0, 0.87)",
+            boxSizing: "border-box",
+            position: "relative",
+            display: "inline-flex",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.06)",
+            borderTopLeftRadius: "4px",
+            borderTopRightRadius: "4px",
+            transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+            "&::before": {
+                borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+                left: 0,
+                bottom: 0,
+                content: "\"\\00a0\"",
+                position: "absolute",
+                right: 0,
+                transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+                pointerEvents: "none"
+            },
+            "&::after": {
+                content: "\"\"",
+                transition: "transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+                left: 0,
+                bottom: 0,
+                position: "absolute",
+                right: 0,
+                transform: "scaleX(0)",
+                borderBottom: `2px solid ${theme.palette.primary.main}`
+            },
+            "&:hover": {
+                backgroundColor: "rgba(0, 0, 0, 0.09)"
+            }
         },
-        label: {
-            width: "100%",
-            height: "100%"
+        focus: {
+            "&::before": {
+                borderBottom: "1px solid rgba(0, 0, 0, 0.87)"
+            },
+            "&::after": {
+                transform: "scaleX(1)",
+                pointerEvents: "none"
+            }
         }
     })
 );
@@ -52,23 +94,31 @@ const SwitchFieldComponent = React.forwardRef(function({
         setValue
     });
 
+    const [focus, setFocus] = useState<boolean>(autoFocus);
+
     return (
-        <FormControl
-            fullWidth
-            error={showError}>
-            <div
-                className={"MuiFilledInput-root MuiFilledInput-underline MuiInputBase-formControl"}>
+        <>
+            <FormControl fullWidth>
+
                 <FormControlLabel
-                    className={classes.formControl}
+                    className={clsx(classes.formControl,
+                        {
+                            [classes.focus]: focus
+                        })}
+                    onClick={(e) => setFocus(true)}
                     labelPlacement={"start"}
                     checked={!!value}
                     inputRef={ref}
                     control={
                         <Switch
                             type={"checkbox"}
+                            color={"secondary"}
                             autoFocus={autoFocus}
                             disabled={disabled}
+                            onFocus={(e) => setFocus(true)}
+                            onBlur={(e) => setFocus(false)}
                             onChange={(evt) => {
+                                setFocus(true);
                                 setValue(
                                     evt.target.checked
                                 );
@@ -76,20 +126,22 @@ const SwitchFieldComponent = React.forwardRef(function({
                     }
                     disabled={disabled}
                     label={
-                        <div className={"MuiFormLabel-root"}
-                             style={{ width: "100%", marginLeft: "-4px" }}>
-                            <LabelWithIcon scaledIcon={true}
-                                           property={property}/>
-                        </div>}
+                        <Typography color={"textSecondary"}>
+                            <LabelWithIcon
+                                scaledIcon={true}
+                                property={property}/>
+                        </Typography>}
                 />
-            </div>
-            {includeDescription &&
-            <FieldDescription property={property}/>}
 
-            {showError && <FormHelperText
-                id="component-error-text">{error}</FormHelperText>}
+                {includeDescription &&
+                <FieldDescription property={property}/>}
 
-        </FormControl>
+                {showError && <FormHelperText>{error}</FormHelperText>}
+
+            </FormControl>
+
+
+        </>
 
     );
 });

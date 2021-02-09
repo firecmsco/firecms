@@ -2,15 +2,9 @@ import * as React from "react";
 import { useEffect } from "react";
 import clsx from "clsx";
 
-import {
-    createStyles,
-    IconButton,
-    makeStyles,
-    Paper,
-    Theme,
-    Tooltip,
-    Typography
-} from "@material-ui/core";
+import { IconButton, Paper, Theme, Tooltip, Typography } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import {
     Entity,
     EntitySchema,
@@ -29,7 +23,7 @@ import SkeletonComponent from "./SkeletonComponent";
 import PreviewComponent from "../PreviewComponent";
 import ErrorView from "../../core/components/ErrorView";
 
-import { Skeleton } from "@material-ui/lab";
+import { Skeleton } from '@material-ui/core';
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 
 /**

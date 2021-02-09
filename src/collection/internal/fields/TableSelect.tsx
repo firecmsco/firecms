@@ -62,6 +62,7 @@ export function TableSelect(props: {
         <Select
             // TODO: related to prev. replace autofocus with ref, it makes the scroll jump when rendered
             autoFocus
+            variant={"standard"}
             key={`table_select_${name}`}
             // inputRef={ref}
             className={classes.select}

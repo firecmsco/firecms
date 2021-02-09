@@ -2,19 +2,20 @@ import React from "react";
 import {
     Box,
     CircularProgress,
-    createStyles,
-    fade,
+    alpha,
     Hidden,
     IconButton,
     InputBase,
-    makeStyles,
     MenuItem,
     Select,
     Theme,
     Tooltip,
     useMediaQuery,
-    useTheme
+    useTheme,
 } from "@material-ui/core";
+
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 
 import { CollectionSize, EntitySchema } from "../../models";
 import SearchBar from "./SearchBar";
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         toolbar: {
             minHeight: 56,
-            [theme.breakpoints.down("md")]: {
+            [theme.breakpoints.down('xl')]: {
                 paddingLeft: theme.spacing(.5),
                 paddingRight: theme.spacing(.5)
             },
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: "flex",
             alignItems: "center",
             "& > *": {
-                [theme.breakpoints.down("md")]: {
+                [theme.breakpoints.down('md')]: {
                     marginRight: theme.spacing(.5)
                 },
                 marginRight: theme.spacing(1)
@@ -62,7 +63,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
         input: {
             borderRadius: 4,
             position: "relative",
-            backgroundColor: fade(theme.palette.common.black, 0.05),
+            backgroundColor: alpha(theme.palette.common.black, 0.05),
             fontSize: 14,
             fontWeight: theme.typography.fontWeightMedium,
             padding: "10px 26px 10px 12px",
@@ -117,7 +118,8 @@ export default function CollectionTableToolbar<M extends { [Key: string]: any }>
                 <IconButton
                     style={{ height: "fit-content" }}
                     aria-label="filter clear"
-                    onClick={props.clearFilter}>
+                    onClick={props.clearFilter}
+                    size="large">
                     <ClearIcon/>
                 </IconButton>
             </Tooltip>
@@ -126,6 +128,7 @@ export default function CollectionTableToolbar<M extends { [Key: string]: any }>
 
     const sizeSelect = (
         <Select
+            variant={"standard"}
             value={props.size}
             style={{ width: 56 }}
             onChange={(evt: any) => {
@@ -142,8 +145,7 @@ export default function CollectionTableToolbar<M extends { [Key: string]: any }>
                 anchorOrigin: {
                     vertical: "bottom",
                     horizontal: "left"
-                },
-                getContentAnchorEl: null
+                }
             }}
             input={<InputBase classes={{
                 root: sizeClasses.root,
@@ -171,7 +173,7 @@ export default function CollectionTableToolbar<M extends { [Key: string]: any }>
             <Box display={"flex"}
                  alignItems="center">
 
-                {props.title && <Hidden smDown>
+                {props.title && <Hidden lgDown>
                     <Box mr={2}>
                         {props.title}
                     </Box>
@@ -181,14 +183,9 @@ export default function CollectionTableToolbar<M extends { [Key: string]: any }>
 
                 {filterView}
 
+
             </Box>
 
-
-            {props.onTextSearch &&
-            <SearchBar
-                key={"search-bar"}
-                onTextSearch={props.onTextSearch}/>
-            }
 
             <div className={classes.actions}>
 
@@ -196,6 +193,12 @@ export default function CollectionTableToolbar<M extends { [Key: string]: any }>
                     {props.loading &&
                     <CircularProgress size={16} thickness={8}/>}
                 </Box>}
+
+                {props.onTextSearch &&
+                <SearchBar
+                    key={"search-bar"}
+                    onTextSearch={props.onTextSearch}/>
+                }
 
                 {props.actions}
 

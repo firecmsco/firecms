@@ -4,15 +4,16 @@
     "private": true,
     "dependencies": {
         "@camberi/firecms": "link:..",
+        "@emotion/react": "link:../node_modules/@emotion/react",
+        "@emotion/styled": "link:../node_modules/@emotion/styled",
         "@material-ui/core": "link:../node_modules/@material-ui/core",
         "@material-ui/icons": "link:../node_modules/@material-ui/icons",
+        "@material-ui/styles": "link:../node_modules/@material-ui/styles",
         "@material-ui/lab": "link:../node_modules/@material-ui/lab",
-        "@material-ui/pickers": "link:../node_modules/@material-ui/pickers",
         "algoliasearch": "link:../node_modules/algoliasearch",
         "firebase": "link:../node_modules/firebase",
         "react": "link:../node_modules/react",
         "react-dom": "link:../node_modules/react-dom",
-        "react-markdown": "^6.0.3",
         "react-scripts": "link:../node_modules/react-scripts"
     },
     "scripts": {
@@ -41,9 +42,9 @@
         ]
     },
     "devDependencies": {
-        "@types/react": "^17.0.0",
-        "@types/react-dom": "^17.0.0",
-        "@types/react-router-dom": "^5.1.6",
-        "typescript": "^4.2.3"
+        "@types/react": "link:../node_modules/@types/react",
+        "@types/react-dom": "link:../node_modules/@types/react-dom",
+        "@types/react-router-dom": "link:../node_modules/@types/react-router-dom",
+        "typescript": "link:../node_modules/typescript"
     }
 }

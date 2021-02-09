@@ -1,12 +1,8 @@
 import React, { useEffect } from "react";
-import {
-    Box,
-    Button,
-    createStyles,
-    Grid,
-    makeStyles,
-    Theme
-} from "@material-ui/core";
+import { Box, Button, Grid, Theme } from "@material-ui/core";
+
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -105,7 +101,7 @@ export function LoginView({
             spacing={1}
             direction="column"
             alignItems="center"
-            justify="center"
+            justifyContent="center"
             style={{ minHeight: "100vh" }}
         >
             <Box m={1}>

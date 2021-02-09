@@ -18,14 +18,14 @@ import AdjustIcon from "@material-ui/icons/Adjust";
 
 export function getIdIcon(
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
-    fontSize: "inherit" | "default" | "small" | "large" = "default"): React.ReactNode {
+    fontSize: "inherit" | "medium" | "large" | "small" | undefined = "inherit"): React.ReactNode {
     return <AdjustIcon color={color} fontSize={fontSize}/>;
 }
 
 export function getIconForProperty(
     property: Property,
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
-    fontSize: "inherit" | "default" | "small" | "large" = "default"): React.ReactNode {
+    fontSize: "inherit" | "medium" | "large" | "small" | undefined = "inherit"): React.ReactNode {
     if (property.dataType === "string") {
         if (property.config?.multiline || property.config?.markdown) {
             return <SubjectIcon color={color} fontSize={fontSize}/>;

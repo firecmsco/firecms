@@ -2,17 +2,17 @@ import * as React from "react";
 
 import {
     Box,
-    createStyles,
     IconButton,
-    makeStyles,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableRow,
     Theme,
-    Typography
+    Typography,
 } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import {
     buildPropertyFrom,
     Entity,
@@ -92,8 +92,7 @@ export default function EntityPreview<M extends { [Key: string]: any }>(
                                 <a href={`https://console.firebase.google.com/project/${(appConfig.firebaseConfig as any)["projectId"]}/firestore/data/${entity.reference.path}`}
                                    rel="noopener noreferrer"
                                    target="_blank">
-                                    <IconButton
-                                        aria-label="go-to-firestore">
+                                    <IconButton aria-label="go-to-firestore" size="large">
                                         <OpenInNewIcon
                                             fontSize={"small"}/>
                                     </IconButton>
@@ -142,7 +141,6 @@ export default function EntityPreview<M extends { [Key: string]: any }>(
                 </TableBody>
             </Table>
         </TableContainer>
-
     );
 
 }

@@ -136,87 +136,83 @@ export default function ExportButton<M extends { [Key: string]: any }>({
 
     const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
 
-    return (
-        <>
+    return <>
 
-            <Tooltip title={"Export"}>
-                <IconButton
-                    color={"primary"}
-                    onClick={handleClickOpen}>
-                    <GetAppIcon/>
-                </IconButton>
-            </Tooltip>
+        <Tooltip title={"Export"}>
+            <IconButton color={"primary"} onClick={handleClickOpen} size="large">
+                <GetAppIcon/>
+            </IconButton>
+        </Tooltip>
 
-            <Dialog
-                open={open}
-                onClose={handleClose}
-            >
-                <DialogTitle>Export data</DialogTitle>
+        <Dialog
+            open={open}
+            onClose={handleClose}
+        >
+            <DialogTitle>Export data</DialogTitle>
 
-                <DialogContent>
-                    <DialogContentText>
+            <DialogContent>
+                <DialogContentText>
 
-                        <div>Download the the content of this table as a CSV
+                    <div>Download the the content of this table as a CSV
+                    </div>
+                    <br/>
+
+                    {needsToAcceptFetchAllData
+                    &&
+                    <MuiAlert elevation={1}
+                              variant="filled"
+                              severity={"warning"}>
+                        <div>
+                            This collections has a large number
+                            of documents (more
+                            than {INITIAL_DOCUMENTS_LIMIT}).
                         </div>
-                        <br/>
+                        <div>
+                            Would you like to proceed?
+                        </div>
 
-                        {needsToAcceptFetchAllData
-                        &&
-                        <MuiAlert elevation={1}
-                                  variant="filled"
-                                  severity={"warning"}>
-                            <div>
-                                This collections has a large number
-                                of documents (more
-                                than {INITIAL_DOCUMENTS_LIMIT}).
-                            </div>
-                            <div>
-                                Would you like to proceed?
-                            </div>
+                    </MuiAlert>}
 
-                        </MuiAlert>}
+                </DialogContentText>
+            </DialogContent>
 
-                    </DialogContentText>
-                </DialogContent>
+            <DialogActions>
+                <Button color="primary" onClick={handleClose}>
+                    Cancel
+                </Button>
 
-                <DialogActions>
-                    <Button color="primary" onClick={handleClose}>
-                        Cancel
+                {dataLoading && <CircularProgress size={16} thickness={8}/>}
+
+                {exportableData &&
+                <CSVLink headers={headers}
+                         data={exportableData}
+                         ref={csvLinkEl}
+                         filename={schema.name}
+                         style={{
+                             textDecoration: "none"
+                         }}
+                         asyncOnClick={true}
+                         onClick={(event, done) => {
+                             if (needsToAcceptFetchAllData) {
+                                 setFetchLargeDataAccepted(true);
+                                 done(false);
+                             } else {
+                                 handleClose();
+                                 done(true);
+                             }
+                         }}
+                         target="_blank"
+                >
+                    <Button color="primary">
+                        Download
                     </Button>
+                </CSVLink>
+                }
 
-                    {dataLoading && <CircularProgress size={16} thickness={8}/>}
+            </DialogActions>
+        </Dialog>
 
-                    {exportableData &&
-                    <CSVLink headers={headers}
-                             data={exportableData}
-                             ref={csvLinkEl}
-                             filename={schema.name}
-                             style={{
-                                 textDecoration: "none"
-                             }}
-                             asyncOnClick={true}
-                             onClick={(event, done) => {
-                                 if (needsToAcceptFetchAllData) {
-                                     setFetchLargeDataAccepted(true);
-                                     done(false);
-                                 } else {
-                                     handleClose();
-                                     done(true);
-                                 }
-                             }}
-                             target="_blank"
-                    >
-                        <Button color="primary">
-                            Download
-                        </Button>
-                    </CSVLink>
-                    }
-
-                </DialogActions>
-            </Dialog>
-
-        </>
-    );
+    </>;
 }
 
 type Header = { label: string, key: string };

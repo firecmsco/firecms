@@ -10,8 +10,13 @@ import { CMSAppProps } from "./CMSAppProps";
 import { CMSMainView } from "./CMSMainView";
 import { CMSAppProvider } from "./CMSAppProvider";
 import CircularProgressCenter from "./internal/CircularProgressCenter";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
-
+import {Theme, ThemeProvider} from "@material-ui/core/styles";
+import { createCMSDefaultTheme } from "./theme";
+import Checkbox from "@material-ui/core/Checkbox";
+import {  Typography } from "@material-ui/core";
+import { createTheme } from '@material-ui/core/styles';
 /**
  * Main entry point for FireCMS. You can use this component as a full app,
  * by specifying collections and entity schemas.
@@ -30,7 +35,10 @@ export function CMSApp(props: CMSAppProps) {
 
     const {
         firebaseConfig,
-        onFirebaseInit
+        onFirebaseInit,
+        primaryColor,
+        secondaryColor,
+        fontFamily
     } = props;
 
     const [
@@ -108,10 +116,21 @@ export function CMSApp(props: CMSAppProps) {
         return <CircularProgressCenter/>;
     }
 
+    const mode: "light" | "dark" = "light";
+    const theme = createCMSDefaultTheme({
+        mode,
+        primaryColor,
+        secondaryColor,
+        fontFamily
+    });
+
     return (
-        <CMSAppProvider {...props}
-                        firebaseConfig={usedFirebaseConfig}>
-            <CMSMainView {...props}/>
-        </CMSAppProvider>
+        <ThemeProvider theme={theme}>
+            <CMSAppProvider {...props}
+                            firebaseConfig={usedFirebaseConfig}>
+                <CssBaseline/>
+                <CMSMainView {...props}/>
+            </CMSAppProvider>
+        </ThemeProvider>
     );
 }

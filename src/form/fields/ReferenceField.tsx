@@ -11,15 +11,16 @@ import {
 import {
     Box,
     Button,
-    createStyles,
     FormControl,
     FormHelperText,
-    IconButton,
-    makeStyles,
+    IconButton, Theme,
     Tooltip,
     Typography
 } from "@material-ui/core";
 import React, { useEffect } from "react";
+
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 
 import ErrorIcon from "@material-ui/icons/Error";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -34,7 +35,7 @@ import { useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { useClearRestoreValue } from "../../hooks";
 
-export const useStyles = makeStyles(theme => createStyles({
+export const useStyles = makeStyles((theme:Theme) => createStyles({
     root: {
         elevation: 0,
         width: "100%",
@@ -268,7 +269,8 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
                                 <span>
                                 <IconButton
                                     disabled={disabled}
-                                    onClick={disabled ? undefined : seeEntityDetails}>
+                                    onClick={disabled ? undefined : seeEntityDetails}
+                                    size="large">
                                     <KeyboardTabIcon/>
                                 </IconButton>
                                     </span>
@@ -280,7 +282,8 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
                                 <span>
                                 <IconButton
                                     disabled={disabled}
-                                    onClick={disabled ? undefined : clearValue}>
+                                    onClick={disabled ? undefined : clearValue}
+                                    size="large">
                                     <ClearIcon/>
                                 </IconButton>
                                 </span>
@@ -318,8 +321,7 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-            {showError && <FormHelperText
-                id="component-error-text">{error}</FormHelperText>}
+            {showError && <FormHelperText>{error}</FormHelperText>}
 
         </FormControl>
     );

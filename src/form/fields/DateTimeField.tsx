@@ -1,5 +1,7 @@
 import React from "react";
-import { DateTimePicker } from "@material-ui/pickers";
+
+import { TextField as MuiTextField } from "@material-ui/core";
+import DateTimePicker from "@material-ui/lab/DateTimePicker";
 
 import { FieldProps } from "../../models";
 
@@ -49,21 +51,24 @@ export default function DateTimeField({
         <React.Fragment>
 
             <DateTimePicker
-                fullWidth
                 clearable
                 autoFocus={autoFocus}
                 value={internalValue}
-                format={dateFormat}
                 label={<LabelWithIcon scaledIcon={false} property={property}/>}
-                error={showError}
+                renderInput={(props) => (
+                    <MuiTextField {...props}
+                                  fullWidth
+                                  error={showError}
+                                  // format={dateFormat}
+                                  variant={"filled"}
+                                  helperText={showError ? error : null}/>
+                )}
                 disabled={disabled}
-                helperText={showError ? error : null}
                 onChange={(dateValue) => {
                     return setValue(
                         dateValue
                     );
                 }}
-                inputVariant={"filled"}
             />
 
             {includeDescription &&

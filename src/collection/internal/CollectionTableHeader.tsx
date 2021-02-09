@@ -4,19 +4,9 @@ import "react-base-table/styles.css";
 import { EntitySchema, Property, WhereFilterOp } from "../../models";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { CMSColumn, Sort } from "../common";
-import {
-    Badge,
-    Box,
-    Button,
-    createStyles,
-    Divider,
-    fade,
-    Grid,
-    IconButton,
-    makeStyles,
-    Popover,
-    Theme
-} from "@material-ui/core";
+import { Badge, Box, Button, Divider, alpha, Grid, IconButton, Popover, Theme } from "@material-ui/core";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowDropDownCircleIcon from "@material-ui/icons/ArrowDropDownCircle";
@@ -34,7 +24,7 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
         margin: "0px -12px",
         padding: "0px 12px",
         color: onHover ? "rgba(0, 0, 0, 0.87)" : "rgba(0,0,0,0.55)",
-        backgroundColor: onHover ? fade(theme.palette.common.black, 0.03) : fade(theme.palette.common.black, 0.01),
+        backgroundColor: onHover ? alpha(theme.palette.common.black, 0.03) : alpha(theme.palette.common.black, 0.01),
         transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
         height: "100%"
     }),
@@ -96,7 +86,6 @@ export default function CollectionTableHeader<M extends { [Key: string]: any },
     };
 
     return (
-
         <ErrorBoundary>
             <Grid
                 className={clsx(classes.header, tableClasses.headerTypography)}
@@ -128,7 +117,7 @@ export default function CollectionTableHeader<M extends { [Key: string]: any },
                 <Grid item>
                     <Badge color="secondary"
                            variant="dot"
-                           overlap="circle"
+                           overlap="circular"
                            invisible={!sort}>
                         <IconButton
                             size={"small"}
@@ -150,7 +139,7 @@ export default function CollectionTableHeader<M extends { [Key: string]: any },
                 {column.filterable && <Grid item>
                     <Badge color="secondary"
                            variant="dot"
-                           overlap="circle"
+                           overlap="circular"
                            invisible={!filter}>
                         <IconButton
                             className={classes.headerIconButton}

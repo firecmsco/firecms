@@ -19,9 +19,15 @@ interface FieldDescriptionPopoverProps<T extends CMSType> {
  * @category Form custom fields
  */
 export default function FieldDescription<T extends CMSType>({ property }: FieldDescriptionPopoverProps<T>) {
-
+    const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     return (
+
+        // <FormHelperText>{disabledTooltip ? disabledTooltip : property.description}</FormHelperText>
         <Box display="flex">
+
+            <Box flexGrow={1}>
+                <FormHelperText>{disabledTooltip ? disabledTooltip : property.description}</FormHelperText>
+            </Box>
 
             {property.longDescription &&
             <Tooltip title={
@@ -39,7 +45,6 @@ export default function FieldDescription<T extends CMSType>({ property }: FieldD
                 </IconButton>
             </Tooltip>}
 
-            <FormHelperText>{property.description}</FormHelperText>
         </Box>
     );
 };

@@ -1,4 +1,5 @@
-import { TextField, Theme, withStyles } from "@material-ui/core";
+import { TextField, Theme } from "@material-ui/core";
+import withStyles from '@material-ui/styles/withStyles';
 import React, { ReactElement } from "react";
 import { FieldDescription, FieldProps } from "@camberi/firecms";
 

@@ -14,7 +14,7 @@ import {
     Typography
 } from "@material-ui/core";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
-import { Skeleton } from "@material-ui/lab";
+import { Skeleton } from '@material-ui/core';
 
 /**
  *
@@ -102,7 +102,7 @@ export default function CollectionRowActions<M extends { [Key: string]: any }>({
                             if (onEditClicked)
                                 onEditClicked(entity);
                         }}
-                    >
+                        size="large">
                         <KeyboardTab/>
                     </IconButton>
                 </Tooltip>
@@ -117,9 +117,7 @@ export default function CollectionRowActions<M extends { [Key: string]: any }>({
                 </Tooltip>}
 
                 {(copyEnabled || deleteEnabled) &&
-                <IconButton
-                    onClick={openMenu}
-                >
+                <IconButton onClick={openMenu} size="large">
                     <MoreVert/>
                 </IconButton>
                 }
