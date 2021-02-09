@@ -10,33 +10,43 @@ import {
     isCollectionPath,
     NavigationEntry
 } from "../routes/navigation";
+import { EntitySidePanelProps, SchemaSidePanelProps } from "./model";
+import { useSchemasRegistryController } from "./SchemaOverrideRegistry";
 
 const DEFAULT_SIDE_ENTITY = {
     sidePanels: [],
     close: () => {
     },
-    open: (props: {
-        collectionPath: string,
-        entityId?: string,
-        selectedSubcollection?: string,
-        copy?: boolean
-    }) => {
+    open: (props: EntitySidePanelProps & Partial<SchemaSidePanelProps>) => {
     }
 };
 
+
 export type SideEntityPanelsController<S extends EntitySchema> = {
+    /**
+     * Close the last panel
+     */
     close: () => void;
-    sidePanels: SidePanelProps[];
-    open: (props: {
-        collectionPath: string,
-        entityId?: string,
-        selectedSubcollection?: string,
-        copy?: boolean
-    }) => void;
+
+    /**
+     * List of side entity panels currently open
+     */
+    sidePanels: EntitySidePanelProps[];
+
+    /**
+     * Open a new entity sideDialog
+     * @param props
+     */
+    open: (props: EntitySidePanelProps & Partial<SchemaSidePanelProps>) => void;
 };
 
-export const SideEntityContext = React.createContext<SideEntityPanelsController<any>>(DEFAULT_SIDE_ENTITY);
-export const useSideEntityController = () => useContext(SideEntityContext);
+export const SideEntityPanelsController = React.createContext<SideEntityPanelsController<any>>(DEFAULT_SIDE_ENTITY);
+
+/**
+ * Get a reference to the controller used to open side dialogs for entity
+ * edition.
+ */
+export const useSideEntityController = () => useContext(SideEntityPanelsController);
 
 interface SideEntityProviderProps {
     children: React.ReactNode;
@@ -51,7 +61,9 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
     const location: any = useLocation();
     const history = useHistory();
     const initialised = useRef<boolean>(false);
-    const [sidePanels, setSidePanels] = useState<SidePanelProps[]>([]);
+    const [sidePanels, setSidePanels] = useState<EntitySidePanelProps[]>([]);
+
+    const viewRegistry = useSchemasRegistryController();
 
     const mainLocation = location.state && location.state["main_location"] ? location.state["main_location"] : location;
 
@@ -89,19 +101,24 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
             const newPath = getCMSPathFrom(lastSidePanel.collectionPath);
             history.replace(newPath);
         }
+
+        viewRegistry.set(lastSidePanel.collectionPath, null);
     };
 
-    const open = (props: {
-        collectionPath: string,
-        entityId?: string,
-        selectedSubcollection?: string,
-        copy?: boolean
-    }) => {
-
-        const { collectionPath, entityId, selectedSubcollection, copy } = props;
+    const open = ({
+                      collectionPath,
+                      entityId,
+                      selectedSubcollection,
+                      copy,
+                      ...schemaProps
+                  }: EntitySidePanelProps & Partial<SchemaSidePanelProps>) => {
 
         if (copy && !entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
+        }
+
+        if (schemaProps && Object.keys(schemaProps).length > 0) {
+            viewRegistry.set(collectionPath, schemaProps as SchemaSidePanelProps);
         }
 
         const newPath = entityId
@@ -112,7 +129,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
 
         // If the side dialog is open currently, we update it
         if (entityId && lastSidePanel && lastSidePanel?.entityId === entityId) {
-            const updatedPanel: SidePanelProps = {
+            const updatedPanel: EntitySidePanelProps = {
                 ...lastSidePanel,
                 selectedSubcollection
             };
@@ -125,7 +142,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
             );
 
         } else {
-            const newPanel: SidePanelProps = {
+            const newPanel: EntitySidePanelProps = {
                 collectionPath,
                 entityId,
                 copy: copy !== undefined && copy,
@@ -142,7 +159,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
     };
 
     return (
-        <SideEntityContext.Provider
+        <SideEntityPanelsController.Provider
             value={{
                 sidePanels,
                 close,
@@ -150,24 +167,16 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
             }}
         >
             {children}
-        </SideEntityContext.Provider>
+        </SideEntityPanelsController.Provider>
     );
 };
 
-
-export interface SidePanelProps {
-    collectionPath: string;
-    entityId?: string;
-    copy: boolean;
-    selectedSubcollection?: string;
-}
-
-function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[], newFlag: boolean): SidePanelProps[] {
+function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[], newFlag: boolean): EntitySidePanelProps[] {
 
     const navigationViewsForPath: NavigationEntry[] = getCollectionViewsFromPath(path, allCollections);
 
     let fullPath: string = "";
-    let sidePanels: SidePanelProps[] = [];
+    let sidePanels: EntitySidePanelProps[] = [];
     for (let i = 0; i < navigationViewsForPath.length; i++) {
         const navigationEntry = navigationViewsForPath[i];
 
@@ -186,7 +195,7 @@ function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[]
                     );
                 }
             } else if (navigationEntry.type === "collection") {
-                const lastSidePanel: SidePanelProps = sidePanels[sidePanels.length - 1];
+                const lastSidePanel: EntitySidePanelProps = sidePanels[sidePanels.length - 1];
                 if (lastSidePanel)
                     lastSidePanel.selectedSubcollection = navigationEntry.collection.relativePath;
             }

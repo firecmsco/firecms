@@ -36,7 +36,8 @@ import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./components/CMSAppBar";
 import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
-import { SideEntityProvider } from "./side_dialog/SideEntityContext";
+import { SideEntityProvider } from "./side_dialog/SideEntityPanelsController";
+import { SchemaOverrideRegistryProvider } from "./side_dialog/SchemaOverrideRegistry";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -252,39 +253,41 @@ export function CMSApp(props: CMSAppProps) {
     function renderMainView() {
         return (
             <Router>
-                <SideEntityProvider navigation={navigation}>
-                    <BreadcrumbsProvider>
-                        <MuiPickersUtilsProvider
-                            utils={DateFnsUtils}>
-                            <DndProvider backend={HTML5Backend}>
+                <SchemaOverrideRegistryProvider navigation={navigation}>
+                    <SideEntityProvider navigation={navigation}>
+                        <BreadcrumbsProvider>
+                            <MuiPickersUtilsProvider
+                                utils={DateFnsUtils}>
+                                <DndProvider backend={HTML5Backend}>
 
-                                <nav>
-                                    <CMSDrawer logo={logo}
-                                               drawerOpen={drawerOpen}
-                                               navigation={navigation}
-                                               closeDrawer={closeDrawer}
-                                               additionalViews={additionalViews}/>
-                                </nav>
+                                    <nav>
+                                        <CMSDrawer logo={logo}
+                                                   drawerOpen={drawerOpen}
+                                                   navigation={navigation}
+                                                   closeDrawer={closeDrawer}
+                                                   additionalViews={additionalViews}/>
+                                    </nav>
 
-                                <div className={classes.main}>
-                                    <CMSAppBar title={name}
-                                               handleDrawerToggle={handleDrawerToggle}
-                                               toolbarExtraWidget={toolbarExtraWidget}/>
+                                    <div className={classes.main}>
+                                        <CMSAppBar title={name}
+                                                   handleDrawerToggle={handleDrawerToggle}
+                                                   toolbarExtraWidget={toolbarExtraWidget}/>
 
-                                    <main
-                                        className={classes.content}>
-                                        <CMSRouterSwitch
-                                            navigation={navigation}
-                                            additionalViews={additionalViews}/>
-                                    </main>
-                                </div>
+                                        <main
+                                            className={classes.content}>
+                                            <CMSRouterSwitch
+                                                navigation={navigation}
+                                                additionalViews={additionalViews}/>
+                                        </main>
+                                    </div>
 
-                                <EntitySideDialogs navigation={navigation}/>
+                                    <EntitySideDialogs/>
 
-                            </DndProvider>
-                        </MuiPickersUtilsProvider>
-                    </BreadcrumbsProvider>
-                </SideEntityProvider>
+                                </DndProvider>
+                            </MuiPickersUtilsProvider>
+                        </BreadcrumbsProvider>
+                    </SideEntityProvider>
+                </SchemaOverrideRegistryProvider>
             </Router>
         );
     }

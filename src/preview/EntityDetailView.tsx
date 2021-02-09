@@ -18,7 +18,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import { getCMSPathFrom, removeInitialSlash } from "../routes/navigation";
 import { EntityCollectionTable } from "../collection/EntityCollectionTable";
-import { useSideEntityController } from "../side_dialog/SideEntityContext";
+import { useSideEntityController } from "../side_dialog/SideEntityPanelsController";
 
 
 export const useStyles = makeStyles(theme => createStyles({

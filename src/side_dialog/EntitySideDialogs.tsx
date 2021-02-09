@@ -1,10 +1,12 @@
 import React from "react";
-import { EntityCollection, EntitySchema } from "../models";
+import { EntitySchema } from "../models";
 import { createStyles, makeStyles } from "@material-ui/core";
 import { EntityDrawer } from "./EntityDrawer";
 import EntityView from "./EntityView";
-import { SidePanelProps, useSideEntityController } from "./SideEntityContext";
-import { getCollectionViewFromPath } from "../routes/navigation";
+import { useSideEntityController } from "./SideEntityPanelsController";
+import { useSchemasRegistryController } from "./SchemaOverrideRegistry";
+import { EntitySidePanelProps, SchemaSidePanelProps } from "./model";
+import { ErrorBoundary } from "../components";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -40,12 +42,14 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 
-export function EntitySideDialogs<S extends EntitySchema>({ navigation }: { navigation: EntityCollection[] }) {
+export function EntitySideDialogs<S extends EntitySchema>() {
 
-    const sideEntityContext = useSideEntityController();
+    const sideEntityController = useSideEntityController();
+    const schemasRegistry = useSchemasRegistryController();
+
     const classes = useStyles();
 
-    const sidePanels = sideEntityContext.sidePanels;
+    const sidePanels = sideEntityController.sidePanels;
     // const [sidePanelBeingClosed, setSidePanelBeingClosed] = useState<SidePanelProps | undefined>();
 
     const onExitAnimation = () => {
@@ -54,33 +58,35 @@ export function EntitySideDialogs<S extends EntitySchema>({ navigation }: { navi
 
     const allPanels = [...sidePanels, undefined];
 
-    function buildEntityView(panel: SidePanelProps) {
+    function buildEntityView(panel: EntitySidePanelProps) {
 
-        const entityCollection = getCollectionViewFromPath(panel.collectionPath, navigation);
-        const editable = entityCollection.editEnabled == undefined || entityCollection.editEnabled;
-        const schema = entityCollection.schema;
-        const subcollections = entityCollection.subcollections;
+        const extendedProps: SchemaSidePanelProps | null = schemasRegistry.get(panel.collectionPath);
 
-        return <EntityView
-            key={`side-form-route-${panel.entityId}`}
-            editable={editable}
-            schema={schema}
-            subcollections={subcollections}
-            {...panel}/>;
+        if (!extendedProps)
+            return null;
+
+        return (
+            <ErrorBoundary>
+                <EntityView
+                    key={`side-form-route-${panel.entityId}`}
+                    {...extendedProps}
+                    {...panel}/>
+            </ErrorBoundary>
+        );
     }
 
     return (
         <>
             {/* we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed */}
             {
-                allPanels.map((panel: SidePanelProps | undefined, index) => {
+                allPanels.map((panel: EntitySidePanelProps | undefined, index) => {
 
                     return (
                         <EntityDrawer
                             key={`side_menu_${index}`}
                             open={panel !== undefined}
                             onClose={() => {
-                                sideEntityContext.close();
+                                sideEntityController.close();
                             }}
                             offsetPosition={sidePanels.length - index - 1}
                             onExitAnimation={onExitAnimation}

@@ -118,6 +118,17 @@ export type {
     AuthContextController,
     BreadcrumbsStatus
 } from "./contexts";
+
+export  {
+    useSideEntityController
+} from "./side_dialog/SideEntityPanelsController";
+export type {
+    SideEntityPanelsController
+} from "./side_dialog/SideEntityPanelsController";
+export type {
+    EntitySidePanelProps, SchemaSidePanelProps
+} from "./side_dialog/model";
+
 export {
     useSnackbarController,
     useBreadcrumbsContext,

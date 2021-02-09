@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import EntityForm from "../form/EntityForm";
 import {
     Entity,
@@ -7,7 +7,7 @@ import {
     EntityStatus,
     EntityValues
 } from "../models";
-import { listenEntity, saveEntity } from "../models/firestore";
+import { listenEntity, saveEntity } from "../models";
 import {
     Box,
     CircularProgress,
@@ -24,11 +24,8 @@ import { Prompt } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
 import { EntityPreview } from "../preview";
 import { EntityCollectionTable } from "../collection/EntityCollectionTable";
-import {
-    getCollectionViewFromPath,
-    removeInitialSlash
-} from "../routes/navigation";
-import { useSideEntityController } from "./SideEntityContext";
+import { removeInitialSlash } from "../routes/navigation";
+import { useSideEntityController } from "./SideEntityPanelsController";
 import CircularProgressCenter from "../components/CircularProgressCenter";
 
 
@@ -85,9 +82,9 @@ const useStylesSide = makeStyles((theme: Theme) =>
 export interface EntitySideViewProps {
     collectionPath: string;
     entityId?: string;
-    copy: boolean;
+    copy?: boolean;
     selectedSubcollection?: string;
-    editable:boolean;
+    editEnabled?:boolean;
     schema: EntitySchema<any>;
     subcollections?: EntityCollection[];
 }
@@ -97,7 +94,7 @@ function EntitySideView({
                             entityId,
                             selectedSubcollection,
                             copy,
-                            editable,
+                            editEnabled = true,
                             schema,
                             subcollections
                         }: EntitySideViewProps) {
@@ -230,7 +227,7 @@ function EntitySideView({
 
     const containerRef = React.useRef<HTMLDivElement>(null);
 
-    const form = editable ? (
+    const form = editEnabled ? (
         <EntityForm
             status={status}
             collectionPath={collectionPath}
@@ -324,7 +321,7 @@ function EntitySideView({
                             scrollButtons="auto"
                         >
                             <Tab
-                                label={`${editable ? (existingEntity ? "Edit" : `Add New`) : ""} ${schema.name}`
+                                label={`${editEnabled ? (existingEntity ? "Edit" : `Add New`) : ""} ${schema.name}`
                                 }/>
 
                             {subcollections && subcollections.map(

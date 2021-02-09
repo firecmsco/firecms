@@ -28,7 +28,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { listenEntityFromRef } from "../../models/firestore";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { CollectionTable } from "../../collection/CollectionTable";
-import { useSideEntityController } from "../../side_dialog/SideEntityContext";
+import { useSideEntityController } from "../../side_dialog/SideEntityPanelsController";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {

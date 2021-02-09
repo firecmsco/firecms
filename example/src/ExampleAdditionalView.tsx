@@ -1,12 +1,24 @@
 import React from "react";
 import { Box, Button } from "@material-ui/core";
 
-import { useSnackbarController, useAuthContext } from "@camberi/firecms";
+import { useSnackbarController, useAuthContext, useSideEntityController, buildSchema } from "@camberi/firecms";
 
 export function ExampleAdditionalView() {
 
     const snackbarController = useSnackbarController();
+    const sideEntityController = useSideEntityController();
     const authContext = useAuthContext();
+
+    const customProductSchema = buildSchema({
+        name: "Product",
+        properties: {
+            name: {
+                title: "Name",
+                validation: { required: true },
+                dataType: "string"
+            },
+        }
+    });
 
     return (
         <Box
@@ -30,10 +42,20 @@ export function ExampleAdditionalView() {
                 <Button
                     onClick={() => snackbarController.open({
                         type: "success",
-                        message: "Test snackbar"
+                        message: "This is pretty cool"
                     })}
                     color="primary">
-                    Click me
+                    Test snackbar
+                </Button>
+
+                <Button
+                    onClick={() => sideEntityController.open({
+                        entityId: "B003WT1622",
+                        collectionPath: "/products",
+                        schema: customProductSchema
+                    })}
+                    color="primary">
+                    Open entity with custom schema
                 </Button>
 
             </Box>

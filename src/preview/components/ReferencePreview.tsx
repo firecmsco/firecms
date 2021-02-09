@@ -32,7 +32,7 @@ import { useAppConfigContext } from "../../contexts";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { PreviewComponent } from "../PreviewComponent";
-import { useSideEntityController } from "../../side_dialog/SideEntityContext";
+import { useSideEntityController } from "../../side_dialog/SideEntityPanelsController";
 import { PreviewError } from "./PreviewError";
 import { Skeleton } from "@material-ui/lab";
 

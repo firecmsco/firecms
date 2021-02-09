@@ -15,7 +15,7 @@ import {
     Typography
 } from "@material-ui/core";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
-import { useSideEntityController } from "../side_dialog/SideEntityContext";
+import { useSideEntityController } from "../side_dialog/SideEntityPanelsController";
 
 export function CollectionRowActions<S extends EntitySchema>({
                                                                  entity,
