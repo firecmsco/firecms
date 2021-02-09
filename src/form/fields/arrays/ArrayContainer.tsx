@@ -32,14 +32,16 @@ export default function ArrayContainer<T>({
     const internalIdsRef = useRef<Record<string, number>>(internalIdsMap);
 
     function getHashValue<T>(v: T) {
-        if ("id" in v)
-            return v["id"];
-        else if (v instanceof firebase.firestore.DocumentReference)
-            return v.id;
-        else if (v instanceof firebase.firestore.Timestamp)
-            return v.toMillis();
-        else if (v instanceof firebase.firestore.GeoPoint)
-            return hash({ latitude: v.latitude, longitude: v.longitude });
+        if (typeof v === "object") {
+            if ("id" in v)
+                return v["id"];
+            else if (v instanceof firebase.firestore.DocumentReference)
+                return v.id;
+            else if (v instanceof firebase.firestore.Timestamp)
+                return v.toMillis();
+            else if (v instanceof firebase.firestore.GeoPoint)
+                return hash({ latitude: v.latitude, longitude: v.longitude });
+        }
         return hash(v, { ignoreUnknown: true });
     }
 
