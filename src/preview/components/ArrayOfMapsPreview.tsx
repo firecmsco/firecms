@@ -11,11 +11,9 @@ import { Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { useStyles } from "./styles";
 
 export function ArrayOfMapsPreview({
-                                       name,
                                        value,
                                        property,
                                        size,
-                                       entitySchema,
                                        PreviewComponent
                                    }: PreviewComponentProps<object[]> & PreviewComponentFactoryProps) {
 
@@ -56,8 +54,7 @@ export function ArrayOfMapsPreview({
                                                 name={key}
                                                 value={value[key] as any}
                                                 property={properties[key]}
-                                                size={"small"}
-                                                entitySchema={entitySchema}/>
+                                                size={"small"}/>
                                         </ErrorBoundary>
                                     </TableCell>
                                 )

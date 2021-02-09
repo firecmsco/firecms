@@ -8,7 +8,6 @@ export function NumberPreview({
                                   value,
                                   property,
                                   size,
-                                  entitySchema
                               }: PreviewComponentProps<number>): React.ReactElement {
 
     if (property.config?.enumValues) {

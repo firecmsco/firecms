@@ -14,8 +14,7 @@ export function ArrayOfStringsPreview({
                                           name,
                                           value,
                                           property,
-                                          size,
-                                          entitySchema
+                                          size
                                       }: PreviewComponentProps<string[]> & PreviewComponentFactoryProps) {
 
     const classes = useStyles();
@@ -38,8 +37,7 @@ export function ArrayOfStringsPreview({
                         <StringPreview name={name}
                                        property={stringProperty}
                                        value={v}
-                                       size={size}
-                                       entitySchema={entitySchema}/>
+                                       size={size}/>
                     </ErrorBoundary>
                 </div>
             )}

@@ -146,8 +146,7 @@ export default function TextField({
                     <PreviewComponent name={name}
                                       value={internalValue}
                                       property={property}
-                                      size={"regular"}
-                                      entitySchema={context.entitySchema}/>
+                                      size={"regular"}/>
                 </Box>
             </ErrorBoundary>
             }

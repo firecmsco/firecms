@@ -39,7 +39,7 @@ import { PreviewError } from "./components/PreviewError";
 export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
     const {
-        property, name, value, size, entitySchema
+        property, name, value, size
     } = props;
 
     const fieldProps = { ...props, PreviewComponent };
@@ -55,7 +55,6 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                 value,
                 property,
                 size,
-                entitySchema,
                 PreviewComponent
             });
     } else if (property.dataType === "string") {
@@ -91,7 +90,6 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                                         property={property as ArrayProperty}
                                         value={value}
                                         size={size}
-                                        entitySchema={entitySchema}
                                         PreviewComponent={PreviewComponent}/>;
             } else if (arrayProperty.of.dataType === "reference") {
                 content = <ArrayOfReferencesPreview {...fieldProps}

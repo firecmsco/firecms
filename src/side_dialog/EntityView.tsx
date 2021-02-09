@@ -29,7 +29,7 @@ import {
     removeInitialSlash
 } from "../routes/navigation";
 import { useSideEntityController } from "./SideEntityContext";
-import { CircularProgressCenter } from "../components";
+import CircularProgressCenter from "../components/CircularProgressCenter";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>
@@ -87,7 +87,9 @@ export interface EntitySideViewProps {
     entityId?: string;
     copy: boolean;
     selectedSubcollection?: string;
-    navigation: EntityCollection[];
+    editable:boolean;
+    schema: EntitySchema<any>;
+    subcollections?: EntityCollection[];
 }
 
 function EntitySideView({
@@ -95,14 +97,10 @@ function EntitySideView({
                             entityId,
                             selectedSubcollection,
                             copy,
-                            navigation
+                            editable,
+                            schema,
+                            subcollections
                         }: EntitySideViewProps) {
-
-
-    const entityCollection = useMemo(() => getCollectionViewFromPath(collectionPath, navigation), [collectionPath, navigation]);
-    const editable = entityCollection.editEnabled == undefined || entityCollection.editEnabled;
-    const schema = entityCollection.schema;
-    const subcollections = entityCollection.subcollections;
 
     const classes = useStylesSide();
 
@@ -262,7 +260,7 @@ function EntitySideView({
                     hidden={tabsPosition !== colIndex + 1}>
                     {entity && collectionPath ?
                         <EntityCollectionTable collectionPath={collectionPath}
-                                               view={subcollectionView}
+                                               collectionConfig={subcollectionView}
                         />
                         :
                         <Box m={3}

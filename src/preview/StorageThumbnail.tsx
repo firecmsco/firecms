@@ -10,9 +10,7 @@ import { getDownloadURL } from "../models";
 export default function StorageThumbnail({ name,
                                              value,
                                              property,
-                                             PreviewComponent,
-                                             size,
-                                             entitySchema }: PreviewComponentProps<string> & PreviewComponentFactoryProps) {
+                                             size }: PreviewComponentProps<string> & PreviewComponentFactoryProps) {
 
     const storagePathOrDownloadUrl = value;
 
@@ -39,7 +37,6 @@ export default function StorageThumbnail({ name,
         <UrlComponentPreview name={name}
                           value={url}
                           property={property}
-                          size={size}
-                          entitySchema={entitySchema}/> :
+                          size={size}/> :
         renderSkeletonImageThumbnail(size);
 }

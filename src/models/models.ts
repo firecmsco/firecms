@@ -11,6 +11,8 @@ import firebase from "firebase/app";
  * This interface represents a view that includes a collection of entities.
  * It can be in the root level of the configuration, defining the main
  * menu navigation.
+ *
+ * If you need a lower level implementation you can check CollectionTable
  */
 export interface EntityCollection<S extends EntitySchema = EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>,

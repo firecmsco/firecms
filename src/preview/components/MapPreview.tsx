@@ -34,7 +34,6 @@ export function MapPreview<T>({
                                   value,
                                   property,
                                   size,
-                                  entitySchema,
                                   PreviewComponent
                               }: PreviewComponentProps<T> & PreviewComponentFactoryProps) {
 
@@ -69,8 +68,7 @@ export function MapPreview<T>({
                             <PreviewComponent name={key}
                                               value={value[key] as any}
                                               property={mapProperty.properties[key]}
-                                              size={size}
-                                              entitySchema={entitySchema}/>
+                                              size={size}/>
                         </ErrorBoundary>
                     </div>
                 ))}
@@ -104,8 +102,7 @@ export function MapPreview<T>({
                                         name={key}
                                         value={value[key] as any}
                                         property={mapProperty.properties[key]}
-                                        size={"small"}
-                                        entitySchema={entitySchema}/>
+                                        size={"small"}/>
                                 </ErrorBoundary>
                             </TableCell>
                         </TableRow>

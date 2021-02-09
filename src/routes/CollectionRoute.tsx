@@ -22,7 +22,7 @@ interface CollectionRouteProps<S extends EntitySchema> {
 
 export function CollectionRoute<S extends EntitySchema>({
                                                             view,
-                                                            collectionPath,
+                                                            collectionPath
                                                         }
                                                             : CollectionRouteProps<S>) {
 
@@ -30,7 +30,7 @@ export function CollectionRoute<S extends EntitySchema>({
     const breadcrumbsContext = useBreadcrumbsContext();
     React.useEffect(() => {
         breadcrumbsContext.set({
-            breadcrumbs:  [{
+            breadcrumbs: [{
                 title: view.name,
                 url: url
             }]
@@ -42,8 +42,9 @@ export function CollectionRoute<S extends EntitySchema>({
     return (
         <div className={classes.root}>
 
-            <EntityCollectionTable collectionPath={collectionPath}
-                             view={view}/>
+            <EntityCollectionTable
+                collectionPath={collectionPath}
+                collectionConfig={view}/>
 
         </div>
     );

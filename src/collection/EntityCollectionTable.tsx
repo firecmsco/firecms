@@ -6,7 +6,7 @@ import {
     EntityCollection,
     EntitySchema
 } from "../models";
-import { CollectionTable } from "./CollectionTable";
+import CollectionTable from "./CollectionTable";
 import { createFormField } from "../form/form_factory";
 import { Button, Typography, useMediaQuery, useTheme } from "@material-ui/core";
 import { Add, Delete } from "@material-ui/icons";
@@ -17,13 +17,25 @@ import { useSideEntityController } from "../side_dialog/SideEntityContext";
 
 type EntitySubCollectionProps<S extends EntitySchema> = {
     collectionPath: string;
-    view: EntityCollection<any>;
+    collectionConfig: EntityCollection<any>;
 }
 
-export function EntityCollectionTable<S extends EntitySchema>({
-                                                                  collectionPath,
-                                                                  view
-                                                              }: EntitySubCollectionProps<S>
+/**
+ * This component is in charge of binding a Firestore path with an {@link EntityCollection}
+ * where it's configuration is defined. This is useful if you have defined already
+ * your entity collections and need to build a custom component.
+ *
+ * If you need a lower level implementation with more granular options, you
+ * can try CollectionTable, which still does data fetching from Firestore.
+ *
+ * @param collectionPath
+ * @param collectionConfig
+ * @constructor
+ */
+export default function EntityCollectionTable<S extends EntitySchema>({
+                                                                          collectionPath,
+                                                                          collectionConfig
+                                                                      }: EntitySubCollectionProps<S>
 ) {
     const selectedEntityContext = useSideEntityController();
 
@@ -33,14 +45,14 @@ export function EntityCollectionTable<S extends EntitySchema>({
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | Entity<S>[] | undefined>(undefined);
     const [selectedEntities, setSelectedEntities] = useState<Entity<S>[]>([]);
 
-    const deleteEnabled = view.deleteEnabled === undefined || view.deleteEnabled;
-    const editEnabled = view.editEnabled === undefined || view.editEnabled;
-    const inlineEditing = editEnabled && (view.inlineEditing === undefined || view.inlineEditing);
-    const selectionEnabled = view.selectionEnabled === undefined || view.selectionEnabled;
-    const paginationEnabled = view.pagination === undefined || view.pagination;
-    const displayedProperties = useColumnIds(view, true);
+    const deleteEnabled = collectionConfig.deleteEnabled === undefined || collectionConfig.deleteEnabled;
+    const editEnabled = collectionConfig.editEnabled === undefined || collectionConfig.editEnabled;
+    const inlineEditing = editEnabled && (collectionConfig.inlineEditing === undefined || collectionConfig.inlineEditing);
+    const selectionEnabled = collectionConfig.selectionEnabled === undefined || collectionConfig.selectionEnabled;
+    const paginationEnabled = collectionConfig.pagination === undefined || collectionConfig.pagination;
+    const displayedProperties = useColumnIds(collectionConfig, true);
 
-    const subcollectionColumns: AdditionalColumnDelegate<any>[] = view.subcollections?.map((subcollection) => {
+    const subcollectionColumns: AdditionalColumnDelegate<any>[] = collectionConfig.subcollections?.map((subcollection) => {
         return {
             id: getSubcollectionColumnId(subcollection),
             title: subcollection.name,
@@ -61,7 +73,7 @@ export function EntityCollectionTable<S extends EntitySchema>({
         };
     }) ?? [];
 
-    const additionalColumns = [...view.additionalColumns ?? [], ...subcollectionColumns];
+    const additionalColumns = [...collectionConfig.additionalColumns ?? [], ...subcollectionColumns];
 
     const onEntityClick = inlineEditing ? undefined : (collectionPath: string, entity: Entity<S>) => {
         selectedEntityContext.open({
@@ -86,7 +98,7 @@ export function EntityCollectionTable<S extends EntitySchema>({
     const title = (
         <>
             <Typography variant="h6">
-                {`${view.schema.name} list`}
+                {`${collectionConfig.schema.name} list`}
             </Typography>
             <Typography variant={"caption"} color={"textSecondary"}>
                 {`/${collectionPath}`}
@@ -136,7 +148,7 @@ export function EntityCollectionTable<S extends EntitySchema>({
                 size="large"
                 variant="contained"
                 color="primary">
-                Add {view.schema.name}
+                Add {collectionConfig.schema.name}
             </Button>
             : <Button
                 onClick={onNewClick}
@@ -160,8 +172,8 @@ export function EntityCollectionTable<S extends EntitySchema>({
                 <p style={{ minWidth: 24 }}>({selectedEntities?.length})</p>
             </Button>;
 
-        const extraActions = view.extraActions ? view.extraActions({
-            view: view,
+        const extraActions = collectionConfig.extraActions ? collectionConfig.extraActions({
+            view: collectionConfig,
             selectedEntities
         }) : undefined;
 
@@ -178,16 +190,16 @@ export function EntityCollectionTable<S extends EntitySchema>({
 
             <CollectionTable
                 collectionPath={collectionPath}
-                schema={view.schema}
+                schema={collectionConfig.schema}
                 additionalColumns={additionalColumns}
-                defaultSize={view.defaultSize}
+                defaultSize={collectionConfig.defaultSize}
                 displayedProperties={displayedProperties}
-                filterableProperties={view.filterableProperties}
-                initialFilter={view.initialFilter}
-                initialSort={view.initialSort}
+                filterableProperties={collectionConfig.filterableProperties}
+                initialFilter={collectionConfig.initialFilter}
+                initialSort={collectionConfig.initialSort}
                 inlineEditing={inlineEditing}
                 onEntityClick={onEntityClick}
-                textSearchDelegate={view.textSearchDelegate}
+                textSearchDelegate={collectionConfig.textSearchDelegate}
                 tableRowWidgetBuilder={tableRowButtonsBuilder}
                 paginationEnabled={paginationEnabled}
                 toolbarWidgetBuilder={toolbarActionsBuilder}
@@ -198,7 +210,7 @@ export function EntityCollectionTable<S extends EntitySchema>({
 
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 collectionPath={collectionPath}
-                                schema={view.schema}
+                                schema={collectionConfig.schema}
                                 open={!!deleteEntityClicked}
                                 onEntityDelete={internalOnEntityDelete}
                                 onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
@@ -206,3 +218,5 @@ export function EntityCollectionTable<S extends EntitySchema>({
         </>
     );
 }
+
+export { EntityCollectionTable };

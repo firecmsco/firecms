@@ -1,4 +1,4 @@
-import { PreviewComponentProps } from "../../models/preview_component_props";
+import { PreviewComponentProps } from "../../models";
 import React from "react";
 import { CheckBox, CheckBoxOutlineBlank } from "@material-ui/icons";
 
@@ -8,7 +8,6 @@ export function BooleanPreview({
                                    value,
                                    property,
                                    size,
-                                   entitySchema
                                }: PreviewComponentProps<boolean>): React.ReactElement {
 
     return value ?

@@ -32,7 +32,6 @@ import { useAppConfigContext } from "../../contexts";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { PreviewComponent } from "../PreviewComponent";
-import { useStyles } from "./styles";
 import { useSideEntityController } from "../../side_dialog/SideEntityContext";
 import { PreviewError } from "./PreviewError";
 import { Skeleton } from "@material-ui/lab";
@@ -98,8 +97,7 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
             property,
             PreviewComponent,
             onClick,
-            size,
-            entitySchema
+            size
         }: PreviewComponentProps<firebase.firestore.DocumentReference> & PreviewComponentFactoryProps) {
 
         const referenceClasses = useReferenceStyles({ size });
@@ -115,9 +113,9 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
         const previewProperties = property.previewProperties;
 
         const appConfig: CMSAppProps = useAppConfigContext();
-        const collectionView: EntityCollection<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
+        const collectionConfig: EntityCollection<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
 
-        const schema = collectionView.schema;
+        const schema = collectionConfig.schema;
         const [entity, setEntity] = React.useState<Entity<typeof schema>>();
 
         const selectedEntityContext = useSideEntityController();
@@ -180,8 +178,7 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
                                         <PreviewComponent name={key as string}
                                                           value={entity.values[key as string]}
                                                           property={property}
-                                                          size={"tiny"}
-                                                          entitySchema={entitySchema}/>
+                                                          size={"tiny"}/>
                                         :
                                         <SkeletonComponent property={property}
                                                            size={"tiny"}/>

@@ -9,7 +9,6 @@ export function StringPreview({
                                   value,
                                   property,
                                   size,
-                                  entitySchema
                               }: PreviewComponentProps<string>): React.ReactElement {
 
     if (property.config?.enumValues) {

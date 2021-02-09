@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { listenEntityFromRef } from "../models/firestore";
 import { Link as ReactLink } from "react-router-dom";
 
-import EntityPreview from "../preview/EntityPreview";
+import EntityPreview from "../components/EntityPreview";
 import {
     Box,
     Container,
@@ -142,7 +142,7 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, colle
                         width={"100%"} hidden={tabsPosition !== colIndex + 1}>
                         <EntityCollectionTable
                             collectionPath={collectionPath}
-                            view={subcollection}
+                            collectionConfig={subcollection}
                         />
                     </Box>;
                 }

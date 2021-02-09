@@ -1,8 +1,7 @@
 import { Entity, EntityCollection, Property } from "../../models";
 import { Box, Button, FormControl, FormHelperText, Paper } from "@material-ui/core";
-import { CMSFieldProps } from "../../models/form_props";
+import { CMSFieldProps } from "../../models";
 import React from "react";
-import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
 import { PreviewComponent, ReferencePreview } from "../../preview";
@@ -13,6 +12,7 @@ import { getCollectionViewFromPath } from "../../routes/navigation";
 import { ReferenceDialog } from "../../components/ReferenceDialog";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { formStyles } from "../../styles";
+import FieldDescription from "../../components/FieldDescription";
 
 
 type ArrayOfReferencesFieldProps = CMSFieldProps<firebase.firestore.DocumentReference[]>;
@@ -39,7 +39,7 @@ export default function ArrayOfReferencesField({
     }
 
     const appConfig: CMSAppProps = useAppConfigContext();
-    const collectionView: EntityCollection<any> = getCollectionViewFromPath(ofProperty.collectionPath, appConfig.navigation);
+    const collectionConfig: EntityCollection<any> = getCollectionViewFromPath(ofProperty.collectionPath, appConfig.navigation);
 
     const [open, setOpen] = React.useState(false);
     const selectedIds = value ? value.map((ref) => ref.id) : [];
@@ -64,7 +64,6 @@ export default function ArrayOfReferencesField({
                                  value={entryValue}
                                  property={ofProperty}
                                  size={"regular"}
-                                 entitySchema={context.entitySchema}
                                  PreviewComponent={PreviewComponent}
                                  onClick={onEntryClick}/>;
     };
@@ -98,6 +97,7 @@ export default function ArrayOfReferencesField({
                 </Box>
 
                 </Paper>
+
                 {includeDescription &&
                 <FieldDescription property={property}/>}
 
@@ -108,10 +108,10 @@ export default function ArrayOfReferencesField({
 
             </FormControl>
 
-            {collectionView && <ReferenceDialog open={open}
+            {collectionConfig && <ReferenceDialog open={open}
                                                 multiselect={true}
                                                 collectionPath={ofProperty.collectionPath}
-                                                collectionView={collectionView}
+                                                collectionView={collectionConfig}
                                                 onClose={onClose}
                                                 onMultipleEntitiesSelected={onMultipleEntitiesSelected}
                                                 createFormField={createFormField}

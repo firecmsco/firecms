@@ -19,7 +19,7 @@ import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
 import { getIconForProperty } from "../util/property_icons";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
 import SkeletonComponent from "../preview/components/SkeletonComponent";
-import ErrorBoundary from "../components/ErrorBoundary";
+import { ErrorBoundary } from "../components";
 import TableCell from "./TableCell";
 import PopupFormField from "./popup_field/PopupFormField";
 import { OutsideAlerter } from "../util/OutsideAlerter";
@@ -29,7 +29,7 @@ import { PreviewTableCell } from "./PreviewTableCell";
 import { CollectionTableProps } from "./CollectionTableProps";
 import { TableCellProps } from "./SelectedCellContext";
 import { useHistory } from "react-router-dom";
-import { CircularProgressCenter } from "../components";
+import CircularProgressCenter from "../components/CircularProgressCenter";
 import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../preview/util";
 import { CollectionRowActions } from "./CollectionRowActions";
@@ -51,7 +51,7 @@ interface CMSColumn {
 type Order = "asc" | "desc" | undefined;
 
 
-export function CollectionTable<S extends EntitySchema<Key, P>,
+export default function CollectionTable<S extends EntitySchema<Key, P>,
     Key extends string = string,
     P extends Properties<Key> = Properties<Key>>({
                                                      initialFilter,
@@ -351,7 +351,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                             value={entity.values[propertyKey]}
                             property={property}
                             size={getPreviewSizeFrom(size)}
-                            entitySchema={schema}
                         />
                     </PreviewTableCell>
                 );
@@ -366,7 +365,6 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
                             value={entity.values[propertyKey]}
                             property={property}
                             size={getPreviewSizeFrom(size)}
-                            entitySchema={schema}
                         />
                     </DisabledTableCell>
                 );
@@ -611,3 +609,5 @@ export function CollectionTable<S extends EntitySchema<Key, P>,
     );
 
 }
+
+export { CollectionTable } ;

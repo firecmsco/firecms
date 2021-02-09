@@ -14,7 +14,6 @@ export function ArrayOfReferencesPreview({
                                              value,
                                              property,
                                              size,
-                                             entitySchema,
                                              PreviewComponent
                                          }: PreviewComponentProps<any[]> & PreviewComponentFactoryProps) {
 
@@ -31,7 +30,6 @@ export function ArrayOfReferencesPreview({
                 <div className={classes.arrayItem} key={`preview_array_ref_${name}_${index}`}>
                     <ReferencePreview
                         name={`${name}[${index}]`}
-                        entitySchema={entitySchema}
                         size={childSize}
                         value={v}
                         property={property.of as ReferenceProperty}

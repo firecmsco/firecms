@@ -10,7 +10,6 @@ type ImagePreviewProps = { size: PreviewSize, url: string };
 
 function ImagePreview({ size, url }: ImagePreviewProps) {
 
-
     const classes = useStyles();
 
     const [onHover, setOnHover] = useState(false);

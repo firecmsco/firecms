@@ -665,8 +665,7 @@ export function StorageItemPreview({
                     <PreviewComponent name={name}
                                       value={value}
                                       property={property}
-                                      size={size}
-                                      entitySchema={entitySchema}/>
+                                      size={size}/>
                 </ErrorBoundary>
                 }
             </Paper>

@@ -43,8 +43,7 @@ export default function DisabledField<S extends EntitySchema>({
                     <PreviewComponent name={name}
                                       value={value}
                                       property={property}
-                                      size={"regular"}
-                                      entitySchema={context.entitySchema}/>
+                                      size={"regular"}/>
                 </ErrorBoundary>
 
             </Paper>

@@ -8,8 +8,8 @@ import {
     DialogContent,
     DialogTitle
 } from "@material-ui/core";
-import EntityPreview from "../preview/EntityPreview";
-import { CircularProgressCenter } from "../components";
+import EntityPreview from "../components/EntityPreview";
+import CircularProgressCenter from "../components/CircularProgressCenter";
 import { useSnackbarController } from "../contexts";
 
 

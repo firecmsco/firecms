@@ -39,7 +39,6 @@ import { useAppConfigContext, useSnackbarController } from "../contexts";
 
 import { CMSAppProps } from "../CMSAppProps";
 import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
-import ArrayDefaultFieldOld from "./fields/delete";
 
 export function createFormField<T, S extends EntitySchema = EntitySchema>({
                                                                               name,

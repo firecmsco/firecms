@@ -83,9 +83,9 @@ export default function ReferenceField<S extends EntitySchema>({
     const classes = useStyles();
 
     const appConfig: CMSAppProps = useAppConfigContext();
-    const collectionView: EntityCollection<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
+    const collectionConfig: EntityCollection<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
 
-    const schema = collectionView.schema;
+    const schema = collectionConfig.schema;
     const collectionPath = property.collectionPath;
 
     const [open, setOpen] = React.useState(autoFocus);
@@ -175,8 +175,7 @@ export default function ReferenceField<S extends EntitySchema>({
                                             name={key}
                                             value={entity.values[key as string]}
                                             property={propertyKey}
-                                            size={"tiny"}
-                                            entitySchema={context.entitySchema}/>
+                                            size={"tiny"}/>
                                         :
                                         <SkeletonComponent
                                             property={propertyKey}
@@ -274,17 +273,17 @@ export default function ReferenceField<S extends EntitySchema>({
 
                 {buildEntityView()}
 
-                {collectionView && <ReferenceDialog open={open}
+                {collectionConfig && <ReferenceDialog open={open}
                                                     multiselect={false}
                                                     collectionPath={collectionPath}
-                                                    collectionView={collectionView}
+                                                    collectionView={collectionConfig}
                                                     onClose={onClose}
                                                     onSingleEntitySelected={handleEntityClick}
                                                     createFormField={createFormField}
                                                     CollectionTable={CollectionTable}
                 />}
 
-                {!collectionView &&
+                {!collectionConfig &&
                 <Box>Reference field configured wrong. Check console</Box>}
 
             </Box>

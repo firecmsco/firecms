@@ -19,15 +19,15 @@ import {
 } from "@material-ui/core";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { mapPropertyToYup } from "../form/validation";
-import { saveEntity } from "../models/firestore";
 import clsx from "clsx";
 import OverflowingCell from "./OverflowingCell";
+import { saveEntity } from "../models";
 import { TableInput } from "./fields/TableInput";
 import { TableSelect } from "./fields/TableSelect";
 import { NumberTableInput } from "./fields/TableNumberInput";
 import { TableSwitch } from "./fields/TableSwitch";
 import { TableDateField } from "./fields/TableDateField";
-import ErrorBoundary from "../components/ErrorBoundary";
+import { ErrorBoundary } from "../components";
 import { PreviewComponent } from "../preview";
 import { CellStyleProps, useCellStyles } from "./styles";
 import { TableReferenceField } from "./fields/TableReferenceField";
@@ -316,7 +316,6 @@ const TableCell = <T, S extends EntitySchema>({
                         value={internalValue}
                         property={property}
                         size={getPreviewSizeFrom(size)}
-                        entitySchema={schema}
                     />
                 </ErrorBoundary>
             </OverflowingCell>

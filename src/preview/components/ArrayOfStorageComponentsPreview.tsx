@@ -15,7 +15,6 @@ export function ArrayOfStorageComponentsPreview({
                                                     value,
                                                     property,
                                                     size,
-                                                    entitySchema,
                                                     PreviewComponent
                                                 }: PreviewComponentProps<any[]> & PreviewComponentFactoryProps) {
 
@@ -35,8 +34,7 @@ export function ArrayOfStorageComponentsPreview({
                         name={name}
                         value={v}
                         property={property.of}
-                        size={childSize}
-                        entitySchema={entitySchema}/>
+                        size={childSize}/>
                 </ErrorBoundary>
             </div>
         )}

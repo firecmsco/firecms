@@ -15,7 +15,7 @@ interface FieldDescriptionPopoverProps {
 }
 
 
-export function FieldDescription({ property }: FieldDescriptionPopoverProps) {
+export default function FieldDescription({ property }: FieldDescriptionPopoverProps) {
 
     return (
         <Box display="flex">

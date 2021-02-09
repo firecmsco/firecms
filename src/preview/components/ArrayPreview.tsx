@@ -16,7 +16,6 @@ export function ArrayPreview({
                                        value,
                                        property,
                                        size,
-                                       entitySchema,
                                        PreviewComponent
                                    }: PreviewComponentProps<any[]> & PreviewComponentFactoryProps) {
 
@@ -42,8 +41,7 @@ export function ArrayPreview({
                                 name={name}
                                 value={value}
                                 property={property.of}
-                                size={childSize}
-                                entitySchema={entitySchema}/>
+                                size={childSize}/>
                         </ErrorBoundary>
                     </div>
                     {index < values.length - 1 && <Divider/>}

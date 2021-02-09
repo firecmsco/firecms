@@ -7,7 +7,6 @@ export function TimestampPreview({
                                      value,
                                      property,
                                      size,
-                                     entitySchema
                                  }: PreviewComponentProps<firebase.firestore.Timestamp | Date>): React.ReactElement {
 
     return (

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { EntityCollection, EntitySchema } from "../models";
 import { createStyles, makeStyles } from "@material-ui/core";
 import { EntityDrawer } from "./EntityDrawer";
 import EntityView from "./EntityView";
 import { SidePanelProps, useSideEntityController } from "./SideEntityContext";
+import { getCollectionViewFromPath } from "../routes/navigation";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -51,20 +52,34 @@ export function EntitySideDialogs<S extends EntitySchema>({ navigation }: { navi
         // setSidePanelBeingClosed(undefined);
     };
 
-    // const extraSidePanel = sidePanelBeingClosed;
-
     const allPanels = [...sidePanels, undefined];
+
+    function buildEntityView(panel: SidePanelProps) {
+
+        const entityCollection = getCollectionViewFromPath(panel.collectionPath, navigation);
+        const editable = entityCollection.editEnabled == undefined || entityCollection.editEnabled;
+        const schema = entityCollection.schema;
+        const subcollections = entityCollection.subcollections;
+
+        return <EntityView
+            key={`side-form-route-${panel.entityId}`}
+            editable={editable}
+            schema={schema}
+            subcollections={subcollections}
+            {...panel}/>;
+    }
+
     return (
         <>
             {/* we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed */}
             {
-                allPanels.map((panel: SidePanelProps | undefined, index) =>
-                    (
+                allPanels.map((panel: SidePanelProps | undefined, index) => {
+
+                    return (
                         <EntityDrawer
                             key={`side_menu_${index}`}
                             open={panel !== undefined}
                             onClose={() => {
-                                // setSidePanelBeingClosed(panel);
                                 sideEntityContext.close();
                             }}
                             offsetPosition={sidePanels.length - index - 1}
@@ -72,15 +87,11 @@ export function EntitySideDialogs<S extends EntitySchema>({ navigation }: { navi
                         >
                             <div
                                 className={panel === undefined || !panel.selectedSubcollection ? classes.root : classes.wide}>
-
-                                {panel && <EntityView
-                                    key={`side-form-route-${panel.entityId}`}
-                                    navigation={navigation}
-                                    {...panel}/>
-                                }
+                                {panel && buildEntityView(panel)}
                             </div>
                         </EntityDrawer>
-                    ))
+                    );
+                })
             }
 
         </>

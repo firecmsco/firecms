@@ -11,11 +11,9 @@ import { getThumbnailMeasure } from "../util";
 
 
 export function UrlComponentPreview({
-                                        name,
                                         value,
                                         property,
                                         size,
-                                        entitySchema
                                     }: PreviewComponentProps<string>): React.ReactElement {
 
     const classes = useStyles();

@@ -14,12 +14,12 @@ import {
     Typography
 } from "@material-ui/core";
 import { Entity, EntitySchema } from "../models";
-import PreviewComponent from "./PreviewComponent";
+import PreviewComponent from "../preview/PreviewComponent";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
-import ErrorBoundary from "../components/ErrorBoundary";
+import { ErrorBoundary } from "./index";
 import { CMSAppProps } from "../CMSAppProps";
-import { useAppConfigContext } from "../contexts/AppConfigContext";
+import { useAppConfigContext } from "../contexts";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -118,8 +118,7 @@ export default function EntityPreview<S extends EntitySchema>(
                                             name={key}
                                             value={value}
                                             property={property}
-                                            size={"regular"}
-                                            entitySchema={schema}/>
+                                            size={"regular"}/>
                                     </ErrorBoundary>
                                 </TableCell>
 

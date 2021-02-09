@@ -102,11 +102,10 @@ export function TableReferenceField<S extends EntitySchema>(props: {
     function buildSingleReferenceField() {
         if (internalValue instanceof firebase.firestore.DocumentReference)
             return <ReferencePreview name={name}
-                onClick={handleOpen}
+                                     onClick={handleOpen}
                                      value={internalValue as firebase.firestore.DocumentReference}
                                      property={usedProperty}
                                      size={getPreviewSizeFrom(size)}
-                                     entitySchema={schema}
                                      PreviewComponent={PreviewComponent}/>;
         else
             return <PreviewError error={"Data is not a reference"}/>;
@@ -121,7 +120,6 @@ export function TableReferenceField<S extends EntitySchema>(props: {
                         <ReferencePreview
                             name={`${name}[${index}]`}
                             onClick={handleOpen}
-                            entitySchema={schema}
                             size={"tiny"}
                             value={v}
                             property={usedProperty}

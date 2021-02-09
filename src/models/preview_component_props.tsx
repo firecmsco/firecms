@@ -13,5 +13,4 @@ export interface PreviewComponentProps<T = any> {
     property: Property<T>,
     onClick?: MouseEventHandler<any>,
     size: PreviewSize,
-    entitySchema?: EntitySchema;
 }

@@ -1,10 +1,10 @@
 export {
-    CircularProgressCenter
-} from "./CircularProgressCenter";
+    default as FieldDescription
+} from "./FieldDescription";
 
 export {
-    FieldDescription
-} from "./FieldDescription";
+    default as ErrorBoundary
+} from "./ErrorBoundary";
 
 
 

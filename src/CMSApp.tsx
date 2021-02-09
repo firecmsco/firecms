@@ -21,7 +21,7 @@ import "firebase/firestore";
 
 import "typeface-space-mono";
 
-import { CircularProgressCenter } from "./components";
+import CircularProgressCenter from "./components/CircularProgressCenter";
 import { Authenticator } from "./models";
 import { blue, pink, red } from "@material-ui/core/colors";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";

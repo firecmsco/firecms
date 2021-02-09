@@ -38,7 +38,7 @@ export type{
 } from "./models";
 
 // EntityCollectionView is deprecated, use EntityCollection instead
-export type {EntityCollection as EntityCollectionView} from "./models";
+export type { EntityCollection as EntityCollectionView } from "./models";
 
 export {
     EntityStatus,
@@ -80,7 +80,6 @@ export type {
 } from "./CMSAppProps";
 
 
-
 export {
     ArrayDefaultField,
     ArrayEnumSelect,
@@ -104,8 +103,14 @@ export {
 } from "./preview";
 
 export {
-    FieldDescription
+    FieldDescription,
+    ErrorBoundary
 } from "./components";
+
+export {
+    CollectionTable,
+    EntityCollectionTable
+} from "./collection";
 
 export type {
     SnackbarController,
@@ -113,7 +118,7 @@ export type {
     AuthContextController,
     BreadcrumbsStatus
 } from "./contexts";
-export  {
+export {
     useSnackbarController,
     useBreadcrumbsContext,
     useAuthContext,
