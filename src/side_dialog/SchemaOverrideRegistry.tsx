@@ -3,7 +3,7 @@ import { EntityCollection, EntitySchema } from "../models";
 import { SchemaSidePanelProps } from "./model";
 import { getCollectionViewFromPath } from "../routes/navigation";
 
-const DEFAULT_SIDE_ENTITY = {
+const DEFAULT_SCHEMA_OVERRIDE_CONTROLLER = {
     /**
      * Get
      */
@@ -16,11 +16,10 @@ const DEFAULT_SIDE_ENTITY = {
         collectionPath: string,
         sidePanelProps: SchemaSidePanelProps | null
     ) => {
-
     }
 };
 
-export type SchemasRegistryPanelsController<S extends EntitySchema> = {
+export type SchemasOverrideRegistryController<S extends EntitySchema> = {
     /**
      * Get props for path
      */
@@ -35,33 +34,21 @@ export type SchemasRegistryPanelsController<S extends EntitySchema> = {
     ) => void;
 };
 
-export const SchemasRegistryContext = React.createContext<SchemasRegistryPanelsController<any>>(DEFAULT_SIDE_ENTITY);
-export const useSchemasRegistryController = () => useContext(SchemasRegistryContext);
+export const SchemaOverrideRegistryContext = React.createContext<SchemasOverrideRegistryController<any>>(DEFAULT_SCHEMA_OVERRIDE_CONTROLLER);
+export const useSchemaOverrideRegistry = () => useContext(SchemaOverrideRegistryContext);
 
 interface ViewRegistryProviderProps {
     children: React.ReactNode;
-    navigation: EntityCollection[];
 }
 
 export const SchemaOverrideRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
-                                                                                        children,
-                                                                                        navigation
+                                                                                        children
                                                                                     }) => {
 
     const viewsRef = useRef<Record<string, SchemaSidePanelProps>>({});
 
     const get = (collectionPath: string): SchemaSidePanelProps | null => {
-        let props: SchemaSidePanelProps | null = viewsRef.current[collectionPath];
-        if (!props) {
-            const entityCollection: EntityCollection = getCollectionViewFromPath(collectionPath, navigation);
-            const editEnabled = entityCollection.editEnabled == undefined || entityCollection.editEnabled;
-            const schema = entityCollection.schema;
-            const subcollections = entityCollection.subcollections;
-            props = {
-                editEnabled, schema, subcollections
-            };
-        }
-        return props;
+        return viewsRef.current[collectionPath];
     };
 
     const set = (
@@ -76,13 +63,13 @@ export const SchemaOverrideRegistryProvider: React.FC<ViewRegistryProviderProps>
     };
 
     return (
-        <SchemasRegistryContext.Provider
+        <SchemaOverrideRegistryContext.Provider
             value={{
                 get,
                 set
             }}
         >
             {children}
-        </SchemasRegistryContext.Provider>
+        </SchemaOverrideRegistryContext.Provider>
     );
 };

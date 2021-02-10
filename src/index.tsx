@@ -121,12 +121,12 @@ export type {
 
 export  {
     useSideEntityController
-} from "./side_dialog/SideEntityPanelsController";
+} from "./contexts/SideEntityPanelsController";
 export type {
     SideEntityPanelsController
-} from "./side_dialog/SideEntityPanelsController";
+} from "./contexts/SideEntityPanelsController";
 export type {
-    EntitySidePanelProps, SchemaSidePanelProps
+    SideEntityPanelProps, SchemaSidePanelProps
 } from "./side_dialog/model";
 
 export {

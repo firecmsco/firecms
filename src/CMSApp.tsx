@@ -36,7 +36,7 @@ import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./components/CMSAppBar";
 import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
-import { SideEntityProvider } from "./side_dialog/SideEntityPanelsController";
+import { SideEntityProvider } from "./contexts/SideEntityPanelsController";
 import { SchemaOverrideRegistryProvider } from "./side_dialog/SchemaOverrideRegistry";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -220,10 +220,10 @@ export function CMSApp(props: CMSAppProps) {
         } else if (process.env.NODE_ENV === "production") {
             fetch("/__/firebase/init.json")
                 .then(async response => {
-                    console.log("Firebase init response", response.status);
+                    console.debug("Firebase init response", response.status);
                     if (response && response.status < 300) {
                         const config = await response.json();
-                        console.log("Using fetched config", config);
+                        console.log("Using configuration fetched from Firebase Hosting", config);
                         initFirebase(config);
                     }
                 })
@@ -253,7 +253,7 @@ export function CMSApp(props: CMSAppProps) {
     function renderMainView() {
         return (
             <Router>
-                <SchemaOverrideRegistryProvider navigation={navigation}>
+                <SchemaOverrideRegistryProvider>
                     <SideEntityProvider navigation={navigation}>
                         <BreadcrumbsProvider>
                             <MuiPickersUtilsProvider
@@ -281,7 +281,7 @@ export function CMSApp(props: CMSAppProps) {
                                         </main>
                                     </div>
 
-                                    <EntitySideDialogs/>
+                                    <EntitySideDialogs navigation={navigation}/>
 
                                 </DndProvider>
                             </MuiPickersUtilsProvider>

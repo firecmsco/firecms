@@ -9,6 +9,7 @@ const DEFAULT_NAVIGATION = {
     }
 };
 
+export type { BreadcrumbEntry };
 export type BreadcrumbsStatus = {
     breadcrumbs: BreadcrumbEntry[];
     set: (props: {

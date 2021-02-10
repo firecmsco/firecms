@@ -14,12 +14,10 @@ import "typeface-rubik";
 const firebaseConfig = {
     apiKey: "",
     authDomain: "",
-    databaseURL: "",
     projectId: "",
     storageBucket: "",
     messagingSenderId: "",
-    appId: "",
-    measurementId: ""
+    appId: ""
 };
 
 const locales = {
@@ -31,7 +29,7 @@ const locales = {
 
 const productSchema = buildSchema({
     name: "Product",
-    properties: {
+    properties:  {
         name: {
             title: "Name",
             validation: { required: true },
@@ -161,7 +159,7 @@ const localeSchema = buildSchema({
     }
 });
 
-export function SimpleApp() {
+export function App() {
 
     const navigation: EntityCollection[] = [
         buildCollection({

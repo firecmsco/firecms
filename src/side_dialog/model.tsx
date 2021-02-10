@@ -1,6 +1,6 @@
 import { EntityCollection, EntitySchema } from "../models";
 
-export interface EntitySidePanelProps {
+export interface SideEntityPanelProps {
     /**
      * Absolute path of the entity
      */

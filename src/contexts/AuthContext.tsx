@@ -4,8 +4,6 @@ import "firebase/auth";
 import React, { useContext, useEffect } from "react";
 import { Authenticator } from "../models";
 
-const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-
 interface AuthProviderProps {
     authenticator: Authenticator | undefined,
     firebaseConfigInitialized: boolean,

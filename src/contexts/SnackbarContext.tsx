@@ -7,13 +7,13 @@ const DEFAULT_STATE = {
     close: () => {
     },
     open: (props: {
-        type: MessageType;
+        type: SnackbarMessageType;
         message: string;
     }) => {
     }
 };
 
-type MessageType = "success" | "info" | "warning" | "error";
+export type SnackbarMessageType = "success" | "info" | "warning" | "error";
 
 export type SnackbarController = {
     /**
@@ -31,7 +31,7 @@ export type SnackbarController = {
      * You can optionally specify a title
      */
     open: (props: {
-        type: MessageType;
+        type: SnackbarMessageType;
         title?: string;
         message: string;
     }) => void;
@@ -49,7 +49,7 @@ export const SnackbarProvider: React.FC<ISelectedEntityProviderProps> = ({ child
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState<string | undefined>(undefined);
     const [message, setMessage] = useState<string | undefined>(undefined);
-    const [type, setType] = useState<MessageType | undefined>(undefined);
+    const [type, setType] = useState<SnackbarMessageType | undefined>(undefined);
 
     const close = () => {
         setIsOpen(false);
@@ -59,7 +59,7 @@ export const SnackbarProvider: React.FC<ISelectedEntityProviderProps> = ({ child
     };
 
     const open = (props: {
-        type: MessageType;
+        type: SnackbarMessageType;
         title?: string;
         message: string;
     }) => {

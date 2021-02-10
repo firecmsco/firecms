@@ -1,12 +1,14 @@
 import React from "react";
-import { EntitySchema } from "../models";
+import { EntityCollection, EntitySchema } from "../models";
 import { createStyles, makeStyles } from "@material-ui/core";
 import { EntityDrawer } from "./EntityDrawer";
 import EntityView from "./EntityView";
-import { useSideEntityController } from "./SideEntityPanelsController";
-import { useSchemasRegistryController } from "./SchemaOverrideRegistry";
-import { EntitySidePanelProps, SchemaSidePanelProps } from "./model";
+import { useSideEntityController } from "../contexts/SideEntityPanelsController";
+import { useSchemaOverrideRegistry } from "./SchemaOverrideRegistry";
+import { SchemaSidePanelProps, SideEntityPanelProps } from "./model";
 import { ErrorBoundary } from "../components";
+import { getCollectionViewFromPath } from "../routes/navigation";
+
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -42,10 +44,10 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 
-export function EntitySideDialogs<S extends EntitySchema>() {
+export function EntitySideDialogs<S extends EntitySchema>({ navigation }: { navigation: EntityCollection[] }) {
 
     const sideEntityController = useSideEntityController();
-    const schemasRegistry = useSchemasRegistryController();
+    const schemasRegistry = useSchemaOverrideRegistry();
 
     const classes = useStyles();
 
@@ -58,12 +60,19 @@ export function EntitySideDialogs<S extends EntitySchema>() {
 
     const allPanels = [...sidePanels, undefined];
 
-    function buildEntityView(panel: EntitySidePanelProps) {
+    function buildEntityView(panel: SideEntityPanelProps) {
 
-        const extendedProps: SchemaSidePanelProps | null = schemasRegistry.get(panel.collectionPath);
+        let extendedProps: SchemaSidePanelProps | null = schemasRegistry.get(panel.collectionPath);
 
-        if (!extendedProps)
-            return null;
+        if (!extendedProps) {
+            const entityCollection: EntityCollection = getCollectionViewFromPath(panel.collectionPath, navigation);
+            const editEnabled = entityCollection.editEnabled == undefined || entityCollection.editEnabled;
+            const schema = entityCollection.schema;
+            const subcollections = entityCollection.subcollections;
+            extendedProps = {
+                editEnabled, schema, subcollections
+            };
+        }
 
         return (
             <ErrorBoundary>
@@ -79,7 +88,7 @@ export function EntitySideDialogs<S extends EntitySchema>() {
         <>
             {/* we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed */}
             {
-                allPanels.map((panel: EntitySidePanelProps | undefined, index) => {
+                allPanels.map((panel: SideEntityPanelProps | undefined, index) => {
 
                     return (
                         <EntityDrawer

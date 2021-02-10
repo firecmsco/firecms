@@ -33,6 +33,7 @@ import CircularProgressCenter from "../components/CircularProgressCenter";
 import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../preview/util";
 import { CollectionRowActions } from "./CollectionRowActions";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -264,7 +265,6 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
         scrollToTop();
     };
 
-
     async function onTextSearch(searchString?: string) {
         if (!!textSearchDelegate) {
             setTextSearchLoading(true);
@@ -282,7 +282,6 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
             setTextSearchLoading(false);
         }
     }
-
 
     const loadNextPage = () => {
         if (!paginationEnabled || dataLoading || noMoreToLoad)
@@ -463,19 +462,23 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
 
             <Paper className={classes.root}>
                 <Box display="flex"
+                     flexDirection={"column"}
                      justifyContent="center"
                      margin={6}>
+
                     <Typography variant={"h6"}>
                         {"Error fetching data from Firestore"}
                     </Typography>
+
                     {dataLoadingError?.name && <Typography>
                         {dataLoadingError?.name}
                     </Typography>}
+
                     {dataLoadingError?.message && <Typography>
                         {dataLoadingError?.message}
                     </Typography>}
-                </Box>
 
+                </Box>
 
             </Paper>
         );
@@ -486,9 +489,18 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
             return <CircularProgressCenter/>;
         return (
             <Box display="flex"
+                 flexDirection={"column"}
+                 alignItems="center"
                  justifyContent="center"
-                 margin={6}>
-                {textSearchInProgress ? "No results" : (filterSet ? "No data with the selected filters" : "This collection is empty")}
+                 width={"100%"}
+                 height={"100%"}
+                 padding={2}>
+                <Box padding={1}>
+                    <AssignmentIcon/>
+                </Box>
+                <Typography>
+                    {textSearchInProgress ? "No results" : (filterSet ? "No data with the selected filters" : "This collection is empty")}
+                </Typography>
             </Box>
         );
     }

@@ -28,7 +28,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { listenEntityFromRef } from "../../models/firestore";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { CollectionTable } from "../../collection/CollectionTable";
-import { useSideEntityController } from "../../side_dialog/SideEntityPanelsController";
+import { useSideEntityController } from "../../contexts/SideEntityPanelsController";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -68,7 +68,6 @@ export default function ReferenceField<S extends EntitySchema>({
                                                                    property,
                                                                    includeDescription,
                                                                    context,
-                                                                   partOfArray,
                                                                    createFormField
                                                                }: CMSFieldProps<firebase.firestore.DocumentReference>) {
 
@@ -244,7 +243,7 @@ export default function ReferenceField<S extends EntitySchema>({
                             </Tooltip>
                         </Box>}
 
-                        {!partOfArray && value && <Box>
+                        {value && <Box>
                             <Tooltip title="Clear">
                                 <span>
                                 <IconButton

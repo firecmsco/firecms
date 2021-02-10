@@ -1,7 +1,7 @@
 export type {
-    SnackbarController,
+    SnackbarController, SnackbarMessageType
 } from "./SnackbarContext";
-export  {
+export {
     useSnackbarController
 } from "./SnackbarContext";
 
@@ -20,8 +20,15 @@ export {
 } from "./AuthContext";
 
 export type {
-    BreadcrumbsStatus
+    BreadcrumbsStatus,BreadcrumbEntry
 } from "./BreacrumbsContext";
 export {
     useBreadcrumbsContext
 } from "./BreacrumbsContext";
+
+export type {
+    SideEntityPanelsController, SchemaSidePanelProps, SideEntityPanelProps
+} from "./SideEntityPanelsController";
+export {
+    useSideEntityController
+} from "./SideEntityPanelsController";

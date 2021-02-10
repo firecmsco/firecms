@@ -84,6 +84,7 @@ picked up automatically.
 - [x] Hooks on pre and post saving and deletion of entities
 - [x] Collection text search integration
 - [x] Infinite scrolling in collections
+- [x] Enhanced reference, and array of reference, fields for relational data
 - [x] Drag and drop reordering of arrays
 - [x] Custom additional views in main navigation
 - [x] Custom fields defined by the developer.
@@ -95,7 +96,23 @@ picked up automatically.
 - [x] Validation for required fields using yup
 - [ ] Allow set up of a project using a CLI create-firecms-app
 
-## Quick example
+## Quickstart
+
+- Create a new React app includint Typescript:
+
+```npx create-react-app my-cms --template typescript```
+
+- Go into the new directory:
+
+```cd my-cms```
+
+- Install FireCMS and it's peer dependencies:
+
+```yarn add @camberi/firecms @material-ui/core @material-ui/icons @material-ui/pickers firebase```
+
+You can replace the content of the file App.tsx with the following sample code.
+Remember to replace the Firebase config with the one you get after creating
+a webapp in the Firebase console.
 
 ```tsx
 import React from "react";
@@ -114,12 +131,10 @@ import "typeface-rubik";
 const firebaseConfig = {
     apiKey: "",
     authDomain: "",
-    databaseURL: "",
     projectId: "",
     storageBucket: "",
     messagingSenderId: "",
-    appId: "",
-    measurementId: ""
+    appId: ""
 };
 
 const locales = {
@@ -131,7 +146,7 @@ const locales = {
 
 const productSchema = buildSchema({
     name: "Product",
-    properties: {
+    properties:  {
         name: {
             title: "Name",
             validation: { required: true },
@@ -261,7 +276,7 @@ const localeSchema = buildSchema({
     }
 });
 
-export function SimpleApp() {
+export function App() {
 
     const navigation: EntityCollection[] = [
         buildCollection({
@@ -290,11 +305,6 @@ export function SimpleApp() {
         firebaseConfig={firebaseConfig}
     />;
 }
-
-ReactDOM.render(
-    <SimpleApp/>,
-    document.getElementById("root")
-);
 ```
 
 #### Included example
@@ -763,7 +773,6 @@ The props provided by this context are:
 
 * `isOpen` Is there currently an open snackbar
 * `close()` Close the currently open snackbar
-
 * `open ({ type: "success" | "info" | "warning" | "error"; title?: string; message: string; })`
   Display a new snackbar. You need to specify the type and message. You can
   optionally specify a title
@@ -787,6 +796,54 @@ export function ExampleAdditionalView() {
                 message: "Test snackbar"
             })}>
             Click me
+        </Button>
+    );
+}
+```
+
+### Side entity controller
+
+`useSideEntityController`
+You can use this controller to open the side entity view used to edit entities.
+
+The props provided by this context are:
+
+* `close()` Close the last panel
+* `sidePanels`: List of side entity panels currently open
+* `open (props: SideEntityPanelProps & Partial<SchemaSidePanelProps>)`
+    Open a new entity sideDialog. By default, the schema and configuration
+    of the view is fetched from the collections you have specified in the
+    navigation
+
+Example:
+
+```tsx
+import React from "react";
+import { useSideEntityController } from "@camberi/firecms";
+
+export function ExampleAdditionalView() {
+
+    const sideEntityController = useSideEntityController();
+    const customProductSchema = buildSchema({
+        name: "Product",
+        properties: {
+            name: {
+                title: "Name",
+                validation: { required: true },
+                dataType: "string"
+            },
+        }
+    });
+
+    return (
+        <Button
+            onClick={() => sideEntityController.open({
+                entityId: "B003WT1622",
+                collectionPath: "/products",
+                schema: customProductSchema
+            })}
+            color="primary">
+            Open entity with custom schema
         </Button>
     );
 }

@@ -1,9 +1,16 @@
 # Change Log
 
-## [0.25.0] - 2021-02
+## [0.25.0] - 2021-02-10
 ### Added
-- `initialSort` to collections views
+- `useSideEntityController` hook, allows to open the side dialog programmatically
+and override the entity schemas.
+- New custom field for **arrays of references**, in form and table mode
+- `initialSort` to collections views.
 
+### Changed
+- Removed full size entity view, in favor of side lateral menu. Also when typing
+directly URLs pointing to entities.
+- Fix for form validation of untouched new entities.
 
 ## [0.24.0] - 2021-01-26
 ### Added

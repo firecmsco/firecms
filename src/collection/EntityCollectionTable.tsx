@@ -13,7 +13,7 @@ import { Add, Delete } from "@material-ui/icons";
 import { CollectionRowActions } from "./CollectionRowActions";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { getSubcollectionColumnId, useColumnIds } from "./common";
-import { useSideEntityController } from "../side_dialog/SideEntityPanelsController";
+import { useSideEntityController } from "../contexts/SideEntityPanelsController";
 
 type EntitySubCollectionProps<S extends EntitySchema> = {
     collectionPath: string;

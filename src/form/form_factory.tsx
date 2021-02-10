@@ -137,17 +137,21 @@ function buildFieldInternal<P extends Property, T = any, S extends EntitySchema 
             name={`${name}`}
         >
             {(fieldProps: FieldProps<T>) => {
+                const name = fieldProps.field.name;
+                const value = fieldProps.field.value;
                 const error = getIn(fieldProps.form.errors, name);
                 const touched = getIn(fieldProps.form.touched, name);
-                const showError: boolean = error && touched && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
+                const showError: boolean = error
+                    && (touched || fieldProps.form.submitCount > 0)
+                    && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
                 const isSubmitting = fieldProps.form.isSubmitting;
 
                 const cmsFieldProps: CMSFieldProps<T> = {
-                    name: fieldProps.field.name,
-                    value: fieldProps.field.value,
+                    name,
+                    value,
                     setValue: (value: T | null) => {
-                        fieldProps.form.setFieldTouched(fieldProps.field.name);
-                        fieldProps.form.setFieldValue(fieldProps.field.name, value);
+                        fieldProps.form.setFieldTouched(name);
+                        fieldProps.form.setFieldValue(name, value);
                     },
                     error,
                     touched,
