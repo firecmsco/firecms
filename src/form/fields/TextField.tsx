@@ -68,7 +68,7 @@ export default function TextField({
             );
         }
     };
-    const disabled = valueIsInfinity || isSubmitting;
+    const disabled = valueIsInfinity || isSubmitting || property.readOnly || property.disabled;
 
     const filledInput = (
         <FilledInput
@@ -128,7 +128,7 @@ export default function TextField({
                                         evt.target.checked ? Infinity : undefined);
                                 }}/>
                         }
-                        disabled={property.disabled || isSubmitting}
+                        disabled={disabled}
                         label={
                             <Typography variant={"caption"}>
                                 Set value to Infinity

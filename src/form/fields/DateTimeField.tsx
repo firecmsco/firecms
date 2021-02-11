@@ -24,7 +24,7 @@ export default function DateTimeField({
 
     const internalValue = value || null;
 
-    const disabled = property.disabled !== undefined ? property.disabled : isSubmitting || !!property.autoValue;
+    const disabled = property.readOnly || property.disabled || isSubmitting || !!property.autoValue;
     return (
         <React.Fragment>
 

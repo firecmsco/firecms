@@ -22,7 +22,7 @@ import { BooleanPreview } from "./components/BooleanPreview";
 import { TimestampPreview } from "./components/TimestampPreview";
 import { default as ReferencePreview } from "./components/ReferencePreview";
 import { ArrayOfReferencesPreview } from "./components/ArrayOfReferencesPreview";
-import { ArrayEnumPreview } from "./components/ArrayEnumPreview";
+import { ArrayPropertyEnumPreview } from "./components/ArrayPropertyEnumPreview";
 import { ArrayPreview } from "./components/ArrayPreview";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";
 import { ArrayOfStorageComponentsPreview } from "./components/ArrayOfStorageComponentsPreview";
@@ -71,7 +71,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                                          value={value}/>;
             }
         } else {
-            content = buildWrongValueType();
+            content = buildWrongValueType(name, property.dataType, value);
         }
     } else if (property.dataType === "array") {
         if (value instanceof Array) {
@@ -90,7 +90,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                                                     property={property as ArrayProperty}/>;
             } else if (arrayProperty.of.dataType === "string") {
                 if (arrayProperty.of.config?.enumValues) {
-                    content = <ArrayEnumPreview
+                    content = <ArrayPropertyEnumPreview
                         {...fieldProps}
                         value={value}
                         property={property as ArrayProperty}/>;
@@ -111,7 +111,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                                         property={property as ArrayProperty}/>;
             }
         } else {
-            content = buildWrongValueType();
+            content = buildWrongValueType(name, property.dataType, value);
         }
     } else if (property.dataType === "map") {
         if (typeof value === "object") {
@@ -119,7 +119,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                 <MapPreview {...fieldProps}
                             property={property as MapProperty}/>;
         } else {
-            content = buildWrongValueType();
+            content = buildWrongValueType(name, property.dataType, value);
         }
     } else if (property.dataType === "timestamp") {
         if (value instanceof Date) {
@@ -127,7 +127,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                                         value={value}
                                         property={property as TimestampProperty}/>;
         } else {
-            content = buildWrongValueType();
+            content = buildWrongValueType(name, property.dataType, value);
         }
     } else if (property.dataType === "reference") {
         if (value instanceof firebase.firestore.DocumentReference) {
@@ -137,7 +137,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                 property={property as ReferenceProperty}
             />;
         } else {
-            content = buildWrongValueType();
+            content = buildWrongValueType(name, property.dataType, value);
         }
     } else if (property.dataType === "boolean") {
         if (typeof value === "boolean") {
@@ -145,7 +145,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                                       value={value}
                                       property={property as BooleanProperty}/>;
         } else {
-            content = buildWrongValueType();
+            content = buildWrongValueType(name, property.dataType, value);
         }
     } else if (property.dataType === "number") {
         if (typeof value === "number") {
@@ -153,9 +153,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                                      value={value}
                                      property={property as NumberProperty}/>;
         } else {
-            console.debug("Unexpected value for property", property, value);
-            console.debug("typeof value", typeof value);
-            content = buildWrongValueType();
+            content = buildWrongValueType(name, property.dataType, value);
         }
     } else {
         content = JSON.stringify(value);
@@ -164,9 +162,10 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     return content === undefined || content === null ? <EmptyValue/> : content;
 }
 
-function buildWrongValueType() {
+function buildWrongValueType(name:string | undefined, dataType:string, value:any) {
+    console.error(`Unexpected value for property ${name}, of type ${dataType}`, value);
     return (
-        <PreviewError error={"Unexpected value"}/>
+        <PreviewError error={`Unexpected value: ${JSON.stringify(value)}`}/>
     );
 }
 

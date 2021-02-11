@@ -35,6 +35,7 @@ import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../preview/util";
 import { CollectionRowActions } from "./CollectionRowActions";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import { buildProperty } from "../models/property_builder";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -54,8 +55,7 @@ type Order = "asc" | "desc" | undefined;
 
 
 export default function CollectionTable<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties<Key> = Properties<Key>,
+    Key extends string,
     AdditionalKey extends string = string>({
                                                      initialFilter,
                                                      initialSort,
@@ -182,11 +182,10 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         };
     });
 
-
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as string[])
             .map((key) => {
-                const property = schema.properties[key as string] as Property;
+                const property = buildProperty(schema.properties[key as string] as Property, schema.defaultValues ?? {});
                 return ({
                     id: key as string,
                     type: "property",
@@ -275,7 +274,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                 setTextSearchInProgress(true);
                 const ids = await textSearchDelegate.performTextSearch(searchString);
                 const promises: Promise<Entity<S, Key>>[] = ids
-                    .map((id) => fetchEntity(collectionPath, id, schema));
+                    .map((id) => fetchEntity(collectionPath, id, schema)
+                    );
                 const entities = await Promise.all(promises);
                 setTextSearchData(entities);
             }
@@ -343,7 +343,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         }
 
         const propertyKey = column.dataKey;
-        const property = schema.properties[propertyKey];
+        const property = buildProperty(schema.properties[propertyKey], entity.values, entity.id);
+        const usedPropertyBuilder = typeof schema.properties[propertyKey] === "function";
 
         if (column.type === "property") {
             if (!inlineEditing) {
@@ -360,7 +361,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                         />
                     </PreviewTableCell>
                 );
-            } else if (property.disabled) {
+            } else if (property.readOnly || property.disabled) {
                 return (
                     <DisabledTableCell
                         key={`disabled_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
@@ -389,7 +390,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                         entity,
                         cellRect,
                         name: propertyKey,
-                        property
+                        property,
+                        usedPropertyBuilder
                     });
                 };
 
@@ -615,6 +617,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                     columnIndex={selectedCell?.columnIndex}
                     name={selectedCell?.name}
                     property={selectedCell?.property}
+                    usedPropertyBuilder={selectedCell?.usedPropertyBuilder ?? false}
                     setPreventOutsideClick={setPreventOutsideClick}
                     entity={selectedCell?.entity}/>
 

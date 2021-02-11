@@ -59,7 +59,8 @@ export default function ArrayShapedField<T>({
                                             context,
                                             tableMode: false,
                                             partOfArray: false,
-                                            autoFocus: false
+                                            autoFocus: false,
+                                            dependsOnOtherProperties: false
                                         })}
                                 </Grid>;
                             }

@@ -5,7 +5,7 @@ import { ReactElement } from "react";
  * When building a custom field you need to create a React Element that takes
  * this interface as props.
  */
-export interface CMSFieldProps<T, CustomProps = any, S extends EntitySchema = EntitySchema> {
+export interface CMSFieldProps<T, CustomProps = any, S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
      * Name of the property
@@ -60,7 +60,7 @@ export interface CMSFieldProps<T, CustomProps = any, S extends EntitySchema = En
      * Builder in case this fields needs to build additional fields,
      * e.g. arrays or maps
      */
-    createFormField: FormFieldBuilder;
+    createFormField: FormFieldBuilder<S, Key>;
 
     /**
      * Flag to indicate that the underlying value has been updated in Firestore
@@ -90,11 +90,11 @@ export interface CMSFieldProps<T, CustomProps = any, S extends EntitySchema = En
     /**
      * Additional values related to the state of the form or the entity
      */
-    context: FormContext<S>;
+    context: FormContext<S, Key>;
 
 }
 
-export interface FormContext<S extends EntitySchema> {
+export interface FormContext<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
      * Schema of the entity being modified
@@ -104,7 +104,7 @@ export interface FormContext<S extends EntitySchema> {
     /**
      * Current values of the entity
      */
-    values: EntityValues<S>;
+    values: EntityValues<S, Key>;
 }
 
 /**
@@ -112,15 +112,17 @@ export interface FormContext<S extends EntitySchema> {
  * another field. This is the pattern used for arrays or maps.
  * Only for advanced use cases
  */
-export type FormFieldBuilder<S extends EntitySchema = EntitySchema> = (props: FormFieldProps<S>) => ReactElement;
+export type FormFieldBuilder<S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>> = (props: FormFieldProps<S, Key>) => ReactElement;
 
-export interface FormFieldProps<S extends EntitySchema> {
+export interface FormFieldProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
     name: string;
     property: Property;
     includeDescription: boolean;
     underlyingValueHasChanged: boolean;
-    context: FormContext<S>;
+    context: FormContext<S, Key>;
     tableMode: boolean;
     partOfArray: boolean;
     autoFocus: boolean;
+    // This flag is used to avoid using FastField internally, which prevents being updated from the values
+    dependsOnOtherProperties:boolean;
 }

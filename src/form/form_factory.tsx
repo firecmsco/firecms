@@ -1,4 +1,4 @@
-import React, { ComponentType } from "react";
+import React, { ComponentType, useEffect } from "react";
 
 import { useClipboard } from "use-clipboard-hook";
 import {
@@ -33,27 +33,29 @@ import DateTimeField from "./fields/DateTimeField";
 import ReferenceField from "./fields/ReferenceField";
 import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
-import DisabledField from "./fields/DisabledField";
+import ReadOnlyField from "./fields/ReadOnlyField";
 import MarkDownField from "./fields/MarkdownField";
 import { useAppConfigContext, useSnackbarController } from "../contexts";
 
 import { CMSAppProps } from "../CMSAppProps";
 import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
 
-export function createFormField<T, S extends EntitySchema = EntitySchema>({
-                                                                              name,
-                                                                              property,
-                                                                              includeDescription,
-                                                                              underlyingValueHasChanged,
-                                                                              context,
-                                                                              tableMode,
-                                                                              partOfArray,
-                                                                              autoFocus
-                                                                          }: FormFieldProps<S>): JSX.Element {
+export function createFormField<T, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
+({
+     name,
+     property,
+     includeDescription,
+     underlyingValueHasChanged,
+     context,
+     tableMode,
+     partOfArray,
+     autoFocus,
+     dependsOnOtherProperties
+ }: FormFieldProps<S, Key>): JSX.Element {
 
     let component: ComponentType<CMSFieldProps<any>> | undefined;
-    if (property.disabled) {
-        component = DisabledField;
+    if (property.readOnly) {
+        component = ReadOnlyField;
     } else if (property.config?.field) {
         component = property.config?.field;
     } else if (property.dataType === "array") {
@@ -93,16 +95,19 @@ export function createFormField<T, S extends EntitySchema = EntitySchema>({
     }
 
     if (component) {
-        return buildFieldInternal(component, {
-            name,
-            property,
-            includeDescription,
-            underlyingValueHasChanged,
-            context,
-            tableMode,
-            partOfArray,
-            autoFocus
-        });
+        return <FieldInternal
+            component={component}
+            componentProps={{
+                name,
+                property,
+                includeDescription,
+                underlyingValueHasChanged,
+                context,
+                tableMode,
+                partOfArray,
+                autoFocus,
+                dependsOnOtherProperties
+            }}/>;
     }
 
     return (
@@ -110,25 +115,32 @@ export function createFormField<T, S extends EntitySchema = EntitySchema>({
     );
 }
 
-function buildFieldInternal<P extends Property, T = any, S extends EntitySchema = EntitySchema>(
-    component: ComponentType<CMSFieldProps<any>>,
-    {
-        name,
-        property,
-        includeDescription,
-        underlyingValueHasChanged,
-        tableMode,
-        partOfArray,
-        autoFocus,
-        context
-    }: FormFieldProps<S>
-) {
+function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> = EntitySchema, Key extends string = string>
+({
+     component,
+     componentProps: {
+         name,
+         property,
+         includeDescription,
+         underlyingValueHasChanged,
+         tableMode,
+         partOfArray,
+         autoFocus,
+         context,
+         dependsOnOtherProperties
+     }
+ }:
+     {
+         component: ComponentType<CMSFieldProps<any>>,
+         componentProps: FormFieldProps<S, Key>
+     }) {
+
 
     const customFieldProps: any = property.config?.fieldProps;
 
     // we use the standard Field for user defined fields, since it rebuilds
     // when there are changes in other values, in contrast to FastField
-    const FieldComponent = property.config?.field ? Field : FastField;
+    const FieldComponent = dependsOnOtherProperties || property.config?.field ? Field : FastField;
 
     return (
         <FieldComponent
@@ -146,6 +158,12 @@ function buildFieldInternal<P extends Property, T = any, S extends EntitySchema 
                     && fieldProps.form.submitCount > 0
                     && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
                 const isSubmitting = fieldProps.form.isSubmitting;
+
+                // useEffect(() => {
+                //     if (dependsOnOtherProperties && property.disabled) {
+                //         fieldProps.form.setFieldValue(name, null);
+                //     }
+                // });
 
                 const cmsFieldProps: CMSFieldProps<T> = {
                     name,
@@ -187,11 +205,12 @@ function buildFieldInternal<P extends Property, T = any, S extends EntitySchema 
 }
 
 
-export function createCustomIdField<S extends EntitySchema>(schema: S,
-                                                            entityStatus: EntityStatus,
-                                                            onChange: Function,
-                                                            error: boolean,
-                                                            entity: Entity<S> | undefined) {
+export function createCustomIdField<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
+(schema: S,
+ entityStatus: EntityStatus,
+ onChange: Function,
+ error: boolean,
+ entity: Entity<S, Key> | undefined) {
 
     const disabled = entityStatus === EntityStatus.existing || !schema.customId;
     const idSetAutomatically = entityStatus !== EntityStatus.existing && !schema.customId;

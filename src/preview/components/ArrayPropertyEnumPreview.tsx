@@ -14,11 +14,17 @@ import {
 import { CustomChip } from "./CustomChip";
 import { useStyles } from "./styles";
 
-
-export function buildArrayEnumPreview(value: string[] | number[],
-                               name: string | undefined,
-                               enumValues: EnumValues<string> | EnumValues<number>,
-                               size: "regular" | "small" | "tiny") {
+export function ArrayEnumPreview({
+                                     name,
+                                     value,
+                                     enumValues,
+                                     size
+                                 }: {
+    value: string[] | number[],
+    name: string | undefined,
+    enumValues: EnumValues<string> | EnumValues<number>,
+    size: "regular" | "small" | "tiny"
+}) {
 
     const classes = useStyles();
 
@@ -42,7 +48,7 @@ export function buildArrayEnumPreview(value: string[] | number[],
     );
 }
 
-export function ArrayEnumPreview({
+export function ArrayPropertyEnumPreview({
                                      name,
                                      value,
                                      property,
@@ -60,5 +66,5 @@ export function ArrayEnumPreview({
 
     const enumValues = ofProperty.config?.enumValues;
 
-    return buildArrayEnumPreview(value, name, enumValues, size);
+    return <ArrayEnumPreview name={name} value={value} enumValues={enumValues} size={size}/>
 }

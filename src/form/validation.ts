@@ -2,6 +2,7 @@ import {
     ArrayProperty,
     BooleanProperty,
     EntitySchema,
+    EntityValues,
     GeopointProperty,
     NumberProperty,
     Properties,
@@ -20,6 +21,8 @@ import {
     ObjectSchema,
     StringSchema
 } from "yup";
+import { PropertiesOrBuilder, PropertyOrBuilder } from "../models/models";
+import { buildProperty } from "../models/property_builder";
 
 
 export function mapPropertyToYup(property: Property): AnySchema<unknown> {
@@ -30,7 +33,7 @@ export function mapPropertyToYup(property: Property): AnySchema<unknown> {
     } else if (property.dataType === "boolean") {
         return getYupBooleanSchema(property);
     } else if (property.dataType === "map") {
-        return getYupObjectSchema(property.properties);
+        return getYupMapObjectSchema(property.properties);
     } else if (property.dataType === "array") {
         return getYupArraySchema(property);
     } else if (property.dataType === "timestamp") {
@@ -40,10 +43,21 @@ export function mapPropertyToYup(property: Property): AnySchema<unknown> {
     } else if (property.dataType === "reference") {
         return getYupReferenceSchema(property);
     }
-    throw Error("Unsupported data type in yup mapping: " + property["dataType"]);
+    throw Error("Unsupported data type in yup mapping: " + property);
 }
 
-export function getYupObjectSchema(properties: Properties): ObjectSchema<any> {
+export function getYupEntitySchema<S extends EntitySchema<Key>, Key extends string>
+(properties: PropertiesOrBuilder,
+ values: Partial<EntityValues<S, Key>>,
+ entityId?: string): ObjectSchema<any> {
+    const objectSchema: any = {};
+    Object.entries(properties).forEach(([key, propertyOrBuilder]: [string, PropertyOrBuilder]) => {
+        objectSchema[key] = mapPropertyToYup(buildProperty(propertyOrBuilder, values, entityId));
+    });
+    return yup.object().shape(objectSchema);
+}
+
+export function getYupMapObjectSchema<S extends EntitySchema<Key>, Key extends string>(properties: Properties<any>): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties).forEach(([key, property]: [string, Property]) => {
         objectSchema[key] = mapPropertyToYup(property);

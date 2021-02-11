@@ -10,7 +10,7 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 
 type DisabledFieldProps = CMSFieldProps<any>;
 
-export default function DisabledField<S extends EntitySchema>({
+export default function ReadOnlyField<S extends EntitySchema>({
                                                                   name,
                                                                   value,
                                                                   setValue,

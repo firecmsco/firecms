@@ -23,12 +23,15 @@ export default function ArrayContainer<T>({
                                               includeAddButton
                                           }: ArrayContainerProps<T>) {
 
-    const hasValue = value && value.length > 0;
+    const hasValue = value && Array.isArray(value) && value.length > 0;
 
     const internalIdsMap: Record<string, number> = useMemo(() =>
-        value ? value.map(v => ({
-            [getHashValue(v)]: getRandomId()
-        })).reduce((a, b) => ({ ...a, ...b }), {}) : {}, [value]);
+        hasValue ? value.map(v => {
+            if(!v) return {};
+            return ({
+                [getHashValue(v)]: getRandomId()
+            });
+        }).reduce((a, b) => ({ ...a, ...b }), {}) : {}, [value]);
     const internalIdsRef = useRef<Record<string, number>>(internalIdsMap);
 
     function getHashValue<T>(v: T) {
@@ -46,7 +49,7 @@ export default function ArrayContainer<T>({
     }
 
     useEffect(() => {
-        if (value && value.length != internalIds.length) {
+        if (hasValue && value && value.length != internalIds.length) {
             const newInternalIds = value.map(v => {
                 const hashValue = getHashValue(v);
                 if (hashValue in internalIdsRef.current) {
@@ -59,10 +62,10 @@ export default function ArrayContainer<T>({
             });
             setInternalIds(newInternalIds);
         }
-    }, [value]);
+    }, [hasValue, value]);
 
     const [internalIds, setInternalIds] = useState<number[]>(
-        value
+        hasValue
             ? Object.values(internalIdsRef.current)
             : []);
 

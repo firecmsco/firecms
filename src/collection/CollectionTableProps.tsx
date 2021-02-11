@@ -1,19 +1,15 @@
 import {
     AdditionalColumnDelegate,
     CollectionSize,
-    Entity, EntityCollection,
+    Entity,
     EntitySchema,
     FilterValues,
-    Properties,
     TextSearchDelegate
 } from "../models";
 import { FormFieldBuilder } from "../form";
 import React from "react";
 
-export interface CollectionTableProps<S extends EntitySchema,
-    Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties = Properties<Key>,
-    AdditionalKey extends string = string> {
+export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends string, AdditionalKey extends string = string> {
 
     /**
      * Absolute collection path
@@ -66,7 +62,7 @@ export interface CollectionTableProps<S extends EntitySchema,
      * an additional column delegate.
      * Usually defined by the end user.
      */
-    additionalColumns?: AdditionalColumnDelegate<AdditionalKey, S>[];
+    additionalColumns?: AdditionalColumnDelegate<AdditionalKey, S, Key>[];
 
     /**
      * Properties that can be filtered
@@ -91,12 +87,12 @@ export interface CollectionTableProps<S extends EntitySchema,
     /**
      * Callback when a multiple entities gets deleted
      */
-    onMultipleEntitiesDelete?(collectionPath: string, entities: Entity<S>[]): void;
+    onMultipleEntitiesDelete?(collectionPath: string, entities: Entity<S, Key>[]): void;
 
     /**
      * Factory method for creating form fields
      */
-    createFormField: FormFieldBuilder;
+    createFormField: FormFieldBuilder<S, Key>;
 
     /**
      * List of entities that will be displayed on top, no matter the ordering.

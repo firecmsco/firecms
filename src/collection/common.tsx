@@ -47,7 +47,7 @@ export function getPreviewWidth<T>(property: Property<T>, size: CollectionSize):
     } else if (property.dataType === "array") {
         const arrayProperty = property as ArrayProperty;
         if ("dataType" in arrayProperty.of) {
-            return getPreviewWidth(arrayProperty.of, size);
+            return getPreviewWidth(arrayProperty.of as Property<unknown>, size);
         } else {
             return 300;
         }

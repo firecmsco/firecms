@@ -38,6 +38,7 @@ export default function MapField<S extends EntitySchema>({
     const classes = formStyles();
 
     const pickOnlySomeKeys = property.config?.pickOnlySomeKeys || false;
+    const disabled = isSubmitting || property.readOnly || property.disabled;
 
     let mapProperties: Record<string, Property>;
     if (!pickOnlySomeKeys) {
@@ -70,6 +71,7 @@ export default function MapField<S extends EntitySchema>({
                 <InputLabel>Add property</InputLabel>
                 <Select
                     value={""}
+                    disabled={disabled}
                     onChange={handleAddProperty}>
                     {keys.map((key) => (
                         <MenuItem key={key} value={key}>
@@ -85,7 +87,7 @@ export default function MapField<S extends EntitySchema>({
         <FormControl fullWidth error={showError}>
 
             {!tableMode && <FormHelperText filled
-                             required={property.validation?.required}>
+                                           required={property.validation?.required}>
                 <LabelWithIcon scaledIcon={true} property={property}/>
             </FormHelperText>}
 
@@ -102,9 +104,10 @@ export default function MapField<S extends EntitySchema>({
                                             includeDescription,
                                             underlyingValueHasChanged,
                                             context,
-                                            tableMode: false,
+                                            tableMode: tableMode,
                                             partOfArray: false,
-                                            autoFocus: false
+                                            autoFocus: false,
+                                            dependsOnOtherProperties: false
                                         })}
                                 </Grid>;
                             }

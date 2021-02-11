@@ -95,6 +95,7 @@ export default function ReferenceField<S extends EntitySchema>({
 
     const clearValue = (e: React.MouseEvent) => {
         e.stopPropagation();
+        setValue(null);
         setOpen(false);
         setEntity(undefined);
     };
@@ -113,8 +114,10 @@ export default function ReferenceField<S extends EntitySchema>({
         setOpen(false);
     };
 
+    const validValue = value && value instanceof firebase.firestore.DocumentReference;
+
     useEffect(() => {
-        if (value) {
+        if (validValue) {
             const cancel = listenEntityFromRef<S>(value, schema, (e => {
                 setEntity(e);
             }));
@@ -152,49 +155,51 @@ export default function ReferenceField<S extends EntitySchema>({
                     </Box>
                 </Tooltip>
             );
-        } else if (value) {
-            body = (
-                <Box display={"flex"}
-                     flexDirection={"column"}
-                     flexGrow={1}
-                     ml={1}
-                     mr={1}>
-
-                    {listProperties && listProperties.map((key, index) => {
-                        const propertyKey = schema.properties[key as string];
-                        return (
-                            <Box
-                                key={`reference_previews_${key}`}
-                                mt={0.5}
-                                mb={0.5}>
-                                <ErrorBoundary>{
-                                    entity ?
-                                        <PreviewComponent
-                                            name={key}
-                                            value={entity.values[key as string]}
-                                            property={propertyKey}
-                                            size={"tiny"}/>
-                                        :
-                                        <SkeletonComponent
-                                            property={propertyKey}
-                                            size={"tiny"}/>}
-                                </ErrorBoundary>
-                            </Box>
-                        );
-                    })}
-                </Box>
-            );
         } else {
-            body = <Box p={1}
-                        onClick={isSubmitting ? undefined : handleClickOpen}
-                        justifyContent="center"
-                        display="flex">
-                <Box flexGrow={1} textAlign={"center"}>No value set</Box>
-                <Button variant="outlined"
-                        color="primary">
-                    Set
-                </Button>
-            </Box>;
+            if (validValue) {
+                body = (
+                    <Box display={"flex"}
+                         flexDirection={"column"}
+                         flexGrow={1}
+                         ml={1}
+                         mr={1}>
+
+                        {listProperties && listProperties.map((key, index) => {
+                            const propertyKey = schema.properties[key as string];
+                            return (
+                                <Box
+                                    key={`reference_previews_${key}`}
+                                    mt={0.5}
+                                    mb={0.5}>
+                                    <ErrorBoundary>{
+                                        entity ?
+                                            <PreviewComponent
+                                                name={key}
+                                                value={entity.values[key as string]}
+                                                property={propertyKey}
+                                                size={"tiny"}/>
+                                            :
+                                            <SkeletonComponent
+                                                property={propertyKey}
+                                                size={"tiny"}/>}
+                                    </ErrorBoundary>
+                                </Box>
+                            );
+                        })}
+                    </Box>
+                );
+            } else {
+                body = <Box p={1}
+                            onClick={isSubmitting ? undefined : handleClickOpen}
+                            justifyContent="center"
+                            display="flex">
+                    <Box flexGrow={1} textAlign={"center"}>No value set</Box>
+                    <Button variant="outlined"
+                            color="primary">
+                        Set
+                    </Button>
+                </Box>;
+            }
         }
 
         return (

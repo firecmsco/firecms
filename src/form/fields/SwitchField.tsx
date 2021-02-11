@@ -40,12 +40,12 @@ export default React.forwardRef(function SwitchField({
                                                          isSubmitting,
                                                          touched,
                                                          property,
-                                                         includeDescription,
+                                                         includeDescription
                                                      }: SwitchFieldProps, ref) {
 
     const classes = useStyles();
 
-    const disabled = property.disabled || isSubmitting;
+    const disabled = property.readOnly || property.disabled || isSubmitting;
     return (
         <FormControl
             fullWidth

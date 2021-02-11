@@ -48,9 +48,8 @@ export type {
 export {
     ArrayDefaultField,
     ArrayEnumSelect,
-    ArrayMapField,
     DateTimeField,
-    DisabledField,
+    ReadOnlyField,
     MapField,
     ReferenceField,
     Select,

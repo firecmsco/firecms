@@ -177,7 +177,7 @@ function SampleApp() {
             added_on: {
                 dataType: "timestamp",
                 title: "Added on",
-                disabled: true,
+                readOnly: true,
                 autoValue: "on_create"
             },
             images: {
@@ -225,13 +225,13 @@ function SampleApp() {
             min_known_price: {
                 dataType: "number",
                 title: "Min known price",
-                disabled: true,
+                readOnly: true,
                 description: "Minimum price this product has ever had"
             },
             prime_eligible: {
                 dataType: "boolean",
                 title: "Prime eligible",
-                disabled: true
+                readOnly: true
             },
             available_locales: {
                 title: "Available locales",
@@ -239,7 +239,7 @@ function SampleApp() {
                     "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
                 longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
                 dataType: "array",
-                disabled: true,
+                readOnly: true,
                 of: {
                     dataType: "string",
                     config: {
@@ -250,7 +250,7 @@ function SampleApp() {
             uppercase_name: {
                 title: "Uppercase Name",
                 dataType: "string",
-                disabled: true,
+                readOnly: true,
                 description: "This field gets updated with a preSave hook"
             }
 
@@ -521,9 +521,19 @@ function SampleApp() {
                     }
                 }
             },
-            title: {
-                dataType: "string",
-                title: "Title"
+            title: ({ values, entityId }) => {
+                // if (entityId === "ddd")
+                // console.log("props", values);
+                if (values?.available_locales && Array.isArray(values.available_locales) && values.available_locales.includes("de"))
+                    return ({
+                        dataType: "string",
+                        title: "Title disabled",
+                        readOnly: true
+                    });
+                return ({
+                    dataType: "string",
+                    title: "Title"
+                });
             },
             tags: {
                 title: "Tags",
@@ -635,6 +645,41 @@ function SampleApp() {
         }
     });
 
+    const testConditionalEntitySchema = buildSchema({
+        customId: true,
+        name: "Test conditional entity",
+        properties: {
+            title: ({ values, entityId }) => {
+                // if (entityId === "ddd")
+                // console.log("props", values);
+                if (values?.available_locales && Array.isArray(values.available_locales) && values.available_locales.includes("de"))
+                    return ({
+                        dataType: "string",
+                        title: "Title disabled",
+                        disabled: true
+                    });
+                return ({
+                    dataType: "string",
+                    title: "Title"
+                });
+            },
+            available_locales: {
+                title: "Available locales",
+                description:
+                    "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
+                longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
+                dataType: "array",
+                of: {
+                    dataType: "string",
+                    config: {
+                        enumValues: locales
+                    }
+                }
+            }
+        }
+    });
+
+
     const productExtraActionBuilder = ({
                                            view,
                                            selectedEntities
@@ -701,7 +746,7 @@ function SampleApp() {
     ];
 
     if (process.env.NODE_ENV !== "production") {
-        const newVar: EntityCollection = {
+        const testCollection: EntityCollection = {
             relativePath: "test_entity",
             schema: testEntitySchema,
             group: "Test group",
@@ -715,7 +760,13 @@ function SampleApp() {
                 filterableProperties: ["difficulty", "search_adjacent", "description"]
             }]
         };
-        navigation.push(buildCollection(newVar));
+        navigation.push(buildCollection(testCollection));
+        navigation.push(buildCollection({
+            relativePath: "test_entity_conditional",
+            schema: testConditionalEntitySchema,
+            group: "Test group",
+            name: "Test entity conditional",
+        }));
     }
 
     const myAuthenticator: Authenticator = (user?: firebase.User) => {

@@ -41,7 +41,8 @@ export default function ArrayDefaultField<T>({
                 context,
                 tableMode: false,
                 partOfArray: true,
-                autoFocus: internalId === lastAddedId
+                autoFocus: internalId === lastAddedId,
+                dependsOnOtherProperties: false
             });
     };
 

@@ -14,28 +14,29 @@ import {
 } from "../../models";
 import { Formik, FormikProps, useFormikContext } from "formik";
 import { Draggable } from "./Draggable";
-import { getYupObjectSchema } from "../../form/validation";
+import { getYupEntitySchema } from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../util/useWindowSize";
 import { FormFieldBuilder } from "../../form";
 import { FormContext } from "../../models/form_props";
 
 
-interface PopupFormFieldProps<S extends EntitySchema> {
-    entity?: Entity<S>,
+interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
+    entity?: Entity<S, Key>,
     schema: S,
     tableKey: string,
     name?: string;
     property?: Property;
-    createFormField: FormFieldBuilder,
+    createFormField: FormFieldBuilder<S,Key>,
     cellRect?: DOMRect;
     formPopupOpen: boolean;
     setFormPopupOpen: (value: boolean) => void;
     columnIndex?: number;
     setPreventOutsideClick: (value: any) => void;
+    usedPropertyBuilder: boolean;
 }
 
-function PopupFormField<S extends EntitySchema>({
+function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                                                     tableKey,
                                                     entity,
                                                     name,
@@ -46,10 +47,11 @@ function PopupFormField<S extends EntitySchema>({
                                                     setPreventOutsideClick,
                                                     formPopupOpen,
                                                     setFormPopupOpen,
-                                                    columnIndex
-                                                }: PopupFormFieldProps<S>) {
+                                                    columnIndex,
+                                                    usedPropertyBuilder
+                                                }: PopupFormFieldProps<S, Key>) {
 
-    const [internalValue, setInternalValue] = useState<EntityValues<S> | undefined>(entity?.values);
+    const [internalValue, setInternalValue] = useState<EntityValues<S, Key> | undefined>(entity?.values);
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
 
@@ -112,7 +114,7 @@ function PopupFormField<S extends EntitySchema>({
         // selectedCell.closePopup();
     };
 
-    const validationSchema = getYupObjectSchema(schema.properties);
+    const validationSchema = getYupEntitySchema(schema.properties, internalValue as EntityValues<any, any> ?? {}, entity?.id);
 
     function normalizePosition({ x, y }: { x: number, y: number }) {
 
@@ -152,9 +154,9 @@ function PopupFormField<S extends EntitySchema>({
                             setFieldTouched,
                             handleSubmit,
                             isSubmitting
-                        }: FormikProps<EntityValues<S>>) => {
+                        }: FormikProps<EntityValues<S, Key>>) => {
 
-        const context: FormContext<S> = {
+        const context: FormContext<S, Key> = {
             entitySchema: schema,
             values
         };
@@ -171,7 +173,8 @@ function PopupFormField<S extends EntitySchema>({
                 context,
                 tableMode: true,
                 partOfArray: false,
-                autoFocus: formPopupOpen
+                autoFocus: formPopupOpen,
+                dependsOnOtherProperties:usedPropertyBuilder
             })}
 
             {name && <AutoSubmitToken

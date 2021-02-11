@@ -42,6 +42,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");
     }
 
+    const validValue = !!value && Array.isArray(value);
     return <FormControl
         fullWidth
         required={property.validation?.required}
@@ -57,7 +58,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
         <MuiSelect multiple
                    variant={"filled"}
                    labelId={`${name}-multiselect-label`}
-                   value={!!value && Array.isArray(value) ? value : []}
+                   value={validValue ? value : []}
                    style={{ minHeight: "64px", padding: "4px" }}
                    disabled={isSubmitting}
                    onChange={(evt: any) => {
@@ -77,7 +78,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
                 return (
                     <MenuItem key={key} value={key}>
                         <Checkbox
-                            checked={!!value && value.indexOf(key as any) > -1}/>
+                            checked={validValue && value.indexOf(key as any) > -1}/>
                         <ListItemText
                             primary={renderPreviewEnumChip(name, enumValues, key, "regular")}/>
                     </MenuItem>

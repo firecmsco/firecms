@@ -29,12 +29,14 @@ export default function Select<T extends EnumType>({
                                                    }: SelectProps<T>) {
 
     const enumValues = property.config?.enumValues as EnumValues<T>;
+    const disabled = isSubmitting || property.readOnly || property.disabled;
 
     return (
         <FormControl
             fullWidth
             required={property.validation?.required}
             error={showError}
+            disabled={disabled}
         >
 
             <InputLabel id={`${name}-select-label`} style={{
@@ -49,7 +51,7 @@ export default function Select<T extends EnumType>({
                 labelId={`${name}-select-label`}
                 autoFocus={autoFocus}
                 value={!!value ? value : ""}
-                disabled={isSubmitting}
+                disabled={disabled}
                 onChange={(evt: any) => {
                     const newValue = evt.target.value;
                     return setValue(

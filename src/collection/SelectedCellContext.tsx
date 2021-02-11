@@ -11,6 +11,7 @@ export type TableCellProps =
         name:  string,
         property: Property,
         entity: Entity<any>,
+        usedPropertyBuilder:boolean,
     }
     | undefined;
 

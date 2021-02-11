@@ -7,15 +7,13 @@ import DateTimeField from "./fields/DateTimeField";
 import ReferenceField from "./fields/ReferenceField";
 import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
-import ArrayMapField from "./fields/ArrayMapField";
-import DisabledField from "./fields/DisabledField";
+import ReadOnlyField from "./fields/ReadOnlyField";
 
 export {
     ArrayDefaultField,
     ArrayEnumSelect,
-    ArrayMapField,
     DateTimeField,
-    DisabledField,
+    ReadOnlyField,
     MapField,
     ReferenceField,
     Select,

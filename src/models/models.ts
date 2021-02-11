@@ -172,7 +172,7 @@ export interface EntitySchema<Key extends string = string> {
     /**
      * Set of properties that compose an entity
      */
-    properties: Properties<Key>;
+    properties: PropertiesOrBuilder<this, Key>;
 
     /**
      * When creating a new entity, set some values as already initialized
@@ -301,9 +301,9 @@ export function buildSchema<Key extends string = string>(
  * same properties
  * @param properties
  */
-export function buildProperties<Key extends string>(
-    properties: Properties<Key>
-): Properties<Key> {
+export function buildProperties<S extends EntitySchema<Key>, Key extends string>(
+    properties: PropertiesOrBuilder<S, Key>
+): PropertiesOrBuilder<S, Key> {
     return properties;
 }
 
@@ -411,10 +411,16 @@ interface BaseProperty {
     columnWidth?: number;
 
     /**
-     * Is this a read only property
+     * Is this a read only property. When set to true, it gets rendered as a
+     * preview.
+     */
+    readOnly?: boolean;
+
+    /**
+     * Is this field disabled. When set to true, it gets rendered as a
+     * disabled field
      */
     disabled?: boolean;
-
 
     /**
      * Rules for validating this property
@@ -433,10 +439,25 @@ export type EnumType = number | string;
  */
 export type EnumValues<T extends EnumType> = Record<T, string>; // id -> Label
 
+
 /**
  * Record of properties of an entity or a map property
  */
-export type Properties<Key extends string = string, T extends any = any> = Record<Key, Property<T>>;
+export type Properties<Key extends string, T extends any = any> = Record<Key, Property<T>>;
+
+export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>> =
+    {
+        values: Partial<EntityValues<S, Key>>,
+        entityId?: string
+    };
+
+export type PropertyBuilder<S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> = (props: PropertyBuilderProps<S, Key>) => Property<T>;
+export type PropertyOrBuilder<S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> =
+    Property<T>
+    | PropertyBuilder<S, Key, T>;
+
+export type PropertiesOrBuilder<S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> =
+    Record<Key, PropertyOrBuilder<S, Key, T>>;
 
 /**
  * This type represents a record of key value pairs as described in an
@@ -445,7 +466,8 @@ export type Properties<Key extends string = string, T extends any = any> = Recor
 export type EntityValues<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>
     = {
-    [K in Key]: S["properties"][K] extends Property<infer T> ? T : any;
+    [K in Key]: S["properties"][K] extends Property<infer T> ? T :
+        (S["properties"][K] extends PropertyBuilder<S, Key, infer T> ? T : any);
 };
 
 export interface NumberProperty extends BaseProperty {
@@ -524,7 +546,7 @@ export interface MapProperty<T = any,
     /**
      * Record of properties included in this map.
      */
-    properties: Properties;
+    properties: Properties<Key>;
 
     /**
      * Rules for validating this property

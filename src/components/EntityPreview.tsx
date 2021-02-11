@@ -20,6 +20,8 @@ import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import { ErrorBoundary } from "./index";
 import { CMSAppProps } from "../CMSAppProps";
 import { useAppConfigContext } from "../contexts";
+import { buildProperty } from "../models/property_builder";
+import { PropertyOrBuilder } from "../models/models";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,16 +42,16 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export interface EntityPreviewProps<S extends EntitySchema> {
-    entity: Entity<S>;
+export interface EntityPreviewProps<S extends EntitySchema<Key>, Key extends string> {
+    entity: Entity<S, Key>;
     schema: S;
 }
 
-export default function EntityPreview<S extends EntitySchema>(
+export default function EntityPreview<S extends EntitySchema<Key>, Key extends string>(
     {
         entity,
         schema
-    }: EntityPreviewProps<S>) {
+    }: EntityPreviewProps<S, Key>) {
 
     const classes = useStyles();
 
@@ -58,7 +60,7 @@ export default function EntityPreview<S extends EntitySchema>(
         <TableContainer>
             <Table aria-label="entity table">
                 <TableBody>
-                    <TableRow >
+                    <TableRow>
                         <TableCell align="right"
                                    component="td"
                                    scope="row"
@@ -89,8 +91,9 @@ export default function EntityPreview<S extends EntitySchema>(
                         </TableCell>
                     </TableRow>
 
-                    {schema && Object.entries(schema.properties).map(([key, property]) => {
+                    {schema && Object.entries(schema.properties).map(([key, propertyOrBuilder]) => {
                         const value = entity.values[key as string];
+                        const property = buildProperty(propertyOrBuilder as PropertyOrBuilder, entity.values, entity.id);
                         return (
                             <TableRow
                                 key={"entity_prev" + property.title + key}>

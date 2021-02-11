@@ -25,7 +25,7 @@ import { PreviewError } from "../../preview/components/PreviewError";
 import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
 
 
-export function TableReferenceField<S extends EntitySchema>(props: {
+export function TableReferenceField<S extends EntitySchema<Key>, Key extends string>(props: {
     name: string,
     internalValue: firebase.firestore.DocumentReference | firebase.firestore.DocumentReference[] | undefined | null,
     updateValue: (newValue: (firebase.firestore.DocumentReference | firebase.firestore.DocumentReference [] | null)) => void,
@@ -33,8 +33,8 @@ export function TableReferenceField<S extends EntitySchema>(props: {
     size: CollectionSize;
     schema: S,
     setPreventOutsideClick: (value: any) => void;
-    createFormField: FormFieldBuilder;
-    CollectionTable: React.FunctionComponent<CollectionTableProps<S>>
+    createFormField: FormFieldBuilder<S, Key>;
+    CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>
 }) {
 
     const {

@@ -97,7 +97,7 @@ export default function MarkDownField({
 
             <div className={classes.root}>
                 <CodeMirror
-                    value={value}
+                    value={typeof value === "string" ? value : ""}
                     options={{
                         mode: "markdown",
                         highlightFormatting: true,

@@ -51,14 +51,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-interface TableCellProps<T, S extends EntitySchema<string>> {
+interface TableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
     tableKey: string,
     columnIndex: number,
     rowIndex: number,
     name: string,
     path: string,
     selected: boolean,
-    entity: Entity<S>,
+    entity: Entity<S,Key>,
     schema: S,
     value: T,
     select: (cellRect: DOMRect) => void,
@@ -67,12 +67,12 @@ interface TableCellProps<T, S extends EntitySchema<string>> {
     focused: boolean,
     setFocused: (value: boolean) => void,
     property: Property<T>,
-    createFormField: FormFieldBuilder;
-    CollectionTable: React.FunctionComponent<CollectionTableProps<S>>,
+    createFormField: FormFieldBuilder<S,Key>;
+    CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>,
 }
 
 
-const TableCell = <T, S extends EntitySchema>({
+const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                   selected,
                                                   focused,
                                                   tableKey,
@@ -92,7 +92,7 @@ const TableCell = <T, S extends EntitySchema>({
                                                   align,
                                                   createFormField,
                                                   CollectionTable
-                                              }: TableCellProps<T, S> & CellStyleProps) => {
+                                              }: TableCellProps<T, S, Key> & CellStyleProps) => {
 
     const ref = React.createRef<HTMLDivElement>();
     const [internalValue, setInternalValue] = useState<any | null>(value);
@@ -153,7 +153,7 @@ const TableCell = <T, S extends EntitySchema>({
 
     useEffect(
         () => {
-            if (internalValue !== value && !error)
+            if (internalValue !== value && !error) {
                 saveEntity({
                         collectionPath: path,
                         id: entity.id,
@@ -167,6 +167,7 @@ const TableCell = <T, S extends EntitySchema>({
                         onSaveFailure
                     }
                 ).then();
+            }
         },
         [internalValue]
     );
@@ -174,20 +175,20 @@ const TableCell = <T, S extends EntitySchema>({
     const updateValue = useCallback(
         (newValue: any | null) => {
 
-            let setValue;
+            let updatedValue;
             if (newValue === undefined) {
-                setValue = null;
+                updatedValue = null;
             } else {
-                setValue = newValue;
+                updatedValue = newValue;
             }
             try {
-                validation.validateSync(setValue);
+                validation.validateSync(updatedValue);
                 setError(undefined);
             } catch (e) {
                 console.error(e);
                 setError(e);
             }
-            setInternalValue(setValue);
+            setInternalValue(updatedValue);
         },
         []
     );
@@ -390,6 +391,6 @@ const TableCell = <T, S extends EntitySchema>({
     );
 };
 
-export default React.memo<TableCellProps<any, any> & CellStyleProps>(TableCell) as React.FunctionComponent<TableCellProps<any, any> & CellStyleProps>;
+export default React.memo<TableCellProps<any, any, any> & CellStyleProps>(TableCell) as React.FunctionComponent<TableCellProps<any, any, any> & CellStyleProps>;
 
 

@@ -14,7 +14,7 @@ export function getColumnsForProperty(property: Property): "xs" | "sm" | "md" {
     }
 
     if (property.dataType === "array") {
-        return property.disabled ? "xs" : "sm";
+        return property.readOnly || property.disabled? "xs" : "sm";
     }
 
     if (property.dataType === "string" && property.config?.storageMeta) {

@@ -135,10 +135,10 @@ function renderMap<T>(property: MapProperty<T>, size: PreviewSize) {
 
 }
 
-function renderArrayOfMaps<P extends Properties>(properties: P, size: PreviewSize, previewProperties?: (keyof P)[]) {
+function renderArrayOfMaps<P extends Properties<Key>, Key extends string>(properties: P, size: PreviewSize, previewProperties?: Key[]) {
     let tableProperties = previewProperties;
     if (!tableProperties || !tableProperties.length) {
-        tableProperties = Object.keys(properties);
+        tableProperties = Object.keys(properties) as Key[];
         if (size)
             tableProperties = tableProperties.slice(0, 3);
     }

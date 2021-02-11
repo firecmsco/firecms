@@ -54,9 +54,9 @@ export interface ReferenceDialogProps {
 
     onClose(): void;
 
-    createFormField: FormFieldBuilder,
+    createFormField: FormFieldBuilder<any>,
 
-    CollectionTable: React.FunctionComponent<CollectionTableProps<any>>;
+    CollectionTable: React.FunctionComponent<CollectionTableProps<any, any>>;
 
 }
 

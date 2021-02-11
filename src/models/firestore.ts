@@ -9,8 +9,11 @@ import {
     FilterValues,
     Properties,
     Property,
+    PropertyBuilder,
+    PropertyOrBuilder,
     WhereFilterOp
 } from "./models";
+import { buildProperty } from "./property_builder";
 
 /**
  * Listen to a entities in a Firestore path
@@ -122,14 +125,13 @@ export function listenEntity<S extends EntitySchema<Key>,
  * @return Function to cancel subscription
  */
 export function listenEntityFromRef<S extends EntitySchema<Key>,
-    P extends Properties<Key> = S["properties"],
     Key extends string = Extract<keyof S["properties"], string>>(
     ref: firebase.firestore.DocumentReference,
     schema: S,
     onSnapshot: (entity: Entity<S, Key>) => void
 ): Function {
-    return ref
-        .onSnapshot((docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema)));
+    return ref.onSnapshot(
+        (docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema)));
 }
 
 /**
@@ -192,7 +194,6 @@ function sanitizeData<S extends EntitySchema<Key>,
 }
 
 export function createEntityFromSchema<S extends EntitySchema<Key>,
-    P extends Properties<Key> = S["properties"],
     Key extends string = Extract<keyof S["properties"], string>>
 (
     doc: firebase.firestore.DocumentSnapshot,
@@ -200,7 +201,7 @@ export function createEntityFromSchema<S extends EntitySchema<Key>,
 ): Entity<S, Key> {
 
     const data = doc.data() ?
-        sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, Key>, schema)
+        sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, Key>, schema as EntitySchema)
         : undefined;
     return {
         id: doc.id,
@@ -246,7 +247,9 @@ export async function saveEntity<S extends EntitySchema<Key>,
         onSaveSuccessHookError?: (e: Error) => void
     }): Promise<void> {
 
-    let updatedValues: EntityValues<S, Key> = updateAutoValues(values, schema.properties, status);
+
+    const properties: Properties<Key> = computeSchemaProperties(schema, id);
+    let updatedValues: EntityValues<S, Key> = updateAutoValues(values, properties, status);
 
     if (schema.onPreSave) {
         try {
@@ -328,7 +331,8 @@ export async function saveEntity<S extends EntitySchema<Key>,
  * @param onDeleteSuccessHookError
  * @return was the whole deletion flow successful
  */
-export async function deleteEntity<S extends EntitySchema>(
+export async function deleteEntity<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>>(
     {
         entity,
         schema,
@@ -338,13 +342,13 @@ export async function deleteEntity<S extends EntitySchema>(
         onPreDeleteHookError,
         onDeleteSuccessHookError
     }: {
-        entity: Entity<S>,
+        entity: Entity<S, Key>,
         collectionPath: string,
         schema: S,
-        onDeleteSuccess?: (entity: Entity<S>) => void,
-        onDeleteFailure?: (entity: Entity<S>, e: Error) => void,
-        onPreDeleteHookError?: (entity: Entity<S>, e: Error) => void,
-        onDeleteSuccessHookError?: (entity: Entity<S>, e: Error) => void,
+        onDeleteSuccess?: (entity: Entity<S, Key>) => void,
+        onDeleteFailure?: (entity: Entity<S, Key>, e: Error) => void,
+        onPreDeleteHookError?: (entity: Entity<S, Key>, e: Error) => void,
+        onDeleteSuccessHookError?: (entity: Entity<S, Key>, e: Error) => void,
     }
 ): Promise<boolean> {
     console.debug("Deleting entity", entity);
@@ -386,30 +390,45 @@ export async function deleteEntity<S extends EntitySchema>(
 }
 
 
+export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends string>(
+    schema: S,
+    entityId?: string | undefined,
+    values?: Partial<EntityValues<S, Key>>
+): Properties<Key> {
+    return Object.entries(schema.properties)
+        .map(([key, propertyOrBuilder]) => {
+            return { [key]: buildProperty(propertyOrBuilder as PropertyOrBuilder, values ?? schema.defaultValues ?? {}, entityId) };
+        })
+        .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<Key>;
+}
+
 /**
  * Functions used to set required fields to undefined in the initially created entity
  * @param schema
+ * @param entityId
  */
-export function initEntityValues<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>
-(schema: S): EntityValues<S, Key> {
-    return initWithProperties(schema.properties, schema.defaultValues);
+export function initEntityValues<S extends EntitySchema<Key>, Key extends string>
+(schema: S, entityId?: string): EntityValues<S, Key> {
+    const properties: Properties<Key> = computeSchemaProperties(schema, entityId);
+    return initWithProperties(properties, schema.defaultValues);
 }
 
-type PropertiesValues<P extends Properties<Key>, Key extends string = Extract<keyof P, string>> = {
-    [K in Key]: P[K] extends Property<infer T> ? T : any;
+type PropertiesValues<S extends EntitySchema<Key>, Key extends string> = {
+    [K in Key]: S["properties"][K] extends Property<infer T> ? T :
+        (S["properties"][K] extends PropertyBuilder<S, Key, infer T> ? T : any);
 };
 
-function initWithProperties<P extends Properties<Key>,
-    Key extends string = Extract<keyof P, string>>
-(properties: P, defaultValues?: Partial<PropertiesValues<P, Key>>): PropertiesValues<P, Key> {
+function initWithProperties<S extends EntitySchema<Key>,
+    P extends Properties<Key>,
+    Key extends string = Extract<keyof S["properties"], string>>
+(properties: P, defaultValues?: Partial<PropertiesValues<S, Key>>): PropertiesValues<S, Key> {
     return Object.entries(properties)
         .map(([key, property]) => {
             const propertyDefaultValue = defaultValues && key in defaultValues ? defaultValues[key] : null;
             const value = initPropertyValue(key, property as Property<unknown>, propertyDefaultValue);
             return value === null ? {} : { [key]: value };
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<P, Key>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<any, any>;
 }
 
 function initPropertyValue(key: string, property: Property, defaultValue: any) {
@@ -457,8 +476,9 @@ function updateAutoValue(inputValue: any,
     return value;
 }
 
-export function updateAutoValues<P extends Properties<Key>, Key extends string = Extract<keyof P, string>>
-(inputValues: Partial<PropertiesValues<P, Key>>, properties: P, status: EntityStatus): PropertiesValues<P, Key> {
+export function updateAutoValues<S extends EntitySchema<Key>,
+    P extends Properties<Key>, Key extends string>
+(inputValues: Partial<PropertiesValues<S, Key>>, properties: P, status: EntityStatus): PropertiesValues<S, Key> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && inputValues[key];
@@ -466,7 +486,7 @@ export function updateAutoValues<P extends Properties<Key>, Key extends string =
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<P, Key>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<S, Key>;
     return { ...inputValues, ...updatedValues };
 }
 

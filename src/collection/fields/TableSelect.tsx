@@ -3,7 +3,7 @@ import { CustomChip } from "../../preview/components/CustomChip";
 import React, { useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@material-ui/core";
 import { useInputStyles } from "./styles";
-import { buildArrayEnumPreview } from "../../preview/components/ArrayEnumPreview";
+import { ArrayEnumPreview } from "../../preview/components/ArrayPropertyEnumPreview";
 
 export function TableSelect(props: {
     name: string,
@@ -70,7 +70,7 @@ export function TableSelect(props: {
             }}
             renderValue={(selected: any) =>
                 Array.isArray(selected) ?
-                    buildArrayEnumPreview(selected, name, enumValues, "small")
+                    <ArrayEnumPreview value={selected} name={name} enumValues={enumValues} size={"small"}/>
                     :
                     selected && <CustomChip
                         colorKey={typeof selected === "number" ? `${name}_${selected}` : selected as string}

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     Box,
     Button,
@@ -8,11 +8,17 @@ import {
     makeStyles,
     Typography
 } from "@material-ui/core";
-import { Entity, EntitySchema, EntityStatus, EntityValues } from "../models";
+import {
+    Entity,
+    EntitySchema,
+    EntityStatus,
+    EntityValues, Properties,
+    Property
+} from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
 import { createCustomIdField, createFormField } from "./form_factory";
-import { initEntityValues } from "../models/firestore";
-import { getYupObjectSchema } from "./validation";
+import { computeSchemaProperties, initEntityValues } from "../models/firestore";
+import { getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
 import { FormContext } from "../models/form_props";
@@ -40,7 +46,7 @@ export const useStyles = makeStyles(theme => createStyles({
     }
 }));
 
-interface EntityFormProps<S extends EntitySchema> {
+interface EntityFormProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
      * New or existing status
@@ -61,12 +67,12 @@ interface EntityFormProps<S extends EntitySchema> {
      * The updated entity is passed from the parent component when the underlying data
      * has changed in Firestore
      */
-    entity?: Entity<S>;
+    entity?: Entity<S, Key>;
 
     /**
      * The callback function called when Save is clicked and validation is correct
      */
-    onEntitySave(schema: S, collectionPath: string, id: string | undefined, values: EntityValues<S>): Promise<void>;
+    onEntitySave(schema: S, collectionPath: string, id: string | undefined, values: EntityValues<S, Key>): Promise<void>;
 
     /**
      * The callback function called when discard is clicked
@@ -82,7 +88,7 @@ interface EntityFormProps<S extends EntitySchema> {
 
 }
 
-function EntityForm<S extends EntitySchema>({
+function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>({
                                                 status,
                                                 collectionPath,
                                                 schema,
@@ -91,7 +97,7 @@ function EntityForm<S extends EntitySchema>({
                                                 onDiscard,
                                                 onModified,
                                                 containerRef
-                                            }: EntityFormProps<S>) {
+                                            }: EntityFormProps<S, Key>) {
 
     const classes = useStyles();
 
@@ -99,9 +105,9 @@ function EntityForm<S extends EntitySchema>({
      * Base values are the ones this view is initialized from, we use them to
      * compare them with underlying changes in Firestore
      */
-    let baseFirestoreValues: EntityValues<S>;
+    let baseFirestoreValues: EntityValues<S, Key>;
     if ((status === EntityStatus.existing || status === EntityStatus.copy) && entity) {
-        baseFirestoreValues = entity.values as EntityValues<S> ?? {};
+        baseFirestoreValues = entity.values as EntityValues<S, Key> ?? {};
     } else if (status === EntityStatus.new) {
         baseFirestoreValues = (initEntityValues(schema));
     } else {
@@ -112,17 +118,13 @@ function EntityForm<S extends EntitySchema>({
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
 
-    const initialValuesRef = React.useRef<EntityValues<S>>(entity?.values ?? initEntityValues(schema));
+    const initialValuesRef = React.useRef<EntityValues<S, Key>>(entity?.values ?? initEntityValues(schema));
     const initialValues = initialValuesRef.current;
+    const [internalValue, setInternalValue] = useState<EntityValues<S, Key> | undefined>(initialValues);
 
     const mustSetCustomId: boolean = (status === EntityStatus.new || status === EntityStatus.copy) && !!schema.customId;
 
-    const [isModified, setIsModified] = React.useState<boolean>(false);
-    useEffect(() => {
-        onModified(isModified);
-    }, [isModified]);
-
-    let underlyingChanges: Partial<EntityValues<S>> = useMemo(() => {
+    let underlyingChanges: Partial<EntityValues<S, Key>> = useMemo(() => {
         if (initialValues && status === EntityStatus.existing) {
             return Object.keys(schema.properties)
                 .map((key) => {
@@ -133,14 +135,13 @@ function EntityForm<S extends EntitySchema>({
                     }
                     return {};
                 })
-                .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<S>;
+                .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<S, Key>;
         } else {
             return {};
         }
     }, [initialValues, baseFirestoreValues]);
 
-
-    function saveValues(values: EntityValues<S>, formikActions: FormikHelpers<EntityValues<S>>) {
+    function saveValues(values: EntityValues<S, Key>, formikActions: FormikHelpers<EntityValues<S, Key>>) {
 
         if (mustSetCustomId && !customId) {
             console.error("Missing custom Id");
@@ -180,7 +181,7 @@ function EntityForm<S extends EntitySchema>({
 
     }
 
-    const validationSchema = getYupObjectSchema(schema.properties);
+    const validationSchema = getYupEntitySchema(schema.properties, internalValue as EntityValues<any, any>?? {}, entity?.id);
 
     function buildButtons(isSubmitting: boolean, modified: boolean) {
         const disabled = isSubmitting || (!modified && status === EntityStatus.existing);
@@ -229,7 +230,10 @@ function EntityForm<S extends EntitySchema>({
               }) => {
 
                 const modified = !deepEqual(baseFirestoreValues, values);
-                setIsModified(modified);
+                useEffect(() => {
+                    onModified(modified);
+                    setInternalValue(values);
+                });
 
                 if (underlyingChanges && entity) {
                     // we update the form fields from the Firestore data
@@ -244,31 +248,35 @@ function EntityForm<S extends EntitySchema>({
                     });
                 }
 
-                const context: FormContext<S> = {
+                const context: FormContext<S, Key> = {
                     entitySchema: schema,
                     values
                 };
 
+                const schemaProperties:Properties<Key> = computeSchemaProperties(schema, entity?.id, values);
                 const formFields = (
                     <Grid container spacing={4}>
 
-                        {Object.entries(schema.properties).map(([key, property]) => {
+                        {Object.entries(schemaProperties).map(([key, property]) => {
 
                             const underlyingValueHasChanged: boolean =
                                 !!underlyingChanges
                                 && Object.keys(underlyingChanges).includes(key)
                                 && !!touched[key];
 
+                            const dependsOnOtherProperties = typeof schema.properties[key] === "function";
+
                             const formField = createFormField(
                                 {
                                     name: key,
-                                    property,
+                                    property: property as Property,
                                     includeDescription: true,
                                     underlyingValueHasChanged,
                                     context,
                                     tableMode: false,
                                     partOfArray: false,
-                                    autoFocus: false
+                                    autoFocus: false,
+                                    dependsOnOtherProperties
                                 });
 
                             return (
