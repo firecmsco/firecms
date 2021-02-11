@@ -80,12 +80,12 @@ export interface CollectionTableProps<S extends EntitySchema,
     /**
      * Callback when anywhere on the table is clicked
      */
-    onEntityClick?(collectionPath: string, entity: Entity<S>): void;
+    onEntityClick?(collectionPath: string, entity: Entity<S, Key>): void;
 
     /**
      * Callback when an entity gets deleted
      */
-    onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
+    onEntityDelete?(collectionPath: string, entity: Entity<S, Key>): void;
 
     /**
      * Callback when a multiple entities gets deleted
@@ -101,7 +101,7 @@ export interface CollectionTableProps<S extends EntitySchema,
      * List of entities that will be displayed on top, no matter the ordering.
      * This is used for reference fields selection
      */
-    entitiesDisplayedFirst?: Entity<S>[];
+    entitiesDisplayedFirst?: Entity<S, Key>[];
 
     /**
      * Additional components builder such as buttons in the
@@ -118,7 +118,7 @@ export interface CollectionTableProps<S extends EntitySchema,
                                  collectionPath,
                                  entity,
                                  size
-                             }: { collectionPath: string, entity: Entity<S>, size: CollectionSize }) => React.ReactNode;
+                             }: { collectionPath: string, entity: Entity<S, Key>, size: CollectionSize }) => React.ReactNode;
 
     /**
      * Is the id column frozen to the left.

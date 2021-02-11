@@ -151,7 +151,7 @@ function EntitySideView({
     }, [selectedSubcollection]);
 
 
-    async function onEntitySave(schema: EntitySchema, collectionPath: string, id: string | undefined, values: EntityValues): Promise<void> {
+    async function onEntitySave(schema: EntitySchema, collectionPath: string, id: string | undefined, values: EntityValues<any, any>): Promise<void> {
 
         if (!status)
             return;

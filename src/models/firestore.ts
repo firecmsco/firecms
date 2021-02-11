@@ -25,10 +25,12 @@ import {
  * @param order
  * @return Function to cancel subscription
  */
-export function listenCollection<S extends EntitySchema<Key, P>, Key extends string = string, P extends Properties<Key> = Properties>(
+export function listenCollection<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>,
+    P extends Properties<Key> = Properties>(
     path: string,
     schema: S,
-    onSnapshot: (entity: Entity<S, P, Key>[]) => void,
+    onSnapshot: (entity: Entity<S, Key>[]) => void,
     onError?: (error: Error) => void,
     filter?: FilterValues<S>,
     limit?: number,
@@ -75,13 +77,13 @@ export function listenCollection<S extends EntitySchema<Key, P>, Key extends str
  * @param entityId
  * @param schema
  */
-export function fetchEntity<S extends EntitySchema<Key, P>,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>>(
+export function fetchEntity<S extends EntitySchema<Key>,
+    P extends Properties<Key> = S["properties"],
+    Key extends string = Extract<keyof S["properties"], string>>(
     path: string,
     entityId: string,
     schema: S
-): Promise<Entity<S, P, Key>> {
+): Promise<Entity<S, Key>> {
 
     console.debug("Fetch entity", path, entityId);
 
@@ -100,13 +102,13 @@ export function fetchEntity<S extends EntitySchema<Key, P>,
  * @param onSnapshot
  * @return Function to cancel subscription
  */
-export function listenEntity<S extends EntitySchema<Key, P>,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>>(
+export function listenEntity<S extends EntitySchema<Key>,
+    P extends Properties<Key> = S["properties"],
+    Key extends string = Extract<keyof S["properties"], string>>(
     path: string,
     entityId: string,
     schema: S,
-    onSnapshot: (entity: Entity<S, P, Key>) => void
+    onSnapshot: (entity: Entity<S, Key>) => void
 ): Function {
     console.debug("Listening entity", path, entityId);
     return firebase.firestore()
@@ -122,12 +124,12 @@ export function listenEntity<S extends EntitySchema<Key, P>,
  * @param onSnapshot
  * @return Function to cancel subscription
  */
-export function listenEntityFromRef<S extends EntitySchema<Key, P>,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>>(
+export function listenEntityFromRef<S extends EntitySchema<Key>,
+    P extends Properties<Key> = S["properties"],
+    Key extends string = Extract<keyof S["properties"], string>>(
     ref: firebase.firestore.DocumentReference,
     schema: S,
-    onSnapshot: (entity: Entity<S, P, Key>) => void
+    onSnapshot: (entity: Entity<S, Key>) => void
 ): Function {
     return ref
         .onSnapshot((docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema)));
@@ -178,11 +180,10 @@ export function replaceTimestampsWithDates(data: any): any {
  * @param values
  * @param schema
  */
-function sanitizeData<S extends EntitySchema,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>>
+function sanitizeData<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>>
 (
-    values: EntityValues<S, P, Key>,
+    values: EntityValues<S, Key>,
     schema: S
 ) {
     let result: any = values;
@@ -193,16 +194,16 @@ function sanitizeData<S extends EntitySchema,
     return result;
 }
 
-export function createEntityFromSchema<S extends EntitySchema<Key, P>,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>>
+export function createEntityFromSchema<S extends EntitySchema<Key>,
+    P extends Properties<Key> = S["properties"],
+    Key extends string = Extract<keyof S["properties"], string>>
 (
     doc: firebase.firestore.DocumentSnapshot,
     schema: S
-): Entity<S, P, Key> {
+): Entity<S, Key> {
 
     const data = doc.data() ?
-        sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, P, Key>, schema)
+        sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, Key>, schema)
         : undefined;
     return {
         id: doc.id,
@@ -224,7 +225,8 @@ export function createEntityFromSchema<S extends EntitySchema<Key, P>,
  * @param onPreSaveHookError
  * @param onSaveSuccessHookError
  */
-export async function saveEntity<S extends EntitySchema>(
+export async function saveEntity<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>>(
     {
         collectionPath,
         id,
@@ -238,16 +240,16 @@ export async function saveEntity<S extends EntitySchema>(
     }: {
         collectionPath: string,
         id: string | undefined,
-        values: Partial<EntityValues<S>>,
+        values: Partial<EntityValues<S, Key>>,
         schema: S,
         status: EntityStatus,
-        onSaveSuccess?: (entity: Entity<S>) => void,
+        onSaveSuccess?: (entity: Entity<S, Key>) => void,
         onSaveFailure?: (e: Error) => void,
         onPreSaveHookError?: (e: Error) => void,
         onSaveSuccessHookError?: (e: Error) => void
     }): Promise<void> {
 
-    let updatedValues = updateAutoValues(values, schema.properties, status);
+    let updatedValues: EntityValues<S, Key> = updateAutoValues(values, schema.properties, status);
 
     if (schema.onPreSave) {
         try {
@@ -278,14 +280,14 @@ export async function saveEntity<S extends EntitySchema>(
             .collection(collectionPath)
             .doc();
 
-    const entity: Entity<S> = {
+    const entity: Entity<S, Key> = {
         id: documentReference.id,
         reference: documentReference,
         values: updatedValues
     };
 
     return documentReference
-        .set(updatedValues, { merge: true })
+        .set(updatedValues as any, { merge: true })
         .then(() => {
             try {
                 if (schema.onSaveSuccess) {
@@ -339,13 +341,13 @@ export async function deleteEntity<S extends EntitySchema>(
         onPreDeleteHookError,
         onDeleteSuccessHookError
     }: {
-        entity: Entity<S, any, any>,
+        entity: Entity<S>,
         collectionPath: string,
         schema: S,
         onDeleteSuccess?: (entity: Entity<S>) => void,
-        onDeleteFailure?: (entity:Entity<S>,e: Error) => void,
-        onPreDeleteHookError?: (entity:Entity<S>,e: Error) => void,
-        onDeleteSuccessHookError?: (entity:Entity<S>,e: Error) => void,
+        onDeleteFailure?: (entity: Entity<S>, e: Error) => void,
+        onPreDeleteHookError?: (entity: Entity<S>, e: Error) => void,
+        onDeleteSuccessHookError?: (entity: Entity<S>, e: Error) => void,
     }
 ): Promise<boolean> {
     console.debug("Deleting entity", entity);
@@ -391,24 +393,23 @@ export async function deleteEntity<S extends EntitySchema>(
  * Functions used to set required fields to undefined in the initially created entity
  * @param schema
  */
-export function initEntityValues<S extends EntitySchema<Key, P>,
-    Key extends string,
-    P extends Properties<Key>>
-(schema: S): EntityValues<S> {
+export function initEntityValues<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>>
+(schema: S): EntityValues<S, Key> {
     return initWithProperties(schema.properties, schema.defaultValues);
 }
 
-type PropertiesValues<P extends Properties, Key extends string = Extract<keyof P, string>> = {
+type PropertiesValues<P extends Properties<Key>, Key extends string = Extract<keyof P, string>> = {
     [K in Key]: P[K] extends Property<infer T> ? T : any;
 };
 
-function initWithProperties<P extends Properties,
+function initWithProperties<P extends Properties<Key>,
     Key extends string = Extract<keyof P, string>>
 (properties: P, defaultValues?: Partial<PropertiesValues<P, Key>>): PropertiesValues<P, Key> {
     return Object.entries(properties)
         .map(([key, property]) => {
             const propertyDefaultValue = defaultValues && key in defaultValues ? defaultValues[key] : null;
-            const value = initPropertyValue(key, property, propertyDefaultValue);
+            const value = initPropertyValue(key, property as Property<unknown>, propertyDefaultValue);
             return value === null ? {} : { [key]: value };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<P, Key>;
@@ -459,12 +460,12 @@ function updateAutoValue(inputValue: any,
     return value;
 }
 
-export function updateAutoValues<P extends Properties, Key extends string = Extract<keyof P, string>>
+export function updateAutoValues<P extends Properties<Key>, Key extends string = Extract<keyof P, string>>
 (inputValues: Partial<PropertiesValues<P, Key>>, properties: P, status: EntityStatus): PropertiesValues<P, Key> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && inputValues[key];
-            const updatedValue = updateAutoValue(inputValue, property, status);
+            const updatedValue = updateAutoValue(inputValue, property as Property, status);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
         })
@@ -477,7 +478,9 @@ export function updateAutoValues<P extends Properties, Key extends string = Extr
  * @param schema
  * @param filterableProperties
  */
-export function initFilterValues<S extends EntitySchema<Key, P>, Key extends string, P extends Properties<Key> = S["properties"]>
+export function initFilterValues<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>,
+    P extends Properties<Key> = S["properties"]>
 (schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<S> {
     return filterableProperties
         .map((key) => ({ [key]: undefined }))

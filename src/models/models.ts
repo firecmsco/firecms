@@ -14,9 +14,8 @@ import firebase from "firebase/app";
  *
  * If you need a lower level implementation you can check CollectionTable
  */
-export interface EntityCollection<S extends EntitySchema = EntitySchema,
-    Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties = Properties<Key>> {
+export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema,
+    Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
      * Plural name of the view. E.g. 'products'
@@ -55,9 +54,9 @@ export interface EntityCollection<S extends EntitySchema = EntitySchema,
 
     /**
      * You can add additional columns to the collection view by implementing
-     * an additional column delegate.
+     * an additional column delegate.q
      */
-    additionalColumns?: AdditionalColumnDelegate<S>[];
+    additionalColumns?: AdditionalColumnDelegate<S, Key>[];
 
     /**
      * If a text search delegate is supplied, a search bar is displayed on top
@@ -149,7 +148,7 @@ export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 /**
  * Specification for defining an entity
  */
-export interface EntitySchema<Key extends string = string, P extends Properties<Key> = Properties<Key>> {
+export interface EntitySchema<Key extends string = string> {
 
     /**
      * Singular name of the entity as displayed in an Add button . E.g. Product
@@ -172,25 +171,25 @@ export interface EntitySchema<Key extends string = string, P extends Properties<
     /**
      * Set of properties that compose an entity
      */
-    properties: P;
+    properties: Properties<Key>;
 
     /**
      * When creating a new entity, set some values as already initialized
      */
-    defaultValues?: Partial<EntityValues<this>>;
+    defaultValues?: Partial<EntityValues<this, Key>>;
 
     /**
      * Hook called when save is successful
      * @param entitySaveProps
      */
-    onSaveSuccess?(entitySaveProps: EntitySaveProps<this>)
+    onSaveSuccess?(entitySaveProps: EntitySaveProps<this, Key>)
         : Promise<void> | void;
 
     /**
      * Hook called when saving fails
      * @param entitySaveProps
      */
-    onSaveFailure?(entitySaveProps: EntitySaveProps<this>)
+    onSaveFailure?(entitySaveProps: EntitySaveProps<this, Key>)
         : Promise<void> | void;
 
     /**
@@ -199,8 +198,8 @@ export interface EntitySchema<Key extends string = string, P extends Properties<
      * error snackbar gets displayed.
      * @param entitySaveProps
      */
-    onPreSave?(entitySaveProps: EntitySaveProps<this>)
-        : Promise<EntityValues<this>> | EntityValues<this>
+    onPreSave?(entitySaveProps: EntitySaveProps<this, Key>)
+        : Promise<EntityValues<this, Key>> | EntityValues<this, Key>
 
     /**
      * Hook called after the entity is deleted in Firestore.
@@ -209,35 +208,33 @@ export interface EntitySchema<Key extends string = string, P extends Properties<
      *
      * @param entityDeleteProps
      */
-    onPreDelete?(entityDeleteProps: EntityDeleteProps<this>): void;
+    onPreDelete?(entityDeleteProps: EntityDeleteProps<this, Key>): void;
 
     /**
      * Hook called after the entity is deleted in Firestore.
      *
      * @param entityDeleteProps
      */
-    onDelete?(entityDeleteProps: EntityDeleteProps<this>): void;
+    onDelete?(entityDeleteProps: EntityDeleteProps<this, Key>): void;
 }
 
 /**
  * Parameters passed to hooks when an entity is saved
  */
-export interface EntitySaveProps<S extends EntitySchema,
-    Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties<Key> = S["properties"]> {
+export interface EntitySaveProps<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>> {
     schema: S;
     collectionPath: string;
     id?: string;
-    values: EntityValues<S, P, Key>;
+    values: EntityValues<S, Key>;
     status: EntityStatus;
 }
 
 /**
  * Parameters passed to hooks when an entity is deleted
  */
-export interface EntityDeleteProps<S extends EntitySchema,
-    Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties<Key> = S["properties"]> {
+export interface EntityDeleteProps<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
      * Firestore path of the parent collection
@@ -252,7 +249,7 @@ export interface EntityDeleteProps<S extends EntitySchema,
     /**
      * Deleted entity
      */
-    entity: Entity<S>;
+    entity: Entity<S, Key>;
 
     /**
      * Schema of the entity being deleted
@@ -265,9 +262,10 @@ export interface EntityDeleteProps<S extends EntitySchema,
  * collection views with all its properties
  * @param collectionView
  */
-export function buildCollection<S extends EntitySchema,
-    Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties = Properties<Key>>(collectionView: EntityCollection<S, Key, P>): EntityCollection<S, Key, P> {
+export function buildCollection<S extends EntitySchema<Key> = EntitySchema,
+    Key extends string = Extract<keyof S["properties"], string>>(
+    collectionView: EntityCollection<S, Key>
+): EntityCollection<S, Key> {
     return collectionView;
 }
 
@@ -276,7 +274,9 @@ export function buildCollection<S extends EntitySchema,
  * the schema keys
  * @param schema
  */
-export function buildSchema<Key extends string, P extends Properties<Key>>(schema: EntitySchema<Key, P>): EntitySchema<Key, P> {
+export function buildSchema<Key extends string = string>(
+    schema: EntitySchema<Key>
+): EntitySchema<Key> {
     return schema;
 }
 
@@ -286,7 +286,9 @@ export function buildSchema<Key extends string, P extends Properties<Key>>(schem
  * same properties
  * @param properties
  */
-export function buildProperties<Key extends string>(properties: Properties<Key>): Properties<Key> {
+export function buildProperties<Key extends string>(
+    properties: Properties<Key>
+): Properties<Key> {
     return properties;
 }
 
@@ -298,12 +300,11 @@ export enum EntityStatus { new = "new", existing = "existing", copy = "copy"}
 /**
  * Representation of an entity fetched from Firestore
  */
-export interface Entity<S extends EntitySchema,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>> {
+export interface Entity<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>> {
     id: string;
     reference: firebase.firestore.DocumentReference;
-    values: EntityValues<S, P, Key>;
+    values: EntityValues<S, Key>;
 }
 
 export type DataType =
@@ -336,9 +337,8 @@ export type Property<T = any, ArrayT = any> =
  * Use this interface for adding additional columns to entity collection views.
  * If you need to do some async loading you can use AsyncPreviewComponent
  */
-export interface AdditionalColumnDelegate<S extends EntitySchema,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>> {
+export interface AdditionalColumnDelegate<S extends EntitySchema<Key> = EntitySchema,
+    Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
      * Id of this column. You can use this id in the `properties` field of the
@@ -359,7 +359,7 @@ export interface AdditionalColumnDelegate<S extends EntitySchema,
     /**
      * Builder for the content of the cell for this column
      */
-    builder: (entity: Entity<S, P, Key>) => React.ReactNode;
+    builder: (entity: Entity<S, Key>) => React.ReactNode;
 
 }
 
@@ -426,11 +426,10 @@ export type Properties<Key extends string = string, T extends any = any> = Recor
  * This type represents a record of key value pairs as described in an
  * entity schema.
  */
-export type EntityValues<S extends EntitySchema = EntitySchema,
-    P extends Properties = S["properties"],
-    Key extends string = Extract<keyof P, string>>
+export type EntityValues<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>>
     = {
-    [K in Key]: P[K] extends Property<infer T> ? T : any;
+    [K in Key]: S["properties"][K] extends Property<infer T> ? T : any;
 };
 
 export interface NumberProperty extends BaseProperty {
@@ -502,15 +501,14 @@ export interface ArrayProperty<T = any> extends BaseProperty {
 }
 
 export interface MapProperty<T = any,
-    Key extends string = Extract<keyof T, string>,
-    P extends Properties = Properties<Key>> extends BaseProperty {
+    Key extends string = Extract<keyof T, string>> extends BaseProperty {
 
     dataType: "map";
 
     /**
      * Record of properties included in this map.
      */
-    properties: P;
+    properties: Properties;
 
     /**
      * Rules for validating this property
@@ -565,9 +563,8 @@ export interface GeopointProperty extends BaseProperty {
     config?: FieldConfig<firebase.firestore.GeoPoint>;
 }
 
-export interface ReferenceProperty<S extends EntitySchema = EntitySchema,
-    Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties = Properties<Key>>
+export interface ReferenceProperty<S extends EntitySchema<Key> = EntitySchema,
+    Key extends string = Extract<keyof S["properties"], string>>
     extends BaseProperty {
 
     dataType: "reference";

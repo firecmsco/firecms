@@ -17,7 +17,8 @@ import {
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
 import { useSideEntityController } from "../contexts/SideEntityPanelsController";
 
-export function CollectionRowActions<S extends EntitySchema>({
+export function CollectionRowActions<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>>({
                                                                  entity,
                                                                  isSelected,
                                                                  collectionPath,
@@ -29,15 +30,15 @@ export function CollectionRowActions<S extends EntitySchema>({
                                                                  onDeleteClicked
                                                              }:
                                                                  {
-                                                                     entity: Entity<S>,
+                                                                     entity: Entity<S, Key>,
                                                                      collectionPath: string,
                                                                      size: CollectionSize,
                                                                      isSelected?: boolean,
                                                                      editEnabled?: boolean,
                                                                      deleteEnabled?: boolean,
                                                                      selectionEnabled?: boolean,
-                                                                     toggleEntitySelection?: (entity: Entity<S>) => void
-                                                                     onDeleteClicked?: (entity: Entity<S>) => void
+                                                                     toggleEntitySelection?: (entity: Entity<S, Key>) => void
+                                                                     onDeleteClicked?: (entity: Entity<S,Key>) => void
                                                                  }) {
 
     const selectedEntityContext = useSideEntityController();

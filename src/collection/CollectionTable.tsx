@@ -52,8 +52,8 @@ interface CMSColumn {
 type Order = "asc" | "desc" | undefined;
 
 
-export default function CollectionTable<S extends EntitySchema<Key, P>,
-    Key extends string = string,
+export default function CollectionTable<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>,
     P extends Properties<Key> = Properties<Key>>({
                                                      initialFilter,
                                                      initialSort,
@@ -73,14 +73,14 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
                                                      entitiesDisplayedFirst,
                                                      createFormField,
                                                      frozenIdColumn
-                                                 }: CollectionTableProps<S>) {
+                                                 }: CollectionTableProps<S, Key>) {
 
     if (inlineEditing && onEntityClick) {
         console.error("You have set both `inlineEditing` and `onEntityClick` in a CollectionTable. `onEntityClick` will have no effect.");
     }
 
     const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];
-    const [data, setData] = React.useState<Entity<S>[]>(initialEntities);
+    const [data, setData] = React.useState<Entity<S, Key>[]>(initialEntities);
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [noMoreToLoad, setNoMoreToLoad] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
@@ -88,7 +88,7 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
 
     const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
     const [textSearchLoading, setTextSearchLoading] = React.useState<boolean>(false);
-    const [textSearchData, setTextSearchData] = React.useState<Entity<S>[]>([]);
+    const [textSearchData, setTextSearchData] = React.useState<Entity<S, Key>[]>([]);
 
     const [filter, setFilter] = React.useState<FilterValues<S> | undefined>(initialFilter);
     const [currentSort, setSort] = React.useState<Order>(initialSort ? initialSort[1] : undefined);
@@ -127,7 +127,7 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
         setFormPopupOpen(false);
     });
 
-    const updateData = (entities: Entity<S>[]) => {
+    const updateData = (entities: Entity<S, Key>[]) => {
         if (!initialEntities) {
             setData(entities);
         } else {
@@ -149,7 +149,7 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
         setPreventOutsideClick(false);
     }, []);
 
-    const additionalColumnsMap: Record<string, AdditionalColumnDelegate<S>> = useMemo(() => {
+    const additionalColumnsMap: Record<string, AdditionalColumnDelegate<S, Key>> = useMemo(() => {
         return additionalColumns ?
             additionalColumns
                 .map((aC) => ({ [aC.id]: aC }))
@@ -222,7 +222,7 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
 
         setDataLoading(true);
 
-        const cancelSubscription = listenCollection<S>(
+        const cancelSubscription = listenCollection<S, Key>(
             collectionPath,
             schema,
             entities => {
@@ -274,7 +274,7 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
             } else {
                 setTextSearchInProgress(true);
                 const ids = await textSearchDelegate.performTextSearch(searchString);
-                const promises: Promise<Entity<S>>[] = ids
+                const promises: Promise<Entity<S, Key>>[] = ids
                     .map((id) => fetchEntity(collectionPath, id, schema));
                 const entities = await Promise.all(promises);
                 setTextSearchData(entities);
@@ -309,7 +309,7 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
     };
 
     const buildIdColumn = (props: {
-        entity: Entity<S>, size: CollectionSize, collectionPath: string
+        entity: Entity<S, Key>, size: CollectionSize, collectionPath: string
     }) => {
         if (tableRowWidgetBuilder)
             return tableRowWidgetBuilder(props);
@@ -325,7 +325,7 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
                               rowIndex
                           }: any) => {
 
-        const entity: Entity<S> = rowData;
+        const entity: Entity<S, Key> = rowData;
 
         if (columnIndex === 0) {
             return buildIdColumn({
@@ -540,7 +540,7 @@ export default function CollectionTable<S extends EntitySchema<Key, P>,
                                 onEndReached={loadNextPage}
                                 rowEventHandlers={
                                     clickableRows ?
-                                        { onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S>) }
+                                        { onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S, Key>) }
                                         : undefined
                                 }
                             >

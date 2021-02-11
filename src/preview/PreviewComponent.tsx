@@ -28,12 +28,8 @@ import { UrlComponentPreview } from "./components/UrlComponentPreview";
 import { ArrayOfStorageComponentsPreview } from "./components/ArrayOfStorageComponentsPreview";
 import { ArrayOfStringsPreview } from "./components/ArrayOfStringsPreview";
 import { NumberPreview } from "./components/NumberPreview";
-import ErrorIcon from "@material-ui/icons/Error";
 
 import firebase from "firebase/app";
-import { Box } from "@material-ui/core";
-import { useStyles } from "./components/styles";
-import clsx from "clsx";
 import { PreviewError } from "./components/PreviewError";
 
 export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
@@ -44,9 +40,6 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
 
     const fieldProps = { ...props, PreviewComponent };
 
-    if (value === null || value === undefined) {
-        return <EmptyValue/>;
-    }
 
     if (property.config?.customPreview) {
         content = createElement(property.config.customPreview as React.ComponentType<PreviewComponentProps & PreviewComponentFactoryProps>,
@@ -57,6 +50,8 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                 size,
                 PreviewComponent
             });
+    } else if (value === null || value === undefined) {
+        return <EmptyValue/>;
     } else if (property.dataType === "string") {
         const stringProperty = property as StringProperty;
         if (typeof value === "string") {
@@ -65,11 +60,9 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                                                property={property as StringProperty}
                                                value={value}/>;
             } else if (stringProperty.config?.storageMeta) {
-
                 content = <StorageThumbnail {...fieldProps}
                                             property={property as StringProperty}
                                             value={value}/>;
-
             } else if (stringProperty.config?.markdown) {
                 content = <ReactMarkdown>{value}</ReactMarkdown>;
             } else {
