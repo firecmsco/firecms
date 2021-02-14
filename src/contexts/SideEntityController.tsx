@@ -144,10 +144,15 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
 
         const sidePanelKey = getSidePanelKey(collectionPath, entityId);
 
-        if (schemaProps && Object.keys(schemaProps).length > 0) {
+        if (schemaProps
+            && schemaProps.schema !== undefined
+            && (schemaProps.editEnabled !== undefined || schemaProps.subcollections !== undefined)) {
+            const editEnabled = schemaProps.editEnabled;
+            const schema = schemaProps.schema;
+            const subcollections = schemaProps.subcollections;
             schemasRegistry.setOverride(
                 sidePanelKey,
-                schemaProps as SchemaSidePanelProps
+                { editEnabled, schema, subcollections }
             );
         }
 

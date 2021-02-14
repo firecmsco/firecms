@@ -1,6 +1,10 @@
 # Change Log
 
-## [0.25.1] - 2021-02-10
+## [0.25.w] - 2021-02-14
+### Changed
+- Fixed bug when switching subcollections in entity view.
+
+## [0.25.1] - 2021-02-14
 ### Added
 - `schemaResolver` props in the CMSApp level that allows overriding schemas and configs in the side
 dialog panels

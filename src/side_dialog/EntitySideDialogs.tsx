@@ -62,8 +62,11 @@ export function EntitySideDialogs<S extends EntitySchema>({ navigation }: { navi
         const schemaProps: SchemaSidePanelProps | undefined = schemasRegistry.getSchema(panel.collectionPath, panel.entityId);
 
         if (!schemaProps) {
-            return <Box>ERROR: You are trying to open an entity with no schema
-                defined.</Box>;
+            return (
+                <Box>
+                    ERROR: You are trying to open an entity with no schema
+                    defined.
+                </Box>);
         }
 
         return (
