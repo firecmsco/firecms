@@ -1,4 +1,9 @@
-import { CollectionSize, Entity, EntitySchema } from "../models";
+import {
+    CollectionSize,
+    Entity,
+    EntityCollection,
+    EntitySchema
+} from "../models";
 import { renderSkeletonText } from "../preview/components/SkeletonComponent";
 import { useTableStyles } from "./styles";
 
@@ -15,33 +20,37 @@ import {
     Typography
 } from "@material-ui/core";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
-import { useSideEntityController } from "../contexts/SideEntityPanelsController";
+import { useSideEntityController } from "../contexts";
 
 export function CollectionRowActions<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>({
-                                                                 entity,
-                                                                 isSelected,
-                                                                 collectionPath,
-                                                                 editEnabled,
-                                                                 deleteEnabled,
-                                                                 selectionEnabled,
-                                                                 size,
-                                                                 toggleEntitySelection,
-                                                                 onDeleteClicked
-                                                             }:
-                                                                 {
-                                                                     entity: Entity<S, Key>,
-                                                                     collectionPath: string,
-                                                                     size: CollectionSize,
-                                                                     isSelected?: boolean,
-                                                                     editEnabled?: boolean,
-                                                                     deleteEnabled?: boolean,
-                                                                     selectionEnabled?: boolean,
-                                                                     toggleEntitySelection?: (entity: Entity<S, Key>) => void
-                                                                     onDeleteClicked?: (entity: Entity<S,Key>) => void
-                                                                 }) {
+                                                                     entity,
+                                                                     isSelected,
+                                                                     collectionPath,
+                                                                     editEnabled,
+                                                                     deleteEnabled,
+                                                                     selectionEnabled,
+                                                                     size,
+                                                                     toggleEntitySelection,
+                                                                     onDeleteClicked,
+                                                                     schema,
+                                                                     subcollections
+                                                                 }:
+                                                                     {
+                                                                         entity: Entity<S, Key>,
+                                                                         collectionPath: string,
+                                                                         size: CollectionSize,
+                                                                         isSelected?: boolean,
+                                                                         editEnabled?: boolean,
+                                                                         deleteEnabled?: boolean,
+                                                                         selectionEnabled?: boolean,
+                                                                         toggleEntitySelection?: (entity: Entity<S, Key>) => void
+                                                                         onDeleteClicked?: (entity: Entity<S, Key>) => void,
+                                                                         schema: EntitySchema<any>;
+                                                                         subcollections?: EntityCollection[];
+                                                                     }) {
 
-    const selectedEntityContext = useSideEntityController();
+    const selectedEntityController = useSideEntityController();
     const classes = useTableStyles({ size });
 
     const [anchorEl, setAnchorEl] = React.useState<any | null>(null);
@@ -70,10 +79,14 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
 
     const onCopyClick = (event: MouseEvent) => {
         event.stopPropagation();
-        selectedEntityContext.open({
+        selectedEntityController.open({
             entityId: entity.id,
             collectionPath,
-            copy: true
+            copy: true,
+            editEnabled: true,
+            schema,
+            subcollections,
+            overrideSchemaResolver: false
         });
         setAnchorEl(null);
     };
@@ -97,9 +110,13 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                     <IconButton
                         onClick={(event: MouseEvent) => {
                             event.stopPropagation();
-                            selectedEntityContext.open({
+                            selectedEntityController.open({
                                 entityId: entity.id,
-                                collectionPath
+                                collectionPath,
+                                editEnabled: editEnabled,
+                                schema: schema,
+                                subcollections: subcollections,
+                                overrideSchemaResolver: false
                             });
                         }}
                     >

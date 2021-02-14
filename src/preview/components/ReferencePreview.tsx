@@ -32,9 +32,10 @@ import { useAppConfigContext } from "../../contexts";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { PreviewComponent } from "../PreviewComponent";
-import { useSideEntityController } from "../../contexts/SideEntityPanelsController";
+import { useSideEntityController } from "../../contexts/SideEntityController";
 import { PreviewError } from "./PreviewError";
 import { Skeleton } from "@material-ui/lab";
+import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
 
 const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Theme) =>
     createStyles({
@@ -112,13 +113,13 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
         const reference: firebase.firestore.DocumentReference = value;
         const previewProperties = property.previewProperties;
 
-        const appConfig: CMSAppProps = useAppConfigContext();
-        const collectionConfig: EntityCollection<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
+        const schemaRegistry = useSchemasRegistry();
+        const collectionConfig: EntityCollection<any> = schemaRegistry.getCollectionConfig(property.collectionPath);
 
         const schema = collectionConfig.schema;
         const [entity, setEntity] = React.useState<Entity<typeof schema>>();
 
-        const selectedEntityContext = useSideEntityController();
+        const selectedEntityController = useSideEntityController();
 
         useEffect(() => {
             const cancel = listenEntityFromRef(reference, schema, (e => {
@@ -195,9 +196,11 @@ export default React.memo<PreviewComponentProps<firebase.firestore.DocumentRefer
                                 size={size === "tiny" ? "small" : "medium"}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    selectedEntityContext.open({
+                                    selectedEntityController.open({
                                         entityId: entity.id,
-                                        collectionPath: reference.parent.path
+                                        collectionPath: reference.parent.path,
+                                        schema,
+                                        overrideSchemaResolver: false
                                     });
                                 }}>
                                 <KeyboardTabIcon fontSize={"small"}/>

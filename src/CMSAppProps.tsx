@@ -4,6 +4,11 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 import { Authenticator, EntityCollection } from "./models";
+import {
+    SchemaResolver,
+    SchemaSidePanelProps,
+    SideEntityPanelProps
+} from "./side_dialog/model";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -91,6 +96,14 @@ export interface CMSAppProps {
      */
     toolbarExtraWidget?: React.ReactNode;
 
+    /**
+     * Used to override schemas based on the collection path and entityId.
+     * This resolver allows to override the schema for specific entities, or
+     * specific collections, app wide. This overrides schemas all through the app.
+     *
+     * You can also override schemas in place, when using `useSideEntityController`
+     */
+    schemaResolver?: SchemaResolver;
 }
 
 
@@ -119,4 +132,5 @@ export interface AdditionalView {
      * navigation view.
      */
     group?: string;
+
 }

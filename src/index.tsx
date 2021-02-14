@@ -1,3 +1,5 @@
+import { SchemaResolver } from "./side_dialog/model";
+
 export type{
     EntityCollection,
     ExtraActionsParams,
@@ -119,14 +121,14 @@ export type {
     BreadcrumbsStatus
 } from "./contexts";
 
-export  {
+export {
     useSideEntityController
-} from "./contexts/SideEntityPanelsController";
+} from "./contexts/SideEntityController";
 export type {
-    SideEntityPanelsController
-} from "./contexts/SideEntityPanelsController";
+    SideEntityController
+} from "./contexts/SideEntityController";
 export type {
-    SideEntityPanelProps, SchemaSidePanelProps
+    SideEntityPanelProps, SchemaSidePanelProps, SchemaResolver
 } from "./side_dialog/model";
 
 export {

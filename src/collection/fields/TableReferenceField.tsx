@@ -22,6 +22,7 @@ import "firebase/firestore";
 import { getPreviewSizeFrom } from "../../preview/util";
 import { useInputStyles } from "./styles";
 import { PreviewError } from "../../preview/components/PreviewError";
+import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
 
 
 export function TableReferenceField<S extends EntitySchema>(props: {
@@ -63,9 +64,8 @@ export function TableReferenceField<S extends EntitySchema>(props: {
     const classes = useInputStyles();
     const collectionPath = usedProperty.collectionPath;
 
-    const appConfig: CMSAppProps = useAppConfigContext();
-    const collectionView: EntityCollection<S> =
-        getCollectionViewFromPath(usedProperty.collectionPath, appConfig.navigation) as EntityCollection<S>;
+    const schemaRegistry = useSchemasRegistry();
+    const collectionConfig: EntityCollection<any> = schemaRegistry.getCollectionConfig(usedProperty.collectionPath);
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = (event: React.MouseEvent) => {
@@ -153,15 +153,14 @@ export function TableReferenceField<S extends EntitySchema>(props: {
                 Edit {property.title}
             </Button>}
 
-            {collectionView && open && <ReferenceDialog open={open}
+            {collectionConfig && open && <ReferenceDialog open={open}
                                                         multiselect={multiselect}
                                                         collectionPath={collectionPath}
                                                         onClose={handleClose}
                                                         onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                                                        collectionView={collectionView}
                                                         onSingleEntitySelected={onSingleValueSet}
                                                         createFormField={createFormField}
-                                                        CollectionTable={CollectionTable}
+                                                        CollectionTable={CollectionTable as any}
                                                         selectedEntityIds={selectedIds}
             />}
 

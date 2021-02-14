@@ -18,7 +18,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import { getCMSPathFrom, removeInitialSlash } from "../routes/navigation";
 import { EntityCollectionTable } from "../collection/EntityCollectionTable";
-import { useSideEntityController } from "../contexts/SideEntityPanelsController";
+import { useSideEntityController } from "../contexts/SideEntityController";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -50,7 +50,7 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, colle
 }) {
 
     const classes = useStyles();
-    const selectedEntityContext = useSideEntityController();
+    const selectedEntityController = useSideEntityController();
 
     const [updatedEntity, setUpdatedEntity] = useState<Entity<S> | undefined>(entity);
     const [tabsPosition, setTabsPosition] = React.useState(0);
@@ -85,7 +85,7 @@ export function EntityDetailView<S extends EntitySchema>({ entity, schema, colle
             className={classes.header}>
 
             <Tooltip title={"Close"}>
-                <IconButton onClick={(e) => selectedEntityContext.close()}>
+                <IconButton onClick={(e) => selectedEntityController.close()}>
                     <CloseIcon/>
                 </IconButton>
             </Tooltip>

@@ -8,6 +8,7 @@ import {
     AdditionalColumnDelegate,
     CollectionSize,
     Entity,
+    EntityCollection,
     EntitySchema,
     fetchEntity,
     FilterValues,
@@ -209,12 +210,10 @@ export default function CollectionTable<S extends EntitySchema<Key>,
             allColumns.push(...items);
         }
 
-        const result: CMSColumn[] = displayedProperties
+        return displayedProperties
             .map((p) => {
                 return allColumns.find(c => c.id === p);
             }).filter(c => !!c) as CMSColumn[];
-
-        return result;
 
     }, [displayedProperties]);
 
@@ -309,7 +308,12 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     };
 
     const buildIdColumn = (props: {
-        entity: Entity<S, Key>, size: CollectionSize, collectionPath: string
+        entity: Entity<S, Key>,
+        size: CollectionSize,
+        collectionPath: string,
+        schema: EntitySchema,
+        editEnabled: boolean,
+        subcollections?: EntityCollection[]
     }) => {
         if (tableRowWidgetBuilder)
             return tableRowWidgetBuilder(props);
@@ -331,7 +335,9 @@ export default function CollectionTable<S extends EntitySchema<Key>,
             return buildIdColumn({
                 size,
                 entity,
-                collectionPath
+                collectionPath,
+                schema,
+                editEnabled: false
             });
         }
 

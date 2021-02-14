@@ -8,11 +8,12 @@ import {
     buildSchema,
     CMSApp,
     Entity,
-    EntitySchema,
     EntityCollection,
     EntitySaveProps,
+    EntitySchema,
     EnumValues,
-    ExtraActionsParams
+    ExtraActionsParams,
+    SchemaResolver
 } from "@camberi/firecms";
 import firebase from "firebase";
 import { IconButton, Tooltip } from "@material-ui/core";
@@ -78,7 +79,7 @@ function SampleApp() {
         watches: "Watches"
     };
 
-    const productSchema:EntitySchema = buildSchema({
+    const productSchema: EntitySchema = buildSchema({
         name: "Product",
         properties: {
             name: {
@@ -677,7 +678,7 @@ function SampleApp() {
     ];
 
     if (process.env.NODE_ENV !== "production") {
-        const newVar:EntityCollection = {
+        const newVar: EntityCollection = {
             relativePath: "test_entity",
             schema: testEntitySchema,
             group: "Test group",
@@ -720,6 +721,32 @@ function SampleApp() {
         view: <ExampleAdditionalView/>
     }];
 
+    const customSchemaResolver: SchemaResolver = ({
+                                                      entityId,
+                                                      collectionPath
+                                                  }: {
+        entityId?: string;
+        collectionPath: string;
+    }) => {
+
+        if (entityId === "B0017TNJWY" && collectionPath === "products") {
+            const customProductSchema = buildSchema({
+                name: "Custom product",
+                properties: {
+                    name: {
+                        title: "Name",
+                        description: "This entity is using a schema overridden by a schema resolver",
+                        validation: { required: true },
+                        dataType: "string"
+                    }
+                }
+            });
+
+            console.log("Using custom schema resolver", collectionPath, entityId);
+            return { schema: customProductSchema };
+        }
+    };
+
     const onFirebaseInit = (config: Object) => {
         // models.firestore().useEmulator("localhost", 8080);
     };
@@ -735,10 +762,11 @@ function SampleApp() {
         logo={logo}
         navigation={navigation}
         additionalViews={additionalViews}
+        schemaResolver={customSchemaResolver}
         // In the production environment, the configuration is fetched from the environment automatically
         firebaseConfig={firebaseConfig}
-        onFirebaseInit={onFirebaseInit}
         // firebaseConfig={process.env.NODE_ENV !== "production" ? firebaseConfig : undefined}
+        onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}
     />;
 }

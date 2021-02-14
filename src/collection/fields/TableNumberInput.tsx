@@ -13,7 +13,7 @@ export function NumberTableInput(props: {
 }) {
 
     const { align, value, updateValue, focused, onBlur } = props;
-    const propStringValue = typeof value === "number" ? value.toString() : "";
+    const propStringValue = (value && typeof value === "number") ? value.toString() : "";
     const [internalValue, setInternalValue] = useState<string | null>(propStringValue);
 
     useEffect(
@@ -44,7 +44,7 @@ export function NumberTableInput(props: {
     useEffect(
         () => {
             if (!focused && propStringValue !== internalValue)
-                setInternalValue(value.toString());
+                setInternalValue(value ? value.toString(): null);
         },
         [value, focused]
     );

@@ -1,4 +1,5 @@
 import { EntityCollection, EntitySchema } from "../models";
+import { removeInitialAndTrailingSlashes } from "../routes/navigation";
 
 export interface SideEntityPanelProps {
     /**
@@ -24,6 +25,13 @@ export interface SideEntityPanelProps {
 
 }
 
+export function getSidePanelKey(collectionPath:string,entityId?:string) {
+    if (entityId)
+        return `${removeInitialAndTrailingSlashes(collectionPath)}/${removeInitialAndTrailingSlashes(entityId)}`;
+    else
+        return removeInitialAndTrailingSlashes(collectionPath);
+}
+
 /**
  * You can add these additional props to override properties
  */
@@ -46,4 +54,19 @@ export interface SchemaSidePanelProps {
      */
     subcollections?: EntityCollection[];
 
+    /**
+     * Should this side panel configuration override the SchemaResolver set
+     * at the CMSApp level. Defaults to true
+     */
+    overrideSchemaResolver?:boolean
+
 }
+
+/**
+ * Used to override schemas based on the collection path and entityId.
+ * If no schema
+ */
+export type SchemaResolver = (props: {
+    entityId?: string,
+    collectionPath: string
+}) => SchemaSidePanelProps | undefined;

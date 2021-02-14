@@ -10,7 +10,7 @@ export function ExampleAdditionalView() {
     const authContext = useAuthContext();
 
     const customProductSchema = buildSchema({
-        name: "Product",
+        name: "Custom product",
         properties: {
             name: {
                 title: "Name",
@@ -51,7 +51,7 @@ export function ExampleAdditionalView() {
                 <Button
                     onClick={() => sideEntityController.open({
                         entityId: "B003WT1622",
-                        collectionPath: "/products",
+                        collectionPath: "/products-test",
                         schema: customProductSchema
                     })}
                     color="primary">

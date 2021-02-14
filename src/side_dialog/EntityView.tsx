@@ -5,9 +5,10 @@ import {
     EntityCollection,
     EntitySchema,
     EntityStatus,
-    EntityValues
+    EntityValues,
+    listenEntity,
+    saveEntity
 } from "../models";
-import { listenEntity, saveEntity } from "../models";
 import {
     Box,
     CircularProgress,
@@ -19,13 +20,12 @@ import {
     Tabs,
     Theme
 } from "@material-ui/core";
-import { useSnackbarController } from "../contexts";
+import { useSideEntityController, useSnackbarController } from "../contexts";
 import { Prompt } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
 import { EntityPreview } from "../preview";
 import { EntityCollectionTable } from "../collection/EntityCollectionTable";
 import { removeInitialSlash } from "../routes/navigation";
-import { useSideEntityController } from "../contexts/SideEntityPanelsController";
 import CircularProgressCenter from "../components/CircularProgressCenter";
 
 
@@ -101,7 +101,7 @@ function EntitySideView({
 
     const classes = useStylesSide();
 
-    const selectedEntityContext = useSideEntityController();
+    const selectedEntityController = useSideEntityController();
     const snackbarContext = useSnackbarController();
 
     const [entity, setEntity] = useState<Entity<EntitySchema>>();
@@ -185,7 +185,7 @@ function EntitySideView({
 
             setStatus(EntityStatus.existing);
             setModified(false);
-            selectedEntityContext.close();
+            selectedEntityController.close();
 
         };
 
@@ -202,7 +202,7 @@ function EntitySideView({
         };
 
         if (status === EntityStatus.existing && !isModified) {
-            selectedEntityContext.close();
+            selectedEntityController.close();
             return;
         }
 
@@ -220,7 +220,7 @@ function EntitySideView({
     }
 
     function onDiscard() {
-        selectedEntityContext.close();
+        selectedEntityController.close();
     }
 
     const existingEntity = status === EntityStatus.existing;
@@ -279,12 +279,13 @@ function EntitySideView({
     function onSideTabClick(value: number) {
         setTabsPosition(value);
         if (entityId && subcollections) {
-            selectedEntityContext.open({
+            selectedEntityController.open({
                 collectionPath,
                 entityId,
                 selectedSubcollection: value !== 0
                     ? subcollections[value - 1].relativePath
-                    : undefined
+                    : undefined,
+                overrideSchemaResolver: false
             });
         }
     }
@@ -301,7 +302,7 @@ function EntitySideView({
                     <div className={classes.header}>
 
                         <IconButton
-                            onClick={(e) => selectedEntityContext.close()}>
+                            onClick={(e) => selectedEntityController.close()}>
                             <CloseIcon/>
                         </IconButton>
 

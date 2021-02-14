@@ -15,9 +15,6 @@ import React, { useEffect } from "react";
 
 import { CMSFieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
-import { getCollectionViewFromPath } from "../../routes/navigation";
-import { useAppConfigContext } from "../../contexts/AppConfigContext";
-import { CMSAppProps } from "../../CMSAppProps";
 import { ReferenceDialog } from "../../components/ReferenceDialog";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { PreviewComponent, SkeletonComponent } from "../../preview";
@@ -28,7 +25,8 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { listenEntityFromRef } from "../../models/firestore";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { CollectionTable } from "../../collection/CollectionTable";
-import { useSideEntityController } from "../../contexts/SideEntityPanelsController";
+import { useSideEntityController } from "../../contexts/SideEntityController";
+import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -81,15 +79,15 @@ export default function ReferenceField<S extends EntitySchema>({
 
     const classes = useStyles();
 
-    const appConfig: CMSAppProps = useAppConfigContext();
-    const collectionConfig: EntityCollection<any> = getCollectionViewFromPath(property.collectionPath, appConfig.navigation);
+    const schemaRegistry = useSchemasRegistry();
+    const collectionConfig: EntityCollection<any> = schemaRegistry.getCollectionConfig(property.collectionPath);
 
     const schema = collectionConfig.schema;
     const collectionPath = property.collectionPath;
 
     const [open, setOpen] = React.useState(autoFocus);
     const [entity, setEntity] = React.useState<Entity<S>>();
-    const selectedEntityContext = useSideEntityController();
+    const selectedEntityController = useSideEntityController();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -104,9 +102,10 @@ export default function ReferenceField<S extends EntitySchema>({
     const seeEntityDetails = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (entity)
-            selectedEntityContext.open({
+            selectedEntityController.open({
                 entityId: entity.id,
-                collectionPath
+                collectionPath,
+                overrideSchemaResolver: false
             });
     };
 
@@ -273,13 +272,12 @@ export default function ReferenceField<S extends EntitySchema>({
                 {buildEntityView()}
 
                 {collectionConfig && <ReferenceDialog open={open}
-                                                    multiselect={false}
-                                                    collectionPath={collectionPath}
-                                                    collectionView={collectionConfig}
-                                                    onClose={onClose}
-                                                    onSingleEntitySelected={handleEntityClick}
-                                                    createFormField={createFormField}
-                                                    CollectionTable={CollectionTable}
+                                                      multiselect={false}
+                                                      collectionPath={collectionPath}
+                                                      onClose={onClose}
+                                                      onSingleEntitySelected={handleEntityClick}
+                                                      createFormField={createFormField}
+                                                      CollectionTable={CollectionTable}
                 />}
 
                 {!collectionConfig &&

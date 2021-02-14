@@ -23,6 +23,7 @@ import { CollectionTableProps } from "../collection/CollectionTableProps";
 import { CollectionTable } from "../collection/CollectionTable";
 import { useColumnIds } from "../collection/common";
 import { CollectionRowActions } from "../collection/CollectionRowActions";
+import { useSchemasRegistry } from "../side_dialog/SchemaRegistry";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -37,7 +38,7 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 
-export interface ReferenceDialogProps<S extends EntitySchema> {
+export interface ReferenceDialogProps {
 
     open: boolean;
 
@@ -45,24 +46,22 @@ export interface ReferenceDialogProps<S extends EntitySchema> {
 
     collectionPath: string;
 
-    collectionView: EntityCollection<S>;
-
-    onSingleEntitySelected?(entity: Entity<S> | null): void;
-
     selectedEntityIds?: string[];
 
-    onMultipleEntitiesSelected?(entities: Entity<S>[]): void;
+    onSingleEntitySelected?(entity: Entity<any> | null): void;
+
+    onMultipleEntitiesSelected?(entities: Entity<any>[]): void;
 
     onClose(): void;
 
     createFormField: FormFieldBuilder,
 
-    CollectionTable: React.FunctionComponent<CollectionTableProps<S>>;
+    CollectionTable: React.FunctionComponent<CollectionTableProps<any>>;
 
 }
 
 
-export function ReferenceDialog<S extends EntitySchema>(
+export function ReferenceDialog(
     {
         onSingleEntitySelected,
         onMultipleEntitiesSelected,
@@ -70,24 +69,27 @@ export function ReferenceDialog<S extends EntitySchema>(
         open,
         multiselect,
         collectionPath,
-        collectionView,
         createFormField,
         CollectionTable,
         selectedEntityIds
-    }: ReferenceDialogProps<S>) {
+    }: ReferenceDialogProps) {
 
     const classes = useStyles();
-    const schema = collectionView.schema;
-    const textSearchDelegate = collectionView.textSearchDelegate;
-    const filterableProperties = collectionView.filterableProperties;
-    const initialFilter = collectionView.initialFilter;
-    const displayedProperties = useColumnIds(collectionView, false);
-    const paginationEnabled = collectionView.pagination === undefined || collectionView.pagination;
+
+    const schemaRegistry = useSchemasRegistry();
+    const collectionConfig = schemaRegistry.getCollectionConfig(collectionPath);
+
+    const schema = collectionConfig.schema;
+    const textSearchDelegate = collectionConfig.textSearchDelegate;
+    const filterableProperties = collectionConfig.filterableProperties;
+    const initialFilter = collectionConfig.initialFilter;
+    const displayedProperties = useColumnIds(collectionConfig, false);
+    const paginationEnabled = collectionConfig.pagination === undefined || collectionConfig.pagination;
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const [selectedEntities, setSelectedEntities] = useState<Entity<S>[] | undefined>();
+    const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
 
     useEffect(() => {
         if (selectedEntityIds) {
@@ -102,7 +104,7 @@ export function ReferenceDialog<S extends EntitySchema>(
     }, [selectedEntityIds]);
 
 
-    const onEntityClick = (collectionPath: string, entity: Entity<S>) => {
+    const onEntityClick = (collectionPath: string, entity: Entity<any>) => {
         if (!multiselect && onSingleEntitySelected) {
             onSingleEntitySelected(entity);
         } else {
@@ -118,11 +120,11 @@ export function ReferenceDialog<S extends EntitySchema>(
         }
     };
 
-    const toggleEntitySelection = (entity: Entity<S>) => {
+    const toggleEntitySelection = (entity: Entity<any>) => {
         let newValue;
         if (selectedEntities) {
             if (selectedEntities.map((e) => e.id).indexOf(entity.id) > -1) {
-                newValue = selectedEntities.filter((item: Entity<S>) => item.id !== entity.id);
+                newValue = selectedEntities.filter((item: Entity<any>) => item.id !== entity.id);
             } else {
                 newValue = [...selectedEntities, entity];
             }
@@ -137,7 +139,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                                        collectionPath,
                                        entity,
                                        size
-                                   }: { collectionPath: string, entity: Entity<S>, size: CollectionSize }) => {
+                                   }: { collectionPath: string, entity: Entity<any>, size: CollectionSize }) => {
 
         const isSelected = selectedEntityIds && selectedEntityIds.indexOf(entity.id) > -1;
         return <CollectionRowActions
@@ -147,6 +149,8 @@ export function ReferenceDialog<S extends EntitySchema>(
             isSelected={isSelected}
             selectionEnabled={multiselect}
             toggleEntitySelection={toggleEntitySelection}
+            schema={schema}
+            editEnabled={false}
         />;
 
     };
@@ -184,7 +188,7 @@ export function ReferenceDialog<S extends EntitySchema>(
                                  filterableProperties={filterableProperties}
                                  textSearchDelegate={textSearchDelegate}
                                  initialFilter={initialFilter}
-                                 initialSort={collectionView.initialSort}
+                                 initialSort={collectionConfig.initialSort}
                                  createFormField={createFormField}
                                  entitiesDisplayedFirst={selectedEntities}
                                  frozenIdColumn={largeLayout}

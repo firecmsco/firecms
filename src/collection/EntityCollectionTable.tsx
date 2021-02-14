@@ -13,7 +13,7 @@ import { Add, Delete } from "@material-ui/icons";
 import { CollectionRowActions } from "./CollectionRowActions";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { getSubcollectionColumnId, useColumnIds } from "./common";
-import { useSideEntityController } from "../contexts/SideEntityPanelsController";
+import { useSideEntityController } from "../contexts/SideEntityController";
 
 type EntitySubCollectionProps<S extends EntitySchema> = {
     collectionPath: string;
@@ -37,7 +37,7 @@ export default function EntityCollectionTable<S extends EntitySchema>({
                                                                           collectionConfig
                                                                       }: EntitySubCollectionProps<S>
 ) {
-    const selectedEntityContext = useSideEntityController();
+    const selectedEntityController = useSideEntityController();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
@@ -61,10 +61,14 @@ export default function EntityCollectionTable<S extends EntitySchema>({
                 <Button color={"primary"}
                         onClick={(event) => {
                             event.stopPropagation();
-                            selectedEntityContext.open({
+                            selectedEntityController.open({
                                 collectionPath: collectionPath,
                                 entityId: entity.id,
-                                selectedSubcollection: subcollection.relativePath
+                                selectedSubcollection: subcollection.relativePath,
+                                editEnabled: editEnabled,
+                                schema: collectionConfig.schema,
+                                subcollections: collectionConfig.subcollections,
+                                overrideSchemaResolver: false
                             });
                         }}>
                     {subcollection.name}
@@ -76,15 +80,25 @@ export default function EntityCollectionTable<S extends EntitySchema>({
     const additionalColumns = [...collectionConfig.additionalColumns ?? [], ...subcollectionColumns];
 
     const onEntityClick = inlineEditing ? undefined : (collectionPath: string, entity: Entity<S>) => {
-        selectedEntityContext.open({
+        selectedEntityController.open({
             entityId: entity.id,
-            collectionPath
+            collectionPath,
+            editEnabled: collectionConfig.editEnabled == undefined || collectionConfig.editEnabled,
+            schema: collectionConfig.schema,
+            subcollections: collectionConfig.subcollections,
+            overrideSchemaResolver: false
         });
     };
 
     const onNewClick = (e: React.MouseEvent) => {
         e.stopPropagation();
-        return collectionPath && selectedEntityContext.open({ collectionPath });
+        return collectionPath && selectedEntityController.open({
+            collectionPath,
+            editEnabled: collectionConfig.editEnabled == undefined || collectionConfig.editEnabled,
+            schema: collectionConfig.schema,
+            subcollections: collectionConfig.subcollections,
+            overrideSchemaResolver: false
+        });
     };
 
     const internalOnEntityDelete = (collectionPath: string, entity: Entity<S>) => {
@@ -134,6 +148,8 @@ export default function EntityCollectionTable<S extends EntitySchema>({
                 size={size}
                 toggleEntitySelection={toggleEntitySelection}
                 onDeleteClicked={setDeleteEntityClicked}
+                schema={collectionConfig.schema}
+                subcollections={collectionConfig.subcollections}
             />
         );
 

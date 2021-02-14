@@ -142,7 +142,8 @@ function buildFieldInternal<P extends Property, T = any, S extends EntitySchema 
                 const error = getIn(fieldProps.form.errors, name);
                 const touched = getIn(fieldProps.form.touched, name);
                 const showError: boolean = error
-                    && (touched || fieldProps.form.submitCount > 0)
+                    && touched
+                    && fieldProps.form.submitCount > 0
                     && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
                 const isSubmitting = fieldProps.form.isSubmitting;
 

@@ -101,7 +101,7 @@ function EntityForm<S extends EntitySchema>({
      */
     let baseFirestoreValues: EntityValues<S>;
     if ((status === EntityStatus.existing || status === EntityStatus.copy) && entity) {
-        baseFirestoreValues = entity.values as EntityValues<S>;
+        baseFirestoreValues = entity.values as EntityValues<S> ?? {};
     } else if (status === EntityStatus.new) {
         baseFirestoreValues = (initEntityValues(schema));
     } else {
@@ -114,6 +114,8 @@ function EntityForm<S extends EntitySchema>({
 
     const initialValuesRef = React.useRef<EntityValues<S>>(entity?.values ?? initEntityValues(schema));
     const initialValues = initialValuesRef.current;
+
+    const mustSetCustomId: boolean = (status === EntityStatus.new || status === EntityStatus.copy) && !!schema.customId;
 
     const [isModified, setIsModified] = React.useState<boolean>(false);
     useEffect(() => {
@@ -137,8 +139,6 @@ function EntityForm<S extends EntitySchema>({
         }
     }, [initialValues, baseFirestoreValues]);
 
-
-    const mustSetCustomId: boolean = (status === EntityStatus.new || status === EntityStatus.copy) && !!schema.customId;
 
     function saveValues(values: EntityValues<S>, formikActions: FormikHelpers<EntityValues<S>>) {
 

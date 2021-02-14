@@ -1,7 +1,7 @@
 import {
     AdditionalColumnDelegate,
     CollectionSize,
-    Entity,
+    Entity, EntityCollection,
     EntitySchema,
     FilterValues,
     Properties,

@@ -374,6 +374,8 @@ the following specs:
 - `toolbarExtraWidget` A component that gets rendered on the upper side of the
   main toolbar.
 
+- `schemaResolver`:
+
 ## Entities configuration
 
 The core of the CMS are entities, which are defined by an `EntitySchema`. In the
@@ -809,11 +811,17 @@ You can use this controller to open the side entity view used to edit entities.
 The props provided by this context are:
 
 * `close()` Close the last panel
-* `sidePanels`: List of side entity panels currently open
+* `sidePanels` List of side entity panels currently open
 * `open (props: SideEntityPanelProps & Partial<SchemaSidePanelProps>)`
-    Open a new entity sideDialog. By default, the schema and configuration
-    of the view is fetched from the collections you have specified in the
-    navigation
+     Open a new entity sideDialog. By default, the schema and configuration
+     of the view is fetched from the collections you have specified in the
+     navigation.
+     At least you need to pass the collectionPath of the entity you would like
+     to edit. You can set an entityId if you would like to edit and existing one
+     (or a new one with that id).
+     If you wish, you can also override the `SchemaSidePanelProps` (such
+     as schema or subcollections) and choose to override the CMSApp
+     level `SchemaResolver`.
 
 Example:
 

@@ -38,9 +38,6 @@ export default function ArrayOfReferencesField({
         throw Error("ArrayOfReferencesField expected a property containing references");
     }
 
-    const appConfig: CMSAppProps = useAppConfigContext();
-    const collectionConfig: EntityCollection<any> = getCollectionViewFromPath(ofProperty.collectionPath, appConfig.navigation);
-
     const [open, setOpen] = React.useState(false);
     const selectedIds = value ? value.map((ref) => ref.id) : [];
 
@@ -108,16 +105,15 @@ export default function ArrayOfReferencesField({
 
             </FormControl>
 
-            {collectionConfig && <ReferenceDialog open={open}
+             <ReferenceDialog open={open}
                                                 multiselect={true}
                                                 collectionPath={ofProperty.collectionPath}
-                                                collectionView={collectionConfig}
                                                 onClose={onClose}
                                                 onMultipleEntitiesSelected={onMultipleEntitiesSelected}
                                                 createFormField={createFormField}
                                                 CollectionTable={CollectionTable}
                                                 selectedEntityIds={selectedIds}
-            />}
+            />
         </>
     );
 }

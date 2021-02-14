@@ -27,8 +27,8 @@ export {
 } from "./BreacrumbsContext";
 
 export type {
-    SideEntityPanelsController, SchemaSidePanelProps, SideEntityPanelProps
-} from "./SideEntityPanelsController";
+    SideEntityController, SchemaSidePanelProps, SideEntityPanelProps
+} from "./SideEntityController";
 export {
     useSideEntityController
-} from "./SideEntityPanelsController";
+} from "./SideEntityController";

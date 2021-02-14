@@ -36,8 +36,8 @@ import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./components/CMSAppBar";
 import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
-import { SideEntityProvider } from "./contexts/SideEntityPanelsController";
-import { SchemaOverrideRegistryProvider } from "./side_dialog/SchemaOverrideRegistry";
+import { SideEntityProvider } from "./contexts/SideEntityController";
+import { SchemaRegistryProvider } from "./side_dialog/SchemaRegistry";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -89,9 +89,10 @@ export function CMSApp(props: CMSAppProps) {
         secondaryColor,
         fontFamily,
         toolbarExtraWidget,
+        schemaResolver,
         signInOptions = [
             firebase.auth.GoogleAuthProvider.PROVIDER_ID
-        ]
+        ],
     } = props;
 
     const classes = useStyles();
@@ -253,7 +254,7 @@ export function CMSApp(props: CMSAppProps) {
     function renderMainView() {
         return (
             <Router>
-                <SchemaOverrideRegistryProvider>
+                <SchemaRegistryProvider navigation={navigation} schemaResolver={schemaResolver}>
                     <SideEntityProvider navigation={navigation}>
                         <BreadcrumbsProvider>
                             <MuiPickersUtilsProvider
@@ -287,7 +288,7 @@ export function CMSApp(props: CMSAppProps) {
                             </MuiPickersUtilsProvider>
                         </BreadcrumbsProvider>
                     </SideEntityProvider>
-                </SchemaOverrideRegistryProvider>
+                </SchemaRegistryProvider>
             </Router>
         );
     }
