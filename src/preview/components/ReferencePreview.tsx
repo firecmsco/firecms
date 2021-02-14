@@ -25,14 +25,11 @@ import {
 } from "../../models/preview_component_props";
 import SkeletonComponent from "./SkeletonComponent";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import { getCollectionViewFromPath } from "../../routes/navigation";
-import { CMSAppProps } from "../../CMSAppProps";
-import { useAppConfigContext } from "../../contexts";
+import { useSideEntityController } from "../../contexts";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { PreviewComponent } from "../PreviewComponent";
-import { useSideEntityController } from "../../contexts/SideEntityController";
 import { PreviewError } from "./PreviewError";
 import { Skeleton } from "@material-ui/lab";
 import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";

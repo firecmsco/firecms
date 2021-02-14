@@ -505,6 +505,21 @@ function SampleApp() {
         customId: true,
         name: "Test entity",
         properties: {
+            imageUrls: {
+                title: "Images",
+                dataType: "array",
+                of: {
+                    dataType: "string",
+                    config: {
+                        storageMeta: {
+                            mediaType: "image",
+                            storagePath: "images",
+                            acceptedFiles: ["image/*"],
+                            storeUrl: true
+                        }
+                    }
+                }
+            },
             title: {
                 dataType: "string",
                 title: "Title"

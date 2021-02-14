@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.25.1] - 2021-02-10
+### Added
+- `schemaResolver` props in the CMSApp level that allows overriding schemas and configs in the side
+dialog panels
+
 ## [0.25.0] - 2021-02-10
 ### Added
 - `useSideEntityController` hook, allows to open the side dialog programmatically
