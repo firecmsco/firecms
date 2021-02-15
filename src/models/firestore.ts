@@ -26,8 +26,7 @@ import {
  * @return Function to cancel subscription
  */
 export function listenCollection<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties<Key> = Properties>(
+    Key extends string = Extract<keyof S["properties"], string>>(
     path: string,
     schema: S,
     onSnapshot: (entity: Entity<S, Key>[]) => void,
@@ -78,7 +77,6 @@ export function listenCollection<S extends EntitySchema<Key>,
  * @param schema
  */
 export function fetchEntity<S extends EntitySchema<Key>,
-    P extends Properties<Key> = S["properties"],
     Key extends string = Extract<keyof S["properties"], string>>(
     path: string,
     entityId: string,
@@ -103,7 +101,6 @@ export function fetchEntity<S extends EntitySchema<Key>,
  * @return Function to cancel subscription
  */
 export function listenEntity<S extends EntitySchema<Key>,
-    P extends Properties<Key> = S["properties"],
     Key extends string = Extract<keyof S["properties"], string>>(
     path: string,
     entityId: string,
@@ -479,8 +476,7 @@ export function updateAutoValues<P extends Properties<Key>, Key extends string =
  * @param filterableProperties
  */
 export function initFilterValues<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties<Key> = S["properties"]>
+    Key extends string = Extract<keyof S["properties"], string>>
 (schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<S> {
     return filterableProperties
         .map((key) => ({ [key]: undefined }))
