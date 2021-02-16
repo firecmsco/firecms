@@ -18,6 +18,7 @@ import ReactMarkdown from "react-markdown";
 
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/base16-light.css";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 require("codemirror/mode/markdown/markdown");
 
@@ -59,16 +60,23 @@ export default function MarkDownField({
                                           setValue,
                                           error,
                                           showError,
-                                          isSubmitting,
+                                          disabled,
                                           autoFocus,
                                           touched,
                                           property,
                                           tableMode,
                                           includeDescription,
-                                          context
+                                          context,
+                                          dependsOnOtherProperties
                                       }: MarkDownFieldProps) {
 
     const classes = useStyles();
+
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
 
     const updateValue = (newValue: string) => {
         if (!newValue) {
@@ -82,7 +90,6 @@ export default function MarkDownField({
         }
     };
 
-    const disabled = isSubmitting;
     return (
 
         <FormControl

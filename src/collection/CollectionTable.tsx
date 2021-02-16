@@ -10,10 +10,10 @@ import {
     Entity,
     EntityCollection,
     EntitySchema,
+    EntityValues,
     fetchEntity,
     FilterValues,
     listenCollection,
-    Properties,
     Property
 } from "../models";
 import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
@@ -35,7 +35,7 @@ import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../preview/util";
 import { CollectionRowActions } from "./CollectionRowActions";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import { buildProperty } from "../models/property_builder";
+import { buildProperty } from "../models/builders";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -57,25 +57,25 @@ type Order = "asc" | "desc" | undefined;
 export default function CollectionTable<S extends EntitySchema<Key>,
     Key extends string,
     AdditionalKey extends string = string>({
-                                                     initialFilter,
-                                                     initialSort,
-                                                     collectionPath,
-                                                     schema,
-                                                     paginationEnabled,
-                                                     displayedProperties,
-                                                     textSearchDelegate,
-                                                     additionalColumns,
-                                                     filterableProperties,
-                                                     inlineEditing,
-                                                     toolbarWidgetBuilder,
-                                                     title,
-                                                     tableRowWidgetBuilder,
-                                                     onEntityClick,
-                                                     defaultSize = "m",
-                                                     entitiesDisplayedFirst,
-                                                     createFormField,
-                                                     frozenIdColumn
-                                                 }: CollectionTableProps<S, Key, P, AdditionalKey>) {
+                                               initialFilter,
+                                               initialSort,
+                                               collectionPath,
+                                               schema,
+                                               paginationEnabled,
+                                               displayedProperties,
+                                               textSearchDelegate,
+                                               additionalColumns,
+                                               filterableProperties,
+                                               inlineEditing,
+                                               toolbarWidgetBuilder,
+                                               title,
+                                               tableRowWidgetBuilder,
+                                               onEntityClick,
+                                               defaultSize = "m",
+                                               entitiesDisplayedFirst,
+                                               CMSFormField,
+                                               frozenIdColumn
+                                           }: CollectionTableProps<S, Key, AdditionalKey>) {
 
     if (inlineEditing && onEntityClick) {
         console.error("You have set both `inlineEditing` and `onEntityClick` in a CollectionTable. `onEntityClick` will have no effect.");
@@ -343,7 +343,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         }
 
         const propertyKey = column.dataKey;
-        const property = buildProperty(schema.properties[propertyKey], entity.values, entity.id);
+        const property = buildProperty(schema.properties[propertyKey], entity.values as EntityValues<any>, entity.id);
         const usedPropertyBuilder = typeof schema.properties[propertyKey] === "function";
 
         if (column.type === "property") {
@@ -360,20 +360,6 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                             size={getPreviewSizeFrom(size)}
                         />
                     </PreviewTableCell>
-                );
-            } else if (property.readOnly || property.disabled) {
-                return (
-                    <DisabledTableCell
-                        key={`disabled_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
-                        size={size}
-                        align={column.align}>
-                        <PreviewComponent
-                            name={propertyKey}
-                            value={entity.values[propertyKey]}
-                            property={property}
-                            size={getPreviewSizeFrom(size)}
-                        />
-                    </DisabledTableCell>
                 );
             } else {
 
@@ -421,7 +407,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                         property={property}
                         openPopup={openPopup}
                         select={onSelect}
-                        createFormField={createFormField}/>
+                        CMSFormField={CMSFormField}/>
                     :
                     <SkeletonComponent property={property}
                                        size={getPreviewSizeFrom(size)}/>;
@@ -431,8 +417,11 @@ export default function CollectionTable<S extends EntitySchema<Key>,
             return (
                 <DisabledTableCell
                     size={size}
+                    tooltip={"Additional columns can't be edited directly"}
                     align={"left"}>
-                    {additionalColumnsMap[column.dataKey].builder(entity)}
+                    <ErrorBoundary>
+                        {additionalColumnsMap[column.dataKey].builder(entity)}
+                    </ErrorBoundary>
                 </DisabledTableCell>
             );
         } else {
@@ -610,7 +599,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                 <PopupFormField
                     tableKey={tableKey}
                     schema={schema}
-                    createFormField={createFormField}
+                    CMSFormField={CMSFormField}
                     cellRect={selectedCell?.cellRect}
                     formPopupOpen={formPopupOpen}
                     setFormPopupOpen={updatePopup}

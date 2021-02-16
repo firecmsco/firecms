@@ -9,6 +9,7 @@ export {
     EntityStatus,
     buildCollection,
     buildSchema,
+    buildProperty,
     buildProperties
 } from "./models";
 
@@ -32,7 +33,7 @@ export {
 export { AlgoliaTextSearchDelegate } from "./models/text_search_delegate";
 
 export type {
-    CMSFieldProps, FormFieldBuilder, FormFieldProps
+    CMSFieldProps, FormFieldProps
 } from "./models/form_props";
 export type { TextSearchDelegate } from "./models/text_search_delegate";
 

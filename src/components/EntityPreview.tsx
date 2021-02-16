@@ -20,7 +20,7 @@ import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import { ErrorBoundary } from "./index";
 import { CMSAppProps } from "../CMSAppProps";
 import { useAppConfigContext } from "../contexts";
-import { buildProperty } from "../models/property_builder";
+import { buildProperty } from "../models/builders";
 import { PropertyOrBuilder } from "../models/models";
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -93,7 +93,7 @@ export default function EntityPreview<S extends EntitySchema<Key>, Key extends s
 
                     {schema && Object.entries(schema.properties).map(([key, propertyOrBuilder]) => {
                         const value = entity.values[key as string];
-                        const property = buildProperty(propertyOrBuilder as PropertyOrBuilder, entity.values, entity.id);
+                        const property = buildProperty(propertyOrBuilder as PropertyOrBuilder<S, Key>, entity.values, entity.id);
                         return (
                             <TableRow
                                 key={"entity_prev" + property.title + key}>

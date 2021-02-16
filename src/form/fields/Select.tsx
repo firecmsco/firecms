@@ -12,6 +12,9 @@ import { CMSFieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { CustomChip } from "../../preview/components/CustomChip";
+import { useClearRestoreValue } from "../useClearRestoreValue";
+import { EnumValueConfig } from "../../models/models";
+import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
 
 type SelectProps<T extends EnumType> = CMSFieldProps<T>;
 
@@ -21,15 +24,21 @@ export default function Select<T extends EnumType>({
                                                        setValue,
                                                        error,
                                                        showError,
-                                                       isSubmitting,
+                                                       disabled,
                                                        autoFocus,
                                                        touched,
                                                        property,
-                                                       includeDescription
+                                                       includeDescription,
+                                                       dependsOnOtherProperties
                                                    }: SelectProps<T>) {
 
     const enumValues = property.config?.enumValues as EnumValues<T>;
-    const disabled = isSubmitting || property.readOnly || property.disabled;
+
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
 
     return (
         <FormControl
@@ -58,25 +67,33 @@ export default function Select<T extends EnumType>({
                         newValue ? newValue : null
                     );
                 }}
-                renderValue={(v: any) =>
-                    <CustomChip
+                renderValue={(v: any) => {
+                    const label = buildEnumLabel(enumValues[v]);
+                    return <CustomChip
                         colorKey={typeof v == "number" ? `${name}_${v}` : v as string}
-                        label={enumValues[v] || v}
-                        error={!enumValues[v]}
+                        label={label || v}
+                        error={!label}
                         outlined={false}
-                        small={false}/>
+                        small={false}/>;
+                }
                 }>
 
-                {Object.entries(enumValues).map(([key, value]) => (
-                    <MenuItem key={`select_${name}_${key}`} value={key}>
-                        <CustomChip
-                            colorKey={typeof key === "number" ? `${name}_${key}` : key as string}
-                            label={value as string}
-                            error={!value}
-                            outlined={false}
-                            small={false}/>
-                    </MenuItem>
-                ))}
+                {Object.entries<string | EnumValueConfig>(enumValues)
+                    .map(([key, value]) => {
+                        const label = buildEnumLabel(value);
+                        return (
+                            <MenuItem key={`select_${name}_${key}`}
+                                      value={key}
+                                      disabled={isEnumValueDisabled(value)}>
+                                <CustomChip
+                                    colorKey={typeof key === "number" ? `${name}_${key}` : key as string}
+                                    label={label || key}
+                                    error={!label}
+                                    outlined={false}
+                                    small={false}/>
+                            </MenuItem>
+                        );
+                    })}
             </MuiSelect>
 
             {includeDescription &&

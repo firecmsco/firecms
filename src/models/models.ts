@@ -297,6 +297,17 @@ export function buildSchema<Key extends string = string>(
 
 /**
  * Identity function we use to defeat the type system of Typescript and preserve
+ * the property keys.
+ * @param property
+ */
+export function buildProperty<S extends EntitySchema<Key>, Key extends string>(
+    property: Property<Key>
+): Property<Key> {
+    return property;
+}
+
+/**
+ * Identity function we use to defeat the type system of Typescript and preserve
  * the properties keys. It can be useful if you have entity schemas with the
  * same properties
  * @param properties
@@ -352,7 +363,8 @@ export type Property<T = any, ArrayT = any> =
  * Use this interface for adding additional columns to entity collection views.
  * If you need to do some async loading you can use AsyncPreviewComponent
  */
-export interface AdditionalColumnDelegate<AdditionalKey extends string = string,
+export interface AdditionalColumnDelegate<
+    AdditionalKey extends string = string,
     S extends EntitySchema<Key> = EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>> {
 
@@ -418,15 +430,34 @@ interface BaseProperty {
 
     /**
      * Is this field disabled. When set to true, it gets rendered as a
-     * disabled field
+     * disabled field. You can also specify a configuration for defining the
+     * behaviour of disabled properties
      */
-    disabled?: boolean;
+    disabled?: boolean | PropertyDisabledConfig;
 
     /**
      * Rules for validating this property
      */
     validation?: PropertyValidationSchema;
 
+}
+
+export type PropertyDisabledConfig = {
+
+    /**
+     * Enable this flag if you would like to clear the value of the field
+     * when the corresponding property gets disabled.
+     *
+     * This is useful for keeping data consistency when you have conditional
+     * properties.
+     */
+    clearOnDisabled?: boolean;
+
+    /**
+     * Explanation of why this property is disabled (e.g. a different field
+     * needs to be enabled)
+     */
+    disabledMessage?: string;
 }
 
 export type EnumType = number | string;
@@ -437,7 +468,12 @@ export type EnumType = number | string;
  * The key in this Record is the value saved in Firestore, and the value in
  * this record is the label displayed in the UI
  */
-export type EnumValues<T extends EnumType> = Record<T, string>; // id -> Label
+export type EnumValues<T extends EnumType> = Record<T, string | EnumValueConfig>;
+
+export type EnumValueConfig = {
+    disabled? :boolean;
+    label: string;
+}
 
 
 /**
@@ -451,12 +487,12 @@ export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema, Key
         entityId?: string
     };
 
-export type PropertyBuilder<S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> = (props: PropertyBuilderProps<S, Key>) => Property<T>;
-export type PropertyOrBuilder<S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> =
+export type PropertyBuilder<S extends EntitySchema<Key>, Key extends string, T extends any = any> = (props: PropertyBuilderProps<S, Key>) => Property<T>;
+export type PropertyOrBuilder<S extends EntitySchema<Key>, Key extends string, T extends any = any> =
     Property<T>
     | PropertyBuilder<S, Key, T>;
 
-export type PropertiesOrBuilder<S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> =
+export type PropertiesOrBuilder<S extends EntitySchema<Key>, Key extends string, T extends any = any> =
     Record<Key, PropertyOrBuilder<S, Key, T>>;
 
 /**

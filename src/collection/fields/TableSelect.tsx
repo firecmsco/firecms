@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@material-ui/core";
 import { useInputStyles } from "./styles";
 import { ArrayEnumPreview } from "../../preview/components/ArrayPropertyEnumPreview";
+import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
 
 export function TableSelect(props: {
     name: string,
@@ -68,29 +69,35 @@ export function TableSelect(props: {
             onChange={(evt) => {
                 updateValue(evt.target.value as typeof internalValue);
             }}
-            renderValue={(selected: any) =>
-                Array.isArray(selected) ?
-                    <ArrayEnumPreview value={selected} name={name} enumValues={enumValues} size={"small"}/>
+            renderValue={(selected: any) => {
+                const label = buildEnumLabel(enumValues[selected]);
+                return Array.isArray(selected) ?
+                    <ArrayEnumPreview value={selected} name={name}
+                                      enumValues={enumValues} size={"small"}/>
                     :
                     selected && <CustomChip
                         colorKey={typeof selected === "number" ? `${name}_${selected}` : selected as string}
-                        label={enumValues[selected] || selected}
-                        error={!enumValues[selected]}
+                        label={label || selected}
+                        error={!label}
                         outlined={false}
-                        small={true}/>
+                        small={true}/>;
+            }
             }>
 
             {Object.entries(enumValues).map(([key, value]) => {
+
+                const label = buildEnumLabel(value);
                 const chip = <CustomChip
                     colorKey={typeof key === "number" ? `${name}_${key}` : key as string}
-                    label={value}
-                    error={!value}
+                    label={label || key}
+                    error={!label}
                     outlined={false}
                     small={true}/>;
                 if (multiple) {
                     return (
                         <MenuItem key={`select-${name}-${key}`}
                                   value={key}
+                                  disabled={isEnumValueDisabled(value)}
                                   dense={true}>
                             <Checkbox
                                 checked={Array.isArray(internalValue) && (internalValue as any[]).includes(key)}/>
@@ -100,6 +107,7 @@ export function TableSelect(props: {
                 } else {
                     return (
                         <MenuItem key={`select-${name}-${key}`} value={key}
+                                  disabled={isEnumValueDisabled(value)}
                                   dense={true}>
                             {chip}
                         </MenuItem>

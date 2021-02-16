@@ -13,7 +13,7 @@ import {
     PropertyOrBuilder,
     WhereFilterOp
 } from "./models";
-import { buildProperty } from "./property_builder";
+import { buildProperty } from "./builders";
 
 /**
  * Listen to a entities in a Firestore path
@@ -397,7 +397,7 @@ export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends
 ): Properties<Key> {
     return Object.entries(schema.properties)
         .map(([key, propertyOrBuilder]) => {
-            return { [key]: buildProperty(propertyOrBuilder as PropertyOrBuilder, values ?? schema.defaultValues ?? {}, entityId) };
+            return { [key]: buildProperty(propertyOrBuilder as PropertyOrBuilder<S, Key>, values ?? schema.defaultValues ?? {}, entityId) };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<Key>;
 }

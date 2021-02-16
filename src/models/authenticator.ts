@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import firebase from "firebase/app";
 
 /**
  * Implement this function to allow access to specific users

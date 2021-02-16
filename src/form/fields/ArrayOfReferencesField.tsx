@@ -1,18 +1,21 @@
-import { Entity, EntityCollection, Property } from "../../models";
-import { Box, Button, FormControl, FormHelperText, Paper } from "@material-ui/core";
-import { CMSFieldProps } from "../../models";
+import { CMSFieldProps, Entity, Property } from "../../models";
+import {
+    Box,
+    Button,
+    FormControl,
+    FormHelperText,
+    Paper
+} from "@material-ui/core";
 import React from "react";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
 import { PreviewComponent, ReferencePreview } from "../../preview";
 import firebase from "firebase";
-import { CMSAppProps } from "../../CMSAppProps";
-import { useAppConfigContext } from "../../contexts";
-import { getCollectionViewFromPath } from "../../routes/navigation";
 import { ReferenceDialog } from "../../components/ReferenceDialog";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { formStyles } from "../../styles";
 import FieldDescription from "../../components/FieldDescription";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 
 type ArrayOfReferencesFieldProps = CMSFieldProps<firebase.firestore.DocumentReference[]>;
@@ -25,10 +28,11 @@ export default function ArrayOfReferencesField({
                                                    isSubmitting,
                                                    tableMode,
                                                    property,
-                                                   createFormField,
+                                                   CMSFormField,
                                                    includeDescription,
                                                    setValue,
-                                                   context
+                                                   context,
+                                                   disabled
                                                }: ArrayOfReferencesFieldProps) {
 
     const classes = formStyles();
@@ -40,6 +44,12 @@ export default function ArrayOfReferencesField({
 
     const [open, setOpen] = React.useState(false);
     const selectedIds = value ? value.map((ref) => ref.id) : [];
+
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
 
     const onEntryClick = () => {
         setOpen(true)
@@ -77,6 +87,7 @@ export default function ArrayOfReferencesField({
 
                 <Paper variant={"outlined"}
                        className={classes.paper}>
+
                 <ArrayContainer value={value}
                                 name={name}
                                 buildEntry={buildEntry}
@@ -110,7 +121,7 @@ export default function ArrayOfReferencesField({
                                                 collectionPath={ofProperty.collectionPath}
                                                 onClose={onClose}
                                                 onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                                                createFormField={createFormField}
+                                                CMSFormField={CMSFormField}
                                                 CollectionTable={CollectionTable}
                                                 selectedEntityIds={selectedIds}
             />

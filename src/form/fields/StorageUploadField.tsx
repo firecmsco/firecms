@@ -17,13 +17,14 @@ import firebase from "firebase/app";
 
 import {
     ArrayProperty,
+    CMSFieldProps,
     EntitySchema,
+    getDownloadURL,
     Property,
     StorageMeta,
-    StringProperty
+    StringProperty,
+    uploadFile
 } from "../../models";
-
-import { CMSFieldProps } from "../../models";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
 import PreviewComponent from "../../preview/PreviewComponent";
@@ -36,7 +37,7 @@ import { PreviewSize } from "../../models/preview_component_props";
 
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
-import { getDownloadURL, uploadFile } from "../../models";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 export const useStyles = makeStyles(theme => ({
     dropZone: {
@@ -53,6 +54,11 @@ export const useStyles = makeStyles(theme => ({
         "&:focus": {
             borderBottom: `2px solid ${theme.palette.primary.dark}`
         }
+    },
+    disabled: {
+        backgroundColor: "rgba(0, 0, 0, 0.12)",
+        color: "rgba(0, 0, 0, 0.38)",
+        borderBottom: `1px dotted ${theme.palette.grey[400]}`
     },
     nonActiveDrop: {
         "&:hover": {
@@ -125,14 +131,23 @@ export default function StorageUploadField({
                                                tableMode,
                                                property,
                                                includeDescription,
-                                               context
+                                               context,
+                                               isSubmitting,
+                                               dependsOnOtherProperties
                                            }: StorageUploadFieldProps) {
 
     const multipleFilesSupported = property.dataType === "array";
+    const disabled = property.readOnly || !!property.disabled || isSubmitting;
 
     const internalValue = multipleFilesSupported ?
         (Array.isArray(value) ? value : []) :
         value;
+
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
 
     return (
 
@@ -149,6 +164,7 @@ export default function StorageUploadField({
             <StorageUpload
                 value={internalValue}
                 name={name}
+                disabled={disabled}
                 autoFocus={autoFocus}
                 property={property}
                 onChange={(newValue) => {
@@ -177,6 +193,7 @@ interface StorageUploadProps {
     onChange: (value: string | string[] | null) => void;
     multipleFilesSupported: boolean;
     autoFocus: boolean;
+    disabled: boolean;
     small: boolean;
     entitySchema: EntitySchema
 }
@@ -188,6 +205,7 @@ export function StorageUpload({
                                   onChange,
                                   multipleFilesSupported,
                                   small,
+                                  disabled,
                                   autoFocus,
                                   entitySchema
                               }: StorageUploadProps) {
@@ -266,7 +284,7 @@ export function StorageUpload({
 
     const onExternalDrop = (acceptedFiles: File[]) => {
 
-        if (!acceptedFiles.length)
+        if (!acceptedFiles.length || disabled)
             return;
 
         let newInternalValue: StorageFieldItem[];
@@ -343,6 +361,7 @@ export function StorageUpload({
         isDragReject
     } = useDropzone({
             accept: storageMeta.acceptedFiles,
+            disabled: disabled,
             onDrop: onExternalDrop
         }
     );
@@ -359,7 +378,8 @@ export function StorageUpload({
                  [classes.nonActiveDrop]: !isDragActive,
                  [classes.activeDrop]: isDragActive,
                  [classes.rejectDrop]: isDragReject,
-                 [classes.acceptDrop]: isDragAccept
+                 [classes.acceptDrop]: isDragAccept,
+                 [classes.disabled]: disabled
              })}
         >
 
@@ -382,9 +402,9 @@ export function StorageUpload({
                             <StorageItemPreview
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                 property={renderProperty}
+                                disabled={disabled}
                                 value={entry.storagePathOrDownloadUrl}
                                 onClear={onClear}
-                                entitySchema={entitySchema}
                                 size={entry.size}/>
                         );
                     } else if (entry.file) {
@@ -623,8 +643,8 @@ interface StorageItemPreviewProps {
     property: Property;
     value: string,
     onClear: (value: string) => void;
-    entitySchema: EntitySchema;
     size: PreviewSize;
+    disabled: boolean;
 }
 
 export function StorageItemPreview({
@@ -632,7 +652,7 @@ export function StorageItemPreview({
                                        property,
                                        value,
                                        onClear,
-                                       entitySchema,
+                                       disabled,
                                        size
                                    }: StorageItemPreviewProps) {
 
@@ -645,10 +665,10 @@ export function StorageItemPreview({
                 className={size === "regular" ? classes.uploadItem : classes.uploadItemSmall}
                 variant={"outlined"}>
 
-                <Box position={"absolute"}
-                     top={-8}
-                     right={-8}
-                     style={{ zIndex: 100 }}>
+                {!disabled && <Box position={"absolute"}
+                                   top={-8}
+                                   right={-8}
+                                   style={{ zIndex: 100 }}>
                     <IconButton
                         size={"small"}
                         style={{ backgroundColor: "white" }}
@@ -658,7 +678,7 @@ export function StorageItemPreview({
                         }}>
                         <ClearIcon fontSize={"small"}/>
                     </IconButton>
-                </Box>
+                </Box>}
 
                 {value &&
                 <ErrorBoundary>
@@ -668,6 +688,7 @@ export function StorageItemPreview({
                                       size={size}/>
                 </ErrorBoundary>
                 }
+
             </Paper>
 
         </Box>

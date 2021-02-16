@@ -7,7 +7,7 @@ import {
     EntitySchema
 } from "../models";
 import CollectionTable from "./CollectionTable";
-import { createFormField } from "../form/form_factory";
+import { CMSFormField } from "../form/form_factory";
 import { Button, Typography, useMediaQuery, useTheme } from "@material-ui/core";
 import { Add, Delete } from "@material-ui/icons";
 import { CollectionRowActions } from "./CollectionRowActions";
@@ -220,7 +220,7 @@ export default function EntityCollectionTable<S extends EntitySchema>({
                 paginationEnabled={paginationEnabled}
                 toolbarWidgetBuilder={toolbarActionsBuilder}
                 title={title}
-                createFormField={createFormField}
+                CMSFormField={CMSFormField}
                 frozenIdColumn={largeLayout}
             />
 

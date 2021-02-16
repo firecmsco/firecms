@@ -4,6 +4,7 @@ import {
     Authenticator,
     buildCollection,
     buildSchema,
+    buildProperty,
     CMSApp,
     EntityCollection
 } from "@camberi/firecms";
@@ -29,7 +30,7 @@ const locales = {
 
 const productSchema = buildSchema({
     name: "Product",
-    properties:  {
+    properties: {
         name: {
             title: "Name",
             validation: { required: true },
@@ -59,24 +60,20 @@ const productSchema = buildSchema({
                 }
             }
         },
-        categories: {
-            title: "Categories",
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "string",
-                config: {
-                    enumValues: {
-                        electronics: "Electronics",
-                        books: "Books",
-                        furniture: "Furniture",
-                        clothing: "Clothing",
-                        food: "Food"
+        published: ({ values }) => buildProperty({
+            title: "Published",
+            dataType: "boolean",
+            columnWidth: 100,
+            disabled: (
+                values.status === "public"
+                    ? false
+                    : {
+                        clearOnDisabled: true,
+                        disabledMessage: "Status must be public in order to enable this the published flag"
                     }
-                }
-            }
-        },
-        image: {
+            )
+        }),
+        main_image: buildProperty({
             title: "Image",
             dataType: "string",
             config: {
@@ -86,7 +83,7 @@ const productSchema = buildSchema({
                     acceptedFiles: ["image/*"]
                 }
             }
-        },
+        }),
         tags: {
             title: "Tags",
             description: "Example of generic array",
@@ -103,10 +100,22 @@ const productSchema = buildSchema({
             dataType: "string",
             columnWidth: 300
         },
-        published: {
-            title: "Published",
-            dataType: "boolean",
-            columnWidth: 100
+        categories: {
+            title: "Categories",
+            validation: { required: true },
+            dataType: "array",
+            of: {
+                dataType: "string",
+                config: {
+                    enumValues: {
+                        electronics: "Electronics",
+                        books: "Books",
+                        furniture: "Furniture",
+                        clothing: "Clothing",
+                        food: "Food"
+                    }
+                }
+            }
         },
         publisher: {
             title: "Publisher",
@@ -188,4 +197,3 @@ export function App() {
         firebaseConfig={firebaseConfig}
     />;
 }
-

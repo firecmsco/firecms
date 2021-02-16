@@ -16,6 +16,7 @@ import PreviewComponent from "../../preview/PreviewComponent";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 interface TextFieldProps extends CMSFieldProps<string | number> {
     allowInfinity?: boolean
@@ -27,13 +28,12 @@ export default function TextField({
                                       setValue,
                                       error,
                                       showError,
-                                      isSubmitting,
+                                      disabled,
                                       autoFocus,
-                                      touched,
                                       property,
                                       includeDescription,
                                       allowInfinity,
-                                      context
+                                      dependsOnOtherProperties
                                   }: TextFieldProps) {
 
     let mediaType: MediaType | undefined;
@@ -43,6 +43,12 @@ export default function TextField({
         mediaType = typeof url === "string" ? url : undefined;
         multiline = (property as StringProperty).config?.multiline;
     }
+
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
 
     const isMultiline = !!multiline;
 
@@ -68,7 +74,6 @@ export default function TextField({
             );
         }
     };
-    const disabled = valueIsInfinity || isSubmitting || property.readOnly || property.disabled;
 
     const filledInput = (
         <FilledInput
@@ -84,7 +89,7 @@ export default function TextField({
                 updateValue(evt.target.value);
             }}
         />
-        );
+    );
 
     return (
         <>

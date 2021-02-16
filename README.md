@@ -51,12 +51,40 @@ or
 yarn add @camberi/firecms
 ```
 
+## Features
+
+### CMS
+- [x] Real-time Collection views for entities
+- [x] Infinite scrolling in collections with optional pagination
+- [x] Collection text search integration
+- [x] All login methods supported by Firebase
+- [x] Custom authenticator to control access
+- [x] Custom additional views in main navigation
+- [x] Filters for string, numbers and booleans
+- [ ] Filters for arrays, dates
+- [ ] Allow set up of a project using a CLI create-firecms-app
+
+### Entity edition
+- [x] Create, read, update, delete views
+- [x] Form for editing entities
+- [x] Implementation of fields for every property (except Geopoint)
+- [x] Conditional fields in forms
+- [x] Native support for Google Storage references and file upload.
+- [x] Validation for required fields using yup
+- [x] Inline editing
+- [x] Hooks on pre and post saving and deletion of entities
+- [x] Enhanced reference, and array of reference, fields for relational data
+- [x] Drag and drop reordering of arrays
+- [x] Custom fields defined by the developer.
+- [x] Subcollection support
+
 ## Use
 
 FireCMS is a purely a React app that uses your Firebase project as a backend, so
 you do not need a specific backend to make it run. Just build your project
 following the installation instructions and deploy it in the way you prefer. A
 very easy way is using Firebase Hosting.
+
 
 ## Firebase requirements
 
@@ -73,32 +101,9 @@ If you are deploying this project to firebase hosting, and the app it properly
 linked to ir, you can omit the firebaseConfig specification, since it gets
 picked up automatically.
 
-## Features
-
-- [x] Create, read, update, delete views
-- [x] Form for editing entities
-- [x] Implementation of fields for every property (except Geopoint)
-- [x] Native support for Google Storage references and file upload.
-- [x] Real-time Collection view for entities
-- [x] Inline editing
-- [x] Hooks on pre and post saving and deletion of entities
-- [x] Collection text search integration
-- [x] Infinite scrolling in collections
-- [x] Enhanced reference, and array of reference, fields for relational data
-- [x] Drag and drop reordering of arrays
-- [x] Custom additional views in main navigation
-- [x] Custom fields defined by the developer.
-- [x] Subcollection support
-- [x] Filters (string, numbers and booleans)
-- [ ] Filters for arrays, dates
-- [x] All login methods supported by Firebase
-- [x] Custom authenticator to control access
-- [x] Validation for required fields using yup
-- [ ] Allow set up of a project using a CLI create-firecms-app
-
 ## Quickstart
 
-- Create a new React app includint Typescript:
+- Create a new React app including Typescript:
 
 ```npx create-react-app my-cms --template typescript```
 
@@ -121,6 +126,7 @@ import {
     Authenticator,
     buildCollection,
     buildSchema,
+    buildProperty,
     CMSApp,
     EntityCollection
 } from "@camberi/firecms";
@@ -146,7 +152,7 @@ const locales = {
 
 const productSchema = buildSchema({
     name: "Product",
-    properties:  {
+    properties: {
         name: {
             title: "Name",
             validation: { required: true },
@@ -176,24 +182,20 @@ const productSchema = buildSchema({
                 }
             }
         },
-        categories: {
-            title: "Categories",
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "string",
-                config: {
-                    enumValues: {
-                        electronics: "Electronics",
-                        books: "Books",
-                        furniture: "Furniture",
-                        clothing: "Clothing",
-                        food: "Food"
+        published: ({ values }) => buildProperty({
+            title: "Published",
+            dataType: "boolean",
+            columnWidth: 100,
+            disabled: (
+                values.status === "public"
+                    ? false
+                    : {
+                        clearOnDisabled: true,
+                        disabledMessage: "Status must be public in order to enable the published flag"
                     }
-                }
-            }
-        },
-        image: {
+            )
+        }),
+        main_image: buildProperty({
             title: "Image",
             dataType: "string",
             config: {
@@ -203,7 +205,7 @@ const productSchema = buildSchema({
                     acceptedFiles: ["image/*"]
                 }
             }
-        },
+        }),
         tags: {
             title: "Tags",
             description: "Example of generic array",
@@ -220,10 +222,22 @@ const productSchema = buildSchema({
             dataType: "string",
             columnWidth: 300
         },
-        published: {
-            title: "Published",
-            dataType: "boolean",
-            columnWidth: 100
+        categories: {
+            title: "Categories",
+            validation: { required: true },
+            dataType: "array",
+            of: {
+                dataType: "string",
+                config: {
+                    enumValues: {
+                        electronics: "Electronics",
+                        books: "Books",
+                        furniture: "Furniture",
+                        clothing: "Clothing",
+                        food: "Food"
+                    }
+                }
+            }
         },
         publisher: {
             title: "Publisher",
@@ -405,7 +419,7 @@ fields, common to all data types:
 * `description` Property description.
 
 * `longDescription` Width in pixels of this column in the collection view. If
-  not set the width is inferred based on the other configurations.
+  not set, the width is inferred based on the other configurations.
 
 * `columnWidth` Longer description of a field, displayed under a popover.
 
@@ -430,6 +444,15 @@ fields, common to all data types:
 * `onPreSave` Hook called when saving fails.
 
 * `defaultValues` Object defining the initial values of the entity on creation.
+
+#### Conditional fields from properties
+
+When defining the properties of a schema, you can choose to use a builder
+(`PropertyBuilder`), instead of assigning the property configuration directly.
+In the builder you receive `PropertyBuilderProps` and return your property.
+
+This is useful for changing property configurations like available values on the
+fly, based on other values.
 
 #### Property configurations
 
@@ -832,6 +855,9 @@ import { useSideEntityController } from "@camberi/firecms";
 export function ExampleAdditionalView() {
 
     const sideEntityController = useSideEntityController();
+
+    // You don't need to provide a schema if the collection path is mapped in
+    // the main navigation or you have set a `schemaResolver`
     const customProductSchema = buildSchema({
         name: "Product",
         properties: {

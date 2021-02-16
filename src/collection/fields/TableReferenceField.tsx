@@ -7,14 +7,11 @@ import {
     Entity,
     EntityCollection,
     EntitySchema,
+    FormFieldProps,
     ReferenceProperty
 } from "../../models";
 import { PreviewComponent } from "../../preview/PreviewComponent";
 import { ReferenceDialog } from "../../components/ReferenceDialog";
-import { getCollectionViewFromPath } from "../../routes/navigation";
-import { CMSAppProps } from "../../CMSAppProps";
-import { useAppConfigContext } from "../../contexts";
-import { FormFieldBuilder } from "../../form";
 import { CollectionTableProps } from "../CollectionTableProps";
 
 import firebase from "firebase/app";
@@ -33,7 +30,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
     size: CollectionSize;
     schema: S,
     setPreventOutsideClick: (value: any) => void;
-    createFormField: FormFieldBuilder<S, Key>;
+    CMSFormField: React.FunctionComponent<FormFieldProps<S, Key>>;
     CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>
 }) {
 
@@ -45,7 +42,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
         updateValue,
         size,
         schema,
-        createFormField,
+        CMSFormField,
         CollectionTable
     } = props;
 
@@ -159,7 +156,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
                                                         onClose={handleClose}
                                                         onMultipleEntitiesSelected={onMultipleEntitiesSelected}
                                                         onSingleEntitySelected={onSingleValueSet}
-                                                        createFormField={createFormField}
+                                                        CMSFormField={CMSFormField}
                                                         CollectionTable={CollectionTable as any}
                                                         selectedEntityIds={selectedIds}
             />}

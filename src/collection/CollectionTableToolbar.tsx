@@ -10,8 +10,7 @@ import {
     makeStyles,
     MenuItem,
     Select,
-    Theme,
-    Toolbar
+    Theme
 } from "@material-ui/core";
 import SearchBar from "./SearchBar";
 

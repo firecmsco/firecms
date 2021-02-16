@@ -9,6 +9,7 @@ import {
     EntitySchema,
     EntityStatus,
     EntityValues,
+    FormFieldProps,
     Property,
     saveEntity
 } from "../../models";
@@ -17,7 +18,6 @@ import { Draggable } from "./Draggable";
 import { getYupEntitySchema } from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../util/useWindowSize";
-import { FormFieldBuilder } from "../../form";
 import { FormContext } from "../../models/form_props";
 
 
@@ -27,7 +27,7 @@ interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
     tableKey: string,
     name?: string;
     property?: Property;
-    createFormField: FormFieldBuilder<S,Key>,
+    CMSFormField: React.FunctionComponent<FormFieldProps<S, Key>>,
     cellRect?: DOMRect;
     formPopupOpen: boolean;
     setFormPopupOpen: (value: boolean) => void;
@@ -37,19 +37,19 @@ interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
 }
 
 function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
-                                                    tableKey,
-                                                    entity,
-                                                    name,
-                                                    property,
-                                                    schema,
-                                                    cellRect,
-                                                    createFormField,
-                                                    setPreventOutsideClick,
-                                                    formPopupOpen,
-                                                    setFormPopupOpen,
-                                                    columnIndex,
-                                                    usedPropertyBuilder
-                                                }: PopupFormFieldProps<S, Key>) {
+                                                                             tableKey,
+                                                                             entity,
+                                                                             name,
+                                                                             property,
+                                                                             schema,
+                                                                             cellRect,
+                                                                             CMSFormField,
+                                                                             setPreventOutsideClick,
+                                                                             formPopupOpen,
+                                                                             setFormPopupOpen,
+                                                                             columnIndex,
+                                                                             usedPropertyBuilder
+                                                                         }: PopupFormFieldProps<S, Key>) {
 
     const [internalValue, setInternalValue] = useState<EntityValues<S, Key> | undefined>(entity?.values);
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
@@ -114,7 +114,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         // selectedCell.closePopup();
     };
 
-    const validationSchema = getYupEntitySchema(schema.properties, internalValue as EntityValues<any, any> ?? {}, entity?.id);
+    const validationSchema = getYupEntitySchema(schema.properties, internalValue as Partial<EntityValues<S, Key>> ?? {}, entity?.id);
 
     function normalizePosition({ x, y }: { x: number, y: number }) {
 
@@ -161,21 +161,23 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
             values
         };
 
+
         return <OutsideAlerter
             enabled={true}
             onOutsideClick={onOutsideClick}>
 
-            {name && property && createFormField({
-                name: name as string,
-                property: property,
-                includeDescription: false,
-                underlyingValueHasChanged: false,
-                context,
-                tableMode: true,
-                partOfArray: false,
-                autoFocus: formPopupOpen,
-                dependsOnOtherProperties:usedPropertyBuilder
-            })}
+            {name && property && <CMSFormField
+                name={name as string}
+                property={property}
+                includeDescription={false}
+                underlyingValueHasChanged={false}
+                disabled={isSubmitting || property.readOnly || !!property.disabled}
+                context={context}
+                tableMode={true}
+                partOfArray={false}
+                autoFocus={formPopupOpen}
+                dependsOnOtherProperties={usedPropertyBuilder}
+            />}
 
             {name && <AutoSubmitToken
                 name={name}

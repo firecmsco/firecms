@@ -16,29 +16,30 @@ import { CMSFieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { useClearRestoreValue } from "../useClearRestoreValue";
+import { CMSFormField } from "../form_factory";
 
 type MapFieldProps<S extends EntitySchema> = CMSFieldProps<object>;
 
 export default function MapField<S extends EntitySchema>({
                                                              name,
                                                              value,
-                                                             error,
                                                              showError,
-                                                             isSubmitting,
-                                                             touched,
+                                                             disabled,
                                                              property,
                                                              setValue,
                                                              tableMode,
                                                              includeDescription,
-                                                             createFormField,
+                                                             CMSFormField,
                                                              underlyingValueHasChanged,
                                                              context
                                                          }: MapFieldProps<S>) {
 
+    console.log(name, disabled);
+
     const classes = formStyles();
 
     const pickOnlySomeKeys = property.config?.pickOnlySomeKeys || false;
-    const disabled = isSubmitting || property.readOnly || property.disabled;
 
     let mapProperties: Record<string, Property>;
     if (!pickOnlySomeKeys) {
@@ -52,6 +53,12 @@ export default function MapField<S extends EntitySchema>({
         mapProperties = {};
     }
 
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
+
     function buildPickKeysSelect() {
 
         const keys = Object.keys(property.properties)
@@ -64,7 +71,7 @@ export default function MapField<S extends EntitySchema>({
             });
         };
 
-        if (!keys.length) return <React.Fragment></React.Fragment>;
+        if (!keys.length) return <></>;
 
         return <Box m={1}>
             <FormControl fullWidth>
@@ -95,21 +102,25 @@ export default function MapField<S extends EntitySchema>({
                 <Grid container spacing={2}>
                     {Object.entries(mapProperties)
                         .map(([entryKey, childProperty], index) => {
-                                return <Grid item sm={12} xs={12}
-                                             key={`map-${name}-${index}`}>
-                                    {createFormField(
-                                        {
-                                            name: `${name}[${entryKey}]`,
-                                            property: childProperty,
-                                            includeDescription,
-                                            underlyingValueHasChanged,
-                                            context,
-                                            tableMode: tableMode,
-                                            partOfArray: false,
-                                            autoFocus: false,
-                                            dependsOnOtherProperties: false
-                                        })}
-                                </Grid>;
+                                return (
+                                    <Grid item
+                                          sm={12}
+                                          xs={12}
+                                          key={`map-${name}-${index}`}>
+                                        <CMSFormField
+                                            name={`${name}[${entryKey}]`}
+                                            disabled={disabled}
+                                            property={childProperty}
+                                            includeDescription={includeDescription}
+                                            underlyingValueHasChanged={underlyingValueHasChanged}
+                                            context={context}
+                                            tableMode={tableMode}
+                                            partOfArray={false}
+                                            autoFocus={false}
+                                            dependsOnOtherProperties={false}
+                                        />
+                                    </Grid>
+                                );
                             }
                         )}
                 </Grid>

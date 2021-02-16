@@ -27,6 +27,7 @@ import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { useSideEntityController } from "../../contexts/SideEntityController";
 import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -60,17 +61,24 @@ export default function ReferenceField<S extends EntitySchema>({
                                                                    setValue,
                                                                    error,
                                                                    showError,
-                                                                   isSubmitting,
+                                                                   disabled,
                                                                    touched,
                                                                    autoFocus,
                                                                    property,
                                                                    includeDescription,
                                                                    context,
-                                                                   createFormField
+                                                                   CMSFormField,
+                                                                   dependsOnOtherProperties
                                                                }: CMSFieldProps<firebase.firestore.DocumentReference>) {
 
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
+
     const handleEntityClick = (entity: Entity<S>) => {
-        if (isSubmitting)
+        if (disabled)
             return;
         const ref = entity ? entity.reference : null;
         setValue(ref);
@@ -190,7 +198,7 @@ export default function ReferenceField<S extends EntitySchema>({
                 );
             } else {
                 body = <Box p={1}
-                            onClick={isSubmitting ? undefined : handleClickOpen}
+                            onClick={disabled ? undefined : handleClickOpen}
                             justifyContent="center"
                             display="flex">
                     <Box flexGrow={1} textAlign={"center"}>No value set</Box>
@@ -204,7 +212,7 @@ export default function ReferenceField<S extends EntitySchema>({
 
         return (
             <Box
-                onClick={isSubmitting ? undefined : handleClickOpen}
+                onClick={disabled ? undefined : handleClickOpen}
                 display="flex">
 
                 <Box display={"flex"}
@@ -239,8 +247,8 @@ export default function ReferenceField<S extends EntitySchema>({
                             <Tooltip title={`See details for ${entity.id}`}>
                                 <span>
                                 <IconButton
-                                    disabled={isSubmitting}
-                                    onClick={isSubmitting ? undefined : seeEntityDetails}>
+                                    disabled={disabled}
+                                    onClick={disabled ? undefined : seeEntityDetails}>
                                     <KeyboardTabIcon/>
                                 </IconButton>
                                     </span>
@@ -251,8 +259,8 @@ export default function ReferenceField<S extends EntitySchema>({
                             <Tooltip title="Clear">
                                 <span>
                                 <IconButton
-                                    disabled={isSubmitting}
-                                    onClick={isSubmitting ? undefined : clearValue}>
+                                    disabled={disabled}
+                                    onClick={disabled ? undefined : clearValue}>
                                     <ClearIcon/>
                                 </IconButton>
                                 </span>
@@ -272,7 +280,7 @@ export default function ReferenceField<S extends EntitySchema>({
         <FormControl error={showError} fullWidth>
 
             <Box
-                className={`${classes.root} ${isSubmitting ? classes.disabled : ""}`}>
+                className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
 
                 {buildEntityView()}
 
@@ -281,7 +289,7 @@ export default function ReferenceField<S extends EntitySchema>({
                                                       collectionPath={collectionPath}
                                                       onClose={onClose}
                                                       onSingleEntitySelected={handleEntityClick}
-                                                      createFormField={createFormField}
+                                                      CMSFormField={CMSFormField}
                                                       CollectionTable={CollectionTable}
                 />}
 

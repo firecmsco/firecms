@@ -1,5 +1,5 @@
 import { MouseEventHandler } from "react";
-import { EntitySchema, Property } from "./models";
+import { Property } from "./models";
 
 export type PreviewSize = "regular" | "small" | "tiny";
 

@@ -11,6 +11,7 @@ import React from "react";
 import { CMSFieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,15 +38,21 @@ export default React.forwardRef(function SwitchField({
                                                          error,
                                                          showError,
                                                          autoFocus,
-                                                         isSubmitting,
+                                                         disabled,
                                                          touched,
                                                          property,
-                                                         includeDescription
+                                                         includeDescription,
+                                                         dependsOnOtherProperties
                                                      }: SwitchFieldProps, ref) {
 
     const classes = useStyles();
 
-    const disabled = property.readOnly || property.disabled || isSubmitting;
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
+
     return (
         <FormControl
             fullWidth

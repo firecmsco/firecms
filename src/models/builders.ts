@@ -1,6 +1,7 @@
 import {
     EntitySchema,
     EntityValues,
+    EnumValueConfig,
     Property,
     PropertyOrBuilder
 } from "./models";
@@ -15,4 +16,20 @@ export function buildProperty<S extends EntitySchema<Key>, Key extends string, T
     } else {
         return propertyOrBuilder;
     }
+}
+
+export function buildEnumLabel(
+    labelOrConfig?: string | EnumValueConfig
+): string | undefined {
+    if (!labelOrConfig)
+        return undefined;
+    if (typeof labelOrConfig === "object") {
+        return labelOrConfig.label;
+    } else {
+        return labelOrConfig;
+    }
+}
+
+export function isEnumValueDisabled(labelOrConfig?: string | EnumValueConfig) {
+    return typeof labelOrConfig === "object" && (labelOrConfig as EnumValueConfig).disabled;
 }

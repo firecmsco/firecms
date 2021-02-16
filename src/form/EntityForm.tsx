@@ -12,11 +12,12 @@ import {
     Entity,
     EntitySchema,
     EntityStatus,
-    EntityValues, Properties,
+    EntityValues,
+    Properties,
     Property
 } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
-import { createCustomIdField, createFormField } from "./form_factory";
+import { CMSFormField, createCustomIdField } from "./form_factory";
 import { computeSchemaProperties, initEntityValues } from "../models/firestore";
 import { getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
@@ -89,15 +90,15 @@ interface EntityFormProps<S extends EntitySchema<Key>, Key extends string = Extr
 }
 
 function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>({
-                                                status,
-                                                collectionPath,
-                                                schema,
-                                                entity,
-                                                onEntitySave,
-                                                onDiscard,
-                                                onModified,
-                                                containerRef
-                                            }: EntityFormProps<S, Key>) {
+                                                                                                                  status,
+                                                                                                                  collectionPath,
+                                                                                                                  schema,
+                                                                                                                  entity,
+                                                                                                                  onEntitySave,
+                                                                                                                  onDiscard,
+                                                                                                                  onModified,
+                                                                                                                  containerRef
+                                                                                                              }: EntityFormProps<S, Key>) {
 
     const classes = useStyles();
 
@@ -181,7 +182,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
     }
 
-    const validationSchema = getYupEntitySchema(schema.properties, internalValue as EntityValues<any, any>?? {}, entity?.id);
+    const validationSchema = getYupEntitySchema(schema.properties, internalValue as Partial<EntityValues<S, Key>> ?? {}, entity?.id);
 
     function buildButtons(isSubmitting: boolean, modified: boolean) {
         const disabled = isSubmitting || (!modified && status === EntityStatus.existing);
@@ -253,11 +254,11 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                     values
                 };
 
-                const schemaProperties:Properties<Key> = computeSchemaProperties(schema, entity?.id, values);
+                const schemaProperties: Properties<Key> = computeSchemaProperties(schema, entity?.id, values);
                 const formFields = (
                     <Grid container spacing={4}>
 
-                        {Object.entries(schemaProperties).map(([key, property]) => {
+                        {Object.entries<Property>(schemaProperties).map(([key, property]) => {
 
                             const underlyingValueHasChanged: boolean =
                                 !!underlyingChanges
@@ -266,25 +267,24 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
                             const dependsOnOtherProperties = typeof schema.properties[key] === "function";
 
-                            const formField = createFormField(
-                                {
-                                    name: key,
-                                    property: property as Property,
-                                    includeDescription: true,
-                                    underlyingValueHasChanged,
-                                    context,
-                                    tableMode: false,
-                                    partOfArray: false,
-                                    autoFocus: false,
-                                    dependsOnOtherProperties
-                                });
-
+                            const disabled = isSubmitting || property.readOnly || !!property.disabled;
                             return (
                                 <Grid item
                                       xs={12}
                                       id={`form_field_${key}`}
                                       key={`field_${schema.name}_${key}`}>
-                                    {formField}
+                                    <CMSFormField
+                                        name={key}
+                                        disabled={disabled}
+                                        property={property as Property}
+                                        includeDescription={true}
+                                        underlyingValueHasChanged={underlyingValueHasChanged}
+                                        context={context}
+                                        tableMode={false}
+                                        partOfArray={false}
+                                        autoFocus={false}
+                                        dependsOnOtherProperties={dependsOnOtherProperties}
+                                    />
                                 </Grid>
                             );
                         })}

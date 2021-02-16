@@ -3,9 +3,11 @@ import {
     Entity,
     EntitySchema,
     EntityStatus,
+    FormFieldProps,
     NumberProperty,
     Property,
     ReferenceProperty,
+    saveEntity,
     StringProperty,
     TimestampProperty
 } from "../models";
@@ -21,7 +23,6 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { mapPropertyToYup } from "../form/validation";
 import clsx from "clsx";
 import OverflowingCell from "./OverflowingCell";
-import { saveEntity } from "../models";
 import { TableInput } from "./fields/TableInput";
 import { TableSelect } from "./fields/TableSelect";
 import { NumberTableInput } from "./fields/TableNumberInput";
@@ -31,12 +32,13 @@ import { ErrorBoundary } from "../components";
 import { PreviewComponent } from "../preview";
 import { CellStyleProps, useCellStyles } from "./styles";
 import { TableReferenceField } from "./fields/TableReferenceField";
-import { FormFieldBuilder } from "../form";
 import { CollectionTableProps } from "./CollectionTableProps";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { getPreviewSizeFrom } from "../preview/util";
+import { useClearRestoreValue } from "../form/useClearRestoreValue";
+import DisabledTableCell from "./DisabledTableCell";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -58,7 +60,7 @@ interface TableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
     name: string,
     path: string,
     selected: boolean,
-    entity: Entity<S,Key>,
+    entity: Entity<S, Key>,
     schema: S,
     value: T,
     select: (cellRect: DOMRect) => void,
@@ -67,35 +69,41 @@ interface TableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
     focused: boolean,
     setFocused: (value: boolean) => void,
     property: Property<T>,
-    createFormField: FormFieldBuilder<S,Key>;
+    CMSFormField: React.FunctionComponent<FormFieldProps<S, Key>>;
     CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>,
 }
 
 
 const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
-                                                  selected,
-                                                  focused,
-                                                  tableKey,
-                                                  columnIndex,
-                                                  rowIndex,
-                                                  name,
-                                                  path,
-                                                  setPreventOutsideClick,
-                                                  setFocused,
-                                                  entity,
-                                                  select,
-                                                  openPopup,
-                                                  schema,
-                                                  value,
-                                                  property,
-                                                  size,
-                                                  align,
-                                                  createFormField,
-                                                  CollectionTable
-                                              }: TableCellProps<T, S, Key> & CellStyleProps) => {
+                                                                           selected,
+                                                                           focused,
+                                                                           tableKey,
+                                                                           columnIndex,
+                                                                           rowIndex,
+                                                                           name,
+                                                                           path,
+                                                                           setPreventOutsideClick,
+                                                                           setFocused,
+                                                                           entity,
+                                                                           select,
+                                                                           openPopup,
+                                                                           schema,
+                                                                           value,
+                                                                           property,
+                                                                           size,
+                                                                           align,
+                                                                           CMSFormField,
+                                                                           CollectionTable
+                                                                       }: TableCellProps<T, S, Key> & CellStyleProps) => {
 
     const ref = React.createRef<HTMLDivElement>();
     const [internalValue, setInternalValue] = useState<any | null>(value);
+
+    useClearRestoreValue<T>({
+        property,
+        value: internalValue,
+        setValue: setInternalValue
+    });
 
     const [error, setError] = useState<Error | undefined>();
 
@@ -193,6 +201,23 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
         []
     );
 
+    if (property.readOnly || property.disabled) {
+        const tooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
+        return (
+            <DisabledTableCell
+                tooltip={tooltip}
+                size={size}
+                align={align}>
+                <PreviewComponent
+                    name={name}
+                    value={entity.values[name]}
+                    property={property}
+                    size={getPreviewSizeFrom(size)}
+                />
+            </DisabledTableCell>
+        );
+    }
+
     let component;
     let inputComponent;
     let allowScroll = false;
@@ -219,7 +244,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                 value={internalValue as number}
                 updateValue={updateValue}
             />;
-            allowScroll=true;
+            allowScroll = true;
         }
     } else if (selected && property.dataType === "string") {
         const stringProperty = property as StringProperty;
@@ -243,7 +268,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                              value={internalValue as string}
                                              updateValue={updateValue}
                 />;
-                allowScroll=true;
+                allowScroll = true;
             }
         }
     } else if (property.dataType === "boolean") {
@@ -261,20 +286,20 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                              updateValue={updateValue}
                                              setPreventOutsideClick={setPreventOutsideClick}
             />;
-            allowScroll=true;
+            allowScroll = true;
         }
     } else if (property.dataType === "reference") {
         inputComponent = <TableReferenceField name={name as string}
                                               internalValue={internalValue as firebase.firestore.DocumentReference}
                                               updateValue={updateValue}
                                               size={size}
-                                              createFormField={createFormField}
+                                              CMSFormField={CMSFormField}
                                               CollectionTable={CollectionTable}
                                               schema={schema}
                                               property={property as ReferenceProperty}
                                               setPreventOutsideClick={setPreventOutsideClick}
         />;
-        allowScroll=true;
+        allowScroll = true;
     } else if (property.dataType === "array") {
         const arrayProperty = (property as ArrayProperty);
         if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
@@ -289,20 +314,20 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                               updateValue={updateValue}
                                               setPreventOutsideClick={setPreventOutsideClick}
                 />;
-                allowScroll=true;
+                allowScroll = true;
             }
         } else if (arrayProperty.of.dataType === "reference") {
             inputComponent = <TableReferenceField name={name as string}
                                                   internalValue={internalValue as firebase.firestore.DocumentReference[]}
                                                   updateValue={updateValue}
                                                   size={size}
-                                                  createFormField={createFormField}
+                                                  CMSFormField={CMSFormField}
                                                   CollectionTable={CollectionTable}
                                                   schema={schema}
                                                   property={property as ReferenceProperty}
                                                   setPreventOutsideClick={setPreventOutsideClick}
             />;
-            allowScroll=false;
+            allowScroll = false;
         }
     }
 

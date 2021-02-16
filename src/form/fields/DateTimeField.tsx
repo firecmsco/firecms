@@ -5,6 +5,7 @@ import { CMSFieldProps } from "../../models/form_props";
 
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 type DateTimeFieldProps = CMSFieldProps<Date>;
 
@@ -15,16 +16,22 @@ export default function DateTimeField({
                                           autoFocus,
                                           error,
                                           showError,
-                                          isSubmitting,
+                                          disabled,
                                           touched,
                                           property,
-                                          includeDescription
+                                          includeDescription,
+                                          dependsOnOtherProperties
                                       }: DateTimeFieldProps) {
 
 
     const internalValue = value || null;
 
-    const disabled = property.readOnly || property.disabled || isSubmitting || !!property.autoValue;
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
+
     return (
         <React.Fragment>
 

@@ -6,13 +6,10 @@ import {
 import React from "react";
 
 import ErrorBoundary from "../../components/ErrorBoundary";
-import {
-    EnumValues,
-    NumberProperty,
-    StringProperty
-} from "../../models";
+import { EnumValues, NumberProperty, StringProperty } from "../../models";
 import { CustomChip } from "./CustomChip";
 import { useStyles } from "./styles";
+import { buildEnumLabel } from "../../models/builders";
 
 export function ArrayEnumPreview({
                                      name,
@@ -31,18 +28,22 @@ export function ArrayEnumPreview({
     return (
         <div className={classes.arrayRoot}>
             {value &&
-            (value as any[]).map((v, index) => (
-                    <div className={classes.arrayItem} key={`preview_array_ref_${name}_${index}`}>
-                        <ErrorBoundary>
-                            <CustomChip
-                                colorKey={typeof v == "number" ? `${name}_${v}` : v as string}
-                                label={enumValues[v] || v}
-                                error={!enumValues[v]}
-                                outlined={false}
-                                small={size !== "regular"}/>
-                        </ErrorBoundary>
-                    </div>
-                )
+            (value as any[]).map((v, index) => {
+                const label = buildEnumLabel(enumValues[v]);
+                return (
+                        <div className={classes.arrayItem}
+                             key={`preview_array_ref_${name}_${index}`}>
+                            <ErrorBoundary>
+                                <CustomChip
+                                    colorKey={typeof v == "number" ? `${name}_${v}` : v as string}
+                                    label={label|| v}
+                                    error={!label}
+                                    outlined={false}
+                                    small={size !== "regular"}/>
+                            </ErrorBoundary>
+                        </div>
+                    );
+                }
             )}
         </div>
     );

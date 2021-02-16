@@ -22,7 +22,7 @@ import {
     StringSchema
 } from "yup";
 import { PropertiesOrBuilder, PropertyOrBuilder } from "../models/models";
-import { buildProperty } from "../models/property_builder";
+import { buildProperty } from "../models/builders";
 
 
 export function mapPropertyToYup(property: Property): AnySchema<unknown> {
@@ -47,12 +47,12 @@ export function mapPropertyToYup(property: Property): AnySchema<unknown> {
 }
 
 export function getYupEntitySchema<S extends EntitySchema<Key>, Key extends string>
-(properties: PropertiesOrBuilder,
+(properties: PropertiesOrBuilder<S, Key>,
  values: Partial<EntityValues<S, Key>>,
  entityId?: string): ObjectSchema<any> {
     const objectSchema: any = {};
-    Object.entries(properties).forEach(([key, propertyOrBuilder]: [string, PropertyOrBuilder]) => {
-        objectSchema[key] = mapPropertyToYup(buildProperty(propertyOrBuilder, values, entityId));
+    Object.entries(properties).forEach(([key, propertyOrBuilder]) => {
+        objectSchema[key] = mapPropertyToYup(buildProperty(propertyOrBuilder as PropertyOrBuilder<S, Key>, values, entityId));
     });
     return yup.object().shape(objectSchema);
 }

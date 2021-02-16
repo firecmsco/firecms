@@ -21,7 +21,7 @@ import { Form, Formik } from "formik";
 import ClearIcon from "@material-ui/icons/Clear";
 import StringNumberFilterField from "./filters/StringNumberFilterField";
 import BooleanFilterField from "./filters/BooleanFilterField";
-import { buildProperty } from "../models/property_builder";
+import { buildProperty } from "../models/builders";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

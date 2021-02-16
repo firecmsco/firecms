@@ -3,7 +3,7 @@ import {
     Entity,
     EntityCollection,
     EntitySchema,
-    fetchEntity
+    fetchEntity, FormFieldProps
 } from "../models";
 import {
     Button,
@@ -18,7 +18,6 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 
-import { FormFieldBuilder } from "../form";
 import { CollectionTableProps } from "../collection/CollectionTableProps";
 import { CollectionTable } from "../collection/CollectionTable";
 import { useColumnIds } from "../collection/common";
@@ -54,7 +53,7 @@ export interface ReferenceDialogProps {
 
     onClose(): void;
 
-    createFormField: FormFieldBuilder<any>,
+    CMSFormField: React.FunctionComponent<FormFieldProps<any>>,
 
     CollectionTable: React.FunctionComponent<CollectionTableProps<any, any>>;
 
@@ -69,7 +68,7 @@ export function ReferenceDialog(
         open,
         multiselect,
         collectionPath,
-        createFormField,
+        CMSFormField,
         CollectionTable,
         selectedEntityIds
     }: ReferenceDialogProps) {
@@ -189,7 +188,7 @@ export function ReferenceDialog(
                                  textSearchDelegate={textSearchDelegate}
                                  initialFilter={initialFilter}
                                  initialSort={collectionConfig.initialSort}
-                                 createFormField={createFormField}
+                                 CMSFormField={CMSFormField}
                                  entitiesDisplayedFirst={selectedEntities}
                                  frozenIdColumn={largeLayout}
                 />}

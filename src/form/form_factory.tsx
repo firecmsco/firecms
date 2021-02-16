@@ -1,4 +1,4 @@
-import React, { ComponentType, useEffect } from "react";
+import React, { ComponentType } from "react";
 
 import { useClipboard } from "use-clipboard-hook";
 import {
@@ -40,13 +40,14 @@ import { useAppConfigContext, useSnackbarController } from "../contexts";
 import { CMSAppProps } from "../CMSAppProps";
 import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
 
-export function createFormField<T, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
+export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
 ({
      name,
      property,
      includeDescription,
      underlyingValueHasChanged,
      context,
+    disabled,
      tableMode,
      partOfArray,
      autoFocus,
@@ -103,6 +104,7 @@ export function createFormField<T, S extends EntitySchema<Key>, Key extends stri
                 includeDescription,
                 underlyingValueHasChanged,
                 context,
+                disabled,
                 tableMode,
                 partOfArray,
                 autoFocus,
@@ -127,6 +129,7 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
          partOfArray,
          autoFocus,
          context,
+         disabled,
          dependsOnOtherProperties
      }
  }:
@@ -151,6 +154,7 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
             {(fieldProps: FieldProps<T>) => {
                 const name = fieldProps.field.name;
                 const value = fieldProps.field.value;
+                const initialValue = fieldProps.meta.initialValue;
                 const error = getIn(fieldProps.form.errors, name);
                 const touched = getIn(fieldProps.form.touched, name);
                 const showError: boolean = error
@@ -159,15 +163,12 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
                     && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
                 const isSubmitting = fieldProps.form.isSubmitting;
 
-                // useEffect(() => {
-                //     if (dependsOnOtherProperties && property.disabled) {
-                //         fieldProps.form.setFieldValue(name, null);
-                //     }
-                // });
+                const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
 
                 const cmsFieldProps: CMSFieldProps<T> = {
                     name,
                     value,
+                    initialValue,
                     setValue: (value: T | null) => {
                         fieldProps.form.setFieldTouched(name);
                         fieldProps.form.setFieldValue(name, value);
@@ -178,13 +179,15 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
                     isSubmitting,
                     includeDescription,
                     property: property as Property<T>,
-                    createFormField,
+                    CMSFormField,
+                    disabled,
                     underlyingValueHasChanged,
                     tableMode,
                     partOfArray,
                     autoFocus,
                     customProps: customFieldProps,
-                    context
+                    context,
+                    dependsOnOtherProperties
                 };
 
                 return (
@@ -192,9 +195,14 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
 
                         {React.createElement(component, cmsFieldProps)}
 
-                        {underlyingValueHasChanged && !fieldProps.form.isSubmitting &&
+                        {underlyingValueHasChanged && !isSubmitting &&
                         <FormHelperText>
                             This value has been updated in Firestore
+                        </FormHelperText>}
+
+                        {disabledTooltip &&
+                        <FormHelperText>
+                            {disabledTooltip}
                         </FormHelperText>}
 
                     </>);

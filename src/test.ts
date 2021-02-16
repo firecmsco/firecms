@@ -1,4 +1,4 @@
-import {expectType} from 'tsd';
+import { expectType } from "tsd";
 import { EntityValues } from "./models";
 import { initEntityValues } from "./models/firestore";
 import { productSchema } from "./test/test_site_config";

@@ -14,6 +14,8 @@ import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { PreviewSize } from "../../models/preview_component_props";
 import { CustomChip } from "../../preview/components/CustomChip";
+import { useClearRestoreValue } from "../useClearRestoreValue";
+import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
 
 type ArrayEnumSelectProps<T extends EnumType> = CMSFieldProps<T[]>;
 
@@ -23,10 +25,11 @@ export default function ArrayEnumSelect<T extends EnumType>({
                                                                 setValue,
                                                                 error,
                                                                 showError,
-                                                                isSubmitting,
+                                                                disabled,
                                                                 touched,
                                                                 property,
-                                                                includeDescription
+                                                                includeDescription,
+                                                                dependsOnOtherProperties
                                                             }: ArrayEnumSelectProps<T>) {
     if (!("dataType" in property.of)) {
         throw Error("Using wrong component ArrayEnumSelect");
@@ -42,6 +45,12 @@ export default function ArrayEnumSelect<T extends EnumType>({
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");
     }
 
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
+
     const validValue = !!value && Array.isArray(value);
     return <FormControl
         fullWidth
@@ -55,12 +64,13 @@ export default function ArrayEnumSelect<T extends EnumType>({
                 <LabelWithIcon property={property}/>
             </InputLabel>
         </div>
+
         <MuiSelect multiple
                    variant={"filled"}
                    labelId={`${name}-multiselect-label`}
                    value={validValue ? value : []}
                    style={{ minHeight: "64px", padding: "4px" }}
-                   disabled={isSubmitting}
+                   disabled={disabled}
                    onChange={(evt: any) => {
                        return setValue(
                            evt.target.value
@@ -68,46 +78,52 @@ export default function ArrayEnumSelect<T extends EnumType>({
                    }}
                    renderValue={(selected: any) => (
                        <div>
-                           {selected && selected.map((value: any) => (
-                               <React.Fragment key={`select_value_${value}`}>{
-                                   renderPreviewEnumChip(name, enumValues, value, "regular")
-                               }</React.Fragment>))}
+                           {selected && selected.map((value: any) => {
+
+                               if (!value) return null;
+
+                               const label = buildEnumLabel(enumValues[value]);
+                               const key: string = typeof value == "number" ? `${name}_${value}` : value as string;
+
+                               return <CustomChip
+                                   key={`select_value_${value}`}
+                                   colorKey={key}
+                                   label={label || value}
+                                   error={!label}
+                                   outlined={false}
+                                   small={false}/>;
+                           })}
                        </div>
                    )}>
-            {Object.keys(enumValues).map(key => {
-                return (
-                    <MenuItem key={key} value={key}>
-                        <Checkbox
-                            checked={validValue && value.indexOf(key as any) > -1}/>
-                        <ListItemText
-                            primary={renderPreviewEnumChip(name, enumValues, key, "regular")}/>
-                    </MenuItem>
-                );
+
+
+            {Object.entries(enumValues).map(([key, enumValue]) => {
+
+                const label = buildEnumLabel(enumValue);
+                const chip = <CustomChip
+                    colorKey={typeof key === "number" ? `${name}_${key}` : key as string}
+                    label={label || key}
+                    error={!label}
+                    outlined={false}
+                    small={false}/>;
+                    return (
+                        <MenuItem key={`form-select-${name}-${key}`}
+                                  value={key}
+                                  disabled={isEnumValueDisabled(enumValue)}
+                                  dense={true}>
+                            <Checkbox
+                                checked={validValue && (value as any[]).includes(key)}/>
+                            <ListItemText primary={chip}/>
+                        </MenuItem>
+                    );
             })}
+
         </MuiSelect>
+
         <FormHelperText>{error}</FormHelperText>
 
         {includeDescription &&
         <FieldDescription property={property}/>}
 
     </FormControl>;
-}
-
-function renderPreviewEnumChip<T extends EnumType>(
-    name: string,
-    enumValues: EnumValues<T>,
-    value: T,
-    size: PreviewSize
-) {
-    if (!value) return null;
-
-    const label = enumValues[value];
-    const key: string = typeof value == "number" ? `${name}_${value}` : value as string;
-
-    return <CustomChip colorKey={key}
-                       label={label || value}
-                       error={!label}
-                       outlined={false}
-                       small={size !== "regular"}/>;
-
 }

@@ -41,7 +41,10 @@ function SampleApp() {
         "de": "German",
         "en": "English",
         "it": "Italian",
-        "fr": "French"
+        "fr": {
+            label: "French",
+            disabled: true
+        }
     };
 
     const categories: EnumValues<string> = {
@@ -115,7 +118,12 @@ function SampleApp() {
                     enumValues: categories
                 }
             },
-            price: {
+            available: {
+                dataType: "boolean",
+                title: "Available",
+                columnWidth: 100
+            },
+            price: ({ values }) => ({
                 dataType: "number",
                 title: "Price",
                 validation: {
@@ -123,11 +131,17 @@ function SampleApp() {
                     min: 0,
                     max: 1000
                 },
+                disabled: values.available ?
+                    false
+                    : {
+                        clearOnDisabled: true,
+                        disabledMessage: "You can only set the price on available items"
+                    },
                 config: {
                     customPreview: PriceTextPreview
                 },
                 description: "Price with range validation"
-            },
+            }),
             currency: {
                 dataType: "string",
                 title: "Currency",
@@ -161,11 +175,6 @@ function SampleApp() {
                 config: {
                     markdown: true
                 }
-            },
-            available: {
-                dataType: "boolean",
-                title: "Available",
-                columnWidth: 100
             },
             amazon_link: {
                 dataType: "string",
@@ -521,14 +530,25 @@ function SampleApp() {
                     }
                 }
             },
+            available_locales: {
+                title: "Available locales",
+                dataType: "array",
+                of: {
+                    dataType: "string",
+                    config: {
+                        enumValues: locales
+                    }
+                }
+            },
             title: ({ values, entityId }) => {
-                // if (entityId === "ddd")
-                // console.log("props", values);
                 if (values?.available_locales && Array.isArray(values.available_locales) && values.available_locales.includes("de"))
                     return ({
                         dataType: "string",
                         title: "Title disabled",
-                        readOnly: true
+                        disabled: {
+                            clearOnDisabled: true,
+                            tooltip: "Disabled because German is selected"
+                        }
                     });
                 return ({
                     dataType: "string",
@@ -547,19 +567,6 @@ function SampleApp() {
                 dataType: "reference",
                 collectionPath: "products",
                 previewProperties: ["name", "main_image"]
-            },
-            available_locales: {
-                title: "Available locales",
-                description:
-                    "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
-                longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-                dataType: "array",
-                of: {
-                    dataType: "string",
-                    config: {
-                        enumValues: locales
-                    }
-                }
             },
             available_dates: {
                 dataType: "array",
@@ -645,39 +652,6 @@ function SampleApp() {
         }
     });
 
-    const testConditionalEntitySchema = buildSchema({
-        customId: true,
-        name: "Test conditional entity",
-        properties: {
-            title: ({ values, entityId }) => {
-                // if (entityId === "ddd")
-                // console.log("props", values);
-                if (values?.available_locales && Array.isArray(values.available_locales) && values.available_locales.includes("de"))
-                    return ({
-                        dataType: "string",
-                        title: "Title disabled",
-                        disabled: true
-                    });
-                return ({
-                    dataType: "string",
-                    title: "Title"
-                });
-            },
-            available_locales: {
-                title: "Available locales",
-                description:
-                    "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
-                longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-                dataType: "array",
-                of: {
-                    dataType: "string",
-                    config: {
-                        enumValues: locales
-                    }
-                }
-            }
-        }
-    });
 
 
     const productExtraActionBuilder = ({
@@ -761,12 +735,6 @@ function SampleApp() {
             }]
         };
         navigation.push(buildCollection(testCollection));
-        navigation.push(buildCollection({
-            relativePath: "test_entity_conditional",
-            schema: testConditionalEntitySchema,
-            group: "Test group",
-            name: "Test entity conditional",
-        }));
     }
 
     const myAuthenticator: Authenticator = (user?: firebase.User) => {

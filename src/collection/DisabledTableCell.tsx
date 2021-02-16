@@ -5,12 +5,15 @@ import OverflowingCell from "./OverflowingCell";
 import { ErrorBoundary } from "../components";
 import { CellStyleProps, useCellStyles } from "./styles";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
+import { Tooltip } from "@material-ui/core";
 
 interface DisabledTableCellProps<T, S extends EntitySchema<string>> {
+    tooltip?:string;
     children: React.ReactNode
 }
 
 export function DisabledTableCell<T, S extends EntitySchema>({
+                                                                 tooltip,
                                                                  children,
                                                                  size,
                                                                  align
@@ -41,7 +44,9 @@ export function DisabledTableCell<T, S extends EntitySchema>({
             right: 4,
             fontSize: "14px"
         }}>
-            <RemoveCircleIcon color={"disabled"} fontSize={"inherit"}/>
+            <Tooltip title={tooltip ?? "Disabled"}>
+                <RemoveCircleIcon color={"disabled"} fontSize={"inherit"}/>
+            </Tooltip>
         </div>}
     </div>;
 }

@@ -6,6 +6,8 @@ import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
 import { formStyles } from "../../styles";
+import { CMSFormField } from "../form_factory";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 
 type ArrayDefaultFieldProps<T> = CMSFieldProps<T[]>;
@@ -16,14 +18,15 @@ export default function ArrayDefaultField<T>({
                                                  error,
                                                  showError,
                                                  isSubmitting,
-                                                 autoFocus,
-                                                 touched,
+                                                 setValue,
                                                  tableMode,
                                                  property,
-                                                 createFormField,
+                                                 CMSFormField,
                                                  includeDescription,
                                                  underlyingValueHasChanged,
-                                                 context
+                                                 context,
+                                                 disabled,
+                                                 dependsOnOtherProperties
                                              }: ArrayDefaultFieldProps<T>) {
 
     const ofProperty: Property = property.of as Property;
@@ -31,21 +34,27 @@ export default function ArrayDefaultField<T>({
 
     const [lastAddedId, setLastAddedId] = useState<number | undefined>();
 
-    const buildEntry = (index: number, internalId: number) => {
-        return createFormField(
-            {
-                name: `${name}[${index}]`,
-                property: ofProperty,
-                includeDescription,
-                underlyingValueHasChanged,
-                context,
-                tableMode: false,
-                partOfArray: true,
-                autoFocus: internalId === lastAddedId,
-                dependsOnOtherProperties: false
-            });
-    };
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
 
+    const buildEntry = (index: number, internalId: number) => {
+        return <CMSFormField
+            name={`${name}[${index}]`}
+            disabled={disabled}
+            property={ofProperty}
+            includeDescription={includeDescription}
+            underlyingValueHasChanged={underlyingValueHasChanged}
+            context={context}
+            tableMode={false}
+            partOfArray={true}
+            autoFocus={internalId === lastAddedId}
+            dependsOnOtherProperties={false}
+        />;
+
+    };
 
     return (
 
