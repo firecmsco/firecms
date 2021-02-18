@@ -40,6 +40,7 @@ export type{
 export {
     EntityStatus,
     buildCollection,
+    buildAdditionalColumnDelegate,
     buildSchema,
     buildProperties
 } from "./models";

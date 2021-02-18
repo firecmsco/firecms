@@ -15,7 +15,8 @@ import firebase from "firebase/app";
  * If you need a lower level implementation you can check CollectionTable
  */
 export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema,
-    Key extends string = Extract<keyof S["properties"], string>> {
+    Key extends string = Extract<keyof S["properties"], string>,
+    AdditionalKey extends string = string> {
 
     /**
      * Plural name of the view. E.g. 'products'
@@ -56,7 +57,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema,
      * You can add additional columns to the collection view by implementing
      * an additional column delegate.q
      */
-    additionalColumns?: AdditionalColumnDelegate<S, Key>[];
+    additionalColumns?: AdditionalColumnDelegate<AdditionalKey, S, Key >[];
 
     /**
      * If a text search delegate is supplied, a search bar is displayed on top
@@ -91,14 +92,14 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema,
      * Properties displayed in this collection. If this property is not set
      * every property is displayed
      */
-    properties?: Key[];
+    properties?: (Key| AdditionalKey)[];
 
     /**
      * Properties that should NOT get displayed in the collection view.
      * All the other properties from the the entity are displayed
      * It has no effect if the properties value is set.
      */
-    excludedProperties?: Key[];
+    excludedProperties?: (Key | AdditionalKey)[];
 
     /**
      * Properties that can be filtered in this view
@@ -259,13 +260,27 @@ export interface EntityDeleteProps<S extends EntitySchema<Key>,
 
 /**
  * Identity function we use to defeat the type system of Typescript and build
+ * additional column delegates views with all its properties
+ * @param additionalColumnDelegate
+ */
+export function buildAdditionalColumnDelegate<AdditionalKey extends string = string,
+    S extends EntitySchema<Key> = EntitySchema,
+    Key extends string = Extract<keyof S["properties"], string>>(
+    additionalColumnDelegate: AdditionalColumnDelegate<AdditionalKey, S, Key>
+): AdditionalColumnDelegate<AdditionalKey, S, Key> {
+    return additionalColumnDelegate;
+}
+
+/**
+ * Identity function we use to defeat the type system of Typescript and build
  * collection views with all its properties
  * @param collectionView
  */
 export function buildCollection<S extends EntitySchema<Key> = EntitySchema,
-    Key extends string = Extract<keyof S["properties"], string>>(
-    collectionView: EntityCollection<S, Key>
-): EntityCollection<S, Key> {
+    Key extends string = Extract<keyof S["properties"], string>,
+    AdditionalKey extends string = string>(
+    collectionView: EntityCollection<S, Key, AdditionalKey>
+): EntityCollection<S, Key, AdditionalKey> {
     return collectionView;
 }
 
@@ -337,14 +352,15 @@ export type Property<T = any, ArrayT = any> =
  * Use this interface for adding additional columns to entity collection views.
  * If you need to do some async loading you can use AsyncPreviewComponent
  */
-export interface AdditionalColumnDelegate<S extends EntitySchema<Key> = EntitySchema,
+export interface AdditionalColumnDelegate<AdditionalKey extends string = string,
+    S extends EntitySchema<Key> = EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
      * Id of this column. You can use this id in the `properties` field of the
      * collection in any order you want
      */
-    id: string;
+    id: AdditionalKey;
 
     /**
      * Header of this column

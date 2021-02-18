@@ -12,7 +12,8 @@ import React from "react";
 
 export interface CollectionTableProps<S extends EntitySchema,
     Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties = Properties<Key>> {
+    P extends Properties = Properties<Key>,
+    AdditionalKey extends string = string> {
 
     /**
      * Absolute collection path
@@ -65,7 +66,7 @@ export interface CollectionTableProps<S extends EntitySchema,
      * an additional column delegate.
      * Usually defined by the end user.
      */
-    additionalColumns?: AdditionalColumnDelegate<S>[];
+    additionalColumns?: AdditionalColumnDelegate<AdditionalKey, S>[];
 
     /**
      * Properties that can be filtered

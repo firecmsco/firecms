@@ -1,43 +1,6 @@
 import { SchemaResolver } from "./side_dialog/model";
 
-export type{
-    EntityCollection,
-    ExtraActionsParams,
-    CollectionSize,
-    EntitySchema,
-    EntitySaveProps,
-    EntityDeleteProps,
-    Entity,
-    DataType,
-    MediaType,
-    Property,
-    AdditionalColumnDelegate,
-    EnumType,
-    EnumValues,
-    Properties,
-    EntityValues,
-    NumberProperty,
-    BooleanProperty,
-    StringProperty,
-    ArrayProperty,
-    MapProperty,
-    TimestampProperty,
-    GeopointProperty,
-    ReferenceProperty,
-    FilterValues,
-    WhereFilterOp,
-    PropertyValidationSchema,
-    NumberPropertyValidationSchema,
-    StringPropertyValidationSchema,
-    DatePropertyValidationSchema,
-    ArrayPropertyValidationSchema,
-    FieldConfig,
-    StringFieldConfig,
-    StorageMeta,
-    MapFieldConfig,
-    StorageFileTypes,
-    NumberFieldConfig
-} from "./models";
+export * from "./models";
 
 // EntityCollectionView is deprecated, use EntityCollection instead
 export type { EntityCollection as EntityCollectionView } from "./models";

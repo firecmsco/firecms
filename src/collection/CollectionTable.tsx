@@ -55,7 +55,8 @@ type Order = "asc" | "desc" | undefined;
 
 export default function CollectionTable<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>,
-    P extends Properties<Key> = Properties<Key>>({
+    P extends Properties<Key> = Properties<Key>,
+    AdditionalKey extends string = string>({
                                                      initialFilter,
                                                      initialSort,
                                                      collectionPath,
@@ -74,7 +75,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                                      entitiesDisplayedFirst,
                                                      createFormField,
                                                      frozenIdColumn
-                                                 }: CollectionTableProps<S, Key>) {
+                                                 }: CollectionTableProps<S, Key, P, AdditionalKey>) {
 
     if (inlineEditing && onEntityClick) {
         console.error("You have set both `inlineEditing` and `onEntityClick` in a CollectionTable. `onEntityClick` will have no effect.");
@@ -150,7 +151,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         setPreventOutsideClick(false);
     }, []);
 
-    const additionalColumnsMap: Record<string, AdditionalColumnDelegate<S, Key>> = useMemo(() => {
+    const additionalColumnsMap: Partial<Record<AdditionalKey, AdditionalColumnDelegate<AdditionalKey, S, Key>>> = useMemo(() => {
         return additionalColumns ?
             additionalColumns
                 .map((aC) => ({ [aC.id]: aC }))

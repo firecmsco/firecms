@@ -4,6 +4,7 @@ import {
     AdditionalView,
     AsyncPreviewComponent,
     Authenticator,
+    buildAdditionalColumnDelegate,
     buildCollection,
     buildSchema,
     CMSApp,
@@ -431,7 +432,7 @@ function SampleApp() {
         }
     });
 
-    const productAdditionalColumn: AdditionalColumnDelegate<typeof productSchema> = {
+    const productAdditionalColumn: AdditionalColumnDelegate = {
         id: "spanish_title",
         title: "Spanish title",
         builder: (entity: Entity<typeof productSchema>) =>
@@ -665,12 +666,19 @@ function SampleApp() {
         filterableProperties: ["price", "available_locales"]
     });
 
-    const usersCollection = buildCollection({
+    const usersCollection = buildCollection<typeof usersSchema>({
         relativePath: "users",
         schema: usersSchema,
         name: "Users",
         textSearchDelegate: usersSearchDelegate,
-        properties: ["first_name", "last_name", "email", "phone", "picture"]
+        additionalColumns: [
+            {
+                id: "sample_additional",
+                title: "Sample additional",
+                builder: () => "Content of a generated column"
+            }
+        ],
+        properties: ["first_name", "last_name", "email", "phone", "sample_additional", "picture"]
     });
 
     const blogCollection = buildCollection({
@@ -707,8 +715,7 @@ function SampleApp() {
                 filterableProperties: ["difficulty", "search_adjacent", "description"]
             }]
         };
-        navigation.push(
-            buildCollection(newVar));
+        navigation.push(buildCollection(newVar));
     }
 
     const myAuthenticator: Authenticator = (user?: firebase.User) => {
