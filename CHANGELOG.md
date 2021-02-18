@@ -9,6 +9,8 @@
 - The `disabled` flag has changed behavior. It now renders the corresponding
   field as disabled, instead of a preview. You can use the new flag `readOnly`
   to preserve the previous state
+- Fix for empty strings on hooks and default values were causing a crash.
+- Fix for additional column keys when defining collections.
 - [BREAKING] `CMSFieldProps` is now called `FieldProps`
 - [BREAKING] `FormFieldProps` is now called `CMSFormFieldProps`
 - [BREAKING] `createFormField` is no longer passed as an argument in `CMSFieldProps`
@@ -19,6 +21,7 @@
 ## [0.25.2] - 2021-02-14
 ### Changed
 - Fixed bug when switching subcollections in entity view.
+- Fix for drag and drop arrays
 
 ## [0.25.1] - 2021-02-14
 ### Added
