@@ -3,7 +3,7 @@ import {
     Entity,
     EntitySchema,
     EntityStatus,
-    FormFieldProps,
+    CMSFormFieldProps,
     NumberProperty,
     Property,
     ReferenceProperty,
@@ -69,7 +69,7 @@ interface TableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
     focused: boolean,
     setFocused: (value: boolean) => void,
     property: Property<T>,
-    CMSFormField: React.FunctionComponent<FormFieldProps<S, Key>>;
+    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
     CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>,
 }
 

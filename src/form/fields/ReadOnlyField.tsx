@@ -2,13 +2,13 @@ import { EntitySchema } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React from "react";
 import { formStyles } from "../../styles";
-import { CMSFieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/form_props";
 import PreviewComponent from "../../preview/PreviewComponent";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
 
-type DisabledFieldProps = CMSFieldProps<any>;
+type DisabledFieldProps = FieldProps<any>;
 
 export default function ReadOnlyField<S extends EntitySchema>({
                                                                   name,

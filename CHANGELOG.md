@@ -9,9 +9,12 @@
 - The `disabled` flag has changed behavior. It now renders the corresponding
   field as disabled, instead of a preview. You can use the new flag `readOnly`
   to preserve the previous state
+- [BREAKING] `CMSFieldProps` is now called `FieldProps`
+- [BREAKING] `FormFieldProps` is now called `CMSFormFieldProps`
 - [BREAKING] `createFormField` is no longer passed as an argument in `CMSFieldProps`
   and it has been replaced with a `CMSFormField`, that is a React component that
-  takes the same props
+  takes the same props. You most probably don't need this unless you are
+  building nested custom fields.
 
 ## [0.25.2] - 2021-02-14
 ### Changed

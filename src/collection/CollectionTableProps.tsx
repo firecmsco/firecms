@@ -4,7 +4,7 @@ import {
     Entity,
     EntitySchema,
     FilterValues,
-    FormFieldProps,
+    CMSFormFieldProps,
     TextSearchDelegate
 } from "../models";
 import React from "react";
@@ -92,7 +92,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     /**
      * Factory method for creating form fields
      */
-    CMSFormField: React.FunctionComponent<FormFieldProps<S, Key>>;
+    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
 
     /**
      * List of entities that will be displayed on top, no matter the ordering.

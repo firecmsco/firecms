@@ -4,7 +4,6 @@ import {
     AdditionalView,
     AsyncPreviewComponent,
     Authenticator,
-    buildAdditionalColumnDelegate,
     buildCollection,
     buildSchema,
     CMSApp,

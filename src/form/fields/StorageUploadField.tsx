@@ -17,7 +17,7 @@ import firebase from "firebase/app";
 
 import {
     ArrayProperty,
-    CMSFieldProps,
+    FieldProps,
     EntitySchema,
     getDownloadURL,
     Property,
@@ -105,7 +105,7 @@ export const useStyles = makeStyles(theme => ({
 }));
 
 
-type StorageUploadFieldProps = CMSFieldProps<string | string[]>;
+type StorageUploadFieldProps = FieldProps<string | string[]>;
 
 /**
  * Internal representation of an item in the storage

@@ -1,4 +1,4 @@
-import { CMSFieldProps, Entity, Property } from "../../models";
+import { FieldProps, Entity, Property } from "../../models";
 import {
     Box,
     Button,
@@ -18,7 +18,7 @@ import FieldDescription from "../../components/FieldDescription";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 
-type ArrayOfReferencesFieldProps = CMSFieldProps<firebase.firestore.DocumentReference[]>;
+type ArrayOfReferencesFieldProps = FieldProps<firebase.firestore.DocumentReference[]>;
 
 export default function ArrayOfReferencesField({
                                                    name,

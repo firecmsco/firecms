@@ -3,7 +3,7 @@ import {
     Entity,
     EntityCollection,
     EntitySchema,
-    fetchEntity, FormFieldProps
+    fetchEntity, CMSFormFieldProps
 } from "../models";
 import {
     Button,
@@ -53,7 +53,7 @@ export interface ReferenceDialogProps {
 
     onClose(): void;
 
-    CMSFormField: React.FunctionComponent<FormFieldProps<any>>,
+    CMSFormField: React.FunctionComponent<CMSFormFieldProps<any>>,
 
     CollectionTable: React.FunctionComponent<CollectionTableProps<any, any>>;
 

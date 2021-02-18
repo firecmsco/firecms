@@ -1,13 +1,13 @@
 import React from "react";
 import { DateTimePicker } from "@material-ui/pickers";
 
-import { CMSFieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/form_props";
 
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
-type DateTimeFieldProps = CMSFieldProps<Date>;
+type DateTimeFieldProps = FieldProps<Date>;
 
 export default function DateTimeField({
                                           name,

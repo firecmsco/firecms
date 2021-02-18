@@ -1,6 +1,6 @@
 import { Property } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@material-ui/core";
-import { CMSFieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/form_props";
 import React, { useState } from "react";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
@@ -10,7 +10,7 @@ import { CMSFormField } from "../form_factory";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 
-type ArrayDefaultFieldProps<T> = CMSFieldProps<T[]>;
+type ArrayDefaultFieldProps<T> = FieldProps<T[]>;
 
 export default function ArrayDefaultField<T>({
                                                  name,

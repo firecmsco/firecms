@@ -5,7 +5,7 @@ import { EntitySchema, EntityValues, Property } from "./models";
  * When building a custom field you need to create a React Element that takes
  * this interface as props.
  */
-export interface CMSFieldProps<T, CustomProps = any, S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>> {
+export interface FieldProps<T, CustomProps = any, S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
      * Name of the property
@@ -65,7 +65,7 @@ export interface CMSFieldProps<T, CustomProps = any, S extends EntitySchema<Key>
      * Builder in case this fields needs to build additional fields,
      * e.g. arrays or maps
      */
-    CMSFormField: React.FunctionComponent<FormFieldProps<S, Key>>;
+    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
 
     /**
      * Flag to indicate that the underlying value has been updated in Firestore
@@ -123,7 +123,7 @@ export interface FormContext<S extends EntitySchema<Key>, Key extends string = E
     values: EntityValues<S, Key>;
 }
 
-export interface FormFieldProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
+export interface CMSFormFieldProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
     name: string;
     property: Property;
     includeDescription: boolean;

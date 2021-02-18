@@ -7,7 +7,7 @@ import {
     Entity,
     EntityCollection,
     EntitySchema,
-    FormFieldProps,
+    CMSFormFieldProps,
     ReferenceProperty
 } from "../../models";
 import { PreviewComponent } from "../../preview/PreviewComponent";
@@ -30,7 +30,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
     size: CollectionSize;
     schema: S,
     setPreventOutsideClick: (value: any) => void;
-    CMSFormField: React.FunctionComponent<FormFieldProps<S, Key>>;
+    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
     CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>
 }) {
 

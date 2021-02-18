@@ -14,14 +14,14 @@ import {
 } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 
-import { ErrorMessage, FastField, Field, FieldProps, getIn } from "formik";
+import { ErrorMessage, FastField, Field, FieldProps as FormikFieldProps, getIn } from "formik";
 
 import {
-    CMSFieldProps,
+    FieldProps,
     Entity,
     EntitySchema,
     EntityStatus,
-    FormFieldProps,
+    CMSFormFieldProps,
     Property
 } from "../models";
 import Select from "./fields/Select";
@@ -40,6 +40,21 @@ import { useAppConfigContext, useSnackbarController } from "../contexts";
 import { CMSAppProps } from "../CMSAppProps";
 import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
 
+/**
+ * This component renders a Formik field creating the corresponding configuration
+ * from a property.
+ * @param name
+ * @param property
+ * @param includeDescription
+ * @param underlyingValueHasChanged
+ * @param context
+ * @param disabled
+ * @param tableMode
+ * @param partOfArray
+ * @param autoFocus
+ * @param dependsOnOtherProperties
+ * @constructor
+ */
 export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
 ({
      name,
@@ -47,51 +62,51 @@ export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string 
      includeDescription,
      underlyingValueHasChanged,
      context,
-    disabled,
+     disabled,
      tableMode,
      partOfArray,
      autoFocus,
      dependsOnOtherProperties
- }: FormFieldProps<S, Key>): JSX.Element {
+ }: CMSFormFieldProps<S, Key>): JSX.Element {
 
-    let component: ComponentType<CMSFieldProps<any>> | undefined;
+    let component: ComponentType<FieldProps<any>> | undefined;
     if (property.readOnly) {
         component = ReadOnlyField;
     } else if (property.config?.field) {
         component = property.config?.field;
     } else if (property.dataType === "array") {
         if ((property.of.dataType === "string" || property.of.dataType === "number") && property.of.config?.enumValues) {
-            component = ArrayEnumSelect as ComponentType<CMSFieldProps<any>>;
+            component = ArrayEnumSelect as ComponentType<FieldProps<any>>;
         } else if (property.of.dataType === "string" && property.of.config?.storageMeta) {
-            component = StorageUploadField as ComponentType<CMSFieldProps<any>>;
+            component = StorageUploadField as ComponentType<FieldProps<any>>;
         } else if (property.of.dataType === "reference") {
-            component = ArrayOfReferencesField as ComponentType<CMSFieldProps<any>>;
+            component = ArrayOfReferencesField as ComponentType<FieldProps<any>>;
         } else {
-            component = ArrayDefaultField as ComponentType<CMSFieldProps<any>>;
+            component = ArrayDefaultField as ComponentType<FieldProps<any>>;
         }
     } else if (property.dataType === "map") {
-        component = MapField as ComponentType<CMSFieldProps<any>>;
+        component = MapField as ComponentType<FieldProps<any>>;
     } else if (property.dataType === "reference") {
-        component = ReferenceField as ComponentType<CMSFieldProps<any>>;
+        component = ReferenceField as ComponentType<FieldProps<any>>;
     } else if (property.dataType === "timestamp") {
-        component = DateTimeField as ComponentType<CMSFieldProps<any>>;
+        component = DateTimeField as ComponentType<FieldProps<any>>;
     } else if (property.dataType === "boolean") {
-        component = SwitchField as ComponentType<CMSFieldProps<any>>;
+        component = SwitchField as ComponentType<FieldProps<any>>;
     } else if (property.dataType === "number") {
         if (property.config?.enumValues) {
             component = Select;
         } else {
-            component = TextField as ComponentType<CMSFieldProps<any>>;
+            component = TextField as ComponentType<FieldProps<any>>;
         }
     } else if (property.dataType === "string") {
         if (property.config?.storageMeta) {
-            component = StorageUploadField as ComponentType<CMSFieldProps<any>>;
+            component = StorageUploadField as ComponentType<FieldProps<any>>;
         } else if (property.config?.markdown) {
-            component = MarkDownField as ComponentType<CMSFieldProps<any>>;
+            component = MarkDownField as ComponentType<FieldProps<any>>;
         } else if (property.config?.enumValues) {
             component = Select;
         } else {
-            component = TextField as ComponentType<CMSFieldProps<any>>;
+            component = TextField as ComponentType<FieldProps<any>>;
         }
     }
 
@@ -134,10 +149,9 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
      }
  }:
      {
-         component: ComponentType<CMSFieldProps<any>>,
-         componentProps: FormFieldProps<S, Key>
+         component: ComponentType<FieldProps<any>>,
+         componentProps: CMSFormFieldProps<S, Key>
      }) {
-
 
     const customFieldProps: any = property.config?.fieldProps;
 
@@ -151,7 +165,7 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
             required={property.validation?.required}
             name={`${name}`}
         >
-            {(fieldProps: FieldProps<T>) => {
+            {(fieldProps: FormikFieldProps<T>) => {
                 const name = fieldProps.field.name;
                 const value = fieldProps.field.value;
                 const initialValue = fieldProps.meta.initialValue;
@@ -165,7 +179,7 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
 
                 const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
 
-                const cmsFieldProps: CMSFieldProps<T> = {
+                const cmsFieldProps: FieldProps<T> = {
                     name,
                     value,
                     initialValue,

@@ -12,14 +12,14 @@ import {
 import React from "react";
 import { formStyles } from "../../styles";
 
-import { CMSFieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { CMSFormField } from "../form_factory";
 
-type MapFieldProps<S extends EntitySchema> = CMSFieldProps<object>;
+type MapFieldProps<S extends EntitySchema> = FieldProps<object>;
 
 export default function MapField<S extends EntitySchema>({
                                                              name,

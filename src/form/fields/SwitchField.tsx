@@ -8,7 +8,7 @@ import {
     Theme
 } from "@material-ui/core";
 import React from "react";
-import { CMSFieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { useClearRestoreValue } from "../useClearRestoreValue";
@@ -28,7 +28,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-type SwitchFieldProps = CMSFieldProps<boolean>;
+type SwitchFieldProps = FieldProps<boolean>;
 
 
 export default React.forwardRef(function SwitchField({

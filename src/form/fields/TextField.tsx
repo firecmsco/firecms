@@ -11,14 +11,14 @@ import {
 } from "@material-ui/core";
 import React from "react";
 
-import { CMSFieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/form_props";
 import PreviewComponent from "../../preview/PreviewComponent";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
-interface TextFieldProps extends CMSFieldProps<string | number> {
+interface TextFieldProps extends FieldProps<string | number> {
     allowInfinity?: boolean
 }
 

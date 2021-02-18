@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import React, { useEffect } from "react";
 
-import { CMSFieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { ReferenceDialog } from "../../components/ReferenceDialog";
 import ErrorBoundary from "../../components/ErrorBoundary";
@@ -69,7 +69,7 @@ export default function ReferenceField<S extends EntitySchema>({
                                                                    context,
                                                                    CMSFormField,
                                                                    dependsOnOtherProperties
-                                                               }: CMSFieldProps<firebase.firestore.DocumentReference>) {
+                                                               }: FieldProps<firebase.firestore.DocumentReference>) {
 
     useClearRestoreValue({
         property,

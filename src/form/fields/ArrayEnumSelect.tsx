@@ -9,7 +9,7 @@ import {
     Select as MuiSelect
 } from "@material-ui/core";
 import React from "react";
-import { CMSFieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { PreviewSize } from "../../models/preview_component_props";
@@ -17,7 +17,7 @@ import { CustomChip } from "../../preview/components/CustomChip";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
 
-type ArrayEnumSelectProps<T extends EnumType> = CMSFieldProps<T[]>;
+type ArrayEnumSelectProps<T extends EnumType> = FieldProps<T[]>;
 
 export default function ArrayEnumSelect<T extends EnumType>({
                                                                 name,

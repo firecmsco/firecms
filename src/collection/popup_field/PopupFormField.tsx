@@ -9,7 +9,7 @@ import {
     EntitySchema,
     EntityStatus,
     EntityValues,
-    FormFieldProps,
+    CMSFormFieldProps,
     Property,
     saveEntity
 } from "../../models";
@@ -27,7 +27,7 @@ interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
     tableKey: string,
     name?: string;
     property?: Property;
-    CMSFormField: React.FunctionComponent<FormFieldProps<S, Key>>,
+    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>,
     cellRect?: DOMRect;
     formPopupOpen: boolean;
     setFormPopupOpen: (value: boolean) => void;

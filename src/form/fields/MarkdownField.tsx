@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 
-import { CMSFieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { Controlled as CodeMirror } from "react-codemirror2";
@@ -22,7 +22,7 @@ import { useClearRestoreValue } from "../useClearRestoreValue";
 
 require("codemirror/mode/markdown/markdown");
 
-interface MarkDownFieldProps extends CMSFieldProps<string> {
+interface MarkDownFieldProps extends FieldProps<string> {
 }
 
 export const useStyles = makeStyles((theme: Theme) =>

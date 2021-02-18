@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 
-import { CMSFieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../../components/LabelWithIcon";
 import { CustomChip } from "../../preview/components/CustomChip";
@@ -16,7 +16,7 @@ import { useClearRestoreValue } from "../useClearRestoreValue";
 import { EnumValueConfig } from "../../models/models";
 import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
 
-type SelectProps<T extends EnumType> = CMSFieldProps<T>;
+type SelectProps<T extends EnumType> = FieldProps<T>;
 
 export default function Select<T extends EnumType>({
                                                        name,
