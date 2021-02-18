@@ -108,9 +108,9 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
      */
     let baseFirestoreValues: EntityValues<S, Key>;
     if ((status === EntityStatus.existing || status === EntityStatus.copy) && entity) {
-        baseFirestoreValues = entity.values as EntityValues<S, Key> ?? {};
+        baseFirestoreValues = entity.values ?? {};
     } else if (status === EntityStatus.new) {
-        baseFirestoreValues = (initEntityValues(schema));
+        baseFirestoreValues = initEntityValues(schema);
     } else {
         throw new Error("Form configured wrong");
     }
@@ -119,7 +119,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
 
-    const initialValuesRef = React.useRef<EntityValues<S, Key>>(entity?.values ?? initEntityValues(schema));
+    const initialValuesRef = React.useRef<EntityValues<S, Key>>(entity?.values ?? baseFirestoreValues);
     const initialValues = initialValuesRef.current;
     const [internalValue, setInternalValue] = useState<EntityValues<S, Key> | undefined>(initialValues);
 
@@ -136,7 +136,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                     }
                     return {};
                 })
-                .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<S, Key>;
+                .reduce((a, b) => ({ ...a, ...b }), {}) as Partial<EntityValues<S, Key>>;
         } else {
             return {};
         }
@@ -224,7 +224,6 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                   values,
                   touched,
                   setFieldValue,
-                  setFieldTouched,
                   handleSubmit,
                   isSubmitting,
                   dirty
@@ -243,8 +242,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                         const formValue = values[key];
                         if (!deepEqual(value, formValue) && !touched[key]) {
                             console.debug("Updated value from Firestore:", key, value);
-                            setFieldValue(key, !!value ? value : null);
-                            setFieldTouched(key, false);
+                            setFieldValue(key, value !== undefined ? value : null);
                         }
                     });
                 }

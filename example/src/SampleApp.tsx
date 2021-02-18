@@ -514,6 +514,10 @@ function SampleApp() {
         customId: true,
         name: "Test entity",
         properties: {
+            empty_string:{
+                title: "empty_string",
+                dataType: "string",
+            },
             imageUrls: {
                 title: "Images",
                 dataType: "array",
@@ -648,9 +652,22 @@ function SampleApp() {
                     }
                 }
             }
-        }
+        },
+        defaultValues: {
+            // empty_string: "",
+        },
     });
-
+    testEntitySchema.onPreSave =({
+                                     schema,
+                                     collectionPath,
+                                     id,
+                                     values,
+                                     status
+                                 }: EntitySaveProps<typeof testEntitySchema>) => {
+        console.log("custom onPreSave");
+        if(!values.empty_string) values.empty_string = "";
+        return values;
+    };
 
 
     const productExtraActionBuilder = ({

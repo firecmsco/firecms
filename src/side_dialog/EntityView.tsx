@@ -153,6 +153,7 @@ function EntitySideView({
 
     async function onEntitySave(schema: EntitySchema, collectionPath: string, id: string | undefined, values: EntityValues<any, any>): Promise<void> {
 
+        console.log("onEntitySave");
         if (!status)
             return;
 
@@ -176,6 +177,7 @@ function EntitySideView({
 
         const onSaveSuccess = (updatedEntity: Entity<EntitySchema>) => {
 
+            console.log("onSaveSuccess");
             setEntity(updatedEntity);
 
             snackbarContext.open({

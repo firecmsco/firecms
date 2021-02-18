@@ -435,7 +435,7 @@ function initPropertyValue(key: string, property: Property, defaultValue: any) {
     let value: any;
     if (property.dataType === "map") {
         value = initWithProperties(property.properties, defaultValue);
-    } else if (defaultValue) {
+    } else if (defaultValue !== undefined) {
         value = defaultValue;
     } else if (property.dataType === "array") {
         value = [];
