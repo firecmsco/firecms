@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.26.0] - 2021-02-17
+## [0.26.0] - 2021-02-18
 ### Added
 - You can now change entity properties on the fly, allowing for conditional
   fields, by using a builder that receives the current values.
