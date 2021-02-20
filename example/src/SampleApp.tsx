@@ -514,9 +514,9 @@ function SampleApp() {
         customId: true,
         name: "Test entity",
         properties: {
-            empty_string:{
+            empty_string: {
                 title: "empty_string",
-                dataType: "string",
+                dataType: "string"
             },
             imageUrls: {
                 title: "Images",
@@ -655,17 +655,17 @@ function SampleApp() {
         },
         defaultValues: {
             // empty_string: "",
-        },
+        }
     });
-    testEntitySchema.onPreSave =({
-                                     schema,
-                                     collectionPath,
-                                     id,
-                                     values,
-                                     status
-                                 }: EntitySaveProps<typeof testEntitySchema>) => {
+    testEntitySchema.onPreSave = ({
+                                      schema,
+                                      collectionPath,
+                                      id,
+                                      values,
+                                      status
+                                  }: EntitySaveProps<typeof testEntitySchema>) => {
         console.log("custom onPreSave");
-        if(!values.empty_string) values.empty_string = "";
+        if (!values.empty_string) values.empty_string = "";
         return values;
     };
 
@@ -722,7 +722,7 @@ function SampleApp() {
         name: "Blog",
         group: "Content",
         textSearchDelegate: blogSearchDelegate,
-        properties: ["name", "images", "status", "reviewed", "products", "long_text"],
+        properties: ["name", "images", "status", "reviewed", "products", "gold_text", "long_text"],
         filterableProperties: ["name", "status"],
         initialFilter: {
             "status": ["==", "published"]

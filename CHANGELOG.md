@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.26.1] - 2021-02-20
+### Added
+- Changed behavior of custom fields in table mode
+
 ## [0.26.0] - 2021-02-18
 ### Added
 - You can now change entity properties on the fly, allowing for conditional

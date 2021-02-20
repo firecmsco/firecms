@@ -304,16 +304,17 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
                                 {formFields}
 
-                                {savingError &&
-                                <Box textAlign="right">
-                                    <Typography color={"error"}>
-                                        Error saving to Firestore. Details in
-                                        the console
-                                    </Typography>
-                                </Box>}
-
                                 <div className={classes.stickyButtons}>
+
+                                    {savingError &&
+                                    <Box textAlign="right">
+                                        <Typography color={"error"}>
+                                            {savingError.message}
+                                        </Typography>
+                                    </Box>}
+
                                     {buildButtons(isSubmitting, modified)}
+
                                 </div>
 
                             </Form>

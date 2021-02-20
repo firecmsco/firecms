@@ -1,9 +1,9 @@
 import {
     ArrayProperty,
+    CMSFormFieldProps,
     Entity,
     EntitySchema,
     EntityStatus,
-    CMSFormFieldProps,
     NumberProperty,
     Property,
     ReferenceProperty,
@@ -109,6 +109,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     const tooltipClasses = useStyles();
     const classes = useCellStyles({ size, align, disabled: false });
+    const customField = Boolean(property.config?.field);
 
     const iconRef = React.createRef<HTMLButtonElement>();
     useEffect(() => {
@@ -200,22 +201,23 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
         },
         []
     );
-
-    if (property.readOnly || property.disabled) {
-        const tooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
-        return (
-            <DisabledTableCell
-                tooltip={tooltip}
-                size={size}
-                align={align}>
-                <PreviewComponent
-                    name={name}
-                    value={entity.values[name]}
-                    property={property}
-                    size={getPreviewSizeFrom(size)}
-                />
-            </DisabledTableCell>
-        );
+    if (!customField) {
+        if (property.readOnly || property.disabled) {
+            const tooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
+            return (
+                <DisabledTableCell
+                    tooltip={tooltip}
+                    size={size}
+                    align={align}>
+                    <PreviewComponent
+                        name={name}
+                        value={entity.values[name]}
+                        property={property}
+                        size={getPreviewSizeFrom(size)}
+                    />
+                </DisabledTableCell>
+            );
+        }
     }
 
     let component;

@@ -1,15 +1,15 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 
-import { Box, IconButton, Portal } from "@material-ui/core";
+import { Box, IconButton, Portal, Typography } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import deepEqual from "deep-equal";
 
 import {
+    CMSFormFieldProps,
     Entity,
     EntitySchema,
     EntityStatus,
     EntityValues,
-    CMSFormFieldProps,
     Property,
     saveEntity
 } from "../../models";
@@ -51,6 +51,8 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                                                                              usedPropertyBuilder
                                                                          }: PopupFormFieldProps<S, Key>) {
 
+
+    const [savingError, setSavingError] = React.useState<any>();
     const [internalValue, setInternalValue] = useState<EntityValues<S, Key> | undefined>(entity?.values);
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
@@ -131,15 +133,23 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         return setPopupLocation(normalizePosition(position));
     };
 
+    const onSaveFailure = (e: Error) => {
+        setSavingError(e);
+    };
+
     const saveValue =
-        (values: object) => entity && saveEntity({
-                collectionPath: entity.reference.parent.path,
-                id: entity?.id,
-                values: values,
-                schema,
-                status: EntityStatus.existing
-            }
-        ).then();
+        (values: object) => {
+            setSavingError(null);
+            return entity && saveEntity({
+                    collectionPath: entity.reference.parent.path,
+                    id: entity?.id,
+                    values: values,
+                    schema,
+                    status: EntityStatus.existing,
+                    onSaveFailure
+                }
+            ).then();
+        };
 
 
     if (!entity)
@@ -207,6 +217,13 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
             >
                 {renderForm}
             </Formik>
+
+            {savingError &&
+                <Typography color={"error"}>
+                    {savingError.message}
+                </Typography>
+            }
+
         </div>
     );
 
