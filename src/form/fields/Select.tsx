@@ -62,15 +62,18 @@ export default function Select<T extends EnumType>({
                 value={!!value ? value : ""}
                 disabled={disabled}
                 onChange={(evt: any) => {
-                    const newValue = evt.target.value;
+                    const eventValue = evt.target.value;
+                    const newValue = eventValue ?
+                        (property.dataType === "number" ? parseFloat(eventValue) : eventValue)
+                        : null;
                     return setValue(
-                        newValue ? newValue : null
+                        newValue
                     );
                 }}
                 renderValue={(v: any) => {
                     const label = buildEnumLabel(enumValues[v]);
                     return <CustomChip
-                        colorKey={typeof v == "number" ? `${name}_${v}` : v as string}
+                        colorKey={typeof v === "number" ? `${name}_${v}` : v as string}
                         label={label || v}
                         error={!label}
                         outlined={false}
