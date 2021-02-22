@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.26.2] - 2021-02-22
+### Added
+- `disableEnforceFocus` is now enabled for entity dialogs
+
+### Changed
+- Enhanced disabled fields in table mode
+
 ## [0.26.1] - 2021-02-20
 ### Added
 - Changed behavior of custom fields in table mode
