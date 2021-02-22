@@ -130,9 +130,7 @@ function SampleApp() {
                     min: 0,
                     max: 1000
                 },
-                disabled: values.available ?
-                    false
-                    : {
+                disabled: !values.available && {
                         clearOnDisabled: true,
                         disabledMessage: "You can only set the price on available items"
                     },

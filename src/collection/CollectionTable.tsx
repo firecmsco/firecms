@@ -367,18 +367,22 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                     updatePopup(true);
                 };
 
-                const onSelect = (cellRect: DOMRect) => {
-                    select({
-                        columnIndex,
-                        // rowIndex,
-                        width: column.width,
-                        height: column.height,
-                        entity,
-                        cellRect,
-                        name: propertyKey,
-                        property,
-                        usedPropertyBuilder
-                    });
+                const onSelect = (cellRect: DOMRect | undefined) => {
+                    if (!cellRect) {
+                        select(undefined);
+                    } else {
+                        select({
+                            columnIndex,
+                            // rowIndex,
+                            width: column.width,
+                            height: column.height,
+                            entity,
+                            cellRect,
+                            name: propertyKey,
+                            property,
+                            usedPropertyBuilder
+                        });
+                    }
                 };
 
                 const selected = selectedCell?.columnIndex === columnIndex

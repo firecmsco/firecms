@@ -35,8 +35,6 @@ export default function MapField<S extends EntitySchema>({
                                                              context
                                                          }: MapFieldProps<S>) {
 
-    console.log(name, disabled);
-
     const classes = formStyles();
 
     const pickOnlySomeKeys = property.config?.pickOnlySomeKeys || false;

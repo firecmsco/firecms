@@ -23,20 +23,20 @@ export function DisabledTableCell<T, S extends EntitySchema>({
 
     const [onHover, setOnHover] = useState(false);
 
-    const previewComponent = (
+
+    return <div className={clsx(classes.tableCell, classes.disabled)}
+                onMouseEnter={() => setOnHover(true)}
+                onMouseMove={() => setOnHover(true)}
+                onMouseLeave={() => setOnHover(false)}>
+
         <OverflowingCell allowScroll={false}
                          size={size}
                          align={align}>
             <ErrorBoundary>
                 {children}
             </ErrorBoundary>
-        </OverflowingCell>);
+        </OverflowingCell>
 
-    return <div className={clsx(classes.tableCell, classes.disabled)}
-                onMouseEnter={() => setOnHover(true)}
-                onMouseMove={() => setOnHover(true)}
-                onMouseLeave={() => setOnHover(false)}>
-        {previewComponent}
         {onHover &&
         <div style={{
             position: "absolute",

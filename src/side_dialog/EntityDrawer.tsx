@@ -129,6 +129,8 @@ export const EntityDrawer = React.forwardRef<HTMLDivElement, EntityDrawerProps>(
             onClose={onClose}
             ref={ref}
             keepMounted={true}
+            // disableEnforceFocus related to https://github.com/Camberi/firecms/issues/50
+            disableEnforceFocus={true}
         >
             {slidingDrawer}
         </Modal>

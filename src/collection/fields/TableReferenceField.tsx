@@ -3,11 +3,11 @@ import { Button } from "@material-ui/core";
 import { ReferencePreview } from "../../preview";
 import {
     ArrayProperty,
+    CMSFormFieldProps,
     CollectionSize,
     Entity,
     EntityCollection,
     EntitySchema,
-    CMSFormFieldProps,
     ReferenceProperty
 } from "../../models";
 import { PreviewComponent } from "../../preview/PreviewComponent";
@@ -23,15 +23,16 @@ import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
 
 
 export function TableReferenceField<S extends EntitySchema<Key>, Key extends string>(props: {
-    name: string,
-    internalValue: firebase.firestore.DocumentReference | firebase.firestore.DocumentReference[] | undefined | null,
-    updateValue: (newValue: (firebase.firestore.DocumentReference | firebase.firestore.DocumentReference [] | null)) => void,
+    name: string;
+    disabled: boolean;
+    internalValue: firebase.firestore.DocumentReference | firebase.firestore.DocumentReference[] | undefined | null;
+    updateValue: (newValue: (firebase.firestore.DocumentReference | firebase.firestore.DocumentReference [] | null)) => void;
     property: ReferenceProperty | ArrayProperty<firebase.firestore.DocumentReference>;
     size: CollectionSize;
-    schema: S,
+    schema: S;
     setPreventOutsideClick: (value: any) => void;
     CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
-    CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>
+    CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>;
 }) {
 
     const {
@@ -41,7 +42,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
         property,
         updateValue,
         size,
-        schema,
+        disabled,
         CMSFormField,
         CollectionTable
     } = props;
@@ -66,6 +67,8 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = (event: React.MouseEvent) => {
+        if (disabled)
+            return;
         if (event.detail <= 1) {
             event.stopPropagation();
             setPreventOutsideClick(true);
@@ -99,7 +102,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
     function buildSingleReferenceField() {
         if (internalValue instanceof firebase.firestore.DocumentReference)
             return <ReferencePreview name={name}
-                                     onClick={handleOpen}
+                                     onClick={disabled ? undefined: handleOpen}
                                      value={internalValue as firebase.firestore.DocumentReference}
                                      property={usedProperty}
                                      size={getPreviewSizeFrom(size)}
@@ -116,7 +119,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
                          key={`preview_array_ref_${name}_${index}`}>
                         <ReferencePreview
                             name={`${name}[${index}]`}
-                            onClick={handleOpen}
+                            onClick={disabled ? undefined: handleOpen}
                             size={"tiny"}
                             value={v}
                             property={usedProperty}
@@ -150,15 +153,18 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
                 Edit {property.title}
             </Button>}
 
-            {collectionConfig && open && <ReferenceDialog open={open}
-                                                        multiselect={multiselect}
-                                                        collectionPath={collectionPath}
-                                                        onClose={handleClose}
-                                                        onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                                                        onSingleEntitySelected={onSingleValueSet}
-                                                        CMSFormField={CMSFormField}
-                                                        CollectionTable={CollectionTable as any}
-                                                        selectedEntityIds={selectedIds}
+            {!disabled
+            && collectionConfig
+            && open
+            && <ReferenceDialog open={open}
+                                multiselect={multiselect}
+                                collectionPath={collectionPath}
+                                onClose={handleClose}
+                                onMultipleEntitiesSelected={onMultipleEntitiesSelected}
+                                onSingleEntitySelected={onSingleValueSet}
+                                CMSFormField={CMSFormField}
+                                CollectionTable={CollectionTable as any}
+                                selectedEntityIds={selectedIds}
             />}
 
         </>

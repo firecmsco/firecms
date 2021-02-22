@@ -63,7 +63,7 @@ interface TableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
     entity: Entity<S, Key>,
     schema: S,
     value: T,
-    select: (cellRect: DOMRect) => void,
+    select: (cellRect: DOMRect | undefined) => void,
     openPopup: () => void,
     setPreventOutsideClick: (value: boolean) => void,
     focused: boolean,
@@ -109,7 +109,11 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     const tooltipClasses = useStyles();
     const classes = useCellStyles({ size, align, disabled: false });
+
     const customField = Boolean(property.config?.field);
+    const customPreview = Boolean(property.config?.customPreview);
+    const disabled = Boolean(property.disabled);
+    const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
 
     const iconRef = React.createRef<HTMLButtonElement>();
     useEffect(() => {
@@ -120,7 +124,9 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     const onSelect = () => {
         const cellRect = ref && ref?.current?.getBoundingClientRect();
-        if (!selected && cellRect) {
+        if (disabled) {
+            select(undefined);
+        } else if (!selected && cellRect) {
             select(cellRect);
         }
     };
@@ -201,70 +207,72 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
         },
         []
     );
-    if (!customField) {
-        if (property.readOnly || property.disabled) {
-            const tooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
-            return (
-                <DisabledTableCell
-                    tooltip={tooltip}
-                    size={size}
-                    align={align}>
-                    <PreviewComponent
-                        name={name}
-                        value={entity.values[name]}
-                        property={property}
-                        size={getPreviewSizeFrom(size)}
-                    />
-                </DisabledTableCell>
-            );
-        }
+
+    if (property.readOnly) {
+        return (
+            <DisabledTableCell
+                tooltip={disabledTooltip}
+                size={size}
+                align={align}>
+                <PreviewComponent
+                    name={name}
+                    value={entity.values[name]}
+                    property={property}
+                    size={getPreviewSizeFrom(size)}
+                />
+            </DisabledTableCell>
+        );
     }
 
-    let component;
-    let inputComponent;
+    let innerComponent;
     let allowScroll = false;
+    let showExpandIcon = false;
 
-    if (selected && property.dataType === "number") {
-        const numberProperty = property as NumberProperty;
-        if (numberProperty.config?.enumValues) {
-            inputComponent = <TableSelect name={name as string}
-                                          multiple={false}
-                                          focused={focused}
-                                          enumValues={numberProperty.config.enumValues}
-                                          error={error}
-                                          onBlur={onBlur}
-                                          internalValue={internalValue as string | number}
-                                          updateValue={updateValue}
-                                          setPreventOutsideClick={setPreventOutsideClick}
-            />;
-        } else {
-            inputComponent = <NumberTableInput
-                align={align}
-                error={error}
-                focused={focused}
-                onBlur={onBlur}
-                value={internalValue as number}
-                updateValue={updateValue}
-            />;
-            allowScroll = true;
-        }
-    } else if (selected && property.dataType === "string") {
-        const stringProperty = property as StringProperty;
-        if (stringProperty.config?.enumValues) {
-            inputComponent = <TableSelect name={name as string}
-                                          multiple={false}
-                                          focused={focused}
-                                          enumValues={stringProperty.config.enumValues}
-                                          error={error}
-                                          onBlur={onBlur}
-                                          internalValue={internalValue as string | number}
-                                          updateValue={updateValue}
-                                          setPreventOutsideClick={setPreventOutsideClick}
-            />;
-        } else if (!stringProperty.config?.storageMeta && !stringProperty.config?.field) {
-            if (!stringProperty.config?.markdown) {
+    if (!customField && (!customPreview || selected)) {
+        if (selected && property.dataType === "number") {
+            const numberProperty = property as NumberProperty;
+            if (numberProperty.config?.enumValues) {
+                innerComponent = <TableSelect name={name as string}
+                                              multiple={false}
+                                              disabled={disabled}
+                                              focused={focused}
+                                              enumValues={numberProperty.config.enumValues}
+                                              error={error}
+                                              onBlur={onBlur}
+                                              internalValue={internalValue as string | number}
+                                              updateValue={updateValue}
+                                              setPreventOutsideClick={setPreventOutsideClick}
+                />;
+            } else {
+                innerComponent = <NumberTableInput
+                    align={align}
+                    error={error}
+                    focused={focused}
+                    disabled={disabled}
+                    onBlur={onBlur}
+                    value={internalValue as number}
+                    updateValue={updateValue}
+                />;
+                allowScroll = true;
+            }
+        } else if (selected && property.dataType === "string") {
+            const stringProperty = property as StringProperty;
+            if (stringProperty.config?.enumValues) {
+                innerComponent = <TableSelect name={name as string}
+                                              multiple={false}
+                                              focused={focused}
+                                              disabled={disabled}
+                                              enumValues={stringProperty.config.enumValues}
+                                              error={error}
+                                              onBlur={onBlur}
+                                              internalValue={internalValue as string | number}
+                                              updateValue={updateValue}
+                                              setPreventOutsideClick={setPreventOutsideClick}
+                />;
+            } else if (!stringProperty.config?.storageMeta && !stringProperty.config?.markdown) {
                 const multiline = !!stringProperty.config?.multiline;
-                inputComponent = <TableInput error={error}
+                innerComponent = <TableInput error={error}
+                                             disabled={disabled}
                                              multiline={multiline}
                                              focused={focused}
                                              value={internalValue as string}
@@ -272,56 +280,30 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                 />;
                 allowScroll = true;
             }
-        }
-    } else if (property.dataType === "boolean") {
-        inputComponent = <TableSwitch error={error}
-                                      focused={focused}
-                                      internalValue={internalValue as boolean}
-                                      updateValue={updateValue}
-        />;
-    } else if (property.dataType === "timestamp") {
-        if (!(property as TimestampProperty).autoValue) {
-            inputComponent = <TableDateField name={name as string}
-                                             error={error}
-                                             focused={focused}
-                                             internalValue={internalValue as Date}
-                                             updateValue={updateValue}
-                                             setPreventOutsideClick={setPreventOutsideClick}
+        } else if (property.dataType === "boolean") {
+            innerComponent = <TableSwitch error={error}
+                                          disabled={disabled}
+                                          focused={focused}
+                                          internalValue={internalValue as boolean}
+                                          updateValue={updateValue}
             />;
-            allowScroll = true;
-        }
-    } else if (property.dataType === "reference") {
-        inputComponent = <TableReferenceField name={name as string}
-                                              internalValue={internalValue as firebase.firestore.DocumentReference}
-                                              updateValue={updateValue}
-                                              size={size}
-                                              CMSFormField={CMSFormField}
-                                              CollectionTable={CollectionTable}
-                                              schema={schema}
-                                              property={property as ReferenceProperty}
-                                              setPreventOutsideClick={setPreventOutsideClick}
-        />;
-        allowScroll = true;
-    } else if (property.dataType === "array") {
-        const arrayProperty = (property as ArrayProperty);
-        if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
-            if (selected && arrayProperty.of.config?.enumValues) {
-                inputComponent = <TableSelect name={name as string}
-                                              multiple={true}
-                                              focused={focused}
-                                              enumValues={arrayProperty.of.config.enumValues}
-                                              error={error}
-                                              onBlur={onBlur}
-                                              internalValue={internalValue as string | number}
-                                              updateValue={updateValue}
-                                              setPreventOutsideClick={setPreventOutsideClick}
+        } else if (property.dataType === "timestamp") {
+            if (!(property as TimestampProperty).autoValue) {
+                innerComponent = <TableDateField name={name as string}
+                                                 error={error}
+                                                 disabled={disabled}
+                                                 focused={focused}
+                                                 internalValue={internalValue as Date}
+                                                 updateValue={updateValue}
+                                                 setPreventOutsideClick={setPreventOutsideClick}
                 />;
                 allowScroll = true;
             }
-        } else if (arrayProperty.of.dataType === "reference") {
-            inputComponent = <TableReferenceField name={name as string}
-                                                  internalValue={internalValue as firebase.firestore.DocumentReference[]}
+        } else if (property.dataType === "reference") {
+            innerComponent = <TableReferenceField name={name as string}
+                                                  internalValue={internalValue as firebase.firestore.DocumentReference}
                                                   updateValue={updateValue}
+                                                  disabled={disabled}
                                                   size={size}
                                                   CMSFormField={CMSFormField}
                                                   CollectionTable={CollectionTable}
@@ -329,39 +311,78 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                   property={property as ReferenceProperty}
                                                   setPreventOutsideClick={setPreventOutsideClick}
             />;
-            allowScroll = false;
+            allowScroll = true;
+        } else if (property.dataType === "array") {
+            const arrayProperty = (property as ArrayProperty);
+            if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
+                if (selected && arrayProperty.of.config?.enumValues) {
+                    innerComponent = <TableSelect name={name as string}
+                                                  multiple={true}
+                                                  disabled={disabled}
+                                                  focused={focused}
+                                                  enumValues={arrayProperty.of.config.enumValues}
+                                                  error={error}
+                                                  onBlur={onBlur}
+                                                  internalValue={internalValue as string | number}
+                                                  updateValue={updateValue}
+                                                  setPreventOutsideClick={setPreventOutsideClick}
+                    />;
+                    allowScroll = true;
+                }
+            } else if (arrayProperty.of.dataType === "reference") {
+                innerComponent = <TableReferenceField name={name as string}
+                                                      disabled={disabled}
+                                                      internalValue={internalValue as firebase.firestore.DocumentReference[]}
+                                                      updateValue={updateValue}
+                                                      size={size}
+                                                      CMSFormField={CMSFormField}
+                                                      CollectionTable={CollectionTable}
+                                                      schema={schema}
+                                                      property={property as ReferenceProperty}
+                                                      setPreventOutsideClick={setPreventOutsideClick}
+                />;
+                allowScroll = false;
+            }
         }
     }
 
-    if (!inputComponent) {
-        component = (
-            <OverflowingCell allowScroll={false}
-                             size={size}
-                             align={align}>
-                <ErrorBoundary>
-                    <PreviewComponent
-                        name={name as string}
-                        value={internalValue}
-                        property={property}
-                        size={getPreviewSizeFrom(size)}
-                    />
-                </ErrorBoundary>
-            </OverflowingCell>
+    if (!innerComponent) {
+        allowScroll = false;
+        showExpandIcon = selected && !innerComponent && !disabled;
+        innerComponent = (
+            <ErrorBoundary>
+                <PreviewComponent
+                    name={name as string}
+                    value={internalValue}
+                    property={property}
+                    size={getPreviewSizeFrom(size)}
+                />
+            </ErrorBoundary>
         );
-    } else {
+    }
+
+    let component: JSX.Element;
+    if (!disabled) {
         component = (
             <OverflowingCell allowScroll={allowScroll}
                              size={size}
                              align={align}>
-                {inputComponent}
+                {innerComponent}
             </OverflowingCell>
+        );
+    } else {
+        component = (
+            <DisabledTableCell tooltip={disabledTooltip}
+                               size={size}
+                               align={align}>
+                {innerComponent}
+            </DisabledTableCell>
         );
     }
 
-
     return (
         <div
-            tabIndex={selected ? undefined : 0}
+            tabIndex={selected || disabled ? undefined : 0}
             key={`$table_cell_${tableKey}_${rowIndex}_${columnIndex}`}
             ref={ref}
             onFocus={onFocus}
@@ -373,6 +394,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                     [classes.error]: error,
                     [classes.selected]: !error && selected || focused
                 })}>
+
             {error && <div style={{
                 position: "absolute",
                 top: 4,
@@ -393,11 +415,12 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                         color={"error"}
                     />
                 </Tooltip>
-            </div>}
+            </div>
+            }
 
             {component}
 
-            {selected && !inputComponent && (
+            {showExpandIcon && (
                 <IconButton
                     ref={iconRef}
                     className={classes.expandIcon}

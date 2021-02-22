@@ -6,16 +6,17 @@ import { EmptyValue } from "../../components/EmptyValue";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 
 export function TableDateField(props: {
-    name: string,
-    error: Error | undefined,
-    internalValue: Date | undefined | null,
-    updateValue: (newValue: (Date | null)) => void,
-    focused: boolean,
-    onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>,
+    name: string;
+    error: Error | undefined;
+    internalValue: Date | undefined | null;
+    updateValue: (newValue: (Date | null)) => void;
+    focused: boolean;
+    disabled: boolean;
+    onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     setPreventOutsideClick: (value: any) => void;
 }) {
 
-    const { name, error, internalValue, setPreventOutsideClick, updateValue } = props;
+    const { disabled, error, internalValue, setPreventOutsideClick, updateValue } = props;
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => {
@@ -44,6 +45,7 @@ export function TableDateField(props: {
             <Box width={40}>
                 <KeyboardDateTimePicker
                     clearable
+                    disabled={disabled}
                     inputVariant="standard"
                     InputProps={{
                         disableUnderline: true,

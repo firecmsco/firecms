@@ -7,18 +7,19 @@ import { ArrayEnumPreview } from "../../preview/components/ArrayPropertyEnumPrev
 import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
 
 export function TableSelect(props: {
-    name: string,
-    enumValues: EnumValues<number | string>,
-    error: Error | undefined,
-    multiple: boolean,
-    internalValue: string | number | string[] | number[] | undefined,
-    updateValue: (newValue: (string | number | string[] | number[] | undefined)) => void,
-    focused: boolean,
-    onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>,
+    name: string;
+    enumValues: EnumValues<number | string>;
+    error: Error | undefined;
+    multiple: boolean;
+    disabled: boolean;
+    internalValue: string | number | string[] | number[] | undefined;
+    updateValue: (newValue: (string | number | string[] | number[] | undefined)) => void;
+    focused: boolean;
+    onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     setPreventOutsideClick: (value: any) => void;
 }) {
 
-    const { name, enumValues, error, internalValue, focused, updateValue, multiple, setPreventOutsideClick } = props;
+    const { name, enumValues, error, internalValue, disabled, updateValue, multiple, setPreventOutsideClick } = props;
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => {
@@ -54,6 +55,7 @@ export function TableSelect(props: {
             className={classes.select}
             classes={{ root: classes.selectRoot }}
             open={open}
+            disabled={disabled}
             multiple={multiple}
             onClose={handleClose}
             onOpen={handleOpen}

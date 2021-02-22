@@ -4,13 +4,14 @@ import { TextareaAutosize } from "@material-ui/core";
 import clsx from "clsx";
 
 export function TableInput(props: {
-    error: Error | undefined,
-    value: string,
-    multiline: boolean,
-    focused: boolean,
-    updateValue: (newValue: (string | undefined)) => void,
+    error: Error | undefined;
+    value: string;
+    multiline: boolean;
+    focused: boolean;
+    disabled: boolean;
+    updateValue: (newValue: (string | undefined)) => void;
 }) {
-    const { error, value, multiline, updateValue, focused } = props;
+    const { disabled, value, multiline, updateValue, focused } = props;
     const [internalValue, setInternalValue] = useState<typeof value>(value);
 
     useEffect(
@@ -55,6 +56,7 @@ export function TableInput(props: {
     return (
         <TextareaAutosize
             ref={ref}
+            disabled={disabled}
             className={clsx(classes.input)}
             value={internalValue ?? ""}
             onChange={(evt) => {

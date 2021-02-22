@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { Switch } from "@material-ui/core";
 
 export function TableSwitch(props: {
-    error: Error | undefined,
-    internalValue?: boolean,
-    focused: boolean,
-    updateValue: (newValue: (boolean | undefined)) => void,
+    error: Error | undefined;
+    internalValue?: boolean;
+    focused: boolean;
+    disabled: boolean;
+    updateValue: (newValue: (boolean | undefined)) => void;
 }) {
-    const { error, internalValue, updateValue, focused } = props;
+    const { disabled, internalValue, updateValue, focused } = props;
 
     const ref = React.createRef<HTMLTextAreaElement>();
     useEffect(() => {
@@ -20,6 +21,7 @@ export function TableSwitch(props: {
         <Switch
             inputRef={ref}
             checked={!!internalValue}
+            disabled={disabled}
             onChange={(evt) => {
                 const value = evt.target.checked as boolean;
                 updateValue(value);

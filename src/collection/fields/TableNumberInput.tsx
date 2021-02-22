@@ -4,15 +4,16 @@ import clsx from "clsx";
 import { useInputStyles } from "./styles";
 
 export function NumberTableInput(props: {
-    error: Error | undefined,
-    value: number,
-    align: "right" | "left" | "center",
-    updateValue: (newValue: (number | null)) => void,
-    focused: boolean,
-    onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>
+    error: Error | undefined;
+    value: number;
+    align: "right" | "left" | "center";
+    updateValue: (newValue: (number | null)) => void;
+    focused: boolean;
+    disabled: boolean;
+    onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }) {
 
-    const { align, value, updateValue, focused, onBlur } = props;
+    const { align, value, updateValue, focused, onBlur, disabled } = props;
     const propStringValue = (value && typeof value === "number") ? value.toString() : "";
     const [internalValue, setInternalValue] = useState<string | null>(propStringValue);
 
@@ -79,6 +80,7 @@ export function NumberTableInput(props: {
                     textAlign: align
                 }
             }}
+            disabled={disabled}
             className={clsx(classes.input, classes.numberInput)}
             disableUnderline
             value={internalValue ?? ""}
