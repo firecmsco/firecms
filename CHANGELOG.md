@@ -1,8 +1,14 @@
 # Change Log
 
+## [0.27.0] - 2021-02-22
+### Added
+- Added `clearMissingValues` to map property config, allowing missing
+  properties from field values to be deleted from Firestore.
+- Added assigned size to custom previews.
+
 ## [0.26.2] - 2021-02-22
 ### Added
-- `disableEnforceFocus` is now enabled for entity dialogs
+- MUI `disableEnforceFocus` is now enabled for entity dialogs
 
 ### Changed
 - Enhanced disabled fields in table mode
