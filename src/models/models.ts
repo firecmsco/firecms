@@ -857,6 +857,16 @@ export interface MapFieldConfig<T> extends FieldConfig<T> {
      */
     pickOnlySomeKeys?: boolean;
 
+    /**
+     * Set this flag to true if you would like to remove values that are not
+     * present in the saved value but are mapped in the schema.
+     * This is useful if you are creating a custom field and need to have only
+     * some specific properties. If set to false, when saving a new map value,
+     * fields that exist in Firestore but not in the new value are not deleted.
+     * Defaults to false.
+     */
+    clearMissingValues?: boolean;
+
 }
 
 /**

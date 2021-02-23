@@ -151,12 +151,12 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         setPreventOutsideClick(false);
     }, []);
 
-    const additionalColumnsMap: Partial<Record<AdditionalKey, AdditionalColumnDelegate<AdditionalKey, S, Key>>> = useMemo(() => {
+    const additionalColumnsMap: Record<string, AdditionalColumnDelegate<string, S, Key>> = useMemo(() => {
         return additionalColumns ?
             additionalColumns
                 .map((aC) => ({ [aC.id]: aC }))
                 .reduce((a, b) => ({ ...a, ...b }), [])
-            : {};
+            : {  };
     }, [additionalColumns]);
 
     const scrollToTop = () => {
@@ -183,9 +183,9 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     });
 
     const columns = useMemo(() => {
-        const allColumns: CMSColumn[] = (Object.keys(schema.properties) as string[])
+        const allColumns: CMSColumn[] = (Object.keys(schema.properties) as Key[])
             .map((key) => {
-                const property = buildProperty(schema.properties[key as string] as Property, schema.defaultValues ?? {});
+                const property = buildProperty(schema.properties[key] as Property, schema.defaultValues ?? {});
                 return ({
                     id: key as string,
                     type: "property",
@@ -342,11 +342,13 @@ export default function CollectionTable<S extends EntitySchema<Key>,
             });
         }
 
-        const propertyKey = column.dataKey;
-        const property = buildProperty(schema.properties[propertyKey], entity.values as EntityValues<any>, entity.id);
-        const usedPropertyBuilder = typeof schema.properties[propertyKey] === "function";
-
         if (column.type === "property") {
+
+
+            const propertyKey = column.dataKey as Key;
+            const property = buildProperty(schema.properties[propertyKey], entity.values, entity.id);
+            const usedPropertyBuilder = typeof schema.properties[propertyKey] === "function";
+
             if (!inlineEditing) {
                 return (
                     <PreviewTableCell
@@ -354,6 +356,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                         size={size}
                         align={column.align}>
                         <PreviewComponent
+                            width={column.width}
+                            height={column.height}
                             name={`preview_${propertyKey}_${rowIndex}_${columnIndex}`}
                             value={entity.values[propertyKey]}
                             property={property}
@@ -411,6 +415,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                         property={property}
                         openPopup={openPopup}
                         select={onSelect}
+                        width={column.width}
+                        height={column.height}
                         CMSFormField={CMSFormField}/>
                     :
                     <SkeletonComponent property={property}
@@ -424,7 +430,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                     tooltip={"Additional columns can't be edited directly"}
                     align={"left"}>
                     <ErrorBoundary>
-                        {additionalColumnsMap[column.dataKey].builder(entity)}
+                        {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder(entity)}
                     </ErrorBoundary>
                 </DisabledTableCell>
             );

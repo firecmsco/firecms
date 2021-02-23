@@ -26,7 +26,6 @@ export function TableInput(props: {
             const handler = setTimeout(doUpdate, 300);
 
             return () => {
-                doUpdate();
                 clearTimeout(handler);
             };
 

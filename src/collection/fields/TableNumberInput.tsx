@@ -35,7 +35,6 @@ export function NumberTableInput(props: {
             const handler = setTimeout(doUpdate, 300);
 
             return () => {
-                doUpdate();
                 clearTimeout(handler);
             };
         },

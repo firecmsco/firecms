@@ -39,6 +39,7 @@ import "firebase/firestore";
 import { getPreviewSizeFrom } from "../preview/util";
 import { useClearRestoreValue } from "../form/useClearRestoreValue";
 import DisabledTableCell from "./DisabledTableCell";
+import deepEqual from "deep-equal";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -69,6 +70,8 @@ interface TableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
     focused: boolean,
     setFocused: (value: boolean) => void,
     property: Property<T>,
+    height: number;
+    width: number;
     CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
     CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>,
 }
@@ -92,6 +95,8 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                                            property,
                                                                            size,
                                                                            align,
+                                                                           width,
+                                                                           height,
                                                                            CMSFormField,
                                                                            CollectionTable
                                                                        }: TableCellProps<T, S, Key> & CellStyleProps) => {
@@ -168,7 +173,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     useEffect(
         () => {
-            if (internalValue !== value && !error) {
+            if (!deepEqual(value, internalValue) && !error) {
                 saveEntity({
                         collectionPath: path,
                         id: entity.id,
@@ -215,6 +220,8 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                 size={size}
                 align={align}>
                 <PreviewComponent
+                    width={width}
+                    height={height}
                     name={name}
                     value={entity.values[name]}
                     property={property}
@@ -355,6 +362,8 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
         innerComponent = (
             <ErrorBoundary>
                 <PreviewComponent
+                    width={width}
+                    height={height}
                     name={name as string}
                     value={internalValue}
                     property={property}

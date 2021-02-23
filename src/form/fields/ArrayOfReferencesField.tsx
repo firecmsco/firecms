@@ -1,4 +1,4 @@
-import { FieldProps, Entity, Property } from "../../models";
+import { Entity, FieldProps, Property } from "../../models";
 import {
     Box,
     Button,
@@ -52,14 +52,14 @@ export default function ArrayOfReferencesField({
     });
 
     const onEntryClick = () => {
-        setOpen(true)
+        setOpen(true);
     };
 
     const onClose = () => {
-        setOpen(false)
+        setOpen(false);
     };
 
-    const onMultipleEntitiesSelected = (entities:Entity<any>[]) => {
+    const onMultipleEntitiesSelected = (entities: Entity<any>[]) => {
         setValue(entities.map((e) => e.reference));
     };
 
@@ -68,11 +68,11 @@ export default function ArrayOfReferencesField({
         if (!entryValue)
             return <div>Internal ERROR</div>;
         return <ReferencePreview
-                                 value={entryValue}
-                                 property={ofProperty}
-                                 size={"regular"}
-                                 PreviewComponent={PreviewComponent}
-                                 onClick={onEntryClick}/>;
+            value={entryValue}
+            property={ofProperty}
+            size={"regular"}
+            PreviewComponent={PreviewComponent}
+            onClick={onEntryClick}/>;
     };
 
 
@@ -88,21 +88,21 @@ export default function ArrayOfReferencesField({
                 <Paper variant={"outlined"}
                        className={classes.paper}>
 
-                <ArrayContainer value={value}
-                                name={name}
-                                buildEntry={buildEntry}
-                                disabled={isSubmitting}/>
+                    <ArrayContainer value={value}
+                                    name={name}
+                                    buildEntry={buildEntry}
+                                    disabled={isSubmitting}/>
 
-                <Box p={1}
-                     justifyContent="center"
-                     textAlign={"left"}>
-                    <Button variant="outlined"
-                            color="primary"
-                            disabled={isSubmitting}
-                            onClick={onEntryClick}>
-                        Edit {property.title}
-                    </Button>
-                </Box>
+                    <Box p={1}
+                         justifyContent="center"
+                         textAlign={"left"}>
+                        <Button variant="outlined"
+                                color="primary"
+                                disabled={isSubmitting}
+                                onClick={onEntryClick}>
+                            Edit {property.title}
+                        </Button>
+                    </Box>
 
                 </Paper>
 
@@ -116,14 +116,14 @@ export default function ArrayOfReferencesField({
 
             </FormControl>
 
-             <ReferenceDialog open={open}
-                                                multiselect={true}
-                                                collectionPath={ofProperty.collectionPath}
-                                                onClose={onClose}
-                                                onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                                                CMSFormField={CMSFormField}
-                                                CollectionTable={CollectionTable}
-                                                selectedEntityIds={selectedIds}
+            <ReferenceDialog open={open}
+                             multiselect={true}
+                             collectionPath={ofProperty.collectionPath}
+                             onClose={onClose}
+                             onMultipleEntitiesSelected={onMultipleEntitiesSelected}
+                             CMSFormField={CMSFormField}
+                             CollectionTable={CollectionTable}
+                             selectedEntityIds={selectedIds}
             />
         </>
     );

@@ -247,7 +247,6 @@ export async function saveEntity<S extends EntitySchema<Key>,
         onSaveSuccessHookError?: (e: Error) => void
     }): Promise<void> {
 
-
     const properties: Properties<Key> = computeSchemaProperties(schema, id);
     let updatedValues: EntityValues<S, Key> = updateAutoValues(values, properties, status);
 
@@ -454,13 +453,15 @@ function updateAutoValue(inputValue: any,
     let value;
     if (property.dataType === "map") {
         value = updateAutoValues(inputValue, property.properties, status);
+        if (property.config?.clearMissingValues) {
+            value = clearMapMissingValues(inputValue, property.properties);
+        }
     } else if (property.dataType === "array") {
         if ("dataType" in property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => updateAutoValue(e, property.of as Property, status));
         } else {
             value = inputValue;
         }
-
     } else if (property.dataType === "timestamp") {
         if (status == EntityStatus.existing && property.autoValue === "on_update") {
             value = firebase.firestore.FieldValue.serverTimestamp();
@@ -476,7 +477,18 @@ function updateAutoValue(inputValue: any,
     return value;
 }
 
-export function updateAutoValues<S extends EntitySchema<Key>,
+function clearMapMissingValues<S extends EntitySchema<Key>,
+    P extends Properties<Key>, Key extends string>
+(inputValues: Partial<PropertiesValues<S, Key>>, properties: P): PropertiesValues<S, Key> {
+    return Object.entries(properties)
+        .map(([key, _]) => {
+            const inputValue = inputValues && inputValues[key];
+            return ({ [key]: inputValue === undefined ? firebase.firestore.FieldValue.delete() : inputValue });
+        })
+        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<S, Key>;
+}
+
+function updateAutoValues<S extends EntitySchema<Key>,
     P extends Properties<Key>, Key extends string>
 (inputValues: Partial<PropertiesValues<S, Key>>, properties: P, status: EntityStatus): PropertiesValues<S, Key> {
     const updatedValues = Object.entries(properties)

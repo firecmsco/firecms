@@ -70,14 +70,12 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
     useEffect(
         () => {
             const saveIfChanged = () => {
-                if (internalValue && !deepEqual(entity?.values, internalValue)) {
-                    saveValue(internalValue);
+                if (!deepEqual(entity?.values, internalValue)) {
+                    saveValue(internalValue ?? {});
                 }
             };
-            const handler = setTimeout(saveIfChanged, 300);
-
+            const handler = setTimeout(saveIfChanged, 200);
             return () => {
-                saveIfChanged();
                 clearTimeout(handler);
             };
         },
@@ -219,9 +217,9 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
             </Formik>
 
             {savingError &&
-                <Typography color={"error"}>
-                    {savingError.message}
-                </Typography>
+            <Typography color={"error"}>
+                {savingError.message}
+            </Typography>
             }
 
         </div>
@@ -265,7 +263,7 @@ const AutoSubmitToken = ({
                              name,
                              onSubmit
                          }: { name: string, onSubmit: (values: any) => void }) => {
-    const { values, errors, submitForm } = useFormikContext();
+    const { values, errors } = useFormikContext();
 
     React.useEffect(() => {
         const fieldError = errors[name];
@@ -273,7 +271,7 @@ const AutoSubmitToken = ({
         if (shouldSave) {
             onSubmit(values);
         }
-    }, [values, submitForm, errors]);
+    }, [values, errors]);
     return null;
 };
 

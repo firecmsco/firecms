@@ -35,7 +35,7 @@ import { PreviewError } from "./components/PreviewError";
 export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
     const {
-        property, name, value, size
+        property, name, value, size, height, width
     } = props;
 
     const fieldProps = { ...props, PreviewComponent };
@@ -48,6 +48,8 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                 value,
                 property,
                 size,
+                height,
+                width,
                 PreviewComponent
             });
     } else if (value === null || value === undefined) {
