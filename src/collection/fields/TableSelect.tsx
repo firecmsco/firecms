@@ -13,13 +13,24 @@ export function TableSelect(props: {
     multiple: boolean;
     disabled: boolean;
     internalValue: string | number | string[] | number[] | undefined;
+    valueType: "string" | "number";
     updateValue: (newValue: (string | number | string[] | number[] | undefined)) => void;
     focused: boolean;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     setPreventOutsideClick: (value: any) => void;
 }) {
 
-    const { name, enumValues, error, internalValue, disabled, updateValue, multiple, setPreventOutsideClick } = props;
+    const {
+        name,
+        enumValues,
+        error,
+        internalValue,
+        disabled,
+        updateValue,
+        multiple,
+        setPreventOutsideClick,
+        valueType
+    } = props;
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => {
@@ -41,7 +52,6 @@ export function TableSelect(props: {
     // const ref = React.createRef<HTMLInputElement>();
     // useEffect(() => {
     //     if (ref.current && focused) {
-    //         console.log("select focus", ref.current);
     //         ref.current?.focus({ preventScroll: true });
     //     }
     // }, [focused, ref.current]);
@@ -69,7 +79,17 @@ export function TableSelect(props: {
             error={!!error}
             value={validValue ? internalValue : (multiple ? [] : "")}
             onChange={(evt) => {
-                updateValue(evt.target.value as typeof internalValue);
+                if (valueType === "number") {
+                    if (multiple) {
+                        updateValue((evt.target.value as string[]).map((v) => parseFloat(v)));
+                    } else {
+                        updateValue(parseFloat(evt.target.value as string));
+                    }
+                } else if (valueType === "string") {
+                    updateValue(evt.target.value as typeof internalValue);
+                } else {
+                    throw Error("Missing mapping in TableSelect");
+                }
             }}
             renderValue={(selected: any) => {
                 const label = buildEnumLabel(enumValues[selected]);
