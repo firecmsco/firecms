@@ -185,7 +185,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as Key[])
             .map((key) => {
-                const property = buildProperty(schema.properties[key] as Property, schema.defaultValues ?? {});
+                const property:Property = buildProperty<S,Key,any>(schema.properties[key], schema.defaultValues ?? {});
                 return ({
                     id: key as string,
                     type: "property",
@@ -346,8 +346,9 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
 
             const propertyKey = column.dataKey as Key;
-            const property = buildProperty(schema.properties[propertyKey], entity.values, entity.id);
-            const usedPropertyBuilder = typeof schema.properties[propertyKey] === "function";
+            const propertyOrBuilder = schema.properties[propertyKey];
+            const property = buildProperty<S,Key>(propertyOrBuilder, entity.values, entity.id);
+            const usedPropertyBuilder = typeof propertyOrBuilder === "function";
 
             if (!inlineEditing) {
                 return (
@@ -359,8 +360,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                             width={column.width}
                             height={column.height}
                             name={`preview_${propertyKey}_${rowIndex}_${columnIndex}`}
-                            value={entity.values[propertyKey]}
                             property={property}
+                            value={entity.values[propertyKey]}
                             size={getPreviewSizeFrom(size)}
                         />
                     </PreviewTableCell>

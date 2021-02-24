@@ -18,11 +18,11 @@ import { LabelWithIcon } from "../../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
-interface TextFieldProps extends FieldProps<string | number> {
+interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
 }
 
-export default function TextField({
+export default function TextField<T extends string | number>({
                                       name,
                                       value,
                                       setValue,
@@ -34,7 +34,7 @@ export default function TextField({
                                       includeDescription,
                                       allowInfinity,
                                       dependsOnOtherProperties
-                                  }: TextFieldProps) {
+                                  }: TextFieldProps<T>) {
 
     let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
@@ -66,7 +66,7 @@ export default function TextField({
         } else if (inputType === "number") {
             const numValue = parseFloat(newValue as string);
             setValue(
-                numValue
+                numValue as T
             );
         } else {
             setValue(
@@ -86,7 +86,7 @@ export default function TextField({
             value={valueIsInfinity ? "Infinity" : (value ?? "")}
             disabled={disabled}
             onChange={(evt) => {
-                updateValue(evt.target.value);
+                updateValue(evt.target.value as T);
             }}
         />
     );
@@ -130,7 +130,7 @@ export default function TextField({
                                 type={"checkbox"}
                                 onChange={(evt) => {
                                     updateValue(
-                                        evt.target.checked ? Infinity : undefined);
+                                        evt.target.checked  ? Infinity as T: undefined);
                                 }}/>
                         }
                         disabled={disabled}

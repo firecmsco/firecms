@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         drawerPaper: {
             width: drawerWidth,
-            letterSpacing: "1px"
+            // letterSpacing: "1px"
         }
     })
 );

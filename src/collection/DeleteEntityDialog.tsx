@@ -13,7 +13,7 @@ import CircularProgressCenter from "../components/CircularProgressCenter";
 import { useSnackbarController } from "../contexts";
 
 
-export interface DeleteEntityDialogProps<S extends EntitySchema> {
+export interface DeleteEntityDialogProps<S extends EntitySchema<any>> {
     entityOrEntitiesToDelete?: Entity<S> | Entity<S>[],
     collectionPath: string,
     schema: S
@@ -26,7 +26,7 @@ export interface DeleteEntityDialogProps<S extends EntitySchema> {
     onClose: () => void;
 }
 
-export default function DeleteEntityDialog<S extends EntitySchema>({
+export default function DeleteEntityDialog<S extends EntitySchema<any>>({
                                                                        entityOrEntitiesToDelete,
                                                                        schema,
                                                                        onClose,

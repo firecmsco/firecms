@@ -42,12 +42,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export interface EntityPreviewProps<S extends EntitySchema<Key>, Key extends string> {
+export interface EntityPreviewProps<S extends EntitySchema<Key> = EntitySchema<any>,
+    Key extends string = Extract<keyof S["properties"], string>> {
     entity: Entity<S, Key>;
     schema: S;
 }
 
-export default function EntityPreview<S extends EntitySchema<Key>, Key extends string>(
+export default function EntityPreview<S extends EntitySchema<Key> = EntitySchema<any>,
+    Key extends string = Extract<keyof S["properties"], string>>(
     {
         entity,
         schema

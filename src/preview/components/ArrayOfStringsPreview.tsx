@@ -1,6 +1,6 @@
 import { StringProperty } from "../../models";
 import {
-    PreviewComponentFactoryProps,
+
     PreviewComponentProps
 } from "../../models/preview_component_props";
 
@@ -15,7 +15,7 @@ export function ArrayOfStringsPreview({
                                           value,
                                           property,
                                           size
-                                      }: PreviewComponentProps<string[]> & PreviewComponentFactoryProps) {
+                                      }: PreviewComponentProps<string[]> ) {
 
     const classes = useStyles();
 

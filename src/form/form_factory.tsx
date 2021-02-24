@@ -94,7 +94,7 @@ export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string 
         component = SwitchField as ComponentType<FieldProps<any>>;
     } else if (property.dataType === "number") {
         if (property.config?.enumValues) {
-            component = Select;
+            component = Select as ComponentType<FieldProps<any>>;
         } else {
             component = TextField as ComponentType<FieldProps<any>>;
         }
@@ -104,7 +104,7 @@ export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string 
         } else if (property.config?.markdown) {
             component = MarkDownField as ComponentType<FieldProps<any>>;
         } else if (property.config?.enumValues) {
-            component = Select;
+            component = Select as ComponentType<FieldProps<any>>;
         } else {
             component = TextField as ComponentType<FieldProps<any>>;
         }
@@ -132,7 +132,7 @@ export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string 
     );
 }
 
-function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> = EntitySchema, Key extends string = string>
+function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = string>
 ({
      component,
      componentProps: {

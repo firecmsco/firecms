@@ -40,7 +40,6 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
 
     const fieldProps = { ...props, PreviewComponent };
 
-
     if (property.config?.customPreview) {
         content = createElement(property.config.customPreview as React.ComponentType<PreviewComponentProps & PreviewComponentFactoryProps>,
             {

@@ -55,7 +55,8 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 
-export default function ReferenceField<S extends EntitySchema>({
+export default function ReferenceField<S extends EntitySchema<Key> = EntitySchema<any>,
+    Key extends string = Extract<keyof S["properties"], string>>({
                                                                    name,
                                                                    value,
                                                                    setValue,
@@ -77,7 +78,7 @@ export default function ReferenceField<S extends EntitySchema>({
         setValue
     });
 
-    const handleEntityClick = (entity: Entity<S>) => {
+    const handleEntityClick = (entity: Entity<S, Key>) => {
         if (disabled)
             return;
         const ref = entity ? entity.reference : null;
@@ -94,7 +95,7 @@ export default function ReferenceField<S extends EntitySchema>({
     const collectionPath = property.collectionPath;
 
     const [open, setOpen] = React.useState(autoFocus);
-    const [entity, setEntity] = React.useState<Entity<S>>();
+    const [entity, setEntity] = React.useState<Entity<S, Key>>();
     const selectedEntityController = useSideEntityController();
 
     const handleClickOpen = () => {
@@ -126,7 +127,7 @@ export default function ReferenceField<S extends EntitySchema>({
 
     useEffect(() => {
         if (validValue) {
-            const cancel = listenEntityFromRef<S>(value, schema, (e => {
+            const cancel = listenEntityFromRef<S, Key>(value, schema, (e => {
                 setEntity(e);
             }));
             return () => cancel();

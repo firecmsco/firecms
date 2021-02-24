@@ -1,5 +1,5 @@
 import {
-    PreviewComponentFactoryProps,
+
     PreviewComponentProps
 } from "../../models/preview_component_props";
 
@@ -54,7 +54,7 @@ export function ArrayPropertyEnumPreview({
                                      value,
                                      property,
                                      size
-                                 }: PreviewComponentProps<string[] | number[]> & PreviewComponentFactoryProps) {
+                                 }: PreviewComponentProps<string[] | number[]> ) {
 
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayEnumPreview");

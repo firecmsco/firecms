@@ -5,7 +5,7 @@ import { EntitySchema, EntityValues, Property } from "./models";
  * When building a custom field you need to create a React Element that takes
  * this interface as props.
  */
-export interface FieldProps<T, CustomProps = any, S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>> {
+export interface FieldProps<T, CustomProps = any, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
      * Name of the property

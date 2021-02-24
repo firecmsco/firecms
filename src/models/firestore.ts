@@ -201,7 +201,7 @@ export function createEntityFromSchema<S extends EntitySchema<Key>,
 ): Entity<S, Key> {
 
     const data = doc.data() ?
-        sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, Key>, schema as EntitySchema)
+        sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, Key>, schema)
         : undefined;
     return {
         id: doc.id,

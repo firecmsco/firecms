@@ -49,7 +49,6 @@ export function useRect<T extends HTMLElement>(
             return () => {
                 if (!resizeObserver) return;
                 resizeObserver.disconnect();
-                resizeObserver = null;
             };
         } else {
             window.addEventListener("resize", handleResize); // Browser support, remove freely

@@ -2,7 +2,7 @@ import * as React from "react";
 import { TextSearchDelegate } from "./text_search_delegate";
 import { FieldProps } from "./form_props";
 import {
-    PreviewComponentFactoryProps,
+
     PreviewComponentProps
 } from "../preview";
 import firebase from "firebase/app";
@@ -14,7 +14,7 @@ import firebase from "firebase/app";
  *
  * If you need a lower level implementation you can check CollectionTable
  */
-export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema,
+export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>,
     AdditionalKey extends string = string> {
 
@@ -126,7 +126,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema,
      * @param selectedEntities current selected entities by the end user or
      * undefined if none
      */
-    extraActions?: (extraActionsParams: ExtraActionsParams<S>) => React.ReactNode;
+    extraActions?: (extraActionsParams: ExtraActionsParams<S, Key>) => React.ReactNode;
 
     /**
      * Are the entities in this collection selectable. Defaults to true
@@ -135,9 +135,10 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema,
 
 }
 
-export type ExtraActionsParams<S extends EntitySchema = EntitySchema> = {
+export type ExtraActionsParams<S extends EntitySchema<Key> = EntitySchema<any>,
+    Key extends string = Extract<keyof S["properties"], string>> = {
     view: EntityCollection,
-    selectedEntities?: Entity<S>[]
+    selectedEntities?: Entity<S, Key>[]
 };
 
 
@@ -264,7 +265,7 @@ export interface EntityDeleteProps<S extends EntitySchema<Key>,
  * @param additionalColumnDelegate
  */
 export function buildAdditionalColumnDelegate<AdditionalKey extends string = string,
-    S extends EntitySchema<Key> = EntitySchema,
+    S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>>(
     additionalColumnDelegate: AdditionalColumnDelegate<AdditionalKey, S, Key>
 ): AdditionalColumnDelegate<AdditionalKey, S, Key> {
@@ -276,7 +277,7 @@ export function buildAdditionalColumnDelegate<AdditionalKey extends string = str
  * collection views with all its properties
  * @param collectionView
  */
-export function buildCollection<S extends EntitySchema<Key> = EntitySchema,
+export function buildCollection<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>,
     AdditionalKey extends string = string>(
     collectionView: EntityCollection<S, Key, AdditionalKey>
@@ -365,7 +366,7 @@ export type Property<T = any, ArrayT = any> =
  */
 export interface AdditionalColumnDelegate<
     AdditionalKey extends string = string,
-    S extends EntitySchema<Key> = EntitySchema,
+    S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
@@ -481,18 +482,18 @@ export type EnumValueConfig = {
  */
 export type Properties<Key extends string, T extends any = any> = Record<Key, Property<T>>;
 
-export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema, Key extends string = Extract<keyof S["properties"], string>> =
+export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> =
     {
         values: Partial<EntityValues<S, Key>>,
         entityId?: string
     };
 
-export type PropertyBuilder<S extends EntitySchema<Key>, Key extends string, T extends any = any> = (props: PropertyBuilderProps<S, Key>) => Property<T>;
-export type PropertyOrBuilder<S extends EntitySchema<Key>, Key extends string, T extends any = any> =
+export type PropertyBuilder<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> = (props: PropertyBuilderProps<S, Key>) => Property<T>;
+export type PropertyOrBuilder<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> =
     Property<T>
     | PropertyBuilder<S, Key, T>;
 
-export type PropertiesOrBuilder<S extends EntitySchema<Key>, Key extends string, T extends any = any> =
+export type PropertiesOrBuilder<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> =
     Record<Key, PropertyOrBuilder<S, Key, T>>;
 
 /**
@@ -619,7 +620,7 @@ export interface TimestampProperty extends BaseProperty {
     /**
      * Configure how this property field is displayed
      */
-    config?: FieldConfig<firebase.firestore.Timestamp>;
+    config?: FieldConfig<Date>;
 }
 
 // TODO: currently this is the only unsupported field
@@ -637,7 +638,7 @@ export interface GeopointProperty extends BaseProperty {
     config?: FieldConfig<firebase.firestore.GeoPoint>;
 }
 
-export interface ReferenceProperty<S extends EntitySchema<Key> = EntitySchema,
+export interface ReferenceProperty<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>>
     extends BaseProperty {
 
@@ -757,7 +758,7 @@ export interface FieldConfig<T, CustomProps = any> {
      * Configure how a property is displayed as a preview, e.g. in the collection
      * view
      */
-    customPreview?: React.ComponentType<PreviewComponentProps<T>> & Partial<PreviewComponentFactoryProps>;
+    customPreview?: React.ComponentType<PreviewComponentProps<T>>;
 }
 
 /**

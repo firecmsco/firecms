@@ -143,7 +143,7 @@ export default function StorageUploadField({
         (Array.isArray(value) ? value : []) :
         value;
 
-    useClearRestoreValue({
+    useClearRestoreValue<string | string[]>({
         property,
         value,
         setValue

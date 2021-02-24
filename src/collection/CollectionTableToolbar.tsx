@@ -157,7 +157,7 @@ export function CollectionTableToolbar<S extends EntitySchema>(props: Collection
                         </Box>
                     </Hidden>}
 
-                    {props.onSizeChanged && sizeSelect}
+                    { sizeSelect}
 
                     {filterEnabled && filterView}
 

@@ -7,7 +7,7 @@ import {
     StringProperty
 } from "../models";
 
-export function getCellAlignment<T>(property: Property<T>): "right" | "left" | "center" {
+export function getCellAlignment(property: Property): "right" | "left" | "center" {
     if (property.dataType === "boolean") {
         return "center";
     } else if (property.dataType === "number" || property.dataType === "timestamp") {
@@ -17,7 +17,7 @@ export function getCellAlignment<T>(property: Property<T>): "right" | "left" | "
     }
 }
 
-export function getPreviewWidth<T>(property: Property<T>, size: CollectionSize): number {
+export function getPreviewWidth(property: Property, size: CollectionSize): number {
 
     if (property.columnWidth) {
         return property.columnWidth;

@@ -15,7 +15,7 @@ import DeleteEntityDialog from "./DeleteEntityDialog";
 import { getSubcollectionColumnId, useColumnIds } from "./common";
 import { useSideEntityController } from "../contexts/SideEntityController";
 
-type EntitySubCollectionProps<S extends EntitySchema> = {
+type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
     collectionPath: string;
     collectionConfig: EntityCollection<any>;
 }
@@ -32,18 +32,18 @@ type EntitySubCollectionProps<S extends EntitySchema> = {
  * @param collectionConfig
  * @constructor
  */
-export default function EntityCollectionTable<S extends EntitySchema>({
+export default function EntityCollectionTable<S extends EntitySchema<Key>, Key extends string>({
                                                                           collectionPath,
                                                                           collectionConfig
-                                                                      }: EntitySubCollectionProps<S>
+                                                                      }: EntityCollectionProps<S, Key>
 ) {
     const selectedEntityController = useSideEntityController();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S> | Entity<S>[] | undefined>(undefined);
-    const [selectedEntities, setSelectedEntities] = useState<Entity<S>[]>([]);
+    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S, Key> | Entity<S, Key>[] | undefined>(undefined);
+    const [selectedEntities, setSelectedEntities] = useState<Entity<S, Key>[]>([]);
 
     const deleteEnabled = collectionConfig.deleteEnabled === undefined || collectionConfig.deleteEnabled;
     const editEnabled = collectionConfig.editEnabled === undefined || collectionConfig.editEnabled;
@@ -79,7 +79,7 @@ export default function EntityCollectionTable<S extends EntitySchema>({
 
     const additionalColumns = [...collectionConfig.additionalColumns ?? [], ...subcollectionColumns];
 
-    const onEntityClick = inlineEditing ? undefined : (collectionPath: string, entity: Entity<S>) => {
+    const onEntityClick = inlineEditing ? undefined : (collectionPath: string, entity: Entity<S, Key>) => {
         selectedEntityController.open({
             entityId: entity.id,
             collectionPath,
@@ -101,11 +101,11 @@ export default function EntityCollectionTable<S extends EntitySchema>({
         });
     };
 
-    const internalOnEntityDelete = (collectionPath: string, entity: Entity<S>) => {
+    const internalOnEntityDelete = (collectionPath: string, entity: Entity<S, Key>) => {
         setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
     };
 
-    const internalOnMultipleEntitiesDelete = (collectionPath: string, entities: Entity<S>[]) => {
+    const internalOnMultipleEntitiesDelete = (collectionPath: string, entities: Entity<S, Key>[]) => {
         setSelectedEntities([]);
     };
 
@@ -120,10 +120,10 @@ export default function EntityCollectionTable<S extends EntitySchema>({
         </>
     );
 
-    const toggleEntitySelection = (entity: Entity<S>) => {
+    const toggleEntitySelection = (entity: Entity<S, Key>) => {
         let newValue;
         if (selectedEntities.indexOf(entity) > -1) {
-            newValue = selectedEntities.filter((item: Entity<S>) => item !== entity);
+            newValue = selectedEntities.filter((item: Entity<S, Key>) => item !== entity);
         } else {
             newValue = [...selectedEntities, entity];
         }

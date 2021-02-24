@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { renderSkeletonImageThumbnail } from "./components/SkeletonComponent";
 import {
-    PreviewComponentFactoryProps,
+
     PreviewComponentProps
 } from "../models/preview_component_props";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";
@@ -10,7 +10,7 @@ import { getDownloadURL } from "../models";
 export default function StorageThumbnail({ name,
                                              value,
                                              property,
-                                             size }: PreviewComponentProps<string> & PreviewComponentFactoryProps) {
+                                             size }: PreviewComponentProps<string> ) {
 
     const storagePathOrDownloadUrl = value;
 
