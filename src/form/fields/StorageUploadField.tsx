@@ -38,6 +38,7 @@ import { PreviewSize } from "../../models/preview_component_props";
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
 import { useClearRestoreValue } from "../useClearRestoreValue";
+import { isReadOnly } from "../../models/utils";
 
 export const useStyles = makeStyles(theme => ({
     dropZone: {
@@ -137,7 +138,7 @@ export default function StorageUploadField({
                                            }: StorageUploadFieldProps) {
 
     const multipleFilesSupported = property.dataType === "array";
-    const disabled = property.readOnly || !!property.disabled || isSubmitting;
+    const disabled = isReadOnly(property) || !!property.disabled || isSubmitting;
 
     const internalValue = multipleFilesSupported ?
         (Array.isArray(value) ? value : []) :

@@ -19,6 +19,7 @@ import { getYupEntitySchema } from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../util/useWindowSize";
 import { FormContext } from "../../models/form_props";
+import { isReadOnly } from "../../models/utils";
 
 
 interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
@@ -179,7 +180,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                 property={property}
                 includeDescription={false}
                 underlyingValueHasChanged={false}
-                disabled={isSubmitting || property.readOnly || !!property.disabled}
+                disabled={isSubmitting || isReadOnly(property) || !!property.disabled}
                 context={context}
                 tableMode={true}
                 partOfArray={false}

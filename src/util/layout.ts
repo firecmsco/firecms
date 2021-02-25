@@ -1,4 +1,5 @@
 import { Property } from "../models";
+import { isReadOnly } from "../models/utils";
 
 export function getColumnsForProperty(property: Property): "xs" | "sm" | "md" {
 
@@ -14,7 +15,7 @@ export function getColumnsForProperty(property: Property): "xs" | "sm" | "md" {
     }
 
     if (property.dataType === "array") {
-        return property.readOnly || property.disabled? "xs" : "sm";
+        return isReadOnly(property) || property.disabled? "xs" : "sm";
     }
 
     if (property.dataType === "string" && property.config?.storageMeta) {

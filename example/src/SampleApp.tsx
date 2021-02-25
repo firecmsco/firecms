@@ -183,7 +183,6 @@ function SampleApp() {
             added_on: {
                 dataType: "timestamp",
                 title: "Added on",
-                readOnly: true,
                 autoValue: "on_create"
             },
             images: {

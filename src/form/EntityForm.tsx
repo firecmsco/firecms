@@ -23,6 +23,7 @@ import { getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
 import { FormContext } from "../models/form_props";
+import { isReadOnly } from "../models/utils";
 
 export const useStyles = makeStyles(theme => createStyles({
     stickyButtons: {
@@ -265,7 +266,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
                             const dependsOnOtherProperties = typeof schema.properties[key] === "function";
 
-                            const disabled = isSubmitting || property.readOnly || !!property.disabled;
+                            const disabled = isSubmitting || isReadOnly(property) || !!property.disabled;
                             return (
                                 <Grid item
                                       xs={12}

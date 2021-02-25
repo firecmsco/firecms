@@ -40,6 +40,7 @@ import { getPreviewSizeFrom } from "../preview/util";
 import { useClearRestoreValue } from "../form/useClearRestoreValue";
 import DisabledTableCell from "./DisabledTableCell";
 import deepEqual from "deep-equal";
+import { isReadOnly } from "../models/utils";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -117,7 +118,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     const customField = Boolean(property.config?.field);
     const customPreview = Boolean(property.config?.customPreview);
-    const disabled = Boolean(property.disabled);
+    let disabled = Boolean(property.disabled);
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
 
     const iconRef = React.createRef<HTMLButtonElement>();
@@ -213,7 +214,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
         []
     );
 
-    if (property.readOnly) {
+    if (isReadOnly(property)) {
         return (
             <DisabledTableCell
                 tooltip={disabledTooltip}
@@ -297,7 +298,10 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                           updateValue={updateValue}
             />;
         } else if (property.dataType === "timestamp") {
-            if (!(property as TimestampProperty).autoValue) {
+            // if ((property as TimestampProperty).autoValue) {
+            //     disabled = true;
+            //     showExpandIcon = false;
+            // } else {
                 innerComponent = <TableDateField name={name as string}
                                                  error={error}
                                                  disabled={disabled}
@@ -307,7 +311,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                  setPreventOutsideClick={setPreventOutsideClick}
                 />;
                 allowScroll = true;
-            }
+            // }
         } else if (property.dataType === "reference") {
             innerComponent = <TableReferenceField name={name as string}
                                                   internalValue={internalValue as firebase.firestore.DocumentReference}

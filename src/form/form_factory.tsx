@@ -39,6 +39,7 @@ import { useAppConfigContext, useSnackbarController } from "../contexts";
 
 import { CMSAppProps } from "../CMSAppProps";
 import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
+import { isReadOnly } from "../models/utils";
 
 /**
  * This component renders a Formik field creating the corresponding configuration
@@ -70,7 +71,7 @@ export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string 
  }: CMSFormFieldProps<S, Key>): JSX.Element {
 
     let component: ComponentType<FieldProps<any>> | undefined;
-    if (property.readOnly) {
+    if (isReadOnly(property)) {
         component = ReadOnlyField;
     } else if (property.config?.field) {
         component = property.config?.field;
