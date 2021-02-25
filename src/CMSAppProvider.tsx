@@ -205,7 +205,7 @@ const makeTheme = (
                 default: mode === "dark" ? "#424242" : "#f6f8f9"
             },
             primary: {
-                main: primaryColor ? primaryColor : blue["800"]
+                main: primaryColor ? primaryColor : "#0070f4"
             },
             secondary: {
                 main: secondaryColor ? secondaryColor : pink["400"]

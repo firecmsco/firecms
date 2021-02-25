@@ -44,7 +44,7 @@ export function NumberTableInput(props: {
     useEffect(
         () => {
             if (!focused && propStringValue !== internalValue)
-                setInternalValue(value ? value.toString(): null);
+                setInternalValue(value !== undefined && value !== null ? value.toString(): null);
         },
         [value, focused]
     );
