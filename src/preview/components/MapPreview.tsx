@@ -1,8 +1,8 @@
 import { MapProperty } from "../../models";
 import {
-    PreviewComponentFactoryProps,
+
     PreviewComponentProps
-} from "../../models/preview_component_props";
+} from "../../models";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import React from "react";
 import {
@@ -14,7 +14,7 @@ import {
     Typography
 } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import PreviewComponent from "../PreviewComponent";
+import { PreviewComponent } from "../PreviewComponent";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -33,9 +33,7 @@ export function MapPreview<T>({
                                   name,
                                   value,
                                   property,
-                                  size,
-                                  PreviewComponent
-                              }: PreviewComponentProps<T> & PreviewComponentFactoryProps) {
+                                  size}: PreviewComponentProps<T> ) {
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPreview");

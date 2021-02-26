@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import { renderSkeletonImageThumbnail } from "./components/SkeletonComponent";
+import { renderSkeletonImageThumbnail } from "./SkeletonComponent";
 import {
 
     PreviewComponentProps
-} from "../models/preview_component_props";
-import { UrlComponentPreview } from "./components/UrlComponentPreview";
-import { getDownloadURL } from "../models";
+} from "../../models";
+import { UrlComponentPreview } from "./UrlComponentPreview";
+import { getDownloadURL } from "../../models";
 
-export default function StorageThumbnail({ name,
+export function StorageThumbnail({ name,
                                              value,
                                              property,
                                              size }: PreviewComponentProps<string> ) {

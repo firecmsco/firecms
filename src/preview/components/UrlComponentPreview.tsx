@@ -1,6 +1,6 @@
 import { MediaType, PreviewComponentProps } from "../../models";
 import React from "react";
-import ImagePreview from "./ImagePreview";
+import { ImagePreview } from "./ImagePreview";
 
 
 import { CardMedia, Link } from "@material-ui/core";

@@ -1,8 +1,8 @@
 import {
-    PreviewComponentFactoryProps,
+
     PreviewComponentProps,
     PreviewSize
-} from "../../models/preview_component_props";
+} from "../../preview";
 import ErrorBoundary from "../../components/ErrorBoundary";
 
 import React from "react";
@@ -15,9 +15,7 @@ export function ArrayPreview({
                                        name,
                                        value,
                                        property,
-                                       size,
-                                       PreviewComponent
-                                   }: PreviewComponentProps<any[]> & PreviewComponentFactoryProps) {
+                                       size}: PreviewComponentProps<any[]> ) {
 
     const classes = useStyles();
 

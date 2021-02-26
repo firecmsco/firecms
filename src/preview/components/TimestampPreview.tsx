@@ -1,4 +1,4 @@
-import { PreviewComponentProps } from "../../models/preview_component_props";
+import { PreviewComponentProps } from "../../preview";
 import React from "react";
 import firebase from "firebase/app";
 

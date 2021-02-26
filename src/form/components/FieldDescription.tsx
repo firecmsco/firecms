@@ -1,5 +1,5 @@
 import React from "react";
-import { Property } from "../models";
+import { Property } from "../../models";
 
 import {
     Box,

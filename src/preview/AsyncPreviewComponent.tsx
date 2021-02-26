@@ -1,8 +1,7 @@
+import { Skeleton } from "@material-ui/lab";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { EntitySchema } from "../models";
-import { renderSkeletonText } from "./components/SkeletonComponent";
-
 
 export interface AsyncPreviewComponentProps<S extends EntitySchema> {
 
@@ -44,7 +43,7 @@ function AsyncPreviewComponent<S extends EntitySchema>(
     }, [builder]);
 
     if (loading)
-        return renderSkeletonText();
+        return <Skeleton variant="text"/>;
 
     return <React.Fragment>{result}</React.Fragment>;
 

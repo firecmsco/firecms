@@ -1,7 +1,6 @@
 import {
-
     PreviewComponentProps
-} from "../../models/preview_component_props";
+} from "../../models";
 
 import React from "react";
 
@@ -10,6 +9,28 @@ import { EnumValues, NumberProperty, StringProperty } from "../../models";
 import { CustomChip } from "./CustomChip";
 import { useStyles } from "./styles";
 import { buildEnumLabel } from "../../models/builders";
+
+
+export function ArrayPropertyEnumPreview({
+                                             name,
+                                             value,
+                                             property,
+                                             size
+                                         }: PreviewComponentProps<string[] | number[]> ) {
+
+    if (property.dataType !== "array")
+        throw Error("Picked wrong preview component ArrayEnumPreview");
+
+    const ofProperty = property.of as StringProperty | NumberProperty;
+    if (!ofProperty.config?.enumValues)
+        throw Error("Picked wrong preview component ArrayEnumPreview");
+
+    if (!value) return null;
+
+    const enumValues = ofProperty.config?.enumValues;
+
+    return <ArrayEnumPreview name={name} value={value} enumValues={enumValues} size={size}/>
+}
 
 export function ArrayEnumPreview({
                                      name,
@@ -47,25 +68,4 @@ export function ArrayEnumPreview({
             )}
         </div>
     );
-}
-
-export function ArrayPropertyEnumPreview({
-                                     name,
-                                     value,
-                                     property,
-                                     size
-                                 }: PreviewComponentProps<string[] | number[]> ) {
-
-    if (property.dataType !== "array")
-        throw Error("Picked wrong preview component ArrayEnumPreview");
-
-    const ofProperty = property.of as StringProperty | NumberProperty;
-    if (!ofProperty.config?.enumValues)
-        throw Error("Picked wrong preview component ArrayEnumPreview");
-
-    if (!value) return null;
-
-    const enumValues = ofProperty.config?.enumValues;
-
-    return <ArrayEnumPreview name={name} value={value} enumValues={enumValues} size={size}/>
 }

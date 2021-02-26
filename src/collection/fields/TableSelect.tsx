@@ -1,9 +1,8 @@
 import { EnumValues } from "../../models";
-import { CustomChip } from "../../preview/components/CustomChip";
+import { CustomChip, ArrayEnumPreview } from "../../preview";
 import React, { useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@material-ui/core";
 import { useInputStyles } from "./styles";
-import { ArrayEnumPreview } from "../../preview/components/ArrayPropertyEnumPreview";
 import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
 
 export function TableSelect(props: {

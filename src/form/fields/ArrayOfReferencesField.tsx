@@ -7,14 +7,14 @@ import {
     Paper
 } from "@material-ui/core";
 import React from "react";
-import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
-import { PreviewComponent, ReferencePreview } from "../../preview";
+import { ReferencePreview } from "../../preview";
 import firebase from "firebase";
-import { ReferenceDialog } from "../../components/ReferenceDialog";
+import { ReferenceDialog } from "../components/ReferenceDialog";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { formStyles } from "../../styles";
-import FieldDescription from "../../components/FieldDescription";
+import FieldDescription from "../components/FieldDescription";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 
@@ -71,7 +71,7 @@ export default function ArrayOfReferencesField({
             value={entryValue}
             property={ofProperty}
             size={"regular"}
-            PreviewComponent={PreviewComponent}
+
             onClick={onEntryClick}/>;
     };
 

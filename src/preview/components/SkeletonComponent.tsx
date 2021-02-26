@@ -18,7 +18,7 @@ import {
     TableRow
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import { PreviewSize } from "../../models/preview_component_props";
+import { PreviewSize } from "../../preview";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
 
@@ -27,7 +27,7 @@ export interface SkeletonComponentProps<T> {
     size: PreviewSize
 }
 
-export default function SkeletonComponent<T>({
+export function SkeletonComponent<T>({
                                                  property,
                                                  size
                                              }: SkeletonComponentProps<T>
@@ -305,8 +305,7 @@ function renderUrlFile(size: PreviewSize) {
         </div>
     );
 }
-
-export function renderSkeletonText(index?: number) {
+ function renderSkeletonText(index?: number) {
     return <Skeleton variant="text"/>;
 }
 

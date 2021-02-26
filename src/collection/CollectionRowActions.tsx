@@ -4,7 +4,6 @@ import {
     EntityCollection,
     EntitySchema
 } from "../models";
-import { renderSkeletonText } from "../preview/components/SkeletonComponent";
 import { useTableStyles } from "./styles";
 
 import React, { MouseEvent } from "react";
@@ -21,6 +20,7 @@ import {
 } from "@material-ui/core";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
 import { useSideEntityController } from "../contexts";
+import { Skeleton } from "@material-ui/lab";
 
 export function CollectionRowActions<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>({
@@ -173,7 +173,7 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                             variant={"caption"}
                             color={"textSecondary"}> {entity.id} </Typography>
                         :
-                        renderSkeletonText()
+                        <Skeleton variant="text"/>
                     }
                 </div>
             )}

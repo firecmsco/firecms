@@ -27,13 +27,13 @@ import {
 } from "../../models";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
-import PreviewComponent from "../../preview/PreviewComponent";
+import { PreviewComponent } from "../../preview";
 import deepEqual from "deep-equal";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import { useSnackbarController } from "../../contexts";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import { PreviewSize } from "../../models/preview_component_props";
+import { PreviewSize } from "../../preview";
 
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";

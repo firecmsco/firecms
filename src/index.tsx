@@ -37,7 +37,7 @@ export type {
 } from "./models/form_props";
 export type { TextSearchDelegate } from "./models/text_search_delegate";
 
-export type { PreviewComponentProps } from "./models/preview_component_props";
+export type { PreviewComponentProps } from "./preview";
 
 
 export { CMSApp } from "./CMSApp";
@@ -62,15 +62,18 @@ export {
 export {
     PreviewComponent,
     AsyncPreviewComponent,
-    EntityPreview,
     ReferencePreview,
     StorageThumbnail
 } from "./preview";
 
 export {
     FieldDescription,
-    ErrorBoundary
+    ErrorBoundary,
 } from "./components";
+
+export {
+    default as EntityPreview,
+} from "./components/EntityPreview";
 
 export {
     CollectionTable,

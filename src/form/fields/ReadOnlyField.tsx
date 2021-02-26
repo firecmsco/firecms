@@ -3,9 +3,9 @@ import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React from "react";
 import { formStyles } from "../../styles";
 import { FieldProps } from "../../models/form_props";
-import PreviewComponent from "../../preview/PreviewComponent";
+import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
 
 type DisabledFieldProps = FieldProps<any>;

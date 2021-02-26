@@ -10,15 +10,14 @@ import {
     EntitySchema,
     ReferenceProperty
 } from "../../models";
-import { PreviewComponent } from "../../preview/PreviewComponent";
-import { ReferenceDialog } from "../../components/ReferenceDialog";
+import { ReferenceDialog } from "../../form/components/ReferenceDialog";
 import { CollectionTableProps } from "../CollectionTableProps";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { getPreviewSizeFrom } from "../../preview/util";
 import { useInputStyles } from "./styles";
-import { PreviewError } from "../../preview/components/PreviewError";
+import { PreviewError } from "../../preview";
 import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
 
 
@@ -105,8 +104,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
                                      onClick={disabled ? undefined: handleOpen}
                                      value={internalValue as firebase.firestore.DocumentReference}
                                      property={usedProperty}
-                                     size={getPreviewSizeFrom(size)}
-                                     PreviewComponent={PreviewComponent}/>;
+                                     size={getPreviewSizeFrom(size)}/>;
         else
             return <PreviewError error={"Data is not a reference"}/>;
     }
@@ -123,7 +121,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
                             size={"tiny"}
                             value={v}
                             property={usedProperty}
-                            PreviewComponent={PreviewComponent}
+
                         />
                     </div>
                 )

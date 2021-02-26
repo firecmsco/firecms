@@ -1,4 +1,5 @@
 import {
+    saveEntity,
     ArrayProperty,
     CMSFormFieldProps,
     Entity,
@@ -7,9 +8,7 @@ import {
     NumberProperty,
     Property,
     ReferenceProperty,
-    saveEntity,
-    StringProperty,
-    TimestampProperty
+    StringProperty
 } from "../models";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {

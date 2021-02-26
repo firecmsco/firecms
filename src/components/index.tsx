@@ -1,6 +1,6 @@
 export {
     default as FieldDescription
-} from "./FieldDescription";
+} from "../form/components/FieldDescription";
 
 export {
     default as ErrorBoundary

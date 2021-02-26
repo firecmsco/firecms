@@ -1,36 +1,52 @@
+import React, { createElement } from "react";
 import {
     ArrayProperty,
     BooleanProperty,
     MapProperty,
     NumberProperty,
+    PreviewComponentProps,
     ReferenceProperty,
     StringProperty,
     TimestampProperty
 } from "../models";
-import React, { createElement } from "react";
-import StorageThumbnail from "./StorageThumbnail";
-import {
-    PreviewComponentFactoryProps,
-    PreviewComponentProps
-} from "../models/preview_component_props";
-import { EmptyValue } from "../components/EmptyValue";
-import ReactMarkdown from "react-markdown";
-import { ArrayOfMapsPreview } from "./components/ArrayOfMapsPreview";
-import { MapPreview } from "./components/MapPreview";
-import { StringPreview } from "./components/StringPreview";
-import { BooleanPreview } from "./components/BooleanPreview";
-import { TimestampPreview } from "./components/TimestampPreview";
-import { default as ReferencePreview } from "./components/ReferencePreview";
-import { ArrayOfReferencesPreview } from "./components/ArrayOfReferencesPreview";
-import { ArrayPropertyEnumPreview } from "./components/ArrayPropertyEnumPreview";
-import { ArrayPreview } from "./components/ArrayPreview";
-import { UrlComponentPreview } from "./components/UrlComponentPreview";
-import { ArrayOfStorageComponentsPreview } from "./components/ArrayOfStorageComponentsPreview";
-import { ArrayOfStringsPreview } from "./components/ArrayOfStringsPreview";
-import { NumberPreview } from "./components/NumberPreview";
 
+import {
+    ArrayOfMapsPreview,
+    ArrayOfReferencesPreview,
+    ArrayOfStorageComponentsPreview,
+    ArrayOfStringsPreview,
+    ArrayPreview,
+    ArrayPropertyEnumPreview,
+    BooleanPreview,
+    EmptyValue,
+    MapPreview,
+    NumberPreview,
+    PreviewError,
+    ReferencePreview,
+    StorageThumbnail,
+    StringPreview,
+    TimestampPreview,
+    UrlComponentPreview
+} from "./components";
+
+import ReactMarkdown from "react-markdown";
 import firebase from "firebase/app";
-import { PreviewError } from "./components/PreviewError";
+
+// import { EmptyValue } from "./components/EmptyValue";
+// import { UrlComponentPreview } from "./components/UrlComponentPreview";
+// import { StorageThumbnail } from "./components/StorageThumbnail";
+// import { StringPreview } from "./components/StringPreview";
+// import { ArrayOfMapsPreview } from "./components/ArrayOfMapsPreview";
+// import { ArrayOfReferencesPreview, ReferencePreview } from "./components/ReferencePreview";
+// import { ArrayPropertyEnumPreview } from "./components/ArrayEnumPreview";
+// import { ArrayOfStorageComponentsPreview } from "./components/ArrayOfStorageComponentsPreview";
+// import { ArrayOfStringsPreview } from "./components/ArrayOfStringsPreview";
+// import { ArrayPreview } from "./components/ArrayPreview";
+// import { MapPreview } from "./components/MapPreview";
+// import { TimestampPreview } from "./components/TimestampPreview";
+// import { BooleanPreview } from "./components/BooleanPreview";
+// import { NumberPreview } from "./components/NumberPreview";
+// import { PreviewError } from "./components/PreviewError";
 
 export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
@@ -41,15 +57,14 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     const fieldProps = { ...props, PreviewComponent };
 
     if (property.config?.customPreview) {
-        content = createElement(property.config.customPreview as React.ComponentType<PreviewComponentProps & PreviewComponentFactoryProps>,
+        content = createElement(property.config.customPreview as React.ComponentType<PreviewComponentProps>,
             {
                 name,
                 value,
                 property,
                 size,
                 height,
-                width,
-                PreviewComponent
+                width
             });
     } else if (value === null || value === undefined) {
         return <EmptyValue/>;
@@ -84,7 +99,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                                         property={property as ArrayProperty}
                                         value={value}
                                         size={size}
-                                        PreviewComponent={PreviewComponent}/>;
+                    />;
             } else if (arrayProperty.of.dataType === "reference") {
                 content = <ArrayOfReferencesPreview {...fieldProps}
                                                     value={value}
@@ -163,7 +178,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     return content === undefined || content === null ? <EmptyValue/> : content;
 }
 
-function buildWrongValueType(name:string | undefined, dataType:string, value:any) {
+function buildWrongValueType(name: string | undefined, dataType: string, value: any) {
     console.error(`Unexpected value for property ${name}, of type ${dataType}`, value);
     return (
         <PreviewError error={`Unexpected value: ${JSON.stringify(value)}`}/>

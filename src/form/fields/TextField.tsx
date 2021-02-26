@@ -12,9 +12,9 @@ import {
 import React from "react";
 
 import { FieldProps } from "../../models/form_props";
-import PreviewComponent from "../../preview/PreviewComponent";
+import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 

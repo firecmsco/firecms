@@ -1,5 +1,5 @@
 import { CollectionSize } from "../models";
-import { PreviewSize } from "../models/preview_component_props";
+import { PreviewSize } from "../preview";
 
 export const TINY_THUMBNAIL = 40;
 export const SMALL_THUMBNAIL = 100;

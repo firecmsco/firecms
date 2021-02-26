@@ -19,13 +19,12 @@ import {
 import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
 import { getIconForProperty } from "../util/property_icons";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
-import SkeletonComponent from "../preview/components/SkeletonComponent";
+import { PreviewComponent, SkeletonComponent } from "../preview";
 import { ErrorBoundary } from "../components";
 import TableCell from "./TableCell";
 import PopupFormField from "./popup_field/PopupFormField";
 import { OutsideAlerter } from "../util/OutsideAlerter";
 import DisabledTableCell from "./DisabledTableCell";
-import { PreviewComponent } from "../preview/PreviewComponent";
 import { PreviewTableCell } from "./PreviewTableCell";
 import { CollectionTableProps } from "./CollectionTableProps";
 import { TableCellProps } from "./SelectedCellContext";

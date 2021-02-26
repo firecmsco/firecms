@@ -12,7 +12,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import React, { useState } from "react";
 import { FieldProps } from "formik/dist/Field";
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
-import { CustomChip } from "../../preview/components/CustomChip";
+import { CustomChip } from "../../preview";
 import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
 
 interface StringNumberFilterFieldProps {

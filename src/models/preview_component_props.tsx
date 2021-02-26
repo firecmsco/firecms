@@ -3,10 +3,6 @@ import { Property } from "./models";
 
 export type PreviewSize = "regular" | "small" | "tiny";
 
-export interface PreviewComponentFactoryProps {
-    PreviewComponent: React.ComponentType<PreviewComponentProps<any>>
-}
-
 export interface PreviewComponentProps<T = any> {
     name?: string;
     value: T;

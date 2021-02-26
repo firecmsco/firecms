@@ -23,10 +23,10 @@ import {
 import { useSideEntityController, useSnackbarController } from "../contexts";
 import { Prompt } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
-import { EntityPreview } from "../preview";
 import { EntityCollectionTable } from "../collection/EntityCollectionTable";
 import { removeInitialSlash } from "../routes/navigation";
 import CircularProgressCenter from "../components/CircularProgressCenter";
+import { default as EntityPreview } from "../components/EntityPreview";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>

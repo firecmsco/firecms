@@ -11,9 +11,8 @@ import {
 import React from "react";
 import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../../components/LabelWithIcon";
-import { PreviewSize } from "../../models/preview_component_props";
-import { CustomChip } from "../../preview/components/CustomChip";
+import { LabelWithIcon } from "../components/LabelWithIcon";
+import { CustomChip } from "../../preview";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
 

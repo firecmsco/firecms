@@ -2,13 +2,13 @@ import React, { CSSProperties, useMemo, useState } from "react";
 import clsx from "clsx";
 import { IconButton } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
-import { PreviewSize } from "../../models/preview_component_props";
+import { PreviewSize } from "../../preview";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
 
 type ImagePreviewProps = { size: PreviewSize, url: string };
 
-function ImagePreview({ size, url }: ImagePreviewProps) {
+export function ImagePreview({ size, url }: ImagePreviewProps) {
 
     const classes = useStyles();
 
@@ -75,5 +75,3 @@ function ImagePreview({ size, url }: ImagePreviewProps) {
 
     );
 }
-
-export default ImagePreview;

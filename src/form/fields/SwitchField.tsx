@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 export const useStyles = makeStyles((theme: Theme) =>

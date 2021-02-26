@@ -1,21 +1,20 @@
+import React from "react";
 import { ArrayProperty, MapProperty } from "../../models";
 import {
-    PreviewComponentFactoryProps,
-    PreviewComponentProps
-} from "../../models/preview_component_props";
-import ErrorBoundary from "../../components/ErrorBoundary";
 
-import React from "react";
+    PreviewComponentProps
+} from "../../models";
+import ErrorBoundary from "../../components/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { useStyles } from "./styles";
+import { PreviewComponent } from "../PreviewComponent";
 
 export function ArrayOfMapsPreview({
                                        value,
                                        property,
-                                       size,
-                                       PreviewComponent
-                                   }: PreviewComponentProps<object[]> & PreviewComponentFactoryProps) {
+                                       size
+}: PreviewComponentProps<object[]> ) {
 
     if (property.dataType !== "array" || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");

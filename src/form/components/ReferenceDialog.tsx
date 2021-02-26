@@ -4,7 +4,7 @@ import {
     EntityCollection,
     EntitySchema,
     fetchEntity, CMSFormFieldProps
-} from "../models";
+} from "../../models";
 import {
     Button,
     createStyles,
@@ -18,11 +18,11 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 
-import { CollectionTableProps } from "../collection/CollectionTableProps";
-import { CollectionTable } from "../collection/CollectionTable";
-import { useColumnIds } from "../collection/common";
-import { CollectionRowActions } from "../collection/CollectionRowActions";
-import { useSchemasRegistry } from "../side_dialog/SchemaRegistry";
+import { CollectionTableProps } from "../../collection/CollectionTableProps";
+import { CollectionTable } from "../../collection/CollectionTable";
+import { useColumnIds } from "../../collection/common";
+import { CollectionRowActions } from "../../collection/CollectionRowActions";
+import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
 
 
 export const useStyles = makeStyles(theme => createStyles({

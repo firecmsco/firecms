@@ -14,7 +14,7 @@ import {
     Typography
 } from "@material-ui/core";
 import { Entity, EntitySchema } from "../models";
-import PreviewComponent from "../preview/PreviewComponent";
+import { PreviewComponent } from "../preview";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import { ErrorBoundary } from "./index";

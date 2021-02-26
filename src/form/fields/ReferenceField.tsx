@@ -15,10 +15,10 @@ import React, { useEffect } from "react";
 
 import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
-import { ReferenceDialog } from "../../components/ReferenceDialog";
+import { ReferenceDialog } from "../components/ReferenceDialog";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { PreviewComponent, SkeletonComponent } from "../../preview";
-import { LabelWithIcon } from "../../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 
 import ErrorIcon from "@material-ui/icons/Error";
 import ClearIcon from "@material-ui/icons/Clear";
