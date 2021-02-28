@@ -10,7 +10,6 @@ import {
     Entity,
     EntityCollection,
     EntitySchema,
-    EntityValues,
     fetchEntity,
     FilterValues,
     listenCollection,
@@ -24,8 +23,6 @@ import { ErrorBoundary } from "../components";
 import TableCell from "./TableCell";
 import PopupFormField from "./popup_field/PopupFormField";
 import { OutsideAlerter } from "../util/OutsideAlerter";
-import DisabledTableCell from "./DisabledTableCell";
-import { PreviewTableCell } from "./PreviewTableCell";
 import { CollectionTableProps } from "./CollectionTableProps";
 import { TableCellProps } from "./SelectedCellContext";
 import { useHistory } from "react-router-dom";
@@ -35,6 +32,7 @@ import { getPreviewSizeFrom } from "../preview/util";
 import { CollectionRowActions } from "./CollectionRowActions";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import { buildProperty } from "../models/builders";
+import PropertyTableCell from "./PropertyTableCell";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -155,7 +153,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
             additionalColumns
                 .map((aC) => ({ [aC.id]: aC }))
                 .reduce((a, b) => ({ ...a, ...b }), [])
-            : {  };
+            : {};
     }, [additionalColumns]);
 
     const scrollToTop = () => {
@@ -184,7 +182,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as Key[])
             .map((key) => {
-                const property:Property = buildProperty<S,Key,any>(schema.properties[key], schema.defaultValues ?? {});
+                const property: Property = buildProperty<S, Key, any>(schema.properties[key], schema.defaultValues ?? {});
                 return ({
                     id: key as string,
                     type: "property",
@@ -346,15 +344,16 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
             const propertyKey = column.dataKey as Key;
             const propertyOrBuilder = schema.properties[propertyKey];
-            const property = buildProperty<S,Key>(propertyOrBuilder, entity.values, entity.id);
+            const property = buildProperty<S, Key>(propertyOrBuilder, entity.values, entity.id);
             const usedPropertyBuilder = typeof propertyOrBuilder === "function";
 
             if (!inlineEditing) {
                 return (
-                    <PreviewTableCell
+                    <TableCell
                         key={`preview_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
                         size={size}
-                        align={column.align}>
+                        align={column.align}
+                        disabled={true}>
                         <PreviewComponent
                             width={column.width}
                             height={column.height}
@@ -363,7 +362,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                             value={entity.values[propertyKey]}
                             size={getPreviewSizeFrom(size)}
                         />
-                    </PreviewTableCell>
+                    </TableCell>
                 );
             } else {
 
@@ -395,9 +394,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                 const isFocused = selected && focused;
 
                 return entity ?
-                    <TableCell
+                    <PropertyTableCell
                         key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
-                        tableKey={tableKey}
                         size={size}
                         align={column.align}
                         name={propertyKey}
@@ -409,8 +407,6 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                         setPreventOutsideClick={setPreventOutsideClick}
                         setFocused={setFocused}
                         value={entity.values[propertyKey]}
-                        columnIndex={columnIndex}
-                        rowIndex={rowIndex}
                         CollectionTable={CollectionTable}
                         property={property}
                         openPopup={openPopup}
@@ -425,15 +421,22 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
         } else if (column.type === "additional") {
             return (
-                <DisabledTableCell
+                <TableCell
+                    focused={false}
+                    selected={false}
+                    disabled={true}
                     size={size}
-                    tooltip={"Additional columns can't be edited directly"}
-                    align={"left"}>
+                    align={"left"}
+                    allowScroll={false}
+                    showExpandIcon={false}
+                    disabledTooltip={"Additional columns can't be edited directly"}
+                >
                     <ErrorBoundary>
                         {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder(entity)}
                     </ErrorBoundary>
-                </DisabledTableCell>
+                </TableCell>
             );
+
         } else {
             return <Box>Internal ERROR</Box>;
         }

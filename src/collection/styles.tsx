@@ -6,7 +6,6 @@ export interface TableStyleProps {
     size: CollectionSize;
 }
 
-
 export const useTableStyles = makeStyles<Theme, TableStyleProps>(theme => createStyles({
     root: {
         height: "100%",
@@ -80,6 +79,21 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
             width: "100%",
             border: "2px solid transparent",
             borderRadius: 4,
+            overflow: "hidden",
+            display: "flex",
+            padding: ({ size }) => {
+                switch (size) {
+                    case "l":
+                    case "xl":
+                        return theme.spacing(2);
+                    case "m":
+                        return theme.spacing(1);
+                    case "s":
+                        return theme.spacing(0.5);
+                    default:
+                        return theme.spacing(0.25);
+                }
+            },
             "&:hover": {
                 backgroundColor: ({ disabled }) => disabled ? undefined : "#eee"
             },
@@ -93,7 +107,7 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
                     default:
                         return "flex-start";
                 }
-            },
+            }
         },
         error: {
             border: `2px solid ${theme.palette.error.light} !important`
@@ -109,6 +123,25 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
             position: "absolute",
             bottom: 0,
             right: 0
+        },
+        arrow: {
+            color: "#ff1744"
+        },
+        tooltip: {
+            margin: "0 8px",
+            backgroundColor: "#ff1744"
+        },
+        centered: {
+            alignItems: "center"
+        },
+        faded: {
+            "-webkit-mask-image": "linear-gradient(to bottom, black 60%, transparent 100%)",
+            maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
+            alignItems: "start"
+        },
+        scrollable: {
+            overflow: "auto",
+            alignItems: "start"
         }
     })
 );
