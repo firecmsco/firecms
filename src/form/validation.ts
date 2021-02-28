@@ -140,7 +140,7 @@ function getYupDateSchema(property: TimestampProperty): AnySchema | DateSchema {
     return schema;
 }
 
-function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProperty<S>): AnySchema {
+function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProperty<S, any>): AnySchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {

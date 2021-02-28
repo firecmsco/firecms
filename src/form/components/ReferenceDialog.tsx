@@ -1,9 +1,8 @@
 import {
+    CMSFormFieldProps,
     CollectionSize,
     Entity,
-    EntityCollection,
-    EntitySchema,
-    fetchEntity, CMSFormFieldProps
+    fetchEntity
 } from "../../models";
 import {
     Button,
@@ -77,6 +76,9 @@ export function ReferenceDialog(
 
     const schemaRegistry = useSchemasRegistry();
     const collectionConfig = schemaRegistry.getCollectionConfig(collectionPath);
+    if (!collectionConfig) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${collectionPath}`);
+    }
 
     const schema = collectionConfig.schema;
     const textSearchDelegate = collectionConfig.textSearchDelegate;

@@ -15,7 +15,7 @@ import {
     Entity,
     EntityCollection,
     EntitySchema,
-    listenEntityFromRef,
+    listenEntityFromRef, Property,
     ReferenceProperty
 } from "../../models";
 
@@ -143,7 +143,10 @@ export const ReferencePreview = React.memo<PreviewComponentProps<firebase.firest
         const previewProperties = property.previewProperties;
 
         const schemaRegistry = useSchemasRegistry();
-        const collectionConfig: EntityCollection<any> = schemaRegistry.getCollectionConfig(property.collectionPath);
+        const collectionConfig = schemaRegistry.getCollectionConfig(property.collectionPath);
+        if(!collectionConfig) {
+            throw Error(`Couldn't find the corresponding collection view for the path: ${property.collectionPath}`);
+        }
 
         const schema = collectionConfig.schema;
         const [entity, setEntity] = React.useState<Entity<typeof schema>>();
@@ -207,10 +210,10 @@ export const ReferencePreview = React.memo<PreviewComponentProps<firebase.firest
                                     {entity ?
                                         <PreviewComponent name={key as string}
                                                           value={entity.values[key as string]}
-                                                          property={property}
+                                                          property={property as Property}
                                                           size={"tiny"}/>
                                         :
-                                        <SkeletonComponent property={property}
+                                        <SkeletonComponent property={property as Property}
                                                            size={"tiny"}/>
                                     }
                                 </div>

@@ -1,4 +1,4 @@
-import { Entity, EntityCollection, EntitySchema } from "../../models";
+import { Entity, EntityCollection, EntitySchema, Property } from "../../models";
 import firebase from "firebase/app";
 import {
     Box,
@@ -89,7 +89,10 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
     const classes = useStyles();
 
     const schemaRegistry = useSchemasRegistry();
-    const collectionConfig: EntityCollection<any> = schemaRegistry.getCollectionConfig(property.collectionPath);
+    const collectionConfig = schemaRegistry.getCollectionConfig(property.collectionPath);
+    if(!collectionConfig) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${property.collectionPath}`);
+    }
 
     const schema = collectionConfig.schema;
     const collectionPath = property.collectionPath;
@@ -127,7 +130,7 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
 
     useEffect(() => {
         if (validValue) {
-            const cancel = listenEntityFromRef<S, Key>(value, schema, (e => {
+            const cancel = listenEntityFromRef(value, schema, (e => {
                 setEntity(e);
             }));
             return () => cancel();
@@ -185,11 +188,11 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
                                             <PreviewComponent
                                                 name={key}
                                                 value={entity.values[key as string]}
-                                                property={propertyKey}
+                                                property={propertyKey as Property}
                                                 size={"tiny"}/>
                                             :
                                             <SkeletonComponent
-                                                property={propertyKey}
+                                                property={propertyKey as Property}
                                                 size={"tiny"}/>}
                                     </ErrorBoundary>
                                 </Box>

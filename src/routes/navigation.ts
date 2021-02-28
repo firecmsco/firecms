@@ -66,7 +66,7 @@ export function getCollectionPathFrom(s: string) {
  * @param path
  * @param collectionViews
  */
-export function getCollectionViewFromPath(path: string, collectionViews: EntityCollection[]): EntityCollection {
+export function getCollectionViewFromPath(path: string, collectionViews: EntityCollection[]): EntityCollection | undefined {
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     if (subpaths.length % 2 === 0) {
@@ -75,9 +75,9 @@ export function getCollectionViewFromPath(path: string, collectionViews: EntityC
 
     let result: EntityCollection | undefined = getCollectionViewFromPathInternal(removeInitialAndTrailingSlashes(path), collectionViews);
 
-    if (!result) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
-    }
+    // if (!result) {
+    //     throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
+    // }
     return result;
 
 }

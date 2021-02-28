@@ -145,8 +145,9 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         const sidePanelKey = getSidePanelKey(collectionPath, entityId);
 
         if (schemaProps
-            && schemaProps.schema !== undefined
-            && (schemaProps.editEnabled !== undefined || schemaProps.subcollections !== undefined)) {
+            && (schemaProps.schema !== undefined
+                || schemaProps.editEnabled !== undefined
+                || schemaProps.subcollections !== undefined)) {
             const editEnabled = schemaProps.editEnabled;
             const schema = schemaProps.schema;
             const subcollections = schemaProps.subcollections;

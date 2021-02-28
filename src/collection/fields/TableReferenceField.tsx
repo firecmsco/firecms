@@ -62,7 +62,10 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
     const collectionPath = usedProperty.collectionPath;
 
     const schemaRegistry = useSchemasRegistry();
-    const collectionConfig: EntityCollection<any> = schemaRegistry.getCollectionConfig(usedProperty.collectionPath);
+    const collectionConfig = schemaRegistry.getCollectionConfig(usedProperty.collectionPath);
+    if(!collectionConfig) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${usedProperty.collectionPath}`);
+    }
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = (event: React.MouseEvent) => {

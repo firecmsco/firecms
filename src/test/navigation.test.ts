@@ -6,20 +6,24 @@ import { siteConfig } from "./test_site_config";
 
 it("collection view matches ok", () => {
 
+    const collectionViewFromPath = getCollectionViewFromPath("products", siteConfig.navigation);
     expect(
-        getCollectionViewFromPath("products", siteConfig.navigation).relativePath
+        collectionViewFromPath && collectionViewFromPath.relativePath
     ).toEqual("products");
 
+    const collectionViewFromPath1 = getCollectionViewFromPath("products/pid/locales", siteConfig.navigation);
     expect(
-        getCollectionViewFromPath("products/pid/locales", siteConfig.navigation).relativePath
+        collectionViewFromPath1 && collectionViewFromPath1.relativePath
     ).toEqual("locales");
 
+    const collectionViewFromPath2 = getCollectionViewFromPath("sites/es/products", siteConfig.navigation);
     expect(
-        getCollectionViewFromPath("sites/es/products", siteConfig.navigation).relativePath
+        collectionViewFromPath2 && collectionViewFromPath2.relativePath
     ).toEqual("sites/es/products");
 
+    const collectionViewFromPath3 = getCollectionViewFromPath("sites/es/products/pid/locales", siteConfig.navigation);
     expect(
-        getCollectionViewFromPath("sites/es/products/pid/locales", siteConfig.navigation).relativePath
+        collectionViewFromPath3 && collectionViewFromPath3.relativePath
     ).toEqual("locales");
 
     expect(
