@@ -13,7 +13,6 @@ import {
 } from "@material-ui/core";
 import {
     Entity,
-    EntityCollection,
     EntitySchema,
     listenEntityFromRef, Property,
     ReferenceProperty

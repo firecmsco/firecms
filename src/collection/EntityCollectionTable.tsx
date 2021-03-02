@@ -13,7 +13,8 @@ import { Add, Delete } from "@material-ui/icons";
 import { CollectionRowActions } from "./CollectionRowActions";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { getSubcollectionColumnId, useColumnIds } from "./common";
-import { useSideEntityController } from "../contexts/SideEntityController";
+import { useSideEntityController } from "../contexts";
+import ExportButton from "./ExportButton";
 
 type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
     collectionPath: string;
@@ -33,9 +34,9 @@ type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
  * @constructor
  */
 export default function EntityCollectionTable<S extends EntitySchema<Key>, Key extends string>({
-                                                                          collectionPath,
-                                                                          collectionConfig
-                                                                      }: EntityCollectionProps<S, Key>
+                                                                                                   collectionPath,
+                                                                                                   collectionConfig
+                                                                                               }: EntityCollectionProps<S, Key>
 ) {
     const selectedEntityController = useSideEntityController();
 
@@ -46,6 +47,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     const [selectedEntities, setSelectedEntities] = useState<Entity<S, Key>[]>([]);
 
     const deleteEnabled = collectionConfig.deleteEnabled === undefined || collectionConfig.deleteEnabled;
+    const exportable = collectionConfig.exportable === undefined || collectionConfig.exportable;
     const editEnabled = collectionConfig.editEnabled === undefined || collectionConfig.editEnabled;
     const inlineEditing = editEnabled && (collectionConfig.inlineEditing === undefined || collectionConfig.inlineEditing);
     const selectionEnabled = collectionConfig.selectionEnabled === undefined || collectionConfig.selectionEnabled;
@@ -155,7 +157,10 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
     };
 
-    function toolbarActionsBuilder({ size }: { size: CollectionSize }) {
+    function toolbarActionsBuilder({
+                                       size,
+                                       data
+                                   }: { size: CollectionSize, data: Entity<any>[] }) {
 
         const addButton = editEnabled && onNewClick && (largeLayout ?
             <Button
@@ -193,10 +198,15 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             selectedEntities
         }) : undefined;
 
+        const exportButton = exportable &&
+            <ExportButton schema={collectionConfig.schema}
+                          collectionPath={collectionPath}/>;
+
         return (
             <>
                 {extraActions}
                 {multipleDeleteButton}
+                {exportButton}
                 {addButton}
             </>
         );

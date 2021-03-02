@@ -57,6 +57,7 @@ yarn add @camberi/firecms
 - [x] Real-time Collection views for entities
 - [x] Infinite scrolling in collections with optional pagination
 - [x] Collection text search integration
+- [x] Data export
 - [x] All login methods supported by Firebase
 - [x] Custom authenticator to control access
 - [x] Custom additional views in main navigation
@@ -697,6 +698,9 @@ Firestore data schema.
 
 * `deleteEnabled` Can the elements in this collection be deleted. Defaults
   to `true`.
+
+* `exportable` Should the data in this collection view include an export button.
+  Defaults to `true`
 
 * `subcollections` Following the Firestore document and collection schema, you
   can add subcollections to your entity in the same way you define the root

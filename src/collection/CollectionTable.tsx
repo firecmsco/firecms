@@ -114,7 +114,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
     const clickableRows = !inlineEditing && onEntityClick;
 
-    const actions = toolbarWidgetBuilder && toolbarWidgetBuilder({ size });
+    const actions = toolbarWidgetBuilder && toolbarWidgetBuilder({ size, data });
 
     const history = useHistory();
     const updatePopup = (value: boolean) => {

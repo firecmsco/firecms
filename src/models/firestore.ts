@@ -186,10 +186,11 @@ function sanitizeData<S extends EntitySchema<Key>,
     schema: S
 ) {
     let result: any = values;
-    Object.entries(schema.properties).forEach(([key, property]) => {
-        if (values && values[key]) result[key] = values[key];
-        else if ((property as Property).validation?.required) result[key] = null;
-    });
+    Object.entries(computeSchemaProperties(schema))
+        .forEach(([key, property]) => {
+            if (values && values[key]) result[key] = values[key];
+            else if (property.validation?.required) result[key] = null;
+        });
     return result;
 }
 
@@ -412,7 +413,7 @@ export function initEntityValues<S extends EntitySchema<Key>, Key extends string
     return initWithProperties(properties, schema.defaultValues);
 }
 
-type PropertiesValues<S extends EntitySchema<Key>, Key extends string> = {
+export type PropertiesValues<S extends EntitySchema<Key>, Key extends string> = {
     [K in Key]: S["properties"][K] extends Property<infer T> ? T :
         (S["properties"][K] extends PropertyBuilder<S, Key, infer T> ? T : any);
 };

@@ -82,6 +82,12 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
     deleteEnabled?: boolean;
 
     /**
+     * Should the data in this collection view include an export button.
+     * Defaults to `true`
+     */
+    exportable?:boolean;
+
+    /**
      * Following the Firestore document and collection schema, you can add
      * subcollections to your entity in the same way you define the root
      * collections.
