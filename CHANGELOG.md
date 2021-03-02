@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.28.0] - 2021-03-02
+### Added
+- Added export function in collection views, enabled by default but can be
+  disabled.
+
+### Changed
+- Enhanced table performance by reducing the number of divs
+
 ## [0.27.0] - 2021-02-22
 ### Added
 - Added `clearMissingValues` to map property config, allowing missing
