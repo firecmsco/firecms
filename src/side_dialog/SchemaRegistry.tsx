@@ -38,7 +38,8 @@ export type SchemasRegistryController = {
      */
     setOverride: (
         entityPath: string,
-        sidePanelProps: Partial<SchemaSidePanelProps> | null
+        sidePanelProps: Partial<SchemaSidePanelProps> | null,
+        overrideSchemaResolver?: boolean
     ) => string | undefined;
 
     /**
@@ -65,7 +66,7 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
                                                                                 schemaResolver
                                                                             }) => {
 
-    const viewsRef = useRef<Record<string, Partial<SchemaSidePanelProps>>>({});
+    const viewsRef = useRef<Record<string, Partial<SchemaSidePanelProps & { overrideSchemaResolver?: boolean }>>>({});
 
     const getSchema = (collectionPath: string, entityId?: string): SchemaSidePanelProps => {
         const sidePanelKey = getSidePanelKey(collectionPath, entityId);
@@ -111,13 +112,14 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
 
     const setOverride = (
         entityPath: string,
-        sidePanelProps: Partial<SchemaSidePanelProps> | null
+        sidePanelProps: Partial<SchemaSidePanelProps> | null,
+        overrideSchemaResolver?: boolean
     ) => {
         if (!sidePanelProps) {
             delete viewsRef.current[entityPath];
             return undefined;
         } else {
-            viewsRef.current[entityPath] = sidePanelProps;
+            viewsRef.current[entityPath] = { ...sidePanelProps, overrideSchemaResolver };
             return entityPath;
         }
     };

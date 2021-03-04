@@ -26,6 +26,7 @@ export function CMSRouterSwitch({ navigation, additionalViews }: {
 
             {navigation.map(entityCollection => (
                     <Route
+                        exact={true}
                         path={buildCollectionPath(entityCollection)}
                         key={`navigation_${entityCollection.relativePath}`}>
                         <CollectionRoute

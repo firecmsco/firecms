@@ -54,12 +54,6 @@ export interface SchemaSidePanelProps {
      */
     subcollections?: EntityCollection[];
 
-    /**
-     * Should this side panel configuration override the SchemaResolver set
-     * at the CMSApp level. Defaults to true
-     */
-    overrideSchemaResolver?:boolean
-
 }
 
 /**

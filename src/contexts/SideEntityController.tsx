@@ -49,7 +49,7 @@ export type SideEntityController<S extends EntitySchema> = {
      * to override the CMSApp level SchemaResolver.
      * @param props
      */
-    open: (props: SideEntityPanelProps & Partial<SchemaSidePanelProps>) => void;
+    open: (props: SideEntityPanelProps & Partial<SchemaSidePanelProps> & {overrideSchemaResolver?: boolean}) => void;
 };
 
 const SideEntityPanelsController = React.createContext<SideEntityController<any>>(DEFAULT_SIDE_ENTITY);
@@ -136,7 +136,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                       selectedSubcollection,
                       copy,
                       ...schemaProps
-                  }: SideEntityPanelProps & Partial<SchemaSidePanelProps>) => {
+                  }: SideEntityPanelProps & Partial<SchemaSidePanelProps> & {overrideSchemaResolver?: boolean}) => {
 
         if (copy && !entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
@@ -151,9 +151,11 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
             const editEnabled = schemaProps.editEnabled;
             const schema = schemaProps.schema;
             const subcollections = schemaProps.subcollections;
+            const overrideSchemaResolver = schemaProps.overrideSchemaResolver;
             schemasRegistry.setOverride(
                 sidePanelKey,
-                { editEnabled, schema, subcollections }
+                { editEnabled, schema, subcollections },
+                overrideSchemaResolver
             );
         }
 

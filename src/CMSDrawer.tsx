@@ -21,7 +21,7 @@ import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import { AdditionalView } from "./CMSAppProps";
 
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         logo: {
