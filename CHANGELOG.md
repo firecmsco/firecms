@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.28.1] - 2021-03-04
+### Changed
+- Bigger drawer.
+- Fix for schema resolving issue.
+- Fix for react-router routes, they need to be exact now
+
 ## [0.28.0] - 2021-03-02
 ### Added
 - Added export function in collection views, enabled by default but can be
