@@ -406,7 +406,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                         focused={isFocused}
                         setPreventOutsideClick={setPreventOutsideClick}
                         setFocused={setFocused}
-                        value={entity.values[propertyKey]}
+                        value={entity?.values ? entity.values[propertyKey] : undefined}
                         CollectionTable={CollectionTable}
                         property={property}
                         openPopup={openPopup}

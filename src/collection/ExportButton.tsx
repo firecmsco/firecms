@@ -141,12 +141,15 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
 type Header = { label: string, key: string };
 
 function getExportHeaders(properties: Properties<any>): Header[] {
-    return Object.entries(properties)
-        .map(([childKey, propertyOrBuilder]) => {
-            const property = buildProperty(propertyOrBuilder, {}, undefined);
-            return getHeaders(property, childKey, "");
-        })
-        .flat();
+    return [
+        { label: "id", key: "id" },
+        ...Object.entries(properties)
+            .map(([childKey, propertyOrBuilder]) => {
+                const property = buildProperty(propertyOrBuilder, {}, undefined);
+                return getHeaders(property, childKey, "");
+            })
+            .flat()
+    ];
 }
 
 function getHeaders(property: Property, propertyKey: string, prefix: string = ""): Header[] {

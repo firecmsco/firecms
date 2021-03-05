@@ -1,6 +1,12 @@
 # Change Log
 
-## [0.28.1] - 2021-03-04
+## [0.28.2] - 2021-03-04
+### Changed
+- Possible fix for https://github.com/Camberi/firecms/issues/59
+  (Algolia missing properties)
+- Added ids to export
+
+## [0.28.1] - 2021-03-05
 ### Changed
 - Bigger drawer.
 - Fix for schema resolving issue.
