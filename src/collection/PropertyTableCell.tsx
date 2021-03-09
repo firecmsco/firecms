@@ -9,7 +9,7 @@ import {
     Property,
     ReferenceProperty,
     saveEntity,
-    StringProperty
+    StringProperty, TimestampProperty
 } from "../models";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
@@ -227,6 +227,7 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                              focused={focused}
                                              internalValue={internalValue as Date}
                                              updateValue={updateValue}
+                                             property={property as TimestampProperty}
                                              setPreventOutsideClick={setPreventOutsideClick}
             />;
             allowScroll = true;

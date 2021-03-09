@@ -607,6 +607,10 @@ function SampleApp() {
                     markdown: true
                 }
             },
+            test_date: {
+                title: "Test date",
+                dataType: "timestamp",
+            },
             created_at: {
                 title: "Created at",
                 dataType: "timestamp",

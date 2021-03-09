@@ -9,7 +9,9 @@ import {
     ThemeProvider
 } from "@material-ui/core";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+
 import DateFnsUtils from "@date-io/date-fns";
+import * as locales from "date-fns/locale";
 
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -90,9 +92,10 @@ export function CMSApp(props: CMSAppProps) {
         fontFamily,
         toolbarExtraWidget,
         schemaResolver,
+        locale,
         signInOptions = [
             firebase.auth.GoogleAuthProvider.PROVIDER_ID
-        ],
+        ]
     } = props;
 
     const classes = useStyles();
@@ -251,14 +254,18 @@ export function CMSApp(props: CMSAppProps) {
                           signInOptions={signInOptions}/>;
     }
 
+    const dateUtilsLocale = locale ? locales[locale] : undefined;
+
     function renderMainView() {
         return (
             <Router>
-                <SchemaRegistryProvider navigation={navigation} schemaResolver={schemaResolver}>
+                <SchemaRegistryProvider navigation={navigation}
+                                        schemaResolver={schemaResolver}>
                     <SideEntityProvider navigation={navigation}>
                         <BreadcrumbsProvider>
                             <MuiPickersUtilsProvider
-                                utils={DateFnsUtils}>
+                                utils={DateFnsUtils}
+                                locale={dateUtilsLocale}>
                                 <DndProvider backend={HTML5Backend}>
 
                                     <nav>

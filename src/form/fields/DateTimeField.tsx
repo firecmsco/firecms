@@ -1,12 +1,14 @@
 import React from "react";
 import { DateTimePicker } from "@material-ui/pickers";
 
-import { FieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models";
 
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../useClearRestoreValue";
-import firebase from "firebase";
+import { CMSAppProps } from "../../CMSAppProps";
+import { useAppConfigContext } from "../../contexts";
+import { defaultDateFormat } from "../../util/dates";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -27,6 +29,9 @@ export default function DateTimeField({
 
     const internalValue = value || null;
 
+    const appConfig: CMSAppProps | undefined = useAppConfigContext();
+    const dateFormat: string = appConfig?.dateTimeFormat ?? defaultDateFormat;
+
     useClearRestoreValue({
         property,
         value,
@@ -41,6 +46,7 @@ export default function DateTimeField({
                 clearable
                 autoFocus={autoFocus}
                 value={internalValue}
+                format={dateFormat}
                 label={<LabelWithIcon scaledIcon={false} property={property}/>}
                 error={showError}
                 disabled={disabled}

@@ -54,6 +54,7 @@ yarn add @camberi/firecms
 ## Features
 
 ### CMS
+
 - [x] Real-time Collection views for entities
 - [x] Infinite scrolling in collections with optional pagination
 - [x] Collection text search integration
@@ -66,6 +67,7 @@ yarn add @camberi/firecms
 - [ ] Allow set up of a project using a CLI create-firecms-app
 
 ### Entity edition
+
 - [x] Create, read, update, delete views
 - [x] Form for editing entities
 - [x] Implementation of fields for every property (except Geopoint)
@@ -85,7 +87,6 @@ FireCMS is a purely a React app that uses your Firebase project as a backend, so
 you do not need a specific backend to make it run. Just build your project
 following the installation instructions and deploy it in the way you prefer. A
 very easy way is using Firebase Hosting.
-
 
 ## Firebase requirements
 
@@ -117,8 +118,8 @@ picked up automatically.
 ```yarn add @camberi/firecms @material-ui/core @material-ui/icons @material-ui/pickers firebase```
 
 You can replace the content of the file App.tsx with the following sample code.
-Remember to replace the Firebase config with the one you get after creating
-a webapp in the Firebase console.
+Remember to replace the Firebase config with the one you get after creating a
+webapp in the Firebase console.
 
 ```tsx
 import React from "react";
@@ -389,7 +390,15 @@ the following specs:
 - `toolbarExtraWidget` A component that gets rendered on the upper side of the
   main toolbar.
 
-- `schemaResolver`:
+- `dateTimeFormat` Format of the dates in the CMS. Defaults to 'MMMM dd, yyyy,
+  HH:mm:ss'
+
+- `locale` Locale of the CMS, currently only affecting dates
+
+- `schemaResolver`  Used to override schemas based on the collection path and
+  entityId. This resolver allows to override the schema for specific entities,
+  or specific collections, app wide. This overrides schemas all through the app.
+  You can also override schemas in place, when using `useSideEntityController`
 
 ## Entities configuration
 
@@ -596,14 +605,13 @@ the `CMSFieldProps` [here](https://github.com/Camberi/firecms/blob/master/src/fo
 You can also pass custom props to your custom field, which you then receive in
 the `customProps`.
 
-If you are developing a custom field and need to access the values of the entity,
-you can use the `context` field in CMSFieldProps.
+If you are developing a custom field and need to access the values of the
+entity, you can use the `context` field in CMSFieldProps.
 
 #### Saving callbacks
 
-When you are saving an entity you can attach diff
-erent hooks before and after it
-gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
+When you are saving an entity you can attach diff erent hooks before and after
+it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
 
 ```
 const productSchema = buildSchema({
@@ -841,15 +849,13 @@ The props provided by this context are:
 * `close()` Close the last panel
 * `sidePanels` List of side entity panels currently open
 * `open (props: SideEntityPanelProps & Partial<SchemaSidePanelProps>)`
-     Open a new entity sideDialog. By default, the schema and configuration
-     of the view is fetched from the collections you have specified in the
-     navigation.
-     At least you need to pass the collectionPath of the entity you would like
-     to edit. You can set an entityId if you would like to edit and existing one
-     (or a new one with that id).
-     If you wish, you can also override the `SchemaSidePanelProps` (such
-     as schema or subcollections) and choose to override the CMSApp
-     level `SchemaResolver`.
+  Open a new entity sideDialog. By default, the schema and configuration of the
+  view is fetched from the collections you have specified in the navigation. At
+  least you need to pass the collectionPath of the entity you would like to
+  edit. You can set an entityId if you would like to edit and existing one
+  (or a new one with that id). If you wish, you can also override
+  the `SchemaSidePanelProps` (such as schema or subcollections) and choose to
+  override the CMSApp level `SchemaResolver`.
 
 Example:
 

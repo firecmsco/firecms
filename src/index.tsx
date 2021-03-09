@@ -42,7 +42,7 @@ export type { PreviewComponentProps } from "./preview";
 
 export { CMSApp } from "./CMSApp";
 export type {
-    CMSAppProps, AdditionalView
+    CMSAppProps, AdditionalView, Locale
 } from "./CMSAppProps";
 
 
@@ -68,11 +68,11 @@ export {
 
 export {
     FieldDescription,
-    ErrorBoundary,
+    ErrorBoundary
 } from "./components";
 
 export {
-    default as EntityPreview,
+    default as EntityPreview
 } from "./components/EntityPreview";
 
 export {

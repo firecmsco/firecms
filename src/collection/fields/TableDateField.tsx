@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useInputStyles } from "./styles";
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
 import { Box, Typography } from "@material-ui/core";
-import { EmptyValue } from "../../preview";
+import { EmptyValue, TimestampPreview } from "../../preview";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import { TimestampProperty } from "../../models";
 
 export function TableDateField(props: {
     name: string;
@@ -12,11 +13,12 @@ export function TableDateField(props: {
     updateValue: (newValue: (Date | null)) => void;
     focused: boolean;
     disabled: boolean;
+    property: TimestampProperty;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     setPreventOutsideClick: (value: any) => void;
 }) {
 
-    const { disabled, error, internalValue, setPreventOutsideClick, updateValue } = props;
+    const { disabled, error, internalValue, setPreventOutsideClick, updateValue, property } = props;
 
     const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => {
@@ -37,7 +39,7 @@ export function TableDateField(props: {
             <Box flexGrow={1}>
                 {internalValue &&
                 <Typography variant={"body2"}>
-                    {internalValue.toLocaleString()}
+                    <TimestampPreview value={internalValue} property={property} size={"regular"}/>
                 </Typography>}
                 {!internalValue && <EmptyValue/>}
             </Box>

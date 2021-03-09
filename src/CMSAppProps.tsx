@@ -4,11 +4,7 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 import { Authenticator, EntityCollection } from "./models";
-import {
-    SchemaResolver,
-    SchemaSidePanelProps,
-    SideEntityPanelProps
-} from "./side_dialog/model";
+import { SchemaResolver } from "./side_dialog/model";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -80,7 +76,7 @@ export interface CMSAppProps {
     primaryColor?: string;
 
     /**
-     * Primary color of the theme of the CMS
+     * Secondary color of the theme of the CMS
      */
     secondaryColor?: string
 
@@ -95,6 +91,17 @@ export interface CMSAppProps {
      * A component that gets rendered on the upper side of the main toolbar
      */
     toolbarExtraWidget?: React.ReactNode;
+
+    /**
+     * Format of the dates in the CMS.
+     * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
+     */
+    dateTimeFormat?: string;
+
+    /**
+     * Locale of the CMS, currently only affecting dates
+     */
+    locale?: Locale;
 
     /**
      * Used to override schemas based on the collection path and entityId.
@@ -134,3 +141,83 @@ export interface AdditionalView {
     group?: string;
 
 }
+
+
+export type Locale =
+    "af" |
+    "ar" |
+    "arDZ" |
+    "arMA" |
+    "arSA" |
+    "az" |
+    "be" |
+    "bg" |
+    "bn" |
+    "ca" |
+    "cs" |
+    "cy" |
+    "da" |
+    "de" |
+    "el" |
+    "enAU" |
+    "enCA" |
+    "enGB" |
+    "enIN" |
+    "enNZ" |
+    "enUS" |
+    "eo" |
+    "es" |
+    "et" |
+    "eu" |
+    "faIR" |
+    "fi" |
+    "fil" |
+    "fr" |
+    "frCA" |
+    "frCH" |
+    "gd" |
+    "gl" |
+    "gu" |
+    "he" |
+    "hi" |
+    "hr" |
+    "hu" |
+    "hy" |
+    "id" |
+    "is" |
+    "it" |
+    "ja" |
+    "ka" |
+    "kk" |
+    "kn" |
+    "ko" |
+    "lb" |
+    "lt" |
+    "lv" |
+    "mk" |
+    "ms" |
+    "mt" |
+    "nb" |
+    "nl" |
+    "nlBE" |
+    "nn" |
+    "pl" |
+    "pt" |
+    "ptBR" |
+    "ro" |
+    "ru" |
+    "sk" |
+    "sl" |
+    "sr" |
+    "srLatn" |
+    "sv" |
+    "ta" |
+    "te" |
+    "th" |
+    "tr" |
+    "ug" |
+    "uk" |
+    "uz" |
+    "vi" |
+    "zhCN" |
+    "zhTW";
