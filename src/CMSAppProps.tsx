@@ -119,6 +119,7 @@ export interface CMSAppProps {
  * navigation
  */
 export interface AdditionalView {
+
     /**
      * CMS Path
      */
@@ -128,6 +129,11 @@ export interface AdditionalView {
      * Name of this view
      */
     name: string;
+
+    /**
+     * Optional description of this view. You can use Markdown
+     */
+    description?: string;
 
     /**
      * Component to be rendered

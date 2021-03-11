@@ -694,6 +694,8 @@ function SampleApp() {
         relativePath: "products",
         schema: productSchema,
         name: "Products",
+        group: "Main",
+        description: "List of the products currently sold in our shop",
         textSearchDelegate: productsSearchDelegate,
         additionalColumns: [productAdditionalColumn],
         extraActions: productExtraActionBuilder,
@@ -706,6 +708,8 @@ function SampleApp() {
         relativePath: "users",
         schema: usersSchema,
         name: "Users",
+        group: "Main",
+        description: "Registered users",
         textSearchDelegate: usersSearchDelegate,
         additionalColumns: [
             {
@@ -722,6 +726,7 @@ function SampleApp() {
         schema: blogSchema,
         name: "Blog",
         group: "Content",
+        description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
         textSearchDelegate: blogSearchDelegate,
         properties: ["name", "images", "status", "reviewed", "products", "gold_text", "long_text"],
         filterableProperties: ["name", "status"],
@@ -740,7 +745,6 @@ function SampleApp() {
         const testCollection: EntityCollection = {
             relativePath: "test_entity",
             schema: testEntitySchema,
-            group: "Test group",
             name: "Test entity",
             filterableProperties: ["difficulty", "search_adjacent", "description"],
             initialSort: ["title", "desc"],

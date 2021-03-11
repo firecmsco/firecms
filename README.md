@@ -665,6 +665,8 @@ Firestore data schema.
 * `group` Optional field used to group top level navigation entries under a
   navigation view. If you set this value in a subcollection it has no effect.
 
+* `description` Optional description of this view. You can use Markdown.
+
 * `properties` Properties displayed in this collection. If this property is not
   set every property is displayed.
 

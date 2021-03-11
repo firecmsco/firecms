@@ -8,21 +8,21 @@ import "firebase/firestore";
 import { EntityCollection } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import { AdditionalView } from "./CMSAppProps";
-import AdditionalViewRoute from "./routes/AdditionalViewRoute";
-import { CollectionRoute } from "./routes";
+import { AdditionalViewRoute, CollectionRoute, HomeRoute } from "./routes";
 
 export function CMSRouterSwitch({ navigation, additionalViews }: {
     navigation: EntityCollection[],
     additionalViews?: AdditionalView[];
 }) {
 
-    const location:any = useLocation();
+    const location: any = useLocation();
     const mainLocation = location.state && location.state["main_location"] ? location.state["main_location"] : location;
 
     const firstCollectionPath = buildCollectionPath(navigation[0]);
 
     return (
         <Switch location={mainLocation}>
+
 
             {navigation.map(entityCollection => (
                     <Route
@@ -47,7 +47,14 @@ export function CMSRouterSwitch({ navigation, additionalViews }: {
                 </Route>
             ))}
 
-            <Redirect to={firstCollectionPath}/>
+
+            <Route
+                key={`navigation_home`}>
+                <HomeRoute
+                    navigation={navigation}
+                    additionalViews={additionalViews}
+                />
+            </Route>
 
         </Switch>
     );

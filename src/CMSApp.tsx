@@ -141,6 +141,9 @@ export function CMSApp(props: CMSAppProps) {
                     root: {
                         "&.mono": {
                             fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                        },
+                        "&.weight-500": {
+                            fontWeight: 500
                         }
                     }
                 },

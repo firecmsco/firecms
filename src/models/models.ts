@@ -17,11 +17,15 @@ import firebase from "firebase/app";
 export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>,
     AdditionalKey extends string = string> {
-
     /**
      * Plural name of the view. E.g. 'products'
      */
     name: string;
+
+    /**
+     * Optional description of this view. You can use Markdown.
+     */
+    description?: string;
 
     /**
      * Relative Firestore path of this view to its parent.

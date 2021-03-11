@@ -17,7 +17,7 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 import { EntityCollection } from "./models";
-import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
+import { computeNavigation } from "./routes/navigation";
 import { AdditionalView } from "./CMSAppProps";
 
 
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
             maxWidth: drawerWidth
         },
         drawerPaper: {
-            width: drawerWidth,
+            width: drawerWidth
             // letterSpacing: "1px"
         }
     })
@@ -50,27 +50,21 @@ interface NavigationEntry {
     group?: string;
 }
 
-export function CMSDrawer({ logo, navigation, closeDrawer, drawerOpen, additionalViews }: CMSDrawerProps) {
+export function CMSDrawer({
+                              logo,
+                              navigation,
+                              closeDrawer,
+                              drawerOpen,
+                              additionalViews
+                          }: CMSDrawerProps) {
 
     const classes = useStyles();
+    const {
+        navigationEntries,
+        groups
+    } = computeNavigation(navigation, additionalViews);
 
-    const navigationEntries: NavigationEntry[] = [
-        ...navigation.map(view => ({
-            url: buildCollectionPath(view),
-            name: view.name,
-            group: view.group
-        })),
-        ...(additionalViews ?? []).map(additionalView => ({
-            url: addInitialSlash(additionalView.path),
-            name: additionalView.name,
-            group: additionalView.group
-        }))
-    ];
-
-    const groups: string[] = Array.from(new Set(
-        Object.values(navigationEntries).map(e => e.group).filter(Boolean) as string[]
-    ).values());
-    const ungroupedNavigationViews: NavigationEntry[] = Object.values(navigationEntries).filter(e => !e.group);
+    const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
     function createNavigationEntry(index: number, group: string, entry: NavigationEntry) {
         return <ListItem
@@ -102,18 +96,15 @@ export function CMSDrawer({ logo, navigation, closeDrawer, drawerOpen, additiona
         {logo &&
         <img className={classes.logo} src={logo} alt={"Logo"}/>}
 
-        <Divider/>
         <List>
-
-            {ungroupedNavigationViews.map((view, index) => createNavigationEntry(index, "none", view))}
 
             {groups.map((group) => (
                 <React.Fragment
                     key={`drawer_group_${group}`}>
                     <Divider key={`divider_${group}`}/>
                     <Box pt={2} pl={2} pr={2} pb={0.5}>
-                        <Typography variant={"caption"}
-                                    color={"textSecondary"}>
+                        <Typography variant={"caption"} color={"textSecondary"}
+                                    className={"weight-500"}>
                             {group.toUpperCase()}
                         </Typography>
                     </Box>
@@ -122,6 +113,10 @@ export function CMSDrawer({ logo, navigation, closeDrawer, drawerOpen, additiona
                         .map((view, index) => createNavigationEntry(index, group, view))}
                 </React.Fragment>
             ))}
+
+            {ungroupedNavigationViews.length > 0 &&
+            <Divider key={`divider_ungrouped`}/>}
+            {ungroupedNavigationViews.map((view, index) => createNavigationEntry(index, "none", view))}
 
         </List>
 

@@ -20,11 +20,11 @@ interface CollectionRouteProps<S extends EntitySchema<Key>, Key extends string> 
     collectionPath: string
 }
 
-export function CollectionRoute<S extends EntitySchema<Key>, Key extends string>({
-                                                            view,
-                                                            collectionPath
-                                                        }
-                                                            : CollectionRouteProps<S, Key>) {
+function CollectionRoute<S extends EntitySchema<Key>, Key extends string>({
+                                                                              view,
+                                                                              collectionPath
+                                                                          }
+                                                                              : CollectionRouteProps<S, Key>) {
 
     const { url } = useRouteMatch();
     const breadcrumbsContext = useBreadcrumbsContext();
@@ -49,3 +49,5 @@ export function CollectionRoute<S extends EntitySchema<Key>, Key extends string>
         </div>
     );
 }
+
+export default CollectionRoute;

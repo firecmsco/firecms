@@ -1,4 +1,5 @@
 import { EntityCollection, EntitySchema } from "../models";
+import { AdditionalView } from "../CMSAppProps";
 
 const DATA_PATH = `/c`;
 
@@ -124,25 +125,25 @@ function getCollectionPathsCombinations(subpaths: string[]): string[] {
 
 }
 
-export type NavigationEntry = NavigationEntryEntity | NavigationEntryCollection;
+export type NavigationViewEntry = NavigationViewEntity | NavigationViewCollection;
 
-interface NavigationEntryEntity {
+interface NavigationViewEntity {
     type: "entity";
     entityId: string;
     parentCollection: EntityCollection;
 }
 
-interface NavigationEntryCollection {
+interface NavigationViewCollection {
     type: "collection";
     collection: EntityCollection;
 }
 
-export function getCollectionViewsFromPath<S extends EntitySchema>(path: string, allCollections: EntityCollection[]): NavigationEntry[] {
+export function getCollectionViewsFromPath<S extends EntitySchema>(path: string, allCollections: EntityCollection[]): NavigationViewEntry[] {
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
 
-    let result: NavigationEntry[] = [];
+    let result: NavigationViewEntry[] = [];
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
         const collection = allCollections && allCollections.find((entry) => entry.relativePath === subpathCombination);
@@ -171,3 +172,37 @@ export function getCollectionViewsFromPath<S extends EntitySchema>(path: string,
     }
     return result;
 }
+
+export interface TopNavigationEntry {
+    url: string;
+    name: string;
+    description?: string;
+    group?: string;
+}
+
+export function computeNavigation(navigation: EntityCollection[], additionalViews: AdditionalView[] | undefined): {
+    navigationEntries: TopNavigationEntry[],
+    groups: string[]
+} {
+    const navigationEntries: TopNavigationEntry[] = [
+        ...navigation.map(view => ({
+            url: buildCollectionPath(view),
+            name: view.name,
+            description: view.description,
+            group: view.group
+        })),
+        ...(additionalViews ?? []).map(additionalView => ({
+            url: addInitialSlash(additionalView.path),
+            name: additionalView.name,
+            description: additionalView.description,
+            group: additionalView.group
+        }))
+    ];
+
+    const groups: string[] = Array.from(new Set(
+        Object.values(navigationEntries).map(e => e.group).filter(Boolean) as string[]
+    ).values());
+
+    return { navigationEntries, groups };
+}
+
