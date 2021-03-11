@@ -1,6 +1,6 @@
 import { Entity, EntityCollection, EntitySchema } from "../models";
 import React, { useEffect, useState } from "react";
-import { listenEntityFromRef } from "../models/firestore";
+import { listenEntityFromRef } from "../models";
 import { Link as ReactLink } from "react-router-dom";
 
 import EntityPreview from "../components/EntityPreview";
@@ -18,7 +18,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import { getCMSPathFrom, removeInitialSlash } from "../routes/navigation";
 import { EntityCollectionTable } from "../collection/EntityCollectionTable";
-import { useSideEntityController } from "../contexts/SideEntityController";
+import { useSideEntityController } from "../contexts";
 
 
 export const useStyles = makeStyles(theme => createStyles({

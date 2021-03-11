@@ -8,13 +8,23 @@ import {
 } from "../models";
 import CollectionTable from "./CollectionTable";
 import { CMSFormField } from "../form/form_factory";
-import { Button, Typography, useMediaQuery, useTheme } from "@material-ui/core";
-import { Add, Delete } from "@material-ui/icons";
+import {
+    Box,
+    Button,
+    IconButton,
+    Popover,
+    Typography,
+    useMediaQuery,
+    useTheme
+} from "@material-ui/core";
+import { Add, Delete, InfoOutlined } from "@material-ui/icons";
 import { CollectionRowActions } from "./CollectionRowActions";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { getSubcollectionColumnId, useColumnIds } from "./common";
 import { useSideEntityController } from "../contexts";
 import ExportButton from "./ExportButton";
+
+import ReactMarkdown from "react-markdown";
 
 type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
     collectionPath: string;
@@ -53,6 +63,8 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     const selectionEnabled = collectionConfig.selectionEnabled === undefined || collectionConfig.selectionEnabled;
     const paginationEnabled = collectionConfig.pagination === undefined || collectionConfig.pagination;
     const displayedProperties = useColumnIds(collectionConfig, true);
+
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const subcollectionColumns: AdditionalColumnDelegate<any>[] = collectionConfig.subcollections?.map((subcollection) => {
         return {
@@ -113,12 +125,51 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
     const title = (
         <>
+
             <Typography variant="h6">
-                {`${collectionConfig.schema.name} list`}
+                {`${collectionConfig.name}`}
             </Typography>
             <Typography variant={"caption"} color={"textSecondary"}>
                 {`/${collectionPath}`}
             </Typography>
+
+            {collectionConfig.description && <>
+                <span style={{ paddingLeft: "8px" }}>
+                <IconButton
+                    size={"small"}
+                    style={{
+                        width: 16,
+                        height: 16
+                    }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setAnchorEl(e.currentTarget);
+                    }}>
+                    <InfoOutlined fontSize={"small"}/>
+                </IconButton>
+                    </span>
+                <Popover
+                    id={"info-dialog"}
+                    open={!!anchorEl}
+                    anchorEl={anchorEl}
+                    onClose={() => {
+                        setAnchorEl(null);
+                    }}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center"
+                    }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center"
+                    }}
+                >
+                    <Box m={2}>
+                        <ReactMarkdown>{collectionConfig.description}</ReactMarkdown>
+                    </Box>
+                </Popover>
+            </>}
+
         </>
     );
 

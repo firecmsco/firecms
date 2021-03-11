@@ -20,8 +20,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
-import { useBreadcrumbsContext } from "../contexts/BreacrumbsContext";
-import { useAuthContext } from "../contexts/AuthContext";
+import { useBreadcrumbsContext, useAuthContext } from "../contexts";
 import ErrorBoundary from "./ErrorBoundary";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -85,9 +84,15 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
 
                     <Hidden smDown>
                         <Box mr={3}>
-                            <Typography variant="h6" noWrap>
-                                {title}
-                            </Typography>
+                            <Link
+                                key={`breadcrumb-home`}
+                                color="inherit"
+                                component={ReactLink}
+                                to={"/"}>
+                                <Typography variant="h6" noWrap>
+                                    {title}
+                                </Typography>
+                            </Link>
                         </Box>
                     </Hidden>
 

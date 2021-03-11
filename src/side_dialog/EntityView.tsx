@@ -72,7 +72,7 @@ const useStylesSide = makeStyles((theme: Theme) =>
             paddingTop: theme.spacing(2),
             display: "flex",
             alignItems: "center",
-            backgroundColor: theme.palette.common.white
+            backgroundColor: theme.palette.background.default
         }
 
     })

@@ -100,12 +100,15 @@ export function CMSApp(props: CMSAppProps) {
 
     const classes = useStyles();
 
+    const mode: "light" | "dark" = "light";
     const makeTheme = () => {
 
         const original = createMuiTheme({
             palette: {
+                type: mode,
                 background: {
-                    default: "#f6f8f9"
+                    // @ts-ignore
+                    default: mode === 'dark' ?  "#424242" : "#f6f8f9"
                 },
                 primary: {
                     main: primaryColor ? primaryColor : blue["800"]

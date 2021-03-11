@@ -32,21 +32,6 @@ import {
 import ReactMarkdown from "react-markdown";
 import firebase from "firebase/app";
 
-// import { EmptyValue } from "./components/EmptyValue";
-// import { UrlComponentPreview } from "./components/UrlComponentPreview";
-// import { StorageThumbnail } from "./components/StorageThumbnail";
-// import { StringPreview } from "./components/StringPreview";
-// import { ArrayOfMapsPreview } from "./components/ArrayOfMapsPreview";
-// import { ArrayOfReferencesPreview, ReferencePreview } from "./components/ReferencePreview";
-// import { ArrayPropertyEnumPreview } from "./components/ArrayEnumPreview";
-// import { ArrayOfStorageComponentsPreview } from "./components/ArrayOfStorageComponentsPreview";
-// import { ArrayOfStringsPreview } from "./components/ArrayOfStringsPreview";
-// import { ArrayPreview } from "./components/ArrayPreview";
-// import { MapPreview } from "./components/MapPreview";
-// import { TimestampPreview } from "./components/TimestampPreview";
-// import { BooleanPreview } from "./components/BooleanPreview";
-// import { NumberPreview } from "./components/NumberPreview";
-// import { PreviewError } from "./components/PreviewError";
 
 export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;

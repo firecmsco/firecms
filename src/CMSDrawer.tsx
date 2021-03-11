@@ -5,6 +5,7 @@ import {
     Divider,
     Drawer,
     List,
+    Link,
     ListItem,
     ListItemText,
     makeStyles,
@@ -94,7 +95,14 @@ export function CMSDrawer({
     >
 
         {logo &&
-        <img className={classes.logo} src={logo} alt={"Logo"}/>}
+        <Link
+            key={`breadcrumb-home`}
+            color="inherit"
+            onClick={closeDrawer}
+            component={ReactLink}
+            to={"/"}>
+            <img className={classes.logo} src={logo} alt={"Logo"}/>
+        </Link>}
 
         <List>
 
@@ -116,6 +124,7 @@ export function CMSDrawer({
 
             {ungroupedNavigationViews.length > 0 &&
             <Divider key={`divider_ungrouped`}/>}
+
             {ungroupedNavigationViews.map((view, index) => createNavigationEntry(index, "none", view))}
 
         </List>

@@ -102,7 +102,7 @@ function HomeRoute({
                 <CardActionArea
                     style={{
                         display: "flex",
-                        backgroundColor: "#fbfbfb",
+                        backgroundColor: "rgb(0 0 0 / 2%)",
                         flexDirection: "column",
                         alignItems: "flex-end"
                     }}
