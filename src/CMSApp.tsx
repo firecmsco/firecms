@@ -124,9 +124,6 @@ export function CMSApp(props: CMSAppProps) {
                 "fontFamily": fontFamily ? fontFamily : `"Rubik", "Roboto", "Helvetica", "Arial", sans-serif`,
                 fontWeightMedium: 500
             },
-            shape: {
-                borderRadius: 2
-            },
             overrides: {
                 MuiButton: {
                     root: {

@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(1),
             zIndex: 100,
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.background.paper,
             borderBottom: "1px solid rgba(224, 224, 224, 1)"
         },
         actions: {
