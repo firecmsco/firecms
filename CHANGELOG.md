@@ -1,8 +1,14 @@
 # Change Log
 
+## [0.29.0] - 2021-03-12
+### Added
+- Home page and possibility to add descriptions to collections using Markdown
+- Allowing overriding locale (only used for changing date formats for now)
+- Allowing customizing date formats with the parameter `dateTimeFormat`
+
 ## [0.28.2] - 2021-03-04
 ### Changed
-- Possible fix for https://github.com/Camberi/firecms/issues/59
+- Fix for https://github.com/Camberi/firecms/issues/59
   (Algolia missing properties)
 - Added ids to export
 
