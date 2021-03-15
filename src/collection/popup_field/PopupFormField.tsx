@@ -267,7 +267,7 @@ const AutoSubmitToken = ({
     const { values, errors } = useFormikContext();
 
     React.useEffect(() => {
-        const fieldError = errors[name];
+        const fieldError = (errors as any)[name];
         const shouldSave = !fieldError || (Array.isArray(fieldError) && !fieldError.filter((e: any) => !!e).length);
         if (shouldSave) {
             onSubmit(values);

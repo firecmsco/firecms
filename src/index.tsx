@@ -42,7 +42,7 @@ export type { PreviewComponentProps } from "./preview";
 
 export { CMSApp } from "./CMSApp";
 export type {
-    CMSAppProps, AdditionalView, Locale
+    CMSAppProps, CMSView, Locale, Navigation, NavigationBuilder, NavigationBuilderProps
 } from "./CMSAppProps";
 
 

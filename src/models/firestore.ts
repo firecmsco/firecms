@@ -188,7 +188,7 @@ function sanitizeData<S extends EntitySchema<Key>,
     let result: any = values;
     Object.entries(computeSchemaProperties(schema))
         .forEach(([key, property]) => {
-            if (values && values[key]) result[key] = values[key];
+            if (values && (values as any)[key]) result[key] = (values as any)[key];
             else if (property.validation?.required) result[key] = null;
         });
     return result;
@@ -424,7 +424,7 @@ function initWithProperties<S extends EntitySchema<Key>,
 (properties: P, defaultValues?: Partial<PropertiesValues<S, Key>>): PropertiesValues<S, Key> {
     return Object.entries(properties)
         .map(([key, property]) => {
-            const propertyDefaultValue = defaultValues && key in defaultValues ? defaultValues[key] : null;
+            const propertyDefaultValue = defaultValues && key in defaultValues ? (defaultValues as any)[key] : null;
             const value = initPropertyValue(key, property as Property<unknown>, propertyDefaultValue);
             return value === null ? {} : { [key]: value };
         })
@@ -483,7 +483,7 @@ function clearMapMissingValues<S extends EntitySchema<Key>,
 (inputValues: Partial<PropertiesValues<S, Key>>, properties: P): PropertiesValues<S, Key> {
     return Object.entries(properties)
         .map(([key, _]) => {
-            const inputValue = inputValues && inputValues[key];
+            const inputValue = inputValues && (inputValues as any)[key];
             return ({ [key]: inputValue === undefined ? firebase.firestore.FieldValue.delete() : inputValue });
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<S, Key>;
@@ -494,7 +494,7 @@ function updateAutoValues<S extends EntitySchema<Key>,
 (inputValues: Partial<PropertiesValues<S, Key>>, properties: P, status: EntityStatus): PropertiesValues<S, Key> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
-            const inputValue = inputValues && inputValues[key];
+            const inputValue = inputValues && (inputValues as any)[key];
             const updatedValue = updateAutoValue(inputValue, property as Property, status);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });

@@ -64,7 +64,7 @@ export function MapPreview<T>({
                         key={"map_preview_" + mapProperty.title + key + index}>
                         <ErrorBoundary>
                             <PreviewComponent name={key}
-                                              value={value[key] as any}
+                                              value={(value as any)[key]}
                                               property={mapProperty.properties[key]}
                                               size={size}/>
                         </ErrorBoundary>
@@ -98,7 +98,7 @@ export function MapPreview<T>({
                                 <ErrorBoundary>
                                     <PreviewComponent
                                         name={key}
-                                        value={value[key] as any}
+                                        value={(value as any)[key]}
                                         property={mapProperty.properties[key]}
                                         size={"small"}/>
                                 </ErrorBoundary>

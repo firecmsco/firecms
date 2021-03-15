@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { BreadcrumbEntry } from "./navigation";
 import { useBreadcrumbsContext } from "../contexts";
-import { AdditionalView } from "../CMSAppProps";
+import { CMSView } from "../CMSAppProps";
 
 
 interface AdditionalViewRouteProps {
-    additionalView: AdditionalView;
+    additionalView: CMSView;
 }
 
 function AdditionalViewRoute({

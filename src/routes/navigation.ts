@@ -1,5 +1,5 @@
 import { EntityCollection, EntitySchema } from "../models";
-import { AdditionalView } from "../CMSAppProps";
+import { CMSView } from "../CMSAppProps";
 
 const DATA_PATH = `/c`;
 
@@ -138,7 +138,7 @@ interface NavigationViewCollection {
     collection: EntityCollection;
 }
 
-export function getCollectionViewsFromPath<S extends EntitySchema>(path: string, allCollections: EntityCollection[]): NavigationViewEntry[] {
+export function getCollectionsFromPath<S extends EntitySchema>(path: string, allCollections: EntityCollection[]): NavigationViewEntry[] {
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
@@ -164,7 +164,7 @@ export function getCollectionViewsFromPath<S extends EntitySchema>(path: string,
             }
             if (collection.subcollections && nextSegments.length > 1) {
                 const newPath = nextSegments.slice(1).join("/");
-                result.push(...getCollectionViewsFromPath(newPath, collection.subcollections));
+                result.push(...getCollectionsFromPath(newPath, collection.subcollections));
             }
             break;
         }
@@ -180,7 +180,7 @@ export interface TopNavigationEntry {
     group?: string;
 }
 
-export function computeNavigation(navigation: EntityCollection[], additionalViews: AdditionalView[] | undefined): {
+export function computeNavigation(navigation: EntityCollection[], additionalViews: CMSView[] | undefined): {
     navigationEntries: TopNavigationEntry[],
     groups: string[]
 } {

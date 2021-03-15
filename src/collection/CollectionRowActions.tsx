@@ -27,6 +27,7 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                                                                      entity,
                                                                      isSelected,
                                                                      collectionPath,
+                                                                     createEnabled,
                                                                      editEnabled,
                                                                      deleteEnabled,
                                                                      selectionEnabled,
@@ -41,6 +42,7 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                                                                          collectionPath: string,
                                                                          size: CollectionSize,
                                                                          isSelected?: boolean,
+                                                                         createEnabled?: boolean,
                                                                          editEnabled?: boolean,
                                                                          deleteEnabled?: boolean,
                                                                          selectionEnabled?: boolean,
@@ -50,7 +52,7 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                                                                          subcollections?: EntityCollection[];
                                                                      }) {
 
-    const selectedEntityController = useSideEntityController();
+    const sideEntityController = useSideEntityController();
     const classes = useTableStyles({ size });
 
     const [anchorEl, setAnchorEl] = React.useState<any | null>(null);
@@ -79,11 +81,15 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
 
     const onCopyClick = (event: MouseEvent) => {
         event.stopPropagation();
-        selectedEntityController.open({
+        sideEntityController.open({
             entityId: entity.id,
             collectionPath,
             copy: true,
-            editEnabled: true,
+            permissions: {
+                edit: editEnabled,
+                create: createEnabled,
+                delete: deleteEnabled
+            },
             schema,
             subcollections,
             overrideSchemaResolver: false
@@ -110,10 +116,14 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                     <IconButton
                         onClick={(event: MouseEvent) => {
                             event.stopPropagation();
-                            selectedEntityController.open({
+                            sideEntityController.open({
                                 entityId: entity.id,
                                 collectionPath,
-                                editEnabled: editEnabled,
+                                permissions: {
+                                    edit: editEnabled,
+                                    create: createEnabled,
+                                    delete: deleteEnabled
+                                },
                                 schema: schema,
                                 subcollections: subcollections,
                                 overrideSchemaResolver: false
@@ -125,10 +135,13 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                 </Tooltip>
                 }
 
-                {selectionEnabled && <Checkbox
-                    checked={isSelected}
-                    onChange={onCheckboxChange}
-                />}
+                {selectionEnabled &&
+                <Tooltip title={"Select"}>
+                    <Checkbox
+                        checked={isSelected}
+                        onChange={onCheckboxChange}
+                    />
+                </Tooltip>}
 
                 {editEnabled &&
                 <IconButton

@@ -19,7 +19,7 @@ import "firebase/storage";
 import "firebase/firestore";
 import { EntityCollection } from "./models";
 import { computeNavigation } from "./routes/navigation";
-import { AdditionalView } from "./CMSAppProps";
+import { CMSView } from "./CMSAppProps";
 
 
 const drawerWidth = 280;
@@ -39,10 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface CMSDrawerProps {
     logo: string | undefined,
-    navigation: EntityCollection[],
+    collections: EntityCollection[],
     drawerOpen: boolean,
     closeDrawer: () => any,
-    additionalViews: AdditionalView[] | undefined;
+    additionalViews: CMSView[] | undefined;
 }
 
 interface NavigationEntry {
@@ -53,7 +53,7 @@ interface NavigationEntry {
 
 export function CMSDrawer({
                               logo,
-                              navigation,
+                              collections,
                               closeDrawer,
                               drawerOpen,
                               additionalViews
@@ -63,7 +63,7 @@ export function CMSDrawer({
     const {
         navigationEntries,
         groups
-    } = computeNavigation(navigation, additionalViews);
+    } = computeNavigation(collections, additionalViews);
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 

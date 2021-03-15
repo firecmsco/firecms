@@ -1,11 +1,9 @@
 import * as React from "react";
 import { TextSearchDelegate } from "./text_search_delegate";
 import { FieldProps } from "./form_props";
-import {
-
-    PreviewComponentProps
-} from "../preview";
+import { PreviewComponentProps } from "../preview";
 import firebase from "firebase/app";
+import { Navigation, NavigationBuilder } from "../CMSAppProps";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -61,7 +59,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      * You can add additional columns to the collection view by implementing
      * an additional column delegate.q
      */
-    additionalColumns?: AdditionalColumnDelegate<AdditionalKey, S, Key >[];
+    additionalColumns?: AdditionalColumnDelegate<AdditionalKey, S, Key>[];
 
     /**
      * If a text search delegate is supplied, a search bar is displayed on top
@@ -69,27 +67,28 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
     textSearchDelegate?: TextSearchDelegate;
 
     /**
-     * Can the elements in this collection be added and edited. Defaults to `true`
+     * Permissions the logged in user can perform on this collection.
+     * If not specified everything defaults to `true`
      */
-    editEnabled?: boolean;
+    permissions?: PermissionsBuilder<S, Key>;
 
     /**
      * Can the elements in this collection be edited inline in the collection
-     * view. If this flag is set to false but `editEnabled` is `true`, entities
+     * view. If this flag is set to false but `permissions.edit` is `true`, entities
      * can still be edited in the side panel
      */
     inlineEditing?: boolean;
 
     /**
-     * Can the elements in this collection be deleted. Defaults to `true`
+     * Are the entities in this collection selectable. Defaults to true
      */
-    deleteEnabled?: boolean;
+    selectionEnabled?: boolean;
 
     /**
      * Should the data in this collection view include an export button.
      * Defaults to `true`
      */
-    exportable?:boolean;
+    exportable?: boolean;
 
     /**
      * Following the Firestore document and collection schema, you can add
@@ -102,7 +101,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      * Properties displayed in this collection. If this property is not set
      * every property is displayed
      */
-    properties?: (Key| AdditionalKey)[];
+    properties?: (Key | AdditionalKey)[];
 
     /**
      * Properties that should NOT get displayed in the collection view.
@@ -138,12 +137,27 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      */
     extraActions?: (extraActionsParams: ExtraActionsParams<S, Key>) => React.ReactNode;
 
-    /**
-     * Are the entities in this collection selectable. Defaults to true
-     */
-    selectionEnabled?: boolean;
 
 }
+
+export type Permissions = {
+    /**
+     * Can the user add new entities. Defaults to `true`
+     */
+    create?: boolean;
+    /**
+     * Can the elements in this collection be edited. Defaults to `true`
+     */
+    edit?: boolean;
+    /**
+     * Can the user delete entities. Defaults to `true`
+     */
+    delete?: boolean;
+}
+
+export type PermissionsBuilder<S extends EntitySchema<Key>, Key extends string> =
+    Permissions
+    | ((props: { user: firebase.User | null, entity: Entity<S, Key> | null }) => Permissions);
 
 export type ExtraActionsParams<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>> = {
@@ -284,6 +298,17 @@ export function buildAdditionalColumnDelegate<AdditionalKey extends string = str
 
 /**
  * Identity function we use to defeat the type system of Typescript and build
+ * navigation objects with all its properties
+ * @param navigation
+ */
+export function buildNavigation(
+    navigation: Navigation | NavigationBuilder
+): Navigation | NavigationBuilder{
+    return navigation;
+}
+
+/**
+ * Identity function we use to defeat the type system of Typescript and build
  * collection views with all its properties
  * @param collectionView
  */
@@ -374,8 +399,7 @@ export type Property<T = any, ArrayT = any> =
  * Use this interface for adding additional columns to entity collection views.
  * If you need to do some async loading you can use AsyncPreviewComponent
  */
-export interface AdditionalColumnDelegate<
-    AdditionalKey extends string = string,
+export interface AdditionalColumnDelegate<AdditionalKey extends string = string,
     S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>> {
 
@@ -482,7 +506,7 @@ export type EnumType = number | string;
 export type EnumValues<T extends EnumType> = Record<T, string | EnumValueConfig>;
 
 export type EnumValueConfig = {
-    disabled? :boolean;
+    disabled?: boolean;
     label: string;
 }
 

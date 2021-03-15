@@ -150,7 +150,7 @@ export const ReferencePreview = React.memo<PreviewComponentProps<firebase.firest
         const schema = collectionConfig.schema;
         const [entity, setEntity] = React.useState<Entity<typeof schema>>();
 
-        const selectedEntityController = useSideEntityController();
+        const sideEntityController = useSideEntityController();
 
         useEffect(() => {
             const cancel = listenEntityFromRef(reference, schema, (e => {
@@ -227,7 +227,7 @@ export const ReferencePreview = React.memo<PreviewComponentProps<firebase.firest
                                 size={size === "tiny" ? "small" : "medium"}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    selectedEntityController.open({
+                                    sideEntityController.open({
                                         entityId: entity.id,
                                         collectionPath: reference.parent.path,
                                         schema,

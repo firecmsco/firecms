@@ -130,8 +130,8 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
         if (initialValues && status === EntityStatus.existing) {
             return Object.keys(schema.properties)
                 .map((key) => {
-                    const initialValue = initialValues[key];
-                    const latestValue = baseFirestoreValues[key];
+                    const initialValue = (initialValues as any)[key];
+                    const latestValue = (baseFirestoreValues as any)[key];
                     if (!deepEqual(initialValue, latestValue)) {
                         return { [key]: latestValue };
                     }
@@ -240,8 +240,8 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                     // we update the form fields from the Firestore data
                     // if they were not touched
                     Object.entries(underlyingChanges).forEach(([key, value]) => {
-                        const formValue = values[key];
-                        if (!deepEqual(value, formValue) && !touched[key]) {
+                        const formValue = (values as any)[key];
+                        if (!deepEqual(value, formValue) && !(touched as any)[key]) {
                             console.debug("Updated value from Firestore:", key, value);
                             setFieldValue(key, value !== undefined ? value : null);
                         }
@@ -262,9 +262,9 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                             const underlyingValueHasChanged: boolean =
                                 !!underlyingChanges
                                 && Object.keys(underlyingChanges).includes(key)
-                                && !!touched[key];
+                                && !!(touched as any)[key];
 
-                            const dependsOnOtherProperties = typeof schema.properties[key] === "function";
+                            const dependsOnOtherProperties = typeof (schema.properties as any)[key] === "function";
 
                             const disabled = isSubmitting || isReadOnly(property) || !!property.disabled;
                             return (

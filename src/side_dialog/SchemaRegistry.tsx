@@ -56,13 +56,13 @@ export const useSchemasRegistry = () => useContext(SchemaRegistryContext);
 
 interface ViewRegistryProviderProps {
     children: React.ReactNode;
-    navigation: EntityCollection[];
+    collections: EntityCollection[];
     schemaResolver?: SchemaResolver;
 }
 
 export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
                                                                                 children,
-                                                                                navigation,
+                                                                                collections,
                                                                                 schemaResolver
                                                                             }) => {
 
@@ -91,12 +91,11 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
 
         }
 
-        const entityCollection: EntityCollection | undefined = getCollectionViewFromPath(collectionPath, navigation);
+        const entityCollection: EntityCollection | undefined = getCollectionViewFromPath(collectionPath, collections);
         if (entityCollection) {
-            const editEnabled = entityCollection.editEnabled == undefined || entityCollection.editEnabled;
             const schema = entityCollection.schema;
             const subcollections = entityCollection.subcollections;
-            result = { ...{ editEnabled, schema, subcollections }, ...result };
+            result = { ...{ schema, subcollections }, ...result };
         }
 
         if (!result.schema)
@@ -107,7 +106,7 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
     };
 
     const getCollectionConfig = (collectionPath: string, entityId?: string) => {
-        return getCollectionViewFromPath(collectionPath, navigation);
+        return getCollectionViewFromPath(collectionPath, collections);
     };
 
     const setOverride = (

@@ -5,6 +5,8 @@ import "firebase/storage";
 import "firebase/firestore";
 import { Authenticator, EntityCollection } from "./models";
 import { SchemaResolver } from "./side_dialog/model";
+import firebase from "firebase";
+
 
 /**
  * Main entry point that defines the CMS configuration
@@ -21,11 +23,14 @@ export interface CMSAppProps {
     logo?: string;
 
     /**
-     * List of the views in the CMS. Each view relates to a collection in the
-     * root Firestore database. Each of the navigation entries in this field
-     * generates an entry in the main menu.
+     * Use this prop to specify the views that will be generated in the CMS.
+     * You usually will want to create a `Navigation` object that includes
+     * collection views where you specify the path and the schema.
+     * Additionally you can add custom views to the root navigation.
+     * In you need to customize the navigation based on the logged user you
+     * can use a `NavigationBuilder`
      */
-    navigation: EntityCollection[];
+    navigation: Navigation | NavigationBuilder | EntityCollection[] ;
 
     /**
      * Do the users need to log in to access the CMS.
@@ -50,12 +55,6 @@ export interface CMSAppProps {
      * without login.
      */
     allowSkipLogin?: boolean;
-
-    /**
-     * Custom additional views created by the developer, added to the main
-     * navigation
-     */
-    additionalViews?: AdditionalView[];
 
     /**
      * Firebase configuration of the project. If you afe deploying the app to
@@ -113,12 +112,39 @@ export interface CMSAppProps {
     schemaResolver?: SchemaResolver;
 }
 
+/**
+ * You can use this builder to customize the navigation, based on the logged in
+ * user
+ */
+export type NavigationBuilder = (props: NavigationBuilderProps) => Navigation;
+export type NavigationBuilderProps =  { user: firebase.User | null }
+
+/**
+ * In this interface you define the main navigation entries of the CMS
+ */
+export interface Navigation {
+
+    /**
+     * List of the mapped collections in the CMS.
+     * Each entry relates to a collection in the root Firestore database.
+     * Each of the navigation entries in this field
+     * generates an entry in the main menu.
+     */
+    collections: EntityCollection[];
+
+    /**
+     * Custom additional views created by the developer, added to the main
+     * navigation
+     */
+    views?: CMSView[];
+
+}
 
 /**
  * Custom additional views created by the developer, added to the main
- * navigation
+ * navigation.
  */
-export interface AdditionalView {
+export interface CMSView {
 
     /**
      * CMS Path
@@ -147,7 +173,6 @@ export interface AdditionalView {
     group?: string;
 
 }
-
 
 export type Locale =
     "af" |

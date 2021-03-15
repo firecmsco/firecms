@@ -264,7 +264,7 @@ export function createCustomIdField<S extends EntitySchema<Key>, Key extends str
                         </Tooltip>
                     </IconButton>
                     {appConfig?.firebaseConfig &&
-                    <a href={`https://console.firebase.google.com/project/${appConfig.firebaseConfig["projectId"]}/firestore/data/${entity.reference.path}`}
+                    <a href={`https://console.firebase.google.com/project/${(appConfig.firebaseConfig as any)["projectId"]}/firestore/data/${entity.reference.path}`}
                        rel="noopener noreferrer"
                        target="_blank">
                         <IconButton

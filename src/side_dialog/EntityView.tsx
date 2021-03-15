@@ -20,13 +20,19 @@ import {
     Tabs,
     Theme
 } from "@material-ui/core";
-import { useSideEntityController, useSnackbarController } from "../contexts";
+import {
+    useAuthContext,
+    useSideEntityController,
+    useSnackbarController
+} from "../contexts";
 import { Prompt } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
 import { EntityCollectionTable } from "../collection/EntityCollectionTable";
 import { removeInitialSlash } from "../routes/navigation";
 import CircularProgressCenter from "../components/CircularProgressCenter";
 import { default as EntityPreview } from "../components/EntityPreview";
+import { canEdit } from "../util/permissions";
+import { PermissionsBuilder } from "../models/models";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>
@@ -84,7 +90,7 @@ export interface EntitySideViewProps {
     entityId?: string;
     copy?: boolean;
     selectedSubcollection?: string;
-    editEnabled?:boolean;
+    permissions?: PermissionsBuilder<any, any>;
     schema: EntitySchema<any>;
     subcollections?: EntityCollection[];
 }
@@ -94,19 +100,21 @@ function EntitySideView({
                             entityId,
                             selectedSubcollection,
                             copy,
-                            editEnabled = true,
+                            permissions,
                             schema,
                             subcollections
                         }: EntitySideViewProps) {
 
     const classes = useStylesSide();
 
-    const selectedEntityController = useSideEntityController();
+    const sideEntityController = useSideEntityController();
     const snackbarContext = useSnackbarController();
+    const authContext = useAuthContext();
 
     const [entity, setEntity] = useState<Entity<EntitySchema>>();
     const [status, setStatus] = useState<EntityStatus>(copy ? EntityStatus.copy : (entityId ? EntityStatus.existing : EntityStatus.new));
     const [loading, setLoading] = useState<boolean>(true);
+    const [readOnly, setReadOnly] = useState<boolean>(false);
     const [tabsPosition, setTabsPosition] = React.useState(0);
 
     // have the original values of the form changed
@@ -115,6 +123,7 @@ function EntitySideView({
     const onModified = (value: boolean) => {
         setModified(value);
     };
+
 
     useEffect(() => {
         if (entityId) {
@@ -138,6 +147,12 @@ function EntitySideView({
         return () => {
         };
     }, [collectionPath, entityId]);
+
+    useEffect(() => {
+        if (entity)
+            setReadOnly(!canEdit(permissions, authContext.loggedUser, entity));
+
+    }, [entity]);
 
     useEffect(() => {
         if (!selectedSubcollection)
@@ -187,7 +202,7 @@ function EntitySideView({
 
             setStatus(EntityStatus.existing);
             setModified(false);
-            selectedEntityController.close();
+            sideEntityController.close();
 
         };
 
@@ -204,7 +219,7 @@ function EntitySideView({
         };
 
         if (status === EntityStatus.existing && !isModified) {
-            selectedEntityController.close();
+            sideEntityController.close();
             return;
         }
 
@@ -222,14 +237,14 @@ function EntitySideView({
     }
 
     function onDiscard() {
-        selectedEntityController.close();
+        sideEntityController.close();
     }
 
     const existingEntity = status === EntityStatus.existing;
 
     const containerRef = React.useRef<HTMLDivElement>(null);
 
-    const form = editEnabled ? (
+    const form = !readOnly ? (
         <EntityForm
             status={status}
             collectionPath={collectionPath}
@@ -281,7 +296,7 @@ function EntitySideView({
     function onSideTabClick(value: number) {
         setTabsPosition(value);
         if (entityId && subcollections) {
-            selectedEntityController.open({
+            sideEntityController.open({
                 collectionPath,
                 entityId,
                 selectedSubcollection: value !== 0
@@ -304,7 +319,7 @@ function EntitySideView({
                     <div className={classes.header}>
 
                         <IconButton
-                            onClick={(e) => selectedEntityController.close()}>
+                            onClick={(e) => sideEntityController.close()}>
                             <CloseIcon/>
                         </IconButton>
 
@@ -324,7 +339,7 @@ function EntitySideView({
                             scrollButtons="auto"
                         >
                             <Tab
-                                label={`${editEnabled ? (existingEntity ? "Edit" : `Add New`) : ""} ${schema.name}`
+                                label={`${!readOnly ? (existingEntity ? "Edit" : `Add New`) : ""} ${schema.name}`
                                 }/>
 
                             {subcollections && subcollections.map(

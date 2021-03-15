@@ -3,15 +3,16 @@ import React from "react";
 import {
     Authenticator,
     buildCollection,
-    buildSchema,
     buildProperty,
+    buildSchema,
     CMSApp,
-    EntityCollection
+    NavigationBuilder,
+    NavigationBuilderProps
 } from "@camberi/firecms";
 import firebase from "firebase/app";
 import "typeface-rubik";
 
-// Replace with your config
+// TODO: Replace with your config
 const firebaseConfig = {
     apiKey: "",
     authDomain: "",
@@ -170,20 +171,27 @@ const localeSchema = buildSchema({
 
 export function App() {
 
-    const navigation: EntityCollection[] = [
-        buildCollection({
-            relativePath: "products",
-            schema: productSchema,
-            name: "Products",
-            subcollections: [
-                buildCollection({
-                    name: "Locales",
-                    relativePath: "locales",
-                    schema: localeSchema
-                })
-            ]
-        })
-    ];
+    const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
+        collections: [
+            buildCollection({
+                relativePath: "products",
+                schema: productSchema,
+                name: "Products",
+                permissions: ({ user }) => ({
+                    edit: true,
+                    create: true,
+                    delete: true
+                }),
+                subcollections: [
+                    buildCollection({
+                        name: "Locales",
+                        relativePath: "locales",
+                        schema: localeSchema
+                    })
+                ]
+            })
+        ]
+    });
 
     const myAuthenticator: Authenticator = (user?: firebase.User) => {
         console.log("Allowing access to", user?.email);

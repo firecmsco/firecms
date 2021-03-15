@@ -1,5 +1,22 @@
 # Change Log
 
+## [0.30.0] - 2021-03-16
+### Added
+- Improved permissions system. You can now set `create`, `edit` or `delete`
+  permissions in the collection config. Those permissions can be set on a per user
+  basis, using a builder.
+- In the same way, you can now change the main navigation based on the logged user.
+
+### Changed
+- The `navigation` prop in `CMSApp` now can take an object where you define your
+  collections like until now, but also the custom views that were found in the
+  root level.
+- [BREAKING] `AdditionalView` is now called `CMSView`
+- [BREAKING] `customViews` in the main`CMSAppProps` has been moved under the new
+  navigation object.
+- [BREAKING] `deleteEnabled` and `editEnabled` have been removed from collections
+  in favor of new `permissions` object.
+
 ## [0.29.0] - 2021-03-12
 ### Added
 - Home page and possibility to add descriptions to collections using Markdown

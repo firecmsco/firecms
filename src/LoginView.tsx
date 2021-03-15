@@ -80,7 +80,7 @@ export function LoginView({
 
                         {appConfigContext?.firebaseConfig &&
                         <Box p={2}>
-                            <a href={`https://console.firebase.google.com/project/${appConfigContext.firebaseConfig["projectId"]}/authentication/providers`}
+                            <a href={`https://console.firebase.google.com/project/${(appConfigContext.firebaseConfig as any)["projectId"]}/authentication/providers`}
                                rel="noopener noreferrer"
                                target="_blank">
                                 <Button variant="outlined"

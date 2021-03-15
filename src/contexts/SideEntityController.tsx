@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import {
     getCMSPathFrom,
-    getCollectionViewsFromPath,
+    getCollectionsFromPath,
     getEntityOrCollectionPath,
     getEntityPath,
     getRouterNewEntityPath,
@@ -49,7 +49,7 @@ export type SideEntityController<S extends EntitySchema> = {
      * to override the CMSApp level SchemaResolver.
      * @param props
      */
-    open: (props: SideEntityPanelProps & Partial<SchemaSidePanelProps> & {overrideSchemaResolver?: boolean}) => void;
+    open: (props: SideEntityPanelProps & Partial<SchemaSidePanelProps> & { overrideSchemaResolver?: boolean }) => void;
 };
 
 const SideEntityPanelsController = React.createContext<SideEntityController<any>>(DEFAULT_SIDE_ENTITY);
@@ -64,8 +64,14 @@ export const useSideEntityController = () => useContext(SideEntityPanelsControll
 
 interface SideEntityProviderProps {
     children: React.ReactNode;
-    navigation: EntityCollection[];
+    collections: EntityCollection[];
 }
+
+
+type InitialConfig = {
+    sidePanels: ExtendedPanelProps[];
+    schemasConfig: Record<string, SchemaSidePanelProps>
+};
 
 type ExtendedPanelProps = SideEntityPanelProps & {
     /**
@@ -76,7 +82,7 @@ type ExtendedPanelProps = SideEntityPanelProps & {
 
 export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                                                                           children,
-                                                                          navigation
+                                                                          collections
                                                                       }) => {
 
     const location: any = useLocation();
@@ -107,8 +113,11 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         if (!initialised.current) {
             if (isCollectionPath(location.pathname)) {
                 const newFlag = location.hash === "#new";
-                const sidePanelsFromUrl = buildSidePanelsFromUrl(getEntityOrCollectionPath(location.pathname), navigation, newFlag);
-                setSidePanels(sidePanelsFromUrl);
+                const initialConfig = buildSidePanelsFromUrl(getEntityOrCollectionPath(location.pathname), collections, newFlag);
+                Object.entries(initialConfig.schemasConfig).forEach(([key, config]) => {
+                    schemasRegistry.setOverride(key, config);
+                });
+                setSidePanels(initialConfig.sidePanels);
             }
             initialised.current = true;
         }
@@ -136,7 +145,9 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                       selectedSubcollection,
                       copy,
                       ...schemaProps
-                  }: SideEntityPanelProps & Partial<SchemaSidePanelProps> & {overrideSchemaResolver?: boolean}) => {
+                  }: SideEntityPanelProps & Partial<SchemaSidePanelProps> & { overrideSchemaResolver?: boolean }) => {
+
+        console.log("open", collectionPath, entityId, selectedSubcollection, copy, schemaProps);
 
         if (copy && !entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
@@ -146,15 +157,15 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
 
         if (schemaProps
             && (schemaProps.schema !== undefined
-                || schemaProps.editEnabled !== undefined
+                || schemaProps.permissions !== undefined
                 || schemaProps.subcollections !== undefined)) {
-            const editEnabled = schemaProps.editEnabled;
+            const permissions = schemaProps.permissions;
             const schema = schemaProps.schema;
             const subcollections = schemaProps.subcollections;
             const overrideSchemaResolver = schemaProps.overrideSchemaResolver;
             schemasRegistry.setOverride(
                 sidePanelKey,
-                { editEnabled, schema, subcollections },
+                { permissions, schema, subcollections },
                 overrideSchemaResolver
             );
         }
@@ -211,9 +222,11 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
     );
 };
 
-function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[], newFlag: boolean): ExtendedPanelProps[] {
+function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[], newFlag: boolean): InitialConfig {
 
-    const navigationViewsForPath: NavigationViewEntry[] = getCollectionViewsFromPath(path, allCollections);
+    const navigationViewsForPath: NavigationViewEntry[] = getCollectionsFromPath(path, allCollections);
+
+    const schemasConfig:Record<string, SchemaSidePanelProps> = {};
 
     let fullPath: string = "";
     let sidePanels: ExtendedPanelProps[] = [];
@@ -233,6 +246,12 @@ function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[]
                             copy: false
                         }
                     );
+                    const sidePanelKey = getSidePanelKey(fullPath, navigationEntry.entityId);
+                    schemasConfig[sidePanelKey] = {
+                        permissions: previousEntry.collection.permissions,
+                        schema: previousEntry.collection.schema,
+                        subcollections: previousEntry.collection.subcollections
+                    };
                 }
             } else if (navigationEntry.type === "collection") {
                 const lastSidePanel: ExtendedPanelProps = sidePanels[sidePanels.length - 1];
@@ -253,5 +272,5 @@ function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[]
         });
     }
 
-    return sidePanels;
+    return { sidePanels, schemasConfig };
 }

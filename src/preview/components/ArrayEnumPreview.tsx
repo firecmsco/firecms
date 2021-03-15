@@ -50,7 +50,7 @@ export function ArrayEnumPreview({
         <div className={classes.arrayRoot}>
             {value &&
             (value as any[]).map((v, index) => {
-                const label = buildEnumLabel(enumValues[v]);
+                const label = buildEnumLabel((enumValues as any)[v]);
                 return (
                         <div className={classes.arrayItem}
                              key={`preview_array_ref_${name}_${index}`}>

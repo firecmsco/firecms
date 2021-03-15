@@ -102,7 +102,7 @@ function renderMap<T>(property: MapProperty<T>, size: PreviewSize) {
                 {mapProperties && mapProperties.map((key: string) => (
                     <ListItem key={property.title + key}>
                         <SkeletonComponent
-                            property={property.properties[key]}
+                            property={(property.properties as any)[key]}
                             size={"small"}/>
                     </ListItem>
                 ))}
@@ -123,7 +123,7 @@ function renderMap<T>(property: MapProperty<T>, size: PreviewSize) {
                             </TableCell>
                             <TableCell key={`table-cell-${key}`} component="th">
                                 <SkeletonComponent
-                                    property={property.properties[key]}
+                                    property={(property.properties as any)[key]}
                                     size={"small"}/>
                             </TableCell>
                         </TableRow>
@@ -157,7 +157,7 @@ function renderArrayOfMaps<P extends Properties<Key>, Key extends string>(proper
                                             component="th"
                                         >
                                             <SkeletonComponent
-                                                property={properties[key as string]}
+                                                property={(properties as any)[key]}
                                                 size={"small"}/>
                                         </TableCell>
                                     )

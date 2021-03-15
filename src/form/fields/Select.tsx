@@ -71,7 +71,7 @@ export default function Select<T extends EnumType>({
                     );
                 }}
                 renderValue={(v: any) => {
-                    const label = buildEnumLabel(enumValues[v]);
+                    const label = buildEnumLabel((enumValues as any)[v]);
                     return <CustomChip
                         colorKey={typeof v === "number" ? `${name}_${v}` : v as string}
                         label={label || v}

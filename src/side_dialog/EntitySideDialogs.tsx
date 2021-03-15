@@ -41,7 +41,7 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 
-export function EntitySideDialogs<S extends EntitySchema>({ navigation }: { navigation: EntityCollection[] }) {
+export function EntitySideDialogs<S extends EntitySchema>({ collections }: { collections: EntityCollection[] }) {
 
     const sideEntityController = useSideEntityController();
     const schemasRegistry = useSchemasRegistry();
@@ -60,6 +60,8 @@ export function EntitySideDialogs<S extends EntitySchema>({ navigation }: { navi
     function buildEntityView(panel: SideEntityPanelProps) {
 
         const schemaProps: SchemaSidePanelProps | undefined = schemasRegistry.getSchema(panel.collectionPath, panel.entityId);
+
+        console.log("schemaProps", schemaProps);
 
         if (!schemaProps) {
             return (

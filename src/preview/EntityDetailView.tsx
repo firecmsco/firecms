@@ -51,7 +51,7 @@ export function EntityDetailView<S extends EntitySchema<Key> = EntitySchema<any>
 }) {
 
     const classes = useStyles();
-    const selectedEntityController = useSideEntityController();
+    const sideEntityController = useSideEntityController();
 
     const [updatedEntity, setUpdatedEntity] = useState<Entity<S, Key> | undefined>(entity);
     const [tabsPosition, setTabsPosition] = React.useState(0);
@@ -86,7 +86,7 @@ export function EntityDetailView<S extends EntitySchema<Key> = EntitySchema<any>
             className={classes.header}>
 
             <Tooltip title={"Close"}>
-                <IconButton onClick={(e) => selectedEntityController.close()}>
+                <IconButton onClick={(e) => sideEntityController.close()}>
                     <CloseIcon/>
                 </IconButton>
             </Tooltip>

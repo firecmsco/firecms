@@ -37,7 +37,7 @@ export default function ArrayContainer<T>({
     function getHashValue<T>(v: T) {
         if (typeof v === "object") {
             if ("id" in v)
-                return v["id"];
+                return (v as any)["id"];
             else if (v instanceof firebase.firestore.DocumentReference)
                 return v.id;
             else if (v instanceof firebase.firestore.Timestamp)

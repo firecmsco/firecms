@@ -7,7 +7,7 @@ import {
 } from "./navigation";
 import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
 import { useBreadcrumbsContext } from "../contexts";
-import { AdditionalView } from "../CMSAppProps";
+import { CMSView } from "../CMSAppProps";
 import { EntityCollection } from "../models";
 import ReactMarkdown from "react-markdown";
 import {
@@ -44,7 +44,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 interface HomeRouteProps {
     navigation: EntityCollection[],
-    additionalViews: AdditionalView[] | undefined;
+    additionalViews: CMSView[] | undefined;
 }
 
 function HomeRoute({

@@ -72,7 +72,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     /**
      * Can the table be edited inline
      */
-    inlineEditing: boolean;
+    inlineEditing: ((entity:Entity<any>) => boolean) | boolean;
 
     /**
      * Callback when anywhere on the table is clicked

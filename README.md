@@ -7,9 +7,13 @@ generates CRUD views based on your configuration. You define views that are
 mapped to absolute or relative paths in your Firestore database, as well as
 schemas for your entities.
 
+The goal of this CMS is to generate collection and form views that bind nicely
+to the Firestore collection/document model. We have built in many basic (and not
+so basic) use cases; but FireCMS is build with extensibility in mind, so it is
+easy to create your custom form fields, or your complete views.
+
 Note that this is a full application, with routing enabled and not a simple
-component. It has only been tested as an application and not as part of a
-different one.
+component.
 
 It is currently in an alpha state, and we continue working to add features and
 expose internal APIs, so it is safe to expect breaking changes.
@@ -31,7 +35,7 @@ FireCMS is based on this great technologies:
 Check the demo with all the core functionalities. You can modify the data, but
 it gets periodically restored.
 
-https://firecms-demo-27150.web.app/
+https://firecms-demo-27150.web.app
 
 ### Changelog
 
@@ -59,6 +63,7 @@ yarn add @camberi/firecms
 - [x] Infinite scrolling in collections with optional pagination
 - [x] Collection text search integration
 - [x] Data export
+- [x] Granular permissions based on user or specific collections/entities
 - [x] All login methods supported by Firebase
 - [x] Custom authenticator to control access
 - [x] Custom additional views in main navigation
@@ -127,15 +132,16 @@ import React from "react";
 import {
     Authenticator,
     buildCollection,
-    buildSchema,
     buildProperty,
+    buildSchema,
     CMSApp,
-    EntityCollection
+    NavigationBuilder,
+    NavigationBuilderProps
 } from "@camberi/firecms";
 import firebase from "firebase/app";
 import "typeface-rubik";
 
-// Replace with your config
+// TODO: Replace with your config
 const firebaseConfig = {
     apiKey: "",
     authDomain: "",
@@ -193,7 +199,7 @@ const productSchema = buildSchema({
                     ? false
                     : {
                         clearOnDisabled: true,
-                        disabledMessage: "Status must be public in order to enable the published flag"
+                        disabledMessage: "Status must be public in order to enable this the published flag"
                     }
             )
         }),
@@ -294,20 +300,27 @@ const localeSchema = buildSchema({
 
 export function App() {
 
-    const navigation: EntityCollection[] = [
-        buildCollection({
-            relativePath: "products",
-            schema: productSchema,
-            name: "Products",
-            subcollections: [
-                buildCollection({
-                    name: "Locales",
-                    relativePath: "locales",
-                    schema: localeSchema
-                })
-            ]
-        })
-    ];
+    const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
+        collections: [
+            buildCollection({
+                relativePath: "products",
+                schema: productSchema,
+                name: "Products",
+                permissions: ({ user }) => ({
+                    edit: true,
+                    create: true,
+                    delete: true
+                }),
+                subcollections: [
+                    buildCollection({
+                        name: "Locales",
+                        relativePath: "locales",
+                        schema: localeSchema
+                    })
+                ]
+            })
+        ]
+    });
 
     const myAuthenticator: Authenticator = (user?: firebase.User) => {
         console.log("Allowing access to", user?.email);
@@ -350,9 +363,12 @@ the following specs:
 
 - `name` Name of the app, displayed as the main title and in the tab title.
 
-- `navigation` List of the views in the CMS. Each view relates to a collection
-  in the root Firestore database. Each of the navigation entries in this field
-  generates an entry in the main menu.
+- `navigation` Use this prop to specify the views that will be generated in the CMS.
+  You usually will want to create a `Navigation` object that includes
+  collection views where you specify the path and the schema.
+  Additionally you can add custom views to the root navigation.
+  In you need to customize the navigation based on the logged user you
+  can use a `NavigationBuilder`
 
 - `logo` Logo to be displayed in the drawer of the CMS.
 
@@ -699,15 +715,14 @@ Firestore data schema.
 * `textSearchDelegate` If a text search delegate is supplied, a search bar is
   displayed on top.
 
-* `editEnabled` Can the elements in this collection be added and edited.
-  Defaults to `true`.
+* `permissions` You can specify an object with boolean permissions with the
+  shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions
+  the user can perform. You can also pass a `PermissionsBuilder` to customize
+  the permissions based on user or entity.
 
 * `inlineEditing` Can the elements in this collection be edited inline in the
-  collection view. If this flag is set to false but `editEnabled` is `true`,
+  collection view. If this flag is set to false but `permissions.edit` is `true`,
   entities can still be edited in the side panel.
-
-* `deleteEnabled` Can the elements in this collection be deleted. Defaults
-  to `true`.
 
 * `exportable` Should the data in this collection view include an export button.
   Defaults to `true`
@@ -791,7 +806,7 @@ Example:
 import React from "react";
 import { useAuthContext } from "@camberi/firecms";
 
-export function ExampleAdditionalView() {
+export function ExampleCMSView() {
 
     const authContext = useAuthContext();
 
@@ -824,7 +839,7 @@ Example:
 import React from "react";
 import { useSnackbarController } from "@camberi/firecms";
 
-export function ExampleAdditionalView() {
+export function ExampleCMSView() {
 
     const snackbarController = useSnackbarController();
 
@@ -865,7 +880,7 @@ Example:
 import React from "react";
 import { useSideEntityController } from "@camberi/firecms";
 
-export function ExampleAdditionalView() {
+export function ExampleCMSView() {
 
     const sideEntityController = useSideEntityController();
 

@@ -1,9 +1,18 @@
 import React from "react";
 import { Box, Button } from "@material-ui/core";
 
-import { useSnackbarController, useAuthContext, useSideEntityController, buildSchema } from "@camberi/firecms";
+import {
+    buildSchema,
+    useAuthContext,
+    useSideEntityController,
+    useSnackbarController
+} from "@camberi/firecms";
 
-export function ExampleAdditionalView() {
+/**
+ * Sample CMS view not bound to a collection, customizable by the developer
+ * @constructor
+ */
+export function ExampleCMSView() {
 
     const snackbarController = useSnackbarController();
     const sideEntityController = useSideEntityController();

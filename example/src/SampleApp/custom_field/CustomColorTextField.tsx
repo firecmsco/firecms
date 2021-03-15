@@ -1,6 +1,6 @@
 import { TextField, Theme, withStyles } from "@material-ui/core";
 import React, { ReactElement } from "react";
-import { FieldProps, FieldDescription } from "@camberi/firecms";
+import { FieldDescription, FieldProps } from "@camberi/firecms";
 
 interface CustomColorTextFieldProps {
     color: string

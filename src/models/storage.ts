@@ -8,7 +8,7 @@ export function uploadFile(file: File,
     return firebase.storage().ref().child(`${path}/${file.name}`).put(file, metadata);
 }
 
-const memo = {};
+const memo:any = {};
 export function getDownloadURL(storagePath: string): Promise<string> {
     if (memo[storagePath])
         return memo[storagePath];

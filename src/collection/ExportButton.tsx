@@ -193,7 +193,7 @@ function processProperties<S extends EntitySchema<Key>,
 (inputValues: Partial<PropertiesValues<S, Key>>, properties: P): PropertiesValues<S, Key> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
-            const inputValue = inputValues && inputValues[key];
+            const inputValue = inputValues && (inputValues as any)[key];
             const updatedValue = processProperty(inputValue, property as Property);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });

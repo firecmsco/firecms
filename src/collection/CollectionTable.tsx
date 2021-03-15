@@ -74,10 +74,6 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                                frozenIdColumn
                                            }: CollectionTableProps<S, Key, AdditionalKey>) {
 
-    if (inlineEditing && onEntityClick) {
-        console.error("You have set both `inlineEditing` and `onEntityClick` in a CollectionTable. `onEntityClick` will have no effect.");
-    }
-
     const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];
     const [data, setData] = React.useState<Entity<S, Key>[]>(initialEntities);
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
@@ -112,9 +108,10 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const [formPopupOpen, setFormPopupOpen] = React.useState<boolean>(false);
     const [preventOutsideClick, setPreventOutsideClick] = React.useState<boolean>(false);
 
-    const clickableRows = !inlineEditing && onEntityClick;
-
-    const actions = toolbarWidgetBuilder && toolbarWidgetBuilder({ size, data });
+    const actions = toolbarWidgetBuilder && toolbarWidgetBuilder({
+        size,
+        data
+    });
 
     const history = useHistory();
     const updatePopup = (value: boolean) => {
@@ -310,14 +307,30 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         size: CollectionSize,
         collectionPath: string,
         schema: EntitySchema,
-        editEnabled: boolean,
         subcollections?: EntityCollection[]
     }) => {
         if (tableRowWidgetBuilder)
             return tableRowWidgetBuilder(props);
         else
-            return <CollectionRowActions {...props}/>;
+            return <CollectionRowActions editEnabled={false} {...props}/>;
 
+    };
+
+    function checkInlineEditing(entity: Entity<any, any>) {
+        if (typeof inlineEditing === "boolean") {
+            return inlineEditing;
+        } else if (typeof inlineEditing === "function") {
+            return inlineEditing(entity);
+        } else {
+            return true;
+        }
+    }
+
+    const onRowClick = ({ rowData }: any) => {
+        const entity = rowData as Entity<S, Key>;
+        if (checkInlineEditing(entity))
+            return undefined;
+        return onEntityClick && onEntityClick(collectionPath, entity);
     };
 
     const cellRenderer = ({
@@ -334,20 +347,20 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                 size,
                 entity,
                 collectionPath,
-                schema,
-                editEnabled: false
+                schema
             });
         }
 
         if (column.type === "property") {
-
 
             const propertyKey = column.dataKey as Key;
             const propertyOrBuilder = schema.properties[propertyKey];
             const property = buildProperty<S, Key>(propertyOrBuilder, entity.values, entity.id);
             const usedPropertyBuilder = typeof propertyOrBuilder === "function";
 
-            if (!inlineEditing) {
+            const inlineEditingEnabled = checkInlineEditing(entity);
+
+            if (!inlineEditingEnabled) {
                 return (
                     <TableCell
                         key={`preview_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
@@ -550,9 +563,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                 onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
                                 onEndReached={loadNextPage}
                                 rowEventHandlers={
-                                    clickableRows ?
-                                        { onClick: ({ rowData }) => onEntityClick && onEntityClick(collectionPath, rowData as Entity<S, Key>) }
-                                        : undefined
+                                    { onClick: onRowClick }
                                 }
                             >
 

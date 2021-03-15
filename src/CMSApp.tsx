@@ -32,7 +32,7 @@ import { SnackbarProvider } from "./contexts/SnackbarContext";
 import { AppConfigProvider } from "./contexts/AppConfigContext";
 
 import { DndProvider } from "react-dnd";
-import { CMSAppProps } from "./CMSAppProps";
+import { CMSAppProps, Navigation } from "./CMSAppProps";
 import { LoginView } from "./LoginView";
 import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
@@ -81,12 +81,11 @@ export function CMSApp(props: CMSAppProps) {
     const {
         name,
         logo,
-        navigation,
+        navigation: navigationOrCollections,
         authentication,
         allowSkipLogin,
         firebaseConfig,
         onFirebaseInit,
-        additionalViews,
         primaryColor,
         secondaryColor,
         fontFamily,
@@ -108,7 +107,7 @@ export function CMSApp(props: CMSAppProps) {
                 type: mode,
                 background: {
                     // @ts-ignore
-                    default: mode === 'dark' ?  "#424242" : "#f6f8f9"
+                    default: mode === "dark" ? "#424242" : "#f6f8f9"
                 },
                 primary: {
                     main: primaryColor ? primaryColor : blue["800"]
@@ -257,14 +256,31 @@ export function CMSApp(props: CMSAppProps) {
                           signInOptions={signInOptions}/>;
     }
 
-    const dateUtilsLocale = locale ? locales[locale] : undefined;
+    function getNavigation(user: firebase.User | null): Navigation {
+        if (Array.isArray(navigationOrCollections)) {
+            return {
+                collections: navigationOrCollections
+            };
+        } else if (typeof navigationOrCollections === "function") {
+            return navigationOrCollections({ user });
+        } else {
+            return navigationOrCollections;
+        }
+    }
 
-    function renderMainView() {
+    function renderMainView(user: firebase.User | null) {
+
+        const dateUtilsLocale = locale ? locales[locale] : undefined;
+        const navigation = getNavigation(user);
+
+        const collections = navigation.collections;
+        const additionalViews = navigation.views;
+
         return (
             <Router>
-                <SchemaRegistryProvider navigation={navigation}
+                <SchemaRegistryProvider collections={collections}
                                         schemaResolver={schemaResolver}>
-                    <SideEntityProvider navigation={navigation}>
+                    <SideEntityProvider collections={collections}>
                         <BreadcrumbsProvider>
                             <MuiPickersUtilsProvider
                                 utils={DateFnsUtils}
@@ -274,7 +290,7 @@ export function CMSApp(props: CMSAppProps) {
                                     <nav>
                                         <CMSDrawer logo={logo}
                                                    drawerOpen={drawerOpen}
-                                                   navigation={navigation}
+                                                   collections={collections}
                                                    closeDrawer={closeDrawer}
                                                    additionalViews={additionalViews}/>
                                     </nav>
@@ -287,12 +303,12 @@ export function CMSApp(props: CMSAppProps) {
                                         <main
                                             className={classes.content}>
                                             <CMSRouterSwitch
-                                                navigation={navigation}
-                                                additionalViews={additionalViews}/>
+                                                collections={collections}
+                                                views={additionalViews}/>
                                         </main>
                                     </div>
 
-                                    <EntitySideDialogs navigation={navigation}/>
+                                    <EntitySideDialogs collections={collections}/>
 
                                 </DndProvider>
                             </MuiPickersUtilsProvider>
@@ -346,7 +362,7 @@ export function CMSApp(props: CMSAppProps) {
                                             <CircularProgressCenter/>
                                             : (
                                                 hasAccessToMainView ?
-                                                    renderMainView()
+                                                    renderMainView(authContext.loggedUser)
                                                     :
                                                     renderLoginView()
                                             )}

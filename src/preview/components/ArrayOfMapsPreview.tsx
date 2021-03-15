@@ -51,7 +51,7 @@ export function ArrayOfMapsPreview({
                                         <ErrorBoundary>
                                             <PreviewComponent
                                                 name={key}
-                                                value={value[key] as any}
+                                                value={(value as any)[key]}
                                                 property={properties[key]}
                                                 size={"small"}/>
                                         </ErrorBoundary>

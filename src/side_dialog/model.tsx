@@ -1,4 +1,4 @@
-import { EntityCollection, EntitySchema } from "../models";
+import { EntityCollection, EntitySchema, PermissionsBuilder } from "../models";
 import { removeInitialAndTrailingSlashes } from "../routes/navigation";
 
 export interface SideEntityPanelProps {
@@ -25,7 +25,7 @@ export interface SideEntityPanelProps {
 
 }
 
-export function getSidePanelKey(collectionPath:string,entityId?:string) {
+export function getSidePanelKey(collectionPath: string, entityId?: string) {
     if (entityId)
         return `${removeInitialAndTrailingSlashes(collectionPath)}/${removeInitialAndTrailingSlashes(entityId)}`;
     else
@@ -38,9 +38,9 @@ export function getSidePanelKey(collectionPath:string,entityId?:string) {
 export interface SchemaSidePanelProps {
 
     /**
-     * Can the elements in this collection be added and edited. Defaults to `true`
+     * Can the elements in this collection be added and edited.
      */
-    editEnabled?: boolean;
+    permissions?: PermissionsBuilder<any, any>;
 
     /**
      * Schema representing the entities of this view

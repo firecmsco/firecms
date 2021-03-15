@@ -99,7 +99,7 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
 
     const [open, setOpen] = React.useState(autoFocus);
     const [entity, setEntity] = React.useState<Entity<S, Key>>();
-    const selectedEntityController = useSideEntityController();
+    const sideEntityController = useSideEntityController();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -115,7 +115,7 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
     const seeEntityDetails = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (entity)
-            selectedEntityController.open({
+            sideEntityController.open({
                 entityId: entity.id,
                 collectionPath,
                 overrideSchemaResolver: false
@@ -187,7 +187,7 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
                                         entity ?
                                             <PreviewComponent
                                                 name={key}
-                                                value={entity.values[key as string]}
+                                                value={(entity.values as any)[key]}
                                                 property={propertyKey as Property}
                                                 size={"tiny"}/>
                                             :

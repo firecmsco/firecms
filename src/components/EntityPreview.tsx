@@ -80,7 +80,7 @@ export default function EntityPreview<S extends EntitySchema<Key> = EntitySchema
                             <Box display="flex" alignItems="center">
                                 {entity.id}
                                 {appConfig?.firebaseConfig &&
-                                <a href={`https://console.firebase.google.com/project/${appConfig.firebaseConfig["projectId"]}/firestore/data/${entity.reference.path}`}
+                                <a href={`https://console.firebase.google.com/project/${(appConfig.firebaseConfig as any)["projectId"]}/firestore/data/${entity.reference.path}`}
                                    rel="noopener noreferrer"
                                    target="_blank">
                                     <IconButton
@@ -94,7 +94,7 @@ export default function EntityPreview<S extends EntitySchema<Key> = EntitySchema
                     </TableRow>
 
                     {schema && Object.entries(schema.properties).map(([key, propertyOrBuilder]) => {
-                        const value = entity.values[key as string];
+                        const value = (entity.values as any)[key];
                         const property = buildProperty(propertyOrBuilder as PropertyOrBuilder<S, Key>, entity.values, entity.id);
                         return (
                             <TableRow

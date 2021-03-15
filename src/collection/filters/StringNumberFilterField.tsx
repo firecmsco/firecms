@@ -34,13 +34,16 @@ const operationLabels = {
 
 const multipleSelectOperations = ["array-contains-any", "in"];
 
-export default function StringNumberFilterField({ name, property }: StringNumberFilterFieldProps) {
+export default function StringNumberFilterField({
+                                                    name,
+                                                    property
+                                                }: StringNumberFilterFieldProps) {
 
     const isArray = property.dataType === "array";
 
     const dataType = property.dataType === "array" ? property.of.dataType : property.dataType;
     const enumValues = property.dataType === "array" ? property.of.config?.enumValues : property.config?.enumValues;
-    const possibleOperations = isArray ?
+    const possibleOperations: (keyof typeof operationLabels) [] = isArray ?
         ["array-contains"] :
         ["==", "!=", ">", "<", ">=", "<="];
 

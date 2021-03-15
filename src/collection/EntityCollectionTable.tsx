@@ -13,6 +13,7 @@ import {
     Button,
     IconButton,
     Popover,
+    Tooltip,
     Typography,
     useMediaQuery,
     useTheme
@@ -21,10 +22,14 @@ import { Add, Delete, InfoOutlined } from "@material-ui/icons";
 import { CollectionRowActions } from "./CollectionRowActions";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { getSubcollectionColumnId, useColumnIds } from "./common";
-import { useSideEntityController } from "../contexts";
+import { useAuthContext, useSideEntityController } from "../contexts";
 import ExportButton from "./ExportButton";
 
 import ReactMarkdown from "react-markdown";
+import {
+    canCreate, canDelete,
+    canEdit
+} from "../util/permissions";
 
 type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
     collectionPath: string;
@@ -48,18 +53,19 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                                                                                                    collectionConfig
                                                                                                }: EntityCollectionProps<S, Key>
 ) {
-    const selectedEntityController = useSideEntityController();
+
+    const sideEntityController = useSideEntityController();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+    const authContext = useAuthContext();
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S, Key> | Entity<S, Key>[] | undefined>(undefined);
     const [selectedEntities, setSelectedEntities] = useState<Entity<S, Key>[]>([]);
 
-    const deleteEnabled = collectionConfig.deleteEnabled === undefined || collectionConfig.deleteEnabled;
-    const exportable = collectionConfig.exportable === undefined || collectionConfig.exportable;
-    const editEnabled = collectionConfig.editEnabled === undefined || collectionConfig.editEnabled;
-    const inlineEditing = editEnabled && (collectionConfig.inlineEditing === undefined || collectionConfig.inlineEditing);
+    const exportable = collectionConfig.exportable=== undefined || collectionConfig.exportable;
+    const inlineEditing = collectionConfig.inlineEditing === undefined || collectionConfig.inlineEditing;
+
     const selectionEnabled = collectionConfig.selectionEnabled === undefined || collectionConfig.selectionEnabled;
     const paginationEnabled = collectionConfig.pagination === undefined || collectionConfig.pagination;
     const displayedProperties = useColumnIds(collectionConfig, true);
@@ -75,11 +81,11 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 <Button color={"primary"}
                         onClick={(event) => {
                             event.stopPropagation();
-                            selectedEntityController.open({
+                            sideEntityController.open({
                                 collectionPath: collectionPath,
                                 entityId: entity.id,
                                 selectedSubcollection: subcollection.relativePath,
-                                editEnabled: editEnabled,
+                                permissions:subcollection.permissions,
                                 schema: collectionConfig.schema,
                                 subcollections: collectionConfig.subcollections,
                                 overrideSchemaResolver: false
@@ -93,11 +99,11 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
     const additionalColumns = [...collectionConfig.additionalColumns ?? [], ...subcollectionColumns];
 
-    const onEntityClick = inlineEditing ? undefined : (collectionPath: string, entity: Entity<S, Key>) => {
-        selectedEntityController.open({
+    const onEntityClick = (collectionPath: string, entity: Entity<S, Key>) => {
+        sideEntityController.open({
             entityId: entity.id,
             collectionPath,
-            editEnabled: collectionConfig.editEnabled == undefined || collectionConfig.editEnabled,
+            permissions: collectionConfig.permissions,
             schema: collectionConfig.schema,
             subcollections: collectionConfig.subcollections,
             overrideSchemaResolver: false
@@ -106,9 +112,9 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
     const onNewClick = (e: React.MouseEvent) => {
         e.stopPropagation();
-        return collectionPath && selectedEntityController.open({
+        return collectionPath && sideEntityController.open({
             collectionPath,
-            editEnabled: collectionConfig.editEnabled == undefined || collectionConfig.editEnabled,
+            permissions: collectionConfig.permissions,
             schema: collectionConfig.schema,
             subcollections: collectionConfig.subcollections,
             overrideSchemaResolver: false
@@ -121,6 +127,13 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
     const internalOnMultipleEntitiesDelete = (collectionPath: string, entities: Entity<S, Key>[]) => {
         setSelectedEntities([]);
+    };
+
+    const checkInlineEditing = (entity: Entity<any>) => {
+        if (!canEdit(collectionConfig.permissions, authContext.loggedUser, entity)) {
+            return false;
+        }
+        return inlineEditing;
     };
 
     const title = (
@@ -195,8 +208,9 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 entity={entity}
                 isSelected={isSelected}
                 collectionPath={collectionPath}
-                editEnabled={editEnabled}
-                deleteEnabled={deleteEnabled}
+                createEnabled={canCreate(collectionConfig.permissions, authContext.loggedUser)}
+                editEnabled={canEdit(collectionConfig.permissions, authContext.loggedUser, entity)}
+                deleteEnabled={canDelete(collectionConfig.permissions, authContext.loggedUser, entity)}
                 selectionEnabled={selectionEnabled}
                 size={size}
                 toggleEntitySelection={toggleEntitySelection}
@@ -213,7 +227,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                                        data
                                    }: { size: CollectionSize, data: Entity<any>[] }) {
 
-        const addButton = editEnabled && onNewClick && (largeLayout ?
+        const addButton = canCreate(collectionConfig.permissions, authContext.loggedUser) && onNewClick && (largeLayout ?
             <Button
                 onClick={onNewClick}
                 startIcon={<Add/>}
@@ -231,18 +245,23 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 <Add/>
             </Button>);
 
-        const multipleDeleteButton = selectionEnabled && deleteEnabled &&
-            <Button
-                disabled={!(selectedEntities?.length)}
-                startIcon={<Delete/>}
-                onClick={(event: React.MouseEvent) => {
-                    event.stopPropagation();
-                    setDeleteEntityClicked(selectedEntities);
-                }}
-                color={"primary"}
-            >
-                <p style={{ minWidth: 24 }}>({selectedEntities?.length})</p>
-            </Button>;
+        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collectionConfig.permissions, authContext.loggedUser, entity));
+        const multipleDeleteButton = selectionEnabled &&
+
+            <Tooltip
+                title={multipleDeleteEnabled ? "Multiple delete" : "You have selected one entity you cannot delete"}>
+                <Button
+                    disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
+                    startIcon={<Delete/>}
+                    onClick={(event: React.MouseEvent) => {
+                        event.stopPropagation();
+                        setDeleteEntityClicked(selectedEntities);
+                    }}
+                    color={"primary"}
+                >
+                    <p style={{ minWidth: 24 }}>({selectedEntities?.length})</p>
+                </Button>
+            </Tooltip>;
 
         const extraActions = collectionConfig.extraActions ? collectionConfig.extraActions({
             view: collectionConfig,
@@ -274,7 +293,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 filterableProperties={collectionConfig.filterableProperties}
                 initialFilter={collectionConfig.initialFilter}
                 initialSort={collectionConfig.initialSort}
-                inlineEditing={inlineEditing}
+                inlineEditing={checkInlineEditing}
                 onEntityClick={onEntityClick}
                 textSearchDelegate={collectionConfig.textSearchDelegate}
                 tableRowWidgetBuilder={tableRowButtonsBuilder}

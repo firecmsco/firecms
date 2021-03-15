@@ -1,4 +1,4 @@
-import { EntitySchema, Property } from "../../models";
+import { EntitySchema, Properties, Property } from "../../models";
 import {
     Box,
     FormControl,
@@ -80,7 +80,7 @@ export default function MapField<S extends EntitySchema>({
                     onChange={handleAddProperty}>
                     {keys.map((key) => (
                         <MenuItem key={key} value={key}>
-                            {property.properties[key].title || key}
+                            {(property.properties as Properties<any>)[key].title || key}
                         </MenuItem>
                     ))}
                 </Select>
