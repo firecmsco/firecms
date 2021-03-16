@@ -2,14 +2,12 @@ import React from "react";
 import {
     Authenticator,
     buildCollection,
-    buildSchema,
     CMSApp,
     CMSView,
     EntityCollection,
     Navigation,
     NavigationBuilder,
-    NavigationBuilderProps,
-    SchemaResolver
+    NavigationBuilderProps
 } from "@camberi/firecms";
 
 import firebase from "firebase";
@@ -33,6 +31,7 @@ import {
 import { usersSchema } from "./schemas/users_schema";
 import { blogSchema } from "./schemas/blog_schema";
 import { testEntitySchema } from "./schemas/test_schema";
+import { customSchemaResolver } from "./custom_schema_resolver";
 
 
 function SampleApp() {
@@ -45,7 +44,7 @@ function SampleApp() {
             defaultSize: "l"
         });
 
-    const productsCollection = buildCollection({
+    const productsCollection = buildCollection<typeof productSchema>({
         relativePath: "products",
         schema: productSchema,
         name: "Products",
@@ -55,7 +54,7 @@ function SampleApp() {
         additionalColumns: [productAdditionalColumn],
         permissions: ({ user }) => ({
             edit: true,
-            create: false
+            create: true
         }),
         extraActions: productExtraActionBuilder,
         subcollections: [localeCollection],
@@ -80,7 +79,7 @@ function SampleApp() {
         properties: ["first_name", "last_name", "email", "phone", "sample_additional", "picture"]
     });
 
-    const blogCollection = buildCollection({
+    const blogCollection = buildCollection<typeof blogSchema>({
         relativePath: "blog",
         schema: blogSchema,
         name: "Blog",
@@ -94,7 +93,7 @@ function SampleApp() {
         }
     });
 
-    const testCollection: EntityCollection = {
+    const testCollection = buildCollection<typeof testEntitySchema>({
         relativePath: "test_entity",
         schema: testEntitySchema,
         name: "Test entity",
@@ -106,7 +105,7 @@ function SampleApp() {
             name: "Test entity",
             filterableProperties: ["difficulty", "search_adjacent", "description"]
         }]
-    };
+    });
 
     const myAuthenticator: Authenticator = (user?: firebase.User) => {
         console.log("Allowing access to", user?.email);
@@ -134,31 +133,6 @@ function SampleApp() {
         view: <ExampleCMSView/>
     }];
 
-    const customSchemaResolver: SchemaResolver = ({
-                                                      entityId,
-                                                      collectionPath
-                                                  }: {
-        entityId?: string;
-        collectionPath: string;
-    }) => {
-
-        if (entityId === "B0017TNJWY" && collectionPath === "products") {
-            const customProductSchema = buildSchema({
-                name: "Custom product",
-                properties: {
-                    name: {
-                        title: "Name",
-                        description: "This entity is using a schema overridden by a schema resolver",
-                        validation: { required: true },
-                        dataType: "string"
-                    }
-                }
-            });
-
-            console.log("Using custom schema resolver", collectionPath, entityId);
-            return { schema: customProductSchema };
-        }
-    };
 
     const onFirebaseInit = (config: Object) => {
         // models.firestore().useEmulator("localhost", 8080);
