@@ -1,4 +1,3 @@
-import React from "react";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import CustomBooleanPreview from "../custom_preview/CustomBooleanPreview";
 import { buildSchema } from "@camberi/firecms";

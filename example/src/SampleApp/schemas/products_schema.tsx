@@ -1,4 +1,3 @@
-import React from "react";
 import PriceTextPreview from "../custom_preview/PriceTextPreview";
 import { SampleExtraActions } from "../SampleExtraActions";
 import {

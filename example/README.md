@@ -1,16 +1,34 @@
 ## Testing the example
 
-This example has dependencies to the FireCMS package in the parent directory
-for development purposes.
-
-In a regular project you would link the dependencies regularly using the `npm`
-repository.
-
 To run this project locally you can set your Firebase configuration in the file
 `firebase_config.ts` under `src`
 
-For local development, you need to run `yarn install` and then `yarn start`,
-both in the root folder of the project and the example folder.
+Then simply
+```
+yarn install
+```
+and
+```
+yarn start
+```
+to run locally.
+
+### Linking to the CMS source code
+
+For development purposes it is useful to link this project to the FireCMS library.
+In order to do that you need to run in the library directory
+```
+yarn link
+```
+Then you can run:
+```
+yarn link "@camberi/firecms"
+```
+as described [here](https://classic.yarnpkg.com/en/docs/cli/link/)
+
+With both projects linked, you will want to run `yarn start` in both of them
+(library and example) so that whenever you do a change in the source code it is
+updated in your local running example.
 
 ### Algolia search
 

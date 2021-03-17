@@ -1,4 +1,3 @@
-import React from "react";
 import { buildSchema } from "@camberi/firecms";
 
 export const usersSchema = buildSchema({

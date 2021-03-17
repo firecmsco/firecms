@@ -1,4 +1,3 @@
-import React from "react";
 import { buildSchema, EntitySaveProps } from "@camberi/firecms";
 import { locales } from "./products_schema";
 

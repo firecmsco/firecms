@@ -1,4 +1,3 @@
-import React from "react";
 import { buildSchema, SchemaResolver } from "@camberi/firecms";
 
 /**
