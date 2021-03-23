@@ -18,7 +18,6 @@ import firebase from "firebase/app";
 import {
     ArrayProperty,
     FieldProps,
-    EntitySchema,
     getDownloadURL,
     Property,
     StorageMeta,
@@ -27,13 +26,12 @@ import {
 } from "../../models";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
-import { PreviewComponent } from "../../preview";
+import { PreviewComponent, PreviewSize } from "../../preview";
 import deepEqual from "deep-equal";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../components/LabelWithIcon";
 import { useSnackbarController } from "../../contexts";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import { PreviewSize } from "../../preview";
 
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
@@ -110,7 +108,8 @@ type StorageUploadFieldProps = FieldProps<string | string[]>;
 
 /**
  * Internal representation of an item in the storage
- * It can have two states, having a storagePath set, which means the file has
+ * It can have two states, having a storagePathOrDownloadUrl set,
+ * which means the file has
  * been uploaded and it is rendered as a preview
  * Or have a pending file being uploaded.
  */
@@ -118,6 +117,7 @@ interface StorageFieldItem {
     id: number; // generated on the fly for internal use only
     storagePathOrDownloadUrl?: string;
     file?: File;
+    fileName?: string;
     metadata?: firebase.storage.UploadMetadata,
     size: PreviewSize
 }
@@ -133,8 +133,7 @@ export default function StorageUploadField({
                                                property,
                                                includeDescription,
                                                context,
-                                               isSubmitting,
-                                               dependsOnOtherProperties
+                                               isSubmitting
                                            }: StorageUploadFieldProps) {
 
     const multipleFilesSupported = property.dataType === "array";
@@ -149,6 +148,56 @@ export default function StorageUploadField({
         value,
         setValue
     });
+
+    const storageMeta: StorageMeta | undefined = property.dataType === "string" ? property.config?.storageMeta :
+        property.dataType === "array" &&
+        (property.of as Property).dataType === "string" ? (property.of as StringProperty).config?.storageMeta :
+            undefined;
+
+    if (!storageMeta)
+        throw Error("Storage meta must be specified");
+
+    const fileNameBuilder = (file: File) => {
+        if (storageMeta.fileName) {
+            const fileName = storageMeta.fileName({
+                entityId: context.entityId,
+                entityValues: context.values,
+                property,
+                file,
+                storageMeta,
+                name
+            });
+
+            if (!fileName || fileName.length === 0) {
+                throw Error("You need to return a valid filename");
+            }
+            return fileName;
+        }
+        return file.name;
+    };
+
+    const storagePathBuilder = (file: File) => {
+        if (typeof storageMeta.storagePath === "string")
+            return storageMeta.storagePath;
+
+        if (typeof storageMeta.storagePath === "function") {
+            const storagePath = storageMeta.storagePath({
+                entityId: context.entityId,
+                entityValues: context.values,
+                property,
+                file,
+                storageMeta,
+                name
+            });
+
+            if (!storagePath || storagePath.length === 0) {
+                throw Error("You need to return a valid filename");
+            }
+            return storagePath;
+        }
+        console.warn("When using a storage property, if you don't specify the storagePath, the root storage is used");
+        return "/";
+    };
 
     return (
 
@@ -173,8 +222,10 @@ export default function StorageUploadField({
                         newValue
                     );
                 }}
+                fileNameBuilder={fileNameBuilder}
+                storagePathBuilder={storagePathBuilder}
+                storageMeta={storageMeta}
                 multipleFilesSupported={multipleFilesSupported}
-                entitySchema={context.entitySchema}
                 small={false}/>
 
             {includeDescription &&
@@ -196,7 +247,9 @@ interface StorageUploadProps {
     autoFocus: boolean;
     disabled: boolean;
     small: boolean;
-    entitySchema: EntitySchema
+    storageMeta: StorageMeta;
+    fileNameBuilder: (file: File) => string;
+    storagePathBuilder: (file: File) => string;
 }
 
 export function StorageUpload({
@@ -208,9 +261,10 @@ export function StorageUpload({
                                   small,
                                   disabled,
                                   autoFocus,
-                                  entitySchema
+                                  storageMeta,
+                                  fileNameBuilder,
+                                  storagePathBuilder
                               }: StorageUploadProps) {
-
 
     if (multipleFilesSupported) {
         const arrayProperty = property as ArrayProperty<string>;
@@ -223,15 +277,7 @@ export function StorageUpload({
         }
     }
 
-    const storageMeta: StorageMeta | undefined = property.dataType === "string" ? property.config?.storageMeta :
-        property.dataType === "array" &&
-        (property.of as Property).dataType === "string" ? (property.of as StringProperty).config?.storageMeta :
-            undefined;
-
     const metadata: firebase.storage.UploadMetadata | undefined = storageMeta?.metadata;
-
-    if (!storageMeta)
-        throw Error("Storage meta must be specified");
 
     const classes = useStyles();
 
@@ -294,6 +340,7 @@ export function StorageUpload({
                 ...(acceptedFiles.map(file => ({
                     id: getRandomId(),
                     file,
+                    fileName: fileNameBuilder(file),
                     metadata,
                     size: size
                 } as StorageFieldItem)))];
@@ -301,6 +348,7 @@ export function StorageUpload({
             newInternalValue = [{
                 id: getRandomId(),
                 file: acceptedFiles[0],
+                fileName: fileNameBuilder(acceptedFiles[0]),
                 metadata,
                 size: size
             }];
@@ -413,7 +461,7 @@ export function StorageUpload({
                             <StorageUploadProgress
                                 entry={entry}
                                 metadata={metadata}
-                                storagePath={storageMeta.storagePath}
+                                storagePath={storagePathBuilder(entry.file)}
                                 onFileUploadComplete={onFileUploadComplete}
                                 size={size}
                             />
@@ -581,15 +629,15 @@ export function StorageUploadProgress({
 
     useEffect(() => {
         if (entry.file)
-            upload(entry.file);
+            upload(entry.file, entry.fileName);
     }, []);
 
-    function upload(file: File) {
+    function upload(file: File, fileName?: string) {
 
         setError(undefined);
         setProgress(0);
 
-        const uploadTask = uploadFile(file, storagePath, metadata);
+        const uploadTask = uploadFile(file, fileName, storagePath, metadata);
         uploadTask.on("state_changed", (snapshot) => {
             const currentProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             setProgress(currentProgress);

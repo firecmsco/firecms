@@ -26,10 +26,7 @@ import { useAuthContext, useSideEntityController } from "../contexts";
 import ExportButton from "./ExportButton";
 
 import ReactMarkdown from "react-markdown";
-import {
-    canCreate, canDelete,
-    canEdit
-} from "../util/permissions";
+import { canCreate, canDelete, canEdit } from "../util/permissions";
 
 type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
     collectionPath: string;
@@ -63,7 +60,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S, Key> | Entity<S, Key>[] | undefined>(undefined);
     const [selectedEntities, setSelectedEntities] = useState<Entity<S, Key>[]>([]);
 
-    const exportable = collectionConfig.exportable=== undefined || collectionConfig.exportable;
+    const exportable = collectionConfig.exportable === undefined || collectionConfig.exportable;
     const inlineEditing = collectionConfig.inlineEditing === undefined || collectionConfig.inlineEditing;
 
     const selectionEnabled = collectionConfig.selectionEnabled === undefined || collectionConfig.selectionEnabled;
@@ -85,7 +82,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                                 collectionPath: collectionPath,
                                 entityId: entity.id,
                                 selectedSubcollection: subcollection.relativePath,
-                                permissions:subcollection.permissions,
+                                permissions: subcollection.permissions,
                                 schema: collectionConfig.schema,
                                 subcollections: collectionConfig.subcollections,
                                 overrideSchemaResolver: false
@@ -250,17 +247,19 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
             <Tooltip
                 title={multipleDeleteEnabled ? "Multiple delete" : "You have selected one entity you cannot delete"}>
-                <Button
-                    disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                    startIcon={<Delete/>}
-                    onClick={(event: React.MouseEvent) => {
-                        event.stopPropagation();
-                        setDeleteEntityClicked(selectedEntities);
-                    }}
-                    color={"primary"}
-                >
-                    <p style={{ minWidth: 24 }}>({selectedEntities?.length})</p>
-                </Button>
+                <span>
+                    <Button
+                        disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
+                        startIcon={<Delete/>}
+                        onClick={(event: React.MouseEvent) => {
+                            event.stopPropagation();
+                            setDeleteEntityClicked(selectedEntities);
+                        }}
+                        color={"primary"}
+                    >
+                        <p style={{ minWidth: 24 }}>({selectedEntities?.length})</p>
+                    </Button>
+                </span>
             </Tooltip>;
 
         const extraActions = collectionConfig.extraActions ? collectionConfig.extraActions({

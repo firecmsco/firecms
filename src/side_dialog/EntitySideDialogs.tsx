@@ -61,8 +61,6 @@ export function EntitySideDialogs<S extends EntitySchema>({ collections }: { col
 
         const schemaProps: SchemaSidePanelProps | undefined = schemasRegistry.getSchema(panel.collectionPath, panel.entityId);
 
-        console.log("schemaProps", schemaProps);
-
         if (!schemaProps) {
             return (
                 <Box>

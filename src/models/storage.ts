@@ -1,11 +1,16 @@
 import firebase from "firebase/app";
 
 export function uploadFile(file: File,
+                           fileName?: string,
                            path?: string,
                            metadata?: firebase.storage.UploadMetadata)
     : firebase.storage.UploadTask {
-    console.debug("Uploading file", file, path, metadata);
-    return firebase.storage().ref().child(`${path}/${file.name}`).put(file, metadata);
+    const usedFilename = fileName ?? file.name;
+    console.debug("Uploading file", usedFilename, file, path, metadata);
+    return firebase.storage()
+        .ref()
+        .child(`${path}/${usedFilename}`)
+        .put(file, metadata);
 }
 
 const memo:any = {};

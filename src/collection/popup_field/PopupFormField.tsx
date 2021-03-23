@@ -167,9 +167,9 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
 
         const context: FormContext<S, Key> = {
             entitySchema: schema,
+            entityId: entity.id,
             values
         };
-
 
         return <OutsideAlerter
             enabled={true}

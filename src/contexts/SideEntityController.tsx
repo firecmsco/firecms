@@ -147,8 +147,6 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                       ...schemaProps
                   }: SideEntityPanelProps & Partial<SchemaSidePanelProps> & { overrideSchemaResolver?: boolean }) => {
 
-        console.log("open", collectionPath, entityId, selectedSubcollection, copy, schemaProps);
-
         if (copy && !entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
@@ -177,7 +175,11 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         const lastSidePanel = sidePanels.length > 0 ? sidePanels[sidePanels.length - 1] : undefined;
 
         // If the side dialog is open currently, we update it
-        if (entityId && lastSidePanel && lastSidePanel?.entityId === entityId) {
+        if (entityId
+            && lastSidePanel
+            && lastSidePanel.collectionPath == collectionPath
+            && lastSidePanel?.entityId === entityId) {
+
             const updatedPanel: ExtendedPanelProps = {
                 ...lastSidePanel,
                 sidePanelKey,
@@ -226,7 +228,7 @@ function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[]
 
     const navigationViewsForPath: NavigationViewEntry[] = getCollectionsFromPath(path, allCollections);
 
-    const schemasConfig:Record<string, SchemaSidePanelProps> = {};
+    const schemasConfig: Record<string, SchemaSidePanelProps> = {};
 
     let fullPath: string = "";
     let sidePanels: ExtendedPanelProps[] = [];

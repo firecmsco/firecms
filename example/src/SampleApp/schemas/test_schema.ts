@@ -18,9 +18,13 @@ export const testEntitySchema = buildSchema({
                 config: {
                     storageMeta: {
                         mediaType: "image",
-                        storagePath: "images",
+                        storagePath: (context) => {
+                            return "images";
+                        },
                         acceptedFiles: ["image/*"],
-                        storeUrl: true
+                        fileName: (context) => {
+                            return context.file.name;
+                        }
                     }
                 }
             }
@@ -151,6 +155,7 @@ export const testEntitySchema = buildSchema({
     },
     defaultValues: {
         // empty_string: "",
+        title:null
     }
 });
 testEntitySchema.onPreSave = ({

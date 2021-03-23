@@ -250,6 +250,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
                 const context: FormContext<S, Key> = {
                     entitySchema: schema,
+                    entityId: entity?.id,
                     values
                 };
 

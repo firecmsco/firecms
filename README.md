@@ -492,11 +492,14 @@ Beside the common fields, some properties have specific configurations.
       indicate that this string refers to a path in Google Cloud Storage.
         * `mediaType` Media type of this reference, used for displaying the
           preview.
-        * `storagePath` Absolute path in your bucket.
+        * `storagePath` Absolute path in your bucket. You can specify it directly
+          or use a callback
         * `acceptedFiles` File MIME types that can be uploaded to this
           reference.
         * `metadata` Specific metadata set in your uploaded file.
-        * `storeUrl`  When set to `true`, this flag indicates that the download
+        * `fileName` You can specify a fileName callback if you need to customize
+          the name of the file
+        * `storeUrl` When set to `true`, this flag indicates that the download
           URL of the file will be saved in Firestore instead of the Cloud
           storage path. Note that the generated URL may use a token that, if
           disabled, may make the URL unusable and lose the original reference to

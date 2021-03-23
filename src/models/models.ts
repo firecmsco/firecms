@@ -303,7 +303,7 @@ export function buildAdditionalColumnDelegate<AdditionalKey extends string = str
  */
 export function buildNavigation(
     navigation: Navigation | NavigationBuilder
-): Navigation | NavigationBuilder{
+): Navigation | NavigationBuilder {
     return navigation;
 }
 
@@ -518,8 +518,8 @@ export type Properties<Key extends string, T extends any = any> = Record<Key, Pr
 
 export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> =
     {
-        values: Partial<EntityValues<S, Key>>,
-        entityId?: string
+        values: Partial<EntityValues<S, Key>>;
+        entityId?: string;
     };
 
 export type PropertyBuilder<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> = (props: PropertyBuilderProps<S, Key>) => Property<T>;
@@ -852,9 +852,9 @@ export interface StorageMeta {
     mediaType?: MediaType;
 
     /**
-     * Absolute path in your bucket
+     * Absolute path in your bucket. You can specify it directly or use a callback
      */
-    storagePath: string;
+    storagePath: string | ((context:UploadedFileContext) => string) ;
 
     /**
      * File MIME types that can be uploaded to this reference
@@ -867,6 +867,12 @@ export interface StorageMeta {
     metadata?: firebase.storage.UploadMetadata,
 
     /**
+     * You can use this callback to customize the uploaded filename
+     * @param context
+     */
+    fileName?: (context:UploadedFileContext) => string;
+
+    /**
      * When set to true, this flag indicates that the download URL of the file
      * will be saved in Firestore instead of the Cloud storage path.
      * Note that the generated URL may use a token that, if disabled, may
@@ -875,6 +881,38 @@ export interface StorageMeta {
      */
     storeUrl?: boolean,
 
+}
+
+export type UploadedFileContext = {
+    /**
+     * Uploaded file
+     */
+    file: File;
+
+    /**
+     * Property field name
+     */
+    name: string;
+
+    /**
+     * Property related to this upload
+     */
+    property: Property;
+
+    /**
+     * Entity Id is set if the entity already exists
+     */
+    entityId?: string;
+
+    /**
+     * Values of the current entity
+     */
+    entityValues: EntityValues<any>;
+
+    /**
+     * Storage meta specified by the developer
+     */
+    storageMeta: StorageMeta;
 }
 
 /**

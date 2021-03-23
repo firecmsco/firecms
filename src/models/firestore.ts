@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
+import deepEqual from "deep-equal";
 
 import {
     Entity,
@@ -144,6 +145,11 @@ export function replaceTimestampsWithDates(data: any): any {
 
     if (data === null)
         return null;
+
+    if (deepEqual(data, firebase.firestore.FieldValue.serverTimestamp())) {
+        console.log("YEP")
+        return null;
+    }
 
     // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed
     if (typeof data === "object" && "firestore" in data && typeof data["firestore"] === "object")
@@ -424,9 +430,9 @@ function initWithProperties<S extends EntitySchema<Key>,
 (properties: P, defaultValues?: Partial<PropertiesValues<S, Key>>): PropertiesValues<S, Key> {
     return Object.entries(properties)
         .map(([key, property]) => {
-            const propertyDefaultValue = defaultValues && key in defaultValues ? (defaultValues as any)[key] : null;
+            const propertyDefaultValue = defaultValues && key in defaultValues ? (defaultValues as any)[key] : undefined;
             const value = initPropertyValue(key, property as Property<unknown>, propertyDefaultValue);
-            return value === null ? {} : { [key]: value };
+            return value === undefined ? {} : { [key]: value };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<any, any>;
 }
@@ -442,7 +448,7 @@ function initPropertyValue(key: string, property: Property, defaultValue: any) {
     } else if (property.dataType === "boolean") {
         value = false;
     } else {
-        value = null;
+        value = undefined;
     }
     return value;
 }

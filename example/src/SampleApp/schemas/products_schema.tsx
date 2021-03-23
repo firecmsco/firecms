@@ -290,7 +290,10 @@ export const localeSchema = buildSchema({
                 storageMeta: {
                     mediaType: "video",
                     storagePath: "videos",
-                    acceptedFiles: ["video/*"]
+                    acceptedFiles: ["video/*"],
+                    fileName: (context) => {
+                        return context.file.name;
+                    }
                 }
             },
             columnWidth: 400

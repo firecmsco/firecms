@@ -121,6 +121,11 @@ export interface FormContext<S extends EntitySchema<Key>, Key extends string = E
      * Current values of the entity
      */
     values: EntityValues<S, Key>;
+
+    /**
+     * Entity, it can be null if it's a new entity
+     */
+    entityId?: string;
 }
 
 export interface CMSFormFieldProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
