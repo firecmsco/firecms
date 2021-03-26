@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.31.0] - 2021-03-26
+### Added
+- Added callback for selecting file name when uploading files to an entity.
+
 ## [0.30.0] - 2021-03-16
 ### Added
 - Improved permissions system. You can now set `create`, `edit` or `delete`
