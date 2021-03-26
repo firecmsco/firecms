@@ -172,10 +172,11 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
                 const initialValue = fieldProps.meta.initialValue;
                 const error = getIn(fieldProps.form.errors, name);
                 const touched = getIn(fieldProps.form.touched, name);
+
                 const showError: boolean = error
-                    && touched
                     && fieldProps.form.submitCount > 0
                     && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
+
                 const isSubmitting = fieldProps.form.isSubmitting;
 
                 const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;

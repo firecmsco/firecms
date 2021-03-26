@@ -60,7 +60,7 @@ export default function DeleteEntityDialog<S extends EntitySchema<any>>({
     };
 
     const onDeleteSuccess = (entity: Entity<any>) => {
-        console.log(entity);
+        console.debug("Deleted",entity);
     };
 
     const onDeleteFailure = (entity: Entity<any>, e: Error) => {

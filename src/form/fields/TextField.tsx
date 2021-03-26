@@ -1,4 +1,4 @@
-import { MediaType, StringProperty } from "../../models";
+import { FieldProps, MediaType, StringProperty } from "../../models";
 import {
     Box,
     FilledInput,
@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import React from "react";
 
-import { FieldProps } from "../../models/form_props";
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../components/LabelWithIcon";
@@ -23,18 +22,18 @@ interface TextFieldProps<T extends string | number> extends FieldProps<T> {
 }
 
 export default function TextField<T extends string | number>({
-                                      name,
-                                      value,
-                                      setValue,
-                                      error,
-                                      showError,
-                                      disabled,
-                                      autoFocus,
-                                      property,
-                                      includeDescription,
-                                      allowInfinity,
-                                      dependsOnOtherProperties
-                                  }: TextFieldProps<T>) {
+                                                                 name,
+                                                                 value,
+                                                                 setValue,
+                                                                 error,
+                                                                 showError,
+                                                                 disabled,
+                                                                 autoFocus,
+                                                                 property,
+                                                                 includeDescription,
+                                                                 allowInfinity,
+                                                                 dependsOnOtherProperties
+                                                             }: TextFieldProps<T>) {
 
     let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
@@ -130,7 +129,7 @@ export default function TextField<T extends string | number>({
                                 type={"checkbox"}
                                 onChange={(evt) => {
                                     updateValue(
-                                        evt.target.checked  ? Infinity as T: undefined);
+                                        evt.target.checked ? Infinity as T : undefined);
                                 }}/>
                         }
                         disabled={disabled}
