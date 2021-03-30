@@ -1,8 +1,4 @@
-import { MapProperty } from "../../models";
-import {
-
-    PreviewComponentProps
-} from "../../models";
+import { MapProperty, PreviewComponentProps } from "../../models";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import React from "react";
 import {

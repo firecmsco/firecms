@@ -1,6 +1,10 @@
-import { Entity, EntityCollection, EntitySchema } from "../models";
+import {
+    Entity,
+    EntityCollection,
+    EntitySchema,
+    listenEntityFromRef
+} from "../models";
 import React, { useEffect, useState } from "react";
-import { listenEntityFromRef } from "../models";
 import { Link as ReactLink } from "react-router-dom";
 
 import EntityPreview from "../components/EntityPreview";

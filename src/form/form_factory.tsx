@@ -14,14 +14,20 @@ import {
 } from "@material-ui/core";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 
-import { ErrorMessage, FastField, Field, FieldProps as FormikFieldProps, getIn } from "formik";
+import {
+    ErrorMessage,
+    FastField,
+    Field,
+    FieldProps as FormikFieldProps,
+    getIn
+} from "formik";
 
 import {
-    FieldProps,
+    CMSFormFieldProps,
     Entity,
     EntitySchema,
     EntityStatus,
-    CMSFormFieldProps,
+    FieldProps,
     Property
 } from "../models";
 import Select from "./fields/Select";

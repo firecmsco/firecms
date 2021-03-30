@@ -1,4 +1,4 @@
-import { Entity, EntityCollection, EntitySchema, Property } from "../../models";
+import { Entity, EntitySchema, Property } from "../../models";
 import firebase from "firebase/app";
 import {
     Box,

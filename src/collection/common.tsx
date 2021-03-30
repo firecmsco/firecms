@@ -10,14 +10,18 @@ import {
 export function getCellAlignment(property: Property): "right" | "left" | "center" {
     if (property.dataType === "boolean") {
         return "center";
-    } else if (property.dataType === "number" || property.dataType === "timestamp") {
+    } else if (property.dataType === "number") {
+        if (property.config?.enumValues)
+            return "left";
+        return "right";
+    } else if (property.dataType === "timestamp") {
         return "right";
     } else {
         return "left";
     }
 }
 
-export function getPreviewWidth(property: Property, size: CollectionSize): number {
+export function getPropertyColumnWidth(property: Property, size: CollectionSize): number {
 
     if (property.columnWidth) {
         return property.columnWidth;
@@ -34,7 +38,7 @@ export function getPreviewWidth(property: Property, size: CollectionSize): numbe
         } else if (stringProperty.config?.storageMeta) {
             return 220;
         } else if (stringProperty.config?.enumValues) {
-            return 180;
+            return 200;
         } else if (stringProperty.config?.multiline) {
             return 300;
         } else if (stringProperty.config?.markdown) {
@@ -47,7 +51,7 @@ export function getPreviewWidth(property: Property, size: CollectionSize): numbe
     } else if (property.dataType === "array") {
         const arrayProperty = property as ArrayProperty;
         if ("dataType" in arrayProperty.of) {
-            return getPreviewWidth(arrayProperty.of as Property<unknown>, size);
+            return getPropertyColumnWidth(arrayProperty.of as Property<unknown>, size);
         } else {
             return 300;
         }

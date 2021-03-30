@@ -1,14 +1,15 @@
 import {
-    PreviewComponentProps
+    EnumValues,
+    NumberProperty,
+    PreviewComponentProps,
+    StringProperty
 } from "../../models";
 
 import React from "react";
 
 import ErrorBoundary from "../../components/ErrorBoundary";
-import { EnumValues, NumberProperty, StringProperty } from "../../models";
-import { CustomChip } from "./CustomChip";
+import { EnumValuesChip } from "./CustomChip";
 import { useStyles } from "./styles";
-import { buildEnumLabel } from "../../models/builders";
 
 
 export function ArrayPropertyEnumPreview({
@@ -16,7 +17,7 @@ export function ArrayPropertyEnumPreview({
                                              value,
                                              property,
                                              size
-                                         }: PreviewComponentProps<string[] | number[]> ) {
+                                         }: PreviewComponentProps<string[] | number[]>) {
 
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayEnumPreview");
@@ -29,7 +30,8 @@ export function ArrayPropertyEnumPreview({
 
     const enumValues = ofProperty.config?.enumValues;
 
-    return <ArrayEnumPreview name={name} value={value} enumValues={enumValues} size={size}/>
+    return <ArrayEnumPreview name={name} value={value} enumValues={enumValues}
+                             size={size}/>;
 }
 
 export function ArrayEnumPreview({
@@ -40,7 +42,7 @@ export function ArrayEnumPreview({
                                  }: {
     value: string[] | number[],
     name: string | undefined,
-    enumValues: EnumValues<string> | EnumValues<number>,
+    enumValues: EnumValues,
     size: "regular" | "small" | "tiny"
 }) {
 
@@ -49,17 +51,14 @@ export function ArrayEnumPreview({
     return (
         <div className={classes.arrayRoot}>
             {value &&
-            (value as any[]).map((v, index) => {
-                const label = buildEnumLabel((enumValues as any)[v]);
-                return (
+            (value as any[]).map((key, index) => {
+                    return (
                         <div className={classes.arrayItem}
                              key={`preview_array_ref_${name}_${index}`}>
                             <ErrorBoundary>
-                                <CustomChip
-                                    colorKey={typeof v == "number" ? `${name}_${v}` : v as string}
-                                    label={label|| v}
-                                    error={!label}
-                                    outlined={false}
+                                <EnumValuesChip
+                                    enumKey={key}
+                                    enumValues={enumValues}
                                     small={size !== "regular"}/>
                             </ErrorBoundary>
                         </div>

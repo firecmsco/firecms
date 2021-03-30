@@ -3,7 +3,7 @@ import { TextSearchDelegate } from "./text_search_delegate";
 import { FieldProps } from "./form_props";
 import { PreviewComponentProps } from "../preview";
 import firebase from "firebase/app";
-import { Navigation, NavigationBuilder } from "../CMSAppProps";
+import { ChipColor } from "./colors";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -192,7 +192,7 @@ export interface EntitySchema<Key extends string = string> {
      * You can also pass a set of values (as an EnumValues object) to allow them
      * to pick from only those
      */
-    customId?: boolean | EnumValues<string>;
+    customId?: boolean | EnumValues;
 
     /**
      * Set of properties that compose an entity
@@ -296,63 +296,6 @@ export function buildAdditionalColumnDelegate<AdditionalKey extends string = str
     return additionalColumnDelegate;
 }
 
-/**
- * Identity function we use to defeat the type system of Typescript and build
- * navigation objects with all its properties
- * @param navigation
- */
-export function buildNavigation(
-    navigation: Navigation | NavigationBuilder
-): Navigation | NavigationBuilder {
-    return navigation;
-}
-
-/**
- * Identity function we use to defeat the type system of Typescript and build
- * collection views with all its properties
- * @param collectionView
- */
-export function buildCollection<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>,
-    AdditionalKey extends string = string>(
-    collectionView: EntityCollection<S, Key, AdditionalKey>
-): EntityCollection<S, Key, AdditionalKey> {
-    return collectionView;
-}
-
-/**
- * Identity function we use to defeat the type system of Typescript and preserve
- * the schema keys
- * @param schema
- */
-export function buildSchema<Key extends string = string>(
-    schema: EntitySchema<Key>
-): EntitySchema<Key> {
-    return schema;
-}
-
-/**
- * Identity function we use to defeat the type system of Typescript and preserve
- * the property keys.
- * @param property
- */
-export function buildProperty<S extends EntitySchema<Key>, Key extends string>(
-    property: Property<Key>
-): Property<Key> {
-    return property;
-}
-
-/**
- * Identity function we use to defeat the type system of Typescript and preserve
- * the properties keys. It can be useful if you have entity schemas with the
- * same properties
- * @param properties
- */
-export function buildProperties<S extends EntitySchema<Key>, Key extends string>(
-    properties: PropertiesOrBuilder<S, Key>
-): PropertiesOrBuilder<S, Key> {
-    return properties;
-}
 
 /**
  * New or existing status
@@ -498,18 +441,28 @@ export type PropertyDisabledConfig = {
 export type EnumType = number | string;
 
 /**
- * We use this interface to define mapping between string or number values in
- * Firestore to a label (such in a select dropdown)
+ * We use this type to define mapping between string or number values in
+ * Firestore to a label (such in a select dropdown).
  * The key in this Record is the value saved in Firestore, and the value in
- * this record is the label displayed in the UI
+ * this record is the label displayed in the UI.
+ * You can add additional customization by assigning a `EnumValueConfig` for the
+ * label instead of a simple string (for enabling or disabling options and
+ * choosing colors).
+ * If you need to ensure the order of the elements you can pass a `Map` instead
+ * of a plain object.
  */
-export type EnumValues<T extends EnumType> = Record<T, string | EnumValueConfig>;
+export type EnumValues =
+    Record<string | number, string | EnumValueConfig>
+    | Map<string, string | EnumValueConfig>;
 
+/**
+ * Configuration for a particular entry in an `EnumValues`
+ */
 export type EnumValueConfig = {
-    disabled?: boolean;
     label: string;
+    disabled?: boolean;
+    color?: ChipColor;
 }
-
 
 /**
  * Record of properties of an entity or a map property
@@ -818,9 +771,13 @@ export interface StringFieldConfig extends FieldConfig<string> {
     /**
      * You can use the enum values providing a map of possible
      * exclusive values the property can take, mapped to the label that it is
-     * displayed in the dropdown.
+     * displayed in the dropdown. You can use a simple object with the format
+     * `value` => `label`, or with the format `value` => `EnumValueConfig` if you
+     * need extra customization, (like disabling specific options or assigning
+     * colors). If you need to ensure the order of the elements, you can pass
+     * a `Map` instead of a plain object.
      */
-    enumValues?: EnumValues<string>;
+    enumValues?: EnumValues;
 
     /**
      * You can specify a `StorageMeta` configuration. It is used to
@@ -854,7 +811,7 @@ export interface StorageMeta {
     /**
      * Absolute path in your bucket. You can specify it directly or use a callback
      */
-    storagePath: string | ((context:UploadedFileContext) => string) ;
+    storagePath: string | ((context: UploadedFileContext) => string);
 
     /**
      * File MIME types that can be uploaded to this reference
@@ -870,7 +827,7 @@ export interface StorageMeta {
      * You can use this callback to customize the uploaded filename
      * @param context
      */
-    fileName?: (context:UploadedFileContext) => string;
+    fileName?: (context: UploadedFileContext) => string;
 
     /**
      * When set to true, this flag indicates that the download URL of the file
@@ -961,6 +918,6 @@ export interface NumberFieldConfig extends FieldConfig<number> {
      * exclusive values the property can take, mapped to the label that it is
      * displayed in the dropdown.
      */
-    enumValues?: EnumValues<number>;
+    enumValues?: EnumValues;
 
 }

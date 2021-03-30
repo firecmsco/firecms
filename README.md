@@ -510,7 +510,11 @@ Beside the common fields, some properties have specific configurations.
       to add a link, or one of the supported media types to render a preview.
     * `enumValues` You can use the enum values providing a map of possible
       exclusive values the property can take, mapped to the label that it is
-      displayed in the dropdown.
+      displayed in the dropdown. You can use a simple object with the format
+      `value` => `label`, or with the format `value` => `EnumValueConfig` if you
+      need extra customization, (like disabling specific options or assigning
+      colors). If you need to ensure the order of the elements, you can pass
+      a `Map` instead of a plain object.
     * `multiline` Is this string property long enough, so it should be displayed
       in a multiple line field. Defaults to false. If set to `true`, the number
       of lines adapts to the content.

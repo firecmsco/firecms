@@ -1,8 +1,7 @@
 import { PreviewComponentProps } from "../../preview";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import React from "react";
-import { CustomChip } from "./CustomChip";
-import { buildEnumLabel } from "../../models/builders";
+import { CustomChip, EnumValuesChip } from "./CustomChip";
 
 
 export function StringPreview({
@@ -13,18 +12,17 @@ export function StringPreview({
                               }: PreviewComponentProps<string>): React.ReactElement {
 
     if (property.config?.enumValues) {
+        const key = value;
         const enumValues = property.config.enumValues;
-        const label = buildEnumLabel(enumValues[value]);
-        return <CustomChip colorKey={value}
-                           label={label || value}
-                           error={!label}
-                           outlined={false}
-                           small={size !== "regular"}/>;
+        return <EnumValuesChip
+            enumKey={key}
+            enumValues={enumValues}
+            small={size !== "regular"}/>;
     } else if (property.config?.previewAsTag) {
         return (
             <ErrorBoundary>
                 <CustomChip
-                    colorKey={name ?? ""}
+                    colorSeed={name ?? ""}
                     label={value}
                     small={size !== "regular"}
                 />

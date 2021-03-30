@@ -1,7 +1,7 @@
 import { buildCollection, buildSchema, EnumValues } from "../models";
 import { CMSAppProps } from "../CMSAppProps";
 
-const locales: EnumValues<string> = {
+const locales: EnumValues = {
     "de-DE": "German",
     "en-US": "English (United States)",
     "es-ES": "Spanish (Spain)",

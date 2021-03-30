@@ -1,31 +1,77 @@
 import { Chip, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React, { useMemo } from "react";
-import { ChipColorSchema, getColorSchemeForKey } from "../../util/chip_utils";
+import {
+    ChipColorSchema,
+    getColorSchemeForKey,
+    getColorSchemeForSeed
+} from "../../util/chip_utils";
+import { ChipColor, EnumValues } from "../../models";
+import {
+    buildEnumLabel,
+    getColorSchemaKey,
+    getLabelOrConfigFrom
+} from "../../util/enums";
 
 const useStyles = makeStyles<Theme, { schema: ChipColorSchema, error: any }>((theme: Theme) =>
     createStyles({
         root: {
             maxWidth: "100%",
-            backgroundColor: ({ schema, error }) => error ? "#eee" : schema.color,
+            backgroundColor: ({
+                                  schema,
+                                  error
+                              }) => error ? "#eee" : schema.color
         },
         label: {
             color: ({ schema, error }) => error ? "red" : schema.text,
-            fontWeight: theme.typography.fontWeightRegular,
+            fontWeight: theme.typography.fontWeightRegular
         }
     })
 );
 
-type EnumChipProps = {
-    colorKey: string,
-    label: string | number,
-    error?: boolean,
-    outlined?: boolean,
-    small: boolean
+
+type EnumValuesChipProps = {
+    enumValues: EnumValues;
+    enumKey: any;
+    small: boolean;
 };
 
-export function CustomChip({ colorKey, label, error, outlined, small }: EnumChipProps) {
+export function EnumValuesChip({
+                                   enumValues,
+                                   enumKey,
+                                   small
+                               }: EnumValuesChipProps) {
+    const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValues, enumKey.toString()) : undefined;
+    const label = buildEnumLabel(enumValue);
+    const colorSchemaKey = getColorSchemaKey(enumValues, enumKey.toString());
+    return <CustomChip
+        colorSeed={`${enumKey}`}
+        colorSchemaKey={colorSchemaKey}
+        label={label !== undefined ? label : enumKey}
+        error={!label}
+        outlined={false}
+        small={small}/>;
+}
 
-    const schema = useMemo(() => getColorSchemeForKey(colorKey), [colorKey]);
+
+type EnumChipProps = {
+    colorSeed: string;
+    colorSchemaKey?: ChipColor;
+    label: string;
+    error?: boolean;
+    outlined?: boolean;
+    small: boolean;
+};
+
+export function CustomChip({
+                               colorSeed,
+                               label,
+                               colorSchemaKey,
+                               error,
+                               outlined,
+                               small
+                           }: EnumChipProps) {
+
+    const schema = useMemo(() => colorSchemaKey ? getColorSchemeForKey(colorSchemaKey) : getColorSchemeForSeed(colorSeed), [colorSeed]);
     const classes = useStyles({ schema, error });
 
     return (

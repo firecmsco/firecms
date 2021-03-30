@@ -1,4 +1,4 @@
-import { EnumType, EnumValues } from "../../models";
+import { EnumType, EnumValues, FieldProps } from "../../models";
 import {
     Checkbox,
     FormControl,
@@ -9,12 +9,11 @@ import {
     Select as MuiSelect
 } from "@material-ui/core";
 import React from "react";
-import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../components/LabelWithIcon";
-import { CustomChip } from "../../preview";
 import { useClearRestoreValue } from "../useClearRestoreValue";
-import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
+import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
+import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 type ArrayEnumSelectProps<T extends EnumType> = FieldProps<T[]>;
 
@@ -38,7 +37,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
-    const enumValues: EnumValues<number | string> | undefined = property.of.config?.enumValues;
+    const enumValues: EnumValues | undefined = property.of.config?.enumValues;
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");
@@ -77,44 +76,36 @@ export default function ArrayEnumSelect<T extends EnumType>({
                    }}
                    renderValue={(selected: any) => (
                        <div>
-                           {selected && selected.map((value: any) => {
+                           {selected && selected.map((key: any) => {
 
-                               if (!value) return null;
+                               if (!key) return null;
 
-                               const label = buildEnumLabel(enumValues[value]);
-                               const key: string = typeof value == "number" ? `${name}_${value}` : value as string;
-
-                               return <CustomChip
-                                   key={`select_value_${value}`}
-                                   colorKey={key}
-                                   label={label || value}
-                                   error={!label}
-                                   outlined={false}
+                               return <EnumValuesChip
+                                   enumKey={key}
+                                   enumValues={enumValues}
                                    small={false}/>;
                            })}
                        </div>
                    )}>
 
 
-            {Object.entries(enumValues).map(([key, enumValue]) => {
+            {enumToObjectEntries(enumValues).map(([key, labelOrConfig]) => {
 
-                const label = buildEnumLabel(enumValue);
-                const chip = <CustomChip
-                    colorKey={typeof key === "number" ? `${name}_${key}` : key as string}
-                    label={label || key}
-                    error={!label}
-                    outlined={false}
+                const chip = <EnumValuesChip
+                    enumKey={key}
+                    enumValues={enumValues}
                     small={false}/>;
-                    return (
-                        <MenuItem key={`form-select-${name}-${key}`}
-                                  value={key}
-                                  disabled={isEnumValueDisabled(enumValue)}
-                                  dense={true}>
-                            <Checkbox
-                                checked={validValue && (value as any[]).includes(key)}/>
-                            <ListItemText primary={chip}/>
-                        </MenuItem>
-                    );
+
+                return (
+                    <MenuItem key={`form-select-${name}-${key}`}
+                              value={key}
+                              disabled={isEnumValueDisabled(labelOrConfig)}
+                              dense={true}>
+                        <Checkbox
+                            checked={validValue && (value as any[]).includes(key)}/>
+                        <ListItemText primary={chip}/>
+                    </MenuItem>
+                );
             })}
 
         </MuiSelect>

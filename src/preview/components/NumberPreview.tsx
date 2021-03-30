@@ -1,7 +1,6 @@
 import { PreviewComponentProps } from "../../models";
 import React from "react";
-import { CustomChip } from "./CustomChip";
-import { buildEnumLabel } from "../../models/builders";
+import { EnumValuesChip } from "./CustomChip";
 
 
 export function NumberPreview({
@@ -12,13 +11,12 @@ export function NumberPreview({
                               }: PreviewComponentProps<number>): React.ReactElement {
 
     if (property.config?.enumValues) {
+        const key = value;
         const enumValues = property.config.enumValues;
-        const label = buildEnumLabel(enumValues[value]);
-        return <CustomChip colorKey={`${name}_${value}`}
-                           label={label || value}
-                           error={!enumValues[value]}
-                           outlined={false}
-                           small={size !== "regular"}/>;
+        return <EnumValuesChip
+            enumKey={key}
+            enumValues={enumValues}
+            small={size !== "regular"}/>;
     } else {
         return <>{value}</>;
     }

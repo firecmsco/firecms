@@ -12,8 +12,8 @@ import ClearIcon from "@material-ui/icons/Clear";
 import React, { useState } from "react";
 import { FieldProps } from "formik/dist/Field";
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
-import { CustomChip } from "../../preview";
-import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
+import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
+import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 interface StringNumberFilterFieldProps {
     name: string,
@@ -141,29 +141,23 @@ export default function StringNumberFilterField({
                                     renderValue={multiple ? (selected: any) =>
                                         (
                                             <div>
-                                                {selected.map((v: any) => {
-                                                    const label = buildEnumLabel(enumValues[v]);
-                                                    return <CustomChip
-                                                        colorKey={v as string}
-                                                        label={label || v}
-                                                        error={!label}
-                                                        outlined={false}
+                                                {selected.map((key: any) => {
+                                                    return <EnumValuesChip
+                                                        enumKey={key}
+                                                        enumValues={enumValues}
                                                         small={true}/>;
                                                 })}
                                             </div>
                                         ) : undefined}>
-                                    {Object.entries(enumValues).map(([key, value]) => {
-                                        const label = buildEnumLabel(value);
+                                    {enumToObjectEntries(enumValues).map(([key, labelOrConfig]) => {
                                         return (
                                             <MenuItem
-                                                disabled={isEnumValueDisabled(value)}
+                                                disabled={isEnumValueDisabled(labelOrConfig)}
                                                 key={`select_${name}_${key}`}
                                                 value={key}>
-                                                <CustomChip
-                                                    colorKey={key as string}
-                                                    label={label || key}
-                                                    error={!value}
-                                                    outlined={false}
+                                                <EnumValuesChip
+                                                    enumKey={key}
+                                                    enumValues={enumValues}
                                                     small={true}/>
                                             </MenuItem>
                                         );

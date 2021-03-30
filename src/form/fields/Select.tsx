@@ -1,4 +1,4 @@
-import { EnumType, EnumValues } from "../../models";
+import { EnumType, EnumValues, FieldProps } from "../../models";
 import {
     FormControl,
     FormHelperText,
@@ -7,14 +7,11 @@ import {
     Select as MuiSelect
 } from "@material-ui/core";
 import React from "react";
-
-import { FieldProps } from "../../models/form_props";
 import { FieldDescription } from "../../components";
 import { LabelWithIcon } from "../components/LabelWithIcon";
-import { CustomChip } from "../../preview";
 import { useClearRestoreValue } from "../useClearRestoreValue";
-import { EnumValueConfig } from "../../models/models";
-import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
+import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
+import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -32,7 +29,7 @@ export default function Select<T extends EnumType>({
                                                        dependsOnOtherProperties
                                                    }: SelectProps<T>) {
 
-    const enumValues = property.config?.enumValues as EnumValues<T>;
+    const enumValues = property.config?.enumValues as EnumValues;
 
     useClearRestoreValue({
         property,
@@ -59,7 +56,7 @@ export default function Select<T extends EnumType>({
                 variant={"filled"}
                 labelId={`${name}-select-label`}
                 autoFocus={autoFocus}
-                value={!!value ? value : ""}
+                value={value !== undefined ? value : ""}
                 disabled={disabled}
                 onChange={(evt: any) => {
                     const eventValue = evt.target.value;
@@ -70,30 +67,24 @@ export default function Select<T extends EnumType>({
                         newValue
                     );
                 }}
-                renderValue={(v: any) => {
-                    const label = buildEnumLabel((enumValues as any)[v]);
-                    return <CustomChip
-                        colorKey={typeof v === "number" ? `${name}_${v}` : v as string}
-                        label={label || v}
-                        error={!label}
-                        outlined={false}
+                renderValue={(key: any) => {
+                    return <EnumValuesChip
+                        enumKey={key}
+                        enumValues={enumValues}
                         small={false}/>;
                 }
                 }>
 
-                {Object.entries<string | EnumValueConfig>(enumValues)
-                    .map(([key, value]) => {
-                        const label = buildEnumLabel(value);
+                {enumToObjectEntries(enumValues)
+                    .map(([key, labelOrConfig]) => {
                         return (
                             <MenuItem key={`select_${name}_${key}`}
                                       value={key}
-                                      disabled={isEnumValueDisabled(value)}>
-                                <CustomChip
-                                    colorKey={typeof key === "number" ? `${name}_${key}` : key as string}
-                                    label={label || key}
-                                    error={!label}
-                                    outlined={false}
-                                    small={false}/>
+                                      disabled={isEnumValueDisabled(labelOrConfig)}>
+                                <EnumValuesChip
+                                    enumKey={key}
+                                    enumValues={enumValues}
+                                    small={true}/>
                             </MenuItem>
                         );
                     })}

@@ -20,7 +20,7 @@ import {
     useTheme
 } from "@material-ui/core";
 import { CSVLink } from "react-csv";
-import { buildProperty } from "../models/builders";
+import { buildPropertyFrom } from "../models/builders";
 import { computeSchemaProperties, PropertiesValues } from "../models/firestore";
 import firebase from "firebase";
 import GetAppIcon from "@material-ui/icons/GetApp";
@@ -145,7 +145,7 @@ function getExportHeaders(properties: Properties<any>): Header[] {
         { label: "id", key: "id" },
         ...Object.entries(properties)
             .map(([childKey, propertyOrBuilder]) => {
-                const property = buildProperty(propertyOrBuilder, {}, undefined);
+                const property = buildPropertyFrom(propertyOrBuilder, {}, undefined);
                 return getHeaders(property, childKey, "");
             })
             .flat()

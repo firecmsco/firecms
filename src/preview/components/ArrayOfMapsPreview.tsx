@@ -1,7 +1,7 @@
 import React from "react";
-import { ArrayProperty, MapProperty } from "../../models";
 import {
-
+    ArrayProperty,
+    MapProperty,
     PreviewComponentProps
 } from "../../models";
 import ErrorBoundary from "../../components/ErrorBoundary";

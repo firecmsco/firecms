@@ -1,4 +1,5 @@
 import { hashString } from "./hash";
+import { ChipColor } from "../models";
 
 export interface ChipColorSchema {
     color: string;
@@ -51,10 +52,13 @@ export const CHIP_COLORS: Record<string, ChipColorSchema> = {
     grayDarker: { color: "#444", text: "#eee" }
 };
 
-export function getColorSchemeForKey(key: string): ChipColorSchema {
-    const hash: number = hashString(key);
+export function getColorSchemeForSeed(seed: string): ChipColorSchema {
+    const hash: number = hashString(seed);
     const colorKeys = Object.keys(CHIP_COLORS);
     const index = hash % colorKeys.length;
     return CHIP_COLORS[colorKeys[index]];
+}
+export function getColorSchemeForKey(key: ChipColor): ChipColorSchema {
+    return CHIP_COLORS[key];
 }
 

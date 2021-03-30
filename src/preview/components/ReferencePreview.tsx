@@ -14,15 +14,13 @@ import {
 import {
     Entity,
     EntitySchema,
-    listenEntityFromRef, Property,
+    listenEntityFromRef,
+    Property,
     ReferenceProperty
 } from "../../models";
 
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import {
-    PreviewComponentProps,
-    PreviewSize
-} from "../../preview";
+import { PreviewComponentProps, PreviewSize } from "../../preview";
 import { useSideEntityController } from "../../contexts";
 
 import firebase from "firebase/app";

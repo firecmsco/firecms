@@ -1,8 +1,5 @@
 import React from "react";
-import { StringProperty } from "../../models";
-import {
-    PreviewComponentProps
-} from "../../models";
+import { PreviewComponentProps, StringProperty } from "../../models";
 
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { StringPreview } from "./StringPreview";

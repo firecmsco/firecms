@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Button } from "@material-ui/core";
-import { ReferencePreview } from "../../preview";
+import { PreviewError, ReferencePreview } from "../../preview";
 import {
     ArrayProperty,
     CMSFormFieldProps,
     CollectionSize,
     Entity,
-    EntityCollection,
     EntitySchema,
     ReferenceProperty
 } from "../../models";
@@ -17,7 +16,6 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import { getPreviewSizeFrom } from "../../preview/util";
 import { useInputStyles } from "./styles";
-import { PreviewError } from "../../preview";
 import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
 
 

@@ -1,6 +1,39 @@
-import { buildSchema, EntitySaveProps } from "@camberi/firecms";
+import {
+    buildEnumValueConfig,
+    buildSchema,
+    EntitySaveProps
+} from "@camberi/firecms";
 import { locales } from "./products_schema";
 
+const relaxedStatus = new Map();
+relaxedStatus.set("-3", buildEnumValueConfig({
+    label: "Very tense",
+    color: "redDarker"
+}));
+relaxedStatus.set("-2", buildEnumValueConfig({
+    label: "Medium tense",
+    color: "redLight"
+}));
+relaxedStatus.set("-1", buildEnumValueConfig({
+    label: "Lightly tense",
+    color: "redLighter"
+}));
+relaxedStatus.set("0", buildEnumValueConfig({
+    label: "Normal",
+    color: "grayLight"
+}));
+relaxedStatus.set("1", buildEnumValueConfig({
+    label: "Lightly relaxed",
+    color: "blueLighter"
+}));
+relaxedStatus.set("2", buildEnumValueConfig({
+    label: "Medium relaxed",
+    color: "blueLight"
+}));
+relaxedStatus.set("3", buildEnumValueConfig({
+    label: "Very relaxed",
+    color: "blueDarker"
+}));
 
 export const testEntitySchema = buildSchema({
     customId: true,
@@ -27,6 +60,13 @@ export const testEntitySchema = buildSchema({
                         }
                     }
                 }
+            }
+        },
+        status: {
+            title: "Status",
+            dataType: "number",
+            config: {
+                enumValues: relaxedStatus
             }
         },
         available_locales: {
@@ -155,7 +195,7 @@ export const testEntitySchema = buildSchema({
     },
     defaultValues: {
         // empty_string: "",
-        title:null
+        title: null
     }
 });
 testEntitySchema.onPreSave = ({

@@ -1,6 +1,6 @@
 import {
     getCollectionsFromPath,
-    getCollectionViewFromPath,
+    getCollectionViewFromPath
 } from "../routes/navigation";
 import { siteConfig } from "./test_site_config";
 import { EntityCollection } from "../models";

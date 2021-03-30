@@ -21,7 +21,7 @@ import { Form, Formik } from "formik";
 import ClearIcon from "@material-ui/icons/Clear";
 import StringNumberFilterField from "./filters/StringNumberFilterField";
 import BooleanFilterField from "./filters/BooleanFilterField";
-import { buildProperty } from "../models/builders";
+import { buildPropertyFrom } from "../models/builders";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -61,7 +61,7 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
                 <TableBody>
                     {
                         filterableProperties.map((key, index) => {
-                            const property = buildProperty(schema.properties[key as string], {}, undefined);
+                            const property = buildPropertyFrom(schema.properties[key as string], {}, undefined);
                             return (
                                 <TableRow
                                     key={`filter_table_${key}_${index}`}>

@@ -1,7 +1,6 @@
 import {
     ArrayProperty,
     CMSFormFieldProps,
-    CollectionSize,
     Entity,
     EntitySchema,
     EntityStatus,
@@ -9,10 +8,10 @@ import {
     Property,
     ReferenceProperty,
     saveEntity,
-    StringProperty, TimestampProperty
+    StringProperty,
+    TimestampProperty
 } from "../models";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import { mapPropertyToYup } from "../form/validation";
 import { TableInput } from "./fields/TableInput";
 import { TableSelect } from "./fields/TableSelect";

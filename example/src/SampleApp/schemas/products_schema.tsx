@@ -11,7 +11,7 @@ import {
     ExtraActionsParams
 } from "@camberi/firecms";
 
-export const locales: EnumValues<string> = {
+export const locales: EnumValues = {
     "es": "Spanish",
     "de": "German",
     "en": "English",
@@ -22,7 +22,7 @@ export const locales: EnumValues<string> = {
     }
 };
 
-const categories: EnumValues<string> = {
+const categories: EnumValues = {
     art_and_decoration: "Art and decoration",
     art_design_books: "Art and design books",
     babys: "Babies and kids",

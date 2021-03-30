@@ -22,7 +22,8 @@ import {
     StringSchema
 } from "yup";
 import { PropertiesOrBuilder, PropertyOrBuilder } from "../models/models";
-import { buildProperty } from "../models/builders";
+import { buildPropertyFrom } from "../models/builders";
+import { enumToObjectEntries } from "../util/enums";
 
 
 export function mapPropertyToYup(property: Property): AnySchema<unknown> {
@@ -52,7 +53,7 @@ export function getYupEntitySchema<S extends EntitySchema<Key>, Key extends stri
  entityId?: string): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties).forEach(([key, propertyOrBuilder]) => {
-        objectSchema[key] = mapPropertyToYup(buildProperty(propertyOrBuilder as PropertyOrBuilder<S, Key>, values, entityId));
+        objectSchema[key] = mapPropertyToYup(buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<S, Key>, values, entityId));
     });
     return yup.object().shape(objectSchema);
 }
@@ -71,7 +72,10 @@ function getYupStringSchema(property: StringProperty): StringSchema {
     if (property.config?.enumValues) {
         if (validation?.required)
             schema = schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required");
-        schema = schema.oneOf(Object.keys(property.config?.enumValues));
+        schema = schema.oneOf(
+            enumToObjectEntries(property.config?.enumValues)
+                .map(([key, _]) => key)
+        );
     }
     if (validation) {
         schema = validation.required ?

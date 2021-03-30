@@ -1,9 +1,9 @@
-import { getColorSchemeForKey } from "../util/chip_utils";
+import { getColorSchemeForSeed } from "../util/chip_utils";
 
 it("chip colors", () => {
 
-    const chipColorSchema = getColorSchemeForKey("furniture");
+    const chipColorSchema = getColorSchemeForSeed("furniture");
     console.log(chipColorSchema);
 
-    console.log(getColorSchemeForKey("related_products"));
+    console.log(getColorSchemeForSeed("related_products"));
 });

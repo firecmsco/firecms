@@ -15,7 +15,7 @@ import {
     listenCollection,
     Property
 } from "../models";
-import { getCellAlignment, getPreviewWidth, getRowHeight } from "./common";
+import { getCellAlignment, getPropertyColumnWidth, getRowHeight } from "./common";
 import { getIconForProperty } from "../util/property_icons";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
 import { PreviewComponent, SkeletonComponent } from "../preview";
@@ -31,7 +31,7 @@ import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../preview/util";
 import { CollectionRowActions } from "./CollectionRowActions";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import { buildProperty } from "../models/builders";
+import { buildPropertyFrom } from "../models/builders";
 import PropertyTableCell from "./PropertyTableCell";
 
 const PAGE_SIZE = 50;
@@ -179,7 +179,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as Key[])
             .map((key) => {
-                const property: Property = buildProperty<S, Key, any>(schema.properties[key], schema.defaultValues ?? {});
+                const property: Property = buildPropertyFrom<S, Key, any>(schema.properties[key], schema.defaultValues ?? {});
                 return ({
                     id: key as string,
                     type: "property",
@@ -187,7 +187,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                     icon: getIconForProperty(property, "disabled", "small"),
                     label: property.title || key as string,
                     sortable: true,
-                    width: getPreviewWidth(property, size)
+                    width: getPropertyColumnWidth(property, size)
                 });
             });
 
@@ -355,7 +355,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
             const propertyKey = column.dataKey as Key;
             const propertyOrBuilder = schema.properties[propertyKey];
-            const property = buildProperty<S, Key>(propertyOrBuilder, entity.values, entity.id);
+            const property = buildPropertyFrom<S, Key>(propertyOrBuilder, entity.values, entity.id);
             const usedPropertyBuilder = typeof propertyOrBuilder === "function";
 
             const inlineEditingEnabled = checkInlineEditing(entity);

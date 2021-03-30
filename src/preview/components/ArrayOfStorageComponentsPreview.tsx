@@ -1,9 +1,6 @@
 import React from "react";
 
-import {
-    PreviewComponentProps,
-    PreviewSize
-} from "../../preview";
+import { PreviewComponentProps, PreviewSize } from "../../preview";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { useStyles } from "./styles";
 import { PreviewComponent } from "../PreviewComponent";

@@ -1,8 +1,8 @@
 import {
     Entity,
     EntitySchema,
-    PermissionsBuilder,
-    Permissions
+    Permissions,
+    PermissionsBuilder
 } from "../models/models";
 import firebase from "firebase";
 

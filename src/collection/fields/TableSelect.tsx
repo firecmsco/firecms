@@ -1,13 +1,14 @@
 import { EnumValues } from "../../models";
-import { CustomChip, ArrayEnumPreview } from "../../preview";
+import { ArrayEnumPreview } from "../../preview";
 import React, { useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@material-ui/core";
 import { useInputStyles } from "./styles";
-import { buildEnumLabel, isEnumValueDisabled } from "../../models/builders";
+import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
+import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 export function TableSelect(props: {
     name: string;
-    enumValues: EnumValues<number | string>;
+    enumValues: EnumValues;
     error: Error | undefined;
     multiple: boolean;
     disabled: boolean;
@@ -90,35 +91,32 @@ export function TableSelect(props: {
                     throw Error("Missing mapping in TableSelect");
                 }
             }}
-            renderValue={(selected: any) => {
-                const label = buildEnumLabel(enumValues[selected]);
-                return Array.isArray(selected) ?
-                    <ArrayEnumPreview value={selected} name={name}
-                                      enumValues={enumValues} size={"small"}/>
-                    :
-                    selected && <CustomChip
-                        colorKey={typeof selected === "number" ? `${name}_${selected}` : selected as string}
-                        label={label || selected}
-                        error={!label}
-                        outlined={false}
+            renderValue={(key: any) => {
+                if (multiple && Array.isArray(key)) {
+                    return <ArrayEnumPreview value={key}
+                                             name={name}
+                                             enumValues={enumValues}
+                                             size={"small"}/>;
+                } else {
+                    return <EnumValuesChip
+                        enumKey={key}
+                        enumValues={enumValues}
                         small={true}/>;
+                }
             }
             }>
 
-            {Object.entries(enumValues).map(([key, value]) => {
+            {enumToObjectEntries(enumValues).map(([key, labelOrConfig]) => {
 
-                const label = buildEnumLabel(value);
-                const chip = <CustomChip
-                    colorKey={typeof key === "number" ? `${name}_${key}` : key as string}
-                    label={label || key}
-                    error={!label}
-                    outlined={false}
+                const chip = <EnumValuesChip
+                    enumKey={key}
+                    enumValues={enumValues}
                     small={true}/>;
                 if (multiple) {
                     return (
                         <MenuItem key={`select-${name}-${key}`}
                                   value={key}
-                                  disabled={isEnumValueDisabled(value)}
+                                  disabled={isEnumValueDisabled(labelOrConfig)}
                                   dense={true}>
                             <Checkbox
                                 checked={Array.isArray(internalValue) && (internalValue as any[]).includes(key)}/>
@@ -128,7 +126,7 @@ export function TableSelect(props: {
                 } else {
                     return (
                         <MenuItem key={`select-${name}-${key}`} value={key}
-                                  disabled={isEnumValueDisabled(value)}
+                                  disabled={isEnumValueDisabled(labelOrConfig)}
                                   dense={true}>
                             {chip}
                         </MenuItem>
