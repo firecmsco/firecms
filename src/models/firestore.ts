@@ -147,7 +147,6 @@ export function replaceTimestampsWithDates(data: any): any {
         return null;
 
     if (deepEqual(data, firebase.firestore.FieldValue.serverTimestamp())) {
-        console.log("YEP")
         return null;
     }
 
@@ -194,7 +193,7 @@ function sanitizeData<S extends EntitySchema<Key>,
     let result: any = values;
     Object.entries(computeSchemaProperties(schema))
         .forEach(([key, property]) => {
-            if (values && (values as any)[key]) result[key] = (values as any)[key];
+            if (values && (values as any)[key] !== undefined) result[key] = (values as any)[key];
             else if (property.validation?.required) result[key] = null;
         });
     return result;
