@@ -1,5 +1,15 @@
 # Change Log
 
+## [0.32.0] - 2021-03-30
+### Added
+- Allowing customizing enum chip colors. You can now specify the color key to
+  the `EnumValueConfig`. You can also pass a `Map` instead of a plain object if
+  you need to ensure the order of the elements.
+
+### Changed
+- Fix for Firebase peer dependency.
+- [BREAKING] `EnumValues` is no longer generic.
+
 ## [0.31.0] - 2021-03-26
 ### Added
 - Added callback for selecting file name when uploading files to an entity.
