@@ -18,7 +18,7 @@ import { Draggable } from "./Draggable";
 import { getYupEntitySchema } from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../util/useWindowSize";
-import { FormContext } from "../../models/form_props";
+import { FormContext } from "../../models/fields";
 import { isReadOnly } from "../../models/utils";
 
 

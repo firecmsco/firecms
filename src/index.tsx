@@ -34,7 +34,7 @@ export { AlgoliaTextSearchDelegate } from "./models/text_search_delegate";
 
 export type {
     FieldProps, CMSFormFieldProps
-} from "./models/form_props";
+} from "./models/fields";
 export type { TextSearchDelegate } from "./models/text_search_delegate";
 
 export type { PreviewComponentProps } from "./preview";

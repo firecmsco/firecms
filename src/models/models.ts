@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TextSearchDelegate } from "./text_search_delegate";
-import { FieldProps } from "./form_props";
+import { FieldProps } from "./fields";
 import { PreviewComponentProps } from "../preview";
 import firebase from "firebase/app";
 import { ChipColor } from "./colors";

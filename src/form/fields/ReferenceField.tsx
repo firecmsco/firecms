@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import React, { useEffect } from "react";
 
-import { FieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/fields";
 import { FieldDescription } from "../../components";
 import { ReferenceDialog } from "../components/ReferenceDialog";
 import ErrorBoundary from "../../components/ErrorBoundary";

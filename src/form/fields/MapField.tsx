@@ -12,7 +12,7 @@ import {
 import React from "react";
 import { formStyles } from "../../styles";
 
-import { FieldProps } from "../../models/form_props";
+import { FieldProps } from "../../models/fields";
 import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
 import { LabelWithIcon } from "../components/LabelWithIcon";

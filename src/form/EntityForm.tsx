@@ -22,7 +22,7 @@ import { computeSchemaProperties, initEntityValues } from "../models/firestore";
 import { getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
-import { FormContext } from "../models/form_props";
+import { FormContext } from "../models/fields";
 import { isReadOnly } from "../models/utils";
 
 export const useStyles = makeStyles(theme => createStyles({

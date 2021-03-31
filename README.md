@@ -620,10 +620,10 @@ props. The bare minimum you need to implement is a field that displays the
 received `value` and uses the `setValue` callback.
 
 See how it works in this
-[sample custom text field](https://github.com/Camberi/firecms/blob/master/example/src/custom_field/CustomColorTextField.tsx)
+[sample custom text field](https://github.com/Camberi/firecms/blob/master/example/src/SampleApp/custom_field/CustomColorTextField.tsx)
 
 You can find the all
-the `CMSFieldProps` [here](https://github.com/Camberi/firecms/blob/master/src/form/form_props.tsx)
+the `CMSFieldProps` [here](https://github.com/Camberi/firecms/blob/master/src/models/fields.tsx)
 
 You can also pass custom props to your custom field, which you then receive in
 the `customProps`.
