@@ -1,5 +1,21 @@
 # Change Log
 
+## [0.33.0] - 2021-03-30
+
+### Added
+- Added example shaped array custom field in the `example` folder
+
+### Changed
+- Adaptations to make it easier to implement custom fields and use the internal
+  CMS fields bound to properties.
+- [BREAKING] `fieldProps` in the property fields configuration has been
+  renamed to `customProps`
+- [BREAKING] `customPreview` in the property fields configuration has been
+  renamed to `preview`
+- You don't need to specify an `of` props in array properties or a `properties`
+  prop in map properties, if you specify a custom field
+
+
 ## [0.32.0] - 2021-03-30
 ### Added
 - Allowing customizing enum chip colors. You can now specify the color key to
