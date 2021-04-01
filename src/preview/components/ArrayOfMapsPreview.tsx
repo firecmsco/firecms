@@ -11,15 +11,19 @@ import { useStyles } from "./styles";
 import { PreviewComponent } from "../PreviewComponent";
 
 export function ArrayOfMapsPreview({
+                                       name,
                                        value,
                                        property,
                                        size
-}: PreviewComponentProps<object[]> ) {
+                                   }: PreviewComponentProps<object[]>) {
 
-    if (property.dataType !== "array" || property.of.dataType !== "map")
+    if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");
 
     const properties = ((property as ArrayProperty).of as MapProperty).properties;
+    if (!properties) {
+        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
+    }
     const values = value;
     const previewProperties = ((property as ArrayProperty).of as MapProperty).previewProperties;
 

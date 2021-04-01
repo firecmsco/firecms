@@ -40,9 +40,16 @@ export default function StringNumberFilterField({
                                                 }: StringNumberFilterFieldProps) {
 
     const isArray = property.dataType === "array";
+    if (isArray && !(property as ArrayProperty).of) {
+        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
+    }
+    const usedProperty: StringProperty | NumberProperty = property.dataType === "array"
+        ? (property as ArrayProperty).of as StringProperty | NumberProperty
+        : property;
 
-    const dataType = property.dataType === "array" ? property.of.dataType : property.dataType;
-    const enumValues = property.dataType === "array" ? property.of.config?.enumValues : property.config?.enumValues;
+    const dataType = usedProperty.dataType;
+    const enumValues = usedProperty.config?.enumValues;
+
     const possibleOperations: (keyof typeof operationLabels) [] = isArray ?
         ["array-contains"] :
         ["==", "!=", ">", "<", ">=", "<="];
@@ -141,22 +148,23 @@ export default function StringNumberFilterField({
                                     renderValue={multiple ? (selected: any) =>
                                         (
                                             <div>
-                                                {selected.map((key: any) => {
+                                                {selected.map((enumKey: any) => {
                                                     return <EnumValuesChip
-                                                        enumKey={key}
+                                                        key={`select_value_${name}_${enumKey}`}
+                                                        enumKey={enumKey}
                                                         enumValues={enumValues}
                                                         small={true}/>;
                                                 })}
                                             </div>
                                         ) : undefined}>
-                                    {enumToObjectEntries(enumValues).map(([key, labelOrConfig]) => {
+                                    {enumToObjectEntries(enumValues).map(([enumKey, labelOrConfig]) => {
                                         return (
                                             <MenuItem
                                                 disabled={isEnumValueDisabled(labelOrConfig)}
-                                                key={`select_${name}_${key}`}
-                                                value={key}>
+                                                key={`select_${name}_${enumKey}`}
+                                                value={enumKey}>
                                                 <EnumValuesChip
-                                                    enumKey={key}
+                                                    enumKey={enumKey}
                                                     enumValues={enumValues}
                                                     small={true}/>
                                             </MenuItem>

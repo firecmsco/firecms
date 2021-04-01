@@ -51,13 +51,13 @@ export function ArrayEnumPreview({
     return (
         <div className={classes.arrayRoot}>
             {value &&
-            (value as any[]).map((key, index) => {
+            (value as any[]).map((enumKey, index) => {
                     return (
                         <div className={classes.arrayItem}
                              key={`preview_array_ref_${name}_${index}`}>
                             <ErrorBoundary>
                                 <EnumValuesChip
-                                    enumKey={key}
+                                    enumKey={enumKey}
                                     enumValues={enumValues}
                                     small={size !== "regular"}/>
                             </ErrorBoundary>

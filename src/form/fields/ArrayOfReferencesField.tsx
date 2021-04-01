@@ -7,7 +7,7 @@ import {
     Paper
 } from "@material-ui/core";
 import React from "react";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
 import { ReferencePreview } from "../../preview";
 import firebase from "firebase";

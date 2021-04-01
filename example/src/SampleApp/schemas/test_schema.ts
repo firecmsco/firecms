@@ -1,47 +1,73 @@
 import {
     buildEnumValueConfig,
+    buildProperty,
     buildSchema,
     EntitySaveProps
 } from "@camberi/firecms";
 import { locales } from "./products_schema";
+import CustomShapedArrayField
+    from "../custom_shaped_array/CustomShapedArrayField";
+import CustomShapedArrayPreview
+    from "../custom_shaped_array/CustomShapedArrayPreview";
 
-const relaxedStatus = new Map();
-relaxedStatus.set("-3", buildEnumValueConfig({
-    label: "Very tense",
-    color: "redDarker"
-}));
-relaxedStatus.set("-2", buildEnumValueConfig({
-    label: "Medium tense",
-    color: "redLight"
-}));
-relaxedStatus.set("-1", buildEnumValueConfig({
-    label: "Lightly tense",
-    color: "redLighter"
-}));
-relaxedStatus.set("0", buildEnumValueConfig({
-    label: "Normal",
-    color: "grayLight"
-}));
-relaxedStatus.set("1", buildEnumValueConfig({
-    label: "Lightly relaxed",
-    color: "blueLighter"
-}));
-relaxedStatus.set("2", buildEnumValueConfig({
-    label: "Medium relaxed",
-    color: "blueLight"
-}));
-relaxedStatus.set("3", buildEnumValueConfig({
-    label: "Very relaxed",
-    color: "blueDarker"
-}));
+const relaxedStatus = new Map([
+    ["-3", buildEnumValueConfig({
+        label: "Very tense",
+        color: "redDarker"
+    })],
+    ["-2", buildEnumValueConfig({
+        label: "Medium tense",
+        color: "redLight"
+    })],
+    ["-1", buildEnumValueConfig({
+        label: "Lightly tense",
+        color: "redLighter"
+    })],
+    ["0", buildEnumValueConfig({
+        label: "Normal",
+        color: "grayLight"
+    })],
+    ["1", buildEnumValueConfig({
+        label: "Lightly relaxed",
+        color: "blueLighter"
+    })],
+    ["2", buildEnumValueConfig({
+        label: "Medium relaxed",
+        color: "blueLight"
+    })],
+    ["3", buildEnumValueConfig({
+        label: "Very relaxed",
+        color: "blueDarker"
+    })]
+]);
 
 export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
     properties: {
         empty_string: {
-            title: "empty_string",
+            title: "Empty String",
             dataType: "string"
+        },
+        shaped_array: {
+            title: "My shaped array",
+            dataType: "array",
+            config: {
+                field: CustomShapedArrayField,
+                preview: CustomShapedArrayPreview,
+                customProps: {
+                    properties: [
+                        buildProperty({
+                            dataType: "string",
+                            title: "Name"
+                        }),
+                        buildProperty({
+                            dataType: "number",
+                            title: "Age"
+                        })
+                    ]
+                }
+            }
         },
         imageUrls: {
             title: "Images",

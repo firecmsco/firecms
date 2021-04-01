@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
@@ -67,22 +67,22 @@ export default function Select<T extends EnumType>({
                         newValue
                     );
                 }}
-                renderValue={(key: any) => {
+                renderValue={(enumKey: any) => {
                     return <EnumValuesChip
-                        enumKey={key}
+                        enumKey={enumKey}
                         enumValues={enumValues}
                         small={false}/>;
                 }
                 }>
 
                 {enumToObjectEntries(enumValues)
-                    .map(([key, labelOrConfig]) => {
+                    .map(([enumKey, labelOrConfig]) => {
                         return (
-                            <MenuItem key={`select_${name}_${key}`}
-                                      value={key}
+                            <MenuItem key={`select_${name}_${enumKey}`}
+                                      value={enumKey}
                                       disabled={isEnumValueDisabled(labelOrConfig)}>
                                 <EnumValuesChip
-                                    enumKey={key}
+                                    enumKey={enumKey}
                                     enumValues={enumValues}
                                     small={true}/>
                             </MenuItem>

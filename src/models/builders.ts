@@ -60,9 +60,9 @@ export function buildSchema<Key extends string = string>(
  * the property keys.
  * @param property
  */
-export function buildProperty<S extends EntitySchema<Key>, Key extends string>(
-    property: Property<Key>
-): Property<Key> {
+export function buildProperty(
+    property: Property
+): Property {
     return property;
 }
 

@@ -128,16 +128,62 @@ export interface FormContext<S extends EntitySchema<Key>, Key extends string = E
     entityId?: string;
 }
 
+/**
+ * In case you need to render a field bound to a Property inside your
+ * custom field you can call `buildPropertyField` with these props.
+ */
 export interface CMSFormFieldProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
+    /**
+     * The name of the property, such as `age`. You can use nested and array
+     * indexed such as `address.street` or `people[3]`
+     */
     name: string;
+    /**
+     * The CMS property you are binding this field to
+     */
     property: Property;
-    includeDescription: boolean;
-    underlyingValueHasChanged: boolean;
+
+    /**
+     * The context where this field is being rendered. You get a context as a
+     * prop when creating a custom field.
+     */
     context: FormContext<S, Key>;
-    tableMode: boolean;
-    partOfArray: boolean;
-    autoFocus: boolean;
-    disabled:boolean;
-    // This flag is used to avoid using FastField internally, which prevents being updated from the values
-    dependsOnOtherProperties:boolean;
+
+    /**
+     * Should the description be included in this field
+     */
+    includeDescription?: boolean;
+
+    /**
+     * Has the value of this property been updated in the database while this
+     * field is being edited
+     */
+    underlyingValueHasChanged?: boolean;
+
+    /**
+     * Is this field being rendered in a table
+     */
+    tableMode?: boolean;
+
+    /**
+     * Is this field part of an array
+     */
+    partOfArray?: boolean;
+
+    /**
+     * Should the field take focus when rendered. When opening the popup view
+     * in table mode, it makes sense to put the focus on the only field rendered.
+     */
+    autoFocus?: boolean;
+
+    /**
+     * Should this field be disabled
+     */
+    disabled?: boolean;
+
+    /**
+     * This flag is used to avoid using Formik FastField internally, which
+     * prevents being updated from the values
+     */
+    dependsOnOtherProperties?: boolean;
 }

@@ -33,7 +33,7 @@ export {
 export { AlgoliaTextSearchDelegate } from "./models/text_search_delegate";
 
 export type {
-    FieldProps, CMSFormFieldProps
+    FieldProps, CMSFormFieldProps,
 } from "./models/fields";
 export type { TextSearchDelegate } from "./models/text_search_delegate";
 
@@ -56,8 +56,9 @@ export {
     Select,
     StorageUploadField,
     SwitchField,
-    TextField
-} from "./form/index";
+    TextField,
+    CMSFormField
+} from "./form";
 
 export {
     PreviewComponent,
@@ -68,6 +69,7 @@ export {
 
 export {
     FieldDescription,
+    LabelWithIcon,
     ErrorBoundary
 } from "./components";
 

@@ -34,6 +34,9 @@ export function mapPropertyToYup(property: Property): AnySchema<unknown> {
     } else if (property.dataType === "boolean") {
         return getYupBooleanSchema(property);
     } else if (property.dataType === "map") {
+        if (!property.properties) {
+            return yup.object();
+        }
         return getYupMapObjectSchema(property.properties);
     } else if (property.dataType === "array") {
         return getYupArraySchema(property);
@@ -172,7 +175,10 @@ function getYupBooleanSchema(property: BooleanProperty): BooleanSchema {
 
 function getYupArraySchema<T>(property: ArrayProperty<T>): ArraySchema<any> {
 
-    let schema: ArraySchema<any> = yup.array().of(mapPropertyToYup(property.of));
+    let schema: ArraySchema<any> = yup.array();
+
+    if (property.of)
+        schema = schema.of(mapPropertyToYup(property.of));
     const validation = property.validation;
 
     if (validation) {

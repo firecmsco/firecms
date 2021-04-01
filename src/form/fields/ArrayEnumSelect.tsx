@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
@@ -29,7 +29,8 @@ export default function ArrayEnumSelect<T extends EnumType>({
                                                                 includeDescription,
                                                                 dependsOnOtherProperties
                                                             }: ArrayEnumSelectProps<T>) {
-    if (!("dataType" in property.of)) {
+
+    if (!property.of) {
         throw Error("Using wrong component ArrayEnumSelect");
     }
 
@@ -81,6 +82,7 @@ export default function ArrayEnumSelect<T extends EnumType>({
                                if (!key) return null;
 
                                return <EnumValuesChip
+                                   key={`array_enum_${key}`}
                                    enumKey={key}
                                    enumValues={enumValues}
                                    small={false}/>;
@@ -89,20 +91,20 @@ export default function ArrayEnumSelect<T extends EnumType>({
                    )}>
 
 
-            {enumToObjectEntries(enumValues).map(([key, labelOrConfig]) => {
+            {enumToObjectEntries(enumValues).map(([enumKey, labelOrConfig]) => {
 
                 const chip = <EnumValuesChip
-                    enumKey={key}
+                    enumKey={enumKey}
                     enumValues={enumValues}
                     small={false}/>;
 
                 return (
-                    <MenuItem key={`form-select-${name}-${key}`}
-                              value={key}
+                    <MenuItem key={`form-select-${name}-${enumKey}`}
+                              value={enumKey}
                               disabled={isEnumValueDisabled(labelOrConfig)}
                               dense={true}>
                         <Checkbox
-                            checked={validValue && (value as any[]).includes(key)}/>
+                            checked={validValue && (value as any[]).includes(enumKey)}/>
                         <ListItemText primary={chip}/>
                     </MenuItem>
                 );

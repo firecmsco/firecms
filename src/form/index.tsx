@@ -22,5 +22,7 @@ export {
     TextField
 };
 
+export { CMSFormField } from "./form_factory";
+
 
 

@@ -85,7 +85,7 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
     const [error, setError] = useState<Error | undefined>();
 
     const customField = Boolean(property.config?.field);
-    const customPreview = Boolean(property.config?.customPreview);
+    const customPreview = Boolean(property.config?.preview);
     const readOnly = isReadOnly(property);
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     let disabled = Boolean(property.disabled);
@@ -245,6 +245,9 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
             allowScroll = true;
         } else if (property.dataType === "array") {
             const arrayProperty = (property as ArrayProperty);
+            if (!arrayProperty.of) {
+                throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
+            }
             if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
                 if (selected && arrayProperty.of.config?.enumValues) {
                     innerComponent = <TableSelect name={name as string}

@@ -4,6 +4,7 @@ import { PreviewComponentProps, PreviewSize } from "../../preview";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { useStyles } from "./styles";
 import { PreviewComponent } from "../PreviewComponent";
+import { Property } from "../../models";
 
 
 export function ArrayOfStorageComponentsPreview({
@@ -12,7 +13,7 @@ export function ArrayOfStorageComponentsPreview({
                                                     property,
                                                     size}: PreviewComponentProps<any[]> ) {
 
-    if (property.dataType !== "array" || property.of.dataType !== "string")
+    if (property.dataType !== "array" || !property.of || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStorageComponentsPreview");
 
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
@@ -27,7 +28,7 @@ export function ArrayOfStorageComponentsPreview({
                     <PreviewComponent
                         name={name}
                         value={v}
-                        property={property.of}
+                        property={property.of as Property}
                         size={childSize}/>
                 </ErrorBoundary>
             </div>

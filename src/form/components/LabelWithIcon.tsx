@@ -9,7 +9,7 @@ interface LabelWithIconProps {
     scaledIcon?: boolean
 }
 
-export function LabelWithIcon({ property, scaledIcon }: LabelWithIconProps) {
+export default function LabelWithIcon({ property, scaledIcon }: LabelWithIconProps) {
 
     const classes = formStyles();
     return (

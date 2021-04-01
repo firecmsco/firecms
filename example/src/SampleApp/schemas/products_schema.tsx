@@ -111,7 +111,7 @@ export const productSchema: EntitySchema = buildSchema({
                 disabledMessage: "You can only set the price on available items"
             },
             config: {
-                customPreview: PriceTextPreview
+                preview: PriceTextPreview
             },
             description: "Price with range validation"
         }),

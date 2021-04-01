@@ -187,7 +187,7 @@ function createFilterField(key: string, property: Property): JSX.Element {
 
     if (property.dataType === "number" || property.dataType === "string") {
         return <StringNumberFilterField name={key} property={property}/>;
-    } else if (property.dataType === "array") {
+    } else if (property.dataType === "array" && property.of) {
         if (property.of.dataType === "number" || property.of.dataType === "string")
             return <StringNumberFilterField name={key} property={property}/>;
     } else if (property.dataType === "boolean") {

@@ -8,7 +8,6 @@ import {
 } from "../../models";
 import React from "react";
 import {
-    Divider,
     Grid,
     List,
     ListItem,
@@ -28,9 +27,9 @@ export interface SkeletonComponentProps<T> {
 }
 
 export function SkeletonComponent<T>({
-                                                 property,
-                                                 size
-                                             }: SkeletonComponentProps<T>
+                                         property,
+                                         size
+                                     }: SkeletonComponentProps<T>
 ) {
 
     if (!property) {
@@ -50,10 +49,10 @@ export function SkeletonComponent<T>({
     } else if (property.dataType === "array") {
         const arrayProperty = property as ArrayProperty;
 
-        if ("dataType" in arrayProperty.of) {
-            if (arrayProperty.of.dataType === "map")
+        if (arrayProperty.of) {
+            if (arrayProperty.of.dataType === "map" && arrayProperty.of.properties) {
                 content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewProperties);
-            else if (arrayProperty.of.dataType === "string") {
+            }else if (arrayProperty.of.dataType === "string") {
                 if (arrayProperty.of.config?.enumValues) {
                     content = renderArrayEnumTableCell();
                 } else if (arrayProperty.of.config?.storageMeta) {
@@ -64,8 +63,6 @@ export function SkeletonComponent<T>({
             } else {
                 content = renderGenericArrayCell(arrayProperty.of);
             }
-        } else {
-            content = renderShapedArray(arrayProperty.of);
         }
 
     } else if (property.dataType === "map") {
@@ -85,6 +82,8 @@ export function SkeletonComponent<T>({
 function renderMap<T>(property: MapProperty<T>, size: PreviewSize) {
 
     const classes = useStyles();
+    if(!property.properties)
+        return <></>;
 
     let mapProperties: string[];
     if (!size) {
@@ -213,33 +212,6 @@ function renderGenericArrayCell(
     );
 }
 
-function renderShapedArray<T extends EnumType>(
-    properties: Property[]
-) {
-
-    const classes = useStyles();
-
-    return (
-        <Grid>
-            {properties &&
-            properties.map((property, index) =>
-                <React.Fragment
-                    key={"preview_array_" + properties[index] + "_" + index}>
-                    {properties[index] && (
-                        <div className={classes.smallMargin}>
-                            <SkeletonComponent
-                                property={property}
-                                size={"small"}/>
-                        </div>
-                    )}
-                    {properties[index] && index < properties.length - 1 &&
-                    <Divider/>}
-                </React.Fragment>
-            )}
-        </Grid>
-    );
-}
-
 function renderUrlAudioComponent() {
     return <Skeleton variant="rect"
                      width={300}
@@ -305,7 +277,8 @@ function renderUrlFile(size: PreviewSize) {
         </div>
     );
 }
- function renderSkeletonText(index?: number) {
+
+function renderSkeletonText(index?: number) {
     return <Skeleton variant="text"/>;
 }
 

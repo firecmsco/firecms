@@ -3,7 +3,7 @@ import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import { FieldProps } from "../../models/fields";
 import React, { useState } from "react";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
 import { formStyles } from "../../styles";
 import { CMSFormField } from "../form_factory";

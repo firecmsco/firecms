@@ -193,7 +193,7 @@ function sanitizeData<S extends EntitySchema<Key>,
     let result: any = values;
     Object.entries(computeSchemaProperties(schema))
         .forEach(([key, property]) => {
-            if (values && (values as any)[key] !== undefined) result[key] = (values as any)[key];
+            if (values && values[key] !== undefined) result[key] = values[key];
             else if (property.validation?.required) result[key] = null;
         });
     return result;
@@ -438,7 +438,7 @@ function initWithProperties<S extends EntitySchema<Key>,
 
 function initPropertyValue(key: string, property: Property, defaultValue: any) {
     let value: any;
-    if (property.dataType === "map") {
+    if (property.dataType === "map" && property.properties) {
         value = initWithProperties(property.properties, defaultValue);
     } else if (defaultValue !== undefined) {
         value = defaultValue;
@@ -457,13 +457,13 @@ function updateAutoValue(inputValue: any,
                          status: EntityStatus): any {
 
     let value;
-    if (property.dataType === "map") {
+    if (property.dataType === "map" && property.properties) {
         value = updateAutoValues(inputValue, property.properties, status);
         if (property.config?.clearMissingValues) {
             value = clearMapMissingValues(inputValue, property.properties);
         }
     } else if (property.dataType === "array") {
-        if ("dataType" in property.of && Array.isArray(inputValue)) {
+        if ( property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => updateAutoValue(e, property.of as Property, status));
         } else {
             value = inputValue;

@@ -50,7 +50,7 @@ export function getPropertyColumnWidth(property: Property, size: CollectionSize)
         }
     } else if (property.dataType === "array") {
         const arrayProperty = property as ArrayProperty;
-        if ("dataType" in arrayProperty.of) {
+        if (arrayProperty.of) {
             return getPropertyColumnWidth(arrayProperty.of as Property<unknown>, size);
         } else {
             return 300;

@@ -91,15 +91,15 @@ export function TableSelect(props: {
                     throw Error("Missing mapping in TableSelect");
                 }
             }}
-            renderValue={(key: any) => {
-                if (multiple && Array.isArray(key)) {
-                    return <ArrayEnumPreview value={key}
+            renderValue={(enumKey: any) => {
+                if (multiple && Array.isArray(enumKey)) {
+                    return <ArrayEnumPreview value={enumKey}
                                              name={name}
                                              enumValues={enumValues}
                                              size={"small"}/>;
                 } else {
                     return <EnumValuesChip
-                        enumKey={key}
+                        enumKey={enumKey}
                         enumValues={enumValues}
                         small={true}/>;
                 }

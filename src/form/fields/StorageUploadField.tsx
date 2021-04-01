@@ -29,7 +29,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { PreviewComponent, PreviewSize } from "../../preview";
 import deepEqual from "deep-equal";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import LabelWithIcon from "../components/LabelWithIcon";
 import { useSnackbarController } from "../../contexts";
 import ErrorBoundary from "../../components/ErrorBoundary";
 
@@ -268,7 +268,7 @@ export function StorageUpload({
 
     if (multipleFilesSupported) {
         const arrayProperty = property as ArrayProperty<string>;
-        if ("dataType" in arrayProperty.of) {
+        if (arrayProperty.of) {
             if (arrayProperty.of.dataType !== "string") {
                 throw Error("Storage field using array must be of data type string");
             }

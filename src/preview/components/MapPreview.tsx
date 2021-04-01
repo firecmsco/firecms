@@ -36,6 +36,9 @@ export function MapPreview<T>({
     }
 
     const mapProperty = property as MapProperty;
+    if (!mapProperty.properties) {
+        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
+    }
 
     if (!value) return null;
 
@@ -61,7 +64,7 @@ export function MapPreview<T>({
                         <ErrorBoundary>
                             <PreviewComponent name={key}
                                               value={(value as any)[key]}
-                                              property={mapProperty.properties[key]}
+                                              property={mapProperty.properties![key]}
                                               size={size}/>
                         </ErrorBoundary>
                     </div>
@@ -84,7 +87,7 @@ export function MapPreview<T>({
                                        component="th">
                                 <Typography variant={"caption"}
                                             color={"textSecondary"}>
-                                    {mapProperty.properties[key].title}
+                                    {mapProperty.properties![key].title}
                                 </Typography>
                             </TableCell>
                             <TableCell key={`table-cell-${name}-${key}`}
@@ -95,7 +98,7 @@ export function MapPreview<T>({
                                     <PreviewComponent
                                         name={key}
                                         value={(value as any)[key]}
-                                        property={mapProperty.properties[key]}
+                                        property={mapProperty.properties![key]}
                                         size={"small"}/>
                                 </ErrorBoundary>
                             </TableCell>

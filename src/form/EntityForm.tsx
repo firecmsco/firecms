@@ -9,6 +9,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {
+    CMSFormFieldProps,
     Entity,
     EntitySchema,
     EntityStatus,
@@ -268,22 +269,25 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                             const dependsOnOtherProperties = typeof (schema.properties as any)[key] === "function";
 
                             const disabled = isSubmitting || isReadOnly(property) || !!property.disabled;
+                            const cmsFormFieldProps:CMSFormFieldProps<any> = {
+                                name: key,
+                                disabled: disabled,
+                                property: property as Property,
+                                includeDescription: true,
+                                underlyingValueHasChanged: underlyingValueHasChanged,
+                                context: context,
+                                tableMode: false,
+                                partOfArray: false,
+                                autoFocus: false,
+                                dependsOnOtherProperties: dependsOnOtherProperties,
+                            };
                             return (
                                 <Grid item
                                       xs={12}
                                       id={`form_field_${key}`}
                                       key={`field_${schema.name}_${key}`}>
                                     <CMSFormField
-                                        name={key}
-                                        disabled={disabled}
-                                        property={property as Property}
-                                        includeDescription={true}
-                                        underlyingValueHasChanged={underlyingValueHasChanged}
-                                        context={context}
-                                        tableMode={false}
-                                        partOfArray={false}
-                                        autoFocus={false}
-                                        dependsOnOtherProperties={dependsOnOtherProperties}
+                                        {...cmsFormFieldProps}
                                     />
                                 </Grid>
                             );

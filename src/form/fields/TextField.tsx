@@ -13,7 +13,7 @@ import React from "react";
 
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import LabelWithIcon from "../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 

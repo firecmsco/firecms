@@ -14,7 +14,7 @@ export function ArrayOfStringsPreview({
 
     const classes = useStyles();
 
-    if (property.dataType !== "array" || property.of.dataType !== "string")
+    if (!property.of || property.dataType !== "array" || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStringsPreview");
 
     if (value && !Array.isArray(value)) {

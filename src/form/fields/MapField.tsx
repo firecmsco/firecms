@@ -15,7 +15,7 @@ import { formStyles } from "../../styles";
 import { FieldProps } from "../../models/fields";
 import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { CMSFormField } from "../form_factory";
 
@@ -39,13 +39,17 @@ export default function MapField<S extends EntitySchema>({
 
     const pickOnlySomeKeys = property.config?.pickOnlySomeKeys || false;
 
+    if (!property.properties) {
+        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
+    }
+
     let mapProperties: Record<string, Property>;
     if (!pickOnlySomeKeys) {
         mapProperties = property.properties;
     } else if (value) {
         mapProperties = pick(property.properties,
             ...Object.keys(value)
-                .filter(key => key in property.properties)
+                .filter(key => key in property.properties!)
         );
     } else {
         mapProperties = {};
@@ -59,7 +63,7 @@ export default function MapField<S extends EntitySchema>({
 
     function buildPickKeysSelect() {
 
-        const keys = Object.keys(property.properties)
+        const keys = Object.keys(property.properties!)
             .filter((key) => !value || !(key in value));
 
         const handleAddProperty = (event: React.ChangeEvent<{ value: unknown }>) => {

@@ -4,7 +4,7 @@ import { DateTimePicker } from "@material-ui/pickers";
 import { FieldProps } from "../../models";
 
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { CMSAppProps } from "../../CMSAppProps";
 import { useAppConfigContext } from "../../contexts";

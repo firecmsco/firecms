@@ -154,7 +154,7 @@ function getExportHeaders(properties: Properties<any>): Header[] {
 
 function getHeaders(property: Property, propertyKey: string, prefix: string = ""): Header[] {
     let currentKey = prefix ? `${prefix}.${propertyKey}` : propertyKey;
-    if (property.dataType === "map") {
+    if (property.dataType === "map" && property.properties) {
         return Object.entries(property.properties)
             .map(([childKey, p]) => getHeaders(p, childKey, currentKey))
             .flat();
@@ -168,10 +168,10 @@ function processProperty(inputValue: any,
                          property: Property): any {
 
     let value;
-    if (property.dataType === "map") {
+    if (property.dataType === "map" && property.properties) {
         value = processProperties(inputValue, property.properties);
     } else if (property.dataType === "array") {
-        if ("dataType" in property.of && Array.isArray(inputValue)) {
+        if (property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => processProperty(e, property.of as Property));
         } else {
             value = inputValue;

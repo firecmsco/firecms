@@ -39,20 +39,23 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
         property, name, value, size, height, width
     } = props;
 
-    const fieldProps = { ...props, PreviewComponent };
+    const fieldProps = { ...props };
 
-    if (property.config?.customPreview) {
-        content = createElement(property.config.customPreview as React.ComponentType<PreviewComponentProps>,
+    if (value === undefined) {
+        content = <EmptyValue/>;
+    } else if (property.config?.preview) {
+        content = createElement(property.config.preview as React.ComponentType<PreviewComponentProps>,
             {
                 name,
                 value,
                 property,
                 size,
                 height,
-                width
+                width,
+                customProps: property.config.customProps
             });
-    } else if (value === null || value === undefined) {
-        return <EmptyValue/>;
+    } else if (value === null) {
+        content = <EmptyValue/>;
     } else if (property.dataType === "string") {
         const stringProperty = property as StringProperty;
         if (typeof value === "string") {
@@ -77,6 +80,9 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     } else if (property.dataType === "array") {
         if (value instanceof Array) {
             const arrayProperty = property as ArrayProperty;
+            if(!arrayProperty.of){
+                throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
+            }
 
             if (arrayProperty.of.dataType === "map") {
                 content =

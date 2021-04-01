@@ -16,7 +16,7 @@ export const blogSchema = buildSchema({
             dataType: "string",
             config: {
                 field: CustomColorTextField,
-                fieldProps: {
+                customProps: {
                     color: "gold"
                 }
             }
@@ -56,17 +56,12 @@ export const blogSchema = buildSchema({
             title: "Priority",
             description: "This field allows the selection of Infinity as a value",
             dataType: "number",
-            config: {
-                fieldProps: {
-                    allowInfinity: true
-                }
-            }
         },
         reviewed: {
             title: "Reviewed",
             dataType: "boolean",
             config: {
-                customPreview: CustomBooleanPreview
+                preview: CustomBooleanPreview
             }
         },
         status: {

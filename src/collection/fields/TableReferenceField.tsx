@@ -49,7 +49,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
     if (property.dataType === "reference") {
         usedProperty = property;
         multiselect = false;
-    } else if (property.dataType === "array" && property.of.dataType === "reference") {
+    } else if (property.dataType === "array" && property.of?.dataType === "reference") {
         usedProperty = property.of;
         multiselect = true;
     } else {

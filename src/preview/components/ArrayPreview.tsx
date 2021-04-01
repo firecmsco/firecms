@@ -6,12 +6,18 @@ import React from "react";
 import { Divider } from "@material-ui/core";
 import { PreviewComponent } from "../PreviewComponent";
 import { useStyles } from "./styles";
+import { Property } from "../../models";
 
 export function ArrayPreview({
-                                       name,
-                                       value,
-                                       property,
-                                       size}: PreviewComponentProps<any[]> ) {
+                                 name,
+                                 value,
+                                 property,
+                                 size
+                             }: PreviewComponentProps<any[]>) {
+
+    if (!property.of) {
+        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
+    }
 
     const classes = useStyles();
 
@@ -29,12 +35,12 @@ export function ArrayPreview({
             {values &&
             values.map((value, index) =>
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
-                    <div className={classes.arrayItemBig} >
+                    <div className={classes.arrayItemBig}>
                         <ErrorBoundary>
                             <PreviewComponent
                                 name={name}
                                 value={value}
-                                property={property.of}
+                                property={property.of as Property}
                                 size={childSize}/>
                         </ErrorBoundary>
                     </div>

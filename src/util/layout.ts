@@ -4,7 +4,7 @@ import { isReadOnly } from "../models/utils";
 export function getColumnsForProperty(property: Property): "xs" | "sm" | "md" {
 
     if (property.dataType === "array" &&
-        "dataType" in property.of &&
+        property.of &&
         property.of.dataType === "string" &&
         property.of.config?.enumValues) {
         return "xs";

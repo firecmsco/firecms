@@ -5,7 +5,7 @@ import { formStyles } from "../../styles";
 import { FieldProps } from "../../models/fields";
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import LabelWithIcon from "../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
 
 type DisabledFieldProps = FieldProps<any>;

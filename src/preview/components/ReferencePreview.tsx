@@ -93,7 +93,7 @@ export function ArrayOfReferencesPreview({
                                              size
                                          }: PreviewComponentProps<any[]>) {
 
-    if (property.dataType !== "array" || property.of.dataType !== "reference")
+    if (property.dataType !== "array" || !property.of || property.of.dataType !== "reference")
         throw Error("Picked wrong preview component ArrayOfReferencesPreview");
 
     const classes = useStyles();

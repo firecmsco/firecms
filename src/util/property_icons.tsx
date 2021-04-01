@@ -45,9 +45,12 @@ export function getIconForProperty(
     } else if (property.dataType === "geopoint") {
         return <RoomIcon color={color} fontSize={fontSize}/>;
     } else if (property.dataType === "map") {
-        return <ViewListIcon color={color} fontSize={fontSize}/>;
+        if (property.properties)
+            return <ViewListIcon color={color} fontSize={fontSize}/>;
+        else
+            return <ListAltIcon color={color} fontSize={fontSize}/>;
     } else if (property.dataType === "array") {
-        if ("dataType" in property.of)
+        if (property.of)
             return getIconForProperty(property.of, color, fontSize);
         else
             return <ListAltIcon color={color} fontSize={fontSize}/>;

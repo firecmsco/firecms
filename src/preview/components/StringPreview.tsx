@@ -12,10 +12,10 @@ export function StringPreview({
                               }: PreviewComponentProps<string>): React.ReactElement {
 
     if (property.config?.enumValues) {
-        const key = value;
+        const enumKey = value;
         const enumValues = property.config.enumValues;
         return <EnumValuesChip
-            enumKey={key}
+            enumKey={enumKey}
             enumValues={enumValues}
             small={size !== "regular"}/>;
     } else if (property.config?.previewAsTag) {

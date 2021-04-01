@@ -30,6 +30,7 @@ import {
     FieldProps,
     Property
 } from "../models";
+
 import Select from "./fields/Select";
 import ArrayEnumSelect from "./fields/ArrayEnumSelect";
 import StorageUploadField from "./fields/StorageUploadField";
@@ -41,34 +42,41 @@ import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ReadOnlyField from "./fields/ReadOnlyField";
 import MarkDownField from "./fields/MarkdownField";
+import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
+
 import { useAppConfigContext, useSnackbarController } from "../contexts";
 
 import { CMSAppProps } from "../CMSAppProps";
-import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
 import { isReadOnly } from "../models/utils";
 
 /**
- * This component renders a Formik field creating the corresponding configuration
- * from a property.
- * @param name
+ * This component renders a form field creating the corresponding configuration
+ * from a property. For example if bound to a string property, it will generate
+ * a text field.
+ *
+ * You can use it when you are creating a custom field, and need to
+ * render additional fields mapped to properties. This is useful if you
+ * need to build a complex property mapping, like an array where each index
+ * is a different property.
+ *
+ * @param name You can use nested names such as `address.street` or `friends[2]`
  * @param property
+ * @param context
  * @param includeDescription
  * @param underlyingValueHasChanged
- * @param context
  * @param disabled
  * @param tableMode
  * @param partOfArray
  * @param autoFocus
  * @param dependsOnOtherProperties
- * @constructor
  */
 export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
 ({
      name,
      property,
+     context,
      includeDescription,
      underlyingValueHasChanged,
-     context,
      disabled,
      tableMode,
      partOfArray,
@@ -82,6 +90,9 @@ export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string 
     } else if (property.config?.field) {
         component = property.config?.field;
     } else if (property.dataType === "array") {
+        if(!property.of){
+            throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
+        }
         if ((property.of.dataType === "string" || property.of.dataType === "number") && property.of.config?.enumValues) {
             component = ArrayEnumSelect as ComponentType<FieldProps<any>>;
         } else if (property.of.dataType === "string" && property.of.config?.storageMeta) {
@@ -160,7 +171,7 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
          componentProps: CMSFormFieldProps<S, Key>
      }) {
 
-    const customFieldProps: any = property.config?.fieldProps;
+    const customFieldProps: any = property.config?.customProps;
 
     // we use the standard Field for user defined fields, since it rebuilds
     // when there are changes in other values, in contrast to FastField
@@ -199,17 +210,17 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
                     touched,
                     showError,
                     isSubmitting,
-                    includeDescription,
+                    includeDescription: includeDescription ?? true,
                     property: property as Property<T>,
                     CMSFormField,
-                    disabled,
-                    underlyingValueHasChanged,
-                    tableMode,
-                    partOfArray,
-                    autoFocus,
+                    disabled: disabled ?? false,
+                    underlyingValueHasChanged: underlyingValueHasChanged ?? false,
+                    tableMode: tableMode ?? false,
+                    partOfArray: partOfArray ?? false,
+                    autoFocus: autoFocus ?? false,
                     customProps: customFieldProps,
                     context,
-                    dependsOnOtherProperties
+                    dependsOnOtherProperties: dependsOnOtherProperties ?? true
                 };
 
                 return (
