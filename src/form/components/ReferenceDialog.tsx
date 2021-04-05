@@ -183,6 +183,7 @@ export function ReferenceDialog(
                                  onEntityClick={onEntityClick}
                                  tableRowWidgetBuilder={tableRowWidgetBuilder}
                                  paginationEnabled={paginationEnabled}
+                                 additionalColumns={collectionConfig.additionalColumns}
                                  title={<Typography
                                      variant={"h6"}>{`Select ${schema.name}`}</Typography>}
                                  displayedProperties={displayedProperties}
