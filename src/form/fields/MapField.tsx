@@ -1,4 +1,4 @@
-import { EntitySchema, Properties, Property } from "../../models";
+import { EntitySchema, Properties, Property, FieldProps } from "../../models";
 import {
     Box,
     FormControl,
@@ -12,7 +12,6 @@ import {
 import React from "react";
 import { formStyles } from "../../styles";
 
-import { FieldProps } from "../../models/fields";
 import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
 import LabelWithIcon from "../components/LabelWithIcon";

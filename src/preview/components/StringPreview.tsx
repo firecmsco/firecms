@@ -1,4 +1,4 @@
-import { PreviewComponentProps } from "../../preview";
+import { PreviewComponentProps } from "../../models";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import React from "react";
 import { CustomChip, EnumValuesChip } from "./CustomChip";
@@ -28,7 +28,11 @@ export function StringPreview({
                 />
             </ErrorBoundary>);
     } else {
-        return <>{value && (value.includes("\n") ? value.split("\n").map(str =>
-            <div>{str}</div>) : value)}</>;
+        return <>
+            {value && (value.includes("\n")
+                ? value.split("\n").map((str, index) =>
+                    <div key={`string_preview_${index}`}>{str}</div>)
+                : value)}
+        </>;
     }
 }

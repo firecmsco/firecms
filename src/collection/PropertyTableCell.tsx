@@ -1,18 +1,13 @@
 import {
     ArrayProperty,
-    CMSFormFieldProps,
-    Entity,
     EntitySchema,
-    EntityStatus,
     NumberProperty,
     Property,
     ReferenceProperty,
-    saveEntity,
     StringProperty,
     TimestampProperty
 } from "../models";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { mapPropertyToYup } from "../form/validation";
+import React, { useCallback, useEffect, useState } from "react";
 import { TableInput } from "./fields/TableInput";
 import { TableSelect } from "./fields/TableSelect";
 import { NumberTableInput } from "./fields/TableNumberInput";
@@ -22,7 +17,6 @@ import { ErrorBoundary } from "../components";
 import { PreviewComponent } from "../preview";
 import { CellStyleProps } from "./styles";
 import { TableReferenceField } from "./fields/TableReferenceField";
-import { CollectionTableProps } from "./CollectionTableProps";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -31,27 +25,30 @@ import { useClearRestoreValue } from "../form/useClearRestoreValue";
 import deepEqual from "deep-equal";
 import { isReadOnly } from "../models/utils";
 import TableCell from "./TableCell";
+import { AnySchema } from "yup";
 
 
-interface PropertyTableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
-    name: string,
-    path: string,
-    selected: boolean,
-    entity: Entity<S, Key>,
-    schema: S,
-    value: T,
-    select: (cellRect: DOMRect | undefined) => void,
-    openPopup: () => void,
-    setPreventOutsideClick: (value: boolean) => void,
-    focused: boolean,
-    setFocused: (value: boolean) => void,
-    property: Property<T>,
+export interface PropertyTableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
+    name: string;
+    path: string;
+    selected: boolean;
+    value: T;
+    select: (cellRect: DOMRect | undefined) => void;
+    openPopup: () => void;
+    setPreventOutsideClick: (value: boolean) => void;
+    focused: boolean;
+    setFocused: (value: boolean) => void;
+    property: Property<T>;
     height: number;
     width: number;
-    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
-    CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>,
+    validation: AnySchema;
+    onValueChange?: (params: OnCellChangeParams<T>) => void
 }
 
+/**
+ * Props passed in a callback when the content of a cell in a table has been edited
+ */
+export type OnCellChangeParams<T> = { value: T, name: string, setError: (e: Error) => void };
 
 const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                                                    selected,
@@ -60,18 +57,16 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                                                    path,
                                                                                    setPreventOutsideClick,
                                                                                    setFocused,
-                                                                                   entity,
+                                                                                   onValueChange,
                                                                                    select,
                                                                                    openPopup,
-                                                                                   schema,
                                                                                    value,
                                                                                    property,
+                                                                                   validation,
                                                                                    size,
                                                                                    align,
                                                                                    width,
-                                                                                   height,
-                                                                                   CMSFormField,
-                                                                                   CollectionTable
+                                                                                   height
                                                                                }: PropertyTableCellProps<T, S, Key> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
@@ -90,16 +85,6 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     let disabled = Boolean(property.disabled);
 
-    const validation = useMemo(() => mapPropertyToYup(property, path, name, entity?.id), [property, path, name, entity?.id]);
-
-    const onSaveSuccess = (entity: Entity<any>) => {
-
-    };
-
-    const onSaveFailure = (e: Error) => {
-        setError(e);
-    };
-
     const onBlur = () => {
         setFocused(false);
     };
@@ -115,19 +100,9 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
     useEffect(
         () => {
             if (!deepEqual(value, internalValue) && !error) {
-                saveEntity({
-                        collectionPath: path,
-                        id: entity.id,
-                        values: {
-                            ...entity.values,
-                            [name]: internalValue
-                        },
-                        schema,
-                        status: EntityStatus.existing,
-                        onSaveSuccess,
-                        onSaveFailure
-                    }
-                ).then();
+                setError(undefined);
+                if (onValueChange)
+                    onValueChange({ value: internalValue, name, setError });
             }
         },
         [internalValue]
@@ -144,7 +119,7 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
             }
             validation
                 .validate(updatedValue)
-                .then( () => {
+                .then(() => {
                     setInternalValue(updatedValue);
                     setError(undefined);
                 })
@@ -238,9 +213,6 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                   updateValue={updateValue}
                                                   disabled={disabled}
                                                   size={size}
-                                                  CMSFormField={CMSFormField}
-                                                  CollectionTable={CollectionTable}
-                                                  schema={schema}
                                                   property={property as ReferenceProperty}
                                                   setPreventOutsideClick={setPreventOutsideClick}
             />;
@@ -272,9 +244,6 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                       internalValue={internalValue as firebase.firestore.DocumentReference[]}
                                                       updateValue={updateValue}
                                                       size={size}
-                                                      CMSFormField={CMSFormField}
-                                                      CollectionTable={CollectionTable}
-                                                      schema={schema}
                                                       property={property as ReferenceProperty}
                                                       setPreventOutsideClick={setPreventOutsideClick}
                 />;

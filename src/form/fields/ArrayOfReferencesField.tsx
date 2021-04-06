@@ -121,8 +121,6 @@ export default function ArrayOfReferencesField({
                              collectionPath={ofProperty.collectionPath}
                              onClose={onClose}
                              onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                             CMSFormField={CMSFormField}
-                             CollectionTable={CollectionTable}
                              selectedEntityIds={selectedIds}
             />
         </>

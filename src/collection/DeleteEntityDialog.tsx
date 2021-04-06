@@ -1,4 +1,4 @@
-import { Entity, EntitySchema } from "../models";
+import {  Entity, EntitySchema } from "../models";
 import React, { useState } from "react";
 import { deleteEntity } from "../models/firestore";
 import {

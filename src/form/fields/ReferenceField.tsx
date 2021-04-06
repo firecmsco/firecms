@@ -13,19 +13,18 @@ import {
 } from "@material-ui/core";
 import React, { useEffect } from "react";
 
-import { FieldProps } from "../../models/fields";
+import ErrorIcon from "@material-ui/icons/Error";
+import ClearIcon from "@material-ui/icons/Clear";
+import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
+
+import { FieldProps, listenEntityFromRef } from "../../models";
 import { FieldDescription } from "../../components";
 import { ReferenceDialog } from "../components/ReferenceDialog";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { PreviewComponent, SkeletonComponent } from "../../preview";
 import LabelWithIcon from "../components/LabelWithIcon";
-
-import ErrorIcon from "@material-ui/icons/Error";
-import ClearIcon from "@material-ui/icons/Clear";
-import { listenEntityFromRef } from "../../models/firestore";
-import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { CollectionTable } from "../../collection/CollectionTable";
-import { useSideEntityController } from "../../contexts/SideEntityController";
+import { useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
@@ -293,8 +292,6 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
                                                       collectionPath={collectionPath}
                                                       onClose={onClose}
                                                       onSingleEntitySelected={handleEntityClick}
-                                                      CMSFormField={CMSFormField}
-                                                      CollectionTable={CollectionTable}
                 />}
 
                 {!collectionConfig &&

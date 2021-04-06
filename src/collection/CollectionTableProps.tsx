@@ -4,7 +4,6 @@ import {
     Entity,
     EntitySchema,
     FilterValues,
-    CMSFormFieldProps,
     TextSearchDelegate
 } from "../models";
 import React from "react";
@@ -29,7 +28,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     /**
      * In case this table should have some filters set by default
      */
-    initialFilter?: FilterValues<S>;
+    initialFilter?: FilterValues<S, Key>;
 
     /**
      * Default sort applied to this collection
@@ -72,27 +71,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     /**
      * Can the table be edited inline
      */
-    inlineEditing: ((entity:Entity<any>) => boolean) | boolean;
-
-    /**
-     * Callback when anywhere on the table is clicked
-     */
-    onEntityClick?(collectionPath: string, entity: Entity<S, Key>): void;
-
-    /**
-     * Callback when an entity gets deleted
-     */
-    onEntityDelete?(collectionPath: string, entity: Entity<S, Key>): void;
-
-    /**
-     * Callback when a multiple entities gets deleted
-     */
-    onMultipleEntitiesDelete?(collectionPath: string, entities: Entity<S, Key>[]): void;
-
-    /**
-     * Factory method for creating form fields
-     */
-    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
+    inlineEditing: ((entity: Entity<any>) => boolean) | boolean;
 
     /**
      * List of entities that will be displayed on top, no matter the ordering.
@@ -104,7 +83,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * Additional components builder such as buttons in the
      * collection toolbar
      */
-    toolbarWidgetBuilder?: (props: { size: CollectionSize, data:Entity<any>[] }) => React.ReactNode;
+    toolbarWidgetBuilder?: (props: { size: CollectionSize, data: Entity<any>[] }) => React.ReactNode;
 
     /**
      * Builder for creating the buttons in each row
@@ -121,4 +100,26 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * Is the id column frozen to the left.
      */
     frozenIdColumn?: boolean;
+
+    /**
+     * Callback when anywhere on the table is clicked
+     */
+    onEntityClick?(collectionPath: string, entity: Entity<S, Key>): void;
+
+    /**
+     * Callback when the value of a cell has been edited
+     * @param params
+     */
+    onCellValueChange?: (params:OnCellChangeParams<any, S, Key>) => void;
 }
+
+/**
+ * Props passed in a callback when the content of a cell in a table has been edited
+ */
+export type OnCellChangeParams<T, S extends EntitySchema<Key>, Key extends string> = {
+    value: T,
+    name: string,
+    entity: Entity<S, Key>,
+    setError: (e: Error) => void
+};
+

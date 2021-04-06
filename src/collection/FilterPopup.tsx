@@ -21,7 +21,7 @@ import { Form, Formik } from "formik";
 import ClearIcon from "@material-ui/icons/Clear";
 import StringNumberFilterField from "./filters/StringNumberFilterField";
 import BooleanFilterField from "./filters/BooleanFilterField";
-import { buildPropertyFrom } from "../models/builders";
+import { buildPropertyFrom } from "../models";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,20 +39,20 @@ const TableCell = withStyles({
     }
 })(MuiTableCell);
 
-interface FilterPopupProps<S extends EntitySchema> {
+interface FilterPopupProps<S extends EntitySchema<Key>, Key extends string> {
     schema: S;
 
-    filterValues?: FilterValues<S>;
+    filterValues?: FilterValues<S, Key>;
 
     /**
      * Properties that can be filtered
      */
-    filterableProperties: (keyof S["properties"])[];
+    filterableProperties: Key[];
 
-    onFilterUpdate(filterValues?: FilterValues<S>): void;
+    onFilterUpdate(filterValues?: FilterValues<S, Key>): void;
 }
 
-export default function FilterPopup<S extends EntitySchema>({ schema, filterValues, onFilterUpdate, filterableProperties }: FilterPopupProps<S>) {
+export default function FilterPopup<S extends EntitySchema<Key>, Key extends string>({ schema, filterValues, onFilterUpdate, filterableProperties }: FilterPopupProps<S, Key>) {
 
     function createFilterFields() {
 
@@ -87,13 +87,13 @@ export default function FilterPopup<S extends EntitySchema>({ schema, filterValu
         );
     }
 
-    const cleanedInitialValues: FilterValues<S> = filterValues || {};
+    const cleanedInitialValues: FilterValues<S, Key> = filterValues || {};
 
     return (
         <PopupState variant="popover" popupId="collection-filter">
             {(popupState) => {
 
-                function setFilters(filterValues?: FilterValues<S>) {
+                function setFilters(filterValues?: FilterValues<S, Key>) {
                     if (!filterValues) {
                         onFilterUpdate(undefined);
                     } else {

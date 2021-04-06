@@ -20,7 +20,7 @@ import {
     useTheme
 } from "@material-ui/core";
 import { CSVLink } from "react-csv";
-import { buildPropertyFrom } from "../models/builders";
+import { buildPropertyFrom } from "../models";
 import { computeSchemaProperties, PropertiesValues } from "../models/firestore";
 import firebase from "firebase";
 import GetAppIcon from "@material-ui/icons/GetApp";

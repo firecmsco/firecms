@@ -71,22 +71,22 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface CollectionTableToolbarProps<S extends EntitySchema> {
+interface CollectionTableToolbarProps<S extends EntitySchema<Key>, Key extends string> {
     collectionPath: string;
     schema: S;
     size: CollectionSize;
     onSizeChanged: (size: CollectionSize) => void;
-    filterValues?: FilterValues<S>;
+    filterValues?: FilterValues<S, Key>;
     onTextSearch?: (searchString?: string) => void;
-    filterableProperties?: (keyof S["properties"])[];
+    filterableProperties?: Key[];
     actions?: React.ReactNode;
     loading: boolean;
     title?: React.ReactNode,
 
-    onFilterUpdate?(filterValues: FilterValues<S>): void;
+    onFilterUpdate?(filterValues: FilterValues<S, Key>): void;
 }
 
-export function CollectionTableToolbar<S extends EntitySchema>(props: CollectionTableToolbarProps<S>) {
+export function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends string>(props: CollectionTableToolbarProps<S, Key>) {
     const classes = useStyles();
     const sizeClasses = useSizeSelectStyles();
 

@@ -6,6 +6,7 @@ import { Box, Paper, Typography } from "@material-ui/core";
 
 import {
     AdditionalColumnDelegate,
+    buildPropertyFrom,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -15,7 +16,11 @@ import {
     listenCollection,
     Property
 } from "../models";
-import { getCellAlignment, getPropertyColumnWidth, getRowHeight } from "./common";
+import {
+    getCellAlignment,
+    getPropertyColumnWidth,
+    getRowHeight
+} from "./common";
 import { getIconForProperty } from "../util/property_icons";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
 import { PreviewComponent, SkeletonComponent } from "../preview";
@@ -31,8 +36,8 @@ import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../preview/util";
 import { CollectionRowActions } from "./CollectionRowActions";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import { buildPropertyFrom } from "../models/builders";
-import PropertyTableCell from "./PropertyTableCell";
+import PropertyTableCell, { OnCellChangeParams } from "./PropertyTableCell";
+import { mapPropertyToYup } from "../form/validation";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -67,11 +72,11 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                                toolbarWidgetBuilder,
                                                title,
                                                tableRowWidgetBuilder,
-                                               onEntityClick,
                                                defaultSize = "m",
                                                entitiesDisplayedFirst,
-                                               CMSFormField,
-                                               frozenIdColumn
+                                               frozenIdColumn,
+                                               onEntityClick,
+                                               onCellValueChange
                                            }: CollectionTableProps<S, Key, AdditionalKey>) {
 
     const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];
@@ -85,7 +90,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const [textSearchLoading, setTextSearchLoading] = React.useState<boolean>(false);
     const [textSearchData, setTextSearchData] = React.useState<Entity<S, Key>[]>([]);
 
-    const [filter, setFilter] = React.useState<FilterValues<S> | undefined>(initialFilter);
+    const [filter, setFilter] = React.useState<FilterValues<S, Key> | undefined>(initialFilter);
     const [currentSort, setSort] = React.useState<Order>(initialSort ? initialSort[1] : undefined);
     const [sortByProperty, setSortProperty] = React.useState<string | undefined>(initialSort ? initialSort[0] as string : undefined);
     const [itemCount, setItemCount] = React.useState<number>(PAGE_SIZE);
@@ -292,7 +297,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         setSortProperty(undefined);
     };
 
-    const onFilterUpdate = (filterValues: FilterValues<S>) => {
+    const onFilterUpdate = (filterValues: FilterValues<S, Key>) => {
         if (sortByProperty && filterValues) {
             const filterKeys = Object.keys(filterValues);
             if (filterKeys.length > 1 || filterKeys[0] !== sortByProperty) {
@@ -329,7 +334,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const onRowClick = ({ rowData }: any) => {
         const entity = rowData as Entity<S, Key>;
         if (checkInlineEditing(entity))
-            return undefined;
+            return;
         return onEntityClick && onEntityClick(collectionPath, entity);
     };
 
@@ -353,8 +358,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
         if (column.type === "property") {
 
-            const propertyKey = column.dataKey as Key;
-            const propertyOrBuilder = schema.properties[propertyKey];
+            const name = column.dataKey as Key;
+            const propertyOrBuilder = schema.properties[name];
             const property = buildPropertyFrom<S, Key>(propertyOrBuilder, entity.values, entity.id);
             const usedPropertyBuilder = typeof propertyOrBuilder === "function";
 
@@ -363,16 +368,16 @@ export default function CollectionTable<S extends EntitySchema<Key>,
             if (!inlineEditingEnabled) {
                 return (
                     <TableCell
-                        key={`preview_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
+                        key={`preview_cell_${name}_${rowIndex}_${columnIndex}`}
                         size={size}
                         align={column.align}
                         disabled={true}>
                         <PreviewComponent
                             width={column.width}
                             height={column.height}
-                            name={`preview_${propertyKey}_${rowIndex}_${columnIndex}`}
+                            name={`preview_${name}_${rowIndex}_${columnIndex}`}
                             property={property}
-                            value={entity.values[propertyKey]}
+                            value={entity.values[name]}
                             size={getPreviewSizeFrom(size)}
                         />
                     </TableCell>
@@ -394,7 +399,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                             height: column.height,
                             entity,
                             cellRect,
-                            name: propertyKey,
+                            name: name,
                             property,
                             usedPropertyBuilder
                         });
@@ -406,27 +411,34 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
                 const isFocused = selected && focused;
 
+                const validation = mapPropertyToYup(property, collectionPath, name, entity.id);
+
+                const onValueChange = onCellValueChange
+                    ? (props: OnCellChangeParams<any>) => onCellValueChange({
+                        ...props,
+                        entity
+                    })
+                    : undefined;
+
                 return entity ?
                     <PropertyTableCell
-                        key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
+                        key={`table_cell_${name}_${rowIndex}_${columnIndex}`}
                         size={size}
                         align={column.align}
-                        name={propertyKey}
+                        name={name}
+                        validation={validation}
                         path={collectionPath}
-                        entity={entity}
-                        schema={schema}
+                        onValueChange={onValueChange}
                         selected={selected}
                         focused={isFocused}
                         setPreventOutsideClick={setPreventOutsideClick}
                         setFocused={setFocused}
-                        value={entity?.values ? entity.values[propertyKey] : undefined}
-                        CollectionTable={CollectionTable}
+                        value={entity?.values ? entity.values[name] : undefined}
                         property={property}
                         openPopup={openPopup}
                         select={onSelect}
                         width={column.width}
-                        height={column.height}
-                        CMSFormField={CMSFormField}/>
+                        height={column.height}/>
                     :
                     <SkeletonComponent property={property}
                                        size={getPreviewSizeFrom(size)}/>;
@@ -621,19 +633,20 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                         onFilterUpdate={onFilterUpdate}/>
 
                 <PopupFormField
-                    tableKey={tableKey}
-                    collectionPath={collectionPath}
-                    schema={schema}
-                    CMSFormField={CMSFormField}
                     cellRect={selectedCell?.cellRect}
-                    formPopupOpen={formPopupOpen}
-                    setFormPopupOpen={updatePopup}
                     columnIndex={selectedCell?.columnIndex}
                     name={selectedCell?.name}
                     property={selectedCell?.property}
                     usedPropertyBuilder={selectedCell?.usedPropertyBuilder ?? false}
+                    entity={selectedCell?.entity}
+                    tableKey={tableKey}
+                    collectionPath={collectionPath}
+                    schema={schema}
+                    formPopupOpen={formPopupOpen}
+                    onCellValueChange={onCellValueChange}
                     setPreventOutsideClick={setPreventOutsideClick}
-                    entity={selectedCell?.entity}/>
+                    setFormPopupOpen={updatePopup}
+                />
 
                 <OutsideAlerter enabled={!preventOutsideClick}
                                 onOutsideClick={handleClickOutside}>

@@ -13,15 +13,13 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-import { Entity, EntitySchema } from "../models";
+import { Entity, EntitySchema, buildPropertyFrom, PropertyOrBuilder } from "../models";
 import { PreviewComponent } from "../preview";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import { ErrorBoundary } from "./index";
 import { CMSAppProps } from "../CMSAppProps";
 import { useAppConfigContext } from "../contexts";
-import { buildPropertyFrom } from "../models/builders";
-import { PropertyOrBuilder } from "../models/models";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({

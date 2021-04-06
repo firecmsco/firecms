@@ -121,7 +121,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      * `filterableProperties` will include the corresponding filter widget.
      * Defaults to none.
      */
-    initialFilter?: FilterValues<S>;
+    initialFilter?: FilterValues<S, Key>;
 
     /**
      * Default sort applied to this collection
@@ -656,7 +656,7 @@ export interface ReferenceProperty<S extends EntitySchema<Key> = EntitySchema<an
 /**
  * Used to define filters applied in collections
  */
-export type FilterValues<S extends EntitySchema> = Partial<{ [K in keyof S["properties"]]: [WhereFilterOp, any] }>;
+export type FilterValues<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> = Partial<{ [K in Key]: [WhereFilterOp, any] }>;
 
 /**
  * Filter conditions in a `Query.where()` clause are specified using the

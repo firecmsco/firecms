@@ -32,7 +32,7 @@ import { removeInitialSlash } from "../routes/navigation";
 import CircularProgressCenter from "../components/CircularProgressCenter";
 import { default as EntityPreview } from "../components/EntityPreview";
 import { canEdit } from "../util/permissions";
-import { PermissionsBuilder } from "../models/models";
+import { PermissionsBuilder } from "../models";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>

@@ -1,5 +1,4 @@
 import {
-    CMSFormFieldProps,
     CollectionSize,
     Entity,
     fetchEntity
@@ -17,7 +16,6 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 
-import { CollectionTableProps } from "../../collection/CollectionTableProps";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { useColumnIds } from "../../collection/common";
 import { CollectionRowActions } from "../../collection/CollectionRowActions";
@@ -52,10 +50,6 @@ export interface ReferenceDialogProps {
 
     onClose(): void;
 
-    CMSFormField: React.FunctionComponent<CMSFormFieldProps<any>>,
-
-    CollectionTable: React.FunctionComponent<CollectionTableProps<any, any>>;
-
 }
 
 
@@ -67,8 +61,6 @@ export function ReferenceDialog(
         open,
         multiselect,
         collectionPath,
-        CMSFormField,
-        CollectionTable,
         selectedEntityIds
     }: ReferenceDialogProps) {
 
@@ -191,7 +183,6 @@ export function ReferenceDialog(
                                  textSearchDelegate={textSearchDelegate}
                                  initialFilter={initialFilter}
                                  initialSort={collectionConfig.initialSort}
-                                 CMSFormField={CMSFormField}
                                  entitiesDisplayedFirst={selectedEntities}
                                  frozenIdColumn={largeLayout}
                 />}

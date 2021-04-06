@@ -4,10 +4,9 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
-    EntitySchema
+    EntitySchema, EntityStatus, saveEntity
 } from "../models";
 import CollectionTable from "./CollectionTable";
-import { CMSFormField } from "../form/form_factory";
 import {
     Box,
     Button,
@@ -27,6 +26,7 @@ import ExportButton from "./ExportButton";
 
 import ReactMarkdown from "react-markdown";
 import { canCreate, canDelete, canEdit } from "../util/permissions";
+import { OnCellChangeParams } from "./CollectionTableProps";
 
 type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
     collectionPath: string;
@@ -132,6 +132,26 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         }
         return inlineEditing;
     };
+
+    const onCellChanged = ({
+                          value,
+                          name,
+                          setError,
+                          entity
+                      }: OnCellChangeParams<any, S,Key>) => saveEntity({
+            collectionPath: collectionPath,
+            id: entity.id,
+            values: {
+                ...entity.values,
+                [name]: value
+            },
+            schema:collectionConfig.schema,
+            status: EntityStatus.existing,
+            onSaveFailure: ((e: Error) => {
+                setError(e);
+            })
+        }
+    ).then();
 
     const title = (
         <>
@@ -294,12 +314,12 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 initialSort={collectionConfig.initialSort}
                 inlineEditing={checkInlineEditing}
                 onEntityClick={onEntityClick}
+                onCellValueChange={onCellChanged}
                 textSearchDelegate={collectionConfig.textSearchDelegate}
                 tableRowWidgetBuilder={tableRowButtonsBuilder}
                 paginationEnabled={paginationEnabled}
                 toolbarWidgetBuilder={toolbarActionsBuilder}
                 title={title}
-                CMSFormField={CMSFormField}
                 frozenIdColumn={largeLayout}
             />
 

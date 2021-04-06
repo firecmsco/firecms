@@ -3,7 +3,7 @@ import {
     EntitySchema,
     Permissions,
     PermissionsBuilder
-} from "../models/models";
+} from "../models";
 import firebase from "firebase";
 
 const DEFAULT_PERMISSIONS = {

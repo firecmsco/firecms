@@ -4,22 +4,15 @@ import { Box, IconButton, Portal, Typography } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import deepEqual from "deep-equal";
 
-import {
-    CMSFormFieldProps,
-    Entity,
-    EntitySchema,
-    EntityStatus,
-    EntityValues,
-    Property,
-    saveEntity
-} from "../../models";
+import { Entity, EntitySchema, EntityValues, Property, FormContext } from "../../models";
 import { Formik, FormikProps, useFormikContext } from "formik";
 import { Draggable } from "./Draggable";
 import { getYupEntitySchema } from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../util/useWindowSize";
-import { FormContext } from "../../models/fields";
 import { isReadOnly } from "../../models/utils";
+import { CMSFormField } from "../../form";
+import { OnCellChangeParams } from "../CollectionTableProps";
 
 
 interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
@@ -29,13 +22,18 @@ interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
     tableKey: string;
     name?: string;
     property?: Property;
-    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
     cellRect?: DOMRect;
     formPopupOpen: boolean;
     setFormPopupOpen: (value: boolean) => void;
     columnIndex?: number;
     setPreventOutsideClick: (value: any) => void;
     usedPropertyBuilder: boolean;
+
+    /**
+     * Callback when the value of a cell has been edited
+     * @param params
+     */
+    onCellValueChange?: (params:OnCellChangeParams<any, S, Key>) => void;
 }
 
 function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
@@ -46,12 +44,12 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                                                                              property,
                                                                              schema,
                                                                              cellRect,
-                                                                             CMSFormField,
                                                                              setPreventOutsideClick,
                                                                              formPopupOpen,
                                                                              setFormPopupOpen,
                                                                              columnIndex,
-                                                                             usedPropertyBuilder
+                                                                             usedPropertyBuilder,
+                                                                             onCellValueChange
                                                                          }: PopupFormFieldProps<S, Key>) {
 
 
@@ -138,22 +136,17 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         return setPopupLocation(normalizePosition(position));
     };
 
-    const onSaveFailure = (e: Error) => {
-        setSavingError(e);
-    };
-
     const saveValue =
         (values: object) => {
             setSavingError(null);
-            return entity && saveEntity({
-                    collectionPath: entity.reference.parent.path,
-                    id: entity?.id,
-                    values: values,
-                    schema,
-                    status: EntityStatus.existing,
-                    onSaveFailure
-                }
-            ).then();
+            if(entity && onCellValueChange && name){
+                onCellValueChange({
+                    value: values[name],
+                    name: name,
+                    entity,
+                    setError:setSavingError
+                });
+            }
         };
 
 

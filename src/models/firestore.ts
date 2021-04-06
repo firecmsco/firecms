@@ -35,7 +35,7 @@ export function listenCollection<S extends EntitySchema<Key>,
     schema: S,
     onSnapshot: (entity: Entity<S, Key>[]) => void,
     onError?: (error: Error) => void,
-    filter?: FilterValues<S>,
+    filter?: FilterValues<S, Key>,
     limit?: number,
     startAfter?: any[],
     orderBy?: string,
@@ -515,7 +515,7 @@ function updateAutoValues<S extends EntitySchema<Key>,
  */
 export function initFilterValues<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>
-(schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<S> {
+(schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<S, Key> {
     return filterableProperties
         .map((key) => ({ [key]: undefined }))
         .reduce((a: any, b: any) => ({ ...a, ...b }), {});

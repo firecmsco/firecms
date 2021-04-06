@@ -8,7 +8,7 @@ import {
     Theme
 } from "@material-ui/core";
 import React from "react";
-import { FieldProps } from "../../models/fields";
+import { FieldProps } from "../../models";
 import { FieldDescription } from "../../components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../useClearRestoreValue";

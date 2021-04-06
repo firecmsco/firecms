@@ -3,14 +3,12 @@ import { Button } from "@material-ui/core";
 import { PreviewError, ReferencePreview } from "../../preview";
 import {
     ArrayProperty,
-    CMSFormFieldProps,
     CollectionSize,
     Entity,
     EntitySchema,
     ReferenceProperty
 } from "../../models";
 import { ReferenceDialog } from "../../form/components/ReferenceDialog";
-import { CollectionTableProps } from "../CollectionTableProps";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -26,10 +24,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
     updateValue: (newValue: (firebase.firestore.DocumentReference | firebase.firestore.DocumentReference [] | null)) => void;
     property: ReferenceProperty | ArrayProperty<firebase.firestore.DocumentReference>;
     size: CollectionSize;
-    schema: S;
     setPreventOutsideClick: (value: any) => void;
-    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
-    CollectionTable: React.FunctionComponent<CollectionTableProps<S, Key>>;
 }) {
 
     const {
@@ -40,8 +35,6 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
         updateValue,
         size,
         disabled,
-        CMSFormField,
-        CollectionTable
     } = props;
 
     let usedProperty: ReferenceProperty;
@@ -161,8 +154,6 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
                                 onClose={handleClose}
                                 onMultipleEntitiesSelected={onMultipleEntitiesSelected}
                                 onSingleEntitySelected={onSingleValueSet}
-                                CMSFormField={CMSFormField}
-                                CollectionTable={CollectionTable as any}
                                 selectedEntityIds={selectedIds}
             />}
 
