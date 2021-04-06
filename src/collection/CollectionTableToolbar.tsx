@@ -17,11 +17,17 @@ import SearchBar from "./SearchBar";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         toolbar: {
+            minHeight: 56,
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(1),
             zIndex: 100,
             backgroundColor: theme.palette.background.paper,
-            borderBottom: "1px solid rgba(224, 224, 224, 1)"
+            borderBottom: "1px solid rgba(224, 224, 224, 1)",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%"
         },
         actions: {
             display: "flex",
@@ -72,7 +78,6 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
 );
 
 interface CollectionTableToolbarProps<S extends EntitySchema<Key>, Key extends string> {
-    collectionPath: string;
     schema: S;
     size: CollectionSize;
     onSizeChanged: (size: CollectionSize) => void;
@@ -140,47 +145,38 @@ export function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends 
         <div
             className={classes.toolbar}
         >
-            <Box
-                display={"flex"}
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                width={"100%"}
-            >
 
-                <Box display={"flex"}
-                     alignItems="center">
+            <Box display={"flex"}
+                 alignItems="center">
 
-                    {props.title && <Hidden smDown>
-                        <Box mr={2}>
-                            {props.title}
-                        </Box>
-                    </Hidden>}
-
-                    { sizeSelect}
-
-                    {filterEnabled && filterView}
-
-                </Box>
-
-
-                {props.onTextSearch &&
-                <SearchBar
-                    onTextSearch={props.onTextSearch}/>
-                }
-
-                <div className={classes.actions}>
-
-                    <Box width={20}>
-                        {props.loading &&
-                        <CircularProgress size={16} thickness={8}/>}
+                {props.title && <Hidden smDown>
+                    <Box mr={2}>
+                        {props.title}
                     </Box>
+                </Hidden>}
 
-                    {props.actions}
+                {sizeSelect}
 
-                </div>
+                {filterEnabled && filterView}
 
             </Box>
+
+
+            {props.onTextSearch &&
+            <SearchBar
+                onTextSearch={props.onTextSearch}/>
+            }
+
+            <div className={classes.actions}>
+
+                <Box width={20}>
+                    {props.loading &&
+                    <CircularProgress size={16} thickness={8}/>}
+                </Box>
+
+                {props.actions}
+
+            </div>
 
         </div>
     );

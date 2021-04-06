@@ -1,8 +1,4 @@
-import {
-    CollectionSize,
-    Entity,
-    fetchEntity
-} from "../../models";
+import { CollectionSize, Entity, fetchEntity } from "../../models";
 import {
     Button,
     createStyles,
@@ -97,7 +93,7 @@ export function ReferenceDialog(
     }, [selectedEntityIds]);
 
 
-    const onEntityClick = (collectionPath: string, entity: Entity<any>) => {
+    const onEntityClick = (entity: Entity<any>) => {
         if (!multiselect && onSingleEntitySelected) {
             onSingleEntitySelected(entity);
         } else {
@@ -129,21 +125,17 @@ export function ReferenceDialog(
     };
 
     const tableRowWidgetBuilder = ({
-                                       collectionPath,
                                        entity,
                                        size
-                                   }: { collectionPath: string, entity: Entity<any>, size: CollectionSize }) => {
+                                   }: { entity: Entity<any>, size: CollectionSize }) => {
 
         const isSelected = selectedEntityIds && selectedEntityIds.indexOf(entity.id) > -1;
         return <CollectionRowActions
             entity={entity}
-            collectionPath={collectionPath}
             size={size}
             isSelected={isSelected}
             selectionEnabled={multiselect}
             toggleEntitySelection={toggleEntitySelection}
-            schema={schema}
-            editEnabled={false}
         />;
 
     };
@@ -155,6 +147,8 @@ export function ReferenceDialog(
         </Button>
     );
 
+    const title = <Typography
+        variant={"h6"}>{`Select ${schema.name}`}</Typography>;
     return (
 
         <Dialog
@@ -167,6 +161,9 @@ export function ReferenceDialog(
             open={open}>
 
             <div className={classes.dialogBody}>
+
+
+
                 {selectedEntities &&
                 <CollectionTable collectionPath={collectionPath}
                                  inlineEditing={false}
@@ -175,9 +172,9 @@ export function ReferenceDialog(
                                  onEntityClick={onEntityClick}
                                  tableRowWidgetBuilder={tableRowWidgetBuilder}
                                  paginationEnabled={paginationEnabled}
+                                 defaultSize={collectionConfig.defaultSize}
                                  additionalColumns={collectionConfig.additionalColumns}
-                                 title={<Typography
-                                     variant={"h6"}>{`Select ${schema.name}`}</Typography>}
+                                 title={title}
                                  displayedProperties={displayedProperties}
                                  filterableProperties={filterableProperties}
                                  textSearchDelegate={textSearchDelegate}

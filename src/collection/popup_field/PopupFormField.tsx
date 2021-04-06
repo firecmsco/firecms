@@ -9,19 +9,18 @@ import { Formik, FormikProps, useFormikContext } from "formik";
 import { Draggable } from "./Draggable";
 import {
     getYupEntitySchema,
-    UniqueFieldValidator
+    CustomFieldValidator
 } from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../util/useWindowSize";
 import { isReadOnly } from "../../models/utils";
 import { CMSFormField } from "../../form";
 import { OnCellChangeParams } from "../CollectionTableProps";
-import { checkUniqueField } from "../../models/firestore";
 
 
 interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
     entity?: Entity<S, Key>;
-    collectionPath: string;
+    customFieldValidator?: CustomFieldValidator;
     schema: S;
     tableKey: string;
     name?: string;
@@ -43,7 +42,7 @@ interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
 function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                                                                              tableKey,
                                                                              entity,
-                                                                             collectionPath,
+                                                                             customFieldValidator,
                                                                              name,
                                                                              property,
                                                                              schema,
@@ -120,11 +119,10 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
     };
 
 
-    const uniqueFieldValidator: UniqueFieldValidator = (name, value) => checkUniqueField(collectionPath, name, value, entity?.id);
     const validationSchema = getYupEntitySchema(
         schema.properties,
         internalValue as Partial<EntityValues<S, Key>> ?? {},
-        uniqueFieldValidator,
+        customFieldValidator,
         entity?.id);
 
     function normalizePosition({ x, y }: { x: number, y: number }) {

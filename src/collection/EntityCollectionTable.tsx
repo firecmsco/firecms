@@ -26,7 +26,11 @@ import ExportButton from "./ExportButton";
 
 import ReactMarkdown from "react-markdown";
 import { canCreate, canDelete, canEdit } from "../util/permissions";
-import { OnCellChangeParams } from "./CollectionTableProps";
+import {
+    OnCellChangeParams,
+    UniqueFieldValidator
+} from "./CollectionTableProps";
+import { checkUniqueField } from "../models/firestore";
 
 type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
     collectionPath: string;
@@ -96,7 +100,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
     const additionalColumns = [...collectionConfig.additionalColumns ?? [], ...subcollectionColumns];
 
-    const onEntityClick = (collectionPath: string, entity: Entity<S, Key>) => {
+    const onEntityClick = (entity: Entity<S, Key>) => {
         sideEntityController.open({
             entityId: entity.id,
             collectionPath,
@@ -213,6 +217,9 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         setSelectedEntities(newValue);
     };
 
+
+    const uniqueFieldValidator:UniqueFieldValidator = ({ name, value, entityId }) => checkUniqueField(collectionPath, name, value, entityId);
+
     const tableRowButtonsBuilder = ({
                                         entity,
                                         size
@@ -220,20 +227,47 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
         const isSelected = selectedEntities.indexOf(entity) > -1;
 
+        const createEnabled = canCreate(collectionConfig.permissions, authContext.loggedUser);
+        const editEnabled = canEdit(collectionConfig.permissions, authContext.loggedUser, entity);
+        const deleteEnabled = canDelete(collectionConfig.permissions, authContext.loggedUser, entity);
+
+        const onCopyClicked = (entity:Entity<S, Key>) =>         sideEntityController.open({
+            entityId: entity.id,
+            collectionPath,
+            copy: true,
+            permissions: {
+                edit: editEnabled,
+                create: createEnabled,
+                delete: deleteEnabled
+            },
+            schema: collectionConfig.schema,
+            subcollections: collectionConfig.subcollections,
+            overrideSchemaResolver: false
+        });
+
+        const onEditClicked = (entity:Entity<S, Key>) =>     sideEntityController.open({
+            entityId: entity.id,
+            collectionPath,
+            permissions: {
+                edit: editEnabled,
+                create: createEnabled,
+                delete: deleteEnabled
+            },
+            schema: collectionConfig.schema,
+            subcollections: collectionConfig.subcollections,
+            overrideSchemaResolver: false
+        });
+
         return (
             <CollectionRowActions
                 entity={entity}
                 isSelected={isSelected}
-                collectionPath={collectionPath}
-                createEnabled={canCreate(collectionConfig.permissions, authContext.loggedUser)}
-                editEnabled={canEdit(collectionConfig.permissions, authContext.loggedUser, entity)}
-                deleteEnabled={canDelete(collectionConfig.permissions, authContext.loggedUser, entity)}
+                onCopyClicked={onCopyClicked}
+                onEditClicked={onEditClicked}
                 selectionEnabled={selectionEnabled}
                 size={size}
                 toggleEntitySelection={toggleEntitySelection}
                 onDeleteClicked={setDeleteEntityClicked}
-                schema={collectionConfig.schema}
-                subcollections={collectionConfig.subcollections}
             />
         );
 
@@ -313,6 +347,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 initialFilter={collectionConfig.initialFilter}
                 initialSort={collectionConfig.initialSort}
                 inlineEditing={checkInlineEditing}
+                uniqueFieldValidator={uniqueFieldValidator}
                 onEntityClick={onEntityClick}
                 onCellValueChange={onCellChanged}
                 textSearchDelegate={collectionConfig.textSearchDelegate}

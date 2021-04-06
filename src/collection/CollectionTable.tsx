@@ -3,17 +3,13 @@ import BaseTable, { Column } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
 import "react-base-table/styles.css";
 import { Box, Paper, Typography } from "@material-ui/core";
-
 import {
     AdditionalColumnDelegate,
     buildPropertyFrom,
     CollectionSize,
     Entity,
-    EntityCollection,
     EntitySchema,
-    fetchEntity,
     FilterValues,
-    listenCollection,
     Property
 } from "../models";
 import {
@@ -37,10 +33,12 @@ import { getPreviewSizeFrom } from "../preview/util";
 import { CollectionRowActions } from "./CollectionRowActions";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import PropertyTableCell, { OnCellChangeParams } from "./PropertyTableCell";
-import { mapPropertyToYup, UniqueFieldValidator } from "../form/validation";
-import { checkUniqueField } from "../models/firestore";
+import { CustomFieldValidator, mapPropertyToYup } from "../form/validation";
+import { useCollectionFetch } from "./useCollectionFetch";
+import { useTextSearch } from "./useTextSearch";
 
 const PAGE_SIZE = 50;
+
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
 
 
@@ -64,7 +62,6 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                                initialSort,
                                                collectionPath,
                                                schema,
-                                               paginationEnabled,
                                                displayedProperties,
                                                textSearchDelegate,
                                                additionalColumns,
@@ -74,37 +71,28 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                                title,
                                                tableRowWidgetBuilder,
                                                defaultSize = "m",
-                                               entitiesDisplayedFirst,
                                                frozenIdColumn,
+                                               uniqueFieldValidator,
+                                               entitiesDisplayedFirst,
+                                               paginationEnabled,
                                                onEntityClick,
                                                onCellValueChange
                                            }: CollectionTableProps<S, Key, AdditionalKey>) {
 
-    const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];
-    const [data, setData] = React.useState<Entity<S, Key>[]>(initialEntities);
-    const [dataLoading, setDataLoading] = React.useState<boolean>(false);
-    const [noMoreToLoad, setNoMoreToLoad] = React.useState<boolean>(false);
-    const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
+
+
     const [size, setSize] = React.useState<CollectionSize>(defaultSize);
 
-    const [textSearchInProgress, setTextSearchInProgress] = React.useState<boolean>(false);
-    const [textSearchLoading, setTextSearchLoading] = React.useState<boolean>(false);
-    const [textSearchData, setTextSearchData] = React.useState<Entity<S, Key>[]>([]);
+    const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? PAGE_SIZE : undefined);
 
     const [filter, setFilter] = React.useState<FilterValues<S, Key> | undefined>(initialFilter);
     const [currentSort, setSort] = React.useState<Order>(initialSort ? initialSort[1] : undefined);
     const [sortByProperty, setSortProperty] = React.useState<string | undefined>(initialSort ? initialSort[0] as string : undefined);
-    const [itemCount, setItemCount] = React.useState<number>(PAGE_SIZE);
+
     const [tableSize, setTableSize] = React.useState<ContentRect | undefined>();
 
     const [tableKey] = React.useState<string>(Math.random().toString(36));
     const tableRef = useRef<BaseTable>(null);
-
-    const textSearchEnabled = !!textSearchDelegate;
-
-    const currentData = textSearchInProgress ? textSearchData : data;
-    const loading = textSearchInProgress ? textSearchLoading : dataLoading;
-    const filterSet = filter && Object.keys(filter).length;
 
     const classes = useTableStyles({ size });
 
@@ -114,9 +102,45 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const [formPopupOpen, setFormPopupOpen] = React.useState<boolean>(false);
     const [preventOutsideClick, setPreventOutsideClick] = React.useState<boolean>(false);
 
+    const [searchString, setSearchString] = React.useState<string | undefined>();
+
+    const textSearchEnabled = !!textSearchDelegate;
+
+    const filterSet = filter && Object.keys(filter).length;
+
+    const {
+        data,
+        dataLoading,
+        noMoreToLoad,
+        dataLoadingError
+    } = useCollectionFetch({
+        entitiesDisplayedFirst,
+        collectionPath,
+        schema,
+        filter,
+        sortByProperty,
+        currentSort,
+        itemCount
+    });
+
+    const {
+        textSearchData,
+        textSearchLoading,
+    } = useTextSearch({
+        searchString,
+        textSearchDelegate,
+        collectionPath,
+        schema,
+    });
+
+    const textSearchInProgress = Boolean(searchString);
+
+    const currentData: Entity<S, Key>[] = textSearchInProgress ? textSearchData : data;
+    const loading = textSearchInProgress ? textSearchLoading : dataLoading;
+
     const actions = toolbarWidgetBuilder && toolbarWidgetBuilder({
         size,
-        data
+        data: currentData
     });
 
     const history = useHistory();
@@ -129,13 +153,15 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         setFormPopupOpen(false);
     });
 
-    const updateData = (entities: Entity<S, Key>[]) => {
-        if (!initialEntities) {
-            setData(entities);
-        } else {
-            const displayedFirstId = new Set(initialEntities.map((e) => e.id));
-            setData([...initialEntities, ...entities.filter((e) => !displayedFirstId.has(e.id))]);
-        }
+    const loadNextPage = () => {
+        if (!paginationEnabled || dataLoading || noMoreToLoad)
+            return;
+        if (itemCount !== undefined)
+            setItemCount(itemCount + PAGE_SIZE);
+    };
+
+    const resetPagination = () => {
+        setItemCount(PAGE_SIZE);
     };
 
     const select = useCallback((cell: TableCellProps) => {
@@ -217,32 +243,6 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
     }, [displayedProperties]);
 
-    useEffect(() => {
-
-        setDataLoading(true);
-
-        const cancelSubscription = listenCollection<S, Key>(
-            collectionPath,
-            schema,
-            entities => {
-                setDataLoading(false);
-                setDataLoadingError(undefined);
-                updateData(entities);
-                setNoMoreToLoad(!paginationEnabled || entities.length < itemCount);
-            },
-            (error) => {
-                console.error("ERROR", error);
-                setDataLoading(false);
-                setDataLoadingError(error);
-            },
-            filter,
-            paginationEnabled ? itemCount : undefined,
-            undefined,
-            sortByProperty,
-            currentSort);
-
-        return cancelSubscription;
-    }, [collectionPath, schema, itemCount, currentSort, sortByProperty, filter]);
 
     const onColumnSort = ({ key }: any) => {
 
@@ -264,35 +264,6 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         scrollToTop();
     };
 
-    async function onTextSearch(searchString?: string) {
-        if (!!textSearchDelegate) {
-            setTextSearchLoading(true);
-            if (!searchString) {
-                setTextSearchData([]);
-                setTextSearchInProgress(false);
-            } else {
-                setTextSearchInProgress(true);
-                const ids = await textSearchDelegate.performTextSearch(searchString);
-                const promises: Promise<Entity<S, Key>>[] = ids
-                    .map((id) => fetchEntity(collectionPath, id, schema)
-                    );
-                const entities = await Promise.all(promises);
-                setTextSearchData(entities);
-            }
-            setTextSearchLoading(false);
-        }
-    }
-
-    const loadNextPage = () => {
-        if (!paginationEnabled || dataLoading || noMoreToLoad)
-            return;
-        setItemCount(itemCount + PAGE_SIZE);
-    };
-
-    const resetPagination = () => {
-        setItemCount(PAGE_SIZE);
-    };
-
     const resetSort = () => {
         setSort(undefined);
         setSortProperty(undefined);
@@ -311,14 +282,11 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const buildIdColumn = (props: {
         entity: Entity<S, Key>,
         size: CollectionSize,
-        collectionPath: string,
-        schema: EntitySchema,
-        subcollections?: EntityCollection[]
     }) => {
         if (tableRowWidgetBuilder)
             return tableRowWidgetBuilder(props);
         else
-            return <CollectionRowActions editEnabled={false} {...props}/>;
+            return <CollectionRowActions {...props}/>;
 
     };
 
@@ -336,7 +304,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         const entity = rowData as Entity<S, Key>;
         if (checkInlineEditing(entity))
             return;
-        return onEntityClick && onEntityClick(collectionPath, entity);
+        return onEntityClick && onEntityClick(entity);
     };
 
     const cellRenderer = ({
@@ -351,9 +319,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         if (columnIndex === 0) {
             return buildIdColumn({
                 size,
-                entity,
-                collectionPath,
-                schema
+                entity
             });
         }
 
@@ -412,8 +378,11 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
                 const isFocused = selected && focused;
 
-                const uniqueFieldValidator: UniqueFieldValidator = (name, value) => checkUniqueField(collectionPath, name, value, entity.id);
-                const validation = mapPropertyToYup(property,uniqueFieldValidator,name);
+                const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
+                    ? (name, value) => uniqueFieldValidator({
+                        name, value, entityId: entity.id
+                    }) : undefined;
+                const validation = mapPropertyToYup(property, customFieldValidator, name);
 
                 const onValueChange = onCellValueChange
                     ? (props: OnCellChangeParams<any>) => onCellValueChange({
@@ -616,6 +585,14 @@ export default function CollectionTable<S extends EntitySchema<Key>,
             );
     }
 
+    const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
+        ? (name, value) => uniqueFieldValidator({
+            name,
+            value,
+            entityId: selectedCell?.entity.id
+        })
+        : undefined;
+
     return (
         <>
 
@@ -623,8 +600,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
                 <CollectionTableToolbar schema={schema}
                                         filterValues={filter}
-                                        onTextSearch={textSearchEnabled ? onTextSearch : undefined}
-                                        collectionPath={collectionPath}
+                                        onTextSearch={textSearchEnabled ? setSearchString : undefined}
                                         filterableProperties={filterableProperties}
                                         actions={actions}
                                         size={size}
@@ -641,7 +617,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                     usedPropertyBuilder={selectedCell?.usedPropertyBuilder ?? false}
                     entity={selectedCell?.entity}
                     tableKey={tableKey}
-                    collectionPath={collectionPath}
+                    customFieldValidator={customFieldValidator}
                     schema={schema}
                     formPopupOpen={formPopupOpen}
                     onCellValueChange={onCellValueChange}

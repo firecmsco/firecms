@@ -91,10 +91,9 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * @param size
      */
     tableRowWidgetBuilder?: ({
-                                 collectionPath,
                                  entity,
                                  size
-                             }: { collectionPath: string, entity: Entity<S, Key>, size: CollectionSize }) => React.ReactNode;
+                             }: { entity: Entity<S, Key>, size: CollectionSize }) => React.ReactNode;
 
     /**
      * Is the id column frozen to the left.
@@ -102,16 +101,24 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     frozenIdColumn?: boolean;
 
     /**
+     * Use this callback to validate if aan entity field should be unique
+     */
+    uniqueFieldValidator?: UniqueFieldValidator;
+
+    /**
      * Callback when anywhere on the table is clicked
      */
-    onEntityClick?(collectionPath: string, entity: Entity<S, Key>): void;
+    onEntityClick?(entity: Entity<S, Key>): void;
 
     /**
      * Callback when the value of a cell has been edited
      * @param params
      */
-    onCellValueChange?: (params:OnCellChangeParams<any, S, Key>) => void;
+    onCellValueChange?: (params: OnCellChangeParams<any, S, Key>) => void;
 }
+
+
+export type UniqueFieldValidator = (props: { name: string, value: any, entityId?: string }) => Promise<boolean>;
 
 /**
  * Props passed in a callback when the content of a cell in a table has been edited

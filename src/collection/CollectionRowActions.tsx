@@ -26,31 +26,26 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>({
                                                                      entity,
                                                                      isSelected,
-                                                                     collectionPath,
-                                                                     createEnabled,
-                                                                     editEnabled,
-                                                                     deleteEnabled,
                                                                      selectionEnabled,
                                                                      size,
                                                                      toggleEntitySelection,
+                                                                     onCopyClicked,
+                                                                     onEditClicked,
                                                                      onDeleteClicked,
-                                                                     schema,
-                                                                     subcollections
                                                                  }:
                                                                      {
                                                                          entity: Entity<S, Key>,
-                                                                         collectionPath: string,
                                                                          size: CollectionSize,
                                                                          isSelected?: boolean,
-                                                                         createEnabled?: boolean,
-                                                                         editEnabled?: boolean,
-                                                                         deleteEnabled?: boolean,
                                                                          selectionEnabled?: boolean,
                                                                          toggleEntitySelection?: (entity: Entity<S, Key>) => void
+                                                                         onEditClicked?: (entity: Entity<S, Key>) => void,
+                                                                         onCopyClicked?: (entity: Entity<S, Key>) => void,
                                                                          onDeleteClicked?: (entity: Entity<S, Key>) => void,
-                                                                         schema: EntitySchema<any>;
-                                                                         subcollections?: EntityCollection[];
                                                                      }) {
+
+    const editEnabled = Boolean(onEditClicked);
+    const deleteEnabled = Boolean(onDeleteClicked);
 
     const sideEntityController = useSideEntityController();
     const classes = useTableStyles({ size });
@@ -81,19 +76,8 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
 
     const onCopyClick = (event: MouseEvent) => {
         event.stopPropagation();
-        sideEntityController.open({
-            entityId: entity.id,
-            collectionPath,
-            copy: true,
-            permissions: {
-                edit: editEnabled,
-                create: createEnabled,
-                delete: deleteEnabled
-            },
-            schema,
-            subcollections,
-            overrideSchemaResolver: false
-        });
+        if (onCopyClicked)
+            onCopyClicked(entity);
         setAnchorEl(null);
     };
 
@@ -116,18 +100,7 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                     <IconButton
                         onClick={(event: MouseEvent) => {
                             event.stopPropagation();
-                            sideEntityController.open({
-                                entityId: entity.id,
-                                collectionPath,
-                                permissions: {
-                                    edit: editEnabled,
-                                    create: createEnabled,
-                                    delete: deleteEnabled
-                                },
-                                schema: schema,
-                                subcollections: subcollections,
-                                overrideSchemaResolver: false
-                            });
+
                         }}
                     >
                         <KeyboardTab/>

@@ -27,7 +27,7 @@ import {
 import {
     getYupEntitySchema,
     mapPropertyToYup,
-    UniqueFieldValidator
+    CustomFieldValidator
 } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
@@ -192,7 +192,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
     }
 
-    const uniqueFieldValidator: UniqueFieldValidator = (name, value) => checkUniqueField(collectionPath, name, value, entity?.id);
+    const uniqueFieldValidator: CustomFieldValidator = (name, value) => checkUniqueField(collectionPath, name, value, entity?.id);
     const validationSchema = getYupEntitySchema(schema.properties, internalValue as Partial<EntityValues<S, Key>> ?? {}, uniqueFieldValidator, entity?.id);
 
     function buildButtons(isSubmitting: boolean, modified: boolean) {
