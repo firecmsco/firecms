@@ -37,7 +37,8 @@ import { getPreviewSizeFrom } from "../preview/util";
 import { CollectionRowActions } from "./CollectionRowActions";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import PropertyTableCell, { OnCellChangeParams } from "./PropertyTableCell";
-import { mapPropertyToYup } from "../form/validation";
+import { mapPropertyToYup, UniqueFieldValidator } from "../form/validation";
+import { checkUniqueField } from "../models/firestore";
 
 const PAGE_SIZE = 50;
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -411,7 +412,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
                 const isFocused = selected && focused;
 
-                const validation = mapPropertyToYup(property, collectionPath, name, entity.id);
+                const uniqueFieldValidator: UniqueFieldValidator = (name, value) => checkUniqueField(collectionPath, name, value, entity.id);
+                const validation = mapPropertyToYup(property,uniqueFieldValidator,name);
 
                 const onValueChange = onCellValueChange
                     ? (props: OnCellChangeParams<any>) => onCellValueChange({
@@ -427,7 +429,6 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                         align={column.align}
                         name={name}
                         validation={validation}
-                        path={collectionPath}
                         onValueChange={onValueChange}
                         selected={selected}
                         focused={isFocused}

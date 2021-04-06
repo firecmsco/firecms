@@ -30,7 +30,6 @@ import { AnySchema } from "yup";
 
 export interface PropertyTableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
     name: string;
-    path: string;
     selected: boolean;
     value: T;
     select: (cellRect: DOMRect | undefined) => void;
@@ -54,7 +53,6 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                                                    selected,
                                                                                    focused,
                                                                                    name,
-                                                                                   path,
                                                                                    setPreventOutsideClick,
                                                                                    setFocused,
                                                                                    onValueChange,

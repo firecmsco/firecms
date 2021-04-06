@@ -7,12 +7,16 @@ import deepEqual from "deep-equal";
 import { Entity, EntitySchema, EntityValues, Property, FormContext } from "../../models";
 import { Formik, FormikProps, useFormikContext } from "formik";
 import { Draggable } from "./Draggable";
-import { getYupEntitySchema } from "../../form/validation";
+import {
+    getYupEntitySchema,
+    UniqueFieldValidator
+} from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../util/useWindowSize";
 import { isReadOnly } from "../../models/utils";
 import { CMSFormField } from "../../form";
 import { OnCellChangeParams } from "../CollectionTableProps";
+import { checkUniqueField } from "../../models/firestore";
 
 
 interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
@@ -115,10 +119,12 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         // selectedCell.closePopup();
     };
 
+
+    const uniqueFieldValidator: UniqueFieldValidator = (name, value) => checkUniqueField(collectionPath, name, value, entity?.id);
     const validationSchema = getYupEntitySchema(
         schema.properties,
         internalValue as Partial<EntityValues<S, Key>> ?? {},
-        collectionPath,
+        uniqueFieldValidator,
         entity?.id);
 
     function normalizePosition({ x, y }: { x: number, y: number }) {

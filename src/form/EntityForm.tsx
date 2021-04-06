@@ -19,8 +19,16 @@ import {
 } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
 import { CMSFormField, createCustomIdField } from "./form_factory";
-import { computeSchemaProperties, initEntityValues } from "../models/firestore";
-import { getYupEntitySchema } from "./validation";
+import {
+    checkUniqueField,
+    computeSchemaProperties,
+    initEntityValues
+} from "../models/firestore";
+import {
+    getYupEntitySchema,
+    mapPropertyToYup,
+    UniqueFieldValidator
+} from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
 import { FormContext } from "../models/fields";
@@ -184,7 +192,8 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
     }
 
-    const validationSchema = getYupEntitySchema(schema.properties, internalValue as Partial<EntityValues<S, Key>> ?? {}, collectionPath, entity?.id);
+    const uniqueFieldValidator: UniqueFieldValidator = (name, value) => checkUniqueField(collectionPath, name, value, entity?.id);
+    const validationSchema = getYupEntitySchema(schema.properties, internalValue as Partial<EntityValues<S, Key>> ?? {}, uniqueFieldValidator, entity?.id);
 
     function buildButtons(isSubmitting: boolean, modified: boolean) {
         const disabled = isSubmitting || (!modified && status === EntityStatus.existing);

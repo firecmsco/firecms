@@ -25,34 +25,31 @@ import {
     StringSchema
 } from "yup";
 import { enumToObjectEntries } from "../util/enums";
-import { checkUniqueField } from "../models/firestore";
 
-export type UniqueFieldValidator = (value: any) => Promise<boolean>;
+export type UniqueFieldValidator = (name: string, value: any) => Promise<boolean>;
 
 
-export function mapPropertyToYup(property: Property, path: string, name?: string, entityId?: string): AnySchema<unknown> {
-
-    const uniqueFieldValidator: UniqueFieldValidator | undefined = name ? ((value) => checkUniqueField(path, name, value, entityId)) : undefined;
+export function mapPropertyToYup(property: Property, uniqueFieldValidator: UniqueFieldValidator, name?: string): AnySchema<unknown> {
 
     if (property.dataType === "string") {
-        return getYupStringSchema(property, uniqueFieldValidator);
+        return getYupStringSchema(property, name, uniqueFieldValidator);
     } else if (property.dataType === "number") {
-        return getYupNumberSchema(property, uniqueFieldValidator);
+        return getYupNumberSchema(property, name, uniqueFieldValidator);
     } else if (property.dataType === "boolean") {
-        return getYupBooleanSchema(property, uniqueFieldValidator);
+        return getYupBooleanSchema(property, name, uniqueFieldValidator);
     } else if (property.dataType === "map") {
         if (!property.properties) {
             return yup.object();
         }
-        return getYupMapObjectSchema(property.properties, path, name, entityId);
+        return getYupMapObjectSchema(property.properties, uniqueFieldValidator, name);
     } else if (property.dataType === "array") {
-        return getYupArraySchema(property, path);
+        return getYupArraySchema(property, uniqueFieldValidator);
     } else if (property.dataType === "timestamp") {
-        return getYupDateSchema(property, uniqueFieldValidator);
+        return getYupDateSchema(property, name, uniqueFieldValidator);
     } else if (property.dataType === "geopoint") {
-        return getYupGeoPointSchema(property, uniqueFieldValidator);
+        return getYupGeoPointSchema(property, name, uniqueFieldValidator);
     } else if (property.dataType === "reference") {
-        return getYupReferenceSchema(property, uniqueFieldValidator);
+        return getYupReferenceSchema(property, name, uniqueFieldValidator);
     }
     throw Error("Unsupported data type in yup mapping: " + property);
 }
@@ -60,24 +57,28 @@ export function mapPropertyToYup(property: Property, path: string, name?: string
 export function getYupEntitySchema<S extends EntitySchema<Key>, Key extends string>
 (properties: PropertiesOrBuilder<S, Key>,
  values: Partial<EntityValues<S, Key>>,
- path: string,
+ uniqueFieldValidator: UniqueFieldValidator,
  entityId?: string): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties).forEach(([name, propertyOrBuilder]) => {
-        objectSchema[name] = mapPropertyToYup(buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<S, Key>, values, entityId), path, name, entityId);
+        objectSchema[name] = mapPropertyToYup(buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<S, Key>, values, entityId), uniqueFieldValidator, name);
     });
     return yup.object().shape(objectSchema);
 }
 
-export function getYupMapObjectSchema<S extends EntitySchema<Key>, Key extends string>(properties: Properties<any>, path: string, name?: string, entityId?: string): ObjectSchema<any> {
+export function getYupMapObjectSchema<S extends EntitySchema<Key>, Key extends string>(
+    properties: Properties<any>,
+    uniqueFieldValidator: UniqueFieldValidator,
+    name?: string
+): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties).forEach(([childName, property]: [string, Property]) => {
-        objectSchema[childName] = mapPropertyToYup(property, path, `${name}[${childName}]`, entityId);
+        objectSchema[childName] = mapPropertyToYup(property, uniqueFieldValidator, `${name}[${childName}]`);
     });
     return yup.object().shape(objectSchema);
 }
 
-function getYupStringSchema(property: StringProperty, uniqueFieldChecker?: UniqueFieldValidator): StringSchema {
+function getYupStringSchema(property: StringProperty, name?:string, uniqueFieldChecker?: UniqueFieldValidator): StringSchema {
     let schema: StringSchema<any> = yup.string();
     const validation = property.validation;
     if (property.config?.enumValues) {
@@ -92,7 +93,7 @@ function getYupStringSchema(property: StringProperty, uniqueFieldChecker?: Uniqu
         schema = validation.required ?
             schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true) :
             schema.notRequired().nullable(true);
-        if (validation.unique && uniqueFieldChecker) schema = schema.test("unique", `There is another entity with this value and it should be unique`, uniqueFieldChecker);
+        if (validation.unique && uniqueFieldChecker && name) schema = schema.test("unique", `There is another entity with this value and it should be unique`, (value) => uniqueFieldChecker(name,value));
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} must be min ${validation.min} characters long`);
         if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.title} must be max ${validation.max} characters long`);
         if (validation.matches) schema = schema.matches(validation.matches);
@@ -107,14 +108,14 @@ function getYupStringSchema(property: StringProperty, uniqueFieldChecker?: Uniqu
     return schema;
 }
 
-function getYupNumberSchema(property: NumberProperty, uniqueFieldChecker?: UniqueFieldValidator): NumberSchema {
+function getYupNumberSchema(property: NumberProperty, name?:string, uniqueFieldChecker?: UniqueFieldValidator): NumberSchema {
     const validation = property.validation;
     let schema: NumberSchema<any> = yup.number().typeError("Must be a number");
     if (validation) {
         schema = validation.required ?
             schema.required(validation.requiredMessage ? validation.requiredMessage : "Required").nullable(true) :
             schema.notRequired().nullable(true);
-        if (validation.unique && uniqueFieldChecker) schema = schema.test("unique", `There is another entity with this value and it should be unique`, uniqueFieldChecker);
+        if (validation.unique && uniqueFieldChecker && name) schema = schema.test("unique", `There is another entity with this value and it should be unique`, (value) => uniqueFieldChecker(name,value));
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} must be higher or equal to ${validation.min}`);
         if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.title} must be lower or equal to ${validation.max}`);
         if (validation.lessThan || validation.lessThan === 0) schema = schema.lessThan(validation.lessThan, `${property.title} must be higher than ${validation.lessThan}`);
@@ -128,10 +129,10 @@ function getYupNumberSchema(property: NumberProperty, uniqueFieldChecker?: Uniqu
     return schema;
 }
 
-function getYupGeoPointSchema(property: GeopointProperty, uniqueFieldChecker?: UniqueFieldValidator): AnySchema {
+function getYupGeoPointSchema(property: GeopointProperty, name?:string, uniqueFieldChecker?: UniqueFieldValidator): AnySchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
-    if (validation?.unique && uniqueFieldChecker) schema = schema.test("unique", `There is another entity with this value and it should be unique`, uniqueFieldChecker);
+    if (validation?.unique && uniqueFieldChecker && name) schema = schema.test("unique", `There is another entity with this value and it should be unique`, (value) => uniqueFieldChecker(name,value));
     if (validation?.required) {
         schema = schema.required(validation.requiredMessage).nullable(true);
     } else {
@@ -140,7 +141,7 @@ function getYupGeoPointSchema(property: GeopointProperty, uniqueFieldChecker?: U
     return schema;
 }
 
-function getYupDateSchema(property: TimestampProperty, uniqueFieldChecker?: UniqueFieldValidator): AnySchema | DateSchema {
+function getYupDateSchema(property: TimestampProperty, name?:string, uniqueFieldChecker?: UniqueFieldValidator): AnySchema | DateSchema {
     if (property.autoValue) {
         return yup.object().nullable(true);
     }
@@ -150,7 +151,7 @@ function getYupDateSchema(property: TimestampProperty, uniqueFieldChecker?: Uniq
         schema = validation.required ?
             schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true) :
             schema.notRequired().nullable(true);
-        if (validation.unique && uniqueFieldChecker) schema = schema.test("unique", `There is another entity with this value and it should be unique`, uniqueFieldChecker);
+        if (validation.unique && uniqueFieldChecker && name) schema = schema.test("unique", `There is another entity with this value and it should be unique`, (value) => uniqueFieldChecker(name,value));
         if (validation.min) schema = schema.min(validation.min, `${property.title} must be after ${validation.min}`);
         if (validation.max) schema = schema.max(validation.max, `${property.title} must be before ${validation.min}`);
     } else {
@@ -159,40 +160,40 @@ function getYupDateSchema(property: TimestampProperty, uniqueFieldChecker?: Uniq
     return schema;
 }
 
-function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProperty<S, any>, uniqueFieldChecker?: UniqueFieldValidator): AnySchema {
+function getYupReferenceSchema<S extends EntitySchema>(property: ReferenceProperty<S, any>, name?:string, uniqueFieldChecker?: UniqueFieldValidator): AnySchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {
         schema = validation.required ?
             schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true) :
             schema.notRequired().nullable(true);
-        if (validation.unique && uniqueFieldChecker) schema = schema.test("unique", `There is another entity with this value and it should be unique`, uniqueFieldChecker);
+        if (validation.unique && uniqueFieldChecker && name) schema = schema.test("unique", `There is another entity with this value and it should be unique`, (value) => uniqueFieldChecker(name,value));
     } else {
         schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
 
-function getYupBooleanSchema(property: BooleanProperty, uniqueFieldChecker?: UniqueFieldValidator): BooleanSchema {
+function getYupBooleanSchema(property: BooleanProperty, name?:string, uniqueFieldChecker?: UniqueFieldValidator): BooleanSchema {
     let schema: BooleanSchema<any> = yup.boolean();
     const validation = property.validation;
     if (validation) {
         schema = validation.required ?
             schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true) :
             schema.notRequired().nullable(true);
-        if (validation.unique && uniqueFieldChecker) schema = schema.test("unique", `There is another entity with this value and it should be unique`, uniqueFieldChecker);
+        if (validation.unique && uniqueFieldChecker && name) schema = schema.test("unique", `There is another entity with this value and it should be unique`, (value) => uniqueFieldChecker(name,value));
     } else {
         schema = schema.notRequired().nullable(true);
     }
     return schema;
 }
 
-function getYupArraySchema<T>(property: ArrayProperty<T>, path: string, name?: string, entityId?: string): ArraySchema<any> {
+function getYupArraySchema<T>(property: ArrayProperty<T>, uniqueFieldValidator: UniqueFieldValidator, name?: string): ArraySchema<any> {
 
     let schema: ArraySchema<any> = yup.array();
 
     if (property.of)
-        schema = schema.of(mapPropertyToYup(property.of, path));
+        schema = schema.of(mapPropertyToYup(property.of, uniqueFieldValidator, name));
     const validation = property.validation;
 
     if (validation) {
