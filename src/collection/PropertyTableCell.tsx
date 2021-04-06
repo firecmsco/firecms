@@ -136,20 +136,22 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
     const updateValue = useCallback(
         (newValue: any | null) => {
 
-            let updatedValue;
+            let updatedValue: any;
             if (newValue === undefined) {
                 updatedValue = null;
             } else {
                 updatedValue = newValue;
             }
-            try {
-                validation.validateSync(updatedValue);
-                setError(undefined);
-            } catch (e) {
-                console.error(e);
-                setError(e);
-            }
-            setInternalValue(updatedValue);
+            validation
+                .validate(updatedValue)
+                .then( () => {
+                    setInternalValue(updatedValue);
+                    setError(undefined);
+                })
+                .catch((e) => {
+                    console.error(e);
+                    setError(e);
+                });
         },
         []
     );
