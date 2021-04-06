@@ -90,7 +90,7 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     let disabled = Boolean(property.disabled);
 
-    const validation = useMemo(() => mapPropertyToYup(property), [property]);
+    const validation = useMemo(() => mapPropertyToYup(property, path, name, entity?.id), [property, path, name, entity?.id]);
 
     const onSaveSuccess = (entity: Entity<any>) => {
 

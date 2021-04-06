@@ -191,7 +191,7 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
                 const touched = getIn(fieldProps.form.touched, name);
 
                 const showError: boolean = error
-                    && fieldProps.form.submitCount > 0
+                    && (fieldProps.form.submitCount > 0 || property.validation?.unique)
                     && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
 
                 const isSubmitting = fieldProps.form.isSubmitting;

@@ -463,7 +463,7 @@ function updateAutoValue(inputValue: any,
             value = clearMapMissingValues(inputValue, property.properties);
         }
     } else if (property.dataType === "array") {
-        if ( property.of && Array.isArray(inputValue)) {
+        if (property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => updateAutoValue(e, property.of as Property, status));
         } else {
             value = inputValue;
@@ -519,4 +519,34 @@ export function initFilterValues<S extends EntitySchema<Key>,
     return filterableProperties
         .map((key) => ({ [key]: undefined }))
         .reduce((a: any, b: any) => ({ ...a, ...b }), {});
+}
+
+/**
+ * Retrieve an entity given a path and a schema
+ * @param path Collection path
+ * @param name of the property
+ * @param value
+ * @param entityId
+ * @return `true` if there are no other fields besides the given entity
+ */
+export function checkUniqueField(
+    path: string,
+    name: string,
+    value: any,
+    entityId?: string
+): Promise<boolean> {
+
+    console.debug("Check unique field entity", path, name, value, entityId);
+
+    if(value === undefined || value === null){
+        return Promise.resolve(true);
+    }
+
+    return firebase.firestore()
+        .collection(path)
+        .where(name, "==", value)
+        .get()
+        .then((snapshots) =>
+            snapshots.docs.filter(doc => doc.id !== entityId).length === 0
+        );
 }

@@ -23,12 +23,13 @@ import { isReadOnly } from "../../models/utils";
 
 
 interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
-    entity?: Entity<S, Key>,
-    schema: S,
-    tableKey: string,
+    entity?: Entity<S, Key>;
+    collectionPath: string;
+    schema: S;
+    tableKey: string;
     name?: string;
     property?: Property;
-    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>,
+    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
     cellRect?: DOMRect;
     formPopupOpen: boolean;
     setFormPopupOpen: (value: boolean) => void;
@@ -40,6 +41,7 @@ interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
 function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                                                                              tableKey,
                                                                              entity,
+                                                                             collectionPath,
                                                                              name,
                                                                              property,
                                                                              schema,
@@ -115,7 +117,11 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         // selectedCell.closePopup();
     };
 
-    const validationSchema = getYupEntitySchema(schema.properties, internalValue as Partial<EntityValues<S, Key>> ?? {}, entity?.id);
+    const validationSchema = getYupEntitySchema(
+        schema.properties,
+        internalValue as Partial<EntityValues<S, Key>> ?? {},
+        collectionPath,
+        entity?.id);
 
     function normalizePosition({ x, y }: { x: number, y: number }) {
 

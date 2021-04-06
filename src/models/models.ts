@@ -677,8 +677,21 @@ export type WhereFilterOp =
  * Rules to validate a property
  */
 export interface PropertyValidationSchema {
+    /**
+     * Is this field required
+     */
     required?: boolean;
+
+    /**
+     * Customize the required message when the property is not set
+     */
     requiredMessage?: string;
+
+    /**
+     * If the unique flag is set to `true`, you can only have one entity in the
+     * collection with this value.
+     */
+    unique?: boolean;
 }
 
 /**

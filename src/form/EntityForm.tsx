@@ -184,7 +184,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
     }
 
-    const validationSchema = getYupEntitySchema(schema.properties, internalValue as Partial<EntityValues<S, Key>> ?? {}, entity?.id);
+    const validationSchema = getYupEntitySchema(schema.properties, internalValue as Partial<EntityValues<S, Key>> ?? {}, collectionPath, entity?.id);
 
     function buildButtons(isSubmitting: boolean, modified: boolean) {
         const disabled = isSubmitting || (!modified && status === EntityStatus.existing);

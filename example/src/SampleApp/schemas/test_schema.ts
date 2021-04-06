@@ -47,7 +47,10 @@ export const testEntitySchema = buildSchema({
     properties: {
         empty_string: {
             title: "Empty String",
-            dataType: "string"
+            dataType: "string",
+            validation: {
+                unique: true
+            }
         },
         shaped_array: {
             title: "My shaped array",

@@ -78,7 +78,7 @@ yarn add @camberi/firecms
 - [x] Implementation of fields for every property (except Geopoint)
 - [x] Conditional fields in forms
 - [x] Native support for Google Storage references and file upload.
-- [x] Validation for required fields using yup
+- [x] Advanced validation for fields using yup
 - [x] Inline editing
 - [x] Hooks on pre and post saving and deletion of entities
 - [x] Enhanced reference, and array of reference, fields for relational data
@@ -531,6 +531,7 @@ Beside the common fields, some properties have specific configurations.
 * `validation` Rules for validating this property:
     * `required` Should this field be compulsory.
     * `requiredMessage` Message to be displayed as a validation error.
+    * `unique` The value of this field must be unique in this collection.
     * `length` Set a required length for the string value.
     * `min` Set a minimum length limit for the string value.
     * `max` Set a maximum length limit for the string value.

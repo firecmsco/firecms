@@ -622,6 +622,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
                 <PopupFormField
                     tableKey={tableKey}
+                    collectionPath={collectionPath}
                     schema={schema}
                     CMSFormField={CMSFormField}
                     cellRect={selectedCell?.cellRect}
