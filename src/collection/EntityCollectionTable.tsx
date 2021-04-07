@@ -4,7 +4,9 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
-    EntitySchema, EntityStatus, saveEntity
+    EntitySchema,
+    EntityStatus,
+    saveEntity
 } from "../models";
 import CollectionTable from "./CollectionTable";
 import {
@@ -138,18 +140,18 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     };
 
     const onCellChanged = ({
-                          value,
-                          name,
-                          setError,
-                          entity
-                      }: OnCellChangeParams<any, S,Key>) => saveEntity({
+                               value,
+                               name,
+                               setError,
+                               entity
+                           }: OnCellChangeParams<any, S, Key>) => saveEntity({
             collectionPath: collectionPath,
             id: entity.id,
             values: {
                 ...entity.values,
                 [name]: value
             },
-            schema:collectionConfig.schema,
+            schema: collectionConfig.schema,
             status: EntityStatus.existing,
             onSaveFailure: ((e: Error) => {
                 setError(e);
@@ -218,7 +220,11 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     };
 
 
-    const uniqueFieldValidator:UniqueFieldValidator = ({ name, value, entityId }) => checkUniqueField(collectionPath, name, value, entityId);
+    const uniqueFieldValidator: UniqueFieldValidator = ({
+                                                            name,
+                                                            value,
+                                                            entityId
+                                                        }) => checkUniqueField(collectionPath, name, value, entityId);
 
     const tableRowButtonsBuilder = ({
                                         entity,
@@ -231,7 +237,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         const editEnabled = canEdit(collectionConfig.permissions, authContext.loggedUser, entity);
         const deleteEnabled = canDelete(collectionConfig.permissions, authContext.loggedUser, entity);
 
-        const onCopyClicked = (entity:Entity<S, Key>) =>         sideEntityController.open({
+        const onCopyClicked = (entity: Entity<S, Key>) => sideEntityController.open({
             entityId: entity.id,
             collectionPath,
             copy: true,
@@ -245,7 +251,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             overrideSchemaResolver: false
         });
 
-        const onEditClicked = (entity:Entity<S, Key>) =>     sideEntityController.open({
+        const onEditClicked = (entity: Entity<S, Key>) => sideEntityController.open({
             entityId: entity.id,
             collectionPath,
             permissions: {

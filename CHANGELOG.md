@@ -1,10 +1,17 @@
 # Change Log
 
+## [0.34.1] - 2021-04-07
+
+### Changed
+- Fix for broken collection detail buttons
+
+
 ## [0.34.0] - 2021-04-07
 
 ### Added
 - Added unique fields validation
 - Internal refactor of CollectionTable.tsx to improve its reusability
+
 
 ## [0.33.0] - 2021-03-30
 

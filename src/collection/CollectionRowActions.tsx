@@ -1,9 +1,4 @@
-import {
-    CollectionSize,
-    Entity,
-    EntityCollection,
-    EntitySchema
-} from "../models";
+import { CollectionSize, Entity, EntitySchema } from "../models";
 import { useTableStyles } from "./styles";
 
 import React, { MouseEvent } from "react";
@@ -19,7 +14,6 @@ import {
     Typography
 } from "@material-ui/core";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
-import { useSideEntityController } from "../contexts";
 import { Skeleton } from "@material-ui/lab";
 
 export function CollectionRowActions<S extends EntitySchema<Key>,
@@ -31,7 +25,7 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                                                                      toggleEntitySelection,
                                                                      onCopyClicked,
                                                                      onEditClicked,
-                                                                     onDeleteClicked,
+                                                                     onDeleteClicked
                                                                  }:
                                                                      {
                                                                          entity: Entity<S, Key>,
@@ -47,7 +41,6 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
     const editEnabled = Boolean(onEditClicked);
     const deleteEnabled = Boolean(onDeleteClicked);
 
-    const sideEntityController = useSideEntityController();
     const classes = useTableStyles({ size });
 
     const [anchorEl, setAnchorEl] = React.useState<any | null>(null);
@@ -100,7 +93,8 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                     <IconButton
                         onClick={(event: MouseEvent) => {
                             event.stopPropagation();
-
+                            if (onEditClicked)
+                                onEditClicked(entity);
                         }}
                     >
                         <KeyboardTab/>
