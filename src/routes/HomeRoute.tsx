@@ -120,8 +120,8 @@ function HomeRoute({
     }
 
     const groupViews
-        = allGroups.map((group) => (
-        <Box mt={6}>
+        = allGroups.map((group, index) => (
+        <Box mt={6} key={`group_${index}`}>
             <Typography color={"textSecondary"} className={"weight-500"}>
                 {group?.toUpperCase() ?? "Ungrouped".toUpperCase()}
             </Typography>

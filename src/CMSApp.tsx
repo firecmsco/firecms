@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import {
     createMuiTheme,
     createStyles,
@@ -8,12 +7,6 @@ import {
     Theme,
     ThemeProvider
 } from "@material-ui/core";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-
-import DateFnsUtils from "@date-io/date-fns";
-import * as locales from "date-fns/locale";
-
-import { BrowserRouter as Router } from "react-router-dom";
 
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -26,62 +19,20 @@ import "typeface-space-mono";
 import CircularProgressCenter from "./components/CircularProgressCenter";
 import { Authenticator } from "./models";
 import { blue, pink, red } from "@material-ui/core/colors";
-import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { SnackbarProvider } from "./contexts/SnackbarContext";
 import { AppConfigProvider } from "./contexts/AppConfigContext";
-
-import { DndProvider } from "react-dnd";
-import { CMSAppProps, Navigation } from "./CMSAppProps";
+import { CMSAppProps } from "./CMSAppProps";
 import { LoginView } from "./LoginView";
-import { CMSDrawer } from "./CMSDrawer";
-import { CMSRouterSwitch } from "./CMSRouterSwitch";
-import { CMSAppBar } from "./components/CMSAppBar";
-import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
-import { SideEntityProvider } from "./contexts/SideEntityController";
-import { SchemaRegistryProvider } from "./side_dialog/SchemaRegistry";
+import { CMSMainView } from "./CMSMainView";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        logo: {
-            padding: theme.spacing(3),
-            maxWidth: 240
-        },
-        main: {
-            display: "flex",
-            flexDirection: "column",
-            width: "100vw",
-            height: "100vh"
-        },
-        content: {
-            flexGrow: 1,
-            width: "100%",
-            height: "100%",
-            overflow: "auto"
-        },
-        tableNoBottomBorder: {
-            "&:last-child th, &:last-child td": {
-                borderBottom: 0
-            }
-        },
-        filter: {
-            flexGrow: 1,
-            padding: theme.spacing(1)
-        },
-        tree: {
-            height: 216,
-            flexGrow: 1,
-            maxWidth: 400
-        }
-    })
-);
 
 export function CMSApp(props: CMSAppProps) {
 
     const {
         name,
         logo,
-        navigation: navigationOrCollections,
+        navigation,
         authentication,
         allowSkipLogin,
         firebaseConfig,
@@ -96,8 +47,6 @@ export function CMSApp(props: CMSAppProps) {
             firebase.auth.GoogleAuthProvider.PROVIDER_ID
         ]
     } = props;
-
-    const classes = useStyles();
 
     const mode: "light" | "dark" = "light";
     const makeTheme = () => {
@@ -182,8 +131,6 @@ export function CMSApp(props: CMSAppProps) {
     };
     const theme = makeTheme();
 
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
-
     const [
         firebaseConfigInitialized,
         setFirebaseConfigInitialized
@@ -247,79 +194,6 @@ export function CMSApp(props: CMSAppProps) {
         }
     }, []);
 
-    const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
-    const closeDrawer = () => setDrawerOpen(false);
-
-    function renderLoginView() {
-        return <LoginView logo={logo}
-                          skipLoginButtonEnabled={skipLoginButtonEnabled}
-                          signInOptions={signInOptions}/>;
-    }
-
-    function getNavigation(user: firebase.User | null): Navigation {
-        if (Array.isArray(navigationOrCollections)) {
-            return {
-                collections: navigationOrCollections
-            };
-        } else if (typeof navigationOrCollections === "function") {
-            return navigationOrCollections({ user });
-        } else {
-            return navigationOrCollections;
-        }
-    }
-
-    function renderMainView(user: firebase.User | null) {
-
-        const dateUtilsLocale = locale ? locales[locale] : undefined;
-        const navigation = getNavigation(user);
-
-        const collections = navigation.collections;
-        const additionalViews = navigation.views;
-
-        return (
-            <Router>
-                <SchemaRegistryProvider collections={collections}
-                                        schemaResolver={schemaResolver}>
-                    <SideEntityProvider collections={collections}>
-                        <BreadcrumbsProvider>
-                            <MuiPickersUtilsProvider
-                                utils={DateFnsUtils}
-                                locale={dateUtilsLocale}>
-                                <DndProvider backend={HTML5Backend}>
-
-                                    <nav>
-                                        <CMSDrawer logo={logo}
-                                                   drawerOpen={drawerOpen}
-                                                   collections={collections}
-                                                   closeDrawer={closeDrawer}
-                                                   additionalViews={additionalViews}/>
-                                    </nav>
-
-                                    <div className={classes.main}>
-                                        <CMSAppBar title={name}
-                                                   handleDrawerToggle={handleDrawerToggle}
-                                                   toolbarExtraWidget={toolbarExtraWidget}/>
-
-                                        <main
-                                            className={classes.content}>
-                                            <CMSRouterSwitch
-                                                collections={collections}
-                                                views={additionalViews}/>
-                                        </main>
-                                    </div>
-
-                                    <EntitySideDialogs collections={collections}/>
-
-                                </DndProvider>
-                            </MuiPickersUtilsProvider>
-                        </BreadcrumbsProvider>
-                    </SideEntityProvider>
-                </SchemaRegistryProvider>
-            </Router>
-        );
-    }
-
-
     if (configError) {
         return <div> {configError} </div>;
     }
@@ -357,21 +231,32 @@ export function CMSApp(props: CMSAppProps) {
                                 const hasAccessToMainView = !authenticationEnabled || authContext.loggedUser || authContext.loginSkipped;
 
                                 return (<>
+
                                         <CssBaseline/>
+
                                         {authContext.authLoading ?
                                             <CircularProgressCenter/>
                                             : (
                                                 hasAccessToMainView ?
-                                                    renderMainView(authContext.loggedUser)
+                                                    <CMSMainView
+                                                        name={name}
+                                                        logo={logo}
+                                                        navigation={navigation}
+                                                        toolbarExtraWidget={toolbarExtraWidget}
+                                                        schemaResolver={schemaResolver}
+                                                        locale={locale}
+                                                        user={authContext.loggedUser}
+                                                    />
                                                     :
-                                                    renderLoginView()
-                                            )}
+                                                    <LoginView logo={logo}
+                                                               skipLoginButtonEnabled={skipLoginButtonEnabled}
+                                                               signInOptions={signInOptions}/>
+                                            )
+                                        }
                                     </>
                                 );
+                            }}
 
-                            }
-
-                            }
                         </AuthContext.Consumer>
                     </AuthProvider>
                 </SnackbarProvider>
@@ -379,4 +264,3 @@ export function CMSApp(props: CMSAppProps) {
         </AppConfigProvider>;
 
 }
-

@@ -138,8 +138,8 @@ function SampleApp() {
         // models.firestore().useEmulator("localhost", 8080);
     };
 
-    const navigation: NavigationBuilder = ({user}: NavigationBuilderProps) => {
-        const navigation:Navigation = {
+    const navigation: NavigationBuilder = async ({ user }: NavigationBuilderProps) => {
+        const navigation: Navigation = {
             collections: [
                 productsCollection,
                 usersCollection,
