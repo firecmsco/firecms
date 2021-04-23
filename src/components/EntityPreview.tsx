@@ -19,7 +19,8 @@ import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import { ErrorBoundary } from "./index";
 import { CMSAppProps } from "../CMSAppProps";
-import { useAppConfigContext } from "../contexts";
+import { useCMSAppContext } from "../contexts";
+import { CMSAppContext } from "../contexts/CMSAppContext";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,7 +56,7 @@ export default function EntityPreview<S extends EntitySchema<Key> = EntitySchema
 
     const classes = useStyles();
 
-    const appConfig: CMSAppProps | undefined = useAppConfigContext();
+    const appConfig: CMSAppContext | undefined = useCMSAppContext();
     return (
         <TableContainer>
             <Table aria-label="entity table">

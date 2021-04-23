@@ -34,8 +34,8 @@ import { CollectionRowActions } from "./CollectionRowActions";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import PropertyTableCell, { OnCellChangeParams } from "./PropertyTableCell";
 import { CustomFieldValidator, mapPropertyToYup } from "../form/validation";
-import { useCollectionFetch } from "./useCollectionFetch";
-import { useTextSearch } from "./useTextSearch";
+import { useCollectionFetch } from "../hooks/useCollectionFetch";
+import { useTextSearch } from "../hooks/useTextSearch";
 
 const PAGE_SIZE = 50;
 

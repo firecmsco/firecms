@@ -35,7 +35,7 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
 import { isReadOnly } from "../../models/utils";
 
 export const useStyles = makeStyles(theme => ({

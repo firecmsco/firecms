@@ -1,5 +1,5 @@
 import {
-    getCollectionsFromPath,
+    getNavigationEntriesFromPathInternal,
     getCollectionViewFromPath
 } from "../routes/navigation";
 import { siteConfig } from "./test_site_config";
@@ -51,9 +51,19 @@ it("collection view matches ok", () => {
     ).toEqual("products/id/subcollection_inline");
 
 });
+
 it("build entity collection array", () => {
 
-    const collections = getCollectionsFromPath("products/pid", collectionViews);
+    const collections = getNavigationEntriesFromPathInternal("products/pid", collectionViews);
+    console.log(collections);
+    // expect(
+    //     collections.map((collection) => collection.relativePath)
+    // ).toEqual(["products", "locales"]);
+});
+
+it("build entity collection array 2", () => {
+
+    const collections = getNavigationEntriesFromPathInternal("products/pid/locales/yep", collectionViews);
     console.log(collections);
     // expect(
     //     collections.map((collection) => collection.relativePath)

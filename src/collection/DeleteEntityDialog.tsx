@@ -10,7 +10,8 @@ import {
 } from "@material-ui/core";
 import EntityPreview from "../components/EntityPreview";
 import CircularProgressCenter from "../components/CircularProgressCenter";
-import { useSnackbarController } from "../contexts";
+import { useCMSAppContext, useSnackbarController } from "../contexts";
+import { CMSAppContext } from "../contexts/CMSAppContext";
 
 
 export interface DeleteEntityDialogProps<S extends EntitySchema<any>> {
@@ -43,6 +44,7 @@ export default function DeleteEntityDialog<S extends EntitySchema<any>>({
 
     const entityOrEntitiesRef = React.useRef<Entity<S> | Entity<S>[]>();
     const [multipleEntities, setMultipleEntities] = React.useState<boolean>();
+    const context = useCMSAppContext();
 
     React.useEffect(() => {
         if (entityOrEntitiesToDelete) {
@@ -100,7 +102,8 @@ export default function DeleteEntityDialog<S extends EntitySchema<any>>({
             onDeleteSuccess,
             onDeleteFailure,
             onPreDeleteHookError,
-            onDeleteSuccessHookError
+            onDeleteSuccessHookError,
+            context
         });
     }
 

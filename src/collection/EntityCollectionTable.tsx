@@ -23,7 +23,11 @@ import { Add, Delete, InfoOutlined } from "@material-ui/icons";
 import { CollectionRowActions } from "./CollectionRowActions";
 import DeleteEntityDialog from "./DeleteEntityDialog";
 import { getSubcollectionColumnId, useColumnIds } from "./common";
-import { useAuthContext, useSideEntityController } from "../contexts";
+import {
+    useAuthContext,
+    useCMSAppContext,
+    useSideEntityController
+} from "../contexts";
 import ExportButton from "./ExportButton";
 
 import ReactMarkdown from "react-markdown";
@@ -62,6 +66,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
     const authContext = useAuthContext();
+    const context = useCMSAppContext();
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S, Key> | Entity<S, Key>[] | undefined>(undefined);
     const [selectedEntities, setSelectedEntities] = useState<Entity<S, Key>[]>([]);
@@ -155,7 +160,8 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             status: EntityStatus.existing,
             onSaveFailure: ((e: Error) => {
                 setError(e);
-            })
+            }),
+            context
         }
     ).then();
 

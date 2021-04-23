@@ -12,7 +12,7 @@ import {
     CustomFieldValidator
 } from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
-import { useWindowSize } from "../../util/useWindowSize";
+import { useWindowSize } from "../../hooks/useWindowSize";
 import { isReadOnly } from "../../models/utils";
 import { CMSFormField } from "../../form";
 import { OnCellChangeParams } from "../CollectionTableProps";

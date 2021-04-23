@@ -125,20 +125,25 @@ function getCollectionPathsCombinations(subpaths: string[]): string[] {
 
 }
 
-export type NavigationViewEntry = NavigationViewEntity | NavigationViewCollection;
+export type NavigationViewEntry =
+    NavigationViewEntity
+    | NavigationViewCollection;
 
 interface NavigationViewEntity {
     type: "entity";
     entityId: string;
+    collectionPath: string;
+    fullPath: string;
     parentCollection: EntityCollection;
 }
 
 interface NavigationViewCollection {
     type: "collection";
+    fullPath: string;
     collection: EntityCollection;
 }
 
-export function getCollectionsFromPath<S extends EntitySchema>(path: string, allCollections: EntityCollection[]): NavigationViewEntry[] {
+export function getNavigationEntriesFromPathInternal<S extends EntitySchema>(path: string, allCollections: EntityCollection[], currentFullPath?: string): NavigationViewEntry[] {
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
@@ -148,23 +153,32 @@ export function getCollectionsFromPath<S extends EntitySchema>(path: string, all
         const subpathCombination = subpathCombinations[i];
         const collection = allCollections && allCollections.find((entry) => entry.relativePath === subpathCombination);
         if (collection) {
+
+            const collectionPath = currentFullPath && currentFullPath.length > 0
+                ? (currentFullPath + "/" + collection.relativePath)
+                : collection.relativePath;
+
             result.push({
                 type: "collection",
+                fullPath: collectionPath,
                 collection
             });
             const restOfThePath = removeInitialAndTrailingSlashes(path.replace(subpathCombination, ""));
             const nextSegments = restOfThePath.length > 0 ? restOfThePath.split("/") : [];
             if (nextSegments.length > 0) {
                 const entityId = nextSegments[0];
+                const fullPath = collectionPath + "/" + entityId;
                 result.push({
                     type: "entity",
                     entityId: entityId,
+                    collectionPath,
+                    fullPath: fullPath,
                     parentCollection: collection
                 });
-            }
-            if (collection.subcollections && nextSegments.length > 1) {
-                const newPath = nextSegments.slice(1).join("/");
-                result.push(...getCollectionsFromPath(newPath, collection.subcollections));
+                if (collection.subcollections && nextSegments.length > 1) {
+                    const newPath = nextSegments.slice(1).join("/");
+                    result.push(...getNavigationEntriesFromPathInternal(newPath, collection.subcollections, fullPath));
+                }
             }
             break;
         }
@@ -205,4 +219,3 @@ export function computeNavigation(navigation: EntityCollection[], additionalView
 
     return { navigationEntries, groups };
 }
-

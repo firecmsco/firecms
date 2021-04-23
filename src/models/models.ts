@@ -4,6 +4,7 @@ import { FieldProps } from "./fields";
 import { PreviewComponentProps } from "../preview";
 import firebase from "firebase/app";
 import { ChipColor } from "./colors";
+import { CMSAppContext } from "../contexts/CMSAppContext";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -249,11 +250,30 @@ export interface EntitySchema<Key extends string = string> {
  */
 export interface EntitySaveProps<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>> {
+    /**
+     * Resolved schema of the entity
+     */
     schema: S;
+    /**
+     * Full path where this entity is beign saved
+     */
     collectionPath: string;
+    /**
+     * Id of the entity or undefined if new
+     */
     id?: string;
+    /**
+     * Values being saved
+     */
     values: EntityValues<S, Key>;
+    /**
+     * New or existing entity
+     */
     status: EntityStatus;
+    /**
+     * Context of the app status
+     */
+    context: CMSAppContext;
 }
 
 /**
@@ -281,6 +301,10 @@ export interface EntityDeleteProps<S extends EntitySchema<Key>,
      * Schema of the entity being deleted
      */
     schema: S;
+    /**
+     * Context of the app status
+     */
+    context: CMSAppContext;
 }
 
 /**

@@ -4,7 +4,7 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 import { Authenticator, EntityCollection } from "./models";
-import { SchemaResolver } from "./side_dialog/model";
+import { SchemaResolver } from "./models";
 import firebase from "firebase";
 
 

@@ -2,7 +2,7 @@ import {
     buildEnumValueConfig,
     buildProperty,
     buildSchema,
-    EntitySaveProps
+    getNavigationFrom
 } from "@camberi/firecms";
 import { locales } from "./products_schema";
 import CustomShapedArrayField
@@ -44,6 +44,25 @@ const relaxedStatus = new Map([
 export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
+    onPreSave: ({
+                    schema,
+                    collectionPath,
+                    id,
+                    values,
+                    status,
+                    context
+                }) => {
+        console.log("custom onPreSave", collectionPath, id);
+
+        getNavigationFrom({
+            path: `${collectionPath}/${id}`,
+            context
+        }).then((result) => console.log("getNavigationFrom", result));
+
+        if (!values.empty_string) values.empty_string = "";
+
+        return values;
+    },
     properties: {
         empty_string: {
             title: "Empty String",
@@ -227,16 +246,6 @@ export const testEntitySchema = buildSchema({
         title: null
     }
 });
-testEntitySchema.onPreSave = ({
-                                  schema,
-                                  collectionPath,
-                                  id,
-                                  values,
-                                  status
-                              }: EntitySaveProps<typeof testEntitySchema>) => {
-    console.log("custom onPreSave");
-    if (!values.empty_string) values.empty_string = "";
-    return values;
-};
+
 
 

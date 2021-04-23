@@ -29,7 +29,7 @@ import { SkeletonComponent } from "./SkeletonComponent";
 import { PreviewComponent } from "../PreviewComponent";
 import { PreviewError } from "./PreviewError";
 import { Skeleton } from "@material-ui/lab";
-import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
+import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { useStyles } from "./styles";
 
 const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Theme) =>

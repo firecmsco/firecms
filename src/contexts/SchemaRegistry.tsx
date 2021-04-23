@@ -1,13 +1,13 @@
 import React, { useContext, useRef } from "react";
-import { EntityCollection } from "../models";
-import { getSidePanelKey, SchemaResolver, SchemaSidePanelProps } from "./model";
+import { EntityCollection, SchemaResolver, SchemaConfig  } from "../models";
+import { getSidePanelKey} from "../side_dialog/model";
 import {
     getCollectionViewFromPath,
     removeInitialAndTrailingSlashes
 } from "../routes/navigation";
 
 const DEFAULT_SCHEMA_CONTROLLER = {
-    getSchema: (collectionPath: string, entityId?: string) => undefined,
+    getSchemaConfig: (collectionPath: string, entityId?: string) => undefined,
     getCollectionConfig: (collectionPath: string, entityId?: string) => {
         throw Error("Reached wrong implementation");
     },
@@ -15,17 +15,23 @@ const DEFAULT_SCHEMA_CONTROLLER = {
     },
     setOverride: (
         entityPath: string,
-        sidePanelProps: Partial<SchemaSidePanelProps> | null
+        schemaConfig: Partial<SchemaConfig> | null
     ) => {
         throw Error("Reached wrong implementation");
     }
 };
 
+/**
+ * This controller is in charge of resolving the entity schemas from a given
+ * path. It takes into account the `navigation` prop set in the main level of the
+ * CMSApp as well as the `schemaResolver` in case you want to override schemas
+ * to specific entities.
+ */
 export type SchemasRegistryController = {
     /**
      * Get props for path
      */
-    getSchema: (collectionPath: string, entityId?: string) => SchemaSidePanelProps | undefined;
+    getSchemaConfig: (collectionPath: string, entityId?: string) => SchemaConfig | undefined;
 
     /**
      * Get props for path
@@ -38,7 +44,7 @@ export type SchemasRegistryController = {
      */
     setOverride: (
         entityPath: string,
-        sidePanelProps: Partial<SchemaSidePanelProps> | null,
+        schemaConfig: Partial<SchemaConfig> | null,
         overrideSchemaResolver?: boolean
     ) => string | undefined;
 
@@ -66,14 +72,14 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
                                                                                 schemaResolver
                                                                             }) => {
 
-    const viewsRef = useRef<Record<string, Partial<SchemaSidePanelProps & { overrideSchemaResolver?: boolean }>>>({});
+    const viewsRef = useRef<Record<string, Partial<SchemaConfig & { overrideSchemaResolver?: boolean }>>>({});
 
-    const getSchema = (collectionPath: string, entityId?: string): SchemaSidePanelProps => {
+    const getSchemaConfig = (collectionPath: string, entityId?: string): SchemaConfig => {
         const sidePanelKey = getSidePanelKey(collectionPath, entityId);
 
-        let result: Partial<SchemaSidePanelProps> = {};
+        let result: Partial<SchemaConfig> = {};
         const overriddenProps = viewsRef.current[sidePanelKey];
-        const resolvedProps: SchemaSidePanelProps | undefined = schemaResolver && schemaResolver({
+        const resolvedProps: SchemaConfig | undefined = schemaResolver && schemaResolver({
             entityId,
             collectionPath: removeInitialAndTrailingSlashes(collectionPath)
         });
@@ -101,7 +107,7 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
         if (!result.schema)
             throw Error(`Not able to resolve schema for ${sidePanelKey}`);
 
-        return result as SchemaSidePanelProps;
+        return result as SchemaConfig;
 
     };
 
@@ -111,14 +117,14 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
 
     const setOverride = (
         entityPath: string,
-        sidePanelProps: Partial<SchemaSidePanelProps> | null,
+        schemaConfig: Partial<SchemaConfig> | null,
         overrideSchemaResolver?: boolean
     ) => {
-        if (!sidePanelProps) {
+        if (!schemaConfig) {
             delete viewsRef.current[entityPath];
             return undefined;
         } else {
-            viewsRef.current[entityPath] = { ...sidePanelProps, overrideSchemaResolver };
+            viewsRef.current[entityPath] = { ...schemaConfig, overrideSchemaResolver };
             return entityPath;
         }
     };
@@ -135,7 +141,7 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
     return (
         <SchemaRegistryContext.Provider
             value={{
-                getSchema,
+                getSchemaConfig,
                 getCollectionConfig,
                 setOverride,
                 removeAllOverridesExcept

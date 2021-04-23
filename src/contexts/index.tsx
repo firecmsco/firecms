@@ -6,11 +6,11 @@ export {
 } from "./SnackbarContext";
 
 export type {
-    AppConfigsProviderState
-} from "./AppConfigContext";
+    CMSAppContextProps
+} from "./CMSAppContext";
 export {
-    useAppConfigContext
-} from "./AppConfigContext";
+    useCMSAppContext
+} from "./CMSAppContext";
 
 export type {
     AuthContextController
@@ -27,7 +27,7 @@ export {
 } from "./BreacrumbsContext";
 
 export type {
-    SideEntityController, SchemaSidePanelProps, SideEntityPanelProps
+    SideEntityController, SchemaConfig, SideEntityPanelProps
 } from "./SideEntityController";
 export {
     useSideEntityController

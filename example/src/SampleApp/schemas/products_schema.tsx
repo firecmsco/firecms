@@ -5,7 +5,6 @@ import {
     AsyncPreviewComponent,
     buildSchema,
     Entity,
-    EntitySaveProps,
     EntitySchema,
     EnumValues,
     ExtraActionsParams
@@ -60,6 +59,25 @@ const categories: EnumValues = {
 
 export const productSchema: EntitySchema = buildSchema({
     name: "Product",
+    onPreSave: ({
+                    schema,
+                    collectionPath,
+                    id,
+                    values,
+                    status
+                }) => {
+        values.uppercase_name = values.name.toUpperCase();
+        return values;
+    },
+
+    onSaveSuccess: (props) => {
+        console.log("onSaveSuccess", props);
+    },
+
+    onDelete: (props) => {
+        console.log("onDelete", props);
+    },
+
     properties: {
         name: {
             dataType: "string",
@@ -232,7 +250,7 @@ export const productSchema: EntitySchema = buildSchema({
             title: "Uppercase Name",
             dataType: "string",
             readOnly: true,
-            description: "This field gets updated with a preSave hook"
+            description: "This field gets updated with a preSave callback"
         }
 
     },
@@ -301,24 +319,6 @@ export const localeSchema = buildSchema({
     }
 });
 
-productSchema.onPreSave = ({
-                               schema,
-                               collectionPath,
-                               id,
-                               values,
-                               status
-                           }: EntitySaveProps<typeof productSchema>) => {
-    values.uppercase_name = values.name.toUpperCase();
-    return values;
-};
-
-productSchema.onSaveSuccess = (props) => {
-    console.log("onSaveSuccess", props);
-};
-
-productSchema.onDelete = (props) => {
-    console.log("onDelete", props);
-};
 
 export const productExtraActionBuilder = ({
                                               view,

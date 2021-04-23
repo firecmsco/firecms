@@ -11,8 +11,7 @@ import {
 import firebase from "firebase";
 import "firebase/auth";
 
-import { useAppConfigContext, useAuthContext } from "./contexts";
-import { CMSAppProps } from "./CMSAppProps";
+import { useAuthContext } from "./contexts";
 
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
@@ -31,18 +30,19 @@ interface LoginViewProps {
     logo?: string,
     // Any of the sign in string or configuration objects defined in https://firebase.google.com/docs/auth/web/firebaseui
     signInOptions: Array<string | any>;
+    firebaseConfig:Object;
 }
 
 export function LoginView({
                               skipLoginButtonEnabled,
                               logo,
-                              signInOptions
+                              signInOptions,
+                              firebaseConfig
                           }: LoginViewProps) {
 
     const classes = useStyles();
 
     const authContext = useAuthContext();
-    const appConfigContext: CMSAppProps | undefined = useAppConfigContext();
 
     useEffect(() => {
         const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
@@ -78,9 +78,9 @@ export function LoginView({
                             your Firebase project
                         </Box>
 
-                        {appConfigContext?.firebaseConfig &&
+                        {firebaseConfig &&
                         <Box p={2}>
-                            <a href={`https://console.firebase.google.com/project/${(appConfigContext.firebaseConfig as any)["projectId"]}/authentication/providers`}
+                            <a href={`https://console.firebase.google.com/project/${(firebaseConfig as any)["projectId"]}/authentication/providers`}
                                rel="noopener noreferrer"
                                target="_blank">
                                 <Button variant="outlined"

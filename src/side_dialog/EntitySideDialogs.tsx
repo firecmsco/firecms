@@ -1,11 +1,11 @@
 import React from "react";
-import { EntityCollection, EntitySchema } from "../models";
+import { EntityCollection, EntitySchema, SchemaConfig } from "../models";
 import { Box, createStyles, makeStyles } from "@material-ui/core";
 import { EntityDrawer } from "./EntityDrawer";
 import EntityView from "./EntityView";
 import { useSideEntityController } from "../contexts";
-import { useSchemasRegistry } from "./SchemaRegistry";
-import { SchemaSidePanelProps, SideEntityPanelProps } from "./model";
+import { useSchemasRegistry } from "../contexts/SchemaRegistry";
+import { SideEntityPanelProps } from "./model";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -59,7 +59,7 @@ export function EntitySideDialogs<S extends EntitySchema>({ collections }: { col
 
     function buildEntityView(panel: SideEntityPanelProps) {
 
-        const schemaProps: SchemaSidePanelProps | undefined = schemasRegistry.getSchema(panel.collectionPath, panel.entityId);
+        const schemaProps: SchemaConfig | undefined = schemasRegistry.getSchemaConfig(panel.collectionPath, panel.entityId);
 
         if (!schemaProps) {
             return (

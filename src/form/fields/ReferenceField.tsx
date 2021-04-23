@@ -25,8 +25,8 @@ import { PreviewComponent, SkeletonComponent } from "../../preview";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { useSideEntityController } from "../../contexts";
-import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
+import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {

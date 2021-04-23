@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { useColumnIds } from "../../collection/common";
 import { CollectionRowActions } from "../../collection/CollectionRowActions";
-import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
+import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 
 
 export const useStyles = makeStyles(theme => createStyles({

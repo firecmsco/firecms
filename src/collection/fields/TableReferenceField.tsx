@@ -14,7 +14,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import { getPreviewSizeFrom } from "../../preview/util";
 import { useInputStyles } from "./styles";
-import { useSchemasRegistry } from "../../side_dialog/SchemaRegistry";
+import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 
 
 export function TableReferenceField<S extends EntitySchema<Key>, Key extends string>(props: {

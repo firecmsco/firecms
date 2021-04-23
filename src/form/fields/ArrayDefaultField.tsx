@@ -6,7 +6,7 @@ import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
 import { formStyles } from "../../styles";
 import { CMSFormField } from "../form_factory";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
 
 
 type ArrayDefaultFieldProps<T> = FieldProps<T[]>;

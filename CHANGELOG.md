@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.35.0] - 2021-04-
+
+### Changed
+- [BREAKING] `SchemaSidePanelProps` has been renamed to `SchemaConfig` used in
+the `schemaResolver` prop.
+- [BREAKING] `useAppConfigContext` has been renamed to `useCMSAppContext`
+
 ## [0.34.1] - 2021-04-07
 
 ### Changed
@@ -16,7 +23,7 @@
 ## [0.33.0] - 2021-03-30
 
 ### Added
-- Added example shaped array custom field in the `example` folder
+- Added example shaped array custom fields in the `example` folder
 
 ### Changed
 - Adaptations to make it easier to implement custom fields and use the internal

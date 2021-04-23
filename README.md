@@ -358,17 +358,16 @@ real time updates.
 
 ## CMSApp level configuration
 
-The entry point for setting up a FireCMS app is the CMSApp, where you can define
-the following specs:
+The entry point for setting up a FireCMS app is the `CMSApp`, where you can
+define the following specs:
 
 - `name` Name of the app, displayed as the main title and in the tab title.
 
-- `navigation` Use this prop to specify the views that will be generated in the CMS.
-  You usually will want to create a `Navigation` object that includes
-  collection views where you specify the path and the schema.
-  Additionally you can add custom views to the root navigation.
-  In you need to customize the navigation based on the logged user you
-  can use a `NavigationBuilder`
+- `navigation` Use this prop to specify the views that will be generated in the
+  CMS. You usually will want to create a `Navigation` object that includes
+  collection views where you specify the path and the schema. Additionally you
+  can add custom views to the root navigation. In you need to customize the
+  navigation based on the logged user you can use a `NavigationBuilder`
 
 - `logo` Logo to be displayed in the drawer of the CMS.
 
@@ -452,18 +451,19 @@ fields, common to all data types:
 * `disabled` Is this a read only property.
 
 * `config`
-    * `field`If you need to render a custom field, you can create a component that
-        takes `FieldProps` as props. You receive the value, a function to
-        update the value and additional utility props such as if there is an error.
-        You can customize it by passing custom props that are received
-        in the component.
+    * `field`If you need to render a custom field, you can create a component
+      that takes `FieldProps` as props. You receive the value, a function to
+      update the value and additional utility props such as if there is an
+      error. You can customize it by passing custom props that are received in
+      the component.
 
-    * `preview` Configure how a property is displayed as a preview, e.g. in the collection
-        view. You can customize it by passing custom props that are received
-        in the component.
+    * `preview` Configure how a property is displayed as a preview, e.g. in the
+      collection view. You can customize it by passing custom props that are
+      received in the component.
 
-    * `customProps` Additional props that are passed to the components defined in `field`
-        or in `preview`.
+    * `customProps` Additional props that are passed to the components defined
+      in `field`
+      or in `preview`.
 
 
 * `onPreSave` Hook called before saving, you need to return the values that will
@@ -496,13 +496,13 @@ Beside the common fields, some properties have specific configurations.
       indicate that this string refers to a path in Google Cloud Storage.
         * `mediaType` Media type of this reference, used for displaying the
           preview.
-        * `storagePath` Absolute path in your bucket. You can specify it directly
-          or use a callback
+        * `storagePath` Absolute path in your bucket. You can specify it
+          directly or use a callback
         * `acceptedFiles` File MIME types that can be uploaded to this
           reference.
         * `metadata` Specific metadata set in your uploaded file.
-        * `fileName` You can specify a fileName callback if you need to customize
-          the name of the file
+        * `fileName` You can specify a fileName callback if you need to
+          customize the name of the file
         * `storeUrl` When set to `true`, this flag indicates that the download
           URL of the file will be saved in Firestore instead of the Cloud
           storage path. Note that the generated URL may use a token that, if
@@ -638,13 +638,23 @@ entity, you can use the `context` field in CMSFieldProps.
 
 #### Saving callbacks
 
-When you are saving an entity you can attach diff erent hooks before and after
-it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
+When you are saving an entity you can attach different callbacks before and
+after it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
 
 ```
 const productSchema = buildSchema({
     customId: true,
     name: "Product",
+    onPreSave: ({
+                   schema,
+                   collectionPath,
+                   id,
+                   values,
+                   status
+               }: EntitySaveProps<typeof productSchema>) => {
+        values.uppercase_name = values.name.toUpperCase();
+        return values;
+},
     properties: {
         name: {
             title: "Name",
@@ -655,21 +665,11 @@ const productSchema = buildSchema({
             title: "Uppercase Name",
             dataType: "string",
             disabled: true,
-            description: "This field gets updated with a preSave hook"
+            description: "This field gets updated with a preSave callback"
         },
     }
 });
 
-productSchema.onPreSave = ({
-                               schema,
-                               collectionPath,
-                               id,
-                               values,
-                               status
-                           }: EntitySaveProps<typeof productSchema>) => {
-    values.uppercase_name = values.name.toUpperCase();
-    return values;
-};
 ```
 
 ## Collection configuration

@@ -44,10 +44,9 @@ import ReadOnlyField from "./fields/ReadOnlyField";
 import MarkDownField from "./fields/MarkdownField";
 import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
 
-import { useAppConfigContext, useSnackbarController } from "../contexts";
-
-import { CMSAppProps } from "../CMSAppProps";
+import { useCMSAppContext, useSnackbarController } from "../contexts";
 import { isReadOnly } from "../models/utils";
+import { CMSAppContext } from "../contexts/CMSAppContext";
 
 /**
  * This component renders a form field creating the corresponding configuration
@@ -90,7 +89,7 @@ export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string 
     } else if (property.config?.field) {
         component = property.config?.field;
     } else if (property.dataType === "array") {
-        if(!property.of){
+        if (!property.of) {
             throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
         }
         if ((property.of.dataType === "string" || property.of.dataType === "number") && property.of.config?.enumValues) {
@@ -266,9 +265,11 @@ export function createCustomIdField<S extends EntitySchema<Key>, Key extends str
         })
     });
 
-    const appConfig: CMSAppProps | undefined = useAppConfigContext();
+    const appConfig: CMSAppContext | undefined = useCMSAppContext();
     const inputProps = entity ? {
-            endAdornment: (<InputAdornment position="end">
+            endAdornment: (
+                <InputAdornment position="end">
+
                     <IconButton
                         onClick={(e) => copy(entity.id)}
                         aria-label="copy-id">
@@ -281,6 +282,7 @@ export function createCustomIdField<S extends EntitySchema<Key>, Key extends str
                             </svg>
                         </Tooltip>
                     </IconButton>
+
                     {appConfig?.firebaseConfig &&
                     <a href={`https://console.firebase.google.com/project/${(appConfig.firebaseConfig as any)["projectId"]}/firestore/data/${entity.reference.path}`}
                        rel="noopener noreferrer"
@@ -293,6 +295,7 @@ export function createCustomIdField<S extends EntitySchema<Key>, Key extends str
                             </Tooltip>
                         </IconButton>
                     </a>}
+
                 </InputAdornment>
             )
         } :

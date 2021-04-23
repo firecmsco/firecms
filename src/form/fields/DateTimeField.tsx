@@ -5,10 +5,11 @@ import { FieldProps } from "../../models";
 
 import { FieldDescription } from "../../components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
 import { CMSAppProps } from "../../CMSAppProps";
-import { useAppConfigContext } from "../../contexts";
+import { useCMSAppContext } from "../../contexts";
 import { defaultDateFormat } from "../../util/dates";
+import { CMSAppContext } from "../../contexts/CMSAppContext";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -29,8 +30,8 @@ export default function DateTimeField({
 
     const internalValue = value || null;
 
-    const appConfig: CMSAppProps | undefined = useAppConfigContext();
-    const dateFormat: string = appConfig?.dateTimeFormat ?? defaultDateFormat;
+    const appConfig: CMSAppContext | undefined = useCMSAppContext();
+    const dateFormat: string = appConfig?.cmsAppConfig?.dateTimeFormat ?? defaultDateFormat;
 
     useClearRestoreValue({
         property,

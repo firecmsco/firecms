@@ -21,7 +21,7 @@ import {
     Theme
 } from "@material-ui/core";
 import {
-    useAuthContext,
+    useAuthContext, useCMSAppContext,
     useSideEntityController,
     useSnackbarController
 } from "../contexts";
@@ -222,6 +222,8 @@ function EntitySideView({
             return;
         }
 
+        const context = useCMSAppContext();
+
         return saveEntity({
             collectionPath,
             id,
@@ -231,7 +233,8 @@ function EntitySideView({
             onSaveSuccess,
             onSaveFailure,
             onPreSaveHookError,
-            onSaveSuccessHookError
+            onSaveSuccessHookError,
+            context
         });
     }
 

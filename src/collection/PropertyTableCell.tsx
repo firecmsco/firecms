@@ -21,7 +21,7 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { getPreviewSizeFrom } from "../preview/util";
-import { useClearRestoreValue } from "../form/useClearRestoreValue";
+import { useClearRestoreValue } from "../hooks/useClearRestoreValue";
 import deepEqual from "deep-equal";
 import { isReadOnly } from "../models/utils";
 import TableCell from "./TableCell";

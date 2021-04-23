@@ -22,6 +22,7 @@ export {
 } from "./storage";
 
 export { AlgoliaTextSearchDelegate } from "./text_search_delegate";
+export type { SchemaResolver, SchemaConfig } from "./schema_resolver";
 
 export type {
     FieldProps, CMSFormFieldProps, FormContext

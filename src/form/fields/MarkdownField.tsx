@@ -18,7 +18,7 @@ import ReactMarkdown from "react-markdown";
 
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/base16-light.css";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
 
 require("codemirror/mode/markdown/markdown");
 

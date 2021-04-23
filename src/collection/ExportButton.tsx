@@ -46,7 +46,7 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
 
     useEffect(() => {
         setDataLoading(true);
-        const cancelSubscription = listenCollection<S, Key>(
+        return listenCollection<S, Key>(
             collectionPath,
             schema,
             entities => {
@@ -64,7 +64,6 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
             undefined,
             undefined,
             undefined);
-        return cancelSubscription;
     }, [collectionPath, schema]);
 
     const handleClickOpen = () => {

@@ -11,7 +11,7 @@ import React from "react";
 import { FieldProps } from "../../models";
 import { FieldDescription } from "../../components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({

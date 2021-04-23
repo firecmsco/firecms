@@ -1,12 +1,5 @@
 import React, { useEffect } from "react";
-import {
-    createMuiTheme,
-    createStyles,
-    CssBaseline,
-    makeStyles,
-    Theme,
-    ThemeProvider
-} from "@material-ui/core";
+import { createMuiTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -21,10 +14,11 @@ import { Authenticator } from "./models";
 import { blue, pink, red } from "@material-ui/core/colors";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { SnackbarProvider } from "./contexts/SnackbarContext";
-import { AppConfigProvider } from "./contexts/AppConfigContext";
+import { CMSAppContextProvider } from "./contexts/CMSAppContext";
 import { CMSAppProps } from "./CMSAppProps";
 import { LoginView } from "./LoginView";
 import { CMSMainView } from "./CMSMainView";
+import { NavigationProvider } from "./contexts/NavigationProvider";
 
 
 export function CMSApp(props: CMSAppProps) {
@@ -218,8 +212,6 @@ export function CMSApp(props: CMSAppProps) {
     }
 
     return usedFirebaseConfig &&
-        <AppConfigProvider cmsAppConfig={props}
-                           firebaseConfig={usedFirebaseConfig}>
 
             <ThemeProvider theme={theme}>
                 <SnackbarProvider>
@@ -238,21 +230,19 @@ export function CMSApp(props: CMSAppProps) {
                                             <CircularProgressCenter/>
                                             : (
                                                 hasAccessToMainView ?
-                                                    <CMSMainView
-                                                        name={name}
-                                                        logo={logo}
-                                                        navigation={navigation}
-                                                        toolbarExtraWidget={toolbarExtraWidget}
-                                                        schemaResolver={schemaResolver}
-                                                        locale={locale}
-                                                        user={authContext.loggedUser}
-                                                    />
+                                                    <NavigationProvider
+                                                        navigationOrCollections={navigation}
+                                                        user={authContext.loggedUser}>
+                                                        <CMSMainView {...props} usedFirebaseConfig={usedFirebaseConfig}/>
+                                                    </NavigationProvider>
                                                     :
                                                     <LoginView logo={logo}
                                                                skipLoginButtonEnabled={skipLoginButtonEnabled}
-                                                               signInOptions={signInOptions}/>
+                                                               signInOptions={signInOptions}
+                                                               firebaseConfig={usedFirebaseConfig}/>
                                             )
                                         }
+
                                     </>
                                 );
                             }}
@@ -260,7 +250,6 @@ export function CMSApp(props: CMSAppProps) {
                         </AuthContext.Consumer>
                     </AuthProvider>
                 </SnackbarProvider>
-            </ThemeProvider>
-        </AppConfigProvider>;
+            </ThemeProvider>;
 
 }

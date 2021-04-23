@@ -15,7 +15,7 @@ import { formStyles } from "../../styles";
 import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
 import { CMSFormField } from "../form_factory";
 
 type MapFieldProps<S extends EntitySchema> = FieldProps<object>;

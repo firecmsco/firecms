@@ -1,31 +1,29 @@
-import { EntityCollection, EntitySchema } from "../models";
+import { EntityCollection, EntitySchema, SchemaConfig } from "../models";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import {
     getCMSPathFrom,
-    getCollectionsFromPath,
     getEntityOrCollectionPath,
     getEntityPath,
+    getNavigationEntriesFromPathInternal,
     getRouterNewEntityPath,
     isCollectionPath,
     NavigationViewEntry
 } from "../routes/navigation";
+import { getSidePanelKey, SideEntityPanelProps } from "../side_dialog/model";
 import {
-    getSidePanelKey,
-    SchemaSidePanelProps,
-    SideEntityPanelProps
-} from "../side_dialog/model";
-import { useSchemasRegistry } from "../side_dialog/SchemaRegistry";
+    useSchemasRegistry
+} from "./SchemaRegistry";
 
 const DEFAULT_SIDE_ENTITY = {
     sidePanels: [],
     close: () => {
     },
-    open: (props: SideEntityPanelProps & Partial<SchemaSidePanelProps>) => {
+    open: (props: SideEntityPanelProps & Partial<SchemaConfig>) => {
     }
 };
 
-export type { SideEntityPanelProps, SchemaSidePanelProps } ;
+export type { SideEntityPanelProps, SchemaConfig } ;
 
 export type SideEntityController<S extends EntitySchema> = {
     /**
@@ -49,7 +47,7 @@ export type SideEntityController<S extends EntitySchema> = {
      * to override the CMSApp level SchemaResolver.
      * @param props
      */
-    open: (props: SideEntityPanelProps & Partial<SchemaSidePanelProps> & { overrideSchemaResolver?: boolean }) => void;
+    open: (props: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaResolver?: boolean }) => void;
 };
 
 const SideEntityPanelsController = React.createContext<SideEntityController<any>>(DEFAULT_SIDE_ENTITY);
@@ -66,12 +64,6 @@ interface SideEntityProviderProps {
     children: React.ReactNode;
     collections: EntityCollection[];
 }
-
-
-type InitialConfig = {
-    sidePanels: ExtendedPanelProps[];
-    schemasConfig: Record<string, SchemaSidePanelProps>
-};
 
 type ExtendedPanelProps = SideEntityPanelProps & {
     /**
@@ -113,11 +105,8 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         if (!initialised.current) {
             if (isCollectionPath(location.pathname)) {
                 const newFlag = location.hash === "#new";
-                const initialConfig = buildSidePanelsFromUrl(getEntityOrCollectionPath(location.pathname), collections, newFlag);
-                Object.entries(initialConfig.schemasConfig).forEach(([key, config]) => {
-                    schemasRegistry.setOverride(key, config);
-                });
-                setSidePanels(initialConfig.sidePanels);
+                const sidePanels = buildSidePanelsFromUrl(getEntityOrCollectionPath(location.pathname), collections, newFlag);
+                setSidePanels(sidePanels);
             }
             initialised.current = true;
         }
@@ -145,7 +134,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                       selectedSubcollection,
                       copy,
                       ...schemaProps
-                  }: SideEntityPanelProps & Partial<SchemaSidePanelProps> & { overrideSchemaResolver?: boolean }) => {
+                  }: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaResolver?: boolean }) => {
 
         if (copy && !entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
@@ -224,31 +213,33 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
     );
 };
 
-function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[], newFlag: boolean): InitialConfig {
+function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[], newFlag: boolean):  ExtendedPanelProps[] {
 
-    const navigationViewsForPath: NavigationViewEntry[] = getCollectionsFromPath(path, allCollections);
+    const navigationViewsForPath: NavigationViewEntry[] = getNavigationEntriesFromPathInternal(path, allCollections);
 
-    const schemasConfig: Record<string, SchemaSidePanelProps> = {};
+    const schemasConfig: Record<string, SchemaConfig> = {};
 
-    let fullPath: string = "";
+    // let fullPath: string = "";
     let sidePanels: ExtendedPanelProps[] = [];
+    let lastCollectionPath = "";
     for (let i = 0; i < navigationViewsForPath.length; i++) {
         const navigationEntry = navigationViewsForPath[i];
 
         if (navigationEntry.type === "collection") {
-            fullPath += "/" + navigationEntry.collection.relativePath;
+            lastCollectionPath = navigationEntry.fullPath;
         }
+
         if (i > 0) { // the first collection is handled by the main navigation
             const previousEntry = navigationViewsForPath[i - 1];
             if (navigationEntry.type === "entity") {
                 if (previousEntry.type === "collection") {
                     sidePanels.push({
-                            collectionPath: fullPath,
+                            collectionPath: navigationEntry.collectionPath,
                             entityId: navigationEntry.entityId,
                             copy: false
                         }
                     );
-                    const sidePanelKey = getSidePanelKey(fullPath, navigationEntry.entityId);
+                    const sidePanelKey = getSidePanelKey(navigationEntry.collectionPath, navigationEntry.entityId);
                     schemasConfig[sidePanelKey] = {
                         permissions: previousEntry.collection.permissions,
                         schema: previousEntry.collection.schema,
@@ -261,18 +252,15 @@ function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[]
                     lastSidePanel.selectedSubcollection = navigationEntry.collection.relativePath;
             }
         }
-        if (navigationEntry.type === "entity") {
-            fullPath += "/" + navigationEntry.entityId;
-        }
 
     }
 
     if (newFlag) {
         sidePanels.push({
-            collectionPath: fullPath,
+            collectionPath: lastCollectionPath,
             copy: false
         });
     }
 
-    return { sidePanels, schemasConfig };
+    return sidePanels;
 }

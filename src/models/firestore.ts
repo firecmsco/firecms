@@ -15,6 +15,7 @@ import {
     WhereFilterOp
 } from "./models";
 import { buildPropertyFrom } from "./builders";
+import { CMSAppContext } from "../contexts/CMSAppContext";
 
 /**
  * Listen to a entities in a Firestore path
@@ -240,7 +241,8 @@ export async function saveEntity<S extends EntitySchema<Key>,
         onSaveSuccess,
         onSaveFailure,
         onPreSaveHookError,
-        onSaveSuccessHookError
+        onSaveSuccessHookError,
+        context
     }: {
         collectionPath: string,
         id: string | undefined,
@@ -250,7 +252,8 @@ export async function saveEntity<S extends EntitySchema<Key>,
         onSaveSuccess?: (entity: Entity<S, Key>) => void,
         onSaveFailure?: (e: Error) => void,
         onPreSaveHookError?: (e: Error) => void,
-        onSaveSuccessHookError?: (e: Error) => void
+        onSaveSuccessHookError?: (e: Error) => void;
+        context: CMSAppContext;
     }): Promise<void> {
 
     const properties: Properties<Key> = computeSchemaProperties(schema, id);
@@ -263,7 +266,8 @@ export async function saveEntity<S extends EntitySchema<Key>,
                 collectionPath,
                 id: id,
                 values: updatedValues,
-                status
+                status,
+                context
             });
         } catch (e) {
             console.error(e);
@@ -301,7 +305,8 @@ export async function saveEntity<S extends EntitySchema<Key>,
                         collectionPath,
                         id,
                         values: updatedValues,
-                        status
+                        status,
+                        context
                     });
                 }
             } catch (e) {
@@ -317,7 +322,8 @@ export async function saveEntity<S extends EntitySchema<Key>,
                     collectionPath,
                     id: id,
                     values: updatedValues,
-                    status
+                    status,
+                    context
                 });
             }
             if (onSaveFailure) onSaveFailure(e);
@@ -345,15 +351,17 @@ export async function deleteEntity<S extends EntitySchema<Key>,
         onDeleteSuccess,
         onDeleteFailure,
         onPreDeleteHookError,
-        onDeleteSuccessHookError
+        onDeleteSuccessHookError,
+        context
     }: {
-        entity: Entity<S, Key>,
-        collectionPath: string,
-        schema: S,
-        onDeleteSuccess?: (entity: Entity<S, Key>) => void,
-        onDeleteFailure?: (entity: Entity<S, Key>, e: Error) => void,
-        onPreDeleteHookError?: (entity: Entity<S, Key>, e: Error) => void,
-        onDeleteSuccessHookError?: (entity: Entity<S, Key>, e: Error) => void,
+        entity: Entity<S, Key>;
+        collectionPath: string;
+        schema: S;
+        onDeleteSuccess?: (entity: Entity<S, Key>) => void;
+        onDeleteFailure?: (entity: Entity<S, Key>, e: Error) => void;
+        onPreDeleteHookError?: (entity: Entity<S, Key>, e: Error) => void;
+        onDeleteSuccessHookError?: (entity: Entity<S, Key>, e: Error) => void;
+        context: CMSAppContext;
     }
 ): Promise<boolean> {
     console.debug("Deleting entity", entity);
@@ -362,7 +370,8 @@ export async function deleteEntity<S extends EntitySchema<Key>,
         id: entity.id,
         entity,
         schema,
-        collectionPath
+        collectionPath,
+        context
     };
 
     if (schema.onPreDelete) {

@@ -15,7 +15,7 @@ import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
