@@ -1,11 +1,19 @@
 # Change Log
 
-## [0.35.0] - 2021-04-
+## [0.35.0] - 2021-04-26
+
+### Added
+- Added `useNavigationFrom` hook and `getNavigationFrom`
+- Added `context` to save and delete callbacks, so you can access `getNavigationFrom`
+from within them.
+- `NavigationBuilder` now supports returning a promise with the navigation
+result, useful if you need to check permissions based on the logged user.
 
 ### Changed
 - [BREAKING] `SchemaSidePanelProps` has been renamed to `SchemaConfig` used in
 the `schemaResolver` prop.
 - [BREAKING] `useAppConfigContext` has been renamed to `useCMSAppContext`
+
 
 ## [0.34.1] - 2021-04-07
 
