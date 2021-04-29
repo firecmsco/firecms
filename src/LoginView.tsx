@@ -42,7 +42,6 @@ export function LoginView({
 
     const classes = useStyles();
 
-    const context = useCMSAppContext();
     const authController = useAuthContext();
 
     useEffect(() => {

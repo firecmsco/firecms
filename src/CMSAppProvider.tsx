@@ -97,28 +97,27 @@ export const CMSAppProvider: React.FunctionComponent<CMSAppProviderProps> = (pro
         navigation: navigationOrBuilder,
         authentication,
         firebaseConfig,
-        schemaResolver
+        schemaResolver,
     } = props;
 
-
-    const [navigation, setNavigation] = React.useState<Navigation>();
+    const [navigation, setNavigation] = React.useState<Navigation | undefined>(undefined);
     const [navigationLoadingError, setNavigationLoadingError] = React.useState<Error | undefined>(undefined);
 
-    const authenticator: Authenticator | undefined
-        = authentication instanceof Function ? authentication : undefined;
-
     const authController: AuthController = useAuthHandler({
-        authenticator
+        authentication
     });
 
     useEffect(() => {
+        if (!authController.canAccessMainView) {
+            return;
+        }
         getNavigation(navigationOrBuilder, authController.loggedUser)
             .then((result: Navigation) => {
                 setNavigation(result);
             }).catch(setNavigationLoadingError);
     }, [authController.loggedUser, navigationOrBuilder]);
 
-    return    (
+    return (
         <AuthProvider authController={authController}>
             <SnackbarProvider>
                 <SchemaRegistryProvider
@@ -148,6 +147,8 @@ export const CMSAppProvider: React.FunctionComponent<CMSAppProviderProps> = (pro
 
 
 async function getNavigation(navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[], user: firebase.User | null): Promise<Navigation> {
+
+    console.log("getNavigation", user);
     if (Array.isArray(navigationOrCollections)) {
         return {
             collections: navigationOrCollections

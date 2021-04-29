@@ -124,10 +124,10 @@ export function CMSMainView(props: CMSMainViewProps) {
         name,
         logo,
         toolbarExtraWidget,
-        allowSkipLogin,
         primaryColor,
         secondaryColor,
-        fontFamily
+        fontFamily,
+        allowSkipLogin
     } = props;
 
     const mode: "light" | "dark" = "light";
@@ -135,7 +135,6 @@ export function CMSMainView(props: CMSMainViewProps) {
 
     const cmsAppContext = useCMSAppContext();
 
-    const authentication = cmsAppContext.cmsAppConfig.authentication;
     const signInOptions = cmsAppContext.cmsAppConfig.signInOptions ?? DEFAULT_SIGN_IN_OPTIONS;
     const locale = cmsAppContext.cmsAppConfig.locale;
 
@@ -150,21 +149,16 @@ export function CMSMainView(props: CMSMainViewProps) {
 
     const authController = useAuthContext();
 
-    if (authController.authLoading || !cmsAppContext.navigation) {
+    if (authController.authLoading) {
         return <CircularProgressCenter/>;
     }
 
-    const authenticationEnabled = authentication === undefined || !!authentication;
-    const skipLoginButtonEnabled = authenticationEnabled && allowSkipLogin;
-
-    const hasAccessToMainView = !authenticationEnabled || authController.loggedUser || authController.loginSkipped;
-
     let view;
-    if (!hasAccessToMainView) {
+    if (!authController.canAccessMainView) {
         view = (
             <LoginView
                 logo={logo}
-                skipLoginButtonEnabled={skipLoginButtonEnabled}
+                skipLoginButtonEnabled={allowSkipLogin}
                 signInOptions={signInOptions}
                 firebaseConfig={cmsAppContext.firebaseConfig}/>
         );
@@ -177,6 +171,10 @@ export function CMSMainView(props: CMSMainViewProps) {
             </div>
         );
     } else {
+
+        if (!cmsAppContext.navigation) {
+            return <CircularProgressCenter/>;
+        }
 
         const collections = cmsAppContext.navigation.collections;
         const additionalViews = cmsAppContext.navigation.views;

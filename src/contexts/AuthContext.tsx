@@ -12,8 +12,16 @@ export interface AuthController {
 
     /**
      * The Firebase user currently logged in
+     * Either the Firebase user, null if they skipped login or undefined
+     * if they are in the login screen
      */
-    loggedUser: firebase.User | null;
+    loggedUser: firebase.User | null ;
+
+    /**
+     * Has the user completed the steps to access the main view, after the
+     * login screen
+     */
+    canAccessMainView: boolean;
 
     /**
      * Error dispatched by the auth provider
@@ -67,11 +75,13 @@ export interface AuthController {
      * Sign out
      */
     signOut: () => void;
+
 }
 
 export const AuthContext = React.createContext<AuthController>({
     loggedUser: null,
     authProviderError: null,
+    canAccessMainView: false,
     setAuthProviderError: (error: Error) => {
     },
     authLoading: false,
@@ -108,12 +118,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
 };
 
 interface AuthHandlerProps {
-    authenticator: Authenticator | undefined
+    authentication?: boolean | Authenticator;
 }
 
 export const useAuthHandler = (
     {
-        authenticator
+        authentication,
     }: AuthHandlerProps): AuthController => {
 
     const [loggedUser, setLoggedUser] = React.useState<firebase.User | null>(null);
@@ -135,8 +145,8 @@ export const useAuthHandler = (
 
         setNotAllowedError(false);
 
-        if (authenticator && user) {
-            const allowed = await authenticator(user);
+        if (authentication instanceof Function && user) {
+            const allowed = await authentication(user);
             if (allowed)
                 setLoggedUser(user);
             else
@@ -165,6 +175,9 @@ export const useAuthHandler = (
             });
     }
 
+    const authenticationEnabled = authentication === undefined || !!authentication;
+    const canAccessMainView = (!authenticationEnabled || Boolean(loggedUser) || loginSkipped) && !notAllowedError;
+
     return {
         loggedUser,
         authProviderError,
@@ -176,7 +189,8 @@ export const useAuthHandler = (
         loginSkipped,
         notAllowedError,
         skipLogin,
-        signOut
+        signOut,
+        canAccessMainView,
     };
 };
 
