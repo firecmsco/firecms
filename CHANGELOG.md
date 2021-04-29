@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.36.1] - 2021-04-29
+
+### Changed
+
+- Fix for navigation loading bug using NavigationBuilder
+
 ## [0.36.0] - 2021-04-29
 
 ### Changed
