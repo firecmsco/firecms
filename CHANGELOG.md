@@ -1,15 +1,16 @@
 # Change Log
 
-## [0.36.0] - 2021-04-26
-
-### Added
-- Added `useNavigationFrom` hook and `getNavigationFrom`
-- Added `context` to save and delete callbacks, so you can access `getNavigationFrom`
-from within them.
-- `NavigationBuilder` now supports returning a promise with the navigation
-result, useful if you need to check permissions based on the logged user.
+## [0.36.0] - 2021-04-29
 
 ### Changed
+- `CMSApp` has been split internally into 3 components:
+  - `CMSApp` which now is only in charge of initialising Firebase
+  - `CMSAppProvider` which is in charge of providing all the contexts
+    used by the CMS hooks.
+  - `CMSMainView` which includes the views of the app including login screen
+    and main collection and entity components.
+  You can see an example [here](https://github.com/Camberi/firecms/blob/master/example/src/SimpleAppWithProvider.tsx)
+- Fix for a bug when saving entities.
 - [BREAKING] `AuthContextController` has been renamed to `AuthController`
 
 ## [0.35.0] - 2021-04-26
