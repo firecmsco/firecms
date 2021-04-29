@@ -65,8 +65,9 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
-    const authContext = useAuthContext();
+
     const context = useCMSAppContext();
+    const authController = useAuthContext();
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S, Key> | Entity<S, Key>[] | undefined>(undefined);
     const [selectedEntities, setSelectedEntities] = useState<Entity<S, Key>[]>([]);
@@ -138,7 +139,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     };
 
     const checkInlineEditing = (entity: Entity<any>) => {
-        if (!canEdit(collectionConfig.permissions, authContext.loggedUser, entity)) {
+        if (!canEdit(collectionConfig.permissions, authController.loggedUser, entity)) {
             return false;
         }
         return inlineEditing;
@@ -239,9 +240,9 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
         const isSelected = selectedEntities.indexOf(entity) > -1;
 
-        const createEnabled = canCreate(collectionConfig.permissions, authContext.loggedUser);
-        const editEnabled = canEdit(collectionConfig.permissions, authContext.loggedUser, entity);
-        const deleteEnabled = canDelete(collectionConfig.permissions, authContext.loggedUser, entity);
+        const createEnabled = canCreate(collectionConfig.permissions, authController.loggedUser);
+        const editEnabled = canEdit(collectionConfig.permissions, authController.loggedUser, entity);
+        const deleteEnabled = canDelete(collectionConfig.permissions, authController.loggedUser, entity);
 
         const onCopyClicked = (entity: Entity<S, Key>) => sideEntityController.open({
             entityId: entity.id,
@@ -290,7 +291,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                                        data
                                    }: { size: CollectionSize, data: Entity<any>[] }) {
 
-        const addButton = canCreate(collectionConfig.permissions, authContext.loggedUser) && onNewClick && (largeLayout ?
+        const addButton = canCreate(collectionConfig.permissions, authController.loggedUser) && onNewClick && (largeLayout ?
             <Button
                 onClick={onNewClick}
                 startIcon={<Add/>}
@@ -308,7 +309,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 <Add/>
             </Button>);
 
-        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collectionConfig.permissions, authContext.loggedUser, entity));
+        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collectionConfig.permissions, authController.loggedUser, entity));
         const multipleDeleteButton = selectionEnabled &&
 
             <Tooltip

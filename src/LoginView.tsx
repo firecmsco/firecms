@@ -11,7 +11,7 @@ import {
 import firebase from "firebase";
 import "firebase/auth";
 
-import { useAuthContext } from "./contexts";
+import { useAuthContext, useCMSAppContext } from "./contexts";
 
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
@@ -42,7 +42,8 @@ export function LoginView({
 
     const classes = useStyles();
 
-    const authContext = useAuthContext();
+    const context = useCMSAppContext();
+    const authController = useAuthContext();
 
     useEffect(() => {
         const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
@@ -50,13 +51,13 @@ export function LoginView({
         const uiConfig: firebaseui.auth.Config = {
             callbacks: {
                 signInSuccessWithAuthResult: (authResult) => {
-                    authContext.setAuthResult(authResult);
+                    authController.setAuthResult(authResult);
                     return true;
                 },
-                uiShown: () => authContext.setAuthLoading(false),
+                uiShown: () => authController.setAuthLoading(false),
                 signInFailure: async (e) => {
                     console.error("signInFailure", e);
-                    authContext.setAuthProviderError(e);
+                    authController.setAuthProviderError(e);
                 }
             },
             signInFlow: "popup",
@@ -68,8 +69,8 @@ export function LoginView({
 
     function buildErrorView() {
         let errorView: any;
-        if (authContext.authProviderError) {
-            if (authContext.authProviderError.code === "auth/operation-not-allowed") {
+        if (authController.authProviderError) {
+            if (authController.authProviderError.code === "auth/operation-not-allowed") {
                 errorView =
                     <>
                         <Box p={2}>
@@ -93,7 +94,7 @@ export function LoginView({
             } else {
                 errorView =
                     <Box p={2}>
-                        {authContext.authProviderError.message}
+                        {authController.authProviderError.message}
                     </Box>;
             }
         }
@@ -120,7 +121,7 @@ export function LoginView({
 
             {skipLoginButtonEnabled &&
             <Box m={2}>
-                <Button onClick={authContext.skipLogin}>
+                <Button onClick={authController.skipLogin}>
                     Skip login
                 </Button>
             </Box>
@@ -128,7 +129,7 @@ export function LoginView({
 
             <Grid item xs={12}>
 
-                {authContext.notAllowedError &&
+                {authController.notAllowedError &&
                 <Box p={2}>
                     It looks like you don't have access to the CMS, based
                     on the specified Authenticator configuration

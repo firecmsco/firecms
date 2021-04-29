@@ -1,4 +1,4 @@
-import { Property, FieldProps } from "../../models";
+import { FieldProps, Property } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React, { useState } from "react";
 import { FieldDescription } from "../../components";

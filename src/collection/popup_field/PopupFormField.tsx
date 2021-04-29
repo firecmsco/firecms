@@ -4,12 +4,18 @@ import { Box, IconButton, Portal, Typography } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import deepEqual from "deep-equal";
 
-import { Entity, EntitySchema, EntityValues, Property, FormContext } from "../../models";
+import {
+    Entity,
+    EntitySchema,
+    EntityValues,
+    FormContext,
+    Property
+} from "../../models";
 import { Formik, FormikProps, useFormikContext } from "formik";
 import { Draggable } from "./Draggable";
 import {
-    getYupEntitySchema,
-    CustomFieldValidator
+    CustomFieldValidator,
+    getYupEntitySchema
 } from "../../form/validation";
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../hooks/useWindowSize";

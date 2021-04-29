@@ -24,11 +24,7 @@ import {
     computeSchemaProperties,
     initEntityValues
 } from "../models/firestore";
-import {
-    getYupEntitySchema,
-    mapPropertyToYup,
-    CustomFieldValidator
-} from "./validation";
+import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
 import { FormContext } from "../models/fields";

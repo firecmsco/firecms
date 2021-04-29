@@ -67,7 +67,10 @@ export function getCollectionPathFrom(s: string) {
  * @param path
  * @param collectionViews
  */
-export function getCollectionViewFromPath(path: string, collectionViews: EntityCollection[]): EntityCollection | undefined {
+export function getCollectionViewFromPath(path: string, collectionViews?: EntityCollection[]): EntityCollection | undefined {
+
+    if(!collectionViews)
+        return undefined;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     if (subpaths.length % 2 === 0) {

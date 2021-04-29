@@ -5,12 +5,10 @@ import React, { useContext, useEffect } from "react";
 import { Authenticator } from "../models";
 
 interface AuthProviderProps {
-    authenticator: Authenticator | undefined,
-    firebaseConfigInitialized: boolean,
-    children: React.ReactNode;
+    authController: AuthController,
 }
 
-export interface AuthContextController {
+export interface AuthController {
 
     /**
      * The Firebase user currently logged in
@@ -22,6 +20,10 @@ export interface AuthContextController {
      */
     authProviderError: any;
 
+    /**
+     * Set an auth provider error
+     * @param error
+     */
     setAuthProviderError: (error: any) => void;
 
     /**
@@ -67,7 +69,7 @@ export interface AuthContextController {
     signOut: () => void;
 }
 
-export const AuthContext = React.createContext<AuthContextController>({
+export const AuthContext = React.createContext<AuthController>({
     loggedUser: null,
     authProviderError: null,
     setAuthProviderError: (error: Error) => {
@@ -85,14 +87,34 @@ export const AuthContext = React.createContext<AuthContextController>({
     signOut: () => {
     }
 });
-export const useAuthContext = () => useContext<AuthContextController>(AuthContext);
+
+export const useAuthContext = () => useContext<AuthController>(AuthContext);
 
 export const AuthProvider: React.FC<AuthProviderProps> = (
     {
         children,
-        authenticator,
-        firebaseConfigInitialized
+        authController
     }) => {
+
+    return (
+        <AuthContext.Provider
+            value={{
+                ...authController
+            }}
+        >
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+interface AuthHandlerProps {
+    authenticator: Authenticator | undefined
+}
+
+export const useAuthHandler = (
+    {
+        authenticator
+    }: AuthHandlerProps): AuthController => {
 
     const [loggedUser, setLoggedUser] = React.useState<firebase.User | null>(null);
     const [authProviderError, setAuthProviderError] = React.useState<any>();
@@ -103,15 +125,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
     const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
 
     useEffect(() => {
-        if (firebaseConfigInitialized) {
-            return firebase.auth().onAuthStateChanged(
-                onAuthStateChanged,
-                error => setAuthProviderError(error)
-            );
-        }
-        return () => {
-        };
-    }, [firebaseConfigInitialized]);
+        return firebase.auth().onAuthStateChanged(
+            onAuthStateChanged,
+            error => setAuthProviderError(error)
+        );
+    }, []);
 
     const onAuthStateChanged = async (user: firebase.User | null) => {
 
@@ -147,23 +165,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = (
             });
     }
 
-    return (
-        <AuthContext.Provider
-            value={{
-                loggedUser,
-                authProviderError,
-                setAuthProviderError,
-                authLoading,
-                setAuthLoading,
-                authResult,
-                setAuthResult,
-                loginSkipped,
-                notAllowedError,
-                skipLogin,
-                signOut
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    );
+    return {
+        loggedUser,
+        authProviderError,
+        setAuthProviderError,
+        authLoading,
+        setAuthLoading,
+        authResult,
+        setAuthResult,
+        loginSkipped,
+        notAllowedError,
+        skipLogin,
+        signOut
+    };
 };
+

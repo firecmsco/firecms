@@ -345,6 +345,19 @@ every feature provided by this CMS.
 To get going you just need to set you Firebase config in `firebase_config.ts`
 and run `yarn start`.
 
+#### More granular control
+
+If you don't want to use FireCMS `CMSApp` as a full app but would like to integrate
+some of its components you may want to use the `CMSAppProvider` and `CMSMainView`
+components (used internally) directly.
+
+This will allow you to initialise Firebase on your own and integrate the
+FireCMS components into your own app. Just place `CMSAppProvider` on top
+of the components that need to use the FireCMS hooks.
+
+You can see an example [here](https://github.com/Camberi/firecms/blob/master/example/src/SimpleAppWithProvider.tsx)
+
+
 #### Real time support
 
 Every view in the CMS has real time data support. This makes it suitable for
@@ -820,11 +833,11 @@ import { useAuthContext } from "@camberi/firecms";
 
 export function ExampleCMSView() {
 
-    const authContext = useAuthContext();
+    const authController = useAuthContext();
 
     return (
-        authContext.loggedUser ?
-            <div>Logged in as {authContext.loggedUser.displayName}</div>
+        authController.loggedUser ?
+            <div>Logged in as {authController.loggedUser.displayName}</div>
             :
             <div>You are not logged in</div>
     );
@@ -923,8 +936,9 @@ export function ExampleCMSView() {
 }
 ```
 
-## Contact
+## Contact and support
 
+https://www.reddit.com/r/firecms/
 `francesco@camberi.com`
 
 ## License

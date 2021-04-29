@@ -1,8 +1,4 @@
 import { Entity, EntityCollection, fetchEntity } from "../models";
-import {
-    NavigationContext,
-    useNavigation
-} from "../contexts/NavigationProvider";
 import { getNavigationEntriesFromPathInternal } from "../routes/navigation";
 import { useEffect, useState } from "react";
 import { CMSAppContext, useCMSAppContext } from "../contexts/CMSAppContext";
@@ -91,7 +87,6 @@ export function useNavigationFrom(
     }: NavigationFromProps): NavigationFrom {
 
     const context: CMSAppContext = useCMSAppContext();
-    const navigationContext: NavigationContext = useNavigation();
 
     const [data, setData] = useState<NavigationEntry[] | undefined>();
     const [dataLoading, setDataLoading] = useState<boolean>(false);
@@ -99,11 +94,11 @@ export function useNavigationFrom(
 
     useEffect(() => {
 
-        if (navigationContext.navigationLoadingError) {
-            setDataLoadingError(navigationContext.navigationLoadingError);
+        if (context.navigationLoadingError) {
+            setDataLoadingError(context.navigationLoadingError);
         }
 
-        const navigation = navigationContext.navigation;
+        const navigation = context.navigation;
         if (navigation) {
             setDataLoading(true);
             setDataLoadingError(undefined);
@@ -115,9 +110,9 @@ export function useNavigationFrom(
                 .finally(() => setDataLoading(false));
         }
 
-    }, [path, navigationContext]);
+    }, [path, context]);
 
-    if (!navigationContext.navigation) {
+    if (!context.navigation) {
         return { dataLoading: true };
     }
 

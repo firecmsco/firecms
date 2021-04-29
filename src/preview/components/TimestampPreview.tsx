@@ -1,7 +1,5 @@
 import { PreviewComponentProps } from "../../preview";
 import React from "react";
-
-import { CMSAppProps } from "../../CMSAppProps";
 import { useCMSAppContext } from "../../contexts";
 
 import format from "date-fns/format";

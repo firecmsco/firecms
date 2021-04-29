@@ -41,7 +41,7 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 
-export function EntitySideDialogs<S extends EntitySchema>({ collections }: { collections: EntityCollection[] }) {
+export function EntitySideDialogs<S extends EntitySchema>() {
 
     const sideEntityController = useSideEntityController();
     const schemasRegistry = useSchemasRegistry();

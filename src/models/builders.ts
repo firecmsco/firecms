@@ -2,7 +2,8 @@ import {
     EntityCollection,
     EntitySchema,
     EntityValues,
-    EnumValueConfig, PropertiesOrBuilder,
+    EnumValueConfig,
+    PropertiesOrBuilder,
     Property,
     PropertyOrBuilder
 } from "./models";

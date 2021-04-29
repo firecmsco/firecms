@@ -13,8 +13,9 @@ export {
 } from "./CMSAppContext";
 
 export type {
-    AuthContextController
+    AuthController
 } from "./AuthContext";
+
 export {
     useAuthContext
 } from "./AuthContext";

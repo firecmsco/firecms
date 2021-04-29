@@ -1,4 +1,4 @@
-import { EntitySchema, Properties, Property, FieldProps } from "../../models";
+import { EntitySchema, FieldProps, Properties, Property } from "../../models";
 import {
     Box,
     FormControl,

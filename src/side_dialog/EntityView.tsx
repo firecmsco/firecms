@@ -21,7 +21,8 @@ import {
     Theme
 } from "@material-ui/core";
 import {
-    useAuthContext, useCMSAppContext,
+    useAuthContext,
+    useCMSAppContext,
     useSideEntityController,
     useSnackbarController
 } from "../contexts";
@@ -109,7 +110,9 @@ function EntitySideView({
 
     const sideEntityController = useSideEntityController();
     const snackbarContext = useSnackbarController();
-    const authContext = useAuthContext();
+
+    const context = useCMSAppContext();
+    const authController = useAuthContext();
 
     const [entity, setEntity] = useState<Entity<EntitySchema>>();
     const [status, setStatus] = useState<EntityStatus>(copy ? EntityStatus.copy : (entityId ? EntityStatus.existing : EntityStatus.new));
@@ -150,7 +153,7 @@ function EntitySideView({
 
     useEffect(() => {
         if (entity)
-            setReadOnly(!canEdit(permissions, authContext.loggedUser, entity));
+            setReadOnly(!canEdit(permissions, authController.loggedUser, entity));
 
     }, [entity]);
 
@@ -221,8 +224,6 @@ function EntitySideView({
             sideEntityController.close();
             return;
         }
-
-        const context = useCMSAppContext();
 
         return saveEntity({
             collectionPath,

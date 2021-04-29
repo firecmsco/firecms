@@ -16,7 +16,7 @@ export function ExampleCMSView() {
 
     const snackbarController = useSnackbarController();
     const sideEntityController = useSideEntityController();
-    const authContext = useAuthContext();
+    const authController = useAuthContext();
 
     const customProductSchema = buildSchema({
         name: "Custom product",
@@ -43,8 +43,8 @@ export function ExampleCMSView() {
 
                 <div>This is an example of an additional view</div>
 
-                {authContext.loggedUser ?
-                    <div>Logged in as {authContext.loggedUser.displayName}</div>
+                {authController.loggedUser ?
+                    <div>Logged in as {authController.loggedUser.displayName}</div>
                     :
                     <div>You are not logged in</div>}
 

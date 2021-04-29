@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from "react";
-import { EntityCollection, SchemaResolver, SchemaConfig  } from "../models";
-import { getSidePanelKey} from "../side_dialog/model";
+import { EntityCollection, SchemaConfig, SchemaResolver } from "../models";
+import { getSidePanelKey } from "../side_dialog/model";
 import {
     getCollectionViewFromPath,
     removeInitialAndTrailingSlashes
@@ -62,7 +62,7 @@ export const useSchemasRegistry = () => useContext(SchemaRegistryContext);
 
 interface ViewRegistryProviderProps {
     children: React.ReactNode;
-    collections: EntityCollection[];
+    collections?: EntityCollection[];
     schemaResolver?: SchemaResolver;
 }
 

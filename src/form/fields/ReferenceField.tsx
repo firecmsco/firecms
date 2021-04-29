@@ -1,4 +1,10 @@
-import { Entity, EntitySchema, Property } from "../../models";
+import {
+    Entity,
+    EntitySchema,
+    FieldProps,
+    listenEntityFromRef,
+    Property
+} from "../../models";
 import firebase from "firebase/app";
 import {
     Box,
@@ -16,8 +22,6 @@ import React, { useEffect } from "react";
 import ErrorIcon from "@material-ui/icons/Error";
 import ClearIcon from "@material-ui/icons/Clear";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-
-import { FieldProps, listenEntityFromRef } from "../../models";
 import { FieldDescription } from "../../components";
 import { ReferenceDialog } from "../components/ReferenceDialog";
 import ErrorBoundary from "../../components/ErrorBoundary";

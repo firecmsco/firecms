@@ -1,5 +1,17 @@
 # Change Log
 
+## [0.36.0] - 2021-04-26
+
+### Added
+- Added `useNavigationFrom` hook and `getNavigationFrom`
+- Added `context` to save and delete callbacks, so you can access `getNavigationFrom`
+from within them.
+- `NavigationBuilder` now supports returning a promise with the navigation
+result, useful if you need to check permissions based on the logged user.
+
+### Changed
+- [BREAKING] `AuthContextController` has been renamed to `AuthController`
+
 ## [0.35.0] - 2021-04-26
 
 ### Added

@@ -20,7 +20,11 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
-import { useBreadcrumbsContext, useAuthContext } from "../contexts";
+import {
+    useAuthContext,
+    useBreadcrumbsContext,
+    useCMSAppContext
+} from "../contexts";
 import ErrorBoundary from "./ErrorBoundary";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -66,7 +70,8 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
     const breadcrumbsContext = useBreadcrumbsContext();
     const { breadcrumbs } = breadcrumbsContext;
 
-    const authContext = useAuthContext();
+    const authController = useAuthContext();
+
     return (
 
         <Slide direction="down" in={true} mountOnEnter unmountOnExit>
@@ -128,17 +133,17 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                     </ErrorBoundary>}
 
                     <Box p={1} mr={1}>
-                        {authContext.loggedUser && authContext.loggedUser.photoURL ?
+                        {authController.loggedUser && authController.loggedUser.photoURL ?
                             <Avatar
-                                src={authContext.loggedUser.photoURL}/>
+                                src={authController.loggedUser.photoURL}/>
                             :
-                            <Avatar>{authContext.loggedUser?.displayName ? authContext.loggedUser.displayName[0] : "A"}</Avatar>
+                            <Avatar>{authController.loggedUser?.displayName ? authController.loggedUser.displayName[0] : "A"}</Avatar>
                         }
                     </Box>
 
                     <Button variant="text"
                             color="inherit"
-                            onClick={authContext.signOut}>
+                            onClick={authController.signOut}>
                         Log Out
                     </Button>
 

@@ -1,4 +1,9 @@
-import { EntitySchema, FilterValues, Property } from "../models";
+import {
+    buildPropertyFrom,
+    EntitySchema,
+    FilterValues,
+    Property
+} from "../models";
 import PopupState, { bindPopover, bindTrigger } from "material-ui-popup-state";
 import {
     Box,
@@ -21,7 +26,6 @@ import { Form, Formik } from "formik";
 import ClearIcon from "@material-ui/icons/Clear";
 import StringNumberFilterField from "./filters/StringNumberFilterField";
 import BooleanFilterField from "./filters/BooleanFilterField";
-import { buildPropertyFrom } from "../models";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

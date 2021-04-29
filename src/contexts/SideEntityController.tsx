@@ -11,9 +11,7 @@ import {
     NavigationViewEntry
 } from "../routes/navigation";
 import { getSidePanelKey, SideEntityPanelProps } from "../side_dialog/model";
-import {
-    useSchemasRegistry
-} from "./SchemaRegistry";
+import { useSchemasRegistry } from "./SchemaRegistry";
 
 const DEFAULT_SIDE_ENTITY = {
     sidePanels: [],
@@ -62,7 +60,7 @@ export const useSideEntityController = () => useContext(SideEntityPanelsControll
 
 interface SideEntityProviderProps {
     children: React.ReactNode;
-    collections: EntityCollection[];
+    collections?: EntityCollection[];
 }
 
 type ExtendedPanelProps = SideEntityPanelProps & {
@@ -102,7 +100,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
     }, [history]);
 
     useEffect(() => {
-        if (!initialised.current) {
+        if (collections && !initialised.current) {
             if (isCollectionPath(location.pathname)) {
                 const newFlag = location.hash === "#new";
                 const sidePanels = buildSidePanelsFromUrl(getEntityOrCollectionPath(location.pathname), collections, newFlag);
@@ -110,7 +108,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
             }
             initialised.current = true;
         }
-    }, [location]);
+    }, [location, collections]);
 
     const close = () => {
 
@@ -219,7 +217,6 @@ function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[]
 
     const schemasConfig: Record<string, SchemaConfig> = {};
 
-    // let fullPath: string = "";
     let sidePanels: ExtendedPanelProps[] = [];
     let lastCollectionPath = "";
     for (let i = 0; i < navigationViewsForPath.length; i++) {

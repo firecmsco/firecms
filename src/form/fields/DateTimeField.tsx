@@ -6,7 +6,6 @@ import { FieldProps } from "../../models";
 import { FieldDescription } from "../../components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
-import { CMSAppProps } from "../../CMSAppProps";
 import { useCMSAppContext } from "../../contexts";
 import { defaultDateFormat } from "../../util/dates";
 import { CMSAppContext } from "../../contexts/CMSAppContext";

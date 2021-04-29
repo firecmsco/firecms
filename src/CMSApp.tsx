@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { createMuiTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -7,123 +6,31 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 
-import "typeface-space-mono";
-
-import CircularProgressCenter from "./components/CircularProgressCenter";
-import { Authenticator } from "./models";
-import { blue, pink, red } from "@material-ui/core/colors";
-import { AuthContext, AuthProvider } from "./contexts/AuthContext";
-import { SnackbarProvider } from "./contexts/SnackbarContext";
-import { CMSAppContextProvider } from "./contexts/CMSAppContext";
 import { CMSAppProps } from "./CMSAppProps";
-import { LoginView } from "./LoginView";
 import { CMSMainView } from "./CMSMainView";
-import { NavigationProvider } from "./contexts/NavigationProvider";
+import { CMSAppProvider } from "./CMSAppProvider";
+import CircularProgressCenter from "./components/CircularProgressCenter";
 
 
+/**
+ * Main entry point for FireCMS. You can use this component as a full app,
+ * by specifying collections and entity schemas.
+ *
+ * This component is in charge of initialising Firebase, with the given
+ * configuration object.
+ *
+ * If you are building a larger app and need finer control, you can use
+ * `CMSAppProvider` and `CMSMainView`.
+ *
+ * @param props
+ * @constructor
+ */
 export function CMSApp(props: CMSAppProps) {
 
     const {
-        name,
-        logo,
-        navigation,
-        authentication,
-        allowSkipLogin,
         firebaseConfig,
-        onFirebaseInit,
-        primaryColor,
-        secondaryColor,
-        fontFamily,
-        toolbarExtraWidget,
-        schemaResolver,
-        locale,
-        signInOptions = [
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID
-        ]
+        onFirebaseInit
     } = props;
-
-    const mode: "light" | "dark" = "light";
-    const makeTheme = () => {
-
-        const original = createMuiTheme({
-            palette: {
-                type: mode,
-                background: {
-                    // @ts-ignore
-                    default: mode === "dark" ? "#424242" : "#f6f8f9"
-                },
-                primary: {
-                    main: primaryColor ? primaryColor : blue["800"]
-                },
-                secondary: {
-                    main: secondaryColor ? secondaryColor : pink["400"]
-                },
-                error: {
-                    main: red.A400
-                }
-            },
-            typography: {
-                "fontFamily": fontFamily ? fontFamily : `"Rubik", "Roboto", "Helvetica", "Arial", sans-serif`,
-                fontWeightMedium: 500
-            },
-            overrides: {
-                MuiButton: {
-                    root: {
-                        borderRadius: 4
-                    }
-                },
-                MuiTableRow: {
-                    root: {
-                        "&:last-child td": {
-                            borderBottom: 0
-                        }
-                    }
-                },
-                MuiTypography: {
-                    root: {
-                        "&.mono": {
-                            fontFamily: "'Space Mono', 'Lucida Console', monospace"
-                        },
-                        "&.weight-500": {
-                            fontWeight: 500
-                        }
-                    }
-                },
-                MuiInputLabel: {
-                    formControl: {
-                        top: 0,
-                        left: 0,
-                        position: "absolute",
-                        transform: "translate(0, 16px) scale(1)"
-                    }
-                },
-                MuiInputBase: {
-                    formControl: {
-                        minHeight: "64px"
-                    },
-                    root: {
-                        "&.mono": {
-                            fontFamily: "'Space Mono', 'Lucida Console', monospace"
-                        }
-                    }
-                },
-                MuiFormControlLabel: {
-                    label: {
-                        width: "100%"
-                    }
-                }
-            }
-        });
-
-        return {
-            ...original,
-            shadows: original.shadows.map((value, index) => {
-                if (index == 1) return "0 1px 1px 0 rgb(0 0 0 / 16%)";
-                else return value;
-            })
-        };
-    };
-    const theme = makeTheme();
 
     const [
         firebaseConfigInitialized,
@@ -134,14 +41,8 @@ export function CMSApp(props: CMSAppProps) {
     const [configError, setConfigError] = React.useState<string>();
     const [firebaseConfigError, setFirebaseConfigError] = React.useState<boolean>(false);
 
-    const authenticationEnabled = authentication === undefined || !!authentication;
-    const skipLoginButtonEnabled = authenticationEnabled && allowSkipLogin;
-
-    const authenticator: Authenticator | undefined
-        = authentication instanceof Function ? authentication : undefined;
-
     function initFirebase(config: Object) {
-        if (firebase.apps.length === 0)
+        if (firebase.apps.length === 0) {
             try {
                 firebase.initializeApp(config);
                 firebase.analytics();
@@ -154,6 +55,7 @@ export function CMSApp(props: CMSAppProps) {
                 console.error(e);
                 setFirebaseConfigError(true);
             }
+        }
     }
 
     useEffect(() => {
@@ -211,45 +113,10 @@ export function CMSApp(props: CMSAppProps) {
         return <CircularProgressCenter/>;
     }
 
-    return usedFirebaseConfig &&
-
-            <ThemeProvider theme={theme}>
-                <SnackbarProvider>
-                    <AuthProvider authenticator={authenticator}
-                                  firebaseConfigInitialized={firebaseConfigInitialized}>
-                        <AuthContext.Consumer>
-                            {(authContext) => {
-
-                                const hasAccessToMainView = !authenticationEnabled || authContext.loggedUser || authContext.loginSkipped;
-
-                                return (<>
-
-                                        <CssBaseline/>
-
-                                        {authContext.authLoading ?
-                                            <CircularProgressCenter/>
-                                            : (
-                                                hasAccessToMainView ?
-                                                    <NavigationProvider
-                                                        navigationOrCollections={navigation}
-                                                        user={authContext.loggedUser}>
-                                                        <CMSMainView {...props} usedFirebaseConfig={usedFirebaseConfig}/>
-                                                    </NavigationProvider>
-                                                    :
-                                                    <LoginView logo={logo}
-                                                               skipLoginButtonEnabled={skipLoginButtonEnabled}
-                                                               signInOptions={signInOptions}
-                                                               firebaseConfig={usedFirebaseConfig}/>
-                                            )
-                                        }
-
-                                    </>
-                                );
-                            }}
-
-                        </AuthContext.Consumer>
-                    </AuthProvider>
-                </SnackbarProvider>
-            </ThemeProvider>;
-
+    return (
+        <CMSAppProvider {...props}
+                        firebaseConfig={usedFirebaseConfig}>
+            <CMSMainView {...props}/>
+        </CMSAppProvider>
+    );
 }
