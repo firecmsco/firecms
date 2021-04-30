@@ -25,8 +25,6 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import * as locales from "date-fns/locale";
 
-import "typeface-space-mono";
-
 export interface CMSMainViewProps {
 
     /**

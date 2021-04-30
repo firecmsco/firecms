@@ -83,14 +83,14 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * Additional components builder such as buttons in the
      * collection toolbar
      */
-    toolbarWidgetBuilder?: (props: { size: CollectionSize, data: Entity<any>[] }) => React.ReactNode;
+    toolbarActionsBuilder?: (props: { size: CollectionSize, data: Entity<any>[] }) => React.ReactNode;
 
     /**
      * Builder for creating the buttons in each row
      * @param entity
      * @param size
      */
-    tableRowWidgetBuilder?: ({
+    tableRowActionsBuilder?: ({
                                  entity,
                                  size
                              }: { entity: Entity<S, Key>, size: CollectionSize }) => React.ReactNode;

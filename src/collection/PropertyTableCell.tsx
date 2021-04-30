@@ -131,7 +131,6 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     let innerComponent: JSX.Element | undefined;
     let allowScroll = false;
-    let showExpandIcon = false;
 
     if (!readOnly && !customField && (!customPreview || selected)) {
         if (selected && property.dataType === "number") {
@@ -252,7 +251,6 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     if (!innerComponent) {
         allowScroll = false;
-        showExpandIcon = selected && !innerComponent && !disabled && !readOnly;
         innerComponent = (
             <ErrorBoundary>
                 <PreviewComponent
@@ -278,7 +276,6 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
             error={error}
             align={align}
             allowScroll={allowScroll}
-            showExpandIcon={showExpandIcon}
             openPopup={!disabled ? openPopup : undefined}
         >
 

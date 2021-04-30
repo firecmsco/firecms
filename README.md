@@ -138,8 +138,11 @@ import {
     NavigationBuilder,
     NavigationBuilderProps
 } from "@camberi/firecms";
+
 import firebase from "firebase/app";
+
 import "typeface-rubik";
+import "typeface-space-mono";
 
 // TODO: Replace with your config
 const firebaseConfig = {

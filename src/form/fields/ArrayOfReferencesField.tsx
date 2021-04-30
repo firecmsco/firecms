@@ -9,13 +9,14 @@ import {
 import React from "react";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
-import { ReferencePreview } from "../../preview";
+import { ErrorView, ReferencePreview } from "../../preview";
 import firebase from "firebase";
 import { ReferenceDialog } from "../components/ReferenceDialog";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { formStyles } from "../../styles";
 import FieldDescription from "../components/FieldDescription";
 import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
+import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 
 
 type ArrayOfReferencesFieldProps = FieldProps<firebase.firestore.DocumentReference[]>;
@@ -28,11 +29,8 @@ export default function ArrayOfReferencesField({
                                                    isSubmitting,
                                                    tableMode,
                                                    property,
-                                                   CMSFormField,
                                                    includeDescription,
-                                                   setValue,
-                                                   context,
-                                                   disabled
+                                                   setValue
                                                }: ArrayOfReferencesFieldProps) {
 
     const classes = formStyles();
@@ -50,6 +48,12 @@ export default function ArrayOfReferencesField({
         value,
         setValue
     });
+
+    const schemaRegistry = useSchemasRegistry();
+    const collectionConfig = schemaRegistry.getCollectionConfig(ofProperty.collectionPath);
+    if (!collectionConfig) {
+        console.error(`Couldn't find the corresponding collection view for the path: ${ofProperty.collectionPath}`);
+    }
 
     const onEntryClick = () => {
         setOpen(true);
@@ -87,22 +91,26 @@ export default function ArrayOfReferencesField({
 
                 <Paper variant={"outlined"}
                        className={classes.paper}>
+                    {!collectionConfig && <ErrorView
+                        error={"The specified collection does not exist. Check console"}/>}
 
-                    <ArrayContainer value={value}
-                                    name={name}
-                                    buildEntry={buildEntry}
-                                    disabled={isSubmitting}/>
+                    {collectionConfig && <>
+                        <ArrayContainer value={value}
+                                        name={name}
+                                        buildEntry={buildEntry}
+                                        disabled={isSubmitting}/>
 
-                    <Box p={1}
-                         justifyContent="center"
-                         textAlign={"left"}>
-                        <Button variant="outlined"
-                                color="primary"
-                                disabled={isSubmitting}
-                                onClick={onEntryClick}>
-                            Edit {property.title}
-                        </Button>
-                    </Box>
+                        <Box p={1}
+                             justifyContent="center"
+                             textAlign={"left"}>
+                            <Button variant="outlined"
+                                    color="primary"
+                                    disabled={isSubmitting}
+                                    onClick={onEntryClick}>
+                                Edit {property.title}
+                            </Button>
+                        </Box>
+                    </>}
 
                 </Paper>
 
@@ -113,16 +121,16 @@ export default function ArrayOfReferencesField({
                 && typeof error === "string"
                 && <FormHelperText>{error}</FormHelperText>}
 
-
             </FormControl>
 
-            <ReferenceDialog open={open}
-                             multiselect={true}
-                             collectionPath={ofProperty.collectionPath}
-                             onClose={onClose}
-                             onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                             selectedEntityIds={selectedIds}
-            />
+            {collectionConfig && <ReferenceDialog open={open}
+                                                  multiselect={true}
+                                                  collectionConfig={collectionConfig}
+                                                  collectionPath={ofProperty.collectionPath}
+                                                  onClose={onClose}
+                                                  onMultipleEntitiesSelected={onMultipleEntitiesSelected}
+                                                  selectedEntityIds={selectedIds}
+            />}
         </>
     );
 }

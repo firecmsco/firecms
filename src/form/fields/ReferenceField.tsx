@@ -25,12 +25,12 @@ import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { FieldDescription } from "../../components";
 import { ReferenceDialog } from "../components/ReferenceDialog";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import { PreviewComponent, SkeletonComponent } from "../../preview";
+import { ErrorView, PreviewComponent, SkeletonComponent } from "../../preview";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {
@@ -60,26 +60,56 @@ export const useStyles = makeStyles(theme => createStyles({
 
 export default function ReferenceField<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>>({
-                                                                   name,
-                                                                   value,
-                                                                   setValue,
-                                                                   error,
-                                                                   showError,
-                                                                   disabled,
-                                                                   touched,
-                                                                   autoFocus,
-                                                                   property,
-                                                                   includeDescription,
-                                                                   context,
-                                                                   CMSFormField,
-                                                                   dependsOnOtherProperties
-                                                               }: FieldProps<firebase.firestore.DocumentReference>) {
+                                                                     name,
+                                                                     value,
+                                                                     setValue,
+                                                                     error,
+                                                                     showError,
+                                                                     disabled,
+                                                                     touched,
+                                                                     autoFocus,
+                                                                     property,
+                                                                     includeDescription,
+                                                                     context,
+                                                                     CMSFormField,
+                                                                     dependsOnOtherProperties
+                                                                 }: FieldProps<firebase.firestore.DocumentReference>) {
 
     useClearRestoreValue({
         property,
         value,
         setValue
     });
+
+    const classes = useStyles();
+
+    const [open, setOpen] = React.useState(autoFocus);
+    const [entity, setEntity] = React.useState<Entity<S, Key>>();
+    const sideEntityController = useSideEntityController();
+
+    const schemaRegistry = useSchemasRegistry();
+
+    const collectionConfig = schemaRegistry.getCollectionConfig(property.collectionPath);
+    if (!collectionConfig) {
+        console.error(`Couldn't find the corresponding collection view for the path: ${property.collectionPath}`);
+    }
+
+    const schema = collectionConfig?.schema;
+    const collectionPath = property.collectionPath;
+
+    const validValue = value && value instanceof firebase.firestore.DocumentReference;
+    useEffect(() => {
+        if (validValue && schema) {
+            const cancel = listenEntityFromRef(value, schema, (e => {
+                setEntity(e);
+            }));
+            return () => cancel();
+        } else {
+            setEntity(undefined);
+            return () => {
+            };
+        }
+    }, [value, schema]);
 
     const handleEntityClick = (entity: Entity<S, Key>) => {
         if (disabled)
@@ -88,21 +118,6 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
         setValue(ref);
         setOpen(false);
     };
-
-    const classes = useStyles();
-
-    const schemaRegistry = useSchemasRegistry();
-    const collectionConfig = schemaRegistry.getCollectionConfig(property.collectionPath);
-    if(!collectionConfig) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${property.collectionPath}`);
-    }
-
-    const schema = collectionConfig.schema;
-    const collectionPath = property.collectionPath;
-
-    const [open, setOpen] = React.useState(autoFocus);
-    const [entity, setEntity] = React.useState<Entity<S, Key>>();
-    const sideEntityController = useSideEntityController();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -129,34 +144,19 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
         setOpen(false);
     };
 
-    const validValue = value && value instanceof firebase.firestore.DocumentReference;
 
-    useEffect(() => {
-        if (validValue) {
-            const cancel = listenEntityFromRef(value, schema, (e => {
-                setEntity(e);
-            }));
-            return () => cancel();
-        } else {
-            setEntity(undefined);
-            return () => {
-            };
-        }
-    }, [value, schema]);
+    function buildEntityView(schema?: EntitySchema) {
 
-    function buildEntityView() {
-
-        const allProperties = Object.keys(schema.properties);
-        let listProperties = property.previewProperties?.filter(p => allProperties.includes(p));
-        if (!listProperties || !listProperties.length) {
-            listProperties = allProperties;
-        }
-        listProperties = listProperties.slice(0, 3);
 
         const missingEntity = entity && !entity.values;
 
         let body: JSX.Element;
-        if (missingEntity) {
+        if (!schema) {
+            body = (
+                <ErrorView
+                    error={"The specified collection does not exist. Check console"}/>
+            );
+        } else if (missingEntity) {
             body = (
                 <Tooltip title={value && value.path}>
                     <Box
@@ -172,6 +172,14 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
             );
         } else {
             if (validValue) {
+
+                const allProperties = Object.keys(schema.properties);
+                let listProperties = property.previewProperties?.filter(p => allProperties.includes(p));
+                if (!listProperties || !listProperties.length) {
+                    listProperties = allProperties;
+                }
+                listProperties = listProperties.slice(0, 3);
+
                 body = (
                     <Box display={"flex"}
                          flexDirection={"column"}
@@ -289,17 +297,16 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
             <Box
                 className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
 
-                {buildEntityView()}
+                {buildEntityView(schema)}
 
                 {collectionConfig && <ReferenceDialog open={open}
+                                                      collectionConfig={collectionConfig}
                                                       multiselect={false}
                                                       collectionPath={collectionPath}
                                                       onClose={onClose}
                                                       onSingleEntitySelected={handleEntityClick}
                 />}
 
-                {!collectionConfig &&
-                <Box>Reference field configured wrong. Check console</Box>}
 
             </Box>
 

@@ -118,26 +118,25 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                 </IconButton>
                 }
 
-                {editEnabled && <Menu
+                {editEnabled || deleteEnabled && <Menu
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
                     onClose={closeMenu}
                     elevation={2}
                 >
-                    {deleteEnabled &&
-                    <MenuItem onClick={onDeleteClick}>
+                    {deleteEnabled && <MenuItem onClick={onDeleteClick}>
                         <ListItemIcon>
                             <Delete/>
                         </ListItemIcon>
                         <ListItemText primary="Delete"/>
                     </MenuItem>}
 
-                    <MenuItem onClick={onCopyClick}>
+                    {editEnabled && <MenuItem onClick={onCopyClick}>
                         <ListItemIcon>
                             <FileCopy/>
                         </ListItemIcon>
                         <ListItemText primary="Copy"/>
-                    </MenuItem>
+                    </MenuItem>}
 
                 </Menu>}
 

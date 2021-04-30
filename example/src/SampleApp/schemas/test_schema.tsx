@@ -71,6 +71,11 @@ export const testEntitySchema = buildSchema({
                 unique: true
             }
         },
+        broken_reference: {
+            title: "Broken reference",
+            dataType: "reference",
+            collectionPath: "not_existing",
+        },
         shaped_array: {
             title: "My shaped array",
             dataType: "array",

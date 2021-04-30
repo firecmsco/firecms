@@ -67,9 +67,9 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                                additionalColumns,
                                                filterableProperties,
                                                inlineEditing,
-                                               toolbarWidgetBuilder,
+                                               toolbarActionsBuilder,
                                                title,
-                                               tableRowWidgetBuilder,
+                                               tableRowActionsBuilder,
                                                defaultSize = "m",
                                                frozenIdColumn,
                                                uniqueFieldValidator,
@@ -138,7 +138,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const currentData: Entity<S, Key>[] = textSearchInProgress ? textSearchData : data;
     const loading = textSearchInProgress ? textSearchLoading : dataLoading;
 
-    const actions = toolbarWidgetBuilder && toolbarWidgetBuilder({
+    const actions = toolbarActionsBuilder && toolbarActionsBuilder({
         size,
         data: currentData
     });
@@ -283,8 +283,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         entity: Entity<S, Key>,
         size: CollectionSize,
     }) => {
-        if (tableRowWidgetBuilder)
-            return tableRowWidgetBuilder(props);
+        if (tableRowActionsBuilder)
+            return tableRowActionsBuilder(props);
         else
             return <CollectionRowActions {...props}/>;
 

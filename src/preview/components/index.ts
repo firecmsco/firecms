@@ -5,7 +5,7 @@ export { CustomChip } from "./CustomChip";
 export { EmptyValue } from "./EmptyValue";
 export { ImagePreview } from "./ImagePreview";
 export { NumberPreview } from "./NumberPreview";
-export { PreviewError } from "./PreviewError";
+export { ErrorView } from "../../components/ErrorView";
 export { StringPreview } from "./StringPreview";
 export { TimestampPreview } from "./TimestampPreview";
 export { UrlComponentPreview } from "./UrlComponentPreview";

@@ -1,4 +1,9 @@
-import { CollectionSize, Entity, fetchEntity } from "../../models";
+import {
+    CollectionSize,
+    Entity,
+    EntityCollection,
+    fetchEntity
+} from "../../models";
 import {
     Button,
     createStyles,
@@ -36,6 +41,8 @@ export interface ReferenceDialogProps {
 
     multiselect: boolean;
 
+    collectionConfig: EntityCollection;
+
     collectionPath: string;
 
     selectedEntityIds?: string[];
@@ -56,17 +63,12 @@ export function ReferenceDialog(
         onClose,
         open,
         multiselect,
+        collectionConfig,
         collectionPath,
         selectedEntityIds
     }: ReferenceDialogProps) {
 
     const classes = useStyles();
-
-    const schemaRegistry = useSchemasRegistry();
-    const collectionConfig = schemaRegistry.getCollectionConfig(collectionPath);
-    if (!collectionConfig) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${collectionPath}`);
-    }
 
     const schema = collectionConfig.schema;
     const textSearchDelegate = collectionConfig.textSearchDelegate;
@@ -124,10 +126,10 @@ export function ReferenceDialog(
         }
     };
 
-    const tableRowWidgetBuilder = ({
-                                       entity,
-                                       size
-                                   }: { entity: Entity<any>, size: CollectionSize }) => {
+    const tableRowActionsBuilder = ({
+                                        entity,
+                                        size
+                                    }: { entity: Entity<any>, size: CollectionSize }) => {
 
         const isSelected = selectedEntityIds && selectedEntityIds.indexOf(entity.id) > -1;
         return <CollectionRowActions
@@ -140,15 +142,18 @@ export function ReferenceDialog(
 
     };
 
-    const toolbarWidgetBuilder = () => (
+    const toolbarActionsBuilder = () => (
         <Button onClick={onClear}
                 color="primary">
             Clear
         </Button>
     );
 
-    const title = <Typography
-        variant={"h6"}>{`Select ${schema.name}`}</Typography>;
+    const title = (
+        <Typography variant={"h6"}>
+            {`Select ${schema.name}`}
+        </Typography>);
+
     return (
 
         <Dialog
@@ -162,15 +167,13 @@ export function ReferenceDialog(
 
             <div className={classes.dialogBody}>
 
-
-
                 {selectedEntities &&
                 <CollectionTable collectionPath={collectionPath}
                                  inlineEditing={false}
                                  schema={schema}
-                                 toolbarWidgetBuilder={toolbarWidgetBuilder}
+                                 toolbarActionsBuilder={toolbarActionsBuilder}
                                  onEntityClick={onEntityClick}
-                                 tableRowWidgetBuilder={tableRowWidgetBuilder}
+                                 tableRowActionsBuilder={tableRowActionsBuilder}
                                  paginationEnabled={paginationEnabled}
                                  defaultSize={collectionConfig.defaultSize}
                                  additionalColumns={collectionConfig.additionalColumns}

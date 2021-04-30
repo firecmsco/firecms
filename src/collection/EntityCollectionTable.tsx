@@ -233,7 +233,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                                                             entityId
                                                         }) => checkUniqueField(collectionPath, name, value, entityId);
 
-    const tableRowButtonsBuilder = ({
+    const tableRowActionsBuilder = ({
                                         entity,
                                         size
                                     }: { entity: Entity<any>, size: CollectionSize }) => {
@@ -275,12 +275,12 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             <CollectionRowActions
                 entity={entity}
                 isSelected={isSelected}
-                onCopyClicked={onCopyClicked}
                 onEditClicked={onEditClicked}
                 selectionEnabled={selectionEnabled}
                 size={size}
                 toggleEntitySelection={toggleEntitySelection}
-                onDeleteClicked={setDeleteEntityClicked}
+                onCopyClicked={editEnabled ? onCopyClicked : undefined}
+                onDeleteClicked={deleteEnabled ? setDeleteEntityClicked : undefined}
             />
         );
 
@@ -351,6 +351,8 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     return (<>
 
             <CollectionTable
+                title={title}
+                frozenIdColumn={largeLayout}
                 collectionPath={collectionPath}
                 schema={collectionConfig.schema}
                 additionalColumns={additionalColumns}
@@ -359,16 +361,14 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 filterableProperties={collectionConfig.filterableProperties}
                 initialFilter={collectionConfig.initialFilter}
                 initialSort={collectionConfig.initialSort}
+                textSearchDelegate={collectionConfig.textSearchDelegate}
+                paginationEnabled={paginationEnabled}
                 inlineEditing={checkInlineEditing}
                 uniqueFieldValidator={uniqueFieldValidator}
                 onEntityClick={onEntityClick}
                 onCellValueChange={onCellChanged}
-                textSearchDelegate={collectionConfig.textSearchDelegate}
-                tableRowWidgetBuilder={tableRowButtonsBuilder}
-                paginationEnabled={paginationEnabled}
-                toolbarWidgetBuilder={toolbarActionsBuilder}
-                title={title}
-                frozenIdColumn={largeLayout}
+                tableRowActionsBuilder={tableRowActionsBuilder}
+                toolbarActionsBuilder={toolbarActionsBuilder}
             />
 
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}

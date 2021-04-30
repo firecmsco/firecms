@@ -21,7 +21,7 @@ import {
     EmptyValue,
     MapPreview,
     NumberPreview,
-    PreviewError,
+    ErrorView,
     ReferencePreview,
     StorageThumbnail,
     StringPreview,
@@ -172,7 +172,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
 function buildWrongValueType(name: string | undefined, dataType: string, value: any) {
     console.error(`Unexpected value for property ${name}, of type ${dataType}`, value);
     return (
-        <PreviewError error={`Unexpected value: ${JSON.stringify(value)}`}/>
+        <ErrorView error={`Unexpected value: ${JSON.stringify(value)}`}/>
     );
 }
 

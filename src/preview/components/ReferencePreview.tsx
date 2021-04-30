@@ -27,7 +27,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import { SkeletonComponent } from "./SkeletonComponent";
 import { PreviewComponent } from "../PreviewComponent";
-import { PreviewError } from "./PreviewError";
+import { ErrorView } from "../../components/ErrorView";
 import { Skeleton } from "@material-ui/lab";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { useStyles } from "./styles";
@@ -170,7 +170,7 @@ export const ReferencePreview = React.memo<PreviewComponentProps<firebase.firest
         let body: JSX.Element;
 
         function buildError(error: string, tooltip?: string) {
-            return <PreviewError error={error} tooltip={tooltip}/>;
+            return <ErrorView error={error} tooltip={tooltip}/>;
         }
 
         if (!value) {

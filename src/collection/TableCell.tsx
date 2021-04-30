@@ -34,7 +34,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                                            allowScroll,
                                                                            openPopup,
                                                                            select,
-                                                                           showExpandIcon
+                                                                           showExpandIcon = true
                                                                        }: TableCellProps<T, S, Key> & CellStyleProps) => {
 
     const ref = React.createRef<HTMLDivElement>();
@@ -52,11 +52,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
     }, [focused]);
 
     const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        if (event.detail > 1) event.preventDefault();
-    };
-
-    const onDoubleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        if (openPopup)
+        if (event.detail == 3 && openPopup)
             openPopup();
     };
 
@@ -90,11 +86,10 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     return (
         <div
-            tabIndex={selected || disabled  ? undefined : 0}
+            tabIndex={selected || disabled ? undefined : 0}
             ref={ref}
             onFocus={onFocus}
             onClick={onClick}
-            onDoubleClick={onDoubleClick}
             onMouseEnter={() => setOnHover(true)}
             onMouseMove={() => setOnHover(true)}
             onMouseLeave={() => setOnHover(false)}
@@ -157,12 +152,13 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                 </Tooltip>
             </div>}
 
-
-            {showExpandIcon && (
+            {
+                selected && !disabled && showExpandIcon &&
+                (
                 <IconButton
                     ref={iconRef}
                     className={cellClasses.expandIcon}
-                    color={"primary"}
+                    color={"default"}
                     size={"small"}
                     onClick={openPopup}>
                     <svg

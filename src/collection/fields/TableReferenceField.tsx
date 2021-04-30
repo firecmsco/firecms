@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@material-ui/core";
-import { PreviewError, ReferencePreview } from "../../preview";
+import { ErrorView, ReferencePreview } from "../../preview";
 import {
     ArrayProperty,
     CollectionSize,
@@ -34,7 +34,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
         property,
         updateValue,
         size,
-        disabled,
+        disabled
     } = props;
 
     let usedProperty: ReferenceProperty;
@@ -52,13 +52,15 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
     const classes = useInputStyles();
     const collectionPath = usedProperty.collectionPath;
 
+    const [open, setOpen] = useState<boolean>(false);
+
     const schemaRegistry = useSchemasRegistry();
     const collectionConfig = schemaRegistry.getCollectionConfig(usedProperty.collectionPath);
-    if(!collectionConfig) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${usedProperty.collectionPath}`);
+    if (!collectionConfig) {
+        console.error(`Couldn't find the corresponding collection view for the path: ${usedProperty.collectionPath}`);
     }
 
-    const [open, setOpen] = useState<boolean>(false);
+
     const handleOpen = (event: React.MouseEvent) => {
         if (disabled)
             return;
@@ -95,12 +97,12 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
     function buildSingleReferenceField() {
         if (internalValue instanceof firebase.firestore.DocumentReference)
             return <ReferencePreview name={name}
-                                     onClick={disabled ? undefined: handleOpen}
+                                     onClick={disabled ? undefined : handleOpen}
                                      value={internalValue as firebase.firestore.DocumentReference}
                                      property={usedProperty}
                                      size={getPreviewSizeFrom(size)}/>;
         else
-            return <PreviewError error={"Data is not a reference"}/>;
+            return <ErrorView error={"Data is not a reference"}/>;
     }
 
     function buildMultipleReferenceField() {
@@ -111,7 +113,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
                          key={`preview_array_ref_${name}_${index}`}>
                         <ReferencePreview
                             name={`${name}[${index}]`}
-                            onClick={disabled ? undefined: handleOpen}
+                            onClick={disabled ? undefined : handleOpen}
                             size={"tiny"}
                             value={v}
                             property={usedProperty}
@@ -122,8 +124,11 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
                 }
             </>;
         else
-            return <PreviewError error={"Data is not an array of references"}/>;
+            return <ErrorView error={"Data is not an array of references"}/>;
     }
+
+    if (!collectionConfig)
+        return <ErrorView error={"The specified collection does not exist"}/>;
 
     return (
         <>
@@ -146,16 +151,17 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
             </Button>}
 
             {!disabled
-            && collectionConfig
             && open
             && <ReferenceDialog open={open}
                                 multiselect={multiselect}
                                 collectionPath={collectionPath}
+                                collectionConfig={collectionConfig}
                                 onClose={handleClose}
                                 onMultipleEntitiesSelected={onMultipleEntitiesSelected}
                                 onSingleEntitySelected={onSingleValueSet}
                                 selectedEntityIds={selectedIds}
             />}
+
 
         </>
     );
