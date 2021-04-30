@@ -1,9 +1,20 @@
 # Change Log
 
+## [0.37.0] - 2021-04-29
+
+### Changed
+- Mono typeface import css has been removed from the core library and needs
+to be imported in every implementation now, like the Rubik typeface. Examples
+and Readme updated. Useful for SSR.
+- Enhanced feedback for references configuration errors, no longer crashing the
+app.
+- Changed double click behaviour in collections table to open the inline editor,
+replaced by a triple click. You can double click to select the content of the
+cell.
+
 ## [0.36.1] - 2021-04-29
 
 ### Changed
-
 - Fix for navigation loading bug using NavigationBuilder
 
 ## [0.36.0] - 2021-04-29
