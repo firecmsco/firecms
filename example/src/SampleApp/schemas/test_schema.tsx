@@ -64,6 +64,35 @@ export const testEntitySchema = buildSchema({
         return values;
     },
     properties: {
+        actions: {
+            title: "Actions",
+            description: "Possible user actions",
+            validation: { required: true },
+            dataType: "array",
+            of: {
+                dataType: "map",
+                properties: {
+                    name: {
+                        title: "Name",
+                        description: "Text that will be shown on the button",
+                        validation: { required: true },
+                        dataType: "string"
+                    },
+                    type: {
+                        title: "Type",
+                        description: "Action type that determines the user flow",
+                        validation: { required: true, uniqueInArray: true },
+                        dataType: "string",
+                        config: {
+                            enumValues: {
+                                complete: "Complete",
+                                continue: "Continue"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         empty_string: {
             title: "Empty String",
             dataType: "string",

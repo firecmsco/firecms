@@ -303,13 +303,12 @@ function getYupBooleanSchema({
     return schema;
 }
 
-function hasUniqueInArrayModifier(property: Property): boolean | string[] {
+function hasUniqueInArrayModifier(property: Property): boolean | [string, Property][] {
     if (property.validation?.uniqueInArray) {
         return true;
     } else if (property.dataType === "map" && property.properties) {
         return Object.entries(property.properties)
-            .filter(([key, childProperty]) => childProperty.validation?.uniqueInArray)
-            .map(([key, childProperty]) => key);
+            .filter(([key, childProperty]) => childProperty.validation?.uniqueInArray);
     }
     return false;
 }
@@ -326,14 +325,16 @@ function getYupArraySchema<T>({
     if (property.of) {
         schema = schema.of(mapPropertyToYup({
             property: property.of,
-            parentProperty: property,
+            parentProperty: property
         }));
         const arrayUniqueFields = hasUniqueInArrayModifier(property.of);
         if (arrayUniqueFields) {
             if (typeof arrayUniqueFields === "boolean") {
                 schema = schema.uniqueInArray(v => v, `${property.title} should have unique values within the array`);
             } else if (Array.isArray(arrayUniqueFields)) {
-                arrayUniqueFields.forEach((f) => schema = schema.uniqueInArray(v => v[f], `${property.title} (${f}) should have unique values within the array`));
+                arrayUniqueFields.forEach(([name, childProperty]) =>
+                    schema = schema.uniqueInArray(v => v && v[name], `${property.title} → ${childProperty.title ?? name}: should have unique values within the array`)
+                );
             }
         }
     }

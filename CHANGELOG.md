@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.38.1] - 2021-05-03
+### Changed
+
+- Fix for unique in array validation and null values
+
 ## [0.38.0] - 2021-05-03
 
 ### Added
