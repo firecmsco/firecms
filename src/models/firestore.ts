@@ -480,7 +480,8 @@ function updateAutoValue(inputValue: any,
     } else if (property.dataType === "timestamp") {
         if (status == EntityStatus.existing && property.autoValue === "on_update") {
             value = firebase.firestore.FieldValue.serverTimestamp();
-        } else if (status == EntityStatus.new || status == EntityStatus.copy && (property.autoValue === "on_update" || property.autoValue === "on_create")) {
+        } else if ((status == EntityStatus.new || status == EntityStatus.copy)
+            && (property.autoValue === "on_update" || property.autoValue === "on_create")) {
             value = firebase.firestore.FieldValue.serverTimestamp();
         } else {
             value = inputValue;
@@ -550,10 +551,10 @@ export function checkUniqueField(
     console.debug("Check unique field entity", path, name, value, entityId);
 
     if (property.dataType === "array") {
-        console.error()
+        console.error();
     }
 
-    if(value === undefined || value === null){
+    if (value === undefined || value === null) {
         return Promise.resolve(true);
     }
 
