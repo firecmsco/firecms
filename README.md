@@ -350,16 +350,17 @@ and run `yarn start`.
 
 #### More granular control
 
-If you don't want to use FireCMS `CMSApp` as a full app but would like to integrate
-some of its components you may want to use the `CMSAppProvider` and `CMSMainView`
+If you don't want to use FireCMS `CMSApp` as a full app but would like to
+integrate some of its components you may want to use the `CMSAppProvider`
+and `CMSMainView`
 components (used internally) directly.
 
-This will allow you to initialise Firebase on your own and integrate the
-FireCMS components into your own app. Just place `CMSAppProvider` on top
-of the components that need to use the FireCMS hooks.
+This will allow you to initialise Firebase on your own and integrate the FireCMS
+components into your own app. Just place `CMSAppProvider` on top of the
+components that need to use the FireCMS hooks.
 
-You can see an example [here](https://github.com/Camberi/firecms/blob/master/example/src/SimpleAppWithProvider.tsx)
-
+You can see an
+example [here](https://github.com/Camberi/firecms/blob/master/example/src/SimpleAppWithProvider.tsx)
 
 #### Real time support
 
@@ -548,6 +549,11 @@ Beside the common fields, some properties have specific configurations.
     * `required` Should this field be compulsory.
     * `requiredMessage` Message to be displayed as a validation error.
     * `unique` The value of this field must be unique in this collection.
+    * `uniqueInArray` If you set it to `true`, the user will only be allowed to
+      have the value of that property once in the parent
+      `ArrayProperty`. It works on direct children properties or on first level
+      children of a `MapProperty` (if set as the `.of` property of
+      the `ArrayProperty`).
     * `length` Set a required length for the string value.
     * `min` Set a minimum length limit for the string value.
     * `max` Set a maximum length limit for the string value.
@@ -749,8 +755,8 @@ Firestore data schema.
   the permissions based on user or entity.
 
 * `inlineEditing` Can the elements in this collection be edited inline in the
-  collection view. If this flag is set to false but `permissions.edit` is `true`,
-  entities can still be edited in the side panel.
+  collection view. If this flag is set to false but `permissions.edit` is `true`
+  , entities can still be edited in the side panel.
 
 * `exportable` Should the data in this collection view include an export button.
   Defaults to `true`

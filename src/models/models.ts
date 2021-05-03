@@ -719,8 +719,9 @@ export interface PropertyValidationSchema {
 
     /**
      * If the uniqueInArray flag is set to `true`, you can only have this value
-     * in per entry in the parent `ArrayProperty`. It has no effect if this
-     * property is not a child of an `ArrayProperty`.
+     * once per entry in the parent `ArrayProperty`. It has no effect if this
+     * property is not a child of an `ArrayProperty`. It works on direct
+     * children of an `ArrayProperty` or first level children of `MapProperty`
      */
     uniqueInArray?: boolean;
 }
