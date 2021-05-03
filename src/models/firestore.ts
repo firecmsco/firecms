@@ -535,6 +535,7 @@ export function initFilterValues<S extends EntitySchema<Key>,
  * @param path Collection path
  * @param name of the property
  * @param value
+ * @param property
  * @param entityId
  * @return `true` if there are no other fields besides the given entity
  */
@@ -542,10 +543,15 @@ export function checkUniqueField(
     path: string,
     name: string,
     value: any,
+    property: Property,
     entityId?: string
 ): Promise<boolean> {
 
     console.debug("Check unique field entity", path, name, value, entityId);
+
+    if (property.dataType === "array") {
+        console.error()
+    }
 
     if(value === undefined || value === null){
         return Promise.resolve(true);

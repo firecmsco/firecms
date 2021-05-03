@@ -27,15 +27,6 @@ import ClearIcon from "@material-ui/icons/Clear";
 import StringNumberFilterField from "./filters/StringNumberFilterField";
 import BooleanFilterField from "./filters/BooleanFilterField";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        filter: {
-            flexGrow: 1,
-            padding: theme.spacing(1)
-        }
-    })
-);
-
 
 const TableCell = withStyles({
     root: {

@@ -89,18 +89,36 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     useEffect(
         () => {
-            if (value !== internalValue)
+            if (value !== internalValue) {
+                validation
+                    .validate(value)
+                    .then(() => {
+                        setError(undefined);
+                    })
+                    .catch((e) => {
+                        console.error(e);
+                        setError(e);
+                    });
                 setInternalValue(value);
+            }
         },
         [value]
     );
 
     useEffect(
         () => {
-            if (!deepEqual(value, internalValue) && !error) {
-                setError(undefined);
-                if (onValueChange)
-                    onValueChange({ value: internalValue, name, setError });
+            if (!deepEqual(value, internalValue)) {
+                validation
+                    .validate(internalValue)
+                    .then(() => {
+                        setError(undefined);
+                        if (onValueChange)
+                            onValueChange({ value: internalValue, name, setError });
+                    })
+                    .catch((e) => {
+                        console.error(e);
+                        setError(e);
+                    });
             }
         },
         [internalValue]
@@ -115,22 +133,14 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
             } else {
                 updatedValue = newValue;
             }
-            validation
-                .validate(updatedValue)
-                .then(() => {
-                    setInternalValue(updatedValue);
-                    setError(undefined);
-                })
-                .catch((e) => {
-                    console.error(e);
-                    setError(e);
-                });
+            setInternalValue(updatedValue);
         },
         []
     );
 
     let innerComponent: JSX.Element | undefined;
     let allowScroll = false;
+    let showExpandIcon = false;
 
     if (!readOnly && !customField && (!customPreview || selected)) {
         if (selected && property.dataType === "number") {
@@ -251,6 +261,7 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     if (!innerComponent) {
         allowScroll = false;
+        showExpandIcon = selected && !innerComponent && !disabled && !readOnly;
         innerComponent = (
             <ErrorBoundary>
                 <PreviewComponent
@@ -276,6 +287,7 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
             error={error}
             align={align}
             allowScroll={allowScroll}
+            showExpandIcon={showExpandIcon}
             openPopup={!disabled ? openPopup : undefined}
         >
 

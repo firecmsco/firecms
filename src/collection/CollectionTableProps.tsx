@@ -3,7 +3,7 @@ import {
     CollectionSize,
     Entity,
     EntitySchema,
-    FilterValues,
+    FilterValues, Property,
     TextSearchDelegate
 } from "../models";
 import React from "react";
@@ -91,9 +91,9 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * @param size
      */
     tableRowActionsBuilder?: ({
-                                 entity,
-                                 size
-                             }: { entity: Entity<S, Key>, size: CollectionSize }) => React.ReactNode;
+                                  entity,
+                                  size
+                              }: { entity: Entity<S, Key>, size: CollectionSize }) => React.ReactNode;
 
     /**
      * Is the id column frozen to the left.
@@ -101,7 +101,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     frozenIdColumn?: boolean;
 
     /**
-     * Use this callback to validate if aan entity field should be unique
+     * Use this callback to validate if an entity field should be unique
      */
     uniqueFieldValidator?: UniqueFieldValidator;
 
@@ -114,11 +114,11 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * Callback when the value of a cell has been edited
      * @param params
      */
-    onCellValueChange?: (params: OnCellChangeParams<any, S, Key>) => void;
+    onCellValueChange?: (params: OnCellChangeParams<any, S, Key>) => Promise<void>;
 }
 
 
-export type UniqueFieldValidator = (props: { name: string, value: any, entityId?: string }) => Promise<boolean>;
+export type UniqueFieldValidator = (props: { name: string, value: any, property: Property, entityId?: string }) => Promise<boolean>;
 
 /**
  * Props passed in a callback when the content of a cell in a table has been edited

@@ -716,6 +716,13 @@ export interface PropertyValidationSchema {
      * collection with this value.
      */
     unique?: boolean;
+
+    /**
+     * If the uniqueInArray flag is set to `true`, you can only have this value
+     * in per entry in the parent `ArrayProperty`. It has no effect if this
+     * property is not a child of an `ArrayProperty`.
+     */
+    uniqueInArray?: boolean;
 }
 
 /**

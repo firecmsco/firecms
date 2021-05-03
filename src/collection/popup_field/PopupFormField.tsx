@@ -1,8 +1,15 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 
-import { Box, IconButton, Portal, Typography } from "@material-ui/core";
+import {
+    Box,
+    Button,
+    createStyles,
+    IconButton,
+    makeStyles,
+    Portal,
+    Typography
+} from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
-import deepEqual from "deep-equal";
 
 import {
     Entity,
@@ -11,7 +18,7 @@ import {
     FormContext,
     Property
 } from "../../models";
-import { Formik, FormikProps, useFormikContext } from "formik";
+import { Form, Formik, FormikProps, getIn, useFormikContext } from "formik";
 import { Draggable } from "./Draggable";
 import {
     CustomFieldValidator,
@@ -22,6 +29,17 @@ import { useWindowSize } from "../../hooks/useWindowSize";
 import { isReadOnly } from "../../models/utils";
 import { CMSFormField } from "../../form";
 import { OnCellChangeParams } from "../CollectionTableProps";
+
+export const useStyles = makeStyles(theme => createStyles({
+    form: {
+        display: "flex",
+        flexDirection: "column"
+    },
+    button: {
+        marginTop: theme.spacing(1),
+        alignSelf: "flex-end"
+    }
+}));
 
 
 interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
@@ -42,7 +60,7 @@ interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
      * Callback when the value of a cell has been edited
      * @param params
      */
-    onCellValueChange?: (params:OnCellChangeParams<any, S, Key>) => void;
+    onCellValueChange?: (params: OnCellChangeParams<any, S, Key>) => Promise<void>;
 }
 
 function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
@@ -63,10 +81,10 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
 
 
     const [savingError, setSavingError] = React.useState<any>();
-    const [internalValue, setInternalValue] = useState<EntityValues<S, Key> | undefined>(entity?.values);
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
 
+    const classes = useStyles();
     const windowSize = useWindowSize();
 
     useEffect(
@@ -75,21 +93,6 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                 calculateInitialPopupLocation(cellRect, draggableBoundingRect);
         },
         [cellRect, draggableBoundingRect]
-    );
-
-    useEffect(
-        () => {
-            const saveIfChanged = () => {
-                if (!deepEqual(entity?.values, internalValue)) {
-                    saveValue(internalValue ?? {});
-                }
-            };
-            const handler = setTimeout(saveIfChanged, 200);
-            return () => {
-                clearTimeout(handler);
-            };
-        },
-        [internalValue]
     );
 
     useEffect(
@@ -127,7 +130,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
 
     const validationSchema = getYupEntitySchema(
         schema.properties,
-        internalValue as Partial<EntityValues<S, Key>> ?? {},
+        entity?.values ?? {},
         customFieldValidator,
         entity?.id);
 
@@ -147,16 +150,17 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
     };
 
     const saveValue =
-        (values: object) => {
+        async (values: object) => {
             setSavingError(null);
-            if(entity && onCellValueChange && name){
-                onCellValueChange({
+            if (entity && onCellValueChange && name) {
+                return onCellValueChange({
                     value: values[name],
                     name: name,
                     entity,
-                    setError:setSavingError
+                    setError: setSavingError
                 });
             }
+            return Promise.resolve();
         };
 
 
@@ -166,6 +170,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
     const renderForm = ({
                             handleChange,
                             values,
+                            errors,
                             touched,
                             dirty,
                             setFieldValue,
@@ -173,6 +178,8 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                             handleSubmit,
                             isSubmitting
                         }: FormikProps<EntityValues<S, Key>>) => {
+
+        const disabled = isSubmitting;
 
         const context: FormContext<S, Key> = {
             entitySchema: schema,
@@ -184,25 +191,35 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
             enabled={true}
             onOutsideClick={onOutsideClick}>
 
-            {name && property && <CMSFormField
-                name={name as string}
-                property={property}
-                includeDescription={false}
-                underlyingValueHasChanged={false}
-                disabled={isSubmitting || isReadOnly(property) || !!property.disabled}
-                context={context}
-                tableMode={true}
-                partOfArray={false}
-                autoFocus={formPopupOpen}
-                dependsOnOtherProperties={usedPropertyBuilder}
-            />}
+            <Form
+                className={classes.form}
+                onSubmit={handleSubmit}
+                noValidate>
 
-            {name && <AutoSubmitToken
-                name={name}
-                onSubmit={(values) => {
-                    setInternalValue(values);
-                }}/>}
+                {name && property && <CMSFormField
+                    name={name as string}
+                    property={property}
+                    includeDescription={false}
+                    underlyingValueHasChanged={false}
+                    disabled={isSubmitting || isReadOnly(property) || !!property.disabled}
+                    context={context}
+                    tableMode={true}
+                    partOfArray={false}
+                    autoFocus={formPopupOpen}
+                    dependsOnOtherProperties={usedPropertyBuilder}
+                />}
 
+                <Button
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={disabled}
+                >
+                    Save
+                </Button>
+
+            </Form>
         </OutsideAlerter>;
     };
 
@@ -219,8 +236,11 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
             <Formik
                 initialValues={entity.values}
                 validationSchema={validationSchema}
-                onSubmit={async (values) => {
-                    return Promise.resolve();
+                validate={(values) => console.debug("Validating", values)}
+                onSubmit={(values, actions) => {
+                    saveValue(values)
+                        .then(() => setFormPopupOpen(false))
+                        .finally(() => actions.setSubmitting(false));
                 }}
             >
                 {renderForm}
@@ -276,7 +296,7 @@ const AutoSubmitToken = ({
     const { values, errors } = useFormikContext();
 
     React.useEffect(() => {
-        const fieldError = (errors as any)[name];
+        const fieldError = getIn(errors, name);
         const shouldSave = !fieldError || (Array.isArray(fieldError) && !fieldError.filter((e: any) => !!e).length);
         if (shouldSave) {
             onSubmit(values);

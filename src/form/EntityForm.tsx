@@ -14,6 +14,7 @@ import {
     EntitySchema,
     EntityStatus,
     EntityValues,
+    FormContext,
     Properties,
     Property
 } from "../models";
@@ -27,7 +28,6 @@ import {
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
-import { FormContext } from "../models/fields";
 import { isReadOnly } from "../models/utils";
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -188,34 +188,48 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
     }
 
-    const uniqueFieldValidator: CustomFieldValidator = (name, value) => checkUniqueField(collectionPath, name, value, entity?.id);
-    const validationSchema = getYupEntitySchema(schema.properties, internalValue as Partial<EntityValues<S, Key>> ?? {}, uniqueFieldValidator, entity?.id);
+    const uniqueFieldValidator: CustomFieldValidator = ({
+                                                            name,
+                                                            value,
+                                                            property
+                                                        }) => checkUniqueField(collectionPath, name, value, property, entity?.id);
+
+    const validationSchema = getYupEntitySchema(
+        schema.properties,
+        internalValue as Partial<EntityValues<S, Key>> ?? {},
+        uniqueFieldValidator,
+        entity?.id);
 
     function buildButtons(isSubmitting: boolean, modified: boolean) {
         const disabled = isSubmitting || (!modified && status === EntityStatus.existing);
-        return <Box textAlign="right">
-            {status === EntityStatus.existing &&
-            <Button
-                variant="text"
-                color="primary"
-                disabled={disabled}
-                className={classes.button}
-                type="reset"
-            >
-                Discard
-            </Button>}
-            <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={disabled}
-                className={classes.button}
-            >
-                {status === EntityStatus.existing && "Save"}
-                {status === EntityStatus.copy && "Create copy"}
-                {status === EntityStatus.new && "Create"}
-            </Button>
-        </Box>;
+        return (
+            <Box textAlign="right">
+
+                {status === EntityStatus.existing &&
+                <Button
+                    variant="text"
+                    color="primary"
+                    disabled={disabled}
+                    className={classes.button}
+                    type="reset"
+                >
+                    Discard
+                </Button>}
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={disabled}
+                    className={classes.button}
+                >
+                    {status === EntityStatus.existing && "Save"}
+                    {status === EntityStatus.copy && "Create copy"}
+                    {status === EntityStatus.new && "Create"}
+                </Button>
+
+            </Box>
+        );
     }
 
     return (
@@ -274,7 +288,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                             const dependsOnOtherProperties = typeof (schema.properties as any)[key] === "function";
 
                             const disabled = isSubmitting || isReadOnly(property) || !!property.disabled;
-                            const cmsFormFieldProps:CMSFormFieldProps<any> = {
+                            const cmsFormFieldProps: CMSFormFieldProps<any> = {
                                 name: key,
                                 disabled: disabled,
                                 property: property as Property,
@@ -284,7 +298,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                                 tableMode: false,
                                 partOfArray: false,
                                 autoFocus: false,
-                                dependsOnOtherProperties: dependsOnOtherProperties,
+                                dependsOnOtherProperties: dependsOnOtherProperties
                             };
                             return (
                                 <Grid item

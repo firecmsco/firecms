@@ -379,10 +379,15 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                 const isFocused = selected && focused;
 
                 const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
-                    ? (name, value) => uniqueFieldValidator({
-                        name, value, entityId: entity.id
+                    ? ({ name, value, property }) => uniqueFieldValidator({
+                        name, value, property, entityId: entity.id
                     }) : undefined;
-                const validation = mapPropertyToYup(property, customFieldValidator, name);
+
+                const validation = mapPropertyToYup({
+                    property,
+                    customFieldValidator,
+                    name
+                });
 
                 const onValueChange = onCellValueChange
                     ? (props: OnCellChangeParams<any>) => onCellValueChange({
@@ -586,9 +591,10 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     }
 
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
-        ? (name, value) => uniqueFieldValidator({
+        ? ({ name, value, property }) => uniqueFieldValidator({
             name,
             value,
+            property,
             entityId: selectedCell?.entity.id
         })
         : undefined;

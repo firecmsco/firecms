@@ -106,29 +106,6 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                     [cellClasses.selected]: !error && selected || focused
                 })}>
 
-            {error && <div style={{
-                position: "absolute",
-                top: 4,
-                right: 4,
-                fontSize: "20px",
-                zIndex: 10
-            }}>
-                <Tooltip
-                    classes={{
-                        arrow: cellClasses.arrow,
-                        tooltip: cellClasses.tooltip
-                    }}
-                    arrow
-                    placement={"left"}
-                    title={error.message}>
-                    <ErrorOutlineIcon
-                        fontSize={"inherit"}
-                        color={"error"}
-                    />
-                </Tooltip>
-            </div>
-            }
-
             <Measure
                 bounds
                 onResize={onMeasure}
@@ -152,12 +129,11 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                 </Tooltip>
             </div>}
 
-            {
-                selected && !disabled && showExpandIcon &&
-                (
+            {(error || showExpandIcon) && <div className={cellClasses.iconsTop}>
+
+                {selected && !disabled && showExpandIcon &&
                 <IconButton
                     ref={iconRef}
-                    className={cellClasses.expandIcon}
                     color={"default"}
                     size={"small"}
                     onClick={openPopup}>
@@ -170,7 +146,26 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                               d="M10.71,13.29a1,1,0,0,0-1.42,0L6,16.57V14a1,1,0,0,0-1-1H5a1,1,0,0,0-1,1l0,5a1,1,0,0,0,1,1h5a1,1,0,0,0,0-2H7.42l3.29-3.29A1,1,0,0,0,10.71,13.29Z"/>
                     </svg>
                 </IconButton>
-            )}
+                }
+
+                {error && <Tooltip
+                    classes={{
+                        arrow: cellClasses.arrow,
+                        tooltip: cellClasses.tooltip
+                    }}
+                    arrow
+                    placement={"left"}
+                    title={error.message}>
+                    <ErrorOutlineIcon
+                        fontSize={"inherit"}
+                        color={"error"}
+                    />
+                </Tooltip>
+                }
+
+
+            </div>
+            }
 
         </div>
     );

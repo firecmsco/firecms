@@ -26,13 +26,22 @@ export default function ArrayContainer<T>({
     const hasValue = value && Array.isArray(value) && value.length > 0;
 
     const internalIdsMap: Record<string, number> = useMemo(() =>
-        hasValue ? value.map(v => {
-            if(!v) return {};
-            return ({
-                [getHashValue(v)]: getRandomId()
-            });
-        }).reduce((a, b) => ({ ...a, ...b }), {}) : {}, [value]);
+            hasValue ?
+                value.map(v => {
+                    if (!v) return {};
+                    return ({
+                        [getHashValue(v)]: getRandomId()
+                    });
+                }).reduce((a, b) => ({ ...a, ...b }), {})
+                : {},
+        [value, hasValue]);
     const internalIdsRef = useRef<Record<string, number>>(internalIdsMap);
+
+    const [internalIds, setInternalIds] = useState<number[]>(
+        hasValue
+            ? Object.values(internalIdsRef.current)
+            : []);
+
 
     function getHashValue<T>(v: T) {
         if (typeof v === "object") {
@@ -63,17 +72,6 @@ export default function ArrayContainer<T>({
             setInternalIds(newInternalIds);
         }
     }, [hasValue, value]);
-
-    const [internalIds, setInternalIds] = useState<number[]>(
-        hasValue
-            ? Object.values(internalIdsRef.current)
-            : []);
-
-    // const [internalIds, setInternalIds] = useState<number[]>(
-    //     value
-    //         ? (value as T[]).map((v, index) => getRandomId())
-    //         : []);
-
     function getRandomId() {
         return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
     }
@@ -115,7 +113,7 @@ export default function ArrayContainer<T>({
                         const formField = buildEntry(index, internalId);
                         return (
                             <ArrayEntry
-                                key={`array_field_${name}_${internalId}`}
+                                key={`array_field_${name}_${internalId}}`}
                                 name={name}
                                 id={internalId}
                                 type={"array_card_" + name}

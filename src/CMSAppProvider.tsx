@@ -148,7 +148,6 @@ export const CMSAppProvider: React.FunctionComponent<CMSAppProviderProps> = (pro
 
 async function getNavigation(navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[], user: firebase.User | null): Promise<Navigation> {
 
-    console.log("getNavigation", user);
     if (Array.isArray(navigationOrCollections)) {
         return {
             collections: navigationOrCollections

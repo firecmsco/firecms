@@ -164,7 +164,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             }),
             context
         }
-    ).then();
+    );
 
     const title = (
         <>
@@ -230,8 +230,9 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     const uniqueFieldValidator: UniqueFieldValidator = ({
                                                             name,
                                                             value,
+                                                            property,
                                                             entityId
-                                                        }) => checkUniqueField(collectionPath, name, value, entityId);
+                                                        }) => checkUniqueField(collectionPath, name, value, property, entityId);
 
     const tableRowActionsBuilder = ({
                                         entity,

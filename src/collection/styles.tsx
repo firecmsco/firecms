@@ -119,10 +119,11 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
         disabled: {
             alpha: 0.8
         },
-        expandIcon: {
+        iconsTop: {
             position: "absolute",
-            top: 0,
-            right: 0
+            top: 2,
+            right: 2,
+            // fontSize: "16px",
         },
         arrow: {
             color: "#ff1744"
