@@ -1,6 +1,7 @@
 import {
     EntityCollection,
     EntitySchema,
+    EntitySchemaType,
     EntityValues,
     EnumValueConfig,
     PropertiesOrBuilder,
@@ -54,6 +55,17 @@ export function buildSchema<Key extends string = string>(
     schema: EntitySchema<Key>
 ): EntitySchema<Key> {
     return schema;
+}
+
+/**
+ * Identity function that requires a schema that has to have the same 
+ * keys as a provided type
+ * @param schema
+ */
+export function buildSchemaFromType<Type extends EntitySchemaType>(
+    schema: EntitySchema<Extract<keyof Type, string>>
+): EntitySchema<Extract<keyof Type, string>> {
+   return schema;
 }
 
 /**

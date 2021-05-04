@@ -172,6 +172,15 @@ export type ExtraActionsParams<S extends EntitySchema<Key> = EntitySchema<any>,
  */
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
+
+export interface EntitySchemaType {
+    [member: string]:
+        undefined | string | number | boolean |
+        string[] | number[] | boolean[] | 
+        EntitySchemaType[] | 
+        EntitySchemaType
+}
+
 /**
  * Specification for defining an entity
  */
@@ -504,8 +513,11 @@ export type PropertyOrBuilder<S extends EntitySchema<Key>, Key extends string = 
     Property<T>
     | PropertyBuilder<S, Key, T>;
 
-export type PropertiesOrBuilder<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> =
-    Record<Key, PropertyOrBuilder<S, Key, T>>;
+export type PropertiesOrBuilder<
+    S extends EntitySchema<Key>, 
+    Key extends string = Extract<keyof S["properties"], string>, 
+    T extends any = any
+> = Record<Key, PropertyOrBuilder<S, Key, T>>;
 
 /**
  * This type represents a record of key value pairs as described in an
