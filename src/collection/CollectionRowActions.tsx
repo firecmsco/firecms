@@ -75,16 +75,8 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
         setAnchorEl(null);
     };
 
-    const onContainerClick = selectionEnabled ?
-        (event: MouseEvent) => {
-            if (toggleEntitySelection)
-                toggleEntitySelection(entity);
-            event.stopPropagation();
-        } : undefined;
-
     return (
-        <div onClick={onContainerClick}
-             className={classes.cellButtonsWrap}>
+        <div className={classes.cellButtonsWrap}>
 
             {(editEnabled || deleteEnabled || selectionEnabled) &&
             <div className={classes.cellButtons}
