@@ -491,7 +491,7 @@ export type EnumValueConfig = {
 /**
  * Record of properties of an entity or a map property
  */
-export type Properties<Key extends string, T extends any = any> = Record<Key, Property<T>>;
+export type Properties<Key extends string = string, T extends any = any> = Record<Key, Property<T>>;
 
 export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> =
     {

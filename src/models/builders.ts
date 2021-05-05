@@ -3,6 +3,7 @@ import {
     EntitySchema,
     EntityValues,
     EnumValueConfig,
+    Properties,
     PropertiesOrBuilder,
     Property,
     PropertyOrBuilder
@@ -73,10 +74,16 @@ export function buildProperty(
  * same properties
  * @param properties
  */
-export function buildProperties<S extends EntitySchema<Key>, Key extends string>(
-    properties: PropertiesOrBuilder<S, Key>
-): PropertiesOrBuilder<S, Key> {
+export function buildProperties<Key extends string>(
+    properties: Properties<Key>
+): Properties<Key> {
     return properties;
+}
+
+export function buildPropertiesOrBuilder<S extends EntitySchema<Key>, Key extends string>(
+    propertiesOrBuilder: PropertiesOrBuilder<S, Key>
+): PropertiesOrBuilder<S, Key> {
+    return propertiesOrBuilder;
 }
 
 export function buildEnumValueConfig(

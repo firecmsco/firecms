@@ -52,16 +52,13 @@ export const testEntitySchema = buildSchema({
                     status,
                     context
                 }) => {
-        console.log("custom onPreSave", collectionPath, id);
-
-        getNavigationFrom({
+        return getNavigationFrom({
             path: `${collectionPath}/${id}`,
             context
-        }).then((result) => console.log("getNavigationFrom", result));
-
-        if (!values.empty_string) values.empty_string = "";
-
-        return values;
+        }).then((navigation) => {
+            console.log("navigation", navigation);
+            return values;
+        });
     },
     properties: {
         actions: {
