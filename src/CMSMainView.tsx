@@ -17,7 +17,6 @@ import { CMSAppBar } from "./components/CMSAppBar";
 import { useAuthContext, useCMSAppContext } from "./contexts";
 import { LoginView } from "./LoginView";
 import { blue, pink, red } from "@material-ui/core/colors";
-import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
 
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -210,10 +209,8 @@ export function CMSMainView(props: CMSMainViewProps) {
             utils={DateFnsUtils}
             locale={dateUtilsLocale}>
             <DndProvider backend={HTML5Backend}>
-
                 <ThemeProvider theme={theme}>
                     <CssBaseline/>
-                    <EntitySideDialogs/>
                     {view}
                 </ThemeProvider>
             </DndProvider>

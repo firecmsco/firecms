@@ -19,6 +19,7 @@ import { CMSAppContextProvider } from "./contexts/CMSAppContext";
 import { SideEntityProvider } from "./contexts/SideEntityController";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { BrowserRouter as Router } from "react-router-dom";
+import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -134,6 +135,7 @@ export const CMSAppProvider: React.FunctionComponent<CMSAppProviderProps> = (pro
                                 collections={navigation?.collections}>
                                 <BreadcrumbsProvider>
                                     {children}
+                                    <EntitySideDialogs/>
                                 </BreadcrumbsProvider>
                             </SideEntityProvider>
                         </Router>
