@@ -33,6 +33,8 @@ import { blogSchema } from "./schemas/blog_schema";
 import { testEntitySchema } from "./schemas/test_schema";
 import { customSchemaResolver } from "./custom_schema_resolver";
 
+import "typeface-rubik";
+import "typeface-space-mono";
 
 function SampleApp() {
 

@@ -276,10 +276,10 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             <CollectionRowActions
                 entity={entity}
                 isSelected={isSelected}
-                onEditClicked={onEditClicked}
                 selectionEnabled={selectionEnabled}
                 size={size}
                 toggleEntitySelection={toggleEntitySelection}
+                onEditClicked={onEditClicked}
                 onCopyClicked={editEnabled ? onCopyClicked : undefined}
                 onDeleteClicked={deleteEnabled ? setDeleteEntityClicked : undefined}
             />

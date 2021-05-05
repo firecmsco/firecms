@@ -9,10 +9,14 @@ import {
     NavigationBuilder,
     NavigationBuilderProps
 } from "@camberi/firecms";
-import firebase from "firebase/app";
-import "typeface-rubik";
-import { firebaseConfig } from "./firebase_config";
 import { Box, CircularProgress } from "@material-ui/core";
+
+import firebase from "firebase/app";
+
+import "typeface-rubik";
+import "typeface-space-mono";
+
+import { firebaseConfig } from "./firebase_config";
 
 const productSchema = buildSchema({
     name: "Product",

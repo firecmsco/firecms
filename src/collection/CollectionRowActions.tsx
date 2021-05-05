@@ -39,6 +39,7 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                                                                      }) {
 
     const editEnabled = Boolean(onEditClicked);
+    const copyEnabled = Boolean(onCopyClicked);
     const deleteEnabled = Boolean(onDeleteClicked);
 
     const classes = useTableStyles({ size });
@@ -110,7 +111,7 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                     />
                 </Tooltip>}
 
-                {editEnabled &&
+                {(copyEnabled || deleteEnabled) &&
                 <IconButton
                     onClick={openMenu}
                 >
@@ -118,7 +119,7 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                 </IconButton>
                 }
 
-                {editEnabled || deleteEnabled && <Menu
+                {(copyEnabled || deleteEnabled) && <Menu
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
                     onClose={closeMenu}
@@ -131,7 +132,7 @@ export function CollectionRowActions<S extends EntitySchema<Key>,
                         <ListItemText primary="Delete"/>
                     </MenuItem>}
 
-                    {editEnabled && <MenuItem onClick={onCopyClick}>
+                    {copyEnabled && <MenuItem onClick={onCopyClick}>
                         <ListItemIcon>
                             <FileCopy/>
                         </ListItemIcon>

@@ -21,6 +21,9 @@ import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import { EntitySideDialogs } from "./side_dialog/EntitySideDialogs";
 
+import { blue, pink, red } from "@material-ui/core/colors";
+import { createMuiTheme } from "@material-ui/core";
+
 /**
  * Main entry point that defines the CMS configuration
  */
@@ -79,6 +82,23 @@ export interface CMSAppProviderProps {
      * Locale of the CMS, currently only affecting dates
      */
     locale?: Locale;
+
+    /**
+     * Primary color of the theme of the CMS
+     */
+    primaryColor?: string;
+
+    /**
+     * Secondary color of the theme of the CMS
+     */
+    secondaryColor?: string
+
+    /**
+     * Font family string
+     * e.g.
+     * '"Roboto", "Helvetica", "Arial", sans-serif'
+     */
+    fontFamily?: string
 }
 
 /**
@@ -99,7 +119,14 @@ export const CMSAppProvider: React.FunctionComponent<CMSAppProviderProps> = (pro
         authentication,
         firebaseConfig,
         schemaResolver,
+        primaryColor,
+        secondaryColor,
+        fontFamily,
     } = props;
+
+
+    const mode: "light" | "dark" = "light";
+    const theme = makeTheme({ mode, primaryColor, secondaryColor, fontFamily });
 
     const [navigation, setNavigation] = React.useState<Navigation | undefined>(undefined);
     const [navigationLoadingError, setNavigationLoadingError] = React.useState<Error | undefined>(undefined);
@@ -128,7 +155,8 @@ export const CMSAppProvider: React.FunctionComponent<CMSAppProviderProps> = (pro
                     <CMSAppContextProvider cmsAppConfig={props}
                                            firebaseConfig={firebaseConfig}
                                            navigation={navigation}
-                                           navigationLoadingError={navigationLoadingError}>
+                                           navigationLoadingError={navigationLoadingError}
+                                           theme={theme}>
 
                         <Router>
                             <SideEntityProvider
@@ -160,4 +188,92 @@ async function getNavigation(navigationOrCollections: Navigation | NavigationBui
         return navigationOrCollections;
     }
 }
+
+const makeTheme = (
+    { mode, primaryColor, secondaryColor, fontFamily }: {
+        mode: "light" | "dark";
+        primaryColor?: string;
+        secondaryColor?: string;
+        fontFamily?: string;
+    }) => {
+
+    const original = createMuiTheme({
+        palette: {
+            type: mode,
+            background: {
+                // @ts-ignore
+                default: mode === "dark" ? "#424242" : "#f6f8f9"
+            },
+            primary: {
+                main: primaryColor ? primaryColor : blue["800"]
+            },
+            secondary: {
+                main: secondaryColor ? secondaryColor : pink["400"]
+            },
+            error: {
+                main: red.A400
+            }
+        },
+        typography: {
+            "fontFamily": fontFamily ? fontFamily : `"Rubik", "Roboto", "Helvetica", "Arial", sans-serif`,
+            fontWeightMedium: 500
+        },
+        overrides: {
+            MuiButton: {
+                root: {
+                    borderRadius: 4
+                }
+            },
+            MuiTableRow: {
+                root: {
+                    "&:last-child td": {
+                        borderBottom: 0
+                    }
+                }
+            },
+            MuiTypography: {
+                root: {
+                    "&.mono": {
+                        fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                    },
+                    "&.weight-500": {
+                        fontWeight: 500
+                    }
+                }
+            },
+            MuiInputLabel: {
+                formControl: {
+                    top: 0,
+                    left: 0,
+                    position: "absolute",
+                    transform: "translate(0, 16px) scale(1)"
+                }
+            },
+            MuiInputBase: {
+                formControl: {
+                    minHeight: "64px"
+                },
+                root: {
+                    "&.mono": {
+                        fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                    }
+                }
+            },
+            MuiFormControlLabel: {
+                label: {
+                    width: "100%"
+                }
+            }
+        }
+    });
+
+    return {
+        ...original,
+        shadows: original.shadows.map((value, index) => {
+            if (index == 1) return "0 1px 1px 0 rgb(0 0 0 / 16%)";
+            else return value;
+        })
+    };
+};
+
 

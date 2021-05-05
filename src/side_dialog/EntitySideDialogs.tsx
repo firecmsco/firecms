@@ -1,9 +1,19 @@
 import React from "react";
-import { EntityCollection, EntitySchema, SchemaConfig } from "../models";
-import { Box, createStyles, makeStyles } from "@material-ui/core";
+import { EntitySchema, SchemaConfig } from "../models";
+import {
+    Box,
+    createStyles,
+    makeStyles,
+    ThemeProvider
+} from "@material-ui/core";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import * as locales from "date-fns/locale";
 import { EntityDrawer } from "./EntityDrawer";
 import EntityView from "./EntityView";
-import { useSideEntityController } from "../contexts";
+import { useCMSAppContext, useSideEntityController } from "../contexts";
 import { useSchemasRegistry } from "../contexts/SchemaRegistry";
 import { SideEntityPanelProps } from "./model";
 
@@ -46,6 +56,11 @@ export function EntitySideDialogs<S extends EntitySchema>() {
     const sideEntityController = useSideEntityController();
     const schemasRegistry = useSchemasRegistry();
 
+    const cmsAppContext = useCMSAppContext();
+    const locale = cmsAppContext.cmsAppConfig.locale;
+    const theme = cmsAppContext.theme;
+    const dateUtilsLocale = locale ? locales[locale] : undefined;
+
     const classes = useStyles();
 
     const sidePanels = sideEntityController.sidePanels;
@@ -78,31 +93,38 @@ export function EntitySideDialogs<S extends EntitySchema>() {
     }
 
     return (
-        <>
-            {/* we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed */}
-            {
-                allPanels.map((panel: SideEntityPanelProps | undefined, index) => {
-                    return (
-                        <EntityDrawer
-                            key={`side_menu_${index}`}
-                            open={panel !== undefined}
-                            onClose={() => {
-                                sideEntityController.close();
-                            }}
-                            offsetPosition={sidePanels.length - index - 1}
-                            onExitAnimation={onExitAnimation}
-                        >
 
-                            <div
-                                className={panel === undefined || !panel.selectedSubcollection ? classes.root : classes.wide}>
-                                {panel && buildEntityView(panel)}
-                            </div>
-                        </EntityDrawer>
-                    );
-                })
-            }
+        <ThemeProvider theme={theme}>
+            <MuiPickersUtilsProvider
+                utils={DateFnsUtils}
+                locale={dateUtilsLocale}>
+                <DndProvider backend={HTML5Backend}>
+                    {/* we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed */}
+                    {
+                        allPanels.map((panel: SideEntityPanelProps | undefined, index) => {
+                            return (
+                                <EntityDrawer
+                                    key={`side_menu_${index}`}
+                                    open={panel !== undefined}
+                                    onClose={() => {
+                                        sideEntityController.close();
+                                    }}
+                                    offsetPosition={sidePanels.length - index - 1}
+                                    onExitAnimation={onExitAnimation}
+                                >
 
-        </>
+                                    <div
+                                        className={panel === undefined || !panel.selectedSubcollection ? classes.root : classes.wide}>
+                                        {panel && buildEntityView(panel)}
+                                    </div>
+                                </EntityDrawer>
+                            );
+                        })
+                    }
+
+                </DndProvider>
+            </MuiPickersUtilsProvider>
+        </ThemeProvider>
     );
 }
 
