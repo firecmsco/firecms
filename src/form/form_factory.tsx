@@ -290,8 +290,7 @@ export function createCustomIdField<S extends EntitySchema<Key>, Key extends str
                         <IconButton
                             aria-label="go-to-firestore">
                             <Tooltip title={"Open in Firestore console"}>
-                                <OpenInNewIcon
-                                    fontSize={"small"}/>
+                                <OpenInNewIcon fontSize={"small"}/>
                             </Tooltip>
                         </IconButton>
                     </a>}
@@ -336,7 +335,11 @@ export function createCustomIdField<S extends EntitySchema<Key>, Key extends str
             <MuiTextField {...fieldProps}
                           error={error}
                           InputProps={inputProps}
-                          onChange={(event) => onChange(event.target.value)}/>}
+                          onChange={(event) => {
+                              let value = event.target.value;
+                              if (value) value = value.trim();
+                              return onChange(value);
+                          }}/>}
 
             <ErrorMessage name={"id"}
                           component="div">
