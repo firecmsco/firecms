@@ -1,6 +1,18 @@
 # Change Log
 
+## [0.38.2] - 2021-05-05
+
+### Changed
+
+- Custom id values are now trimmed
+- Fix for entity actions dropdown
+- Fix for being able to use side entity dialogs without having a rendered main
+  view
+- [BREAKING] If you are using provider and main view, you need to move the theme
+  related fields from the main view to the provider (colors and fonts)
+
 ## [0.38.1] - 2021-05-03
+
 ### Changed
 
 - Fix for unique in array validation and null values
