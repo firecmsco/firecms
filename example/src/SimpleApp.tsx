@@ -5,7 +5,9 @@ import {
     buildCollection,
     buildProperty,
     buildSchema,
+    buildSchemaFromType,
     CMSApp,
+    EntitySchema,
     NavigationBuilder,
     NavigationBuilderProps
 } from "@camberi/firecms";
@@ -141,7 +143,14 @@ const productSchema = buildSchema({
     }
 });
 
-const localeSchema = buildSchema({
+
+type LocalSchema = {
+    title: string,
+    selectable?: boolean,
+    video: string
+}
+
+const localeSchema = buildSchemaFromType<LocalSchema>({
     customId: locales,
     name: "Locale",
     properties: {
