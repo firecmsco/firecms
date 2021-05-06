@@ -1,7 +1,6 @@
 import {
     EntityCollection,
     EntitySchema,
-    EntitySchemaType,
     EntityValues,
     EnumValueConfig,
     Properties,
@@ -59,14 +58,19 @@ export function buildSchema<Key extends string = string>(
 }
 
 /**
- * Identity function that requires a schema that has to have the same 
- * keys as a provided type
+ * Identity function that requires a builds a schema based on a type.
+ * Useful if you have defined your models in Typescript.
+ * The schema property keys are validated by the type system but the property
+ * data types are not yet, so you could still match a string type to a
+ * NumberProperty, e.g.
  * @param schema
  */
-export function buildSchemaFromType<Type extends EntitySchemaType>(
-    schema: EntitySchema<Extract<keyof Type, string>>
-): EntitySchema<Extract<keyof Type, string>> {
-   return schema;
+export function buildSchemaFrom<Type extends Partial<{ [P in Key]: T; }>,
+    Key extends string = Extract<keyof Type, string>,
+    T = any>(
+    schema: EntitySchema<Key, T>
+): EntitySchema<Key, T> {
+    return schema;
 }
 
 /**

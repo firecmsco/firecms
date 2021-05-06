@@ -172,19 +172,10 @@ export type ExtraActionsParams<S extends EntitySchema<Key> = EntitySchema<any>,
  */
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
-
-export interface EntitySchemaType {
-    [member: string]:
-        undefined | string | number | boolean |
-        string[] | number[] | boolean[] | 
-        EntitySchemaType[] | 
-        EntitySchemaType
-}
-
 /**
  * Specification for defining an entity
  */
-export interface EntitySchema<Key extends string = string> {
+export interface EntitySchema<Key extends string = string, T extends any = any> {
 
     /**
      * Singular name of the entity as displayed in an Add button . E.g. Product
@@ -207,7 +198,7 @@ export interface EntitySchema<Key extends string = string> {
     /**
      * Set of properties that compose an entity
      */
-    properties: PropertiesOrBuilder<this, Key>;
+    properties: PropertiesOrBuilder<this, Key, T>;
 
     /**
      * When creating a new entity, set some values as already initialized
@@ -259,26 +250,32 @@ export interface EntitySchema<Key extends string = string> {
  */
 export interface EntitySaveProps<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>> {
+
     /**
      * Resolved schema of the entity
      */
     schema: S;
+
     /**
-     * Full path where this entity is beign saved
+     * Full path where this entity is being saved
      */
     collectionPath: string;
+
     /**
      * Id of the entity or undefined if new
      */
     id?: string;
+
     /**
      * Values being saved
      */
     values: EntityValues<S, Key>;
+
     /**
      * New or existing entity
      */
     status: EntityStatus;
+
     /**
      * Context of the app status
      */
@@ -513,11 +510,9 @@ export type PropertyOrBuilder<S extends EntitySchema<Key>, Key extends string = 
     Property<T>
     | PropertyBuilder<S, Key, T>;
 
-export type PropertiesOrBuilder<
-    S extends EntitySchema<Key>, 
-    Key extends string = Extract<keyof S["properties"], string>, 
-    T extends any = any
-> = Record<Key, PropertyOrBuilder<S, Key, T>>;
+export type PropertiesOrBuilder<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>,
+    T extends any = any> = Record<Key, PropertyOrBuilder<S, Key, T>>;
 
 /**
  * This type represents a record of key value pairs as described in an

@@ -5,12 +5,11 @@ import {
     buildCollection,
     buildProperty,
     buildSchema,
-    buildSchemaFromType,
     CMSApp,
-    EntitySchema,
     NavigationBuilder,
     NavigationBuilderProps
 } from "@camberi/firecms";
+
 import firebase from "firebase/app";
 import "typeface-rubik";
 import "typeface-space-mono";
@@ -28,8 +27,7 @@ const firebaseConfig = {
 const locales = {
     "de-DE": "German",
     "en-US": "English (United States)",
-    "es-ES": "Spanish (Spain)",
-    "es-419": "Spanish (South America)"
+    "es-ES": "Spanish (Spain)"
 };
 
 const productSchema = buildSchema({
@@ -143,14 +141,7 @@ const productSchema = buildSchema({
     }
 });
 
-
-type LocalSchema = {
-    title: string,
-    selectable?: boolean,
-    video: string
-}
-
-const localeSchema = buildSchemaFromType<LocalSchema>({
+const localeSchema = buildSchema({
     customId: locales,
     name: "Locale",
     properties: {

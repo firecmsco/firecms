@@ -4,6 +4,7 @@ import {
     AdditionalColumnDelegate,
     AsyncPreviewComponent,
     buildSchema,
+    buildSchemaFrom,
     Entity,
     EntitySchema,
     EnumValues,
@@ -277,7 +278,15 @@ export const productAdditionalColumn: AdditionalColumnDelegate = {
         }/>
 };
 
-export const localeSchema = buildSchema({
+type Locale = {
+    name: string,
+    description: string,
+    selectable?: boolean,
+    video: string
+}
+
+
+export const localeSchema = buildSchemaFrom<Locale>({
     customId: locales,
     name: "Locale",
     properties: {
