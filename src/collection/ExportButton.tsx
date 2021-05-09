@@ -24,6 +24,7 @@ import { buildPropertyFrom } from "../models";
 import { computeSchemaProperties, PropertiesValues } from "../models/firestore";
 import firebase from "firebase";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import { useTranslation } from "react-i18next";
 
 type ExportButtonProps<S extends EntitySchema<Key>, Key extends string> = {
     schema: S;
@@ -35,7 +36,7 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
                                                                                           collectionPath
                                                                                       }: ExportButtonProps<S, Key>
 ) {
-
+    const { t } = useTranslation();
     const [data, setData] = React.useState<Entity<S, Key>[]>();
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
@@ -86,7 +87,7 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
     return (
         <>
 
-            <Tooltip title={"Export"}>
+            <Tooltip title={<>{t("export")}</>}>
                 <IconButton
                     color={"primary"}
                     onClick={handleClickOpen}>
@@ -103,13 +104,13 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
 
                 <DialogContent>
                     <DialogContentText>
-                        Download the the content of this table as a CSV
+                        {t("downloadAsFormat", { format: "CSV" })}
                     </DialogContentText>
                 </DialogContent>
 
                 <DialogActions>
                     <Button color="primary" onClick={handleClose}>
-                        Cancel
+                        {t("cancel")}
                     </Button>
 
                     {dataLoading && <CircularProgress size={16} thickness={8}/>}
@@ -125,7 +126,7 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
                     >
                         <Button color="primary" autoFocus
                                 onClick={handleDownload}>
-                            Download
+                            {t("download")}
                         </Button>
                     </CSVLink>
                     }

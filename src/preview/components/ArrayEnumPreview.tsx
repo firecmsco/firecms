@@ -6,10 +6,10 @@ import {
 } from "../../models";
 
 import React from "react";
-
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { EnumValuesChip } from "./CustomChip";
 import { useStyles } from "./styles";
+import { useTranslation } from "react-i18next";
 
 
 export function ArrayPropertyEnumPreview({
@@ -18,13 +18,14 @@ export function ArrayPropertyEnumPreview({
                                              property,
                                              size
                                          }: PreviewComponentProps<string[] | number[]>) {
+    const { t } = useTranslation();
 
     if (property.dataType !== "array")
-        throw Error("Picked wrong preview component ArrayEnumPreview");
+        throw Error(t("errorPickedWrongPreviewComponent", { component: "ArrayEnumPreview" }));
 
     const ofProperty = property.of as StringProperty | NumberProperty;
     if (!ofProperty.config?.enumValues)
-        throw Error("Picked wrong preview component ArrayEnumPreview");
+        throw Error(t("errorPickedWrongPreviewComponent", { component: "ArrayEnumPreview" }));
 
     if (!value) return null;
 

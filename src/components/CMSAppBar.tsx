@@ -23,9 +23,9 @@ import { Link as ReactLink } from "react-router-dom";
 import {
     useAuthContext,
     useBreadcrumbsContext,
-    useCMSAppContext
 } from "../contexts";
 import ErrorBoundary from "./ErrorBoundary";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -66,6 +66,7 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                                                                    }) => {
 
     const classes = useStyles();
+    const { t } = useTranslation();
 
     const breadcrumbsContext = useBreadcrumbsContext();
     const { breadcrumbs } = breadcrumbsContext;
@@ -144,7 +145,7 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                     <Button variant="text"
                             color="inherit"
                             onClick={authController.signOut}>
-                        Log Out
+                        {t("logout")}
                     </Button>
 
                 </Toolbar>

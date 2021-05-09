@@ -37,6 +37,7 @@ import {
     UniqueFieldValidator
 } from "./CollectionTableProps";
 import { checkUniqueField } from "../models/firestore";
+import { useTranslation } from "react-i18next";
 
 type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
     collectionPath: string;
@@ -63,6 +64,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
     const sideEntityController = useSideEntityController();
 
+    const { t } = useTranslation();
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -299,7 +301,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 size="large"
                 variant="contained"
                 color="primary">
-                Add {collectionConfig.schema.name}
+                {t("collectionAddItem", { item: collectionConfig.schema.name })}
             </Button>
             : <Button
                 onClick={onNewClick}
@@ -314,7 +316,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         const multipleDeleteButton = selectionEnabled &&
 
             <Tooltip
-                title={multipleDeleteEnabled ? "Multiple delete" : "You have selected one entity you cannot delete"}>
+                title={<>{multipleDeleteEnabled ? t("multipleDelete") : t("multipleDeleteHasEntityYouCantDelete")}</>}>
                 <span>
                     <Button
                         disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}

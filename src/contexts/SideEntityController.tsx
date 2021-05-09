@@ -12,6 +12,7 @@ import {
 } from "../routes/navigation";
 import { getSidePanelKey, SideEntityPanelProps } from "../side_dialog/model";
 import { useSchemasRegistry } from "./SchemaRegistry";
+import i18n from "i18next";
 
 const DEFAULT_SIDE_ENTITY = {
     sidePanels: [],
@@ -135,7 +136,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                   }: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaResolver?: boolean }) => {
 
         if (copy && !entityId) {
-            throw Error("If you want to copy an entity you need to provide an entityId");
+            throw Error(i18n.t("errorMissingEntityIdForCopy"));
         }
 
         const sidePanelKey = getSidePanelKey(collectionPath, entityId);

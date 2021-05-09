@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { PreviewComponent } from "../PreviewComponent";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -30,14 +31,15 @@ export function MapPreview<T>({
                                   value,
                                   property,
                                   size}: PreviewComponentProps<T> ) {
+    const { t } = useTranslation();
 
     if (property.dataType !== "map") {
-        throw Error("Picked wrong preview component MapPreview");
+        throw Error(t("errorPickedWrongPreviewComponent", { component: "MapPreview" }));
     }
 
     const mapProperty = property as MapProperty;
     if (!mapProperty.properties) {
-        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
+        throw Error(t("errorMissingPropForMap", {name}));
     }
 
     if (!value) return null;

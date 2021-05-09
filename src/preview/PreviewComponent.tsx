@@ -31,7 +31,8 @@ import {
 
 import ReactMarkdown from "react-markdown";
 import firebase from "firebase/app";
-
+import { useTranslation } from "react-i18next"
+import i18n from "i18next";
 
 export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
@@ -40,6 +41,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
     } = props;
 
     const fieldProps = { ...props };
+    const { t } = useTranslation();
 
     if (value === undefined) {
         content = <EmptyValue/>;
@@ -81,7 +83,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
         if (value instanceof Array) {
             const arrayProperty = property as ArrayProperty;
             if(!arrayProperty.of){
-                throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
+                throw Error(t("errorMissingOfPropForArrayField", { name }));
             }
 
             if (arrayProperty.of.dataType === "map") {
@@ -170,9 +172,9 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
 }
 
 function buildWrongValueType(name: string | undefined, dataType: string, value: any) {
-    console.error(`Unexpected value for property ${name}, of type ${dataType}`, value);
+    console.error(i18n.t("errorUnexpectedValueForDatatype", { name, dataType }), value);
     return (
-        <ErrorView error={`Unexpected value: ${JSON.stringify(value)}`}/>
+        <ErrorView error={i18n.t("errorUnexpectedValue", { value: JSON.stringify(value) } )}/>
     );
 }
 

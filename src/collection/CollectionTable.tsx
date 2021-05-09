@@ -36,6 +36,7 @@ import PropertyTableCell, { OnCellChangeParams } from "./PropertyTableCell";
 import { CustomFieldValidator, mapPropertyToYup } from "../form/validation";
 import { useCollectionFetch } from "../hooks/useCollectionFetch";
 import { useTextSearch } from "../hooks/useTextSearch";
+import { useTranslation } from "react-i18next";
 
 const PAGE_SIZE = 50;
 
@@ -94,6 +95,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const [tableKey] = React.useState<string>(Math.random().toString(36));
     const tableRef = useRef<BaseTable>(null);
 
+    const { t } = useTranslation();
     const classes = useTableStyles({ size });
 
     const [selectedCell, setSelectedCell] = React.useState<TableCellProps>(undefined);
@@ -429,7 +431,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                     align={"left"}
                     allowScroll={false}
                     showExpandIcon={false}
-                    disabledTooltip={"Additional columns can't be edited directly"}
+                    disabledTooltip={t("errorAdditionalColumnsCantBeEdited")}
                 >
                     <ErrorBoundary>
                         {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder(entity)}
@@ -438,7 +440,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
             );
 
         } else {
-            return <Box>Internal ERROR</Box>;
+            return <Box>{t("errorInternal")}</Box>;
         }
     };
 
@@ -478,7 +480,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                      margin={6}>
 
                     <Typography variant={"h6"}>
-                        {"Error fetching data from Firestore"}
+                        {t("errorFetchingData")}
                     </Typography>
 
                     {dataLoadingError?.name && <Typography>
@@ -510,7 +512,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                     <AssignmentIcon/>
                 </Box>
                 <Typography>
-                    {textSearchInProgress ? "No results" : (filterSet ? "No data with the selected filters" : "This collection is empty")}
+                    {textSearchInProgress ? t("searchNoResults") : (filterSet ? t("searchNoDataWithSelectedFilters") : t("searchCollectionIsEmpty"))}
                 </Typography>
             </Box>
         );

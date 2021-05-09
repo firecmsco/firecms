@@ -1,8 +1,29 @@
 import { Box, Typography } from "@material-ui/core";
-import React, { ErrorInfo } from "react";
+import React, { ErrorInfo, FunctionComponent } from "react";
 
 import ErrorIcon from "@material-ui/icons/Error";
+import { useTranslation } from "react-i18next";
 
+const ErrorFallback : FunctionComponent = () => {
+    const { t } = useTranslation();
+    return (
+        <Box
+            display={"flex"}
+            flexDirection={"column"}
+            m={0.5}>
+            <Box
+                display={"flex"}
+                alignItems={"center"}
+                m={0.5}>
+                <ErrorIcon color={"error"} fontSize={"small"}/>
+                <Box marginLeft={1}>{t("error")}</Box>
+            </Box>
+            <Typography variant={"caption"}>
+                {t("errorSeeInConsole")}
+            </Typography>
+        </Box>
+    );
+}
 
 export default class ErrorBoundary extends React.Component<{}, {hasError:boolean}> {
     constructor(props:any) {
@@ -20,23 +41,7 @@ export default class ErrorBoundary extends React.Component<{}, {hasError:boolean
 
     render() {
         if (this.state.hasError) {
-            return (
-                <Box
-                    display={"flex"}
-                    flexDirection={"column"}
-                    m={0.5}>
-                    <Box
-                        display={"flex"}
-                        alignItems={"center"}
-                        m={0.5}>
-                        <ErrorIcon color={"error"} fontSize={"small"}/>
-                        <Box marginLeft={1}>Error</Box>
-                    </Box>
-                    <Typography variant={"caption"}>
-                        See the error in the console
-                    </Typography>
-                </Box>
-            );
+            return <ErrorFallback />;
         }
 
         return this.props.children;

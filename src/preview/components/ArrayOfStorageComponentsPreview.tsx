@@ -5,6 +5,7 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import { useStyles } from "./styles";
 import { PreviewComponent } from "../PreviewComponent";
 import { Property } from "../../models";
+import { useTranslation } from "react-i18next";
 
 
 export function ArrayOfStorageComponentsPreview({
@@ -12,9 +13,10 @@ export function ArrayOfStorageComponentsPreview({
                                                     value,
                                                     property,
                                                     size}: PreviewComponentProps<any[]> ) {
+    const { t } = useTranslation();
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "string")
-        throw Error("Picked wrong preview component ArrayOfStorageComponentsPreview");
+        throw Error(t("errorPickedWrongPreviewComponent", { component: "ArrayOfStorageComponentsPreview" }));
 
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
     const classes = useStyles();

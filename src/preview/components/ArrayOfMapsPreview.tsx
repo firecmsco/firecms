@@ -9,6 +9,7 @@ import ErrorBoundary from "../../components/ErrorBoundary";
 import { Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { useStyles } from "./styles";
 import { PreviewComponent } from "../PreviewComponent";
+import { useTranslation } from "react-i18next";
 
 export function ArrayOfMapsPreview({
                                        name,
@@ -16,13 +17,15 @@ export function ArrayOfMapsPreview({
                                        property,
                                        size
                                    }: PreviewComponentProps<object[]>) {
+    const { t } = useTranslation();
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
-        throw Error("Picked wrong preview component ArrayOfMapsPreview");
+    
+        throw Error(t("errorPickedWrongPreviewComponent", { component: "ArrayOfMapsPreview" }));
 
     const properties = ((property as ArrayProperty).of as MapProperty).properties;
     if (!properties) {
-        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
+        throw Error(t("errorMissingPropForMap", {name}));
     }
     const values = value;
     const previewProperties = ((property as ArrayProperty).of as MapProperty).previewProperties;

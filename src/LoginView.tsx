@@ -15,6 +15,7 @@ import { useAuthContext, useCMSAppContext } from "./contexts";
 
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,7 +40,7 @@ export function LoginView({
                               signInOptions,
                               firebaseConfig
                           }: LoginViewProps) {
-
+    const { t } = useTranslation();
     const classes = useStyles();
 
     const authController = useAuthContext();
@@ -73,9 +74,7 @@ export function LoginView({
                 errorView =
                     <>
                         <Box p={2}>
-                            You need to enable the corresponding login provider
-                            in
-                            your Firebase project
+                            {t("errorEnableLoginProvider")}
                         </Box>
 
                         {firebaseConfig &&
@@ -85,7 +84,7 @@ export function LoginView({
                                target="_blank">
                                 <Button variant="outlined"
                                         color="primary">
-                                    Open Firebase configuration
+                                    {t("openFirebaseConfiguration")}
                                 </Button>
                             </a>
                         </Box>}
@@ -121,7 +120,7 @@ export function LoginView({
             {skipLoginButtonEnabled &&
             <Box m={2}>
                 <Button onClick={authController.skipLogin}>
-                    Skip login
+                    {t("skipLogin")}
                 </Button>
             </Box>
             }
@@ -130,8 +129,7 @@ export function LoginView({
 
                 {authController.notAllowedError &&
                 <Box p={2}>
-                    It looks like you don't have access to the CMS, based
-                    on the specified Authenticator configuration
+                    {t("errorNoAccessToCms")}
                 </Box>}
 
                 {buildErrorView()}

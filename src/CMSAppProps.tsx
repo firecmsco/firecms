@@ -98,7 +98,9 @@ export interface CMSAppProps {
     dateTimeFormat?: string;
 
     /**
-     * Locale of the CMS, currently only affecting dates
+     * Locale of the CMS. 
+     * Affects date format and, for a limited ammount of languages, the language
+     * of the CMS. The default language is english.
      */
     locale?: Locale;
 

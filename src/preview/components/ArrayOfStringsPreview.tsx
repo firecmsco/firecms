@@ -1,9 +1,9 @@
 import React from "react";
 import { PreviewComponentProps, StringProperty } from "../../models";
-
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { StringPreview } from "./StringPreview";
 import { useStyles } from "./styles";
+import { useTranslation } from "react-i18next";
 
 export function ArrayOfStringsPreview({
                                           name,
@@ -11,11 +11,12 @@ export function ArrayOfStringsPreview({
                                           property,
                                           size
                                       }: PreviewComponentProps<string[]> ) {
-
+    const { t } = useTranslation();
     const classes = useStyles();
 
     if (!property.of || property.dataType !== "array" || property.of.dataType !== "string")
-        throw Error("Picked wrong preview component ArrayOfStringsPreview");
+        throw Error(t("errorPickedWrongPreviewComponent", { component: "ArrayOfStringsPreview" }));
+
 
     if (value && !Array.isArray(value)) {
         return <div>{`Unexpected value: ${value}`}</div>;

@@ -5,6 +5,7 @@ import {
     getCollectionViewFromPath,
     removeInitialAndTrailingSlashes
 } from "../routes/navigation";
+import i18n from "i18next";
 
 const DEFAULT_SCHEMA_CONTROLLER = {
     getSchemaConfig: (collectionPath: string, entityId?: string) => undefined,
@@ -105,7 +106,7 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
         }
 
         if (!result.schema)
-            throw Error(`Not able to resolve schema for ${sidePanelKey}`);
+            throw Error(i18n.t("errorUnableToResolveSchema", { sidePanelKey }));
 
         return result as SchemaConfig;
 

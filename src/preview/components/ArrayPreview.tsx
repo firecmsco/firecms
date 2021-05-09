@@ -7,6 +7,7 @@ import { Divider } from "@material-ui/core";
 import { PreviewComponent } from "../PreviewComponent";
 import { useStyles } from "./styles";
 import { Property } from "../../models";
+import { useTranslation } from "react-i18next";
 
 export function ArrayPreview({
                                  name,
@@ -14,15 +15,16 @@ export function ArrayPreview({
                                  property,
                                  size
                              }: PreviewComponentProps<any[]>) {
+    const { t } = useTranslation();
 
     if (!property.of) {
-        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
+        throw Error(t("errorMissingOfPropForArrayField", {name}));
     }
 
     const classes = useStyles();
 
     if (property.dataType !== "array")
-        throw Error("Picked wrong preview component ArrayPreview");
+        throw Error(t("errorPickedWrongPreviewComponent", { component: "ArrayPreview" }));
 
     const values = value;
 

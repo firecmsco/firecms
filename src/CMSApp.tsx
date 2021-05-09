@@ -5,11 +5,12 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
-
+import "./i18n/config";
 import { CMSAppProps } from "./CMSAppProps";
 import { CMSMainView } from "./CMSMainView";
 import { CMSAppProvider } from "./CMSAppProvider";
 import CircularProgressCenter from "./components/CircularProgressCenter";
+import { useTranslation } from "react-i18next";
 
 
 /**
@@ -29,7 +30,8 @@ export function CMSApp(props: CMSAppProps) {
 
     const {
         firebaseConfig,
-        onFirebaseInit
+        onFirebaseInit,
+        locale
     } = props;
 
     const [
@@ -37,6 +39,7 @@ export function CMSApp(props: CMSAppProps) {
         setFirebaseConfigInitialized
     ] = React.useState<boolean>(false);
 
+    const { i18n } = useTranslation();
     const [usedFirebaseConfig, setUsedFirebaseConfig] = React.useState<Object>();
     const [configError, setConfigError] = React.useState<string>();
     const [firebaseConfigError, setFirebaseConfigError] = React.useState<boolean>(false);
@@ -89,6 +92,10 @@ export function CMSApp(props: CMSAppProps) {
             );
         }
     }, []);
+
+    useEffect(() => {
+        i18n.changeLanguage(locale);
+    }, [locale])
 
     if (configError) {
         return <div> {configError} </div>;

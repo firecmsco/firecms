@@ -21,6 +21,7 @@ import { ErrorBoundary } from "./index";
 import { CMSAppProps } from "../CMSAppProps";
 import { useCMSAppContext } from "../contexts";
 import { CMSAppContext } from "../contexts/CMSAppContext";
+import { useTranslation } from "react-i18next";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -55,6 +56,7 @@ export default function EntityPreview<S extends EntitySchema<Key> = EntitySchema
     }: EntityPreviewProps<S, Key>) {
 
     const classes = useStyles();
+    const { t } = useTranslation();
 
     const appConfig: CMSAppContext | undefined = useCMSAppContext();
     return (
@@ -68,7 +70,7 @@ export default function EntityPreview<S extends EntitySchema<Key> = EntitySchema
                                    className={classes.titleCell}>
                             <Typography variant={"caption"}
                                         color={"textSecondary"}>
-                                Id
+                                {t("id")}
                             </Typography>
                         </TableCell>
                         <TableCell padding="none"

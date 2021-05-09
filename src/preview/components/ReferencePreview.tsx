@@ -31,6 +31,7 @@ import { ErrorView } from "../../components/ErrorView";
 import { Skeleton } from "@material-ui/lab";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { useStyles } from "./styles";
+import { useTranslation } from "react-i18next";
 
 const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Theme) =>
     createStyles({
@@ -92,11 +93,12 @@ export function ArrayOfReferencesPreview({
                                              property,
                                              size
                                          }: PreviewComponentProps<any[]>) {
+    const classes = useStyles();
+    const { t } = useTranslation();
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "reference")
-        throw Error("Picked wrong preview component ArrayOfReferencesPreview");
+        throw Error(t("errorPickedWrongPreviewComponent", { component: "ArrayOfReferencesPreview" }));
 
-    const classes = useStyles();
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
