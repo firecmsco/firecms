@@ -143,7 +143,7 @@ export const CMSAppProvider: React.FunctionComponent<CMSAppProviderProps> = (pro
             .then((result: Navigation) => {
                 setNavigation(result);
             }).catch(setNavigationLoadingError);
-    }, [authController.loggedUser, navigationOrBuilder]);
+    }, [authController.loggedUser, authController.canAccessMainView, navigationOrBuilder]);
 
     return (
         <AuthProvider authController={authController}>
