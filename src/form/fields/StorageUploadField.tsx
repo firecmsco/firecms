@@ -583,7 +583,8 @@ export function StorageEntry({
     });
 
     const [{ isDragging }, drag, preview] = useDrag({
-        item: { type: dragType, id: entry.id, index },
+        type: dragType,
+        item: { id: entry.id, index },
         collect: (monitor: any) => ({
             isDragging: monitor.isDragging()
         })

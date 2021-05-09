@@ -102,7 +102,8 @@ export const ArrayEntry: React.FC<ArrayEntryProps> = ({
     });
 
     const [{ isDragging }, drag, preview] = useDrag({
-        item: { type: type, id, index },
+        type: type,
+        item: { id, index },
         collect: (monitor: any) => ({
             isDragging: monitor.isDragging()
         })

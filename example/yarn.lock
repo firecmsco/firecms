@@ -3449,25 +3449,9 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.3, ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-algoliasearch@^4.5.1:
-  version "4.9.1"
-  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-4.9.1.tgz#1fa8ece3f9808e465226176b88b953801c2274e0"
-  integrity sha512-EeJUYXzBEhZSsL6tXc3hseLBCtlNLa1MZ4mlMK6EeX38yRjY5vgnFcNNml6uUhlOjvheKxgkKRpPWkxgL8Cqkg==
-  dependencies:
-    "@algolia/cache-browser-local-storage" "4.9.1"
-    "@algolia/cache-common" "4.9.1"
-    "@algolia/cache-in-memory" "4.9.1"
-    "@algolia/client-account" "4.9.1"
-    "@algolia/client-analytics" "4.9.1"
-    "@algolia/client-common" "4.9.1"
-    "@algolia/client-recommendation" "4.9.1"
-    "@algolia/client-search" "4.9.1"
-    "@algolia/logger-common" "4.9.1"
-    "@algolia/logger-console" "4.9.1"
-    "@algolia/requester-browser-xhr" "4.9.1"
-    "@algolia/requester-common" "4.9.1"
-    "@algolia/requester-node-http" "4.9.1"
-    "@algolia/transporter" "4.9.1"
+"algoliasearch@link:../node_modules/algoliasearch":
+  version "0.0.0"
+  uid ""
 
 alphanum-sort@^1.0.0:
   version "1.0.2"
@@ -6345,25 +6329,9 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
-firebase@^7.24.0:
-  version "7.24.0"
-  resolved "https://registry.yarnpkg.com/firebase/-/firebase-7.24.0.tgz#dab53b9c0f1c9538d2d6f4f51769897b0b6d60d8"
-  integrity sha512-j6jIyGFFBlwWAmrlUg9HyQ/x+YpsPkc/TTkbTyeLwwAJrpAmmEHNPT6O9xtAnMV4g7d3RqLL/u9//aZlbY4rQA==
-  dependencies:
-    "@firebase/analytics" "0.6.0"
-    "@firebase/app" "0.6.11"
-    "@firebase/app-types" "0.6.1"
-    "@firebase/auth" "0.15.0"
-    "@firebase/database" "0.6.13"
-    "@firebase/firestore" "1.18.0"
-    "@firebase/functions" "0.5.1"
-    "@firebase/installations" "0.4.17"
-    "@firebase/messaging" "0.7.1"
-    "@firebase/performance" "0.4.2"
-    "@firebase/polyfill" "0.3.36"
-    "@firebase/remote-config" "0.1.28"
-    "@firebase/storage" "0.3.43"
-    "@firebase/util" "0.3.2"
+"firebase@link:../node_modules/firebase":
+  version "0.0.0"
+  uid ""
 
 flat-cache@^3.0.4:
   version "3.0.4"
