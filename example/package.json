@@ -5,6 +5,9 @@
     "dependencies": {
         "algoliasearch": "^4.5.1",
         "firebase": "^7.24.0",
+        "@material-ui/core": "link:../node_modules/@material-ui/core",
+        "@material-ui/icons": "link:../node_modules/@material-ui/icons",
+        "@material-ui/pickers": "link:../node_modules/@material-ui/pickers",
         "@camberi/firecms": "link:../node_modules/@camberi/firecms",
         "react": "link:../node_modules/react",
         "react-dom": "link:../node_modules/react-dom",
