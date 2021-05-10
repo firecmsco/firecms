@@ -740,8 +740,10 @@ Firestore data schema.
   props `entityCollection`  and `selectedEntities` if any are set by the end
   user.
 
-* `pagination` If enabled, content is loaded in batch. If `false` all entities
-  in the collection are loaded. Defaults to `true`.
+* `pagination` If enabled, content is loaded in batches. If `false` all entities
+  in the collection are loaded. You can specify a number to specify the
+  pagination size (50 by default)
+  Defaults to `true`
 
 * `additionalColumns` You can add additional columns to the collection view by
   implementing an additional column delegate.

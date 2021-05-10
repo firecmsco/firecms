@@ -34,10 +34,10 @@ import { CollectionRowActions } from "./CollectionRowActions";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import PropertyTableCell, { OnCellChangeParams } from "./PropertyTableCell";
 import { CustomFieldValidator, mapPropertyToYup } from "../form/validation";
-import { useCollectionFetch } from "../hooks/useCollectionFetch";
+import { useCollectionFetch } from "../hooks";
 import { useTextSearch } from "../hooks/useTextSearch";
 
-const PAGE_SIZE = 50;
+const DEFAULT_PAGE_SIZE = 50;
 
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
 
@@ -76,14 +76,14 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                                entitiesDisplayedFirst,
                                                paginationEnabled,
                                                onEntityClick,
-                                               onCellValueChange
+                                               onCellValueChange,
+                                               pageSize = DEFAULT_PAGE_SIZE
                                            }: CollectionTableProps<S, Key, AdditionalKey>) {
-
 
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize);
 
-    const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? PAGE_SIZE : undefined);
+    const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
 
     const [filter, setFilter] = React.useState<FilterValues<S, Key> | undefined>(initialFilter);
     const [currentSort, setSort] = React.useState<Order>(initialSort ? initialSort[1] : undefined);
@@ -125,12 +125,12 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
     const {
         textSearchData,
-        textSearchLoading,
+        textSearchLoading
     } = useTextSearch({
         searchString,
         textSearchDelegate,
         collectionPath,
-        schema,
+        schema
     });
 
     const textSearchInProgress = Boolean(searchString);
@@ -157,11 +157,11 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         if (!paginationEnabled || dataLoading || noMoreToLoad)
             return;
         if (itemCount !== undefined)
-            setItemCount(itemCount + PAGE_SIZE);
+            setItemCount(itemCount + pageSize);
     };
 
     const resetPagination = () => {
-        setItemCount(PAGE_SIZE);
+        setItemCount(pageSize);
     };
 
     const select = useCallback((cell: TableCellProps) => {

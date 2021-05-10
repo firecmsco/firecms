@@ -20,7 +20,6 @@ import React, { useEffect, useState } from "react";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { useColumnIds } from "../../collection/common";
 import { CollectionRowActions } from "../../collection/CollectionRowActions";
-import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -75,7 +74,8 @@ export function ReferenceDialog(
     const filterableProperties = collectionConfig.filterableProperties;
     const initialFilter = collectionConfig.initialFilter;
     const displayedProperties = useColumnIds(collectionConfig, false);
-    const paginationEnabled = collectionConfig.pagination === undefined || collectionConfig.pagination;
+    const paginationEnabled = collectionConfig.pagination === undefined || Boolean(collectionConfig.pagination);
+    const pageSize = typeof collectionConfig.pagination === "number" ? collectionConfig.pagination : undefined;
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
@@ -178,6 +178,7 @@ export function ReferenceDialog(
                                  defaultSize={collectionConfig.defaultSize}
                                  additionalColumns={collectionConfig.additionalColumns}
                                  title={title}
+                                 pageSize={pageSize}
                                  displayedProperties={displayedProperties}
                                  filterableProperties={filterableProperties}
                                  textSearchDelegate={textSearchDelegate}

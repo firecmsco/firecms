@@ -76,7 +76,8 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     const inlineEditing = collectionConfig.inlineEditing === undefined || collectionConfig.inlineEditing;
 
     const selectionEnabled = collectionConfig.selectionEnabled === undefined || collectionConfig.selectionEnabled;
-    const paginationEnabled = collectionConfig.pagination === undefined || collectionConfig.pagination;
+    const paginationEnabled = collectionConfig.pagination === undefined || Boolean(collectionConfig.pagination);
+    const pageSize = typeof collectionConfig.pagination === "number" ? collectionConfig.pagination : undefined;
     const displayedProperties = useColumnIds(collectionConfig, true);
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -364,6 +365,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 initialSort={collectionConfig.initialSort}
                 textSearchDelegate={collectionConfig.textSearchDelegate}
                 paginationEnabled={paginationEnabled}
+                pageSize={pageSize}
                 inlineEditing={checkInlineEditing}
                 uniqueFieldValidator={uniqueFieldValidator}
                 onEntityClick={onEntityClick}

@@ -115,6 +115,11 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * @param params
      */
     onCellValueChange?: (params: OnCellChangeParams<any, S, Key>) => Promise<void>;
+
+    /**
+     * How many entries are loaded per page
+     */
+    pageSize?:number;
 }
 
 
