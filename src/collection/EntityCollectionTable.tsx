@@ -338,6 +338,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
         const exportButton = exportable &&
             <ExportButton schema={collectionConfig.schema}
+                          exportConfig={typeof collectionConfig.exportable === "object" ? collectionConfig.exportable : undefined}
                           collectionPath={collectionPath}/>;
 
         return (

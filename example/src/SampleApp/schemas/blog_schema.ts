@@ -1,6 +1,6 @@
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import CustomBooleanPreview from "../custom_preview/CustomBooleanPreview";
-import { buildSchema } from "@camberi/firecms";
+import { buildSchema, ExportMappingFunction } from "@camberi/firecms";
 
 export const blogSchema = buildSchema({
     name: "Blog entry",
@@ -55,7 +55,7 @@ export const blogSchema = buildSchema({
         priority: {
             title: "Priority",
             description: "This field allows the selection of Infinity as a value",
-            dataType: "number",
+            dataType: "number"
         },
         reviewed: {
             title: "Reviewed",
@@ -110,3 +110,14 @@ export const blogSchema = buildSchema({
         tags: ["default tag"]
     }
 });
+
+/**
+ * Sample field that will be added to the export
+ */
+export const sampleAdditionalExportColumn: ExportMappingFunction = {
+    key: "extra",
+    builder: async ({ entity }) => {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        return "Additional exported value " + entity.id;
+    }
+};

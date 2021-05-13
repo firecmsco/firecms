@@ -91,7 +91,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      * Should the data in this collection view include an export button.
      * Defaults to `true`
      */
-    exportable?: boolean;
+    exportable?: boolean | ExportConfig;
 
     /**
      * Following the Firestore document and collection schema, you can add
@@ -142,6 +142,16 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
 
 
 }
+
+export type ExportConfig = {
+    additionalColumns: ExportMappingFunction[]
+}
+
+export type ExportMappingFunction = {
+    key: string;
+    builder: (props: { entity: Entity<any> }) => Promise<string> | string
+}
+
 
 export type Permissions = {
     /**

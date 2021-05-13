@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import {
+    buildPropertyFrom,
     Entity,
     EntitySchema,
+    ExportConfig,
     listenCollection,
     Properties,
     Property
@@ -20,7 +22,6 @@ import {
     useTheme
 } from "@material-ui/core";
 import { CSVLink } from "react-csv";
-import { buildPropertyFrom } from "../models";
 import { computeSchemaProperties, PropertiesValues } from "../models/firestore";
 import firebase from "firebase";
 import GetAppIcon from "@material-ui/icons/GetApp";
@@ -28,42 +29,68 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 type ExportButtonProps<S extends EntitySchema<Key>, Key extends string> = {
     schema: S;
     collectionPath: string;
+    exportConfig?: ExportConfig;
 }
 
 export default function ExportButton<S extends EntitySchema<Key>, Key extends string>({
                                                                                           schema,
-                                                                                          collectionPath
+                                                                                          collectionPath,
+                                                                                          exportConfig
                                                                                       }: ExportButtonProps<S, Key>
 ) {
 
     const [data, setData] = React.useState<Entity<S, Key>[]>();
+    const [additionalData, setAdditionalData] = React.useState<Record<string, any>[]>();
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
 
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
     useEffect(() => {
         setDataLoading(true);
+
+        const updateEntities = async (entities: Entity<S, Key>[]) => {
+            setData(entities);
+            await fetchAdditionalColumns(entities);
+            setDataLoading(false);
+            setDataLoadingError(undefined);
+        };
+
+        const fetchAdditionalColumns = async (entities: Entity<S, Key>[]) => {
+
+            if (!exportConfig?.additionalColumns) {
+                return;
+            }
+
+            const additionalColumns = exportConfig.additionalColumns;
+
+            const resolvedColumnsValues: Record<string, any>[] = await Promise.all(entities.map(async (entity) => {
+                return (await Promise.all(additionalColumns.map(async (column) => {
+                    return { [column.key]: await column.builder({ entity }) };
+                }))).reduce((a, b) => ({ ...a, ...b }), {});
+            }));
+
+            setAdditionalData(resolvedColumnsValues);
+        };
+
+        const onFetchError = (error: Error) => {
+            console.error("ERROR", error);
+            setDataLoading(false);
+            setDataLoadingError(error);
+        };
+
         return listenCollection<S, Key>(
             collectionPath,
             schema,
-            entities => {
-                setDataLoading(false);
-                setDataLoadingError(undefined);
-                setData(entities);
-            },
-            (error) => {
-                console.error("ERROR", error);
-                setDataLoading(false);
-                setDataLoadingError(error);
-            },
+            updateEntities,
+            onFetchError,
             undefined,
             undefined,
             undefined,
             undefined,
             undefined);
+
     }, [collectionPath, schema]);
 
     const handleClickOpen = () => {
@@ -79,9 +106,12 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
     };
 
     const properties = computeSchemaProperties(schema);
-    const exportableData = data && data.map(e => ({ id: e.id, ...processProperties(e.values as any, properties) }));
+    const exportableData: any[] | undefined = data && data.map(e => ({ id: e.id, ...processProperties(e.values as any, properties) }));
+    if (exportableData && additionalData) {
+        additionalData.map((additional, index) => exportableData[index] = { ...exportableData[index], ...additional });
+    }
 
-    const headers = getExportHeaders(properties);
+    const headers = getExportHeaders(properties, exportConfig);
 
     return (
         <>
@@ -95,7 +125,6 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
             </Tooltip>
 
             <Dialog
-                fullScreen={fullScreen}
                 open={open}
                 onClose={handleClose}
             >
@@ -139,8 +168,9 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
 
 type Header = { label: string, key: string };
 
-function getExportHeaders(properties: Properties<any>): Header[] {
-    return [
+function getExportHeaders(properties: Properties<any>,
+                          exportConfig?: ExportConfig): Header[] {
+    const headers = [
         { label: "id", key: "id" },
         ...Object.entries(properties)
             .map(([childKey, propertyOrBuilder]) => {
@@ -149,6 +179,15 @@ function getExportHeaders(properties: Properties<any>): Header[] {
             })
             .flat()
     ];
+
+    if (exportConfig?.additionalColumns) {
+        headers.push(...exportConfig.additionalColumns.map((column) => ({
+            label: column.key,
+            key: column.key
+        })));
+    }
+
+    return headers;
 }
 
 function getHeaders(property: Property, propertyKey: string, prefix: string = ""): Header[] {

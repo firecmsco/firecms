@@ -29,7 +29,10 @@ import {
     productSchema
 } from "./schemas/products_schema";
 import { usersSchema } from "./schemas/users_schema";
-import { blogSchema } from "./schemas/blog_schema";
+import {
+    blogSchema,
+    sampleAdditionalExportColumn
+} from "./schemas/blog_schema";
 import { testEntitySchema } from "./schemas/test_schema";
 import { customSchemaResolver } from "./custom_schema_resolver";
 
@@ -86,6 +89,9 @@ function SampleApp() {
         schema: blogSchema,
         name: "Blog",
         group: "Content",
+        exportable: {
+            additionalColumns: [sampleAdditionalExportColumn]
+        },
         description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
         textSearchDelegate: blogSearchDelegate,
         properties: ["name", "images", "status", "reviewed", "products", "gold_text", "long_text"],
