@@ -3,8 +3,7 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
-import { Authenticator, EntityCollection } from "./models";
-import { SchemaResolver } from "./models";
+import { Authenticator, EntityCollection, SchemaResolver } from "./models";
 import firebase from "firebase";
 
 
@@ -150,9 +149,11 @@ export interface Navigation {
 export interface CMSView {
 
     /**
-     * CMS Path
+     * CMS Path (or paths) you can reach this view from.
+     * If you include multiple paths, only the first one will be included in the
+     * main menu
      */
-    path: string;
+    path: string | string[];
 
     /**
      * Name of this view
@@ -163,6 +164,12 @@ export interface CMSView {
      * Optional description of this view. You can use Markdown
      */
     description?: string;
+
+    /**
+     * Should this view be hidden from the main navigation panel.
+     * It will still be accessible if you reach the specified path
+     */
+    hideFromNavigation?: boolean;
 
     /**
      * Component to be rendered

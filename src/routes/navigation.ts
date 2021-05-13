@@ -69,7 +69,7 @@ export function getCollectionPathFrom(s: string) {
  */
 export function getCollectionViewFromPath(path: string, collectionViews?: EntityCollection[]): EntityCollection | undefined {
 
-    if(!collectionViews)
+    if (!collectionViews)
         return undefined;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -197,7 +197,7 @@ export interface TopNavigationEntry {
     group?: string;
 }
 
-export function computeNavigation(navigation: EntityCollection[], additionalViews: CMSView[] | undefined): {
+export function computeNavigation(navigation: EntityCollection[], cmsViews: CMSView[] | undefined, includeHiddenViews: boolean): {
     navigationEntries: TopNavigationEntry[],
     groups: string[]
 } {
@@ -208,12 +208,16 @@ export function computeNavigation(navigation: EntityCollection[], additionalView
             description: view.description,
             group: view.group
         })),
-        ...(additionalViews ?? []).map(additionalView => ({
-            url: addInitialSlash(additionalView.path),
-            name: additionalView.name,
-            description: additionalView.description,
-            group: additionalView.group
-        }))
+        ...(cmsViews ?? []).map(cmsView =>
+            includeHiddenViews || !cmsView.hideFromNavigation ?
+                ({
+                    url: addInitialSlash(Array.isArray(cmsView.path) ? cmsView.path[0] : cmsView.path),
+                    name: cmsView.name,
+                    description: cmsView.description,
+                    group: cmsView.group
+                })
+                : undefined)
+            .filter((view) => !!view) as TopNavigationEntry[]
     ];
 
     const groups: string[] = Array.from(new Set(

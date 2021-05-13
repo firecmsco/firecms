@@ -5,18 +5,18 @@ import { useBreadcrumbsContext } from "../contexts";
 import { CMSView } from "../CMSAppProps";
 
 
-interface AdditionalViewRouteProps {
-    additionalView: CMSView;
+interface CMSViewRouteProps {
+    cmsView: CMSView;
 }
 
-function AdditionalViewRoute({
-                                 additionalView
-                             }: AdditionalViewRouteProps) {
+function CMSViewRoute({
+                                 cmsView
+                             }: CMSViewRouteProps) {
 
     const { url } = useRouteMatch();
 
     const breadcrumb: BreadcrumbEntry = {
-        title: additionalView.name,
+        title: cmsView.name,
         url: url
     };
 
@@ -29,8 +29,8 @@ function AdditionalViewRoute({
     }, [url]);
 
     return <React.Fragment>
-        {additionalView.view}
+        {cmsView.view}
     </React.Fragment>;
 }
 
-export default AdditionalViewRoute;
+export default CMSViewRoute;

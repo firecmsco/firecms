@@ -4,8 +4,8 @@ import {
     createStyles,
     Divider,
     Drawer,
-    List,
     Link,
+    List,
     ListItem,
     ListItemText,
     makeStyles,
@@ -42,7 +42,7 @@ interface CMSDrawerProps {
     collections: EntityCollection[],
     drawerOpen: boolean,
     closeDrawer: () => any,
-    additionalViews: CMSView[] | undefined;
+    cmsViews: CMSView[] | undefined;
 }
 
 interface NavigationEntry {
@@ -56,14 +56,14 @@ export function CMSDrawer({
                               collections,
                               closeDrawer,
                               drawerOpen,
-                              additionalViews
+                              cmsViews
                           }: CMSDrawerProps) {
 
     const classes = useStyles();
     const {
         navigationEntries,
         groups
-    } = computeNavigation(collections, additionalViews);
+    } = computeNavigation(collections, cmsViews, false);
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 

@@ -44,12 +44,12 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 interface HomeRouteProps {
     navigation: EntityCollection[],
-    additionalViews: CMSView[] | undefined;
+    cmsViews: CMSView[] | undefined;
 }
 
 function HomeRoute({
                        navigation,
-                       additionalViews
+                       cmsViews
                    }: HomeRouteProps) {
 
     const classes = useStyles();
@@ -71,7 +71,7 @@ function HomeRoute({
     const {
         navigationEntries,
         groups
-    } = computeNavigation(navigation, additionalViews);
+    } = computeNavigation(navigation, cmsViews, true);
 
     const allGroups: Array<string | null> = [...groups];
     if (navigationEntries.filter(e => !e.group).length > 0) {

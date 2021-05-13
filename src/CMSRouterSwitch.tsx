@@ -4,7 +4,7 @@ import { Route, Switch, useLocation } from "react-router-dom";
 import { EntityCollection } from "./models";
 import { addInitialSlash, buildCollectionPath } from "./routes/navigation";
 import { CMSView } from "./CMSAppProps";
-import { AdditionalViewRoute, CollectionRoute, HomeRoute } from "./routes";
+import { CMSViewRoute, CollectionRoute, HomeRoute } from "./routes";
 
 export function CMSRouterSwitch({ collections, views }: {
     collections: EntityCollection[],
@@ -13,6 +13,15 @@ export function CMSRouterSwitch({ collections, views }: {
 
     const location: any = useLocation();
     const mainLocation = location.state && location.state["main_location"] ? location.state["main_location"] : location;
+
+    function buildCMSViewRoute(path: string, cmsView: CMSView) {
+        return <Route
+            key={"additional_view_" + path}
+            path={addInitialSlash(path)}
+        >
+            <CMSViewRoute cmsView={cmsView}/>
+        </Route>;
+    }
 
     return (
         <Switch location={mainLocation}>
@@ -32,21 +41,18 @@ export function CMSRouterSwitch({ collections, views }: {
                 )}
 
             {views &&
-            views.map(additionalView => (
-                <Route
-                    key={"additional_view_" + additionalView.path}
-                    path={addInitialSlash(additionalView.path)}
-                >
-                    <AdditionalViewRoute additionalView={additionalView}/>
-                </Route>
-            ))}
+            views.map(cmsView => {
+                if (Array.isArray(cmsView.path))
+                    return <>{cmsView.path.map(path => buildCMSViewRoute(path, cmsView))}</>;
+                return buildCMSViewRoute(cmsView.path, cmsView);
+            })}
 
 
             <Route
                 key={`navigation_home`}>
                 <HomeRoute
                     navigation={collections}
-                    additionalViews={views}
+                    cmsViews={views}
                 />
             </Route>
 

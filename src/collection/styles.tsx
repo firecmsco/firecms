@@ -95,7 +95,7 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
                 }
             },
             "&:hover": {
-                backgroundColor: ({ disabled }) => disabled ? undefined : "#eee"
+                backgroundColor: ({ disabled }:any) => disabled ? undefined : "#eee"
             },
             justifyContent: ({ align }) => {
                 switch (align) {

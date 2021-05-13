@@ -7,6 +7,7 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "@camberi/firecms";
+import { useParams } from "react-router-dom";
 
 /**
  * Sample CMS view not bound to a collection, customizable by the developer
@@ -17,6 +18,9 @@ export function ExampleCMSView() {
     const snackbarController = useSnackbarController();
     const sideEntityController = useSideEntityController();
     const authController = useAuthContext();
+
+    const params = useParams();
+    console.log("Test view params", params);
 
     const customProductSchema = buildSchema({
         name: "Custom product",

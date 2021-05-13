@@ -3,8 +3,8 @@ export {
 } from "./CollectionRoute";
 
 export {
-    default as AdditionalViewRoute
-} from "./AdditionalViewRoute";
+    default as CMSViewRoute
+} from "./CMSViewRoute";
 
 export {
     default as HomeRoute

@@ -381,7 +381,7 @@ define the following specs:
 - `name` Name of the app, displayed as the main title and in the tab title.
 
 - `navigation` Use this prop to specify the views that will be generated in the
-  CMS. You usually will want to create a `Navigation` object that includes
+  CMS. You will usually want to create a `Navigation` object that includes
   collection views where you specify the path and the schema. Additionally you
   can add custom views to the root navigation. In you need to customize the
   navigation based on the logged user you can use a `NavigationBuilder`
@@ -402,9 +402,6 @@ define the following specs:
 
 - `allowSkipLogin` If authentication is enabled, allow the user to access the
   content without login.
-
-- `additionalViews` Custom additional views created by the developer, added to
-  the main navigation.
 
 - `firebaseConfig` Firebase configuration of the project. If you afe deploying
   the app to Firebase hosting, you don't need to specify this value.

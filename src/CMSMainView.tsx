@@ -150,7 +150,7 @@ export function CMSMainView(props: CMSMainViewProps) {
         }
 
         const collections = cmsAppContext.navigation.collections;
-        const additionalViews = cmsAppContext.navigation.views;
+        const cmsViews = cmsAppContext.navigation.views;
 
         view = (
             <>
@@ -159,7 +159,7 @@ export function CMSMainView(props: CMSMainViewProps) {
                                drawerOpen={drawerOpen}
                                collections={collections}
                                closeDrawer={closeDrawer}
-                               additionalViews={additionalViews}/>
+                               cmsViews={cmsViews}/>
                 </nav>
 
                 <div className={classes.main}>
@@ -171,7 +171,7 @@ export function CMSMainView(props: CMSMainViewProps) {
                         className={classes.content}>
                         <CMSRouterSwitch
                             collections={collections}
-                            views={additionalViews}/>
+                            views={cmsViews}/>
                     </main>
                 </div>
             </>
