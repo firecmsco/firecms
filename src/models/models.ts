@@ -89,6 +89,8 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
 
     /**
      * Should the data in this collection view include an export button.
+     * You can also set an `ExportConfig` configuration object to customize
+     * the export and add additional values.
      * Defaults to `true`
      */
     exportable?: boolean | ExportConfig;

@@ -8,6 +8,7 @@
         "@material-ui/core": "link:../node_modules/@material-ui/core",
         "@material-ui/icons": "link:../node_modules/@material-ui/icons",
         "@material-ui/pickers": "link:../node_modules/@material-ui/pickers",
+        "@material-ui/lab": "link:../node_modules/@material-ui/lab",
         "@camberi/firecms": "link:../node_modules/@camberi/firecms",
         "react": "link:../node_modules/react",
         "react-dom": "link:../node_modules/react-dom",

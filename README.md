@@ -120,7 +120,7 @@ picked up automatically.
 
 - Install FireCMS and it's peer dependencies:
 
-```yarn add @camberi/firecms @material-ui/core @material-ui/icons @material-ui/pickers firebase```
+```yarn add @camberi/firecms @material-ui/core @material-ui/icons @material-ui/pickers @material-ui/lab firebase```
 
 You can replace the content of the file App.tsx with the following sample code.
 Remember to replace the Firebase config with the one you get after creating a
@@ -382,7 +382,7 @@ define the following specs:
 
 - `navigation` Use this prop to specify the views that will be generated in the
   CMS. You will usually want to create a `Navigation` object that includes
-  collection views where you specify the path and the schema. Additionally you
+  collection views where you specify the path and the schema. Additionally, you
   can add custom views to the root navigation. In you need to customize the
   navigation based on the logged user you can use a `NavigationBuilder`
 
@@ -706,9 +706,6 @@ Firestore data schema.
 
 * `defaultSize` Default size of the rendered collection.
 
-* `size` Optional field used to group top level navigation entries under a
-  navigation view. If you set this value in a subcollection it has no effect.
-
 * `group` Optional field used to group top level navigation entries under a
   navigation view. If you set this value in a subcollection it has no effect.
 
@@ -758,6 +755,8 @@ Firestore data schema.
   , entities can still be edited in the side panel.
 
 * `exportable` Should the data in this collection view include an export button.
+  You can also set an `ExportConfig` configuration object to customize
+  the export and add additional values.
   Defaults to `true`
 
 * `subcollections` Following the Firestore document and collection schema, you

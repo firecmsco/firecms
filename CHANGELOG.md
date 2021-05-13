@@ -1,5 +1,25 @@
 # Change Log
 
+## [0.39.0] - 2021-05-13
+
+### Added
+
+- Allowing adding customized columns to CSV exports
+- Added builder
+- Allowing changing pagination size
+- Allowing multiple paths per CMSView and `hideFromNavigation` flag added
+
+### Changed
+
+- [BREAKING] Material dependencies have been moved to `peerDependencies`
+If your build breaks, simply add these dependencies to your project:
+```
+"@material-ui/core": "^4.11.4",
+"@material-ui/icons": "^4.11.2",
+"@material-ui/lab": "^4.0.0-alpha.58",
+"@material-ui/pickers": "^3.3.10",
+```
+
 ## [0.38.2] - 2021-05-05
 
 ### Changed
