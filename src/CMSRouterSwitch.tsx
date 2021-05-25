@@ -16,11 +16,21 @@ export function CMSRouterSwitch({ collections, views }: {
 
     function buildCMSViewRoute(path: string, cmsView: CMSView) {
         return <Route
-            key={"additional_view_" + path}
+            key={"navigation_view_" + path}
             path={addInitialSlash(path)}
         >
             <CMSViewRoute cmsView={cmsView}/>
         </Route>;
+    }
+
+    let customRoutes: JSX.Element[] = [];
+    if (views) {
+        views.forEach((cmsView) => {
+            if (Array.isArray(cmsView.path))
+                customRoutes.push(...cmsView.path.map(path => buildCMSViewRoute(path, cmsView)));
+            else
+                customRoutes.push(buildCMSViewRoute(cmsView.path, cmsView));
+        });
     }
 
     return (
@@ -40,13 +50,7 @@ export function CMSRouterSwitch({ collections, views }: {
                     )
                 )}
 
-            {views &&
-            views.map(cmsView => {
-                if (Array.isArray(cmsView.path))
-                    return <>{cmsView.path.map(path => buildCMSViewRoute(path, cmsView))}</>;
-                return buildCMSViewRoute(cmsView.path, cmsView);
-            })}
-
+            {customRoutes}
 
             <Route
                 key={`navigation_home`}>

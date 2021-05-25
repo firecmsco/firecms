@@ -312,22 +312,31 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             </Button>);
 
         const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collectionConfig.permissions, authController.loggedUser, entity));
+        const onMultipleDeleteClick = (event: React.MouseEvent) => {
+            event.stopPropagation();
+            setDeleteEntityClicked(selectedEntities);
+        };
         const multipleDeleteButton = selectionEnabled &&
 
             <Tooltip
                 title={multipleDeleteEnabled ? "Multiple delete" : "You have selected one entity you cannot delete"}>
                 <span>
-                    <Button
+                    {largeLayout && <Button
                         disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
                         startIcon={<Delete/>}
-                        onClick={(event: React.MouseEvent) => {
-                            event.stopPropagation();
-                            setDeleteEntityClicked(selectedEntities);
-                        }}
+                        onClick={onMultipleDeleteClick}
                         color={"primary"}
                     >
                         <p style={{ minWidth: 24 }}>({selectedEntities?.length})</p>
-                    </Button>
+                    </Button>}
+
+                    {!largeLayout &&
+                    <IconButton
+                        color={"primary"}
+                        disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
+                        onClick={onMultipleDeleteClick}>
+                        <Delete/>
+                    </IconButton>}
                 </span>
             </Tooltip>;
 

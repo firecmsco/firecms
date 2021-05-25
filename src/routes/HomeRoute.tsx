@@ -119,31 +119,35 @@ function HomeRoute({
         </Grid>;
     }
 
-    const groupViews
-        = allGroups.map((group, index) => (
-        <Box mt={6} mb={6} key={`group_${index}`}>
-            <Typography color={"textSecondary"} className={"weight-500"}>
-                {group?.toUpperCase() ?? "Ungrouped".toUpperCase()}
-            </Typography>
-            <Divider/>
-            <Box mt={2}>
-                <Grid container spacing={2}>
-                    {group && navigationEntries
-                        .filter((entry) => entry.group === group)
-                        .map((entry) => buildNavigationCard(entry))
-                    }
-                    {!group && navigationEntries
-                        .filter((entry) => !entry.group)
-                        .map((entry) => buildNavigationCard(entry))
-                    }
-                </Grid>
-            </Box>
-        </Box>
-    ));
 
-    return <Container>
-        {groupViews}
-    </Container>;
+    return (
+        <Container>
+            {allGroups.map((group, index) => (
+                <Box mt={6} mb={6} key={`group_${index}`}>
+                    {allGroups.length > 0 && <>
+                        <Typography color={"textSecondary"}
+                                    className={"weight-500"}>
+                            {group?.toUpperCase() ?? "Ungrouped".toUpperCase()}
+                        </Typography>
+                        <Divider/>
+                    </>}
+
+                    <Box mt={2}>
+                        <Grid container spacing={2}>
+                            {group && navigationEntries
+                                .filter((entry) => entry.group === group)
+                                .map((entry) => buildNavigationCard(entry))
+                            }
+                            {!group && navigationEntries
+                                .filter((entry) => !entry.group)
+                                .map((entry) => buildNavigationCard(entry))
+                            }
+                        </Grid>
+                    </Box>
+                </Box>
+            ))}
+        </Container>
+    );
 }
 
 export default HomeRoute;

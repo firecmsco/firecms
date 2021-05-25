@@ -8,15 +8,12 @@ import PopupState, { bindPopover, bindTrigger } from "material-ui-popup-state";
 import {
     Box,
     Button,
-    createStyles,
     IconButton,
-    makeStyles,
     Popover,
     Table,
     TableBody,
     TableCell as MuiTableCell,
     TableRow,
-    Theme,
     Tooltip,
     withStyles
 } from "@material-ui/core";
@@ -47,7 +44,12 @@ interface FilterPopupProps<S extends EntitySchema<Key>, Key extends string> {
     onFilterUpdate(filterValues?: FilterValues<S, Key>): void;
 }
 
-export default function FilterPopup<S extends EntitySchema<Key>, Key extends string>({ schema, filterValues, onFilterUpdate, filterableProperties }: FilterPopupProps<S, Key>) {
+export default function FilterPopup<S extends EntitySchema<Key>, Key extends string>({
+                                                                                         schema,
+                                                                                         filterValues,
+                                                                                         onFilterUpdate,
+                                                                                         filterableProperties
+                                                                                     }: FilterPopupProps<S, Key>) {
 
     function createFilterFields() {
 
@@ -99,16 +101,23 @@ export default function FilterPopup<S extends EntitySchema<Key>, Key extends str
                     popupState.close();
                 }
 
-                const clearSetFiltersView = <Tooltip title="Clear filter">
-                    <IconButton
-                        aria-label="filter clear"
-                        onClick={() => onFilterUpdate(undefined)}>
-                        <ClearIcon fontSize={"small"}/>
-                    </IconButton>
-                </Tooltip>;
+                const clearSetFiltersView = (
+                    <Tooltip title="Clear filter">
+                        <IconButton
+                            style={{ height: "fit-content" }}
+                            size={"small"}
+                            aria-label="filter clear"
+                            onClick={() => onFilterUpdate(undefined)}>
+                            <ClearIcon fontSize={"small"}/>
+                        </IconButton>
+                    </Tooltip>
+                );
 
                 return (
-                    <Box display={"flex"} ml={1}>
+                    <Box display={"flex"}
+                         alignItems={"center"}
+                         ml={.5}
+                         mr={1}>
 
                         <Tooltip title="Filter list">
                             <IconButton
@@ -137,7 +146,16 @@ export default function FilterPopup<S extends EntitySchema<Key>, Key extends str
                                     initialValues={cleanedInitialValues}
                                     onSubmit={setFilters}
                                 >
-                                    {({ values, resetForm, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => {
+                                    {({
+                                          values,
+                                          resetForm,
+                                          errors,
+                                          touched,
+                                          handleChange,
+                                          handleBlur,
+                                          handleSubmit,
+                                          isSubmitting
+                                      }) => {
                                         const reset = (e: any) => {
                                             resetForm();
                                             setFilters(undefined);

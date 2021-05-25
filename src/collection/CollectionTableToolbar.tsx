@@ -18,7 +18,11 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         toolbar: {
             minHeight: 56,
-            paddingLeft: theme.spacing(2),
+            [theme.breakpoints.down("md")]: {
+                paddingLeft: theme.spacing(.5),
+                paddingRight: theme.spacing(.5)
+            },
+            paddingLeft: theme.spacing(1),
             paddingRight: theme.spacing(1),
             zIndex: 100,
             backgroundColor: theme.palette.background.paper,
@@ -33,6 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
             display: "flex",
             alignItems: "center",
             "& > *": {
+                [theme.breakpoints.down("md")]: {
+                    marginRight: theme.spacing(.5)
+                },
                 marginRight: theme.spacing(1)
             }
         }
@@ -169,10 +176,8 @@ export function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends 
 
             <div className={classes.actions}>
 
-                <Box width={20}>
-                    {props.loading &&
-                    <CircularProgress size={16} thickness={8}/>}
-                </Box>
+                {props.loading &&
+                <CircularProgress size={16} thickness={8}/>}
 
                 {props.actions}
 
