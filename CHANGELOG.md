@@ -1,5 +1,17 @@
 # Change Log
 
+## [0.39.1] - 2021-05-23
+
+### Added
+
+- Added `extra` and `setExtra` fields in auth controller to store custom user data.
+
+### Changed
+
+- Fix for home page
+- Minor layout updates
+- Removed `authResult` from auth context since it was actually useless and confusing
+
 ## [0.39.0] - 2021-05-13
 
 ### Added
