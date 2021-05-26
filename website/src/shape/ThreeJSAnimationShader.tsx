@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 // @ts-ignore
 import useThemeContext from "@theme/hooks/useThemeContext";
@@ -28,7 +28,7 @@ export function ThreeJSAnimationShader({ scroll }: AnimationProps) {
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const sceneStateRef = useRef<SceneState | null>(null);
-    const clockRef = useRef<THREE.Clock>( new THREE.Clock());
+    const clockRef = useRef<THREE.Clock>(new THREE.Clock());
     const requestRef = useRef<number>(-1);
 
     const { isDarkTheme } = useThemeContext();
@@ -137,10 +137,11 @@ export function ThreeJSAnimationShader({ scroll }: AnimationProps) {
 
         // renderer.setClearColor(0xffffff);
         renderer.setSize(width, height);
-        renderer.setPixelRatio(window.devicePixelRatio > 1 ? 1.5 : 1);
+        if (typeof window !== "undefined")
+            renderer.setPixelRatio(window?.devicePixelRatio > 1 ? 1.5 : 1);
 
         const scene = new THREE.Scene();
-        const geometry = isDarkTheme ? buildNightGeometry() :buildDayGeometry();
+        const geometry = isDarkTheme ? buildNightGeometry() : buildDayGeometry();
 
         const red = new THREE.Color(1.0, .23, .0);
         const magenta = new THREE.Color(.97, .34, .45);
@@ -350,19 +351,26 @@ export function ThreeJSAnimationShader({ scroll }: AnimationProps) {
 
     }, [canvasRef.current, wireframe]);
 
+    const innerHeight = window?.innerHeight ?? 0;
+    const innerWidth = window?.innerWidth ?? 0;
     useEffect(() => {
         function handleResize() {
             if (sceneStateRef.current && canvasRef.current) {
-                const width = window.innerWidth,
-                    height = window.innerHeight;
+                const width = innerWidth,
+                    height = innerHeight;
                 canvasRef.current.width = width;
                 updateSceneSize(sceneStateRef.current, width, height);
             }
         }
 
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, [window.innerHeight, window.innerWidth]);
+        if (typeof window !== "undefined")
+            window.addEventListener("resize", handleResize);
+        return () => {
+            if (typeof window !== "undefined")
+                window.removeEventListener("resize", handleResize);
+        };
+
+    }, [innerHeight, innerWidth]);
 
     return <canvas
         style={{

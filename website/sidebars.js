@@ -38,7 +38,7 @@ module.exports = {
                     items: [
                         'contexts/auth_context',
                         'contexts/side_entity_controller',
-                        'contexts/snackbar',
+                        'contexts/snackbars',
                     ]
                 },
             ]

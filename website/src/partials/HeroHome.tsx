@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import useThemeContext from "@theme/hooks/useThemeContext";
 import { ThreeJSAnimationShader } from "../shape/ThreeJSAnimationShader";
 import HeroButtons from "./HeroButtons";
 
-function HeroHome({ scroll }: { scroll: number }) {
+function HeroHome({  }) {
 
+    const [scroll, setScroll] = useState(typeof window !== "undefined"
+        ? window?.pageYOffset
+        : 0);
+
+    useEffect(() => {
+        const listener = () => {
+            if (typeof window !== "undefined")
+                setScroll(window?.pageYOffset ?? 0);
+        };
+        if (typeof window !== "undefined")
+            window.addEventListener("scroll", listener);
+        return () => {
+            if (typeof window !== "undefined")
+                window.removeEventListener("scroll", listener);
+        };
+    }, []);
 
     return (
         <section className="relative" style={{

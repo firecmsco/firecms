@@ -11,14 +11,14 @@ module.exports = {
     plugins: [
         'docusaurus-plugin-sass',
         'docusaurus-tailwindcss-loader',
-        [
-            '@docusaurus/plugin-sitemap',
-            {
-                changefreq: 'weekly',
-                priority: 0.5,
-                trailingSlash: false
-            }
-        ]
+        // [
+        //     '@docusaurus/plugin-sitemap',
+        //     {
+        //         changefreq: 'weekly',
+        //         priority: 0.5,
+        //         trailingSlash: false
+        //     }
+        // ]
     ],
     themeConfig: {
         navbar: {

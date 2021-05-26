@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import HeroHome from "../partials/HeroHome";
 import FeaturesHome from "../partials/Features";
 import FeaturesBlocks from "../partials/FeaturesBlocks";
@@ -11,23 +12,10 @@ import "aos/dist/aos.css";
 import "../css/tailwind.css";
 import Separator from "../partials/Separator";
 import FirebaseIntro from "../partials/FirebaseIntro";
-import { ThreeJSAnimationShader } from "../shape/ThreeJSAnimationShader";
 
 function Home() {
     const context = useDocusaurusContext();
     const { siteConfig = {} } = context;
-
-    const [scroll, setScroll] = useState(window.pageYOffset);
-
-    useEffect(() => {
-        const listener = () => {
-            setScroll(window.pageYOffset);
-        };
-        window.addEventListener("scroll", listener);
-        return () => {
-            window.removeEventListener("scroll", listener);
-        };
-    }, []);
 
     useEffect(() => {
         AOS.init();
@@ -41,7 +29,10 @@ function Home() {
 
                 <main className="flex-grow">
 
-                    <HeroHome scroll={scroll}/>
+                    <BrowserOnly
+                        fallback={<div></div>}>
+                        {() => <HeroHome/>}
+                    </BrowserOnly>
 
                     <Separator/>
 
