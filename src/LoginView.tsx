@@ -11,7 +11,7 @@ import {
 import firebase from "firebase";
 import "firebase/auth";
 
-import { useAuthContext, useCMSAppContext } from "./contexts";
+import { useAuthContext } from "./contexts";
 
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
@@ -50,7 +50,6 @@ export function LoginView({
         const uiConfig: firebaseui.auth.Config = {
             callbacks: {
                 signInSuccessWithAuthResult: (authResult) => {
-                    authController.setAuthResult(authResult);
                     return true;
                 },
                 uiShown: () => authController.setAuthLoading(false),

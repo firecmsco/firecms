@@ -46,17 +46,6 @@ export interface AuthController {
     setAuthLoading: (loading: boolean) => void;
 
     /**
-     * Authentication result
-     */
-    authResult: any;
-
-    /**
-     * Change authentication result
-     * @param authResult
-     */
-    setAuthResult: (authResult: any) => void;
-
-    /**
      * Is the login skipped
      */
     loginSkipped: boolean;
@@ -96,9 +85,6 @@ export const AuthContext = React.createContext<AuthController>({
     },
     authLoading: false,
     setAuthLoading: () => {
-    },
-    authResult: null,
-    setAuthResult: () => {
     },
     loginSkipped: false,
     notAllowedError: false,
@@ -142,7 +128,6 @@ export const useAuthHandler = (
     const [authProviderError, setAuthProviderError] = React.useState<any>();
 
     const [authLoading, setAuthLoading] = React.useState(true);
-    const [authResult, setAuthResult] = React.useState<any>();
     const [loginSkipped, setLoginSkipped] = React.useState<boolean>(false);
     const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
     const [extra, setExtra] = React.useState<any>();
@@ -197,8 +182,6 @@ export const useAuthHandler = (
         setAuthProviderError,
         authLoading,
         setAuthLoading,
-        authResult,
-        setAuthResult,
         loginSkipped,
         notAllowedError,
         skipLogin,
