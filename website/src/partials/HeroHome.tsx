@@ -12,7 +12,14 @@ function HeroHome({}) {
         }}>
 
             <BrowserOnly
-                fallback={<div></div>}>
+                fallback={<canvas style={{
+                    height: "100vh",
+                    maxHeight: "600px",
+                    width: "100vw",
+                    position: "fixed",
+                    transform: `translateY(60px)`,
+                    zIndex: -10
+                }}/>}>
                 {() => <ThreeJSAnimationShader/>}
             </BrowserOnly>
 

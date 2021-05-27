@@ -34,6 +34,11 @@ module.exports = {
                     label: 'Docs',
                     position: 'left'
                 },
+                {
+                    to: 'https://demo.firecms.co',
+                    label: 'Demo',
+                    position: 'left'
+                },
                 // { to: 'blog', label: 'Blog', position: 'left' },
                 {
                     href: 'https://github.com/Camberi/firecms',
@@ -48,11 +53,19 @@ module.exports = {
             links: [
                 {
                     // Label of the section of these links
-                    title: 'Docs',
+                    title: 'Links',
                     items: [
                         {
-                            label: 'Intro',
+                            label: 'Docs',
                             to: 'docs/',
+                        },
+                        {
+                            label: 'Demo',
+                            to: 'https://demo.firecms.co',
+                        },
+                        {
+                            label: 'Camberi',
+                            to: 'https://camberi.com',
                         },
                     ],
                 },
@@ -62,6 +75,10 @@ module.exports = {
                         {
                             label: 'Reddit',
                             href: 'https://www.reddit.com/r/firecms/',
+                        },
+                        {
+                            label: 'Github',
+                            href: 'https://github.com/Camberi/firecms',
                         },
                         // {
                         //     label: 'Discord',
@@ -82,6 +99,7 @@ module.exports = {
                     ],
                 },
             ],
+            copyright: `GPL-3.0 © ${new Date().getFullYear()} - camberi`,
         },
         prism: {
             theme: require('prism-react-renderer/themes/vsDark'),

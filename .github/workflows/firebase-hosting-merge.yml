@@ -14,6 +14,9 @@ jobs:
             working-directory: ./website
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
       - run: yarn
       - run: yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
