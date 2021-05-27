@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 // @ts-ignore
 import useThemeContext from "@theme/hooks/useThemeContext";
@@ -21,10 +21,26 @@ type SceneState = {
 }
 
 type AnimationProps = {
-    scroll: number,
 }
 
-export function ThreeJSAnimationShader({ scroll }: AnimationProps) {
+export function ThreeJSAnimationShader({  }: AnimationProps) {
+
+    const [scroll, setScroll] = useState(typeof window !== "undefined"
+        ? window?.pageYOffset
+        : 0);
+
+    useEffect(() => {
+        const listener = () => {
+            if (typeof window !== "undefined")
+                setScroll(window?.pageYOffset ?? 0);
+        };
+        if (typeof window !== "undefined")
+            window.addEventListener("scroll", listener);
+        return () => {
+            if (typeof window !== "undefined")
+                window.removeEventListener("scroll", listener);
+        };
+    }, []);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const sceneStateRef = useRef<SceneState | null>(null);

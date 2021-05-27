@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import BrowserOnly from "@docusaurus/BrowserOnly";
 import HeroHome from "../partials/HeroHome";
 import FeaturesHome from "../partials/Features";
 import FeaturesBlocks from "../partials/FeaturesBlocks";
@@ -28,11 +27,7 @@ function Home() {
             <div className="flex flex-col min-h-screen overflow-hidden">
 
                 <main className="flex-grow">
-
-                    <BrowserOnly
-                        fallback={<div></div>}>
-                        {() => <HeroHome/>}
-                    </BrowserOnly>
+                    <HeroHome/>
 
                     <Separator/>
 

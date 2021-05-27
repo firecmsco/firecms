@@ -1,34 +1,20 @@
-import React, { useEffect, useState } from "react";
-import useBaseUrl from "@docusaurus/useBaseUrl";
-import useThemeContext from "@theme/hooks/useThemeContext";
+import React from "react";
 import { ThreeJSAnimationShader } from "../shape/ThreeJSAnimationShader";
 import HeroButtons from "./HeroButtons";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
-function HeroHome({  }) {
+function HeroHome({}) {
 
-    const [scroll, setScroll] = useState(typeof window !== "undefined"
-        ? window?.pageYOffset
-        : 0);
-
-    useEffect(() => {
-        const listener = () => {
-            if (typeof window !== "undefined")
-                setScroll(window?.pageYOffset ?? 0);
-        };
-        if (typeof window !== "undefined")
-            window.addEventListener("scroll", listener);
-        return () => {
-            if (typeof window !== "undefined")
-                window.removeEventListener("scroll", listener);
-        };
-    }, []);
 
     return (
         <section className="relative" style={{
             isolation: "isolate"
         }}>
 
-            <ThreeJSAnimationShader scroll={scroll}/>
+            <BrowserOnly
+                fallback={<div></div>}>
+                {() => <ThreeJSAnimationShader/>}
+            </BrowserOnly>
 
             <div
                 className="flex items-center justify-center px-4 sm:px-6 lg:mt-44 md:mt-40 mt-32">
@@ -63,7 +49,7 @@ function HeroHome({  }) {
                         // data-aos="zoom-y-out"
                         // data-aos-delay="200"
                     >
-                    <HeroButtons/>
+                        <HeroButtons/>
                     </div>
 
                 </div>
