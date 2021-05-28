@@ -1,3 +1,5 @@
+[logo]: https://firecms.co/img/logo_small.png "Logo"
+
 # FireCMS
 
 > Awesome Firestore based headless CMS, developed by Camberi
@@ -27,12 +29,18 @@ FireCMS is based on this great technologies:
 - Material UI
 - Formik + Yup
 
+### Quickstart
+
+The easiest way to get going is to check our docs!
+
+https://firecms.co
+
 ### Demo
 
 Check the demo with all the core functionalities. You can modify the data, but
 it gets periodically restored.
 
-https://firecms-demo-27150.web.app
+https://demo.firecms.co
 
 ### Changelog
 

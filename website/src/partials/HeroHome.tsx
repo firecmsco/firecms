@@ -13,11 +13,12 @@ function HeroHome({}) {
 
             <BrowserOnly
                 fallback={<canvas style={{
-                    height: "100vh",
-                    maxHeight: "600px",
-                    width: "100vw",
+                    height: "1000px",
+                    width: "100vh",
+                    maxHeight: "1000px",
                     position: "fixed",
                     transform: `translateY(60px)`,
+                    top: 0,
                     zIndex: -10
                 }}/>}>
                 {() => <ThreeJSAnimationShader/>}

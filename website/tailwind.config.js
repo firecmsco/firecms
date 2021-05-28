@@ -1,8 +1,7 @@
 module.exports = {
     purge: ['./src/**/*.html', './src/**/*.js', './src/**/*.tsx'],
     // important: '#tailwind',
-    corePlugins: { preflight: false},
-    // important: '#tailwind',
+    corePlugins: { preflight: false },
     theme: {
         extend: {
             colors: {
@@ -156,6 +155,5 @@ module.exports = {
         opacity: ['responsive', 'hover', 'focus', 'group-hover']
     },
     plugins: [
-        require('@tailwindcss/custom-forms')
     ]
 }

@@ -393,7 +393,6 @@ export function Shape(props: ShapeProps) {
         const material2 = new THREE.MeshPhongMaterial({
             transparent: true
         });
-        material2.flatShading = true;
         material2Ref.current = material2;
 
         const materialWireframe = new THREE.MeshPhongMaterial({

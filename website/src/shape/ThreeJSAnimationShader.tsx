@@ -287,7 +287,6 @@ export function ThreeJSAnimationShader({  }: AnimationProps) {
 
         const material = new THREE.ShaderMaterial({
             uniforms: uniforms,
-            flatShading: true,
             vertexShader: buildVertexShader(),
             fragmentShader: buildFragmentShader()
         });
@@ -367,17 +366,16 @@ export function ThreeJSAnimationShader({  }: AnimationProps) {
 
     }, [canvasRef.current, wireframe]);
 
-    const innerHeight = window?.innerHeight ?? 0;
-    const innerWidth = window?.innerWidth ?? 0;
     useEffect(() => {
         function handleResize() {
             if (sceneStateRef.current && canvasRef.current) {
-                const width = innerWidth,
-                    height = innerHeight;
+                const width = window.innerWidth,
+                    height = window.innerHeight;
                 canvasRef.current.width = width;
                 updateSceneSize(sceneStateRef.current, width, height);
             }
         }
+        handleResize();
 
         if (typeof window !== "undefined")
             window.addEventListener("resize", handleResize);
@@ -386,7 +384,7 @@ export function ThreeJSAnimationShader({  }: AnimationProps) {
                 window.removeEventListener("resize", handleResize);
         };
 
-    }, [innerHeight, innerWidth]);
+    }, [window]);
 
     return <canvas
         style={{

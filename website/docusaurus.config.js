@@ -9,7 +9,7 @@ module.exports = {
     organizationName: 'Camberi',
     projectName: 'FireCMS',
     plugins: [
-        'docusaurus-plugin-sass',
+        // 'docusaurus-plugin-sass',
         'docusaurus-tailwindcss-loader',
         // [
         //     '@docusaurus/plugin-sitemap',
