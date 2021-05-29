@@ -1,4 +1,5 @@
-[logo]: https://firecms.co/img/logo_small.png "Logo"
+
+![logo](https://firecms.co/img/logo_small.png)
 
 # FireCMS
 

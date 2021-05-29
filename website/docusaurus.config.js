@@ -1,6 +1,6 @@
 module.exports = {
     title: 'FireCMS',
-    tagline: 'Awesome Firestore based headless CMS, developed by Camberi',
+    tagline: 'Awesome Firestore based headless CMS',
     url: 'https://firecms.co',
     baseUrl: '/',
     onBrokenLinks: 'throw',
@@ -9,16 +9,8 @@ module.exports = {
     organizationName: 'Camberi',
     projectName: 'FireCMS',
     plugins: [
-        // 'docusaurus-plugin-sass',
         'docusaurus-tailwindcss-loader',
-        // [
-        //     '@docusaurus/plugin-sitemap',
-        //     {
-        //         changefreq: 'weekly',
-        //         priority: 0.5,
-        //         trailingSlash: false
-        //     }
-        // ]
+        // '@docusaurus/plugin-google-gtag',
     ],
     themeConfig: {
         navbar: {
@@ -103,6 +95,9 @@ module.exports = {
         },
         prism: {
             theme: require('prism-react-renderer/themes/vsDark'),
+        },
+        gtag: {
+            trackingID: 'G-D4DQQCW88S',
         },
     },
     presets: [

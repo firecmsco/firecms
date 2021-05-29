@@ -52,6 +52,8 @@ fields, common to all data types:
       in `field`
       or in `preview`.
 
+You can see more details about how to implement [custom fields](custom_fields.md)
+
 
 * `onPreSave` Hook called before saving, you need to return the values that will
   get saved. If you throw an error in this method the process stops, and an
@@ -78,7 +80,7 @@ fly, based on other values.
 When you are saving an entity you can attach different callbacks before and
 after it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
 
-```
+```tsx
 const productSchema = buildSchema({
     customId: true,
     name: "Product",
