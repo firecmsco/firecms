@@ -10,13 +10,13 @@ module.exports = {
             label: 'Quickstart',
             id: 'quickstart'
         },
+        'cms_config',
         {
             type: 'category',
-            label: 'Configuration',
+            label: 'Default views',
             items: [
-                'cms_config',
-                'collections',
                 'entity_schemas',
+                'collections',
                 {
                     type: 'category',
                     label: 'Properties',
@@ -31,15 +31,15 @@ module.exports = {
                         'properties/geopoint'
                     ]
                 },
-                'custom_fields',
-                {
-                    type: 'category',
-                    label: 'Custom views',
-                    items: [
-                        'custom_views',
-                        'contexts/hooks'
-                    ]
-                }
+                'custom_fields'
+            ]
+        },
+        {
+            type: 'category',
+            label: 'Custom views',
+            items: [
+                'custom_views',
+                'contexts/hooks'
             ]
         }
     ]
