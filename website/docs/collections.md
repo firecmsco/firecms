@@ -4,7 +4,6 @@ title: Collections
 sidebar_label: Collections
 ---
 
-
 Once you have defined at least one entity schema, you can include it in a
 collection. You can find collection views as the first level of navigation in
 the main menu, or as subcollections inside other collections, following the
@@ -106,6 +105,24 @@ including enum types. If you want a property to be filterable, you can mark it
 as such in the entity schema.
 
 Any comments related to this feature are welcome.
+
+### Permissions
+
+You can define the `edit`, `create` and `delete` permissions at the collection
+level, also depending on the logged-in user.
+
+```tsx
+buildCollection({
+    relativePath: "products",
+    schema: productSchema,
+    name: "Products",
+    permissions: ({ user }) => ({
+        edit: true,
+        create: true,
+        delete: true
+    })
+});
+```
 
 ### Text search
 

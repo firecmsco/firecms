@@ -70,7 +70,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
     textSearchDelegate?: TextSearchDelegate;
 
     /**
-     * Permissions the logged in user can perform on this collection.
+     * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`
      */
     permissions?: PermissionsBuilder<S, Key>;

@@ -76,7 +76,7 @@ export function ThreeJSAnimationShader({  }: AnimationProps) {
 
         const vertices: { pos: number[], norm: number[], uv: number[] }[] = [];
 
-        const dodecahedron = new THREE.DodecahedronGeometry(SPHERE_RADIUS, 12);
+        const dodecahedron = new THREE.DodecahedronGeometry(SPHERE_RADIUS, 16);
 
         console.log("dodecahedron vertices count", dodecahedron.attributes.position.array.length);
 
@@ -157,9 +157,10 @@ export function ThreeJSAnimationShader({  }: AnimationProps) {
             renderer.setPixelRatio(window?.devicePixelRatio > 1 ? 1.5 : 1);
 
         const scene = new THREE.Scene();
-        const geometry = isDarkTheme ? buildNightGeometry() : buildDayGeometry();
+        // const geometry = isDarkTheme ? buildNightGeometry() : buildDayGeometry();
+        const geometry = buildNightGeometry();
 
-        const red = new THREE.Color(1.0, .23, .0);
+        const red = new THREE.Color(1.0, .0, .0);
         const magenta = new THREE.Color(.97, .34, .45);
         const cyan = new THREE.Color(.53, .96, 1.);
         const blue = new THREE.Color(.46, .32, .87);
@@ -186,15 +187,7 @@ export function ThreeJSAnimationShader({  }: AnimationProps) {
             coef: new THREE.Vector3(1, 0, 0),
             constant: new THREE.Vector3(0, -.9, 0)
         });
-        layers.push({
-            is_active: 1,
-            color: blue,
-            sin: new THREE.Vector3(1, 0, 0),
-            cos: new THREE.Vector3(0, 0, 0),
-            time_dilation: new THREE.Vector3(1.1, 1, 1),
-            coef: new THREE.Vector3(1, 0, 0),
-            constant: new THREE.Vector3(0, -1, -.2)
-        });
+
         layers.push({
             is_active: 1,
             color: cyan,
@@ -207,13 +200,12 @@ export function ThreeJSAnimationShader({  }: AnimationProps) {
         layers.push({
             is_active: 1,
             color: blue,
-            sin: new THREE.Vector3(0, 0, 1),
-            cos: new THREE.Vector3(0, 1, 1),
-            time_dilation: new THREE.Vector3(.7, .4, .5),
-            coef: new THREE.Vector3(.3, -.5, 1),
-            constant: new THREE.Vector3(0, -.4, .5)
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(1.1, 1, 1),
+            coef: new THREE.Vector3(1, 0, 0),
+            constant: new THREE.Vector3(0, -1, -.2)
         });
-
         layers.push({
             is_active: 1,
             color: blue,
@@ -223,6 +215,7 @@ export function ThreeJSAnimationShader({  }: AnimationProps) {
             coef: new THREE.Vector3(.3, 0, .3),
             constant: new THREE.Vector3(0, -.8, .2)
         });
+
 
         layers.push({
             is_active: 1,
@@ -252,6 +245,16 @@ export function ThreeJSAnimationShader({  }: AnimationProps) {
             time_dilation: new THREE.Vector3(.7, .6, 1),
             coef: new THREE.Vector3(-.4, .8, .5),
             constant: new THREE.Vector3(0, -.8, 0)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(0, 0, 1),
+            cos: new THREE.Vector3(0, 1, 1),
+            time_dilation: new THREE.Vector3(.7, .4, .5),
+            coef: new THREE.Vector3(.3, -.5, 1),
+            constant: new THREE.Vector3(0, -.4, .5)
         });
 
         layers.push({
@@ -295,7 +298,6 @@ export function ThreeJSAnimationShader({  }: AnimationProps) {
 
         const mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = .2;
-        // mesh.position.y = 6;
         mesh.position.y = 14;
 
         // mesh.rotation.y = 3.14 / 2;
@@ -616,27 +618,6 @@ function buildVertexShader() {
     vec3 blendNormal(vec3 base, vec3 blend, float opacity) {
         return (blendNormal(base, blend) * opacity + base * (1.0 - opacity));
     }
-    vec3 blendAverage(vec3 base, vec3 blend) {
-        return (base+blend)/2.0;
-    }
-
-    vec3 blendAverage(vec3 base, vec3 blend, float opacity) {
-        return (blendAverage(base, blend) * opacity + base * (1.0 - opacity));
-    }
-
-    vec3 blendMultiply(vec3 base, vec3 blend) {
-        return base*blend;
-    }
-
-    vec3 blendMultiply(vec3 base, vec3 blend, float opacity) {
-        return (blendMultiply(base, blend) * opacity + base * (1.0 - opacity));
-    }
-
-    vec3 czm_saturation(vec3 rgb, float adjustment) {
-        const vec3 W = vec3(0.2125, 0.7154, 0.0721);
-        vec3 intensity = vec3(dot(rgb, W));
-        return mix(intensity, rgb, adjustment);
-    }
 
     vec3 getColor(){
 
@@ -694,11 +675,10 @@ function buildVertexShader() {
                         smoothstep( 0.0, 1.0,
                             1.05 -
                             distance(st, normalize(vec3(x, y, z) ) ) )
-                    , 6.0);
+                    , 5.0);
                 color = blendNormal(color, nColor, amount);
             // }
         }
-        // color = czm_saturation(color, 1.0);
         return color;
     }
 
@@ -717,9 +697,10 @@ function buildVertexShader() {
         // float r2 = u_time * 0.15;
         // v_displacement_amount = snoise(s2 * normal + r2) * u_displacement_ratio + 1.0;
 
-        vec3 newPosition = position  * v_displacement_amount ;
+        vec3 newPosition = position * v_displacement_amount ;
 
         v_color = getColor();
+        // v_color = czm_saturation(v_color, 1.0);
 
         gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
     }
@@ -737,9 +718,16 @@ varying float v_displacement_amount;
 varying vec3 v_position;
 varying vec3 v_color;
 
+vec3 czm_saturation(vec3 rgb, float adjustment) {
+    const vec3 W = vec3(0.2125, 0.7154, 0.0721);
+    vec3 intensity = vec3(dot(rgb, W));
+    return mix(intensity, rgb, adjustment);
+}
+
 void main(){
     vec3 color = v_color;
-    color.gb +=  (sin(v_position.z + v_displacement_amount) + sin(u_time)) * 0.1;
+    color.gb -=  (sin(v_position.z + v_displacement_amount) + sin(u_time)) * 0.05;
+    color = czm_saturation(color, 1.2);
     gl_FragColor = vec4(color,1.0);
 }
 `;

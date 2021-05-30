@@ -15,6 +15,7 @@ module.exports = {
             label: 'Configuration',
             items: [
                 'cms_config',
+                'collections',
                 'entity_schemas',
                 {
                     type: 'category',
@@ -31,16 +32,14 @@ module.exports = {
                     ]
                 },
                 'custom_fields',
-                'collections',
                 {
                     type: 'category',
-                    label: 'Contexts and hooks',
+                    label: 'Custom views',
                     items: [
-                        'contexts/auth_context',
-                        'contexts/side_entity_controller',
-                        'contexts/snackbars',
+                        'custom_views',
+                        'contexts/hooks'
                     ]
-                },
+                }
             ]
         }
     ]

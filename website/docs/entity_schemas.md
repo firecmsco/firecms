@@ -4,7 +4,7 @@ title: Entity Schemas
 sidebar_label: Entity Schemas
 ---
 
-The core of the CMS are entities, which are defined by an `EntitySchema`. In the
+The core of the CMS are **entities**, which are defined by an `EntitySchema`. In the
 schema you define the properties, which are related to the Firestore data types.
 
 - `name` A singular name of the entity as displayed in an Add button. E.g.
@@ -38,19 +38,21 @@ fields, common to all data types:
 * `disabled` Is this a read only property.
 
 * `config`
-    * `field`If you need to render a custom field, you can create a component
+    * `field`
+      If you need to render a custom field, you can create a component
       that takes `FieldProps` as props. You receive the value, a function to
       update the value and additional utility props such as if there is an
       error. You can customize it by passing custom props that are received in
       the component.
 
-    * `preview` Configure how a property is displayed as a preview, e.g. in the
+    * `preview`
+      Configure how a property is displayed as a preview, e.g. in the
       collection view. You can customize it by passing custom props that are
       received in the component.
 
-    * `customProps` Additional props that are passed to the components defined
-      in `field`
-      or in `preview`.
+    * `customProps`
+      Additional props that are passed to the components defined
+      in `field` or in `preview`.
 
 You can see more details about how to implement [custom fields](custom_fields.md)
 
@@ -93,7 +95,7 @@ const productSchema = buildSchema({
                }: EntitySaveProps<typeof productSchema>) => {
         values.uppercase_name = values.name.toUpperCase();
         return values;
-},
+    },
     properties: {
         name: {
             title: "Name",

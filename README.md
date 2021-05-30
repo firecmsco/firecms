@@ -98,13 +98,6 @@ You can access the code for the demo project under
 [`example`](https://github.com/Camberi/firecms/tree/master/example). It includes
 every feature provided by this CMS.
 
-## Provided hooks
-
-FireCMS provides different hooks that allow you to interact with the internal
-state of the app. Please note that in order to use this hook you **must** be in
-a component (you can't use them directly from a callback function).
-
-
 ## Contact and support
 
 https://www.reddit.com/r/firecms/

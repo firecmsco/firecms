@@ -41,19 +41,17 @@ very easy way is using Firebase Hosting.
 
 ## Firebase requirements
 
-You need to enable the Firestore database in your Firebase project. If you have
-enabled authentication in the CMS config you need to enable Google
-authentication in your project.
-
-Also, if you are using storage fields in your string properties, you need to
-enable Firebase Storage.
+* You need to enable the **Firestore** database in your Firebase project.
+* If you have enabled **authentication** in the CMS config, you need to enable the
+  corresponding auth method in your project.
+* Also, if you are using **storage** fields in your string properties, you need to
+  enable Firebase Storage.
 
 ### Deployment to Firebase hosting
 
-If you are deploying this project to firebase hosting, and the app it properly
+If you are deploying this project to firebase hosting, and the app is properly
 linked to it, you can omit the `firebaseConfig` specification, since it gets
 picked up automatically.
-
 
 #### Real time support
 

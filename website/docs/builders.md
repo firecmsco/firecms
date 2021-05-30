@@ -1,9 +1,21 @@
 ---
-id: cms_config
-title: CMS main config
-sidebar_label: Main config
+id: builders
+title: Builder functions
+sidebar_label: Builder functions
 ---
 
+FireCMS works as a complete app that is in charge of creating the views that
+you define based on your collections and entity schemas. It handles
+navigation for you as well as authentication and login.
+
+However, there is a lot of room to customization, including custom views
+and custom fields for your entity properties, in case the basic use cases
+we include don't suit your needs.
+
+In the simplest case, you will want to create some properties
+
+
+## CMSApp
 
 The entry point for setting up a FireCMS app is the `CMSApp`, where you can
 define the following specs:
