@@ -303,6 +303,11 @@ export interface EntityDeleteProps<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
+     * Schema of the entity being deleted
+     */
+    schema: S;
+
+    /**
      * Firestore path of the parent collection
      */
     collectionPath: string;
@@ -317,10 +322,6 @@ export interface EntityDeleteProps<S extends EntitySchema<Key>,
      */
     entity: Entity<S, Key>;
 
-    /**
-     * Schema of the entity being deleted
-     */
-    schema: S;
     /**
      * Context of the app status
      */

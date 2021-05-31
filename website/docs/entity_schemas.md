@@ -4,8 +4,9 @@ title: Entity Schemas
 sidebar_label: Entity Schemas
 ---
 
-The core of the CMS are **entities**, which are defined by an `EntitySchema`. In the
-schema you define the properties, which are related to the Firestore data types.
+The core of the CMS are **entities**, which are defined by an `EntitySchema`. In
+the schema you define the properties, which are related to the Firestore data
+types.
 
 - `name` A singular name of the entity as displayed in an Add button. E.g.
   Product
@@ -39,23 +40,23 @@ fields, common to all data types:
 
 * `config`
     * `field`
-      If you need to render a custom field, you can create a component
-      that takes `FieldProps` as props. You receive the value, a function to
-      update the value and additional utility props such as if there is an
-      error. You can customize it by passing custom props that are received in
-      the component.
+      If you need to render a custom field, you can create a component that
+      takes `FieldProps` as props. You receive the value, a function to update
+      the value and additional utility props such as if there is an error. You
+      can customize it by passing custom props that are received in the
+      component.
 
     * `preview`
-      Configure how a property is displayed as a preview, e.g. in the
-      collection view. You can customize it by passing custom props that are
-      received in the component.
+      Configure how a property is displayed as a preview, e.g. in the collection
+      view. You can customize it by passing custom props that are received in
+      the component.
 
     * `customProps`
-      Additional props that are passed to the components defined
-      in `field` or in `preview`.
+      Additional props that are passed to the components defined in `field` or
+      in `preview`.
 
-You can see more details about how to implement [custom fields](custom_fields.md)
-
+You can see more details about how to
+implement [custom fields](custom_fields.md)
 
 * `onPreSave` Hook called before saving, you need to return the values that will
   get saved. If you throw an error in this method the process stops, and an
@@ -76,8 +77,35 @@ In the builder you receive `PropertyBuilderProps` and return your property.
 This is useful for changing property configurations like available values on the
 fly, based on other values.
 
+Example of field that gets enabled or disabled based on other values:
 
-#### Saving callbacks
+```tsx
+export const productSchema: EntitySchema = buildSchema({
+    name: "Product",
+    properties: {
+        available: {
+            dataType: "boolean",
+            title: "Available"
+        },
+        price: ({ values }) => ({
+            dataType: "number",
+            title: "Price",
+            validation: {
+                requiredMessage: "You must set a price between 0 and 1000",
+                min: 0,
+                max: 1000
+            },
+            disabled: !values.available && {
+                clearOnDisabled: true,
+                disabledMessage: "You can only set the price on available items"
+            },
+            description: "Price with range validation"
+        })
+    }
+});
+```
+
+### Saving callbacks
 
 When you are saving an entity you can attach different callbacks before and
 after it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
@@ -87,14 +115,21 @@ const productSchema = buildSchema({
     customId: true,
     name: "Product",
     onPreSave: ({
-                   schema,
-                   collectionPath,
-                   id,
-                   values,
-                   status
-               }: EntitySaveProps<typeof productSchema>) => {
+                    schema,
+                    collectionPath,
+                    id,
+                    values,
+                    status
+                }: EntitySaveProps<typeof productSchema>) => {
         values.uppercase_name = values.name.toUpperCase();
         return values;
+    },
+    onSaveSuccess: (props: EntitySaveProps<typeof productSchema>) => {
+        console.log("onSaveSuccess", props);
+    },
+
+    onDelete: (props: EntityDeleteProps<typeof productSchema>) => {
+        console.log("onDelete", props);
     },
     properties: {
         name: {
@@ -110,7 +145,43 @@ const productSchema = buildSchema({
         },
     }
 });
-
 ```
 
+#### EntitySaveProps
+
+* `schema`: EntitySchema
+  Resolved schema of the entity
+
+* `collectionPath`: string
+  Full path where this entity is being saved
+
+* `id`?: string
+  Id of the entity or undefined if new
+
+* `values`: EntityValues<S, Key>
+  Values being saved
+
+* `status`: EntityStatus
+  New or existing entity
+
+* `context`: CMSAppContext
+  Context of the app status
+
+
+#### EntityDeleteProps
+
+* `schema`: EntitySchema
+  Resolved schema of the entity
+
+* `collectionPath`: string
+  Full path where this entity is being saved
+
+* `id`?: string
+  Id of the entity or undefined if new
+
+* `entity`: Entity<S, Key>
+  Deleted entity
+
+* `context`: CMSAppContext
+  Context of the app status
 
