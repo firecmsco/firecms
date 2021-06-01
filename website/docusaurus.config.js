@@ -10,7 +10,6 @@ module.exports = {
     projectName: 'FireCMS',
     plugins: [
         'docusaurus-tailwindcss-loader',
-        // '@docusaurus/plugin-google-gtag',
     ],
     themeConfig: {
         navbar: {
@@ -41,7 +40,7 @@ module.exports = {
                 }
             ]
         },
-        footer:  {
+        footer: {
             links: [
                 {
                     // Label of the section of these links
@@ -49,29 +48,29 @@ module.exports = {
                     items: [
                         {
                             label: 'Docs',
-                            to: 'docs/',
+                            to: 'docs/'
                         },
                         {
                             label: 'Demo',
-                            to: 'https://demo.firecms.co',
+                            to: 'https://demo.firecms.co'
                         },
                         {
                             label: 'Camberi',
-                            to: 'https://camberi.com',
-                        },
-                    ],
+                            to: 'https://camberi.com'
+                        }
+                    ]
                 },
                 {
                     title: 'Community',
                     items: [
                         {
                             label: 'Reddit',
-                            href: 'https://www.reddit.com/r/firecms/',
+                            href: 'https://www.reddit.com/r/firecms/'
                         },
                         {
                             label: 'Github',
-                            href: 'https://github.com/Camberi/firecms',
-                        },
+                            href: 'https://github.com/Camberi/firecms'
+                        }
                         // {
                         //     label: 'Discord',
                         //     href: 'https://discordapp.com/invite/docusaurus',
@@ -80,25 +79,25 @@ module.exports = {
                         //     label: 'Twitter',
                         //     href: 'https://twitter.com/docusaurus',
                         // },
-              //           {
-              //               //Renders the html pass-through instead of a simple link
-              //               html: `
-              //   <a href="https://www.netlify.com" target="_blank" rel="noreferrer noopener" aria-label="Deploys by Netlify">
-              //     <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" alt="Deploys by Netlify" />
-              //   </a>
-              // `,
-              //           },
-                    ],
-                },
+                        //           {
+                        //               //Renders the html pass-through instead of a simple link
+                        //               html: `
+                        //   <a href="https://www.netlify.com" target="_blank" rel="noreferrer noopener" aria-label="Deploys by Netlify">
+                        //     <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" alt="Deploys by Netlify" />
+                        //   </a>
+                        // `,
+                        //           },
+                    ]
+                }
             ],
-            copyright: `GPL-3.0 © ${new Date().getFullYear()} - camberi`,
+            copyright: `GPL-3.0 © ${new Date().getFullYear()} - camberi`
         },
         prism: {
-            theme: require('prism-react-renderer/themes/vsDark'),
+            theme: require('prism-react-renderer/themes/vsDark')
         },
         gtag: {
-            trackingID: 'G-D4DQQCW88S',
-        },
+            trackingID: 'G-D4DQQCW88S'
+        }
     },
     presets: [
         [
@@ -114,7 +113,7 @@ module.exports = {
                 // },
                 theme: {
                     customCss: [
-                        require.resolve('./src/css/custom.css'),
+                        require.resolve('./src/css/custom.css')
                     ]
                 }
             }

@@ -17,7 +17,7 @@ import pricePreview from "@site/static/img/price.png";
 // @ts-ignore
 import cmsPreview from "@site/static/img/editing.mp4";
 
-import { vs2015, atomOneLight, CodeBlock } from "react-code-blocks";
+import { atomOneLight, CodeBlock, vs2015 } from "react-code-blocks";
 import useThemeContext from "@theme/hooks/useThemeContext";
 
 function Features() {
@@ -68,7 +68,7 @@ function Features() {
 
     const tab0 = (
         <div className={"p-4"}>
-            <video className={"rounded-xl"}
+            <video className={"rounded-xl shadow-md border-gray-200"}
                    width="100%" loop autoPlay muted>
                 <source src={cmsPreview}
                         type="video/mp4"/>
