@@ -18,7 +18,7 @@ easy to create your custom form fields, or your complete views.
 Note that this is a full application, with routing enabled and not a simple
 component.
 
-[![NPM](https://img.shields.io/n4pm/v/@camberi/firecms.svg)](https://www.npmjs.com/package/@camberi/firecms) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/@camberi/firecms.svg)](https://www.npmjs.com/package/@camberi/firecms) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ### Core technologies
 
