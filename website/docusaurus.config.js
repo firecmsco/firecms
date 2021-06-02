@@ -90,7 +90,7 @@ module.exports = {
                     ]
                 }
             ],
-            copyright: `GPL-3.0 © ${new Date().getFullYear()} - camberi`
+            copyright: `MIT © ${new Date().getFullYear()} - camberi`
         },
         prism: {
             theme: require('prism-react-renderer/themes/vsDark')

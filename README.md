@@ -105,4 +105,4 @@ https://www.reddit.com/r/firecms/
 
 ## License
 
-GPL-3.0 © [camberi](https://github.com/camberi)
+MIT © [camberi](https://github.com/camberi)
