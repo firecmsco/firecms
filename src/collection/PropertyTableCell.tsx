@@ -21,7 +21,7 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { getPreviewSizeFrom } from "../preview/util";
-import { useClearRestoreValue } from "../hooks/useClearRestoreValue";
+import { useClearRestoreValue } from "../hooks";
 import deepEqual from "deep-equal";
 import { isReadOnly } from "../models/utils";
 import TableCell from "./TableCell";
@@ -251,7 +251,7 @@ const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                       internalValue={internalValue as firebase.firestore.DocumentReference[]}
                                                       updateValue={updateValue}
                                                       size={size}
-                                                      property={property as ReferenceProperty}
+                                                      property={property as ArrayProperty}
                                                       setPreventOutsideClick={setPreventOutsideClick}
                 />;
                 allowScroll = false;
