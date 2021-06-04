@@ -52,7 +52,7 @@ This is an example of a custom TextField that takes the background color as a pr
 ```tsx
 import { TextField, Theme, withStyles } from "@material-ui/core";
 import React, { ReactElement } from "react";
-import { FieldDescription, FieldProps } from "@camberi/firecms";
+import { FieldDescription, FieldProps } from "dist/index";
 
 interface CustomColorTextFieldProps {
     color: string
@@ -131,9 +131,10 @@ how the preview of a property is displayed in collection and other read only
 views
 
 Example of a custom preview for a `boolean` property:
+
 ```tsx
 import React, { ReactElement } from "react";
-import { PreviewComponentProps } from "@camberi/firecms";
+import { PreviewComponentProps } from "dist/index";
 
 import CheckBoxOutlineBlank from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxOutlined from "@material-ui/icons/CheckBoxOutlined";

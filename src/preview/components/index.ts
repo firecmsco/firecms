@@ -12,11 +12,11 @@ export { UrlComponentPreview } from "./UrlComponentPreview";
 export { SkeletonComponent} from "./SkeletonComponent";
 export { StorageThumbnail } from "./StorageThumbnail";
 
-export { PreviewComponent } from "../PreviewComponent";
+export { default as PreviewComponent } from "../PreviewComponent";
 
 export { ArrayOfStorageComponentsPreview } from "./ArrayOfStorageComponentsPreview";
 export { ArrayOfMapsPreview } from "./ArrayOfMapsPreview";
-export { ReferencePreview, ArrayOfReferencesPreview} from "./ReferencePreview";
+export { default as ReferencePreview, ArrayOfReferencesPreview} from "./ReferencePreview";
 export { MapPreview } from "./MapPreview";
 export { ArrayPreview } from "./ArrayPreview";
 

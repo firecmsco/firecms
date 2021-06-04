@@ -10,6 +10,13 @@ module.exports = {
     projectName: 'FireCMS',
     plugins: [
         'docusaurus-tailwindcss-loader',
+        [
+            'docusaurus-plugin-typedoc',
+            {
+                entryPoints: ['../src/index.tsx'],
+                tsconfig: '../tsconfig.json'
+            }
+        ]
     ],
     themeConfig: {
         navbar: {
@@ -20,9 +27,15 @@ module.exports = {
             },
             items: [
                 {
-                    to: 'docs/',
-                    activeBasePath: 'docs',
+                    to: 'docs',
+                    activeBaseRegex: 'docs(/)?$',
                     label: 'Docs',
+                    position: 'left'
+                },
+                {
+                    to: 'docs/api',
+                    // activeBasePath: 'api',
+                    label: 'API',
                     position: 'left'
                 },
                 {
@@ -49,6 +62,10 @@ module.exports = {
                         {
                             label: 'Docs',
                             to: 'docs/'
+                        },
+                        {
+                            label: 'API',
+                            to: 'docs/api/'
                         },
                         {
                             label: 'Demo',
@@ -106,6 +123,7 @@ module.exports = {
                 docs: {
                     sidebarPath: require.resolve('./sidebars.js')
                 },
+                blog: false,
                 // blog: {
                 //     showReadingTime: true,
                 //     editUrl:

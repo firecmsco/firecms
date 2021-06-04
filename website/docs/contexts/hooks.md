@@ -26,7 +26,7 @@ Example:
 
 ```tsx
 import React from "react";
-import { useAuthContext } from "@camberi/firecms";
+import { useAuthContext } from "dist/index";
 
 export function ExampleCMSView() {
 
@@ -62,7 +62,7 @@ Example:
 
 ```tsx
 import React from "react";
-import { useSideEntityController } from "@camberi/firecms";
+import { useSideEntityController } from "dist/index";
 
 export function ExampleCMSView() {
 

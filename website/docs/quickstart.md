@@ -37,7 +37,7 @@ import {
     CMSApp,
     NavigationBuilder,
     NavigationBuilderProps
-} from "@camberi/firecms";
+} from "dist/index";
 
 import firebase from "firebase/app";
 
