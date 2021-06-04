@@ -345,7 +345,7 @@ export function buildAdditionalColumnDelegate<AdditionalKey extends string = str
 /**
  * New or existing status
  */
-export enum EntityStatus { new = "new", existing = "existing", copy = "copy"}
+export type EntityStatus = "new" | "existing" | "copy";
 
 /**
  * Representation of an entity fetched from Firestore

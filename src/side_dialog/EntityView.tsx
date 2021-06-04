@@ -115,7 +115,7 @@ function EntitySideView({
     const authController = useAuthContext();
 
     const [entity, setEntity] = useState<Entity<EntitySchema>>();
-    const [status, setStatus] = useState<EntityStatus>(copy ? EntityStatus.copy : (entityId ? EntityStatus.existing : EntityStatus.new));
+    const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
     const [loading, setLoading] = useState<boolean>(true);
     const [readOnly, setReadOnly] = useState<boolean>(false);
     const [tabsPosition, setTabsPosition] = React.useState(0);
@@ -136,7 +136,7 @@ function EntitySideView({
                 schema,
                 (e) => {
                     if (e) {
-                        setStatus(copy ? EntityStatus.copy : EntityStatus.existing);
+                        setStatus(copy ? "copy" : "existing");
                         setEntity(e);
                         console.debug("Updated entity from Firestore", e);
                     }
@@ -144,7 +144,7 @@ function EntitySideView({
                 });
             return () => cancelSubscription();
         } else {
-            setStatus(EntityStatus.new);
+            setStatus("new");
             setLoading(false);
         }
         return () => {
@@ -202,7 +202,7 @@ function EntitySideView({
                 message: `${schema.name}: Saved correctly`
             });
 
-            setStatus(EntityStatus.existing);
+            setStatus("existing");
             setModified(false);
             sideEntityController.close();
 
@@ -220,7 +220,7 @@ function EntitySideView({
             console.error(e);
         };
 
-        if (status === EntityStatus.existing && !isModified) {
+        if (status === "existing" && !isModified) {
             sideEntityController.close();
             return;
         }
@@ -243,7 +243,7 @@ function EntitySideView({
         sideEntityController.close();
     }
 
-    const existingEntity = status === EntityStatus.existing;
+    const existingEntity = status === "existing";
 
     const containerRef = React.useRef<HTMLDivElement>(null);
 

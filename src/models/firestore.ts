@@ -478,9 +478,9 @@ function updateAutoValue(inputValue: any,
             value = inputValue;
         }
     } else if (property.dataType === "timestamp") {
-        if (status == EntityStatus.existing && property.autoValue === "on_update") {
+        if (status == "existing" && property.autoValue === "on_update") {
             value = firebase.firestore.FieldValue.serverTimestamp();
-        } else if ((status == EntityStatus.new || status == EntityStatus.copy)
+        } else if ((status == "new" || status == "copy")
             && (property.autoValue === "on_update" || property.autoValue === "on_create")) {
             value = firebase.firestore.FieldValue.serverTimestamp();
         } else {

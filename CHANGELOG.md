@@ -1,16 +1,25 @@
 # Change Log
 
+## [0.34.1] - 2021-06-
+
+### Changed
+
+- [BREAKING] Change EntityStatus from JS enum to TS type. This only affects you
+  if you are using a save callback.
+
 ## [0.39.1] - 2021-05-23
 
 ### Added
 
-- Added `extra` and `setExtra` fields in auth controller to store custom user data.
+- Added `extra` and `setExtra` fields in auth controller to store custom user
+  data.
 
 ### Changed
 
 - Fix for home page
 - Minor layout updates
-- Removed `authResult` from auth context since it was actually useless and confusing
+- Removed `authResult` from auth context since it was actually useless and
+  confusing
 
 ## [0.39.0] - 2021-05-13
 
@@ -24,7 +33,8 @@
 ### Changed
 
 - [BREAKING] Material dependencies have been moved to `peerDependencies`
-If your build breaks, simply add these dependencies to your project:
+  If your build breaks, simply add these dependencies to your project:
+
 ```
 "@material-ui/core": "^4.11.4",
 "@material-ui/icons": "^4.11.2",

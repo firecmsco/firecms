@@ -113,9 +113,9 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
      * compare them with underlying changes in Firestore
      */
     let baseFirestoreValues: EntityValues<S, Key>;
-    if ((status === EntityStatus.existing || status === EntityStatus.copy) && entity) {
+    if ((status === "existing" || status === "copy") && entity) {
         baseFirestoreValues = entity.values ?? {};
-    } else if (status === EntityStatus.new) {
+    } else if (status === "new") {
         baseFirestoreValues = initEntityValues(schema);
     } else {
         throw new Error("Form configured wrong");
@@ -129,10 +129,10 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
     const initialValues = initialValuesRef.current;
     const [internalValue, setInternalValue] = useState<EntityValues<S, Key> | undefined>(initialValues);
 
-    const mustSetCustomId: boolean = (status === EntityStatus.new || status === EntityStatus.copy) && !!schema.customId;
+    const mustSetCustomId: boolean = (status === "new" || status === "copy") && !!schema.customId;
 
     let underlyingChanges: Partial<EntityValues<S, Key>> = useMemo(() => {
-        if (initialValues && status === EntityStatus.existing) {
+        if (initialValues && status === "existing") {
             return Object.keys(schema.properties)
                 .map((key) => {
                     const initialValue = (initialValues as any)[key];
@@ -161,10 +161,10 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
         setCustomIdError(false);
 
         let id: string | undefined;
-        if (status === EntityStatus.existing) {
+        if (status === "existing") {
             if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
             id = entity.id;
-        } else if (status === EntityStatus.new || status === EntityStatus.copy) {
+        } else if (status === "new" || status === "copy") {
             if (schema.customId) {
                 if (!customId) throw Error("Form misconfiguration when saving, customId should be set");
                 id = customId;
@@ -201,11 +201,11 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
         entity?.id);
 
     function buildButtons(isSubmitting: boolean, modified: boolean) {
-        const disabled = isSubmitting || (!modified && status === EntityStatus.existing);
+        const disabled = isSubmitting || (!modified && status === "existing");
         return (
             <Box textAlign="right">
 
-                {status === EntityStatus.existing &&
+                {status === "existing" &&
                 <Button
                     variant="text"
                     color="primary"
@@ -223,9 +223,9 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                     disabled={disabled}
                     className={classes.button}
                 >
-                    {status === EntityStatus.existing && "Save"}
-                    {status === EntityStatus.copy && "Create copy"}
-                    {status === EntityStatus.new && "Create"}
+                    {status === "existing" && "Save"}
+                    {status === "copy" && "Create copy"}
+                    {status === "new" && "Create"}
                 </Button>
 
             </Box>

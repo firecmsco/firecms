@@ -159,7 +159,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 [name]: value
             },
             schema: collectionConfig.schema,
-            status: EntityStatus.existing,
+            status: "existing",
             onSaveFailure: ((e: Error) => {
                 setError(e);
             }),

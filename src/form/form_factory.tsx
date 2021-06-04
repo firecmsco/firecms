@@ -252,8 +252,8 @@ export function createCustomIdField<S extends EntitySchema<Key>, Key extends str
  error: boolean,
  entity: Entity<S, Key> | undefined) {
 
-    const disabled = entityStatus === EntityStatus.existing || !schema.customId;
-    const idSetAutomatically = entityStatus !== EntityStatus.existing && !schema.customId;
+    const disabled = entityStatus === "existing" || !schema.customId;
+    const idSetAutomatically = entityStatus !== "existing" && !schema.customId;
 
     const hasEnumValues = typeof schema.customId === "object";
 
@@ -305,7 +305,7 @@ export function createCustomIdField<S extends EntitySchema<Key>, Key extends str
         disabled: disabled,
         name: "id",
         type: null,
-        value: entity && entityStatus === EntityStatus.existing ? entity.id : undefined,
+        value: entity && entityStatus === "existing" ? entity.id : undefined,
         variant: "filled"
     };
     return (
