@@ -123,7 +123,7 @@ import {
     // ...
     NavigationBuilder,
     NavigationBuilderProps
-} from "dist/index";
+} from "@camberi/firecms";
 
 // ...
 
@@ -164,7 +164,7 @@ You may want to override the schema definition for particular entities. In
 that case you can define a schema resolver in the CMSApp level.
 
 ```tsx
-import { buildSchema, SchemaResolver } from "dist/index";
+import { buildSchema, SchemaResolver } from "@camberi/firecms";
 
 const customSchemaResolver: SchemaResolver = ({
                                                   entityId,
