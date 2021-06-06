@@ -1,11 +1,13 @@
 # Change Log
 
-## [0.34.1] - 2021-06-
+## [0.40.0] - 2021-06-
 
 ### Changed
 
 - [BREAKING] Change EntityStatus from JS enum to TS type. This only affects you
   if you are using a save callback.
+- [BREAKING] AlgoliaTextSearchDelegate is now a function instead of a class.
+You instantiate it the same, just remove the new keyword
 
 ## [0.39.1] - 2021-05-23
 

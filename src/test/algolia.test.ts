@@ -7,7 +7,7 @@ it("Test Algolia search", async () => {
         "Y6FR1MDSVW",
         "f084e6dcc154c04295c8124dbb797ff1");
 
-    const algoliaTextSearchDelegate = new AlgoliaTextSearchDelegate(
+    const algoliaTextSearchDelegate = AlgoliaTextSearchDelegate(
         client,
         "users");
 

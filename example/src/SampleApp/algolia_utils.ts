@@ -11,12 +11,12 @@ if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH
     console.error("Text search not enabled");
 }
 
-export const productsSearchDelegate = client && new AlgoliaTextSearchDelegate(
+export const productsSearchDelegate = client && AlgoliaTextSearchDelegate(
     client,
     "products");
-export const usersSearchDelegate = client && new AlgoliaTextSearchDelegate(
+export const usersSearchDelegate = client && AlgoliaTextSearchDelegate(
     client,
     "users");
-export const blogSearchDelegate = client && new AlgoliaTextSearchDelegate(
+export const blogSearchDelegate = client && AlgoliaTextSearchDelegate(
     client,
     "blog");

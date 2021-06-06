@@ -1,4 +1,4 @@
-import { SearchClient, SearchIndex } from "algoliasearch";
+import { SearchClient } from "algoliasearch";
 
 /**
  * Simple interface for implementing a text search
@@ -11,27 +11,29 @@ export interface TextSearchDelegate {
     performTextSearch(query: string): Promise<readonly string[]>;
 }
 
-export class AlgoliaTextSearchDelegate implements TextSearchDelegate {
+/**
+ * Specific implementation of a TextSearchDelegate that uses Algolia as the
+ * search engine
+ * @param algoliaClient
+ * @param indexKey
+ * @constructor
+ */
+export function AlgoliaTextSearchDelegate(algoliaClient: SearchClient, indexKey: string): TextSearchDelegate {
 
-    algoliaClient: SearchClient;
-    index: SearchIndex;
-
-    constructor(algoliaClient: SearchClient, indexKey: string) {
-        this.algoliaClient = algoliaClient;
-        this.index = algoliaClient.initIndex(indexKey);
-    }
-
-    performTextSearch(query: string): Promise<readonly string[]> {
-        console.log("Performing Algolia query", this.index, query);
-        return this.index
-            .search(query)
-            .then(({ hits }: any) => {
-                console.log(hits);
-                return hits.map((hit: any) => hit.objectID as string);
-            })
-            .catch((err: any) => {
-                console.log(err);
-                return [];
-            });
-    }
+    const index = algoliaClient.initIndex(indexKey);
+    return {
+        performTextSearch: (query: string): Promise<readonly string[]> => {
+            console.log("Performing Algolia query", index, query);
+            return index
+                .search(query)
+                .then(({ hits }: any) => {
+                    console.log(hits);
+                    return hits.map((hit: any) => hit.objectID as string);
+                })
+                .catch((err: any) => {
+                    console.log(err);
+                    return [];
+                });
+        }
+    };
 }
