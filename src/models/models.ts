@@ -640,7 +640,7 @@ export interface TimestampProperty extends BaseProperty {
     /**
      * Rules for validating this property
      */
-    validation?: DatePropertyValidationSchema;
+    validation?: TimestampPropertyValidationSchema;
 
     /**
      * If this flag is  set to `on_create` or `on_update` this timestamp is
@@ -720,7 +720,8 @@ export type WhereFilterOp =
     | "array-contains-any";
 
 /**
- * Rules to validate a property
+ * Rules to validate any property. Some properties have specific rules
+ * on top of these.
  */
 export interface PropertyValidationSchema {
     /**
@@ -779,7 +780,7 @@ export interface StringPropertyValidationSchema extends PropertyValidationSchema
 /**
  * Validation rules for dates
  */
-export interface DatePropertyValidationSchema extends PropertyValidationSchema {
+export interface TimestampPropertyValidationSchema extends PropertyValidationSchema {
     min?: Date;
     max?: Date;
 }

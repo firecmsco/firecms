@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { FieldDescription } from "../../components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
-import { formStyles } from "../../styles";
+import { formStyles } from "../styles";
 import { CMSFormField } from "../form_factory";
 import { useClearRestoreValue } from "../../hooks";
 

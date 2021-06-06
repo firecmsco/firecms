@@ -1,7 +1,7 @@
 import React from "react";
 import { Property } from "../../models";
 
-import { formStyles } from "../../styles";
+import { formStyles } from "../styles";
 import { getIconForProperty } from "../../util/property_icons";
 
 interface LabelWithIconProps {

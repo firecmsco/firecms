@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { PropsWithChildren, useEffect } from "react";
 
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -6,7 +6,12 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 
-import { Authenticator, EntityCollection, SchemaResolver } from "./models";
+import {
+    Authenticator,
+    EntityCollection,
+    PreviewComponentProps,
+    SchemaResolver
+} from "./models";
 import {
     AuthController,
     AuthProvider,
@@ -111,7 +116,8 @@ export interface CMSAppProviderProps {
  * @param props
  * @constructor
  */
-export const CMSAppProvider: React.FunctionComponent<CMSAppProviderProps> = (props) => {
+
+export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
 
     const {
         children,

@@ -1,7 +1,7 @@
 import { EntityCollection, EntitySchema, PermissionsBuilder } from "./models";
 
 /**
- * You can add these additional props to override properties
+ * You can add these additional props to override properties in a SchemaResolver
  */
 export interface SchemaConfig {
 

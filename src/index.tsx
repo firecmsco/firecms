@@ -20,15 +20,6 @@ export {
     getDownloadURL
 } from "./models/storage";
 
-export { AlgoliaTextSearchDelegate } from "./models/text_search_delegate";
-
-export type {
-    FieldProps, CMSFormFieldProps,
-} from "./models/fields";
-export type { TextSearchDelegate } from "./models/text_search_delegate";
-
-export type { PreviewComponentProps } from "./preview";
-
 
 export { CMSApp } from "./CMSApp";
 export type {
@@ -45,7 +36,6 @@ export type {
     CMSMainViewProps
 } from "./CMSMainView";
 
-
 export {
     ArrayDefaultField,
     ArrayEnumSelect,
@@ -60,6 +50,10 @@ export {
     CMSFormField
 } from "./form";
 
+export type {
+    FieldProps, CMSFormFieldProps,
+} from "./models/fields";
+
 export {
     PreviewComponent,
     AsyncPreviewComponent,
@@ -67,15 +61,13 @@ export {
     StorageThumbnail
 } from "./preview";
 
+export type { PreviewComponentProps } from "./preview";
+
 export {
     FieldDescription,
     LabelWithIcon,
-    ErrorBoundary
+    EntityPreview
 } from "./components";
-
-export {
-    default as EntityPreview
-} from "./components/EntityPreview";
 
 export {
     CollectionTable,
@@ -88,6 +80,8 @@ export type {
     SideEntityPanelProps
 } from "./side_dialog/model";
 
+export { AlgoliaTextSearchDelegate } from "./models/text_search_delegate";
+export type { TextSearchDelegate } from "./models/text_search_delegate";
 
 export * from "./hooks";
 

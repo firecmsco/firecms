@@ -117,143 +117,143 @@ export function ArrayOfReferencesPreview({
     );
 }
 
+function ReferencePreview<S extends EntitySchema>(
+    {
+        value,
+        property,
+        onClick,
+        size
+    }: PreviewComponentProps<firebase.firestore.DocumentReference>) {
 
-export const ReferencePreview = React.memo<PreviewComponentProps<firebase.firestore.DocumentReference>>(
-    function ReferencePreview<S extends EntitySchema>(
-        {
-            value,
-            property,
-            onClick,
-            size
-        }: PreviewComponentProps<firebase.firestore.DocumentReference>) {
+    const referenceClasses = useReferenceStyles({ size });
 
-        const referenceClasses = useReferenceStyles({ size });
+    // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed and replace with instance check of DocumentReference
+    const isFirestoreReference = value
+        && typeof value === "object"
+        && "firestore" in value
+        && typeof value["firestore"] === "object";
+    // const isFirestoreReference = value instanceof models.firestore.DocumentReference;
 
-        // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed and replace with instance check of DocumentReference
-        const isFirestoreReference = value
-            && typeof value === "object"
-            && "firestore" in value
-            && typeof value["firestore"] === "object";
-        // const isFirestoreReference = value instanceof models.firestore.DocumentReference;
+    const reference: firebase.firestore.DocumentReference = value;
+    const previewProperties = property.previewProperties;
 
-        const reference: firebase.firestore.DocumentReference = value;
-        const previewProperties = property.previewProperties;
+    const schemaRegistry = useSchemasRegistry();
+    const collectionConfig = schemaRegistry.getCollectionConfig(property.collectionPath);
+    if(!collectionConfig) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${property.collectionPath}`);
+    }
 
-        const schemaRegistry = useSchemasRegistry();
-        const collectionConfig = schemaRegistry.getCollectionConfig(property.collectionPath);
-        if(!collectionConfig) {
-            throw Error(`Couldn't find the corresponding collection view for the path: ${property.collectionPath}`);
-        }
+    const schema = collectionConfig.schema;
+    const [entity, setEntity] = React.useState<Entity<typeof schema>>();
 
-        const schema = collectionConfig.schema;
-        const [entity, setEntity] = React.useState<Entity<typeof schema>>();
+    const sideEntityController = useSideEntityController();
 
-        const sideEntityController = useSideEntityController();
+    useEffect(() => {
+        const cancel = listenEntityFromRef(reference, schema, (e => {
+            setEntity(e);
+        }));
+        return () => cancel();
+    }, [reference, schema]);
 
-        useEffect(() => {
-            const cancel = listenEntityFromRef(reference, schema, (e => {
-                setEntity(e);
-            }));
-            return () => cancel();
-        }, [reference, schema]);
+    let listProperties = previewProperties;
+    if (!listProperties || !listProperties.length) {
+        listProperties = Object.keys(schema.properties);
+    }
 
-        let listProperties = previewProperties;
-        if (!listProperties || !listProperties.length) {
-            listProperties = Object.keys(schema.properties);
-        }
+    if (size === "small" || size === "regular")
+        listProperties = listProperties.slice(0, 3);
+    else if (size === "tiny")
+        listProperties = listProperties.slice(0, 1);
 
-        if (size === "small" || size === "regular")
-            listProperties = listProperties.slice(0, 3);
-        else if (size === "tiny")
-            listProperties = listProperties.slice(0, 1);
+    let body: JSX.Element;
 
-        let body: JSX.Element;
+    function buildError(error: string, tooltip?: string) {
+        return <ErrorView error={error} tooltip={tooltip}/>;
+    }
 
-        function buildError(error: string, tooltip?: string) {
-            return <ErrorView error={error} tooltip={tooltip}/>;
-        }
+    if (!value) {
+        body = buildError("Reference not set");
+    }
+    // currently not happening since this gets filtered out in PreviewComponent
+    else if (!(value instanceof firebase.firestore.DocumentReference)) {
+        body = buildError("Unexpected value", JSON.stringify(value));
+    } else if (entity && !entity.values) {
+        body = buildError("Reference does not exist", reference.path);
+    } else {
 
-        if (!value) {
-            body = buildError("Reference not set");
-        }
-        // currently not happening since this gets filtered out in PreviewComponent
-        else if (!(value instanceof firebase.firestore.DocumentReference)) {
-            body = buildError("Unexpected value", JSON.stringify(value));
-        } else if (entity && !entity.values) {
-            body = buildError("Reference does not exist", reference.path);
-        } else {
+        body = (
+            <>
+                <div className={referenceClasses.root}>
 
-            body = (
-                <>
-                    <div className={referenceClasses.root}>
-
-                        {size !== "tiny" && (
-                            value ?
-                                <div className={referenceClasses.inner}>
-                                    <Typography variant={"caption"}
-                                                className={"mono"}>
-                                        {value.id}
-                                    </Typography>
-                                </div>
-                                : <Skeleton variant="text"/>)}
+                    {size !== "tiny" && (
+                        value ?
+                            <div className={referenceClasses.inner}>
+                                <Typography variant={"caption"}
+                                            className={"mono"}>
+                                    {value.id}
+                                </Typography>
+                            </div>
+                            : <Skeleton variant="text"/>)}
 
 
-                        {listProperties && listProperties.map((key) => {
-                            const property = schema.properties[key as string];
+                    {listProperties && listProperties.map((key) => {
+                        const property = schema.properties[key as string];
 
-                            return (
-                                <div key={"ref_prev_" + key}
-                                     className={referenceClasses.inner}>
-                                    {entity ?
-                                        <PreviewComponent name={key as string}
-                                                          value={entity.values[key as string]}
-                                                          property={property as Property}
-                                                          size={"tiny"}/>
-                                        :
-                                        <SkeletonComponent property={property as Property}
-                                                           size={"tiny"}/>
-                                    }
-                                </div>
-                            );
-                        })}
+                        return (
+                            <div key={"ref_prev_" + key}
+                                 className={referenceClasses.inner}>
+                                {entity ?
+                                    <PreviewComponent name={key as string}
+                                                      value={entity.values[key as string]}
+                                                      property={property as Property}
+                                                      size={"tiny"}/>
+                                    :
+                                    <SkeletonComponent property={property as Property}
+                                                       size={"tiny"}/>
+                                }
+                            </div>
+                        );
+                    })}
 
-                    </div>
-                    <div className={referenceClasses.marginAuto}>
-                        {entity &&
-                        <Tooltip title={`See details for ${entity.id}`}>
-                            <IconButton
-                                size={size === "tiny" ? "small" : "medium"}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    sideEntityController.open({
-                                        entityId: entity.id,
-                                        collectionPath: reference.parent.path,
-                                        schema,
-                                        overrideSchemaResolver: false
-                                    });
-                                }}>
-                                <KeyboardTabIcon fontSize={"small"}/>
-                            </IconButton>
-                        </Tooltip>}
-                    </div>
-                </>
-            );
-        }
-
-        return (
-            <Paper elevation={0} className={clsx(referenceClasses.paper,
-                {
-                    [referenceClasses.regular]: size === "regular",
-                    [referenceClasses.small]: size === "small",
-                    [referenceClasses.tiny]: size === "tiny",
-                    [referenceClasses.clickable]: !!onClick
-                })}
-                   onClick={onClick}>
-
-                {body}
-
-            </Paper>
+                </div>
+                <div className={referenceClasses.marginAuto}>
+                    {entity &&
+                    <Tooltip title={`See details for ${entity.id}`}>
+                        <IconButton
+                            size={size === "tiny" ? "small" : "medium"}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                sideEntityController.open({
+                                    entityId: entity.id,
+                                    collectionPath: reference.parent.path,
+                                    schema,
+                                    overrideSchemaResolver: false
+                                });
+                            }}>
+                            <KeyboardTabIcon fontSize={"small"}/>
+                        </IconButton>
+                    </Tooltip>}
+                </div>
+            </>
         );
+    }
 
-    });
+    return (
+        <Paper elevation={0} className={clsx(referenceClasses.paper,
+            {
+                [referenceClasses.regular]: size === "regular",
+                [referenceClasses.small]: size === "small",
+                [referenceClasses.tiny]: size === "tiny",
+                [referenceClasses.clickable]: !!onClick
+            })}
+               onClick={onClick}>
+
+            {body}
+
+        </Paper>
+    );
+
+}
+
+export default React.memo<PreviewComponentProps<firebase.firestore.DocumentReference>>(ReferencePreview);
 

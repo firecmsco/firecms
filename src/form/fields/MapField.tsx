@@ -10,7 +10,7 @@ import {
     Select
 } from "@material-ui/core";
 import React from "react";
-import { formStyles } from "../../styles";
+import { formStyles } from "../styles";
 
 import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
