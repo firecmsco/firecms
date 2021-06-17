@@ -19,7 +19,7 @@ import {
     Property
 } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
-import { CMSFormField, createCustomIdField } from "./form_factory";
+import { buildPropertyField, createCustomIdField } from "./form_factory";
 import {
     checkUniqueField,
     computeSchemaProperties,
@@ -288,10 +288,10 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                             const dependsOnOtherProperties = typeof (schema.properties as any)[key] === "function";
 
                             const disabled = isSubmitting || isReadOnly(property) || !!property.disabled;
-                            const cmsFormFieldProps: CMSFormFieldProps<any> = {
+                            const cmsFormFieldProps: CMSFormFieldProps<any, any> = {
                                 name: key,
                                 disabled: disabled,
-                                property: property as Property,
+                                property: property,
                                 includeDescription: true,
                                 underlyingValueHasChanged: underlyingValueHasChanged,
                                 context: context,
@@ -305,9 +305,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                                       xs={12}
                                       id={`form_field_${key}`}
                                       key={`field_${schema.name}_${key}`}>
-                                    <CMSFormField
-                                        {...cmsFormFieldProps}
-                                    />
+                                    {buildPropertyField(cmsFormFieldProps)}
                                 </Grid>
                             );
                         })}

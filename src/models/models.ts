@@ -6,6 +6,27 @@ import firebase from "firebase/app";
 import { ChipColor } from "./colors";
 import { CMSAppContext } from "../contexts/CMSAppContext";
 
+export type CMSType = string
+    | number
+    | boolean
+    | Date
+    | firebase.firestore.Timestamp
+    | firebase.firestore.GeoPoint
+    | firebase.firestore.DocumentReference
+    | CMSType[]
+    | object;
+
+export type Property<T extends CMSType = any> =
+    T extends string ? StringProperty :
+        T extends number ? NumberProperty :
+            T extends boolean ? BooleanProperty :
+                T extends Date ? TimestampProperty :
+                    T extends firebase.firestore.Timestamp ? TimestampProperty :
+                        T extends firebase.firestore.GeoPoint ? GeopointProperty :
+                            T extends firebase.firestore.DocumentReference ? ReferenceProperty :
+                                T extends Array<any> ? ArrayProperty<T> :
+                                    T extends object ? MapProperty<T> : never;
+
 /**
  * This interface represents a view that includes a collection of entities.
  * It can be in the root level of the configuration, defining the main
@@ -189,7 +210,7 @@ export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 /**
  * Specification for defining an entity
  */
-export interface EntitySchema<Key extends string = string, T extends any = any> {
+export interface EntitySchema<Key extends string = string> {
 
     /**
      * Singular name of the entity as displayed in an Add button . E.g. Product
@@ -212,7 +233,7 @@ export interface EntitySchema<Key extends string = string, T extends any = any> 
     /**
      * Set of properties that compose an entity
      */
-    properties: PropertiesOrBuilder<this, Key, T>;
+    properties: PropertiesOrBuilder<this, Key>;
 
     /**
      * When creating a new entity, set some values as already initialized
@@ -372,17 +393,6 @@ export type MediaType =
     | "video"
     | "audio";
 
-export type Property<T = any, ArrayT = any> =
-    T extends string ? StringProperty :
-        T extends number ? NumberProperty :
-            T extends boolean ? BooleanProperty :
-                T extends Date ? TimestampProperty :
-                    T extends firebase.firestore.Timestamp ? TimestampProperty :
-                        T extends firebase.firestore.GeoPoint ? GeopointProperty :
-                            T extends firebase.firestore.DocumentReference ? ReferenceProperty :
-                                T extends Array<ArrayT> ? ArrayProperty<ArrayT> :
-                                    T extends object ? MapProperty<T> : never;
-
 /**
  * Use this interface for adding additional columns to entity collection views.
  * If you need to do some async loading you can use AsyncPreviewComponent
@@ -512,7 +522,7 @@ export type EnumValueConfig = {
 /**
  * Record of properties of an entity or a map property
  */
-export type Properties<Key extends string = string, T extends any = any> = Record<Key, Property<T>>;
+export type Properties<Key extends string = string> = Record<Key, Property>;
 
 export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> =
     {
@@ -520,14 +530,13 @@ export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema<any>
         entityId?: string;
     };
 
-export type PropertyBuilder<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> = (props: PropertyBuilderProps<S, Key>) => Property<T>;
-export type PropertyOrBuilder<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>, T extends any = any> =
+export type PropertyBuilder<T extends CMSType = CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> = (props: PropertyBuilderProps<S, Key>) => Property<T>;
+export type PropertyOrBuilder<T extends CMSType = CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> =
     Property<T>
-    | PropertyBuilder<S, Key, T>;
+    | PropertyBuilder<T, S, Key>;
 
 export type PropertiesOrBuilder<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>,
-    T extends any = any> = Record<Key, PropertyOrBuilder<S, Key, T>>;
+    Key extends string = Extract<keyof S["properties"], string>> = Record<Key, PropertyOrBuilder<CMSType, S, Key>>;
 
 /**
  * This type represents a record of key value pairs as described in an
@@ -537,7 +546,7 @@ export type EntityValues<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>
     = {
     [K in Key]: S["properties"][K] extends Property<infer T> ? T :
-        (S["properties"][K] extends PropertyBuilder<S, Key, infer T> ? T : any);
+        (S["properties"][K] extends PropertyBuilder<infer T, S, Key> ? T : any);
 };
 
 export interface NumberProperty extends BaseProperty {
@@ -586,16 +595,15 @@ export interface StringProperty extends BaseProperty {
     validation?: StringPropertyValidationSchema,
 }
 
-export interface ArrayProperty<T = any> extends BaseProperty {
+export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType> extends BaseProperty {
 
     dataType: "array";
 
     /**
      * The property of this array. You can specify any property.
-     * You can also specify an array or properties if you need the array to have
-     * a specific limited shape such as [string, number, string]
+     * You can leave this field empty only if you are providing a custom field
      */
-    of?: Property<T>;
+    of?: Property<ArrayT>;
 
     /**
      * Rules for validating this property
@@ -605,18 +613,19 @@ export interface ArrayProperty<T = any> extends BaseProperty {
     /**
      * Configure how this property field is displayed
      */
-    config?: FieldConfig<T[]>;
+    config?: FieldConfig<T>;
 }
 
-export interface MapProperty<T = any,
-    Key extends string = Extract<keyof T, string>> extends BaseProperty {
+export interface MapProperty<T extends object = {},
+    Key extends string = string
+    > extends BaseProperty {
 
     dataType: "map";
 
     /**
      * Record of properties included in this map.
      */
-    properties?: Properties<Key>;
+    properties?: Properties<string>;
 
     /**
      * Rules for validating this property
@@ -796,7 +805,7 @@ export interface ArrayPropertyValidationSchema extends PropertyValidationSchema 
 /**
  * Configure how a field is displayed
  */
-export interface FieldConfig<T, CustomProps = any> {
+export interface FieldConfig<T extends CMSType, CustomProps = any> {
 
     /**
      * If you need to render a custom field, you can create a component that
@@ -805,14 +814,14 @@ export interface FieldConfig<T, CustomProps = any> {
      * You can customize it by passing custom props that are received
      * in the component.
      */
-    field?: React.ComponentType<FieldProps<T, CustomProps>>;
+    field?: React.ElementType<FieldProps<T, CustomProps>>;
 
     /**
      * Configure how a property is displayed as a preview, e.g. in the collection
      * view. You can customize it by passing custom props that are received
      * in the component.
      */
-    preview?: React.ComponentType<PreviewComponentProps<T, CustomProps>>;
+    preview?: React.ElementType<PreviewComponentProps<T, CustomProps>>;
 
     /**
      * Additional props that are passed to the components defined in `field`
@@ -949,7 +958,7 @@ export type UploadedFileContext = {
  * Possible configuration fields for a string property. Note that setting one
  * config disables the others.
  */
-export interface MapFieldConfig<T> extends FieldConfig<T> {
+export interface MapFieldConfig<T extends {}> extends FieldConfig<T> {
 
     /**
      * Allow the user to add only some of the keys in this map.

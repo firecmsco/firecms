@@ -13,7 +13,13 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-import { Entity, EntitySchema, buildPropertyFrom, PropertyOrBuilder } from "../models";
+import {
+    Entity,
+    EntitySchema,
+    buildPropertyFrom,
+    PropertyOrBuilder,
+    Property
+} from "../models";
 import { PreviewComponent } from "../preview";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
@@ -94,7 +100,7 @@ export default function EntityPreview<S extends EntitySchema<Key> = EntitySchema
 
                     {schema && Object.entries(schema.properties).map(([key, propertyOrBuilder]) => {
                         const value = (entity.values as any)[key];
-                        const property = buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<S, Key>, entity.values, entity.id);
+                        const property:Property = buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, S, Key>, entity.values, entity.id);
                         return (
                             <TableRow
                                 key={"entity_prev" + property.title + key}>

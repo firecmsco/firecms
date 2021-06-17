@@ -1,4 +1,4 @@
-import React, { ComponentType } from "react";
+import React, { ElementType, ReactElement } from "react";
 
 import { useClipboard } from "use-clipboard-hook";
 import {
@@ -24,6 +24,7 @@ import {
 
 import {
     CMSFormFieldProps,
+    CMSType,
     Entity,
     EntitySchema,
     EntityStatus,
@@ -48,8 +49,9 @@ import { useCMSAppContext, useSnackbarController } from "../contexts";
 import { isReadOnly } from "../models/utils";
 import { CMSAppContext } from "../contexts/CMSAppContext";
 
+
 /**
- * This component renders a form field creating the corresponding configuration
+ * This factory method renders a form field creating the corresponding configuration
  * from a property. For example if bound to a string property, it will generate
  * a text field.
  *
@@ -69,7 +71,7 @@ import { CMSAppContext } from "../contexts/CMSAppContext";
  * @param autoFocus
  * @param dependsOnOtherProperties
  */
-export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
+export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
 ({
      name,
      property,
@@ -81,49 +83,49 @@ export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string 
      partOfArray,
      autoFocus,
      dependsOnOtherProperties
- }: CMSFormFieldProps<S, Key>): JSX.Element {
+ }: CMSFormFieldProps<T, S, Key>): ReactElement<CMSFormFieldProps<T, S, Key>> {
 
-    let component: ComponentType<FieldProps<any>> | undefined;
+    let component: ElementType<FieldProps<T>> | undefined;
     if (isReadOnly(property)) {
         component = ReadOnlyField;
     } else if (property.config?.field) {
-        component = property.config?.field;
+        component = property.config?.field as ElementType<FieldProps<T>>;
     } else if (property.dataType === "array") {
         if (!property.of) {
             throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
         }
         if ((property.of.dataType === "string" || property.of.dataType === "number") && property.of.config?.enumValues) {
-            component = ArrayEnumSelect as ComponentType<FieldProps<any>>;
+            component = ArrayEnumSelect as ElementType<FieldProps<T>>;
         } else if (property.of.dataType === "string" && property.of.config?.storageMeta) {
-            component = StorageUploadField as ComponentType<FieldProps<any>>;
+            component = StorageUploadField as ElementType<FieldProps<T>>;
         } else if (property.of.dataType === "reference") {
-            component = ArrayOfReferencesField as ComponentType<FieldProps<any>>;
+            component = ArrayOfReferencesField as ElementType<FieldProps<T>>;
         } else {
-            component = ArrayDefaultField as ComponentType<FieldProps<any>>;
+            component = ArrayDefaultField as ElementType<FieldProps<T>>;
         }
     } else if (property.dataType === "map") {
-        component = MapField as ComponentType<FieldProps<any>>;
+        component = MapField as ElementType<FieldProps<T>>;
     } else if (property.dataType === "reference") {
-        component = ReferenceField as ComponentType<FieldProps<any>>;
+        component = ReferenceField as ElementType<FieldProps<T>>;
     } else if (property.dataType === "timestamp") {
-        component = DateTimeField as ComponentType<FieldProps<any>>;
+        component = DateTimeField as ElementType<FieldProps<T>>;
     } else if (property.dataType === "boolean") {
-        component = SwitchField as ComponentType<FieldProps<any>>;
+        component = SwitchField as ElementType<FieldProps<T>>;
     } else if (property.dataType === "number") {
         if (property.config?.enumValues) {
-            component = Select as ComponentType<FieldProps<any>>;
+            component = Select as ElementType<FieldProps<T>>;
         } else {
-            component = TextField as ComponentType<FieldProps<any>>;
+            component = TextField as ElementType<FieldProps<T>>;
         }
     } else if (property.dataType === "string") {
         if (property.config?.storageMeta) {
-            component = StorageUploadField as ComponentType<FieldProps<any>>;
+            component = StorageUploadField as ElementType<FieldProps<T>>;
         } else if (property.config?.markdown) {
-            component = MarkDownField as ComponentType<FieldProps<any>>;
+            component = MarkDownField as ElementType<FieldProps<T>>;
         } else if (property.config?.enumValues) {
-            component = Select as ComponentType<FieldProps<any>>;
+            component = Select as ElementType<FieldProps<T>>;
         } else {
-            component = TextField as ComponentType<FieldProps<any>>;
+            component = TextField as ElementType<FieldProps<T>>;
         }
     }
 
@@ -149,7 +151,7 @@ export function CMSFormField<T, S extends EntitySchema<Key>, Key extends string 
     );
 }
 
-function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = string>
+function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = string>
 ({
      component,
      componentProps: {
@@ -166,8 +168,8 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
      }
  }:
      {
-         component: ComponentType<FieldProps<any>>,
-         componentProps: CMSFormFieldProps<S, Key>
+         component: ElementType<FieldProps<T>>,
+         componentProps: CMSFormFieldProps<T, S, Key>
      }) {
 
     const customFieldProps: any = property.config?.customProps;
@@ -211,7 +213,6 @@ function FieldInternal<P extends Property, T = any, S extends EntitySchema<Key> 
                     isSubmitting,
                     includeDescription: includeDescription ?? true,
                     property: property as Property<T>,
-                    CMSFormField,
                     disabled: disabled ?? false,
                     underlyingValueHasChanged: underlyingValueHasChanged ?? false,
                     tableMode: tableMode ?? false,

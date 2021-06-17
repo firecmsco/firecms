@@ -58,7 +58,7 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 
-export default function ReferenceField<S extends EntitySchema<Key> = EntitySchema<any>,
+export default function ReferenceField<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>({
                                                                      name,
                                                                      value,

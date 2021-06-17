@@ -1,33 +1,34 @@
-import { FieldProps, Property } from "../../models";
+import { CMSType, FieldProps, Property } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React, { useState } from "react";
 import { FieldDescription } from "../../components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
 import { formStyles } from "../styles";
-import { CMSFormField } from "../form_factory";
+import { buildPropertyField } from "../form_factory";
 import { useClearRestoreValue } from "../../hooks";
 
 
-type ArrayDefaultFieldProps<T> = FieldProps<T[]>;
+export default function ArrayDefaultField<T extends Array<any>>({
+                                                                    name,
+                                                                    value,
+                                                                    error,
+                                                                    showError,
+                                                                    isSubmitting,
+                                                                    setValue,
+                                                                    tableMode,
+                                                                    property,
+                                                                    includeDescription,
+                                                                    underlyingValueHasChanged,
+                                                                    context,
+                                                                    disabled,
+                                                                    dependsOnOtherProperties
+                                                                }: FieldProps<T>) {
 
-export default function ArrayDefaultField<T>({
-                                                 name,
-                                                 value,
-                                                 error,
-                                                 showError,
-                                                 isSubmitting,
-                                                 setValue,
-                                                 tableMode,
-                                                 property,
-                                                 includeDescription,
-                                                 underlyingValueHasChanged,
-                                                 context,
-                                                 disabled,
-                                                 dependsOnOtherProperties
-                                             }: ArrayDefaultFieldProps<T>) {
+    if (!property.of)
+        throw Error("ArrayDefaultField misconfiguration. Property.of not set");
 
-    const ofProperty: Property = property.of as Property;
+    const ofProperty: Property<CMSType[]> = property.of as Property<CMSType[]>;
     const classes = formStyles();
 
     const [lastAddedId, setLastAddedId] = useState<number | undefined>();
@@ -39,18 +40,18 @@ export default function ArrayDefaultField<T>({
     });
 
     const buildEntry = (index: number, internalId: number) => {
-        return <CMSFormField
-            name={`${name}[${index}]`}
-            disabled={disabled}
-            property={ofProperty}
-            includeDescription={includeDescription}
-            underlyingValueHasChanged={underlyingValueHasChanged}
-            context={context}
-            tableMode={false}
-            partOfArray={true}
-            autoFocus={internalId === lastAddedId}
-            dependsOnOtherProperties={false}
-        />;
+        return buildPropertyField({
+            name: `${name}[${index}]`,
+            disabled,
+            property: ofProperty,
+            includeDescription,
+            underlyingValueHasChanged,
+            context,
+            tableMode: false,
+            partOfArray: true,
+            autoFocus: internalId === lastAddedId,
+            dependsOnOtherProperties: false
+        });
 
     };
 

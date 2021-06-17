@@ -27,8 +27,8 @@ import {
 import { OutsideAlerter } from "../../util/OutsideAlerter";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { isReadOnly } from "../../models/utils";
-import { CMSFormField } from "../../form";
 import { OnCellChangeParams } from "../CollectionTableProps";
+import { buildPropertyField } from "../../form";
 
 export const useStyles = makeStyles(theme => createStyles({
     form: {
@@ -196,18 +196,18 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                 onSubmit={handleSubmit}
                 noValidate>
 
-                {name && property && <CMSFormField
-                    name={name as string}
-                    property={property}
-                    includeDescription={false}
-                    underlyingValueHasChanged={false}
-                    disabled={isSubmitting || isReadOnly(property) || !!property.disabled}
-                    context={context}
-                    tableMode={true}
-                    partOfArray={false}
-                    autoFocus={formPopupOpen}
-                    dependsOnOtherProperties={usedPropertyBuilder}
-                />}
+                {name && property && buildPropertyField({
+                    name: name as string,
+                    disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
+                    property,
+                    includeDescription: false,
+                    underlyingValueHasChanged: false,
+                    context,
+                    tableMode: true,
+                    partOfArray: false,
+                    autoFocus: formPopupOpen,
+                    dependsOnOtherProperties: usedPropertyBuilder
+                })}
 
                 <Button
                     className={classes.button}

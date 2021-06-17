@@ -11,24 +11,21 @@ import {
 import React from "react";
 import { FieldDescription } from "../../components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 
-type ArrayEnumSelectProps<T extends EnumType> = FieldProps<T[]>;
 
-export default function ArrayEnumSelect<T extends EnumType>({
-                                                                name,
-                                                                value,
-                                                                setValue,
-                                                                error,
-                                                                showError,
-                                                                disabled,
-                                                                touched,
-                                                                property,
-                                                                includeDescription,
-                                                                dependsOnOtherProperties
-                                                            }: ArrayEnumSelectProps<T>) {
+export default function ArrayEnumSelect({
+                                            name,
+                                            value,
+                                            setValue,
+                                            error,
+                                            showError,
+                                            disabled,
+                                            property,
+                                            includeDescription
+                                        }: FieldProps<EnumType[]>) {
 
     if (!property.of) {
         throw Error("Using wrong component ArrayEnumSelect");

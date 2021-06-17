@@ -8,6 +8,7 @@ import ReferenceField from "./fields/ReferenceField";
 import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ReadOnlyField from "./fields/ReadOnlyField";
+import { buildPropertyField } from "./form_factory";
 
 export {
     ArrayDefaultField,
@@ -22,7 +23,7 @@ export {
     TextField
 };
 
-export { CMSFormField } from "./form_factory";
+export { buildPropertyField } from "./form_factory";
 
 
 

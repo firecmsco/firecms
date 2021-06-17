@@ -27,6 +27,7 @@ export type { SchemaResolver, SchemaConfig } from "./schema_resolver";
 export type {
     FieldProps, CMSFormFieldProps, FormContext
 } from "./fields";
+
 export type { TextSearchDelegate } from "./text_search_delegate";
 
 export type { PreviewComponentProps } from "./preview_component_props";

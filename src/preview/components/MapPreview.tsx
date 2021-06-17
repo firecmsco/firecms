@@ -25,7 +25,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-export function MapPreview<T>({
+export function MapPreview<T extends {}>({
                                   name,
                                   value,
                                   property,

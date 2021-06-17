@@ -1,11 +1,11 @@
 import React from "react";
-import { EntitySchema, EntityValues, Property } from "./models";
+import { CMSType, EntitySchema, EntityValues, Property } from "./models";
 
 /**
- * When building a custom field you need to create a React Element that takes
+ * When building a custom field you need to create a React component that takes
  * this interface as props.
  */
-export interface FieldProps<T, CustomProps = any, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> {
+export interface FieldProps<T extends CMSType, CustomProps = any, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
      * Name of the property
@@ -33,9 +33,10 @@ export interface FieldProps<T, CustomProps = any, S extends EntitySchema<Key> = 
     isSubmitting: boolean;
 
     /**
-     * Is there an error in this field. The error field has the same shape as
-     * the field, replacing values with a string containing the error.
-     * It takes the value `null` if there is no error
+     * Should this field show the error indicator.
+     * Note that there might be an error (like an empty field that should be
+     * filled) but we don't want to show the error until the user has tried
+     * saving.
      */
     showError: boolean;
 
@@ -60,12 +61,6 @@ export interface FieldProps<T, CustomProps = any, S extends EntitySchema<Key> = 
      * Should this field include a description
      */
     includeDescription: boolean;
-
-    /**
-     * Builder in case this fields needs to build additional fields,
-     * e.g. arrays or maps
-     */
-    CMSFormField: React.FunctionComponent<CMSFormFieldProps<S, Key>>;
 
     /**
      * Flag to indicate that the underlying value has been updated in Firestore
@@ -132,16 +127,18 @@ export interface FormContext<S extends EntitySchema<Key>, Key extends string = E
  * In case you need to render a field bound to a Property inside your
  * custom field you can call `buildPropertyField` with these props.
  */
-export interface CMSFormFieldProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
+export interface CMSFormFieldProps<T extends CMSType, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
+
     /**
      * The name of the property, such as `age`. You can use nested and array
      * indexed such as `address.street` or `people[3]`
      */
     name: string;
+
     /**
      * The CMS property you are binding this field to
      */
-    property: Property;
+    property: Property<T>;
 
     /**
      * The context where this field is being rendered. You get a context as a

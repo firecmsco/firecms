@@ -1,5 +1,5 @@
 import {
-    ArrayProperty,
+    ArrayProperty, CMSType,
     EntitySchema,
     NumberProperty,
     Property,
@@ -28,7 +28,7 @@ import TableCell from "./TableCell";
 import { AnySchema } from "yup";
 
 
-export interface PropertyTableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
+export interface PropertyTableCellProps<T extends CMSType, S extends EntitySchema<Key>, Key extends string> {
     name: string;
     selected: boolean;
     value: T;
@@ -49,7 +49,7 @@ export interface PropertyTableCellProps<T, S extends EntitySchema<Key>, Key exte
  */
 export type OnCellChangeParams<T> = { value: T, name: string, setError: (e: Error) => void };
 
-const PropertyTableCell = <T, S extends EntitySchema<Key>, Key extends string>({
+const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key extends string>({
                                                                                    selected,
                                                                                    focused,
                                                                                    name,

@@ -1,9 +1,9 @@
 import React, { MouseEventHandler } from "react";
-import { Property } from "./models";
+import { CMSType, Property } from "./models";
 
 export type PreviewSize = "regular" | "small" | "tiny";
 
-export interface PreviewComponentProps<T = any, CustomProps = any> {
+export interface PreviewComponentProps<T extends CMSType = CMSType, CustomProps = any> {
     /**
      * Name of the property
      */

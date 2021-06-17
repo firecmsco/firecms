@@ -1,6 +1,6 @@
 ---
 id: "entityschema"
-title: "Interface: EntitySchema<Key, T>"
+title: "Interface: EntitySchema<Key>"
 sidebar_label: "EntitySchema"
 sidebar_position: 0
 custom_edit_url: null

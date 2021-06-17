@@ -1,4 +1,5 @@
 import {
+    CMSType,
     EntityCollection,
     EntitySchema,
     EntityValues,
@@ -10,8 +11,8 @@ import {
 } from "./models";
 import { Navigation, NavigationBuilder } from "../CMSAppProps";
 
-export function buildPropertyFrom<S extends EntitySchema<Key>, Key extends string, T extends any = any>(
-    propertyOrBuilder: PropertyOrBuilder<S, Key, T>,
+export function buildPropertyFrom<T extends CMSType, S extends EntitySchema<Key>, Key extends string>(
+    propertyOrBuilder: PropertyOrBuilder<T, S, Key>,
     values: Partial<EntityValues<S, Key>>,
     entityId?: string
 ): Property<T> {
@@ -67,9 +68,9 @@ export function buildSchema<Key extends string = string>(
  */
 export function buildSchemaFrom<Type extends Partial<{ [P in Key]: T; }>,
     Key extends string = Extract<keyof Type, string>,
-    T = any>(
-    schema: EntitySchema<Key, T>
-): EntitySchema<Key, T> {
+    T extends CMSType = CMSType>(
+    schema: EntitySchema<Key>
+): EntitySchema<Key> {
     return schema;
 }
 
@@ -78,9 +79,9 @@ export function buildSchemaFrom<Type extends Partial<{ [P in Key]: T; }>,
  * the property keys.
  * @param property
  */
-export function buildProperty(
-    property: Property
-): Property {
+export function buildProperty<T extends CMSType>(
+    property: Property<T>
+): Property<T> {
     return property;
 }
 
@@ -96,7 +97,7 @@ export function buildProperties<Key extends string>(
     return properties;
 }
 
-export function buildPropertiesOrBuilder<S extends EntitySchema<Key>, Key extends string>(
+export function buildPropertiesOrBuilder<T extends CMSType, S extends EntitySchema<Key>, Key extends string>(
     propertiesOrBuilder: PropertiesOrBuilder<S, Key>
 ): PropertiesOrBuilder<S, Key> {
     return propertiesOrBuilder;

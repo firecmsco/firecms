@@ -7,8 +7,6 @@ import { FieldDescription } from "../../components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ErrorBoundary from "../../components/ErrorBoundary";
 
-type DisabledFieldProps = FieldProps<any>;
-
 export default function ReadOnlyField<S extends EntitySchema>({
                                                                   name,
                                                                   value,
@@ -21,7 +19,7 @@ export default function ReadOnlyField<S extends EntitySchema>({
                                                                   property,
                                                                   includeDescription,
                                                                   context
-                                                              }: DisabledFieldProps) {
+                                                              }: FieldProps<any>) {
 
     const classes = formStyles();
 

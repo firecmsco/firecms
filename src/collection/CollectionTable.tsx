@@ -5,7 +5,7 @@ import "react-base-table/styles.css";
 import { Box, Paper, Typography } from "@material-ui/core";
 import {
     AdditionalColumnDelegate,
-    buildPropertyFrom,
+    buildPropertyFrom, CMSType,
     CollectionSize,
     Entity,
     EntitySchema,
@@ -211,7 +211,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as Key[])
             .map((key) => {
-                const property: Property = buildPropertyFrom<S, Key, any>(schema.properties[key], schema.defaultValues ?? {});
+                const property: Property<any> = buildPropertyFrom<any, S, Key>(schema.properties[key], schema.defaultValues ?? {});
                 return ({
                     id: key as string,
                     type: "property",
@@ -327,7 +327,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
             const name = column.dataKey as Key;
             const propertyOrBuilder = schema.properties[name];
-            const property = buildPropertyFrom<S, Key>(propertyOrBuilder, entity.values, entity.id);
+            const property:Property = buildPropertyFrom<CMSType, S, Key>(propertyOrBuilder, entity.values, entity.id);
             const usedPropertyBuilder = typeof propertyOrBuilder === "function";
 
             const inlineEditingEnabled = checkInlineEditing(entity);

@@ -411,7 +411,7 @@ export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends
 ): Properties<Key> {
     return Object.entries(schema.properties)
         .map(([key, propertyOrBuilder]) => {
-            return { [key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<S, Key>, values ?? schema.defaultValues ?? {}, entityId) };
+            return { [key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, S, Key>, values ?? schema.defaultValues ?? {}, entityId) };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<Key>;
 }
@@ -429,7 +429,7 @@ export function initEntityValues<S extends EntitySchema<Key>, Key extends string
 
 export type PropertiesValues<S extends EntitySchema<Key>, Key extends string> = {
     [K in Key]: S["properties"][K] extends Property<infer T> ? T :
-        (S["properties"][K] extends PropertyBuilder<S, Key, infer T> ? T : any);
+        (S["properties"][K] extends PropertyBuilder<infer T, S, Key> ? T : any);
 };
 
 function initWithProperties<S extends EntitySchema<Key>,
@@ -439,7 +439,7 @@ function initWithProperties<S extends EntitySchema<Key>,
     return Object.entries(properties)
         .map(([key, property]) => {
             const propertyDefaultValue = defaultValues && key in defaultValues ? (defaultValues as any)[key] : undefined;
-            const value = initPropertyValue(key, property as Property<unknown>, propertyDefaultValue);
+            const value = initPropertyValue(key, property as Property, propertyDefaultValue);
             return value === undefined ? {} : { [key]: value };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<any, any>;

@@ -79,7 +79,7 @@ export function SkeletonComponent<T>({
     return (content ? content : null);
 }
 
-function renderMap<T>(property: MapProperty<T>, size: PreviewSize) {
+function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize) {
 
     const classes = useStyles();
     if(!property.properties)

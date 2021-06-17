@@ -168,7 +168,7 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
 
 type Header = { label: string, key: string };
 
-function getExportHeaders(properties: Properties<any>,
+function getExportHeaders(properties: Properties,
                           exportConfig?: ExportConfig): Header[] {
     const headers = [
         { label: "id", key: "id" },

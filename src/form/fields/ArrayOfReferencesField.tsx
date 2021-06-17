@@ -15,7 +15,7 @@ import { ReferenceDialog } from "../components/ReferenceDialog";
 import { CollectionTable } from "../../collection/CollectionTable";
 import { formStyles } from "../styles";
 import FieldDescription from "../components/FieldDescription";
-import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 
 

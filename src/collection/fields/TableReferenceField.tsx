@@ -22,7 +22,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
     disabled: boolean;
     internalValue: firebase.firestore.DocumentReference | firebase.firestore.DocumentReference[] | undefined | null;
     updateValue: (newValue: (firebase.firestore.DocumentReference | firebase.firestore.DocumentReference [] | null)) => void;
-    property: ReferenceProperty | ArrayProperty<firebase.firestore.DocumentReference>;
+    property: ReferenceProperty | ArrayProperty<firebase.firestore.DocumentReference[]>;
     size: CollectionSize;
     setPreventOutsideClick: (value: any) => void;
 }) {

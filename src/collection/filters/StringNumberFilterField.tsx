@@ -17,7 +17,7 @@ import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 interface StringNumberFilterFieldProps {
     name: string,
-    property: ArrayProperty<string | number> | StringProperty | NumberProperty,
+    property: ArrayProperty<string[] | number[]> | StringProperty | NumberProperty,
 }
 
 const operationLabels = {

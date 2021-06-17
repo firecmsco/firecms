@@ -1,7 +1,7 @@
 import React, { createElement } from "react";
 import {
     ArrayProperty,
-    BooleanProperty,
+    BooleanProperty, CMSType,
     MapProperty,
     NumberProperty,
     PreviewComponentProps,
@@ -33,7 +33,7 @@ import ReactMarkdown from "react-markdown";
 import firebase from "firebase/app";
 
 
-export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
+export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
     const {
         property, name, value, size, height, width
@@ -88,7 +88,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                 content =
                     <ArrayOfMapsPreview name={name}
                                         property={property as ArrayProperty}
-                                        value={value}
+                                        value={value as object[]}
                                         size={size}
                     />;
             } else if (arrayProperty.of.dataType === "reference") {
@@ -99,7 +99,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                 if (arrayProperty.of.config?.enumValues) {
                     content = <ArrayPropertyEnumPreview
                         {...fieldProps}
-                        value={value}
+                        value={value as string[]}
                         property={property as ArrayProperty}/>;
                 } else if (arrayProperty.of.config?.storageMeta) {
                     content = <ArrayOfStorageComponentsPreview
@@ -109,7 +109,7 @@ export function PreviewComponent<T>(props: PreviewComponentProps<T>) {
                 } else {
                     content = <ArrayOfStringsPreview
                         {...fieldProps}
-                        value={value}
+                        value={value as string[]}
                         property={property as ArrayProperty}/>;
                 }
             } else {

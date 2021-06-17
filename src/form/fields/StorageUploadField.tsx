@@ -106,22 +106,6 @@ export const useStyles = makeStyles(theme => ({
 
 type StorageUploadFieldProps = FieldProps<string | string[]>;
 
-/**
- * Internal representation of an item in the storage
- * It can have two states, having a storagePathOrDownloadUrl set,
- * which means the file has
- * been uploaded and it is rendered as a preview
- * Or have a pending file being uploaded.
- */
-interface StorageFieldItem {
-    id: number; // generated on the fly for internal use only
-    storagePathOrDownloadUrl?: string;
-    file?: File;
-    fileName?: string;
-    metadata?: firebase.storage.UploadMetadata,
-    size: PreviewSize
-}
-
 export default function StorageUploadField({
                                                name,
                                                value,
@@ -238,10 +222,26 @@ export default function StorageUploadField({
     );
 }
 
+/**
+ * Internal representation of an item in the storage
+ * It can have two states, having a storagePathOrDownloadUrl set,
+ * which means the file has
+ * been uploaded and it is rendered as a preview
+ * Or have a pending file being uploaded.
+ */
+interface StorageFieldItem {
+    id: number; // generated on the fly for internal use only
+    storagePathOrDownloadUrl?: string;
+    file?: File;
+    fileName?: string;
+    metadata?: firebase.storage.UploadMetadata,
+    size: PreviewSize
+}
+
 interface StorageUploadProps {
     value: string | string[];
     name: string;
-    property: StringProperty | ArrayProperty<string>;
+    property: StringProperty | ArrayProperty<string[]>;
     onChange: (value: string | string[] | null) => void;
     multipleFilesSupported: boolean;
     autoFocus: boolean;
@@ -267,7 +267,7 @@ export function StorageUpload({
                               }: StorageUploadProps) {
 
     if (multipleFilesSupported) {
-        const arrayProperty = property as ArrayProperty<string>;
+        const arrayProperty = property as ArrayProperty<string[]>;
         if (arrayProperty.of) {
             if (arrayProperty.of.dataType !== "string") {
                 throw Error("Storage field using array must be of data type string");
@@ -445,8 +445,8 @@ export function StorageUpload({
                     let child;
                     if (entry.storagePathOrDownloadUrl) {
                         const renderProperty = multipleFilesSupported
-                            ? (property as ArrayProperty<string>).of as Property
-                            : property;
+                            ? (property as ArrayProperty<string[]>).of as StringProperty
+                            : property as StringProperty;
                         child = (
                             <StorageItemPreview
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
@@ -690,7 +690,7 @@ export function StorageUploadProgress({
 
 interface StorageItemPreviewProps {
     name: string;
-    property: Property;
+    property: StringProperty;
     value: string,
     onClear: (value: string) => void;
     size: PreviewSize;

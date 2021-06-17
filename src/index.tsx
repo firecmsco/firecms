@@ -1,3 +1,5 @@
+import { buildPropertyField } from "./form";
+
 export * from "./models";
 
 // EntityCollectionView is deprecated, use EntityCollection instead
@@ -47,7 +49,7 @@ export {
     StorageUploadField,
     SwitchField,
     TextField,
-    CMSFormField
+    buildPropertyField
 } from "./form";
 
 export type {

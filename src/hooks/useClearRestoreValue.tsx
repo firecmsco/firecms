@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Property } from "../models";
+import { CMSType, Property } from "../models";
 
 /**
  * Hook we use to restore a value after it has been cleared
@@ -7,7 +7,7 @@ import { Property } from "../models";
  * @param value
  * @param setValue
  */
-export function useClearRestoreValue<T>({
+export function useClearRestoreValue<T extends CMSType>({
                                             property,
                                             value,
                                             setValue

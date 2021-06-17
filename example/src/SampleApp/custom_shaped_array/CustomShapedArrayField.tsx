@@ -1,6 +1,10 @@
 import React, { ReactElement } from "react";
 import { Box, FormControl, FormHelperText, Paper } from "@material-ui/core";
-import { CMSFormField, FieldDescription, FieldProps } from "@camberi/firecms";
+import {
+    buildPropertyField,
+    FieldDescription,
+    FieldProps
+} from "@camberi/firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 
@@ -30,10 +34,11 @@ export default function CustomShapedArrayField({
             <Paper variant={"outlined"}>
                 <Box m={2}>
                     {properties.map((property, index) =>
-                        <CMSFormField key={`custom_array_field_${index}`}
-                                      name={`${name}[${index}]`}
-                                      property={property}
-                                      context={context}/>
+                        buildPropertyField({
+                            name: `${name}[${index}]`,
+                            property,
+                            context
+                        })
                     )}
                 </Box>
             </Paper>

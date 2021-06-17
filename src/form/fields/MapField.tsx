@@ -16,7 +16,7 @@ import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
-import { CMSFormField } from "../form_factory";
+import { buildPropertyField } from "../form_factory";
 
 
 export default function MapField<T extends object>({
@@ -106,18 +106,20 @@ export default function MapField<T extends object>({
                                           sm={12}
                                           xs={12}
                                           key={`map-${name}-${index}`}>
-                                        <CMSFormField
-                                            name={`${name}[${entryKey}]`}
-                                            disabled={disabled}
-                                            property={childProperty}
-                                            includeDescription={includeDescription}
-                                            underlyingValueHasChanged={underlyingValueHasChanged}
-                                            context={context}
-                                            tableMode={tableMode}
-                                            partOfArray={false}
-                                            autoFocus={false}
-                                            dependsOnOtherProperties={false}
-                                        />
+                                        {
+                                            buildPropertyField({
+                                                name: `${name}[${entryKey}]`,
+                                                disabled,
+                                                property: childProperty,
+                                                includeDescription,
+                                                underlyingValueHasChanged,
+                                                context,
+                                                tableMode,
+                                                partOfArray: false,
+                                                autoFocus: false,
+                                                dependsOnOtherProperties: false
+                                            })
+                                        }
                                     </Grid>
                                 );
                             }

@@ -1,7 +1,7 @@
 import {
     ArrayProperty,
     BooleanProperty,
-    buildPropertyFrom,
+    buildPropertyFrom, CMSType,
     EntitySchema,
     EntityValues,
     GeopointProperty,
@@ -80,7 +80,7 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
     throw Error("Unsupported data type in yup mapping: " + property);
 }
 
-export function getYupEntitySchema<S extends EntitySchema<Key>, Key extends string>
+export function getYupEntitySchema<T extends CMSType, S extends EntitySchema<Key>, Key extends string>
 (properties: PropertiesOrBuilder<S, Key>,
  values: Partial<EntityValues<S, Key>>,
  customFieldValidator?: CustomFieldValidator,
@@ -88,7 +88,7 @@ export function getYupEntitySchema<S extends EntitySchema<Key>, Key extends stri
     const objectSchema: any = {};
     Object.entries(properties).forEach(([name, propertyOrBuilder]) => {
         objectSchema[name] = mapPropertyToYup({
-            property: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<S, Key>, values, entityId),
+            property: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, S, Key>, values, entityId),
             customFieldValidator,
             name
         });
