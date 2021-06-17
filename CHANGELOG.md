@@ -5,10 +5,11 @@
 ### Changed
 
 - Internal type fixes.
-- [BREAKING] ArrayProperty first generic type changed from T to T[]
+- [BREAKING] `ArrayProperty` first generic type changed from T to T[]
 - [BREAKING] `CMSFormField` component (used for generating custom fields)
   has been replaced by a function called `buildPropertyField` that takes the
   same props
+- Fix for jumping search bar while loading
 
 ## [0.40.0] - 2021-06-06
 

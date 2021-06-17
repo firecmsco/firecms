@@ -10,17 +10,21 @@ import { IconButton } from "@material-ui/core";
 
 import SearchIcon from "@material-ui/icons/Search";
 import ClearIcon from "@material-ui/icons/Clear";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         search: {
             position: "relative",
+            display: "flex",
+            alignItems: "center",
+            height: 40,
             borderRadius: theme.shape.borderRadius,
             backgroundColor: fade(theme.palette.common.black, 0.05),
             "&:hover": {
                 backgroundColor: fade(theme.palette.common.black, 0.10)
             },
-            marginLeft: 0,
+            marginLeft: theme.spacing(1),
             [theme.breakpoints.up("sm")]: {
                 marginLeft: theme.spacing(1),
                 width: "auto"
@@ -46,10 +50,12 @@ const useStyles = makeStyles((theme: Theme) =>
             transition: theme.transitions.create("width"),
             width: "100%",
             [theme.breakpoints.up("sm")]: {
-                width: "12ch",
-                "&:focus": {
-                    width: "20ch"
-                }
+                width: "12ch"
+            }
+        },
+        inputActive: {
+            [theme.breakpoints.up("sm")]: {
+                width: "20ch"
             }
         }
     })
@@ -65,6 +71,7 @@ export default function SearchBar({ onTextSearch }: SearchBarProps) {
     const classes = useStyles();
 
     const [searchText, setSearchText] = useState<string>("");
+    const [active, setActive] = useState<boolean>(false);
 
     /**
      * Debounce on Search text update
@@ -102,9 +109,13 @@ export default function SearchBar({ onTextSearch }: SearchBarProps) {
                     onChange={(event) => {
                         setSearchText(event.target.value);
                     }}
+                    onFocus={() => setActive(true)}
+                    onBlur={() => setActive(false)}
                     classes={{
                         root: classes.inputRoot,
-                        input: classes.inputInput
+                        input: clsx(classes.inputInput, {
+                            [classes.inputActive]: active
+                        })
                     }}
                     endAdornment={searchText ?
                         <IconButton

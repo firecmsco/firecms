@@ -41,10 +41,18 @@ export function useTextSearch<S extends EntitySchema<Key>, Key extends string>(
                 setTextSearchData([]);
             } else {
                 const ids = await textSearchDelegate.performTextSearch(searchString);
-                const promises: Promise<Entity<S, Key>>[] = ids
-                    .map((id) => fetchEntity(collectionPath, id, schema)
+                const promises: Promise<Entity<S, Key> | null>[] = ids
+                    .map(async (id) => {
+                            try {
+                                return await fetchEntity(collectionPath, id, schema);
+                            } catch (e) {
+                                console.error(e);
+                                return null;
+                            }
+                        }
                     );
-                const entities = await Promise.all(promises);
+                const entities = (await Promise.all(promises))
+                    .filter((e) => e !== null && e.values) as Entity<S, Key>[];
                 setTextSearchData(entities);
             }
             setTextSearchLoading(false);

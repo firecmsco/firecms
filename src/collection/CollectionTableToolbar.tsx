@@ -5,12 +5,15 @@ import {
     Box,
     CircularProgress,
     createStyles,
+    fade,
     Hidden,
     InputBase,
     makeStyles,
     MenuItem,
     Select,
-    Theme
+    Theme,
+    useMediaQuery,
+    useTheme
 } from "@material-ui/core";
 import SearchBar from "./SearchBar";
 
@@ -56,7 +59,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
         input: {
             borderRadius: 4,
             position: "relative",
-            backgroundColor: "#e3e3e3",
+            backgroundColor: fade(theme.palette.common.black, 0.05),
             fontSize: 14,
             fontWeight: theme.typography.fontWeightMedium,
             padding: "10px 26px 10px 12px",
@@ -87,20 +90,22 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
 interface CollectionTableToolbarProps<S extends EntitySchema<Key>, Key extends string> {
     schema: S;
     size: CollectionSize;
-    onSizeChanged: (size: CollectionSize) => void;
     filterValues?: FilterValues<S, Key>;
-    onTextSearch?: (searchString?: string) => void;
     filterableProperties?: Key[];
     actions?: React.ReactNode;
     loading: boolean;
     title?: React.ReactNode,
-
-    onFilterUpdate?(filterValues: FilterValues<S, Key>): void;
+    onFilterUpdate?: (filterValues: FilterValues<S, Key>) => void;
+    onTextSearch?: (searchString?: string) => void;
+    onSizeChanged: (size: CollectionSize) => void;
 }
 
 export function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends string>(props: CollectionTableToolbarProps<S, Key>) {
     const classes = useStyles();
     const sizeClasses = useSizeSelectStyles();
+
+    const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const filterEnabled = props.onFilterUpdate && props.filterableProperties && props.filterableProperties.length > 0;
     const filterView = filterEnabled && props.onFilterUpdate && props.filterableProperties &&
@@ -171,13 +176,16 @@ export function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends 
 
             {props.onTextSearch &&
             <SearchBar
+                key={"search-bar"}
                 onTextSearch={props.onTextSearch}/>
             }
 
             <div className={classes.actions}>
 
-                {props.loading &&
-                <CircularProgress size={16} thickness={8}/>}
+                {largeLayout && <Box width={22}>
+                    {props.loading &&
+                    <CircularProgress size={16} thickness={8}/>}
+                </Box>}
 
                 {props.actions}
 
