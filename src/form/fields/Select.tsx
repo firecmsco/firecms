@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { FieldDescription } from "../../components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 

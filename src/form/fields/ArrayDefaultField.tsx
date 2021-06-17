@@ -20,7 +20,6 @@ export default function ArrayDefaultField<T>({
                                                  setValue,
                                                  tableMode,
                                                  property,
-                                                 CMSFormField,
                                                  includeDescription,
                                                  underlyingValueHasChanged,
                                                  context,

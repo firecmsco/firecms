@@ -71,7 +71,6 @@ export default function ReferenceField<S extends EntitySchema<Key> = EntitySchem
                                                                      property,
                                                                      includeDescription,
                                                                      context,
-                                                                     CMSFormField,
                                                                      dependsOnOtherProperties
                                                                  }: FieldProps<firebase.firestore.DocumentReference>) {
 

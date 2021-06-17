@@ -9,6 +9,7 @@ import CustomShapedArrayField
     from "../custom_shaped_array/CustomShapedArrayField";
 import CustomShapedArrayPreview
     from "../custom_shaped_array/CustomShapedArrayPreview";
+import ChapterField from "../custom_field/ChapterField";
 
 const relaxedStatus = new Map([
     ["-3", buildEnumValueConfig({
@@ -61,6 +62,27 @@ export const testEntitySchema = buildSchema({
         });
     },
     properties: {
+        chapterList: {
+            title: 'chapterList',
+            dataType: 'array',
+            validation: {
+                required: true,
+                min: 1,
+            },
+            of: {
+                dataType: 'map',
+                config: {
+                    field: ChapterField as any,
+                },
+                properties: {
+                    title: {
+                        title: 'Title',
+                        validation: { required: true },
+                        dataType: 'string',
+                    },
+                },
+            },
+        },
         actions: {
             title: "Actions",
             description: "Possible user actions",

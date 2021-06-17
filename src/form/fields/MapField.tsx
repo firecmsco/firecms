@@ -1,4 +1,4 @@
-import { EntitySchema, FieldProps, Properties, Property } from "../../models";
+import { FieldProps, Properties, Property } from "../../models";
 import {
     Box,
     FormControl,
@@ -15,12 +15,11 @@ import { formStyles } from "../styles";
 import { FieldDescription } from "../../components";
 import { pick } from "../../util/objects";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks";
 import { CMSFormField } from "../form_factory";
 
-type MapFieldProps<S extends EntitySchema> = FieldProps<object>;
 
-export default function MapField<S extends EntitySchema>({
+export default function MapField<T extends object>({
                                                              name,
                                                              value,
                                                              showError,
@@ -29,10 +28,9 @@ export default function MapField<S extends EntitySchema>({
                                                              setValue,
                                                              tableMode,
                                                              includeDescription,
-                                                             CMSFormField,
                                                              underlyingValueHasChanged,
                                                              context
-                                                         }: MapFieldProps<S>) {
+                                                         }: FieldProps<T> ) {
 
     const classes = formStyles();
 
