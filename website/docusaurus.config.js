@@ -23,7 +23,7 @@ module.exports = {
             title: 'FireCMS',
             logo: {
                 alt: 'FireCMS Logo',
-                src: 'img/logo_small.png'
+                src: 'img/firecms_logo.svg'
             },
             items: [
                 {
