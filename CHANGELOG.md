@@ -1,6 +1,13 @@
 # Change Log
 
-## [0.41.0] - 2021-06-
+## [0.41.1] - 2021-06-22
+
+### Changed
+
+- Fix for export component that was fetching the complete collections on mount.
+Now opening the CMS does not trigger excessive reads by default.
+
+## [0.41.0] - 2021-06-19
 
 ### Changed
 
