@@ -212,7 +212,7 @@ function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySc
                     showError,
                     isSubmitting,
                     includeDescription: includeDescription ?? true,
-                    property: property as Property<T>,
+                    property: property,
                     disabled: disabled ?? false,
                     underlyingValueHasChanged: underlyingValueHasChanged ?? false,
                     tableMode: tableMode ?? false,

@@ -18,7 +18,6 @@ import {
     DialogTitle,
     IconButton,
     Tooltip,
-    useMediaQuery,
     useTheme
 } from "@material-ui/core";
 import { CSVLink } from "react-csv";
@@ -45,9 +44,11 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
 
     const [open, setOpen] = React.useState(false);
-    const theme = useTheme();
 
     useEffect(() => {
+
+        if (!open) return;
+
         setDataLoading(true);
 
         const updateEntities = async (entities: Entity<S, Key>[]) => {
@@ -91,7 +92,7 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
             undefined,
             undefined);
 
-    }, [collectionPath, schema]);
+    }, [collectionPath, schema, open]);
 
     const handleClickOpen = () => {
         setOpen(true);

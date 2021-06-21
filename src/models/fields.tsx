@@ -180,7 +180,9 @@ export interface CMSFormFieldProps<T extends CMSType, S extends EntitySchema<Key
 
     /**
      * This flag is used to avoid using Formik FastField internally, which
-     * prevents being updated from the values
+     * prevents being updated from the values.
+     * Set this value to `true` if you are developing a custom field which
+     * value gets updated dynamically based on others.
      */
     dependsOnOtherProperties?: boolean;
 }
