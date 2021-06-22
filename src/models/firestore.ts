@@ -76,6 +76,57 @@ export function listenCollection<S extends EntitySchema<Key>,
 }
 
 /**
+ * Fetch entities in a Firestore path
+ * @param path
+ * @param schema
+ * @param filter
+ * @param limit
+ * @param startAfter
+ * @param orderBy
+ * @param order
+ * @return Function to cancel subscription
+ */
+export function fetchCollection<S extends EntitySchema<Key>,
+    Key extends string = Extract<keyof S["properties"], string>>(
+    path: string,
+    schema: S,
+    filter?: FilterValues<S, Key>,
+    limit?: number,
+    startAfter?: any[],
+    orderBy?: string,
+    order?: "desc" | "asc"
+): Promise<Entity<S, Key>[]> {
+
+    console.debug("Fetching collection", path, limit, filter, startAfter, orderBy, order);
+
+    let collectionReference: firebase.firestore.Query = firebase.firestore().collection(path);
+
+    if (filter)
+        Object.entries(filter)
+            .filter(([_, entry]) => !!entry)
+            .forEach(([key, filterParameter]) => {
+                const [op, value] = filterParameter as [WhereFilterOp, any];
+                return collectionReference = collectionReference.where(key, op, value);
+            });
+
+    if (orderBy && order)
+        collectionReference = collectionReference.orderBy(orderBy, order);
+
+    if (startAfter)
+        collectionReference = collectionReference
+            .startAfter(startAfter);
+
+    if (limit)
+        collectionReference = collectionReference
+            .limit(limit);
+
+    return collectionReference
+        .get()
+        .then((colSnapshot) =>
+            colSnapshot.docs.map((doc) => createEntityFromSchema(doc, schema)));
+}
+
+/**
  * Retrieve an entity given a path and a schema
  * @param path
  * @param entityId
@@ -340,6 +391,7 @@ export async function saveEntity<S extends EntitySchema<Key>,
  * @param onDeleteFailure
  * @param onPreDeleteHookError
  * @param onDeleteSuccessHookError
+ * @param context
  * @return was the whole deletion flow successful
  */
 export async function deleteEntity<S extends EntitySchema<Key>,
@@ -427,7 +479,7 @@ export function initEntityValues<S extends EntitySchema<Key>, Key extends string
     return initWithProperties(properties, schema.defaultValues);
 }
 
-export type PropertiesValues<S extends EntitySchema<Key>, Key extends string> = {
+type PropertiesValues<S extends EntitySchema<Key>, Key extends string> = {
     [K in Key]: S["properties"][K] extends Property<infer T> ? T :
         (S["properties"][K] extends PropertyBuilder<infer T, S, Key> ? T : any);
 };

@@ -44,7 +44,6 @@
         "deep-equal": "^2.0.5",
         "firebaseui": "^4.8.0",
         "formik": "^2.2.6",
-        "json2csv": "^5.0.6",
         "material-ui-popup-state": "^1.8.3",
         "object-hash": "^2.1.1",
         "react-base-table": "^1.12.0",

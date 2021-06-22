@@ -4,10 +4,13 @@ import {
     Entity,
     EntitySchema,
     ExportConfig,
-    listenCollection,
     Properties,
     Property
 } from "../models";
+import {
+    computeSchemaProperties,
+    fetchCollection,
+} from "../models/firestore";
 import {
     Button,
     CircularProgress,
@@ -17,19 +20,20 @@ import {
     DialogContentText,
     DialogTitle,
     IconButton,
-    Tooltip,
-    useTheme
+    Tooltip
 } from "@material-ui/core";
-import { CSVLink } from "react-csv";
-import { computeSchemaProperties, PropertiesValues } from "../models/firestore";
 import firebase from "firebase";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import MuiAlert from "@material-ui/lab/Alert/Alert";
+import { CSVLink } from "react-csv";
 
 type ExportButtonProps<S extends EntitySchema<Key>, Key extends string> = {
     schema: S;
     collectionPath: string;
     exportConfig?: ExportConfig;
 }
+
+const INITIAL_DOCUMENTS_LIMIT = 200;
 
 export default function ExportButton<S extends EntitySchema<Key>, Key extends string>({
                                                                                           schema,
@@ -38,10 +42,19 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
                                                                                       }: ExportButtonProps<S, Key>
 ) {
 
+
+    const csvLinkEl = React.useRef<any>(null);
+
     const [data, setData] = React.useState<Entity<S, Key>[]>();
     const [additionalData, setAdditionalData] = React.useState<Record<string, any>[]>();
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
+
+    // If in the initial load, we get more than INITIAL_DOCUMENTS_LIMIT results
+    const [hasLargeAmountOfData, setHasLargeAmountOfData] = React.useState<boolean>(false);
+
+    // did the user agree to export a large amount of data
+    const [fetchLargeDataAccepted, setFetchLargeDataAccepted] = React.useState<boolean>(false);
 
     const [open, setOpen] = React.useState(false);
 
@@ -52,10 +65,20 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
         setDataLoading(true);
 
         const updateEntities = async (entities: Entity<S, Key>[]) => {
+            if (entities.length >= INITIAL_DOCUMENTS_LIMIT) {
+                setHasLargeAmountOfData(true);
+            }
             setData(entities);
             await fetchAdditionalColumns(entities);
             setDataLoading(false);
             setDataLoadingError(undefined);
+
+            // this is hack used to trigger the CSV download after
+            // fetching additional data
+            if (data && entities.length > data.length && fetchLargeDataAccepted && csvLinkEl.current)
+                setTimeout(() => {
+                    csvLinkEl.current.link.click();
+                });
         };
 
         const fetchAdditionalColumns = async (entities: Entity<S, Key>[]) => {
@@ -81,18 +104,18 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
             setDataLoadingError(error);
         };
 
-        return listenCollection<S, Key>(
+        fetchCollection<S, Key>(
             collectionPath,
             schema,
-            updateEntities,
-            onFetchError,
+            undefined,
+            fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT,
             undefined,
             undefined,
-            undefined,
-            undefined,
-            undefined);
+            undefined)
+            .then(updateEntities)
+            .catch(onFetchError);
 
-    }, [collectionPath, schema, open]);
+    }, [collectionPath, fetchLargeDataAccepted, schema, open]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -102,17 +125,15 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
         setOpen(false);
     };
 
-    const handleDownload = () => {
-        setOpen(false);
-    };
-
     const properties = computeSchemaProperties(schema);
     const exportableData: any[] | undefined = data && data.map(e => ({ id: e.id, ...processProperties(e.values as any, properties) }));
     if (exportableData && additionalData) {
-        additionalData.map((additional, index) => exportableData[index] = { ...exportableData[index], ...additional });
+        additionalData.forEach((additional, index) => exportableData[index] = { ...exportableData[index], ...additional });
     }
 
     const headers = getExportHeaders(properties, exportConfig);
+
+    const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
 
     return (
         <>
@@ -133,7 +154,27 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
 
                 <DialogContent>
                     <DialogContentText>
-                        Download the the content of this table as a CSV
+
+                        <div>Download the the content of this table as a CSV
+                        </div>
+                        <br/>
+
+                        {needsToAcceptFetchAllData
+                        &&
+                        <MuiAlert elevation={1}
+                                  variant="filled"
+                                  severity={"warning"}>
+                            <div>
+                                This collections has a large number
+                                of documents (more
+                                than {INITIAL_DOCUMENTS_LIMIT}).
+                            </div>
+                            <div>
+                                Would you like to proceed?
+                            </div>
+
+                        </MuiAlert>}
+
                     </DialogContentText>
                 </DialogContent>
 
@@ -147,14 +188,24 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
                     {exportableData &&
                     <CSVLink headers={headers}
                              data={exportableData}
+                             ref={csvLinkEl}
                              filename={schema.name}
                              style={{
                                  textDecoration: "none"
                              }}
+                             asyncOnClick={true}
+                             onClick={(event, done) => {
+                                 if (needsToAcceptFetchAllData) {
+                                     setFetchLargeDataAccepted(true);
+                                     done(false);
+                                 } else {
+                                     handleClose();
+                                     done(true);
+                                 }
+                             }}
                              target="_blank"
                     >
-                        <Button color="primary" autoFocus
-                                onClick={handleDownload}>
+                        <Button color="primary">
                             Download
                         </Button>
                     </CSVLink>
@@ -229,7 +280,7 @@ function processProperty(inputValue: any,
 
 function processProperties<S extends EntitySchema<Key>,
     P extends Properties<Key>, Key extends string>
-(inputValues: Partial<PropertiesValues<S, Key>>, properties: P): PropertiesValues<S, Key> {
+(inputValues: Record<Key, any>, properties: P): Record<Key, any> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues as any)[key];
@@ -237,7 +288,7 @@ function processProperties<S extends EntitySchema<Key>,
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<S, Key>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as Record<Key, any>;
     return { ...inputValues, ...updatedValues };
 }
 
