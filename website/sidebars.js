@@ -10,6 +10,7 @@ module.exports = {
             label: 'Quickstart',
             id: 'quickstart'
         },
+        'deployment',
         'cms_config',
         {
             type: 'category',

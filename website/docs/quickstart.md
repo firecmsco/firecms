@@ -23,6 +23,7 @@ yarn add @camberi/firecms firebase @material-ui/core @material-ui/icons @materia
 ```
 
 You can replace the content of the file App.tsx with the following sample code.
+
 Remember to **replace** the Firebase config with the one you get after creating a
 webapp in the Firebase console.
 
