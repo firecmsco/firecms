@@ -1,7 +1,7 @@
 ---
 id: deployment
 title: Deployment to Firebase Hosting
-sidebar_label: Deployment to Firebase Hosting
+sidebar_label: Deployment
 ---
 
 If you would like to deploy your CMS to Firebase Hosting, you need to enable
@@ -35,7 +35,7 @@ look similar to this (remember to replace your site).
 
 ```
 
-Then simply run
+Then simply run:
 ```
 yarn run build && firebase deploy --only hosting
 ```

@@ -5,7 +5,12 @@ sidebar_label: Custom views
 ---
 
 If you need to develop a custom view that does not map directly to a Firestore
-collection you can implement it as
+collection you can implement it as a React component.
+
+You need to define the name, route and the component, and add it to the main
+navigation, as the example below.
+
+By default, it will show in the main navigation view.
 
 For custom views you can define the following props:
 * `path` string | string[]
