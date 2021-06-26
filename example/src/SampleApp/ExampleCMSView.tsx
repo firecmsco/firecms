@@ -7,7 +7,6 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "@camberi/firecms";
-import { useParams } from "react-router-dom";
 
 /**
  * Sample CMS view not bound to a collection, customizable by the developer
@@ -15,12 +14,14 @@ import { useParams } from "react-router-dom";
  */
 export function ExampleCMSView() {
 
+    // hook to display custom snackbars
     const snackbarController = useSnackbarController();
-    const sideEntityController = useSideEntityController();
-    const authController = useAuthContext();
 
-    const params = useParams();
-    console.log("Test view params", params);
+    // hook to open the side dialog that shows the entity forms
+    const sideEntityController = useSideEntityController();
+
+    // hook to do operations related to authentication
+    const authController = useAuthContext();
 
     const customProductSchema = buildSchema({
         name: "Custom product",
@@ -30,6 +31,10 @@ export function ExampleCMSView() {
                 validation: { required: true },
                 dataType: "string"
             },
+            very_custom_field: {
+                title: "Very custom field",
+                dataType: "string"
+            }
         }
     });
 
@@ -48,7 +53,8 @@ export function ExampleCMSView() {
                 <div>This is an example of an additional view</div>
 
                 {authController.loggedUser ?
-                    <div>Logged in as {authController.loggedUser.displayName}</div>
+                    <div>Logged in
+                        as {authController.loggedUser.displayName}</div>
                     :
                     <div>You are not logged in</div>}
 

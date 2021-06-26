@@ -4,6 +4,9 @@ title: Custom views
 sidebar_label: Custom views
 ---
 
+If you need to develop a custom view that does not map directly to a Firestore
+collection you can implement it as
+
 For custom views you can define the following props:
 * `path` string | string[]
 
@@ -74,38 +77,92 @@ export function App() {
 }
 ```
 
-The code for the sample implemented view can be found [here](https://github.com/Camberi/firecms/blob/master/example/src/SampleApp/ExampleCMSView.tsx)
+Your custom view is implemented as any regular React component that uses
+some hooks provided by the CMS:
 
+```tsx
+import React from "react";
+import { Box, Button } from "@material-ui/core";
 
-### Builder functions
+import {
+    buildSchema,
+    useAuthContext,
+    useSideEntityController,
+    useSnackbarController
+} from "@camberi/firecms";
 
-FireCMS provides a set of **builder functions** that just return the input they
-receive but are useful for using the features of the type system and validate
-your schemas and properties at compile time.
+/**
+ * Sample CMS view not bound to a collection, customizable by the developer
+ * @constructor
+ */
+export function ExampleCMSView() {
 
-* `buildNavigation`
-* `buildCollection`
-* `buildSchema`
-* `buildProperties`
-* `buildProperty`
-* `buildProperty`
-* `buildEnumValueConfig`
+    // hook to display custom snackbars
+    const snackbarController = useSnackbarController();
 
-Additionally, if you have defined your models as Typescript types, you can
-use this function to validate them (only the property names):
-* `buildSchemaFrom<YOUR_TYPE>`
+    // hook to open the side dialog that shows the entity forms
+    const sideEntityController = useSideEntityController();
 
-## More granular control
+    // hook to do operations related to authentication
+    const authController = useAuthContext();
 
-If you don't want to use FireCMS `CMSApp` as a full app but would like to
-integrate some of its components you may want to use the `CMSAppProvider`
-and `CMSMainView`
-components (used internally) directly.
+    const customProductSchema = buildSchema({
+        name: "Custom product",
+        properties: {
+            name: {
+                title: "Name",
+                validation: { required: true },
+                dataType: "string"
+            },
+            very_custom_field: {
+                title: "Very custom field",
+                dataType: "string"
+            }
+        }
+    });
 
-This will allow you to initialise Firebase on your own and integrate the FireCMS
-components into your own app. Just place `CMSAppProvider` on top of the
-components that need to use the FireCMS hooks.
+    return (
+        <Box
+            display="flex"
+            width={"100%"}
+            height={"100%"}>
 
-You can see an
-example [here](https://github.com/Camberi/firecms/blob/master/example/src/SimpleAppWithProvider.tsx)
+            <Box m="auto"
+                 display="flex"
+                 flexDirection={"column"}
+                 alignItems={"center"}
+                 justifyItems={"center"}>
+
+                <div>This is an example of an additional view</div>
+
+                {authController.loggedUser ?
+                    <div>Logged in
+                        as {authController.loggedUser.displayName}</div>
+                    :
+                    <div>You are not logged in</div>}
+
+                <Button
+                    onClick={() => snackbarController.open({
+                        type: "success",
+                        message: "This is pretty cool"
+                    })}
+                    color="primary">
+                    Test snackbar
+                </Button>
+
+                <Button
+                    onClick={() => sideEntityController.open({
+                        entityId: "B003WT1622",
+                        collectionPath: "/products-test",
+                        schema: customProductSchema
+                    })}
+                    color="primary">
+                    Open entity with custom schema
+                </Button>
+
+            </Box>
+        </Box>
+    );
+}
+```
 
