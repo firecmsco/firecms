@@ -72,6 +72,7 @@ export default function ArrayContainer<T>({
             setInternalIds(newInternalIds);
         }
     }, [hasValue, value]);
+
     function getRandomId() {
         return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
     }

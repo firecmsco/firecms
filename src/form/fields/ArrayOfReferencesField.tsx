@@ -9,14 +9,15 @@ import {
 import React from "react";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
-import { ErrorView, ReferencePreview } from "../../preview";
+import { ReferencePreview } from "../../preview";
 import firebase from "firebase";
 import { ReferenceDialog } from "../components/ReferenceDialog";
-import { CollectionTable } from "../../collection/CollectionTable";
+import { CollectionTable } from "../../collection/components/CollectionTable";
 import { formStyles } from "../styles";
 import FieldDescription from "../components/FieldDescription";
 import { useClearRestoreValue } from "../../hooks";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
+import { ErrorView } from "../../core/components";
 
 
 type ArrayOfReferencesFieldProps = FieldProps<firebase.firestore.DocumentReference[]>;

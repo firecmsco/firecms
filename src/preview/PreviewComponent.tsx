@@ -1,7 +1,8 @@
 import React, { createElement } from "react";
 import {
     ArrayProperty,
-    BooleanProperty, CMSType,
+    BooleanProperty,
+    CMSType,
     MapProperty,
     NumberProperty,
     PreviewComponentProps,
@@ -10,27 +11,27 @@ import {
     TimestampProperty
 } from "../models";
 
+import { ArrayPreview } from "./components/ArrayPreview";
+import { ArrayOfMapsPreview } from "./components/ArrayOfMapsPreview";
+import { ArrayOfStorageComponentsPreview } from "./components/ArrayOfStorageComponentsPreview";
+import { ArrayOfStringsPreview } from "./components/ArrayOfStringsPreview";
+import { ArrayPropertyEnumPreview } from "./components/ArrayEnumPreview";
 import {
-    ArrayOfMapsPreview,
     ArrayOfReferencesPreview,
-    ArrayOfStorageComponentsPreview,
-    ArrayOfStringsPreview,
-    ArrayPreview,
-    ArrayPropertyEnumPreview,
-    BooleanPreview,
-    EmptyValue,
-    MapPreview,
-    NumberPreview,
-    ErrorView,
-    ReferencePreview,
-    StorageThumbnail,
-    StringPreview,
-    TimestampPreview,
-    UrlComponentPreview
-} from "./components";
+    default as ReferencePreview
+} from "./components/ReferencePreview";
+import { BooleanPreview } from "./components/BooleanPreview";
+import { EmptyValue } from "./components/EmptyValue";
+import { NumberPreview } from "./components/NumberPreview";
+import { StringPreview } from "./components/StringPreview";
+import { TimestampPreview } from "./components/TimestampPreview";
+import { UrlComponentPreview } from "./components/UrlComponentPreview";
+import { StorageThumbnail } from "./components/StorageThumbnail";
+import { MapPreview } from "./components/MapPreview";
 
 import ReactMarkdown from "react-markdown";
 import firebase from "firebase/app";
+import { ErrorView } from "../core/components";
 
 
 export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps<T>) {
@@ -80,7 +81,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
     } else if (property.dataType === "array") {
         if (value instanceof Array) {
             const arrayProperty = property as ArrayProperty;
-            if(!arrayProperty.of){
+            if (!arrayProperty.of) {
                 throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
             }
 

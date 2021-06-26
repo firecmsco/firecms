@@ -23,6 +23,8 @@ export {
     TextField
 };
 
+export * from "./components";
+
 export { buildPropertyField } from "./form_factory";
 
 

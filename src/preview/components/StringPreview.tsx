@@ -1,5 +1,5 @@
 import { PreviewComponentProps } from "../../models";
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../core/components/ErrorBoundary";
 import React from "react";
 import { CustomChip, EnumValuesChip } from "./CustomChip";
 

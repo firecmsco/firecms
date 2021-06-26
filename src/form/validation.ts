@@ -1,7 +1,8 @@
 import {
     ArrayProperty,
     BooleanProperty,
-    buildPropertyFrom, CMSType,
+    buildPropertyFrom,
+    CMSType,
     EntitySchema,
     EntityValues,
     GeopointProperty,

@@ -4,7 +4,7 @@ import { getSidePanelKey } from "../side_dialog/model";
 import {
     getCollectionViewFromPath,
     removeInitialAndTrailingSlashes
-} from "../routes/navigation";
+} from "../core/navigation";
 
 const DEFAULT_SCHEMA_CONTROLLER = {
     getSchemaConfig: (collectionPath: string, entityId?: string) => undefined,
@@ -124,7 +124,10 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
             delete viewsRef.current[entityPath];
             return undefined;
         } else {
-            viewsRef.current[entityPath] = { ...schemaConfig, overrideSchemaResolver };
+            viewsRef.current[entityPath] = {
+                ...schemaConfig,
+                overrideSchemaResolver
+            };
             return entityPath;
         }
     };

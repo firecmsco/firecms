@@ -7,6 +7,7 @@ import {
     EntityStatus,
     EntityValues,
     listenEntity,
+    PermissionsBuilder,
     saveEntity
 } from "../models";
 import {
@@ -28,12 +29,11 @@ import {
 } from "../contexts";
 import { Prompt } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
-import { EntityCollectionTable } from "../collection/EntityCollectionTable";
-import { removeInitialSlash } from "../routes/navigation";
-import CircularProgressCenter from "../components/CircularProgressCenter";
-import { default as EntityPreview } from "../components/EntityPreview";
+import { EntityCollectionTable } from "../collection/components/EntityCollectionTable";
+import { removeInitialSlash } from "../core/navigation";
+import CircularProgressCenter from "../core/components/CircularProgressCenter";
+import { default as EntityPreview } from "../core/components/EntityPreview";
 import { canEdit } from "../util/permissions";
-import { PermissionsBuilder } from "../models";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>

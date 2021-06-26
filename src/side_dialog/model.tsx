@@ -1,5 +1,4 @@
-import { EntityCollection, EntitySchema, PermissionsBuilder } from "../models";
-import { removeInitialAndTrailingSlashes } from "../routes/navigation";
+import { removeInitialAndTrailingSlashes } from "../core/navigation";
 
 export interface SideEntityPanelProps {
     /**

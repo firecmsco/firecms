@@ -1,5 +1,5 @@
 import { Entity, EntityCollection, fetchEntity } from "../models";
-import { getNavigationEntriesFromPathInternal } from "../routes/navigation";
+import { getNavigationEntriesFromPathInternal } from "../core/navigation";
 import { useEffect, useState } from "react";
 import { CMSAppContext, useCMSAppContext } from "../contexts/CMSAppContext";
 
@@ -31,7 +31,10 @@ export type NavigationCollection = {
  * @param path
  * @param cmsAppContext
  */
-export function getNavigationFrom({path, context} : { path: string, context: CMSAppContext }): Promise<NavigationEntry[]> {
+export function getNavigationFrom({
+                                      path,
+                                      context
+                                  }: { path: string, context: CMSAppContext }): Promise<NavigationEntry[]> {
 
     const navigation = context.navigation;
     const schemasRegistryController = context.schemasRegistryController;

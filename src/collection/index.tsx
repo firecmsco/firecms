@@ -1,11 +1,14 @@
-
 export {
     default as EntityCollectionTable
-} from "./EntityCollectionTable";
+} from "./components/EntityCollectionTable";
 
 export {
     default as CollectionTable
-} from "./CollectionTable";
+} from "./components/CollectionTable";
+
+export type {
+    CollectionTableProps
+} from "./components/CollectionTableProps";
 
 
 

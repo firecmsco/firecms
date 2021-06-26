@@ -75,6 +75,7 @@ interface EntityFormProps<S extends EntitySchema<Key>, Key extends string = Extr
      * has changed in Firestore
      */
     entity?: Entity<S, Key>;
+    containerRef: React.RefObject<HTMLDivElement>;
 
     /**
      * The callback function called when Save is clicked and validation is correct
@@ -90,8 +91,6 @@ interface EntityFormProps<S extends EntitySchema<Key>, Key extends string = Extr
      * The callback function when the form original values have been modified
      */
     onModified(dirty: boolean): void;
-
-    containerRef: React.RefObject<HTMLDivElement>;
 
 }
 

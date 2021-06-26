@@ -7,7 +7,7 @@ export function BooleanPreview({
                                    name,
                                    value,
                                    property,
-                                   size,
+                                   size
                                }: PreviewComponentProps<boolean>): React.ReactElement {
 
     return value ?

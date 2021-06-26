@@ -1,7 +1,7 @@
 import React from "react";
 
 import { PreviewComponentProps, PreviewSize } from "../../preview";
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../core/components/ErrorBoundary";
 import { useStyles } from "./styles";
 import { PreviewComponent } from "../PreviewComponent";
 import { Property } from "../../models";
@@ -11,7 +11,8 @@ export function ArrayOfStorageComponentsPreview({
                                                     name,
                                                     value,
                                                     property,
-                                                    size}: PreviewComponentProps<any[]> ) {
+                                                    size
+                                                }: PreviewComponentProps<any[]>) {
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStorageComponentsPreview");

@@ -21,7 +21,7 @@ export {
 } from "./AuthContext";
 
 export type {
-    BreadcrumbsStatus,BreadcrumbEntry
+    BreadcrumbsStatus, BreadcrumbEntry
 } from "./BreacrumbsContext";
 export {
     useBreadcrumbsContext

@@ -20,14 +20,16 @@ import {
 } from "../../models";
 
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
-import { PreviewComponentProps, PreviewSize } from "../../preview";
+import { PreviewComponentProps, PreviewSize } from "../preview_component_props";
 import { useSideEntityController } from "../../contexts";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
+
 import { SkeletonComponent } from "./SkeletonComponent";
 import { PreviewComponent } from "../PreviewComponent";
-import { ErrorView } from "../../components/ErrorView";
+import { default as ErrorView } from "../../core/components/ErrorView";
+
 import { Skeleton } from "@material-ui/lab";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { useStyles } from "./styles";
@@ -139,7 +141,7 @@ function ReferencePreview<S extends EntitySchema>(
 
     const schemaRegistry = useSchemasRegistry();
     const collectionConfig = schemaRegistry.getCollectionConfig(property.collectionPath);
-    if(!collectionConfig) {
+    if (!collectionConfig) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${property.collectionPath}`);
     }
 
@@ -208,8 +210,9 @@ function ReferencePreview<S extends EntitySchema>(
                                                       property={property as Property}
                                                       size={"tiny"}/>
                                     :
-                                    <SkeletonComponent property={property as Property}
-                                                       size={"tiny"}/>
+                                    <SkeletonComponent
+                                        property={property as Property}
+                                        size={"tiny"}/>
                                 }
                             </div>
                         );

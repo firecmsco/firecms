@@ -4,7 +4,7 @@ import {
     MapProperty,
     PreviewComponentProps
 } from "../../models";
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../core/components/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { useStyles } from "./styles";

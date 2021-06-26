@@ -28,10 +28,10 @@ import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
 import { PreviewComponent, PreviewSize } from "../../preview";
 import deepEqual from "deep-equal";
-import { FieldDescription } from "../../components";
+import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useSnackbarController } from "../../contexts";
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../core/components/ErrorBoundary";
 
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";

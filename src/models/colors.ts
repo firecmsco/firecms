@@ -41,4 +41,4 @@ export type ChipColor =
     | "redDarker"
     | "pinkDarker"
     | "purpleDarker"
-    | "grayDarker" ;
+    | "grayDarker";

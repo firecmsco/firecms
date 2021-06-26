@@ -7,7 +7,7 @@ import {
 
 import React from "react";
 
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../core/components/ErrorBoundary";
 import { EnumValuesChip } from "./CustomChip";
 import { useStyles } from "./styles";
 

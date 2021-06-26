@@ -9,7 +9,7 @@ import {
     getRouterNewEntityPath,
     isCollectionPath,
     NavigationViewEntry
-} from "../routes/navigation";
+} from "../core/navigation";
 import { getSidePanelKey, SideEntityPanelProps } from "../side_dialog/model";
 import { useSchemasRegistry } from "./SchemaRegistry";
 
@@ -211,7 +211,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
     );
 };
 
-function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[], newFlag: boolean):  ExtendedPanelProps[] {
+function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[], newFlag: boolean): ExtendedPanelProps[] {
 
     const navigationViewsForPath: NavigationViewEntry[] = getNavigationEntriesFromPathInternal(path, allCollections);
 

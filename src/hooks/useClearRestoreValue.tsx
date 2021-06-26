@@ -8,15 +8,15 @@ import { CMSType, Property } from "../models";
  * @param setValue
  */
 export function useClearRestoreValue<T extends CMSType>({
-                                            property,
-                                            value,
-                                            setValue
-                                        }:
-                                            {
-                                                property: Property<T>,
-                                                value: T,
-                                                setValue: (value: T | null, shouldValidate?: boolean) => void
-                                            }) {
+                                                            property,
+                                                            value,
+                                                            setValue
+                                                        }:
+                                                            {
+                                                                property: Property<T>,
+                                                                value: T,
+                                                                setValue: (value: T | null, shouldValidate?: boolean) => void
+                                                            }) {
 
     const clearedValueRef = useRef<T | null>(null);
     useEffect(() => {

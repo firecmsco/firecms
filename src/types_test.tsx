@@ -36,8 +36,8 @@ export const productSchema = buildSchemaFrom<Product>({
             dataType: "string"
         },
         price: {
-            dataType: "string", // THIS SHOULD FAIL
-        },
+            dataType: "string" // THIS SHOULD FAIL
+        }
         // missing: { // This fails if uncommented, which is expected
         //     dataType: "string",
         // },

@@ -2,20 +2,16 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import deepEqual from "deep-equal";
 
+import { Entity, EntitySchema, EntityStatus, EntityValues } from "./models";
 import {
-    Entity,
-    EntitySchema,
-    EntityStatus,
-    EntityValues,
-    FilterValues,
     Properties,
     Property,
     PropertyBuilder,
-    PropertyOrBuilder,
-    WhereFilterOp
-} from "./models";
+    PropertyOrBuilder
+} from "./properties";
 import { buildPropertyFrom } from "./builders";
 import { CMSAppContext } from "../contexts/CMSAppContext";
+import { FilterValues, WhereFilterOp } from "./collections";
 
 /**
  * Listen to a entities in a Firestore path

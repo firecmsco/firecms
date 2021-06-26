@@ -1,5 +1,5 @@
 import { MapProperty, PreviewComponentProps } from "../../models";
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../core/components/ErrorBoundary";
 import React from "react";
 import {
     createStyles,
@@ -26,10 +26,11 @@ const useStyles = makeStyles(() =>
 );
 
 export function MapPreview<T extends {}>({
-                                  name,
-                                  value,
-                                  property,
-                                  size}: PreviewComponentProps<T> ) {
+                                             name,
+                                             value,
+                                             property,
+                                             size
+                                         }: PreviewComponentProps<T>) {
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPreview");

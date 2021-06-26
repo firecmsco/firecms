@@ -1,4 +1,4 @@
-import { Property } from "./models";
+import { Property } from "./properties";
 
 export function isReadOnly(property: Property): boolean {
     if (property.readOnly)

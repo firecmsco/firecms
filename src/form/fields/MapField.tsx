@@ -12,7 +12,7 @@ import {
 import React from "react";
 import { formStyles } from "../styles";
 
-import { FieldDescription } from "../../components";
+import { FieldDescription } from "../../form/components";
 import { pick } from "../../util/objects";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
@@ -20,17 +20,17 @@ import { buildPropertyField } from "../form_factory";
 
 
 export default function MapField<T extends object>({
-                                                             name,
-                                                             value,
-                                                             showError,
-                                                             disabled,
-                                                             property,
-                                                             setValue,
-                                                             tableMode,
-                                                             includeDescription,
-                                                             underlyingValueHasChanged,
-                                                             context
-                                                         }: FieldProps<T> ) {
+                                                       name,
+                                                       value,
+                                                       showError,
+                                                       disabled,
+                                                       property,
+                                                       setValue,
+                                                       tableMode,
+                                                       includeDescription,
+                                                       underlyingValueHasChanged,
+                                                       context
+                                                   }: FieldProps<T>) {
 
     const classes = formStyles();
 

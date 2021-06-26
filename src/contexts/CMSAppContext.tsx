@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
-import { Navigation } from "../CMSAppProps";
+import { Navigation } from "../models";
 import {
     SchemasRegistryController,
     useSchemasRegistry
 } from "./SchemaRegistry";
-import { AuthController } from "./AuthContext";
-import { CMSAppProviderProps } from "../CMSAppProvider";
+import { CMSAppProviderProps } from "../core/CMSAppProvider";
 
 
 /**
@@ -17,14 +16,14 @@ export interface CMSAppContext {
     schemasRegistryController: SchemasRegistryController;
     cmsAppConfig: CMSAppProviderProps;
     firebaseConfig: Object;
-    theme:any;
+    theme: any;
 }
 
 const CMSAppContext = React.createContext<CMSAppContext>({
     schemasRegistryController: {} as any,
     cmsAppConfig: {} as any,
     theme: {} as any,
-    firebaseConfig: {},
+    firebaseConfig: {}
 });
 
 /**
@@ -38,7 +37,7 @@ export interface CMSAppContextProps {
     firebaseConfig: Object;
     navigation?: Navigation;
     navigationLoadingError?: Error;
-    theme:any;
+    theme: any;
 }
 
 export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
@@ -47,7 +46,7 @@ export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
                                                                         cmsAppConfig,
                                                                         navigation,
                                                                         navigationLoadingError,
-                                                                        theme,
+                                                                        theme
                                                                     }) => {
 
     const schemasRegistryController = useSchemasRegistry();
@@ -60,7 +59,7 @@ export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
                 navigation,
                 navigationLoadingError,
                 schemasRegistryController,
-                theme,
+                theme
             }}
         >
             {children}

@@ -13,7 +13,11 @@ export {
 } from "./useCollectionFetch";
 
 export type {
-    NavigationFromProps, NavigationEntry, NavigationEntity, NavigationCollection, NavigationFrom
+    NavigationFromProps,
+    NavigationEntry,
+    NavigationEntity,
+    NavigationCollection,
+    NavigationFrom
 } from "./useNavigationFrom";
 
 export {

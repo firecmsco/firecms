@@ -17,9 +17,9 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 
-import { CollectionTable } from "../../collection/CollectionTable";
+import { CollectionTable } from "../../collection/components/CollectionTable";
 import { useColumnIds } from "../../collection/common";
-import { CollectionRowActions } from "../../collection/CollectionRowActions";
+import { CollectionRowActions } from "../../collection/components/CollectionRowActions";
 
 
 export const useStyles = makeStyles(theme => createStyles({

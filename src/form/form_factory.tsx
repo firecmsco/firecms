@@ -28,8 +28,7 @@ import {
     Entity,
     EntitySchema,
     EntityStatus,
-    FieldProps,
-    Property
+    FieldProps
 } from "../models";
 
 import Select from "./fields/Select";

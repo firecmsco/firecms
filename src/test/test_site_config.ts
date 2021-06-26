@@ -1,5 +1,5 @@
 import { buildCollection, buildSchema, EnumValues } from "../models";
-import { CMSAppProps } from "../CMSAppProps";
+import { CMSAppProps } from "../core/CMSAppProps";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -165,7 +165,7 @@ export const siteConfig: CMSAppProps = {
             relativePath: "products/id/subcollection_inline",
             schema: productSchema,
             name: "Products",
-            subcollections: subcollections,
+            subcollections: subcollections
         })
     ]
 };

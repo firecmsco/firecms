@@ -1,5 +1,7 @@
 export * from "./models";
-
+export * from "./properties";
+export * from "./collections";
+export * from "./navigation";
 export * from "./builders";
 
 export type {
@@ -21,7 +23,6 @@ export {
     getDownloadURL
 } from "./storage";
 
-export { AlgoliaTextSearchDelegate } from "./text_search_delegate";
 export type { SchemaResolver, SchemaConfig } from "./schema_resolver";
 
 export type {
@@ -29,5 +30,6 @@ export type {
 } from "./fields";
 
 export type { TextSearchDelegate } from "./text_search_delegate";
+export { AlgoliaTextSearchDelegate } from "./text_search_delegate";
 
-export type { PreviewComponentProps } from "./preview_component_props";
+export type { PreviewComponentProps } from "../preview/preview_component_props";

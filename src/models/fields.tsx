@@ -1,5 +1,6 @@
 import React from "react";
-import { CMSType, EntitySchema, EntityValues, Property } from "./models";
+import { EntitySchema, EntityValues } from "./models";
+import { CMSType, Property } from "./properties";
 
 /**
  * When building a custom field you need to create a React component that takes
@@ -95,13 +96,13 @@ export interface FieldProps<T extends CMSType, CustomProps = any, S extends Enti
     /**
      * Flag to indicate if this field should be disabled
      */
-    disabled:boolean;
+    disabled: boolean;
 
     /**
      * Flag to indicate if this field was built from a property that gets
      * rendered conditionally
      */
-    dependsOnOtherProperties:boolean;
+    dependsOnOtherProperties: boolean;
 
 }
 

@@ -12,9 +12,9 @@ import {
 import React from "react";
 
 import { PreviewComponent } from "../../preview";
-import { FieldDescription } from "../../components";
+import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../core/components/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {

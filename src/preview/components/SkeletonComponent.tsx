@@ -52,7 +52,7 @@ export function SkeletonComponent<T>({
         if (arrayProperty.of) {
             if (arrayProperty.of.dataType === "map" && arrayProperty.of.properties) {
                 content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewProperties);
-            }else if (arrayProperty.of.dataType === "string") {
+            } else if (arrayProperty.of.dataType === "string") {
                 if (arrayProperty.of.config?.enumValues) {
                     content = renderArrayEnumTableCell();
                 } else if (arrayProperty.of.config?.storageMeta) {
@@ -82,7 +82,7 @@ export function SkeletonComponent<T>({
 function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize) {
 
     const classes = useStyles();
-    if(!property.properties)
+    if (!property.properties)
         return <></>;
 
     let mapProperties: string[];

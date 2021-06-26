@@ -3,9 +3,9 @@ import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React from "react";
 import { formStyles } from "../styles";
 import { PreviewComponent } from "../../preview";
-import { FieldDescription } from "../../components";
+import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../core/components/ErrorBoundary";
 
 export default function ReadOnlyField<S extends EntitySchema>({
                                                                   name,

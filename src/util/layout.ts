@@ -10,12 +10,12 @@ export function getColumnsForProperty(property: Property): "xs" | "sm" | "md" {
         return "xs";
     }
 
-    if ( property.dataType === "map") {
+    if (property.dataType === "map") {
         return "xs";
     }
 
     if (property.dataType === "array") {
-        return isReadOnly(property) || property.disabled? "xs" : "sm";
+        return isReadOnly(property) || property.disabled ? "xs" : "sm";
     }
 
     if (property.dataType === "string" && property.config?.storageMeta) {

@@ -13,7 +13,8 @@ export function uploadFile(file: File,
         .put(file, metadata);
 }
 
-const memo:any = {};
+const memo: any = {};
+
 export function getDownloadURL(storagePath: string): Promise<string> {
     if (memo[storagePath])
         return memo[storagePath];

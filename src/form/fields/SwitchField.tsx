@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { FieldProps } from "../../models";
-import { FieldDescription } from "../../components";
+import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 

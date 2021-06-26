@@ -1,13 +1,12 @@
 import { CMSType, FieldProps, Property } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React, { useState } from "react";
-import { FieldDescription } from "../../components";
+import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "./arrays/ArrayContainer";
 import { formStyles } from "../styles";
 import { buildPropertyField } from "../form_factory";
 import { useClearRestoreValue } from "../../hooks";
-
 
 export default function ArrayDefaultField<T extends Array<any>>({
                                                                     name,

@@ -1,15 +1,18 @@
 import {
     CMSType,
-    EntityCollection,
-    EntitySchema,
-    EntityValues,
     EnumValueConfig,
     Properties,
     PropertiesOrBuilder,
     Property,
     PropertyOrBuilder
-} from "./models";
-import { Navigation, NavigationBuilder } from "../CMSAppProps";
+} from "./properties";
+import {
+    EntitySchema,
+    EntityValues,
+    Navigation,
+    NavigationBuilder
+} from "../models";
+import { AdditionalColumnDelegate, EntityCollection } from "./collections";
 
 export function buildPropertyFrom<T extends CMSType, S extends EntitySchema<Key>, Key extends string>(
     propertyOrBuilder: PropertyOrBuilder<T, S, Key>,
@@ -107,4 +110,17 @@ export function buildEnumValueConfig(
     enumValueConfig: EnumValueConfig
 ): EnumValueConfig {
     return enumValueConfig;
+}
+
+/**
+ * Identity function we use to defeat the type system of Typescript and build
+ * additional column delegates views with all its properties
+ * @param additionalColumnDelegate
+ */
+export function buildAdditionalColumnDelegate<AdditionalKey extends string = string,
+    S extends EntitySchema<Key> = EntitySchema<any>,
+    Key extends string = Extract<keyof S["properties"], string>>(
+    additionalColumnDelegate: AdditionalColumnDelegate<AdditionalKey, S, Key>
+): AdditionalColumnDelegate<AdditionalKey, S, Key> {
+    return additionalColumnDelegate;
 }

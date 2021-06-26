@@ -58,6 +58,7 @@ export function getColorSchemeForSeed(seed: string): ChipColorSchema {
     const index = hash % colorKeys.length;
     return CHIP_COLORS[colorKeys[index]];
 }
+
 export function getColorSchemeForKey(key: ChipColor): ChipColorSchema {
     return CHIP_COLORS[key];
 }

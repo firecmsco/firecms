@@ -1,7 +1,7 @@
 import React from "react";
 import { PreviewComponentProps, StringProperty } from "../../models";
 
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../core/components/ErrorBoundary";
 import { StringPreview } from "./StringPreview";
 import { useStyles } from "./styles";
 
@@ -10,7 +10,7 @@ export function ArrayOfStringsPreview({
                                           value,
                                           property,
                                           size
-                                      }: PreviewComponentProps<string[]> ) {
+                                      }: PreviewComponentProps<string[]>) {
 
     const classes = useStyles();
 

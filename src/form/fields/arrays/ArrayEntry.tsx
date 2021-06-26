@@ -78,7 +78,7 @@ export const ArrayEntry: React.FC<ArrayEntryProps> = ({
             const clientOffset = monitor.getClientOffset();
 
             // Get pixels to the top
-            const hoverClientY = clientOffset ? clientOffset .y - hoverBoundingRect.top : 0;
+            const hoverClientY = clientOffset ? clientOffset.y - hoverBoundingRect.top : 0;
 
             // Dragging downwards
             if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY - 50) {
@@ -139,4 +139,4 @@ export const ArrayEntry: React.FC<ArrayEntryProps> = ({
             </Box>
         </div>
     );
-}
+};

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { BreadcrumbEntry } from "../routes/navigation";
+import { BreadcrumbEntry } from "../core/navigation";
 
 const DEFAULT_NAVIGATION = {
     breadcrumbs: [],

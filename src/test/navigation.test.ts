@@ -1,7 +1,7 @@
 import {
     getCollectionViewFromPath,
     getNavigationEntriesFromPathInternal
-} from "../routes/navigation";
+} from "../core/navigation";
 import { siteConfig } from "./test_site_config";
 import { EntityCollection } from "../models";
 

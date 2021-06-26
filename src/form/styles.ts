@@ -24,7 +24,7 @@ export const formStyles = makeStyles(theme => createStyles({
         height: "14px"
     },
     stickyButtons: {
-        marginTop:theme.spacing(2),
+        marginTop: theme.spacing(2),
         backgroundColor: "#ffffffb8",
         borderTop: "solid 1px #f9f9f9",
         position: "sticky",

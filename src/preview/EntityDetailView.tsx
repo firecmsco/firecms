@@ -7,7 +7,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link as ReactLink } from "react-router-dom";
 
-import EntityPreview from "../components/EntityPreview";
+import EntityPreview from "../core/components/EntityPreview";
 import {
     Box,
     Container,
@@ -20,8 +20,8 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
-import { getCMSPathFrom, removeInitialSlash } from "../routes/navigation";
-import { EntityCollectionTable } from "../collection/EntityCollectionTable";
+import { getCMSPathFrom, removeInitialSlash } from "../core/navigation";
+import { EntityCollectionTable } from "../collection/components/EntityCollectionTable";
 import { useSideEntityController } from "../contexts";
 
 
@@ -47,7 +47,12 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 export function EntityDetailView<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>>({ entity, schema, collectionPath, subcollections }: {
+    Key extends string = Extract<keyof S["properties"], string>>({
+                                                                     entity,
+                                                                     schema,
+                                                                     collectionPath,
+                                                                     subcollections
+                                                                 }: {
     entity?: Entity<S, Key>,
     collectionPath: string;
     schema: S,

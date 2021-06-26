@@ -3,10 +3,12 @@ import { renderSkeletonImageThumbnail } from "./SkeletonComponent";
 import { getDownloadURL, PreviewComponentProps } from "../../models";
 import { UrlComponentPreview } from "./UrlComponentPreview";
 
-export function StorageThumbnail({ name,
-                                             value,
-                                             property,
-                                             size }: PreviewComponentProps<string> ) {
+export function StorageThumbnail({
+                                     name,
+                                     value,
+                                     property,
+                                     size
+                                 }: PreviewComponentProps<string>) {
 
     const storagePathOrDownloadUrl = value;
 
@@ -31,8 +33,8 @@ export function StorageThumbnail({ name,
 
     return url ?
         <UrlComponentPreview name={name}
-                          value={url}
-                          property={property}
-                          size={size}/> :
+                             value={url}
+                             property={property}
+                             size={size}/> :
         renderSkeletonImageThumbnail(size);
 }
