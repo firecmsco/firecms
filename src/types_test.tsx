@@ -18,7 +18,7 @@ interface NumberProperty {
 }
 
 function buildSchemaFrom<Type extends Partial<{ [P in Key]: T; }>,
-    Key extends string = Extract<keyof Type, string>,
+    Key extends Extract<keyof Type, string> = Extract<keyof Type, string>,
     T = any>(
     schema: EntitySchema<Key>
 ): EntitySchema<Key> {

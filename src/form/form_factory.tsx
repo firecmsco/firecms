@@ -23,12 +23,15 @@ import {
 } from "formik";
 
 import {
+    ArrayProperty,
     CMSFormFieldProps,
     CMSType,
     Entity,
     EntitySchema,
     EntityStatus,
-    FieldProps
+    FieldProps,
+    NumberProperty,
+    StringProperty
 } from "../models";
 
 import Select from "./fields/Select";
@@ -90,14 +93,15 @@ export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key
     } else if (property.config?.field) {
         component = property.config?.field as ElementType<FieldProps<T>>;
     } else if (property.dataType === "array") {
-        if (!property.of) {
+        const of = (property as ArrayProperty).of;
+        if (!of) {
             throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
         }
-        if ((property.of.dataType === "string" || property.of.dataType === "number") && property.of.config?.enumValues) {
+        if ((of.dataType === "string" || of.dataType === "number") && of.config?.enumValues) {
             component = ArrayEnumSelect as ElementType<FieldProps<T>>;
-        } else if (property.of.dataType === "string" && property.of.config?.storageMeta) {
+        } else if (of.dataType === "string" && of.config?.storageMeta) {
             component = StorageUploadField as ElementType<FieldProps<T>>;
-        } else if (property.of.dataType === "reference") {
+        } else if (of.dataType === "reference") {
             component = ArrayOfReferencesField as ElementType<FieldProps<T>>;
         } else {
             component = ArrayDefaultField as ElementType<FieldProps<T>>;
@@ -111,17 +115,17 @@ export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key
     } else if (property.dataType === "boolean") {
         component = SwitchField as ElementType<FieldProps<T>>;
     } else if (property.dataType === "number") {
-        if (property.config?.enumValues) {
+        if ((property as NumberProperty).config?.enumValues) {
             component = Select as ElementType<FieldProps<T>>;
         } else {
             component = TextField as ElementType<FieldProps<T>>;
         }
     } else if (property.dataType === "string") {
-        if (property.config?.storageMeta) {
+        if ((property as StringProperty).config?.storageMeta) {
             component = StorageUploadField as ElementType<FieldProps<T>>;
-        } else if (property.config?.markdown) {
+        } else if ((property as StringProperty).config?.markdown) {
             component = MarkDownField as ElementType<FieldProps<T>>;
-        } else if (property.config?.enumValues) {
+        } else if ((property as StringProperty).config?.enumValues) {
             component = Select as ElementType<FieldProps<T>>;
         } else {
             component = TextField as ElementType<FieldProps<T>>;
