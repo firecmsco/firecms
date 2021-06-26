@@ -10,15 +10,15 @@ custom_edit_url: null
 
 #### Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | `T`: `any`[] |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | `ArrayDefaultFieldProps`<T\> |
+| `__namedParameters` | [FieldProps](../interfaces/fieldprops.md)<T\> |
 
 #### Returns
 
@@ -26,4 +26,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[form/fields/ArrayDefaultField.tsx:14](https://github.com/Camberi/firecms/blob/42dd384/src/form/fields/ArrayDefaultField.tsx#L14)
+[form/fields/ArrayDefaultField.tsx:11](https://github.com/Camberi/firecms/blob/b1328ad/src/form/fields/ArrayDefaultField.tsx#L11)

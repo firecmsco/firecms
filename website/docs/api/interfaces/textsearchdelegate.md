@@ -28,4 +28,4 @@ array containing the Firestore ids of the search results
 
 #### Defined in
 
-[models/text_search_delegate.ts:11](https://github.com/Camberi/firecms/blob/42dd384/src/models/text_search_delegate.ts#L11)
+[models/text_search_delegate.ts:11](https://github.com/Camberi/firecms/blob/b1328ad/src/models/text_search_delegate.ts#L11)

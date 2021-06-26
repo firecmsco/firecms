@@ -30,7 +30,7 @@ or in `preview`.
 
 #### Defined in
 
-[models/models.ts:821](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L821)
+[models/properties.ts:418](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L418)
 
 ___
 
@@ -48,13 +48,13 @@ a `Map` instead of a plain object.
 
 #### Defined in
 
-[models/models.ts:853](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L853)
+[models/properties.ts:450](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L450)
 
 ___
 
 ### field
 
-• `Optional` **field**: `ComponentType`<[FieldProps](fieldprops.md)<string, any, [EntitySchema](entityschema.md)<any, any\>, any\>\>
+• `Optional` **field**: `ElementType`<[FieldProps](fieldprops.md)<string, any, [EntitySchema](entityschema.md)<any\>, any\>\>
 
 If you need to render a custom field, you can create a component that
 takes `FieldProps` as props. You receive the value, a function to
@@ -68,7 +68,7 @@ in the component.
 
 #### Defined in
 
-[models/models.ts:808](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L808)
+[models/properties.ts:405](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L405)
 
 ___
 
@@ -82,7 +82,7 @@ syntax. It also includes a preview of the result.
 
 #### Defined in
 
-[models/models.ts:842](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L842)
+[models/properties.ts:439](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L439)
 
 ___
 
@@ -96,13 +96,13 @@ the number of lines adapts to the content
 
 #### Defined in
 
-[models/models.ts:835](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L835)
+[models/properties.ts:432](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L432)
 
 ___
 
 ### preview
 
-• `Optional` **preview**: `ComponentType`<[PreviewComponentProps](previewcomponentprops.md)<string, any\>\>
+• `Optional` **preview**: `ElementType`<[PreviewComponentProps](previewcomponentprops.md)<string, any\>\>
 
 Configure how a property is displayed as a preview, e.g. in the collection
 view. You can customize it by passing custom props that are received
@@ -114,7 +114,7 @@ in the component.
 
 #### Defined in
 
-[models/models.ts:815](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L815)
+[models/properties.ts:412](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L412)
 
 ___
 
@@ -126,7 +126,7 @@ Should this string be rendered as a tag instead of just text.
 
 #### Defined in
 
-[models/models.ts:870](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L870)
+[models/properties.ts:467](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L467)
 
 ___
 
@@ -139,7 +139,7 @@ indicate that this string refers to a path in Google Cloud Storage.
 
 #### Defined in
 
-[models/models.ts:859](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L859)
+[models/properties.ts:456](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L456)
 
 ___
 
@@ -152,4 +152,4 @@ to add a link, or one of the supported media types to render a preview
 
 #### Defined in
 
-[models/models.ts:865](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L865)
+[models/properties.ts:462](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L462)

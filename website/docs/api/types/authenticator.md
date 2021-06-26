@@ -26,4 +26,4 @@ Implement this function to allow access to specific users
 
 #### Defined in
 
-[models/authenticator.ts:6](https://github.com/Camberi/firecms/blob/42dd384/src/models/authenticator.ts#L6)
+[models/authenticator.ts:6](https://github.com/Camberi/firecms/blob/b1328ad/src/models/authenticator.ts#L6)

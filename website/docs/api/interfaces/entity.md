@@ -23,7 +23,7 @@ Representation of an entity fetched from Firestore
 
 #### Defined in
 
-[models/models.ts:355](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L355)
+[models/models.ts:163](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L163)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[models/models.ts:356](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L356)
+[models/models.ts:164](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L164)
 
 ___
 
@@ -43,4 +43,4 @@ ___
 
 #### Defined in
 
-[models/models.ts:357](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L357)
+[models/models.ts:165](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L165)

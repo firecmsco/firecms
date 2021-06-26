@@ -14,7 +14,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[contexts/CMSAppContext.tsx:37](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/CMSAppContext.tsx#L37)
+[contexts/CMSAppContext.tsx:36](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/CMSAppContext.tsx#L36)
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 #### Defined in
 
-[contexts/CMSAppContext.tsx:36](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/CMSAppContext.tsx#L36)
+[contexts/CMSAppContext.tsx:35](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/CMSAppContext.tsx#L35)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[contexts/CMSAppContext.tsx:38](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/CMSAppContext.tsx#L38)
+[contexts/CMSAppContext.tsx:37](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/CMSAppContext.tsx#L37)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[contexts/CMSAppContext.tsx:39](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/CMSAppContext.tsx#L39)
+[contexts/CMSAppContext.tsx:38](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/CMSAppContext.tsx#L38)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[contexts/CMSAppContext.tsx:40](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/CMSAppContext.tsx#L40)
+[contexts/CMSAppContext.tsx:39](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/CMSAppContext.tsx#L39)
 
 ___
 
@@ -64,4 +64,4 @@ ___
 
 #### Defined in
 
-[contexts/CMSAppContext.tsx:41](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/CMSAppContext.tsx#L41)
+[contexts/CMSAppContext.tsx:40](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/CMSAppContext.tsx#L40)

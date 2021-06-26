@@ -10,4 +10,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[CMSAppProps.tsx:187](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L187)
+[core/CMSAppProps.tsx:161](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L161)

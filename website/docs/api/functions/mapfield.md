@@ -6,19 +6,19 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
-▸ **MapField**<S\>(`__namedParameters`): `Element`
+▸ **MapField**<T\>(`__namedParameters`): `Element`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<string, any, S\> |
+| `T` | `T`: `object` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | `MapFieldProps`<S\> |
+| `__namedParameters` | [FieldProps](../interfaces/fieldprops.md)<T\> |
 
 #### Returns
 
@@ -26,4 +26,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[form/fields/MapField.tsx:23](https://github.com/Camberi/firecms/blob/42dd384/src/form/fields/MapField.tsx#L23)
+[form/fields/MapField.tsx:22](https://github.com/Camberi/firecms/blob/b1328ad/src/form/fields/MapField.tsx#L22)

@@ -18,7 +18,7 @@ File MIME types that can be uploaded to this reference
 
 #### Defined in
 
-[models/models.ts:892](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L892)
+[models/properties.ts:489](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L489)
 
 ___
 
@@ -46,7 +46,7 @@ You can use this callback to customize the uploaded filename
 
 #### Defined in
 
-[models/models.ts:903](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L903)
+[models/properties.ts:500](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L500)
 
 ___
 
@@ -58,7 +58,7 @@ Media type of this reference, used for displaying the preview
 
 #### Defined in
 
-[models/models.ts:882](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L882)
+[models/properties.ts:479](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L479)
 
 ___
 
@@ -70,7 +70,7 @@ Specific metadata set in your uploaded file
 
 #### Defined in
 
-[models/models.ts:897](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L897)
+[models/properties.ts:494](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L494)
 
 ___
 
@@ -82,7 +82,7 @@ Absolute path in your bucket. You can specify it directly or use a callback
 
 #### Defined in
 
-[models/models.ts:887](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L887)
+[models/properties.ts:484](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L484)
 
 ___
 
@@ -98,4 +98,4 @@ so it is not encouraged to use this flag. Defaults to false
 
 #### Defined in
 
-[models/models.ts:912](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L912)
+[models/properties.ts:509](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L509)

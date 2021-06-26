@@ -29,4 +29,4 @@ the schema keys
 
 #### Defined in
 
-[models/builders.ts:54](https://github.com/Camberi/firecms/blob/42dd384/src/models/builders.ts#L54)
+[models/builders.ts:58](https://github.com/Camberi/firecms/blob/b1328ad/src/models/builders.ts#L58)

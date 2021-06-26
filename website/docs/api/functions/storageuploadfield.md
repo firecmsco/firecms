@@ -20,4 +20,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[form/fields/StorageUploadField.tsx:125](https://github.com/Camberi/firecms/blob/42dd384/src/form/fields/StorageUploadField.tsx#L125)
+[form/fields/StorageUploadField.tsx:109](https://github.com/Camberi/firecms/blob/b1328ad/src/form/fields/StorageUploadField.tsx#L109)

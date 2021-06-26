@@ -15,7 +15,7 @@ undefined values.
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
 
 #### Parameters
@@ -40,4 +40,4 @@ undefined values.
 
 #### Defined in
 
-[models/firestore.ts:233](https://github.com/Camberi/firecms/blob/42dd384/src/models/firestore.ts#L233)
+[models/firestore.ts:280](https://github.com/Camberi/firecms/blob/b1328ad/src/models/firestore.ts#L280)

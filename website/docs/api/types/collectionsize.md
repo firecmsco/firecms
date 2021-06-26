@@ -12,4 +12,4 @@ Sizes in which a collection can be rendered
 
 #### Defined in
 
-[models/models.ts:187](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L187)
+[models/collections.ts:155](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L155)

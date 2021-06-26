@@ -6,13 +6,14 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
-▸ **buildPropertiesOrBuilder**<S, Key\>(`propertiesOrBuilder`): [PropertiesOrBuilder](../types/propertiesorbuilder.md)<S, Key\>
+▸ **buildPropertiesOrBuilder**<T, S, Key\>(`propertiesOrBuilder`): [PropertiesOrBuilder](../types/propertiesorbuilder.md)<S, Key\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> |
+| `T` | `T`: [CMSType](../types/cmstype.md) |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> |
 | `Key` | `Key`: `string` |
 
 #### Parameters
@@ -27,4 +28,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[models/builders.ts:99](https://github.com/Camberi/firecms/blob/42dd384/src/models/builders.ts#L99)
+[models/builders.ts:103](https://github.com/Camberi/firecms/blob/b1328ad/src/models/builders.ts#L103)

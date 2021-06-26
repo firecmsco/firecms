@@ -20,4 +20,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[models/builders.ts:105](https://github.com/Camberi/firecms/blob/42dd384/src/models/builders.ts#L105)
+[models/builders.ts:109](https://github.com/Camberi/firecms/blob/b1328ad/src/models/builders.ts#L109)

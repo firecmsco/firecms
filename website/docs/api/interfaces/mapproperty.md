@@ -10,8 +10,8 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `T` | `T` = `any` |
-| `Key` | `Key`: `string` = `Extract`<keyof `T`, string\> |
+| `T` | `T`: `object` = {} |
+| `Key` | `Key`: `string` = `string` |
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ BaseProperty.columnWidth
 
 #### Defined in
 
-[models/models.ts:446](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L446)
+[models/properties.ts:75](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L75)
 
 ___
 
@@ -46,7 +46,7 @@ Configure how this property field is displayed
 
 #### Defined in
 
-[models/models.ts:634](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L634)
+[models/properties.ts:251](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L251)
 
 ___
 
@@ -60,7 +60,7 @@ BaseProperty.dataType
 
 #### Defined in
 
-[models/models.ts:614](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L614)
+[models/properties.ts:231](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L231)
 
 ___
 
@@ -76,7 +76,7 @@ BaseProperty.description
 
 #### Defined in
 
-[models/models.ts:435](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L435)
+[models/properties.ts:64](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L64)
 
 ___
 
@@ -94,7 +94,7 @@ BaseProperty.disabled
 
 #### Defined in
 
-[models/models.ts:459](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L459)
+[models/properties.ts:88](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L88)
 
 ___
 
@@ -110,7 +110,7 @@ BaseProperty.longDescription
 
 #### Defined in
 
-[models/models.ts:440](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L440)
+[models/properties.ts:69](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L69)
 
 ___
 
@@ -122,19 +122,19 @@ Properties that are displayed when as a preview
 
 #### Defined in
 
-[models/models.ts:629](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L629)
+[models/properties.ts:246](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L246)
 
 ___
 
 ### properties
 
-• `Optional` **properties**: [Properties](../types/properties.md)<Key, any\>
+• `Optional` **properties**: [Properties](../types/properties.md)<string\>
 
 Record of properties included in this map.
 
 #### Defined in
 
-[models/models.ts:619](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L619)
+[models/properties.ts:236](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L236)
 
 ___
 
@@ -151,7 +151,7 @@ BaseProperty.readOnly
 
 #### Defined in
 
-[models/models.ts:452](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L452)
+[models/properties.ts:81](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L81)
 
 ___
 
@@ -167,7 +167,7 @@ BaseProperty.title
 
 #### Defined in
 
-[models/models.ts:430](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L430)
+[models/properties.ts:59](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L59)
 
 ___
 
@@ -183,4 +183,4 @@ BaseProperty.validation
 
 #### Defined in
 
-[models/models.ts:624](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L624)
+[models/properties.ts:241](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L241)

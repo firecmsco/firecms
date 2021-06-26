@@ -16,7 +16,7 @@ Absolute path of the entity
 
 #### Defined in
 
-[side_dialog/model.tsx:8](https://github.com/Camberi/firecms/blob/42dd384/src/side_dialog/model.tsx#L8)
+[side_dialog/model.tsx:7](https://github.com/Camberi/firecms/blob/b1328ad/src/side_dialog/model.tsx#L7)
 
 ___
 
@@ -28,7 +28,7 @@ Set this flag to true if you want to make a copy of an existing entity
 
 #### Defined in
 
-[side_dialog/model.tsx:18](https://github.com/Camberi/firecms/blob/42dd384/src/side_dialog/model.tsx#L18)
+[side_dialog/model.tsx:17](https://github.com/Camberi/firecms/blob/b1328ad/src/side_dialog/model.tsx#L17)
 
 ___
 
@@ -40,7 +40,7 @@ Id of the entity, if not set, it means we are creating a new entity
 
 #### Defined in
 
-[side_dialog/model.tsx:13](https://github.com/Camberi/firecms/blob/42dd384/src/side_dialog/model.tsx#L13)
+[side_dialog/model.tsx:12](https://github.com/Camberi/firecms/blob/b1328ad/src/side_dialog/model.tsx#L12)
 
 ___
 
@@ -53,4 +53,4 @@ entity was already open, it is replaced.
 
 #### Defined in
 
-[side_dialog/model.tsx:24](https://github.com/Camberi/firecms/blob/42dd384/src/side_dialog/model.tsx#L24)
+[side_dialog/model.tsx:23](https://github.com/Camberi/firecms/blob/b1328ad/src/side_dialog/model.tsx#L23)

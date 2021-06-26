@@ -10,4 +10,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[models/colors.ts:1](https://github.com/Camberi/firecms/blob/42dd384/src/models/colors.ts#L1)
+[models/colors.ts:1](https://github.com/Camberi/firecms/blob/b1328ad/src/models/colors.ts#L1)

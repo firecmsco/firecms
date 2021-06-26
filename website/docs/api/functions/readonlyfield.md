@@ -12,13 +12,13 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<string, any, S\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<string, S\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | `DisabledFieldProps` |
+| `__namedParameters` | [FieldProps](../interfaces/fieldprops.md)<any\> |
 
 #### Returns
 
@@ -26,4 +26,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[form/fields/ReadOnlyField.tsx:12](https://github.com/Camberi/firecms/blob/42dd384/src/form/fields/ReadOnlyField.tsx#L12)
+[form/fields/ReadOnlyField.tsx:10](https://github.com/Camberi/firecms/blob/b1328ad/src/form/fields/ReadOnlyField.tsx#L10)

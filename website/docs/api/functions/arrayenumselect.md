@@ -6,19 +6,13 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
-▸ **ArrayEnumSelect**<T\>(`__namedParameters`): `Element`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | `T`: [EnumType](../types/enumtype.md) |
+▸ **ArrayEnumSelect**(`__namedParameters`): `Element`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | `ArrayEnumSelectProps`<T\> |
+| `__namedParameters` | [FieldProps](../interfaces/fieldprops.md)<[EnumType](../types/enumtype.md)[]\> |
 
 #### Returns
 
@@ -26,4 +20,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[form/fields/ArrayEnumSelect.tsx:20](https://github.com/Camberi/firecms/blob/42dd384/src/form/fields/ArrayEnumSelect.tsx#L20)
+[form/fields/ArrayEnumSelect.tsx:19](https://github.com/Camberi/firecms/blob/b1328ad/src/form/fields/ArrayEnumSelect.tsx#L19)

@@ -6,21 +6,21 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
-▸ **buildPropertyFrom**<S, Key, T\>(`propertyOrBuilder`, `values`, `entityId?`): [Property](../types/property.md)<T\>
+▸ **buildPropertyFrom**<T, S, Key\>(`propertyOrBuilder`, `values`, `entityId?`): [Property](../types/property.md)<T\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> |
+| `T` | `T`: [CMSType](../types/cmstype.md) |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> |
 | `Key` | `Key`: `string` |
-| `T` | `T`: `unknown` = `any` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `propertyOrBuilder` | [PropertyOrBuilder](../types/propertyorbuilder.md)<S, Key, T\> |
+| `propertyOrBuilder` | [PropertyOrBuilder](../types/propertyorbuilder.md)<T, S, Key\> |
 | `values` | `Partial`<[EntityValues](../types/entityvalues.md)<S, Key\>\> |
 | `entityId?` | `string` |
 
@@ -30,4 +30,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[models/builders.ts:13](https://github.com/Camberi/firecms/blob/42dd384/src/models/builders.ts#L13)
+[models/builders.ts:17](https://github.com/Camberi/firecms/blob/b1328ad/src/models/builders.ts#L17)

@@ -19,7 +19,7 @@ Optional description of this view. You can use Markdown
 
 #### Defined in
 
-[CMSAppProps.tsx:166](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L166)
+[core/CMSAppProps.tsx:140](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L140)
 
 ___
 
@@ -32,7 +32,7 @@ navigation view.
 
 #### Defined in
 
-[CMSAppProps.tsx:183](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L183)
+[core/CMSAppProps.tsx:157](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L157)
 
 ___
 
@@ -45,7 +45,7 @@ It will still be accessible if you reach the specified path
 
 #### Defined in
 
-[CMSAppProps.tsx:172](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L172)
+[core/CMSAppProps.tsx:146](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L146)
 
 ___
 
@@ -57,7 +57,7 @@ Name of this view
 
 #### Defined in
 
-[CMSAppProps.tsx:161](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L161)
+[core/CMSAppProps.tsx:135](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L135)
 
 ___
 
@@ -71,7 +71,7 @@ main menu
 
 #### Defined in
 
-[CMSAppProps.tsx:156](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L156)
+[core/CMSAppProps.tsx:130](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L130)
 
 ___
 
@@ -83,4 +83,4 @@ Component to be rendered
 
 #### Defined in
 
-[CMSAppProps.tsx:177](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L177)
+[core/CMSAppProps.tsx:151](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L151)

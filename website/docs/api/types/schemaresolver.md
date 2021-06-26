@@ -29,4 +29,4 @@ If no schema
 
 #### Defined in
 
-[models/schema_resolver.ts:31](https://github.com/Camberi/firecms/blob/42dd384/src/models/schema_resolver.ts#L31)
+[models/schema_resolver.ts:32](https://github.com/Camberi/firecms/blob/b1328ad/src/models/schema_resolver.ts#L32)

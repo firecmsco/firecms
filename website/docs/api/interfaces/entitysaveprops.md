@@ -25,7 +25,7 @@ Full path where this entity is being saved
 
 #### Defined in
 
-[models/models.ts:276](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L276)
+[models/models.ts:97](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L97)
 
 ___
 
@@ -37,7 +37,7 @@ Context of the app status
 
 #### Defined in
 
-[models/models.ts:296](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L296)
+[models/models.ts:117](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L117)
 
 ___
 
@@ -49,7 +49,7 @@ Id of the entity or undefined if new
 
 #### Defined in
 
-[models/models.ts:281](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L281)
+[models/models.ts:102](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L102)
 
 ___
 
@@ -61,7 +61,7 @@ Resolved schema of the entity
 
 #### Defined in
 
-[models/models.ts:271](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L271)
+[models/models.ts:92](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L92)
 
 ___
 
@@ -73,7 +73,7 @@ New or existing entity
 
 #### Defined in
 
-[models/models.ts:291](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L291)
+[models/models.ts:112](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L112)
 
 ___
 
@@ -85,4 +85,4 @@ Values being saved
 
 #### Defined in
 
-[models/models.ts:286](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L286)
+[models/models.ts:107](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L107)

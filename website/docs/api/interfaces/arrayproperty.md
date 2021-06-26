@@ -1,6 +1,6 @@
 ---
 id: "arrayproperty"
-title: "Interface: ArrayProperty<T>"
+title: "Interface: ArrayProperty<T, ArrayT>"
 sidebar_label: "ArrayProperty"
 sidebar_position: 0
 custom_edit_url: null
@@ -10,7 +10,8 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `T` | `T` = `any` |
+| `T` | `T`: `ArrayT`[] = `any`[] |
+| `ArrayT` | `ArrayT`: [CMSType](../types/cmstype.md) = [CMSType](../types/cmstype.md) |
 
 ## Hierarchy
 
@@ -33,19 +34,19 @@ BaseProperty.columnWidth
 
 #### Defined in
 
-[models/models.ts:446](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L446)
+[models/properties.ts:75](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L75)
 
 ___
 
 ### config
 
-• `Optional` **config**: [FieldConfig](fieldconfig.md)<T[], any\>
+• `Optional` **config**: [FieldConfig](fieldconfig.md)<T, any\>
 
 Configure how this property field is displayed
 
 #### Defined in
 
-[models/models.ts:608](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L608)
+[models/properties.ts:225](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L225)
 
 ___
 
@@ -59,7 +60,7 @@ BaseProperty.dataType
 
 #### Defined in
 
-[models/models.ts:591](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L591)
+[models/properties.ts:209](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L209)
 
 ___
 
@@ -75,7 +76,7 @@ BaseProperty.description
 
 #### Defined in
 
-[models/models.ts:435](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L435)
+[models/properties.ts:64](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L64)
 
 ___
 
@@ -93,7 +94,7 @@ BaseProperty.disabled
 
 #### Defined in
 
-[models/models.ts:459](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L459)
+[models/properties.ts:88](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L88)
 
 ___
 
@@ -109,21 +110,20 @@ BaseProperty.longDescription
 
 #### Defined in
 
-[models/models.ts:440](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L440)
+[models/properties.ts:69](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L69)
 
 ___
 
 ### of
 
-• `Optional` **of**: [Property](../types/property.md)<T, any\>
+• `Optional` **of**: [Property](../types/property.md)<ArrayT\>
 
 The property of this array. You can specify any property.
-You can also specify an array or properties if you need the array to have
-a specific limited shape such as [string, number, string]
+You can leave this field empty only if you are providing a custom field
 
 #### Defined in
 
-[models/models.ts:598](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L598)
+[models/properties.ts:215](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L215)
 
 ___
 
@@ -140,7 +140,7 @@ BaseProperty.readOnly
 
 #### Defined in
 
-[models/models.ts:452](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L452)
+[models/properties.ts:81](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L81)
 
 ___
 
@@ -156,7 +156,7 @@ BaseProperty.title
 
 #### Defined in
 
-[models/models.ts:430](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L430)
+[models/properties.ts:59](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L59)
 
 ___
 
@@ -172,4 +172,4 @@ BaseProperty.validation
 
 #### Defined in
 
-[models/models.ts:603](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L603)
+[models/properties.ts:220](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L220)

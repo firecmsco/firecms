@@ -19,4 +19,4 @@ Used to define filters applied in collections
 
 #### Defined in
 
-[models/models.ts:705](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L705)
+[models/collections.ts:212](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L212)

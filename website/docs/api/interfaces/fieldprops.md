@@ -6,32 +6,19 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
-When building a custom field you need to create a React Element that takes
+When building a custom field you need to create a React component that takes
 this interface as props.
 
 ## Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | `T` |
+| `T` | `T`: [CMSType](../types/cmstype.md) |
 | `CustomProps` | `CustomProps` = `any` |
 | `S` | `S`: [EntitySchema](entityschema.md)<Key\> = [EntitySchema](entityschema.md)<any\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
 
 ## Properties
-
-### CMSFormField
-
-• **CMSFormField**: `FunctionComponent`<[CMSFormFieldProps](cmsformfieldprops.md)<S, Key\>\>
-
-Builder in case this fields needs to build additional fields,
-e.g. arrays or maps
-
-#### Defined in
-
-[models/fields.tsx:68](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L68)
-
-___
 
 ### autoFocus
 
@@ -41,7 +28,7 @@ Should this field autofocus on mount
 
 #### Defined in
 
-[models/fields.tsx:88](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L88)
+[models/fields.tsx:84](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L84)
 
 ___
 
@@ -53,7 +40,7 @@ Additional values related to the state of the form or the entity
 
 #### Defined in
 
-[models/fields.tsx:98](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L98)
+[models/fields.tsx:94](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L94)
 
 ___
 
@@ -65,7 +52,7 @@ Additional properties set by the developer
 
 #### Defined in
 
-[models/fields.tsx:93](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L93)
+[models/fields.tsx:89](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L89)
 
 ___
 
@@ -78,7 +65,7 @@ rendered conditionally
 
 #### Defined in
 
-[models/fields.tsx:109](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L109)
+[models/fields.tsx:105](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L105)
 
 ___
 
@@ -90,7 +77,7 @@ Flag to indicate if this field should be disabled
 
 #### Defined in
 
-[models/fields.tsx:103](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L103)
+[models/fields.tsx:99](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L99)
 
 ___
 
@@ -104,7 +91,7 @@ It takes the value `null` if there is no error
 
 #### Defined in
 
-[models/fields.tsx:47](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L47)
+[models/fields.tsx:49](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L49)
 
 ___
 
@@ -116,7 +103,7 @@ Should this field include a description
 
 #### Defined in
 
-[models/fields.tsx:62](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L62)
+[models/fields.tsx:64](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L64)
 
 ___
 
@@ -128,7 +115,7 @@ Initial value of this field
 
 #### Defined in
 
-[models/fields.tsx:23](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L23)
+[models/fields.tsx:24](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L24)
 
 ___
 
@@ -140,7 +127,7 @@ Is the form currently submitting
 
 #### Defined in
 
-[models/fields.tsx:33](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L33)
+[models/fields.tsx:34](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L34)
 
 ___
 
@@ -152,7 +139,7 @@ Name of the property
 
 #### Defined in
 
-[models/fields.tsx:13](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L13)
+[models/fields.tsx:14](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L14)
 
 ___
 
@@ -164,19 +151,19 @@ Is this field part of an array
 
 #### Defined in
 
-[models/fields.tsx:78](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L78)
+[models/fields.tsx:74](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L74)
 
 ___
 
 ### property
 
-• **property**: [Property](../types/property.md)<T, any\>
+• **property**: [Property](../types/property.md)<T\>
 
 Property related to this field
 
 #### Defined in
 
-[models/fields.tsx:57](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L57)
+[models/fields.tsx:59](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L59)
 
 ___
 
@@ -203,7 +190,7 @@ Set value of field directly
 
 #### Defined in
 
-[models/fields.tsx:28](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L28)
+[models/fields.tsx:29](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L29)
 
 ___
 
@@ -211,13 +198,14 @@ ___
 
 • **showError**: `boolean`
 
-Is there an error in this field. The error field has the same shape as
-the field, replacing values with a string containing the error.
-It takes the value `null` if there is no error
+Should this field show the error indicator.
+Note that there might be an error (like an empty field that should be
+filled) but we don't want to show the error until the user has tried
+saving.
 
 #### Defined in
 
-[models/fields.tsx:40](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L40)
+[models/fields.tsx:42](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L42)
 
 ___
 
@@ -229,7 +217,7 @@ Is this field being rendered in the table
 
 #### Defined in
 
-[models/fields.tsx:83](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L83)
+[models/fields.tsx:79](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L79)
 
 ___
 
@@ -241,7 +229,7 @@ Has this field been touched
 
 #### Defined in
 
-[models/fields.tsx:52](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L52)
+[models/fields.tsx:54](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L54)
 
 ___
 
@@ -253,7 +241,7 @@ Flag to indicate that the underlying value has been updated in Firestore
 
 #### Defined in
 
-[models/fields.tsx:73](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L73)
+[models/fields.tsx:69](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L69)
 
 ___
 
@@ -265,4 +253,4 @@ Current value of this field
 
 #### Defined in
 
-[models/fields.tsx:18](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L18)
+[models/fields.tsx:19](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L19)

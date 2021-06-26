@@ -19,4 +19,4 @@ using the open method of this controller.
 
 #### Defined in
 
-[contexts/SideEntityController.tsx:59](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/SideEntityController.tsx#L59)
+[contexts/SideEntityController.tsx:59](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/SideEntityController.tsx#L59)

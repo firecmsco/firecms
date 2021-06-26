@@ -29,4 +29,4 @@ well as a `schemaResolver` if provided.
 
 #### Defined in
 
-[hooks/useNavigationFrom.tsx:34](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useNavigationFrom.tsx#L34)
+[hooks/useNavigationFrom.tsx:34](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useNavigationFrom.tsx#L34)

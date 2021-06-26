@@ -20,4 +20,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[form/components/FieldDescription.tsx:18](https://github.com/Camberi/firecms/blob/42dd384/src/form/components/FieldDescription.tsx#L18)
+[form/components/FieldDescription.tsx:18](https://github.com/Camberi/firecms/blob/b1328ad/src/form/components/FieldDescription.tsx#L18)

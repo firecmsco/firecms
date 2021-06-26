@@ -19,7 +19,7 @@ can try CollectionTable, which still does data fetching from Firestore.
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> |
 | `Key` | `Key`: `string` |
 
 #### Parameters
@@ -34,4 +34,4 @@ can try CollectionTable, which still does data fetching from Firestore.
 
 #### Defined in
 
-[collection/EntityCollectionTable.tsx:58](https://github.com/Camberi/firecms/blob/42dd384/src/collection/EntityCollectionTable.tsx#L58)
+[collection/components/EntityCollectionTable.tsx:57](https://github.com/Camberi/firecms/blob/b1328ad/src/collection/components/EntityCollectionTable.tsx#L57)

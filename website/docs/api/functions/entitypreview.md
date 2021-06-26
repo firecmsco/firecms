@@ -12,7 +12,7 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> = [EntitySchema](../interfaces/entityschema.md)<any, any\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> = [EntitySchema](../interfaces/entityschema.md)<any\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
 
 #### Parameters
@@ -27,4 +27,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[components/EntityPreview.tsx:50](https://github.com/Camberi/firecms/blob/42dd384/src/components/EntityPreview.tsx#L50)
+[core/components/EntityPreview.tsx:55](https://github.com/Camberi/firecms/blob/b1328ad/src/core/components/EntityPreview.tsx#L55)

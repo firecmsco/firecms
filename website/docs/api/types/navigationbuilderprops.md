@@ -16,4 +16,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[CMSAppProps.tsx:122](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L122)
+[models/navigation.ts:14](https://github.com/Camberi/firecms/blob/b1328ad/src/models/navigation.ts#L14)

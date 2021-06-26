@@ -13,7 +13,17 @@ module.exports = {
         [
             'docusaurus-plugin-typedoc',
             {
-                entryPoints: ['../src/index.tsx'],
+                entryPoints: [
+                    '../src/index.tsx',
+                    // '../src/core/index.tsx',
+                    // '../src/models/index.ts',
+                    // '../src/collection/index.tsx',
+                    // '../src/contexts/index.tsx',
+                    // '../src/form/index.tsx',
+                    // '../src/preview/index.ts',
+                    // '../src/side_dialog/index.ts',
+                    // '../src/hooks/index.tsx',
+                ],
                 tsconfig: '../tsconfig.json'
             }
         ]

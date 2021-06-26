@@ -18,4 +18,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[hooks/useNavigationFrom.tsx:73](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useNavigationFrom.tsx#L73)
+[hooks/useNavigationFrom.tsx:76](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useNavigationFrom.tsx#L76)

@@ -26,4 +26,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[hooks/useCollectionFetch.tsx:39](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useCollectionFetch.tsx#L39)
+[hooks/useCollectionFetch.tsx:39](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useCollectionFetch.tsx#L39)

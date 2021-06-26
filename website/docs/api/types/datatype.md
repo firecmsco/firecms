@@ -10,4 +10,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[models/models.ts:360](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L360)
+[models/properties.ts:31](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L31)

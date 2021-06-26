@@ -12,7 +12,7 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> |
 | `Key` | `Key`: `string` |
 
 #### Parameters
@@ -27,4 +27,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[hooks/useCollectionFetch.tsx:46](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useCollectionFetch.tsx#L46)
+[hooks/useCollectionFetch.tsx:46](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useCollectionFetch.tsx#L46)

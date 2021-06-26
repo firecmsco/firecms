@@ -1,6 +1,6 @@
 ---
 id: "cmsformfieldprops"
-title: "Interface: CMSFormFieldProps<S, Key>"
+title: "Interface: CMSFormFieldProps<T, S, Key>"
 sidebar_label: "CMSFormFieldProps"
 sidebar_position: 0
 custom_edit_url: null
@@ -13,6 +13,7 @@ custom field you can call `buildPropertyField` with these props.
 
 | Name | Type |
 | :------ | :------ |
+| `T` | `T`: [CMSType](../types/cmstype.md) |
 | `S` | `S`: [EntitySchema](entityschema.md)<Key\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
 
@@ -27,7 +28,7 @@ in table mode, it makes sense to put the focus on the only field rendered.
 
 #### Defined in
 
-[models/fields.tsx:177](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L177)
+[models/fields.tsx:175](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L175)
 
 ___
 
@@ -40,7 +41,7 @@ prop when creating a custom field.
 
 #### Defined in
 
-[models/fields.tsx:150](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L150)
+[models/fields.tsx:148](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L148)
 
 ___
 
@@ -49,11 +50,13 @@ ___
 • `Optional` **dependsOnOtherProperties**: `boolean`
 
 This flag is used to avoid using Formik FastField internally, which
-prevents being updated from the values
+prevents being updated from the values.
+Set this value to `true` if you are developing a custom field which
+value gets updated dynamically based on others.
 
 #### Defined in
 
-[models/fields.tsx:188](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L188)
+[models/fields.tsx:188](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L188)
 
 ___
 
@@ -65,7 +68,7 @@ Should this field be disabled
 
 #### Defined in
 
-[models/fields.tsx:182](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L182)
+[models/fields.tsx:180](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L180)
 
 ___
 
@@ -77,7 +80,7 @@ Should the description be included in this field
 
 #### Defined in
 
-[models/fields.tsx:155](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L155)
+[models/fields.tsx:153](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L153)
 
 ___
 
@@ -90,7 +93,7 @@ indexed such as `address.street` or `people[3]`
 
 #### Defined in
 
-[models/fields.tsx:140](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L140)
+[models/fields.tsx:137](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L137)
 
 ___
 
@@ -102,19 +105,19 @@ Is this field part of an array
 
 #### Defined in
 
-[models/fields.tsx:171](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L171)
+[models/fields.tsx:169](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L169)
 
 ___
 
 ### property
 
-• **property**: [StringProperty](stringproperty.md) \| [NumberProperty](numberproperty.md) \| [BooleanProperty](booleanproperty.md) \| [TimestampProperty](timestampproperty.md) \| [GeopointProperty](geopointproperty.md) \| [ReferenceProperty](referenceproperty.md)<[EntitySchema](entityschema.md)<any, any\>, any\> \| [ArrayProperty](arrayproperty.md)<any\> \| [MapProperty](mapproperty.md)<any, string\>
+• **property**: [Property](../types/property.md)<T\>
 
 The CMS property you are binding this field to
 
 #### Defined in
 
-[models/fields.tsx:144](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L144)
+[models/fields.tsx:142](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L142)
 
 ___
 
@@ -126,7 +129,7 @@ Is this field being rendered in a table
 
 #### Defined in
 
-[models/fields.tsx:166](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L166)
+[models/fields.tsx:164](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L164)
 
 ___
 
@@ -139,4 +142,4 @@ field is being edited
 
 #### Defined in
 
-[models/fields.tsx:161](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L161)
+[models/fields.tsx:159](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L159)

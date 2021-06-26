@@ -6,21 +6,27 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
-▸ **buildProperty**(`property`): [Property](../types/property.md)
+▸ **buildProperty**<T\>(`property`): [Property](../types/property.md)<T\>
 
 Identity function we use to defeat the type system of Typescript and preserve
 the property keys.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `T`: [CMSType](../types/cmstype.md) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `property` | [Property](../types/property.md) |
+| `property` | [Property](../types/property.md)<T\> |
 
 #### Returns
 
-[Property](../types/property.md)
+[Property](../types/property.md)<T\>
 
 #### Defined in
 
-[models/builders.ts:81](https://github.com/Camberi/firecms/blob/42dd384/src/models/builders.ts#L81)
+[models/builders.ts:85](https://github.com/Camberi/firecms/blob/b1328ad/src/models/builders.ts#L85)

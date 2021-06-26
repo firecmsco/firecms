@@ -26,4 +26,4 @@ entity dialogs, so you can display them outside the main CMS view.
 
 #### Defined in
 
-[CMSAppProvider.tsx:120](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L120)
+[core/CMSAppProvider.tsx:121](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L121)

@@ -20,4 +20,4 @@ of a plain object.
 
 #### Defined in
 
-[models/models.ts:499](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L499)
+[models/properties.ts:128](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L128)

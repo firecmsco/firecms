@@ -22,7 +22,7 @@ Validation rules for strings
 
 #### Defined in
 
-[models/models.ts:773](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L773)
+[models/properties.ts:370](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L370)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[models/models.ts:769](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L769)
+[models/properties.ts:366](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L366)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[models/models.ts:776](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L776)
+[models/properties.ts:373](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L373)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[models/models.ts:772](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L772)
+[models/properties.ts:369](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L369)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[models/models.ts:771](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L771)
+[models/properties.ts:368](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L368)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[models/models.ts:770](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L770)
+[models/properties.ts:367](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L367)
 
 ___
 
@@ -88,7 +88,7 @@ Is this field required
 
 #### Defined in
 
-[models/models.ts:730](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L730)
+[models/properties.ts:327](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L327)
 
 ___
 
@@ -104,7 +104,7 @@ Customize the required message when the property is not set
 
 #### Defined in
 
-[models/models.ts:735](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L735)
+[models/properties.ts:332](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L332)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[models/models.ts:775](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L775)
+[models/properties.ts:372](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L372)
 
 ___
 
@@ -131,7 +131,7 @@ collection with this value.
 
 #### Defined in
 
-[models/models.ts:741](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L741)
+[models/properties.ts:338](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L338)
 
 ___
 
@@ -150,7 +150,7 @@ children of an `ArrayProperty` or first level children of `MapProperty`
 
 #### Defined in
 
-[models/models.ts:749](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L749)
+[models/properties.ts:346](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L346)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[models/models.ts:777](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L777)
+[models/properties.ts:374](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L374)
 
 ___
 
@@ -170,4 +170,4 @@ ___
 
 #### Defined in
 
-[models/models.ts:774](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L774)
+[models/properties.ts:371](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L371)

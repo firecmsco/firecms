@@ -23,4 +23,4 @@ navigation objects with all its properties
 
 #### Defined in
 
-[models/builders.ts:30](https://github.com/Camberi/firecms/blob/42dd384/src/models/builders.ts#L30)
+[models/builders.ts:34](https://github.com/Camberi/firecms/blob/b1328ad/src/models/builders.ts#L34)

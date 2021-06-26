@@ -15,7 +15,7 @@ collection views with all its properties
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> = [EntitySchema](../interfaces/entityschema.md)<any, any\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> = [EntitySchema](../interfaces/entityschema.md)<any\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
 | `AdditionalKey` | `AdditionalKey`: `string` = `string` |
 
@@ -31,4 +31,4 @@ collection views with all its properties
 
 #### Defined in
 
-[models/builders.ts:41](https://github.com/Camberi/firecms/blob/42dd384/src/models/builders.ts#L41)
+[models/builders.ts:45](https://github.com/Camberi/firecms/blob/b1328ad/src/models/builders.ts#L45)

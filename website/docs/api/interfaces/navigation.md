@@ -12,7 +12,7 @@ In this interface you define the main navigation entries of the CMS
 
 ### collections
 
-• **collections**: [EntityCollectionView](entitycollectionview.md)<[EntitySchema](entityschema.md)<any, any\>, any, string\>[]
+• **collections**: [EntityCollectionView](entitycollectionview.md)<[EntitySchema](entityschema.md)<any\>, any, string\>[]
 
 List of the mapped collections in the CMS.
 Each entry relates to a collection in the root Firestore database.
@@ -21,7 +21,7 @@ generates an entry in the main menu.
 
 #### Defined in
 
-[CMSAppProps.tsx:135](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L135)
+[models/navigation.ts:27](https://github.com/Camberi/firecms/blob/b1328ad/src/models/navigation.ts#L27)
 
 ___
 
@@ -34,4 +34,4 @@ navigation
 
 #### Defined in
 
-[CMSAppProps.tsx:141](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L141)
+[models/navigation.ts:33](https://github.com/Camberi/firecms/blob/b1328ad/src/models/navigation.ts#L33)

@@ -14,4 +14,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[contexts/AuthContext.tsx:99](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L99)
+[contexts/AuthContext.tsx:99](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L99)

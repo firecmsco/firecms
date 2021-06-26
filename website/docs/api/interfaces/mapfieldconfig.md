@@ -11,9 +11,9 @@ config disables the others.
 
 ## Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | `T`: `Object` |
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ Defaults to false.
 
 #### Defined in
 
-[models/models.ts:971](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L971)
+[models/properties.ts:568](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L568)
 
 ___
 
@@ -53,13 +53,13 @@ or in `preview`.
 
 #### Defined in
 
-[models/models.ts:821](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L821)
+[models/properties.ts:418](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L418)
 
 ___
 
 ### field
 
-• `Optional` **field**: `ComponentType`<[FieldProps](fieldprops.md)<T, any, [EntitySchema](entityschema.md)<any, any\>, any\>\>
+• `Optional` **field**: `ElementType`<[FieldProps](fieldprops.md)<T, any, [EntitySchema](entityschema.md)<any\>, any\>\>
 
 If you need to render a custom field, you can create a component that
 takes `FieldProps` as props. You receive the value, a function to
@@ -73,7 +73,7 @@ in the component.
 
 #### Defined in
 
-[models/models.ts:808](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L808)
+[models/properties.ts:405](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L405)
 
 ___
 
@@ -89,13 +89,13 @@ needed
 
 #### Defined in
 
-[models/models.ts:961](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L961)
+[models/properties.ts:558](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L558)
 
 ___
 
 ### preview
 
-• `Optional` **preview**: `ComponentType`<[PreviewComponentProps](previewcomponentprops.md)<T, any\>\>
+• `Optional` **preview**: `ElementType`<[PreviewComponentProps](previewcomponentprops.md)<T, any\>\>
 
 Configure how a property is displayed as a preview, e.g. in the collection
 view. You can customize it by passing custom props that are received
@@ -107,4 +107,4 @@ in the component.
 
 #### Defined in
 
-[models/models.ts:815](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L815)
+[models/properties.ts:412](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L412)

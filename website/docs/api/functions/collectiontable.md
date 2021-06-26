@@ -12,7 +12,7 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> |
 | `Key` | `Key`: `string` |
 | `AdditionalKey` | `AdditionalKey`: `string` = `string` |
 
@@ -20,7 +20,7 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | `CollectionTableProps`<S, Key, AdditionalKey\> |
+| `__namedParameters` | [CollectionTableProps](../interfaces/collectiontableprops.md)<S, Key, AdditionalKey\> |
 
 #### Returns
 
@@ -28,4 +28,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[collection/CollectionTable.tsx:58](https://github.com/Camberi/firecms/blob/42dd384/src/collection/CollectionTable.tsx#L58)
+[collection/components/CollectionTable.tsx:61](https://github.com/Camberi/firecms/blob/b1328ad/src/collection/components/CollectionTable.tsx#L61)

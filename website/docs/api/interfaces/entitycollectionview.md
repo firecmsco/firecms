@@ -31,7 +31,7 @@ an additional column delegate.q
 
 #### Defined in
 
-[models/models.ts:65](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L65)
+[models/collections.ts:62](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L62)
 
 ___
 
@@ -43,7 +43,7 @@ Default size of the rendered collection
 
 #### Defined in
 
-[models/models.ts:44](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L44)
+[models/collections.ts:41](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L41)
 
 ___
 
@@ -55,7 +55,7 @@ Optional description of this view. You can use Markdown.
 
 #### Defined in
 
-[models/models.ts:27](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L27)
+[models/collections.ts:24](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L24)
 
 ___
 
@@ -69,7 +69,7 @@ It has no effect if the properties value is set.
 
 #### Defined in
 
-[models/models.ts:116](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L116)
+[models/collections.ts:113](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L113)
 
 ___
 
@@ -84,7 +84,7 @@ Defaults to `true`
 
 #### Defined in
 
-[models/models.ts:96](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L96)
+[models/collections.ts:93](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L93)
 
 ___
 
@@ -116,7 +116,7 @@ undefined if none
 
 #### Defined in
 
-[models/models.ts:143](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L143)
+[models/collections.ts:140](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L140)
 
 ___
 
@@ -128,7 +128,7 @@ Properties that can be filtered in this view
 
 #### Defined in
 
-[models/models.ts:121](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L121)
+[models/collections.ts:118](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L118)
 
 ___
 
@@ -142,7 +142,7 @@ effect.
 
 #### Defined in
 
-[models/models.ts:51](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L51)
+[models/collections.ts:48](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L48)
 
 ___
 
@@ -157,7 +157,7 @@ Defaults to none.
 
 #### Defined in
 
-[models/models.ts:129](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L129)
+[models/collections.ts:126](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L126)
 
 ___
 
@@ -169,7 +169,7 @@ Default sort applied to this collection
 
 #### Defined in
 
-[models/models.ts:134](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L134)
+[models/collections.ts:131](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L131)
 
 ___
 
@@ -183,7 +183,7 @@ can still be edited in the side panel
 
 #### Defined in
 
-[models/models.ts:83](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L83)
+[models/collections.ts:80](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L80)
 
 ___
 
@@ -195,7 +195,7 @@ Plural name of the view. E.g. 'products'
 
 #### Defined in
 
-[models/models.ts:22](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L22)
+[models/collections.ts:19](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L19)
 
 ___
 
@@ -210,7 +210,7 @@ Defaults to `true`
 
 #### Defined in
 
-[models/models.ts:59](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L59)
+[models/collections.ts:56](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L56)
 
 ___
 
@@ -223,7 +223,7 @@ If not specified everything defaults to `true`
 
 #### Defined in
 
-[models/models.ts:76](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L76)
+[models/collections.ts:73](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L73)
 
 ___
 
@@ -236,7 +236,7 @@ every property is displayed
 
 #### Defined in
 
-[models/models.ts:109](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L109)
+[models/collections.ts:106](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L106)
 
 ___
 
@@ -250,7 +250,7 @@ This path also determines the URL in FireCMS
 
 #### Defined in
 
-[models/models.ts:34](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L34)
+[models/collections.ts:31](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L31)
 
 ___
 
@@ -262,7 +262,7 @@ Schema representing the entities of this view
 
 #### Defined in
 
-[models/models.ts:39](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L39)
+[models/collections.ts:36](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L36)
 
 ___
 
@@ -274,13 +274,13 @@ Are the entities in this collection selectable. Defaults to true
 
 #### Defined in
 
-[models/models.ts:88](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L88)
+[models/collections.ts:85](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L85)
 
 ___
 
 ### subcollections
 
-• `Optional` **subcollections**: [EntityCollectionView](entitycollectionview.md)<[EntitySchema](entityschema.md)<any, any\>, any, string\>[]
+• `Optional` **subcollections**: [EntityCollectionView](entitycollectionview.md)<[EntitySchema](entityschema.md)<any\>, any, string\>[]
 
 Following the Firestore document and collection schema, you can add
 subcollections to your entity in the same way you define the root
@@ -288,7 +288,7 @@ collections.
 
 #### Defined in
 
-[models/models.ts:103](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L103)
+[models/collections.ts:100](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L100)
 
 ___
 
@@ -300,4 +300,4 @@ If a text search delegate is supplied, a search bar is displayed on top
 
 #### Defined in
 
-[models/models.ts:70](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L70)
+[models/collections.ts:67](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L67)

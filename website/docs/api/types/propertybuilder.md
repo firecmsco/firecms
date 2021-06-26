@@ -1,20 +1,20 @@
 ---
 id: "propertybuilder"
-title: "Type alias: PropertyBuilder<S, Key, T>"
+title: "Type alias: PropertyBuilder<T, S, Key>"
 sidebar_label: "PropertyBuilder"
 sidebar_position: 0
 custom_edit_url: null
 ---
 
-Ƭ **PropertyBuilder**<S, Key, T\>: (`props`: [PropertyBuilderProps](propertybuilderprops.md)<S, Key\>) => [Property](property.md)<T\>
+Ƭ **PropertyBuilder**<T, S, Key\>: (`props`: [PropertyBuilderProps](propertybuilderprops.md)<S, Key\>) => [Property](property.md)<T\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key\> |
+| `T` | `T`: [CMSType](cmstype.md) = [CMSType](cmstype.md) |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key\> = [EntitySchema](../interfaces/entityschema.md)<any\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
-| `T` | `T`: `any` = `any` |
 
 #### Type declaration
 
@@ -32,4 +32,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[models/models.ts:523](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L523)
+[models/properties.ts:152](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L152)

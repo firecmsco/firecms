@@ -12,7 +12,7 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> = [EntitySchema](../interfaces/entityschema.md)<any, any\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
 
 #### Parameters
@@ -27,4 +27,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[form/fields/ReferenceField.tsx:61](https://github.com/Camberi/firecms/blob/42dd384/src/form/fields/ReferenceField.tsx#L61)
+[form/fields/ReferenceField.tsx:62](https://github.com/Camberi/firecms/blob/b1328ad/src/form/fields/ReferenceField.tsx#L62)

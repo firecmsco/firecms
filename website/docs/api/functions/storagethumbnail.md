@@ -20,4 +20,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[preview/components/StorageThumbnail.tsx:6](https://github.com/Camberi/firecms/blob/42dd384/src/preview/components/StorageThumbnail.tsx#L6)
+[preview/components/StorageThumbnail.tsx:6](https://github.com/Camberi/firecms/blob/b1328ad/src/preview/components/StorageThumbnail.tsx#L6)

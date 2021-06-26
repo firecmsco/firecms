@@ -17,4 +17,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[contexts/BreacrumbsContext.tsx:13](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/BreacrumbsContext.tsx#L13)
+[contexts/BreacrumbsContext.tsx:13](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/BreacrumbsContext.tsx#L13)

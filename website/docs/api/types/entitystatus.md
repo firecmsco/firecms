@@ -12,4 +12,4 @@ New or existing status
 
 #### Defined in
 
-[models/models.ts:348](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L348)
+[models/models.ts:156](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L156)

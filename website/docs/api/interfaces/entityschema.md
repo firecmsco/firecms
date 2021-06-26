@@ -13,7 +13,6 @@ Specification for defining an entity
 | Name | Type |
 | :------ | :------ |
 | `Key` | `Key`: `string` = `string` |
-| `T` | `T`: `any` = `any` |
 
 ## Properties
 
@@ -28,19 +27,19 @@ to pick from only those
 
 #### Defined in
 
-[models/models.ts:210](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L210)
+[models/models.ts:31](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L31)
 
 ___
 
 ### defaultValues
 
-• `Optional` **defaultValues**: `Partial`<[EntityValues](../types/entityvalues.md)<[EntitySchema](entityschema.md)<Key, T\>, Key\>\>
+• `Optional` **defaultValues**: `Partial`<[EntityValues](../types/entityvalues.md)<[EntitySchema](entityschema.md)<Key\>, Key\>\>
 
 When creating a new entity, set some values as already initialized
 
 #### Defined in
 
-[models/models.ts:220](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L220)
+[models/models.ts:41](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L41)
 
 ___
 
@@ -52,7 +51,7 @@ Description of this entity
 
 #### Defined in
 
-[models/models.ts:202](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L202)
+[models/models.ts:23](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L23)
 
 ___
 
@@ -64,19 +63,19 @@ Singular name of the entity as displayed in an Add button . E.g. Product
 
 #### Defined in
 
-[models/models.ts:197](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L197)
+[models/models.ts:18](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L18)
 
 ___
 
 ### properties
 
-• **properties**: [PropertiesOrBuilder](../types/propertiesorbuilder.md)<[EntitySchema](entityschema.md)<Key, T\>, Key, T\>
+• **properties**: [PropertiesOrBuilder](../types/propertiesorbuilder.md)<[EntitySchema](entityschema.md)<Key\>, Key\>
 
 Set of properties that compose an entity
 
 #### Defined in
 
-[models/models.ts:215](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L215)
+[models/models.ts:36](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L36)
 
 ## Methods
 
@@ -90,7 +89,7 @@ Hook called after the entity is deleted in Firestore.
 
 | Name | Type |
 | :------ | :------ |
-| `entityDeleteProps` | [EntityDeleteProps](entitydeleteprops.md)<[EntitySchema](entityschema.md)<Key, T\>, Key\> |
+| `entityDeleteProps` | [EntityDeleteProps](entitydeleteprops.md)<[EntitySchema](entityschema.md)<Key\>, Key\> |
 
 #### Returns
 
@@ -98,7 +97,7 @@ Hook called after the entity is deleted in Firestore.
 
 #### Defined in
 
-[models/models.ts:259](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L259)
+[models/models.ts:80](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L80)
 
 ___
 
@@ -114,7 +113,7 @@ error snackbar gets displayed.
 
 | Name | Type |
 | :------ | :------ |
-| `entityDeleteProps` | [EntityDeleteProps](entitydeleteprops.md)<[EntitySchema](entityschema.md)<Key, T\>, Key\> |
+| `entityDeleteProps` | [EntityDeleteProps](entitydeleteprops.md)<[EntitySchema](entityschema.md)<Key\>, Key\> |
 
 #### Returns
 
@@ -122,13 +121,13 @@ error snackbar gets displayed.
 
 #### Defined in
 
-[models/models.ts:252](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L252)
+[models/models.ts:73](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L73)
 
 ___
 
 ### onPreSave
 
-▸ `Optional` **onPreSave**(`entitySaveProps`): [EntityValues](../types/entityvalues.md)<[EntitySchema](entityschema.md)<Key, T\>, Key\> \| `Promise`<[EntityValues](../types/entityvalues.md)<[EntitySchema](entityschema.md)<Key, T\>, Key\>\>
+▸ `Optional` **onPreSave**(`entitySaveProps`): [EntityValues](../types/entityvalues.md)<[EntitySchema](entityschema.md)<Key\>, Key\> \| `Promise`<[EntityValues](../types/entityvalues.md)<[EntitySchema](entityschema.md)<Key\>, Key\>\>
 
 Hook called before saving, you need to return the values that will get
 saved. If you throw an error in this method the process stops, and an
@@ -138,15 +137,15 @@ error snackbar gets displayed.
 
 | Name | Type |
 | :------ | :------ |
-| `entitySaveProps` | [EntitySaveProps](entitysaveprops.md)<[EntitySchema](entityschema.md)<Key, T\>, Key\> |
+| `entitySaveProps` | [EntitySaveProps](entitysaveprops.md)<[EntitySchema](entityschema.md)<Key\>, Key\> |
 
 #### Returns
 
-[EntityValues](../types/entityvalues.md)<[EntitySchema](entityschema.md)<Key, T\>, Key\> \| `Promise`<[EntityValues](../types/entityvalues.md)<[EntitySchema](entityschema.md)<Key, T\>, Key\>\>
+[EntityValues](../types/entityvalues.md)<[EntitySchema](entityschema.md)<Key\>, Key\> \| `Promise`<[EntityValues](../types/entityvalues.md)<[EntitySchema](entityschema.md)<Key\>, Key\>\>
 
 #### Defined in
 
-[models/models.ts:242](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L242)
+[models/models.ts:63](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L63)
 
 ___
 
@@ -160,7 +159,7 @@ Hook called when saving fails
 
 | Name | Type |
 | :------ | :------ |
-| `entitySaveProps` | [EntitySaveProps](entitysaveprops.md)<[EntitySchema](entityschema.md)<Key, T\>, Key\> |
+| `entitySaveProps` | [EntitySaveProps](entitysaveprops.md)<[EntitySchema](entityschema.md)<Key\>, Key\> |
 
 #### Returns
 
@@ -168,7 +167,7 @@ Hook called when saving fails
 
 #### Defined in
 
-[models/models.ts:233](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L233)
+[models/models.ts:54](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L54)
 
 ___
 
@@ -182,7 +181,7 @@ Hook called when save is successful
 
 | Name | Type |
 | :------ | :------ |
-| `entitySaveProps` | [EntitySaveProps](entitysaveprops.md)<[EntitySchema](entityschema.md)<Key, T\>, Key\> |
+| `entitySaveProps` | [EntitySaveProps](entitysaveprops.md)<[EntitySchema](entityschema.md)<Key\>, Key\> |
 
 #### Returns
 
@@ -190,4 +189,4 @@ Hook called when save is successful
 
 #### Defined in
 
-[models/models.ts:226](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L226)
+[models/models.ts:47](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L47)

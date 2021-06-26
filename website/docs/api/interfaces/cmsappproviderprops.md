@@ -22,7 +22,7 @@ apply
 
 #### Defined in
 
-[CMSAppProvider.tsx:54](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L54)
+[core/CMSAppProvider.tsx:55](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L55)
 
 ___
 
@@ -35,7 +35,7 @@ Defaults to 'MMMM dd, yyyy, HH:mm:ss'
 
 #### Defined in
 
-[CMSAppProvider.tsx:84](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L84)
+[core/CMSAppProvider.tsx:85](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L85)
 
 ___
 
@@ -48,7 +48,7 @@ of initialising Firebase and expects it to be already initialised.
 
 #### Defined in
 
-[CMSAppProvider.tsx:69](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L69)
+[core/CMSAppProvider.tsx:70](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L70)
 
 ___
 
@@ -62,7 +62,7 @@ e.g.
 
 #### Defined in
 
-[CMSAppProvider.tsx:106](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L106)
+[core/CMSAppProvider.tsx:107](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L107)
 
 ___
 
@@ -74,13 +74,13 @@ Locale of the CMS, currently only affecting dates
 
 #### Defined in
 
-[CMSAppProvider.tsx:89](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L89)
+[core/CMSAppProvider.tsx:90](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L90)
 
 ___
 
 ### navigation
 
-• **navigation**: [EntityCollectionView](entitycollectionview.md)<[EntitySchema](entityschema.md)<any, any\>, any, string\>[] \| [Navigation](navigation.md) \| [NavigationBuilder](../types/navigationbuilder.md)
+• **navigation**: [EntityCollectionView](entitycollectionview.md)<[EntitySchema](entityschema.md)<any\>, any, string\>[] \| [Navigation](navigation.md) \| [NavigationBuilder](../types/navigationbuilder.md)
 
 Use this prop to specify the views that will be generated in the CMS.
 You usually will want to create a `Navigation` object that includes
@@ -91,7 +91,7 @@ can use a `NavigationBuilder`
 
 #### Defined in
 
-[CMSAppProvider.tsx:45](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L45)
+[core/CMSAppProvider.tsx:46](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L46)
 
 ___
 
@@ -103,7 +103,7 @@ Primary color of the theme of the CMS
 
 #### Defined in
 
-[CMSAppProvider.tsx:94](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L94)
+[core/CMSAppProvider.tsx:95](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L95)
 
 ___
 
@@ -119,7 +119,7 @@ You can also override schemas in place, when using `useSideEntityController`
 
 #### Defined in
 
-[CMSAppProvider.tsx:78](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L78)
+[core/CMSAppProvider.tsx:79](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L79)
 
 ___
 
@@ -131,7 +131,7 @@ Secondary color of the theme of the CMS
 
 #### Defined in
 
-[CMSAppProvider.tsx:99](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L99)
+[core/CMSAppProvider.tsx:100](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L100)
 
 ___
 
@@ -147,4 +147,4 @@ Defaults to Google sign in only.
 
 #### Defined in
 
-[CMSAppProvider.tsx:63](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProvider.tsx#L63)
+[core/CMSAppProvider.tsx:64](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProvider.tsx#L64)

@@ -16,7 +16,7 @@ additional column delegates views with all its properties
 | Name | Type |
 | :------ | :------ |
 | `AdditionalKey` | `AdditionalKey`: `string` = `string` |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> = [EntitySchema](../interfaces/entityschema.md)<any, any\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> = [EntitySchema](../interfaces/entityschema.md)<any\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
 
 #### Parameters
@@ -31,4 +31,4 @@ additional column delegates views with all its properties
 
 #### Defined in
 
-[models/models.ts:336](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L336)
+[models/builders.ts:120](https://github.com/Camberi/firecms/blob/b1328ad/src/models/builders.ts#L120)

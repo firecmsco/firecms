@@ -31,7 +31,7 @@ Is this field required
 
 #### Defined in
 
-[models/models.ts:730](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L730)
+[models/properties.ts:327](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L327)
 
 ___
 
@@ -43,7 +43,7 @@ Customize the required message when the property is not set
 
 #### Defined in
 
-[models/models.ts:735](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L735)
+[models/properties.ts:332](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L332)
 
 ___
 
@@ -56,7 +56,7 @@ collection with this value.
 
 #### Defined in
 
-[models/models.ts:741](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L741)
+[models/properties.ts:338](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L338)
 
 ___
 
@@ -71,4 +71,4 @@ children of an `ArrayProperty` or first level children of `MapProperty`
 
 #### Defined in
 
-[models/models.ts:749](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L749)
+[models/properties.ts:346](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L346)

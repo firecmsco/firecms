@@ -10,7 +10,7 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `T` | `T` = `any` |
+| `T` | `T`: [CMSType](../types/cmstype.md) = [CMSType](../types/cmstype.md) |
 | `CustomProps` | `CustomProps` = `any` |
 
 ## Properties
@@ -23,7 +23,7 @@ Additional properties set by the developer
 
 #### Defined in
 
-[models/preview_component_props.tsx:47](https://github.com/Camberi/firecms/blob/42dd384/src/models/preview_component_props.tsx#L47)
+[preview/preview_component_props.tsx:47](https://github.com/Camberi/firecms/blob/b1328ad/src/preview/preview_component_props.tsx#L47)
 
 ___
 
@@ -36,7 +36,7 @@ It may be undefined if unlimited.
 
 #### Defined in
 
-[models/preview_component_props.tsx:36](https://github.com/Camberi/firecms/blob/42dd384/src/models/preview_component_props.tsx#L36)
+[preview/preview_component_props.tsx:36](https://github.com/Camberi/firecms/blob/b1328ad/src/preview/preview_component_props.tsx#L36)
 
 ___
 
@@ -48,7 +48,7 @@ Name of the property
 
 #### Defined in
 
-[models/preview_component_props.tsx:10](https://github.com/Camberi/firecms/blob/42dd384/src/models/preview_component_props.tsx#L10)
+[preview/preview_component_props.tsx:10](https://github.com/Camberi/firecms/blob/b1328ad/src/preview/preview_component_props.tsx#L10)
 
 ___
 
@@ -60,31 +60,31 @@ Click handler
 
 #### Defined in
 
-[models/preview_component_props.tsx:25](https://github.com/Camberi/firecms/blob/42dd384/src/models/preview_component_props.tsx#L25)
+[preview/preview_component_props.tsx:25](https://github.com/Camberi/firecms/blob/b1328ad/src/preview/preview_component_props.tsx#L25)
 
 ___
 
 ### property
 
-• **property**: [Property](../types/property.md)<T, any\>
+• **property**: [Property](../types/property.md)<T\>
 
 Property this display is related to
 
 #### Defined in
 
-[models/preview_component_props.tsx:20](https://github.com/Camberi/firecms/blob/42dd384/src/models/preview_component_props.tsx#L20)
+[preview/preview_component_props.tsx:20](https://github.com/Camberi/firecms/blob/b1328ad/src/preview/preview_component_props.tsx#L20)
 
 ___
 
 ### size
 
-• **size**: `PreviewSize`
+• **size**: [PreviewSize](../types/previewsize.md)
 
 Desired size of the preview, depending on the context.
 
 #### Defined in
 
-[models/preview_component_props.tsx:30](https://github.com/Camberi/firecms/blob/42dd384/src/models/preview_component_props.tsx#L30)
+[preview/preview_component_props.tsx:30](https://github.com/Camberi/firecms/blob/b1328ad/src/preview/preview_component_props.tsx#L30)
 
 ___
 
@@ -96,7 +96,7 @@ Current value of the property
 
 #### Defined in
 
-[models/preview_component_props.tsx:15](https://github.com/Camberi/firecms/blob/42dd384/src/models/preview_component_props.tsx#L15)
+[preview/preview_component_props.tsx:15](https://github.com/Camberi/firecms/blob/b1328ad/src/preview/preview_component_props.tsx#L15)
 
 ___
 
@@ -109,4 +109,4 @@ It may be undefined if unlimited.
 
 #### Defined in
 
-[models/preview_component_props.tsx:42](https://github.com/Camberi/firecms/blob/42dd384/src/models/preview_component_props.tsx#L42)
+[preview/preview_component_props.tsx:42](https://github.com/Camberi/firecms/blob/b1328ad/src/preview/preview_component_props.tsx#L42)

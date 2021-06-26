@@ -12,11 +12,11 @@
         "clear": "docusaurus clear"
     },
     "dependencies": {
-        "@docusaurus/core": "^2.0.0-beta.0",
-        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.0",
-        "@docusaurus/plugin-sitemap": "^2.0.0-beta.0",
-        "@docusaurus/preset-classic": "^2.0.0-beta.0",
-        "@docusaurus/theme-live-codeblock": "^2.0.0-beta.0",
+        "@docusaurus/core": "^2.0.0-beta.2",
+        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.2",
+        "@docusaurus/plugin-sitemap": "^2.0.0-beta.2",
+        "@docusaurus/preset-classic": "^2.0.0-beta.2",
+        "@docusaurus/theme-live-codeblock": "^2.0.0-beta.2",
         "aos": "^2.3.4",
         "clsx": "^1.1.1",
         "docusaurus-plugin-typedoc": "^0.14.2",
@@ -52,12 +52,12 @@
         "@types/react": "^17.0.2",
         "@types/react-helmet": "^6.1.0",
         "@types/react-router-dom": "^5.1.7",
-        "postcss-loader": "^3.0.0",
-        "postcss-preset-env": "^3.0.0",
-        "typescript": "^4.2.2",
         "postcss": "^7.0.0",
         "postcss-import": "^12.0.0",
+        "postcss-loader": "^3.0.0",
+        "postcss-preset-env": "^3.0.0",
         "typedoc": "^0.20.36",
-        "typedoc-plugin-markdown": "^3.9.0"
+        "typedoc-plugin-markdown": "^3.9.0",
+        "typescript": "^4.2.2"
     }
 }

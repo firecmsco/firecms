@@ -13,4 +13,4 @@ user
 
 #### Defined in
 
-[CMSAppProps.tsx:118](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L118)
+[models/navigation.ts:10](https://github.com/Camberi/firecms/blob/b1328ad/src/models/navigation.ts#L10)

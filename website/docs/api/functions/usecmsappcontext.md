@@ -16,4 +16,4 @@ Use this hook to get the app context
 
 #### Defined in
 
-[contexts/CMSAppContext.tsx:33](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/CMSAppContext.tsx#L33)
+[contexts/CMSAppContext.tsx:32](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/CMSAppContext.tsx#L32)

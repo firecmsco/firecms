@@ -29,4 +29,4 @@ If you are building a larger app and need finer control, you can use
 
 #### Defined in
 
-[CMSApp.tsx:28](https://github.com/Camberi/firecms/blob/42dd384/src/CMSApp.tsx#L28)
+[core/CMSApp.tsx:28](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSApp.tsx#L28)

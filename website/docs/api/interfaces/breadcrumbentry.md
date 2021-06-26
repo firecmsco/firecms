@@ -14,7 +14,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[routes/navigation.ts:7](https://github.com/Camberi/firecms/blob/42dd384/src/routes/navigation.ts#L7)
+[core/navigation.ts:7](https://github.com/Camberi/firecms/blob/b1328ad/src/core/navigation.ts#L7)
 
 ___
 
@@ -24,4 +24,4 @@ ___
 
 #### Defined in
 
-[routes/navigation.ts:8](https://github.com/Camberi/firecms/blob/42dd384/src/routes/navigation.ts#L8)
+[core/navigation.ts:8](https://github.com/Camberi/firecms/blob/b1328ad/src/core/navigation.ts#L8)

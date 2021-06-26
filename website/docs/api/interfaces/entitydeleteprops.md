@@ -25,7 +25,7 @@ Firestore path of the parent collection
 
 #### Defined in
 
-[models/models.ts:313](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L313)
+[models/models.ts:134](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L134)
 
 ___
 
@@ -37,7 +37,7 @@ Context of the app status
 
 #### Defined in
 
-[models/models.ts:328](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L328)
+[models/models.ts:149](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L149)
 
 ___
 
@@ -49,7 +49,7 @@ Deleted entity
 
 #### Defined in
 
-[models/models.ts:323](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L323)
+[models/models.ts:144](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L144)
 
 ___
 
@@ -61,7 +61,7 @@ Deleted entity id
 
 #### Defined in
 
-[models/models.ts:318](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L318)
+[models/models.ts:139](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L139)
 
 ___
 
@@ -73,4 +73,4 @@ Schema of the entity being deleted
 
 #### Defined in
 
-[models/models.ts:308](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L308)
+[models/models.ts:129](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L129)

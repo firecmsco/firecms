@@ -23,7 +23,7 @@ Absolute collection path
 
 #### Defined in
 
-[hooks/useCollectionFetch.tsx:16](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useCollectionFetch.tsx#L16)
+[hooks/useCollectionFetch.tsx:16](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useCollectionFetch.tsx#L16)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[hooks/useCollectionFetch.tsx:36](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useCollectionFetch.tsx#L36)
+[hooks/useCollectionFetch.tsx:36](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useCollectionFetch.tsx#L36)
 
 ___
 
@@ -46,7 +46,7 @@ This is used for reference fields selection
 
 #### Defined in
 
-[hooks/useCollectionFetch.tsx:30](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useCollectionFetch.tsx#L30)
+[hooks/useCollectionFetch.tsx:30](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useCollectionFetch.tsx#L30)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[hooks/useCollectionFetch.tsx:32](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useCollectionFetch.tsx#L32)
+[hooks/useCollectionFetch.tsx:32](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useCollectionFetch.tsx#L32)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[hooks/useCollectionFetch.tsx:24](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useCollectionFetch.tsx#L24)
+[hooks/useCollectionFetch.tsx:24](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useCollectionFetch.tsx#L24)
 
 ___
 
@@ -78,7 +78,7 @@ Schema of the entity displayed by this collection
 
 #### Defined in
 
-[hooks/useCollectionFetch.tsx:21](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useCollectionFetch.tsx#L21)
+[hooks/useCollectionFetch.tsx:21](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useCollectionFetch.tsx#L21)
 
 ___
 
@@ -88,4 +88,4 @@ ___
 
 #### Defined in
 
-[hooks/useCollectionFetch.tsx:34](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useCollectionFetch.tsx#L34)
+[hooks/useCollectionFetch.tsx:34](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useCollectionFetch.tsx#L34)

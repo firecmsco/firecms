@@ -14,7 +14,7 @@ Retrieve an entity given a path and a schema
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
 
 #### Parameters
@@ -31,4 +31,4 @@ Retrieve an entity given a path and a schema
 
 #### Defined in
 
-[models/firestore.ts:84](https://github.com/Camberi/firecms/blob/42dd384/src/models/firestore.ts#L84)
+[models/firestore.ts:131](https://github.com/Camberi/firecms/blob/b1328ad/src/models/firestore.ts#L131)

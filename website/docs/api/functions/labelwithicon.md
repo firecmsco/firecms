@@ -20,4 +20,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[form/components/LabelWithIcon.tsx:12](https://github.com/Camberi/firecms/blob/42dd384/src/form/components/LabelWithIcon.tsx#L12)
+[form/components/LabelWithIcon.tsx:12](https://github.com/Camberi/firecms/blob/b1328ad/src/form/components/LabelWithIcon.tsx#L12)

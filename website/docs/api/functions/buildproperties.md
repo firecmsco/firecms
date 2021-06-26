@@ -30,4 +30,4 @@ same properties
 
 #### Defined in
 
-[models/builders.ts:93](https://github.com/Camberi/firecms/blob/42dd384/src/models/builders.ts#L93)
+[models/builders.ts:97](https://github.com/Camberi/firecms/blob/b1328ad/src/models/builders.ts#L97)

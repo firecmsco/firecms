@@ -16,7 +16,7 @@ Is the login process ongoing
 
 #### Defined in
 
-[contexts/AuthContext.tsx:40](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L40)
+[contexts/AuthContext.tsx:40](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L40)
 
 ___
 
@@ -28,7 +28,7 @@ Error dispatched by the auth provider
 
 #### Defined in
 
-[contexts/AuthContext.tsx:29](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L29)
+[contexts/AuthContext.tsx:29](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L29)
 
 ___
 
@@ -41,7 +41,7 @@ login screen
 
 #### Defined in
 
-[contexts/AuthContext.tsx:24](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L24)
+[contexts/AuthContext.tsx:24](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L24)
 
 ___
 
@@ -54,7 +54,7 @@ e.g: Additional user data fetched from a Firestore document
 
 #### Defined in
 
-[contexts/AuthContext.tsx:72](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L72)
+[contexts/AuthContext.tsx:72](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L72)
 
 ___
 
@@ -68,7 +68,7 @@ if they are in the login screen
 
 #### Defined in
 
-[contexts/AuthContext.tsx:18](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L18)
+[contexts/AuthContext.tsx:18](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L18)
 
 ___
 
@@ -80,7 +80,7 @@ Is the login skipped
 
 #### Defined in
 
-[contexts/AuthContext.tsx:51](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L51)
+[contexts/AuthContext.tsx:51](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L51)
 
 ___
 
@@ -92,7 +92,7 @@ The current user was not allowed access
 
 #### Defined in
 
-[contexts/AuthContext.tsx:56](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L56)
+[contexts/AuthContext.tsx:56](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L56)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[contexts/AuthContext.tsx:46](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L46)
+[contexts/AuthContext.tsx:46](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L46)
 
 ___
 
@@ -146,7 +146,7 @@ Set an auth provider error
 
 #### Defined in
 
-[contexts/AuthContext.tsx:35](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L35)
+[contexts/AuthContext.tsx:35](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L35)
 
 ___
 
@@ -172,7 +172,7 @@ Set extra
 
 #### Defined in
 
-[contexts/AuthContext.tsx:77](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L77)
+[contexts/AuthContext.tsx:77](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L77)
 
 ___
 
@@ -192,7 +192,7 @@ Sign out
 
 #### Defined in
 
-[contexts/AuthContext.tsx:66](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L66)
+[contexts/AuthContext.tsx:66](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L66)
 
 ___
 
@@ -212,4 +212,4 @@ Skip login
 
 #### Defined in
 
-[contexts/AuthContext.tsx:61](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/AuthContext.tsx#L61)
+[contexts/AuthContext.tsx:61](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/AuthContext.tsx#L61)

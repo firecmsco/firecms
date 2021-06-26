@@ -41,7 +41,7 @@ Builder for the content of the cell for this column
 
 #### Defined in
 
-[models/models.ts:413](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L413)
+[models/collections.ts:205](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L205)
 
 ___
 
@@ -54,7 +54,7 @@ collection in any order you want
 
 #### Defined in
 
-[models/models.ts:398](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L398)
+[models/collections.ts:190](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L190)
 
 ___
 
@@ -66,7 +66,7 @@ Header of this column
 
 #### Defined in
 
-[models/models.ts:403](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L403)
+[models/collections.ts:195](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L195)
 
 ___
 
@@ -78,4 +78,4 @@ Width of the generated column in pixels
 
 #### Defined in
 
-[models/models.ts:408](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L408)
+[models/collections.ts:200](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L200)

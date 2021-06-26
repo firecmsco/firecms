@@ -19,7 +19,7 @@ without login.
 
 #### Defined in
 
-[CMSAppProps.tsx:56](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L56)
+[core/CMSAppProps.tsx:60](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L60)
 
 ___
 
@@ -35,7 +35,7 @@ apply
 
 #### Defined in
 
-[CMSAppProps.tsx:41](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L41)
+[core/CMSAppProps.tsx:45](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L45)
 
 ___
 
@@ -48,7 +48,7 @@ Defaults to 'MMMM dd, yyyy, HH:mm:ss'
 
 #### Defined in
 
-[CMSAppProps.tsx:97](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L97)
+[core/CMSAppProps.tsx:101](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L101)
 
 ___
 
@@ -61,7 +61,7 @@ Firebase hosting, you don't need to specify this value
 
 #### Defined in
 
-[CMSAppProps.tsx:62](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L62)
+[core/CMSAppProps.tsx:66](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L66)
 
 ___
 
@@ -75,7 +75,7 @@ e.g.
 
 #### Defined in
 
-[CMSAppProps.tsx:86](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L86)
+[core/CMSAppProps.tsx:90](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L90)
 
 ___
 
@@ -87,7 +87,7 @@ Locale of the CMS, currently only affecting dates
 
 #### Defined in
 
-[CMSAppProps.tsx:102](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L102)
+[core/CMSAppProps.tsx:106](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L106)
 
 ___
 
@@ -99,7 +99,7 @@ Logo to be displayed in the drawer of the CMS
 
 #### Defined in
 
-[CMSAppProps.tsx:22](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L22)
+[core/CMSAppProps.tsx:26](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L26)
 
 ___
 
@@ -111,13 +111,13 @@ Name of the app, displayed as the main title and in the tab title
 
 #### Defined in
 
-[CMSAppProps.tsx:17](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L17)
+[core/CMSAppProps.tsx:21](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L21)
 
 ___
 
 ### navigation
 
-• **navigation**: [EntityCollectionView](entitycollectionview.md)<[EntitySchema](entityschema.md)<any, any\>, any, string\>[] \| [Navigation](navigation.md) \| [NavigationBuilder](../types/navigationbuilder.md)
+• **navigation**: [EntityCollectionView](entitycollectionview.md)<[EntitySchema](entityschema.md)<any\>, any, string\>[] \| [Navigation](navigation.md) \| [NavigationBuilder](../types/navigationbuilder.md)
 
 Use this prop to specify the views that will be generated in the CMS.
 You usually will want to create a `Navigation` object that includes
@@ -128,7 +128,7 @@ can use a `NavigationBuilder`
 
 #### Defined in
 
-[CMSAppProps.tsx:32](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L32)
+[core/CMSAppProps.tsx:36](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L36)
 
 ___
 
@@ -157,7 +157,7 @@ using the local emulator or retrieving the used configuration.
 
 #### Defined in
 
-[CMSAppProps.tsx:69](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L69)
+[core/CMSAppProps.tsx:73](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L73)
 
 ___
 
@@ -169,7 +169,7 @@ Primary color of the theme of the CMS
 
 #### Defined in
 
-[CMSAppProps.tsx:74](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L74)
+[core/CMSAppProps.tsx:78](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L78)
 
 ___
 
@@ -185,7 +185,7 @@ You can also override schemas in place, when using `useSideEntityController`
 
 #### Defined in
 
-[CMSAppProps.tsx:111](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L111)
+[core/CMSAppProps.tsx:115](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L115)
 
 ___
 
@@ -197,7 +197,7 @@ Secondary color of the theme of the CMS
 
 #### Defined in
 
-[CMSAppProps.tsx:79](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L79)
+[core/CMSAppProps.tsx:83](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L83)
 
 ___
 
@@ -213,7 +213,7 @@ Defaults to Google sign in only.
 
 #### Defined in
 
-[CMSAppProps.tsx:50](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L50)
+[core/CMSAppProps.tsx:54](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L54)
 
 ___
 
@@ -225,4 +225,4 @@ A component that gets rendered on the upper side of the main toolbar
 
 #### Defined in
 
-[CMSAppProps.tsx:91](https://github.com/Camberi/firecms/blob/42dd384/src/CMSAppProps.tsx#L91)
+[core/CMSAppProps.tsx:95](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSAppProps.tsx#L95)

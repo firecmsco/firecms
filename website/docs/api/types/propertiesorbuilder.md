@@ -1,12 +1,12 @@
 ---
 id: "propertiesorbuilder"
-title: "Type alias: PropertiesOrBuilder<S, Key, T>"
+title: "Type alias: PropertiesOrBuilder<S, Key>"
 sidebar_label: "PropertiesOrBuilder"
 sidebar_position: 0
 custom_edit_url: null
 ---
 
-Ƭ **PropertiesOrBuilder**<S, Key, T\>: `Record`<Key, [PropertyOrBuilder](propertyorbuilder.md)<S, Key, T\>\>
+Ƭ **PropertiesOrBuilder**<S, Key\>: `Record`<Key, [PropertyOrBuilder](propertyorbuilder.md)<[CMSType](cmstype.md), S, Key\>\>
 
 #### Type parameters
 
@@ -14,8 +14,7 @@ custom_edit_url: null
 | :------ | :------ |
 | `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
-| `T` | `T`: `any` = `any` |
 
 #### Defined in
 
-[models/models.ts:528](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L528)
+[models/properties.ts:157](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L157)

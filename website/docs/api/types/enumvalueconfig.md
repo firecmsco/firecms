@@ -20,4 +20,4 @@ Configuration for a particular entry in an `EnumValues`
 
 #### Defined in
 
-[models/models.ts:506](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L506)
+[models/properties.ts:135](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L135)

@@ -6,7 +6,7 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
-Ƭ **EntityValues**<S, Key\>: { [K in Key]: S["properties"][K] extends Property<infer T\> ? T : S["properties"][K] extends PropertyBuilder<S, Key, infer T\> ? T : any}
+Ƭ **EntityValues**<S, Key\>: { [K in Key]: S["properties"][K] extends Property<infer T\> ? T : S["properties"][K] extends PropertyBuilder<infer T, S, Key\> ? T : any}
 
 This type represents a record of key value pairs as described in an
 entity schema.
@@ -20,4 +20,4 @@ entity schema.
 
 #### Defined in
 
-[models/models.ts:536](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L536)
+[models/models.ts:173](https://github.com/Camberi/firecms/blob/b1328ad/src/models/models.ts#L173)

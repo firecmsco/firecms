@@ -13,4 +13,4 @@ strings '<', '<=', '==', '>=', '>', 'array-contains', 'in', and 'array-contains-
 
 #### Defined in
 
-[models/models.ts:711](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L711)
+[models/collections.ts:218](https://github.com/Camberi/firecms/blob/b1328ad/src/models/collections.ts#L218)

@@ -23,7 +23,7 @@ Entity, it can be null if it's a new entity
 
 #### Defined in
 
-[models/fields.tsx:128](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L128)
+[models/fields.tsx:124](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L124)
 
 ___
 
@@ -35,7 +35,7 @@ Schema of the entity being modified
 
 #### Defined in
 
-[models/fields.tsx:118](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L118)
+[models/fields.tsx:114](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L114)
 
 ___
 
@@ -47,4 +47,4 @@ Current values of the entity
 
 #### Defined in
 
-[models/fields.tsx:123](https://github.com/Camberi/firecms/blob/42dd384/src/models/fields.tsx#L123)
+[models/fields.tsx:119](https://github.com/Camberi/firecms/blob/b1328ad/src/models/fields.tsx#L119)

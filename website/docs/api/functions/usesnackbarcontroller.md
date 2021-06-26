@@ -14,4 +14,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[contexts/SnackbarContext.tsx:41](https://github.com/Camberi/firecms/blob/42dd384/src/contexts/SnackbarContext.tsx#L41)
+[contexts/SnackbarContext.tsx:41](https://github.com/Camberi/firecms/blob/b1328ad/src/contexts/SnackbarContext.tsx#L41)

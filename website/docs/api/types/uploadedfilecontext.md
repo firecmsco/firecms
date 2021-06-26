@@ -21,4 +21,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[models/models.ts:916](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L916)
+[models/properties.ts:513](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L513)

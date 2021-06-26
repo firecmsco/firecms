@@ -12,9 +12,9 @@ Hook we use to restore a value after it has been cleared
 
 #### Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | `T`: [CMSType](../types/cmstype.md) |
 
 #### Parameters
 
@@ -31,4 +31,4 @@ Hook we use to restore a value after it has been cleared
 
 #### Defined in
 
-[hooks/useClearRestoreValue.tsx:10](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useClearRestoreValue.tsx#L10)
+[hooks/useClearRestoreValue.tsx:10](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useClearRestoreValue.tsx#L10)

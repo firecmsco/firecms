@@ -17,7 +17,7 @@ without login.
 
 #### Defined in
 
-[CMSMainView.tsx:42](https://github.com/Camberi/firecms/blob/42dd384/src/CMSMainView.tsx#L42)
+[core/CMSMainView.tsx:41](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSMainView.tsx#L41)
 
 ___
 
@@ -29,7 +29,7 @@ Logo to be displayed in the drawer of the CMS
 
 #### Defined in
 
-[CMSMainView.tsx:36](https://github.com/Camberi/firecms/blob/42dd384/src/CMSMainView.tsx#L36)
+[core/CMSMainView.tsx:35](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSMainView.tsx#L35)
 
 ___
 
@@ -41,7 +41,7 @@ Name of the app, displayed as the main title and in the tab title
 
 #### Defined in
 
-[CMSMainView.tsx:31](https://github.com/Camberi/firecms/blob/42dd384/src/CMSMainView.tsx#L31)
+[core/CMSMainView.tsx:30](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSMainView.tsx#L30)
 
 ___
 
@@ -53,4 +53,4 @@ A component that gets rendered on the upper side of the main toolbar
 
 #### Defined in
 
-[CMSMainView.tsx:47](https://github.com/Camberi/firecms/blob/42dd384/src/CMSMainView.tsx#L47)
+[core/CMSMainView.tsx:46](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSMainView.tsx#L46)

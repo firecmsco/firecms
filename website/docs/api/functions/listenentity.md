@@ -12,7 +12,7 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
 
 #### Parameters
@@ -32,4 +32,4 @@ Function to cancel subscription
 
 #### Defined in
 
-[models/firestore.ts:108](https://github.com/Camberi/firecms/blob/42dd384/src/models/firestore.ts#L108)
+[models/firestore.ts:155](https://github.com/Camberi/firecms/blob/b1328ad/src/models/firestore.ts#L155)

@@ -23,4 +23,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[models/storage.ts:3](https://github.com/Camberi/firecms/blob/42dd384/src/models/storage.ts#L3)
+[models/storage.ts:3](https://github.com/Camberi/firecms/blob/b1328ad/src/models/storage.ts#L3)

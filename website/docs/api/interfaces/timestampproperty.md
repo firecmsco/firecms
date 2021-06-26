@@ -25,7 +25,7 @@ update (including creation). Useful for creating `created_on` or
 
 #### Defined in
 
-[models/models.ts:651](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L651)
+[models/properties.ts:268](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L268)
 
 ___
 
@@ -42,7 +42,7 @@ BaseProperty.columnWidth
 
 #### Defined in
 
-[models/models.ts:446](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L446)
+[models/properties.ts:75](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L75)
 
 ___
 
@@ -54,7 +54,7 @@ Configure how this property field is displayed
 
 #### Defined in
 
-[models/models.ts:656](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L656)
+[models/properties.ts:273](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L273)
 
 ___
 
@@ -68,7 +68,7 @@ BaseProperty.dataType
 
 #### Defined in
 
-[models/models.ts:638](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L638)
+[models/properties.ts:255](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L255)
 
 ___
 
@@ -84,7 +84,7 @@ BaseProperty.description
 
 #### Defined in
 
-[models/models.ts:435](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L435)
+[models/properties.ts:64](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L64)
 
 ___
 
@@ -102,7 +102,7 @@ BaseProperty.disabled
 
 #### Defined in
 
-[models/models.ts:459](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L459)
+[models/properties.ts:88](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L88)
 
 ___
 
@@ -118,7 +118,7 @@ BaseProperty.longDescription
 
 #### Defined in
 
-[models/models.ts:440](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L440)
+[models/properties.ts:69](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L69)
 
 ___
 
@@ -135,7 +135,7 @@ BaseProperty.readOnly
 
 #### Defined in
 
-[models/models.ts:452](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L452)
+[models/properties.ts:81](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L81)
 
 ___
 
@@ -151,7 +151,7 @@ BaseProperty.title
 
 #### Defined in
 
-[models/models.ts:430](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L430)
+[models/properties.ts:59](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L59)
 
 ___
 
@@ -167,4 +167,4 @@ BaseProperty.validation
 
 #### Defined in
 
-[models/models.ts:643](https://github.com/Camberi/firecms/blob/42dd384/src/models/models.ts#L643)
+[models/properties.ts:260](https://github.com/Camberi/firecms/blob/b1328ad/src/models/properties.ts#L260)

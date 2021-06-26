@@ -26,4 +26,4 @@ collection views.
 
 #### Defined in
 
-[CMSMainView.tsx:100](https://github.com/Camberi/firecms/blob/42dd384/src/CMSMainView.tsx#L100)
+[core/CMSMainView.tsx:99](https://github.com/Camberi/firecms/blob/b1328ad/src/core/CMSMainView.tsx#L99)

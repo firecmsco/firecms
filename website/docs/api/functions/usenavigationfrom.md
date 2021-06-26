@@ -24,4 +24,4 @@ in any React component that lives under `CMSApp`
 
 #### Defined in
 
-[hooks/useNavigationFrom.tsx:84](https://github.com/Camberi/firecms/blob/42dd384/src/hooks/useNavigationFrom.tsx#L84)
+[hooks/useNavigationFrom.tsx:87](https://github.com/Camberi/firecms/blob/b1328ad/src/hooks/useNavigationFrom.tsx#L87)

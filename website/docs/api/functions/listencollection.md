@@ -14,7 +14,7 @@ Listen to a entities in a Firestore path
 
 | Name | Type |
 | :------ | :------ |
-| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, any, S\> |
+| `S` | `S`: [EntitySchema](../interfaces/entityschema.md)<Key, S\> |
 | `Key` | `Key`: `string` = `Extract`<keyof `S`[``"properties"``], string\> |
 
 #### Parameters
@@ -45,4 +45,4 @@ Function to cancel subscription
 
 #### Defined in
 
-[models/firestore.ts:33](https://github.com/Camberi/firecms/blob/42dd384/src/models/firestore.ts#L33)
+[models/firestore.ts:29](https://github.com/Camberi/firecms/blob/b1328ad/src/models/firestore.ts#L29)
