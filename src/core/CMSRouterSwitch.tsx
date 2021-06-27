@@ -5,9 +5,9 @@ import { EntityCollection } from "../models";
 import { addInitialSlash, buildCollectionPath } from "./navigation";
 import { CMSView } from "./CMSAppProps";
 
-import { default as CollectionRoute } from "./components/CollectionRoute";
-import { default as CMSViewRoute } from "./components/CMSViewRoute";
-import { default as HomeRoute } from "./components/HomeRoute";
+import { default as CollectionRoute } from "./internal/CollectionRoute";
+import { default as CMSViewRoute } from "./internal/CMSViewRoute";
+import { default as HomeRoute } from "./internal/HomeRoute";
 
 export function CMSRouterSwitch({ collections, views }: {
     collections: EntityCollection[],

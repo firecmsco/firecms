@@ -22,7 +22,7 @@ import { getIconForProperty } from "../../util/property_icons";
 import { CollectionTableToolbar } from "./CollectionTableToolbar";
 import { PreviewComponent } from "../../preview/PreviewComponent";
 import { SkeletonComponent } from "../../preview/components/SkeletonComponent";
-import { default as ErrorBoundary } from "../../core/components/ErrorBoundary";
+import { default as ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import TableCell from "./TableCell";
 import PopupFormField from "./popup_field/PopupFormField";
 import { OutsideAlerter } from "../../core/components/OutsideAlerter";

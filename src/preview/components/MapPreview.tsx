@@ -1,5 +1,5 @@
 import { MapProperty, PreviewComponentProps } from "../../models";
-import ErrorBoundary from "../../core/components/ErrorBoundary";
+import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import React from "react";
 import {
     createStyles,

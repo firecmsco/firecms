@@ -21,7 +21,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { useAuthContext, useBreadcrumbsContext } from "../../contexts";
-import ErrorBoundary from "./ErrorBoundary";
+import ErrorBoundary from "../internal/ErrorBoundary";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

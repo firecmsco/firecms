@@ -31,7 +31,7 @@ import deepEqual from "deep-equal";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useSnackbarController } from "../../contexts";
-import ErrorBoundary from "../../core/components/ErrorBoundary";
+import ErrorBoundary from "../../core/internal/ErrorBoundary";
 
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";

@@ -14,7 +14,7 @@ import React from "react";
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import ErrorBoundary from "../../core/components/ErrorBoundary";
+import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {

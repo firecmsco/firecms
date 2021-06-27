@@ -5,7 +5,7 @@ import { formStyles } from "../styles";
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import ErrorBoundary from "../../core/components/ErrorBoundary";
+import ErrorBoundary from "../../core/internal/ErrorBoundary";
 
 export default function ReadOnlyField<S extends EntitySchema>({
                                                                   name,

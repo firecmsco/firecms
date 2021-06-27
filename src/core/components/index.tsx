@@ -8,12 +8,12 @@ export {
 
 export {
     default as CollectionRoute
-} from "./CollectionRoute";
+} from "../internal/CollectionRoute";
 
 export {
     default as CMSViewRoute
-} from "./CMSViewRoute";
+} from "../internal/CMSViewRoute";
 
 export {
     default as HomeRoute
-} from "./HomeRoute";
+} from "../internal/HomeRoute";

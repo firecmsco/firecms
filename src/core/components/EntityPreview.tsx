@@ -23,7 +23,7 @@ import {
 import { PreviewComponent } from "../../preview/PreviewComponent";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../../util/property_icons";
-import { default as ErrorBoundary } from "./ErrorBoundary";
+import { default as ErrorBoundary } from "../internal/ErrorBoundary";
 import { useCMSAppContext } from "../../contexts";
 import { CMSAppContext } from "../../contexts/CMSAppContext";
 

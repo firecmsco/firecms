@@ -1,7 +1,7 @@
 import React from "react";
 import { PreviewComponentProps, StringProperty } from "../../models";
 
-import ErrorBoundary from "../../core/components/ErrorBoundary";
+import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { StringPreview } from "./StringPreview";
 import { useStyles } from "./styles";
 

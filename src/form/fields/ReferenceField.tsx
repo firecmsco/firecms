@@ -25,7 +25,7 @@ import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { FieldDescription } from "../../form/components";
 import { ErrorView } from "../../core/components";
 import { ReferenceDialog } from "../components/ReferenceDialog";
-import ErrorBoundary from "../../core/components/ErrorBoundary";
+import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { PreviewComponent, SkeletonComponent } from "../../preview";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { CollectionTable } from "../../collection/components/CollectionTable";
