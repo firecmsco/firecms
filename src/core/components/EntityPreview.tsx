@@ -20,10 +20,10 @@ import {
     Property,
     PropertyOrBuilder
 } from "../../models";
-import { PreviewComponent } from "../../preview/PreviewComponent";
+import PreviewComponent from "../../preview/PreviewComponent";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../../util/property_icons";
-import { default as ErrorBoundary } from "../internal/ErrorBoundary";
+import ErrorBoundary from "../internal/ErrorBoundary";
 import { useCMSAppContext } from "../../contexts";
 import { CMSAppContext } from "../../contexts/CMSAppContext";
 
@@ -52,6 +52,13 @@ export interface EntityPreviewProps<S extends EntitySchema<Key> = EntitySchema<a
     schema: S;
 }
 
+/**
+ * Use this component to render a preview of a property values
+ * @param entity
+ * @param schema
+ * @constructor
+ * @category Core components
+ */
 export default function EntityPreview<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>>(
     {

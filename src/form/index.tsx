@@ -8,11 +8,12 @@ import ReferenceField from "./fields/ReferenceField";
 import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ReadOnlyField from "./fields/ReadOnlyField";
-import { buildPropertyField } from "./form_factory";
+import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
 
 export {
     ArrayDefaultField,
     ArrayEnumSelect,
+    ArrayOfReferencesField,
     DateTimeField,
     ReadOnlyField,
     MapField,

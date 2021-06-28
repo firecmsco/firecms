@@ -1,5 +1,8 @@
 import firebase from "firebase/app";
 
+/**
+ * @category Storage
+ */
 export function uploadFile(file: File,
                            fileName?: string,
                            path?: string,
@@ -15,6 +18,9 @@ export function uploadFile(file: File,
 
 const memo: any = {};
 
+/**
+ * @category Storage
+ */
 export function getDownloadURL(storagePath: string): Promise<string> {
     if (memo[storagePath])
         return memo[storagePath];

@@ -1,14 +1,5 @@
 import React, { useState } from "react";
 import {
-    AdditionalColumnDelegate,
-    CollectionSize,
-    Entity,
-    EntityCollection,
-    EntitySchema,
-    saveEntity
-} from "../../models";
-import CollectionTable from "./CollectionTable";
-import {
     Box,
     Button,
     IconButton,
@@ -19,22 +10,39 @@ import {
     useTheme
 } from "@material-ui/core";
 import { Add, Delete, InfoOutlined } from "@material-ui/icons";
-import { CollectionRowActions } from "./CollectionRowActions";
-import DeleteEntityDialog from "./DeleteEntityDialog";
-import { getSubcollectionColumnId, useColumnIds } from "../common";
+import ReactMarkdown from "react-markdown";
+
+
+import {
+    AdditionalColumnDelegate,
+    CollectionSize,
+    Entity,
+    EntityCollection,
+    EntitySchema,
+    saveEntity
+} from "../../models";
+import CollectionTable from "../../collection/components/CollectionTable";
+
 import {
     useAuthContext,
     useCMSAppContext,
     useSideEntityController
 } from "../../contexts";
-import ExportButton from "./ExportButton";
 
-import ReactMarkdown from "react-markdown";
+import CollectionRowActions
+    from "../../collection/components/CollectionRowActions";
+import DeleteEntityDialog from "../../collection/components/DeleteEntityDialog";
+import ExportButton from "../../collection/internal/ExportButton";
+import {
+    getSubcollectionColumnId,
+    useColumnIds
+} from "../../collection/common";
+
 import { canCreate, canDelete, canEdit } from "../../util/permissions";
 import {
     OnCellChangeParams,
     UniqueFieldValidator
-} from "./CollectionTableProps";
+} from "../../collection/components/CollectionTableProps";
 import { checkUniqueField } from "../../models/firestore";
 
 type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
@@ -48,11 +56,12 @@ type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
  * your entity collections and need to build a custom component.
  *
  * If you need a lower level implementation with more granular options, you
- * can try CollectionTable, which still does data fetching from Firestore.
+ * can try {@link CollectionTable}, which still does data fetching from Firestore.
  *
  * @param collectionPath
  * @param collectionConfig
  * @constructor
+ * @category Core components
  */
 export default function EntityCollectionTable<S extends EntitySchema<Key>, Key extends string>({
                                                                                                    collectionPath,
@@ -340,7 +349,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             </Tooltip>;
 
         const extraActions = collectionConfig.extraActions ? collectionConfig.extraActions({
-            view: collectionConfig,
+            collection: collectionConfig,
             selectedEntities
         }) : undefined;
 

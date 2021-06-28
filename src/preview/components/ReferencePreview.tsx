@@ -15,8 +15,7 @@ import {
     Entity,
     EntitySchema,
     listenEntityFromRef,
-    Property,
-    ReferenceProperty
+    Property
 } from "../../models";
 
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
@@ -26,13 +25,19 @@ import { useSideEntityController } from "../../contexts";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
-import { SkeletonComponent } from "./SkeletonComponent";
-import { PreviewComponent } from "../PreviewComponent";
-import { default as ErrorView } from "../../core/components/ErrorView";
+import SkeletonComponent from "./SkeletonComponent";
+import PreviewComponent from "../PreviewComponent";
+import ErrorView from "../../core/components/ErrorView";
 
 import { Skeleton } from "@material-ui/lab";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { useStyles } from "./styles";
+
+/**
+ * @category Preview components
+ */
+export default function ReferencePreview(props: PreviewComponentProps<firebase.firestore.DocumentReference>) {
+    return <MemoReferencePreview {...props} />;
+}
 
 const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Theme) =>
     createStyles({
@@ -87,39 +92,7 @@ const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Them
         }
     }));
 
-
-export function ArrayOfReferencesPreview({
-                                             name,
-                                             value,
-                                             property,
-                                             size
-                                         }: PreviewComponentProps<any[]>) {
-
-    if (property.dataType !== "array" || !property.of || property.of.dataType !== "reference")
-        throw Error("Picked wrong preview component ArrayOfReferencesPreview");
-
-    const classes = useStyles();
-    const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
-
-    return (
-        <>
-            {value &&
-            value.map((v, index) =>
-                <div className={classes.arrayItem}
-                     key={`preview_array_ref_${name}_${index}`}>
-                    <ReferencePreview
-                        name={`${name}[${index}]`}
-                        size={childSize}
-                        value={v}
-                        property={property.of as ReferenceProperty}
-                    />
-                </div>
-            )}
-        </>
-    );
-}
-
-function ReferencePreview<S extends EntitySchema>(
+function ReferencePreviewComponent<S extends EntitySchema>(
     {
         value,
         property,
@@ -258,5 +231,5 @@ function ReferencePreview<S extends EntitySchema>(
 
 }
 
-export default React.memo<PreviewComponentProps<firebase.firestore.DocumentReference>>(ReferencePreview);
+const MemoReferencePreview = React.memo<PreviewComponentProps<firebase.firestore.DocumentReference>>(ReferencePreviewComponent) as React.FunctionComponent<PreviewComponentProps<firebase.firestore.DocumentReference>>;
 

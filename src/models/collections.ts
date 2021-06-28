@@ -1,5 +1,5 @@
 import { TextSearchDelegate } from "./text_search_delegate";
-import { Entity, EntitySchema } from "./models";
+import { Entity, EntitySchema } from "./entities";
 import React from "react";
 import firebase from "firebase/app";
 
@@ -8,7 +8,8 @@ import firebase from "firebase/app";
  * It can be in the root level of the configuration, defining the main
  * menu navigation.
  *
- * If you need a lower level implementation you can check CollectionTable
+ * If you need a lower level implementation you can check {@link CollectionTable}
+ * @category Collections
  */
 export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>,
@@ -139,22 +140,29 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      */
     extraActions?: (extraActionsParams: ExtraActionsParams<S, Key>) => React.ReactNode;
 
-
 }
 
+/**
+ *
+ * @category Collections
+ */
 export type ExtraActionsParams<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>> = {
-    view: EntityCollection,
+    collection: EntityCollection,
     selectedEntities?: Entity<S, Key>[]
 };
 
 
 /**
  * Sizes in which a collection can be rendered
+ * @category Collections
  */
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
 
+/**
+ * @category Collections
+ */
 export type Permissions = {
     /**
      * Can the user add new entities. Defaults to `true`
@@ -170,6 +178,10 @@ export type Permissions = {
     delete?: boolean;
 }
 
+/**
+ *
+ * @category Collections
+ */
 export type PermissionsBuilder<S extends EntitySchema<Key>, Key extends string> =
     Permissions
     | ((props: { user: firebase.User | null, entity: Entity<S, Key> | null }) => Permissions);
@@ -178,6 +190,7 @@ export type PermissionsBuilder<S extends EntitySchema<Key>, Key extends string> 
 /**
  * Use this interface for adding additional columns to entity collection views.
  * If you need to do some async loading you can use AsyncPreviewComponent
+ * @category Collections
  */
 export interface AdditionalColumnDelegate<AdditionalKey extends string = string,
     S extends EntitySchema<Key> = EntitySchema<any>,
@@ -208,12 +221,14 @@ export interface AdditionalColumnDelegate<AdditionalKey extends string = string,
 
 /**
  * Used to define filters applied in collections
+ * @category Collections
  */
 export type FilterValues<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> = Partial<{ [K in Key]: [WhereFilterOp, any] }>;
 
 /**
  * Filter conditions in a `Query.where()` clause are specified using the
  * strings '<', '<=', '==', '>=', '>', 'array-contains', 'in', and 'array-contains-any'.
+ * @category Collections
  */
 export type WhereFilterOp =
     | "<"
@@ -226,10 +241,16 @@ export type WhereFilterOp =
     | "in"
     | "array-contains-any";
 
+/**
+ * @category Collections
+ */
 export type ExportConfig = {
     additionalColumns: ExportMappingFunction[]
 }
 
+/**
+ * @category Collections
+ */
 export type ExportMappingFunction = {
     key: string;
     builder: (props: { entity: Entity<any> }) => Promise<string> | string

@@ -9,6 +9,7 @@ import {
 
 /**
  * Specification for defining an entity
+ * @category Entities
  */
 export interface EntitySchema<Key extends string = string> {
 
@@ -82,6 +83,7 @@ export interface EntitySchema<Key extends string = string> {
 
 /**
  * Parameters passed to hooks when an entity is saved
+ * @category Entities
  */
 export interface EntitySaveProps<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>> {
@@ -119,6 +121,7 @@ export interface EntitySaveProps<S extends EntitySchema<Key>,
 
 /**
  * Parameters passed to hooks when an entity is deleted
+ * @category Entities
  */
 export interface EntityDeleteProps<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>> {
@@ -152,11 +155,13 @@ export interface EntityDeleteProps<S extends EntitySchema<Key>,
 
 /**
  * New or existing status
+ * @category Entities
  */
 export type EntityStatus = "new" | "existing" | "copy";
 
 /**
  * Representation of an entity fetched from Firestore
+ * @category Entities
  */
 export interface Entity<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>> {
@@ -169,6 +174,7 @@ export interface Entity<S extends EntitySchema<Key>,
 /**
  * This type represents a record of key value pairs as described in an
  * entity schema.
+ * @category Entities
  */
 export type EntityValues<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>

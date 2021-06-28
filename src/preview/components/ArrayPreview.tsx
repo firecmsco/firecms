@@ -4,11 +4,14 @@ import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import React from "react";
 
 import { Divider } from "@material-ui/core";
-import { PreviewComponent } from "../PreviewComponent";
+import PreviewComponent from "../PreviewComponent";
 import { useStyles } from "./styles";
 import { Property } from "../../models";
 
-export function ArrayPreview({
+/**
+ * @category Preview components
+ */
+export default function ArrayPreview({
                                  name,
                                  value,
                                  property,

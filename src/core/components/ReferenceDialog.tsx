@@ -17,9 +17,10 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 
-import { CollectionTable } from "../../collection/components/CollectionTable";
+import CollectionTable from "../../collection/components/CollectionTable";
+import CollectionRowActions
+    from "../../collection/components/CollectionRowActions";
 import { useColumnIds } from "../../collection/common";
-import { CollectionRowActions } from "../../collection/components/CollectionRowActions";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -36,46 +37,82 @@ export const useStyles = makeStyles(theme => createStyles({
 
 export interface ReferenceDialogProps {
 
+    /**
+     * Is the dialog currently open
+     */
     open: boolean;
 
+    /**
+     * Allow multiple selection of values
+     */
     multiselect: boolean;
 
-    collectionConfig: EntityCollection;
+    /**
+     * Entity collection config
+     */
+    collection: EntityCollection;
 
+    /**
+     * Absolute path of the collection
+     */
     collectionPath: string;
 
+    /**
+     * If you are opening the dialog for the first time, you can select some
+     * entity ids to be displayed first.
+     */
     selectedEntityIds?: string[];
 
+    /**
+     * If `multiselect` is set to `false`, you will get the select entity
+     * in this callback.
+     * @param entities
+     * @callback
+        */
     onSingleEntitySelected?(entity: Entity<any> | null): void;
 
+    /**
+     * If `multiselect` is set to `true`, you will get the selected entities
+     * in this callback.
+     * @param entities
+     * @callback
+        */
     onMultipleEntitiesSelected?(entities: Entity<any>[]): void;
 
+    /**
+     * Is the dialog currently open
+     * @callback
+        */
     onClose(): void;
 
 }
 
-
-export function ReferenceDialog(
+/**
+ * This component renders an overlay dialog that allows to select entities
+ * in a given collection
+ * @category Core components
+ */
+export default function ReferenceDialog(
     {
         onSingleEntitySelected,
         onMultipleEntitiesSelected,
         onClose,
         open,
         multiselect,
-        collectionConfig,
+        collection,
         collectionPath,
         selectedEntityIds
     }: ReferenceDialogProps) {
 
     const classes = useStyles();
 
-    const schema = collectionConfig.schema;
-    const textSearchDelegate = collectionConfig.textSearchDelegate;
-    const filterableProperties = collectionConfig.filterableProperties;
-    const initialFilter = collectionConfig.initialFilter;
-    const displayedProperties = useColumnIds(collectionConfig, false);
-    const paginationEnabled = collectionConfig.pagination === undefined || Boolean(collectionConfig.pagination);
-    const pageSize = typeof collectionConfig.pagination === "number" ? collectionConfig.pagination : undefined;
+    const schema = collection.schema;
+    const textSearchDelegate = collection.textSearchDelegate;
+    const filterableProperties = collection.filterableProperties;
+    const initialFilter = collection.initialFilter;
+    const displayedProperties = useColumnIds(collection, false);
+    const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
+    const pageSize = typeof collection.pagination === "number" ? collection.pagination : undefined;
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
@@ -175,15 +212,15 @@ export function ReferenceDialog(
                                  onEntityClick={onEntityClick}
                                  tableRowActionsBuilder={tableRowActionsBuilder}
                                  paginationEnabled={paginationEnabled}
-                                 defaultSize={collectionConfig.defaultSize}
-                                 additionalColumns={collectionConfig.additionalColumns}
+                                 defaultSize={collection.defaultSize}
+                                 additionalColumns={collection.additionalColumns}
                                  title={title}
                                  pageSize={pageSize}
                                  displayedProperties={displayedProperties}
                                  filterableProperties={filterableProperties}
                                  textSearchDelegate={textSearchDelegate}
                                  initialFilter={initialFilter}
-                                 initialSort={collectionConfig.initialSort}
+                                 initialSort={collection.initialSort}
                                  entitiesDisplayedFirst={selectedEntities}
                                  frozenIdColumn={largeLayout}
                 />}

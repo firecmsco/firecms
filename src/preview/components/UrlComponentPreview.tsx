@@ -1,16 +1,20 @@
-import { MediaType, PreviewComponentProps } from "../../models";
 import React from "react";
-import { ImagePreview } from "./ImagePreview";
-
-
 import { CardMedia, Link } from "@material-ui/core";
+
 import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+
+import { MediaType } from "../../models";
+import { PreviewComponentProps } from "../preview_component_props";
+import ImagePreview from "./ImagePreview";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
 
 
-export function UrlComponentPreview({
+/**
+ * @category Preview components
+ */
+export default function UrlComponentPreview({
                                         value,
                                         property,
                                         size

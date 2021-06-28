@@ -1,3 +1,6 @@
+/**
+ * @category Colors
+ */
 export type ChipColor =
     | "blueLighter"
     | "cyanLighter"

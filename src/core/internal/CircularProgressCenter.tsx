@@ -5,6 +5,12 @@ import {
 } from "@material-ui/core";
 import React from "react";
 
+/**
+ *
+ * @param props
+ * @constructor
+ * @ignore
+ */
 export default function CircularProgressCenter(props: CircularProgressProps) {
     return (
         <Box

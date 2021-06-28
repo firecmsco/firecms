@@ -1,6 +1,9 @@
 import React from "react";
 
-export function EmptyValue() {
+/**
+ * @category Preview components
+ */
+export default function EmptyValue() {
 
     return (
         <div style={{

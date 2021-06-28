@@ -12,6 +12,9 @@ import { CMSAppContext } from "../../contexts/CMSAppContext";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
+/**
+ * @category Form fields
+ */
 export default function DateTimeField({
                                           name,
                                           value,

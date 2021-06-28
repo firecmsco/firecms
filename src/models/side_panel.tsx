@@ -1,5 +1,7 @@
-import { removeInitialAndTrailingSlashes } from "../core/navigation";
-
+/**
+ * Props used to open a side dialog
+ * @category Hooks and utilities
+ */
 export interface SideEntityPanelProps {
     /**
      * Absolute path of the entity
@@ -24,10 +26,4 @@ export interface SideEntityPanelProps {
 
 }
 
-export function getSidePanelKey(collectionPath: string, entityId?: string) {
-    if (entityId)
-        return `${removeInitialAndTrailingSlashes(collectionPath)}/${removeInitialAndTrailingSlashes(entityId)}`;
-    else
-        return removeInitialAndTrailingSlashes(collectionPath);
-}
 

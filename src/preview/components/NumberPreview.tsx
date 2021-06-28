@@ -1,9 +1,12 @@
-import { PreviewComponentProps } from "../../models";
 import React from "react";
+
 import { EnumValuesChip } from "./CustomChip";
+import { PreviewComponentProps } from "../preview_component_props";
 
-
-export function NumberPreview({
+/**
+ * @category Preview components
+ */
+export default function NumberPreview({
                                   name,
                                   value,
                                   property,

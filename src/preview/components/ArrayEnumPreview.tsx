@@ -1,9 +1,4 @@
-import {
-    EnumValues,
-    NumberProperty,
-    PreviewComponentProps,
-    StringProperty
-} from "../../models";
+import { EnumValues } from "../../models";
 
 import React from "react";
 
@@ -11,30 +6,10 @@ import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { EnumValuesChip } from "./CustomChip";
 import { useStyles } from "./styles";
 
-
-export function ArrayPropertyEnumPreview({
-                                             name,
-                                             value,
-                                             property,
-                                             size
-                                         }: PreviewComponentProps<string[] | number[]>) {
-
-    if (property.dataType !== "array")
-        throw Error("Picked wrong preview component ArrayEnumPreview");
-
-    const ofProperty = property.of as StringProperty | NumberProperty;
-    if (!ofProperty.config?.enumValues)
-        throw Error("Picked wrong preview component ArrayEnumPreview");
-
-    if (!value) return null;
-
-    const enumValues = ofProperty.config?.enumValues;
-
-    return <ArrayEnumPreview name={name} value={value} enumValues={enumValues}
-                             size={size}/>;
-}
-
-export function ArrayEnumPreview({
+/**
+ * @category Preview components
+ */
+export default function ArrayEnumPreview({
                                      name,
                                      value,
                                      enumValues,

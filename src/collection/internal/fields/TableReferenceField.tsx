@@ -9,7 +9,7 @@ import {
     EntitySchema,
     ReferenceProperty
 } from "../../../models";
-import { ReferenceDialog } from "../../../form/components/ReferenceDialog";
+import ReferenceDialog from "../../../core/components/ReferenceDialog";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -156,7 +156,7 @@ export function TableReferenceField<S extends EntitySchema<Key>, Key extends str
             && <ReferenceDialog open={open}
                                 multiselect={multiselect}
                                 collectionPath={collectionPath}
-                                collectionConfig={collectionConfig}
+                                collection={collectionConfig}
                                 onClose={handleClose}
                                 onMultipleEntitiesSelected={onMultipleEntitiesSelected}
                                 onSingleEntitySelected={onSingleValueSet}

@@ -2,6 +2,7 @@ import { SearchClient } from "algoliasearch";
 
 /**
  * Simple interface for implementing a text search
+ * @category Collections
  */
 export interface TextSearchDelegate {
     /**
@@ -17,6 +18,7 @@ export interface TextSearchDelegate {
  * @param algoliaClient
  * @param indexKey
  * @constructor
+ * @category Collections
  */
 export function AlgoliaTextSearchDelegate(algoliaClient: SearchClient, indexKey: string): TextSearchDelegate {
 

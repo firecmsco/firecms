@@ -18,6 +18,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ * Generic error view. Displayed for example when an unexpected value comes
+ * from Firestore in a collection view.
+ * @param error
+ * @param tooltip
+ * @constructor
+ * @category Core components
+ */
 export default function ErrorView({
                                       error,
                                       tooltip

@@ -1,6 +1,6 @@
 export { CMSApp } from "./CMSApp";
 export type {
-    CMSAppProps, CMSView, Locale
+    CMSAppProps
 } from "./CMSAppProps";
 
 export { CMSAppProvider } from "./CMSAppProvider";

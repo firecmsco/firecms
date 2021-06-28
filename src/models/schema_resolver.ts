@@ -1,8 +1,9 @@
-import { EntitySchema } from "./models";
+import { EntitySchema } from "./entities";
 import { EntityCollection, PermissionsBuilder } from "./collections";
 
 /**
  * You can add these additional props to override properties in a SchemaResolver
+ * @category Navigation
  */
 export interface SchemaConfig {
 
@@ -27,7 +28,7 @@ export interface SchemaConfig {
 
 /**
  * Used to override schemas based on the collection path and entityId.
- * If no schema
+ * @category Navigation
  */
 export type SchemaResolver = (props: {
     entityId?: string,

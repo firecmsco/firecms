@@ -1,13 +1,12 @@
 import React from "react";
 
 import { Route, Switch, useLocation } from "react-router-dom";
-import { EntityCollection } from "../models";
+import { CMSView, EntityCollection } from "../models";
 import { addInitialSlash, buildCollectionPath } from "./navigation";
-import { CMSView } from "./CMSAppProps";
 
-import { default as CollectionRoute } from "./internal/CollectionRoute";
-import { default as CMSViewRoute } from "./internal/CMSViewRoute";
-import { default as HomeRoute } from "./internal/HomeRoute";
+import CollectionRoute from "./internal/CollectionRoute";
+import CMSViewRoute from "./internal/CMSViewRoute";
+import HomeRoute from "./internal/HomeRoute";
 
 export function CMSRouterSwitch({ collections, views }: {
     collections: EntityCollection[],
@@ -47,7 +46,7 @@ export function CMSRouterSwitch({ collections, views }: {
                             key={`navigation_${entityCollection.relativePath}`}>
                             <CollectionRoute
                                 collectionPath={entityCollection.relativePath}
-                                view={entityCollection}
+                                collectionConfig={entityCollection}
                             />
                         </Route>
                     )
@@ -58,7 +57,7 @@ export function CMSRouterSwitch({ collections, views }: {
             <Route
                 key={`navigation_home`}>
                 <HomeRoute
-                    navigation={collections}
+                    collections={collections}
                     cmsViews={views}
                 />
             </Route>

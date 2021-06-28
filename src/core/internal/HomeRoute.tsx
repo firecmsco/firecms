@@ -1,15 +1,4 @@
 import React, { useEffect } from "react";
-import { Link as ReactLink, useRouteMatch } from "react-router-dom";
-import {
-    BreadcrumbEntry,
-    computeNavigation,
-    TopNavigationEntry
-} from "../navigation";
-import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
-import { useBreadcrumbsContext } from "../../contexts";
-import { CMSView } from "../CMSAppProps";
-import { EntityCollection } from "../../models";
-import ReactMarkdown from "react-markdown";
 import {
     Box,
     Card,
@@ -25,7 +14,18 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
+import ReactMarkdown from "react-markdown";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
+import { Link as ReactLink, useRouteMatch } from "react-router-dom";
+
+import {
+    BreadcrumbEntry,
+    computeNavigation,
+    TopNavigationEntry
+} from "../navigation";
+import { useBreadcrumbsContext } from "../../contexts";
+import { CMSView, EntityCollection } from "../../models";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,12 +43,12 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 
 interface HomeRouteProps {
-    navigation: EntityCollection[],
+    collections: EntityCollection[],
     cmsViews: CMSView[] | undefined;
 }
 
 function HomeRoute({
-                       navigation,
+                       collections,
                        cmsViews
                    }: HomeRouteProps) {
 
@@ -71,7 +71,7 @@ function HomeRoute({
     const {
         navigationEntries,
         groups
-    } = computeNavigation(navigation, cmsViews, true);
+    } = computeNavigation(collections, cmsViews, true);
 
     const allGroups: Array<string | null> = [...groups];
     if (navigationEntries.filter(e => !e.group).length > 0) {

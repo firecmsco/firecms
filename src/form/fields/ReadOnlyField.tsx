@@ -7,6 +7,9 @@ import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 
+/**
+ * @category Form fields
+ */
 export default function ReadOnlyField<S extends EntitySchema>({
                                                                   name,
                                                                   value,

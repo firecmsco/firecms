@@ -8,11 +8,10 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import LabelWithIcon from "../components/LabelWithIcon";
-import ArrayContainer from "./arrays/ArrayContainer";
+import ArrayContainer from "../components/ArrayContainer";
 import { ReferencePreview } from "../../preview";
 import firebase from "firebase";
-import { ReferenceDialog } from "../components/ReferenceDialog";
-import { CollectionTable } from "../../collection/components/CollectionTable";
+import ReferenceDialog from "../../core/components/ReferenceDialog";
 import { formStyles } from "../styles";
 import FieldDescription from "../components/FieldDescription";
 import { useClearRestoreValue } from "../../hooks";
@@ -22,6 +21,9 @@ import { ErrorView } from "../../core/components";
 
 type ArrayOfReferencesFieldProps = FieldProps<firebase.firestore.DocumentReference[]>;
 
+/**
+ * @category Form fields
+ */
 export default function ArrayOfReferencesField({
                                                    name,
                                                    value,
@@ -76,7 +78,6 @@ export default function ArrayOfReferencesField({
             value={entryValue}
             property={ofProperty}
             size={"regular"}
-
             onClick={onEntryClick}/>;
     };
 
@@ -126,7 +127,7 @@ export default function ArrayOfReferencesField({
 
             {collectionConfig && <ReferenceDialog open={open}
                                                   multiselect={true}
-                                                  collectionConfig={collectionConfig}
+                                                  collection={collectionConfig}
                                                   collectionPath={ofProperty.collectionPath}
                                                   onClose={onClose}
                                                   onMultipleEntitiesSelected={onMultipleEntitiesSelected}

@@ -9,6 +9,7 @@ import "firebase/firestore";
 import {
     Authenticator,
     EntityCollection,
+    Locale,
     Navigation,
     NavigationBuilder,
     SchemaResolver
@@ -19,19 +20,19 @@ import {
     useAuthHandler
 } from "../contexts/AuthContext";
 import { SnackbarProvider } from "../contexts/SnackbarContext";
-import { Locale } from "./CMSAppProps";
 import { SchemaRegistryProvider } from "../contexts/SchemaRegistry";
 import { CMSAppContextProvider } from "../contexts/CMSAppContext";
 import { SideEntityProvider } from "../contexts/SideEntityController";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { BrowserRouter as Router } from "react-router-dom";
-import { EntitySideDialogs } from "../side_dialog/EntitySideDialogs";
+import { EntitySideDialogs } from "./internal/EntitySideDialogs";
 
 import { pink, red } from "@material-ui/core/colors";
 import { createMuiTheme } from "@material-ui/core";
 
 /**
  * Main entry point that defines the CMS configuration
+ * @category Core
  */
 export interface CMSAppProviderProps {
 
@@ -116,8 +117,8 @@ export interface CMSAppProviderProps {
  *
  * @param props
  * @constructor
+ * @category Core
  */
-
 export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
 
     const {

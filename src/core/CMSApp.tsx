@@ -9,7 +9,7 @@ import "firebase/firestore";
 import { CMSAppProps } from "./CMSAppProps";
 import { CMSMainView } from "./CMSMainView";
 import { CMSAppProvider } from "./CMSAppProvider";
-import CircularProgressCenter from "./components/CircularProgressCenter";
+import CircularProgressCenter from "./internal/CircularProgressCenter";
 
 
 /**
@@ -20,10 +20,11 @@ import CircularProgressCenter from "./components/CircularProgressCenter";
  * configuration object.
  *
  * If you are building a larger app and need finer control, you can use
- * `CMSAppProvider` and `CMSMainView`.
+ * {@link CMSAppProvider} and {@link CMSMainView} instead.
  *
  * @param props
  * @constructor
+ * @category Core
  */
 export function CMSApp(props: CMSAppProps) {
 

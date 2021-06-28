@@ -1,6 +1,4 @@
-import { CollectionSize, EntitySchema, FilterValues } from "../../models";
 import React from "react";
-import FilterPopup from "./FilterPopup";
 import {
     Box,
     CircularProgress,
@@ -15,7 +13,10 @@ import {
     useMediaQuery,
     useTheme
 } from "@material-ui/core";
-import SearchBar from "./SearchBar";
+
+import { CollectionSize, EntitySchema, FilterValues } from "../../models";
+import SearchBar from "../internal/SearchBar";
+import FilterPopup from "../internal/FilterPopup";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -100,7 +101,7 @@ interface CollectionTableToolbarProps<S extends EntitySchema<Key>, Key extends s
     onSizeChanged: (size: CollectionSize) => void;
 }
 
-export function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends string>(props: CollectionTableToolbarProps<S, Key>) {
+export default function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends string>(props: CollectionTableToolbarProps<S, Key>) {
     const classes = useStyles();
     const sizeClasses = useSizeSelectStyles();
 

@@ -14,7 +14,10 @@ interface FieldDescriptionPopoverProps {
     property: Property,
 }
 
-
+/**
+ * Render the field description for a property
+ * @category Form custom fields
+ */
 export default function FieldDescription({ property }: FieldDescriptionPopoverProps) {
 
     return (

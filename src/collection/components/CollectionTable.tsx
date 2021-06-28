@@ -3,6 +3,9 @@ import BaseTable, { Column } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
 import "react-base-table/styles.css";
 import { Box, Paper, Typography } from "@material-ui/core";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import { useHistory } from "react-router-dom";
+
 import {
     AdditionalColumnDelegate,
     buildPropertyFrom,
@@ -18,24 +21,21 @@ import {
     getPropertyColumnWidth,
     getRowHeight
 } from "../common";
-import { getIconForProperty } from "../../util/property_icons";
-import { CollectionTableToolbar } from "./CollectionTableToolbar";
-import { PreviewComponent } from "../../preview/PreviewComponent";
-import { SkeletonComponent } from "../../preview/components/SkeletonComponent";
-import { default as ErrorBoundary } from "../../core/internal/ErrorBoundary";
-import TableCell from "./TableCell";
-import PopupFormField from "./popup_field/PopupFormField";
-import { OutsideAlerter } from "../../core/components/OutsideAlerter";
+import CollectionTableToolbar from "./CollectionTableToolbar";
+import PreviewComponent from "../../preview/PreviewComponent";
+import SkeletonComponent from "../../preview/components/SkeletonComponent";
+import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import TableCell from "../internal/TableCell";
+import PopupFormField from "../internal/popup_field/PopupFormField";
+import OutsideAlerter from "../../core/internal/OutsideAlerter";
+import CollectionRowActions from "./CollectionRowActions";
 import { CollectionTableProps } from "./CollectionTableProps";
-import { TableCellProps } from "./SelectedCellContext";
-import { useHistory } from "react-router-dom";
-import CircularProgressCenter
-    from "../../core/components/CircularProgressCenter";
+import { TableCellProps } from "../internal/TableCellProps";
+import { getIconForProperty } from "../../util/property_icons";
+import CircularProgressCenter from "../../core/internal/CircularProgressCenter";
 import { useTableStyles } from "../styles";
 import { getPreviewSizeFrom } from "../../preview/util";
-import { CollectionRowActions } from "./CollectionRowActions";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import PropertyTableCell, { OnCellChangeParams } from "./PropertyTableCell";
+import PropertyTableCell, { OnCellChangeParams } from "../internal/PropertyTableCell";
 import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
 import { useCollectionFetch } from "../../hooks";
 import { useTextSearch } from "../../hooks/useTextSearch";
@@ -57,7 +57,17 @@ interface CMSColumn {
 
 type Order = "asc" | "desc" | undefined;
 
-
+/**
+ * This component is in charge of rendering a collection table with a high
+ * degree of customization.
+ *
+ * If you just want to bind a EntityCollection to a collection table you can
+ * check {@link EntityCollectionTable}
+ *
+ * @see CollectionTableProps
+ * @see EntityCollectionTable
+ * @category Collection components
+ */
 export default function CollectionTable<S extends EntitySchema<Key>,
     Key extends string,
     AdditionalKey extends string = string>({
@@ -644,5 +654,3 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     );
 
 }
-
-export { CollectionTable } ;

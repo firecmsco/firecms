@@ -9,10 +9,10 @@ import {
 import firebase from "firebase/app";
 import "firebase/auth";
 
-import CircularProgressCenter from "./components/CircularProgressCenter";
+import CircularProgressCenter from "./internal/CircularProgressCenter";
 import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
-import { CMSAppBar } from "./components/CMSAppBar";
+import { CMSAppBar } from "./internal/CMSAppBar";
 import { useAuthContext, useCMSAppContext } from "../contexts";
 import { LoginView } from "./LoginView";
 
@@ -22,6 +22,9 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import * as locales from "date-fns/locale";
 
+/**
+ * @category Core
+ */
 export interface CMSMainViewProps {
 
     /**
@@ -95,6 +98,7 @@ const useStyles = makeStyles((theme: Theme) =>
  *
  * @param props
  * @constructor
+ * @category Core
  */
 export function CMSMainView(props: CMSMainViewProps) {
 

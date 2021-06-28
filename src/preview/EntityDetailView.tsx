@@ -21,7 +21,7 @@ import {
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import { getCMSPathFrom, removeInitialSlash } from "../core/navigation";
-import { EntityCollectionTable } from "../collection/components/EntityCollectionTable";
+import { EntityCollectionTable } from "../core/components/EntityCollectionTable";
 import { useSideEntityController } from "../contexts";
 
 

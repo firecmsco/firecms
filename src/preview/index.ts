@@ -6,28 +6,34 @@ export type {
 
 export { default as AsyncPreviewComponent } from "./AsyncPreviewComponent";
 
-export { ArrayOfStringsPreview } from "./components/ArrayOfStringsPreview";
 export {
-    ArrayEnumPreview, ArrayPropertyEnumPreview
+    default as ArrayOfStringsPreview
+} from "./components/ArrayOfStringsPreview";
+export {
+    default as ArrayEnumPreview,
 } from "./components/ArrayEnumPreview";
-export { BooleanPreview } from "./components/BooleanPreview";
-export { CustomChip } from "./components/CustomChip";
-export { EmptyValue } from "./components/EmptyValue";
-export { ImagePreview } from "./components/ImagePreview";
-export { NumberPreview } from "./components/NumberPreview";
-export { StringPreview } from "./components/StringPreview";
-export { TimestampPreview } from "./components/TimestampPreview";
-export { UrlComponentPreview } from "./components/UrlComponentPreview";
-export { SkeletonComponent } from "./components/SkeletonComponent";
-export { StorageThumbnail } from "./components/StorageThumbnail";
-
-
 export {
-    ArrayOfStorageComponentsPreview
+    default as  ArrayPropertyEnumPreview
+} from "./components/ArrayPropertyEnumPreview";
+export { default as BooleanPreview } from "./components/BooleanPreview";
+export { default as CustomChip } from "./components/CustomChip";
+export { default as EmptyValue } from "./components/EmptyValue";
+export { default as ImagePreview } from "./components/ImagePreview";
+export { default as ArrayOfMapsPreview } from "./components/ArrayOfMapsPreview";
+export { default as NumberPreview } from "./components/NumberPreview";
+export { default as StringPreview } from "./components/StringPreview";
+export { default as TimestampPreview } from "./components/TimestampPreview";
+export {
+    default as UrlComponentPreview
+} from "./components/UrlComponentPreview";
+export { default as SkeletonComponent } from "./components/SkeletonComponent";
+export { default as StorageThumbnail } from "./components/StorageThumbnail";
+export {
+    default as ArrayOfStorageComponentsPreview
 } from "./components/ArrayOfStorageComponentsPreview";
-export { ArrayOfMapsPreview } from "./components/ArrayOfMapsPreview";
+export { default as ReferencePreview } from "./components/ReferencePreview";
 export {
-    default as ReferencePreview, ArrayOfReferencesPreview
-} from "./components/ReferencePreview";
-export { MapPreview } from "./components/MapPreview";
-export { ArrayPreview } from "./components/ArrayPreview";
+    default as ArrayOfReferencesPreview
+} from "./components/ArrayOfReferencesPreview";
+export { default as MapPreview } from "./components/MapPreview";
+export { default as ArrayPreview } from "./components/ArrayPreview";

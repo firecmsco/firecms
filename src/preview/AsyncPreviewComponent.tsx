@@ -9,14 +9,7 @@ export interface AsyncPreviewComponentProps<S extends EntitySchema> {
 
 }
 
-/**
- * Utility component used to render the result of an async execution.
- * It shows a loading indicator while at it.
- *
- * @param buildComponent that needs to do some async
- * @constructor
- */
-function AsyncPreviewComponent<S extends EntitySchema>(
+function AsyncPreviewComponentInternal<S extends EntitySchema>(
     {
         builder
     }: AsyncPreviewComponentProps<S>): JSX.Element {
@@ -49,4 +42,14 @@ function AsyncPreviewComponent<S extends EntitySchema>(
 
 }
 
-export default React.memo(AsyncPreviewComponent);
+const MemoAsyncPreviewComponent = React.memo(AsyncPreviewComponentInternal) as React.FunctionComponent<AsyncPreviewComponentProps<EntitySchema>>;
+
+/**
+ * Utility component used to render the result of an async execution.
+ * It shows a loading indicator while at it.
+ *
+ * @category Preview components
+ */
+export default function AsyncPreviewComponent(props: AsyncPreviewComponentProps<EntitySchema>) {
+    return <MemoAsyncPreviewComponent {...props} />;
+}

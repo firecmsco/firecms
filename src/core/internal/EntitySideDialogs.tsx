@@ -1,5 +1,5 @@
 import React from "react";
-import { EntitySchema, SchemaConfig } from "../models";
+import { EntitySchema, SchemaConfig } from "../../models";
 import {
     Box,
     createStyles,
@@ -13,9 +13,9 @@ import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 import { EntityDrawer } from "./EntityDrawer";
 import EntityView from "./EntityView";
-import { useCMSAppContext, useSideEntityController } from "../contexts";
-import { useSchemasRegistry } from "../contexts/SchemaRegistry";
-import { SideEntityPanelProps } from "./model";
+import { useCMSAppContext, useSideEntityController } from "../../contexts";
+import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
+import { SideEntityPanelProps } from "../../models/side_panel";
 
 export const useStyles = makeStyles(theme => createStyles({
     root: {

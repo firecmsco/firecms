@@ -8,6 +8,9 @@ import {
 
 type Order = "asc" | "desc" | undefined;
 
+/**
+ * @category Hooks and utilities
+ */
 export interface CollectionFetchProps<S extends EntitySchema<Key>, Key extends string> {
 
     /**
@@ -36,6 +39,9 @@ export interface CollectionFetchProps<S extends EntitySchema<Key>, Key extends s
     currentSort?: Order;
 }
 
+/**
+ * @category Hooks and utilities
+ */
 export type CollectionFetchResult<S extends EntitySchema<Key>, Key extends string> = {
     data: Entity<S, Key>[]
     dataLoading: boolean,
@@ -43,15 +49,26 @@ export type CollectionFetchResult<S extends EntitySchema<Key>, Key extends strin
     dataLoadingError?: Error
 }
 
+/**
+ * This hook is used to fetch collections using a given schema
+ * @param collectionPath
+ * @param schema
+ * @param filter
+ * @param sortByProperty
+ * @param currentSort
+ * @param itemCount
+ * @param entitiesDisplayedFirst
+ * @category Hooks and utilities
+ */
 export function useCollectionFetch<S extends EntitySchema<Key>, Key extends string>(
     {
-        entitiesDisplayedFirst,
         collectionPath,
         schema,
         filter,
         sortByProperty,
         currentSort,
-        itemCount
+        itemCount,
+        entitiesDisplayedFirst
     }: CollectionFetchProps<S, Key>): CollectionFetchResult<S, Key> {
 
     const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];

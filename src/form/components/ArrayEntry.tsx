@@ -31,15 +31,18 @@ type ArrayEntryProps = {
     remove: (index: number) => void,
 };
 
-export const ArrayEntry: React.FC<ArrayEntryProps> = ({
-                                                          id,
-                                                          name,
-                                                          moveItem,
-                                                          type,
-                                                          index,
-                                                          remove,
-                                                          children
-                                                      }) => {
+/**
+ * @category Form custom fields
+ */
+export function ArrayEntry({
+                               id,
+                               name,
+                               moveItem,
+                               type,
+                               index,
+                               remove,
+                               children
+                           }: React.PropsWithChildren<ArrayEntryProps>) {
 
     const classes = useStyles();
     const ref = React.useRef<HTMLDivElement>(null);
@@ -140,3 +143,5 @@ export const ArrayEntry: React.FC<ArrayEntryProps> = ({
         </div>
     );
 };
+
+export default ArrayEntry;

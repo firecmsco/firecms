@@ -6,6 +6,9 @@ import {
     TextSearchDelegate
 } from "../models";
 
+/**
+ * @category Hooks and utilities
+ */
 export interface TextSearchProps<S extends EntitySchema<Key>, Key extends string> {
 
     searchString?: string;
@@ -18,11 +21,22 @@ export interface TextSearchProps<S extends EntitySchema<Key>, Key extends string
 
 }
 
+/**
+ * @category Hooks and utilities
+ */
 export type TextSearchResult<S extends EntitySchema<Key>, Key extends string> = {
     textSearchData: Entity<S, Key>[]
     textSearchLoading: boolean,
 }
 
+/**
+ *
+ * @param searchString
+ * @param textSearchDelegate
+ * @param collectionPath
+ * @param schema
+ * @category Hooks and utilities
+ */
 export function useTextSearch<S extends EntitySchema<Key>, Key extends string>(
     {
         searchString,

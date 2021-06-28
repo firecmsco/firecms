@@ -7,7 +7,10 @@ import * as locales from "date-fns/locale";
 import { defaultDateFormat } from "../../util/dates";
 import { CMSAppContext } from "../../contexts/CMSAppContext";
 
-export function TimestampPreview({
+/**
+ * @category Preview components
+ */
+export default function TimestampPreview({
                                      name,
                                      value,
                                      property,

@@ -14,7 +14,7 @@ import { TableSelect } from "./fields/TableSelect";
 import { NumberTableInput } from "./fields/TableNumberInput";
 import { TableSwitch } from "./fields/TableSwitch";
 import { TableDateField } from "./fields/TableDateField";
-import { default as ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { PreviewComponent } from "../../preview";
 import { CellStyleProps } from "../styles";
 import { TableReferenceField } from "./fields/TableReferenceField";

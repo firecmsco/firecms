@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import EntityForm from "../form/EntityForm";
+import EntityForm from "../../form/EntityForm";
 import {
     Entity,
     EntityCollection,
@@ -9,7 +9,7 @@ import {
     listenEntity,
     PermissionsBuilder,
     saveEntity
-} from "../models";
+} from "../../models";
 import {
     Box,
     CircularProgress,
@@ -26,14 +26,14 @@ import {
     useCMSAppContext,
     useSideEntityController,
     useSnackbarController
-} from "../contexts";
+} from "../../contexts";
 import { Prompt } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
-import { EntityCollectionTable } from "../collection/components/EntityCollectionTable";
-import { removeInitialSlash } from "../core/navigation";
-import CircularProgressCenter from "../core/components/CircularProgressCenter";
-import { default as EntityPreview } from "../core/components/EntityPreview";
-import { canEdit } from "../util/permissions";
+import { EntityCollectionTable } from "../components/EntityCollectionTable";
+import { removeInitialSlash } from "../navigation";
+import CircularProgressCenter from "./CircularProgressCenter";
+import EntityPreview from "../components/EntityPreview";
+import { canEdit } from "../../util/permissions";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>

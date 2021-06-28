@@ -17,9 +17,8 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
-import { EntityCollection } from "../models";
+import { CMSView, EntityCollection } from "../models";
 import { computeNavigation } from "./navigation";
-import { CMSView } from "./CMSAppProps";
 
 
 const drawerWidth = 280;

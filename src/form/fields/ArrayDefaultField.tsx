@@ -3,11 +3,14 @@ import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React, { useState } from "react";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import ArrayContainer from "./arrays/ArrayContainer";
+import ArrayContainer from "../components/ArrayContainer";
 import { formStyles } from "../styles";
 import { buildPropertyField } from "../form_factory";
 import { useClearRestoreValue } from "../../hooks";
 
+/**
+ * @category Form fields
+ */
 export default function ArrayDefaultField<T extends Array<any>>({
                                                                     name,
                                                                     value,

@@ -9,6 +9,11 @@ interface LabelWithIconProps {
     scaledIcon?: boolean
 }
 
+/**
+ * Render the label of a form field for a given property, with the corresponding
+ * icon
+ * @category Form custom fields
+ */
 export default function LabelWithIcon({
                                           property,
                                           scaledIcon

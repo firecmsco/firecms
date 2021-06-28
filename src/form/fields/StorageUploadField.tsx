@@ -14,7 +14,6 @@ import {
 
 import firebase from "firebase/app";
 
-
 import {
     ArrayProperty,
     FieldProps,
@@ -103,9 +102,11 @@ export const useStyles = makeStyles(theme => ({
     }
 }));
 
-
 type StorageUploadFieldProps = FieldProps<string | string[]>;
 
+/**
+ * @category Form fields
+ */
 export default function StorageUploadField({
                                                name,
                                                value,

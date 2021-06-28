@@ -2,7 +2,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import deepEqual from "deep-equal";
 
-import { Entity, EntitySchema, EntityStatus, EntityValues } from "./models";
+import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
 import {
     Properties,
     Property,
@@ -25,6 +25,8 @@ import { FilterValues, WhereFilterOp } from "./collections";
  * @param orderBy
  * @param order
  * @return Function to cancel subscription
+ * @see useCollectionFetch if you need this functionality implemented as a hook
+ * @category Firestore
  */
 export function listenCollection<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>(
@@ -81,6 +83,8 @@ export function listenCollection<S extends EntitySchema<Key>,
  * @param orderBy
  * @param order
  * @return Function to cancel subscription
+ * @see useCollectionFetch if you need this functionality implemented as a hook
+ * @category Firestore
  */
 export function fetchCollection<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>(
@@ -127,6 +131,7 @@ export function fetchCollection<S extends EntitySchema<Key>,
  * @param path
  * @param entityId
  * @param schema
+ * @category Firestore
  */
 export function fetchEntity<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>(
@@ -151,6 +156,7 @@ export function fetchEntity<S extends EntitySchema<Key>,
  * @param schema
  * @param onSnapshot
  * @return Function to cancel subscription
+ * @category Firestore
  */
 export function listenEntity<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>(
@@ -172,6 +178,7 @@ export function listenEntity<S extends EntitySchema<Key>,
  * @param schema
  * @param onSnapshot
  * @return Function to cancel subscription
+ * @category Firestore
  */
 export function listenEntityFromRef<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>(
@@ -188,6 +195,7 @@ export function listenEntityFromRef<S extends EntitySchema<Key>,
  * This makes it easier to interact with the rest of the libraries and
  * bindings.
  * @param data
+ * @category Firestore
  */
 export function replaceTimestampsWithDates(data: any): any {
 
@@ -231,6 +239,7 @@ export function replaceTimestampsWithDates(data: any): any {
  * Add missing required fields, expected in the schema, to the values of an entity coming from Firestore
  * @param values
  * @param schema
+ * @category Firestore
  */
 function sanitizeData<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>
@@ -247,6 +256,12 @@ function sanitizeData<S extends EntitySchema<Key>,
     return result;
 }
 
+/**
+ *
+ * @param doc
+ * @param schema
+ * @category Firestore
+ */
 export function createEntityFromSchema<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>
 (
@@ -276,6 +291,7 @@ export function createEntityFromSchema<S extends EntitySchema<Key>,
  * @param onSaveFailure
  * @param onPreSaveHookError
  * @param onSaveSuccessHookError
+ * @category Firestore
  */
 export async function saveEntity<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>(
@@ -389,6 +405,7 @@ export async function saveEntity<S extends EntitySchema<Key>,
  * @param onDeleteSuccessHookError
  * @param context
  * @return was the whole deletion flow successful
+ * @category Firestore
  */
 export async function deleteEntity<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>(
@@ -451,7 +468,13 @@ export async function deleteEntity<S extends EntitySchema<Key>,
     });
 }
 
-
+/**
+ *
+ * @param schema
+ * @param entityId
+ * @param values
+ * @ignore
+ */
 export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends string>(
     schema: S,
     entityId?: string | undefined,
@@ -468,6 +491,7 @@ export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends
  * Functions used to set required fields to undefined in the initially created entity
  * @param schema
  * @param entityId
+ * @ignore
  */
 export function initEntityValues<S extends EntitySchema<Key>, Key extends string>
 (schema: S, entityId?: string): EntityValues<S, Key> {
@@ -479,6 +503,7 @@ type PropertiesValues<S extends EntitySchema<Key>, Key extends string> = {
     [K in Key]: S["properties"][K] extends Property<infer T> ? T :
         (S["properties"][K] extends PropertyBuilder<infer T, S, Key> ? T : any);
 };
+
 
 function initWithProperties<S extends EntitySchema<Key>,
     P extends Properties<Key>,
@@ -570,6 +595,7 @@ function updateAutoValues<S extends EntitySchema<Key>,
  * Functions used to initialize filter object
  * @param schema
  * @param filterableProperties
+ * @ignore
  */
 export function initFilterValues<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>
@@ -580,13 +606,14 @@ export function initFilterValues<S extends EntitySchema<Key>,
 }
 
 /**
- * Retrieve an entity given a path and a schema
+ * Check if the given property is unique in the given collection
  * @param path Collection path
  * @param name of the property
  * @param value
  * @param property
  * @param entityId
  * @return `true` if there are no other fields besides the given entity
+ * @category Firestore
  */
 export function checkUniqueField(
     path: string,

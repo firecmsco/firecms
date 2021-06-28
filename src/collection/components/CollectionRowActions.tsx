@@ -16,7 +16,21 @@ import {
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
 import { Skeleton } from "@material-ui/lab";
 
-export function CollectionRowActions<S extends EntitySchema<Key>,
+/**
+ *
+ * @param entity
+ * @param isSelected
+ * @param selectionEnabled
+ * @param size
+ * @param toggleEntitySelection
+ * @param onCopyClicked
+ * @param onEditClicked
+ * @param onDeleteClicked
+ * @constructor
+ *
+ * @category Collection components
+ */
+export default function CollectionRowActions<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>({
                                                                      entity,
                                                                      isSelected,

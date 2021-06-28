@@ -1,6 +1,7 @@
 import {
     CMSType,
     EnumValueConfig,
+    EnumValues,
     Properties,
     PropertiesOrBuilder,
     Property,
@@ -14,6 +15,11 @@ import {
 } from "../models";
 import { AdditionalColumnDelegate, EntityCollection } from "./collections";
 
+/**
+ * Identity function we use to defeat the type system of Typescript and build
+ * properties
+ * @category Builder
+ */
 export function buildPropertyFrom<T extends CMSType, S extends EntitySchema<Key>, Key extends string>(
     propertyOrBuilder: PropertyOrBuilder<T, S, Key>,
     values: Partial<EntityValues<S, Key>>,
@@ -30,6 +36,7 @@ export function buildPropertyFrom<T extends CMSType, S extends EntitySchema<Key>
  * Identity function we use to defeat the type system of Typescript and build
  * navigation objects with all its properties
  * @param navigation
+ * @category Builder
  */
 export function buildNavigation(
     navigation: Navigation | NavigationBuilder
@@ -41,6 +48,7 @@ export function buildNavigation(
  * Identity function we use to defeat the type system of Typescript and build
  * collection views with all its properties
  * @param collectionView
+ * @category Builder
  */
 export function buildCollection<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>,
@@ -54,6 +62,7 @@ export function buildCollection<S extends EntitySchema<Key> = EntitySchema<any>,
  * Identity function we use to defeat the type system of Typescript and preserve
  * the schema keys
  * @param schema
+ * @category Builder
  */
 export function buildSchema<Key extends string = string>(
     schema: EntitySchema<Key>
@@ -68,6 +77,7 @@ export function buildSchema<Key extends string = string>(
  * data types are not yet, so you could still match a string type to a
  * NumberProperty, e.g.
  * @param schema
+ * @category Builder
  */
 export function buildSchemaFrom<Type extends Partial<{ [P in Key]: T; }>,
     Key extends string = Extract<keyof Type, string>,
@@ -81,6 +91,7 @@ export function buildSchemaFrom<Type extends Partial<{ [P in Key]: T; }>,
  * Identity function we use to defeat the type system of Typescript and preserve
  * the property keys.
  * @param property
+ * @category Builder
  */
 export function buildProperty<T extends CMSType>(
     property: Property<T>
@@ -90,9 +101,9 @@ export function buildProperty<T extends CMSType>(
 
 /**
  * Identity function we use to defeat the type system of Typescript and preserve
- * the properties keys. It can be useful if you have entity schemas with the
- * same properties
+ * the properties keys.
  * @param properties
+ * @category Builder
  */
 export function buildProperties<Key extends string>(
     properties: Properties<Key>
@@ -100,12 +111,36 @@ export function buildProperties<Key extends string>(
     return properties;
 }
 
+/**
+ * Identity function we use to defeat the type system of Typescript and preserve
+ * the properties keys.
+ * @param propertiesOrBuilder
+ * @category Builder
+ */
 export function buildPropertiesOrBuilder<T extends CMSType, S extends EntitySchema<Key>, Key extends string>(
     propertiesOrBuilder: PropertiesOrBuilder<S, Key>
 ): PropertiesOrBuilder<S, Key> {
     return propertiesOrBuilder;
 }
 
+/**
+ * Identity function we use to defeat the type system of Typescript and preserve
+ * the properties keys.
+ * @param enumValues
+ * @category Builder
+ */
+export function buildEnumValues(
+    enumValues: EnumValues
+): EnumValues {
+    return enumValues;
+}
+
+/**
+ * Identity function we use to defeat the type system of Typescript and preserve
+ * the properties keys.
+ * @param enumValueConfig
+ * @category Builder
+ */
 export function buildEnumValueConfig(
     enumValueConfig: EnumValueConfig
 ): EnumValueConfig {
@@ -116,6 +151,7 @@ export function buildEnumValueConfig(
  * Identity function we use to defeat the type system of Typescript and build
  * additional column delegates views with all its properties
  * @param additionalColumnDelegate
+ * @category Builder
  */
 export function buildAdditionalColumnDelegate<AdditionalKey extends string = string,
     S extends EntitySchema<Key> = EntitySchema<any>,

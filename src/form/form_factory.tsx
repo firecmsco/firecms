@@ -72,6 +72,7 @@ import { CMSAppContext } from "../contexts/CMSAppContext";
  * @param partOfArray
  * @param autoFocus
  * @param dependsOnOtherProperties
+ * @category Form custom fields
  */
 export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
 ({

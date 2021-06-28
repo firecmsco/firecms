@@ -10,14 +10,28 @@ const DEFAULT_NAVIGATION = {
 };
 
 export type { BreadcrumbEntry };
-export type BreadcrumbsStatus = {
+
+/**
+ * @category Hooks and utilities
+ */
+export type BreadcrumbsController = {
     breadcrumbs: BreadcrumbEntry[];
     set: (props: {
         breadcrumbs: BreadcrumbEntry[];
     }) => void;
 };
 
-export const BreadcrumbContext = React.createContext<BreadcrumbsStatus>(DEFAULT_NAVIGATION);
+export const BreadcrumbContext = React.createContext<BreadcrumbsController>(DEFAULT_NAVIGATION);
+
+/**
+ * Hook to retrieve the BreadcrumbContext.
+ *
+ * Consider that in order to use this hook you need to have a parent
+ * `CMSApp` or a `CMSAppProvider`
+ *
+ * @see BreadcrumbsController
+ * @category Hooks and utilities
+ */
 export const useBreadcrumbsContext = () => useContext(BreadcrumbContext);
 
 interface BreadcrumbsProviderProps {

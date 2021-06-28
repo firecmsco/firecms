@@ -9,7 +9,7 @@ interface OutsideAlerterProps {
 /**
  * Component that alerts if you click outside of it
  */
-export function OutsideAlerter({
+export default function OutsideAlerter({
                                    children,
                                    enabled,
                                    onOutsideClick

@@ -1,9 +1,11 @@
-import { PreviewComponentProps } from "../../models";
 import React from "react";
 import { CheckBox, CheckBoxOutlineBlank } from "@material-ui/icons";
+import { PreviewComponentProps } from "../preview_component_props";
 
-
-export function BooleanPreview({
+/**
+ * @category Preview components
+ */
+export default function BooleanPreview({
                                    name,
                                    value,
                                    property,

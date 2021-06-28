@@ -25,8 +25,10 @@ export interface SkeletonComponentProps<T> {
     property: Property,
     size: PreviewSize
 }
-
-export function SkeletonComponent<T>({
+/**
+ * @category Preview components
+ */
+export default function SkeletonComponent<T>({
                                          property,
                                          size
                                      }: SkeletonComponentProps<T>

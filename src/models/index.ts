@@ -1,8 +1,11 @@
-export * from "./models";
+
+export * from "./entities";
 export * from "./properties";
 export * from "./collections";
 export * from "./navigation";
 export * from "./builders";
+export * from "./side_panel";
+export * from "./locales";
 
 export type {
     Authenticator
@@ -31,5 +34,3 @@ export type {
 
 export type { TextSearchDelegate } from "./text_search_delegate";
 export { AlgoliaTextSearchDelegate } from "./text_search_delegate";
-
-export type { PreviewComponentProps } from "../preview/preview_component_props";

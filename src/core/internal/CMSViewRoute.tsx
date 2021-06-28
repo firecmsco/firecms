@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { BreadcrumbEntry } from "../navigation";
 import { useBreadcrumbsContext } from "../../contexts";
-import { CMSView } from "../CMSAppProps";
+import { CMSView } from "../../models";
 
 
 interface CMSViewRouteProps {

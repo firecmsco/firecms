@@ -21,6 +21,9 @@ interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
 }
 
+/**
+ * @category Form fields
+ */
 export default function TextField<T extends string | number>({
                                                                  name,
                                                                  value,

@@ -1,5 +1,27 @@
 {
     "allReflectionsHaveOwnDocument": true,
-    "readme" : "none",
-    "categorizeByGroup" : true
+    "readme": "none",
+    "categorizeByGroup": true,
+    "categoryOrder": [
+        "Core",
+        "Collections",
+        "Entity properties",
+        "Entities",
+        "Form fields",
+
+        "Builder",
+
+        "Core components",
+        "Form custom fields",
+        "Preview components",
+        "Collection components",
+
+        "Hooks and utilities",
+
+        "Authentication",
+        "Firestore",
+        "Locales",
+        "Navigation",
+        "*"
+    ]
 }

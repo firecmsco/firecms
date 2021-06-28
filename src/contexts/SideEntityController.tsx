@@ -10,8 +10,9 @@ import {
     isCollectionPath,
     NavigationViewEntry
 } from "../core/navigation";
-import { getSidePanelKey, SideEntityPanelProps } from "../side_dialog/model";
+import { SideEntityPanelProps } from "../models/side_panel";
 import { useSchemasRegistry } from "./SchemaRegistry";
+import { getSidePanelKey } from "./utils";
 
 const DEFAULT_SIDE_ENTITY = {
     sidePanels: [],
@@ -23,6 +24,10 @@ const DEFAULT_SIDE_ENTITY = {
 
 export type { SideEntityPanelProps, SchemaConfig } ;
 
+/**
+ * Controller to open the side dialog displaying entity forms
+ * @category Hooks and utilities
+ */
 export type SideEntityController<S extends EntitySchema> = {
     /**
      * Close the last panel
@@ -48,6 +53,7 @@ export type SideEntityController<S extends EntitySchema> = {
     open: (props: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaResolver?: boolean }) => void;
 };
 
+
 const SideEntityPanelsController = React.createContext<SideEntityController<any>>(DEFAULT_SIDE_ENTITY);
 
 /**
@@ -55,6 +61,12 @@ const SideEntityPanelsController = React.createContext<SideEntityController<any>
  * edition. You can open side panels using schemas specified in the general
  * navigation, overriding them using a `SchemaResolver` or explicitly
  * using the open method of this controller.
+ *
+ * Consider that in order to use this hook you need to have a parent
+ * `CMSApp` or a `CMSAppProvider`
+ *
+ * @see SideEntityController
+ * @category Hooks and utilities
  */
 export const useSideEntityController = () => useContext(SideEntityPanelsController);
 

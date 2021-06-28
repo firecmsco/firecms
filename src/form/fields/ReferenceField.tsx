@@ -24,11 +24,10 @@ import ClearIcon from "@material-ui/icons/Clear";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { FieldDescription } from "../../form/components";
 import { ErrorView } from "../../core/components";
-import { ReferenceDialog } from "../components/ReferenceDialog";
+import ReferenceDialog from "../../core/components/ReferenceDialog";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { PreviewComponent, SkeletonComponent } from "../../preview";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { CollectionTable } from "../../collection/components/CollectionTable";
 import { useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { useClearRestoreValue } from "../../hooks";
@@ -58,7 +57,9 @@ export const useStyles = makeStyles(theme => createStyles({
     }
 }));
 
-
+/**
+ * @category Form fields
+ */
 export default function ReferenceField<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>({
                                                                      name,
@@ -300,7 +301,7 @@ export default function ReferenceField<S extends EntitySchema<Key>,
                 {buildEntityView(schema)}
 
                 {collectionConfig && <ReferenceDialog open={open}
-                                                      collectionConfig={collectionConfig}
+                                                      collection={collectionConfig}
                                                       multiselect={false}
                                                       collectionPath={collectionPath}
                                                       onClose={onClose}

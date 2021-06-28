@@ -6,6 +6,7 @@ import "firebase/firestore";
 import {
     Authenticator,
     EntityCollection,
+    Locale,
     Navigation,
     NavigationBuilder,
     SchemaResolver
@@ -13,8 +14,10 @@ import {
 
 /**
  * Main entry point that defines the CMS configuration
+ * @category Core
  */
 export interface CMSAppProps {
+
     /**
      * Name of the app, displayed as the main title and in the tab title
      */
@@ -115,124 +118,3 @@ export interface CMSAppProps {
     schemaResolver?: SchemaResolver;
 }
 
-
-/**
- * Custom additional views created by the developer, added to the main
- * navigation.
- */
-export interface CMSView {
-
-    /**
-     * CMS Path (or paths) you can reach this view from.
-     * If you include multiple paths, only the first one will be included in the
-     * main menu
-     */
-    path: string | string[];
-
-    /**
-     * Name of this view
-     */
-    name: string;
-
-    /**
-     * Optional description of this view. You can use Markdown
-     */
-    description?: string;
-
-    /**
-     * Should this view be hidden from the main navigation panel.
-     * It will still be accessible if you reach the specified path
-     */
-    hideFromNavigation?: boolean;
-
-    /**
-     * Component to be rendered
-     */
-    view: React.ReactNode;
-
-    /**
-     * Optional field used to group top level navigation entries under a
-     * navigation view.
-     */
-    group?: string;
-
-}
-
-export type Locale =
-    "af" |
-    "ar" |
-    "arDZ" |
-    "arMA" |
-    "arSA" |
-    "az" |
-    "be" |
-    "bg" |
-    "bn" |
-    "ca" |
-    "cs" |
-    "cy" |
-    "da" |
-    "de" |
-    "el" |
-    "enAU" |
-    "enCA" |
-    "enGB" |
-    "enIN" |
-    "enNZ" |
-    "enUS" |
-    "eo" |
-    "es" |
-    "et" |
-    "eu" |
-    "faIR" |
-    "fi" |
-    "fil" |
-    "fr" |
-    "frCA" |
-    "frCH" |
-    "gd" |
-    "gl" |
-    "gu" |
-    "he" |
-    "hi" |
-    "hr" |
-    "hu" |
-    "hy" |
-    "id" |
-    "is" |
-    "it" |
-    "ja" |
-    "ka" |
-    "kk" |
-    "kn" |
-    "ko" |
-    "lb" |
-    "lt" |
-    "lv" |
-    "mk" |
-    "ms" |
-    "mt" |
-    "nb" |
-    "nl" |
-    "nlBE" |
-    "nn" |
-    "pl" |
-    "pt" |
-    "ptBR" |
-    "ro" |
-    "ru" |
-    "sk" |
-    "sl" |
-    "sr" |
-    "srLatn" |
-    "sv" |
-    "ta" |
-    "te" |
-    "th" |
-    "tr" |
-    "ug" |
-    "uk" |
-    "uz" |
-    "vi" |
-    "zhCN" |
-    "zhTW";

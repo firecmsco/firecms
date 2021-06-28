@@ -8,7 +8,10 @@ import { getThumbnailMeasure } from "../util";
 
 type ImagePreviewProps = { size: PreviewSize, url: string };
 
-export function ImagePreview({ size, url }: ImagePreviewProps) {
+/**
+ * @category Preview components
+ */
+export default function ImagePreview({ size, url }: ImagePreviewProps) {
 
     const classes = useStyles();
 

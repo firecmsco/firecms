@@ -1,16 +1,19 @@
 import React from "react";
 import {
     ArrayProperty,
-    MapProperty,
-    PreviewComponentProps
+    MapProperty
 } from "../../models";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { useStyles } from "./styles";
-import { PreviewComponent } from "../PreviewComponent";
+import PreviewComponent from "../PreviewComponent";
+import { PreviewComponentProps } from "../preview_component_props";
 
-export function ArrayOfMapsPreview({
+/**
+ * @category Preview components
+ */
+export default function ArrayOfMapsPreview({
                                        name,
                                        value,
                                        property,

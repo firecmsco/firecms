@@ -1,9 +1,10 @@
 import { FieldArray } from "formik";
 import { Box, Button } from "@material-ui/core";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { ArrayEntry } from "./ArrayEntry";
 import hash from "object-hash";
 import firebase from "firebase";
+
+import ArrayEntry from "./ArrayEntry";
 
 interface ArrayContainerProps<T> {
     value: T[];
@@ -14,6 +15,9 @@ interface ArrayContainerProps<T> {
     includeAddButton?: boolean;
 }
 
+/**
+ * @category Form custom fields
+ */
 export default function ArrayContainer<T>({
                                               name,
                                               value,

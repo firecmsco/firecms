@@ -1,4 +1,3 @@
-import { NavigationEntity } from "./useNavigationFrom";
 
 export {
     useClearRestoreValue

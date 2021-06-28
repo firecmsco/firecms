@@ -15,6 +15,9 @@ import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
+/**
+ * @category Form fields
+ */
 export default function Select<T extends EnumType>({
                                                        name,
                                                        value,

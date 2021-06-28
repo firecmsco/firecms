@@ -57,6 +57,16 @@ module.exports = {
         //         'api/interfaces/cmsappprops',
         //         {
         //             type: 'category',
+        //             label: 'Custom app',
+        //             items: [
+        //                 'api/functions/cmsappprovider',
+        //                 'api/interfaces/cmsappproviderprops',
+        //                 'api/functions/cmsmainview',
+        //                 'api/interfaces/cmsmainviewprops',
+        //             ]
+        //         },
+        //         {
+        //             type: 'category',
         //             label: 'Entity schemas',
         //             items: [
         //                 'api/interfaces/entity',
@@ -107,7 +117,81 @@ module.exports = {
         //                 'api/interfaces/sideentitypanelprops',
         //             ]
         //         },
+        //         'api/index',
         //     ]
         // },
     ]
 }
+
+// 'api/functions/algoliatextsearchdelegate'
+// 'api/functions/arraycontainer'
+// 'api/functions/arraydefaultfield'
+// 'api/functions/arrayentry'
+// 'api/functions/arrayenumpreview'
+// 'api/functions/arrayenumselect'
+// 'api/functions/arrayofmapspreview'
+// 'api/functions/arrayofreferencesfield'
+// 'api/functions/arrayofreferencespreview'
+// 'api/functions/arrayofstoragecomponentspreview'
+// 'api/functions/arrayofstringspreview'
+// 'api/functions/arraypreview'
+// 'api/functions/arraypropertyenumpreview'
+// 'api/functions/asyncpreviewcomponent'
+// 'api/functions/booleanpreview'
+// 'api/functions/buildadditionalcolumndelegate'
+// 'api/functions/buildcollection'
+// 'api/functions/buildenumvalueconfig'
+// 'api/functions/buildenumvalues'
+// 'api/functions/buildnavigation'
+// 'api/functions/buildproperties'
+// 'api/functions/buildpropertiesorbuilder'
+// 'api/functions/buildproperty'
+// 'api/functions/buildpropertyfield'
+// 'api/functions/buildpropertyfrom'
+// 'api/functions/buildschema'
+// 'api/functions/buildschemafrom'
+// 'api/functions/cmsapp'
+// 'api/functions/cmsappprovider'
+// 'api/functions/cmsmainview'
+// 'api/functions/collectiontable'
+// 'api/functions/customchip'
+// 'api/functions/datetimefield'
+// 'api/functions/emptyvalue'
+// 'api/functions/entitycollectiontable'
+// 'api/functions/entitypreview'
+// 'api/functions/errorview'
+// 'api/functions/fetchentity'
+// 'api/functions/fielddescription'
+// 'api/functions/getdownloadurl'
+// 'api/functions/getnavigationfrom'
+// 'api/functions/imagepreview'
+// 'api/functions/labelwithicon'
+// 'api/functions/listencollection'
+// 'api/functions/listenentity'
+// 'api/functions/listenentityfromref'
+// 'api/functions/mapfield'
+// 'api/functions/mappreview'
+// 'api/functions/numberpreview'
+// 'api/functions/previewcomponent'
+// 'api/functions/readonlyfield'
+// 'api/functions/referencedialog'
+// 'api/functions/referencefield'
+// 'api/functions/referencepreview'
+// 'api/functions/saveentity'
+// 'api/functions/select'
+// 'api/functions/skeletoncomponent'
+// 'api/functions/storagethumbnail'
+// 'api/functions/storageuploadfield'
+// 'api/functions/stringpreview'
+// 'api/functions/switchfield'
+// 'api/functions/textfield'
+// 'api/functions/timestamppreview'
+// 'api/functions/uploadfile'
+// 'api/functions/urlcomponentpreview'
+// 'api/functions/useauthcontext'
+// 'api/functions/usebreadcrumbscontext'
+// 'api/functions/usecmsappcontext'
+// 'api/functions/usecollectionfetch'
+// 'api/functions/usenavigationfrom'
+// 'api/functions/usesideentitycontroller'
+// 'api/functions/usesnackbarcontroller'

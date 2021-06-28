@@ -3,7 +3,7 @@ import { EntityCollection, EntitySchema } from "../../models";
 import { createStyles, makeStyles } from "@material-ui/core";
 import { useRouteMatch } from "react-router-dom";
 import { useBreadcrumbsContext } from "../../contexts";
-import { EntityCollectionTable } from "../../collection/components/EntityCollectionTable";
+import { EntityCollectionTable } from "../components/EntityCollectionTable";
 
 export const useStyles = makeStyles(() =>
     createStyles({
@@ -16,12 +16,12 @@ export const useStyles = makeStyles(() =>
 );
 
 interface CollectionRouteProps<S extends EntitySchema<Key>, Key extends string> {
-    view: EntityCollection<S, Key>;
+    collectionConfig: EntityCollection<S, Key>;
     collectionPath: string
 }
 
 function CollectionRoute<S extends EntitySchema<Key>, Key extends string>({
-                                                                              view,
+                                                                              collectionConfig,
                                                                               collectionPath
                                                                           }
                                                                               : CollectionRouteProps<S, Key>) {
@@ -31,7 +31,7 @@ function CollectionRoute<S extends EntitySchema<Key>, Key extends string>({
     React.useEffect(() => {
         breadcrumbsContext.set({
             breadcrumbs: [{
-                title: view.name,
+                title: collectionConfig.name,
                 url: url
             }]
         });
@@ -44,7 +44,7 @@ function CollectionRoute<S extends EntitySchema<Key>, Key extends string>({
 
             <EntityCollectionTable
                 collectionPath={collectionPath}
-                collectionConfig={view}/>
+                collectionConfig={collectionConfig}/>
 
         </div>
     );

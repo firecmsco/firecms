@@ -1,20 +1,24 @@
 import firebase from "firebase/app";
 import { EntityCollection } from "./collections";
-import { CMSView } from "../core/CMSAppProps";
 
 
 /**
  * You can use this builder to customize the navigation, based on the logged in
  * user
+ * @category Navigation
  */
 export type NavigationBuilder =
     ((props: NavigationBuilderProps) => Promise<Navigation>)
     | ((props: NavigationBuilderProps) => Navigation);
 
+/**
+ * @category Navigation
+ */
 export type NavigationBuilderProps = { user: firebase.User | null }
 
 /**
  * In this interface you define the main navigation entries of the CMS
+ * @category Navigation
  */
 export interface Navigation {
 
@@ -33,3 +37,48 @@ export interface Navigation {
     views?: CMSView[];
 
 }
+
+
+/**
+ * Custom additional views created by the developer, added to the main
+ * navigation.
+ * @category Navigation
+ */
+export interface CMSView {
+
+    /**
+     * CMS Path (or paths) you can reach this view from.
+     * If you include multiple paths, only the first one will be included in the
+     * main menu
+     */
+    path: string | string[];
+
+    /**
+     * Name of this view
+     */
+    name: string;
+
+    /**
+     * Optional description of this view. You can use Markdown
+     */
+    description?: string;
+
+    /**
+     * Should this view be hidden from the main navigation panel.
+     * It will still be accessible if you reach the specified path
+     */
+    hideFromNavigation?: boolean;
+
+    /**
+     * Component to be rendered
+     */
+    view: React.ReactNode;
+
+    /**
+     * Optional field used to group top level navigation entries under a
+     * navigation view.
+     */
+    group?: string;
+
+}
+

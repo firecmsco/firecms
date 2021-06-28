@@ -1,3 +1,5 @@
+import { CMSAppContext } from "./CMSAppContext";
+
 export type {
     SnackbarController, SnackbarMessageType
 } from "./SnackbarContext";
@@ -6,7 +8,7 @@ export {
 } from "./SnackbarContext";
 
 export type {
-    CMSAppContextProps
+    CMSAppContext
 } from "./CMSAppContext";
 export {
     useCMSAppContext
@@ -21,14 +23,14 @@ export {
 } from "./AuthContext";
 
 export type {
-    BreadcrumbsStatus, BreadcrumbEntry
+    BreadcrumbsController, BreadcrumbEntry
 } from "./BreacrumbsContext";
 export {
     useBreadcrumbsContext
 } from "./BreacrumbsContext";
 
 export type {
-    SideEntityController, SchemaConfig, SideEntityPanelProps
+    SideEntityController, SchemaConfig
 } from "./SideEntityController";
 export {
     useSideEntityController

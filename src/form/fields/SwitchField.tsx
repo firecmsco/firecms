@@ -30,20 +30,19 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 type SwitchFieldProps = FieldProps<boolean>;
 
-
-export default React.forwardRef(function SwitchField({
-                                                         name,
-                                                         value,
-                                                         setValue,
-                                                         error,
-                                                         showError,
-                                                         autoFocus,
-                                                         disabled,
-                                                         touched,
-                                                         property,
-                                                         includeDescription,
-                                                         dependsOnOtherProperties
-                                                     }: SwitchFieldProps, ref) {
+const SwitchFieldComponent = React.forwardRef(function({
+                                                           name,
+                                                           value,
+                                                           setValue,
+                                                           error,
+                                                           showError,
+                                                           autoFocus,
+                                                           disabled,
+                                                           touched,
+                                                           property,
+                                                           includeDescription,
+                                                           dependsOnOtherProperties
+                                                       }: SwitchFieldProps, ref) {
 
     const classes = useStyles();
 
@@ -94,4 +93,11 @@ export default React.forwardRef(function SwitchField({
 
     );
 });
+
+/**
+ * @category Form fields
+ */
+export default function(props: SwitchFieldProps) {
+    return <SwitchFieldComponent {...props}/>;
+}
 

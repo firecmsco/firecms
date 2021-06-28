@@ -1,10 +1,10 @@
 import React, { useContext, useRef } from "react";
 import { EntityCollection, SchemaConfig, SchemaResolver } from "../models";
-import { getSidePanelKey } from "../side_dialog/model";
 import {
     getCollectionViewFromPath,
     removeInitialAndTrailingSlashes
 } from "../core/navigation";
+import { getSidePanelKey } from "./utils";
 
 const DEFAULT_SCHEMA_CONTROLLER = {
     getSchemaConfig: (collectionPath: string, entityId?: string) => undefined,
@@ -154,3 +154,5 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
         </SchemaRegistryContext.Provider>
     );
 };
+
+

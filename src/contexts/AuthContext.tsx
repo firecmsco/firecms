@@ -8,6 +8,10 @@ interface AuthProviderProps {
     authController: AuthController,
 }
 
+/**
+ * Controller for retrieving the logged user or performing auth related operations
+ * @category Hooks and utilities
+ */
 export interface AuthController {
 
     /**
@@ -96,6 +100,15 @@ export const AuthContext = React.createContext<AuthController>({
     }
 });
 
+/**
+ * Hook to retrieve the AuthContext.
+ *
+ * Consider that in order to use this hook you need to have a parent
+ * `CMSApp` or a `CMSAppProvider`
+ *
+ * @see AuthController
+ * @category Hooks and utilities
+ */
 export const useAuthContext = () => useContext<AuthController>(AuthContext);
 
 export const AuthProvider: React.FC<AuthProviderProps> = (

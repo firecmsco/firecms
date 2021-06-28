@@ -15,7 +15,9 @@ import { useClearRestoreValue } from "../../hooks";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 
-
+/**
+ * @category Form fields
+ */
 export default function ArrayEnumSelect({
                                             name,
                                             value,

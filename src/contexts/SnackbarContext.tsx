@@ -13,8 +13,16 @@ const DEFAULT_STATE = {
     }
 };
 
+/**
+ * Possible snackbar types
+ * @category Hooks and utilities
+ */
 export type SnackbarMessageType = "success" | "info" | "warning" | "error";
 
+/**
+ * Controller to display snackbars
+ * @category Hooks and utilities
+ */
 export type SnackbarController = {
     /**
      * Is there currently an open snackbar
@@ -38,6 +46,16 @@ export type SnackbarController = {
 };
 
 export const SnackbarContext = React.createContext<SnackbarController>(DEFAULT_STATE);
+
+/**
+ * Hook to retrieve the SnackbarContext.
+ *
+ * Consider that in order to use this hook you need to have a parent
+ * `CMSApp` or a `CMSAppProvider`
+ *
+ * @see SnackbarController
+ * @category Hooks and utilities
+ */
 export const useSnackbarController = () => useContext<SnackbarController>(SnackbarContext);
 
 interface ISelectedEntityProviderProps {

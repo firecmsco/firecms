@@ -4,8 +4,11 @@ import firebase from "firebase/app";
 import { FieldProps } from "./fields";
 import { PreviewComponentProps } from "../preview";
 import { ChipColor } from "./colors";
-import { EntitySchema, EntityValues } from "./models";
+import { EntitySchema, EntityValues } from "./entities";
 
+/**
+ * @category Entity properties
+ */
 export type CMSType = string
     | number
     | boolean
@@ -16,6 +19,9 @@ export type CMSType = string
     | CMSType[]
     | object;
 
+/**
+ * @category Entity properties
+ */
 export type Property<T extends CMSType = any> =
     T extends string ? StringProperty :
         T extends number ? NumberProperty :
@@ -27,7 +33,9 @@ export type Property<T extends CMSType = any> =
                                 T extends Array<any> ? ArrayProperty<T> :
                                     T extends object ? MapProperty<T> : never;
 
-
+/**
+ * @category Entity properties
+ */
 export type DataType =
     | "number"
     | "string"
@@ -38,6 +46,9 @@ export type DataType =
     | "geopoint"
     | "reference";
 
+/**
+ * @category Entity properties
+ */
 export type MediaType =
     | "image"
     | "video"
@@ -45,6 +56,7 @@ export type MediaType =
 
 /**
  * Interface including all common properties of a CMS property
+ * @category Entity properties
  */
 interface BaseProperty {
 
@@ -94,6 +106,9 @@ interface BaseProperty {
 
 }
 
+/**
+ * @category Entity properties
+ */
 export type PropertyDisabledConfig = {
 
     /**
@@ -112,6 +127,9 @@ export type PropertyDisabledConfig = {
     disabledMessage?: string;
 }
 
+/**
+ * @category Entity properties
+ */
 export type EnumType = number | string;
 
 /**
@@ -124,6 +142,7 @@ export type EnumType = number | string;
  * choosing colors).
  * If you need to ensure the order of the elements you can pass a `Map` instead
  * of a plain object.
+ * @category Entity properties
  */
 export type EnumValues =
     Record<string | number, string | EnumValueConfig>
@@ -131,6 +150,7 @@ export type EnumValues =
 
 /**
  * Configuration for a particular entry in an `EnumValues`
+ * @category Entity properties
  */
 export type EnumValueConfig = {
     label: string;
@@ -140,24 +160,38 @@ export type EnumValueConfig = {
 
 /**
  * Record of properties of an entity or a map property
+ * @category Entity properties
  */
 export type Properties<Key extends string = string> = Record<Key, Property>;
 
+/**
+ * @category Entity properties
+ */
 export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> =
     {
         values: Partial<EntityValues<S, Key>>;
         entityId?: string;
     };
-
+/**
+ * @category Entity properties
+ */
 export type PropertyBuilder<T extends CMSType = CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> = (props: PropertyBuilderProps<S, Key>) => Property<T>;
+
+/**
+ * @category Entity properties
+ */
 export type PropertyOrBuilder<T extends CMSType = CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> =
     Property<T>
     | PropertyBuilder<T, S, Key>;
-
+/**
+ * @category Entity properties
+ */
 export type PropertiesOrBuilder<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>> = Record<Key, PropertyOrBuilder<CMSType, S, Key>>;
 
-
+/**
+ * @category Entity properties
+ */
 export interface NumberProperty extends BaseProperty {
 
     dataType: "number";
@@ -174,6 +208,9 @@ export interface NumberProperty extends BaseProperty {
 
 }
 
+/**
+ * @category Entity properties
+ */
 export interface BooleanProperty extends BaseProperty {
 
     dataType: "boolean";
@@ -189,6 +226,9 @@ export interface BooleanProperty extends BaseProperty {
     config?: FieldConfig<boolean>;
 }
 
+/**
+ * @category Entity properties
+ */
 export interface StringProperty extends BaseProperty {
 
     dataType: "string";
@@ -204,6 +244,9 @@ export interface StringProperty extends BaseProperty {
     validation?: StringPropertyValidationSchema,
 }
 
+/**
+ * @category Entity properties
+ */
 export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType> extends BaseProperty {
 
     dataType: "array";
@@ -225,6 +268,9 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
     config?: FieldConfig<T>;
 }
 
+/**
+ * @category Entity properties
+ */
 export interface MapProperty<T extends object = {},
     Key extends string = string> extends BaseProperty {
 
@@ -251,6 +297,9 @@ export interface MapProperty<T extends object = {},
     config?: MapFieldConfig<T>;
 }
 
+/**
+ * @category Entity properties
+ */
 export interface TimestampProperty extends BaseProperty {
     dataType: "timestamp";
 
@@ -273,6 +322,9 @@ export interface TimestampProperty extends BaseProperty {
     config?: FieldConfig<Date>;
 }
 
+/**
+ * @category Entity properties
+ */
 // TODO: currently this is the only unsupported field
 export interface GeopointProperty extends BaseProperty {
     dataType: "geopoint";
@@ -288,6 +340,9 @@ export interface GeopointProperty extends BaseProperty {
     config?: FieldConfig<firebase.firestore.GeoPoint>;
 }
 
+/**
+ * @category Entity properties
+ */
 export interface ReferenceProperty<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>>
     extends BaseProperty {
@@ -315,10 +370,10 @@ export interface ReferenceProperty<S extends EntitySchema<Key> = EntitySchema<an
     config?: FieldConfig<firebase.firestore.DocumentReference>;
 }
 
-
 /**
  * Rules to validate any property. Some properties have specific rules
- * on top of these.
+ * additionally to these.
+ * @category Entity properties
  */
 export interface PropertyValidationSchema {
     /**
@@ -348,6 +403,7 @@ export interface PropertyValidationSchema {
 
 /**
  * Validation rules for numbers
+ * @category Entity properties
  */
 export interface NumberPropertyValidationSchema extends PropertyValidationSchema {
     min?: number;
@@ -361,6 +417,7 @@ export interface NumberPropertyValidationSchema extends PropertyValidationSchema
 
 /**
  * Validation rules for strings
+ * @category Entity properties
  */
 export interface StringPropertyValidationSchema extends PropertyValidationSchema {
     length?: number;
@@ -376,6 +433,7 @@ export interface StringPropertyValidationSchema extends PropertyValidationSchema
 
 /**
  * Validation rules for dates
+ * @category Entity properties
  */
 export interface TimestampPropertyValidationSchema extends PropertyValidationSchema {
     min?: Date;
@@ -384,6 +442,7 @@ export interface TimestampPropertyValidationSchema extends PropertyValidationSch
 
 /**
  * Validation rules for arrays
+ * @category Entity properties
  */
 export interface ArrayPropertyValidationSchema extends PropertyValidationSchema {
     min?: number;
@@ -392,6 +451,7 @@ export interface ArrayPropertyValidationSchema extends PropertyValidationSchema 
 
 /**
  * Configure how a field is displayed
+ * @category Entity properties
  */
 export interface FieldConfig<T extends CMSType, CustomProps = any> {
 
@@ -421,6 +481,7 @@ export interface FieldConfig<T extends CMSType, CustomProps = any> {
 /**
  * Possible configuration fields for a string property. Note that setting one
  * config disables the others.
+ * @category Entity properties
  */
 export interface StringFieldConfig extends FieldConfig<string> {
 
@@ -470,6 +531,7 @@ export interface StringFieldConfig extends FieldConfig<string> {
 
 /**
  * Additional configuration related to Storage related fields
+ * @category Entity properties
  */
 export interface StorageMeta {
 
@@ -510,6 +572,9 @@ export interface StorageMeta {
 
 }
 
+/**
+ * @category Entity properties
+ */
 export type UploadedFileContext = {
     /**
      * Uploaded file
@@ -545,6 +610,7 @@ export type UploadedFileContext = {
 /**
  * Possible configuration fields for a string property. Note that setting one
  * config disables the others.
+ * @category Entity properties
  */
 export interface MapFieldConfig<T extends {}> extends FieldConfig<T> {
 
@@ -571,6 +637,7 @@ export interface MapFieldConfig<T extends {}> extends FieldConfig<T> {
 
 /**
  * MIME types for storage fields
+ * @category Entity properties
  */
 export type StorageFileTypes =
     "image/*"
@@ -581,6 +648,9 @@ export type StorageFileTypes =
     | "font/*"
     | string; // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 
+/**
+ * @category Entity properties
+ */
 export interface NumberFieldConfig extends FieldConfig<number> {
 
     /**

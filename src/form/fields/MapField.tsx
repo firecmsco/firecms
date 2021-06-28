@@ -18,7 +18,9 @@ import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
 
-
+/**
+ * @category Form fields
+ */
 export default function MapField<T extends object>({
                                                        name,
                                                        value,

@@ -7,13 +7,10 @@ export {
 } from "./EntityPreview";
 
 export {
-    default as CollectionRoute
-} from "../internal/CollectionRoute";
+    default as ReferenceDialog
+} from "./ReferenceDialog";
 
 export {
-    default as CMSViewRoute
-} from "../internal/CMSViewRoute";
+    default as EntityCollectionTable
+} from "./EntityCollectionTable";
 
-export {
-    default as HomeRoute
-} from "../internal/HomeRoute";

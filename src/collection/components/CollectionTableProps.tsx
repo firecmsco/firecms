@@ -9,6 +9,9 @@ import {
 } from "../../models";
 import React from "react";
 
+/**
+ * @category Collection components
+ */
 export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends string, AdditionalKey extends string = string> {
 
     /**

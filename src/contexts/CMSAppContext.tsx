@@ -9,6 +9,7 @@ import { CMSAppProviderProps } from "../core/CMSAppProvider";
 
 /**
  * Context that includes the internal controllers used by the app
+ * @category Hooks and utilities
  */
 export interface CMSAppContext {
     navigation?: Navigation;
@@ -19,7 +20,7 @@ export interface CMSAppContext {
     theme: any;
 }
 
-const CMSAppContext = React.createContext<CMSAppContext>({
+const CMSAppContextInstance = React.createContext<CMSAppContext>({
     schemasRegistryController: {} as any,
     cmsAppConfig: {} as any,
     theme: {} as any,
@@ -27,11 +28,21 @@ const CMSAppContext = React.createContext<CMSAppContext>({
 });
 
 /**
- * Use this hook to get the app context
+ * Hook to retrieve the CMSAppContext.
+ *
+ * Consider that in order to use this hook you need to have a parent
+ * `CMSApp` or a `CMSAppProvider`
+ *
+ * @see CMSAppContext
+ * @category Hooks and utilities
  */
-export const useCMSAppContext = () => useContext(CMSAppContext);
+export const useCMSAppContext = () => useContext(CMSAppContextInstance);
 
-export interface CMSAppContextProps {
+/**
+ *
+ * @category Core
+ */
+interface CMSAppContextProps {
     cmsAppConfig: CMSAppProviderProps;
     children: React.ReactNode;
     firebaseConfig: Object;
@@ -52,7 +63,7 @@ export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
     const schemasRegistryController = useSchemasRegistry();
 
     return (
-        <CMSAppContext.Provider
+        <CMSAppContextInstance.Provider
             value={{
                 cmsAppConfig,
                 firebaseConfig,
@@ -63,6 +74,6 @@ export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
             }}
         >
             {children}
-        </CMSAppContext.Provider>
+        </CMSAppContextInstance.Provider>
     );
 };

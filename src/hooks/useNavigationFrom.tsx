@@ -3,8 +3,14 @@ import { getNavigationEntriesFromPathInternal } from "../core/navigation";
 import { useEffect, useState } from "react";
 import { CMSAppContext, useCMSAppContext } from "../contexts/CMSAppContext";
 
+/**
+ * @ignore
+ */
 export type NavigationEntry = NavigationEntity | NavigationCollection;
 
+/**
+ * @ignore
+ */
 export type NavigationEntity = {
     type: "entity";
     entity: Entity<any>;
@@ -14,6 +20,9 @@ export type NavigationEntity = {
     parentCollection: EntityCollection;
 };
 
+/**
+ * @ignore
+ */
 export type NavigationCollection = {
     type: "collection";
     fullPath: string;
@@ -30,6 +39,7 @@ export type NavigationCollection = {
  *
  * @param path
  * @param cmsAppContext
+ * @category Hooks and utilities
  */
 export function getNavigationFrom({
                                       path,
@@ -69,10 +79,16 @@ export function getNavigationFrom({
     return Promise.all(resultPromises);
 }
 
+/**
+ * @category Hooks and utilities
+ */
 export interface NavigationFromProps {
     path: string;
 }
 
+/**
+ * @category Hooks and utilities
+ */
 export type NavigationFrom = {
     data?: NavigationEntry[]
     dataLoading: boolean,
@@ -83,6 +99,7 @@ export type NavigationFrom = {
  * Use this hook to retrieve an array of navigation entries (resolved
  * collection or entity) for the given path. You can use this hook
  * in any React component that lives under `CMSApp`
+ * @category Hooks and utilities
  */
 export function useNavigationFrom(
     {

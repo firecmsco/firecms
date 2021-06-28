@@ -35,6 +35,9 @@ type EnumValuesChipProps = {
     small: boolean;
 };
 
+/**
+ * @category Preview components
+ */
 export function EnumValuesChip({
                                    enumValues,
                                    enumKey,
@@ -62,7 +65,10 @@ type EnumChipProps = {
     small: boolean;
 };
 
-export function CustomChip({
+/**
+ * @category Preview components
+ */
+export default function CustomChip({
                                colorSeed,
                                label,
                                colorSchemaKey,

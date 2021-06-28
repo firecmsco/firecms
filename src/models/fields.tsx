@@ -1,10 +1,12 @@
 import React from "react";
-import { EntitySchema, EntityValues } from "./models";
+import { EntitySchema, EntityValues } from "./entities";
 import { CMSType, Property } from "./properties";
 
 /**
  * When building a custom field you need to create a React component that takes
  * this interface as props.
+ *
+ * @category Form custom fields
  */
 export interface FieldProps<T extends CMSType, CustomProps = any, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> {
 
@@ -106,6 +108,10 @@ export interface FieldProps<T extends CMSType, CustomProps = any, S extends Enti
 
 }
 
+/**
+ *
+ * @category Form custom fields
+ */
 export interface FormContext<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
 
     /**
@@ -126,7 +132,8 @@ export interface FormContext<S extends EntitySchema<Key>, Key extends string = E
 
 /**
  * In case you need to render a field bound to a Property inside your
- * custom field you can call `buildPropertyField` with these props.
+ * custom field you can call {@link buildPropertyField} with these props.
+ * @category Form custom fields
  */
 export interface CMSFormFieldProps<T extends CMSType, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
 

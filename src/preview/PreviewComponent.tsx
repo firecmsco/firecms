@@ -5,36 +5,42 @@ import {
     CMSType,
     MapProperty,
     NumberProperty,
-    PreviewComponentProps,
     ReferenceProperty,
     StringProperty,
     TimestampProperty
 } from "../models";
 
-import { ArrayPreview } from "./components/ArrayPreview";
-import { ArrayOfMapsPreview } from "./components/ArrayOfMapsPreview";
-import { ArrayOfStorageComponentsPreview } from "./components/ArrayOfStorageComponentsPreview";
-import { ArrayOfStringsPreview } from "./components/ArrayOfStringsPreview";
-import { ArrayPropertyEnumPreview } from "./components/ArrayEnumPreview";
-import {
-    ArrayOfReferencesPreview,
-    default as ReferencePreview
-} from "./components/ReferencePreview";
-import { BooleanPreview } from "./components/BooleanPreview";
-import { EmptyValue } from "./components/EmptyValue";
-import { NumberPreview } from "./components/NumberPreview";
-import { StringPreview } from "./components/StringPreview";
-import { TimestampPreview } from "./components/TimestampPreview";
-import { UrlComponentPreview } from "./components/UrlComponentPreview";
-import { StorageThumbnail } from "./components/StorageThumbnail";
-import { MapPreview } from "./components/MapPreview";
+import ArrayPreview from "./components/ArrayPreview";
+import ArrayOfMapsPreview from "./components/ArrayOfMapsPreview";
+import ArrayOfStorageComponentsPreview
+    from "./components/ArrayOfStorageComponentsPreview";
+import ArrayOfStringsPreview from "./components/ArrayOfStringsPreview";
+import ArrayPropertyEnumPreview from "./components/ArrayPropertyEnumPreview";
+import ReferencePreview from "./components/ReferencePreview";
+import BooleanPreview from "./components/BooleanPreview";
+import EmptyValue from "./components/EmptyValue";
+import NumberPreview from "./components/NumberPreview";
+import StringPreview from "./components/StringPreview";
+import TimestampPreview from "./components/TimestampPreview";
+import UrlComponentPreview from "./components/UrlComponentPreview";
+import StorageThumbnail from "./components/StorageThumbnail";
+import MapPreview from "./components/MapPreview";
+import ArrayOfReferencesPreview from "./components/ArrayOfReferencesPreview";
+import ErrorView from "../core/components/ErrorView";
+
+import { PreviewComponentProps } from "./preview_component_props";
 
 import ReactMarkdown from "react-markdown";
 import firebase from "firebase/app";
-import { ErrorView } from "../core/components";
 
+/**
+ * @category Preview components
+ */
+export default function PreviewComponent(props: PreviewComponentProps) {
+    return <MemoPreviewComponent {...props} />;
+}
 
-export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps<T>) {
+export function PreviewComponentInternal<T extends CMSType>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
     const {
         property, name, value, size, height, width
@@ -177,4 +183,5 @@ function buildWrongValueType(name: string | undefined, dataType: string, value: 
     );
 }
 
-export default React.memo<PreviewComponentProps>(PreviewComponent);
+const MemoPreviewComponent = React.memo<PreviewComponentProps>(PreviewComponentInternal) as React.FunctionComponent<PreviewComponentProps>;
+

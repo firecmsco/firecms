@@ -1,8 +1,10 @@
-import { EntityCollection, EntitySchema } from "../models";
-import { CMSView } from "./CMSAppProps";
+import { CMSView, EntityCollection, EntitySchema } from "../models";
 
 const DATA_PATH = `/c`;
 
+/**
+ * @category Hooks and utilities
+ */
 export interface BreadcrumbEntry {
     title: string;
     url: string;

@@ -24,10 +24,10 @@ import {
     CustomFieldValidator,
     getYupEntitySchema
 } from "../../../form/validation";
-import { OutsideAlerter } from "../../../core/components/OutsideAlerter";
+import OutsideAlerter from "../../../core/internal/OutsideAlerter";
 import { useWindowSize } from "../../../hooks/useWindowSize";
 import { isReadOnly } from "../../../models/utils";
-import { OnCellChangeParams } from "../CollectionTableProps";
+import { OnCellChangeParams } from "../../components/CollectionTableProps";
 import { buildPropertyField } from "../../../form/form_factory";
 
 export const useStyles = makeStyles(theme => createStyles({
