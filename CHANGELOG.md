@@ -1,11 +1,20 @@
 # Change Log
 
+## [0.42.0] - 2021-06-22
+
+### Changed
+
+- Big internal refactor to have a better modularised code, also to generate
+  better docs
+- [BREAKING] EntityCollectionView (previously renamed to EntityCollection)
+  has been removed. Simply rename to EntityCollection
+
 ## [0.41.1] - 2021-06-22
 
 ### Changed
 
 - Fix for export component that was fetching the complete collections on mount.
-Now opening the CMS does not trigger excessive reads by default.
+  Now opening the CMS does not trigger excessive reads by default.
 
 ## [0.41.0] - 2021-06-19
 
