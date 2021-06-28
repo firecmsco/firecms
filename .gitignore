@@ -27,3 +27,5 @@ firebase-debug.log*
 
 .npmrc
 .eslintcache
+
+report.**.json
