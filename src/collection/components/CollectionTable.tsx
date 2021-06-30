@@ -61,6 +61,10 @@ type Order = "asc" | "desc" | undefined;
  * This component is in charge of rendering a collection table with a high
  * degree of customization.
  *
+ * Please note that you only need to use this component if you are building
+ * a custom view. If you just need to create a default view you can do it
+ * exclusively with config options.
+ *
  * If you just want to bind a EntityCollection to a collection table you can
  * check {@link EntityCollectionTable}
  *

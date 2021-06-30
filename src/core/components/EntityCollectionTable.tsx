@@ -55,6 +55,10 @@ type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
  * where it's configuration is defined. This is useful if you have defined already
  * your entity collections and need to build a custom component.
  *
+ * Please note that you only need to use this component if you are building
+ * a custom view. If you just need to create a default view you can do it
+ * exclusively with config options.
+ *
  * If you need a lower level implementation with more granular options, you
  * can try {@link CollectionTable}, which still does data fetching from Firestore.
  *

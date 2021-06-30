@@ -24,7 +24,8 @@ module.exports = {
                     // '../src/side_dialog/index.ts',
                     // '../src/hooks/index.tsx',
                 ],
-                tsconfig: '../tsconfig.json'
+                tsconfig: '../tsconfig.json',
+                watch: process.env.TYPEDOC_WATCH,
             }
         ]
     ],

@@ -4,6 +4,19 @@ title: Quickstart
 sidebar_label: Quickstart
 ---
 
+## Firebase setup
+
+In order to run FireCMS, you need to create a Firebase project first, with
+some requirements:
+- You need to enable Firestore in it.
+- In the project settings, you need to create a Web application within your
+  project, from which you can get your Firebase config
+
+![firebase_setup](../static/img/firebase_setup_app.png)
+
+Note that you can
+## FireCMS setup
+
 - Create a new React app including Typescript:
 
 ```
