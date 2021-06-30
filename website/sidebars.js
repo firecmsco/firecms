@@ -327,7 +327,3 @@ module.exports = {
 
 // HTML RegEXP:    \<li\>\<a href\=\"\/docs\/([a-zA-Z\s\/]+)\"\>[a-zA-Z\s\/]+\<\/a\>\<\/li\>
 // replace by:     '$1',
-<ul>'api/types/navigationbuilder',
-'api/types/navigationbuilderprops',
-'api/types/schemaresolver',
-</ul>
