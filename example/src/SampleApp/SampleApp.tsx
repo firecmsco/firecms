@@ -106,7 +106,6 @@ function SampleApp() {
         schema: testEntitySchema,
         name: "Test entity",
         filterableProperties: ["difficulty", "search_adjacent", "description"],
-        initialSort: ["title", "desc"],
         subcollections: [{
             relativePath: "test_subcollection",
             schema: testEntitySchema,

@@ -662,9 +662,7 @@ function isFilterCombinationValid<Key extends string>(filterValues: FilterValues
 
     // Order by clause cannot contain a field with an equality filter available
     const values: [WhereFilterOp, any][] = Object.values(filterValues);
-    console.log("isFilterCombinationValid ", values);
     if (sortKey && values.map((v) => v[0]).includes("==")) {
-        console.log("isFilterCombinationValid FFF", values);
         return false;
     }
 

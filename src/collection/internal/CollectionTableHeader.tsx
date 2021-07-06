@@ -207,7 +207,7 @@ function FilterForm({
 
     const tableClasses = useTableStyles();
 
-    const [filterInternal, setFilterInternal] = useState(filter);
+    const [filterInternal, setFilterInternal] = useState<[WhereFilterOp, any] | undefined>(filter);
 
     function createFilterField(): JSX.Element {
 
