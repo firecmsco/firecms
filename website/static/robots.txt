@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: http://firecms.co/sitemap.xml
