@@ -1,14 +1,13 @@
-
 ![logo](https://firecms.co/img/logo_small.png)
 
 # FireCMS
 
 > Awesome Firestore based headless CMS, developed by Camberi
 
-FireCMS is a headless CMS and admin panel built by developers for developers. It
-generates CRUD views based on your configuration. You define views that are
-mapped to absolute or relative paths in your Firestore database, as well as
-schemas for your entities.
+FireCMS is a headless CMS and admin panel based on Firebase, built by developers
+for developers. It generates CRUD views based on your configuration. You define
+views that are mapped to absolute or relative paths in your Firestore database,
+as well as schemas for your entities.
 
 The goal of this CMS is to generate collection and form views that bind nicely
 to the Firestore collection/document model. We have built in many basic (and not

@@ -1,5 +1,20 @@
 # Change Log
 
+## [0.43.0] - 2021-07-06
+
+### Changed
+
+- Filtering in collections has been changed from a single dropdown to dropdowns
+  in each column header.
+- Added Timestamp filters
+- `filterableProperties` has no longer effect since every field is filterable
+  now and will be removed in the future.
+
+### Added
+
+- `indexes` property where you can specify the indexes in your Firestore
+  configuration. That allows to filter/sort by multiple properties.
+
 ## [0.42.0] - 2021-06-22
 
 ### Changed
