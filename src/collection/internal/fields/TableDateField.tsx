@@ -27,15 +27,12 @@ export function TableDateField(props: {
         property
     } = props;
 
-    const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => {
         setPreventOutsideClick(true);
-        setOpen(true);
     };
 
     const handleClose = () => {
         setPreventOutsideClick(false);
-        setOpen(false);
     };
 
     const classes = useInputStyles();

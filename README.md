@@ -73,8 +73,7 @@ yarn add @camberi/firecms
 - [x] All login methods supported by Firebase
 - [x] Custom authenticator to control access
 - [x] Custom additional views in main navigation
-- [x] Filters for string, numbers and booleans
-- [ ] Filters for arrays, dates
+- [x] Filters for string, numbers, booleans, arrays and dates
 - [ ] Allow set up of a project using a CLI create-firecms-app
 
 ### Entity edition

@@ -6,6 +6,7 @@ import {
 } from "../../../models";
 import {
     Box,
+    FormControl,
     IconButton,
     Input,
     MenuItem,
@@ -70,7 +71,6 @@ export default function StringNumberFilterField({
     const [internalValue, setInternalValue] = useState<string | number | string[] | number[] | undefined>(fieldValue);
 
     function updateFilter(op: WhereFilterOp, val: string | number | string[] | number[] | undefined) {
-        console.log("updateFilter", val);
         let newValue = val;
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
@@ -103,70 +103,73 @@ export default function StringNumberFilterField({
     return (
 
         <Box display={"flex"} width={340} alignItems={"center"}>
-            <Box width={100}>
-                <MuiSelect value={operation}
-                           fullWidth
-                           onChange={(evt: any) => {
-                               updateFilter(evt.target.value, internalValue);
-                           }}>
-                    {possibleOperations.map((op) =>
-                        <MenuItem
-                            key={`filter_op_${name}_${op}`}
-                            value={op}>{operationLabels[op]}</MenuItem>
-                    )}
+            <Box width={80}>
+                <FormControl fullWidth>
+                    <MuiSelect value={operation}
+                               fullWidth
+                               onChange={(evt: any) => {
+                                   updateFilter(evt.target.value, internalValue);
+                               }}>
+                        {possibleOperations.map((op) =>
+                            <MenuItem
+                                key={`filter_op_${name}_${op}`}
+                                value={op}>{operationLabels[op]}</MenuItem>
+                        )}
 
-                </MuiSelect>
+                    </MuiSelect>
+                </FormControl>
             </Box>
 
             <Box flexGrow={1} ml={1}>
 
-                {!enumValues && <Input
-                    fullWidth
-                    key={`filter_${name}`}
-                    type={dataType === "number" ? "number" : undefined}
-                    value={internalValue !== undefined ? internalValue : ""}
-                    onChange={(evt) => {
-                        const val = dataType === "number" ?
-                            parseFloat(evt.target.value)
-                            : evt.target.value;
-                        updateFilter(operation, val);
-                    }}
-                />}
+                <FormControl fullWidth>
+                    {!enumValues && <Input
+                        fullWidth
+                        key={`filter_${name}`}
+                        type={dataType === "number" ? "number" : undefined}
+                        value={internalValue !== undefined ? internalValue : ""}
+                        onChange={(evt) => {
+                            const val = dataType === "number" ?
+                                parseFloat(evt.target.value)
+                                : evt.target.value;
+                            updateFilter(operation, val);
+                        }}
+                    />}
 
-                {enumValues &&
-                <MuiSelect
-                    fullWidth
-                    key={`filter-select-${multiple}-${name}`}
-                    multiple={multiple}
-                    value={internalValue !== undefined ? internalValue : isArray ? [] : ""}
-                    onChange={(evt: any) => updateFilter(operation, property.dataType === "number" ? parseInt(evt.target.value) : evt.target.value)}
-                    renderValue={multiple ? (selected: any) =>
-                        (
-                            <div>
-                                {selected.map((enumKey: any) => {
-                                    return <EnumValuesChip
-                                        key={`select_value_${name}_${enumKey}`}
+                    {enumValues &&
+                    <MuiSelect
+                        fullWidth
+                        key={`filter-select-${multiple}-${name}`}
+                        multiple={multiple}
+                        value={internalValue !== undefined ? internalValue : isArray ? [] : ""}
+                        onChange={(evt: any) => updateFilter(operation, property.dataType === "number" ? parseInt(evt.target.value) : evt.target.value)}
+                        renderValue={multiple ? (selected: any) =>
+                            (
+                                <div>
+                                    {selected.map((enumKey: any) => {
+                                        return <EnumValuesChip
+                                            key={`select_value_${name}_${enumKey}`}
+                                            enumKey={enumKey}
+                                            enumValues={enumValues}
+                                            small={true}/>;
+                                    })}
+                                </div>
+                            ) : undefined}>
+                        {enumToObjectEntries(enumValues).map(([enumKey, labelOrConfig]) => {
+                            return (
+                                <MenuItem
+                                    disabled={isEnumValueDisabled(labelOrConfig)}
+                                    key={`select_${name}_${enumKey}`}
+                                    value={enumKey}>
+                                    <EnumValuesChip
                                         enumKey={enumKey}
                                         enumValues={enumValues}
-                                        small={true}/>;
-                                })}
-                            </div>
-                        ) : undefined}>
-                    {enumToObjectEntries(enumValues).map(([enumKey, labelOrConfig]) => {
-                        return (
-                            <MenuItem
-                                disabled={isEnumValueDisabled(labelOrConfig)}
-                                key={`select_${name}_${enumKey}`}
-                                value={enumKey}>
-                                <EnumValuesChip
-                                    enumKey={enumKey}
-                                    enumValues={enumValues}
-                                    small={true}/>
-                            </MenuItem>
-                        );
-                    })}
-                </MuiSelect>}
-
+                                        small={true}/>
+                                </MenuItem>
+                            );
+                        })}
+                    </MuiSelect>}
+                </FormControl>
             </Box>
 
             {internalValue !== undefined && <Box ml={1}>

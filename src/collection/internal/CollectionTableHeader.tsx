@@ -25,6 +25,7 @@ import BooleanFilterField from "./filters/BooleanFilterField";
 import { getIconForProperty } from "../../util/property_icons";
 import { useTableStyles } from "../components/styles";
 import clsx from "clsx";
+import DateTimeFilterField from "./filters/DateTimeFilterfield";
 
 export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | "left" | "center" }>
 (theme => createStyles({
@@ -209,7 +210,7 @@ function FilterForm({
 
     const [filterInternal, setFilterInternal] = useState<[WhereFilterOp, any] | undefined>(filter);
 
-    function createFilterField(): JSX.Element {
+    function createFilterField(property: Property): JSX.Element {
 
         if (property.dataType === "number" || property.dataType === "string") {
             return <StringNumberFilterField value={filterInternal}
@@ -217,16 +218,17 @@ function FilterForm({
                                             name={id}
                                             property={property}/>;
         } else if (property.dataType === "array" && property.of) {
-            if (property.of.dataType === "number" || property.of.dataType === "string")
-                return <StringNumberFilterField value={filterInternal}
-                                                setValue={setFilterInternal}
-                                                name={id}
-                                                property={property}/>;
+            return createFilterField(property.of);
         } else if (property.dataType === "boolean") {
             return <BooleanFilterField value={filterInternal}
                                        setValue={setFilterInternal}
                                        name={id}
                                        property={property}/>;
+        } else if (property.dataType === "timestamp") {
+            return <DateTimeFilterField value={filterInternal}
+                                        setValue={setFilterInternal}
+                                        name={id}
+                                        property={property}/>;
         }
 
         return (
@@ -254,7 +256,7 @@ function FilterForm({
             <Divider/>
 
             <Box p={2}>
-                {createFilterField()}
+                {createFilterField(property)}
             </Box>
 
             <Box display="flex"

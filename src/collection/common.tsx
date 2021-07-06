@@ -42,6 +42,8 @@ export function isPropertyFilterable(property: Property): boolean {
         return true;
     } else if (property.dataType === "string") {
         return true;
+    } else if (property.dataType === "timestamp") {
+        return true;
     } else if (property.dataType === "array") {
         if (property.of)
             return isPropertyFilterable(property.of);
