@@ -1,27 +1,34 @@
-import React from "react";
-import { ThreeJSAnimationShader } from "../shape/ThreeJSAnimationShader";
+import React, { Suspense } from "react";
 import HeroButtons from "./HeroButtons";
 import BrowserOnly from "@docusaurus/BrowserOnly";
+
+const LazyThreeJSAnimationShader = React.lazy(() => import("../shape/ThreeJSAnimationShader"));
+
 
 function HeroHome({}) {
 
 
+    const fallback = <canvas style={{
+        height: "1000px",
+        width: "100vh",
+        maxHeight: "1000px",
+        position: "fixed",
+        transform: `translateY(60px)`,
+        top: 0,
+        zIndex: -10
+    }}/>;
     return (
         <section className="relative" style={{
             isolation: "isolate"
         }}>
 
             <BrowserOnly
-                fallback={<canvas style={{
-                    height: "1000px",
-                    width: "100vh",
-                    maxHeight: "1000px",
-                    position: "fixed",
-                    transform: `translateY(60px)`,
-                    top: 0,
-                    zIndex: -10
-                }}/>}>
-                {() => <ThreeJSAnimationShader/>}
+                fallback={fallback}>
+                {() =>(
+                    <Suspense fallback={fallback}>
+                        <LazyThreeJSAnimationShader/>
+                    </Suspense>
+                )}
             </BrowserOnly>
 
             <div

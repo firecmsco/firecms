@@ -23,7 +23,7 @@ type SceneState = {
 type AnimationProps = {
 }
 
-export function ThreeJSAnimationShader({  }: AnimationProps) {
+export default function ThreeJSAnimationShader({  }: AnimationProps) {
 
     const [scroll, setScroll] = useState(typeof window !== "undefined"
         ? window?.pageYOffset
