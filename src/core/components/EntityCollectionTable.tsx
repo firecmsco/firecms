@@ -30,8 +30,8 @@ import {
 } from "../../contexts";
 
 import CollectionRowActions
-    from "../../collection/components/CollectionRowActions";
-import DeleteEntityDialog from "../../collection/components/DeleteEntityDialog";
+    from "../../collection/internal/CollectionRowActions";
+import DeleteEntityDialog from "../../collection/internal/DeleteEntityDialog";
 import ExportButton from "../../collection/internal/ExportButton";
 import {
     getSubcollectionColumnId,
@@ -72,6 +72,11 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                                                                                                    collectionConfig
                                                                                                }: EntityCollectionProps<S, Key>
 ) {
+
+    if(collectionConfig.filterableProperties){
+        console.warn("The property 'filterableProperties' has been deprecated and will be removed in the" +
+            "future. The supported properties are filtarable by default. ")
+    }
 
     const sideEntityController = useSideEntityController();
 
@@ -208,6 +213,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                     id={"info-dialog"}
                     open={!!anchorEl}
                     anchorEl={anchorEl}
+                    elevation={2}
                     onClose={() => {
                         setAnchorEl(null);
                     }}
@@ -372,7 +378,8 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         );
     }
 
-    return (<>
+    return (
+        <>
 
             <CollectionTable
                 title={title}
@@ -382,12 +389,12 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 additionalColumns={additionalColumns}
                 defaultSize={collectionConfig.defaultSize}
                 displayedProperties={displayedProperties}
-                filterableProperties={collectionConfig.filterableProperties}
                 initialFilter={collectionConfig.initialFilter}
                 initialSort={collectionConfig.initialSort}
                 textSearchDelegate={collectionConfig.textSearchDelegate}
                 paginationEnabled={paginationEnabled}
                 pageSize={pageSize}
+                indexes={collectionConfig.indexes}
                 inlineEditing={checkInlineEditing}
                 uniqueFieldValidator={uniqueFieldValidator}
                 onEntityClick={onEntityClick}

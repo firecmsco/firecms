@@ -16,7 +16,7 @@ import { TableSwitch } from "./fields/TableSwitch";
 import { TableDateField } from "./fields/TableDateField";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { PreviewComponent } from "../../preview";
-import { CellStyleProps } from "../styles";
+import { CellStyleProps } from "../components/styles";
 import { TableReferenceField } from "./fields/TableReferenceField";
 
 import firebase from "firebase/app";

@@ -1,5 +1,5 @@
 import { CollectionSize, Entity, EntitySchema } from "../../models";
-import { useTableStyles } from "../styles";
+import { useTableStyles } from "../components/styles";
 
 import React, { MouseEvent } from "react";
 import "react-base-table/styles.css";
@@ -56,7 +56,7 @@ export default function CollectionRowActions<S extends EntitySchema<Key>,
     const copyEnabled = Boolean(onCopyClicked);
     const deleteEnabled = Boolean(onDeleteClicked);
 
-    const classes = useTableStyles({ size });
+    const classes = useTableStyles();
 
     const [anchorEl, setAnchorEl] = React.useState<any | null>(null);
 

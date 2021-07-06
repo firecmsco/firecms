@@ -57,14 +57,14 @@ function SampleApp() {
         description: "List of the products currently sold in our shop",
         textSearchDelegate: productsSearchDelegate,
         additionalColumns: [productAdditionalColumn],
+        indexes: [{category: "desc" , available: "desc"}],
         permissions: ({ user }) => ({
             edit: true,
             create: true
         }),
         extraActions: productExtraActionBuilder,
         subcollections: [localeCollection],
-        excludedProperties: ["images", "related_products"],
-        filterableProperties: ["price", "available_locales"]
+        excludedProperties: ["images", "related_products"]
     });
 
     const usersCollection = buildCollection<typeof usersSchema>({

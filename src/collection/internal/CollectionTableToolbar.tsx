@@ -5,18 +5,20 @@ import {
     createStyles,
     fade,
     Hidden,
+    IconButton,
     InputBase,
     makeStyles,
     MenuItem,
     Select,
     Theme,
+    Tooltip,
     useMediaQuery,
     useTheme
 } from "@material-ui/core";
 
 import { CollectionSize, EntitySchema, FilterValues } from "../../models";
-import SearchBar from "../internal/SearchBar";
-import FilterPopup from "../internal/FilterPopup";
+import SearchBar from "./SearchBar";
+import ClearIcon from "@material-ui/icons/Clear";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -91,14 +93,13 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
 interface CollectionTableToolbarProps<S extends EntitySchema<Key>, Key extends string> {
     schema: S;
     size: CollectionSize;
-    filterValues?: FilterValues<S, Key>;
-    filterableProperties?: Key[];
+    filterIsSet: boolean;
     actions?: React.ReactNode;
     loading: boolean;
     title?: React.ReactNode,
-    onFilterUpdate?: (filterValues: FilterValues<S, Key>) => void;
     onTextSearch?: (searchString?: string) => void;
     onSizeChanged: (size: CollectionSize) => void;
+    clearFilter(): void;
 }
 
 export default function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends string>(props: CollectionTableToolbarProps<S, Key>) {
@@ -108,12 +109,20 @@ export default function CollectionTableToolbar<S extends EntitySchema<Key>, Key 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const filterEnabled = props.onFilterUpdate && props.filterableProperties && props.filterableProperties.length > 0;
-    const filterView = filterEnabled && props.onFilterUpdate && props.filterableProperties &&
-        <FilterPopup schema={props.schema}
-                     filterValues={props.filterValues}
-                     onFilterUpdate={props.onFilterUpdate}
-                     filterableProperties={props.filterableProperties}/>;
+    const filterView = props.filterIsSet &&
+        <Box display={"flex"}
+             alignItems="center">
+
+            <Tooltip title="Clear filter">
+                <IconButton
+                    style={{ height: "fit-content" }}
+                    aria-label="filter clear"
+                    onClick={props.clearFilter}>
+                    <ClearIcon/>
+                </IconButton>
+            </Tooltip>
+
+        </Box>;
 
     const sizeSelect = (
         <Select
@@ -170,7 +179,7 @@ export default function CollectionTableToolbar<S extends EntitySchema<Key>, Key 
 
                 {sizeSelect}
 
-                {filterEnabled && filterView}
+                {filterView}
 
             </Box>
 

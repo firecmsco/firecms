@@ -86,6 +86,13 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
     selectionEnabled?: boolean;
 
     /**
+     * If you need to filter/sort by multiple properties in this collection, you
+     * need to create special indexes in Firestore.
+     * You can then specify here the indexes created.
+     */
+    indexes?: CompositeIndex<Key>[];
+
+    /**
      * Should the data in this collection view include an export button.
      * You can also set an `ExportConfig` configuration object to customize
      * the export and add additional values.
@@ -115,6 +122,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
 
     /**
      * Properties that can be filtered in this view
+     * DEPRECATED, it has no effect if set
      */
     filterableProperties?: Key[];
 
@@ -124,7 +132,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      * `filterableProperties` will include the corresponding filter widget.
      * Defaults to none.
      */
-    initialFilter?: FilterValues<S, Key>;
+    initialFilter?: FilterValues<Key>;
 
     /**
      * Default sort applied to this collection
@@ -223,7 +231,9 @@ export interface AdditionalColumnDelegate<AdditionalKey extends string = string,
  * Used to define filters applied in collections
  * @category Collections
  */
-export type FilterValues<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> = Partial<{ [K in Key]: [WhereFilterOp, any] }>;
+export type FilterValues<Key extends string>
+    = Partial<{ [K in Key]: [WhereFilterOp, any] }>;
+
 
 /**
  * Filter conditions in a `Query.where()` clause are specified using the
@@ -242,6 +252,8 @@ export type WhereFilterOp =
     | "array-contains-any";
 
 /**
+ * You can use this configuration to add additional columns to the data
+ * exports
  * @category Collections
  */
 export type ExportConfig = {
@@ -255,4 +267,12 @@ export type ExportMappingFunction = {
     key: string;
     builder: (props: { entity: Entity<any> }) => Promise<string> | string
 }
+
+/**
+ * Used to indicate valid filter combinations (as created in Firestore)
+ * If the user selects a specific filter/sort combination, the CMS checks if it's
+ * valid, otherwise it reverts to the simpler valid case
+ * @category Collections
+ */
+export type CompositeIndex<Key extends string> = Record<Key, "asc" | "desc">
 

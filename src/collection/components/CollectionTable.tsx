@@ -11,51 +11,44 @@ import {
     buildPropertyFrom,
     CMSType,
     CollectionSize,
+    CompositeIndex,
     Entity,
     EntitySchema,
     FilterValues,
-    Property
+    Property,
+    WhereFilterOp
 } from "../../models";
 import {
+    CMSColumn,
     getCellAlignment,
     getPropertyColumnWidth,
-    getRowHeight
+    getRowHeight,
+    isPropertyFilterable,
+    Sort
 } from "../common";
-import CollectionTableToolbar from "./CollectionTableToolbar";
+import CollectionTableToolbar from "../internal/CollectionTableToolbar";
 import PreviewComponent from "../../preview/PreviewComponent";
 import SkeletonComponent from "../../preview/components/SkeletonComponent";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import TableCell from "../internal/TableCell";
 import PopupFormField from "../internal/popup_field/PopupFormField";
 import OutsideAlerter from "../../core/internal/OutsideAlerter";
-import CollectionRowActions from "./CollectionRowActions";
+import CollectionRowActions from "../internal/CollectionRowActions";
 import { CollectionTableProps } from "./CollectionTableProps";
 import { TableCellProps } from "../internal/TableCellProps";
-import { getIconForProperty } from "../../util/property_icons";
 import CircularProgressCenter from "../../core/internal/CircularProgressCenter";
-import { useTableStyles } from "../styles";
+import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../../preview/util";
 import PropertyTableCell, { OnCellChangeParams } from "../internal/PropertyTableCell";
 import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
 import { useCollectionFetch } from "../../hooks";
 import { useTextSearch } from "../../hooks/useTextSearch";
+import CollectionTableHeader from "../internal/CollectionTableHeader";
 
 const DEFAULT_PAGE_SIZE = 50;
 
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
 
-
-interface CMSColumn {
-    id: string;
-    type: "property" | "additional";
-    label: string;
-    icon?: React.ReactNode;
-    align: "right" | "left" | "center";
-    sortable: boolean;
-    width: number;
-}
-
-type Order = "asc" | "desc" | undefined;
 
 /**
  * This component is in charge of rendering a collection table with a high
@@ -82,7 +75,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                                displayedProperties,
                                                textSearchDelegate,
                                                additionalColumns,
-                                               filterableProperties,
+                                               indexes,
                                                inlineEditing,
                                                toolbarActionsBuilder,
                                                title,
@@ -102,16 +95,16 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
     const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
 
-    const [filter, setFilter] = React.useState<FilterValues<S, Key> | undefined>(initialFilter);
-    const [currentSort, setSort] = React.useState<Order>(initialSort ? initialSort[1] : undefined);
-    const [sortByProperty, setSortProperty] = React.useState<string | undefined>(initialSort ? initialSort[0] as string : undefined);
+    const [filterValues, setFilterValues] = React.useState<FilterValues<Key>>(initialFilter || {});
+    const [sortByProperty, setSortProperty] = React.useState<Key | undefined>(initialSort ? initialSort[0] : undefined);
+    const [currentSort, setCurrentSort] = React.useState<Sort>(initialSort ? initialSort[1] : undefined);
 
     const [tableSize, setTableSize] = React.useState<ContentRect | undefined>();
 
     const [tableKey] = React.useState<string>(Math.random().toString(36));
     const tableRef = useRef<BaseTable>(null);
 
-    const classes = useTableStyles({ size });
+    const classes = useTableStyles();
 
     const [selectedCell, setSelectedCell] = React.useState<TableCellProps>(undefined);
     const [focused, setFocused] = React.useState<boolean>(false);
@@ -123,7 +116,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
     const textSearchEnabled = !!textSearchDelegate;
 
-    const filterSet = filter && Object.keys(filter).length;
+    const filterIsSet = filterValues && Object.keys(filterValues).length > 0;
 
     const {
         data,
@@ -134,7 +127,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         entitiesDisplayedFirst,
         collectionPath,
         schema,
-        filter,
+        filterValues,
         sortByProperty,
         currentSort,
         itemCount
@@ -232,10 +225,11 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                 return ({
                     id: key as string,
                     type: "property",
+                    property,
                     align: getCellAlignment(property),
-                    icon: getIconForProperty(property, "disabled", "small"),
                     label: property.title || key as string,
                     sortable: true,
+                    filterable: isPropertyFilterable(property),
                     width: getPropertyColumnWidth(property, size)
                 });
             });
@@ -247,6 +241,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                     type: "additional",
                     align: "left",
                     sortable: false,
+                    filterable: false,
                     label: additionalColumn.title,
                     width: additionalColumn.width ?? 200
                 }));
@@ -261,40 +256,33 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     }, [displayedProperties]);
 
 
-    const onColumnSort = ({ key }: any) => {
+    const onColumnSort = (key: Key) => {
 
-        console.debug("onColumnSort", key);
-        const property = key;
-        if (filter) {
-            const filterKeys = Object.keys(filter);
-            if (filterKeys.length > 1 || filterKeys[0] !== property) {
-                return;
+        const isDesc = sortByProperty === key && currentSort === "desc";
+        const isAsc = sortByProperty === key && currentSort === "asc";
+        const newSort = isDesc ? "asc" : (isAsc ? undefined : "desc");
+        const newSortProperty = isAsc ? undefined : key;
+
+        if (filterValues) {
+            if (!isFilterCombinationValid(filterValues, indexes, newSortProperty, newSort)) {
+                // reset filters
+                setFilterValues({});
             }
         }
         resetPagination();
 
-        const isDesc = sortByProperty === property && currentSort === "desc";
-        const isAsc = sortByProperty === property && currentSort === "asc";
-        setSort(isDesc ? "asc" : (isAsc ? undefined : "desc"));
-        setSortProperty(isAsc ? undefined : property);
+        setCurrentSort(newSort);
+        setSortProperty(newSortProperty);
 
         scrollToTop();
     };
 
     const resetSort = () => {
-        setSort(undefined);
+        setCurrentSort(undefined);
         setSortProperty(undefined);
     };
 
-    const onFilterUpdate = (filterValues: FilterValues<S, Key>) => {
-        if (sortByProperty && filterValues) {
-            const filterKeys = Object.keys(filterValues);
-            if (filterKeys.length > 1 || filterKeys[0] !== sortByProperty) {
-                resetSort();
-            }
-        }
-        setFilter(filterValues);
-    };
+    const clearFilter = () => setFilterValues({});
 
     const buildIdColumn = (props: {
         entity: Entity<S, Key>,
@@ -462,24 +450,49 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
     const headerRenderer = ({ columnIndex }: any) => {
 
-        const headCell = columns[columnIndex - 1];
+        const column = columns[columnIndex - 1];
+
+        const filterForThisProperty: [WhereFilterOp, any] | undefined =
+            column && column.type === "property" && filterValues && filterValues[column.id] ?
+                filterValues[column.id]
+                : undefined;
+
+        const onPropertyFilterUpdate = (filterForProperty?: [WhereFilterOp, any]) => {
+
+            let newFilterValue = filterValues ? { ...filterValues } : {};
+
+            if (!filterForProperty) {
+                delete newFilterValue[column.id];
+            } else {
+                newFilterValue[column.id] = filterForProperty;
+            }
+
+            const isNewFilterCombinationValid = isFilterCombinationValid(newFilterValue, indexes, sortByProperty, currentSort);
+            if (!isNewFilterCombinationValid) {
+                newFilterValue = filterForProperty ? { [column.id]: filterForProperty } as FilterValues<Key> : {};
+            }
+
+            setFilterValues(newFilterValue);
+            if (column.id !== sortByProperty) {
+                resetSort();
+            }
+        };
 
         return (
 
             <ErrorBoundary>
                 {columnIndex === 0 ?
-                    <div className={classes.header}>
+                    <div className={classes.headerTypography}>
                         Id
                     </div>
                     :
-                    <div className={classes.header}>
-                        <div className={classes.headerItem}>
-                            {headCell.icon}
-                        </div>
-                        <div className={classes.headerItem}>
-                            {headCell.label}
-                        </div>
-                    </div>
+                    <CollectionTableHeader
+                        onFilterUpdate={onPropertyFilterUpdate}
+                        filter={filterForThisProperty}
+                        sort={sortByProperty === column.id ? currentSort : undefined}
+                        onColumnSort={onColumnSort}
+                        column={column}/>
+
                 }
             </ErrorBoundary>
         );
@@ -527,86 +540,73 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                     <AssignmentIcon/>
                 </Box>
                 <Typography>
-                    {textSearchInProgress ? "No results" : (filterSet ? "No data with the selected filters" : "This collection is empty")}
+                    {textSearchInProgress ? "No results" : (filterIsSet ? "No data with the selected filters" : "This collection is empty")}
                 </Typography>
             </Box>
         );
     }
 
-    let body;
+    const body =
+        (
+            <Measure
+                bounds
+                onResize={setTableSize}>
+                {({ measureRef }) => (
+                    <div ref={measureRef}
+                         className={classes.tableContainer}>
 
-    if (!loading && dataLoadingError) {
-        body = buildErrorView();
-    } else {
-        body =
-            (
-                <Measure
-                    bounds
-                    onResize={setTableSize}>
-                    {({ measureRef }) => (
-                        <div ref={measureRef}
-                             className={classes.tableContainer}>
+                        {tableSize?.bounds &&
+                        <BaseTable
+                            rowClassName={`${classes.tableRow} ${classes.tableRowClickable}`}
+                            data={currentData}
+                            width={tableSize.bounds.width}
+                            height={tableSize.bounds.height}
+                            emptyRenderer={dataLoadingError ? buildErrorView() : buildEmptyView()}
+                            fixed
+                            ignoreFunctionInColumnCompare={false}
+                            rowHeight={getRowHeight(size)}
+                            ref={tableRef}
+                            overscanRowCount={2}
+                            onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
+                            onEndReached={loadNextPage}
+                            rowEventHandlers={
+                                { onClick: onRowClick }
+                            }
+                        >
 
-                            {tableSize?.bounds &&
-                            <BaseTable
-                                rowClassName={`${classes.tableRow} ${classes.tableRowClickable}`}
-                                data={currentData}
-                                width={tableSize.bounds.width}
-                                height={tableSize.bounds.height}
-                                emptyRenderer={buildEmptyView()}
-                                fixed
-                                ignoreFunctionInColumnCompare={false}
-                                rowHeight={getRowHeight(size)}
-                                ref={tableRef}
-                                sortBy={currentSort && sortByProperty ? {
-                                    key: sortByProperty,
-                                    order: currentSort
-                                } : undefined}
-                                overscanRowCount={2}
-                                onColumnSort={onColumnSort}
-                                onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
-                                onEndReached={loadNextPage}
-                                rowEventHandlers={
-                                    { onClick: onRowClick }
-                                }
-                            >
+                            <Column
+                                headerRenderer={headerRenderer}
+                                cellRenderer={cellRenderer}
+                                align={"center"}
+                                key={"header-id"}
+                                dataKey={"id"}
+                                flexShrink={0}
+                                frozen={frozenIdColumn ? "left" : undefined}
+                                width={160}/>
 
+                            {columns.map((column) =>
                                 <Column
+                                    key={column.id}
+                                    type={column.type}
+                                    title={column.label}
+                                    className={classes.column}
                                     headerRenderer={headerRenderer}
                                     cellRenderer={cellRenderer}
-                                    align={"center"}
-                                    key={"header-id"}
-                                    dataKey={"id"}
+                                    height={getRowHeight(size)}
+                                    align={column.align}
+                                    flexGrow={1}
                                     flexShrink={0}
-                                    frozen={frozenIdColumn ? "left" : undefined}
-                                    width={160}/>
+                                    resizable={true}
+                                    size={size}
+                                    dataKey={column.id}
+                                    width={column.width}/>)
+                            }
+                        </BaseTable>}
+                    </div>
+                )}
+            </Measure>
 
-                                {columns.map((column) =>
-                                    <Column
-                                        key={column.id}
-                                        type={column.type}
-                                        title={column.label}
-                                        className={classes.column}
-                                        headerRenderer={headerRenderer}
-                                        cellRenderer={cellRenderer}
-                                        height={getRowHeight(size)}
-                                        align={column.align}
-                                        flexGrow={1}
-                                        flexShrink={0}
-                                        resizable={true}
-                                        size={size}
-                                        sortable={column.sortable}
-                                        dataKey={column.id}
-                                        width={column.width}/>)
-                                }
-                            </BaseTable>}
-                        </div>
-                    )}
-                </Measure>
-
-            );
-    }
-
+        );
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
         ? ({ name, value, property }) => uniqueFieldValidator({
             name,
@@ -622,15 +622,14 @@ export default function CollectionTable<S extends EntitySchema<Key>,
             <Paper className={classes.root}>
 
                 <CollectionTableToolbar schema={schema}
-                                        filterValues={filter}
+                                        filterIsSet={filterIsSet}
                                         onTextSearch={textSearchEnabled ? setSearchString : undefined}
-                                        filterableProperties={filterableProperties}
+                                        clearFilter={clearFilter}
                                         actions={actions}
                                         size={size}
                                         onSizeChanged={setSize}
                                         title={title}
-                                        loading={loading}
-                                        onFilterUpdate={onFilterUpdate}/>
+                                        loading={loading}/>
 
                 <PopupFormField
                     cellRect={selectedCell?.cellRect}
@@ -657,4 +656,30 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         </>
     );
 
+}
+
+function isFilterCombinationValid<Key extends string>(filterValues: FilterValues<Key>, indexes?: CompositeIndex<Key>[], sortKey?: Key, sortDirection?: "asc" | "desc"): boolean {
+
+    // Order by clause cannot contain a field with an equality filter available
+    const values: [WhereFilterOp, any][] = Object.values(filterValues);
+    console.log("isFilterCombinationValid ", values);
+    if (sortKey && values.map((v) => v[0]).includes("==")) {
+        console.log("isFilterCombinationValid FFF", values);
+        return false;
+    }
+
+    const filterKeys = Object.keys(filterValues);
+    const filtersCount = filterKeys.length;
+    if (!indexes && filtersCount > 1)
+        return false;
+
+    // only one filter set, different to the sort key
+    if (sortKey && filtersCount === 1 && filterKeys[0] !== sortKey)
+        return false;
+
+    return !!indexes && indexes
+        .filter((compositeIndex) => !sortKey || sortKey in compositeIndex)
+        .find((compositeIndex) =>
+            Object.entries(filterValues).every(([key, value]) => compositeIndex[key] !== undefined && (!sortDirection || compositeIndex[key] === sortDirection))
+        ) !== undefined;
 }

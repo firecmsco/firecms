@@ -1,21 +1,17 @@
-import { BooleanProperty } from "../../../models";
-import { Field } from "formik";
+import { BooleanProperty, WhereFilterOp } from "../../../models";
 import {
+    Checkbox,
     createStyles,
     FormControlLabel,
     makeStyles,
-    Switch,
     Theme
 } from "@material-ui/core";
 import React from "react";
-import { FieldProps } from "formik/dist/Field";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         formControl: {
-            width: "100%",
-            minHeight: "64px",
-            paddingRight: "32px"
+            width: "200px",
         },
         label: {
             width: "100%",
@@ -26,58 +22,57 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 interface BooleanFieldProps {
     name: string,
+    value?: [op: WhereFilterOp, fieldValue: any];
+    setValue: (value?: [op: WhereFilterOp, newValue: any]) => void;
     property: BooleanProperty,
 }
 
 export default function BooleanFilterField({
                                                name,
-                                               property
+                                               property,
+                                               value,
+                                               setValue
                                            }: BooleanFieldProps) {
 
     const classes = useStyles();
+
+    function updateFilter(val?: boolean) {
+        if (val !== undefined) {
+            setValue(
+                ["==", val]
+            );
+        } else {
+            setValue(
+                undefined
+            );
+        }
+    }
+
+    const valueSetToTrue = value && value[1];
+    const valueSet = !!value;
+
     return (
-        <Field
-            name={`${name}`}
-        >
-            {({
-                  field,
-                  form: { setFieldValue },
-                  ...props
-              }: FieldProps) => {
-
-                const [fieldOperation, fieldValue] = field.value ? field.value : ["==", false];
-
-                function updateFilter(val: boolean) {
-                    if (val) {
-                        setFieldValue(
-                            name,
-                            ["==", val]
-                        );
-                    } else {
-                        setFieldValue(
-                            name,
-                            undefined
-                        );
-                    }
-                }
-
-                return (
-                    <FormControlLabel
-                        className={classes.formControl}
-                        labelPlacement={"end"}
-                        checked={fieldValue}
-                        control={
-                            <Switch
-                                key={`filter-${name}`}
-                                type={"checkbox"}
-                                onChange={(evt) => updateFilter(evt.target.checked)}
-                            />
-                        }
-                        label={undefined}
-                    />
-                );
-            }}
-        </Field>
+        <FormControlLabel
+            className={classes.formControl}
+            labelPlacement={"end"}
+            checked={valueSet&& valueSetToTrue}
+            control={
+                <Checkbox
+                    key={`filter-${name}`}
+                    indeterminate={!valueSet}
+                    onChange={(evt) => {
+                        if (valueSetToTrue)
+                            updateFilter(false);
+                        else if (!valueSet)
+                            updateFilter(true);
+                        else
+                            updateFilter(undefined);
+                    }}
+                />
+            }
+            label={!valueSet ? "No filter" : (valueSetToTrue ? `${property.title} is true` : `${property.title} is false`)}
+        />
     );
+
 
 }

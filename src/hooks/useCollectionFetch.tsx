@@ -32,7 +32,7 @@ export interface CollectionFetchProps<S extends EntitySchema<Key>, Key extends s
      */
     entitiesDisplayedFirst?: Entity<S, Key>[];
 
-    filter?: FilterValues<S, Key>;
+    filterValues?: FilterValues<Key>;
 
     sortByProperty?: string;
 
@@ -64,7 +64,7 @@ export function useCollectionFetch<S extends EntitySchema<Key>, Key extends stri
     {
         collectionPath,
         schema,
-        filter,
+        filterValues,
         sortByProperty,
         currentSort,
         itemCount,
@@ -103,14 +103,15 @@ export function useCollectionFetch<S extends EntitySchema<Key>, Key extends stri
             (error) => {
                 console.error("ERROR", error);
                 setDataLoading(false);
+                setData([]);
                 setDataLoadingError(error);
             },
-            filter,
+            filterValues,
             itemCount,
             undefined,
             sortByProperty,
             currentSort);
-    }, [collectionPath, schema, itemCount, currentSort, sortByProperty, filter]);
+    }, [collectionPath, schema, itemCount, currentSort, sortByProperty, filterValues]);
 
     return {
         data,

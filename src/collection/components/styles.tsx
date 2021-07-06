@@ -1,12 +1,9 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import { CollectionSize } from "../models";
+import { CollectionSize } from "../../models";
 
-export interface TableStyleProps {
-    size: CollectionSize;
-}
 
-export const useTableStyles = makeStyles<Theme, TableStyleProps>(theme => createStyles({
+export const useTableStyles = makeStyles<Theme>(theme => createStyles({
     root: {
         height: "100%",
         width: "100%",
@@ -18,14 +15,11 @@ export const useTableStyles = makeStyles<Theme, TableStyleProps>(theme => create
         height: "100%",
         flexGrow: 1
     },
-    header: {
-        display: "flex",
-        flexDirection: "row",
-        fontWeight: theme.typography.fontWeightMedium,
-        lineHeight: "0.9rem",
-        alignItems: "center",
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1)
+    headerTypography:{
+        color: "rgba(0,0,0,0.55)",
+        fontSize: "12px",
+        textTransform: "uppercase",
+        fontWeight: 600
     },
     tableRow: {
         display: "flex",
@@ -42,10 +36,6 @@ export const useTableStyles = makeStyles<Theme, TableStyleProps>(theme => create
         backgroundColor: "#eee",
         border: `2px solid ${theme.palette.primary.dark}`,
         padding: theme.spacing(2)
-    },
-    headerItem: {
-        display: "inherit",
-        paddingRight: theme.spacing(1)
     },
     cellButtonsWrap: {
         height: "100%",

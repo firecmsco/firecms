@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import {
     ArrayProperty,
     CollectionSize,
@@ -6,6 +6,20 @@ import {
     Property,
     StringProperty
 } from "../models";
+
+export interface CMSColumn {
+    id: string;
+    type: "property" | "additional";
+    label: string;
+    property?: Property;
+    align: "right" | "left" | "center";
+    sortable: boolean;
+    filterable: boolean;
+    width: number;
+}
+
+export type Sort = "asc" | "desc" | undefined;
+
 
 export function getCellAlignment(property: Property): "right" | "left" | "center" {
     if (property.dataType === "boolean") {
@@ -18,6 +32,23 @@ export function getCellAlignment(property: Property): "right" | "left" | "center
         return "right";
     } else {
         return "left";
+    }
+}
+
+export function isPropertyFilterable(property: Property): boolean {
+    if (property.dataType === "boolean") {
+        return true;
+    } else if (property.dataType === "number") {
+        return true;
+    } else if (property.dataType === "string") {
+        return true;
+    } else if (property.dataType === "array") {
+        if (property.of)
+            return isPropertyFilterable(property.of);
+        else
+            return false;
+    } else {
+        return false;
     }
 }
 

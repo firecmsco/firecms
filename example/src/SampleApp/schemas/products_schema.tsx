@@ -330,7 +330,6 @@ export const localeSchema = buildSchemaFrom<Locale>({
 
 
 export const productExtraActionBuilder = ({
-                                              view,
                                               selectedEntities
                                           }: ExtraActionsParams) => {
     return (

@@ -181,7 +181,7 @@ export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
             </SnackbarProvider>
         </AuthProvider>);
 
-};
+}
 
 
 async function getNavigation(navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[], user: firebase.User | null): Promise<Navigation> {
@@ -224,7 +224,11 @@ const makeTheme = (
         },
         typography: {
             "fontFamily": fontFamily ? fontFamily : `"Rubik", "Roboto", "Helvetica", "Arial", sans-serif`,
-            fontWeightMedium: 500
+            fontWeightMedium: 500,
+            h6: {
+                fontWeight: 500,
+                fontSize: "1.15rem"
+            }
         },
         overrides: {
             MuiButton: {

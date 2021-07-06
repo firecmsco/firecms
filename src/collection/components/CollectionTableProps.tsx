@@ -3,7 +3,7 @@ import {
     CollectionSize,
     Entity,
     EntitySchema,
-    FilterValues,
+    FilterValues, CompositeIndex,
     Property,
     TextSearchDelegate
 } from "../../models";
@@ -32,7 +32,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     /**
      * In case this table should have some filters set by default
      */
-    initialFilter?: FilterValues<S, Key>;
+    initialFilter?: FilterValues<Key>;
 
     /**
      * Default sort applied to this collection
@@ -68,14 +68,16 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     additionalColumns?: AdditionalColumnDelegate<AdditionalKey, S, Key>[];
 
     /**
-     * Properties that can be filtered
-     */
-    filterableProperties?: Key[];
-
-    /**
      * Can the table be edited inline
      */
     inlineEditing: ((entity: Entity<any>) => boolean) | boolean;
+
+    /**
+     * If you need to filter/sort by multiple properties in this collection, you
+     * need to create special indexes in Firestore.
+     * You can then specify here the indexes created.
+     */
+    indexes?: CompositeIndex<Key>[];
 
     /**
      * List of entities that will be displayed on top, no matter the ordering.

@@ -34,7 +34,7 @@ export function listenCollection<S extends EntitySchema<Key>,
     schema: S,
     onSnapshot: (entity: Entity<S, Key>[]) => void,
     onError?: (error: Error) => void,
-    filter?: FilterValues<S, Key>,
+    filter?: FilterValues< Key>,
     limit?: number,
     startAfter?: any[],
     orderBy?: string,
@@ -52,6 +52,14 @@ export function listenCollection<S extends EntitySchema<Key>,
                 const [op, value] = filterParameter as [WhereFilterOp, any];
                 return collectionReference = collectionReference.where(key, op, value);
             });
+
+    if (filter && orderBy && order) {
+        Object.entries(filter).forEach(([key, value]) => {
+            if (key !== orderBy) {
+                collectionReference = collectionReference.orderBy(key, "asc");
+            }
+        });
+    }
 
     if (orderBy && order)
         collectionReference = collectionReference.orderBy(orderBy, order);
@@ -90,7 +98,7 @@ export function fetchCollection<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>(
     path: string,
     schema: S,
-    filter?: FilterValues<S, Key>,
+    filter?: FilterValues<Key>,
     limit?: number,
     startAfter?: any[],
     orderBy?: string,
@@ -108,6 +116,14 @@ export function fetchCollection<S extends EntitySchema<Key>,
                 const [op, value] = filterParameter as [WhereFilterOp, any];
                 return collectionReference = collectionReference.where(key, op, value);
             });
+
+    if (filter && orderBy && order) {
+        Object.entries(filter).forEach(([key, value]) => {
+            if (key !== orderBy) {
+                collectionReference = collectionReference.orderBy(key, "asc");
+            }
+        });
+    }
 
     if (orderBy && order)
         collectionReference = collectionReference.orderBy(orderBy, order);
@@ -599,7 +615,7 @@ function updateAutoValues<S extends EntitySchema<Key>,
  */
 export function initFilterValues<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>
-(schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<S, Key> {
+(schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<Key> {
     return filterableProperties
         .map((key) => ({ [key]: undefined }))
         .reduce((a: any, b: any) => ({ ...a, ...b }), {});

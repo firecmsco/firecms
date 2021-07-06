@@ -189,6 +189,7 @@ module.exports = {
                         'api/types/collectionsize',
                         'api/types/exportconfig',
                         'api/types/exportmappingfunction',
+                        'api/types/firestoreindex',
                         'api/types/extraactionsparams',
                         'api/types/filtervalues',
                         'api/types/permissions',

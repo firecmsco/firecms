@@ -19,7 +19,7 @@ import React, { useEffect, useState } from "react";
 
 import CollectionTable from "../../collection/components/CollectionTable";
 import CollectionRowActions
-    from "../../collection/components/CollectionRowActions";
+    from "../../collection/internal/CollectionRowActions";
 import { useColumnIds } from "../../collection/common";
 
 
@@ -108,7 +108,6 @@ export default function ReferenceDialog(
 
     const schema = collection.schema;
     const textSearchDelegate = collection.textSearchDelegate;
-    const filterableProperties = collection.filterableProperties;
     const initialFilter = collection.initialFilter;
     const displayedProperties = useColumnIds(collection, false);
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
@@ -217,7 +216,6 @@ export default function ReferenceDialog(
                                  title={title}
                                  pageSize={pageSize}
                                  displayedProperties={displayedProperties}
-                                 filterableProperties={filterableProperties}
                                  textSearchDelegate={textSearchDelegate}
                                  initialFilter={initialFilter}
                                  initialSort={collection.initialSort}
