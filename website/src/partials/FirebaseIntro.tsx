@@ -70,6 +70,7 @@ function FirebaseIntro() {
                                 height="35" title="GitHub"/>
 
                         <a className="ml-1 mb-2"
+                           rel="noopener noreferrer"
                            href="https://www.producthunt.com/posts/firecms?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-firecms"
                            target="_blank">
                             <img
