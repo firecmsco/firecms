@@ -8,6 +8,8 @@ The core of the CMS are **entities**, which are defined by an `EntitySchema`. In
 the schema you define the properties, which are related to the Firestore data
 types.
 
+Check the full API reference in [Entity schemas](api/interfaces/entityschema.md)
+
 - `name` A singular name of the entity as displayed in an Add button. E.g.
   Product
 

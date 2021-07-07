@@ -13,7 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function PriceTextPreview({
-                                                 value, property, size
+                                                 value, property, size, customProps
                                              }: PreviewComponentProps<number>)
     : ReactElement {
 

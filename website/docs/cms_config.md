@@ -117,6 +117,11 @@ Otherwise, you can define your own [custom views](custom_views.md).
 You can change the navigation based on the logged-in user, by using a `NavigationBuilder`
 function which can be asynchronous.
 
+By using an async `NavigationBuilder` you can also fetch some data in order to
+build your schemas. Let's say you have a collection called `subscriptions` and would
+like to use its ids as the enum values of a `string` property; you can fetch
+them and then build the schema with them.
+
 ```tsx
 
 import {

@@ -6,9 +6,12 @@ sidebar_label: Array
 
 ##  `of`
 
-The property of this array. You can specify any property. You can also
-specify an array or properties if you need the array to have a specific
-limited shape such as [string, number, string].
+The property of this array.
+
+You can specify any property (except another Array property, since
+Firestore does not support it)
+You can leave this field empty only if you are providing a custom field,
+otherwise an error will be thrown.
 
 ## `validation`
 

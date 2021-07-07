@@ -9,11 +9,17 @@ collection. You can find collection views as the first level of navigation in
 the main menu, or as subcollections inside other collections, following the
 Firestore data schema.
 
+Check the full API reference in [Entity collections](api/interfaces/entitycollection.md)
+
 * `name` The plural name of the view. E.g. 'products'.
 
 * `relativePath` Relative Firestore path of this view to its parent. If this
   view is in the root the path is equal to the absolute one. This path also
   determines the URL in FireCMS.
+
+* `subcollections` Following the Firestore document and collection schema, you
+  can add subcollections to your entity in the same way you define the root
+  collections.
 
 * `defaultSize` Default size of the rendered collection.
 
@@ -29,8 +35,9 @@ Firestore data schema.
   collection view. All the other properties from the entity are displayed. It
   has no effect if the `properties` value is set.
 
-* `filterableProperties` List of properties that include a filter widget.
-  Defaults to none.
+* `indexes` If you need to filter/sort by multiple properties in this collection, you
+  need to create special indexes in Firestore.
+  You can then specify here the indexes created.
 
 * `initialFilter` Initial filters applied to this collection. Consider that you
   can filter any property, but only those included in
@@ -66,15 +73,8 @@ Firestore data schema.
   , entities can still be edited in the side panel.
 
 * `exportable` Should the data in this collection view include an export button.
-  You can also set an `ExportConfig` configuration object to customize
-  the export and add additional values.
-  Defaults to `true`
-
-* `subcollections` Following the Firestore document and collection schema, you
-  can add subcollections to your entity in the same way you define the root
-  collections.
-
-* `onEntityDelete` Hook called after the entity gets deleted in Firestore.
+  You can also set an `ExportConfig` configuration object to customize the
+  export and add additional values. Defaults to `true`
 
 ### Additional columns
 
@@ -89,6 +89,20 @@ If you would like to do some async computation, such as fetching a different
 entity, you can use the utility component `AsyncPreviewComponent` to show a
 loading indicator.
 
+```tsx
+export const productAdditionalColumn: AdditionalColumnDelegate = {
+    id: "spanish_title",
+    title: "Spanish title",
+    builder: (entity: Entity<typeof productSchema>) =>
+        <AsyncPreviewComponent builder={
+            entity.reference.collection("locales")
+                .doc("es")
+                .get()
+                .then((snapshot: any) => snapshot.get("name") as string)
+        }/>
+};
+```
+
 ### Subcollections
 
 Subcollections are collections of entities that are found under another entity.
@@ -100,11 +114,31 @@ Subcollections are easily accessible from the side view while editing an entity.
 
 ### Filters
 
-Filtering support is currently limited to string, number and boolean values,
-including enum types. If you want a property to be filterable, you can mark it
-as such in the entity schema.
+Filtering is enabled by default for string, numbers, booleans, timestamps and
+arrays. A dropdown is included in every column of the collection where
+applicable.
 
-Any comments related to this feature are welcome.
+Since Firestore has limited querying capabilities, each time to apply a filter
+or new sort, the previous sort/filter combination gets reset by default (unless
+filtering, sorting by the same property).
+
+If you need to enable filtering/sorting by more than one property at a time, you
+can specify the filters that you have enabled in your Firestore configuration.
+In order to do so, just pass the indexes configuration to your collection:
+
+```tsx
+    const productsCollection = buildCollection({
+    relativePath: "products",
+    schema: productSchema,
+    name: "Products",
+    indexes: [
+        {
+            category: "asc",
+            available: "desc"
+        }
+    ]
+});
+```
 
 ### Permissions
 

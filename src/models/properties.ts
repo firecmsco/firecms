@@ -252,8 +252,11 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
     dataType: "array";
 
     /**
-     * The property of this array. You can specify any property.
-     * You can leave this field empty only if you are providing a custom field
+     * The property of this array.
+     * You can specify any property (except another Array property, since
+     * Firestore does not support it)
+     * You can leave this field empty only if you are providing a custom field,
+     * otherwise an error will be thrown.
      */
     of?: Property<ArrayT>;
 

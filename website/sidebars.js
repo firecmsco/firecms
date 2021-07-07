@@ -5,7 +5,6 @@ module.exports = {
             label: 'Introduction',
             id: 'intro'
         },
-        'firebase_setup',
         'quickstart',
         'cms_config',
         {
@@ -28,7 +27,8 @@ module.exports = {
                         'properties/geopoint'
                     ]
                 },
-                'custom_fields'
+                'custom_fields',
+                'custom_previews'
             ]
         },
         {
@@ -39,6 +39,7 @@ module.exports = {
                 'contexts/hooks'
             ]
         },
+        'firebase_setup',
         'deployment'
     ],
 
