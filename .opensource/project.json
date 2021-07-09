@@ -1,8 +1,11 @@
 {
     "name": "FireCMS",
-    "platforms": [ "Web" ],
+    "platforms": [
+        "Admin",
+        "Web"
+    ],
     "content": "README.md",
-    "pages" : {
+    "pages": {
         "website/docs/index.md": "Intro",
         "website/docs/quickstart.md": "Quickstart",
         "website/docs/cms_config.md": "CMS Config",
@@ -15,10 +18,19 @@
         "website/docs/firebase_setup.md": "Firebase setup",
         "website/docs/deployment.md": "Deployment"
     },
-    "related": [ ],
+    "related": [],
     "tabs": [
-        { "title": "Homepage", "href": "https://firecms.co/" },
-        { "title": "NPM", "href": "https://www.npmjs.com/package/@camberi/firecms" },
-        { "title": "API Reference", "href": "https://firecms.co/docs/api" }
+        {
+            "title": "Homepage",
+            "href": "https://firecms.co/"
+        },
+        {
+            "title": "NPM",
+            "href": "https://www.npmjs.com/package/@camberi/firecms"
+        },
+        {
+            "title": "API Reference",
+            "href": "https://firecms.co/docs/api"
+        }
     ]
 }
