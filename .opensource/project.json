@@ -1,0 +1,24 @@
+{
+    "name": "FireCMS",
+    "platforms": [ "Web" ],
+    "content": "README.md",
+    "pages" : {
+        "website/docs/index.md": "Intro",
+        "website/docs/quickstart.md": "Quickstart",
+        "website/docs/cms_config.md": "CMS Config",
+        "website/docs/entity_schemas.md": "Entity schemas",
+        "website/docs/collections.md": "collections",
+        "website/docs/custom_fields.md": "Custom fields",
+        "website/docs/custom_views.md": "Custom views",
+        "website/docs/custom_previews.md": "Custom previews",
+        "website/docs/contexts/hooks.md": "Hooks",
+        "website/docs/firebase_setup.md": "Firebase setup",
+        "website/docs/deployment.md": "Deployment"
+    },
+    "related": [ ],
+    "tabs": [
+        { "title": "Homepage", "href": "https://firecms.co/" },
+        { "title": "NPM", "href": "https://www.npmjs.com/package/@camberi/firecms" },
+        { "title": "API Reference", "href": "https://firecms.co/docs/api" }
+    ]
+}
