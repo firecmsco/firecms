@@ -76,7 +76,7 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
 
         const vertices: { pos: number[], norm: number[], uv: number[] }[] = [];
 
-        const dodecahedron = new THREE.DodecahedronGeometry(SPHERE_RADIUS, 16);
+        const dodecahedron = new THREE.DodecahedronGeometry(SPHERE_RADIUS, 18);
 
         console.log("dodecahedron vertices count", dodecahedron.attributes.position.array.length);
 
@@ -262,7 +262,7 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
             color: yellow,
             sin: new THREE.Vector3(0, 1, 1),
             cos: new THREE.Vector3(1, 0, 0),
-            time_dilation: new THREE.Vector3(.8, .6, .8),
+            time_dilation: new THREE.Vector3(.8, .8, .8),
             coef: new THREE.Vector3(-.5, .8, .3),
             constant: new THREE.Vector3(-.1, -.5, .7)
         });
@@ -275,6 +275,115 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
             time_dilation: new THREE.Vector3(.4, .6, 1.1),
             coef: new THREE.Vector3(.1, .8, .5),
             constant: new THREE.Vector3(0, -.5, .7)
+        });
+
+
+        layers.push({
+            is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(0, 1, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.7, .9, .8),
+            coef: new THREE.Vector3(1, 0, 0),
+            constant: new THREE.Vector3(0, -.8, 1)
+        });
+        layers.push({
+            is_active: 1,
+            color: yellow,
+            sin: new THREE.Vector3(0, 0, 0),
+            cos: new THREE.Vector3(1, 0, 0),
+            time_dilation: new THREE.Vector3(1, 1, .9),
+            coef: new THREE.Vector3(1, 0, 0),
+            constant: new THREE.Vector3(0, -.7, 0)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: red,
+            sin: new THREE.Vector3(1, 0, 1),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.9, 1, 1),
+            coef: new THREE.Vector3(1, 0, .9),
+            constant: new THREE.Vector3(0, -1, .2)
+        });
+        layers.push({
+            is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(1, .9, 1),
+            coef: new THREE.Vector3(1, 0, 0),
+            constant: new THREE.Vector3(0, -1, -.7)
+        });
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.9, .8, .7),
+            coef: new THREE.Vector3(.5, 0, .4),
+            constant: new THREE.Vector3(0, -.9, .3)
+        });
+
+
+        layers.push({
+            is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(0, 1, 0),
+            cos: new THREE.Vector3(1, 0, 1),
+            time_dilation: new THREE.Vector3(.4, .9, .3),
+            coef: new THREE.Vector3(.3, 1, -.3),
+            constant: new THREE.Vector3(.3, -1.1, .5)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(1, 0, 1),
+            cos: new THREE.Vector3(0, 1, 0),
+            time_dilation: new THREE.Vector3(.6, .7, 1),
+            coef: new THREE.Vector3(.2, .2, .6),
+            constant: new THREE.Vector3(.2, -.7 -.3)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: magenta,
+            sin: new THREE.Vector3(0, 0, 0),
+            cos: new THREE.Vector3(1, 1, 1),
+            time_dilation: new THREE.Vector3(.7, .8, 1),
+            coef: new THREE.Vector3(-.45, .85, .55),
+            constant: new THREE.Vector3(0, -.85, 0)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: red,
+            sin: new THREE.Vector3(0, 0, 1),
+            cos: new THREE.Vector3(1, 1, 0),
+            time_dilation: new THREE.Vector3(.6, .5, .5),
+            coef: new THREE.Vector3(.3, -.5, 1),
+            constant: new THREE.Vector3(0, -.5, .4)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(0, 1, 1),
+            cos: new THREE.Vector3(1, 0, 0),
+            time_dilation: new THREE.Vector3(.9, .7, .7),
+            coef: new THREE.Vector3(-.4, .9, .4),
+            constant: new THREE.Vector3(-.2, -.4, .6)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: yellow,
+            sin: new THREE.Vector3(0, 1, 0),
+            cos: new THREE.Vector3(1, 0, 1),
+            time_dilation: new THREE.Vector3(.5, .9, 1),
+            coef: new THREE.Vector3(.1, .7, .5),
+            constant: new THREE.Vector3(0, -.4, .8)
         });
 
         const uniforms = {
@@ -420,7 +529,7 @@ function buildVertexShader() {
     uniform float u_time;
 
     uniform int u_layers_count;
-    uniform Layer u_layers[11];
+    uniform Layer u_layers[22];
     uniform vec2 u_resolution;
     uniform vec3 u_base_color;
     uniform float u_sphere_radius;
@@ -635,7 +744,7 @@ function buildVertexShader() {
         color -= (1.0-st.z) / 3.0;
 
 
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 22; i++) {
             // if(u_layers[i].is_active == 1.0){
                 vec3 nColor = u_layers[i].color;
                 vec3 constant = u_layers[i].constant;
