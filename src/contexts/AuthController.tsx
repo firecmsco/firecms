@@ -71,12 +71,16 @@ export interface AuthController {
 
     /**
      * Utility field you can use to store your custom data.
-     * e.g: Additional user data fetched from a Firestore document
+     * e.g: Additional user data fetched from a Firestore document, or custom
+     * claims
      */
     extra?: any;
 
     /**
-     * Set extra
+     * You can use this method to store any extra data you would like to
+     * associate your user to.
+     * e.g: Additional user data fetched from a Firestore document, or custom
+     * claims
      */
     setExtra: (extra: any) => void;
 }
@@ -109,7 +113,7 @@ export const AuthContext = React.createContext<AuthController>({
  * @see AuthController
  * @category Hooks and utilities
  */
-export const useAuthContext = () => useContext<AuthController>(AuthContext);
+export const useAuthController = () => useContext<AuthController>(AuthContext);
 
 export const AuthProvider: React.FC<AuthProviderProps> = (
     {

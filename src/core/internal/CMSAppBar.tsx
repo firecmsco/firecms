@@ -20,7 +20,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
-import { useAuthContext, useBreadcrumbsContext } from "../../contexts";
+import { useAuthController, useBreadcrumbsContext } from "../../contexts";
 import ErrorBoundary from "./ErrorBoundary";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -66,7 +66,7 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
     const breadcrumbsContext = useBreadcrumbsContext();
     const { breadcrumbs } = breadcrumbsContext;
 
-    const authController = useAuthContext();
+    const authController = useAuthController();
 
     return (
 

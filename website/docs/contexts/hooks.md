@@ -9,7 +9,7 @@ state of the app. Please note that in order to use this hook you **must** be in
 a component (you can't use them directly from a callback function).
 
 
-## `useAuthContext`
+## `useAuthController`
 For state and operations regarding authentication.
 
 The props provided by this context are:
@@ -26,11 +26,11 @@ Example:
 
 ```tsx
 import React from "react";
-import { useAuthContext } from "@camberi/firecms";
+import { useAuthController } from "@camberi/firecms";
 
 export function ExampleCMSView() {
 
-    const authController = useAuthContext();
+    const authController = useAuthController();
 
     return (
         authController.loggedUser ?

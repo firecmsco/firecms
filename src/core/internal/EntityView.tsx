@@ -22,7 +22,7 @@ import {
     Theme
 } from "@material-ui/core";
 import {
-    useAuthContext,
+    useAuthController,
     useCMSAppContext,
     useSideEntityController,
     useSnackbarController
@@ -112,7 +112,7 @@ function EntitySideView({
     const snackbarContext = useSnackbarController();
 
     const context = useCMSAppContext();
-    const authController = useAuthContext();
+    const authController = useAuthController();
 
     const [entity, setEntity] = useState<Entity<EntitySchema>>();
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
@@ -153,7 +153,7 @@ function EntitySideView({
 
     useEffect(() => {
         if (entity)
-            setReadOnly(!canEdit(permissions, authController.loggedUser, entity));
+            setReadOnly(!canEdit(permissions, entity, authController));
 
     }, [entity]);
 

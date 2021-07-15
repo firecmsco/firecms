@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.44.0] - 2021-07-15
+
+### Changed
+
+- [BREAKING] renamed `useAuthContext` to `useAuthController`
+- Including `authController` in `PermissionBuilder` so you can access additional
+  data for a user.
+
 ## [0.43.0] - 2021-07-06
 
 ### Changed

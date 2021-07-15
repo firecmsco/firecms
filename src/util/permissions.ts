@@ -4,7 +4,7 @@ import {
     Permissions,
     PermissionsBuilder
 } from "../models";
-import firebase from "firebase";
+import { AuthController } from "../contexts";
 
 const DEFAULT_PERMISSIONS = {
     edit: true,
@@ -14,15 +14,19 @@ const DEFAULT_PERMISSIONS = {
 
 function checkHasPermissionOnEntity<S extends EntitySchema<Key>, Key extends string>
 (permission: PermissionsBuilder<S, Key> | Permissions | undefined,
- user: firebase.User | null,
- entity: Entity<S, Key> | null): Permissions {
+ entity: Entity<S, Key> | null,
+ authController: AuthController): Permissions {
 
     if (permission === undefined) {
         return DEFAULT_PERMISSIONS;
     } else if (typeof permission === "object") {
         return permission as Permissions;
     } else if (typeof permission === "function") {
-        return permission({ user, entity });
+        return permission({
+            user: authController.loggedUser,
+            entity,
+            authController
+        });
     }
 
     throw Error("New type of HasPermission added and not mapped");
@@ -30,21 +34,21 @@ function checkHasPermissionOnEntity<S extends EntitySchema<Key>, Key extends str
 
 export function canEdit<S extends EntitySchema<Key>, Key extends string>
 (permission: PermissionsBuilder<S, Key> | Permissions | undefined,
- user: firebase.User | null,
- entity: Entity<S, Key>): boolean {
-    return checkHasPermissionOnEntity(permission, user, entity).edit ?? DEFAULT_PERMISSIONS.edit;
+ entity: Entity<S, Key>,
+ authController: AuthController): boolean {
+    return checkHasPermissionOnEntity(permission,  entity, authController).edit ?? DEFAULT_PERMISSIONS.edit;
 }
 
 export function canCreate<S extends EntitySchema<Key>, Key extends string>
 (permission: PermissionsBuilder<S, Key> | Permissions | undefined,
- user: firebase.User | null): boolean {
-    return checkHasPermissionOnEntity(permission, user, null).create ?? DEFAULT_PERMISSIONS.create;
+ authController: AuthController): boolean {
+    return checkHasPermissionOnEntity(permission,  null, authController).create ?? DEFAULT_PERMISSIONS.create;
 }
 
 export function canDelete<S extends EntitySchema<Key>, Key extends string>
 (permission: PermissionsBuilder<S, Key> | Permissions | undefined,
- user: firebase.User | null,
- entity: Entity<S, Key>): boolean {
-    return checkHasPermissionOnEntity(permission, user, entity).delete ?? DEFAULT_PERMISSIONS.delete;
+ entity: Entity<S, Key>,
+ authController: AuthController): boolean {
+    return checkHasPermissionOnEntity(permission,  entity, authController).delete ?? DEFAULT_PERMISSIONS.delete;
 }
 

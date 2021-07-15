@@ -91,7 +91,7 @@ import { Box, Button } from "@material-ui/core";
 
 import {
     buildSchema,
-    useAuthContext,
+    useAuthController,
     useSideEntityController,
     useSnackbarController
 } from "@camberi/firecms";

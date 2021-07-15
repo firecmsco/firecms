@@ -295,11 +295,11 @@ module.exports = {
             type: 'category',
             label: 'Hooks',
             items: [
-                'api/functions/getnavigationfrom',
-                'api/functions/useauthcontext',
+                'api/functions/useauthcontroller',
                 'api/functions/usebreadcrumbscontext',
                 'api/functions/usecmsappcontext',
                 'api/functions/usecollectionfetch',
+                'api/functions/getnavigationfrom',
                 'api/functions/usenavigationfrom',
                 'api/functions/usesideentitycontroller',
                 'api/functions/usesnackbarcontroller',

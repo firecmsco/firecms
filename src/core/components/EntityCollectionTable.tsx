@@ -24,7 +24,7 @@ import {
 import CollectionTable from "../../collection/components/CollectionTable";
 
 import {
-    useAuthContext,
+    useAuthController,
     useCMSAppContext,
     useSideEntityController
 } from "../../contexts";
@@ -73,9 +73,9 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                                                                                                }: EntityCollectionProps<S, Key>
 ) {
 
-    if(collectionConfig.filterableProperties){
+    if (collectionConfig.filterableProperties) {
         console.warn("The property 'filterableProperties' has been deprecated and will be removed in the" +
-            "future. The supported properties are filtarable by default. ")
+            "future. The supported properties are filtarable by default. ");
     }
 
     const sideEntityController = useSideEntityController();
@@ -84,7 +84,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const context = useCMSAppContext();
-    const authController = useAuthContext();
+    const authController = useAuthController();
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S, Key> | Entity<S, Key>[] | undefined>(undefined);
     const [selectedEntities, setSelectedEntities] = useState<Entity<S, Key>[]>([]);
@@ -157,7 +157,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     };
 
     const checkInlineEditing = (entity: Entity<any>) => {
-        if (!canEdit(collectionConfig.permissions, authController.loggedUser, entity)) {
+        if (!canEdit(collectionConfig.permissions, entity, authController)) {
             return false;
         }
         return inlineEditing;
@@ -260,9 +260,9 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
         const isSelected = selectedEntities.indexOf(entity) > -1;
 
-        const createEnabled = canCreate(collectionConfig.permissions, authController.loggedUser);
-        const editEnabled = canEdit(collectionConfig.permissions, authController.loggedUser, entity);
-        const deleteEnabled = canDelete(collectionConfig.permissions, authController.loggedUser, entity);
+        const createEnabled = canCreate(collectionConfig.permissions, authController);
+        const editEnabled = canEdit(collectionConfig.permissions, entity, authController);
+        const deleteEnabled = canDelete(collectionConfig.permissions, entity, authController);
 
         const onCopyClicked = (entity: Entity<S, Key>) => sideEntityController.open({
             entityId: entity.id,
@@ -311,7 +311,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                                        data
                                    }: { size: CollectionSize, data: Entity<any>[] }) {
 
-        const addButton = canCreate(collectionConfig.permissions, authController.loggedUser) && onNewClick && (largeLayout ?
+        const addButton = canCreate(collectionConfig.permissions, authController) && onNewClick && (largeLayout ?
             <Button
                 onClick={onNewClick}
                 startIcon={<Add/>}
@@ -329,7 +329,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 <Add/>
             </Button>);
 
-        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collectionConfig.permissions, authController.loggedUser, entity));
+        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collectionConfig.permissions, entity, authController));
         const onMultipleDeleteClick = (event: React.MouseEvent) => {
             event.stopPropagation();
             setDeleteEntityClicked(selectedEntities);

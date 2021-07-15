@@ -16,11 +16,11 @@ export {
 
 export type {
     AuthController
-} from "./AuthContext";
+} from "./AuthController";
 
 export {
-    useAuthContext
-} from "./AuthContext";
+    useAuthController
+} from "./AuthController";
 
 export type {
     BreadcrumbsController, BreadcrumbEntry

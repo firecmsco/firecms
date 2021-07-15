@@ -18,7 +18,7 @@ import {
     AuthController,
     AuthProvider,
     useAuthHandler
-} from "../contexts/AuthContext";
+} from "../contexts/AuthController";
 import { SnackbarProvider } from "../contexts/SnackbarContext";
 import { SchemaRegistryProvider } from "../contexts/SchemaRegistry";
 import { CMSAppContextProvider } from "../contexts/CMSAppContext";
@@ -147,7 +147,7 @@ export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
         if (!authController.canAccessMainView) {
             return;
         }
-        getNavigation(navigationOrBuilder, authController.loggedUser)
+        getNavigation(navigationOrBuilder, authController.loggedUser, authController)
             .then((result: Navigation) => {
                 setNavigation(result);
             }).catch(setNavigationLoadingError);
@@ -184,14 +184,16 @@ export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
 }
 
 
-async function getNavigation(navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[], user: firebase.User | null): Promise<Navigation> {
+async function getNavigation(navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[],
+                             user: firebase.User | null,
+                             authController:AuthController): Promise<Navigation> {
 
     if (Array.isArray(navigationOrCollections)) {
         return {
             collections: navigationOrCollections
         };
     } else if (typeof navigationOrCollections === "function") {
-        return navigationOrCollections({ user });
+        return navigationOrCollections({ user, authController });
     } else {
         return navigationOrCollections;
     }

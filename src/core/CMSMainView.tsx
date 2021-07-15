@@ -13,7 +13,7 @@ import CircularProgressCenter from "./internal/CircularProgressCenter";
 import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./internal/CMSAppBar";
-import { useAuthContext, useCMSAppContext } from "../contexts";
+import { useAuthController, useCMSAppContext } from "../contexts";
 import { LoginView } from "./LoginView";
 
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -123,7 +123,7 @@ export function CMSMainView(props: CMSMainViewProps) {
     const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
     const closeDrawer = () => setDrawerOpen(false);
 
-    const authController = useAuthContext();
+    const authController = useAuthController();
 
     if (authController.authLoading) {
         return <CircularProgressCenter/>;

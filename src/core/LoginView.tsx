@@ -11,7 +11,7 @@ import {
 import firebase from "firebase";
 import "firebase/auth";
 
-import { useAuthContext } from "../contexts";
+import { useAuthController } from "../contexts";
 
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
@@ -42,7 +42,7 @@ export function LoginView({
 
     const classes = useStyles();
 
-    const authController = useAuthContext();
+    const authController = useAuthController();
 
     useEffect(() => {
         const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());

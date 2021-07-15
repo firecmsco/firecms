@@ -2,6 +2,7 @@ import { TextSearchDelegate } from "./text_search_delegate";
 import { Entity, EntitySchema } from "./entities";
 import React from "react";
 import firebase from "firebase/app";
+import { AuthController } from "../contexts/AuthController";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -192,7 +193,7 @@ export type Permissions = {
  */
 export type PermissionsBuilder<S extends EntitySchema<Key>, Key extends string> =
     Permissions
-    | ((props: { user: firebase.User | null, entity: Entity<S, Key> | null }) => Permissions);
+    | ((props: { user: firebase.User | null, entity: Entity<S, Key> | null, authController: AuthController }) => Permissions);
 
 
 /**
