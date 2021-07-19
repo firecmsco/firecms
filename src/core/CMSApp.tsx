@@ -96,18 +96,12 @@ export function CMSApp(props: CMSAppProps) {
     }
 
     if (firebaseConfigError) {
-        return <>
-            <div>
-                It seems like the provided Firebase config is not correct. If
-                you
-                are using the credentials provided automatically by Firebase
-                Hosting, make sure you link your Firebase app to Firebase
-                Hosting.
-            </div>
-            <div>
-                {JSON.stringify(firebaseConfigError)}
-            </div>
-        </>;
+        return <div>
+            It seems like the provided Firebase config is not correct. If you
+            are using the credentials provided automatically by Firebase
+            Hosting, make sure you link your Firebase app to Firebase
+            Hosting.
+        </div>;
     }
 
     if (!firebaseConfigInitialized || !usedFirebaseConfig) {

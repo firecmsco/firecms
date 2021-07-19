@@ -1,15 +1,12 @@
 ---
-id: quickstart
-title: Quickstart
-sidebar_label: Quickstart
+id: quickstart title: Quickstart sidebar_label: Quickstart
 ---
 
 :::note
 
 Please note that in order to use FireCMS you need an existing Firebase project
-with some requirements.
-Check the [Firebase setup section](firebase_setup.md) if you need additional
-support
+with some requirements. Check the [Firebase setup section](firebase_setup.md) if
+you need additional support
 
 :::
 
@@ -33,8 +30,8 @@ yarn add @camberi/firecms firebase @material-ui/core @material-ui/icons @materia
 
 You can replace the content of the file App.tsx with the following sample code.
 
-Remember to **replace** the Firebase config with the one you get after creating a
-webapp in the Firebase console.
+Remember to **replace** the Firebase config with the one you get after creating
+a webapp in the Firebase console.
 
 ```tsx
 import React from "react";
@@ -213,27 +210,42 @@ const localeSchema = buildSchema({
 
 export function App() {
 
-    const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
-        collections: [
-            buildCollection({
-                relativePath: "products",
-                schema: productSchema,
-                name: "Products",
-                permissions: ({ user }) => ({
-                    edit: true,
-                    create: true,
-                    delete: true
-                }),
-                subcollections: [
-                    buildCollection({
-                        name: "Locales",
-                        relativePath: "locales",
-                        schema: localeSchema
-                    })
-                ]
-            })
-        ]
-    });
+
+    const navigation: NavigationBuilder = async ({
+                                                     user,
+                                                     authController
+                                                 }: NavigationBuilderProps) => {
+
+        // This is a fake example of retrieving async data related to the user
+        // and storing it in the authController
+        const sampleUser = await Promise.resolve({
+            name: "John",
+            roles: ["admin"]
+        });
+        authController.setExtra(sampleUser);
+
+        return ({
+            collections: [
+                buildCollection({
+                    relativePath: "products",
+                    schema: productSchema,
+                    name: "Products",
+                    permissions: ({ user, authController }) => ({
+                        edit: true,
+                        create: true,
+                        delete: authController.extra.roles.includes("admin")
+                    }),
+                    subcollections: [
+                        buildCollection({
+                            name: "Locales",
+                            relativePath: "locales",
+                            schema: localeSchema
+                        })
+                    ]
+                })
+            ]
+        });
+    };
 
     const myAuthenticator: Authenticator = (user?: firebase.User) => {
         console.log("Allowing access to", user?.email);
@@ -250,6 +262,7 @@ export function App() {
 ```
 
 Then simply run
+
 ```
 yarn start
 ```

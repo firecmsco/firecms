@@ -11,6 +11,7 @@ import {
 } from "@camberi/firecms";
 
 import firebase from "firebase/app";
+
 import "typeface-rubik";
 import "typeface-space-mono";
 
@@ -27,7 +28,8 @@ const firebaseConfig = {
 const locales = {
     "de-DE": "German",
     "en-US": "English (United States)",
-    "es-ES": "Spanish (Spain)"
+    "es-ES": "Spanish (Spain)",
+    "es-419": "Spanish (South America)"
 };
 
 const productSchema = buildSchema({
@@ -172,27 +174,42 @@ const localeSchema = buildSchema({
 
 export function App() {
 
-    const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
-        collections: [
-            buildCollection({
-                relativePath: "products",
-                schema: productSchema,
-                name: "Products",
-                permissions: ({ user }) => ({
-                    edit: true,
-                    create: true,
-                    delete: true
-                }),
-                subcollections: [
-                    buildCollection({
-                        name: "Locales",
-                        relativePath: "locales",
-                        schema: localeSchema
-                    })
-                ]
-            })
-        ]
-    });
+
+    const navigation: NavigationBuilder = async ({
+                                                     user,
+                                                     authController
+                                                 }: NavigationBuilderProps) => {
+
+        // This is a fake example of retrieving async data related to the user
+        // and storing it in the authController
+        const sampleUser = await Promise.resolve({
+            name: "John",
+            roles: ["admin"]
+        });
+        authController.setExtra(sampleUser);
+
+        return ({
+            collections: [
+                buildCollection({
+                    relativePath: "products",
+                    schema: productSchema,
+                    name: "Products",
+                    permissions: ({ user, authController }) => ({
+                        edit: true,
+                        create: true,
+                        delete: authController.extra.roles.includes("admin")
+                    }),
+                    subcollections: [
+                        buildCollection({
+                            name: "Locales",
+                            relativePath: "locales",
+                            schema: localeSchema
+                        })
+                    ]
+                })
+            ]
+        });
+    };
 
     const myAuthenticator: Authenticator = (user?: firebase.User) => {
         console.log("Allowing access to", user?.email);

@@ -79,44 +79,47 @@ function HomeRoute({
     }
 
     function buildNavigationCard(entry: TopNavigationEntry) {
-        return <Grid item xs={12} sm={6} md={4}>
-            <Card elevation={0}
-                  className={classes.card}>
+        return (
+            <Grid item xs={12} sm={6} md={4}
+                  key={`nav_${entry.group}_${entry.name}`}>
+                <Card elevation={0}
+                      className={classes.card}>
 
-                <CardContent
-                    className={classes.flexGrow}>
+                    <CardContent
+                        className={classes.flexGrow}>
 
-                    <PlaylistPlayIcon color={"disabled"}/>
-                    <Typography gutterBottom variant="h5"
-                                component="h2">
-                        {entry.name}
-                    </Typography>
+                        <PlaylistPlayIcon color={"disabled"}/>
+                        <Typography gutterBottom variant="h5"
+                                    component="h2">
+                            {entry.name}
+                        </Typography>
 
-                    {entry.description && <Typography variant="body2"
-                                                      color="textSecondary"
-                                                      component="div">
-                        <ReactMarkdown>{entry.description}</ReactMarkdown>
-                    </Typography>}
-                </CardContent>
+                        {entry.description && <Typography variant="body2"
+                                                          color="textSecondary"
+                                                          component="div">
+                            <ReactMarkdown>{entry.description}</ReactMarkdown>
+                        </Typography>}
+                    </CardContent>
 
-                <CardActionArea
-                    style={{
-                        display: "flex",
-                        backgroundColor: "rgb(0 0 0 / 2%)",
-                        flexDirection: "column",
-                        alignItems: "flex-end"
-                    }}
-                    component={ReactLink}
-                    to={entry.url}>
-                    <CardActions style={{ alignSelf: "flex-end" }}>
-                        <IconButton color="primary">
-                            <ArrowForwardIcon/>
-                        </IconButton>
-                    </CardActions>
+                    <CardActionArea
+                        style={{
+                            display: "flex",
+                            backgroundColor: "rgb(0 0 0 / 2%)",
+                            flexDirection: "column",
+                            alignItems: "flex-end"
+                        }}
+                        component={ReactLink}
+                        to={entry.url}>
+                        <CardActions style={{ alignSelf: "flex-end" }}>
+                            <IconButton color="primary">
+                                <ArrowForwardIcon/>
+                            </IconButton>
+                        </CardActions>
 
-                </CardActionArea>
-            </Card>
-        </Grid>;
+                    </CardActionArea>
+                </Card>
+            </Grid>
+        );
     }
 
 

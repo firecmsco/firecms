@@ -57,10 +57,14 @@ function SampleApp() {
         description: "List of the products currently sold in our shop",
         textSearchDelegate: productsSearchDelegate,
         additionalColumns: [productAdditionalColumn],
-        indexes: [{category: "desc" , available: "desc"}],
-        permissions: ({ user }) => ({
+        indexes: [{ category: "desc", available: "desc" }],
+        permissions: ({ user, authController }) => ({
             edit: true,
-            create: true
+            create: true,
+            // we use some custom logic by storing user data in the 'extra;
+            // field of the authcontroller while building the main navigation
+            // (see below)
+            delete: authController.extra.roles.includes("admin")
         }),
         extraActions: productExtraActionBuilder,
         subcollections: [localeCollection],
@@ -145,7 +149,19 @@ function SampleApp() {
         // models.firestore().useEmulator("localhost", 8080);
     };
 
-    const navigation: NavigationBuilder = async ({ user }: NavigationBuilderProps) => {
+    const navigation: NavigationBuilder = async ({
+                                                     user,
+                                                     authController
+                                                 }: NavigationBuilderProps) => {
+
+        // This is a fake example of retrieving async data related to the user
+        // and storing it in the authController
+        const sampleUser = await Promise.resolve({
+            name: "John",
+            roles: ["admin"]
+        });
+        authController.setExtra(sampleUser);
+
         const navigation: Navigation = {
             collections: [
                 productsCollection,
