@@ -1,5 +1,7 @@
 ---
-id: quickstart title: Quickstart sidebar_label: Quickstart
+id: quickstart
+title: Quickstart
+sidebar_label: Quickstart
 ---
 
 :::note
