@@ -1,15 +1,16 @@
-import PriceTextPreview from "../custom_preview/PriceTextPreview";
-import { SampleExtraActions } from "../SampleExtraActions";
+import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
+import { SampleExtraActions } from "../collection_actions/SampleExtraActions";
 import {
     AdditionalColumnDelegate,
     AsyncPreviewComponent,
     buildSchema,
     buildSchemaFrom,
     Entity,
-    EntitySchema,
+    EntityCustomViewBuilder,
     EnumValues,
     ExtraActionsParams
 } from "@camberi/firecms";
+import { SampleProductsView } from "../custom_schema_view/SampleProductsView";
 
 export const locales: EnumValues = {
     "es": "Spanish",
@@ -58,8 +59,20 @@ const categories: EnumValues = {
     watches: "Watches"
 };
 
-export const productSchema: EntitySchema = buildSchema({
+
+const sampleView: EntityCustomViewBuilder = {
+    path: "sample_custom_view",
+    name: "Custom view",
+    builder: ({ schema, entity }) => (
+        <SampleProductsView entity={entity}/>
+    )
+};
+
+export const productSchema = buildSchema({
     name: "Product",
+    views: [
+        sampleView
+    ],
     onPreSave: ({
                     schema,
                     collectionPath,

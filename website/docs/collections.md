@@ -39,10 +39,7 @@ Check the full API reference in [Entity collections](api/interfaces/entitycollec
   need to create special indexes in Firestore.
   You can then specify here the indexes created.
 
-* `initialFilter` Initial filters applied to this collection. Consider that you
-  can filter any property, but only those included in
-  `filterableProperties` will include the corresponding filter widget. Defaults
-  to none
+* `initialFilter` Initial filters applied to this collection.
 
 * `initialSort` Default sort applied to this collection. It takes tuples in the
   shape `["property_name", "asc"]` or `["property_name", "desc"]`

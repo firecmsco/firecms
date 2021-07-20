@@ -90,7 +90,7 @@ export interface EntitySideViewProps {
     collectionPath: string;
     entityId?: string;
     copy?: boolean;
-    selectedSubcollection?: string;
+    selectedSubpath?: string;
     permissions?: PermissionsBuilder<any, any>;
     schema: EntitySchema<any>;
     subcollections?: EntityCollection[];
@@ -99,7 +99,7 @@ export interface EntitySideViewProps {
 function EntitySideView({
                             collectionPath,
                             entityId,
-                            selectedSubcollection,
+                            selectedSubpath,
                             copy,
                             permissions,
                             schema,
@@ -120,13 +120,11 @@ function EntitySideView({
     const [readOnly, setReadOnly] = useState<boolean>(false);
     const [tabsPosition, setTabsPosition] = React.useState(0);
 
-    // have the original values of the form changed
+    // have the original values of the form changed?
     const [isModified, setModified] = useState(false);
 
-    const onModified = (value: boolean) => {
-        setModified(value);
-    };
-
+    const customViews = schema.views;
+    const customViewsCount = customViews?.length ?? 0;
 
     useEffect(() => {
         if (entityId) {
@@ -138,6 +136,7 @@ function EntitySideView({
                     if (e) {
                         setStatus(copy ? "copy" : "existing");
                         setEntity(e);
+                        setReadOnly(!canEdit(permissions, e, authController));
                         console.debug("Updated entity from Firestore", e);
                     }
                     setLoading(false);
@@ -151,22 +150,25 @@ function EntitySideView({
         };
     }, [collectionPath, entityId]);
 
-    useEffect(() => {
-        if (entity)
-            setReadOnly(!canEdit(permissions, entity, authController));
-
-    }, [entity]);
 
     useEffect(() => {
-        if (!selectedSubcollection)
+        if (!selectedSubpath)
             setTabsPosition(0);
-        if (subcollections && selectedSubcollection) {
-            const index = subcollections
-                .map((c) => c.relativePath)
-                .findIndex((p) => p === selectedSubcollection);
+
+        if (customViews) {
+            const index = customViews
+                .map((c) => c.path)
+                .findIndex((p) => p === selectedSubpath);
             setTabsPosition(index + 1);
         }
-    }, [selectedSubcollection]);
+
+        if (subcollections && selectedSubpath) {
+            const index = subcollections
+                .map((c) => c.relativePath)
+                .findIndex((p) => p === selectedSubpath);
+            setTabsPosition(index + customViewsCount + 1);
+        }
+    }, [selectedSubpath]);
 
 
     async function onEntitySave(schema: EntitySchema, collectionPath: string, id: string | undefined, values: EntityValues<any, any>): Promise<void> {
@@ -254,7 +256,7 @@ function EntitySideView({
             schema={schema}
             onEntitySave={onEntitySave}
             onDiscard={onDiscard}
-            onModified={onModified}
+            onModified={setModified}
             entity={entity}
             containerRef={containerRef}/>
     ) : (
@@ -263,7 +265,24 @@ function EntitySideView({
             schema={schema}/>
     );
 
-    const subCollectionsView = subcollections && subcollections.map(
+    const customViewsView: JSX.Element[] | undefined = customViews && customViews.map(
+        (customView, colIndex) => {
+            return (
+                <Box
+                    key={`custom_view_${customView.path}_${colIndex}`}
+                    role="tabpanel"
+                    flexGrow={1}
+                    height={"100%"}
+                    width={"100%"}
+                    hidden={tabsPosition !== colIndex + 1}>
+                    {entity && customView.builder({ schema, entity })
+                    }
+                </Box>
+            );
+        }
+    );
+
+    const subCollectionsViews = subcollections && subcollections.map(
         (subcollectionView, colIndex) => {
             const collectionPath = entity ? `${entity?.reference.path}/${removeInitialSlash(subcollectionView.relativePath)}` : undefined;
 
@@ -274,7 +293,7 @@ function EntitySideView({
                     flexGrow={1}
                     height={"100%"}
                     width={"100%"}
-                    hidden={tabsPosition !== colIndex + 1}>
+                    hidden={tabsPosition !== colIndex + customViewsCount + 1}>
                     {entity && collectionPath ?
                         <EntityCollectionTable collectionPath={collectionPath}
                                                collectionConfig={subcollectionView}
@@ -296,15 +315,27 @@ function EntitySideView({
         }
     );
 
+    function getSelectedSubpath(value: number) {
+        if (value == 0) return undefined;
+
+        if (customViews && value < customViewsCount + 1) {
+            return customViews[value - 1].path;
+        }
+
+        if (subcollections) {
+            return subcollections[value - customViewsCount - 1].relativePath;
+        }
+
+        throw Error("Something is wrong in getSelectedSubpath");
+    }
+
     function onSideTabClick(value: number) {
         setTabsPosition(value);
-        if (entityId && subcollections) {
+        if (entityId) {
             sideEntityController.open({
                 collectionPath,
                 entityId,
-                selectedSubcollection: value !== 0
-                    ? subcollections[value - 1].relativePath
-                    : undefined,
+                selectedSubpath: getSelectedSubpath(value),
                 overrideSchemaResolver: false
             });
         }
@@ -345,12 +376,20 @@ function EntitySideView({
                                 label={`${!readOnly ? (existingEntity ? "Edit" : `Add New`) : ""} ${schema.name}`
                                 }/>
 
+                            {customViews && customViews.map(
+                                (view) =>
+                                    <Tab
+                                        key={`entity_detail_custom_tab_${view.name}`}
+                                        label={view.name}/>
+                            )}
+
                             {subcollections && subcollections.map(
                                 (subcollection) =>
                                     <Tab
-                                        key={`entity_detail_tab_${subcollection.name}`}
+                                        key={`entity_detail_collection_tab_${subcollection.name}`}
                                         label={subcollection.name}/>
                             )}
+
                         </Tabs>
                     </div>
 
@@ -364,7 +403,9 @@ function EntitySideView({
                         {form}
                     </Box>
 
-                    {subCollectionsView}
+                    {customViewsView}
+
+                    {subCollectionsViews}
 
                 </div>
 

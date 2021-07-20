@@ -1,5 +1,5 @@
 import CustomColorTextField from "../custom_field/CustomColorTextField";
-import CustomBooleanPreview from "../custom_preview/CustomBooleanPreview";
+import CustomBooleanPreview from "../custom_field_preview/CustomBooleanPreview";
 import { buildSchema, ExportMappingFunction } from "@camberi/firecms";
 
 export const blogSchema = buildSchema({

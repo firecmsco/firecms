@@ -74,7 +74,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 ) {
 
     if (collectionConfig.filterableProperties) {
-        console.warn("The property 'filterableProperties' has been deprecated and will be removed in the" +
+        console.warn("The property 'filterableProperties' has been deprecated and will be removed in the " +
             "future. The supported properties are filtarable by default. ");
     }
 
@@ -111,7 +111,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                             sideEntityController.open({
                                 collectionPath: collectionPath,
                                 entityId: entity.id,
-                                selectedSubcollection: subcollection.relativePath,
+                                selectedSubpath: subcollection.relativePath,
                                 permissions: subcollection.permissions,
                                 schema: collectionConfig.schema,
                                 subcollections: collectionConfig.subcollections,

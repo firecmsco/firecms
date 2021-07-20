@@ -1,3 +1,4 @@
+import React from "react";
 import firebase from "firebase/app";
 import { CMSAppContext } from "../contexts/CMSAppContext";
 import {
@@ -79,7 +80,37 @@ export interface EntitySchema<Key extends string = string> {
      * @param entityDeleteProps
      */
     onDelete?(entityDeleteProps: EntityDeleteProps<this, Key>): void;
+
+    /**
+     * Array of builders for rendering additional panels in an entity view.
+     * Useful if you need to render custom views
+     */
+    views?: EntityCustomViewBuilder<this, Key>[];
 }
+
+/**
+ * You can use this builder to render a custom panel in the entity detail view.
+ * It gets rendered as a tab.
+ * @category Entities
+ */
+export type EntityCustomViewBuilder<S extends EntitySchema<Key> = EntitySchema<any>,
+    Key extends string = Extract<keyof S["properties"], string>> =
+    {
+        path: string,
+        name: string,
+        builder: (extraActionsParams: EntityCustomViewParams<S, Key>) => React.ReactNode
+    }
+
+/**
+ * Parameters passed to the builder in charge of rendering a custom panel for
+ * an entity view.
+ * @category Entities
+ */
+export type EntityCustomViewParams<S extends EntitySchema<Key> = EntitySchema<any>,
+    Key extends string = Extract<keyof S["properties"], string>> = {
+    schema: S,
+    entity?: Entity<S, Key>,
+};
 
 /**
  * Parameters passed to hooks when an entity is saved

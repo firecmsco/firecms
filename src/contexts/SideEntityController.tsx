@@ -141,7 +141,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
     const open = ({
                       collectionPath,
                       entityId,
-                      selectedSubcollection,
+                      selectedSubpath,
                       copy,
                       ...schemaProps
                   }: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaResolver?: boolean }) => {
@@ -168,7 +168,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         }
 
         const newPath = entityId
-            ? getEntityPath(entityId, collectionPath, selectedSubcollection)
+            ? getEntityPath(entityId, collectionPath, selectedSubpath)
             : getRouterNewEntityPath(collectionPath);
 
         const lastSidePanel = sidePanels.length > 0 ? sidePanels[sidePanels.length - 1] : undefined;
@@ -182,10 +182,10 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
             const updatedPanel: ExtendedPanelProps = {
                 ...lastSidePanel,
                 sidePanelKey,
-                selectedSubcollection
+                selectedSubpath
             };
             history.replace(
-                getEntityPath(entityId, collectionPath, selectedSubcollection),
+                getEntityPath(entityId, collectionPath, selectedSubpath),
                 {
                     main_location: mainLocation,
                     panels: [...sidePanels.slice(0, -1), updatedPanel]
@@ -198,7 +198,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                 entityId,
                 copy: copy !== undefined && copy,
                 sidePanelKey,
-                selectedSubcollection
+                selectedSubpath
             };
             history.push(
                 newPath,
@@ -258,7 +258,7 @@ function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[]
             } else if (navigationEntry.type === "collection") {
                 const lastSidePanel: ExtendedPanelProps = sidePanels[sidePanels.length - 1];
                 if (lastSidePanel)
-                    lastSidePanel.selectedSubcollection = navigationEntry.collection.relativePath;
+                    lastSidePanel.selectedSubpath = navigationEntry.collection.relativePath;
             }
         }
 

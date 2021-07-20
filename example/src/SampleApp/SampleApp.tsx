@@ -34,7 +34,7 @@ import {
     sampleAdditionalExportColumn
 } from "./schemas/blog_schema";
 import { testEntitySchema } from "./schemas/test_schema";
-import { customSchemaResolver } from "./custom_schema_resolver";
+import { customSchemaResolver } from "./schemas/custom_schema_resolver";
 
 import "typeface-rubik";
 import "typeface-space-mono";
@@ -99,7 +99,6 @@ function SampleApp() {
         description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
         textSearchDelegate: blogSearchDelegate,
         properties: ["name", "images", "status", "reviewed", "products", "gold_text", "long_text"],
-        filterableProperties: ["name", "status"],
         initialFilter: {
             "status": ["==", "published"]
         }
@@ -109,12 +108,10 @@ function SampleApp() {
         relativePath: "test_entity",
         schema: testEntitySchema,
         name: "Test entity",
-        filterableProperties: ["difficulty", "search_adjacent", "description"],
         subcollections: [{
             relativePath: "test_subcollection",
             schema: testEntitySchema,
             name: "Test entity",
-            filterableProperties: ["difficulty", "search_adjacent", "description"]
         }]
     });
 

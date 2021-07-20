@@ -91,9 +91,19 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
             // override schema resolver default to true
             const shouldOverrideResolver = overriddenProps.overrideSchemaResolver === undefined || overriddenProps.overrideSchemaResolver;
             if (shouldOverrideResolver)
-                result = { ...result, ...overriddenProps };
+                result = {
+                    ...overriddenProps,
+                    permissions: result.permissions || overriddenProps.permissions,
+                    schema: result.schema || overriddenProps.schema,
+                    subcollections: result.subcollections || overriddenProps.subcollections
+                };
             else
-                result = { ...overriddenProps, ...result };
+                result = {
+                    ...result,
+                    permissions: overriddenProps.permissions ?? result.permissions,
+                    schema: overriddenProps.schema ?? result.schema,
+                    subcollections: overriddenProps.subcollections ?? result.subcollections
+                };
 
         }
 
@@ -101,7 +111,13 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
         if (entityCollection) {
             const schema = entityCollection.schema;
             const subcollections = entityCollection.subcollections;
-            result = { ...{ schema, subcollections }, ...result };
+            const permissions = entityCollection.permissions;
+            result = {
+                ...result,
+                schema: result.schema ?? schema,
+                subcollections: result.subcollections ?? subcollections,
+                permissions: result.permissions ?? permissions
+            };
         }
 
         if (!result.schema)

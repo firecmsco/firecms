@@ -607,19 +607,6 @@ function updateAutoValues<S extends EntitySchema<Key>,
     return { ...inputValues, ...updatedValues };
 }
 
-/**
- * Functions used to initialize filter object
- * @param schema
- * @param filterableProperties
- * @ignore
- */
-export function initFilterValues<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>
-(schema: S, filterableProperties: (keyof S["properties"])[]): FilterValues<Key> {
-    return filterableProperties
-        .map((key) => ({ [key]: undefined }))
-        .reduce((a: any, b: any) => ({ ...a, ...b }), {});
-}
 
 /**
  * Check if the given property is unique in the given collection

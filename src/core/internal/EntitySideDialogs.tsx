@@ -114,7 +114,7 @@ export function EntitySideDialogs<S extends EntitySchema>() {
                                 >
 
                                     <div
-                                        className={panel === undefined || !panel.selectedSubcollection ? classes.root : classes.wide}>
+                                        className={panel === undefined || !panel.selectedSubpath ? classes.root : classes.wide}>
                                         {panel && buildEntityView(panel)}
                                     </div>
                                 </EntityDrawer>

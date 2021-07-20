@@ -136,6 +136,8 @@ module.exports = {
                         'api/interfaces/entityschema',
                         'api/types/entitystatus',
                         'api/types/entityvalues',
+                        'api/types/entitycustomviewbuilder',
+                        'api/types/entitycustomviewparams',
                         'api/interfaces/fieldconfig',
                         'api/interfaces/stringfieldconfig',
                         'api/interfaces/storagemeta',

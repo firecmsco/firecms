@@ -128,9 +128,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
     filterableProperties?: Key[];
 
     /**
-     * Initial filters applied to this collection. Consider that you
-     * can filter any property, but only those included in
-     * `filterableProperties` will include the corresponding filter widget.
+     * Initial filters applied to this collection.
      * Defaults to none.
      */
     initialFilter?: FilterValues<Key>;

@@ -22,7 +22,7 @@ export interface SideEntityPanelProps {
      * Open the entity with a selected subcollection view. If the panel for this
      * entity was already open, it is replaced.
      */
-    selectedSubcollection?: string;
+    selectedSubpath?: string;
 
 }
 
