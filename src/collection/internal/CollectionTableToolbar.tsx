@@ -102,7 +102,7 @@ interface CollectionTableToolbarProps<S extends EntitySchema<Key>, Key extends s
     clearFilter(): void;
 }
 
-export default function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends string>(props: CollectionTableToolbarProps<S, Key>) {
+export default function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>(props: CollectionTableToolbarProps<S, Key>) {
     const classes = useStyles();
     const sizeClasses = useSizeSelectStyles();
 

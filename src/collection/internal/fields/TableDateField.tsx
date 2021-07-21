@@ -69,6 +69,11 @@ export function TableDateField(props: {
                             height: "100%"
                         }
                     }}
+                    InputAdornmentProps={{
+                        style: {
+                            height: 26
+                        }
+                    }}
                     onOpen={handleOpen}
                     onClose={handleClose}
                     value={internalValue ?? null}

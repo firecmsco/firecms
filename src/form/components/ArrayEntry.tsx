@@ -9,6 +9,7 @@ import { Box, createStyles, IconButton, makeStyles } from "@material-ui/core";
 const useStyles = makeStyles(theme => createStyles({
     arrayEntry: {
         marginBottom: theme.spacing(1),
+        borderRadius: "4px",
         opacity: 1
     },
     arrayEntryDragging: {

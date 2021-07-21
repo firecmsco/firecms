@@ -132,7 +132,7 @@ export type UniqueFieldValidator = (props: { name: string, value: any, property:
 /**
  * Props passed in a callback when the content of a cell in a table has been edited
  */
-export type OnCellChangeParams<T, S extends EntitySchema<Key>, Key extends string> = {
+export type OnCellChangeParams<T, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> = {
     value: T,
     name: string,
     entity: Entity<S, Key>,

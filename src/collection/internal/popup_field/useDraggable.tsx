@@ -23,36 +23,25 @@ const useStyles = makeStyles<Theme>((theme: Theme) =>
 
 
 type DraggableProps = {
-    children: React.ReactNode;
+    containerRef: React.RefObject<HTMLDivElement>,
+    ref: React.RefObject<HTMLDivElement>,
     x?: number;
     y?: number;
-    open: boolean;
     onMove: (x: number, y: number) => void,
-    onMeasure: (rect: DOMRect | undefined) => void,
 };
 
-export function Draggable({
-                              children,
+export function useDraggable({
+                                 containerRef,
+    ref,
                               x,
                               y,
-                              open,
                               onMove,
-                              onMeasure
                           }: DraggableProps) {
 
-    const classes = useStyles();
 
     let relX = 0;
     let relY = 0;
 
-    const ref = React.createRef<HTMLDivElement>();
-
-    useEffect(
-        () => {
-            onMeasure(ref.current?.getBoundingClientRect());
-        },
-        [ref.current]
-    );
 
     const onMouseDown = (event: any) => {
         if (event.button !== 0 || !ref.current || event.target !== ref.current) {
@@ -83,9 +72,9 @@ export function Draggable({
     };
 
     const update = () => {
-        if (ref.current) {
-            ref.current.style.top = `${y}px`;
-            ref.current.style.left = `${x}px`;
+        if (containerRef.current) {
+            containerRef.current.style.top = `${y}px`;
+            containerRef.current.style.left = `${x}px`;
         }
     };
 
@@ -99,22 +88,4 @@ export function Draggable({
         };
     });
 
-    const element = (
-        <div key={`table_popup_${open}`}
-             className={clsx(classes.popup,
-                 {
-                     [classes.hidden]: !open
-                 })} ref={ref}>
-            {children}
-        </div>
-    );
-
-    if (!open)
-        return element;
-
-    return (
-        <Grow in={open}>
-            {element}
-        </Grow>
-    );
 }

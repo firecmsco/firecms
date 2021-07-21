@@ -137,6 +137,9 @@ function ArrayOneOfEntry({
 
     const enumValues: EnumValues = Object.entries(properties).map(([key, property]) => ({ [key]: property.title ?? key })).reduce((a, b) => ({ ...a, ...b }));
 
+    const typeFieldName = `${name}[${typeField}]`;
+    const valueFieldName = `${name}[${valueField}]`;
+
     return (
         <Paper className={classes.paper} elevation={1}>
 
@@ -147,7 +150,7 @@ function ArrayOneOfEntry({
 
                 <FastField
                     required={true}
-                    name={`${name}[${typeField}]`}
+                    name={typeFieldName}
                 >
                     {(fieldProps: FormikFieldProps) =>
                         (
@@ -158,8 +161,9 @@ function ArrayOneOfEntry({
                                 value={fieldProps.field.value !== undefined ? fieldProps.field.value : ""}
                                 onChange={(evt: any) => {
                                     const eventValue = evt.target.value;
-                                    fieldProps.form.setFieldTouched(fieldProps.field.name);
-                                    fieldProps.form.setFieldValue(fieldProps.field.name, eventValue);
+                                    fieldProps.form.setFieldTouched(typeFieldName);
+                                    fieldProps.form.setFieldValue(typeFieldName, eventValue);
+                                    fieldProps.form.setFieldValue(valueFieldName, null);
                                 }}
                                 renderValue={(enumKey: any) =>
                                     <EnumValuesChip
@@ -189,7 +193,7 @@ function ArrayOneOfEntry({
             {selectedProperty && (
                 <FormControl fullWidth key={`form_control_${name}_${type}`}>
                     {buildPropertyField({
-                        name: `${name}[${valueField}]`,
+                        name: valueFieldName,
                         property: selectedProperty,
                         context: context
                     })}

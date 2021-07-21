@@ -96,6 +96,7 @@ function SampleApp() {
         exportable: {
             additionalColumns: [sampleAdditionalExportColumn]
         },
+        properties: ["name", "images", "status", "content", "reviewed", "products", "gold_text", "long_text"],
         description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
         textSearchDelegate: blogSearchDelegate,
         initialFilter: {
@@ -110,7 +111,7 @@ function SampleApp() {
         subcollections: [{
             relativePath: "test_subcollection",
             schema: testEntitySchema,
-            name: "Test entity",
+            name: "Test entity"
         }]
     });
 

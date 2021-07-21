@@ -18,8 +18,8 @@ import {
     FormContext,
     Property
 } from "../../../models";
-import { Form, Formik, FormikProps, getIn, useFormikContext } from "formik";
-import { Draggable } from "./Draggable";
+import { Form, Formik, FormikProps } from "formik";
+import { useDraggable } from "./useDraggable";
 import {
     CustomFieldValidator,
     getYupEntitySchema
@@ -29,6 +29,7 @@ import { useWindowSize } from "../../../hooks/useWindowSize";
 import { isReadOnly } from "../../../models/utils";
 import { OnCellChangeParams } from "../../components/CollectionTableProps";
 import { buildPropertyField } from "../../../form/form_factory";
+import clsx from "clsx";
 
 export const useStyles = makeStyles(theme => createStyles({
     form: {
@@ -37,7 +38,30 @@ export const useStyles = makeStyles(theme => createStyles({
     },
     button: {
         marginTop: theme.spacing(1),
-        alignSelf: "flex-end"
+        alignSelf: "flex-end",
+        position: "sticky",
+        bottom: 0
+    },
+    popup: {
+        display: "inline-block",
+        userSelect: "none",
+        position: "fixed",
+        zIndex: 1300,
+        boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
+        borderRadius: "4px",
+        backgroundColor: theme.palette.background.paper,
+        transition: "transform 250ms ease-out",
+        transform: "scale(1.0)",
+    },
+    popupInner: {
+        padding: theme.spacing(2),
+        overflow: "auto",
+        cursor: "inherit",
+    },
+    hidden: {
+        visibility: "hidden",
+        transform: "scale(0.7)",
+        zIndex: -1
     }
 }));
 
@@ -87,6 +111,24 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
     const classes = useStyles();
     const windowSize = useWindowSize();
 
+    const ref = React.useRef<HTMLDivElement>(null);
+    const containerRef = React.useRef<HTMLDivElement>(null);
+
+    useDraggable({
+        containerRef,
+        ref,
+        x: popupLocation?.x,
+        y: popupLocation?.y,
+        onMove: (x, y) => onMove({ x, y })
+    });
+
+    useEffect(
+        () => {
+            setDraggableBoundingRect(ref.current?.getBoundingClientRect());
+        },
+        [ref.current]
+    );
+
     useEffect(
         () => {
             if (cellRect && draggableBoundingRect)
@@ -127,7 +169,6 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         // selectedCell.closePopup();
     };
 
-
     const validationSchema = getYupEntitySchema(
         schema.properties,
         entity?.values ?? {},
@@ -139,9 +180,10 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         if (!draggableBoundingRect)
             return;
 
+        // We divide the width by 0.7 since we it is scaled down
         return {
-            x: Math.max(0, Math.min(x, windowSize.width - draggableBoundingRect.width)),
-            y: Math.max(0, Math.min(y, windowSize.height - draggableBoundingRect.height))
+            x: Math.max(0, Math.min(x, windowSize.width - draggableBoundingRect.width / 0.7)),
+            y: Math.max(0, Math.min(y, windowSize.height - draggableBoundingRect.height / 0.7))
         };
     }
 
@@ -223,15 +265,13 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         </OutsideAlerter>;
     };
 
-
     const form = entity && (
         <div
             key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
             style={{
-                width: 470,
+                width: 520,
                 maxWidth: "100vw",
-                maxHeight: "85vh",
-                overflow: "auto"
+                maxHeight: "85vh"
             }}>
             <Formik
                 initialValues={entity.values}
@@ -255,16 +295,16 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         </div>
     );
 
-    return (
-        <Portal container={document.body}>
-            <Draggable
-                key={`draggable_${name}_${entity.id}`}
-                x={popupLocation?.x}
-                y={popupLocation?.y}
-                open={formPopupOpen}
-                onMove={(x, y) => onMove({ x, y })}
-                onMeasure={(rect) => setDraggableBoundingRect(rect)}
-            >
+    const draggable = (
+        <div
+            key={`draggable_${name}_${entity.id}`}
+            className={clsx(classes.popup,
+                { [classes.hidden]: !formPopupOpen }
+            )}
+            ref={containerRef}>
+
+            <div className={classes.popupInner}
+                 ref={ref}>
 
                 {form}
 
@@ -282,27 +322,17 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                                    fontSize={"small"}/>
                     </IconButton>
                 </Box>
+            </div>
 
-            </Draggable>
+        </div>
+    );
+
+    return (
+        <Portal container={document.body}>
+            {draggable}
         </Portal>
     );
 
 }
-
-const AutoSubmitToken = ({
-                             name,
-                             onSubmit
-                         }: { name: string, onSubmit: (values: any) => void }) => {
-    const { values, errors } = useFormikContext();
-
-    React.useEffect(() => {
-        const fieldError = getIn(errors, name);
-        const shouldSave = !fieldError || (Array.isArray(fieldError) && !fieldError.filter((e: any) => !!e).length);
-        if (shouldSave) {
-            onSubmit(values);
-        }
-    }, [values, errors]);
-    return null;
-};
 
 export default PopupFormField;
