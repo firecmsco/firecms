@@ -126,7 +126,7 @@ export function ArrayEntry({
                      key={`field_${name}_entryValue`}>
                     {children}
                 </Box>
-                <Box width={"48px"}
+                <Box width={"36px"}
                      display="flex"
                      flexDirection="column"
                      alignItems="center">

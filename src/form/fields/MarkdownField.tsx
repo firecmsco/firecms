@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
     Box,
     createStyles,
@@ -8,48 +10,24 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-import React from "react";
+import MDEditor from '@uiw/react-md-editor';
 
 import { FieldProps } from "../../models";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { Controlled as CodeMirror } from "react-codemirror2";
-import ReactMarkdown from "react-markdown";
 
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/base16-light.css";
 import { useClearRestoreValue } from "../../hooks";
 
-require("codemirror/mode/markdown/markdown");
 
 interface MarkDownFieldProps extends FieldProps<string> {
 }
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: { // hacky, could not load custom css file to create theme
-            "& .cm-s-base16-light div.CodeMirror-selected": {
-                background: "rgb(200 200 200)"
-            },
-            "& .cm-s-base16-light .CodeMirror-line::selection, .cm-s-base16-light .CodeMirror-line > span::selection, .cm-s-base16-light .CodeMirror-line > span > span::selection": {
-                background: "rgb(200 200 200)"
-            },
-            "& .react-codemirror2 .cm-s-base16-light.CodeMirror": {
-                backgroundColor: "rgb(230 230 230)",
-                borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
-                color: "currentColor",
-                "&:hover": {
-                    backgroundColor: "rgb(222 222 222)"
-                }
+        root: {
+            "& .w-md-editor-toolbar": {
+                backgroundColor: "rgba(0, 0, 0, 0.09)"
             }
-        },
-        preview: {
-            padding: theme.spacing(2)
-        },
-        previewGutter: {
-            width: "28px",
-            minWidth: "28px",
-            background: "#f5f5f5"
         }
     })
 );
@@ -81,7 +59,7 @@ export default function MarkDownField({
         setValue
     });
 
-    const updateValue = (newValue: string) => {
+    const updateValue = (newValue: string | undefined) => {
         if (!newValue) {
             setValue(
                 null
@@ -106,42 +84,11 @@ export default function MarkDownField({
             </FormHelperText>}
 
             <div className={classes.root}>
-                <CodeMirror
-                    value={typeof value === "string" ? value : ""}
-                    options={{
-                        mode: "markdown",
-                        highlightFormatting: true,
-                        theme: "base16-light",
-                        lineNumbers: true,
-                        lineWrapping: true,
-                        readOnly: disabled,
-                        autoFocus: autoFocus
-                    }}
-                    onBeforeChange={(editor, data, value) => {
-                        updateValue(value);
-                    }}
-                    onChange={(editor, data, value) => {
-                    }}
+                <MDEditor
+                    value={value}
+                    onChange={(value) => updateValue(value)}
                 />
             </div>
-
-            {!tableMode && <Box mt={1}>
-                <Paper variant={"outlined"}>
-                    <Box display={"flex"}>
-                        <Box className={classes.previewGutter}/>
-                        <Box className={classes.preview}>
-                            {value &&
-                            <ReactMarkdown>{value}</ReactMarkdown>}
-                            {!value &&
-                            <Typography variant={"caption"}
-                                        color={"textSecondary"}>
-                                <p>Preview for {property.title}</p>
-                            </Typography>}
-                        </Box>
-                    </Box>
-                </Paper>
-            </Box>}
-
 
             <Box display={"flex"}>
                 <Box flexGrow={1}>
