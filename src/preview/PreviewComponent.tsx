@@ -32,6 +32,7 @@ import { PreviewComponentProps } from "./preview_component_props";
 
 import ReactMarkdown from "react-markdown";
 import firebase from "firebase/app";
+import ArrayOneOfPreview from "./components/ArrayOneOfPreview";
 
 /**
  * @category Preview components
@@ -87,42 +88,48 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
     } else if (property.dataType === "array") {
         if (value instanceof Array) {
             const arrayProperty = property as ArrayProperty;
-            if (!arrayProperty.of) {
-                throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
+            if (!arrayProperty.of && !arrayProperty.oneOf) {
+                throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
             }
 
-            if (arrayProperty.of.dataType === "map") {
-                content =
-                    <ArrayOfMapsPreview name={name}
-                                        property={property as ArrayProperty}
-                                        value={value as object[]}
-                                        size={size}
-                    />;
-            } else if (arrayProperty.of.dataType === "reference") {
-                content = <ArrayOfReferencesPreview {...fieldProps}
-                                                    value={value}
-                                                    property={property as ArrayProperty}/>;
-            } else if (arrayProperty.of.dataType === "string") {
-                if (arrayProperty.of.config?.enumValues) {
-                    content = <ArrayPropertyEnumPreview
-                        {...fieldProps}
-                        value={value as string[]}
-                        property={property as ArrayProperty}/>;
-                } else if (arrayProperty.of.config?.storageMeta) {
-                    content = <ArrayOfStorageComponentsPreview
-                        {...fieldProps}
-                        value={value}
-                        property={property as ArrayProperty}/>;
+            if (arrayProperty.of) {
+                if (arrayProperty.of.dataType === "map") {
+                    content =
+                        <ArrayOfMapsPreview name={name}
+                                            property={property as ArrayProperty}
+                                            value={value as object[]}
+                                            size={size}
+                        />;
+                } else if (arrayProperty.of.dataType === "reference") {
+                    content = <ArrayOfReferencesPreview {...fieldProps}
+                                                        value={value}
+                                                        property={property as ArrayProperty}/>;
+                } else if (arrayProperty.of.dataType === "string") {
+                    if (arrayProperty.of.config?.enumValues) {
+                        content = <ArrayPropertyEnumPreview
+                            {...fieldProps}
+                            value={value as string[]}
+                            property={property as ArrayProperty}/>;
+                    } else if (arrayProperty.of.config?.storageMeta) {
+                        content = <ArrayOfStorageComponentsPreview
+                            {...fieldProps}
+                            value={value}
+                            property={property as ArrayProperty}/>;
+                    } else {
+                        content = <ArrayOfStringsPreview
+                            {...fieldProps}
+                            value={value as string[]}
+                            property={property as ArrayProperty}/>;
+                    }
                 } else {
-                    content = <ArrayOfStringsPreview
-                        {...fieldProps}
-                        value={value as string[]}
-                        property={property as ArrayProperty}/>;
+                    content = <ArrayPreview {...fieldProps}
+                                            value={value}
+                                            property={property as ArrayProperty}/>;
                 }
-            } else {
-                content = <ArrayPreview {...fieldProps}
-                                        value={value}
-                                        property={property as ArrayProperty}/>;
+            } else if (arrayProperty.oneOf) {
+                content = <ArrayOneOfPreview {...fieldProps}
+                                             value={value}
+                                             property={property as ArrayProperty}/>;
             }
         } else {
             content = buildWrongValueType(name, property.dataType, value);

@@ -28,7 +28,7 @@ export default function ArrayDefaultField<T extends Array<any>>({
                                                                 }: FieldProps<T>) {
 
     if (!property.of)
-        throw Error("ArrayDefaultField misconfiguration. Property.of not set");
+        throw Error("ArrayDefaultField misconfiguration. Property `of` not set");
 
     const ofProperty: Property<CMSType[]> = property.of as Property<CMSType[]>;
     const classes = formStyles();

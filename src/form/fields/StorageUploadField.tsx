@@ -90,7 +90,8 @@ export const useStyles = makeStyles(theme => ({
         boxSizing: "border-box"
     },
     arrayEntry: {
-        border: "1px dashed transparent"
+        border: "1px dashed transparent",
+        borderRadius: "4px"
     },
     arrayEntryHovered: {
         opacity: 0.5,

@@ -12,6 +12,7 @@ import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
+import { formStyles } from "../styles";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -66,9 +67,7 @@ export default function Select<T extends EnumType>({
                     const newValue = eventValue ?
                         (property.dataType === "number" ? parseFloat(eventValue) : eventValue)
                         : null;
-                    return setValue(
-                        newValue
-                    );
+                    return setValue(newValue);
                 }}
                 renderValue={(enumKey: any) => {
                     return <EnumValuesChip

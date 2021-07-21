@@ -27,7 +27,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import MuiAlert from "@material-ui/lab/Alert/Alert";
 import { CSVLink } from "react-csv";
 
-type ExportButtonProps<S extends EntitySchema<Key>, Key extends string> = {
+type ExportButtonProps<S extends EntitySchema<any> > = {
     schema: S;
     collectionPath: string;
     exportConfig?: ExportConfig;
@@ -35,17 +35,17 @@ type ExportButtonProps<S extends EntitySchema<Key>, Key extends string> = {
 
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
-export default function ExportButton<S extends EntitySchema<Key>, Key extends string>({
+export default function ExportButton<S extends EntitySchema<any>>({
                                                                                           schema,
                                                                                           collectionPath,
                                                                                           exportConfig
-                                                                                      }: ExportButtonProps<S, Key>
+                                                                                      }: ExportButtonProps<S>
 ) {
 
 
     const csvLinkEl = React.useRef<any>(null);
 
-    const [data, setData] = React.useState<Entity<S, Key>[]>();
+    const [data, setData] = React.useState<Entity<S, any>[]>();
     const [additionalData, setAdditionalData] = React.useState<Record<string, any>[]>();
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
@@ -64,7 +64,7 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
 
         setDataLoading(true);
 
-        const updateEntities = async (entities: Entity<S, Key>[]) => {
+        const updateEntities = async (entities: Entity<S, any>[]) => {
             if (entities.length >= INITIAL_DOCUMENTS_LIMIT) {
                 setHasLargeAmountOfData(true);
             }
@@ -81,7 +81,7 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
                 });
         };
 
-        const fetchAdditionalColumns = async (entities: Entity<S, Key>[]) => {
+        const fetchAdditionalColumns = async (entities: Entity<S, any>[]) => {
 
             if (!exportConfig?.additionalColumns) {
                 return;
@@ -104,7 +104,7 @@ export default function ExportButton<S extends EntitySchema<Key>, Key extends st
             setDataLoadingError(error);
         };
 
-        fetchCollection<S, Key>(
+        fetchCollection<S, any>(
             collectionPath,
             schema,
             undefined,

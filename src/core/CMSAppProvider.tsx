@@ -263,10 +263,12 @@ const makeTheme = (
                     transform: "translate(0, 16px) scale(1)"
                 }
             },
+            MuiFilledInput: {
+                input: {
+                    minHeight: "27px"
+                }
+            },
             MuiInputBase: {
-                formControl: {
-                    minHeight: "64px"
-                },
                 root: {
                     "&.mono": {
                         fontFamily: "'Space Mono', 'Lucida Console', monospace"

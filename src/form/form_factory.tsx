@@ -43,10 +43,11 @@ import DateTimeField from "./fields/DateTimeField";
 import ReferenceField from "./fields/ReferenceField";
 import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
+import ArrayOneOfField from "./fields/ArrayOneOfField";
 import ReadOnlyField from "./fields/ReadOnlyField";
 import MarkDownField from "./fields/MarkdownField";
-import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
 
+import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
 import { useCMSAppContext, useSnackbarController } from "../contexts";
 import { isReadOnly } from "../models/utils";
 import { CMSAppContext } from "../contexts/CMSAppContext";
@@ -95,17 +96,23 @@ export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key
         component = property.config?.field as ElementType<FieldProps<T>>;
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
-        if (!of) {
-            throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
+        if (of) {
+            if ((of.dataType === "string" || of.dataType === "number") && of.config?.enumValues) {
+                component = ArrayEnumSelect as ElementType<FieldProps<T>>;
+            } else if (of.dataType === "string" && of.config?.storageMeta) {
+                component = StorageUploadField as ElementType<FieldProps<T>>;
+            } else if (of.dataType === "reference") {
+                component = ArrayOfReferencesField as ElementType<FieldProps<T>>;
+            } else {
+                component = ArrayDefaultField as ElementType<FieldProps<T>>;
+            }
         }
-        if ((of.dataType === "string" || of.dataType === "number") && of.config?.enumValues) {
-            component = ArrayEnumSelect as ElementType<FieldProps<T>>;
-        } else if (of.dataType === "string" && of.config?.storageMeta) {
-            component = StorageUploadField as ElementType<FieldProps<T>>;
-        } else if (of.dataType === "reference") {
-            component = ArrayOfReferencesField as ElementType<FieldProps<T>>;
-        } else {
-            component = ArrayDefaultField as ElementType<FieldProps<T>>;
+        const oneOf = (property as ArrayProperty).oneOf;
+        if (oneOf) {
+            component = ArrayOneOfField as ElementType<FieldProps<T>>;
+        }
+        if (!of && !oneOf) {
+            throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
         }
     } else if (property.dataType === "map") {
         component = MapField as ElementType<FieldProps<T>>;

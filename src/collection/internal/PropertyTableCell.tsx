@@ -231,35 +231,38 @@ const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key e
             allowScroll = true;
         } else if (property.dataType === "array") {
             const arrayProperty = (property as ArrayProperty);
-            if (!arrayProperty.of) {
-                throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
-            }
-            if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
-                if (selected && arrayProperty.of.config?.enumValues) {
-                    innerComponent = <TableSelect name={name as string}
-                                                  multiple={true}
-                                                  disabled={disabled}
-                                                  focused={focused}
-                                                  valueType={arrayProperty.of.dataType}
-                                                  enumValues={arrayProperty.of.config.enumValues}
-                                                  error={error}
-                                                  onBlur={onBlur}
-                                                  internalValue={internalValue as string | number}
-                                                  updateValue={updateValue}
-                                                  setPreventOutsideClick={setPreventOutsideClick}
-                    />;
-                    allowScroll = true;
-                }
-            } else if (arrayProperty.of.dataType === "reference") {
-                innerComponent = <TableReferenceField name={name as string}
+            if (arrayProperty.of) {
+                if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
+                    if (selected && arrayProperty.of.config?.enumValues) {
+                        innerComponent = <TableSelect name={name as string}
+                                                      multiple={true}
                                                       disabled={disabled}
-                                                      internalValue={internalValue as firebase.firestore.DocumentReference[]}
+                                                      focused={focused}
+                                                      valueType={arrayProperty.of.dataType}
+                                                      enumValues={arrayProperty.of.config.enumValues}
+                                                      error={error}
+                                                      onBlur={onBlur}
+                                                      internalValue={internalValue as string | number}
                                                       updateValue={updateValue}
-                                                      size={size}
-                                                      property={property as ArrayProperty}
                                                       setPreventOutsideClick={setPreventOutsideClick}
-                />;
-                allowScroll = false;
+                        />;
+                        allowScroll = true;
+                    }
+                } else if (arrayProperty.of.dataType === "reference") {
+                    innerComponent = <TableReferenceField name={name as string}
+                                                          disabled={disabled}
+                                                          internalValue={internalValue as firebase.firestore.DocumentReference[]}
+                                                          updateValue={updateValue}
+                                                          size={size}
+                                                          property={property as ArrayProperty}
+                                                          setPreventOutsideClick={setPreventOutsideClick}
+                    />;
+                    allowScroll = false;
+                }
+            }
+
+            if (!arrayProperty.of && !arrayProperty.oneOf) {
+                throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
             }
         }
     }

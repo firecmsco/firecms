@@ -44,7 +44,7 @@ export default function ArrayOfReferencesField({
     }
 
     const [open, setOpen] = React.useState(false);
-    const selectedIds = value ? value.map((ref) => ref.id) : [];
+    const selectedIds = value && Array.isArray(value) ? value.map((ref) => ref.id) : [];
 
     useClearRestoreValue({
         property,

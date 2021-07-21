@@ -261,6 +261,39 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
     of?: Property<ArrayT>;
 
     /**
+     * Use this field if you would like to have an array of properties.
+     * It is useful if you need to have values of different types in the same
+     * array.
+     * Each entry of the array is an object with the shape:
+     * ```
+     * { type: "YOUR_TYPE", value: "YOUR_VALUE"}
+     * ```
+     * Note that you can use any property so `value` can take any value (strings,
+     * numbers, array, objects...)
+     * You can customise the `type` and `value` fields to suit your needs.
+     *
+     * An example use case for this feature may be a blog entry, where you have
+     * images and text blocks using markdown.
+     */
+    oneOf?: {
+        /**
+         * Record of properties, where the key is the `type` and the value
+         * is the corresponding property
+         */
+        properties: Record<string, Property>;
+        /**
+         * Name of the field to use as the discriminator for type
+         * Defaults to `type`
+         */
+        typeField?: string;
+        /**
+         * Name of the  field to use as the value
+         * Defaults to `value`
+         */
+        valueField?: string;
+    };
+
+    /**
      * Rules for validating this property
      */
     validation?: ArrayPropertyValidationSchema,
@@ -282,7 +315,7 @@ export interface MapProperty<T extends object = {},
     /**
      * Record of properties included in this map.
      */
-    properties?: Properties<string>;
+    properties?: Properties;
 
     /**
      * Rules for validating this property

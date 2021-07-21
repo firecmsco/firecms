@@ -98,7 +98,6 @@ function SampleApp() {
         },
         description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
         textSearchDelegate: blogSearchDelegate,
-        properties: ["name", "images", "status", "reviewed", "products", "gold_text", "long_text"],
         initialFilter: {
             "status": ["==", "published"]
         }

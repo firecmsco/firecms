@@ -40,6 +40,12 @@ export const formStyles = makeStyles(theme => createStyles({
     },
     form: {
         marginTop: theme.spacing(2)
+    },
+    input: {
+        minHeight: "64px"
+    },
+    oneOfInput: {
+        marginBottom: theme.spacing(2)
     }
 }));
 

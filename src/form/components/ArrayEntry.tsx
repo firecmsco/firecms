@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => createStyles({
     arrayEntryDragging: {
         marginBottom: theme.spacing(1),
         border: "1px dashed gray",
+        borderRadius: "4px",
         cursor: "move",
         opacity: 0.5
     },

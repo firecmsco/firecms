@@ -16,6 +16,7 @@ import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";
+import { formStyles } from "../styles";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -37,6 +38,9 @@ export default function TextField<T extends string | number>({
                                                                  allowInfinity,
                                                                  dependsOnOtherProperties
                                                              }: TextFieldProps<T>) {
+
+
+    const classes = formStyles();
 
     let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
@@ -79,6 +83,7 @@ export default function TextField<T extends string | number>({
 
     const filledInput = (
         <FilledInput
+            className={classes.input}
             autoFocus={autoFocus}
             type={inputType}
             multiline={isMultiline}

@@ -1,0 +1,203 @@
+import React, { useState } from "react";
+import {
+    FormControl,
+    FormHelperText,
+    InputLabel,
+    MenuItem,
+    Paper,
+    Select
+} from "@material-ui/core";
+import { FastField, FieldProps as FormikFieldProps } from "formik";
+
+import { formStyles } from "../styles";
+import ArrayContainer from "../components/ArrayContainer";
+import FieldDescription from "../components/FieldDescription";
+import { useClearRestoreValue } from "../../hooks";
+import { buildPropertyField } from "../form_factory";
+import LabelWithIcon from "../components/LabelWithIcon";
+import { EnumValuesChip } from "../../preview/components/CustomChip";
+import { enumToObjectEntries } from "../../util/enums";
+import { EnumValues, FieldProps, FormContext, Property } from "../../models";
+
+
+/**
+ * @category Form fields
+ */
+export default function ArrayOneOfField<T extends Array<any>>({
+                                                                  name,
+                                                                  value,
+                                                                  error,
+                                                                  showError,
+                                                                  isSubmitting,
+                                                                  setValue,
+                                                                  tableMode,
+                                                                  property,
+                                                                  includeDescription,
+                                                                  underlyingValueHasChanged,
+                                                                  context,
+                                                                  disabled,
+                                                                  dependsOnOtherProperties
+                                                              }: FieldProps<T>) {
+
+    if (!property.oneOf)
+        throw Error("ArrayOneOfField misconfiguration. Property `oneOf` not set");
+
+    const classes = formStyles();
+
+    const [lastAddedId, setLastAddedId] = useState<number | undefined>();
+
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
+
+    const buildEntry = (index: number, internalId: number) => {
+        return <ArrayOneOfEntry
+            name={`${name}[${index}]`}
+            index={index}
+            value={value[index]}
+            typeField={property.oneOf!.typeField ?? "type"}
+            valueField={property.oneOf!.valueField ?? "value"}
+            properties={property.oneOf!.properties}
+            context={context}/>;
+    };
+
+    return (
+
+        <FormControl fullWidth error={showError}>
+
+            {!tableMode && <FormHelperText filled
+                                           required={property.validation?.required}>
+                <LabelWithIcon scaledIcon={true} property={property}/>
+            </FormHelperText>}
+
+            <Paper variant={"outlined"}
+                   className={classes.paper}>
+                <ArrayContainer value={value}
+                                name={name}
+                                buildEntry={buildEntry}
+                                onInternalIdAdded={setLastAddedId}
+                                disabled={isSubmitting}
+                                includeAddButton={true}/>
+
+            </Paper>
+
+            {includeDescription &&
+            <FieldDescription property={property}/>}
+
+            {showError
+            && typeof error === "string"
+            && <FormHelperText>{error}</FormHelperText>}
+
+        </FormControl>
+    );
+}
+
+type ArrayOneOfEntryProps = {
+    name: string;
+    index: number;
+    value: any;
+    /**
+     * Name of the field to use as the discriminator for type
+     * Defaults to `type`
+     */
+    typeField: string;
+    /**
+     * Name of the  field to use as the value
+     * Defaults to `value`
+     */
+    valueField: string;
+    /**
+     * Record of properties, where the key is the `type` and the value
+     * is the corresponding property
+     */
+    properties: Record<string, Property>;
+
+    /**
+     * Additional values related to the state of the form or the entity
+     */
+    context: FormContext<any, any>;
+}
+
+function ArrayOneOfEntry({
+                             name,
+                             index,
+                             value,
+                             typeField,
+                             valueField,
+                             properties,
+                             context
+                         }: ArrayOneOfEntryProps) {
+
+    const classes = formStyles();
+
+    const type = value && value[typeField];
+    const selectedProperty = type ? properties[type] : undefined;
+
+    const enumValues: EnumValues = Object.entries(properties).map(([key, property]) => ({ [key]: property.title ?? key })).reduce((a, b) => ({ ...a, ...b }));
+
+    return (
+        <Paper className={classes.paper} elevation={1}>
+
+            <FormControl fullWidth>
+                <InputLabel id={`${name}_${index}_select_label`}>
+                    <span>Type</span>
+                </InputLabel>
+
+                <FastField
+                    required={true}
+                    name={`${name}[${typeField}]`}
+                >
+                    {(fieldProps: FormikFieldProps) =>
+                        (
+                            <Select
+                                fullWidth
+                                className={classes.oneOfInput}
+                                labelId={`${name}_${index}_select_label`}
+                                value={fieldProps.field.value !== undefined ? fieldProps.field.value : ""}
+                                onChange={(evt: any) => {
+                                    const eventValue = evt.target.value;
+                                    fieldProps.form.setFieldTouched(fieldProps.field.name);
+                                    fieldProps.form.setFieldValue(fieldProps.field.name, eventValue);
+                                }}
+                                renderValue={(enumKey: any) =>
+                                    <EnumValuesChip
+                                        enumKey={enumKey}
+                                        enumValues={enumValues}
+                                        small={true}/>
+                                }>
+                                {enumToObjectEntries(enumValues)
+                                    .map(([enumKey, labelOrConfig]) => {
+                                        return (
+                                            <MenuItem
+                                                key={`select_${name}_${index}_${enumKey}`}
+                                                value={enumKey}>
+                                                <EnumValuesChip
+                                                    enumKey={enumKey}
+                                                    enumValues={enumValues}
+                                                    small={true}/>
+                                            </MenuItem>
+                                        );
+                                    })}
+                            </Select>
+                        )
+                    }
+                </FastField>
+            </FormControl>
+
+            {selectedProperty && (
+                <FormControl fullWidth key={`form_control_${name}_${type}`}>
+                    {buildPropertyField({
+                        name: `${name}[${valueField}]`,
+                        property: selectedProperty,
+                        context: context
+                    })}
+                </FormControl>
+            )}
+
+        </Paper>
+    );
+}
+
+

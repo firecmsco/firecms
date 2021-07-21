@@ -21,13 +21,44 @@ export const blogSchema = buildSchema({
                 }
             }
         },
-        long_text: {
-            title: "Long text",
-            description: "Example of a long text",
+        content: {
+            title: "Content",
+            description: "Example of a complex array with multiple properties as children",
             validation: { required: true },
-            dataType: "string",
-            config: {
-                multiline: true
+            dataType: "array",
+            oneOf: {
+                properties: {
+                    "image": {
+                        title: "Image",
+                        dataType: "string",
+                        config: {
+                            storageMeta: {
+                                mediaType: "image",
+                                storagePath: "images",
+                                acceptedFiles: ["image/*"],
+                                metadata: {
+                                    cacheControl: "max-age=1000000"
+                                }
+                            }
+                        }
+                    },
+                    "text": {
+                        dataType: "string",
+                        title: "Text",
+                        config: {
+                            markdown: true
+                        }
+                    },
+                    "products": {
+                        title: "Products",
+                        dataType: "array",
+                        of:{
+                            dataType: "reference",
+                            collectionPath: "products",
+                            previewProperties: ["name", "main_image"]
+                        }
+                    }
+                }
             }
         },
         images: {
@@ -73,24 +104,6 @@ export const blogSchema = buildSchema({
                     published: "Published",
                     draft: "Draft"
                 }
-            }
-        },
-        content: {
-            title: "Content",
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "string"
-            }
-        },
-        products: {
-            title: "Products",
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "reference",
-                collectionPath: "products",
-                previewProperties: ["name", "main_image"]
             }
         },
         tags: {
