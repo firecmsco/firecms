@@ -44,19 +44,44 @@ const useStylesSide = makeStyles((theme: Theme) =>
             flexDirection: "column"
         },
         container: {
+            width: "45vw",
+            height: "100%",
+            maxWidth: "1000px",
+            [theme.breakpoints.down("md")]: {
+                width: "60vw"
+            },
+            [theme.breakpoints.down("sm")]: {
+                width: "85vw"
+            },
+            [theme.breakpoints.down("xs")]: {
+                width: "100vw"
+            },
+            transition: "width 250ms ease-in-out"
+        },
+        wide: {
+            width: "65vw",
+            height: "100%",
+            maxWidth: "1500px",
+            [theme.breakpoints.down("md")]: {
+                width: "80vw"
+            },
+            [theme.breakpoints.down("sm")]: {
+                width: "95vw"
+            },
+            [theme.breakpoints.down("xs")]: {
+                width: "100vw"
+            },
+            transition: "width 250ms ease-in-out"
+        },
+        tabsContainer: {
             flexGrow: 1,
             height: "100%",
             overflow: "auto"
         },
         tabBar: {
-            paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(2),
-            paddingTop: theme.spacing(1),
-            [theme.breakpoints.down("sm")]: {
-                paddingLeft: theme.spacing(1),
-                paddingRight: theme.spacing(1),
-                paddingTop: theme.spacing(0)
-            }
+            paddingLeft: theme.spacing(1),
+            paddingRight: theme.spacing(1),
+            paddingTop: theme.spacing(0)
         },
         form: {
             padding: theme.spacing(3),
@@ -288,11 +313,10 @@ function EntitySideView({
 
             return (
                 <Box
+                    className={classes.wide}
                     key={`subcol_${subcollectionView.name}_${colIndex}`}
                     role="tabpanel"
                     flexGrow={1}
-                    height={"100%"}
-                    width={"100%"}
                     hidden={tabsPosition !== colIndex + customViewsCount + 1}>
                     {entity && collectionPath ?
                         <EntityCollectionTable collectionPath={collectionPath}
@@ -342,82 +366,89 @@ function EntitySideView({
     }
 
 
-    return loading ?
-        <CircularProgressCenter/>
-        :
-        <>
+    return <div
+        className={tabsPosition === 0 ? classes.container : classes.wide}>
+        {
+            loading ?
+                <CircularProgressCenter/>
+                :
+                <>
 
-            <div className={classes.root}>
+                    <div className={classes.root}>
 
-                <Paper elevation={0} variant={"outlined"}>
-                    <div className={classes.header}>
+                        <Paper elevation={0} variant={"outlined"}>
+                            <div className={classes.header}>
 
-                        <IconButton
-                            onClick={(e) => sideEntityController.close()}>
-                            <CloseIcon/>
-                        </IconButton>
+                                <IconButton
+                                    onClick={(e) => sideEntityController.close()}>
+                                    <CloseIcon/>
+                                </IconButton>
 
-                        {loading && <CircularProgress size={16} thickness={8}/>}
+                                {loading &&
+                                <CircularProgress size={16} thickness={8}/>}
 
-                        <Box flexGrow={1}/>
+                                <Box flexGrow={1}/>
 
-                        <Tabs
-                            value={tabsPosition}
-                            indicatorColor="secondary"
-                            textColor="inherit"
-                            onChange={(ev, value) => {
-                                onSideTabClick(value);
-                            }}
-                            className={classes.tabBar}
-                            variant="scrollable"
-                            scrollButtons="auto"
-                        >
-                            <Tab
-                                label={`${!readOnly ? (existingEntity ? "Edit" : `Add New`) : ""} ${schema.name}`
-                                }/>
-
-                            {customViews && customViews.map(
-                                (view) =>
+                                <Tabs
+                                    value={tabsPosition}
+                                    indicatorColor="secondary"
+                                    textColor="inherit"
+                                    onChange={(ev, value) => {
+                                        onSideTabClick(value);
+                                    }}
+                                    className={classes.tabBar}
+                                    variant="scrollable"
+                                    scrollButtons="auto"
+                                >
                                     <Tab
-                                        key={`entity_detail_custom_tab_${view.name}`}
-                                        label={view.name}/>
-                            )}
+                                        label={`${!readOnly ? (existingEntity ? "Edit" : `Add New`) : ""} ${schema.name}`
+                                        }/>
 
-                            {subcollections && subcollections.map(
-                                (subcollection) =>
-                                    <Tab
-                                        key={`entity_detail_collection_tab_${subcollection.name}`}
-                                        label={subcollection.name}/>
-                            )}
+                                    {customViews && customViews.map(
+                                        (view) =>
+                                            <Tab
+                                                key={`entity_detail_custom_tab_${view.name}`}
+                                                label={view.name}/>
+                                    )}
 
-                        </Tabs>
+                                    {subcollections && subcollections.map(
+                                        (subcollection) =>
+                                            <Tab
+                                                key={`entity_detail_collection_tab_${subcollection.name}`}
+                                                label={subcollection.name}/>
+                                    )}
+
+                                </Tabs>
+                            </div>
+
+                        </Paper>
+
+                        <div className={classes.tabsContainer}
+                             ref={containerRef}>
+                            <Box
+                                role="tabpanel"
+                                hidden={tabsPosition !== 0}
+                                className={classes.form}>
+                                {form}
+                            </Box>
+
+                            {customViewsView}
+
+                            {subCollectionsViews}
+
+                        </div>
+
                     </div>
 
-                </Paper>
-
-                <div className={classes.container} ref={containerRef}>
-                    <Box
-                        role="tabpanel"
-                        hidden={tabsPosition !== 0}
-                        className={classes.form}>
-                        {form}
-                    </Box>
-
-                    {customViewsView}
-
-                    {subCollectionsViews}
-
-                </div>
-
-            </div>
-
-            <Prompt
-                when={isModified && tabsPosition === 0}
-                message={location =>
-                    `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`
-                }
-            />
-        </>;
+                    <Prompt
+                        when={isModified && tabsPosition === 0}
+                        message={location =>
+                            `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`
+                        }
+                    />
+                </>
+        }
+    </div>;
 }
 
 export default React.memo(EntitySideView);

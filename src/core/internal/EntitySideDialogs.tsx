@@ -17,39 +17,6 @@ import { useCMSAppContext, useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { SideEntityPanelProps } from "../../models/side_panel";
 
-export const useStyles = makeStyles(theme => createStyles({
-    root: {
-        width: "45vw",
-        height: "100%",
-        maxWidth: "1000px",
-        [theme.breakpoints.down("md")]: {
-            width: "60vw"
-        },
-        [theme.breakpoints.down("sm")]: {
-            width: "85vw"
-        },
-        [theme.breakpoints.down("xs")]: {
-            width: "100vw"
-        },
-        transition: "width 300ms ease-in-out"
-    },
-    wide: {
-        width: "65vw",
-        height: "100%",
-        maxWidth: "1500px",
-        [theme.breakpoints.down("md")]: {
-            width: "80vw"
-        },
-        [theme.breakpoints.down("sm")]: {
-            width: "95vw"
-        },
-        [theme.breakpoints.down("xs")]: {
-            width: "100vw"
-        },
-        transition: "width 300ms ease-in-out"
-    }
-}));
-
 
 export function EntitySideDialogs<S extends EntitySchema>() {
 
@@ -60,8 +27,6 @@ export function EntitySideDialogs<S extends EntitySchema>() {
     const locale = cmsAppContext.cmsAppConfig.locale;
     const theme = cmsAppContext.theme;
     const dateUtilsLocale = locale ? locales[locale] : undefined;
-
-    const classes = useStyles();
 
     const sidePanels = sideEntityController.sidePanels;
     // const [sidePanelBeingClosed, setSidePanelBeingClosed] = useState<SidePanelProps | undefined>();
@@ -113,10 +78,8 @@ export function EntitySideDialogs<S extends EntitySchema>() {
                                     onExitAnimation={onExitAnimation}
                                 >
 
-                                    <div
-                                        className={panel === undefined || !panel.selectedSubpath ? classes.root : classes.wide}>
+
                                         {panel && buildEntityView(panel)}
-                                    </div>
                                 </EntityDrawer>
                             );
                         })

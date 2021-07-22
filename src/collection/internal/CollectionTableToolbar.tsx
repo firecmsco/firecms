@@ -90,7 +90,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface CollectionTableToolbarProps<S extends EntitySchema<Key>, Key extends string> {
+interface CollectionTableToolbarProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
     schema: S;
     size: CollectionSize;
     filterIsSet: boolean;

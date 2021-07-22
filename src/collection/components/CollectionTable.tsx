@@ -66,7 +66,7 @@ const PIXEL_NEXT_PAGE_OFFSET = 1200;
  * @category Collection components
  */
 export default function CollectionTable<S extends EntitySchema<Key>,
-    Key extends string,
+    Key extends string = Extract<keyof S["properties"], string>,
     AdditionalKey extends string = string>({
                                                initialFilter,
                                                initialSort,
@@ -621,7 +621,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
             <Paper className={classes.root}>
 
-                <CollectionTableToolbar schema={schema}
+                <CollectionTableToolbar schema={schema as EntitySchema}
                                         filterIsSet={filterIsSet}
                                         onTextSearch={textSearchEnabled ? setSearchString : undefined}
                                         clearFilter={clearFilter}
