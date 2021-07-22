@@ -46,7 +46,7 @@ function SampleApp() {
             name: "Locales",
             relativePath: "locales",
             schema: localeSchema,
-            defaultSize: "l"
+            defaultSize: "m"
         });
 
     const productsCollection = buildCollection<typeof productSchema>({
@@ -96,7 +96,7 @@ function SampleApp() {
         exportable: {
             additionalColumns: [sampleAdditionalExportColumn]
         },
-        properties: ["name", "images", "status", "content", "reviewed", "products", "gold_text", "long_text"],
+        properties: ["name", "header_image", "status", "content", "reviewed", "products", "gold_text"],
         description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
         textSearchDelegate: blogSearchDelegate,
         initialFilter: {

@@ -108,8 +108,21 @@ export type EntityCustomViewBuilder<S extends EntitySchema<Key> = EntitySchema<a
  */
 export type EntityCustomViewParams<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>> = {
-    schema: S,
-    entity?: Entity<S, Key>,
+    /**
+     * Schema used by this entity
+     */
+    schema: S;
+    /**
+     * Entity that this view refers to. It can be undefined if the entity is new
+     */
+    entity?: Entity<S, Key>;
+
+    /**
+     * Modified values in the form that have not been saved yet.
+     * If the entity is not new and the values are not modified, this values
+     * are the same as in `entity`
+     */
+    modifiedValues?: EntityValues<S, Key>;
 };
 
 /**

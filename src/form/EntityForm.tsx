@@ -42,8 +42,18 @@ export const useStyles = makeStyles(theme => createStyles({
     },
     container: {
         height: "100%",
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2)
+        padding: theme.spacing(4),
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+        [theme.breakpoints.down("sm")]: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+            paddingTop: theme.spacing(3),
+            paddingBottom: theme.spacing(3)
+        },
+        [theme.breakpoints.down("xs")]: {
+            padding: theme.spacing(2),
+        }
     },
     button: {
         margin: theme.spacing(1)
@@ -92,6 +102,11 @@ interface EntityFormProps<S extends EntitySchema<Key>, Key extends string = Extr
      */
     onModified(dirty: boolean): void;
 
+    /**
+     * The callback function when the form original values have been modified
+     */
+    onValuesChanged(values?:EntityValues<S, Key>): void;
+
 }
 
 function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>({
@@ -102,7 +117,8 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                                                                                                                   onEntitySave,
                                                                                                                   onDiscard,
                                                                                                                   onModified,
-                                                                                                                  containerRef
+                                                                                                                  containerRef,
+                                                                                                                  onValuesChanged
                                                                                                               }: EntityFormProps<S, Key>) {
 
     const classes = useStyles();
@@ -253,6 +269,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                 useEffect(() => {
                     onModified(modified);
                     setInternalValue(values);
+                    onValuesChanged(values);
                 });
 
                 if (underlyingChanges && entity) {
@@ -318,30 +335,30 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
                         {createCustomIdField(schema, status, setCustomId, customIdError, entity)}
 
-                        <Box pt={3}>
 
-                            <Form className={classes.form}
-                                  onSubmit={handleSubmit}
-                                  noValidate>
+                        <Form className={classes.form}
+                              onSubmit={handleSubmit}
+                              noValidate>
 
+                            <Box pt={3}>
                                 {formFields}
+                            </Box>
 
-                                <div className={classes.stickyButtons}>
+                            <div className={classes.stickyButtons}>
 
-                                    {savingError &&
-                                    <Box textAlign="right">
-                                        <Typography color={"error"}>
-                                            {savingError.message}
-                                        </Typography>
-                                    </Box>}
+                                {savingError &&
+                                <Box textAlign="right">
+                                    <Typography color={"error"}>
+                                        {savingError.message}
+                                    </Typography>
+                                </Box>}
 
-                                    {buildButtons(isSubmitting, modified)}
+                                {buildButtons(isSubmitting, modified)}
 
-                                </div>
+                            </div>
 
-                            </Form>
+                        </Form>
 
-                        </Box>
 
                         <ErrorFocus containerRef={containerRef}/>
 

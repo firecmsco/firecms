@@ -59,12 +59,11 @@ const categories: EnumValues = {
     watches: "Watches"
 };
 
-
 const sampleView: EntityCustomViewBuilder = {
     path: "sample_custom_view",
     name: "Custom view",
-    builder: ({ schema, entity }) => (
-        <SampleProductsView entity={entity}/>
+    builder: ({ schema, entity, modifiedValues }) => (
+        <SampleProductsView entity={entity} modifiedValues={modifiedValues}/>
     )
 };
 
@@ -188,11 +187,6 @@ export const productSchema = buildSchema({
                 url: true
             }
         },
-        added_on: {
-            dataType: "timestamp",
-            title: "Added on",
-            autoValue: "on_create"
-        },
         images: {
             dataType: "array",
             title: "Images",
@@ -235,17 +229,6 @@ export const productSchema = buildSchema({
                 }
             }
         },
-        min_known_price: {
-            dataType: "number",
-            title: "Min known price",
-            readOnly: true,
-            description: "Minimum price this product has ever had"
-        },
-        prime_eligible: {
-            dataType: "boolean",
-            title: "Prime eligible",
-            readOnly: true
-        },
         available_locales: {
             title: "Available locales",
             description:
@@ -265,7 +248,12 @@ export const productSchema = buildSchema({
             dataType: "string",
             readOnly: true,
             description: "This field gets updated with a preSave callback"
-        }
+        },
+        added_on: {
+            dataType: "timestamp",
+            title: "Added on",
+            autoValue: "on_create"
+        },
 
     },
     defaultValues: {

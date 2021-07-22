@@ -1,5 +1,4 @@
 import CustomColorTextField from "../custom_field/CustomColorTextField";
-import CustomBooleanPreview from "../custom_field_preview/CustomBooleanPreview";
 import { buildSchema, ExportMappingFunction } from "@camberi/firecms";
 
 export const blogSchema = buildSchema({
@@ -9,6 +8,64 @@ export const blogSchema = buildSchema({
             title: "Name",
             validation: { required: true },
             dataType: "string"
+        },
+        header_image: {
+            title: "Header image",
+            dataType: "string",
+            config: {
+                storageMeta: {
+                    mediaType: "image",
+                    storagePath: "images",
+                    acceptedFiles: ["image/*"],
+                    metadata: {
+                        cacheControl: "max-age=1000000"
+                    }
+                }
+            }
+        },
+        content: {
+            title: "Content",
+            description: "Example of a complex array with multiple properties as children",
+            validation: { required: true },
+            dataType: "array",
+            oneOf: {
+                properties: {
+                    images: {
+                        title: "Images",
+                        dataType: "array",
+                        of: {
+                            dataType: "string",
+                            config: {
+                                storageMeta: {
+                                    mediaType: "image",
+                                    storagePath: "images",
+                                    acceptedFiles: ["image/*"],
+                                    metadata: {
+                                        cacheControl: "max-age=1000000"
+                                    }
+                                }
+                            }
+                        },
+                        description: "This fields allows uploading multiple images at once and reordering"
+                    },
+                    text: {
+                        dataType: "string",
+                        title: "Text",
+                        config: {
+                            markdown: true
+                        }
+                    },
+                    products: {
+                        title: "Products",
+                        dataType: "array",
+                        of:{
+                            dataType: "reference",
+                            collectionPath: "products",
+                            previewProperties: ["name", "main_image"]
+                        }
+                    }
+                }
+            }
         },
         gold_text: {
             title: "Gold text",
@@ -21,79 +78,13 @@ export const blogSchema = buildSchema({
                 }
             }
         },
-        content: {
-            title: "Content",
-            description: "Example of a complex array with multiple properties as children",
-            validation: { required: true },
-            dataType: "array",
-            oneOf: {
-                properties: {
-                    "image": {
-                        title: "Image",
-                        dataType: "string",
-                        config: {
-                            storageMeta: {
-                                mediaType: "image",
-                                storagePath: "images",
-                                acceptedFiles: ["image/*"],
-                                metadata: {
-                                    cacheControl: "max-age=1000000"
-                                }
-                            }
-                        }
-                    },
-                    "text": {
-                        dataType: "string",
-                        title: "Text",
-                        config: {
-                            markdown: true
-                        }
-                    },
-                    "products": {
-                        title: "Products",
-                        dataType: "array",
-                        of:{
-                            dataType: "reference",
-                            collectionPath: "products",
-                            previewProperties: ["name", "main_image"]
-                        }
-                    }
-                }
-            }
-        },
-        images: {
-            title: "Images",
-            dataType: "array",
-            of: {
-                dataType: "string",
-                config: {
-                    storageMeta: {
-                        mediaType: "image",
-                        storagePath: "images",
-                        acceptedFiles: ["image/*"],
-                        metadata: {
-                            cacheControl: "max-age=1000000"
-                        }
-                    }
-                }
-            },
-            description: "This fields allows uploading multiple images at once and reordering"
-        },
         publish_date: {
             title: "Publish date",
             dataType: "timestamp"
         },
-        priority: {
-            title: "Priority",
-            description: "This field allows the selection of Infinity as a value",
-            dataType: "number"
-        },
         reviewed: {
             title: "Reviewed",
             dataType: "boolean",
-            config: {
-                preview: CustomBooleanPreview
-            }
         },
         status: {
             title: "Status",

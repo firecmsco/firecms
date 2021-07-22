@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import { DocumentSnapshot } from "firebase-functions/lib/providers/firestore";
 import { deleteInAlgolia, indexInAlgolia } from "./algolia";
-import {  importDatabaseBackup } from "./util";
+import {  importDatabaseBackup } from "./backup";
 
 
 export { setProductAvailableLocales } from "./products";

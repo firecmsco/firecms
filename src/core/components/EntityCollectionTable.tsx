@@ -9,7 +9,7 @@ import {
     useMediaQuery,
     useTheme
 } from "@material-ui/core";
-import { Add, Delete, InfoOutlined } from "@material-ui/icons";
+import { Add, Delete } from "@material-ui/icons";
 import ReactMarkdown from "react-markdown";
 
 
@@ -75,7 +75,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
     if (collectionConfig.filterableProperties) {
         console.warn("The property 'filterableProperties' has been deprecated and will be removed in the " +
-            "future. The supported properties are filtarable by default. ");
+            "future. The supported properties are filterable by default.");
     }
 
     const sideEntityController = useSideEntityController();
@@ -97,7 +97,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     const pageSize = typeof collectionConfig.pagination === "number" ? collectionConfig.pagination : undefined;
     const displayedProperties = useColumnIds(collectionConfig, true);
 
-    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
     const subcollectionColumns: AdditionalColumnDelegate<any>[] = collectionConfig.subcollections?.map((subcollection) => {
         return {
@@ -184,55 +184,68 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         }
     );
 
+    const open = anchorEl != null;
     const title = (
-        <>
+        <div style={{
+            padding: "4px"
+        }}>
 
-            <Typography variant="h6">
+            <Typography
+                variant="h6"
+                style={{
+                    lineHeight: "1.1",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    maxWidth: "160px",
+                    cursor: collectionConfig.description ? "pointer" : "inherit"
+                }}
+                onClick={collectionConfig.description ? (e) => {
+                    setAnchorEl(e.currentTarget);
+                    e.stopPropagation();
+                } : undefined}
+            >
                 {`${collectionConfig.name}`}
             </Typography>
-            <Typography variant={"caption"} color={"textSecondary"}>
+            <Typography
+                style={{
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    maxWidth: "160px",
+                    direction: "rtl",
+                    textAlign: "left",
+                }}
+                variant={"caption"}
+                color={"textSecondary"}>
                 {`/${collectionPath}`}
             </Typography>
 
-            {collectionConfig.description && <>
-                <span style={{ paddingLeft: "8px" }}>
-                <IconButton
-                    size={"small"}
-                    style={{
-                        width: 16,
-                        height: 16
-                    }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setAnchorEl(e.currentTarget);
-                    }}>
-                    <InfoOutlined fontSize={"small"}/>
-                </IconButton>
-                    </span>
-                <Popover
-                    id={"info-dialog"}
-                    open={!!anchorEl}
-                    anchorEl={anchorEl}
-                    elevation={2}
-                    onClose={() => {
-                        setAnchorEl(null);
-                    }}
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "center"
-                    }}
-                    transformOrigin={{
-                        vertical: "top",
-                        horizontal: "center"
-                    }}
-                >
-                    <Box m={2}>
-                        <ReactMarkdown>{collectionConfig.description}</ReactMarkdown>
-                    </Box>
-                </Popover>
-            </>}
+            {collectionConfig.description &&
+            <Popover
+                id={"info-dialog"}
+                open={open}
+                anchorEl={anchorEl}
+                elevation={1}
+                onClose={() => {
+                    setAnchorEl(null);
+                }}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center"
+                }}
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center"
+                }}
+            >
+                <Box m={2}>
+                    <ReactMarkdown>{collectionConfig.description}</ReactMarkdown>
+                </Box>
+            </Popover>
+            }
 
-        </>
+        </div>
     );
 
     const toggleEntitySelection = (entity: Entity<S, Key>) => {

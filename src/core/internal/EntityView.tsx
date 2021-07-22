@@ -1,4 +1,20 @@
 import React, { useEffect, useState } from "react";
+import {
+    Box,
+    CircularProgress,
+    createStyles,
+    IconButton,
+    makeStyles,
+    Paper,
+    Tab,
+    Tabs,
+    Theme,
+    useMediaQuery,
+    useTheme
+} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import { Prompt } from "react-router-dom";
+import clsx from "clsx";
 import EntityForm from "../../form/EntityForm";
 import {
     Entity,
@@ -11,92 +27,91 @@ import {
     saveEntity
 } from "../../models";
 import {
-    Box,
-    CircularProgress,
-    createStyles,
-    IconButton,
-    makeStyles,
-    Paper,
-    Tab,
-    Tabs,
-    Theme
-} from "@material-ui/core";
-import {
     useAuthController,
     useCMSAppContext,
     useSideEntityController,
     useSnackbarController
 } from "../../contexts";
-import { Prompt } from "react-router-dom";
-import CloseIcon from "@material-ui/icons/Close";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";
 import { removeInitialSlash } from "../navigation";
 import CircularProgressCenter from "./CircularProgressCenter";
 import EntityPreview from "../components/EntityPreview";
 import { canEdit } from "../../util/permissions";
 
+import {
+    CONTAINER_FULL_WIDTH,
+    CONTAINER_WIDTH,
+    TAB_WIDTH,
+    TAB_WIDTH_LG
+} from "./common";
+
 
 const useStylesSide = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
-            height: "100%",
-            display: "flex",
-            flexDirection: "column"
-        },
         container: {
-            width: "45vw",
+            display: "flex",
+            flexDirection: "column",
+            width: CONTAINER_WIDTH,
             height: "100%",
-            maxWidth: "1000px",
-            [theme.breakpoints.down("md")]: {
-                width: "60vw"
-            },
             [theme.breakpoints.down("sm")]: {
-                width: "85vw"
-            },
-            [theme.breakpoints.down("xs")]: {
-                width: "100vw"
+                width: CONTAINER_FULL_WIDTH
             },
             transition: "width 250ms ease-in-out"
         },
-        wide: {
-            width: "65vw",
-            height: "100%",
-            maxWidth: "1500px",
+        containerWide: {
+            width: `calc(${TAB_WIDTH} + ${CONTAINER_WIDTH})`,
+            [theme.breakpoints.down("lg")]: {
+                width: `calc(${TAB_WIDTH_LG} + ${CONTAINER_WIDTH})`
+            },
             [theme.breakpoints.down("md")]: {
-                width: "80vw"
+                width: CONTAINER_FULL_WIDTH
+            }
+        },
+        subcollectionPanel: {
+            width: TAB_WIDTH,
+            height: "100%",
+            overflow: "auto",
+            borderLeft: "1px solid #eeeeee",
+            [theme.breakpoints.down("lg")]: {
+                width: TAB_WIDTH_LG
             },
-            [theme.breakpoints.down("sm")]: {
-                width: "95vw"
-            },
-            [theme.breakpoints.down("xs")]: {
-                width: "100vw"
-            },
-            transition: "width 250ms ease-in-out"
+            [theme.breakpoints.down("md")]: {
+                borderLeft: "inherit",
+                width: CONTAINER_FULL_WIDTH
+            }
         },
         tabsContainer: {
             flexGrow: 1,
             height: "100%",
-            overflow: "auto"
+            width: `calc(${TAB_WIDTH} + ${CONTAINER_WIDTH})`,
+            [theme.breakpoints.down("lg")]: {
+                width: `calc(${TAB_WIDTH_LG} + ${CONTAINER_WIDTH})`
+            },
+            [theme.breakpoints.down("md")]: {
+                width: CONTAINER_FULL_WIDTH
+            },
+            display: "flex",
+            overflow: "auto",
+            flexDirection: "row"
+        },
+        form: {
+            width: CONTAINER_WIDTH,
+            maxWidth: "100%",
+            height: "100%",
+            overflow: "auto",
+            [theme.breakpoints.down("sm")]: {
+                maxWidth: CONTAINER_FULL_WIDTH,
+                width: CONTAINER_FULL_WIDTH
+            }
         },
         tabBar: {
             paddingLeft: theme.spacing(1),
             paddingRight: theme.spacing(1),
             paddingTop: theme.spacing(0)
         },
-        form: {
-            padding: theme.spacing(3),
-            [theme.breakpoints.down("sm")]: {
-                paddingLeft: theme.spacing(2),
-                paddingRight: theme.spacing(2),
-                paddingTop: theme.spacing(3),
-                paddingBottom: theme.spacing(3)
-            },
-            [theme.breakpoints.down("xs")]: {
-                paddingLeft: theme.spacing(0),
-                paddingRight: theme.spacing(0),
-                paddingTop: theme.spacing(2),
-                paddingBottom: theme.spacing(1)
-            }
+        tab: {
+            fontSize: "0.875rem",
+            minWidth: "140px"
         },
         header: {
             paddingLeft: theme.spacing(2),
@@ -111,7 +126,7 @@ const useStylesSide = makeStyles((theme: Theme) =>
 );
 
 
-export interface EntitySideViewProps {
+export interface EntitySideViewProps<S extends EntitySchema<Key>, Key extends string> {
     collectionPath: string;
     entityId?: string;
     copy?: boolean;
@@ -121,15 +136,15 @@ export interface EntitySideViewProps {
     subcollections?: EntityCollection[];
 }
 
-function EntitySideView({
-                            collectionPath,
-                            entityId,
-                            selectedSubpath,
-                            copy,
-                            permissions,
-                            schema,
-                            subcollections
-                        }: EntitySideViewProps) {
+function EntityView<S extends EntitySchema<Key>, Key extends string>({
+                                                                         collectionPath,
+                                                                         entityId,
+                                                                         selectedSubpath,
+                                                                         copy,
+                                                                         permissions,
+                                                                         schema,
+                                                                         subcollections
+                                                                     }: EntitySideViewProps<S, Key>) {
 
     const classes = useStylesSide();
 
@@ -143,13 +158,17 @@ function EntitySideView({
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
     const [loading, setLoading] = useState<boolean>(true);
     const [readOnly, setReadOnly] = useState<boolean>(false);
-    const [tabsPosition, setTabsPosition] = React.useState(0);
+    const [tabsPosition, setTabsPosition] = React.useState(-1);
 
     // have the original values of the form changed?
     const [isModified, setModified] = useState(false);
+    const [modifiedValues, setModifiedValues] = useState<EntityValues<any> | undefined>();
 
     const customViews = schema.views;
     const customViewsCount = customViews?.length ?? 0;
+
+    const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
 
     useEffect(() => {
         if (entityId) {
@@ -175,25 +194,42 @@ function EntitySideView({
         };
     }, [collectionPath, entityId]);
 
-
     useEffect(() => {
         if (!selectedSubpath)
-            setTabsPosition(0);
+            setTabsPosition(-1);
 
         if (customViews) {
             const index = customViews
                 .map((c) => c.path)
                 .findIndex((p) => p === selectedSubpath);
-            setTabsPosition(index + 1);
+            setTabsPosition(index);
         }
 
         if (subcollections && selectedSubpath) {
             const index = subcollections
                 .map((c) => c.relativePath)
                 .findIndex((p) => p === selectedSubpath);
-            setTabsPosition(index + customViewsCount + 1);
+            setTabsPosition(index + customViewsCount);
         }
     }, [selectedSubpath]);
+
+    useEffect(() => {
+        function beforeunload(e: any) {
+            if (isModified) {
+                e.preventDefault();
+                e.returnValue = `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`;
+            }
+        }
+
+        if (typeof window !== "undefined")
+            window.addEventListener("beforeunload", beforeunload);
+
+        return () => {
+            if (typeof window !== "undefined")
+                window.removeEventListener("beforeunload", beforeunload);
+        };
+
+    }, [window]);
 
 
     async function onEntitySave(schema: EntitySchema, collectionPath: string, id: string | undefined, values: EntityValues<any, any>): Promise<void> {
@@ -231,7 +267,9 @@ function EntitySideView({
 
             setStatus("existing");
             setModified(false);
-            sideEntityController.close();
+
+            if (tabsPosition === -1)
+                sideEntityController.close();
 
         };
 
@@ -267,7 +305,8 @@ function EntitySideView({
     }
 
     function onDiscard() {
-        sideEntityController.close();
+        if (tabsPosition === -1)
+            sideEntityController.close();
     }
 
     const existingEntity = status === "existing";
@@ -281,6 +320,7 @@ function EntitySideView({
             schema={schema}
             onEntitySave={onEntitySave}
             onDiscard={onDiscard}
+            onValuesChanged={setModifiedValues}
             onModified={setModified}
             entity={entity}
             containerRef={containerRef}/>
@@ -294,13 +334,18 @@ function EntitySideView({
         (customView, colIndex) => {
             return (
                 <Box
+                    className={classes.subcollectionPanel}
                     key={`custom_view_${customView.path}_${colIndex}`}
                     role="tabpanel"
                     flexGrow={1}
                     height={"100%"}
                     width={"100%"}
-                    hidden={tabsPosition !== colIndex + 1}>
-                    {entity && customView.builder({ schema, entity })
+                    hidden={tabsPosition !== colIndex}>
+                    {entity && customView.builder({
+                        schema,
+                        entity,
+                        modifiedValues: isModified ? modifiedValues : entity?.values
+                    })
                     }
                 </Box>
             );
@@ -313,11 +358,11 @@ function EntitySideView({
 
             return (
                 <Box
-                    className={classes.wide}
+                    className={classes.subcollectionPanel}
                     key={`subcol_${subcollectionView.name}_${colIndex}`}
                     role="tabpanel"
                     flexGrow={1}
-                    hidden={tabsPosition !== colIndex + customViewsCount + 1}>
+                    hidden={tabsPosition !== colIndex + customViewsCount}>
                     {entity && collectionPath ?
                         <EntityCollectionTable collectionPath={collectionPath}
                                                collectionConfig={subcollectionView}
@@ -340,14 +385,15 @@ function EntitySideView({
     );
 
     function getSelectedSubpath(value: number) {
-        if (value == 0) return undefined;
+        console.log("getSelectedSubpath", value);
+        if (value == -1) return undefined;
 
-        if (customViews && value < customViewsCount + 1) {
-            return customViews[value - 1].path;
+        if (customViews && value < customViewsCount) {
+            return customViews[value].path;
         }
 
         if (subcollections) {
-            return subcollections[value - customViewsCount - 1].relativePath;
+            return subcollections[value - customViewsCount].relativePath;
         }
 
         throw Error("Something is wrong in getSelectedSubpath");
@@ -365,85 +411,108 @@ function EntitySideView({
         }
     }
 
+    const header = <Paper elevation={0} variant={"outlined"}>
+        <div className={classes.header}>
+
+            <IconButton
+                onClick={(e) => sideEntityController.close()}>
+                <CloseIcon/>
+            </IconButton>
+
+            <Tabs
+                value={tabsPosition == -1 ? 0 : false}
+                indicatorColor="secondary"
+                textColor="inherit"
+                scrollButtons="auto"
+            >
+                <Tab
+                    label={schema.name}
+                    classes={{
+                        root: classes.tab
+                    }}
+                    wrapped={true}
+                    onClick={() => {
+                        onSideTabClick(-1);
+                    }}/>
+            </Tabs>
+
+            <Box flexGrow={1}/>
+
+            {loading &&
+            <CircularProgress size={16} thickness={8}/>}
+
+            <Tabs
+                value={tabsPosition >= 0 ? tabsPosition : false}
+                indicatorColor="secondary"
+                textColor="inherit"
+                onChange={(ev, value) => {
+                    onSideTabClick(value);
+                }}
+                className={classes.tabBar}
+                variant="scrollable"
+                scrollButtons="auto"
+            >
+
+                {customViews && customViews.map(
+                    (view) =>
+                        <Tab
+                            classes={{
+                                root: classes.tab
+                            }}
+                            wrapped={true}
+                            key={`entity_detail_custom_tab_${view.name}`}
+                            label={view.name}/>
+                )}
+
+                {subcollections && subcollections.map(
+                    (subcollection) =>
+                        <Tab
+                            classes={{
+                                root: classes.tab
+                            }}
+                            wrapped={true}
+                            key={`entity_detail_collection_tab_${subcollection.name}`}
+                            label={subcollection.name}/>
+                )}
+
+            </Tabs>
+        </div>
+
+    </Paper>;
 
     return <div
-        className={tabsPosition === 0 ? classes.container : classes.wide}>
+        className={clsx(classes.container, { [classes.containerWide]: tabsPosition !== -1 })}>
         {
             loading ?
                 <CircularProgressCenter/>
                 :
                 <>
 
-                    <div className={classes.root}>
+                    {header}
 
-                        <Paper elevation={0} variant={"outlined"}>
-                            <div className={classes.header}>
+                    <div className={classes.tabsContainer}
+                         ref={containerRef}>
 
-                                <IconButton
-                                    onClick={(e) => sideEntityController.close()}>
-                                    <CloseIcon/>
-                                </IconButton>
+                        <Box
+                            role="tabpanel"
+                            hidden={!largeLayout && tabsPosition !== -1}
+                            className={classes.form}>
+                            {form}
+                        </Box>
 
-                                {loading &&
-                                <CircularProgress size={16} thickness={8}/>}
+                        {customViewsView}
 
-                                <Box flexGrow={1}/>
-
-                                <Tabs
-                                    value={tabsPosition}
-                                    indicatorColor="secondary"
-                                    textColor="inherit"
-                                    onChange={(ev, value) => {
-                                        onSideTabClick(value);
-                                    }}
-                                    className={classes.tabBar}
-                                    variant="scrollable"
-                                    scrollButtons="auto"
-                                >
-                                    <Tab
-                                        label={`${!readOnly ? (existingEntity ? "Edit" : `Add New`) : ""} ${schema.name}`
-                                        }/>
-
-                                    {customViews && customViews.map(
-                                        (view) =>
-                                            <Tab
-                                                key={`entity_detail_custom_tab_${view.name}`}
-                                                label={view.name}/>
-                                    )}
-
-                                    {subcollections && subcollections.map(
-                                        (subcollection) =>
-                                            <Tab
-                                                key={`entity_detail_collection_tab_${subcollection.name}`}
-                                                label={subcollection.name}/>
-                                    )}
-
-                                </Tabs>
-                            </div>
-
-                        </Paper>
-
-                        <div className={classes.tabsContainer}
-                             ref={containerRef}>
-                            <Box
-                                role="tabpanel"
-                                hidden={tabsPosition !== 0}
-                                className={classes.form}>
-                                {form}
-                            </Box>
-
-                            {customViewsView}
-
-                            {subCollectionsViews}
-
-                        </div>
+                        {subCollectionsViews}
 
                     </div>
 
+
                     <Prompt
-                        when={isModified && tabsPosition === 0}
-                        message={location =>
-                            `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`
+                        message={(location, action) => {
+                            if (action === "POP" && isModified)
+                                return `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`;
+                            else return true;
+                        }
                         }
                     />
                 </>
@@ -451,4 +520,4 @@ function EntitySideView({
     </div>;
 }
 
-export default React.memo(EntitySideView);
+export default React.memo(EntityView);

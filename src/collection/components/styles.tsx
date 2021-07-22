@@ -17,7 +17,7 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
     },
     headerTypography:{
         color: "rgba(0,0,0,0.55)",
-        fontSize: "12px",
+        fontSize: "0.750rem",
         textTransform: "uppercase",
         fontWeight: 600
     },

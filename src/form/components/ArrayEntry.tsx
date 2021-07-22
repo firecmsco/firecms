@@ -117,7 +117,7 @@ export function ArrayEntry({
     drag(drop(ref));
 
     return (
-        <div ref={ref}
+        <div ref={preview}
              className={isDragging ? classes.arrayEntryDragging : classes.arrayEntry}
         >
             <Box key={`field_${index}`}
@@ -131,7 +131,7 @@ export function ArrayEntry({
                      display="flex"
                      flexDirection="column"
                      alignItems="center">
-                    <div className={classes.handle}>
+                    <div className={classes.handle} ref={ref}>
                         <DragHandleIcon fontSize={"small"}/>
                     </div>
                     <IconButton

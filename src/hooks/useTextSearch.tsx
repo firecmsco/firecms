@@ -9,7 +9,7 @@ import {
 /**
  * @category Hooks and utilities
  */
-export interface TextSearchProps<S extends EntitySchema<Key>, Key extends string> {
+export interface TextSearchProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
 
     searchString?: string;
 
@@ -37,7 +37,7 @@ export type TextSearchResult<S extends EntitySchema<Key>, Key extends string> = 
  * @param schema
  * @category Hooks and utilities
  */
-export function useTextSearch<S extends EntitySchema<Key>, Key extends string>(
+export function useTextSearch<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>(
     {
         searchString,
         textSearchDelegate,

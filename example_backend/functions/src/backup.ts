@@ -1,6 +1,12 @@
 import * as functions from "firebase-functions";
 
-const bucket = "gs://firecms_firestore_backups/2020-10-24T12:40:11_23620";
+/**
+ * To create a new export:
+ * ```
+ * gcloud firestore export gs://firecms_firestore_backups --project firecms-demo-27150
+ * ```
+ */
+const bucket = "gs://firecms_firestore_backups/2021-07-26T15:04:05_95236";
 
 export function eraseDatabase() {
     const firebase_tools = require("firebase-tools");

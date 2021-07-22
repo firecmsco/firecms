@@ -1,11 +1,6 @@
 import React from "react";
 import { EntitySchema, SchemaConfig } from "../../models";
-import {
-    Box,
-    createStyles,
-    makeStyles,
-    ThemeProvider
-} from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -16,6 +11,7 @@ import EntityView from "./EntityView";
 import { useCMSAppContext, useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { SideEntityPanelProps } from "../../models/side_panel";
+import { CONTAINER_WIDTH } from "./common";
 
 
 export function EntitySideDialogs<S extends EntitySchema>() {
@@ -29,11 +25,6 @@ export function EntitySideDialogs<S extends EntitySchema>() {
     const dateUtilsLocale = locale ? locales[locale] : undefined;
 
     const sidePanels = sideEntityController.sidePanels;
-    // const [sidePanelBeingClosed, setSidePanelBeingClosed] = useState<SidePanelProps | undefined>();
-
-    const onExitAnimation = () => {
-        // setSidePanelBeingClosed(undefined);
-    };
 
     const allPanels = [...sidePanels, undefined];
 
@@ -42,11 +33,7 @@ export function EntitySideDialogs<S extends EntitySchema>() {
         const schemaProps: SchemaConfig | undefined = schemasRegistry.getSchemaConfig(panel.collectionPath, panel.entityId);
 
         if (!schemaProps) {
-            return (
-                <Box>
-                    ERROR: You are trying to open an entity with no schema
-                    defined.
-                </Box>);
+            throw Error("ERROR: You are trying to open an entity with no schema defined.");
         }
 
         return (
@@ -75,11 +62,13 @@ export function EntitySideDialogs<S extends EntitySchema>() {
                                         sideEntityController.close();
                                     }}
                                     offsetPosition={sidePanels.length - index - 1}
-                                    onExitAnimation={onExitAnimation}
                                 >
 
+                                    {panel && buildEntityView(panel)}
 
-                                        {panel && buildEntityView(panel)}
+                                    {!panel &&
+                                    <div style={{ width: CONTAINER_WIDTH }}/>}
+
                                 </EntityDrawer>
                             );
                         })

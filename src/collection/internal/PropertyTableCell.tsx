@@ -34,7 +34,7 @@ export interface PropertyTableCellProps<T extends CMSType, S extends EntitySchem
     selected: boolean;
     value: T;
     select: (cellRect: DOMRect | undefined) => void;
-    openPopup: () => void;
+    openPopup: (cellRect: DOMRect | undefined) => void;
     setPreventOutsideClick: (value: boolean) => void;
     focused: boolean;
     setFocused: (value: boolean) => void;

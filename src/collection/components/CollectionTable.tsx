@@ -107,6 +107,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const classes = useTableStyles();
 
     const [selectedCell, setSelectedCell] = React.useState<TableCellProps>(undefined);
+    const [popupCell, setPopupCell] = React.useState<TableCellProps>(undefined);
     const [focused, setFocused] = React.useState<boolean>(false);
 
     const [formPopupOpen, setFormPopupOpen] = React.useState<boolean>(false);
@@ -140,7 +141,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         searchString,
         textSearchDelegate,
         collectionPath,
-        schema
+        schema: schema as EntitySchema<any>
     });
 
     const textSearchInProgress = Boolean(searchString);
@@ -174,16 +175,18 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         setItemCount(pageSize);
     };
 
-    const select = useCallback((cell: TableCellProps) => {
+    const select = (cell: TableCellProps) => {
+        console.log("select", formPopupOpen, cell);
         setSelectedCell(cell);
         setFocused(true);
-        setFormPopupOpen(false);
-    }, []);
+        if (!formPopupOpen) {
+            setPopupCell(cell);
+        }
+    };
 
     const unselect = useCallback(() => {
         setSelectedCell(undefined);
         setFocused(false);
-        setFormPopupOpen(false);
         setPreventOutsideClick(false);
     }, []);
 
@@ -356,15 +359,11 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                 );
             } else {
 
-                const openPopup = () => {
-                    updatePopup(true);
-                };
-
-                const onSelect = (cellRect: DOMRect | undefined) => {
+                const openPopup = (cellRect: DOMRect | undefined) => {
                     if (!cellRect) {
-                        select(undefined);
+                        setPopupCell(undefined);
                     } else {
-                        select({
+                        setPopupCell({
                             columnIndex,
                             // rowIndex,
                             width: column.width,
@@ -375,6 +374,26 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                             property,
                             usedPropertyBuilder
                         });
+                    }
+                    updatePopup(true);
+                };
+
+                const onSelect = (cellRect: DOMRect | undefined) => {
+                    if (!cellRect) {
+                        select(undefined);
+                    } else {
+                        const selectedConfig = {
+                            columnIndex,
+                            // rowIndex,
+                            width: column.width,
+                            height: column.height,
+                            entity,
+                            cellRect,
+                            name: name,
+                            property,
+                            usedPropertyBuilder
+                        };
+                        select(selectedConfig);
                     }
                 };
 
@@ -632,12 +651,12 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                         loading={loading}/>
 
                 <PopupFormField
-                    cellRect={selectedCell?.cellRect}
-                    columnIndex={selectedCell?.columnIndex}
-                    name={selectedCell?.name}
-                    property={selectedCell?.property}
-                    usedPropertyBuilder={selectedCell?.usedPropertyBuilder ?? false}
-                    entity={selectedCell?.entity}
+                    cellRect={popupCell?.cellRect}
+                    columnIndex={popupCell?.columnIndex}
+                    name={popupCell?.name}
+                    property={popupCell?.property}
+                    usedPropertyBuilder={popupCell?.usedPropertyBuilder ?? false}
+                    entity={popupCell?.entity}
                     tableKey={tableKey}
                     customFieldValidator={customFieldValidator}
                     schema={schema}

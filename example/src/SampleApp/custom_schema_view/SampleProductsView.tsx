@@ -1,9 +1,10 @@
 import React from "react";
 import { Box, Button } from "@material-ui/core";
-import { Entity, useSnackbarController } from "@camberi/firecms";
+import { Entity, EntityValues, useSnackbarController } from "@camberi/firecms";
 
-export function SampleProductsView({ entity }: {
-    entity?: Entity<any>
+export function SampleProductsView({ entity, modifiedValues }: {
+    entity?: Entity<any>;
+    modifiedValues?: EntityValues<any>;
 }) {
 
     const snackbarContext = useSnackbarController();
@@ -11,7 +12,7 @@ export function SampleProductsView({ entity }: {
     const onClick = (event: React.MouseEvent) => {
         snackbarContext.open({
             type: "success",
-            message: `Clicked on ${entity?.values.name}`
+            message: `Custom action for ${modifiedValues?.name}`
         });
     };
 
@@ -27,10 +28,25 @@ export function SampleProductsView({ entity }: {
                  alignItems={"center"}
                  justifyItems={"center"}>
 
-                <div>
-                    This is an example of a custom view added
-                    as a panel to an entity schema
-                </div>
+                <Box p={2}>
+                    <p>
+                        This is an example of a custom view added
+                        as a panel to an entity schema.
+                    </p>
+                    <p>
+                        Values in the form:
+                    </p>
+                    <p style={{
+                        color: "#fff",
+                        padding: "8px",
+                        fontSize: ".85em",
+                        fontFamily: "monospace",
+                        borderRadius: "4px",
+                        backgroundColor: "#4e482f"
+                    }}>
+                        {modifiedValues && JSON.stringify(modifiedValues, null, 2)}
+                    </p>
+                </Box>
 
                 <Button onClick={onClick} color="primary">
                     Your action

@@ -51,12 +51,12 @@ export const useStyles = makeStyles(theme => createStyles({
         borderRadius: "4px",
         backgroundColor: theme.palette.background.paper,
         transition: "transform 250ms ease-out",
-        transform: "scale(1.0)",
+        transform: "scale(1.0)"
     },
     popupInner: {
         padding: theme.spacing(2),
         overflow: "auto",
-        cursor: "inherit",
+        cursor: "inherit"
     },
     hidden: {
         visibility: "hidden",
@@ -147,7 +147,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
     useLayoutEffect(
         () => {
             if (popupLocation)
-                setPopupLocation(normalizePosition(popupLocation));
+                setPopupLocation(normalizePosition(popupLocation, false));
         },
         [windowSize]
     );
@@ -162,7 +162,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                 : cellRect.y - cellRect.height / 2
         };
 
-        setPopupLocation(normalizePosition(initialLocation));
+        setPopupLocation(normalizePosition(initialLocation, true));
     };
 
     const onOutsideClick = () => {
@@ -175,20 +175,19 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         customFieldValidator,
         entity?.id);
 
-    function normalizePosition({ x, y }: { x: number, y: number }) {
+    function normalizePosition({ x, y }: { x: number, y: number }, initial:boolean) {
 
         if (!draggableBoundingRect)
             return;
 
-        // We divide the width by 0.7 since we it is scaled down
         return {
-            x: Math.max(0, Math.min(x, windowSize.width - draggableBoundingRect.width / 0.7)),
-            y: Math.max(0, Math.min(y, windowSize.height - draggableBoundingRect.height / 0.7))
+            x: Math.max(0, Math.min(x, windowSize.width - (initial ? draggableBoundingRect.width / 0.7 : draggableBoundingRect.width))),
+            y: Math.max(0, Math.min(y, windowSize.height - (initial? draggableBoundingRect.height / 0.7 :draggableBoundingRect.height)))
         };
     }
 
     const onMove = (position: { x: number, y: number }) => {
-        return setPopupLocation(normalizePosition(position));
+        return setPopupLocation(normalizePosition(position, false));
     };
 
     const saveValue =

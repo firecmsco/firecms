@@ -14,12 +14,12 @@ interface TableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
     disabled: boolean;
     error?: Error;
     allowScroll?: boolean;
-    openPopup?: () => void;
     disabledTooltip?: string;
     focused?: boolean;
     selected?: boolean;
     showExpandIcon?: boolean;
-    select?: (cellRect: DOMRect | undefined) => void,
+    select?: (cellRect: DOMRect | undefined) => void;
+    openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
 const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
@@ -52,8 +52,20 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
     }, [focused]);
 
     const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        if (event.detail == 3 && openPopup)
-            openPopup();
+        if (event.detail == 3) {
+            doOpenPopup();
+        }
+    };
+
+    function doOpenPopup() {
+        if (openPopup) {
+            const cellRect = ref && ref?.current?.getBoundingClientRect();
+            openPopup(cellRect);
+        }
+    }
+
+    const onIconClick = (event: any) => {
+        doOpenPopup();
     };
 
     const onFocus = (event: React.SyntheticEvent<HTMLDivElement>) => {
@@ -136,7 +148,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                     ref={iconRef}
                     color={"default"}
                     size={"small"}
-                    onClick={openPopup}>
+                    onClick={onIconClick}>
                     <svg
                         className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
                         width="20" height="20" viewBox="0 0 24 24">
