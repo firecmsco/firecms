@@ -6,11 +6,9 @@ import {
     FormControl,
     FormHelperText,
     makeStyles,
-    Paper,
-    Theme,
-    Typography
+    Theme
 } from "@material-ui/core";
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor from "@uiw/react-md-editor";
 
 import { FieldProps } from "../../models";
 import { FieldDescription } from "../../form/components";

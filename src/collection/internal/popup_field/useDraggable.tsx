@@ -1,26 +1,4 @@
 import React, { useEffect } from "react";
-import { Grow } from "@material-ui/core";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import clsx from "clsx";
-
-const useStyles = makeStyles<Theme>((theme: Theme) =>
-    createStyles({
-        popup: {
-            display: "inline-block",
-            userSelect: "none",
-            position: "fixed",
-            zIndex: 1300,
-            boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
-            borderRadius: "6px",
-            backgroundColor: theme.palette.background.paper,
-            padding: theme.spacing(2)
-        },
-        hidden: {
-            visibility: "hidden",
-            zIndex: -1
-        }
-    }));
-
 
 type DraggableProps = {
     containerRef: React.RefObject<HTMLDivElement>,
@@ -32,11 +10,11 @@ type DraggableProps = {
 
 export function useDraggable({
                                  containerRef,
-    ref,
-                              x,
-                              y,
-                              onMove,
-                          }: DraggableProps) {
+                                 ref,
+                                 x,
+                                 y,
+                                 onMove
+                             }: DraggableProps) {
 
 
     let relX = 0;

@@ -1,8 +1,5 @@
 import React from "react";
-import {
-    ArrayProperty,
-    MapProperty
-} from "../../models";
+import { ArrayProperty, MapProperty } from "../../models";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@material-ui/core";

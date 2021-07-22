@@ -16,7 +16,7 @@ import {
     useTheme
 } from "@material-ui/core";
 
-import { CollectionSize, EntitySchema, FilterValues } from "../../models";
+import { CollectionSize, EntitySchema } from "../../models";
 import SearchBar from "./SearchBar";
 import ClearIcon from "@material-ui/icons/Clear";
 

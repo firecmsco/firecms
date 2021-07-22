@@ -31,7 +31,7 @@ export const useStyles = makeStyles(theme => createStyles({
         [theme.breakpoints.down("xs")]: {
             width: "100vw"
         },
-        transition: "width 155ms cubic-bezier(0.33, 1, 0.68, 1)"
+        transition: "width 300ms ease-in-out"
     },
     wide: {
         width: "65vw",
@@ -46,7 +46,7 @@ export const useStyles = makeStyles(theme => createStyles({
         [theme.breakpoints.down("xs")]: {
             width: "100vw"
         },
-        transition: "width 150ms cubic-bezier(0.33, 1, 0.68, 1)"
+        transition: "width 300ms ease-in-out"
     }
 }));
 

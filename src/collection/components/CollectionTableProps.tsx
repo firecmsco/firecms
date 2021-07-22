@@ -1,9 +1,10 @@
 import {
     AdditionalColumnDelegate,
     CollectionSize,
+    CompositeIndex,
     Entity,
     EntitySchema,
-    FilterValues, CompositeIndex,
+    FilterValues,
     Property,
     TextSearchDelegate
 } from "../../models";
