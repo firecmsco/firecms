@@ -3,6 +3,7 @@ import { Entity, EntitySchema } from "./entities";
 import React from "react";
 import firebase from "firebase/app";
 import { AuthController } from "../contexts/AuthController";
+import { CMSAppContext } from "../contexts";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -191,7 +192,28 @@ export type Permissions = {
  */
 export type PermissionsBuilder<S extends EntitySchema<Key>, Key extends string> =
     Permissions
-    | ((props: { user: firebase.User | null, entity: Entity<S, Key> | null, authController: AuthController }) => Permissions);
+    | ((props: {
+    /**
+     * Logged in user
+     */
+    user: firebase.User | null;
+    /**
+     * Entity being edited, might be null if it is new
+     */
+    entity: Entity<S, Key> | null;
+    /**
+     * Collection path of this entity
+     */
+    collectionPath: string;
+    /**
+     * Auth controller for additional auth operations
+     */
+    authController: AuthController;
+    /**
+     * Context of the app status
+     */
+    context: CMSAppContext;
+}) => Permissions);
 
 
 /**

@@ -4,7 +4,7 @@ import {
     Permissions,
     PermissionsBuilder
 } from "../models";
-import { AuthController } from "../contexts";
+import { AuthController, CMSAppContext } from "../contexts";
 
 const DEFAULT_PERMISSIONS = {
     edit: true,
@@ -15,7 +15,9 @@ const DEFAULT_PERMISSIONS = {
 function checkHasPermissionOnEntity<S extends EntitySchema<Key>, Key extends string>
 (permission: PermissionsBuilder<S, Key> | Permissions | undefined,
  entity: Entity<S, Key> | null,
- authController: AuthController): Permissions {
+ authController: AuthController,
+ collectionPath:string,
+ context: CMSAppContext): Permissions {
 
     if (permission === undefined) {
         return DEFAULT_PERMISSIONS;
@@ -25,7 +27,9 @@ function checkHasPermissionOnEntity<S extends EntitySchema<Key>, Key extends str
         return permission({
             user: authController.loggedUser,
             entity,
-            authController
+            authController,
+            collectionPath,
+            context
         });
     }
 
@@ -35,20 +39,26 @@ function checkHasPermissionOnEntity<S extends EntitySchema<Key>, Key extends str
 export function canEdit<S extends EntitySchema<Key>, Key extends string>
 (permission: PermissionsBuilder<S, Key> | Permissions | undefined,
  entity: Entity<S, Key>,
- authController: AuthController): boolean {
-    return checkHasPermissionOnEntity(permission,  entity, authController).edit ?? DEFAULT_PERMISSIONS.edit;
+ authController: AuthController,
+ collectionPath:string,
+ context: CMSAppContext): boolean {
+    return checkHasPermissionOnEntity(permission,  entity, authController, collectionPath, context).edit ?? DEFAULT_PERMISSIONS.edit;
 }
 
 export function canCreate<S extends EntitySchema<Key>, Key extends string>
 (permission: PermissionsBuilder<S, Key> | Permissions | undefined,
- authController: AuthController): boolean {
-    return checkHasPermissionOnEntity(permission,  null, authController).create ?? DEFAULT_PERMISSIONS.create;
+ authController: AuthController,
+ collectionPath:string,
+ context: CMSAppContext): boolean {
+    return checkHasPermissionOnEntity(permission,  null, authController, collectionPath, context).create ?? DEFAULT_PERMISSIONS.create;
 }
 
 export function canDelete<S extends EntitySchema<Key>, Key extends string>
 (permission: PermissionsBuilder<S, Key> | Permissions | undefined,
  entity: Entity<S, Key>,
- authController: AuthController): boolean {
-    return checkHasPermissionOnEntity(permission,  entity, authController).delete ?? DEFAULT_PERMISSIONS.delete;
+ authController: AuthController,
+ collectionPath:string,
+ context: CMSAppContext): boolean {
+    return checkHasPermissionOnEntity(permission,  entity, authController, collectionPath, context).delete ?? DEFAULT_PERMISSIONS.delete;
 }
 

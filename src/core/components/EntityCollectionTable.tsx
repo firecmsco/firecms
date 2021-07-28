@@ -40,7 +40,7 @@ import {
 
 import { canCreate, canDelete, canEdit } from "../../util/permissions";
 import {
-    OnCellChangeParams,
+    OnCellValueChange,
     UniqueFieldValidator
 } from "../../collection/components/CollectionTableProps";
 import { checkUniqueField } from "../../models/firestore";
@@ -157,18 +157,18 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     };
 
     const checkInlineEditing = (entity: Entity<any>) => {
-        if (!canEdit(collectionConfig.permissions, entity, authController)) {
+        if (!canEdit(collectionConfig.permissions, entity, authController, collectionPath, context)) {
             return false;
         }
         return inlineEditing;
     };
 
-    const onCellChanged = ({
+    const onCellChanged:OnCellValueChange<any, S, Key> = ({
                                value,
                                name,
                                setError,
                                entity
-                           }: OnCellChangeParams<any, S, Key>) => saveEntity({
+                           }) => saveEntity({
             collectionPath: collectionPath,
             id: entity.id,
             values: {
@@ -273,9 +273,9 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
         const isSelected = selectedEntities.indexOf(entity) > -1;
 
-        const createEnabled = canCreate(collectionConfig.permissions, authController);
-        const editEnabled = canEdit(collectionConfig.permissions, entity, authController);
-        const deleteEnabled = canDelete(collectionConfig.permissions, entity, authController);
+        const createEnabled = canCreate(collectionConfig.permissions, authController, collectionPath, context);
+        const editEnabled = canEdit(collectionConfig.permissions, entity, authController, collectionPath,context);
+        const deleteEnabled = canDelete(collectionConfig.permissions, entity, authController, collectionPath, context);
 
         const onCopyClicked = (entity: Entity<S, Key>) => sideEntityController.open({
             entityId: entity.id,
@@ -324,7 +324,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                                        data
                                    }: { size: CollectionSize, data: Entity<any>[] }) {
 
-        const addButton = canCreate(collectionConfig.permissions, authController) && onNewClick && (largeLayout ?
+        const addButton = canCreate(collectionConfig.permissions, authController, collectionPath, context) && onNewClick && (largeLayout ?
             <Button
                 onClick={onNewClick}
                 startIcon={<Add/>}
@@ -342,7 +342,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                 <Add/>
             </Button>);
 
-        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collectionConfig.permissions, entity, authController));
+        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collectionConfig.permissions, entity, authController, collectionPath, context));
         const onMultipleDeleteClick = (event: React.MouseEvent) => {
             event.stopPropagation();
             setDeleteEntityClicked(selectedEntities);

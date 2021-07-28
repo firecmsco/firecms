@@ -115,7 +115,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * Callback when the value of a cell has been edited
      * @param params
      */
-    onCellValueChange?: (params: OnCellChangeParams<any, S, Key>) => Promise<void>;
+    onCellValueChange?: OnCellValueChange<unknown, S, Key>;
     /**
      * How many entries are loaded per page
      */
@@ -127,13 +127,22 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     onEntityClick?(entity: Entity<S, Key>): void;
 }
 
-
+/**
+ * @category Collection components
+ */
 export type UniqueFieldValidator = (props: { name: string, value: any, property: Property, entityId?: string }) => Promise<boolean>;
 
 /**
- * Props passed in a callback when the content of a cell in a table has been edited
+ * Callback when a cell has changed in a table
+ * @category Collection components
  */
-export type OnCellChangeParams<T, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> = {
+export type OnCellValueChange<T, S extends EntitySchema<Key>, Key extends string> = (params: OnCellValueChangeParams<T, S, Key>) => Promise<void>;
+
+/**
+ * Props passed in a callback when the content of a cell in a table has been edited
+ * @category Collection components
+ */
+export type OnCellValueChangeParams<T, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> = {
     value: T,
     name: string,
     entity: Entity<S, Key>,

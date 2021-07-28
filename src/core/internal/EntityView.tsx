@@ -180,7 +180,7 @@ function EntityView<S extends EntitySchema<Key>, Key extends string>({
                     if (e) {
                         setStatus(copy ? "copy" : "existing");
                         setEntity(e);
-                        setReadOnly(!canEdit(permissions, e, authController));
+                        setReadOnly(!canEdit(permissions, e, authController, collectionPath));
                         console.debug("Updated entity from Firestore", e);
                     }
                     setLoading(false);

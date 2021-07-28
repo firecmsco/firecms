@@ -27,7 +27,7 @@ import {
 import OutsideAlerter from "../../../core/internal/OutsideAlerter";
 import { useWindowSize } from "../../../hooks/useWindowSize";
 import { isReadOnly } from "../../../models/utils";
-import { OnCellChangeParams } from "../../components/CollectionTableProps";
+import { OnCellValueChangeParams } from "../../components/CollectionTableProps";
 import { buildPropertyField } from "../../../form/form_factory";
 import clsx from "clsx";
 import ElementResizeListener from "./ElementResizeListener";
@@ -85,7 +85,7 @@ interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
      * Callback when the value of a cell has been edited
      * @param params
      */
-    onCellValueChange?: (params: OnCellChangeParams<any, S, Key>) => Promise<void>;
+    onCellValueChange?: (params: OnCellValueChangeParams<any, S, Key>) => Promise<void>;
 }
 
 function PopupFormField<S extends EntitySchema<Key>, Key extends string>({

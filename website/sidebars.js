@@ -197,7 +197,10 @@ module.exports = {
                         'api/types/filtervalues',
                         'api/types/permissions',
                         'api/types/permissionsbuilder',
-                        'api/types/wherefilterop'
+                        'api/types/wherefilterop',
+                        'api/types/oncellvaluechange',
+                        'api/types/oncellvaluechangeparams',
+                        'api/types/uniquefieldvalidator',
                     ]
                 }
             ]
