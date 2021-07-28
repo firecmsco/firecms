@@ -162,7 +162,9 @@ export type EnumValueConfig = {
  * Record of properties of an entity or a map property
  * @category Entity properties
  */
-export type Properties<Key extends string = string> = Record<Key, Property>;
+export type Properties<Key extends string = string> = {
+    [K in Key]: Property
+};
 
 /**
  * @category Entity properties
