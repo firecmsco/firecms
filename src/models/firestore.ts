@@ -267,7 +267,7 @@ function sanitizeData<S extends EntitySchema<Key>,
     Object.entries(computeSchemaProperties(schema))
         .forEach(([key, property]) => {
             if (values && values[key] !== undefined) result[key] = values[key];
-            else if (property.validation?.required) result[key] = null;
+            else if ((property as Property).validation?.required) result[key] = null;
         });
     return result;
 }
@@ -492,7 +492,7 @@ export async function deleteEntity<S extends EntitySchema<Key>,
  * @ignore
  */
 export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>(
-    schema: S,
+    schema: EntitySchema<Key>,
     entityId?: string | undefined,
     values?: Partial<EntityValues<S, Key>>
 ): Properties<Key> {
