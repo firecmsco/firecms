@@ -30,6 +30,7 @@ import { isReadOnly } from "../../../models/utils";
 import { OnCellChangeParams } from "../../components/CollectionTableProps";
 import { buildPropertyField } from "../../../form/form_factory";
 import clsx from "clsx";
+import ElementResizeListener from "./ElementResizeListener";
 
 export const useStyles = makeStyles(theme => createStyles({
     form: {
@@ -102,11 +103,11 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                                                                              usedPropertyBuilder,
                                                                              onCellValueChange
                                                                          }: PopupFormFieldProps<S, Key>) {
-
+    console.log(property, cellRect);
 
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
-    const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
+    // const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
 
     const classes = useStyles();
     const windowSize = useWindowSize();
@@ -114,6 +115,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
     const ref = React.useRef<HTMLDivElement>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
 
+    const draggableBoundingRect = ref.current?.getBoundingClientRect();
     useDraggable({
         containerRef,
         ref,
@@ -124,17 +126,17 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
 
     useEffect(
         () => {
-            setDraggableBoundingRect(ref.current?.getBoundingClientRect());
+            if (!cellRect) return;
+            updatePopupLocation(getInitialLocation());
         },
-        [ref.current]
+        [property]
     );
 
-    useEffect(
+    useLayoutEffect(
         () => {
-            if (cellRect && draggableBoundingRect)
-                calculateInitialPopupLocation(cellRect, draggableBoundingRect);
+            updatePopupLocation(popupLocation);
         },
-        [cellRect, draggableBoundingRect]
+        [windowSize, cellRect]
     );
 
     useEffect(
@@ -143,27 +145,6 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         },
         [formPopupOpen]
     );
-
-    useLayoutEffect(
-        () => {
-            if (popupLocation)
-                setPopupLocation(normalizePosition(popupLocation, false));
-        },
-        [windowSize]
-    );
-
-    const calculateInitialPopupLocation = (cellRect: DOMRect, popupRect: DOMRect) => {
-        const initialLocation = {
-            x: cellRect.left < windowSize.width - cellRect.right
-                ? cellRect.x + cellRect.width / 2
-                : cellRect.x - cellRect.width / 2,
-            y: cellRect.top < windowSize.height - cellRect.bottom
-                ? cellRect.y + cellRect.height / 2
-                : cellRect.y - cellRect.height / 2
-        };
-
-        setPopupLocation(normalizePosition(initialLocation, true));
-    };
 
     const onOutsideClick = () => {
         // selectedCell.closePopup();
@@ -175,34 +156,62 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         customFieldValidator,
         entity?.id);
 
-    function normalizePosition({ x, y }: { x: number, y: number }, initial:boolean) {
-
-        if (!draggableBoundingRect)
-            return;
+    function getInitialLocation() {
+        if (!cellRect) throw Error("getInitialLocation error");
 
         return {
-            x: Math.max(0, Math.min(x, windowSize.width - (initial ? draggableBoundingRect.width / 0.7 : draggableBoundingRect.width))),
-            y: Math.max(0, Math.min(y, windowSize.height - (initial? draggableBoundingRect.height / 0.7 :draggableBoundingRect.height)))
+            x: cellRect.left < windowSize.width - cellRect.right
+                ? cellRect.x + cellRect.width / 2
+                : cellRect.x - cellRect.width / 2,
+            y: cellRect.top < windowSize.height - cellRect.bottom
+                ? cellRect.y + cellRect.height / 2
+                : cellRect.y - cellRect.height / 2
         };
     }
 
-    const onMove = (position: { x: number, y: number }) => {
-        return setPopupLocation(normalizePosition(position, false));
+    const updatePopupLocation = (position?: { x: number, y: number }) => {
+        if (!cellRect || !draggableBoundingRect) return;
+
+        const newPosition = normalizePosition(position ?? getInitialLocation());
+        if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
+            setPopupLocation(newPosition);
     };
 
-    const saveValue =
-        async (values: object) => {
-            setSavingError(null);
-            if (entity && onCellValueChange && name) {
-                return onCellValueChange({
-                    value: values[name],
-                    name: name,
-                    entity,
-                    setError: setSavingError
-                });
-            }
-            return Promise.resolve();
+    function normalizePosition({
+                                   x,
+                                   y
+                               }: { x: number, y: number }) {
+        if (!ref.current?.getBoundingClientRect())
+            throw Error("normalizePosition called before draggableBoundingRect is set");
+
+        return {
+            x: Math.max(0, Math.min(x, windowSize.width - ref.current?.getBoundingClientRect().width)),
+            y: Math.max(0, Math.min(y, windowSize.height - ref.current?.getBoundingClientRect().height))
         };
+    }
+
+    const adaptResize = () => {
+        if (!draggableBoundingRect) return;
+        return updatePopupLocation(popupLocation);
+    };
+
+    const onMove = (position: { x: number, y: number }) => {
+        if (!draggableBoundingRect) return;
+        return updatePopupLocation(position);
+    };
+
+    const saveValue = async (values: object) => {
+        setSavingError(null);
+        if (entity && onCellValueChange && name) {
+            return onCellValueChange({
+                value: values[name],
+                name: name,
+                entity,
+                setError: setSavingError
+            });
+        }
+        return Promise.resolve();
+    };
 
 
     if (!entity)
@@ -301,6 +310,8 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                 { [classes.hidden]: !formPopupOpen }
             )}
             ref={containerRef}>
+
+            <ElementResizeListener onResize={adaptResize}/>
 
             <div className={classes.popupInner}
                  ref={ref}>

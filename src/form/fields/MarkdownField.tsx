@@ -84,6 +84,7 @@ export default function MarkDownField({
             <div className={classes.root}>
                 <MDEditor
                     value={value}
+                    preview={"edit"}
                     onChange={(value) => updateValue(value)}
                 />
             </div>

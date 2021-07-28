@@ -156,6 +156,7 @@ const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key e
                                               disabled={disabled}
                                               focused={focused}
                                               valueType={"number"}
+                                              small={getPreviewSizeFrom(size) !== "regular"}
                                               enumValues={numberProperty.config.enumValues}
                                               error={error}
                                               onBlur={onBlur}
@@ -183,6 +184,7 @@ const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key e
                                               focused={focused}
                                               disabled={disabled}
                                               valueType={"string"}
+                                              small={getPreviewSizeFrom(size) !== "regular"}
                                               enumValues={stringProperty.config.enumValues}
                                               error={error}
                                               onBlur={onBlur}
@@ -238,6 +240,7 @@ const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key e
                                                       multiple={true}
                                                       disabled={disabled}
                                                       focused={focused}
+                                                      small={getPreviewSizeFrom(size) !== "regular"}
                                                       valueType={arrayProperty.of.dataType}
                                                       enumValues={arrayProperty.of.config.enumValues}
                                                       error={error}

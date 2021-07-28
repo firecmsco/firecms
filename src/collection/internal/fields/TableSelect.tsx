@@ -12,6 +12,7 @@ export function TableSelect(props: {
     error: Error | undefined;
     multiple: boolean;
     disabled: boolean;
+    small: boolean;
     internalValue: string | number | string[] | number[] | undefined;
     valueType: "string" | "number";
     updateValue: (newValue: (string | number | string[] | number[] | undefined)) => void;
@@ -26,6 +27,7 @@ export function TableSelect(props: {
         error,
         internalValue,
         disabled,
+        small,
         updateValue,
         multiple,
         setPreventOutsideClick,
@@ -96,12 +98,12 @@ export function TableSelect(props: {
                     return <ArrayEnumPreview value={enumKey}
                                              name={name}
                                              enumValues={enumValues}
-                                             size={"small"}/>;
+                                             size={small ? "small" : "regular"}/>;
                 } else {
                     return <EnumValuesChip
                         enumKey={enumKey}
                         enumValues={enumValues}
-                        small={true}/>;
+                        small={small}/>;
                 }
             }
             }>

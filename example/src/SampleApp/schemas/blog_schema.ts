@@ -28,6 +28,7 @@ export const blogSchema = buildSchema({
             description: "Example of a complex array with multiple properties as children",
             validation: { required: true },
             dataType: "array",
+            columnWidth: 400,
             oneOf: {
                 properties: {
                     images: {
@@ -90,6 +91,7 @@ export const blogSchema = buildSchema({
             title: "Status",
             validation: { required: true },
             dataType: "string",
+            columnWidth: 140,
             config: {
                 enumValues: {
                     published: "Published",

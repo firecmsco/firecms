@@ -158,7 +158,7 @@ function ArrayOneOfEntry({
                                 fullWidth
                                 className={classes.oneOfInput}
                                 labelId={`${name}_${index}_select_label`}
-                                value={fieldProps.field.value !== undefined ? fieldProps.field.value : ""}
+                                value={fieldProps.field.value !== undefined && fieldProps.field.value !== null? fieldProps.field.value : ""}
                                 onChange={(evt: any) => {
                                     const eventValue = evt.target.value;
                                     fieldProps.form.setFieldTouched(typeFieldName);

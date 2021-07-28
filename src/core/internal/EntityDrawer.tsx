@@ -48,16 +48,11 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => createStyles({
     root: {},
     /* Styles applied to the `Paper` component. */
     paper: {
-        overflowY: "auto",
-        display: "flex",
-        flexDirection: "column",
         height: "100%",
-        flex: "1 0 auto",
         zIndex: theme.zIndex.drawer,
         WebkitOverflowScrolling: "touch", // Add iOS momentum scrolling.
         // temporary style
         position: "fixed",
-        top: 0,
         outline: 0
     },
     paperAnchorRight: ({ offsetPosition }) => ({

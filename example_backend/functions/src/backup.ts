@@ -14,7 +14,7 @@ export function eraseDatabase() {
     const deleteConfig = {
         project: process.env.GCLOUD_PROJECT,
         recursive: true,
-        yes: true,
+        yes: true,ov
         token: functions.config().fb.token
     };
     return firebase_tools.firestore

@@ -176,7 +176,6 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     };
 
     const select = (cell: TableCellProps) => {
-        console.log("select", formPopupOpen, cell);
         setSelectedCell(cell);
         setFocused(true);
         if (!formPopupOpen) {

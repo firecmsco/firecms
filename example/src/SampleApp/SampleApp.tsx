@@ -96,6 +96,7 @@ function SampleApp() {
         exportable: {
             additionalColumns: [sampleAdditionalExportColumn]
         },
+        defaultSize: "l",
         properties: ["name", "header_image", "status", "content", "reviewed", "products", "gold_text"],
         description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
         textSearchDelegate: blogSearchDelegate,
