@@ -1,5 +1,30 @@
 # Change Log
 
+## [0.45.0] - 2021-07-19
+
+### Added
+
+- New `oneOf` field in `ArrayProperty`. This new configuration allows the user
+  to build complex array of objects structures, where the object is determined
+  by a discriminator or `type` field and stored in the `value` field (both those
+  fields are customizable). You can se an example of this in the content
+  of [blog entries in the demo](https://demo.firecms.co/c/blog)
+- You can now add custom views to your entity schemas, that get rendered next to
+  the entity form. You can use these views for anything you need, such as
+  rendering a custom form, building a dashboard or displaying a post preview.
+- The `collectionPath` and app `context` props have been added
+  to `PermissionBuilder` so you can get better info of the context of an
+  entity.
+
+### Changed
+
+- Subcollection views and new schema custom views are now displayed side by side
+  when you open the tabs in the side view (useful for better context switching)
+- The markdown component has been replaced by a better one.
+- Many bugfixes in the form popup view and enhanced behaviour. You can now keep
+  a popup open and continue editing other fields. The popup doesn't close
+  automatically now when you click on a different cell.
+
 ## [0.44.0] - 2021-07-19
 
 ### Changed
