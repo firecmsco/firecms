@@ -25,7 +25,7 @@ There are two ways to build views in FireCMS:
 - Create custom views that sit in the main level of your navigation tree. In
   this case you can build your custom React component and make use of the
   internal components of the CMS as well as the provided hooks.
-  Check [Custom views](custom_views.md) for more details
+  Check [Custom main views](custom_main_views.md) for more details
 
 ### Core technologies
 

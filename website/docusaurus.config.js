@@ -1,6 +1,6 @@
 module.exports = {
-    title: 'FireCMS',
-    tagline: 'Awesome Firestore based headless CMS',
+    title: 'FireCMS - Firestore CMS',
+    tagline: 'Awesome Firestore/Firebase and React based headless CMS, completely open source',
     url: 'https://firecms.co',
     baseUrl: '/',
     onBrokenLinks: 'throw',
@@ -50,15 +50,21 @@ module.exports = {
                     position: 'left'
                 },
                 {
-                    to: 'https://demo.firecms.co',
-                    label: 'Demo',
+                    to: 'blog',
+                    label: 'Blog',
                     position: 'left'
                 },
-                // { to: 'blog', label: 'Blog', position: 'left' },
+                {
+                    to: 'https://demo.firecms.co',
+                    label: 'Demo',
+                    className: "btn mr-2 px-6 py-2 text-white font-bold uppercase bg-blue-600 hover:text-white hover:bg-blue-700",
+                    'aria-label': 'Open the demo project',
+                    position: 'right'
+                },
                 {
                     href: 'https://github.com/Camberi/firecms',
                     // label: 'GitHub',
-                    className: 'header-github-link',
+                    className: 'mr-2 header-github-link',
                     'aria-label': 'GitHub repository',
                     position: 'right'
                 }
@@ -66,6 +72,16 @@ module.exports = {
         },
         footer: {
             links: [
+                {
+                    title: 'Get in touch',
+                    items: [
+                        {
+                            label: 'Contact',
+                            href: 'mailto: hello@camberi.com'
+                        }
+                    ]
+                },
+
                 {
                     // Label of the section of these links
                     title: 'Links',
@@ -134,12 +150,12 @@ module.exports = {
                 docs: {
                     sidebarPath: require.resolve('./sidebars.js')
                 },
-                blog: false,
-                // blog: {
-                //     showReadingTime: true,
-                //     editUrl:
-                //         'https://github.com/facebook/docusaurus/edit/master/website/blog/'
-                // },
+                // blog: false,
+                blog: {
+                    showReadingTime: true,
+                    // editUrl:
+                    //     'https://github.com/facebook/docusaurus/edit/master/website/blog/'
+                },
                 theme: {
                     customCss: [
                         require.resolve('./src/css/custom.css')

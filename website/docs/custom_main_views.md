@@ -1,5 +1,5 @@
 ---
-id: custom_views
+id: custom_main_views
 title: Custom views
 sidebar_label: Custom views
 ---

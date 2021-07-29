@@ -8,8 +8,8 @@ FireCMS works as a complete app that is in charge of creating the views that
 you define based on your collections and entity schemas. It handles
 navigation for you as well as authentication and login.
 
-However, there is a lot of room to customization, including [custom views](custom_views.md)
-and [custom fields](custom_fields.md) for your entity properties, in case the basic use cases
+However, there is a lot of room to customization, including [main custom views](custom_main_views.md),
+[custom schema views](custom_schema_views.md), and [custom fields](custom_fields.md) for your entity properties, in case the basic use cases
 we include don't suit your needs.
 
 In the simplest case, you will want to create some properties, include them
@@ -112,7 +112,7 @@ that get mapped to CMS views, or create your own React views.
 You can check all the possible configurations for defining [collections](collections.md)
 and [entity schemas](entity_schemas.md) in their respective documents.
 
-Otherwise, you can define your own [custom views](custom_views.md).
+Otherwise, you can define your own [custom views](custom_main_views.md).
 
 You can change the navigation based on the logged-in user, by using a `NavigationBuilder`
 function which can be asynchronous.
@@ -132,7 +132,7 @@ import {
 
 // ...
 
-const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
+const navigation: NavigationBuilder = async ({ user }: NavigationBuilderProps) => ({
     collections: [
         buildCollection({
             relativePath: "products",
@@ -160,7 +160,6 @@ your schemas and properties at compile time.
 Additionally, if you have defined your models as Typescript types, you can
 use this function to validate them (only the property names):
 * `buildSchemaFrom<YOUR_TYPE>`
-
 
 
 ### Schema resolver
@@ -209,6 +208,6 @@ This will allow you to initialise Firebase on your own and integrate the FireCMS
 components into your own app. Just place `CMSAppProvider` on top of the
 components that need to use the FireCMS hooks.
 
-You can see an
-example [here](https://github.com/Camberi/firecms/blob/master/example/src/SimpleAppWithProvider.tsx)
+You can see an example
+[here](https://github.com/Camberi/firecms/blob/master/example/src/SimpleAppWithProvider.tsx)
 

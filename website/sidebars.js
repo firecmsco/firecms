@@ -28,14 +28,15 @@ module.exports = {
                     ]
                 },
                 'custom_fields',
-                'custom_previews'
+                'custom_previews',
+                'custom_schema_views'
             ]
         },
         {
             type: 'category',
-            label: 'Custom views',
+            label: 'Custom main views',
             items: [
-                'custom_views',
+                'custom_main_views',
                 'contexts/hooks'
             ]
         },
