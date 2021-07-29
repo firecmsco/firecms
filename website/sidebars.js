@@ -217,11 +217,13 @@ module.exports = {
                         'api/functions/arraydefaultfield',
                         'api/functions/arrayenumselect',
                         'api/functions/arrayofreferencesfield',
+                        'api/functions/arrayoneoffield',
                         'api/functions/datetimefield',
                         'api/functions/mapfield',
                         'api/functions/readonlyfield',
                         'api/functions/referencefield',
                         'api/functions/select',
+                        'api/functions/markdownfield',
                         'api/functions/storageuploadfield',
                         'api/functions/switchfield',
                         'api/functions/textfield'

@@ -9,11 +9,14 @@ import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ReadOnlyField from "./fields/ReadOnlyField";
 import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
+import ArrayOneOfField from "./fields/ArrayOneOfField";
+import MarkdownField from "./fields/MarkdownField";
 
 export {
     ArrayDefaultField,
     ArrayEnumSelect,
     ArrayOfReferencesField,
+    ArrayOneOfField,
     DateTimeField,
     ReadOnlyField,
     MapField,
@@ -21,6 +24,7 @@ export {
     Select,
     StorageUploadField,
     SwitchField,
+    MarkdownField,
     TextField
 };
 
