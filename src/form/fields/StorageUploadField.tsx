@@ -106,6 +106,10 @@ export const useStyles = makeStyles(theme => ({
 type StorageUploadFieldProps = FieldProps<string | string[]>;
 
 /**
+ * Field that allows to upload files to Google Cloud Storage.
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
  * @category Form fields
  */
 export default function StorageUploadField({

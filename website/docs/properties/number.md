@@ -21,3 +21,14 @@ sidebar_label: Number
 * `positive` Value must be a positive number.
 * `negative` Value must be a negative number.
 * `integer` Value must be an integer.
+
+
+---
+
+The widget that gets created is
+- [`TextField`](api/functions/textfield.md) generic text field
+- [`Select`](api/functions/select.md) if `enumValues` are set in the string config, this field renders a select
+  where each option is a colored chip.
+
+Links:
+- [API](api/interfaces/numberproperty.md)

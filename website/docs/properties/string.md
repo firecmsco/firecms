@@ -62,3 +62,18 @@ sidebar_label: String
   whitespace.
 * `lowercase` Transforms the string value to lowercase.
 * `uppercase` Transforms the string value to uppercase.
+
+
+---
+
+Based on your configuration the form field widgets that are created are:
+- [`TextField`](api/functions/textfield.md) generic text field
+- [`StorageUploadField`](api/functions/storageuploadfield.md) the property has a
+  storage configuration.
+- [`MarkdownField.`](api/functions/markdownfield.md) the property has a
+  markdown configuration.
+- [`Select`](api/functions/select.md) if `enumValues` are set in the string config, this field renders a select
+  where each option is a colored chip.
+
+Links:
+- [API](api/interfaces/stringproperty.md)

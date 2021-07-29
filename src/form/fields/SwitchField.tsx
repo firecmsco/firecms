@@ -95,6 +95,10 @@ const SwitchFieldComponent = React.forwardRef(function({
 });
 
 /**
+ * Simple boolean switch.
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
  * @category Form fields
  */
 export default function(props: SwitchFieldProps) {

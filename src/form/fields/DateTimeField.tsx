@@ -13,6 +13,10 @@ import { CMSAppContext } from "../../contexts/CMSAppContext";
 type DateTimeFieldProps = FieldProps<Date>;
 
 /**
+ * Field that allows selecting a date
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
  * @category Form fields
  */
 export default function DateTimeField({

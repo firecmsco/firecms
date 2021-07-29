@@ -9,6 +9,11 @@ import { buildPropertyField } from "../form_factory";
 import { useClearRestoreValue } from "../../hooks";
 
 /**
+ * Generic array field that allows reordering and renders the child property
+ * as nodes.
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
  * @category Form fields
  */
 export default function ArrayDefaultField<T extends Array<any>>({

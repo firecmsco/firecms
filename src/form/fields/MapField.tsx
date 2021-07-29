@@ -19,6 +19,10 @@ import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
 
 /**
+ * Field that renders the children property fields
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
  * @category Form fields
  */
 export default function MapField<T extends object>({

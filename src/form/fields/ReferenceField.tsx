@@ -58,6 +58,10 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 /**
+ * Field that opens a reference selection dialog.
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
  * @category Form fields
  */
 export default function ReferenceField<S extends EntitySchema<Key>,
