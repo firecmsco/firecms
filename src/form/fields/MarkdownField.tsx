@@ -31,6 +31,10 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
+ * Render a markdown field that allows edition and seeing the preview.
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
  * @category Form fields
  */
 export default function MarkDownField({

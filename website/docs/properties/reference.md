@@ -19,3 +19,12 @@ List of properties rendered as this reference preview.
 * `required` Should this field be compulsory.
 * `requiredMessage` Message to be displayed as a validation error.
 
+
+---
+
+The widget that gets created is
+- [`ReferenceField`](api/functions/referencefield.md) Field that opens a
+reference selection dialog
+
+Links:
+- [API](api/interfaces/referenceproperty.md)

@@ -16,6 +16,10 @@ import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 /**
+ * This fields renders a dropdown with multiple selection.
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
  * @category Form fields
  */
 export default function ArrayEnumSelect({

@@ -22,6 +22,10 @@ import { ErrorView } from "../../core/components";
 type ArrayOfReferencesFieldProps = FieldProps<firebase.firestore.DocumentReference[]>;
 
 /**
+ * This field allows to select multiple references.
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
  * @category Form fields
  */
 export default function ArrayOfReferencesField({

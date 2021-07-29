@@ -8,6 +8,11 @@ import LabelWithIcon from "../components/LabelWithIcon";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 
 /**
+ *
+ * Simply render the non-editable preview of a field
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
  * @category Form fields
  */
 export default function ReadOnlyField<S extends EntitySchema>({
