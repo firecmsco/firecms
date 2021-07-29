@@ -98,8 +98,12 @@ every feature provided by this CMS.
 
 ## Contact and support
 
-https://www.reddit.com/r/firecms/
-`francesco@camberi.com`
+If you need general support you can open a GitHub issue or ask you question on
+[Reddit](https://www.reddit.com/r/firecms/)
+
+Do you need consulting setting up your Firestore based CMS in no time?
+We are happy to help!
+`hello@camberi.com`
 
 ## License
 
