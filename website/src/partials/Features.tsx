@@ -14,7 +14,9 @@ import FirebaseLogo from "@site/static/img/firebase.svg";
 // @ts-ignore
 import pricePreview from "@site/static/img/price.png";
 // @ts-ignore
-import cmsPreview from "@site/static/img/editing.mp4";
+import cmsPreviewVideo from "@site/static/img/editing.mp4";
+// @ts-ignore
+import customFieldVideo from "@site/static/img/custom_fields.mp4";
 
 import useThemeContext from "@theme/hooks/useThemeContext";
 
@@ -27,84 +29,6 @@ import {
 function Features() {
 
     const { isDarkTheme } = useThemeContext();
-
-    const tab0 = (
-        <div className={"p-4"}>
-            <video className={"rounded-xl shadow-md border-gray-200"}
-                   width="100%" loop autoPlay muted>
-                <source src={cmsPreview}
-                        type="video/mp4"/>
-            </video>
-        </div>
-    );
-
-    const tab1 = (
-        <div
-            className="relative flex-col font-mono">
-
-            <SyntaxHighlighter
-                language={"typescript"}
-                showLineNumbers={false}
-                style={isDarkTheme ? vs2015 : atomOneLight}
-            >
-                {
-                    `const price = buildProperty({
-    title: "Price",
-    description: "Price with range validation",
-    dataType: "number",
-    validation: {
-        required: true,
-        requiredMessage:
-         "You must set a price between 0 and 1000",
-        min: 0,
-        max: 1000
-    }
-});`}
-            </SyntaxHighlighter>
-            <div
-                className={"p-1 flex justify-center"}>
-                <img
-                    className=""
-                    src={pricePreview}
-                    width="500"
-                    alt="Element"
-                />
-            </div>
-        </div>
-    );
-
-    const tab2 = (
-        <div
-            className="relative flex-col font-mono">
-            <SyntaxHighlighter
-                language={"typescript"}
-                showLineNumbers={false}
-                style={isDarkTheme ? vs2015 : atomOneLight}
-            >
-                {`const productSchema: EntitySchema = buildSchema({
-    name: "Product",
-    onPreSave: ({ values }) => {
-        values.uppercase = values.name.toUpperCase();
-        return values;
-    },
-    properties: {
-        name: {
-            dataType: "string",
-            title: "Name"
-        },
-        uppercase: {
-            dataType: "string",
-            title: "Uppercase Name",
-            readOnly: true
-        }
-    },
-    defaultValues: {
-        name: "Default name",
-    }
-});`}
-            </SyntaxHighlighter>
-        </div>
-    );
 
     return (
         <section className="relative">
@@ -138,7 +62,14 @@ function Features() {
                             <div
                                 className="relative flex flex-col">
 
-                                {tab0}
+                                <div className={"p-4"}>
+                                    <video
+                                        className={"rounded-xl shadow-md border-gray-200"}
+                                        width="100%" loop autoPlay muted>
+                                        <source src={cmsPreviewVideo}
+                                                type="video/mp4"/>
+                                    </video>
+                                </div>
 
                             </div>
                         </div>
@@ -159,7 +90,38 @@ function Features() {
                             <div
                                 className="relative flex flex-col">
 
-                                {tab1}
+                                <div
+                                    className="relative flex-col font-mono">
+
+                                    <SyntaxHighlighter
+                                        language={"typescript"}
+                                        showLineNumbers={false}
+                                        style={isDarkTheme ? vs2015 : atomOneLight}
+                                    >
+                                        {
+                                            `const price = buildProperty({
+    title: "Price",
+    description: "Price with range validation",
+    dataType: "number",
+    validation: {
+        required: true,
+        requiredMessage:
+         "You must set a price between 0 and 1000",
+        min: 0,
+        max: 1000
+    }
+});`}
+                                    </SyntaxHighlighter>
+                                    <div
+                                        className={"p-1 flex justify-center"}>
+                                        <img
+                                            className=""
+                                            src={pricePreview}
+                                            width="500"
+                                            alt="Element"
+                                        />
+                                    </div>
+                                </div>
 
                             </div>
 
@@ -171,12 +133,13 @@ function Features() {
                             data-aos-delay="190"
                         >
                             <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
-                                <h3 className="md:text-right h3 mb-3">Easy schema
-                                    definition</h3>
+                                <h3 className="md:text-right h3 mb-3">
+                                    Easy schema definition
+                                </h3>
                                 <p className="md:text-right text-xl text-gray-600">
                                     Define your entity schemas and choose from
-                                    multiple
-                                    form widgets and validation options.
+                                    multiple form widgets and validation
+                                    options.
                                 </p>
                             </div>
                         </div>
@@ -194,11 +157,18 @@ function Features() {
                             data-aos-delay="120"
                         >
                             <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
-                                <h3 className="h3 mb-3">Customization</h3>
+                                <h3 className="h3 mb-3">Built for every
+                                    project</h3>
                                 <p className="text-xl text-gray-600">
-                                    Integrate your own custom form fields as
-                                    React components,
-                                    value previews or save callbacks.
+                                    FireCMS a CMS built to work with every
+                                    existing
+                                    Firebase/Firestore project. It does not
+                                    enforce
+                                    any data structure.
+                                </p>
+                                <p className="text-xl text-gray-600">
+                                    Use the integrated hooks and callbacks to
+                                    integrate your business logic in multiple ways.
                                 </p>
                             </div>
 
@@ -212,8 +182,89 @@ function Features() {
                             <div
                                 className="relative flex flex-col">
 
-                                {tab2}
+                                <div
+                                    className="relative flex-col font-mono">
+                                    <SyntaxHighlighter
+                                        language={"typescript"}
+                                        showLineNumbers={false}
+                                        style={isDarkTheme ? vs2015 : atomOneLight}
+                                    >
+                                        {`const productSchema: EntitySchema = buildSchema({
+    name: "Product",
+    onPreSave: ({ values }) => {
+        values.uppercase = values.name.toUpperCase();
+        return values;
+    },
+    properties: {
+        name: {
+            dataType: "string",
+            title: "Name"
+        },
+        uppercase: {
+            dataType: "string",
+            title: "Uppercase Name",
+            readOnly: true
+        }
+    },
+    defaultValues: {
+        name: "Default name",
+    }
+});`}
+                                    </SyntaxHighlighter>
+                                </div>
 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+                <div className="pt-12 md:pt-20">
+
+                    <div
+                        className="flex flex-col-reverse md:grid md:grid-cols-12 md:gap-6">
+                        <div
+                            className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6"
+                            data-aos="fade-right"
+                            data-aos-delay="120"
+                        >
+                            <div className={"p-4"}>
+                                <video
+                                    className={"rounded-xl shadow-md border-gray-200"}
+                                    width="100%" loop autoPlay muted>
+                                    <source src={customFieldVideo}
+                                            type="video/mp4"/>
+                                </video>
+                            </div>
+
+                        </div>
+
+                        <div
+                            className="flex items-center max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 md:order-1"
+                            data-aos="fade-left"
+                            data-aos-delay="220"
+                        >
+                            <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
+                                <h3 className="md:text-right h3 mb-3">
+                                    Plenty of room for customization
+                                </h3>
+                                <p className="md:text-right text-xl text-gray-600">
+                                    "Our CMS must allow developers to extend it
+                                    in any way they need, while
+                                    keeping it extremely simple to kickstart a
+                                    new project, with the bare minimum
+                                    configuration. We need <b>sensible defaults
+                                    that can be overridden or extended</b>"
+                                </p>
+                                <p className="md:text-right text-xl text-gray-600">
+                                    Integrate your own custom form fields as
+                                    React components, as well as preview
+                                    widgets.
+                                    You can also define complete views related
+                                    to your entities or in the main navigation.
+                                </p>
                             </div>
                         </div>
                     </div>
