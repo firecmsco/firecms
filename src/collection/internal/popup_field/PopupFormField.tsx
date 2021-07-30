@@ -103,8 +103,6 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                                                                              usedPropertyBuilder,
                                                                              onCellValueChange
                                                                          }: PopupFormFieldProps<S, Key>) {
-    console.log(property, cellRect);
-
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     // const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
