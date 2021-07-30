@@ -25,13 +25,11 @@
         "postcss-import": "^12.0.0",
         "postprocessing": "^6.19.1",
         "react": "^16.8.4",
-        "react-code-blocks": "^0.0.8",
         "react-dom": "^16.8.4",
+        "react-syntax-highlighter": "^15.4.4",
         "react-transition-group": "^4.4.1",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat",
         "three": "^0.126.1",
-        "three-bas": "^2.12.0",
-        "three-buffer-geometry-utils": "^1.0.0",
         "ts-easing": "^0.2.0"
     },
     "browserslist": {

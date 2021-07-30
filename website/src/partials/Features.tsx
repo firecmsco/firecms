@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import Transition from "./utils/Transition";
+import React from "react";
 
 // @ts-ignore
 import featuresBg from "@site/static/img/features-bg.png";
@@ -17,54 +16,17 @@ import pricePreview from "@site/static/img/price.png";
 // @ts-ignore
 import cmsPreview from "@site/static/img/editing.mp4";
 
-import { atomOneLight, CodeBlock, vs2015 } from "react-code-blocks";
 import useThemeContext from "@theme/hooks/useThemeContext";
+
+import SyntaxHighlighter from "react-syntax-highlighter";
+import {
+    atomOneLight,
+    vs2015
+} from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 function Features() {
 
     const { isDarkTheme } = useThemeContext();
-    const [tab, setTab] = useState(0);
-
-    const tabsRef = useRef<any>();
-
-    const heightFix = () => {
-        if (tabsRef.current && tabsRef.current.children[tab]) {
-            // @ts-ignore
-            tabsRef.current.style.height = tabsRef.current.children[tab].offsetHeight + "px";
-        }
-    };
-    useEffect(() => {
-        heightFix();
-    }, [tab]);
-
-    function buildFeature(title: string, text: string, icon: React.ReactNode, thisTab: number) {
-        return <div
-            className={`flex items-center text-black text-lg p-5 rounded border transition duration-300 ease-in-out mb-3 cursor-pointer ${
-                tab !== thisTab
-                    ? "bg-white shadow-md border-gray-200 hover:shadow-lg"
-                    : "bg-gray-200 border-transparent"
-            }`}
-            onClick={e => {
-                e.preventDefault();
-                setTab(thisTab);
-            }}
-        >
-            <div>
-                <div
-                    className="font-bold leading-snug tracking-tight mb-1">
-                    {title}
-                </div>
-                <div className="text-gray-600">
-                    {text}
-                </div>
-            </div>
-            <div
-                className="flex justify-center items-center w-8 h-8 bg-white rounded-full shadow flex-shrink-0 ml-3">
-                {icon}
-            </div>
-        </div>;
-    }
-
 
     const tab0 = (
         <div className={"p-4"}>
@@ -80,8 +42,13 @@ function Features() {
         <div
             className="relative flex-col font-mono">
 
-            <CodeBlock
-                text={`const price = buildProperty({
+            <SyntaxHighlighter
+                language={"typescript"}
+                showLineNumbers={false}
+                style={isDarkTheme ? vs2015 : atomOneLight}
+            >
+                {
+                    `const price = buildProperty({
     title: "Price",
     description: "Price with range validation",
     dataType: "number",
@@ -92,14 +59,8 @@ function Features() {
         min: 0,
         max: 1000
     }
-});
-`
-                }
-                language={"typescript"}
-                showLineNumbers={false}
-                theme={isDarkTheme ? vs2015 : atomOneLight}
-            />
-
+});`}
+            </SyntaxHighlighter>
             <div
                 className={"p-1 flex justify-center"}>
                 <img
@@ -115,8 +76,12 @@ function Features() {
     const tab2 = (
         <div
             className="relative flex-col font-mono">
-            <CodeBlock
-                text={`const productSchema: EntitySchema = buildSchema({
+            <SyntaxHighlighter
+                language={"typescript"}
+                showLineNumbers={false}
+                style={isDarkTheme ? vs2015 : atomOneLight}
+            >
+                {`const productSchema: EntitySchema = buildSchema({
     name: "Product",
     onPreSave: ({ values }) => {
         values.uppercase = values.name.toUpperCase();
@@ -136,112 +101,118 @@ function Features() {
     defaultValues: {
         name: "Default name",
     }
-});
-`
-                }
-                language={"typescript"}
-                showLineNumbers={false}
-                theme={isDarkTheme ? vs2015 : atomOneLight}
-            />
+});`}
+            </SyntaxHighlighter>
         </div>
     );
 
     return (
         <section className="relative">
+            <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+                <div className="pt-12 md:pt-20">
+
+                    <div className="md:grid md:grid-cols-12 md:gap-6">
+                        <div
+                            className="flex items-center max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6"
+                            data-aos="fade-right"
+                        >
+                            <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
+                                <h3 className="h3 mb-3">Powerful editing</h3>
+                                <p className="text-xl text-gray-600">
+                                    Map your collections and document schemas to
+                                    beautiful tables and forms
+                                </p>
+                                <p className="text-xl text-gray-600">
+                                    Edit your collections and entities using
+                                    both a spreadsheet
+                                    view and powerful forms.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div
+                            className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 md:order-1"
+                            data-aos="fade-left"
+                        >
+                            <div
+                                className="relative flex flex-col">
+
+                                {tab0}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+                <div className="pt-12 md:pt-20">
+
+                    <div
+                        className="flex flex-col-reverse md:grid md:grid-cols-12 md:gap-6">
+                        <div
+                            className=" max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6"
+                            data-aos="fade-right"
+                            data-aos-delay="90"
+                        >
+                            <div
+                                className="relative flex flex-col">
+
+                                {tab1}
+
+                            </div>
+
+                        </div>
+
+                        <div
+                            className="flex items-center max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 md:order-1"
+                            data-aos="fade-left"
+                            data-aos-delay="190"
+                        >
+                            <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
+                                <h3 className="md:text-right h3 mb-3">Easy schema
+                                    definition</h3>
+                                <p className="md:text-right text-xl text-gray-600">
+                                    Define your entity schemas and choose from
+                                    multiple
+                                    form widgets and validation options.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
                 <div className="pt-12 md:pt-20">
 
                     <div className="md:grid md:grid-cols-12 md:gap-6">
                         <div
-                            className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6"
+                            className="flex items-center max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6"
                             data-aos="fade-right"
+                            data-aos-delay="120"
                         >
                             <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
-                                <h3 className="h3 mb-3">Ready out of the
-                                    box</h3>
+                                <h3 className="h3 mb-3">Customization</h3>
                                 <p className="text-xl text-gray-600">
-                                    Map your collections and document schemas to
-                                    beautiful tables and forms
+                                    Integrate your own custom form fields as
+                                    React components,
+                                    value previews or save callbacks.
                                 </p>
                             </div>
 
-                            <div className="mb-8 md:mb-0">
-
-
-                                {buildFeature("Powerful editing",
-                                    `
-                    Edit your collections and entities using both a spreadsheet
-                    view and powerful forms.
-                                `,
-                                    arrowIcon, 0)}
-
-                                {buildFeature("Easy schema definition",
-                                    `
-                    Define your entity schemas and choose from multiple
-                    form widgets and validation options.
-                                `,
-                                    lightningIcon, 1)}
-
-                                {buildFeature("Customization",
-                                    `
-                    Integrate your own custom form fields as React components,
-                    value previews or save callbacks.
-                                `,
-                                    settingsIcon, 2)}
-
-                            </div>
                         </div>
 
                         <div
                             className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 md:order-1"
-                            data-aos="zoom-y-out"
-                            ref={tabsRef}
+                            data-aos="fade-left"
+                            data-aos-delay="220"
                         >
                             <div
                                 className="relative flex flex-col">
 
-                                <Transition
-                                    show={tab === 0}
-                                    appear={true}
-                                    className="w-full"
-                                    enter="transition ease-in-out duration-700 transform order-first"
-                                    enterStart="opacity-0 translate-y-16"
-                                    enterEnd="opacity-100 translate-y-0"
-                                    leave="transition ease-in-out duration-300 transform absolute"
-                                    leaveStart="opacity-100 translate-y-0"
-                                    leaveEnd="opacity-0 -translate-y-16"
-                                >
-                                    {tab0}
-                                </Transition>
-
-                                <Transition
-                                    show={tab === 1}
-                                    appear={true}
-                                    className="w-full"
-                                    enter="transition ease-in-out duration-700 transform order-first"
-                                    enterStart="opacity-0 translate-y-16"
-                                    enterEnd="opacity-100 translate-y-0"
-                                    leave="transition ease-in-out duration-300 transform absolute"
-                                    leaveStart="opacity-100 translate-y-0"
-                                    leaveEnd="opacity-0 -translate-y-16"
-                                >
-                                    {tab1}
-                                </Transition>
-
-                                <Transition
-                                    show={tab === 2}
-                                    appear={true}
-                                    className="w-full"
-                                    enter="transition ease-in-out duration-700 transform order-first"
-                                    enterStart="opacity-0 translate-y-16"
-                                    enterEnd="opacity-100 translate-y-0"
-                                    leave="transition ease-in-out duration-300 transform absolute"
-                                    leaveStart="opacity-100 translate-y-0"
-                                    leaveEnd="opacity-0 -translate-y-16"
-                                >
-                                    {tab2}
-                                </Transition>
+                                {tab2}
 
                             </div>
                         </div>
