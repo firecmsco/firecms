@@ -42,7 +42,7 @@ a.btn {
     text-decoration: none;
 }
 
-pre{
+.custom-code-block pre{
     overflow: inherit !important;
 }
 

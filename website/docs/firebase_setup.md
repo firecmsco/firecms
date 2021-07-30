@@ -8,7 +8,9 @@ In order to run **FireCMS**, you need to create a Firebase project first, with
 some requirements:
 
 ### Firestore
-You need to enable **Firestore** in it.
+You need to enable **Firestore** in it. You can initialise the security rules
+in test mode to allow reads and writes, but you are encouraged to write rules
+that are suited for your domain.
 
 ### Web app
 In the project settings, you need to create a **Web app** within your

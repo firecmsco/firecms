@@ -83,23 +83,21 @@ function Features() {
                     <div
                         className="flex flex-col-reverse md:grid md:grid-cols-12 md:gap-6">
                         <div
-                            className=" max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6"
+                            className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6"
                             data-aos="fade-right"
                             data-aos-delay="90"
                         >
+
                             <div
-                                className="relative flex flex-col">
+                                className="custom-code-block relative flex-col font-mono">
 
-                                <div
-                                    className="relative flex-col font-mono">
-
-                                    <SyntaxHighlighter
-                                        language={"typescript"}
-                                        showLineNumbers={false}
-                                        style={isDarkTheme ? vs2015 : atomOneLight}
-                                    >
-                                        {
-                                            `const price = buildProperty({
+                                <SyntaxHighlighter
+                                    language={"typescript"}
+                                    showLineNumbers={false}
+                                    style={isDarkTheme ? vs2015 : atomOneLight}
+                                >
+                                    {
+                                        `const price = buildProperty({
     title: "Price",
     description: "Price with range validation",
     dataType: "number",
@@ -111,19 +109,18 @@ function Features() {
         max: 1000
     }
 });`}
-                                    </SyntaxHighlighter>
-                                    <div
-                                        className={"p-1 flex justify-center"}>
-                                        <img
-                                            className=""
-                                            src={pricePreview}
-                                            width="500"
-                                            alt="Element"
-                                        />
-                                    </div>
+                                </SyntaxHighlighter>
+                                <div
+                                    className={"p-1 flex justify-center"}>
+                                    <img
+                                        className=""
+                                        src={pricePreview}
+                                        width="500"
+                                        alt="Element"
+                                    />
                                 </div>
-
                             </div>
+
 
                         </div>
 
@@ -168,7 +165,8 @@ function Features() {
                                 </p>
                                 <p className="text-xl text-gray-600">
                                     Use the integrated hooks and callbacks to
-                                    integrate your business logic in multiple ways.
+                                    integrate your business logic in multiple
+                                    ways.
                                 </p>
                             </div>
 
@@ -183,7 +181,7 @@ function Features() {
                                 className="relative flex flex-col">
 
                                 <div
-                                    className="relative flex-col font-mono">
+                                    className="custom-code-block relative flex-col font-mono">
                                     <SyntaxHighlighter
                                         language={"typescript"}
                                         showLineNumbers={false}
