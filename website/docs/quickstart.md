@@ -30,10 +30,25 @@ cd my-cms
 yarn add @camberi/firecms firebase @material-ui/core @material-ui/icons @material-ui/pickers @material-ui/lab
 ```
 
+You will need to init Firebase, either with an existing project or a new one:
+
+```
+firebase init
+```
+
+:::note
+You don't need to enable any of the services, besides Firebase Hosting if you
+would like to deploy it there. Check the [Deployment to Firebase Hosting](deployment.md)
+section if you need additional support
+:::
+
 You can replace the content of the file App.tsx with the following sample code.
 
 Remember to **replace** the Firebase config with the one you get after creating
 a webapp in the Firebase console.
+
+If you don't know where to find the Firebase app config, check the
+[Firesbase setup](firebase_setup.md) section
 
 ```tsx
 import React from "react";
