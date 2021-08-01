@@ -48,7 +48,7 @@ Remember to **replace** the Firebase config with the one you get after creating
 a webapp in the Firebase console.
 
 If you don't know where to find the Firebase app config, check the
-[Firesbase setup](firebase_setup.md) section
+[Firebase setup](firebase_setup.md) section
 
 ```tsx
 import React from "react";

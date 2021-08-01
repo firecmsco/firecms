@@ -41,7 +41,21 @@ function Features() {
                             data-aos="fade-right"
                         >
                             <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
-                                <h3 className="h3 mb-3">Powerful editing</h3>
+
+                                <div className={"flex items-center mb-3"}>
+
+                                    <div
+                                        className="flex items-center justify-center text-white w-8 h-8 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                                        {lightningIcon}
+                                    </div>
+
+                                    <h3 className="h3 m-0">
+                                        Powerful editing
+                                    </h3>
+
+                                </div>
+
+
                                 <p className="text-xl text-gray-600">
                                     Map your collections and document schemas to
                                     beautiful tables and forms
@@ -130,9 +144,20 @@ function Features() {
                             data-aos-delay="190"
                         >
                             <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
-                                <h3 className="md:text-right h3 mb-3">
-                                    Easy schema definition
-                                </h3>
+
+                                <div
+                                    className={"flex justify-end items-center mb-3"}>
+
+                                    <h3 className="h3 m-0 mr-3 md:text-right ">
+                                        Easy schema definition
+                                    </h3>
+
+                                    <div
+                                        className="flex items-center justify-center text-white w-8 h-8 bg-gray-800 rounded-full shadow flex-shrink-0 ">
+                                        {arrowIcon}
+                                    </div>
+                                </div>
+
                                 <p className="md:text-right text-xl text-gray-600">
                                     Define your entity schemas and choose from
                                     multiple form widgets and validation
@@ -154,8 +179,18 @@ function Features() {
                             data-aos-delay="120"
                         >
                             <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
-                                <h3 className="h3 mb-3">Built for every
-                                    project</h3>
+                                <div className={"flex items-center mb-3"}>
+
+                                    <div
+                                        className="flex items-center justify-center text-white w-8 h-8 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                                        {tickIcon}
+                                    </div>
+
+                                    <h3 className="h3 m-0">
+                                        Built for every project
+                                    </h3>
+
+                                </div>
                                 <p className="text-xl text-gray-600">
                                     FireCMS a CMS built to work with every
                                     existing
@@ -245,16 +280,27 @@ function Features() {
                             data-aos-delay="220"
                         >
                             <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
-                                <h3 className="md:text-right h3 mb-3">
-                                    Plenty of room for customization
-                                </h3>
+
+                                <div
+                                    className={"flex justify-end items-center mb-3"}>
+
+                                    <h3 className="h3 m-0 mr-3 md:text-right ">
+                                        Plenty of room for customization
+                                    </h3>
+
+                                    <div
+                                        className="flex items-center justify-center text-white w-8 h-8 bg-gray-800 rounded-full shadow flex-shrink-0 ">
+                                        {settingsIcon}
+                                    </div>
+                                </div>
+
                                 <p className="md:text-right text-xl text-gray-600">
-                                    "Our CMS must allow developers to extend it
+                                    FireCMS allows developers to extend it
                                     in any way they need, while
                                     keeping it extremely simple to kickstart a
                                     new project, with the bare minimum
-                                    configuration. We need <b>sensible defaults
-                                    that can be overridden or extended</b>"
+                                    configuration. We use <b>sensible defaults
+                                    that can be overridden or extended</b>.
                                 </p>
                                 <p className="md:text-right text-xl text-gray-600">
                                     Integrate your own custom form fields as
@@ -293,8 +339,17 @@ const arrowIcon = <svg
     />
 </svg>;
 
+const tickIcon = <svg width="16px" height="16px" viewBox="0 0 20 15" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="check_black_24dp" transform="translate(-2.000000, -5.000000)">
+            <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>
+            <polygon id="Path" fill="#FFFFFF" fill-rule="nonzero" points="9 14.9813787 5.38451728 11.363324 2.88437331 13.9911209 9 20.002627 21.509993 7.55223468 19.0392011 4.9604079"></polygon>
+        </g>
+    </g>
+</svg>;
+
 const settingsIcon = <svg xmlns="http://www.w3.org/2000/svg" height="24px"
-                          viewBox="0 0 24 24" width="16px" fill="#000000">
+                          viewBox="0 0 24 24" width="16px" fill="#FFFFFF">
     <g>
         <path d="M0,0h24v24H0V0z" fill="none"/>
         <path
