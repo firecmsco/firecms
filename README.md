@@ -2,7 +2,7 @@
 
 # FireCMS
 
-> Awesome Firestore based headless CMS, developed by Camberi
+> Awesome Firestore-based headless CMS, developed by Camberi
 
 FireCMS is a headless CMS and admin panel based on Firebase, built by developers
 for developers. It generates CRUD views based on your configuration. You define
@@ -101,7 +101,7 @@ every feature provided by this CMS.
 If you need general support you can open a GitHub issue or ask you question on
 [Reddit](https://www.reddit.com/r/firecms/)
 
-Do you need consulting setting up your Firestore based CMS in no time?
+Do you need consulting setting up your Firestore-based CMS in no time?
 We are happy to help!
 `hello@camberi.com`
 

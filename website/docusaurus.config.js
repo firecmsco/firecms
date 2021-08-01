@@ -30,6 +30,10 @@ module.exports = {
         ]
     ],
     themeConfig: {
+        colorMode:{
+            defaultMode: 'dark',
+            respectPrefersColorScheme: false,
+        },
         navbar: {
             title: 'FireCMS',
             logo: {

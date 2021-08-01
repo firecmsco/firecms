@@ -24,7 +24,7 @@ function HeroHome({}) {
 
             <BrowserOnly
                 fallback={fallback}>
-                {() =>(
+                {() => (
                     <Suspense fallback={fallback}>
                         <LazyThreeJSAnimationShader/>
                     </Suspense>
@@ -44,8 +44,8 @@ function HeroHome({}) {
                         // }}
                     >
                             <span
-                                className="block">Your Firestore</span>
-                        <span className="block">based</span>
+                                className="block">Your</span>
+                        <span className="block">Firestore-based</span>
                     </div>
 
                     <div
