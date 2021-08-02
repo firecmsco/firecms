@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.46.0] - 2021-08-02
+
+### Added
+
+- `collectionPath` and `context` to `ExtraActionsParams`
+- Green border indicator on collection tables to indicate that the value
+was saved successfully in Firestore.
+
+
 ## [0.45.0] - 2021-07-19
 
 ### Added
