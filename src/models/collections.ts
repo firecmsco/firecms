@@ -151,13 +151,31 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
 }
 
 /**
+ * Parameter passed to the `extraActions` builder in the collection configuration
  *
  * @category Collections
  */
 export type ExtraActionsParams<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>> = {
-    collection: EntityCollection,
-    selectedEntities?: Entity<S, Key>[]
+    /**
+     * Collection path of this entity
+     */
+    collectionPath: string;
+
+    /**
+     * The collection configuration
+     */
+    collection: EntityCollection;
+
+    /**
+     * The entities currently selected in this collection
+     */
+    selectedEntities?: Entity<S, Key>[];
+
+    /**
+     * Context of the app status
+     */
+    context: CMSAppContext;
 };
 
 
