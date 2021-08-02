@@ -48,7 +48,7 @@ export interface PropertyTableCellProps<T extends CMSType, S extends EntitySchem
 /**
  * Props passed in a callback when the content of a cell in a table has been edited
  */
-export type OnCellChangeParams<T> = { value: T, name: string, setError: (e: Error) => void };
+export type OnCellChangeParams<T> = { value: T, name: string, setError: (e: Error) => void, setSaved: (saved: boolean) => void };
 
 const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key extends string>({
                                                                                                    selected,
@@ -77,6 +77,7 @@ const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key e
     });
 
     const [error, setError] = useState<Error | undefined>();
+    const [saved, setSaved] = useState<boolean>(false);
 
     const customField = Boolean(property.config?.field);
     const customPreview = Boolean(property.config?.preview);
@@ -109,16 +110,19 @@ const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key e
     useEffect(
         () => {
             if (!deepEqual(value, internalValue)) {
+                setSaved(false);
                 validation
                     .validate(internalValue)
                     .then(() => {
                         setError(undefined);
-                        if (onValueChange)
+                        if (onValueChange) {
                             onValueChange({
                                 value: internalValue,
                                 name,
-                                setError
+                                setError,
+                                setSaved
                             });
+                        }
                     })
                     .catch((e) => {
                         console.error(e);
@@ -295,6 +299,7 @@ const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key e
             disabled={disabled || readOnly}
             disabledTooltip={disabledTooltip ?? "Disabled"}
             size={size}
+            saved={saved}
             error={error}
             align={align}
             allowScroll={allowScroll}

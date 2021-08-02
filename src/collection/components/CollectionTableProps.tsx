@@ -146,6 +146,7 @@ export type OnCellValueChangeParams<T, S extends EntitySchema<Key>, Key extends 
     value: T,
     name: string,
     entity: Entity<S, Key>,
+    setSaved: (saved: boolean) => void
     setError: (e: Error) => void
 };
 

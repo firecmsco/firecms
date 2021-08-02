@@ -15,7 +15,7 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
         height: "100%",
         flexGrow: 1
     },
-    headerTypography:{
+    headerTypography: {
         color: "rgba(0,0,0,0.55)",
         fontSize: "0.750rem",
         textTransform: "uppercase",
@@ -104,7 +104,11 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
         },
         selected: {
             backgroundColor: "#f9f9f9",
-            border: "2px solid #5E9ED6"
+            border: "2px solid #5E9ED6",
+            transition: "border-color 300ms ease-in-out",
+        },
+        saved: {
+            border: `2px solid ${theme.palette.success.main}`
         },
         disabled: {
             alpha: 0.8

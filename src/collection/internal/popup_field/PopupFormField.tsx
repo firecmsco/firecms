@@ -205,7 +205,9 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                 value: values[name],
                 name: name,
                 entity,
-                setError: setSavingError
+                setError: setSavingError,
+                setSaved: () => {
+                }
             });
         }
         return Promise.resolve();

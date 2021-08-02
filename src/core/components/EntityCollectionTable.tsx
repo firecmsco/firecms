@@ -166,6 +166,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     const onCellChanged: OnCellValueChange<any, S, Key> = ({
                                                                value,
                                                                name,
+                                                               setSaved,
                                                                setError,
                                                                entity
                                                            }) => saveEntity({
@@ -177,6 +178,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             },
             schema: collectionConfig.schema,
             status: "existing",
+            onSaveSuccess: () => setSaved(true),
             onSaveFailure: ((e: Error) => {
                 setError(e);
             }),
