@@ -12,6 +12,7 @@ import { getRowHeight } from "../common";
 interface TableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
     children: React.ReactNode;
     disabled: boolean;
+    saved?: boolean;
     error?: Error;
     allowScroll?: boolean;
     disabledTooltip?: string;
@@ -29,6 +30,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                                            disabled,
                                                                            disabledTooltip,
                                                                            size,
+                                                                           saved,
                                                                            error,
                                                                            align,
                                                                            allowScroll,
@@ -39,10 +41,12 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     const ref = React.createRef<HTMLDivElement>();
 
+
     const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
     const maxHeight = useMemo(() => getRowHeight(size), [size]);
 
     const [onHover, setOnHover] = useState(false);
+    const [internalSaved, setInternalSaved] = useState(saved);
 
     const iconRef = React.createRef<HTMLButtonElement>();
     useEffect(() => {
@@ -50,6 +54,24 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
             iconRef.current.focus({ preventScroll: true });
         }
     }, [focused]);
+
+    useEffect(() => {
+        if (internalSaved != saved) {
+            if (saved) {
+                setInternalSaved(true);
+            } else {
+                setInternalSaved(true);
+            }
+        }
+        const removeSavedState = () => {
+            setInternalSaved(false);
+        };
+        const handler = setTimeout(removeSavedState, 500);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [saved]);
 
     const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (event.detail == 3) {
@@ -115,6 +137,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                 {
                     [cellClasses.disabled]: disabled,
                     [cellClasses.error]: error,
+                    [cellClasses.saved]: selected && internalSaved,
                     [cellClasses.selected]: !error && selected || focused
                 })}>
 
@@ -137,11 +160,13 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                 fontSize: "14px"
             }}>
                 <Tooltip title={disabledTooltip}>
-                    <RemoveCircleIcon color={"disabled"} fontSize={"inherit"}/>
+                    <RemoveCircleIcon color={"disabled"}
+                                      fontSize={"inherit"}/>
                 </Tooltip>
             </div>}
 
-            {(error || showExpandIcon) && <div className={cellClasses.iconsTop}>
+            {(error || showExpandIcon) &&
+            <div className={cellClasses.iconsTop}>
 
                 {selected && !disabled && showExpandIcon &&
                 <IconButton
