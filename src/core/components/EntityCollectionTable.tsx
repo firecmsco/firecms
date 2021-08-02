@@ -112,7 +112,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                                 collectionPath: collectionPath,
                                 entityId: entity.id,
                                 selectedSubpath: subcollection.relativePath,
-                                permissions: subcollection.permissions,
+                                permissions: collectionConfig.permissions,
                                 schema: collectionConfig.schema,
                                 subcollections: collectionConfig.subcollections,
                                 overrideSchemaResolver: false
@@ -163,12 +163,12 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         return inlineEditing;
     };
 
-    const onCellChanged:OnCellValueChange<any, S, Key> = ({
-                               value,
-                               name,
-                               setError,
-                               entity
-                           }) => saveEntity({
+    const onCellChanged: OnCellValueChange<any, S, Key> = ({
+                                                               value,
+                                                               name,
+                                                               setError,
+                                                               entity
+                                                           }) => saveEntity({
             collectionPath: collectionPath,
             id: entity.id,
             values: {
@@ -214,7 +214,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                     overflow: "hidden",
                     maxWidth: "160px",
                     direction: "rtl",
-                    textAlign: "left",
+                    textAlign: "left"
                 }}
                 variant={"caption"}
                 color={"textSecondary"}>
@@ -274,7 +274,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         const isSelected = selectedEntities.indexOf(entity) > -1;
 
         const createEnabled = canCreate(collectionConfig.permissions, authController, collectionPath, context);
-        const editEnabled = canEdit(collectionConfig.permissions, entity, authController, collectionPath,context);
+        const editEnabled = canEdit(collectionConfig.permissions, entity, authController, collectionPath, context);
         const deleteEnabled = canDelete(collectionConfig.permissions, entity, authController, collectionPath, context);
 
         const onCopyClicked = (entity: Entity<S, Key>) => sideEntityController.open({
@@ -372,8 +372,10 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             </Tooltip>;
 
         const extraActions = collectionConfig.extraActions ? collectionConfig.extraActions({
+            collectionPath: collectionPath,
             collection: collectionConfig,
-            selectedEntities
+            selectedEntities,
+            context
         }) : undefined;
 
         const exportButton = exportable &&
