@@ -82,38 +82,38 @@ function HomeRoute({
         return (
             <Grid item xs={12} sm={6} md={4}
                   key={`nav_${entry.group}_${entry.name}`}>
-                <Card elevation={0}
-                      className={classes.card}>
-
-                    <CardContent
-                        className={classes.flexGrow}>
-
-                        <PlaylistPlayIcon color={"disabled"}/>
-                        <Typography gutterBottom variant="h5"
-                                    component="h2">
-                            {entry.name}
-                        </Typography>
-
-                        {entry.description && <Typography variant="body2"
-                                                          color="textSecondary"
-                                                          component="div">
-                            <ReactMarkdown>{entry.description}</ReactMarkdown>
-                        </Typography>}
-                    </CardContent>
+                <Card elevation={0}>
 
                     <CardActionArea
-                        style={{
-                            display: "flex",
-                            backgroundColor: "rgb(0 0 0 / 2%)",
-                            flexDirection: "column",
-                            alignItems: "flex-end"
-                        }}
+                        className={classes.card}
                         component={ReactLink}
                         to={entry.url}>
+                        <CardContent
+                            className={classes.flexGrow}>
+
+                            <PlaylistPlayIcon color={"disabled"}/>
+                            <Typography gutterBottom variant="h5"
+                                        component="h2">
+                                {entry.name}
+                            </Typography>
+
+                            {entry.description && <Typography variant="body2"
+                                                              color="textSecondary"
+                                                              component="div">
+                                <ReactMarkdown
+                                    components={{
+                                        a: (props) => <a {...props}
+                                                         onClick={(e) => e.stopPropagation()}
+                                                         target="_blank">{props.children}</a>
+                                    }}
+                                >{entry.description}</ReactMarkdown>
+                            </Typography>}
+                        </CardContent>
+
                         <CardActions style={{ alignSelf: "flex-end" }}>
-                            <IconButton color="primary">
-                                <ArrowForwardIcon/>
-                            </IconButton>
+                            <Box p={1} >
+                                <ArrowForwardIcon color="primary" />
+                            </Box>
                         </CardActions>
 
                     </CardActionArea>
