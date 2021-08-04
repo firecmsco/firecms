@@ -6,7 +6,7 @@ import {
     FormHelperText,
     Paper
 } from "@material-ui/core";
-import React from "react";
+import React, { useMemo } from "react";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "../components/ArrayContainer";
 import { ReferencePreview } from "../../preview";
@@ -57,7 +57,10 @@ export default function ArrayOfReferencesField({
     });
 
     const schemaRegistry = useSchemasRegistry();
-    const collectionConfig = schemaRegistry.getCollectionConfig(ofProperty.collectionPath);
+    const collectionConfig = useMemo(() => {
+        return schemaRegistry.getCollectionConfig(ofProperty.collectionPath);
+    }, [ofProperty.collectionPath]);
+
     if (!collectionConfig) {
         console.error(`Couldn't find the corresponding collection view for the path: ${ofProperty.collectionPath}`);
     }

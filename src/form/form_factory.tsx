@@ -215,7 +215,7 @@ function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySc
                     value,
                     initialValue,
                     setValue: (value: T | null) => {
-                        fieldProps.form.setFieldTouched(name);
+                        fieldProps.form.setFieldTouched(name, true, false);
                         fieldProps.form.setFieldValue(name, value);
                     },
                     error,

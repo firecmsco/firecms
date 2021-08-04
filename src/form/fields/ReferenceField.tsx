@@ -152,7 +152,6 @@ export default function ReferenceField<S extends EntitySchema<Key>,
 
     function buildEntityView(schema?: EntitySchema) {
 
-
         const missingEntity = entity && !entity.values;
 
         let body: JSX.Element;
