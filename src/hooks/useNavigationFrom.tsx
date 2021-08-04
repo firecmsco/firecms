@@ -1,4 +1,9 @@
-import { Entity, EntityCollection, fetchEntity } from "../models";
+import {
+    Entity,
+    EntityCollection,
+    EntityCustomView,
+    fetchEntity
+} from "../models";
 import { getNavigationEntriesFromPathInternal } from "../core/navigation";
 import { useEffect, useState } from "react";
 import { CMSAppContext, useCMSAppContext } from "../contexts/CMSAppContext";
@@ -6,7 +11,10 @@ import { CMSAppContext, useCMSAppContext } from "../contexts/CMSAppContext";
 /**
  * @ignore
  */
-export type NavigationEntry = NavigationEntity | NavigationCollection;
+export type NavigationEntry =
+    NavigationEntity
+    | NavigationCollection
+    | NavigationCustom;
 
 /**
  * @ignore
@@ -30,8 +38,17 @@ export type NavigationCollection = {
 };
 
 /**
+ * @ignore
+ */
+interface NavigationCustom {
+    type: "custom_view";
+    fullPath: string;
+    view: EntityCustomView;
+}
+
+/**
  * Use this function to retrieve an array of navigation entries (resolved
- * collection or entity) for the given path. You need to pass the app context
+ * collection, entity or entity custom_view) for the given path. You need to pass the app context
  * that you receive in different callbacks, such as the save hooks.
  *
  * It will take into account the `navigation` provided at the `CMSApp` level, as
@@ -57,7 +74,10 @@ export function getNavigationFrom({
         throw Error("Calling getNavigationFrom, but main schemasRegistryController has not yet been initialised");
     }
 
-    const navigationEntries = getNavigationEntriesFromPathInternal(path, navigation.collections);
+    const navigationEntries = getNavigationEntriesFromPathInternal({
+        path,
+        allCollections: navigation.collections
+    });
 
     const resultPromises: Promise<NavigationEntry>[] = navigationEntries.map((entry) => {
         if (entry.type === "collection") {
@@ -71,6 +91,8 @@ export function getNavigationFrom({
                 .then((entity) => {
                     return { ...entry, entity };
                 });
+        } else if (entry.type === "custom_view") {
+            return Promise.resolve(entry);
         } else {
             throw Error("Unmapped element in useEntitiesFromPath");
         }

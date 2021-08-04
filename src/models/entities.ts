@@ -85,7 +85,7 @@ export interface EntitySchema<Key extends string = string> {
      * Array of builders for rendering additional panels in an entity view.
      * Useful if you need to render custom views
      */
-    views?: EntityCustomViewBuilder<this, Key>[];
+    views?: EntityCustomView<this, Key>[];
 }
 
 /**
@@ -93,7 +93,7 @@ export interface EntitySchema<Key extends string = string> {
  * It gets rendered as a tab.
  * @category Entities
  */
-export type EntityCustomViewBuilder<S extends EntitySchema<Key> = EntitySchema<any>,
+export type EntityCustomView<S extends EntitySchema<Key> = EntitySchema<any>,
     Key extends string = Extract<keyof S["properties"], string>> =
     {
         path: string,

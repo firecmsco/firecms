@@ -10,6 +10,13 @@ const locales: EnumValues = {
 
 export const productSchema = buildSchema({
     name: "Product",
+    views:[
+        {
+            path: "custom_view",
+            name: "Test custom view",
+            builder: ({}) => undefined
+        }
+    ],
     properties: {
         name: {
             title: "Name",
@@ -151,15 +158,13 @@ export const siteConfig: CMSAppProps = {
             relativePath: "products",
             schema: productSchema,
             name: "Products",
-            subcollections: subcollections,
-            properties: ["name", "price", "status", "categories", "tags", "description", "published", "added_on", "publisher", "available_locales", "image"]
+            subcollections: subcollections
         }),
         buildCollection({
             relativePath: "sites/es/products",
             schema: productSchema,
             name: "Products",
-            subcollections: subcollections,
-            properties: ["name", "price", "status", "categories", "tags", "description", "published", "added_on", "publisher", "available_locales", "image"]
+            subcollections: subcollections
         }),
         buildCollection({
             relativePath: "products/id/subcollection_inline",

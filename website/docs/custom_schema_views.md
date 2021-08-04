@@ -9,7 +9,7 @@ overriding fields if you need a custom implementation, but that might be not
 enough in certain cases, where you might want to have a full **custom view related
 to one entity**.
 
-In order to accomplish that you can pass an array of `EntityCustomViewBuilder`
+In order to accomplish that you can pass an array of `EntityCustomView`
 to your schema. Like in this example:
 
 ```tsx

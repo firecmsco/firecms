@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.47.0] - 2021-08-02
+
+### Changed
+
+- [BREAKING] `EntityCustomViewBuilder` has been renamed to `EntityCustomView`
+
 ## [0.46.0] - 2021-08-02
 
 ### Added

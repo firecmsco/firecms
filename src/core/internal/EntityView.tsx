@@ -385,7 +385,6 @@ function EntityView<S extends EntitySchema<Key>, Key extends string>({
     );
 
     function getSelectedSubpath(value: number) {
-        console.log("getSelectedSubpath", value);
         if (value == -1) return undefined;
 
         if (customViews && value < customViewsCount) {

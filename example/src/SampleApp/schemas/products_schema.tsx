@@ -6,7 +6,7 @@ import {
     buildSchema,
     buildSchemaFrom,
     Entity,
-    EntityCustomViewBuilder,
+    EntityCustomView,
     EnumValues,
     ExtraActionsParams
 } from "@camberi/firecms";
@@ -59,7 +59,7 @@ const categories: EnumValues = {
     watches: "Watches"
 };
 
-const sampleView: EntityCustomViewBuilder = {
+const sampleView: EntityCustomView = {
     path: "sample_custom_view",
     name: "Custom view",
     builder: ({ schema, entity, modifiedValues }) => (

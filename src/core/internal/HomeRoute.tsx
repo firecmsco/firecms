@@ -9,7 +9,6 @@ import {
     createStyles,
     Divider,
     Grid,
-    IconButton,
     makeStyles,
     Theme,
     Typography

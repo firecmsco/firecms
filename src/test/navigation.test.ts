@@ -29,9 +29,9 @@ it("collection view matches ok", () => {
     ).toEqual("locales");
 
     expect(
-        () => getCollectionViewFromPath("products/pid/not_existing", collectionViews)
-    ).toThrow(
-        "Couldn't find the corresponding collection view for the path: products/pid/not_existing"
+        getCollectionViewFromPath("products/pid/not_existing", collectionViews)
+    ).toEqual(
+       undefined
     );
 
     expect(
@@ -41,9 +41,9 @@ it("collection view matches ok", () => {
     );
 
     expect(
-        () => getCollectionViewFromPath("products", [])
+        getCollectionViewFromPath("products", [])
     ).toThrow(
-        "Couldn't find the corresponding collection view for the path: products"
+       undefined
     );
     const collectionViewFromPath10 = getCollectionViewFromPath("products/id/subcollection_inline", collectionViews);
     expect(
@@ -54,7 +54,22 @@ it("collection view matches ok", () => {
 
 it("build entity collection array", () => {
 
-    const collections = getNavigationEntriesFromPathInternal("products/pid", collectionViews);
+    const collections = getNavigationEntriesFromPathInternal({
+        path: "products/pid",
+        allCollections: collectionViews
+    });
+    console.log(collections);
+    // expect(
+    //     collections.map((collection) => collection.relativePath)
+    // ).toEqual(["products", "locales"]);
+});
+
+it("Custom view internal", () => {
+
+    const collections = getNavigationEntriesFromPathInternal({
+        path: "products/pid/custom_view",
+        allCollections: collectionViews
+    });
     console.log(collections);
     // expect(
     //     collections.map((collection) => collection.relativePath)
@@ -63,7 +78,10 @@ it("build entity collection array", () => {
 
 it("build entity collection array 2", () => {
 
-    const collections = getNavigationEntriesFromPathInternal("products/pid/locales/yep", collectionViews);
+    const collections = getNavigationEntriesFromPathInternal({
+        path: "products/pid/locales/yep",
+        allCollections: collectionViews
+    });
     console.log(collections);
     // expect(
     //     collections.map((collection) => collection.relativePath)

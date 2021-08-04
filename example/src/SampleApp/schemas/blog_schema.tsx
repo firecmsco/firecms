@@ -1,8 +1,15 @@
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import { buildSchema, ExportMappingFunction } from "@camberi/firecms";
+import { BlogEntryPreview } from "../custom_schema_view/BlogEntryPreview";
+
 
 export const blogSchema = buildSchema({
     name: "Blog entry",
+    views: [{
+        path: "preview",
+        name: "Preview",
+        builder: (props) => <BlogEntryPreview {...props}/>
+    }],
     properties: {
         name: {
             title: "Name",
@@ -59,7 +66,7 @@ export const blogSchema = buildSchema({
                     products: {
                         title: "Products",
                         dataType: "array",
-                        of:{
+                        of: {
                             dataType: "reference",
                             collectionPath: "products",
                             previewProperties: ["name", "main_image"]
@@ -85,7 +92,7 @@ export const blogSchema = buildSchema({
         },
         reviewed: {
             title: "Reviewed",
-            dataType: "boolean",
+            dataType: "boolean"
         },
         status: {
             title: "Status",

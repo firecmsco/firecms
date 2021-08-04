@@ -1,4 +1,9 @@
-import { CMSView, EntityCollection, EntitySchema } from "../models";
+import {
+    CMSView,
+    EntityCollection,
+    EntityCustomView,
+    EntitySchema
+} from "../models";
 
 const DATA_PATH = `/c`;
 
@@ -79,12 +84,7 @@ export function getCollectionViewFromPath(path: string, collectionViews?: Entity
         throw Error(`Collection paths must have an odd number of segments: ${path}`);
     }
 
-    let result: EntityCollection | undefined = getCollectionViewFromPathInternal(removeInitialAndTrailingSlashes(path), collectionViews);
-
-    // if (!result) {
-    //     throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
-    // }
-    return result;
+    return getCollectionViewFromPathInternal(removeInitialAndTrailingSlashes(path), collectionViews);
 
 }
 
@@ -131,8 +131,9 @@ function getCollectionPathsCombinations(subpaths: string[]): string[] {
 }
 
 export type NavigationViewEntry =
-    NavigationViewEntity
-    | NavigationViewCollection;
+    | NavigationViewEntity
+    | NavigationViewCollection
+    | NavigationViewCustom;
 
 interface NavigationViewEntity {
     type: "entity";
@@ -148,7 +149,24 @@ interface NavigationViewCollection {
     collection: EntityCollection;
 }
 
-export function getNavigationEntriesFromPathInternal<S extends EntitySchema>(path: string, allCollections: EntityCollection[], currentFullPath?: string): NavigationViewEntry[] {
+interface NavigationViewCustom {
+    type: "custom_view";
+    fullPath: string;
+    view: EntityCustomView;
+}
+
+export function getNavigationEntriesFromPathInternal<S extends EntitySchema>(props: {
+    path: string,
+    allCollections: EntityCollection[],
+    customViews?: EntityCustomView[],
+    currentFullPath?: string
+}): NavigationViewEntry[] {
+
+    const {
+        path,
+        allCollections,
+        currentFullPath
+    } = props;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
@@ -156,9 +174,9 @@ export function getNavigationEntriesFromPathInternal<S extends EntitySchema>(pat
     let result: NavigationViewEntry[] = [];
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
-        const collection = allCollections && allCollections.find((entry) => entry.relativePath === subpathCombination);
-        if (collection) {
 
+        const collection = allCollections && allCollections.find((entry) => entry.relativePath === subpathCombination);
+          if (collection) {
             const collectionPath = currentFullPath && currentFullPath.length > 0
                 ? (currentFullPath + "/" + collection.relativePath)
                 : collection.relativePath;
@@ -180,9 +198,28 @@ export function getNavigationEntriesFromPathInternal<S extends EntitySchema>(pat
                     fullPath: fullPath,
                     parentCollection: collection
                 });
-                if (collection.subcollections && nextSegments.length > 1) {
+                if(nextSegments.length > 1){
                     const newPath = nextSegments.slice(1).join("/");
-                    result.push(...getNavigationEntriesFromPathInternal(newPath, collection.subcollections, fullPath));
+                    const customViews = collection.schema.views;
+                    const customView = customViews && customViews.find((entry) => entry.path === newPath);
+                    if (customView) {
+                        const collectionPath = currentFullPath && currentFullPath.length > 0
+                            ? (currentFullPath + "/" + customView.path)
+                            : customView.path;
+                        result.push({
+                            type: "custom_view",
+                            fullPath: collectionPath,
+                            view: customView
+                        });
+                    }
+                    else if (collection.subcollections ) {
+                        result.push(...getNavigationEntriesFromPathInternal({
+                            path: newPath,
+                            customViews: customViews,
+                            allCollections: collection.subcollections,
+                            currentFullPath: fullPath
+                        }));
+                    }
                 }
             }
             break;
