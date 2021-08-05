@@ -17,6 +17,7 @@ export {
 } from "./components/ArrayPropertyEnumPreview";
 export { default as BooleanPreview } from "./components/BooleanPreview";
 export { default as CustomChip } from "./components/CustomChip";
+export { default as Markdown } from "./components/Markdown";
 export { default as EmptyValue } from "./components/EmptyValue";
 export { default as ImagePreview } from "./components/ImagePreview";
 export { default as ArrayOfMapsPreview } from "./components/ArrayOfMapsPreview";

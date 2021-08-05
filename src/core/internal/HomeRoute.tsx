@@ -13,7 +13,7 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-import ReactMarkdown from "react-markdown";
+
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
 import { Link as ReactLink, useRouteMatch } from "react-router-dom";
@@ -25,6 +25,7 @@ import {
 } from "../navigation";
 import { useBreadcrumbsContext } from "../../contexts";
 import { CMSView, EntityCollection } from "../../models";
+import { Markdown } from "../../preview";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -99,19 +100,13 @@ function HomeRoute({
                             {entry.description && <Typography variant="body2"
                                                               color="textSecondary"
                                                               component="div">
-                                <ReactMarkdown
-                                    components={{
-                                        a: (props) => <a {...props}
-                                                         onClick={(e) => e.stopPropagation()}
-                                                         target="_blank">{props.children}</a>
-                                    }}
-                                >{entry.description}</ReactMarkdown>
+                                <Markdown source={entry.description}/>
                             </Typography>}
                         </CardContent>
 
                         <CardActions style={{ alignSelf: "flex-end" }}>
-                            <Box p={1} >
-                                <ArrowForwardIcon color="primary" />
+                            <Box p={1}>
+                                <ArrowForwardIcon color="primary"/>
                             </Box>
                         </CardActions>
 

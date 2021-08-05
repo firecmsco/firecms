@@ -10,10 +10,10 @@ import {
 import {
     EntityCustomViewParams,
     EntityValues,
+    Markdown,
     getDownloadURL
 } from "@camberi/firecms";
 import { blogSchema } from "../schemas/blog_schema";
-import ReactMarkdown from "react-markdown";
 import { productSchema } from "../schemas/products_schema";
 import firebase from "firebase";
 
@@ -54,17 +54,23 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<type
                     {modifiedValues.name}
                 </Typography>}
 
-                {modifiedValues?.content && modifiedValues.content.map(
-                    (entry: any, index: number) => {
-                        if (entry.type === "text")
-                            return <Text markdownText={entry.value}/>;
-                        if (entry.type === "images")
-                            return <Images storagePaths={entry.value}/>;
-                        if (entry.type === "products")
-                            return <Products references={entry.value}/>;
-                        else throw Error(`Unsupported component ${entry.type}`);
-                    }
-                )}
+                {modifiedValues?.content && modifiedValues.content
+                    .filter((e: any) => !!e)
+                    .map(
+                        (entry: any, index: number) => {
+                            if (entry.type === "text")
+                                return <Text key={`preview_text_${index}`}
+                                             markdownText={entry.value}/>;
+                            if (entry.type === "images")
+                                return <Images key={`preview_images_${index}`}
+                                               storagePaths={entry.value}/>;
+                            if (entry.type === "products")
+                                return <Products
+                                    key={`preview_products_${index}`}
+                                    references={entry.value}/>;
+                            else throw Error(`Unsupported component ${entry.type}`);
+                        }
+                    )}
 
             </Container>
 
@@ -75,17 +81,16 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<type
 
 export function Images({ storagePaths }: { storagePaths: string[] }) {
     return <Box display="flex">
-        {storagePaths.map((path) =>
-
-            <Box m={1}>
-                <Box p={2}
-                     style={{
-                         width: 250,
-                         height: 250
-                     }}>
-                    <StorageImage storagePath={path}/>
-                </Box>
-            </Box>)}
+        {storagePaths.map((path, index) =>
+            <Box p={2} m={1}
+                 key={`images_${index}`}
+                 style={{
+                     width: 250,
+                     height: 250
+                 }}>
+                <StorageImage storagePath={path}/>
+            </Box>
+        )}
     </Box>;
 }
 
@@ -111,7 +116,7 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
 export function Text({ markdownText }: { markdownText: string }) {
     return <Container maxWidth={"sm"}>
         <Box mt={6} mb={6}>
-            <ReactMarkdown>{markdownText}</ReactMarkdown>
+            <Markdown source={markdownText}/>
         </Box>
     </Container>;
 }
@@ -127,9 +132,12 @@ export function Products({ references }: { references: firebase.firestore.Docume
                 .then((results) => setProducts(results));
         }
     }, [references]);
+
     if (!products) return <CircularProgress/>;
+
     return <Box>
-        {products.map((p) => <ProductPreview
+        {products.map((p, index) => <ProductPreview
+            key={`products_${index}`}
             values={p as EntityValues<typeof productSchema>}/>)}
     </Box>;
 }

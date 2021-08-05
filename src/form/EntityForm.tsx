@@ -265,7 +265,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                   dirty
               }) => {
 
-                const modified = !deepEqual(baseFirestoreValues, values);
+                const modified = useMemo(() => !deepEqual(baseFirestoreValues, values), [baseFirestoreValues, values]);
                 useEffect(() => {
                     onModified(modified);
                     setInternalValue(values);

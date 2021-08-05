@@ -112,10 +112,12 @@ export const testEntitySchema = buildSchema({
                 previewProperties: ["name", "main_image"]
             }
         },
-        broken_reference: {
-            title: "Broken reference",
-            dataType: "reference",
-            collectionPath: "not_existing"
+        mark: {
+            title: "Mark",
+            dataType: "string",
+            config: {
+                markdown: true
+            }
         },
         shaped_array: {
             title: "My shaped array",
@@ -225,13 +227,6 @@ export const testEntitySchema = buildSchema({
                     storagePath: "test",
                     acceptedFiles: ["image/*"]
                 }
-            }
-        },
-        mark: {
-            title: "Mark",
-            dataType: "string",
-            config: {
-                markdown: true
             }
         },
         test_date: {

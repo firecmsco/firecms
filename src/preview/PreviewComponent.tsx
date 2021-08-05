@@ -30,10 +30,10 @@ import ErrorView from "../core/components/ErrorView";
 
 import { PreviewComponentProps } from "./preview_component_props";
 
-import ReactMarkdown from "react-markdown";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import ArrayOneOfPreview from "./components/ArrayOneOfPreview";
+import Markdown from "./components/Markdown";
 
 /**
  * @category Preview components
@@ -77,7 +77,7 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
                                             property={property as StringProperty}
                                             value={value}/>;
             } else if (stringProperty.config?.markdown) {
-                content = <ReactMarkdown>{value}</ReactMarkdown>;
+                content = <Markdown source={value}/>;
             } else {
                 content = <StringPreview {...fieldProps}
                                          property={property as StringProperty}

@@ -10,7 +10,6 @@ import {
     useTheme
 } from "@material-ui/core";
 import { Add, Delete } from "@material-ui/icons";
-import ReactMarkdown from "react-markdown";
 
 
 import {
@@ -44,6 +43,7 @@ import {
     UniqueFieldValidator
 } from "../../collection/components/CollectionTableProps";
 import { checkUniqueField } from "../../models/firestore";
+import { Markdown } from "../../preview";
 
 type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
     collectionPath: string;
@@ -241,9 +241,11 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
                     horizontal: "center"
                 }}
             >
+
                 <Box m={2}>
-                    <ReactMarkdown>{collectionConfig.description}</ReactMarkdown>
+                    <Markdown source={collectionConfig.description}/>
                 </Box>
+
             </Popover>
             }
 
