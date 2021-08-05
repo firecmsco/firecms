@@ -44,6 +44,7 @@ import {
     TAB_WIDTH,
     TAB_WIDTH_LG
 } from "./common";
+import ErrorBoundary from "./ErrorBoundary";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>
@@ -341,12 +342,13 @@ function EntityView<S extends EntitySchema<Key>, Key extends string>({
                     height={"100%"}
                     width={"100%"}
                     hidden={tabsPosition !== colIndex}>
-                    {entity && customView.builder({
-                        schema,
-                        entity,
-                        modifiedValues: isModified ? modifiedValues : entity?.values
-                    })
-                    }
+                    <ErrorBoundary>
+                        {entity && customView.builder({
+                            schema,
+                            entity,
+                            modifiedValues: isModified ? modifiedValues : entity?.values
+                        })}
+                    </ErrorBoundary>
                 </Box>
             );
         }
