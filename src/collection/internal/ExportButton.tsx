@@ -22,7 +22,8 @@ import {
     IconButton,
     Tooltip
 } from "@material-ui/core";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import MuiAlert from "@material-ui/lab/Alert/Alert";
 import { CSVLink } from "react-csv";

@@ -6,11 +6,12 @@ import {
     FormHelperText,
     Paper
 } from "@material-ui/core";
+import { ReferencePreview } from "../../preview";
+import firebase from "firebase/app";
+import "firebase/firestore";
 import React, { useMemo } from "react";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "../components/ArrayContainer";
-import { ReferencePreview } from "../../preview";
-import firebase from "firebase";
 import ReferenceDialog from "../../core/components/ReferenceDialog";
 import { formStyles } from "../styles";
 import FieldDescription from "../components/FieldDescription";

@@ -2,6 +2,7 @@ import { TextSearchDelegate } from "./text_search_delegate";
 import { Entity, EntitySchema } from "./entities";
 import React from "react";
 import firebase from "firebase/app";
+import "firebase/auth";
 import { AuthController } from "../contexts/AuthController";
 import { CMSAppContext } from "../contexts";
 

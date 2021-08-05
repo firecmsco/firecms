@@ -32,6 +32,7 @@ import { PreviewComponentProps } from "./preview_component_props";
 
 import ReactMarkdown from "react-markdown";
 import firebase from "firebase/app";
+import "firebase/firestore";
 import ArrayOneOfPreview from "./components/ArrayOneOfPreview";
 
 /**

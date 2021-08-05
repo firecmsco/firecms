@@ -97,6 +97,21 @@ export const testEntitySchema = buildSchema({
                 unique: true
             }
         },
+        product: {
+            title: "Product",
+            dataType: "reference",
+            collectionPath: "products",
+            previewProperties: ["name", "main_image"]
+        },
+        products: {
+            title: "Products",
+            dataType: "array",
+            of:{
+                dataType: "reference",
+                collectionPath: "products",
+                previewProperties: ["name", "main_image"]
+            }
+        },
         broken_reference: {
             title: "Broken reference",
             dataType: "reference",
@@ -179,12 +194,6 @@ export const testEntitySchema = buildSchema({
             of: {
                 dataType: "string"
             }
-        },
-        product: {
-            title: "Product",
-            dataType: "reference",
-            collectionPath: "products",
-            previewProperties: ["name", "main_image"]
         },
         available_dates: {
             dataType: "array",

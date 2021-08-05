@@ -13,6 +13,7 @@ import ReferenceDialog from "../../../core/components/ReferenceDialog";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
+
 import { getPreviewSizeFrom } from "../../../preview/util";
 import { useInputStyles } from "./styles";
 import { useSchemasRegistry } from "../../../contexts/SchemaRegistry";

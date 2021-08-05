@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 
 import firebase from "firebase/app";
+import "firebase/storage";
 
 import {
     ArrayProperty,

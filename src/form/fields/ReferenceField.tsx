@@ -1,3 +1,6 @@
+import firebase from "firebase/app";
+import "firebase/firestore";
+
 import {
     Entity,
     EntitySchema,
@@ -5,7 +8,6 @@ import {
     listenEntityFromRef,
     Property
 } from "../../models";
-import firebase from "firebase/app";
 import {
     Box,
     Button,

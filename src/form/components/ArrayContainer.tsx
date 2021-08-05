@@ -2,7 +2,8 @@ import { FieldArray } from "formik";
 import { Box, Button } from "@material-ui/core";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import hash from "object-hash";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 import ArrayEntry from "./ArrayEntry";
 
