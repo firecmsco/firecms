@@ -9,9 +9,9 @@ function HeroHome({}) {
 
 
     const fallback = <canvas style={{
-        height: "1000px",
+        height: "800px",
         width: "100vh",
-        maxHeight: "1000px",
+        maxHeight: "800px",
         position: "fixed",
         transform: `translateY(60px)`,
         top: 0,

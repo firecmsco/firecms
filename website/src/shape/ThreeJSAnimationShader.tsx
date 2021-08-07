@@ -40,7 +40,7 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
             if (typeof window !== "undefined")
                 window.removeEventListener("scroll", listener);
         };
-    }, []);
+    }, [window]);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const sceneStateRef = useRef<SceneState | null>(null);
@@ -50,27 +50,10 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
     const { isDarkTheme } = useThemeContext();
     const wireframe = isDarkTheme;
 
-    // useEffect(() => {
-    //     yDisplacement.current = getDisplacement();
-    // }, [scroll, size.height]);
-
     useEffect(() => {
         if (sceneStateRef.current)
             sceneStateRef.current.material.wireframe = wireframe;
     }, [wireframe]);
-
-    function buildDayGeometry() {
-
-        const geometry = new THREE.SphereBufferGeometry(SPHERE_RADIUS,
-            25,
-            60,
-            Math.PI / 4 - .5,
-            Math.PI,
-            Math.PI / 2 + .2,
-            Math.PI
-        );
-        return geometry;
-    }
 
     function buildNightGeometry() {
 
@@ -78,17 +61,11 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
 
         const dodecahedron = new THREE.DodecahedronGeometry(SPHERE_RADIUS, 18);
 
-        console.log("dodecahedron vertices count", dodecahedron.attributes.position.array.length);
 
         for (let i = 0; i < dodecahedron.attributes.position.count; i++) {
             const x = dodecahedron.attributes.position.array[i * 3];
             const y = dodecahedron.attributes.position.array[i * 3 + 1];
             const z = dodecahedron.attributes.position.array[i * 3 + 2];
-            // if (i < 1000) {
-            //     console.log(y);
-            //
-            // }
-            // if (y < 0) {
             const pos = [
                 x,
                 y,
@@ -105,7 +82,6 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
             ];
             vertices.push({ pos, norm, uv });
 
-            // }
         }
 
         const positions: number[] = [];
@@ -124,14 +100,6 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
         geometry.setAttribute(
             "position",
             new THREE.BufferAttribute(new Float32Array(positions), positionNumComponents));
-        // geometry.setAttribute(
-        //     "normal",
-        //     new THREE.BufferAttribute(new Float32Array(normals), normalNumComponents));
-        // geometry.setAttribute(
-        //     "uv",
-        //     new THREE.BufferAttribute(new Float32Array(uvs), uvNumComponents));
-
-        // geometry.computeVertexNormals();
 
         console.log("geometry vertices count", geometry.attributes.position.array.length);
         const merged = BufferGeometryUtils.mergeVertices(geometry);
@@ -500,7 +468,7 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
     return <canvas
         style={{
             height: "100vh",
-            maxHeight: "600px",
+            maxHeight: "800px",
             width: "100vw",
             position: "fixed",
             top: `-${scroll / 2}px`,

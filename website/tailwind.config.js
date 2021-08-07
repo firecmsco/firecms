@@ -1,4 +1,5 @@
 module.exports = {
+    darkMode: 'class',
     purge: ['./src/**/*.html', './src/**/*.js', './src/**/*.tsx'],
     // important: '#tailwind',
     corePlugins: { preflight: false },

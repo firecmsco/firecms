@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
@@ -20,7 +20,25 @@ function Home() {
 
     useEffect(() => {
         AOS.init();
-    }, []);
+        updateDarkModeClass();
+    }, [window]);
+
+    function updateDarkModeClass() {
+        if (document.documentElement?.dataset?.theme === "dark" && !document.documentElement.classList.contains("dark")) {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
+    }
+
+    useMutationObservable(document.documentElement, (mutations) => {
+        mutations.forEach(function(mutation) {
+            if (mutation.type == "attributes" && mutation.attributeName === "data-theme") {
+                updateDarkModeClass();
+            }
+        });
+    });
+
 
     return (
         <Layout
@@ -51,3 +69,13 @@ function Home() {
 }
 
 export default Home;
+
+function useMutationObservable(targetEl, cb, config = { attributes: true, childList: false, subtree: false }) {
+    useEffect(() => {
+        const observer = new MutationObserver(cb);
+        observer.observe(targetEl, config);
+        return () => {
+                observer.disconnect();
+        };
+    }, [targetEl, config]);
+}
