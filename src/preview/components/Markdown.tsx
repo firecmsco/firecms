@@ -10,9 +10,14 @@ type MarkdownProps = {
  * @category Preview components
  */
 export default function Markdown({
-                             source
-                         }: MarkdownProps) {
+                                     source
+                                 }: MarkdownProps) {
     return <MarkdownPreview source={source}
+                            style={{
+                                fontSize: "inherit",
+                                lineHeight: "inherit",
+                                fontFamily: "inherit"
+                            }}
                             components={{
                                 a: (props) => <a {...props}
                                                  onClick={(e) => e.stopPropagation()}

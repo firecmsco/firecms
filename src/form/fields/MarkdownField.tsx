@@ -37,7 +37,7 @@ export const useStyles = makeStyles((theme: Theme) =>
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function MarkDownField({
+export default function MarkdownField({
                                           name,
                                           value,
                                           setValue,

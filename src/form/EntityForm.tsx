@@ -270,7 +270,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                     onModified(modified);
                     setInternalValue(values);
                     onValuesChanged(values);
-                });
+                }, [modified, values]);
 
                 if (underlyingChanges && entity) {
                     // we update the form fields from the Firestore data

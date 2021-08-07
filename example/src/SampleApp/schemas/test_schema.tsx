@@ -61,30 +61,23 @@ export const testEntitySchema = buildSchema({
         });
     },
     properties: {
-        actions: {
-            title: "Actions",
-            description: "Possible user actions",
+        content: {
+            title: "Content",
+            description: "Example of a complex array with multiple properties as children",
             validation: { required: true },
             dataType: "array",
-            of: {
-                dataType: "map",
+            columnWidth: 450,
+            oneOf: {
                 properties: {
-                    name: {
-                        title: "Name",
-                        description: "Text that will be shown on the button",
-                        validation: { required: true },
+                    title: {
+                        title: "Title",
                         dataType: "string"
                     },
-                    type: {
-                        title: "Type",
-                        description: "Action type that determines the user flow",
-                        validation: { required: true, uniqueInArray: true },
+                    text: {
                         dataType: "string",
+                        title: "Text",
                         config: {
-                            enumValues: {
-                                complete: "Complete",
-                                continue: "Continue"
-                            }
+                            markdown: true
                         }
                     }
                 }
@@ -106,7 +99,7 @@ export const testEntitySchema = buildSchema({
         products: {
             title: "Products",
             dataType: "array",
-            of:{
+            of: {
                 dataType: "reference",
                 collectionPath: "products",
                 previewProperties: ["name", "main_image"]
@@ -136,6 +129,35 @@ export const testEntitySchema = buildSchema({
                             title: "Age"
                         })
                     ]
+                }
+            }
+        },
+        actions: {
+            title: "Actions",
+            description: "Possible user actions",
+            validation: { required: true },
+            dataType: "array",
+            of: {
+                dataType: "map",
+                properties: {
+                    name: {
+                        title: "Name",
+                        description: "Text that will be shown on the button",
+                        validation: { required: true },
+                        dataType: "string"
+                    },
+                    type: {
+                        title: "Type",
+                        description: "Action type that determines the user flow",
+                        validation: { required: true, uniqueInArray: true },
+                        dataType: "string",
+                        config: {
+                            enumValues: {
+                                complete: "Complete",
+                                continue: "Continue"
+                            }
+                        }
+                    }
                 }
             }
         },

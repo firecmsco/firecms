@@ -1,4 +1,4 @@
-import React, { ElementType, ReactElement } from "react";
+import React, { ElementType, ReactElement, useState } from "react";
 
 import { useClipboard } from "use-clipboard-hook";
 import {
@@ -45,12 +45,13 @@ import MapField from "./fields/MapField";
 import ArrayDefaultField from "./fields/ArrayDefaultField";
 import ArrayOneOfField from "./fields/ArrayOneOfField";
 import ReadOnlyField from "./fields/ReadOnlyField";
-import MarkDownField from "./fields/MarkdownField";
+import MarkdownField from "./fields/MarkdownField";
 
 import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
 import { useCMSAppContext, useSnackbarController } from "../contexts";
 import { isReadOnly } from "../models/utils";
 import { CMSAppContext } from "../contexts/CMSAppContext";
+import { useEffect } from "react";
 
 
 /**
@@ -132,7 +133,7 @@ export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key
         if ((property as StringProperty).config?.storageMeta) {
             component = StorageUploadField as ElementType<FieldProps<T>>;
         } else if ((property as StringProperty).config?.markdown) {
-            component = MarkDownField as ElementType<FieldProps<T>>;
+            component = MarkdownField as ElementType<FieldProps<T>>;
         } else if ((property as StringProperty).config?.enumValues) {
             component = Select as ElementType<FieldProps<T>>;
         } else {
@@ -141,26 +142,46 @@ export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key
     }
 
     if (component) {
-        return <FieldInternal
-            component={component}
-            componentProps={{
-                name,
-                property,
-                includeDescription,
-                underlyingValueHasChanged,
-                context,
-                disabled,
-                tableMode,
-                partOfArray,
-                autoFocus,
-                dependsOnOtherProperties
-            }}/>;
+
+        const componentProps = {
+            name,
+            property,
+            includeDescription,
+            underlyingValueHasChanged,
+            context,
+            disabled,
+            tableMode,
+            partOfArray,
+            autoFocus,
+            dependsOnOtherProperties
+        };
+
+        // we use the standard Field for user defined fields, since it rebuilds
+        // when there are changes in other values, in contrast to FastField
+        const FieldComponent = dependsOnOtherProperties || property.config?.field ? Field : FastField;
+
+        return (
+            <FieldComponent
+                key={`form_field_${name}`}
+                required={property.validation?.required}
+                name={`${name}`}
+            >
+                {(fieldProps: FormikFieldProps<T>) => {
+                    return <FieldInternal
+                        component={component as ElementType<FieldProps<T>>}
+                        componentProps={componentProps}
+                        fieldProps={fieldProps}/>;
+                }}
+            </FieldComponent>
+        );
+
     }
 
     return (
         <div>{`Currently the field ${property.dataType} is not supported`}</div>
     );
 }
+
 
 function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = string>
 ({
@@ -176,84 +197,85 @@ function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySc
          context,
          disabled,
          dependsOnOtherProperties
-     }
+     },
+     fieldProps
+
  }:
      {
          component: ElementType<FieldProps<T>>,
-         componentProps: CMSFormFieldProps<T, S, Key>
+         componentProps: CMSFormFieldProps<T, S, Key>,
+         fieldProps: FormikFieldProps<T>
      }) {
 
     const customFieldProps: any = property.config?.customProps;
+    const value = fieldProps.field.value;
+    const initialValue = fieldProps.meta.initialValue;
+    const error = getIn(fieldProps.form.errors, name);
+    const touched = getIn(fieldProps.form.touched, name);
 
-    // we use the standard Field for user defined fields, since it rebuilds
-    // when there are changes in other values, in contrast to FastField
-    const FieldComponent = dependsOnOtherProperties || property.config?.field ? Field : FastField;
+    const showError: boolean = error
+        && (fieldProps.form.submitCount > 0 || property.validation?.unique)
+        && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
+
+    const isSubmitting = fieldProps.form.isSubmitting;
+
+    const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
+
+    const [internalValue,setInternalValue] = useState<T | null>(value);
+    useEffect(
+        () => {
+            const handler = setTimeout(() => {
+                fieldProps.form.setFieldValue(name, internalValue);
+                fieldProps.form.setFieldTouched(name, true, false);
+            }, 50);
+
+            return () => {
+                clearTimeout(handler);
+            };
+        },
+        [internalValue]
+    );
+
+    const cmsFieldProps: FieldProps<T> = {
+        name,
+        value: internalValue as T,
+        initialValue,
+        setValue: (value: T | null) => {
+            setInternalValue(value);
+        },
+        error,
+        touched,
+        showError,
+        isSubmitting,
+        includeDescription: includeDescription ?? true,
+        property: property,
+        disabled: disabled ?? false,
+        underlyingValueHasChanged: underlyingValueHasChanged ?? false,
+        tableMode: tableMode ?? false,
+        partOfArray: partOfArray ?? false,
+        autoFocus: autoFocus ?? false,
+        customProps: customFieldProps,
+        context,
+        dependsOnOtherProperties: dependsOnOtherProperties ?? true
+    };
 
     return (
-        <FieldComponent
-            key={`form_field_${name}`}
-            required={property.validation?.required}
-            name={`${name}`}
-        >
-            {(fieldProps: FormikFieldProps<T>) => {
-                const name = fieldProps.field.name;
-                const value = fieldProps.field.value;
-                const initialValue = fieldProps.meta.initialValue;
-                const error = getIn(fieldProps.form.errors, name);
-                const touched = getIn(fieldProps.form.touched, name);
+        <>
 
-                const showError: boolean = error
-                    && (fieldProps.form.submitCount > 0 || property.validation?.unique)
-                    && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
+            {React.createElement(component, cmsFieldProps)}
 
-                const isSubmitting = fieldProps.form.isSubmitting;
+            {underlyingValueHasChanged && !isSubmitting &&
+            <FormHelperText>
+                This value has been updated in Firestore
+            </FormHelperText>}
 
-                const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
+            {disabledTooltip &&
+            <FormHelperText>
+                {disabledTooltip}
+            </FormHelperText>}
 
-                const cmsFieldProps: FieldProps<T> = {
-                    name,
-                    value,
-                    initialValue,
-                    setValue: (value: T | null) => {
-                        fieldProps.form.setFieldTouched(name, true, false);
-                        fieldProps.form.setFieldValue(name, value);
-                    },
-                    error,
-                    touched,
-                    showError,
-                    isSubmitting,
-                    includeDescription: includeDescription ?? true,
-                    property: property,
-                    disabled: disabled ?? false,
-                    underlyingValueHasChanged: underlyingValueHasChanged ?? false,
-                    tableMode: tableMode ?? false,
-                    partOfArray: partOfArray ?? false,
-                    autoFocus: autoFocus ?? false,
-                    customProps: customFieldProps,
-                    context,
-                    dependsOnOtherProperties: dependsOnOtherProperties ?? true
-                };
+        </>);
 
-                return (
-                    <>
-
-                        {React.createElement(component, cmsFieldProps)}
-
-                        {underlyingValueHasChanged && !isSubmitting &&
-                        <FormHelperText>
-                            This value has been updated in Firestore
-                        </FormHelperText>}
-
-                        {disabledTooltip &&
-                        <FormHelperText>
-                            {disabledTooltip}
-                        </FormHelperText>}
-
-                    </>);
-            }
-            }
-
-        </FieldComponent>);
 }
 
 
@@ -360,4 +382,10 @@ export function createCustomIdField<S extends EntitySchema<Key>, Key extends str
 
         </FormControl>
     );
+}
+
+
+function FieldInternalInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = string>
+(fieldProps: FormikFieldProps<T>) {
+
 }
