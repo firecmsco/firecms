@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+
 
 import HeroHome from "../partials/HeroHome";
 import FeaturesHome from "../partials/Features";
@@ -19,11 +21,14 @@ function Home() {
     const { siteConfig = {} } = context;
 
     useEffect(() => {
-        AOS.init();
-        updateDarkModeClass();
-    }, [window]);
+        if (ExecutionEnvironment.canUseDOM) {
+            AOS.init();
+            updateDarkModeClass();
+        }
+    }, [ExecutionEnvironment.canUseDOM]);
 
     function updateDarkModeClass() {
+        if (!document) return;
         if (document.documentElement?.dataset?.theme === "dark" && !document.documentElement.classList.contains("dark")) {
             document.documentElement.classList.add("dark");
         } else {
@@ -31,13 +36,25 @@ function Home() {
         }
     }
 
-    useMutationObservable(document.documentElement, (mutations) => {
-        mutations.forEach(function(mutation) {
-            if (mutation.type == "attributes" && mutation.attributeName === "data-theme") {
-                updateDarkModeClass();
-            }
+    useEffect(() => {
+        if (!ExecutionEnvironment.canUseDOM) return;
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach(function(mutation) {
+                if (mutation.type == "attributes"
+                    && mutation.attributeName === "data-theme") {
+                    updateDarkModeClass();
+                }
+            });
         });
-    });
+        observer.observe(document.documentElement, {
+            attributes: true,
+            childList: false,
+            subtree: false
+        });
+        return () => {
+            observer.disconnect();
+        };
+    }, [ExecutionEnvironment.canUseDOM]);
 
 
     return (
@@ -70,12 +87,3 @@ function Home() {
 
 export default Home;
 
-function useMutationObservable(targetEl, cb, config = { attributes: true, childList: false, subtree: false }) {
-    useEffect(() => {
-        const observer = new MutationObserver(cb);
-        observer.observe(targetEl, config);
-        return () => {
-                observer.disconnect();
-        };
-    }, [targetEl, config]);
-}
