@@ -7669,10 +7669,10 @@ postcss@^8.2.8:
     nanoid "^3.1.22"
     source-map "^0.6.1"
 
-postprocessing@^6.19.1:
-  version "6.20.3"
-  resolved "https://registry.yarnpkg.com/postprocessing/-/postprocessing-6.20.3.tgz#17cc47bf3a4a4fd0c3e918a2e71292a0958f3349"
-  integrity sha512-Fm68mijfc/DBm0kGiXg3ws8zLgfwdH2XmiS4b/j2JXOsK7Flaq4VylycGgJcf2y6Q/y+zM+ZgtNvJAAcjmgYzA==
+postprocessing@^6.22.3:
+  version "6.22.3"
+  resolved "https://registry.yarnpkg.com/postprocessing/-/postprocessing-6.22.3.tgz#b5f0e16111ccbc4a520cee077e55eb4bbd57124f"
+  integrity sha512-zk8sw7ZFlr7v5OVLnM6QpM8DDrV9buFuTfTYa0K0dTEB5ap5qCTVg25mG66uJ90vqu3u4bFJY6jbpoW3BGmALg==
 
 prepend-http@^2.0.0:
   version "2.0.0"
@@ -9239,10 +9239,10 @@ text-table@0.2.0, text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-three@^0.126.1:
-  version "0.126.1"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.126.1.tgz#cf4e4e52060fd952f6f0d5440cbd422c66bc4be7"
-  integrity sha512-eOEXnZeE1FDV0XgL1u08auIP13jxdN9LQBAEmlErYzMxtIIfuGIAZbijOyookALUhqVzVOx0Tywj6n192VM+nQ==
+three@^0.131.3:
+  version "0.131.3"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.131.3.tgz#406fd210c603ca9154937ae3582996fbfd3cb716"
+  integrity sha512-VkZAv8ZTJqiE/fyEmoWLxcNHImpVcjqW7RO0GzMu3tRpwO0KUvK9pjTmJzJcAbc51BOeB2G38zh80yjHTbP8gQ==
 
 thunky@^1.0.2:
   version "1.1.0"

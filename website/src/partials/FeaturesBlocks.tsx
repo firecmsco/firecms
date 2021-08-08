@@ -195,7 +195,7 @@ function FeaturesBlocks() {
                         data-aos="fade-up"
                         data-aos-delay="100">
                         <h2 className="h2 mb-4">Full set of features</h2>
-                        <p className="text-xl text-gray-600">
+                        <p className="text-xl text-gray-500">
                             Everything you need to kickstart your Firebase based
                             project
                         </p>
@@ -211,7 +211,7 @@ function FeaturesBlocks() {
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                 Schema validation
                             </h4>
-                            <p className="text-gray-600 text-center">
+                            <p className="text-gray-500 text-center">
                                 Define your data types and validation to ensure
                                 consistency
                             </p>
@@ -225,7 +225,7 @@ function FeaturesBlocks() {
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                 Reference support
                             </h4>
-                            <p className="text-gray-600 text-center">
+                            <p className="text-gray-500 text-center">
                                 Link entities in different collections in a
                                 seamless way
                             </p>
@@ -239,7 +239,7 @@ function FeaturesBlocks() {
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                 Role system
                             </h4>
-                            <p className="text-gray-600 text-center">
+                            <p className="text-gray-500 text-center">
                                 Define different app configurations based
                                 on the logged user
                             </p>
@@ -253,7 +253,7 @@ function FeaturesBlocks() {
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                 Customization
                             </h4>
-                            <p className="text-gray-600 text-center">
+                            <p className="text-gray-500 text-center">
                                 Custom form fields, hooks and full views based
                                 on React
                             </p>
@@ -267,7 +267,7 @@ function FeaturesBlocks() {
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                 Subcollection support
                             </h4>
-                            <p className="text-gray-600 text-center">
+                            <p className="text-gray-500 text-center">
                                 Complete navigation for collections under other
                                 entities
                             </p>
@@ -282,7 +282,7 @@ function FeaturesBlocks() {
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                 Real time support
                             </h4>
-                            <p className="text-gray-600 text-center">
+                            <p className="text-gray-500 text-center">
                                 In every view of your CMS, ideal for background
                                 updates
                             </p>

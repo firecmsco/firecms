@@ -15,7 +15,7 @@ function Testimonials() {
                             data-aos="zoom-y-out">
                             All the power of Firebase and open source
                         </h2>
-                        <p className="text-xl text-gray-600"
+                        <p className="text-xl text-gray-500"
                            data-aos="zoom-y-out">
                             Extend the functionality of your admin panel and
                             your
@@ -23,7 +23,7 @@ function Testimonials() {
                             Firebase
                             and Google Cloud
                         </p>
-                        <p className="text-xl text-gray-600"
+                        <p className="text-xl text-gray-500"
                            data-aos="zoom-y-out">
                             Join our vibrant open source community!
                         </p>

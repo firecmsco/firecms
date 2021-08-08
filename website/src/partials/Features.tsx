@@ -56,11 +56,11 @@ function Features() {
                                 </div>
 
 
-                                <p className="text-xl text-gray-600">
+                                <p className="text-xl text-gray-500">
                                     Map your collections and document schemas to
                                     beautiful tables and forms
                                 </p>
-                                <p className="text-xl text-gray-600">
+                                <p className="text-xl text-gray-500">
                                     Edit your collections and entities using
                                     both a spreadsheet
                                     view and powerful forms.
@@ -158,7 +158,7 @@ function Features() {
                                     </div>
                                 </div>
 
-                                <p className="md:text-right text-xl text-gray-600">
+                                <p className="md:text-right text-xl text-gray-500">
                                     Define your entity schemas and choose from
                                     multiple form widgets and validation
                                     options.
@@ -191,14 +191,14 @@ function Features() {
                                     </h3>
 
                                 </div>
-                                <p className="text-xl text-gray-600">
+                                <p className="text-xl text-gray-500">
                                     FireCMS a CMS built to work with every
                                     existing
                                     Firebase/Firestore project. It does not
                                     enforce
                                     any data structure.
                                 </p>
-                                <p className="text-xl text-gray-600">
+                                <p className="text-xl text-gray-500">
                                     Use the integrated hooks and callbacks to
                                     integrate your business logic in multiple
                                     ways.
@@ -294,7 +294,7 @@ function Features() {
                                     </div>
                                 </div>
 
-                                <p className="md:text-right text-xl text-gray-600">
+                                <p className="md:text-right text-xl text-gray-500">
                                     FireCMS allows developers to extend it
                                     in any way they need, while
                                     keeping it extremely simple to kickstart a
@@ -302,7 +302,7 @@ function Features() {
                                     configuration. We use <b>sensible defaults
                                     that can be overridden or extended</b>.
                                 </p>
-                                <p className="md:text-right text-xl text-gray-600">
+                                <p className="md:text-right text-xl text-gray-500">
                                     Integrate your own custom form fields as
                                     React components, as well as preview
                                     widgets.

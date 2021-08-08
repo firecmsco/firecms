@@ -1,5 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+// import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+// import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import {
+    DepthOfFieldEffect,
+    BloomEffect,
+    ShockWaveEffect,
+    EffectComposer,
+    EffectPass,
+    RenderPass
+} from "postprocessing";
+
+
 // @ts-ignore
 import useThemeContext from "@theme/hooks/useThemeContext";
 import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtils";
@@ -13,6 +25,7 @@ const SPHERE_RADIUS = 15;
 
 type SceneState = {
     renderer: THREE.WebGLRenderer,
+    composer: EffectComposer,
     camera: THREE.OrthographicCamera,
     scene: THREE.Scene,
     geometry: THREE.BufferGeometry,
@@ -20,20 +33,19 @@ type SceneState = {
     mesh: THREE.Mesh,
 }
 
-type AnimationProps = {
-}
+type AnimationProps = {}
 
-export default function ThreeJSAnimationShader({  }: AnimationProps) {
+export default function ThreeJSAnimationShader({}: AnimationProps) {
 
-    const [scroll, setScroll] = useState(typeof window !== "undefined"
-        ? window?.pageYOffset
-        : 0);
+
+    const scrollRef = useRef<number>(0);
 
     useEffect(() => {
         const listener = () => {
             if (typeof window !== "undefined")
-                setScroll(window?.pageYOffset ?? 0);
+                scrollRef.current = window?.pageYOffset ?? 0;
         };
+        listener();
         if (typeof window !== "undefined")
             window.addEventListener("scroll", listener);
         return () => {
@@ -119,7 +131,9 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
             canvas: ref
         });
 
-        // renderer.setClearColor(0xffffff);
+        // if (!isDarkTheme)
+        //     renderer.setClearColor(0xffffff);
+
         renderer.setSize(width, height);
         if (typeof window !== "undefined")
             renderer.setPixelRatio(window?.devicePixelRatio > 1 ? 1.5 : 1);
@@ -217,34 +231,13 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
 
         layers.push({
             is_active: 1,
-            color: blue,
-            sin: new THREE.Vector3(0, 0, 1),
-            cos: new THREE.Vector3(0, 1, 1),
-            time_dilation: new THREE.Vector3(.7, .4, .5),
-            coef: new THREE.Vector3(.3, -.5, 1),
-            constant: new THREE.Vector3(0, -.4, .5)
-        });
-
-        layers.push({
-            is_active: 1,
             color: yellow,
-            sin: new THREE.Vector3(0, 1, 1),
-            cos: new THREE.Vector3(1, 0, 0),
+            sin: new THREE.Vector3(1, 1, 1),
+            cos: new THREE.Vector3(0, 0, 0),
             time_dilation: new THREE.Vector3(.8, .8, .8),
             coef: new THREE.Vector3(-.5, .8, .3),
-            constant: new THREE.Vector3(-.1, -.5, .7)
+            constant: new THREE.Vector3(.1, -.5, .7)
         });
-
-        layers.push({
-            is_active: 1,
-            color: magenta,
-            sin: new THREE.Vector3(0, 1, 0),
-            cos: new THREE.Vector3(1, 0, 1),
-            time_dilation: new THREE.Vector3(.4, .6, 1.1),
-            coef: new THREE.Vector3(.1, .8, .5),
-            constant: new THREE.Vector3(0, -.5, .7)
-        });
-
 
         layers.push({
             is_active: 1,
@@ -254,6 +247,27 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
             time_dilation: new THREE.Vector3(.7, .9, .8),
             coef: new THREE.Vector3(1, 0, 0),
             constant: new THREE.Vector3(0, -.8, 1)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(0, 0, 1),
+            cos: new THREE.Vector3(0, 1, 1),
+            time_dilation: new THREE.Vector3(.7, .4, .5),
+            coef: new THREE.Vector3(.3, -.5, 1),
+            constant: new THREE.Vector3(0, -.4, .5)
+        });
+
+
+        layers.push({
+            is_active: 1,
+            color: magenta,
+            sin: new THREE.Vector3(0, 1, 0),
+            cos: new THREE.Vector3(1, 0, 1),
+            time_dilation: new THREE.Vector3(.4, .6, 1.1),
+            coef: new THREE.Vector3(.1, .8, .5),
+            constant: new THREE.Vector3(0, -.5, .7)
         });
         layers.push({
             is_active: 1,
@@ -311,17 +325,7 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
             cos: new THREE.Vector3(0, 1, 0),
             time_dilation: new THREE.Vector3(.6, .7, 1),
             coef: new THREE.Vector3(.2, .2, .6),
-            constant: new THREE.Vector3(.2, -.7 -.3)
-        });
-
-        layers.push({
-            is_active: 1,
-            color: magenta,
-            sin: new THREE.Vector3(0, 0, 0),
-            cos: new THREE.Vector3(1, 1, 1),
-            time_dilation: new THREE.Vector3(.7, .8, 1),
-            coef: new THREE.Vector3(-.45, .85, .55),
-            constant: new THREE.Vector3(0, -.85, 0)
+            constant: new THREE.Vector3(.2, -.7 - .3)
         });
 
         layers.push({
@@ -336,22 +340,32 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
 
         layers.push({
             is_active: 1,
+            color: yellow,
+            sin: new THREE.Vector3(1, 1, 0),
+            cos: new THREE.Vector3(0, 0, 1),
+            time_dilation: new THREE.Vector3(.9, .9, 1),
+            coef: new THREE.Vector3(-.1, -.6, .5),
+            constant: new THREE.Vector3(-0.7, -.7, .8)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: magenta,
+            sin: new THREE.Vector3(0, 0, 0),
+            cos: new THREE.Vector3(1, 1, 1),
+            time_dilation: new THREE.Vector3(.7, .8, 1),
+            coef: new THREE.Vector3(-.45, .85, .55),
+            constant: new THREE.Vector3(0, -.85, 0)
+        });
+
+        layers.push({
+            is_active: 1,
             color: blue,
             sin: new THREE.Vector3(0, 1, 1),
             cos: new THREE.Vector3(1, 0, 0),
             time_dilation: new THREE.Vector3(.9, .7, .7),
             coef: new THREE.Vector3(-.4, .9, .4),
             constant: new THREE.Vector3(-.2, -.4, .6)
-        });
-
-        layers.push({
-            is_active: 1,
-            color: yellow,
-            sin: new THREE.Vector3(0, 1, 0),
-            cos: new THREE.Vector3(1, 0, 1),
-            time_dilation: new THREE.Vector3(.5, .9, 1),
-            coef: new THREE.Vector3(.1, .7, .5),
-            constant: new THREE.Vector3(0, -.4, .8)
         });
 
         const uniforms = {
@@ -377,15 +391,7 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
         mesh.rotation.x = .2;
         mesh.position.y = 14;
 
-        // mesh.rotation.y = 3.14 / 2;
         scene.add(mesh);
-
-        // BG plane
-        const planeGeometry = new THREE.PlaneGeometry(100, 50);
-        // const planeGeometry = new THREE.PlaneGeometry(10, 10);
-        const plane = new THREE.Mesh(planeGeometry, material);
-        plane.position.z = -50;
-        // scene.add(plane);
 
         const left = width / -CAMERA_FACTOR;
         const right = width / CAMERA_FACTOR;
@@ -394,10 +400,21 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
         const near = 1;
         const far = 100;
         const camera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-        camera.position.z = 50;
+        camera.position.z = 15;
+
+        const composer = new EffectComposer(renderer);
+        const renderPass = new RenderPass(scene, camera);
+        composer.addPass(renderPass);
+        const depthOfFieldEffect = new DepthOfFieldEffect(camera, {
+            focusDistance : .0,
+            focalLength: 1,
+            bokehScale: 6
+        });
+        composer.addPass(new EffectPass(camera, depthOfFieldEffect));
 
         return {
             renderer,
+            composer,
             camera,
             scene,
             geometry,
@@ -427,8 +444,10 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
 
         const {
             renderer,
+            composer,
             camera,
             scene,
+            mesh,
             material
         } = sceneStateRef.current;
 
@@ -436,8 +455,11 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
         render();
 
         function render() {
+
+            mesh.position.y = 14 + scrollRef.current / 140;
             material.uniforms.u_time.value = clockRef.current.getElapsedTime() * TIME_DILATION;
-            renderer.render(scene, camera);
+
+            composer.render();
             requestRef.current = requestAnimationFrame(render);
         }
 
@@ -454,6 +476,7 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
                 updateSceneSize(sceneStateRef.current, width, height);
             }
         }
+
         handleResize();
 
         if (typeof window !== "undefined")
@@ -465,18 +488,21 @@ export default function ThreeJSAnimationShader({  }: AnimationProps) {
 
     }, [window]);
 
-    return <canvas
-        style={{
-            height: "100vh",
-            maxHeight: "800px",
-            width: "100vw",
-            position: "fixed",
-            top: `-${scroll / 2}px`,
-            transform: `translateY(60px)`,
-            zIndex: -10
-        }}
-        ref={canvasRef}
-    />;
+    return (
+        <canvas
+            style={{
+                height: "100vh",
+                maxHeight: "800px",
+                width: "100vw",
+                position: "fixed",
+                top: `0px`,
+                // top: `-${scroll / 2}px`,
+                transform: `translateY(60px)`,
+                zIndex: -10
+            }}
+            ref={canvasRef}
+        />
+    );
 
 }
 
@@ -749,10 +775,10 @@ function buildVertexShader() {
 
                 float amount =
                     pow(
-                        smoothstep( 0.0, 1.0,
+                        smoothstep( 0.0, .9,
                             1.05 -
                             distance(st, normalize(vec3(x, y, z) ) ) )
-                    , 5.0);
+                    , 7.0);
                 color = blendNormal(color, nColor, amount);
             // }
         }

@@ -62,7 +62,7 @@ function Home() {
             title={`${siteConfig.title}`}
             description="Awesome Firestore/Firebase-based  headless CMS/admin tool">
 
-            <div className="flex flex-col min-h-screen overflow-hidden">
+            <div className="flex flex-col min-h-screen overflow-hidden ">
 
                 <main className="flex-grow">
                     <HeroHome/>

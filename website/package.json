@@ -20,13 +20,13 @@
         "aos": "^2.3.4",
         "clsx": "^1.1.1",
         "docusaurus-plugin-typedoc": "^0.14.2",
-        "postprocessing": "^6.19.1",
+        "postprocessing": "^6.22.3",
         "react": "^16.8.4",
         "react-dom": "^16.8.4",
         "react-syntax-highlighter": "^15.4.4",
         "react-transition-group": "^4.4.1",
         "tailwindcss": "^2.2.7",
-        "three": "^0.126.1",
+        "three": "^0.131.3",
         "ts-easing": "^0.2.0"
     },
     "browserslist": {
@@ -43,11 +43,11 @@
     },
     "devDependencies": {
         "@docusaurus/module-type-aliases": "^2.0.0-beta.4",
-        "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",
         "@tsconfig/docusaurus": "^1.0.2",
         "@types/react": "^17.0.2",
         "@types/react-helmet": "^6.1.0",
         "@types/react-router-dom": "^5.1.7",
+        "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",
         "postcss": "^8.3.6",
         "postcss-import": "^14.0.2",
         "postcss-loader": "^6.1.1",
