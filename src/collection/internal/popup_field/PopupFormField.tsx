@@ -71,6 +71,7 @@ interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
     entity?: Entity<S, Key>;
     customFieldValidator?: CustomFieldValidator;
     schema: S;
+    collectionPath: string;
     tableKey: string;
     name?: string;
     property?: Property;
@@ -95,6 +96,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                                                                              name,
                                                                              property,
                                                                              schema,
+                                                                             collectionPath,
                                                                              cellRect,
                                                                              setPreventOutsideClick,
                                                                              formPopupOpen,
@@ -151,6 +153,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
     const validationSchema = getYupEntitySchema(
         schema.properties,
         entity?.values ?? {},
+        collectionPath,
         customFieldValidator,
         entity?.id);
 

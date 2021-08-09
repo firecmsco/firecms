@@ -1,4 +1,4 @@
-import React, { ElementType, ReactElement, useState } from "react";
+import React, { ElementType, ReactElement, useEffect, useState } from "react";
 
 import { useClipboard } from "use-clipboard-hook";
 import {
@@ -51,7 +51,7 @@ import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
 import { useCMSAppContext, useSnackbarController } from "../contexts";
 import { isReadOnly } from "../models/utils";
 import { CMSAppContext } from "../contexts/CMSAppContext";
-import { useEffect } from "react";
+import deepEqual from "deep-equal";
 
 
 /**
@@ -221,7 +221,7 @@ function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySc
 
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
 
-    const [internalValue,setInternalValue] = useState<T | null>(value);
+    const [internalValue, setInternalValue] = useState<T | null>(value);
     useEffect(
         () => {
             const handler = setTimeout(() => {
@@ -234,6 +234,15 @@ function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySc
             };
         },
         [internalValue]
+    );
+
+    useEffect(
+        () => {
+            if (!deepEqual(value, internalValue)) {
+                setInternalValue(value);
+            }
+        },
+        [value]
     );
 
     const cmsFieldProps: FieldProps<T> = {

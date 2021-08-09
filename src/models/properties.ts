@@ -173,6 +173,7 @@ export type Properties<Key extends string = string> = {
 export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> =
     {
         values: Partial<EntityValues<S, Key>>;
+        collectionPath: string;
         entityId?: string;
     };
 /**

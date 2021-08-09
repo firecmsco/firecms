@@ -131,7 +131,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
     if ((status === "existing" || status === "copy") && entity) {
         baseFirestoreValues = entity.values ?? {};
     } else if (status === "new") {
-        baseFirestoreValues = initEntityValues(schema);
+        baseFirestoreValues = initEntityValues(schema, collectionPath);
     } else {
         throw new Error("Form configured wrong");
     }
@@ -212,6 +212,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
     const validationSchema = getYupEntitySchema(
         schema.properties,
         internalValue as Partial<EntityValues<S, Key>> ?? {},
+        collectionPath,
         uniqueFieldValidator,
         entity?.id);
 
@@ -290,7 +291,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                     values
                 };
 
-                const schemaProperties: Properties<Key> = computeSchemaProperties(schema, entity?.id, values);
+                const schemaProperties: Properties<Key> = computeSchemaProperties(schema, collectionPath, entity?.id, values);
                 const formFields = (
                     <Grid container spacing={4}>
 

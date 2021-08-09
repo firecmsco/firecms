@@ -29,7 +29,7 @@ it("timestamp array conversion", () => {
 
 it("Initial values", () => {
 
-    const initialisedValues = initEntityValues(productSchema);
+    const initialisedValues = initEntityValues(productSchema, "test");
     console.log(initialisedValues);
     expect(
         Object.values(initialisedValues).filter((v) => v === undefined)

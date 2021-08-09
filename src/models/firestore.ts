@@ -75,7 +75,7 @@ export function listenCollection<S extends EntitySchema<Key>,
     return collectionReference
         .onSnapshot({
                 next: (colSnapshot) =>
-                    onSnapshot(colSnapshot.docs.map((doc) => createEntityFromSchema(doc, schema))),
+                    onSnapshot(colSnapshot.docs.map((doc) => createEntityFromSchema(doc, schema, path))),
                 error: onError
             }
         );
@@ -139,7 +139,7 @@ export function fetchCollection<S extends EntitySchema<Key>,
     return collectionReference
         .get()
         .then((colSnapshot) =>
-            colSnapshot.docs.map((doc) => createEntityFromSchema(doc, schema)));
+            colSnapshot.docs.map((doc) => createEntityFromSchema(doc, schema, path)));
 }
 
 /**
@@ -162,7 +162,7 @@ export function fetchEntity<S extends EntitySchema<Key>,
         .collection(path)
         .doc(entityId)
         .get()
-        .then((docSnapshot) => createEntityFromSchema(docSnapshot, schema));
+        .then((docSnapshot) => createEntityFromSchema(docSnapshot, schema, path));
 }
 
 /**
@@ -185,7 +185,7 @@ export function listenEntity<S extends EntitySchema<Key>,
     return firebase.firestore()
         .collection(path)
         .doc(entityId)
-        .onSnapshot((docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema)));
+        .onSnapshot((docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema, path)));
 }
 
 /**
@@ -203,7 +203,7 @@ export function listenEntityFromRef<S extends EntitySchema<Key>,
     onSnapshot: (entity: Entity<S, Key>) => void
 ): Function {
     return ref.onSnapshot(
-        (docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema)));
+        (docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema, ref.path)));
 }
 
 /**
@@ -255,16 +255,18 @@ export function replaceTimestampsWithDates(data: any): any {
  * Add missing required fields, expected in the schema, to the values of an entity coming from Firestore
  * @param values
  * @param schema
+ * @param collectionPath
  * @category Firestore
  */
 function sanitizeData<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>
 (
     values: EntityValues<S, Key>,
-    schema: S
+    schema: S,
+    collectionPath: string
 ) {
     let result: any = values;
-    Object.entries(computeSchemaProperties(schema))
+    Object.entries(computeSchemaProperties(schema, collectionPath))
         .forEach(([key, property]) => {
             if (values && values[key] !== undefined) result[key] = values[key];
             else if ((property as Property).validation?.required) result[key] = null;
@@ -282,11 +284,12 @@ export function createEntityFromSchema<S extends EntitySchema<Key>,
     Key extends string = Extract<keyof S["properties"], string>>
 (
     doc: firebase.firestore.DocumentSnapshot,
-    schema: S
+    schema: S,
+    collectionPath: string
 ): Entity<S, Key> {
 
     const data = doc.data() ?
-        sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, Key>, schema)
+        sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, Key>, schema, collectionPath)
         : undefined;
     return {
         id: doc.id,
@@ -335,7 +338,7 @@ export async function saveEntity<S extends EntitySchema<Key>,
         context: CMSAppContext;
     }): Promise<void> {
 
-    const properties: Properties<Key> = computeSchemaProperties(schema, id);
+    const properties: Properties<Key> = computeSchemaProperties(schema, collectionPath, id);
     let updatedValues: EntityValues<S, Key> = updateAutoValues(values, properties, status);
 
     if (schema.onPreSave) {
@@ -487,18 +490,20 @@ export async function deleteEntity<S extends EntitySchema<Key>,
 /**
  *
  * @param schema
+ * @param collectionPath
  * @param entityId
  * @param values
  * @ignore
  */
 export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>(
     schema: EntitySchema<Key>,
+    collectionPath: string,
     entityId?: string | undefined,
     values?: Partial<EntityValues<S, Key>>
 ): Properties<Key> {
     return Object.entries(schema.properties)
         .map(([key, propertyOrBuilder]) => {
-            return { [key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, S, Key>, values ?? schema.defaultValues ?? {}, entityId) };
+            return { [key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, S, Key>, values ?? schema.defaultValues ?? {}, collectionPath, entityId) };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<Key>;
 }
@@ -506,12 +511,13 @@ export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends
 /**
  * Functions used to set required fields to undefined in the initially created entity
  * @param schema
+ * @param collectionPath
  * @param entityId
  * @ignore
  */
 export function initEntityValues<S extends EntitySchema<Key>, Key extends string>
-(schema: S, entityId?: string): EntityValues<S, Key> {
-    const properties: Properties<Key> = computeSchemaProperties(schema, entityId);
+(schema: S, collectionPath: string, entityId?: string): EntityValues<S, Key> {
+    const properties: Properties<Key> = computeSchemaProperties(schema, collectionPath, entityId);
     return initWithProperties(properties, schema.defaultValues);
 }
 

@@ -84,7 +84,7 @@ export default function ArrayContainer<T>({
 
     return <FieldArray
         name={name}
-        validateOnChange={false}
+        validateOnChange={true}
         render={arrayHelpers => {
 
             const moveItem = (dragIndex: number, hoverIndex: number) => {

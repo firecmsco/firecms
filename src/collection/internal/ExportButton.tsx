@@ -126,13 +126,13 @@ export default function ExportButton<S extends EntitySchema<any>>({
         setOpen(false);
     };
 
-    const properties = computeSchemaProperties(schema);
+    const properties = computeSchemaProperties(schema, collectionPath);
     const exportableData: any[] | undefined = data && data.map(e => ({ id: e.id, ...processProperties(e.values as any, properties) }));
     if (exportableData && additionalData) {
         additionalData.forEach((additional, index) => exportableData[index] = { ...exportableData[index], ...additional });
     }
 
-    const headers = getExportHeaders(properties, exportConfig);
+    const headers = getExportHeaders(properties, collectionPath, exportConfig);
 
     const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
 
@@ -222,12 +222,13 @@ export default function ExportButton<S extends EntitySchema<any>>({
 type Header = { label: string, key: string };
 
 function getExportHeaders(properties: Properties,
+                          collectionPath: string,
                           exportConfig?: ExportConfig): Header[] {
     const headers = [
         { label: "id", key: "id" },
         ...Object.entries(properties)
             .map(([childKey, propertyOrBuilder]) => {
-                const property = buildPropertyFrom(propertyOrBuilder, {}, undefined);
+                const property = buildPropertyFrom(propertyOrBuilder, {}, collectionPath, undefined);
                 return getHeaders(property, childKey, "");
             })
             .flat()

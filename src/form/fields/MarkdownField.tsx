@@ -87,7 +87,7 @@ export default function MarkdownField({
 
             <div className={classes.root}>
                 <MDEditor
-                    value={value}
+                    value={typeof value === "string" ? value : ""}
                     preview={"edit"}
                     onChange={(value) => updateValue(value)}
                 />

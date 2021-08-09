@@ -2,7 +2,6 @@ import CustomColorTextField from "../custom_field/CustomColorTextField";
 import { buildSchema, ExportMappingFunction } from "@camberi/firecms";
 import { BlogEntryPreview } from "../custom_schema_view/BlogEntryPreview";
 
-
 export const blogSchema = buildSchema({
     name: "Blog entry",
     views: [{

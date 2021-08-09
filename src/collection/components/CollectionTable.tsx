@@ -223,7 +223,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as Key[])
             .map((key) => {
-                const property: Property<any> = buildPropertyFrom<any, S, Key>(schema.properties[key], schema.defaultValues ?? {});
+                const property: Property<any> = buildPropertyFrom<any, S, Key>(schema.properties[key], schema.defaultValues ?? {}, collectionPath);
                 return ({
                     id: key as string,
                     type: "property",
@@ -659,6 +659,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                     tableKey={tableKey}
                     customFieldValidator={customFieldValidator}
                     schema={schema}
+                    collectionPath={collectionPath}
                     formPopupOpen={formPopupOpen}
                     onCellValueChange={onCellValueChange}
                     setPreventOutsideClick={setPreventOutsideClick}

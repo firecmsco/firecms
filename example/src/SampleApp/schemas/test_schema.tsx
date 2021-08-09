@@ -61,6 +61,13 @@ export const testEntitySchema = buildSchema({
         });
     },
     properties: {
+        string_array: {
+            title: "String array",
+            dataType: "array",
+            of: {
+                dataType: "string"
+            }
+        },
         content: {
             title: "Content",
             description: "Example of a complex array with multiple properties as children",

@@ -10,8 +10,8 @@ import {
 import {
     EntityCustomViewParams,
     EntityValues,
-    Markdown,
-    getDownloadURL
+    getDownloadURL,
+    Markdown
 } from "@camberi/firecms";
 import { blogSchema } from "../schemas/blog_schema";
 import { productSchema } from "../schemas/products_schema";
@@ -80,6 +80,8 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<type
 }
 
 export function Images({ storagePaths }: { storagePaths: string[] }) {
+    if (!storagePaths)
+        return <></>;
     return <Box display="flex">
         {storagePaths.map((path, index) =>
             <Box p={2} m={1}
@@ -104,6 +106,9 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
         }
     }, [storagePath]);
 
+    if (!storagePath)
+        return <></>;
+
     return (<img
         alt={"Generic"}
         style={{
@@ -114,6 +119,10 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
 }
 
 export function Text({ markdownText }: { markdownText: string }) {
+
+    if (!markdownText)
+        return <></>;
+
     return <Container maxWidth={"sm"}>
         <Box mt={6} mb={6}>
             <Markdown source={markdownText}/>
@@ -122,6 +131,7 @@ export function Text({ markdownText }: { markdownText: string }) {
 }
 
 export function Products({ references }: { references: firebase.firestore.DocumentReference[] }) {
+
 
     const [products, setProducts] = useState<object[] | undefined>();
 
@@ -133,16 +143,23 @@ export function Products({ references }: { references: firebase.firestore.Docume
         }
     }, [references]);
 
+
+    if (!references)
+        return <></>;
+
     if (!products) return <CircularProgress/>;
 
     return <Box>
         {products.map((p, index) => <ProductPreview
             key={`products_${index}`}
-            values={p as EntityValues<typeof productSchema>}/>)}
+            productValues={p as EntityValues<typeof productSchema>}/>)}
     </Box>;
 }
 
-export function ProductPreview({ values }: { values: EntityValues<typeof productSchema> }) {
+export function ProductPreview({ productValues }: { productValues: EntityValues<typeof productSchema> }) {
+
+    if (!productValues)
+        return <></>;
 
     return <CardActionArea style={{
         width: "400px",
@@ -157,7 +174,7 @@ export function ProductPreview({ values }: { values: EntityValues<typeof product
         }}>
             <Box flexGrow={1} flexShrink={1} flexBasis={296} p={2}
                  maxHeight={296}>
-                <StorageImage storagePath={values.main_image}/>
+                <StorageImage storagePath={productValues.main_image}/>
             </Box>
             <Typography gutterBottom
                         variant="h6"
@@ -165,13 +182,13 @@ export function ProductPreview({ values }: { values: EntityValues<typeof product
                         style={{
                             marginTop: "16px"
                         }}>
-                {values.name}
+                {productValues.name}
             </Typography>
 
             <Typography variant="body2"
                         color="textSecondary"
                         component="div">
-                {values.price} {values.currency}
+                {productValues.price} {productValues.currency}
             </Typography>
         </CardContent>
     </CardActionArea>;

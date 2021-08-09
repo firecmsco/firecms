@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     FormControl,
     FormHelperText,
@@ -49,8 +49,6 @@ export default function ArrayOneOfField<T extends Array<any>>({
 
     const classes = formStyles();
 
-    const [lastAddedId, setLastAddedId] = useState<number | undefined>();
-
     useClearRestoreValue({
         property,
         value,
@@ -59,6 +57,7 @@ export default function ArrayOneOfField<T extends Array<any>>({
 
     const buildEntry = (index: number, internalId: number) => {
         return <ArrayOneOfEntry
+            key={`array_one_of_${index}`}
             name={`${name}[${index}]`}
             index={index}
             value={value[index]}
@@ -82,7 +81,6 @@ export default function ArrayOneOfField<T extends Array<any>>({
                 <ArrayContainer value={value}
                                 name={name}
                                 buildEntry={buildEntry}
-                                onInternalIdAdded={setLastAddedId}
                                 disabled={isSubmitting}
                                 includeAddButton={true}/>
 
@@ -138,7 +136,16 @@ function ArrayOneOfEntry({
     const classes = formStyles();
 
     const type = value && value[typeField];
-    const selectedProperty = type ? properties[type] : undefined;
+
+    useEffect(() => {
+        if (type !== typeInternal) {
+            setTypeInternal(type);
+        }
+    }, [type]);
+
+    const [typeInternal, setTypeInternal] = useState<string | undefined>(type ?? undefined);
+
+    const property = typeInternal ? properties[typeInternal] : undefined;
 
     const enumValues: EnumValues = Object.entries(properties).map(([key, property]) => ({ [key]: property.title ?? key })).reduce((a, b) => ({ ...a, ...b }));
 
@@ -163,10 +170,11 @@ function ArrayOneOfEntry({
                                 fullWidth
                                 className={classes.oneOfInput}
                                 labelId={`${name}_${index}_select_label`}
-                                value={fieldProps.field.value !== undefined && fieldProps.field.value !== null? fieldProps.field.value : ""}
+                                value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}
                                 onChange={(evt: any) => {
                                     const eventValue = evt.target.value;
                                     fieldProps.form.setFieldTouched(typeFieldName);
+                                    setTypeInternal(eventValue);
                                     fieldProps.form.setFieldValue(typeFieldName, eventValue);
                                     fieldProps.form.setFieldValue(valueFieldName, null);
                                 }}
@@ -195,11 +203,12 @@ function ArrayOneOfEntry({
                 </FastField>
             </FormControl>
 
-            {selectedProperty && (
-                <FormControl fullWidth key={`form_control_${name}_${type}`}>
+            {property && (
+                <FormControl fullWidth
+                             key={`form_control_${name}_${typeInternal}`}>
                     {buildPropertyField({
                         name: valueFieldName,
-                        property: selectedProperty,
+                        property: property,
                         context: context
                     })}
                 </FormControl>

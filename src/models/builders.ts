@@ -23,10 +23,11 @@ import { AdditionalColumnDelegate, EntityCollection } from "./collections";
 export function buildPropertyFrom<T extends CMSType, S extends EntitySchema<Key>, Key extends string>(
     propertyOrBuilder: PropertyOrBuilder<T, S, Key>,
     values: Partial<EntityValues<S, Key>>,
+    collectionPath: string,
     entityId?: string
 ): Property<T> {
     if (typeof propertyOrBuilder === "function") {
-        return propertyOrBuilder({ values, entityId });
+        return propertyOrBuilder({ values, entityId, collectionPath });
     } else {
         return propertyOrBuilder;
     }
