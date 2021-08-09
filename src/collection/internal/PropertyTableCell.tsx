@@ -93,15 +93,6 @@ const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key e
     useEffect(
         () => {
             if (value !== internalValue) {
-                validation
-                    .validate(value)
-                    .then(() => {
-                        setError(undefined);
-                    })
-                    .catch((e) => {
-                        console.error(e);
-                        setError(e);
-                    });
                 setInternalValue(value);
             }
         },

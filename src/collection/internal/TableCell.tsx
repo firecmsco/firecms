@@ -41,7 +41,6 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
 
     const ref = React.createRef<HTMLDivElement>();
 
-
     const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
     const maxHeight = useMemo(() => getRowHeight(size), [size]);
 
