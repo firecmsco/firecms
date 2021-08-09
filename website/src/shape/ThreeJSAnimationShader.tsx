@@ -410,7 +410,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
             focalLength: 1,
             bokehScale: 6
         });
-        composer.addPass(new EffectPass(camera, depthOfFieldEffect));
+        // composer.addPass(new EffectPass(camera, depthOfFieldEffect));
 
         return {
             renderer,
