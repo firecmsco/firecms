@@ -5,6 +5,10 @@
 ### Changed
 
 - [BREAKING] `EntityCustomViewBuilder` has been renamed to `EntityCustomView`
+- Big form performance enhancements
+- Fixes related to `oneOf` array properties.
+- Fixed missing permission error in cell
+- Added `collectionPath` to `PropertyBuilder`
 
 ## [0.46.0] - 2021-08-02
 
