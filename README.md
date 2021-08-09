@@ -44,7 +44,7 @@ https://demo.firecms.co
 
 ### Changelog
 
-https://github.com/Camberi/firecms/blob/master/CHANGELOG.md
+https://firecms.co/docs/changelog
 
 ## Install
 

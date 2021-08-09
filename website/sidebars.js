@@ -41,7 +41,8 @@ module.exports = {
             ]
         },
         'firebase_setup',
-        'deployment'
+        'deployment',
+        'changelog'
     ],
 
     apiSidebar: [
