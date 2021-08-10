@@ -82,7 +82,7 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
 }
 
 export function getYupEntitySchema<T extends CMSType, S extends EntitySchema<Key>, Key extends string>
-(properties: Partial<PropertiesOrBuilder<S, Key>>,
+(properties: PropertiesOrBuilder<S, Key>,
  values: Partial<EntityValues<S, Key>>,
  collectionPath: string,
  customFieldValidator?: CustomFieldValidator,

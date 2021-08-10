@@ -278,6 +278,7 @@ function sanitizeData<S extends EntitySchema<Key>,
  *
  * @param doc
  * @param schema
+ * @param collectionPath
  * @category Firestore
  */
 export function createEntityFromSchema<S extends EntitySchema<Key>,

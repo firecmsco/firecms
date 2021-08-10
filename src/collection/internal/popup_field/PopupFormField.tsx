@@ -153,8 +153,8 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
 
     const validationSchema = getYupEntitySchema(
         name ?
-            { [name]: schema.properties[name] } as Partial<PropertiesOrBuilder<S, Key>>
-            : {},
+            { [name]: schema.properties[name] } as PropertiesOrBuilder<S, Key>
+            : {} as PropertiesOrBuilder<S, Key>,
         entity?.values ?? {},
         collectionPath,
         customFieldValidator,
