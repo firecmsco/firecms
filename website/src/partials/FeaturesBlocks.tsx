@@ -196,8 +196,8 @@ function FeaturesBlocks() {
                         data-aos-delay="100">
                         <h2 className="h2 mb-4">Full set of features</h2>
                         <p className="text-xl text-gray-500">
-                            Everything you need to kickstart your Firebase based
-                            project
+                            Everything you need to kickstart your Firebase-based
+                            project with the best low-code solution
                         </p>
                     </div>
 
@@ -206,7 +206,7 @@ function FeaturesBlocks() {
                         <div
                             data-aos="fade-up"
                             data-aos-delay="100"
-                            className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
+                            className="relative flex flex-col items-center p-6 rounded shadow-lg bg-white dark:bg-opacity-5">
                             {iconStars}
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                 Schema validation

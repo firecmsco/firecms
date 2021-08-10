@@ -15,6 +15,7 @@ import FirebaseIntro from "../partials/FirebaseIntro";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "../css/tailwind.css";
+import Pricing from "../partials/Pricing";
 
 function Home() {
     const context = useDocusaurusContext();
@@ -74,6 +75,9 @@ function Home() {
                     <Separator/>
 
                     <FeaturesBlocks/>
+                    <Separator/>
+
+                    <Pricing/>
                     <Separator/>
 
                     <Testimonials/>
