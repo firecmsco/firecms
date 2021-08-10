@@ -226,7 +226,6 @@ function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySc
         () => {
             const handler = setTimeout(() => {
                 fieldProps.form.setFieldValue(name, internalValue);
-                fieldProps.form.setFieldTouched(name, true, false);
             }, 50);
 
             return () => {
@@ -250,6 +249,7 @@ function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySc
         value: internalValue as T,
         initialValue,
         setValue: (value: T | null) => {
+            fieldProps.form.setFieldTouched(name, true, false);
             setInternalValue(value);
         },
         error,

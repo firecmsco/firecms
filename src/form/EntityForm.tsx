@@ -146,7 +146,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") && !!schema.customId;
 
-    let underlyingChanges: Partial<EntityValues<S, Key>> = useMemo(() => {
+    const underlyingChanges: Partial<EntityValues<S, Key>> = useMemo(() => {
         if (initialValues && status === "existing") {
             return Object.keys(schema.properties)
                 .map((key) => {
@@ -255,7 +255,6 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
             validationSchema={validationSchema}
             validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}
-
         >
             {({
                   values,
