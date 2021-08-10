@@ -27,7 +27,7 @@ export default function ArrayOfStringsPreview({
     const stringProperty = property.of as StringProperty;
 
     return (
-        <div className={classes.arrayRoot}>
+        <div className={classes.array}>
             {value &&
             value.map((v, index) =>
                 <div className={classes.arrayItem}

@@ -99,13 +99,16 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
                 }
             }
         },
+        fullWidth: {
+            width: "100%"
+        },
         error: {
             border: `2px solid ${theme.palette.error.light} !important`
         },
         selected: {
             backgroundColor: "#f9f9f9",
             border: "2px solid #5E9ED6",
-            transition: "border-color 300ms ease-in-out",
+            transition: "border-color 300ms ease-in-out"
         },
         saved: {
             border: `2px solid ${theme.palette.success.main}`

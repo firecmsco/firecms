@@ -36,7 +36,7 @@ export default function ArrayOneOfPreview({
     const properties = property.oneOf.properties;
 
     return (
-        <>
+        <div className={classes.array}>
             {values &&
             values.map((value, index) =>
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
@@ -52,6 +52,6 @@ export default function ArrayOneOfPreview({
                     {index < values.length - 1 && <Divider/>}
                 </React.Fragment>
             )}
-        </>
+        </div>
     );
 }

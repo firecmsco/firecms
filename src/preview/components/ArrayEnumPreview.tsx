@@ -24,7 +24,7 @@ export default function ArrayEnumPreview({
     const classes = useStyles();
 
     return (
-        <div className={classes.arrayRoot}>
+        <div className={classes.arrayWrap}>
             {value &&
             (value as any[]).map((enumKey, index) => {
                     return (

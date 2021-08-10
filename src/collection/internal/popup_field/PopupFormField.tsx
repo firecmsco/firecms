@@ -16,6 +16,7 @@ import {
     EntitySchema,
     EntityValues,
     FormContext,
+    PropertiesOrBuilder,
     Property
 } from "../../../models";
 import { Form, Formik, FormikProps } from "formik";
@@ -50,9 +51,9 @@ export const useStyles = makeStyles(theme => createStyles({
         zIndex: 1300,
         boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
         borderRadius: "4px",
-        backgroundColor: theme.palette.background.paper,
-        transition: "transform 250ms ease-out",
-        transform: "scale(1.0)"
+        backgroundColor: theme.palette.background.paper
+        // transition: "transform 250ms ease-out",
+        // transform: "scale(1.0)"
     },
     popupInner: {
         padding: theme.spacing(2),
@@ -61,7 +62,7 @@ export const useStyles = makeStyles(theme => createStyles({
     },
     hidden: {
         visibility: "hidden",
-        transform: "scale(0.7)",
+        // transform: "scale(0.7)",
         zIndex: -1
     }
 }));
@@ -151,7 +152,9 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
     };
 
     const validationSchema = getYupEntitySchema(
-        schema.properties,
+        name ?
+            { [name]: schema.properties[name] } as Partial<PropertiesOrBuilder<S, Key>>
+            : {},
         entity?.values ?? {},
         collectionPath,
         customFieldValidator,
@@ -250,7 +253,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                 noValidate>
 
                 {name && property && buildPropertyField({
-                    name: name as string,
+                    name,
                     disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
                     property,
                     includeDescription: false,

@@ -291,7 +291,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                     values
                 };
 
-                const schemaProperties: Properties<Key> = computeSchemaProperties(schema, collectionPath, entity?.id, values);
+                const schemaProperties: Properties<Key> = computeSchemaProperties(schema, collectionPath, entity?.id, values as EntityValues<S, Key>);
                 const formFields = (
                     <Grid container spacing={4}>
 

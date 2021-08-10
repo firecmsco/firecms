@@ -496,7 +496,7 @@ export async function deleteEntity<S extends EntitySchema<Key>,
  * @ignore
  */
 export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>(
-    schema: EntitySchema<Key>,
+    schema: S,
     collectionPath: string,
     entityId?: string | undefined,
     values?: Partial<EntityValues<S, Key>>

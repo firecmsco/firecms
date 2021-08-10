@@ -34,7 +34,7 @@ export default function ArrayPreview({
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
-        <>
+        <div className={classes.array}>
             {values &&
             values.map((value, index) =>
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
@@ -50,6 +50,6 @@ export default function ArrayPreview({
                     {index < values.length - 1 && <Divider/>}
                 </React.Fragment>
             )}
-        </>
+        </div>
     );
 }

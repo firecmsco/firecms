@@ -12,9 +12,13 @@ export const useStyles = makeStyles((theme: Theme) =>
         smallMargin: {
             margin: theme.spacing(1)
         },
-        arrayRoot: {
+        arrayWrap: {
             display: "flex",
             flexWrap: "wrap"
+        },
+        array: {
+            display: "flex",
+            flexDirection: "column"
         },
         arrayItem: {
             margin: theme.spacing(0.5)

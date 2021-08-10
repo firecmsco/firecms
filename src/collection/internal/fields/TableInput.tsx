@@ -53,16 +53,18 @@ export function TableInput(props: {
     }, [focused]);
 
     return (
-        <TextareaAutosize
-            ref={ref}
-            disabled={disabled}
-            className={clsx(classes.input)}
-            value={internalValue ?? ""}
-            onChange={(evt) => {
-                const newValue = evt.target.value as string;
-                if (multiline || !newValue.endsWith("\n"))
-                    setInternalValue(newValue);
-            }}
-        />
+        <div style={{ display: "flex" }}>
+            <TextareaAutosize
+                ref={ref}
+                disabled={disabled}
+                className={clsx(classes.input)}
+                value={internalValue ?? ""}
+                onChange={(evt) => {
+                    const newValue = evt.target.value as string;
+                    if (multiline || !newValue.endsWith("\n"))
+                        setInternalValue(newValue);
+                }}
+            />
+        </div>
     );
 }

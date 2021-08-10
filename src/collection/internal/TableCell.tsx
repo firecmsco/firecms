@@ -106,8 +106,11 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
     };
 
     const onMeasure = useCallback((contentRect: ContentRect) => {
-        if (contentRect?.bounds)
-            setIsOverflowing(contentRect.bounds.height > maxHeight);
+        if (contentRect?.bounds) {
+            const newOverflowingValue = contentRect.bounds.height > maxHeight;
+            if (isOverflowing !== newOverflowingValue)
+                setIsOverflowing(newOverflowingValue);
+        }
     }, [maxHeight]);
 
 
@@ -117,6 +120,17 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
         disabled: disabled
     });
 
+    const measuredDiv = <Measure
+        bounds
+        onResize={onMeasure}
+    >
+        {({ measureRef }) => (
+            <div ref={measureRef}
+                 className={clsx(cellClasses.fullWidth)}>
+                {children}
+            </div>
+        )}
+    </Measure>;
     return (
         <div
             tabIndex={selected || disabled ? undefined : 0}
@@ -129,27 +143,19 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
             className={clsx(
                 cellClasses.tableCell,
                 {
-                    [cellClasses.centered]: disabled || !isOverflowing,
-                    [cellClasses.faded]: !disabled && !allowScroll && isOverflowing,
-                    [cellClasses.scrollable]: !disabled && allowScroll && isOverflowing
-                },
-                {
                     [cellClasses.disabled]: disabled,
+                    [cellClasses.centered]: disabled || !isOverflowing,
                     [cellClasses.error]: error,
                     [cellClasses.saved]: selected && internalSaved,
                     [cellClasses.selected]: !error && selected || focused
                 })}>
 
-            <Measure
-                bounds
-                onResize={onMeasure}
-            >
-                {({ measureRef }) => (
-                    <div ref={measureRef} style={{ width: "100%" }}>
-                        {children}
-                    </div>
-                )}
-            </Measure>
+            <div className={clsx(cellClasses.fullWidth, {
+                [cellClasses.faded]: !disabled && !allowScroll && isOverflowing,
+                [cellClasses.scrollable]: !disabled && allowScroll && isOverflowing
+            })}>
+                {measuredDiv}
+            </div>
 
             {disabled && onHover && disabledTooltip &&
             <div style={{

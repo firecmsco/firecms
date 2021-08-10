@@ -22,7 +22,7 @@ export default function ArrayOfStorageComponentsPreview({
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
     const classes = useStyles();
 
-    return <div className={classes.arrayRoot}>
+    return <div className={classes.arrayWrap}>
         {value &&
         value.map((v, index) =>
             <div className={classes.arrayItem}
