@@ -32,7 +32,23 @@ const locales = {
     "es-419": "Spanish (South America)"
 };
 
-const productSchema = buildSchema({
+type Product = {
+    name: string;
+    price: number;
+    status: string;
+    published: boolean;
+    main_image: string;
+    tags: string[];
+    description: string;
+    categories: string[];
+    publisher: {
+        name: string;
+        external_id: string;
+    },
+    expires_on: Date
+}
+
+const productSchema = buildSchema<Product>({
     name: "Product",
     properties: {
         name: {
@@ -172,7 +188,7 @@ const localeSchema = buildSchema({
     }
 });
 
-export function App() {
+export default function App() {
 
 
     const navigation: NavigationBuilder = async ({

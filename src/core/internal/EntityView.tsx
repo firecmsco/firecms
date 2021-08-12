@@ -127,17 +127,17 @@ const useStylesSide = makeStyles((theme: Theme) =>
 );
 
 
-export interface EntitySideViewProps<S extends EntitySchema<Key>, Key extends string> {
+export interface EntitySideViewProps<M extends { [Key: string]: any }> {
     collectionPath: string;
     entityId?: string;
     copy?: boolean;
     selectedSubpath?: string;
-    permissions?: PermissionsBuilder<any, any>;
+    permissions?: PermissionsBuilder<any>;
     schema: EntitySchema<any>;
-    subcollections?: EntityCollection[];
+    subcollections?: EntityCollection<any>[];
 }
 
-function EntityView<S extends EntitySchema<Key>, Key extends string>({
+function EntityView<M extends { [Key: string]: any }>({
                                                                          collectionPath,
                                                                          entityId,
                                                                          selectedSubpath,
@@ -145,7 +145,7 @@ function EntityView<S extends EntitySchema<Key>, Key extends string>({
                                                                          permissions,
                                                                          schema,
                                                                          subcollections
-                                                                     }: EntitySideViewProps<S, Key>) {
+                                                                     }: EntitySideViewProps<M>) {
 
     const classes = useStylesSide();
 
@@ -155,7 +155,7 @@ function EntityView<S extends EntitySchema<Key>, Key extends string>({
     const context = useCMSAppContext();
     const authController = useAuthController();
 
-    const [entity, setEntity] = useState<Entity<EntitySchema>>();
+    const [entity, setEntity] = useState<Entity<M>>();
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
     const [loading, setLoading] = useState<boolean>(true);
     const [readOnly, setReadOnly] = useState<boolean>(false);
@@ -173,7 +173,7 @@ function EntityView<S extends EntitySchema<Key>, Key extends string>({
 
     useEffect(() => {
         if (entityId) {
-            const cancelSubscription = listenEntity<EntitySchema>(
+            const cancelSubscription = listenEntity<M>(
                 collectionPath,
                 entityId,
                 schema,
@@ -233,7 +233,7 @@ function EntityView<S extends EntitySchema<Key>, Key extends string>({
     }, [window]);
 
 
-    async function onEntitySave(schema: EntitySchema, collectionPath: string, id: string | undefined, values: EntityValues<any, any>): Promise<void> {
+    async function onEntitySave(schema: EntitySchema<M>, collectionPath: string, id: string | undefined, values: EntityValues<M>): Promise<void> {
 
         if (!status)
             return;
@@ -256,7 +256,7 @@ function EntityView<S extends EntitySchema<Key>, Key extends string>({
             console.error(e);
         };
 
-        const onSaveSuccess = (updatedEntity: Entity<EntitySchema>) => {
+        const onSaveSuccess = (updatedEntity: Entity<M>) => {
 
             console.log("onSaveSuccess");
             setEntity(updatedEntity);

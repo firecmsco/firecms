@@ -38,7 +38,7 @@ import Markdown from "./components/Markdown";
 /**
  * @category Preview components
  */
-export default function PreviewComponent(props: PreviewComponentProps) {
+export default function PreviewComponent<T extends CMSType>(props: PreviewComponentProps<T>) {
     return <MemoPreviewComponent {...props} />;
 }
 
@@ -191,5 +191,5 @@ function buildWrongValueType(name: string | undefined, dataType: string, value: 
     );
 }
 
-const MemoPreviewComponent = React.memo<PreviewComponentProps>(PreviewComponentInternal) as React.FunctionComponent<PreviewComponentProps>;
+const MemoPreviewComponent = React.memo<PreviewComponentProps<any>>(PreviewComponentInternal) as React.FunctionComponent<PreviewComponentProps<any>>;
 

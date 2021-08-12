@@ -46,10 +46,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export interface EntityPreviewProps<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>> {
-    entity: Entity<S, Key>;
-    schema: S;
+export interface EntityPreviewProps<M extends { [Key: string]: any }> {
+    entity: Entity<M>;
+    schema: EntitySchema<M>;
 }
 
 /**
@@ -59,12 +58,11 @@ export interface EntityPreviewProps<S extends EntitySchema<Key> = EntitySchema<a
  * @constructor
  * @category Core components
  */
-export default function EntityPreview<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>>(
+export default function EntityPreview<M extends { [Key: string]: any }>(
     {
         entity,
         schema
-    }: EntityPreviewProps<S, Key>) {
+    }: EntityPreviewProps<M>) {
 
     const classes = useStyles();
 
@@ -106,7 +104,7 @@ export default function EntityPreview<S extends EntitySchema<Key> = EntitySchema
 
                     {schema && Object.entries(schema.properties).map(([key, propertyOrBuilder]) => {
                         const value = (entity.values as any)[key];
-                        const property: Property = buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, S, Key>, entity.values, entity.id);
+                        const property: Property = buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, entity.values, entity.id);
                         return (
                             <TableRow
                                 key={"entity_prev" + property.title + key}>

@@ -1,4 +1,8 @@
-import { Entity, FieldProps, Property } from "../../models";
+import {
+    Entity,
+    FieldProps,
+    Property
+} from "../../models";
 import {
     Box,
     Button,

@@ -41,6 +41,9 @@ fields, common to all data types:
 * `disabled` Is this a read only property.
 
 * `config`
+  You can see more details about how to implement
+  [custom fields](custom_fields.md)
+
     * `field`
       If you need to render a custom field, you can create a component that
       takes `FieldProps` as props. You receive the value, a function to update
@@ -57,8 +60,6 @@ fields, common to all data types:
       Additional props that are passed to the components defined in `field` or
       in `preview`.
 
-You can see more details about how to
-implement [custom fields](custom_fields.md)
 
 * `onPreSave` Hook called before saving, you need to return the values that will
   get saved. If you throw an error in this method the process stops, and an
@@ -70,24 +71,57 @@ implement [custom fields](custom_fields.md)
 
 * `defaultValues` Object defining the initial values of the entity on creation.
 
-### Conditional fields from properties
-
-When defining the properties of a schema, you can choose to use a builder
-(`PropertyBuilder`), instead of assigning the property configuration directly.
-In the builder you receive `PropertyBuilderProps` and return your property.
-
-This is useful for changing property configurations like available values on the
-fly, based on other values.
-
-Example of field that gets enabled or disabled based on other values:
+### Sample entity schema
 
 ```tsx
-export const productSchema: EntitySchema = buildSchema({
+import { buildSchema } from "@camberi/firecms";
+import firebase from "firebase/app";
+
+type Product = {
+    name: string;
+    main_image: string;
+    available: boolean;
+    price: number;
+    related_products: firebase.firestore.DocumentReference[];
+    publisher: {
+        name: string;
+        external_id: string;
+    }
+}
+
+export const productSchema = buildSchema<Product>({
     name: "Product",
     properties: {
+        name: {
+            dataType: "string",
+            title: "Name",
+            config: {
+                multiline: true
+            },
+            validation: { required: true }
+        },
+        main_image: {
+            dataType: "string",
+            title: "Image",
+            config: {
+                storageMeta: {
+                    mediaType: "image",
+                    storagePath: "images",
+                    acceptedFiles: ["image/*"],
+                    metadata: {
+                        cacheControl: "max-age=1000000"
+                    }
+                }
+            },
+            description: "Upload field for images",
+            validation: {
+                required: true
+            }
+        },
         available: {
             dataType: "boolean",
-            title: "Available"
+            title: "Available",
+            columnWidth: 100
         },
         price: ({ values }) => ({
             dataType: "number",
@@ -102,88 +136,31 @@ export const productSchema: EntitySchema = buildSchema({
                 disabledMessage: "You can only set the price on available items"
             },
             description: "Price with range validation"
-        })
+        }),
+        related_products: {
+            dataType: "array",
+            title: "Related products",
+            description: "Reference to self",
+            of: {
+                dataType: "reference",
+                collectionPath: "products"
+            }
+        },
+        publisher: {
+            title: "Publisher",
+            description: "This is an example of a map property",
+            dataType: "map",
+            properties: {
+                name: {
+                    title: "Name",
+                    dataType: "string"
+                },
+                external_id: {
+                    title: "External id",
+                    dataType: "string"
+                }
+            }
+        }
     }
 });
 ```
-
-### Saving callbacks
-
-When you are saving an entity you can attach different callbacks before and
-after it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
-
-```tsx
-const productSchema = buildSchema({
-    customId: true,
-    name: "Product",
-    onPreSave: ({
-                    schema,
-                    collectionPath,
-                    id,
-                    values,
-                    status
-                }: EntitySaveProps<typeof productSchema>) => {
-        values.uppercase_name = values.name.toUpperCase();
-        return values;
-    },
-    onSaveSuccess: (props: EntitySaveProps<typeof productSchema>) => {
-        console.log("onSaveSuccess", props);
-    },
-
-    onDelete: (props: EntityDeleteProps<typeof productSchema>) => {
-        console.log("onDelete", props);
-    },
-    properties: {
-        name: {
-            title: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        uppercase_name: {
-            title: "Uppercase Name",
-            dataType: "string",
-            disabled: true,
-            description: "This field gets updated with a preSave callback"
-        },
-    }
-});
-```
-
-#### EntitySaveProps
-
-* `schema`: EntitySchema
-  Resolved schema of the entity
-
-* `collectionPath`: string
-  Full path where this entity is being saved
-
-* `id`?: string
-  Id of the entity or undefined if new
-
-* `values`: EntityValues<S, Key>
-  Values being saved
-
-* `status`: EntityStatus
-  New or existing entity
-
-* `context`: CMSAppContext
-  Context of the app status
-
-
-#### EntityDeleteProps
-
-* `schema`: EntitySchema
-  Resolved schema of the entity
-
-* `collectionPath`: string
-  Full path where this entity is being saved
-
-* `id`?: string
-  Id of the entity or undefined if new
-
-* `entity`: Entity<S, Key>
-  Deleted entity
-
-* `context`: CMSAppContext
-  Context of the app status
-

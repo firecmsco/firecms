@@ -12,6 +12,7 @@ module.exports = {
             label: 'Default views',
             items: [
                 'entity_schemas',
+                'entity_schemas_advanced',
                 'collections',
                 {
                     type: 'category',
@@ -84,7 +85,6 @@ module.exports = {
                         'api/functions/buildproperty',
                         'api/functions/buildpropertyfrom',
                         'api/functions/buildschema',
-                        'api/functions/buildschemafrom'
                     ]
                 },
                 {

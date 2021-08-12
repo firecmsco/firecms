@@ -6,7 +6,6 @@ import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
 import {
     Properties,
     Property,
-    PropertyBuilder,
     PropertyOrBuilder
 } from "./properties";
 import { buildPropertyFrom } from "./builders";
@@ -28,13 +27,12 @@ import { FilterValues, WhereFilterOp } from "./collections";
  * @see useCollectionFetch if you need this functionality implemented as a hook
  * @category Firestore
  */
-export function listenCollection<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>(
+export function listenCollection<M extends { [Key: string]: any }>(
     path: string,
-    schema: S,
-    onSnapshot: (entity: Entity<S, Key>[]) => void,
+    schema: EntitySchema<M>,
+    onSnapshot: (entity: Entity<M>[]) => void,
     onError?: (error: Error) => void,
-    filter?: FilterValues<Key>,
+    filter?: FilterValues<M>,
     limit?: number,
     startAfter?: any[],
     orderBy?: string,
@@ -94,16 +92,15 @@ export function listenCollection<S extends EntitySchema<Key>,
  * @see useCollectionFetch if you need this functionality implemented as a hook
  * @category Firestore
  */
-export function fetchCollection<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>(
+export function fetchCollection<M extends { [Key: string]: any }>(
     path: string,
-    schema: S,
-    filter?: FilterValues<Key>,
+    schema: EntitySchema<M>,
+    filter?: FilterValues<M>,
     limit?: number,
     startAfter?: any[],
     orderBy?: string,
     order?: "desc" | "asc"
-): Promise<Entity<S, Key>[]> {
+): Promise<Entity<M>[]> {
 
     console.debug("Fetching collection", path, limit, filter, startAfter, orderBy, order);
 
@@ -149,12 +146,11 @@ export function fetchCollection<S extends EntitySchema<Key>,
  * @param schema
  * @category Firestore
  */
-export function fetchEntity<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>(
+export function fetchEntity<M extends { [Key: string]: any }>(
     path: string,
     entityId: string,
-    schema: S
-): Promise<Entity<S, Key>> {
+    schema: EntitySchema<M>
+): Promise<Entity<M>> {
 
     console.debug("Fetch entity", path, entityId);
 
@@ -174,12 +170,11 @@ export function fetchEntity<S extends EntitySchema<Key>,
  * @return Function to cancel subscription
  * @category Firestore
  */
-export function listenEntity<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>(
+export function listenEntity<M extends { [Key: string]: any }>(
     path: string,
     entityId: string,
-    schema: S,
-    onSnapshot: (entity: Entity<S, Key>) => void
+    schema: EntitySchema<M>,
+    onSnapshot: (entity: Entity<M>) => void
 ): Function {
     console.debug("Listening entity", path, entityId);
     return firebase.firestore()
@@ -196,11 +191,10 @@ export function listenEntity<S extends EntitySchema<Key>,
  * @return Function to cancel subscription
  * @category Firestore
  */
-export function listenEntityFromRef<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>(
+export function listenEntityFromRef<M extends { [Key: string]: any }>(
     ref: firebase.firestore.DocumentReference,
-    schema: S,
-    onSnapshot: (entity: Entity<S, Key>) => void
+    schema: EntitySchema<M>,
+    onSnapshot: (entity: Entity<M>) => void
 ): Function {
     return ref.onSnapshot(
         (docSnapshot) => onSnapshot(createEntityFromSchema(docSnapshot, schema, ref.path)));
@@ -258,11 +252,10 @@ export function replaceTimestampsWithDates(data: any): any {
  * @param collectionPath
  * @category Firestore
  */
-function sanitizeData<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>
+function sanitizeData<M extends { [Key: string]: any }>
 (
-    values: EntityValues<S, Key>,
-    schema: S,
+    values: EntityValues<M>,
+    schema: EntitySchema<M>,
     collectionPath: string
 ) {
     let result: any = values;
@@ -281,16 +274,15 @@ function sanitizeData<S extends EntitySchema<Key>,
  * @param collectionPath
  * @category Firestore
  */
-export function createEntityFromSchema<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>
+export function createEntityFromSchema<M extends { [Key: string]: any }>
 (
     doc: firebase.firestore.DocumentSnapshot,
-    schema: S,
+    schema: EntitySchema<M>,
     collectionPath: string
-): Entity<S, Key> {
+): Entity<M> {
 
     const data = doc.data() ?
-        sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<S, Key>, schema, collectionPath)
+        sanitizeData(replaceTimestampsWithDates(doc.data()) as EntityValues<M>, schema, collectionPath)
         : undefined;
     return {
         id: doc.id,
@@ -313,8 +305,7 @@ export function createEntityFromSchema<S extends EntitySchema<Key>,
  * @param onSaveSuccessHookError
  * @category Firestore
  */
-export async function saveEntity<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>(
+export async function saveEntity<M extends { [Key: string]: any }>(
     {
         collectionPath,
         id,
@@ -329,18 +320,18 @@ export async function saveEntity<S extends EntitySchema<Key>,
     }: {
         collectionPath: string,
         id: string | undefined,
-        values: Partial<EntityValues<S, Key>>,
-        schema: S,
+        values: Partial<EntityValues<M>>,
+        schema: EntitySchema<M>,
         status: EntityStatus,
-        onSaveSuccess?: (entity: Entity<S, Key>) => void,
+        onSaveSuccess?: (entity: Entity<M>) => void,
         onSaveFailure?: (e: Error) => void,
         onPreSaveHookError?: (e: Error) => void,
         onSaveSuccessHookError?: (e: Error) => void;
         context: CMSAppContext;
     }): Promise<void> {
 
-    const properties: Properties<Key> = computeSchemaProperties(schema, collectionPath, id);
-    let updatedValues: EntityValues<S, Key> = updateAutoValues(values, properties, status);
+    const properties: Properties<M> = computeSchemaProperties(schema, collectionPath, id);
+    let updatedValues: EntityValues<M> = updateAutoValues(values, properties, status);
 
     if (schema.onPreSave) {
         try {
@@ -372,7 +363,7 @@ export async function saveEntity<S extends EntitySchema<Key>,
             .collection(collectionPath)
             .doc();
 
-    const entity: Entity<S, Key> = {
+    const entity: Entity<M> = {
         id: documentReference.id,
         reference: documentReference,
         values: updatedValues
@@ -427,8 +418,7 @@ export async function saveEntity<S extends EntitySchema<Key>,
  * @return was the whole deletion flow successful
  * @category Firestore
  */
-export async function deleteEntity<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>(
+export async function deleteEntity<M extends { [Key: string]: any }>(
     {
         entity,
         schema,
@@ -439,13 +429,13 @@ export async function deleteEntity<S extends EntitySchema<Key>,
         onDeleteSuccessHookError,
         context
     }: {
-        entity: Entity<S, Key>;
+        entity: Entity<M>;
         collectionPath: string;
-        schema: S;
-        onDeleteSuccess?: (entity: Entity<S, Key>) => void;
-        onDeleteFailure?: (entity: Entity<S, Key>, e: Error) => void;
-        onPreDeleteHookError?: (entity: Entity<S, Key>, e: Error) => void;
-        onDeleteSuccessHookError?: (entity: Entity<S, Key>, e: Error) => void;
+        schema: EntitySchema<M>;
+        onDeleteSuccess?: (entity: Entity<M>) => void;
+        onDeleteFailure?: (entity: Entity<M>, e: Error) => void;
+        onPreDeleteHookError?: (entity: Entity<M>, e: Error) => void;
+        onDeleteSuccessHookError?: (entity: Entity<M>, e: Error) => void;
         context: CMSAppContext;
     }
 ): Promise<boolean> {
@@ -496,17 +486,17 @@ export async function deleteEntity<S extends EntitySchema<Key>,
  * @param values
  * @ignore
  */
-export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>(
-    schema: S,
+export function computeSchemaProperties<M extends { [Key: string]: any }>(
+    schema: EntitySchema<M>,
     collectionPath: string,
     entityId?: string | undefined,
-    values?: Partial<EntityValues<S, Key>>
-): Properties<Key> {
+    values?: Partial<EntityValues<M>>
+): Properties<M> {
     return Object.entries(schema.properties)
         .map(([key, propertyOrBuilder]) => {
-            return { [key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, S, Key>, values ?? schema.defaultValues ?? {}, collectionPath, entityId) };
+            return { [key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, values ?? schema.defaultValues ?? {}, collectionPath, entityId) };
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<Key>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<M>;
 }
 
 /**
@@ -516,29 +506,23 @@ export function computeSchemaProperties<S extends EntitySchema<Key>, Key extends
  * @param entityId
  * @ignore
  */
-export function initEntityValues<S extends EntitySchema<Key>, Key extends string>
-(schema: S, collectionPath: string, entityId?: string): EntityValues<S, Key> {
-    const properties: Properties<Key> = computeSchemaProperties(schema, collectionPath, entityId);
+export function initEntityValues<M extends { [Key: string]: any }>
+(schema: EntitySchema<M>, collectionPath: string, entityId?: string): EntityValues<M> {
+    const properties: Properties<M> = computeSchemaProperties(schema, collectionPath, entityId);
     return initWithProperties(properties, schema.defaultValues);
 }
 
-type PropertiesValues<S extends EntitySchema<Key>, Key extends string> = {
-    [K in Key]: S["properties"][K] extends Property<infer T> ? T :
-        (S["properties"][K] extends PropertyBuilder<infer T, S, Key> ? T : any);
-};
 
 
-function initWithProperties<S extends EntitySchema<Key>,
-    P extends Properties<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>
-(properties: P, defaultValues?: Partial<PropertiesValues<S, Key>>): PropertiesValues<S, Key> {
+function initWithProperties<M extends { [Key: string]: any }>
+(properties: Properties<M>, defaultValues?: Partial<EntityValues<M>>): EntityValues<M> {
     return Object.entries(properties)
         .map(([key, property]) => {
             const propertyDefaultValue = defaultValues && key in defaultValues ? (defaultValues as any)[key] : undefined;
             const value = initPropertyValue(key, property as Property, propertyDefaultValue);
             return value === undefined ? {} : { [key]: value };
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<any, any>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
 }
 
 function initPropertyValue(key: string, property: Property, defaultValue: any) {
@@ -589,20 +573,18 @@ function updateAutoValue(inputValue: any,
     return value;
 }
 
-function clearMapMissingValues<S extends EntitySchema<Key>,
-    P extends Properties<Key>, Key extends string>
-(inputValues: Partial<PropertiesValues<S, Key>>, properties: P): PropertiesValues<S, Key> {
+function clearMapMissingValues<M extends { [Key: string]: any }>
+(inputValues: Partial<EntityValues<M>>, properties: Properties<M>): EntityValues<M> {
     return Object.entries(properties)
         .map(([key, _]) => {
             const inputValue = inputValues && (inputValues as any)[key];
             return ({ [key]: inputValue === undefined ? firebase.firestore.FieldValue.delete() : inputValue });
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<S, Key>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
 }
 
-function updateAutoValues<S extends EntitySchema<Key>,
-    P extends Properties<Key>, Key extends string>
-(inputValues: Partial<PropertiesValues<S, Key>>, properties: P, status: EntityStatus): PropertiesValues<S, Key> {
+function updateAutoValues<M extends { [Key: string]: any }>
+(inputValues: Partial<EntityValues<M>>, properties: Properties<M>, status: EntityStatus): EntityValues<M> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues as any)[key];
@@ -610,7 +592,7 @@ function updateAutoValues<S extends EntitySchema<Key>,
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesValues<S, Key>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
     return { ...inputValues, ...updatedValues };
 }
 

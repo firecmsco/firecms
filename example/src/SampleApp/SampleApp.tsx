@@ -38,10 +38,11 @@ import { customSchemaResolver } from "./schemas/custom_schema_resolver";
 
 import "typeface-rubik";
 import "typeface-space-mono";
+import { Locale, Product } from "./types";
 
 function SampleApp() {
 
-    const localeCollection: EntityCollection<typeof localeSchema> =
+    const localeCollection: EntityCollection<Locale> =
         buildCollection({
             name: "Locales",
             relativePath: "locales",
@@ -49,7 +50,7 @@ function SampleApp() {
             defaultSize: "m"
         });
 
-    const productsCollection = buildCollection<typeof productSchema>({
+    const productsCollection = buildCollection<Product>({
         relativePath: "products",
         schema: productSchema,
         name: "Products",
@@ -71,7 +72,7 @@ function SampleApp() {
         excludedProperties: ["images", "related_products"]
     });
 
-    const usersCollection = buildCollection<typeof usersSchema>({
+    const usersCollection = buildCollection({
         relativePath: "users",
         schema: usersSchema,
         name: "Users",
@@ -88,7 +89,7 @@ function SampleApp() {
         properties: ["first_name", "last_name", "email", "phone", "sample_additional", "picture"]
     });
 
-    const blogCollection = buildCollection<typeof blogSchema>({
+    const blogCollection = buildCollection({
         relativePath: "blog",
         schema: blogSchema,
         name: "Blog",
@@ -105,7 +106,7 @@ function SampleApp() {
         }
     });
 
-    const testCollection = buildCollection<typeof testEntitySchema>({
+    const testCollection = buildCollection({
         relativePath: "test_entity",
         schema: testEntitySchema,
         name: "Test entity",

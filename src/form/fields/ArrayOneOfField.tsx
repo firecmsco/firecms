@@ -17,7 +17,12 @@ import { buildPropertyField } from "../form_factory";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 import { enumToObjectEntries } from "../../util/enums";
-import { EnumValues, FieldProps, FormContext, Property } from "../../models";
+import {
+    EnumValues,
+    FieldProps,
+    FormContext,
+    Property
+} from "../../models";
 
 
 /**
@@ -120,7 +125,7 @@ type ArrayOneOfEntryProps = {
     /**
      * Additional values related to the state of the form or the entity
      */
-    context: FormContext<any, any>;
+    context: FormContext<any>;
 }
 
 function ArrayOneOfEntry({

@@ -55,7 +55,7 @@ type PropertyContext<PT extends Property> = {
     property: PT,
     parentProperty?: MapProperty | ArrayProperty,
     customFieldValidator?: CustomFieldValidator,
-    name?: string
+    name?: any
 }
 
 export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySchema<unknown> {
@@ -81,16 +81,16 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
     throw Error("Unsupported data type in yup mapping: " + property);
 }
 
-export function getYupEntitySchema<T extends CMSType, S extends EntitySchema<Key>, Key extends string>
-(properties: PropertiesOrBuilder<S, Key>,
- values: Partial<EntityValues<S, Key>>,
+export function getYupEntitySchema<T extends CMSType, M extends { [Key: string]: any }>
+(properties: PropertiesOrBuilder<M>,
+ values: Partial<EntityValues<M>>,
  collectionPath: string,
  customFieldValidator?: CustomFieldValidator,
  entityId?: string): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties).forEach(([name, propertyOrBuilder]) => {
         objectSchema[name] = mapPropertyToYup({
-            property: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, S, Key>, values, collectionPath, entityId),
+            property: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, values, collectionPath, entityId),
             customFieldValidator,
             name
         });
@@ -98,7 +98,7 @@ export function getYupEntitySchema<T extends CMSType, S extends EntitySchema<Key
     return yup.object().shape(objectSchema);
 }
 
-export function getYupMapObjectSchema<S extends EntitySchema<Key>, Key extends string>({
+export function getYupMapObjectSchema<M extends { [Key: string]: any }>({
                                                                                            property,
                                                                                            parentProperty,
                                                                                            customFieldValidator,
@@ -251,7 +251,7 @@ function getYupDateSchema({
     return schema;
 }
 
-function getYupReferenceSchema<S extends EntitySchema>({
+function getYupReferenceSchema<M extends { [Key: string]: any }>({
                                                            property,
                                                            parentProperty,
                                                            customFieldValidator,

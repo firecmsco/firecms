@@ -10,15 +10,16 @@ import {
 import {
     EntityCustomViewParams,
     EntityValues,
+    InferSchemaType,
     getDownloadURL,
     Markdown
 } from "@camberi/firecms";
-import { blogSchema } from "../schemas/blog_schema";
-import { productSchema } from "../schemas/products_schema";
 import firebase from "firebase";
+import { Product } from "../types";
+import { blogSchema } from "../schemas/blog_schema";
 
 
-export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<typeof blogSchema>) {
+export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<InferSchemaType<typeof blogSchema>>) {
 
     const [headerUrl, setHeaderUrl] = useState<string | undefined>();
     useEffect(() => {
@@ -152,11 +153,11 @@ export function Products({ references }: { references: firebase.firestore.Docume
     return <Box>
         {products.map((p, index) => <ProductPreview
             key={`products_${index}`}
-            productValues={p as EntityValues<typeof productSchema>}/>)}
+            productValues={p as EntityValues<Product>}/>)}
     </Box>;
 }
 
-export function ProductPreview({ productValues }: { productValues: EntityValues<typeof productSchema> }) {
+export function ProductPreview({ productValues }: { productValues: EntityValues<Product> }) {
 
     if (!productValues)
         return <></>;

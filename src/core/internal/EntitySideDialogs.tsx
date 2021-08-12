@@ -14,7 +14,7 @@ import { SideEntityPanelProps } from "../../models/side_panel";
 import { CONTAINER_WIDTH } from "./common";
 
 
-export function EntitySideDialogs<S extends EntitySchema>() {
+export function EntitySideDialogs<M extends { [Key: string]: any }>() {
 
     const sideEntityController = useSideEntityController();
     const schemasRegistry = useSchemasRegistry();

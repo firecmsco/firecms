@@ -10,7 +10,7 @@ import { PreviewComponentProps } from "../preview_component_props";
 /**
  * @category Preview components
  */
-export default function ArrayOfMapsPreview({
+export default function ArrayOfMapsPreview<T>({
                                        name,
                                        value,
                                        property,
@@ -20,12 +20,12 @@ export default function ArrayOfMapsPreview({
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");
 
-    const properties = ((property as ArrayProperty).of as MapProperty).properties;
+    const properties = ((property as ArrayProperty).of as MapProperty<any>).properties;
     if (!properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
     }
     const values = value;
-    const previewProperties = ((property as ArrayProperty).of as MapProperty).previewProperties;
+    const previewProperties = ((property as ArrayProperty).of as MapProperty<any>).previewProperties;
 
     if (!values) return null;
 
@@ -49,14 +49,14 @@ export default function ArrayOfMapsPreview({
                             {mapProperties && mapProperties.map(
                                 (key, index) => (
                                     <TableCell
-                                        key={`table-cell-${key}`}
+                                        key={`table-cell-${key as string}`}
                                         component="th"
                                     >
                                         <ErrorBoundary>
                                             <PreviewComponent
-                                                name={key}
+                                                name={key as string}
                                                 value={(value as any)[key]}
-                                                property={properties[key]}
+                                                property={properties[key as string]}
                                                 size={"small"}/>
                                         </ErrorBoundary>
                                     </TableCell>

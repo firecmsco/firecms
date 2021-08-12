@@ -3,16 +3,16 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { EntitySchema } from "../models";
 
-export interface AsyncPreviewComponentProps<S extends EntitySchema> {
+export interface AsyncPreviewComponentProps<M extends { [Key: string]: any }> {
 
     builder: Promise<React.ReactNode>;
 
 }
 
-function AsyncPreviewComponentInternal<S extends EntitySchema>(
+function AsyncPreviewComponentInternal<M extends { [Key: string]: any }>(
     {
         builder
-    }: AsyncPreviewComponentProps<S>): JSX.Element {
+    }: AsyncPreviewComponentProps<M>): JSX.Element {
 
     const [loading, setLoading] = useState<boolean>(true);
     const [result, setResult] = useState<React.ReactNode>(null);
@@ -42,7 +42,7 @@ function AsyncPreviewComponentInternal<S extends EntitySchema>(
 
 }
 
-const MemoAsyncPreviewComponent = React.memo(AsyncPreviewComponentInternal) as React.FunctionComponent<AsyncPreviewComponentProps<EntitySchema>>;
+const MemoAsyncPreviewComponent = React.memo(AsyncPreviewComponentInternal) as React.FunctionComponent<AsyncPreviewComponentProps<EntitySchema<any>>>;
 
 /**
  * Utility component used to render the result of an async execution.
@@ -50,6 +50,6 @@ const MemoAsyncPreviewComponent = React.memo(AsyncPreviewComponentInternal) as R
  *
  * @category Preview components
  */
-export default function AsyncPreviewComponent(props: AsyncPreviewComponentProps<EntitySchema>) {
+export default function AsyncPreviewComponent(props: AsyncPreviewComponentProps<EntitySchema<any>>) {
     return <MemoAsyncPreviewComponent {...props} />;
 }

@@ -11,7 +11,7 @@ type Order = "asc" | "desc" | undefined;
 /**
  * @category Hooks and utilities
  */
-export interface CollectionFetchProps<S extends EntitySchema<Key>, Key extends string> {
+export interface CollectionFetchProps<M extends { [Key: string]: any }> {
 
     /**
      * Absolute collection path
@@ -21,7 +21,7 @@ export interface CollectionFetchProps<S extends EntitySchema<Key>, Key extends s
     /**
      * Schema of the entity displayed by this collection
      */
-    schema: S;
+    schema: EntitySchema<M>;
 
 
     itemCount?: number;
@@ -30,11 +30,11 @@ export interface CollectionFetchProps<S extends EntitySchema<Key>, Key extends s
      * List of entities that will be displayed on top, no matter the ordering.
      * This is used for reference fields selection
      */
-    entitiesDisplayedFirst?: Entity<S, Key>[];
+    entitiesDisplayedFirst?: Entity<M>[];
 
-    filterValues?: FilterValues<Key>;
+    filterValues?: FilterValues<M>;
 
-    sortByProperty?: string;
+    sortByProperty?: Extract<keyof M, string>;
 
     currentSort?: Order;
 }
@@ -42,8 +42,8 @@ export interface CollectionFetchProps<S extends EntitySchema<Key>, Key extends s
 /**
  * @category Hooks and utilities
  */
-export type CollectionFetchResult<S extends EntitySchema<Key>, Key extends string> = {
-    data: Entity<S, Key>[]
+export type CollectionFetchResult<M extends { [Key: string]: any }> = {
+    data: Entity<M>[]
     dataLoading: boolean,
     noMoreToLoad: boolean,
     dataLoadingError?: Error
@@ -60,7 +60,7 @@ export type CollectionFetchResult<S extends EntitySchema<Key>, Key extends strin
  * @param entitiesDisplayedFirst
  * @category Hooks and utilities
  */
-export function useCollectionFetch<S extends EntitySchema<Key>, Key extends string>(
+export function useCollectionFetch<M extends { [Key: string]: any }>(
     {
         collectionPath,
         schema,
@@ -69,16 +69,16 @@ export function useCollectionFetch<S extends EntitySchema<Key>, Key extends stri
         currentSort,
         itemCount,
         entitiesDisplayedFirst
-    }: CollectionFetchProps<S, Key>): CollectionFetchResult<S, Key> {
+    }: CollectionFetchProps<M>): CollectionFetchResult<M> {
 
     const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];
-    const [data, setData] = useState<Entity<S, Key>[]>(initialEntities);
+    const [data, setData] = useState<Entity<M>[]>(initialEntities);
 
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
     const [noMoreToLoad, setNoMoreToLoad] = useState<boolean>(false);
 
-    const updateData = (entities: Entity<S, Key>[]) => {
+    const updateData = (entities: Entity<M>[]) => {
         if (!initialEntities) {
             setData(entities);
         } else {
@@ -91,7 +91,7 @@ export function useCollectionFetch<S extends EntitySchema<Key>, Key extends stri
 
         setDataLoading(true);
 
-        return listenCollection<S, Key>(
+        return listenCollection<M>(
             collectionPath,
             schema,
             entities => {

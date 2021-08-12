@@ -17,12 +17,12 @@ easy to create your custom form fields, or your complete views.
 
 There are two ways to build views in FireCMS:
 
-- Create mapping configurations for **collections** (to Firestore collections)
+- The **standard way**: Create mapping configurations for **collections** (to Firestore collections)
   and **schemas** (to Firestore documents). The best way to get a grasp of how
   this works is checking the [Quickstart](quickstart.md),
   [Collections](collections.md) and [Entity schema](entity_schemas.md)
   documentation.
-- Create custom views that sit in the main level of your navigation tree. In
+- Create **custom views** that sit in the main level of your navigation tree. In
   this case you can build your custom React component and make use of the
   internal components of the CMS as well as the provided hooks.
   Check [Custom main views](custom_main_views.md) for more details

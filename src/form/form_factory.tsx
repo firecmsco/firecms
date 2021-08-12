@@ -1,4 +1,4 @@
-import React, { ElementType, ReactElement, useEffect, useState } from "react";
+import React, { ComponentType, ReactElement, useEffect, useState } from "react";
 
 import { useClipboard } from "use-clipboard-hook";
 import {
@@ -30,7 +30,7 @@ import {
     EntitySchema,
     EntityStatus,
     FieldProps,
-    NumberProperty,
+    NumberProperty, Property,
     StringProperty
 } from "../models";
 
@@ -76,7 +76,7 @@ import deepEqual from "deep-equal";
  * @param dependsOnOtherProperties
  * @category Form custom fields
  */
-export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
+export function buildPropertyField<T extends CMSType = any, M = any>
 ({
      name,
      property,
@@ -88,56 +88,56 @@ export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key
      partOfArray,
      autoFocus,
      dependsOnOtherProperties
- }: CMSFormFieldProps<T, S, Key>): ReactElement<CMSFormFieldProps<T, S, Key>> {
+ }: CMSFormFieldProps< M>): ReactElement<CMSFormFieldProps< M>> {
 
-    let component: ElementType<FieldProps<T>> | undefined;
+    let component: ComponentType<FieldProps<T>> | undefined;
     if (isReadOnly(property)) {
         component = ReadOnlyField;
     } else if (property.config?.field) {
-        component = property.config?.field as ElementType<FieldProps<T>>;
+        component = property.config?.field as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
         if (of) {
             if ((of.dataType === "string" || of.dataType === "number") && of.config?.enumValues) {
-                component = ArrayEnumSelect as ElementType<FieldProps<T>>;
+                component = ArrayEnumSelect as ComponentType<FieldProps<T>>;
             } else if (of.dataType === "string" && of.config?.storageMeta) {
-                component = StorageUploadField as ElementType<FieldProps<T>>;
+                component = StorageUploadField as ComponentType<FieldProps<T>>;
             } else if (of.dataType === "reference") {
-                component = ArrayOfReferencesField as ElementType<FieldProps<T>>;
+                component = ArrayOfReferencesField as ComponentType<FieldProps<T>>;
             } else {
-                component = ArrayDefaultField as ElementType<FieldProps<T>>;
+                component = ArrayDefaultField as ComponentType<FieldProps<T>>;
             }
         }
         const oneOf = (property as ArrayProperty).oneOf;
         if (oneOf) {
-            component = ArrayOneOfField as ElementType<FieldProps<T>>;
+            component = ArrayOneOfField as ComponentType<FieldProps<T>>;
         }
         if (!of && !oneOf) {
             throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
         }
     } else if (property.dataType === "map") {
-        component = MapField as ElementType<FieldProps<T>>;
+        component = MapField as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "reference") {
-        component = ReferenceField as ElementType<FieldProps<T>>;
+        component = ReferenceField as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "timestamp") {
-        component = DateTimeField as ElementType<FieldProps<T>>;
+        component = DateTimeField as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "boolean") {
-        component = SwitchField as ElementType<FieldProps<T>>;
+        component = SwitchField as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "number") {
         if ((property as NumberProperty).config?.enumValues) {
-            component = Select as ElementType<FieldProps<T>>;
+            component = Select as ComponentType<FieldProps<T>>;
         } else {
-            component = TextField as ElementType<FieldProps<T>>;
+            component = TextField as ComponentType<FieldProps<T>>;
         }
     } else if (property.dataType === "string") {
         if ((property as StringProperty).config?.storageMeta) {
-            component = StorageUploadField as ElementType<FieldProps<T>>;
+            component = StorageUploadField as ComponentType<FieldProps<T>>;
         } else if ((property as StringProperty).config?.markdown) {
-            component = MarkdownField as ElementType<FieldProps<T>>;
+            component = MarkdownField as ComponentType<FieldProps<T>>;
         } else if ((property as StringProperty).config?.enumValues) {
-            component = Select as ElementType<FieldProps<T>>;
+            component = Select as ComponentType<FieldProps<T>>;
         } else {
-            component = TextField as ElementType<FieldProps<T>>;
+            component = TextField as ComponentType<FieldProps<T>>;
         }
     }
 
@@ -168,7 +168,7 @@ export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key
             >
                 {(fieldProps: FormikFieldProps<T>) => {
                     return <FieldInternal
-                        component={component as ElementType<FieldProps<T>>}
+                        component={component as ComponentType<FieldProps<T>>}
                         componentProps={componentProps}
                         fieldProps={fieldProps}/>;
                 }}
@@ -183,7 +183,7 @@ export function buildPropertyField<T extends CMSType, S extends EntitySchema<Key
 }
 
 
-function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = string>
+function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
 ({
      component,
      componentProps: {
@@ -202,8 +202,8 @@ function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySc
 
  }:
      {
-         component: ElementType<FieldProps<T>>,
-         componentProps: CMSFormFieldProps<T, S, Key>,
+         component: ComponentType<FieldProps<T>>,
+         componentProps: CMSFormFieldProps<M>,
          fieldProps: FormikFieldProps<T>
      }) {
 
@@ -257,7 +257,7 @@ function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySc
         showError,
         isSubmitting,
         includeDescription: includeDescription ?? true,
-        property: property,
+        property: property as Property<T>,
         disabled: disabled ?? false,
         underlyingValueHasChanged: underlyingValueHasChanged ?? false,
         tableMode: tableMode ?? false,
@@ -288,12 +288,12 @@ function FieldInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySc
 }
 
 
-export function createCustomIdField<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>
-(schema: S,
+export function createCustomIdField<M extends { [Key: string]: any }>
+(schema: EntitySchema<M>,
  entityStatus: EntityStatus,
  onChange: Function,
  error: boolean,
- entity: Entity<S, Key> | undefined) {
+ entity: Entity<M> | undefined) {
 
     const disabled = entityStatus === "existing" || !schema.customId;
     const idSetAutomatically = entityStatus !== "existing" && !schema.customId;
@@ -394,7 +394,7 @@ export function createCustomIdField<S extends EntitySchema<Key>, Key extends str
 }
 
 
-function FieldInternalInternal<T extends CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = string>
+function FieldInternalInternal<T extends CMSType, M extends { [Key: string]: any }>
 (fieldProps: FormikFieldProps<T>) {
 
 }

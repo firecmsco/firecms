@@ -1,11 +1,20 @@
 import {
+    ArrayProperty,
+    BooleanProperty,
     CMSType,
     EnumValueConfig,
     EnumValues,
+    GeopointProperty,
+    MapProperty,
+    NumberProperty,
     Properties,
     PropertiesOrBuilder,
     Property,
-    PropertyOrBuilder
+    PropertyBuilder,
+    PropertyOrBuilder,
+    ReferenceProperty,
+    StringProperty,
+    TimestampProperty
 } from "./properties";
 import {
     EntitySchema,
@@ -20,9 +29,9 @@ import { AdditionalColumnDelegate, EntityCollection } from "./collections";
  * properties
  * @category Builder
  */
-export function buildPropertyFrom<T extends CMSType, S extends EntitySchema<Key>, Key extends string>(
-    propertyOrBuilder: PropertyOrBuilder<T, S, Key>,
-    values: Partial<EntityValues<S, Key>>,
+export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: any }>(
+    propertyOrBuilder: PropertyOrBuilder<T, M>,
+    values: Partial<EntityValues<M>>,
     collectionPath: string,
     entityId?: string
 ): Property<T> {
@@ -51,11 +60,10 @@ export function buildNavigation(
  * @param collectionView
  * @category Builder
  */
-export function buildCollection<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>,
+export function buildCollection<M extends { [Key: string]: any },
     AdditionalKey extends string = string>(
-    collectionView: EntityCollection<S, Key, AdditionalKey>
-): EntityCollection<S, Key, AdditionalKey> {
+    collectionView: EntityCollection<M, AdditionalKey>
+): EntityCollection<M, AdditionalKey> {
     return collectionView;
 }
 
@@ -65,26 +73,9 @@ export function buildCollection<S extends EntitySchema<Key> = EntitySchema<any>,
  * @param schema
  * @category Builder
  */
-export function buildSchema<Key extends string = string>(
-    schema: EntitySchema<Key>
-): EntitySchema<Key> {
-    return schema;
-}
-
-/**
- * Identity function that requires a builds a schema based on a type.
- * Useful if you have defined your models in Typescript.
- * The schema property keys are validated by the type system but the property
- * data types are not yet, so you could still match a string type to a
- * NumberProperty, e.g.
- * @param schema
- * @category Builder
- */
-export function buildSchemaFrom<Type extends Partial<{ [P in Key]: T; }>,
-    Key extends string = Extract<keyof Type, string>,
-    T extends CMSType = CMSType>(
-    schema: EntitySchema<Key>
-): EntitySchema<Key> {
+export function buildSchema<M extends { [Key: string]: any }>(
+    schema: EntitySchema<M>
+): EntitySchema<M> {
     return schema;
 }
 
@@ -94,10 +85,18 @@ export function buildSchemaFrom<Type extends Partial<{ [P in Key]: T; }>,
  * @param property
  * @category Builder
  */
-export function buildProperty<T extends CMSType>(
-    property: Property<T>
-): Property<T> {
-    return property;
+export function buildProperty<T extends CMSType, P extends PropertyOrBuilder<T, any> = PropertyOrBuilder<T, any>>(
+    property: P
+): P extends StringProperty ? StringProperty :
+    P extends NumberProperty ? NumberProperty :
+        P extends BooleanProperty ? BooleanProperty :
+            P extends TimestampProperty ? TimestampProperty :
+                P extends GeopointProperty ? GeopointProperty :
+                    P extends ReferenceProperty ? ReferenceProperty :
+                        P extends ArrayProperty ? ArrayProperty :
+                            P extends MapProperty ? MapProperty :
+                                P extends PropertyBuilder<T, any> ? PropertyBuilder<T, any> : any {
+    return property as any;
 }
 
 /**
@@ -106,9 +105,9 @@ export function buildProperty<T extends CMSType>(
  * @param properties
  * @category Builder
  */
-export function buildProperties<Key extends string>(
-    properties: Properties<Key>
-): Properties<Key> {
+export function buildProperties<M>(
+    properties: Properties<M>
+): Properties<M> {
     return properties;
 }
 
@@ -118,9 +117,9 @@ export function buildProperties<Key extends string>(
  * @param propertiesOrBuilder
  * @category Builder
  */
-export function buildPropertiesOrBuilder<T extends CMSType, S extends EntitySchema<Key>, Key extends string>(
-    propertiesOrBuilder: PropertiesOrBuilder<S, Key>
-): PropertiesOrBuilder<S, Key> {
+export function buildPropertiesOrBuilder<M>(
+    propertiesOrBuilder: PropertiesOrBuilder<M>
+): PropertiesOrBuilder<M> {
     return propertiesOrBuilder;
 }
 
@@ -154,10 +153,8 @@ export function buildEnumValueConfig(
  * @param additionalColumnDelegate
  * @category Builder
  */
-export function buildAdditionalColumnDelegate<AdditionalKey extends string = string,
-    S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>>(
-    additionalColumnDelegate: AdditionalColumnDelegate<AdditionalKey, S, Key>
-): AdditionalColumnDelegate<AdditionalKey, S, Key> {
+export function buildAdditionalColumnDelegate<M extends { [Key: string]: any }, AdditionalKey extends string = string>(
+    additionalColumnDelegate: AdditionalColumnDelegate<M, AdditionalKey>
+): AdditionalColumnDelegate<M, AdditionalKey> {
     return additionalColumnDelegate;
 }

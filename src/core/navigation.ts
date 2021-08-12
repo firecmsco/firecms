@@ -88,7 +88,7 @@ export function getCollectionViewFromPath(path: string, collectionViews?: Entity
 
 }
 
-function getCollectionViewFromPathInternal<S extends EntitySchema>(path: string, collectionViews: EntityCollection[]): EntityCollection | undefined {
+function getCollectionViewFromPathInternal<M extends { [Key: string]: any }>(path: string, collectionViews: EntityCollection[]): EntityCollection | undefined {
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
@@ -130,37 +130,37 @@ function getCollectionPathsCombinations(subpaths: string[]): string[] {
 
 }
 
-export type NavigationViewEntry =
-    | NavigationViewEntity
-    | NavigationViewCollection
-    | NavigationViewCustom;
+export type NavigationViewEntry<M>  =
+    | NavigationViewEntity<M>
+    | NavigationViewCollection<M>
+    | NavigationViewCustom<M> ;
 
-interface NavigationViewEntity {
+interface NavigationViewEntity<M>  {
     type: "entity";
     entityId: string;
     collectionPath: string;
     fullPath: string;
-    parentCollection: EntityCollection;
+    parentCollection: EntityCollection<M> ;
 }
 
-interface NavigationViewCollection {
+interface NavigationViewCollection<M>  {
     type: "collection";
     fullPath: string;
-    collection: EntityCollection;
+    collection: EntityCollection<M> ;
 }
 
-interface NavigationViewCustom {
+interface NavigationViewCustom<M> {
     type: "custom_view";
     fullPath: string;
-    view: EntityCustomView;
+    view: EntityCustomView<M> ;
 }
 
-export function getNavigationEntriesFromPathInternal<S extends EntitySchema>(props: {
+export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: any }>(props: {
     path: string,
     allCollections: EntityCollection[],
-    customViews?: EntityCustomView[],
+    customViews?: EntityCustomView<M>[],
     currentFullPath?: string
-}): NavigationViewEntry[] {
+}): NavigationViewEntry<M> [] {
 
     const {
         path,
@@ -171,7 +171,7 @@ export function getNavigationEntriesFromPathInternal<S extends EntitySchema>(pro
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
 
-    let result: NavigationViewEntry[] = [];
+    let result: NavigationViewEntry<M> [] = [];
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
 

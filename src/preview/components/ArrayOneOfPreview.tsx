@@ -6,6 +6,7 @@ import { useStyles } from "./styles";
 import PreviewComponent from "../PreviewComponent";
 import { PreviewComponentProps, PreviewSize } from "../../preview";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import { Property } from "../../models";
 
 /**
  * @category Preview components
@@ -45,7 +46,7 @@ export default function ArrayOneOfPreview({
                             <PreviewComponent
                                 name={name}
                                 value={value[valueField]}
-                                property={properties[value[typeField]]}
+                                property={properties[value[typeField]] as Property<any>}
                                 size={childSize}/>
                         </ErrorBoundary>
                     </div>

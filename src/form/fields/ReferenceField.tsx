@@ -66,8 +66,7 @@ export const useStyles = makeStyles(theme => createStyles({
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function ReferenceField<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>({
+export default function ReferenceField<M extends { [Key: string]: any }>({
                                                                      name,
                                                                      value,
                                                                      setValue,
@@ -91,7 +90,7 @@ export default function ReferenceField<S extends EntitySchema<Key>,
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(autoFocus);
-    const [entity, setEntity] = React.useState<Entity<S, Key>>();
+    const [entity, setEntity] = React.useState<Entity<M>>();
     const sideEntityController = useSideEntityController();
 
     const schemaRegistry = useSchemasRegistry();
@@ -118,7 +117,7 @@ export default function ReferenceField<S extends EntitySchema<Key>,
         }
     }, [value, schema]);
 
-    const handleEntityClick = (entity: Entity<S, Key>) => {
+    const handleEntityClick = (entity: Entity<M>) => {
         if (disabled)
             return;
         const ref = entity ? entity.reference : null;
@@ -152,7 +151,7 @@ export default function ReferenceField<S extends EntitySchema<Key>,
     };
 
 
-    function buildEntityView(schema?: EntitySchema) {
+    function buildEntityView(schema?: EntitySchema<any>) {
 
         const missingEntity = entity && !entity.values;
 
@@ -180,7 +179,7 @@ export default function ReferenceField<S extends EntitySchema<Key>,
             if (validValue) {
 
                 const allProperties = Object.keys(schema.properties);
-                let listProperties = property.previewProperties?.filter(p => allProperties.includes(p));
+                let listProperties = property.previewProperties?.filter(p => allProperties.includes(p as string));
                 if (!listProperties || !listProperties.length) {
                     listProperties = allProperties;
                 }
@@ -197,13 +196,13 @@ export default function ReferenceField<S extends EntitySchema<Key>,
                             const propertyKey = schema.properties[key as string];
                             return (
                                 <Box
-                                    key={`reference_previews_${key}`}
+                                    key={`reference_previews_${key as string}`}
                                     mt={0.5}
                                     mb={0.5}>
                                     <ErrorBoundary>{
                                         entity ?
                                             <PreviewComponent
-                                                name={key}
+                                                name={key as string}
                                                 value={(entity.values as any)[key]}
                                                 property={propertyKey as Property}
                                                 size={"tiny"}/>

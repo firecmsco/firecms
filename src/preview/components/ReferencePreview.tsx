@@ -92,7 +92,7 @@ const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Them
         }
     }));
 
-function ReferencePreviewComponent<S extends EntitySchema>(
+function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     {
         value,
         property,
@@ -175,7 +175,7 @@ function ReferencePreviewComponent<S extends EntitySchema>(
                         const property = schema.properties[key as string];
 
                         return (
-                            <div key={"ref_prev_" + key}
+                            <div key={"ref_prev_" + (key as string)}
                                  className={referenceClasses.inner}>
                                 {entity ?
                                     <PreviewComponent name={key as string}

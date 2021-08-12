@@ -1,16 +1,17 @@
-import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
-import { SampleExtraActions } from "../collection_actions/SampleExtraActions";
 import {
     AdditionalColumnDelegate,
     AsyncPreviewComponent,
     buildSchema,
-    buildSchemaFrom,
     Entity,
     EntityCustomView,
     EnumValues,
     ExtraActionsParams
 } from "@camberi/firecms";
+
+import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
+import { SampleExtraActions } from "../collection_actions/SampleExtraActions";
 import { SampleProductsView } from "../custom_schema_view/SampleProductsView";
+import { Locale, Product } from "../types";
 
 export const locales: EnumValues = {
     "es": "Spanish",
@@ -67,7 +68,9 @@ const sampleView: EntityCustomView = {
     )
 };
 
-export const productSchema = buildSchema({
+
+
+export const productSchema = buildSchema<Product>({
     name: "Product",
     views: [
         sampleView
@@ -267,10 +270,10 @@ export const productSchema = buildSchema({
     }
 });
 
-export const productAdditionalColumn: AdditionalColumnDelegate = {
+export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
     id: "spanish_title",
     title: "Spanish title",
-    builder: (entity: Entity<typeof productSchema>) =>
+    builder: (entity: Entity<Product>) =>
         <AsyncPreviewComponent builder={
             entity.reference.collection("locales")
                 .doc("es")
@@ -279,15 +282,8 @@ export const productAdditionalColumn: AdditionalColumnDelegate = {
         }/>
 };
 
-type Locale = {
-    name: string,
-    description: string,
-    selectable?: boolean,
-    video: string
-}
 
-
-export const localeSchema = buildSchemaFrom<Locale>({
+export const localeSchema = buildSchema<Locale>({
     customId: locales,
     name: "Locale",
     properties: {

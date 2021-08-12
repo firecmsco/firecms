@@ -1,5 +1,11 @@
-import { buildCollection, buildSchema, EnumValues } from "../models";
+import {
+    buildCollection,
+    buildProperty,
+    buildSchema,
+    EnumValues
+} from "../models";
 import { CMSAppProps } from "../core/CMSAppProps";
+import { PreviewComponentProps } from "../preview";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -10,97 +16,150 @@ const locales: EnumValues = {
 
 export const productSchema = buildSchema({
     name: "Product",
-    views:[
+    views: [
         {
             path: "custom_view",
             name: "Test custom view",
             builder: ({}) => undefined
         }
     ],
+    onPreSave: ({
+                    schema,
+                    collectionPath,
+                    id,
+                    values,
+                    status
+                }) => {
+        values.uppercase_name = values.name.toUpperCase();
+        return values;
+    },
+
+    onSaveSuccess: (props) => {
+        console.log("onSaveSuccess", props);
+    },
+
+    onDelete: (props) => {
+        console.log("onDelete", props);
+    },
+
     properties: {
         name: {
+            dataType: "number",
             title: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        price: {
-            title: "Price",
-            validation: {
-                required: true,
-                requiredMessage: "You must set a price between 0 and 1000",
-                min: 0,
-                max: 1000
-            },
-            description: "Price with range validation",
-            dataType: "number"
-        },
-        status: {
-            title: "Status",
-            validation: { required: true },
-            dataType: "string",
-            description: "Should this product be visible in the website",
-            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
             config: {
-                enumValues: {
-                    private: "Private",
-                    public: "Public"
-                }
-            }
+                multiline: true
+            },
+            validation: { required: true }
         },
-        categories: {
-            title: "Categories",
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "string",
-                config: {
-                    enumValues: {
-                        electronics: "Electronics",
-                        books: "Books",
-                        furniture: "Furniture",
-                        clothing: "Clothing",
-                        food: "Food"
-                    }
-                }
-            }
-        },
-        image: {
-            title: "Image",
+        main_image: buildProperty({
             dataType: "string",
+            title: "Image",
             config: {
                 storageMeta: {
                     mediaType: "image",
                     storagePath: "images",
-                    acceptedFiles: ["image/*"]
+                    acceptedFiles: ["image/*"],
+                    metadata: {
+                        cacheControl: "max-age=1000000"
+                    }
                 }
+            },
+            description: "Upload field for images",
+            validation: {
+                required: true
             }
-        },
-        tags: {
-            title: "Tags",
-            description: "Example of generic array",
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "string"
-            }
-        },
-        description: {
-            title: "Description",
-            description: "Not mandatory but it'd be awesome if you filled this up",
-            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            dataType: "string",
-            columnWidth: 300
-        },
-        published: {
-            title: "Published",
+        }),
+        available: buildProperty({
             dataType: "boolean",
+            title: "Available",
             columnWidth: 100
-        },
-        expires_on: {
-            title: "Expires on",
-            dataType: "timestamp"
-        },
-        publisher: {
+        }),
+        price: buildProperty(({ values }) => ({
+            dataType: "number",
+            title: "Price",
+            validation: {
+                requiredMessage: "You must set a price between 0 and 1000",
+                min: 0,
+                max: 1000
+            },
+            disabled: !values.available && {
+                clearOnDisabled: true,
+                disabledMessage: "You can only set the price on available items"
+            },
+            config: {
+                // preview: PriceTextPreview
+            },
+            description: "Price with range validation"
+        })),
+        currency: buildProperty({
+            dataType: "string",
+            title: "Currency",
+            config: {
+                enumValues: {
+                    EUR: "Euros",
+                    DOL: "Dollars"
+                }
+            },
+            validation: {
+                required: true
+            }
+        }),
+        public: buildProperty({
+            dataType: "boolean",
+            title: "Public",
+            description: "Should this product be visible in the website",
+            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros."
+        }),
+        brand: buildProperty({
+            dataType: "string",
+            title: "Brand",
+            validation: {
+                required: true
+            }
+        }),
+        description: buildProperty({
+            dataType: "string",
+            title: "Description",
+            description: "Example of a markdown field",
+            config: {
+                markdown: true
+            }
+        }),
+        amazon_link: buildProperty({
+            dataType: "string",
+            title: "Amazon link",
+            config: {
+                url: true
+            }
+        }),
+        images: buildProperty({
+            dataType: "array",
+            title: "Images",
+            of: {
+                dataType: "string",
+                config: {
+                    storageMeta: {
+                        mediaType: "image",
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"],
+                        metadata: {
+                            cacheControl: "max-age=1000000"
+                        }
+                    }
+                }
+            },
+            description: "This fields allows uploading multiple images at once"
+        }),
+        related_products: buildProperty({
+            dataType: "array",
+            title: "Related products",
+            description: "Reference to self",
+            of: {
+                dataType: "reference",
+                collectionPath: "products"
+            }
+        }),
+        publisher: buildProperty({
             title: "Publisher",
             description: "This is an example of a map property",
             dataType: "map",
@@ -114,9 +173,45 @@ export const productSchema = buildSchema({
                     dataType: "string"
                 }
             }
+        }),
+        available_locales: buildProperty({
+            title: "Available locales",
+            description:
+                "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
+            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
+            dataType: "array",
+            readOnly: true,
+            of: {
+                dataType: "string",
+                config: {
+                    enumValues: locales
+                }
+            }
+        }),
+        uppercase_name: buildProperty({
+            title: "Uppercase Name",
+            dataType: "string",
+            readOnly: true,
+            description: "This field gets updated with a preSave callback"
+        }),
+        added_on: buildProperty({
+            dataType: "timestamp",
+            title: "Added on",
+            autoValue: "on_create"
+        })
+
+    },
+    defaultValues: {
+        currency: "EUR",
+        publisher: {
+            name: "Default publisher"
         }
+    },
+    onPreDelete: () => {
+        throw Error("Product deletion not allowed in this demo");
     }
 });
+
 
 const subcollections = [
     buildCollection({
@@ -140,10 +235,12 @@ const subcollections = [
                     title: "Video",
                     dataType: "string",
                     validation: { required: false },
-                    storageMeta: {
-                        mediaType: "video",
-                        storagePath: "videos",
-                        acceptedFiles: ["video/*"]
+                    config: {
+                        storageMeta: {
+                            mediaType: "video",
+                            storagePath: "videos",
+                            acceptedFiles: ["video/*"]
+                        }
                     }
                 }
             }

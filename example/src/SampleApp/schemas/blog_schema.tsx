@@ -1,7 +1,11 @@
 import CustomColorTextField from "../custom_field/CustomColorTextField";
-import { buildSchema, ExportMappingFunction } from "@camberi/firecms";
+import { buildSchema, buildProperty, ExportMappingFunction } from "@camberi/firecms";
 import { BlogEntryPreview } from "../custom_schema_view/BlogEntryPreview";
 
+/**
+ * This is a schema that is generated without passing an explicit type,
+ * but it is inferred correctly since we are using `buildProperty` in each property
+ */
 export const blogSchema = buildSchema({
     name: "Blog entry",
     views: [{
@@ -10,12 +14,12 @@ export const blogSchema = buildSchema({
         builder: (props) => <BlogEntryPreview {...props}/>
     }],
     properties: {
-        name: {
+        name: buildProperty({
             title: "Name",
             validation: { required: true },
             dataType: "string"
-        },
-        header_image: {
+        }),
+        header_image: buildProperty({
             title: "Header image",
             dataType: "string",
             config: {
@@ -28,8 +32,8 @@ export const blogSchema = buildSchema({
                     }
                 }
             }
-        },
-        content: {
+        }),
+        content: buildProperty({
             title: "Content",
             description: "Example of a complex array with multiple properties as children",
             validation: { required: true },
@@ -73,8 +77,8 @@ export const blogSchema = buildSchema({
                     }
                 }
             }
-        },
-        gold_text: {
+        }),
+        gold_text: buildProperty({
             title: "Gold text",
             description: "This field is using a custom component defined by the developer",
             dataType: "string",
@@ -84,16 +88,16 @@ export const blogSchema = buildSchema({
                     color: "gold"
                 }
             }
-        },
-        publish_date: {
+        }),
+        publish_date: buildProperty({
             title: "Publish date",
             dataType: "timestamp"
-        },
-        reviewed: {
+        }),
+        reviewed: buildProperty({
             title: "Reviewed",
             dataType: "boolean"
-        },
-        status: {
+        }),
+        status: buildProperty({
             title: "Status",
             validation: { required: true },
             dataType: "string",
@@ -104,8 +108,8 @@ export const blogSchema = buildSchema({
                     draft: "Draft"
                 }
             }
-        },
-        tags: {
+        }),
+        tags: buildProperty({
             title: "Tags",
             description: "Example of generic array",
             dataType: "array",
@@ -115,7 +119,7 @@ export const blogSchema = buildSchema({
                     previewAsTag: true
                 }
             }
-        }
+        })
     },
     defaultValues: {
         status: "draft",

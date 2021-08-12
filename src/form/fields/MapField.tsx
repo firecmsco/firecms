@@ -1,3 +1,4 @@
+import React from "react";
 import { FieldProps, Properties, Property } from "../../models";
 import {
     Box,
@@ -9,14 +10,12 @@ import {
     Paper,
     Select
 } from "@material-ui/core";
-import React from "react";
 import { formStyles } from "../styles";
-
-import { FieldDescription } from "../../form/components";
 import { pick } from "../../util/objects";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
+import { FieldDescription } from "../components";
 
 /**
  * Field that renders the children property fields
@@ -113,7 +112,7 @@ export default function MapField<T extends object>({
                                           xs={12}
                                           key={`map-${name}-${index}`}>
                                         {
-                                            buildPropertyField({
+                                            buildPropertyField<any, T>({
                                                 name: `${name}[${entryKey}]`,
                                                 disabled,
                                                 property: childProperty,

@@ -43,7 +43,7 @@ export default function ArrayPreview({
                             <PreviewComponent
                                 name={name}
                                 value={value}
-                                property={property.of as Property}
+                                property={property.of as Property<any>}
                                 size={childSize}/>
                         </ErrorBoundary>
                     </div>

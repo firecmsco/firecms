@@ -220,7 +220,7 @@ export default function StorageUploadField({
                 small={false}/>
 
             {includeDescription &&
-            <FieldDescription property={property}/>}
+            <FieldDescription property={property as any}/>}
 
             {showError && <FormHelperText
                 id="component-error-text">{error}</FormHelperText>}

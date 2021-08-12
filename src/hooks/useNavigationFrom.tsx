@@ -11,39 +11,39 @@ import { CMSAppContext, useCMSAppContext } from "../contexts/CMSAppContext";
 /**
  * @ignore
  */
-export type NavigationEntry =
-    NavigationEntity
-    | NavigationCollection
-    | NavigationCustom;
+export type NavigationEntry<M> =
+    | NavigationEntity<M>
+    | NavigationCollection<M>
+    | NavigationCustom<M>;
 
 /**
  * @ignore
  */
-export type NavigationEntity = {
+export type NavigationEntity<M> = {
     type: "entity";
-    entity: Entity<any>;
+    entity: Entity<M>;
     entityId: string;
     collectionPath: string;
     fullPath: string;
-    parentCollection: EntityCollection;
+    parentCollection: EntityCollection<M>;
 };
 
 /**
  * @ignore
  */
-export type NavigationCollection = {
+export type NavigationCollection<M> = {
     type: "collection";
     fullPath: string;
-    collection: EntityCollection;
+    collection: EntityCollection<M>;
 };
 
 /**
  * @ignore
  */
-interface NavigationCustom {
+interface NavigationCustom<M> {
     type: "custom_view";
     fullPath: string;
-    view: EntityCustomView;
+    view: EntityCustomView<M>;
 }
 
 /**
@@ -58,10 +58,10 @@ interface NavigationCustom {
  * @param cmsAppContext
  * @category Hooks and utilities
  */
-export function getNavigationFrom({
+export function getNavigationFrom<M>({
                                       path,
                                       context
-                                  }: { path: string, context: CMSAppContext }): Promise<NavigationEntry[]> {
+                                  }: { path: string, context: CMSAppContext }): Promise<NavigationEntry<M>[]> {
 
     const navigation = context.navigation;
     const schemasRegistryController = context.schemasRegistryController;
@@ -79,7 +79,7 @@ export function getNavigationFrom({
         allCollections: navigation.collections
     });
 
-    const resultPromises: Promise<NavigationEntry>[] = navigationEntries.map((entry) => {
+    const resultPromises: Promise<NavigationEntry<any>>[] = navigationEntries.map((entry) => {
         if (entry.type === "collection") {
             return Promise.resolve(entry);
         } else if (entry.type === "entity") {
@@ -111,8 +111,8 @@ export interface NavigationFromProps {
 /**
  * @category Hooks and utilities
  */
-export type NavigationFrom = {
-    data?: NavigationEntry[]
+export type NavigationFrom<M> = {
+    data?: NavigationEntry<M>[]
     dataLoading: boolean,
     dataLoadingError?: Error
 }
@@ -123,14 +123,14 @@ export type NavigationFrom = {
  * in any React component that lives under `CMSApp`
  * @category Hooks and utilities
  */
-export function useNavigationFrom(
+export function useNavigationFrom<M>(
     {
         path
-    }: NavigationFromProps): NavigationFrom {
+    }: NavigationFromProps): NavigationFrom<M> {
 
     const context: CMSAppContext = useCMSAppContext();
 
-    const [data, setData] = useState<NavigationEntry[] | undefined>();
+    const [data, setData] = useState<NavigationEntry<M>[] | undefined>();
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
 
@@ -144,7 +144,7 @@ export function useNavigationFrom(
         if (navigation) {
             setDataLoading(true);
             setDataLoadingError(undefined);
-            getNavigationFrom({ path, context })
+            getNavigationFrom<M>({ path, context })
                 .then((res) => {
                     setData(res);
                 })

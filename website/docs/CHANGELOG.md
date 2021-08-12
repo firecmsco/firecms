@@ -4,8 +4,51 @@ title: Changelog
 sidebar_label: Changelog
 ---
 
+## [0.48.0] - 2021-08-
 
-## [0.47.0] - 2021-08-02
+### Changed
+
+[BREAKING] Big types refactor. **This only affects you if you use Typescript.**
+
+All the key signatures affecting schemas (`EntitySchema` and related) have
+changed from `EntitySchema<Key extends string = string>`
+to `EntitySchema<M>` where `M` is simply your model, though you can omit it.
+
+You are now encouraged to define your model like:
+
+```tsx
+type Product = {
+    name: string;
+    price:number;
+}
+const productSchema = buildSchema<Product>({
+    // ...
+    properties:{
+      name: {
+        dataType: "string",
+        // ...
+      },
+      // ...
+    }
+    // ...
+});
+```
+
+If you would still like to use inferred types from schemas using something like
+`typeof productSchema`, you can still do it if you wrap it in a new type
+`InferSchemaType`, but this is not encouraged.
+In the previous example `InferSchemaType<typeOf productSchema>` is the same
+type as `Product`.
+
+Related changes:
+- Wherever you had defined your own schema, using `buildSchema()`
+  and where using that as a type parameter, it can be changed to the defined
+  type or just removed.
+- `buildSchemaFrom` has been deleted since now it's identical to `buildSchema`
+
+If you need more info: https://firecms.co/blog/types_refactor
+
+## [0.47.0] - 2021-08-10
 
 ### Changed
 
@@ -20,9 +63,8 @@ sidebar_label: Changelog
 ### Added
 
 - `collectionPath` and `context` to `ExtraActionsParams`
-- Green border indicator on collection tables to indicate that the value
-was saved successfully in Firestore.
-
+- Green border indicator on collection tables to indicate that the value was
+  saved successfully in Firestore.
 
 ## [0.45.0] - 2021-07-19
 
@@ -37,8 +79,7 @@ was saved successfully in Firestore.
   the entity form. You can use these views for anything you need, such as
   rendering a custom form, building a dashboard or displaying a post preview.
 - The `collectionPath` and app `context` props have been added
-  to `PermissionBuilder` so you can get better info of the context of an
-  entity.
+  to `PermissionBuilder` so you can get better info of the context of an entity.
 
 ### Changed
 

@@ -54,7 +54,7 @@ export default function MapPreview<T extends {}>({
     if (size === "regular") {
         mapPropertyKeys = Object.keys(mapProperty.properties);
     } else {
-        mapPropertyKeys = mapProperty.previewProperties || Object.keys(mapProperty.properties);
+        mapPropertyKeys = (mapProperty.previewProperties || Object.keys(mapProperty.properties) )as string[];
         if (size === "small")
             mapPropertyKeys = mapPropertyKeys.slice(0, 3);
         else if (size === "tiny")
