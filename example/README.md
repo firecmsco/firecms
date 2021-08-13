@@ -1,6 +1,11 @@
+This is a full-blown app that uses every feature of FireCMS in one way or
+another
+
 ## Testing the example
+
 If you just want to run the example, you can replace the linked dependencies in
 the `package.json` file for:
+
 ```
 // ...
 "dependencies": {

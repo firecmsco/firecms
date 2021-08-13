@@ -57,8 +57,7 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
 }));
 
 
-export default function CollectionTableHeader<S extends EntitySchema<Key>,
-    Key extends string,
+export default function CollectionTableHeader<M extends { [Key: string]: any },
     AdditionalKey extends string = string>({
                                                sort,
                                                onColumnSort,
@@ -67,7 +66,7 @@ export default function CollectionTableHeader<S extends EntitySchema<Key>,
                                                column
                                            }: {
     column: CMSColumn;
-    onColumnSort: (key: Key) => void;
+    onColumnSort: (key: Extract<keyof M, string>) => void;
     onFilterUpdate: (filterForProperty?: [WhereFilterOp, any]) => void;
     filter?: [WhereFilterOp, any];
     sort: Sort;
@@ -135,7 +134,7 @@ export default function CollectionTableHeader<S extends EntitySchema<Key>,
                             size={"small"}
                             className={classes.headerIconButton}
                             onClick={() => {
-                                onColumnSort(column.id as Key);
+                                onColumnSort(column.id as Extract<keyof M, string>);
                             }}
                         >
                             {!sort && <ArrowDownwardIcon fontSize={"small"}/>}
@@ -180,7 +179,7 @@ export default function CollectionTableHeader<S extends EntitySchema<Key>,
                     horizontal: "right"
                 }}
             >
-                <FilterForm id={column.id as Key}
+                <FilterForm id={column.id as keyof M}
                             property={column.property}
                             filter={filter}
                             onFilterUpdate={update}/>
@@ -190,20 +189,20 @@ export default function CollectionTableHeader<S extends EntitySchema<Key>,
     );
 }
 
-interface FilterFormProps {
-    id: string;
+interface FilterFormProps<M> {
+    id: keyof M;
     property: Property;
     onFilterUpdate: (filter?: [WhereFilterOp, any]) => void;
     filter?: [WhereFilterOp, any];
 }
 
 
-function FilterForm({
+function FilterForm<M>({
                         id,
                         property,
                         onFilterUpdate,
                         filter
-                    }: FilterFormProps) {
+                    }: FilterFormProps<M>) {
 
 
     const tableClasses = useTableStyles();
@@ -215,19 +214,19 @@ function FilterForm({
         if (property.dataType === "number" || property.dataType === "string") {
             return <StringNumberFilterField value={filterInternal}
                                             setValue={setFilterInternal}
-                                            name={id}
+                                            name={id as string}
                                             property={property}/>;
         } else if (property.dataType === "array" && property.of) {
             return createFilterField(property.of);
         } else if (property.dataType === "boolean") {
             return <BooleanFilterField value={filterInternal}
                                        setValue={setFilterInternal}
-                                       name={id}
+                                       name={id as string}
                                        property={property}/>;
         } else if (property.dataType === "timestamp") {
             return <DateTimeFilterField value={filterInternal}
                                         setValue={setFilterInternal}
-                                        name={id}
+                                        name={id as string}
                                         property={property}/>;
         }
 

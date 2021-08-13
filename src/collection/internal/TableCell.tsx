@@ -9,7 +9,7 @@ import { EntitySchema } from "../../models";
 import { getRowHeight } from "../common";
 
 
-interface TableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
+interface TableCellProps<T, M extends { [Key: string]: any }> {
     children: React.ReactNode;
     disabled: boolean;
     saved?: boolean;
@@ -23,7 +23,7 @@ interface TableCellProps<T, S extends EntitySchema<Key>, Key extends string> {
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
-const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
+const TableCell = <T, M extends { [Key: string]: any }>({
                                                                            children,
                                                                            selected,
                                                                            focused,
@@ -37,7 +37,7 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
                                                                            openPopup,
                                                                            select,
                                                                            showExpandIcon = true
-                                                                       }: TableCellProps<T, S, Key> & CellStyleProps) => {
+                                                                       }: TableCellProps<T, M> & CellStyleProps) => {
 
     const ref = React.createRef<HTMLDivElement>();
 
@@ -213,6 +213,6 @@ const TableCell = <T, S extends EntitySchema<Key>, Key extends string>({
     );
 };
 
-export default React.memo<TableCellProps<any, any, any> & CellStyleProps>(TableCell) as React.FunctionComponent<TableCellProps<any, any, any> & CellStyleProps>;
+export default React.memo<TableCellProps<any, any> & CellStyleProps>(TableCell) as React.FunctionComponent<TableCellProps<any, any> & CellStyleProps>;
 
 

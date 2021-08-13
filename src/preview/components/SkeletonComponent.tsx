@@ -92,7 +92,7 @@ function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize
         mapProperties = Object.keys(property.properties);
     } else {
         if (property.previewProperties)
-            mapProperties = property.previewProperties;
+            mapProperties = property.previewProperties as string[];
         else
             mapProperties = Object.keys(property.properties).slice(0, 3);
     }
@@ -136,10 +136,10 @@ function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize
 
 }
 
-function renderArrayOfMaps<P extends Properties<Key>, Key extends string>(properties: P, size: PreviewSize, previewProperties?: Key[]) {
+function renderArrayOfMaps<M>(properties: Properties<M>, size: PreviewSize, previewProperties?: string[]) {
     let tableProperties = previewProperties;
     if (!tableProperties || !tableProperties.length) {
-        tableProperties = Object.keys(properties) as Key[];
+        tableProperties = Object.keys(properties) as string[];
         if (size)
             tableProperties = tableProperties.slice(0, 3);
     }

@@ -90,8 +90,8 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface CollectionTableToolbarProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
-    schema: S;
+interface CollectionTableToolbarProps<M extends { [Key: string]: any }> {
+    schema: EntitySchema<M>;
     size: CollectionSize;
     filterIsSet: boolean;
     actions?: React.ReactNode;
@@ -102,7 +102,7 @@ interface CollectionTableToolbarProps<S extends EntitySchema<Key>, Key extends s
     clearFilter(): void;
 }
 
-export default function CollectionTableToolbar<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>(props: CollectionTableToolbarProps<S, Key>) {
+export default function CollectionTableToolbar<M extends { [Key: string]: any }>(props: CollectionTableToolbarProps<M>) {
     const classes = useStyles();
     const sizeClasses = useSizeSelectStyles();
 

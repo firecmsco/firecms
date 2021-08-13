@@ -46,23 +46,22 @@ export const useStyles = makeStyles(theme => createStyles({
     }
 }));
 
-export function EntityDetailView<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>>({
+export function EntityDetailView<M extends { [Key: string]: any }>({
                                                                      entity,
                                                                      schema,
                                                                      collectionPath,
                                                                      subcollections
                                                                  }: {
-    entity?: Entity<S, Key>,
+    entity?: Entity<M>,
     collectionPath: string;
-    schema: S,
-    subcollections?: EntityCollection[];
+    schema: EntitySchema<M>,
+    subcollections?: EntityCollection<any>[];
 }) {
 
     const classes = useStyles();
     const sideEntityController = useSideEntityController();
 
-    const [updatedEntity, setUpdatedEntity] = useState<Entity<S, Key> | undefined>(entity);
+    const [updatedEntity, setUpdatedEntity] = useState<Entity<M> | undefined>(entity);
     const [tabsPosition, setTabsPosition] = React.useState(0);
 
     const ref = React.createRef<HTMLDivElement>();
@@ -72,7 +71,7 @@ export function EntityDetailView<S extends EntitySchema<Key> = EntitySchema<any>
         ref.current!.scrollTo({ top: 0 });
         const cancelSubscription =
             entity ?
-                listenEntityFromRef<S, Key>(
+                listenEntityFromRef<M>(
                     entity?.reference,
                     schema,
                     (e) => {

@@ -2,18 +2,13 @@ import React from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { CMSAppContext } from "../contexts/CMSAppContext";
-import {
-    EnumValues,
-    PropertiesOrBuilder,
-    Property,
-    PropertyBuilder
-} from "./properties";
+import { EnumValues, PropertiesOrBuilder } from "./properties";
 
 /**
  * Specification for defining an entity
  * @category Entities
  */
-export interface EntitySchema<Key extends string = string> {
+export interface EntitySchema<M extends { [Key: string]: any }> {
 
     /**
      * Singular name of the entity as displayed in an Add button . E.g. Product
@@ -36,25 +31,25 @@ export interface EntitySchema<Key extends string = string> {
     /**
      * Set of properties that compose an entity
      */
-    properties: PropertiesOrBuilder<this, Key>;
+    properties: PropertiesOrBuilder<M>;
 
     /**
      * When creating a new entity, set some values as already initialized
      */
-    defaultValues?: Partial<EntityValues<this, Key>>;
+    defaultValues?: any;
 
     /**
      * Hook called when save is successful
      * @param entitySaveProps
      */
-    onSaveSuccess?(entitySaveProps: EntitySaveProps<this, Key>)
+    onSaveSuccess?(entitySaveProps: EntitySaveProps<M>)
         : Promise<void> | void;
 
     /**
      * Hook called when saving fails
      * @param entitySaveProps
      */
-    onSaveFailure?(entitySaveProps: EntitySaveProps<this, Key>)
+    onSaveFailure?(entitySaveProps: EntitySaveProps<M>)
         : Promise<void> | void;
 
     /**
@@ -63,8 +58,8 @@ export interface EntitySchema<Key extends string = string> {
      * error snackbar gets displayed.
      * @param entitySaveProps
      */
-    onPreSave?(entitySaveProps: EntitySaveProps<this, Key>)
-        : Promise<EntityValues<this, Key>> | EntityValues<this, Key>
+    onPreSave?(entitySaveProps: EntitySaveProps<M>)
+        : Promise<EntityValues<M>> | EntityValues<M>
 
     /**
      * Hook called after the entity is deleted in Firestore.
@@ -73,33 +68,34 @@ export interface EntitySchema<Key extends string = string> {
      *
      * @param entityDeleteProps
      */
-    onPreDelete?(entityDeleteProps: EntityDeleteProps<this, Key>): void;
+    onPreDelete?(entityDeleteProps: EntityDeleteProps<M>): void;
 
     /**
      * Hook called after the entity is deleted in Firestore.
      *
      * @param entityDeleteProps
      */
-    onDelete?(entityDeleteProps: EntityDeleteProps<this, Key>): void;
+    onDelete?(entityDeleteProps: EntityDeleteProps<M>): void;
 
     /**
      * Array of builders for rendering additional panels in an entity view.
      * Useful if you need to render custom views
      */
-    views?: EntityCustomView<this, Key>[];
+    views?: EntityCustomView<M>[];
 }
+
+export type InferSchemaType<S extends EntitySchema<any>> = S extends EntitySchema<infer M> ? M : never;
 
 /**
  * You can use this builder to render a custom panel in the entity detail view.
  * It gets rendered as a tab.
  * @category Entities
  */
-export type EntityCustomView<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>> =
+export type EntityCustomView<M = any> =
     {
         path: string,
         name: string,
-        builder: (extraActionsParams: EntityCustomViewParams<S, Key>) => React.ReactNode
+        builder: (extraActionsParams: EntityCustomViewParams<M>) => React.ReactNode
     }
 
 /**
@@ -107,36 +103,34 @@ export type EntityCustomView<S extends EntitySchema<Key> = EntitySchema<any>,
  * an entity view.
  * @category Entities
  */
-export type EntityCustomViewParams<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>> = {
+export type EntityCustomViewParams<M extends { [Key: string]: any } = any> = {
     /**
      * Schema used by this entity
      */
-    schema: S;
+    schema: EntitySchema<M extends EntitySchema<any> ? InferSchemaType<M> : M>;
     /**
      * Entity that this view refers to. It can be undefined if the entity is new
      */
-    entity?: Entity<S, Key>;
+    entity?: Entity<M extends EntitySchema<any> ? InferSchemaType<M> : M>;
 
     /**
      * Modified values in the form that have not been saved yet.
      * If the entity is not new and the values are not modified, this values
      * are the same as in `entity`
      */
-    modifiedValues?: EntityValues<S, Key>;
+    modifiedValues?: EntityValues<M>;
 };
 
 /**
  * Parameters passed to hooks when an entity is saved
  * @category Entities
  */
-export interface EntitySaveProps<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>> {
+export interface EntitySaveProps<M extends { [Key: string]: any }> {
 
     /**
      * Resolved schema of the entity
      */
-    schema: S;
+    schema: EntitySchema<M>;
 
     /**
      * Full path where this entity is being saved
@@ -151,7 +145,7 @@ export interface EntitySaveProps<S extends EntitySchema<Key>,
     /**
      * Values being saved
      */
-    values: EntityValues<S, Key>;
+    values: EntityValues<M>;
 
     /**
      * New or existing entity
@@ -168,13 +162,12 @@ export interface EntitySaveProps<S extends EntitySchema<Key>,
  * Parameters passed to hooks when an entity is deleted
  * @category Entities
  */
-export interface EntityDeleteProps<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>> {
+export interface EntityDeleteProps<M extends { [Key: string]: any }> {
 
     /**
      * Schema of the entity being deleted
      */
-    schema: S;
+    schema: EntitySchema<M>;
 
     /**
      * Firestore path of the parent collection
@@ -189,7 +182,7 @@ export interface EntityDeleteProps<S extends EntitySchema<Key>,
     /**
      * Deleted entity
      */
-    entity: Entity<S, Key>;
+    entity: Entity<M>;
 
     /**
      * Context of the app status
@@ -208,11 +201,10 @@ export type EntityStatus = "new" | "existing" | "copy";
  * Representation of an entity fetched from Firestore
  * @category Entities
  */
-export interface Entity<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>> {
+export interface Entity<M extends { [Key: string]: any }> {
     id: string;
     reference: firebase.firestore.DocumentReference;
-    values: EntityValues<S, Key>;
+    values: EntityValues<M>;
 }
 
 
@@ -221,10 +213,5 @@ export interface Entity<S extends EntitySchema<Key>,
  * entity schema.
  * @category Entities
  */
-export type EntityValues<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>
-    = {
-    [K in Key]: S["properties"][K] extends Property<infer T> ? T :
-        (S["properties"][K] extends PropertyBuilder<infer T, S, Key> ? T : any);
-};
+export type EntityValues<M> = M;
 

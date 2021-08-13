@@ -12,9 +12,9 @@ const DEFAULT_PERMISSIONS = {
     delete: true
 };
 
-function checkHasPermissionOnEntity<S extends EntitySchema<Key>, Key extends string>
-(permission: PermissionsBuilder<S, Key> | Permissions | undefined,
- entity: Entity<S, Key> | null,
+function checkHasPermissionOnEntity<M extends { [Key: string]: any }>
+(permission: PermissionsBuilder<M> | Permissions | undefined,
+ entity: Entity<M> | null,
  authController: AuthController,
  collectionPath:string,
  context: CMSAppContext): Permissions {
@@ -36,26 +36,26 @@ function checkHasPermissionOnEntity<S extends EntitySchema<Key>, Key extends str
     throw Error("New type of HasPermission added and not mapped");
 }
 
-export function canEdit<S extends EntitySchema<Key>, Key extends string>
-(permission: PermissionsBuilder<S, Key> | Permissions | undefined,
- entity: Entity<S, Key>,
+export function canEdit<M extends { [Key: string]: any }>
+(permission: PermissionsBuilder<M> | Permissions | undefined,
+ entity: Entity<M>,
  authController: AuthController,
  collectionPath:string,
  context: CMSAppContext): boolean {
     return checkHasPermissionOnEntity(permission,  entity, authController, collectionPath, context).edit ?? DEFAULT_PERMISSIONS.edit;
 }
 
-export function canCreate<S extends EntitySchema<Key>, Key extends string>
-(permission: PermissionsBuilder<S, Key> | Permissions | undefined,
+export function canCreate<M extends { [Key: string]: any }>
+(permission: PermissionsBuilder<M> | Permissions | undefined,
  authController: AuthController,
  collectionPath:string,
  context: CMSAppContext): boolean {
     return checkHasPermissionOnEntity(permission,  null, authController, collectionPath, context).create ?? DEFAULT_PERMISSIONS.create;
 }
 
-export function canDelete<S extends EntitySchema<Key>, Key extends string>
-(permission: PermissionsBuilder<S, Key> | Permissions | undefined,
- entity: Entity<S, Key>,
+export function canDelete<M extends { [Key: string]: any }>
+(permission: PermissionsBuilder<M> | Permissions | undefined,
+ entity: Entity<M>,
  authController: AuthController,
  collectionPath:string,
  context: CMSAppContext): boolean {

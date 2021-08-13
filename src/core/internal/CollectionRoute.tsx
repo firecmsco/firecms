@@ -15,16 +15,16 @@ export const useStyles = makeStyles(() =>
     })
 );
 
-interface CollectionRouteProps<S extends EntitySchema<Key>, Key extends string> {
-    collectionConfig: EntityCollection<S, Key>;
+interface CollectionRouteProps<M extends { [Key: string]: any }> {
+    collectionConfig: EntityCollection<M>;
     collectionPath: string
 }
 
-function CollectionRoute<S extends EntitySchema<Key>, Key extends string>({
+function CollectionRoute<M extends { [Key: string]: any }>({
                                                                               collectionConfig,
                                                                               collectionPath
                                                                           }
-                                                                              : CollectionRouteProps<S, Key>) {
+                                                                              : CollectionRouteProps<M>) {
 
     const { url } = useRouteMatch();
     const breadcrumbsContext = useBreadcrumbsContext();

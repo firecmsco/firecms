@@ -10,7 +10,7 @@ export interface SchemaConfig {
     /**
      * Can the elements in this collection be added and edited.
      */
-    permissions?: PermissionsBuilder<any, any>;
+    permissions?: PermissionsBuilder<any>;
 
     /**
      * Schema representing the entities of this view
@@ -22,7 +22,7 @@ export interface SchemaConfig {
      * subcollections to your entity in the same way you define the root
      * collections.
      */
-    subcollections?: EntityCollection[];
+    subcollections?: EntityCollection<any>[];
 
 }
 

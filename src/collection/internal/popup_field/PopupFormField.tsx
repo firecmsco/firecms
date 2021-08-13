@@ -68,13 +68,13 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 
-interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
-    entity?: Entity<S, Key>;
+interface PopupFormFieldProps<M extends { [Key: string]: any }> {
+    entity?: Entity<M>;
     customFieldValidator?: CustomFieldValidator;
-    schema: S;
+    schema: EntitySchema<M>;
     collectionPath: string;
     tableKey: string;
-    name?: string;
+    name?: keyof M;
     property?: Property;
     cellRect?: DOMRect;
     formPopupOpen: boolean;
@@ -87,10 +87,10 @@ interface PopupFormFieldProps<S extends EntitySchema<Key>, Key extends string> {
      * Callback when the value of a cell has been edited
      * @param params
      */
-    onCellValueChange?: (params: OnCellValueChangeParams<any, S, Key>) => Promise<void>;
+    onCellValueChange?: (params: OnCellValueChangeParams<any, M>) => Promise<void>;
 }
 
-function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
+function PopupFormField<M extends { [Key: string]: any }>({
                                                                              tableKey,
                                                                              entity,
                                                                              customFieldValidator,
@@ -105,7 +105,7 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                                                                              columnIndex,
                                                                              usedPropertyBuilder,
                                                                              onCellValueChange
-                                                                         }: PopupFormFieldProps<S, Key>) {
+                                                                         }: PopupFormFieldProps<M>) {
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     // const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
@@ -153,8 +153,8 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
 
     const validationSchema = getYupEntitySchema(
         name ?
-            { [name]: schema.properties[name] } as PropertiesOrBuilder<S, Key>
-            : {} as PropertiesOrBuilder<S, Key>,
+            { [name]: schema.properties[name] } as PropertiesOrBuilder<M>
+            : {} as PropertiesOrBuilder<M>,
         entity?.values ?? {},
         collectionPath,
         customFieldValidator,
@@ -208,8 +208,8 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
         setSavingError(null);
         if (entity && onCellValueChange && name) {
             return onCellValueChange({
-                value: values[name],
-                name: name,
+                value: values[name as string],
+                name: name as string,
                 entity,
                 setError: setSavingError,
                 setSaved: () => {
@@ -233,11 +233,11 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                             setFieldTouched,
                             handleSubmit,
                             isSubmitting
-                        }: FormikProps<EntityValues<S, Key>>) => {
+                        }: FormikProps<EntityValues<M>>) => {
 
         const disabled = isSubmitting;
 
-        const context: FormContext<S, Key> = {
+        const context: FormContext<M> = {
             entitySchema: schema,
             entityId: entity.id,
             values
@@ -252,8 +252,8 @@ function PopupFormField<S extends EntitySchema<Key>, Key extends string>({
                 onSubmit={handleSubmit}
                 noValidate>
 
-                {name && property && buildPropertyField({
-                    name,
+                {name && property && buildPropertyField<any, M>({
+                    name: name as string,
                     disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
                     property,
                     includeDescription: false,

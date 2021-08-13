@@ -31,7 +31,7 @@ export default function ArrayOfStorageComponentsPreview({
                     <PreviewComponent
                         name={name}
                         value={v}
-                        property={property.of as Property}
+                        property={property.of as Property<string>}
                         size={childSize}/>
                 </ErrorBoundary>
             </div>

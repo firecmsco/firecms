@@ -5,7 +5,7 @@ import { formStyles } from "../styles";
 import { getIconForProperty } from "../../util/property_icons";
 
 interface LabelWithIconProps {
-    property: Property,
+    property: Property<any>,
     scaledIcon?: boolean
 }
 

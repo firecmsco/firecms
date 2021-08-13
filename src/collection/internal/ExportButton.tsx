@@ -28,25 +28,25 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import MuiAlert from "@material-ui/lab/Alert/Alert";
 import { CSVLink } from "react-csv";
 
-type ExportButtonProps<S extends EntitySchema<any> > = {
-    schema: S;
+type ExportButtonProps<M extends { [Key: string]: any }> = {
+    schema: EntitySchema<M>;
     collectionPath: string;
     exportConfig?: ExportConfig;
 }
 
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
-export default function ExportButton<S extends EntitySchema<any>>({
-                                                                                          schema,
-                                                                                          collectionPath,
-                                                                                          exportConfig
-                                                                                      }: ExportButtonProps<S>
+export default function ExportButton<M extends { [Key: string]: any }>({
+                                                                           schema,
+                                                                           collectionPath,
+                                                                           exportConfig
+                                                                       }: ExportButtonProps<M>
 ) {
 
 
     const csvLinkEl = React.useRef<any>(null);
 
-    const [data, setData] = React.useState<Entity<S, any>[]>();
+    const [data, setData] = React.useState<Entity<M>[]>();
     const [additionalData, setAdditionalData] = React.useState<Record<string, any>[]>();
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
@@ -65,7 +65,7 @@ export default function ExportButton<S extends EntitySchema<any>>({
 
         setDataLoading(true);
 
-        const updateEntities = async (entities: Entity<S, any>[]) => {
+        const updateEntities = async (entities: Entity<M>[]) => {
             if (entities.length >= INITIAL_DOCUMENTS_LIMIT) {
                 setHasLargeAmountOfData(true);
             }
@@ -82,7 +82,7 @@ export default function ExportButton<S extends EntitySchema<any>>({
                 });
         };
 
-        const fetchAdditionalColumns = async (entities: Entity<S, any>[]) => {
+        const fetchAdditionalColumns = async (entities: Entity<M>[]) => {
 
             if (!exportConfig?.additionalColumns) {
                 return;
@@ -105,7 +105,7 @@ export default function ExportButton<S extends EntitySchema<any>>({
             setDataLoadingError(error);
         };
 
-        fetchCollection<S, any>(
+        fetchCollection<M>(
             collectionPath,
             schema,
             undefined,
@@ -221,9 +221,9 @@ export default function ExportButton<S extends EntitySchema<any>>({
 
 type Header = { label: string, key: string };
 
-function getExportHeaders(properties: Properties,
-                          collectionPath: string,
-                          exportConfig?: ExportConfig): Header[] {
+function getExportHeaders<M extends { [Key: string]: any }>(properties: Properties<M>,
+                                                            collectionPath: string,
+                                                            exportConfig?: ExportConfig): Header[] {
     const headers = [
         { label: "id", key: "id" },
         ...Object.entries(properties)
@@ -280,9 +280,8 @@ function processProperty(inputValue: any,
     return value;
 }
 
-function processProperties<S extends EntitySchema<Key>,
-    P extends Properties<Key>, Key extends string>
-(inputValues: Record<Key, any>, properties: P): Record<Key, any> {
+function processProperties<M extends { [Key: string]: any }>
+(inputValues: Record<keyof M, any>, properties: Properties<M>): Record<keyof M, any> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues as any)[key];
@@ -290,7 +289,7 @@ function processProperties<S extends EntitySchema<Key>,
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as Record<Key, any>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as Record<keyof M, any>;
     return { ...inputValues, ...updatedValues };
 }
 

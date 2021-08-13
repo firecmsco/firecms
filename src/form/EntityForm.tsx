@@ -63,7 +63,7 @@ export const useStyles = makeStyles(theme => createStyles({
     }
 }));
 
-interface EntityFormProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
+interface EntityFormProps<M extends { [Key: string]: any }> {
 
     /**
      * New or existing status
@@ -78,19 +78,19 @@ interface EntityFormProps<S extends EntitySchema<Key>, Key extends string = Extr
     /**
      * Schema of the entity this form represents
      */
-    schema: S;
+    schema: EntitySchema<M>;
 
     /**
      * The updated entity is passed from the parent component when the underlying data
      * has changed in Firestore
      */
-    entity?: Entity<S, Key>;
+    entity?: Entity<M>;
     containerRef: React.RefObject<HTMLDivElement>;
 
     /**
      * The callback function called when Save is clicked and validation is correct
      */
-    onEntitySave(schema: S, collectionPath: string, id: string | undefined, values: EntityValues<S, Key>): Promise<void>;
+    onEntitySave(schema: EntitySchema<M>, collectionPath: string, id: string | undefined, values: EntityValues<M>): Promise<void>;
 
     /**
      * The callback function called when discard is clicked
@@ -105,11 +105,11 @@ interface EntityFormProps<S extends EntitySchema<Key>, Key extends string = Extr
     /**
      * The callback function when the form original values have been modified
      */
-    onValuesChanged(values?:EntityValues<S, Key>): void;
+    onValuesChanged(values?:EntityValues<M>): void;
 
 }
 
-function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>({
+function EntityForm<M extends { [Key: string]: any }>({
                                                                                                                   status,
                                                                                                                   collectionPath,
                                                                                                                   schema,
@@ -119,7 +119,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                                                                                                                   onModified,
                                                                                                                   containerRef,
                                                                                                                   onValuesChanged
-                                                                                                              }: EntityFormProps<S, Key>) {
+                                                                                                              }: EntityFormProps<M>) {
 
     const classes = useStyles();
 
@@ -127,7 +127,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
      * Base values are the ones this view is initialized from, we use them to
      * compare them with underlying changes in Firestore
      */
-    let baseFirestoreValues: EntityValues<S, Key>;
+    let baseFirestoreValues: EntityValues<M>;
     if ((status === "existing" || status === "copy") && entity) {
         baseFirestoreValues = entity.values ?? {};
     } else if (status === "new") {
@@ -140,13 +140,13 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
 
-    const initialValuesRef = React.useRef<EntityValues<S, Key>>(entity?.values ?? baseFirestoreValues);
+    const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseFirestoreValues);
     const initialValues = initialValuesRef.current;
-    const [internalValue, setInternalValue] = useState<EntityValues<S, Key> | undefined>(initialValues);
+    const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") && !!schema.customId;
 
-    const underlyingChanges: Partial<EntityValues<S, Key>> = useMemo(() => {
+    const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
         if (initialValues && status === "existing") {
             return Object.keys(schema.properties)
                 .map((key) => {
@@ -157,13 +157,13 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                     }
                     return {};
                 })
-                .reduce((a, b) => ({ ...a, ...b }), {}) as Partial<EntityValues<S, Key>>;
+                .reduce((a, b) => ({ ...a, ...b }), {}) as Partial<EntityValues<M>>;
         } else {
             return {};
         }
     }, [initialValues, baseFirestoreValues]);
 
-    function saveValues(values: EntityValues<S, Key>, formikActions: FormikHelpers<EntityValues<S, Key>>) {
+    function saveValues(values: EntityValues<M>, formikActions: FormikHelpers<EntityValues<M>>) {
 
         if (mustSetCustomId && !customId) {
             console.error("Missing custom Id");
@@ -211,7 +211,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
 
     const validationSchema = getYupEntitySchema(
         schema.properties,
-        internalValue as Partial<EntityValues<S, Key>> ?? {},
+        internalValue as Partial<EntityValues<M>> ?? {},
         collectionPath,
         uniqueFieldValidator,
         entity?.id);
@@ -284,13 +284,13 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                     });
                 }
 
-                const context: FormContext<S, Key> = {
+                const context: FormContext<M> = {
                     entitySchema: schema,
                     entityId: entity?.id,
                     values
                 };
 
-                const schemaProperties: Properties<Key> = computeSchemaProperties(schema, collectionPath, entity?.id, values as EntityValues<S, Key>);
+                const schemaProperties: Properties<M> = computeSchemaProperties(schema, collectionPath, entity?.id, values as EntityValues<M>);
                 const formFields = (
                     <Grid container spacing={4}>
 
@@ -304,7 +304,7 @@ function EntityForm<S extends EntitySchema<Key>, Key extends string = Extract<ke
                             const dependsOnOtherProperties = typeof (schema.properties as any)[key] === "function";
 
                             const disabled = isSubmitting || isReadOnly(property) || !!property.disabled;
-                            const cmsFormFieldProps: CMSFormFieldProps<any, any> = {
+                            const cmsFormFieldProps: CMSFormFieldProps<any> = {
                                 name: key,
                                 disabled: disabled,
                                 property: property,

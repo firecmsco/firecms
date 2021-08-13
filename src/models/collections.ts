@@ -14,8 +14,7 @@ import { CMSAppContext } from "../contexts";
  * If you need a lower level implementation you can check {@link CollectionTable}
  * @category Collections
  */
-export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>,
+export interface EntityCollection<M extends { [Key: string]: any } = any,
     AdditionalKey extends string = string> {
     /**
      * Plural name of the view. E.g. 'products'
@@ -37,7 +36,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
     /**
      * Schema representing the entities of this view
      */
-    schema: S;
+    schema: EntitySchema<M>;
 
     /**
      * Default size of the rendered collection
@@ -63,7 +62,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      * You can add additional columns to the collection view by implementing
      * an additional column delegate.q
      */
-    additionalColumns?: AdditionalColumnDelegate<AdditionalKey, S, Key>[];
+    additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey>[];
 
     /**
      * If a text search delegate is supplied, a search bar is displayed on top
@@ -74,7 +73,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`
      */
-    permissions?: PermissionsBuilder<S, Key>;
+    permissions?: PermissionsBuilder<M>;
 
     /**
      * Can the elements in this collection be edited inline in the collection
@@ -93,7 +92,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      * need to create special indexes in Firestore.
      * You can then specify here the indexes created.
      */
-    indexes?: CompositeIndex<Key>[];
+    indexes?: CompositeIndex<Extract<keyof M, string>>[];
 
     /**
      * Should the data in this collection view include an export button.
@@ -108,37 +107,37 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      * subcollections to your entity in the same way you define the root
      * collections.
      */
-    subcollections?: EntityCollection[];
+    subcollections?: EntityCollection<any, any>[];
 
     /**
      * Properties displayed in this collection. If this property is not set
      * every property is displayed
      */
-    properties?: (Key | AdditionalKey)[];
+    properties?: (Extract<keyof M, string> | AdditionalKey)[];
 
     /**
      * Properties that should NOT get displayed in the collection view.
      * All the other properties from the the entity are displayed
      * It has no effect if the properties value is set.
      */
-    excludedProperties?: (Key | AdditionalKey)[];
+    excludedProperties?: (Extract<keyof M, string> | AdditionalKey)[];
 
     /**
      * Properties that can be filtered in this view
      * DEPRECATED, it has no effect if set
      */
-    filterableProperties?: Key[];
+    filterableProperties?: (Extract<keyof M, string>)[];
 
     /**
      * Initial filters applied to this collection.
      * Defaults to none.
      */
-    initialFilter?: FilterValues<Key>;
+    initialFilter?: FilterValues<M>;
 
     /**
      * Default sort applied to this collection
      */
-    initialSort?: [Key, "asc" | "desc"];
+    initialSort?: [Extract<keyof M, string>, "asc" | "desc"];
 
     /**
      * Builder for rendering additional components such as buttons in the
@@ -147,7 +146,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
      * @param selectedEntities current selected entities by the end user or
      * undefined if none
      */
-    extraActions?: (extraActionsParams: ExtraActionsParams<S, Key>) => React.ReactNode;
+    extraActions?: (extraActionsParams: ExtraActionsParams<M>) => React.ReactNode;
 
 }
 
@@ -156,8 +155,7 @@ export interface EntityCollection<S extends EntitySchema<Key> = EntitySchema<any
  *
  * @category Collections
  */
-export type ExtraActionsParams<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>> = {
+export type ExtraActionsParams<M extends { [Key: string]: any } = any> = {
     /**
      * Collection path of this entity
      */
@@ -166,12 +164,12 @@ export type ExtraActionsParams<S extends EntitySchema<Key> = EntitySchema<any>,
     /**
      * The collection configuration
      */
-    collection: EntityCollection;
+    collection: EntityCollection<M>;
 
     /**
      * The entities currently selected in this collection
      */
-    selectedEntities?: Entity<S, Key>[];
+    selectedEntities?: Entity<M>[];
 
     /**
      * Context of the app status
@@ -209,7 +207,7 @@ export type Permissions = {
  *
  * @category Collections
  */
-export type PermissionsBuilder<S extends EntitySchema<Key>, Key extends string> =
+export type PermissionsBuilder<M extends { [Key: string]: any }> =
     Permissions
     | ((props: {
     /**
@@ -219,7 +217,7 @@ export type PermissionsBuilder<S extends EntitySchema<Key>, Key extends string> 
     /**
      * Entity being edited, might be null if it is new
      */
-    entity: Entity<S, Key> | null;
+    entity: Entity<M> | null;
     /**
      * Collection path of this entity
      */
@@ -240,9 +238,7 @@ export type PermissionsBuilder<S extends EntitySchema<Key>, Key extends string> 
  * If you need to do some async loading you can use AsyncPreviewComponent
  * @category Collections
  */
-export interface AdditionalColumnDelegate<AdditionalKey extends string = string,
-    S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>> {
+export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any, AdditionalKey extends string = string> {
 
     /**
      * Id of this column. You can use this id in the `properties` field of the
@@ -263,7 +259,7 @@ export interface AdditionalColumnDelegate<AdditionalKey extends string = string,
     /**
      * Builder for the content of the cell for this column
      */
-    builder: (entity: Entity<S, Key>) => React.ReactNode;
+    builder: (entity: Entity<M>) => React.ReactNode;
 
 }
 
@@ -271,8 +267,8 @@ export interface AdditionalColumnDelegate<AdditionalKey extends string = string,
  * Used to define filters applied in collections
  * @category Collections
  */
-export type FilterValues<Key extends string>
-    = Partial<{ [K in Key]: [WhereFilterOp, any] }>;
+export type FilterValues<M extends { [Key: string]: any }>
+    = { [K in keyof M]?: [WhereFilterOp, any] };
 
 
 /**
@@ -314,5 +310,5 @@ export type ExportMappingFunction = {
  * valid, otherwise it reverts to the simpler valid case
  * @category Collections
  */
-export type CompositeIndex<Key extends string> = Record<Key, "asc" | "desc">
+export type CompositeIndex<Key extends string> = Partial<Record<Key, "asc" | "desc">>
 

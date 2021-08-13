@@ -1,6 +1,13 @@
 import React from "react";
 import { EntitySchema, EntityValues } from "./entities";
-import { CMSType, Property } from "./properties";
+import {
+    ArrayProperty,
+    BooleanProperty,
+    CMSType, GeopointProperty, MapProperty,
+    NumberProperty,
+    Property, ReferenceProperty,
+    StringProperty, TimestampProperty
+} from "./properties";
 
 /**
  * When building a custom field you need to create a React component that takes
@@ -8,7 +15,7 @@ import { CMSType, Property } from "./properties";
  *
  * @category Form custom fields
  */
-export interface FieldProps<T extends CMSType, CustomProps = any, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> {
+export interface FieldProps<T extends CMSType, CustomProps = any, M extends { [Key: string]: any } = any> {
 
     /**
      * Name of the property
@@ -93,7 +100,7 @@ export interface FieldProps<T extends CMSType, CustomProps = any, S extends Enti
     /**
      * Additional values related to the state of the form or the entity
      */
-    context: FormContext<S, Key>;
+    context: FormContext<M>;
 
     /**
      * Flag to indicate if this field should be disabled
@@ -112,17 +119,17 @@ export interface FieldProps<T extends CMSType, CustomProps = any, S extends Enti
  *
  * @category Form custom fields
  */
-export interface FormContext<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
+export interface FormContext<M extends { [Key: string]: any }> {
 
     /**
      * Schema of the entity being modified
      */
-    entitySchema: S;
+    entitySchema: EntitySchema<M>;
 
     /**
      * Current values of the entity
      */
-    values: EntityValues<S, Key>;
+    values: EntityValues<M>;
 
     /**
      * Entity, it can be null if it's a new entity
@@ -135,7 +142,7 @@ export interface FormContext<S extends EntitySchema<Key>, Key extends string = E
  * custom field you can call {@link buildPropertyField} with these props.
  * @category Form custom fields
  */
-export interface CMSFormFieldProps<T extends CMSType, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
+export interface CMSFormFieldProps<M extends { [Key: string]: any } = any> {
 
     /**
      * The name of the property, such as `age`. You can use nested and array
@@ -146,13 +153,20 @@ export interface CMSFormFieldProps<T extends CMSType, S extends EntitySchema<Key
     /**
      * The CMS property you are binding this field to
      */
-    property: Property<T>;
+    property: StringProperty |
+        NumberProperty |
+        BooleanProperty |
+        TimestampProperty |
+        GeopointProperty |
+        ReferenceProperty |
+        ArrayProperty |
+        MapProperty;
 
     /**
      * The context where this field is being rendered. You get a context as a
      * prop when creating a custom field.
      */
-    context: FormContext<S, Key>;
+    context: FormContext<M>;
 
     /**
      * Should the description be included in this field

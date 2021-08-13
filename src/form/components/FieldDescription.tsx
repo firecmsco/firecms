@@ -1,5 +1,5 @@
 import React from "react";
-import { Property } from "../../models";
+import { CMSType, Property } from "../../models";
 
 import {
     Box,
@@ -10,15 +10,15 @@ import {
 } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/InfoOutlined";
 
-interface FieldDescriptionPopoverProps {
-    property: Property,
+interface FieldDescriptionPopoverProps<T extends CMSType> {
+    property: Property<T>,
 }
 
 /**
  * Render the field description for a property
  * @category Form custom fields
  */
-export default function FieldDescription({ property }: FieldDescriptionPopoverProps) {
+export default function FieldDescription<T extends CMSType>({ property }: FieldDescriptionPopoverProps<T>) {
 
     return (
         <Box display="flex">

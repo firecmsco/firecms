@@ -5,25 +5,36 @@ import "firebase/firestore";
 import { FieldProps } from "./fields";
 import { PreviewComponentProps } from "../preview";
 import { ChipColor } from "./colors";
-import { EntitySchema, EntityValues } from "./entities";
+import { EntityValues } from "./entities";
 
 /**
  * @category Entity properties
  */
-export type CMSType = string
+export type CMSType =
+    | string
     | number
     | boolean
     | Date
     | firebase.firestore.Timestamp
     | firebase.firestore.GeoPoint
     | firebase.firestore.DocumentReference
-    | CMSType[]
-    | object;
+    | object
+    | CMSType[];
 
 /**
  * @category Entity properties
  */
-export type Property<T extends CMSType = any> =
+type AnyProperty =
+    StringProperty |
+    NumberProperty |
+    BooleanProperty |
+    TimestampProperty |
+    GeopointProperty |
+    ReferenceProperty |
+    ArrayProperty |
+    MapProperty;
+
+export type Property<T extends CMSType = CMSType> =
     T extends string ? StringProperty :
         T extends number ? NumberProperty :
             T extends boolean ? BooleanProperty :
@@ -31,8 +42,8 @@ export type Property<T extends CMSType = any> =
                     T extends firebase.firestore.Timestamp ? TimestampProperty :
                         T extends firebase.firestore.GeoPoint ? GeopointProperty :
                             T extends firebase.firestore.DocumentReference ? ReferenceProperty :
-                                T extends Array<any> ? ArrayProperty<T> :
-                                    T extends object ? MapProperty<T> : never;
+                                T extends Array<CMSType> ? ArrayProperty<T> :
+                                    T extends object ? MapProperty<T> : AnyProperty;
 
 /**
  * @category Entity properties
@@ -163,35 +174,38 @@ export type EnumValueConfig = {
  * Record of properties of an entity or a map property
  * @category Entity properties
  */
-export type Properties<Key extends string = string> = {
-    [K in Key]: Property
+export type Properties<M extends { [Key: string]: any }> = {
+    [k in keyof M]: Property<M[k]>;
 };
 
 /**
  * @category Entity properties
  */
-export type PropertyBuilderProps<S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> =
+export type PropertyBuilderProps<T, M extends { [Key: string]: any }> =
     {
-        values: Partial<EntityValues<S, Key>>;
+        values: Partial<M>;
         collectionPath: string;
         entityId?: string;
     };
 /**
  * @category Entity properties
  */
-export type PropertyBuilder<T extends CMSType = CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> = (props: PropertyBuilderProps<S, Key>) => Property<T>;
+export type PropertyBuilder<T extends CMSType, M> = (props: PropertyBuilderProps<T, M>) => Property<T>;
 
 /**
  * @category Entity properties
  */
-export type PropertyOrBuilder<T extends CMSType = CMSType, S extends EntitySchema<Key> = EntitySchema<any>, Key extends string = Extract<keyof S["properties"], string>> =
+export type PropertyOrBuilder<T extends CMSType, M> =
     Property<T>
-    | PropertyBuilder<T, S, Key>;
+    | PropertyBuilder<T, M>;
+
 /**
  * @category Entity properties
  */
-export type PropertiesOrBuilder<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>> = Record<Key, PropertyOrBuilder<CMSType, S, Key>>;
+export type PropertiesOrBuilder<M extends { [Key: string]: any }> =
+    {
+        [k in keyof M]: PropertyOrBuilder<M[k], M>;
+    };
 
 /**
  * @category Entity properties
@@ -251,7 +265,7 @@ export interface StringProperty extends BaseProperty {
 /**
  * @category Entity properties
  */
-export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType> extends BaseProperty {
+export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> extends BaseProperty {
 
     dataType: "array";
 
@@ -311,7 +325,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
 /**
  * @category Entity properties
  */
-export interface MapProperty<T extends object = {},
+export interface MapProperty<T extends object = any,
     Key extends string = string> extends BaseProperty {
 
     dataType: "map";
@@ -319,7 +333,7 @@ export interface MapProperty<T extends object = {},
     /**
      * Record of properties included in this map.
      */
-    properties?: Properties;
+    properties?: Properties<any>;
 
     /**
      * Rules for validating this property
@@ -329,7 +343,7 @@ export interface MapProperty<T extends object = {},
     /**
      * Properties that are displayed when as a preview
      */
-    previewProperties?: Key[];
+    previewProperties?: Extract<keyof T, string>[];
 
     /**
      * Configure how this property field is displayed
@@ -383,8 +397,7 @@ export interface GeopointProperty extends BaseProperty {
 /**
  * @category Entity properties
  */
-export interface ReferenceProperty<S extends EntitySchema<Key> = EntitySchema<any>,
-    Key extends string = Extract<keyof S["properties"], string>>
+export interface ReferenceProperty<M extends { [Key: string]: any } = any>
     extends BaseProperty {
 
     dataType: "reference";
@@ -402,7 +415,7 @@ export interface ReferenceProperty<S extends EntitySchema<Key> = EntitySchema<an
      * reference. If not specified the first 3 are used. Only the first 3
      * specified values are considered.
      */
-    previewProperties?: Key[];
+    previewProperties?: (keyof M)[];
 
     /**
      * Configure how this property field is displayed
@@ -502,14 +515,14 @@ export interface FieldConfig<T extends CMSType, CustomProps = any> {
      * You can customize it by passing custom props that are received
      * in the component.
      */
-    field?: React.ElementType<FieldProps<T, CustomProps>>;
+    field?: React.ComponentType<FieldProps<T, CustomProps>>;
 
     /**
      * Configure how a property is displayed as a preview, e.g. in the collection
      * view. You can customize it by passing custom props that are received
      * in the component.
      */
-    preview?: React.ElementType<PreviewComponentProps<T, CustomProps>>;
+    preview?: React.ComponentType<PreviewComponentProps<T, CustomProps>>;
 
     /**
      * Additional props that are passed to the components defined in `field`
@@ -629,7 +642,7 @@ export type UploadedFileContext = {
     /**
      * Property related to this upload
      */
-    property: Property;
+    property: StringProperty | ArrayProperty<string[]>;
 
     /**
      * Entity Id is set if the entity already exists

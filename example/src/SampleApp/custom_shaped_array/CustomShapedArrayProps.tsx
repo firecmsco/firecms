@@ -1,6 +1,4 @@
-import {
-    Property
-} from "@camberi/firecms";
+import { Property } from "@camberi/firecms";
 
 export interface CustomShapedArrayProps {
     properties: Property[]

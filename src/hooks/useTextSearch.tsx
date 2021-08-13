@@ -9,7 +9,7 @@ import {
 /**
  * @category Hooks and utilities
  */
-export interface TextSearchProps<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> {
+export interface TextSearchProps<M extends { [Key: string]: any }> {
 
     searchString?: string;
 
@@ -17,15 +17,15 @@ export interface TextSearchProps<S extends EntitySchema<Key>, Key extends string
 
     collectionPath: string;
 
-    schema: S;
+    schema: EntitySchema<M>;
 
 }
 
 /**
  * @category Hooks and utilities
  */
-export type TextSearchResult<S extends EntitySchema<Key>, Key extends string> = {
-    textSearchData: Entity<S, Key>[]
+export type TextSearchResult<M extends { [Key: string]: any }> = {
+    textSearchData: Entity<M>[]
     textSearchLoading: boolean,
 }
 
@@ -37,16 +37,16 @@ export type TextSearchResult<S extends EntitySchema<Key>, Key extends string> = 
  * @param schema
  * @category Hooks and utilities
  */
-export function useTextSearch<S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>>(
+export function useTextSearch<M extends { [Key: string]: any }>(
     {
         searchString,
         textSearchDelegate,
         collectionPath,
         schema
-    }: TextSearchProps<S, Key>): TextSearchResult<S, Key> {
+    }: TextSearchProps<M>): TextSearchResult<M> {
 
     const [textSearchLoading, setTextSearchLoading] = useState<boolean>(false);
-    const [textSearchData, setTextSearchData] = useState<Entity<S, Key>[]>([]);
+    const [textSearchData, setTextSearchData] = useState<Entity<M>[]>([]);
 
     async function onTextSearch(searchString?: string) {
         if (textSearchDelegate) {
@@ -55,7 +55,7 @@ export function useTextSearch<S extends EntitySchema<Key>, Key extends string = 
                 setTextSearchData([]);
             } else {
                 const ids = await textSearchDelegate.performTextSearch(searchString);
-                const promises: Promise<Entity<S, Key> | null>[] = ids
+                const promises: Promise<Entity<M> | null>[] = ids
                     .map(async (id) => {
                             try {
                                 return await fetchEntity(collectionPath, id, schema);
@@ -66,7 +66,7 @@ export function useTextSearch<S extends EntitySchema<Key>, Key extends string = 
                         }
                     );
                 const entities = (await Promise.all(promises))
-                    .filter((e) => e !== null && e.values) as Entity<S, Key>[];
+                    .filter((e) => e !== null && e.values) as Entity<M>[];
                 setTextSearchData(entities);
             }
             setTextSearchLoading(false);

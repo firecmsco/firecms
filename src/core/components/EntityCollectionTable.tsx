@@ -45,9 +45,9 @@ import {
 import { checkUniqueField } from "../../models/firestore";
 import { Markdown } from "../../preview";
 
-type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
+type EntityCollectionProps<M extends { [Key: string]: any }> = {
     collectionPath: string;
-    collectionConfig: EntityCollection<any>;
+    collectionConfig: EntityCollection<M>;
 }
 
 /**
@@ -67,10 +67,10 @@ type EntityCollectionProps<S extends EntitySchema<Key>, Key extends string> = {
  * @constructor
  * @category Core components
  */
-export default function EntityCollectionTable<S extends EntitySchema<Key>, Key extends string>({
+export default function EntityCollectionTable<M extends { [Key: string]: any }>({
                                                                                                    collectionPath,
                                                                                                    collectionConfig
-                                                                                               }: EntityCollectionProps<S, Key>
+                                                                                               }: EntityCollectionProps<M>
 ) {
 
     if (collectionConfig.filterableProperties) {
@@ -86,8 +86,8 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
     const context = useCMSAppContext();
     const authController = useAuthController();
 
-    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<S, Key> | Entity<S, Key>[] | undefined>(undefined);
-    const [selectedEntities, setSelectedEntities] = useState<Entity<S, Key>[]>([]);
+    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
+    const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
 
     const exportable = collectionConfig.exportable === undefined || collectionConfig.exportable;
     const inlineEditing = collectionConfig.inlineEditing === undefined || collectionConfig.inlineEditing;
@@ -126,7 +126,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
 
     const additionalColumns = [...collectionConfig.additionalColumns ?? [], ...subcollectionColumns];
 
-    const onEntityClick = (entity: Entity<S, Key>) => {
+    const onEntityClick = (entity: Entity<M>) => {
         sideEntityController.open({
             entityId: entity.id,
             collectionPath,
@@ -148,11 +148,11 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         });
     };
 
-    const internalOnEntityDelete = (collectionPath: string, entity: Entity<S, Key>) => {
+    const internalOnEntityDelete = (collectionPath: string, entity: Entity<M>) => {
         setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
     };
 
-    const internalOnMultipleEntitiesDelete = (collectionPath: string, entities: Entity<S, Key>[]) => {
+    const internalOnMultipleEntitiesDelete = (collectionPath: string, entities: Entity<M>[]) => {
         setSelectedEntities([]);
     };
 
@@ -163,7 +163,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         return inlineEditing;
     };
 
-    const onCellChanged: OnCellValueChange<any, S, Key> = ({
+    const onCellChanged: OnCellValueChange<any, M> = ({
                                                                value,
                                                                name,
                                                                setSaved,
@@ -252,10 +252,10 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         </div>
     );
 
-    const toggleEntitySelection = (entity: Entity<S, Key>) => {
+    const toggleEntitySelection = (entity: Entity<M>) => {
         let newValue;
         if (selectedEntities.indexOf(entity) > -1) {
-            newValue = selectedEntities.filter((item: Entity<S, Key>) => item !== entity);
+            newValue = selectedEntities.filter((item: Entity<M>) => item !== entity);
         } else {
             newValue = [...selectedEntities, entity];
         }
@@ -281,7 +281,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
         const editEnabled = canEdit(collectionConfig.permissions, entity, authController, collectionPath, context);
         const deleteEnabled = canDelete(collectionConfig.permissions, entity, authController, collectionPath, context);
 
-        const onCopyClicked = (entity: Entity<S, Key>) => sideEntityController.open({
+        const onCopyClicked = (entity: Entity<M>) => sideEntityController.open({
             entityId: entity.id,
             collectionPath,
             copy: true,
@@ -295,7 +295,7 @@ export default function EntityCollectionTable<S extends EntitySchema<Key>, Key e
             overrideSchemaResolver: false
         });
 
-        const onEditClicked = (entity: Entity<S, Key>) => sideEntityController.open({
+        const onEditClicked = (entity: Entity<M>) => sideEntityController.open({
             entityId: entity.id,
             collectionPath,
             permissions: {

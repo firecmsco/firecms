@@ -19,7 +19,7 @@ import { useInputStyles } from "./styles";
 import { useSchemasRegistry } from "../../../contexts/SchemaRegistry";
 
 
-export function TableReferenceField<S extends EntitySchema<Key>, Key extends string>(props: {
+export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     name: string;
     disabled: boolean;
     internalValue: firebase.firestore.DocumentReference | firebase.firestore.DocumentReference[] | undefined | null;

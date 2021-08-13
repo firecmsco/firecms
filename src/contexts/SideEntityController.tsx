@@ -33,7 +33,7 @@ export type { SideEntityPanelProps, SchemaConfig } ;
  * Controller to open the side dialog displaying entity forms
  * @category Hooks and utilities
  */
-export type SideEntityController<S extends EntitySchema> = {
+export type SideEntityController<M extends { [Key: string]: any }> = {
     /**
      * Close the last panel
      */
@@ -230,7 +230,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
 
 function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[], newFlag: boolean): ExtendedPanelProps[] {
 
-    const navigationViewsForPath: NavigationViewEntry[] = getNavigationEntriesFromPathInternal({
+    const navigationViewsForPath: NavigationViewEntry<any>[] = getNavigationEntriesFromPathInternal({
         path,
         allCollections
     });

@@ -9,7 +9,8 @@ collection. You can find collection views as the first level of navigation in
 the main menu, or as subcollections inside other collections, following the
 Firestore data schema.
 
-Check the full API reference in [Entity collections](api/interfaces/entitycollection.md)
+Check the full API reference
+in [Entity collections](api/interfaces/entitycollection.md)
 
 * `name` The plural name of the view. E.g. 'products'.
 
@@ -35,9 +36,9 @@ Check the full API reference in [Entity collections](api/interfaces/entitycollec
   collection view. All the other properties from the entity are displayed. It
   has no effect if the `properties` value is set.
 
-* `indexes` If you need to filter/sort by multiple properties in this collection, you
-  need to create special indexes in Firestore.
-  You can then specify here the indexes created.
+* `indexes` If you need to filter/sort by multiple properties in this
+  collection, you need to create special indexes in Firestore. You can then
+  specify here the indexes created.
 
 * `initialFilter` Initial filters applied to this collection.
 
@@ -73,6 +74,35 @@ Check the full API reference in [Entity collections](api/interfaces/entitycollec
   You can also set an `ExportConfig` configuration object to customize the
   export and add additional values. Defaults to `true`
 
+:::note In the examples you might see references to the type `Product`
+(which defines the model) or the schema `productSchema`, as declared in
+the [entity schemas section](entity_schemas.md)
+:::
+
+### Sample collection
+
+```tsx
+import { buildCollection } from "@camberi/firecms";
+
+const productsCollection = buildCollection<Product>({
+    relativePath: "products",
+    schema: productSchema,
+    name: "Products",
+    group: "Main",
+    description: "List of the products currently sold in our shop",
+    textSearchDelegate: productsSearchDelegate,
+    additionalColumns: [productAdditionalColumn],
+    indexes: [{ price: "desc", available: "desc" }],
+    permissions: ({ user, authController }) => ({
+        edit: true,
+        create: true,
+        delete: false
+    }),
+    excludedProperties: ["related_products"]
+});
+
+```
+
 ### Additional columns
 
 If you would like to include a column that does not map directly to a property,
@@ -87,10 +117,12 @@ entity, you can use the utility component `AsyncPreviewComponent` to show a
 loading indicator.
 
 ```tsx
-export const productAdditionalColumn: AdditionalColumnDelegate = {
+import { buildCollection, AdditionalColumnDelegate } from "@camberi/firecms";
+
+export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
     id: "spanish_title",
     title: "Spanish title",
-    builder: (entity: Entity<typeof productSchema>) =>
+    builder: (entity: Entity<Product>) =>
         <AsyncPreviewComponent builder={
             entity.reference.collection("locales")
                 .doc("es")
@@ -124,13 +156,15 @@ can specify the filters that you have enabled in your Firestore configuration.
 In order to do so, just pass the indexes configuration to your collection:
 
 ```tsx
-    const productsCollection = buildCollection({
+import { buildCollection } from "@camberi/firecms";
+
+const productsCollection = buildCollection<Product>({
     relativePath: "products",
     schema: productSchema,
     name: "Products",
     indexes: [
         {
-            category: "asc",
+            price: "asc",
             available: "desc"
         }
     ]

@@ -13,7 +13,7 @@ import React from "react";
 /**
  * @category Collection components
  */
-export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends string, AdditionalKey extends string = string> {
+export interface CollectionTableProps<M extends { [Key: string]: any }, AdditionalKey extends string = string> {
 
     /**
      * Absolute collection path
@@ -23,7 +23,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     /**
      * Schema of the entity displayed by this collection
      */
-    schema: S;
+    schema: EntitySchema<M>;
 
     /**
      * Override the title in the toolbar
@@ -33,12 +33,12 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     /**
      * In case this table should have some filters set by default
      */
-    initialFilter?: FilterValues<Key>;
+    initialFilter?: FilterValues<M>;
 
     /**
      * Default sort applied to this collection
      */
-    initialSort?: [Key, "asc" | "desc"];
+    initialSort?: [Extract<keyof M, string>, "asc" | "desc"];
 
     /**
      * If enabled, content is loaded in batch
@@ -66,7 +66,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * an additional column delegate.
      * Usually defined by the end user.
      */
-    additionalColumns?: AdditionalColumnDelegate<AdditionalKey, S, Key>[];
+    additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey>[];
 
     /**
      * Can the table be edited inline
@@ -78,13 +78,13 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * need to create special indexes in Firestore.
      * You can then specify here the indexes created.
      */
-    indexes?: CompositeIndex<Key>[];
+    indexes?: CompositeIndex<Extract<keyof M, string>>[];
 
     /**
      * List of entities that will be displayed on top, no matter the ordering.
      * This is used for reference fields selection
      */
-    entitiesDisplayedFirst?: Entity<S, Key>[];
+    entitiesDisplayedFirst?: Entity<M>[];
 
     /**
      * Additional components builder such as buttons in the
@@ -100,7 +100,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     tableRowActionsBuilder?: ({
                                   entity,
                                   size
-                              }: { entity: Entity<S, Key>, size: CollectionSize }) => React.ReactNode;
+                              }: { entity: Entity<M>, size: CollectionSize }) => React.ReactNode;
 
     /**
      * Is the id column frozen to the left.
@@ -115,7 +115,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
      * Callback when the value of a cell has been edited
      * @param params
      */
-    onCellValueChange?: OnCellValueChange<unknown, S, Key>;
+    onCellValueChange?: OnCellValueChange<unknown, M>;
     /**
      * How many entries are loaded per page
      */
@@ -124,7 +124,7 @@ export interface CollectionTableProps<S extends EntitySchema<Key>, Key extends s
     /**
      * Callback when anywhere on the table is clicked
      */
-    onEntityClick?(entity: Entity<S, Key>): void;
+    onEntityClick?(entity: Entity<M>): void;
 }
 
 /**
@@ -136,16 +136,16 @@ export type UniqueFieldValidator = (props: { name: string, value: any, property:
  * Callback when a cell has changed in a table
  * @category Collection components
  */
-export type OnCellValueChange<T, S extends EntitySchema<Key>, Key extends string> = (params: OnCellValueChangeParams<T, S, Key>) => Promise<void>;
+export type OnCellValueChange<T, M extends { [Key: string]: any }> = (params: OnCellValueChangeParams<T, M>) => Promise<void>;
 
 /**
  * Props passed in a callback when the content of a cell in a table has been edited
  * @category Collection components
  */
-export type OnCellValueChangeParams<T, S extends EntitySchema<Key>, Key extends string = Extract<keyof S["properties"], string>> = {
+export type OnCellValueChangeParams<T, M extends { [Key: string]: any }> = {
     value: T,
     name: string,
-    entity: Entity<S, Key>,
+    entity: Entity<M>,
     setSaved: (saved: boolean) => void
     setError: (e: Error) => void
 };

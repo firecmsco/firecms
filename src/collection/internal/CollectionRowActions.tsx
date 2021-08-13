@@ -30,8 +30,7 @@ import { Skeleton } from "@material-ui/lab";
  *
  * @category Collection components
  */
-export default function CollectionRowActions<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>>({
+export default function CollectionRowActions<M extends { [Key: string]: any }>({
                                                                      entity,
                                                                      isSelected,
                                                                      selectionEnabled,
@@ -42,14 +41,14 @@ export default function CollectionRowActions<S extends EntitySchema<Key>,
                                                                      onDeleteClicked
                                                                  }:
                                                                      {
-                                                                         entity: Entity<S, Key>,
+                                                                         entity: Entity<M>,
                                                                          size: CollectionSize,
                                                                          isSelected?: boolean,
                                                                          selectionEnabled?: boolean,
-                                                                         toggleEntitySelection?: (entity: Entity<S, Key>) => void
-                                                                         onEditClicked?: (entity: Entity<S, Key>) => void,
-                                                                         onCopyClicked?: (entity: Entity<S, Key>) => void,
-                                                                         onDeleteClicked?: (entity: Entity<S, Key>) => void,
+                                                                         toggleEntitySelection?: (entity: Entity<M>) => void
+                                                                         onEditClicked?: (entity: Entity<M>) => void,
+                                                                         onCopyClicked?: (entity: Entity<M>) => void,
+                                                                         onDeleteClicked?: (entity: Entity<M>) => void,
                                                                      }) {
 
     const editEnabled = Boolean(onEditClicked);

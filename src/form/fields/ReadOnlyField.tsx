@@ -15,7 +15,7 @@ import ErrorBoundary from "../../core/internal/ErrorBoundary";
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function ReadOnlyField<S extends EntitySchema>({
+export default function ReadOnlyField<M extends { [Key: string]: any }>({
                                                                   name,
                                                                   value,
                                                                   setValue,

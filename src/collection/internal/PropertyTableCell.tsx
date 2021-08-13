@@ -30,7 +30,7 @@ import TableCell from "./TableCell";
 import { AnySchema } from "yup";
 
 
-export interface PropertyTableCellProps<T extends CMSType, S extends EntitySchema<Key>, Key extends string> {
+export interface PropertyTableCellProps<T extends CMSType, M extends { [Key: string]: any }> {
     name: string;
     selected: boolean;
     value: T;
@@ -51,7 +51,7 @@ export interface PropertyTableCellProps<T extends CMSType, S extends EntitySchem
  */
 export type OnCellChangeParams<T> = { value: T, name: string, setError: (e: Error) => void, setSaved: (saved: boolean) => void };
 
-const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key extends string>({
+const PropertyTableCell = <T extends CMSType, M extends { [Key: string]: any }>({
                                                                                                    selected,
                                                                                                    focused,
                                                                                                    name,
@@ -67,7 +67,7 @@ const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key e
                                                                                                    align,
                                                                                                    width,
                                                                                                    height
-                                                                                               }: PropertyTableCellProps<T, S, Key> & CellStyleProps) => {
+                                                                                               }: PropertyTableCellProps<T, M> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
 
@@ -306,6 +306,6 @@ const PropertyTableCell = <T extends CMSType, S extends EntitySchema<Key>, Key e
 
 };
 
-export default React.memo<PropertyTableCellProps<any, any, any> & CellStyleProps>(PropertyTableCell) as React.FunctionComponent<PropertyTableCellProps<any, any, any> & CellStyleProps>;
+export default React.memo<PropertyTableCellProps<any, any> & CellStyleProps>(PropertyTableCell) as React.FunctionComponent<PropertyTableCellProps<any, any> & CellStyleProps>;
 
 

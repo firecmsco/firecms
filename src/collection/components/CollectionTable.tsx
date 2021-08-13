@@ -13,7 +13,6 @@ import {
     CollectionSize,
     CompositeIndex,
     Entity,
-    EntitySchema,
     FilterValues,
     Property,
     WhereFilterOp
@@ -65,8 +64,7 @@ const PIXEL_NEXT_PAGE_OFFSET = 1200;
  * @see EntityCollectionTable
  * @category Collection components
  */
-export default function CollectionTable<S extends EntitySchema<Key>,
-    Key extends string = Extract<keyof S["properties"], string>,
+export default function CollectionTable<M extends { [Key: string]: any },
     AdditionalKey extends string = string>({
                                                initialFilter,
                                                initialSort,
@@ -88,15 +86,15 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                                                onEntityClick,
                                                onCellValueChange,
                                                pageSize = DEFAULT_PAGE_SIZE
-                                           }: CollectionTableProps<S, Key, AdditionalKey>) {
+                                           }: CollectionTableProps<M, AdditionalKey>) {
 
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize);
 
     const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
 
-    const [filterValues, setFilterValues] = React.useState<FilterValues<Key>>(initialFilter || {});
-    const [sortByProperty, setSortProperty] = React.useState<Key | undefined>(initialSort ? initialSort[0] : undefined);
+    const [filterValues, setFilterValues] = React.useState<FilterValues<M>>(initialFilter || {});
+    const [sortByProperty, setSortProperty] = React.useState<Extract<keyof M, string> | undefined>(initialSort ? initialSort[0] : undefined);
     const [currentSort, setCurrentSort] = React.useState<Sort>(initialSort ? initialSort[1] : undefined);
 
     const [tableSize, setTableSize] = React.useState<ContentRect | undefined>();
@@ -106,8 +104,8 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
     const classes = useTableStyles();
 
-    const [selectedCell, setSelectedCell] = React.useState<TableCellProps>(undefined);
-    const [popupCell, setPopupCell] = React.useState<TableCellProps>(undefined);
+    const [selectedCell, setSelectedCell] = React.useState<TableCellProps<M>>(undefined);
+    const [popupCell, setPopupCell] = React.useState<TableCellProps<M>>(undefined);
     const [focused, setFocused] = React.useState<boolean>(false);
 
     const [formPopupOpen, setFormPopupOpen] = React.useState<boolean>(false);
@@ -141,12 +139,12 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         searchString,
         textSearchDelegate,
         collectionPath,
-        schema: schema as EntitySchema<any>
+        schema
     });
 
     const textSearchInProgress = Boolean(searchString);
 
-    const currentData: Entity<S, Key>[] = textSearchInProgress ? textSearchData : data;
+    const currentData: Entity<M>[] = textSearchInProgress ? textSearchData : data;
     const loading = textSearchInProgress ? textSearchLoading : dataLoading;
 
     const actions = toolbarActionsBuilder && toolbarActionsBuilder({
@@ -175,7 +173,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         setItemCount(pageSize);
     };
 
-    const select = (cell: TableCellProps) => {
+    const select = (cell: TableCellProps<M>) => {
         setSelectedCell(cell);
         setFocused(true);
         if (!formPopupOpen) {
@@ -189,7 +187,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         setPreventOutsideClick(false);
     }, []);
 
-    const additionalColumnsMap: Record<string, AdditionalColumnDelegate<string, S, Key>> = useMemo(() => {
+    const additionalColumnsMap: Record<string, AdditionalColumnDelegate<M, string>> = useMemo(() => {
         return additionalColumns ?
             additionalColumns
                 .map((aC) => ({ [aC.id]: aC }))
@@ -221,9 +219,9 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     });
 
     const columns = useMemo(() => {
-        const allColumns: CMSColumn[] = (Object.keys(schema.properties) as Key[])
+        const allColumns: CMSColumn[] = (Object.keys(schema.properties) as (keyof M)[])
             .map((key) => {
-                const property: Property<any> = buildPropertyFrom<any, S, Key>(schema.properties[key], schema.defaultValues ?? {}, collectionPath);
+                const property: Property<any> = buildPropertyFrom<any, M>(schema.properties[key], schema.defaultValues ?? {}, collectionPath);
                 return ({
                     id: key as string,
                     type: "property",
@@ -258,12 +256,12 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     }, [displayedProperties]);
 
 
-    const onColumnSort = (key: Key) => {
+    const onColumnSort = (key: Extract<keyof M, string>) => {
 
         const isDesc = sortByProperty === key && currentSort === "desc";
         const isAsc = sortByProperty === key && currentSort === "asc";
         const newSort = isDesc ? "asc" : (isAsc ? undefined : "desc");
-        const newSortProperty = isAsc ? undefined : key;
+        const newSortProperty:Extract<keyof M, string> | undefined = isAsc ? undefined : key;
 
         if (filterValues) {
             if (!isFilterCombinationValid(filterValues, indexes, newSortProperty, newSort)) {
@@ -287,7 +285,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     const clearFilter = () => setFilterValues({});
 
     const buildIdColumn = (props: {
-        entity: Entity<S, Key>,
+        entity: Entity<M>,
         size: CollectionSize,
     }) => {
         if (tableRowActionsBuilder)
@@ -297,7 +295,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
     };
 
-    function checkInlineEditing(entity: Entity<any, any>) {
+    function checkInlineEditing<M>(entity: Entity<M>) {
         if (typeof inlineEditing === "boolean") {
             return inlineEditing;
         } else if (typeof inlineEditing === "function") {
@@ -308,7 +306,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
     }
 
     const onRowClick = ({ rowData }: any) => {
-        const entity = rowData as Entity<S, Key>;
+        const entity = rowData as Entity<M>;
         if (checkInlineEditing(entity))
             return;
         return onEntityClick && onEntityClick(entity);
@@ -321,7 +319,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                               rowIndex
                           }: any) => {
 
-        const entity: Entity<S, Key> = rowData;
+        const entity: Entity<M> = rowData;
 
         if (columnIndex === 0) {
             return buildIdColumn({
@@ -332,9 +330,9 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
         if (column.type === "property") {
 
-            const name = column.dataKey as Key;
+            const name = column.dataKey as keyof M;
             const propertyOrBuilder = schema.properties[name];
-            const property: Property = buildPropertyFrom<CMSType, S, Key>(propertyOrBuilder, entity.values, entity.id);
+            const property: Property<any> = buildPropertyFrom<CMSType, M>(propertyOrBuilder, entity.values, entity.id);
             const usedPropertyBuilder = typeof propertyOrBuilder === "function";
 
             const inlineEditingEnabled = checkInlineEditing(entity);
@@ -424,7 +422,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
                         key={`table_cell_${name}_${rowIndex}_${columnIndex}`}
                         size={size}
                         align={column.align}
-                        name={name}
+                        name={name as string}
                         validation={validation}
                         onValueChange={onValueChange}
                         selected={selected}
@@ -487,7 +485,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
             const isNewFilterCombinationValid = isFilterCombinationValid(newFilterValue, indexes, sortByProperty, currentSort);
             if (!isNewFilterCombinationValid) {
-                newFilterValue = filterForProperty ? { [column.id]: filterForProperty } as FilterValues<Key> : {};
+                newFilterValue = filterForProperty ? { [column.id]: filterForProperty } as FilterValues<M> : {};
             }
 
             setFilterValues(newFilterValue);
@@ -516,7 +514,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         );
     };
 
-    function buildErrorView<S extends EntitySchema>() {
+    function buildErrorView<M extends { [Key: string]: any }>() {
         return (
 
             <Paper className={classes.root}>
@@ -543,7 +541,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
         );
     }
 
-    function buildEmptyView<S extends EntitySchema>() {
+    function buildEmptyView<M extends { [Key: string]: any }>() {
         if (loading)
             return <CircularProgressCenter/>;
         return (
@@ -639,7 +637,7 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
             <Paper className={classes.root}>
 
-                <CollectionTableToolbar schema={schema as EntitySchema}
+                <CollectionTableToolbar schema={schema}
                                         filterIsSet={filterIsSet}
                                         onTextSearch={textSearchEnabled ? setSearchString : undefined}
                                         clearFilter={clearFilter}
@@ -677,10 +675,10 @@ export default function CollectionTable<S extends EntitySchema<Key>,
 
 }
 
-function isFilterCombinationValid<Key extends string>(filterValues: FilterValues<Key>, indexes?: CompositeIndex<Key>[], sortKey?: Key, sortDirection?: "asc" | "desc"): boolean {
+function isFilterCombinationValid<M extends { [Key: string]: any }>(filterValues: FilterValues<M>, indexes?: CompositeIndex<Extract<keyof M, string>>[], sortKey?: keyof M, sortDirection?: "asc" | "desc"): boolean {
 
     // Order by clause cannot contain a field with an equality filter available
-    const values: [WhereFilterOp, any][] = Object.values(filterValues);
+    const values: [WhereFilterOp, any][] = Object.values(filterValues) as [WhereFilterOp, any][];
     if (sortKey && values.map((v) => v[0]).includes("==")) {
         return false;
     }

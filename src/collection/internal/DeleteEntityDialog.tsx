@@ -13,19 +13,19 @@ import CircularProgressCenter from "../../core/internal/CircularProgressCenter";
 import { useCMSAppContext, useSnackbarController } from "../../contexts";
 
 
-export interface DeleteEntityDialogProps<S extends EntitySchema<any>> {
-    entityOrEntitiesToDelete?: Entity<S> | Entity<S>[],
+export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
+    entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
     collectionPath: string,
-    schema: S
+    schema: EntitySchema<M>,
     open: boolean;
     onClose: () => void;
 
-    onEntityDelete?(collectionPath: string, entity: Entity<S>): void;
+    onEntityDelete?(collectionPath: string, entity: Entity<M>): void;
 
-    onMultipleEntitiesDelete?(collectionPath: string, entities: Entity<S>[]): void;
+    onMultipleEntitiesDelete?(collectionPath: string, entities: Entity<M>[]): void;
 }
 
-export default function DeleteEntityDialog<S extends EntitySchema<any>>({
+export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
                                                                             entityOrEntitiesToDelete,
                                                                             schema,
                                                                             onClose,
@@ -35,12 +35,12 @@ export default function DeleteEntityDialog<S extends EntitySchema<any>>({
                                                                             collectionPath,
                                                                             ...other
                                                                         }
-                                                                            : DeleteEntityDialogProps<S>) {
+                                                                            : DeleteEntityDialogProps<M>) {
 
     const snackbarContext = useSnackbarController();
     const [loading, setLoading] = useState(false);
 
-    const entityOrEntitiesRef = React.useRef<Entity<S> | Entity<S>[]>();
+    const entityOrEntitiesRef = React.useRef<Entity<M> | Entity<M>[]>();
     const [multipleEntities, setMultipleEntities] = React.useState<boolean>();
     const context = useCMSAppContext();
 
@@ -92,7 +92,7 @@ export default function DeleteEntityDialog<S extends EntitySchema<any>>({
         console.error(e);
     };
 
-    function performDelete(entity: Entity<S>): Promise<boolean> {
+    function performDelete(entity: Entity<M>): Promise<boolean> {
         return deleteEntity({
             entity,
             schema,
@@ -111,12 +111,12 @@ export default function DeleteEntityDialog<S extends EntitySchema<any>>({
             setLoading(true);
 
             if (multipleEntities) {
-                Promise.all((entityOrEntities as Entity<S>[]).map(performDelete)).then((results) => {
+                Promise.all((entityOrEntities as Entity<M>[]).map(performDelete)).then((results) => {
 
                     setLoading(false);
 
                     if (onMultipleEntitiesDelete && entityOrEntities)
-                        onMultipleEntitiesDelete(collectionPath, entityOrEntities as Entity<S>[]);
+                        onMultipleEntitiesDelete(collectionPath, entityOrEntities as Entity<M>[]);
 
                     if (results.every(Boolean)) {
                         snackbarContext.open({
@@ -138,11 +138,11 @@ export default function DeleteEntityDialog<S extends EntitySchema<any>>({
                 });
 
             } else {
-                performDelete(entityOrEntities as Entity<S>).then((success) => {
+                performDelete(entityOrEntities as Entity<M>).then((success) => {
                     setLoading(false);
                     if (success) {
                         if (onEntityDelete && entityOrEntities)
-                            onEntityDelete(collectionPath, entityOrEntities as Entity<S>);
+                            onEntityDelete(collectionPath, entityOrEntities as Entity<M>);
                         snackbarContext.open({
                             type: "success",
                             message: `${schema.name} deleted`
@@ -156,7 +156,7 @@ export default function DeleteEntityDialog<S extends EntitySchema<any>>({
 
     const content = entityOrEntities && (multipleEntities ?
         <div>Multiple entities</div> :
-        <EntityPreview entity={entityOrEntities as Entity<S>}
+        <EntityPreview entity={entityOrEntities as Entity<M>}
                        schema={schema}/>);
 
     const dialogTitle = multipleEntities ? `${schema.name}: Confirm multiple delete?`
