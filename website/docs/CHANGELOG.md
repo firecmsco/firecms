@@ -4,7 +4,7 @@ title: Changelog
 sidebar_label: Changelog
 ---
 
-## [0.48.0] - 2021-08-
+## [0.49.0] - 2021-08-13
 
 ### Changed
 
@@ -47,6 +47,15 @@ Related changes:
 - `buildSchemaFrom` has been deleted since now it's identical to `buildSchema`
 
 If you need more info: https://firecms.co/blog/types_refactor
+
+## [0.48.0] - 2021-08-13
+
+### Changed
+- Fix for changes in forms not updating correctly when a real time update
+  happened in Firestore
+- Fix for popup view position
+- Fix for popup view validating only the corresponding cell and not the whole
+property, which was provoking unfixable saving errors.
 
 ## [0.47.0] - 2021-08-10
 

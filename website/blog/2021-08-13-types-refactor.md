@@ -9,7 +9,7 @@ author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
 
 ### Types update
 
-We have a **big update in version 0.48.0** affecting the main types used in the
+We have a **big update in version 0.49.0** affecting the main types used in the
 CMS.
 
 The signature of `EntitySchema<Key extends string = string>` has changed to
