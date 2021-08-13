@@ -1,7 +1,8 @@
 import { expectType } from "tsd";
-import { initEntityValues } from "../models/firestore";
 import { productSchema } from "./test_site_config";
+import { EntitySchema, EntityValues } from "../models";
 
+declare function getValues<M>(schema: EntitySchema<M>): EntityValues<M>;
 
-const values = initEntityValues(productSchema, "test");
+const values = getValues(productSchema);
 expectType<string>(values.name);
