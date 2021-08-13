@@ -5,7 +5,6 @@ import {
     EnumValues
 } from "../models";
 import { CMSAppProps } from "../core/CMSAppProps";
-import { PreviewComponentProps } from "../preview";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -30,7 +29,7 @@ export const productSchema = buildSchema({
                     values,
                     status
                 }) => {
-        values.uppercase_name = values.name.toUpperCase();
+        values.uppercase_name = (values.name as string).toUpperCase();
         return values;
     },
 
@@ -43,14 +42,14 @@ export const productSchema = buildSchema({
     },
 
     properties: {
-        name: {
-            dataType: "number",
+        name: buildProperty({
+            dataType: "string",
             title: "Name",
             config: {
                 multiline: true
             },
             validation: { required: true }
-        },
+        }),
         main_image: buildProperty({
             dataType: "string",
             title: "Image",
