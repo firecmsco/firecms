@@ -4,6 +4,12 @@ title: Changelog
 sidebar_label: Changelog
 ---
 
+## [0.49.1] - 2021-08-15
+
+### Changed
+
+- Fix for broken custom entity views and new entities.
+
 ## [0.49.0] - 2021-08-13
 
 ### Changed
@@ -47,6 +53,7 @@ Related changes:
 - `buildSchemaFrom` has been deleted since now it's identical to `buildSchema`
 
 If you need more info: https://firecms.co/blog/types_refactor
+
 
 ## [0.48.0] - 2021-08-13
 
