@@ -21,6 +21,8 @@ import { blogSchema } from "../schemas/blog_schema";
 
 export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<InferSchemaType<typeof blogSchema>>) {
 
+    console.log("BlogEntryPreview", modifiedValues);
+
     const [headerUrl, setHeaderUrl] = useState<string | undefined>();
     useEffect(() => {
         if (modifiedValues?.header_image) {

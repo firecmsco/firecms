@@ -63,14 +63,14 @@ const categories: EnumValues = {
 const sampleView: EntityCustomView = {
     path: "sample_custom_view",
     name: "Custom view",
-    builder: ({ schema, entity, modifiedValues }) => (
-        <SampleProductsView entity={entity} modifiedValues={modifiedValues}/>
-    )
+    builder: ({ schema, entity, modifiedValues }) =>
+        <SampleProductsView entity={entity}
+                            modifiedValues={modifiedValues}/>
 };
 
 
 
-export const productSchema = buildSchema<Product>({
+export const productSchema = buildSchema<any>({
     name: "Product",
     views: [
         sampleView

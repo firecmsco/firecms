@@ -138,14 +138,14 @@ export interface EntitySideViewProps<M extends { [Key: string]: any }> {
 }
 
 function EntityView<M extends { [Key: string]: any }>({
-                                                                         collectionPath,
-                                                                         entityId,
-                                                                         selectedSubpath,
-                                                                         copy,
-                                                                         permissions,
-                                                                         schema,
-                                                                         subcollections
-                                                                     }: EntitySideViewProps<M>) {
+                                                          collectionPath,
+                                                          entityId,
+                                                          selectedSubpath,
+                                                          copy,
+                                                          permissions,
+                                                          schema,
+                                                          subcollections
+                                                      }: EntitySideViewProps<M>) {
 
     const classes = useStylesSide();
 
@@ -343,7 +343,7 @@ function EntityView<M extends { [Key: string]: any }>({
                     width={"100%"}
                     hidden={tabsPosition !== colIndex}>
                     <ErrorBoundary>
-                        {entity && customView.builder({
+                        {customView.builder({
                             schema,
                             entity,
                             modifiedValues: isModified ? modifiedValues : entity?.values

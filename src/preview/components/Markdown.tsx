@@ -12,7 +12,7 @@ type MarkdownProps = {
 export default function Markdown({
                                      source
                                  }: MarkdownProps) {
-    return <MarkdownPreview source={source}
+    return <MarkdownPreview source={typeof source === "string" ? source : ""}
                             style={{
                                 fontSize: "inherit",
                                 lineHeight: "inherit",

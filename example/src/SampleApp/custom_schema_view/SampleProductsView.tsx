@@ -1,10 +1,11 @@
 import React from "react";
 import { Box, Button } from "@material-ui/core";
 import { Entity, EntityValues, useSnackbarController } from "@camberi/firecms";
+import { Product } from "../types";
 
 export function SampleProductsView({ entity, modifiedValues }: {
-    entity?: Entity<any>;
-    modifiedValues?: EntityValues<any>;
+    entity?: Entity<Product>;
+    modifiedValues?: EntityValues<Product>;
 }) {
 
     const snackbarContext = useSnackbarController();
@@ -15,6 +16,19 @@ export function SampleProductsView({ entity, modifiedValues }: {
             message: `Custom action for ${modifiedValues?.name}`
         });
     };
+
+    const includePropertyValue = (key:string, value: any ): boolean => {
+        if (key === "related_products")
+            return false;
+        return true;
+    };
+
+    const values = modifiedValues ?
+        Object.entries(modifiedValues)
+            .filter(([key, value]) => includePropertyValue(key, value))
+            .map(([key, value]) => ({ [key]: value }))
+            .reduce((a, b) => ({ ...a, ...b }))
+        : {};
 
     return (
         <Box
@@ -28,7 +42,7 @@ export function SampleProductsView({ entity, modifiedValues }: {
                  alignItems={"center"}
                  justifyItems={"center"}>
 
-                <Box p={2}>
+                <Box p={4}>
                     <p>
                         This is an example of a custom view added
                         as a panel to an entity schema.
@@ -36,7 +50,8 @@ export function SampleProductsView({ entity, modifiedValues }: {
                     <p>
                         Values in the form:
                     </p>
-                    <p style={{
+
+                    {values && <p style={{
                         color: "#fff",
                         padding: "8px",
                         fontSize: ".85em",
@@ -44,8 +59,13 @@ export function SampleProductsView({ entity, modifiedValues }: {
                         borderRadius: "4px",
                         backgroundColor: "#4e482f"
                     }}>
-                        {modifiedValues && JSON.stringify(modifiedValues, null, 2)}
-                    </p>
+                        {JSON.stringify(values, null, 2)}
+                    </p>}
+
+                    <small>
+                        Note that "Related products" is intentionally excluded from this JSON preview
+                    </small>
+
                 </Box>
 
                 <Button onClick={onClick} color="primary">
