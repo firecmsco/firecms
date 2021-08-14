@@ -26,7 +26,7 @@ function Pricing() {
     const { isDarkTheme } = useThemeContext();
 
     const community = <div
-        className="bg-white dark:bg-opacity-5 m-10 lg:col-span-1 rounded-lg border-b-4 overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 transform hover:scale-105">
+        className="bg-white dark:bg-opacity-5 m-4 md:m-10 lg:col-span-1 rounded-lg border-b-4 overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 transform ">
         <div
             className="p-4 bg-green-500 text-center ">
             <h3 className="h5 mb-0 text-white ">
@@ -65,7 +65,7 @@ function Pricing() {
 
 
     const advanced = <div
-        className="bg-white dark:bg-opacity-5 m-10 lg:col-span-1 rounded-lg border-b-4 overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 transform hover:scale-105">
+        className="bg-white dark:bg-opacity-5 m-4 md:m-10 lg:col-span-1 rounded-lg border-b-4 overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 transform">
         <div
             className="p-4 bg-blue-600 text-center ">
             <h3 className="h5 mb-0 text-white ">
@@ -105,9 +105,9 @@ function Pricing() {
             data-aos="fade-up"
             data-aos-delay="100">
 
-            <h1 className="h2 ">
+            <h2 className="h2 ">
                 Pricing
-            </h1>
+            </h2>
 
             {/*<p className="text-xl text-gray-500 dark:text-gray-200">*/}
             {/*    This is the best part*/}

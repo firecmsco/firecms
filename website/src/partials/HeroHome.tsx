@@ -35,18 +35,13 @@ function HeroHome({}) {
                 className="flex items-center justify-center px-4 sm:px-6 lg:mt-44 md:mt-40 mt-32">
 
                 <div className="text-center ">
-                    <div
+                    <h1
                         className="block text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-3"
-                        // data-aos="zoom-y-out"
-                        // style={{
-                        //     opacity: .9,
-                        //     mixBlendMode: "color-dodge"
-                        // }}
                     >
                             <span
                                 className="block">Your</span>
                         <span className="block">Firestore-based</span>
-                    </div>
+                    </h1>
 
                     <div
                         className="block text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-3"
