@@ -22,7 +22,6 @@ import { SchemaRegistryProvider } from "../contexts/SchemaRegistry";
 import { CMSAppContextProvider } from "../contexts/CMSAppContext";
 import { SideEntityProvider } from "../contexts/SideEntityController";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
-import { BrowserRouter as Router } from "react-router-dom";
 import { EntitySideDialogs } from "./internal/EntitySideDialogs";
 import { DataSource } from "../models/data/datasource";
 import { FirestoreDatasource } from "../models/data/firestore_datasource";
@@ -169,15 +168,13 @@ export function CMSAppProvider({
                         navigation={navigation}
                         navigationLoadingError={navigationLoadingError}>
 
-                        <Router>
-                            <SideEntityProvider
-                                collections={navigation?.collections}>
-                                <BreadcrumbsProvider>
-                                    {children}
-                                    <EntitySideDialogs/>
-                                </BreadcrumbsProvider>
-                            </SideEntityProvider>
-                        </Router>
+                        <SideEntityProvider
+                            collections={navigation?.collections}>
+                            <BreadcrumbsProvider>
+                                {children}
+                                <EntitySideDialogs/>
+                            </BreadcrumbsProvider>
+                        </SideEntityProvider>
 
                     </CMSAppContextProvider>
                 </SchemaRegistryProvider>

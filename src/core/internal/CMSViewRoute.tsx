@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useRouteMatch } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { BreadcrumbEntry } from "../navigation";
 import { useBreadcrumbsContext } from "../../contexts";
 import { CMSView } from "../../models";
@@ -13,11 +13,11 @@ function CMSViewRoute({
                           cmsView
                       }: CMSViewRouteProps) {
 
-    const { url } = useRouteMatch();
+    const { pathname } = useLocation();
 
     const breadcrumb: BreadcrumbEntry = {
         title: cmsView.name,
-        url: url
+        url: pathname
     };
 
     const breadcrumbsContext = useBreadcrumbsContext();
@@ -26,7 +26,7 @@ function CMSViewRoute({
         breadcrumbsContext.set({
             breadcrumbs: [breadcrumb]
         });
-    }, [url]);
+    }, [pathname]);
 
     return <React.Fragment>
         {cmsView.view}

@@ -7,6 +7,7 @@ import "firebase/storage";
 import { CMSAppProps } from "./CMSAppProps";
 import { CMSMainView } from "./CMSMainView";
 import { CMSAppProvider } from "./CMSAppProvider";
+import { BrowserRouter as Router } from "react-router-dom";
 import CircularProgressCenter from "./internal/CircularProgressCenter";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
@@ -123,12 +124,14 @@ export function CMSApp(props: CMSAppProps) {
 
     return (
         <ThemeProvider theme={theme}>
+            <Router>
             <CMSAppProvider {...props}
                             dataSource={FirestoreDatasource}
                             firebaseConfig={usedFirebaseConfig}>
                 <CssBaseline/>
                 <CMSMainView {...props}/>
             </CMSAppProvider>
+            </Router>
         </ThemeProvider>
     );
 }

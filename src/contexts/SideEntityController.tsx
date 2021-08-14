@@ -1,11 +1,6 @@
-import {
-    EntityCollection,
-    EntityCustomView,
-    EntitySchema,
-    SchemaConfig
-} from "../models";
+import { EntityCollection, SchemaConfig } from "../models";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
     getCMSPathFrom,
     getEntityOrCollectionPath,
@@ -92,17 +87,18 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                                                                           collections
                                                                       }) => {
 
-    const location: any = useLocation();
-    const history = useHistory();
+    const location = useLocation();
+
+    const navigate = useNavigate();
     const initialised = useRef<boolean>(false);
     const [sidePanels, setSidePanels] = useState<ExtendedPanelProps[]>([]);
 
     const schemasRegistry = useSchemasRegistry();
 
-    const mainLocation = location.state && location.state["main_location"] ? location.state["main_location"] : location;
+    const basePathname = location.state && location.state["base_pathname"] ? location.state["base_pathname"] : location.pathname;
 
     useEffect(() => {
-        return history.listen((location: any, action) => {
+        if (schemasRegistry.initialised) {
             if (location?.state && location.state["panels"]) {
                 const customSchemaKeys = (location.state["panels"] as ExtendedPanelProps[])
                     .map((e) => e.sidePanelKey)
@@ -113,9 +109,11 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                 schemasRegistry.removeAllOverridesExcept([]);
                 setSidePanels([]);
             }
-        });
-    }, [history]);
+        }
+    }, [location?.state, schemasRegistry.initialised]);
 
+
+    // only on initialisation
     useEffect(() => {
         if (collections && !initialised.current) {
             if (isCollectionPath(location.pathname)) {
@@ -135,10 +133,12 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         const lastSidePanel = sidePanels[sidePanels.length - 1];
         const locationPanels = location?.state && location.state["panels"];
         if (locationPanels && locationPanels.length > 0) {
-            history.go(-1);
+            console.log("locationPanels.length > 0");
+            navigate(-1);
         } else {
+            console.log("locationPanels.length === 0");
             const newPath = getCMSPathFrom(lastSidePanel.collectionPath);
-            history.replace(newPath);
+            navigate(newPath, { replace: true });
         }
 
     };
@@ -189,11 +189,14 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                 sidePanelKey,
                 selectedSubpath
             };
-            history.replace(
+            navigate(
                 getEntityPath(entityId, collectionPath, selectedSubpath),
                 {
-                    main_location: mainLocation,
-                    panels: [...sidePanels.slice(0, -1), updatedPanel]
+                    replace: true,
+                    state: {
+                        base_pathname: basePathname,
+                        panels: [...sidePanels.slice(0, -1), updatedPanel]
+                    }
                 }
             );
 
@@ -205,11 +208,13 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                 sidePanelKey,
                 selectedSubpath
             };
-            history.push(
+            navigate(
                 newPath,
                 {
-                    main_location: mainLocation,
-                    panels: [...sidePanels, newPanel]
+                    state: {
+                        base_pathname: basePathname,
+                        panels: [...sidePanels, newPanel]
+                    }
                 }
             );
         }

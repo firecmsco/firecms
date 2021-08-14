@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView, EntityCollection } from "../models";
 import { addInitialSlash, buildCollectionPath } from "./navigation";
 
@@ -13,8 +13,8 @@ export function CMSRouterSwitch({ collections, views }: {
     views?: CMSView[];
 }) {
 
-    const location: any = useLocation();
-    const mainLocation = location.state && location.state["main_location"] ? location.state["main_location"] : location;
+    const location = useLocation();
+    const basePathname = location.state && location.state["base_pathname"] ? location.state["base_pathname"] : location.pathname;
 
     function buildCMSViewRoute(path: string, cmsView: CMSView) {
         return <Route
@@ -35,22 +35,39 @@ export function CMSRouterSwitch({ collections, views }: {
         });
     }
 
+    const matchedCollection = [...collections]
+        // we reorder collections so that nested paths are included first
+        .sort((a, b) => b.relativePath.length - a.relativePath.length)
+        .find(entityCollection => {
+            return addInitialSlash(buildCollectionPath(entityCollection)) === addInitialSlash(basePathname);
+        });
+
+    if (matchedCollection) {
+        return <CollectionRoute
+            key={`col_${matchedCollection.relativePath}`}
+            collectionPath={matchedCollection.relativePath}
+            collectionConfig={matchedCollection}
+        />;
+    }
+
+    const collectionRoutes = [...collections]
+        // we reorder collections so that nested paths are included first
+        .sort((a, b) => b.relativePath.length - a.relativePath.length)
+        .map(entityCollection => (
+                <Route
+                    path={buildCollectionPath(entityCollection)}
+                    key={`navigation_${entityCollection.relativePath}`}>
+                    <CollectionRoute
+                        collectionPath={entityCollection.relativePath}
+                        collectionConfig={entityCollection}
+                    />
+                </Route>
+            )
+        );
     return (
-        <Switch location={mainLocation}>
-            {[...collections]
-                // we reorder collections so that nested paths are included first
-                .sort((a, b) => b.relativePath.length - a.relativePath.length)
-                .map(entityCollection => (
-                        <Route
-                            path={buildCollectionPath(entityCollection)}
-                            key={`navigation_${entityCollection.relativePath}`}>
-                            <CollectionRoute
-                                collectionPath={entityCollection.relativePath}
-                                collectionConfig={entityCollection}
-                            />
-                        </Route>
-                    )
-                )}
+        <Routes>
+
+            {collectionRoutes}
 
             {customRoutes}
 
@@ -62,6 +79,6 @@ export function CMSRouterSwitch({ collections, views }: {
                 />
             </Route>
 
-        </Switch>
+        </Routes>
     );
 }

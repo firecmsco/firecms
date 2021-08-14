@@ -17,7 +17,7 @@ import createStyles from '@material-ui/styles/createStyles';
 import makeStyles from '@material-ui/styles/makeStyles';
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
-import { Link as ReactLink, useRouteMatch } from "react-router-dom";
+import { Link as ReactLink, useLocation } from "react-router-dom";
 
 import {
     BreadcrumbEntry,
@@ -54,11 +54,11 @@ function HomeRoute({
                    }: HomeRouteProps) {
 
     const classes = useStyles();
-    const { url } = useRouteMatch();
+    const { pathname } = useLocation();
 
     const breadcrumb: BreadcrumbEntry = {
         title: "Home",
-        url: url
+        url: pathname
     };
 
     const breadcrumbsContext = useBreadcrumbsContext();
@@ -67,7 +67,7 @@ function HomeRoute({
         breadcrumbsContext.set({
             breadcrumbs: [breadcrumb]
         });
-    }, [url]);
+    }, [pathname]);
 
     const {
         navigationEntries,
