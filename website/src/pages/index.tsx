@@ -60,8 +60,8 @@ function Home() {
 
     return (
         <Layout
-            title={`${siteConfig.title}`}
-            description="Awesome Firestore/Firebase-based  headless CMS/admin tool">
+            title={"FireCMS"}
+            description="Awesome headless CMS based Firestore/Firebase and React, and completely open-source">
 
             <div className="flex flex-col min-h-screen overflow-hidden ">
 

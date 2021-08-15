@@ -1,6 +1,6 @@
 module.exports = {
-    title: 'FireCMS - Firestore CMS',
-    tagline: 'Awesome Firestore/Firebase and React based headless CMS, completely open source',
+    title: 'FireCMS - Firestore/Firebase headless CMS',
+    tagline: 'Awesome headless CMS based Firestore/Firebase and React, and completely open-source',
     url: 'https://firecms.co',
     baseUrl: '/',
     onBrokenLinks: 'throw',
