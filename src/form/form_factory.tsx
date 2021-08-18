@@ -1,21 +1,7 @@
 import React, { ComponentType, ReactElement, useEffect, useState } from "react";
-
-import { useClipboard } from "use-clipboard-hook";
-import {
-    FormControl,
-    FormHelperText,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    MenuItem,
-    Select as MuiSelect,
-    TextField as MuiTextField,
-    Tooltip
-} from "@material-ui/core";
-import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+import { FormHelperText } from "@material-ui/core";
 
 import {
-    ErrorMessage,
     FastField,
     Field,
     FieldProps as FormikFieldProps,
@@ -26,12 +12,8 @@ import {
     ArrayProperty,
     CMSFormFieldProps,
     CMSType,
-    Entity,
-    EntitySchema,
-    EntityStatus,
     FieldProps,
-    NumberProperty, Property,
-    StringProperty
+    Property
 } from "../models";
 
 import Select from "./fields/Select";
@@ -48,9 +30,7 @@ import ReadOnlyField from "./fields/ReadOnlyField";
 import MarkdownField from "./fields/MarkdownField";
 
 import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
-import { useCMSAppContext, useSnackbarController } from "../contexts";
 import { isReadOnly } from "../models/utils";
-import { CMSAppContext } from "../contexts/CMSAppContext";
 import deepEqual from "deep-equal";
 
 
@@ -90,7 +70,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
      dependsOnOtherProperties
  }: CMSFormFieldProps< M>): ReactElement<CMSFormFieldProps< M>> {
 
-    let component: ComponentType<FieldProps<T>> | undefined;
+    let component: ComponentType<FieldProps<T, any, M>> | undefined;
     if (isReadOnly(property)) {
         component = ReadOnlyField;
     } else if (property.config?.field) {
@@ -124,17 +104,17 @@ export function buildPropertyField<T extends CMSType = any, M = any>
     } else if (property.dataType === "boolean") {
         component = SwitchField as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "number") {
-        if ((property as NumberProperty).config?.enumValues) {
+        if (property.config?.enumValues) {
             component = Select as ComponentType<FieldProps<T>>;
         } else {
             component = TextField as ComponentType<FieldProps<T>>;
         }
     } else if (property.dataType === "string") {
-        if ((property as StringProperty).config?.storageMeta) {
+        if (property.config?.storageMeta) {
             component = StorageUploadField as ComponentType<FieldProps<T>>;
-        } else if ((property as StringProperty).config?.markdown) {
+        } else if (property.config?.markdown) {
             component = MarkdownField as ComponentType<FieldProps<T>>;
-        } else if ((property as StringProperty).config?.enumValues) {
+        } else if (property.config?.enumValues) {
             component = Select as ComponentType<FieldProps<T>>;
         } else {
             component = TextField as ComponentType<FieldProps<T>>;
