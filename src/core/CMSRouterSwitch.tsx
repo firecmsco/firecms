@@ -2,7 +2,7 @@ import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView, EntityCollection } from "../models";
-import { addInitialSlash, buildCollectionPath } from "./navigation";
+import { addInitialSlash, buildCollectionUrlPath } from "./navigation";
 
 import CollectionRoute from "./internal/CollectionRoute";
 import CMSViewRoute from "./internal/CMSViewRoute";
@@ -39,7 +39,7 @@ export function CMSRouterSwitch({ collections, views }: {
         // we reorder collections so that nested paths are included first
         .sort((a, b) => b.relativePath.length - a.relativePath.length)
         .find(entityCollection => {
-            return addInitialSlash(buildCollectionPath(entityCollection)) === addInitialSlash(basePathname);
+            return addInitialSlash(buildCollectionUrlPath(entityCollection)) === addInitialSlash(basePathname);
         });
 
     if (matchedCollection) {
@@ -55,7 +55,7 @@ export function CMSRouterSwitch({ collections, views }: {
         .sort((a, b) => b.relativePath.length - a.relativePath.length)
         .map(entityCollection => (
                 <Route
-                    path={buildCollectionPath(entityCollection)}
+                    path={buildCollectionUrlPath(entityCollection)}
                     key={`navigation_${entityCollection.relativePath}`}>
                     <CollectionRoute
                         collectionPath={entityCollection.relativePath}

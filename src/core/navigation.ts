@@ -39,7 +39,7 @@ export function getRouterNewEntityPath(basePath: string) {
     return `${DATA_PATH}/${removeInitialAndTrailingSlashes(basePath)}#new`;
 }
 
-export function buildCollectionPath(view: EntityCollection) {
+export function buildCollectionUrlPath(view: EntityCollection) {
     return `${DATA_PATH}/${removeInitialAndTrailingSlashes(view.relativePath)}`;
 }
 
@@ -243,7 +243,7 @@ export function computeNavigation(navigation: EntityCollection[], cmsViews: CMSV
 } {
     const navigationEntries: TopNavigationEntry[] = [
         ...navigation.map(view => ({
-            url: buildCollectionPath(view),
+            url: buildCollectionUrlPath(view),
             name: view.name,
             description: view.description,
             group: view.group

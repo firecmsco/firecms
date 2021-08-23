@@ -1,3 +1,5 @@
+import { initCMSFirebase } from "./initCMSFirebase";
+
 export { CMSApp } from "./CMSApp";
 export type {
     CMSAppProps
@@ -14,3 +16,5 @@ export type {
 } from "./CMSMainView";
 
 export * from "./components";
+
+export { initCMSFirebase } from "./initCMSFirebase";

@@ -1,16 +1,13 @@
 import React from "react";
-import firebase from "firebase/app";
-import "firebase/auth";
 
-import { Theme} from "@material-ui/core";
-import {createStyles, makeStyles} from "@material-ui/styles";
+import { Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/styles";
 
 import CircularProgressCenter from "./internal/CircularProgressCenter";
 import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./internal/CMSAppBar";
-import { useAuthController, useCMSAppContext } from "../contexts";
-import { LoginView } from "./LoginView";
+import {  useCMSAppContext } from "../contexts";
 import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
 import LocalizationProvider from "@material-ui/lab/LocalizationProvider";
 
@@ -48,9 +45,6 @@ export interface CMSMainViewProps {
 
 }
 
-const DEFAULT_SIGN_IN_OPTIONS = [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID
-];
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -104,11 +98,9 @@ export function CMSMainView(props: CMSMainViewProps) {
         name,
         logo,
         toolbarExtraWidget,
-        allowSkipLogin
     } = props;
 
     const cmsAppContext = useCMSAppContext();
-    const signInOptions = cmsAppContext.cmsAppConfig.signInOptions ?? DEFAULT_SIGN_IN_OPTIONS;
     const locale = cmsAppContext.cmsAppConfig.locale;
 
     const dateUtilsLocale = locale ? locales[locale] : undefined;
@@ -120,40 +112,29 @@ export function CMSMainView(props: CMSMainViewProps) {
     const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
     const closeDrawer = () => setDrawerOpen(false);
 
-    const authController = useAuthController();
-
-    if (authController.authLoading) {
+    if (!cmsAppContext.navigation) {
         return <CircularProgressCenter/>;
     }
 
-    let view;
-    if (!authController.canAccessMainView) {
-        view = (
-            <LoginView
-                logo={logo}
-                skipLoginButtonEnabled={allowSkipLogin}
-                signInOptions={signInOptions}
-                firebaseConfig={cmsAppContext.firebaseConfig}/>
-        );
-    } else if (cmsAppContext.navigationLoadingError) {
-        view = (
+    const collections = cmsAppContext.navigation.collections;
+    const cmsViews = cmsAppContext.navigation.views;
+
+    if (cmsAppContext.navigationLoadingError) {
+        return (
             <div>
                 <p>There was an error while loading
                     your navigation config</p>
                 <p>{cmsAppContext.navigationLoadingError}</p>
             </div>
         );
-    } else {
+    }
 
-        if (!cmsAppContext.navigation) {
-            return <CircularProgressCenter/>;
-        }
-
-        const collections = cmsAppContext.navigation.collections;
-        const cmsViews = cmsAppContext.navigation.views;
-
-        view = (
-            <>
+    return (
+        <LocalizationProvider
+            dateAdapter={AdapterDateFns}
+            utils={DateFnsUtils}
+            locale={dateUtilsLocale}>
+            <DndProvider backend={HTML5Backend}>
                 <nav>
                     <CMSDrawer logo={logo}
                                drawerOpen={drawerOpen}
@@ -163,10 +144,10 @@ export function CMSMainView(props: CMSMainViewProps) {
                 </nav>
 
                 <div className={classes.main}>
+
                     <CMSAppBar title={name}
                                handleDrawerToggle={handleDrawerToggle}
                                toolbarExtraWidget={toolbarExtraWidget}/>
-
                     <main
                         className={classes.content}>
                         <CMSRouterSwitch
@@ -174,18 +155,7 @@ export function CMSMainView(props: CMSMainViewProps) {
                             views={cmsViews}/>
                     </main>
                 </div>
-            </>
-        );
-    }
 
-
-    return (
-        <LocalizationProvider
-            dateAdapter={AdapterDateFns}
-            utils={DateFnsUtils}
-            locale={dateUtilsLocale}>
-            <DndProvider backend={HTML5Backend}>
-                {view}
             </DndProvider>
         </LocalizationProvider>
     );

@@ -78,7 +78,6 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
                                                                                 schemaResolver
                                                                             }) => {
 
-    console.log("INIT SchemaRegistryProvider", collections);
     const initialised = collections !== undefined;
     const viewsRef = useRef<Record<string, Partial<SchemaConfig & { overrideSchemaResolver?: boolean }>>>({});
 
