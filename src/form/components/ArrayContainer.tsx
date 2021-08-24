@@ -2,10 +2,9 @@ import { FieldArray } from "formik";
 import { Box, Button } from "@material-ui/core";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import hash from "object-hash";
-import firebase from "firebase/app";
-import "firebase/firestore";
 
 import ArrayEntry from "./ArrayEntry";
+import { GeoPoint } from "../../models";
 
 interface ArrayContainerProps<T> {
     value: T[];
@@ -47,16 +46,13 @@ export default function ArrayContainer<T>({
             ? Object.values(internalIdsRef.current)
             : []);
 
-
     function getHashValue<T>(v: T) {
         if (typeof v === "object") {
             if ("id" in v)
                 return (v as any)["id"];
-            else if (v instanceof firebase.firestore.DocumentReference)
-                return v.id;
-            else if (v instanceof firebase.firestore.Timestamp)
-                return v.toMillis();
-            else if (v instanceof firebase.firestore.GeoPoint)
+            else if (v instanceof Date)
+                return v.toLocaleString();
+            else if (v instanceof GeoPoint)
                 return hash({ latitude: v.latitude, longitude: v.longitude });
         }
         return hash(v, { ignoreUnknown: true });

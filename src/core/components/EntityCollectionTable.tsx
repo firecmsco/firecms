@@ -17,8 +17,6 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
-    EntitySchema,
-    saveEntity
 } from "../../models";
 import CollectionTable from "../../collection/components/CollectionTable";
 
@@ -42,8 +40,8 @@ import {
     OnCellValueChange,
     UniqueFieldValidator
 } from "../../collection/components/CollectionTableProps";
-import { checkUniqueField } from "../../models/firestore";
 import { Markdown } from "../../preview";
+import { useDataSource } from "../../hooks/useDataSource";
 
 type EntityCollectionProps<M extends { [Key: string]: any }> = {
     collectionPath: string;
@@ -80,6 +78,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
 
     const sideEntityController = useSideEntityController();
 
+    const dataSource = useDataSource();
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -169,7 +168,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                                                                setSaved,
                                                                setError,
                                                                entity
-                                                           }) => saveEntity({
+                                                           }) => dataSource.saveEntity({
             collectionPath: collectionPath,
             id: entity.id,
             values: {
@@ -269,7 +268,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                                                             value,
                                                             property,
                                                             entityId
-                                                        }) => checkUniqueField(collectionPath, name, value, property, entityId);
+                                                        }) => dataSource.checkUniqueField(collectionPath, name, value, property, entityId);
 
     const tableRowActionsBuilder = ({
                                         entity,

@@ -10,18 +10,17 @@ import {
 import {
     EntityCustomViewParams,
     EntityValues,
+    EntityReference,
     InferSchemaType,
     getDownloadURL,
     Markdown
 } from "@camberi/firecms";
-import firebase from "firebase";
 import { Product } from "../types";
 import { blogSchema } from "../schemas/blog_schema";
+import firebase from "firebase";
 
 
 export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<InferSchemaType<typeof blogSchema>>) {
-
-    console.log("BlogEntryPreview", modifiedValues);
 
     const [headerUrl, setHeaderUrl] = useState<string | undefined>();
     useEffect(() => {
@@ -133,14 +132,13 @@ export function Text({ markdownText }: { markdownText: string }) {
     </Container>;
 }
 
-export function Products({ references }: { references: firebase.firestore.DocumentReference[] }) {
-
+export function Products({ references }: { references: EntityReference[] }) {
 
     const [products, setProducts] = useState<object[] | undefined>();
 
     useEffect(() => {
         if (references) {
-            Promise.all(references.map((ref) => ref.get().then(doc => doc.data())))
+            Promise.all(references.map((ref) => firebase.firestore().collection(ref.path).doc(ref.id).get().then(doc => doc.data())))
                 .then((results) => results.filter(r => !!r) as object[])
                 .then((results) => setProducts(results));
         }

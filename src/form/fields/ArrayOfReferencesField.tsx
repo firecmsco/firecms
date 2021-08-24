@@ -1,5 +1,5 @@
 import {
-    Entity,
+    Entity, EntityReference,
     FieldProps,
     Property
 } from "../../models";
@@ -11,8 +11,6 @@ import {
     Paper
 } from "@material-ui/core";
 import { ReferencePreview } from "../../preview";
-import firebase from "firebase/app";
-import "firebase/firestore";
 import React, { useMemo } from "react";
 import LabelWithIcon from "../components/LabelWithIcon";
 import ArrayContainer from "../components/ArrayContainer";
@@ -22,9 +20,10 @@ import FieldDescription from "../components/FieldDescription";
 import { useClearRestoreValue } from "../../hooks";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { ErrorView } from "../../core/components";
+import { getReferenceFrom } from "../../models/utils";
 
 
-type ArrayOfReferencesFieldProps = FieldProps<firebase.firestore.DocumentReference[]>;
+type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 
 /**
  * This field allows to select multiple references.
@@ -79,7 +78,7 @@ export default function ArrayOfReferencesField({
     };
 
     const onMultipleEntitiesSelected = (entities: Entity<any>[]) => {
-        setValue(entities.map((e) => e.reference));
+        setValue(entities.map(e => getReferenceFrom(e)));
     };
 
     const buildEntry = (index: number, internalId: number) => {

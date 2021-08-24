@@ -13,10 +13,6 @@ import {
 import createStyles from '@material-ui/styles/createStyles';
 import makeStyles from '@material-ui/styles/makeStyles';
 import { Link as ReactLink } from "react-router-dom";
-import "firebase/analytics";
-import "firebase/auth";
-import "firebase/storage";
-import "firebase/firestore";
 import { CMSView, EntityCollection } from "../models";
 import { computeNavigation } from "./navigation";
 

@@ -85,7 +85,6 @@ export default function TextField<T extends string | number>({
 
     const filledInput = (
         <FilledInput
-            id="component-filled"
             className={classes.input}
             autoFocus={autoFocus}
             type={inputType}

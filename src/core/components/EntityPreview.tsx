@@ -89,7 +89,7 @@ export default function EntityPreview<M extends { [Key: string]: any }>(
                             <Box display="flex" alignItems="center">
                                 {entity.id}
                                 {appConfig?.firebaseConfig &&
-                                <a href={`https://console.firebase.google.com/project/${(appConfig.firebaseConfig as any)["projectId"]}/firestore/data/${entity.reference.path}`}
+                                <a href={`https://console.firebase.google.com/project/${(appConfig.firebaseConfig as any)["projectId"]}/firestore/data/${entity.path}/${entity.id}`}
                                    rel="noopener noreferrer"
                                    target="_blank">
                                     <IconButton aria-label="go-to-firestore" size="large">

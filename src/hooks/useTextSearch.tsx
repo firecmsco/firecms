@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import {
     Entity,
     EntitySchema,
-    fetchEntity,
     TextSearchDelegate
 } from "../models";
+import { useDataSource } from "./useDataSource";
 
 /**
  * @category Hooks and utilities
@@ -45,6 +45,8 @@ export function useTextSearch<M extends { [Key: string]: any }>(
         schema
     }: TextSearchProps<M>): TextSearchResult<M> {
 
+
+    const dataSource = useDataSource();
     const [textSearchLoading, setTextSearchLoading] = useState<boolean>(false);
     const [textSearchData, setTextSearchData] = useState<Entity<M>[]>([]);
 
@@ -58,7 +60,7 @@ export function useTextSearch<M extends { [Key: string]: any }>(
                 const promises: Promise<Entity<M> | null>[] = ids
                     .map(async (id) => {
                             try {
-                                return await fetchEntity(collectionPath, id, schema);
+                                return await dataSource.fetchEntity(collectionPath, id, schema);
                             } catch (e) {
                                 console.error(e);
                                 return null;

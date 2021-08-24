@@ -1,35 +1,32 @@
 import * as React from "react";
-import { useEffect } from "react";
 import clsx from "clsx";
 
-import { IconButton, Paper, Theme, Tooltip, Typography } from "@material-ui/core";
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
 import {
-    Entity,
-    EntitySchema,
-    listenEntityFromRef,
-    Property
-} from "../../models";
+    IconButton,
+    Paper,
+    Skeleton,
+    Theme,
+    Tooltip,
+    Typography
+} from "@material-ui/core";
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
+import { EntityReference, Property } from "../../models";
 
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { PreviewComponentProps, PreviewSize } from "../preview_component_props";
 import { useSideEntityController } from "../../contexts";
 
-import firebase from "firebase/app";
-import "firebase/firestore";
-
 import SkeletonComponent from "./SkeletonComponent";
 import PreviewComponent from "../PreviewComponent";
 import ErrorView from "../../core/components/ErrorView";
-
-import { Skeleton } from '@material-ui/core';
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
+import { useEntityFetch } from "../../hooks/useEntityFetch";
 
 /**
  * @category Preview components
  */
-export default function ReferencePreview(props: PreviewComponentProps<firebase.firestore.DocumentReference>) {
+export default function ReferencePreview(props: PreviewComponentProps<EntityReference>) {
     return <MemoReferencePreview {...props} />;
 }
 
@@ -92,7 +89,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         property,
         onClick,
         size
-    }: PreviewComponentProps<firebase.firestore.DocumentReference>) {
+    }: PreviewComponentProps<EntityReference>) {
 
     const referenceClasses = useReferenceStyles({ size });
 
@@ -103,7 +100,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         && typeof value["firestore"] === "object";
     // const isFirestoreReference = value instanceof models.firestore.DocumentReference;
 
-    const reference: firebase.firestore.DocumentReference = value;
+    const reference: EntityReference = value;
     const previewProperties = property.previewProperties;
 
     const schemaRegistry = useSchemasRegistry();
@@ -113,16 +110,17 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     }
 
     const schema = collectionConfig.schema;
-    const [entity, setEntity] = React.useState<Entity<typeof schema>>();
-
     const sideEntityController = useSideEntityController();
 
-    useEffect(() => {
-        const cancel = listenEntityFromRef(reference, schema, (e => {
-            setEntity(e);
-        }));
-        return () => cancel();
-    }, [reference, schema]);
+    const {
+        entity,
+        dataLoading,
+        dataLoadingError
+    } = useEntityFetch({
+        collectionPath: reference.path,
+        entityId: reference.id,
+        schema
+    });
 
     let listProperties = previewProperties;
     if (!listProperties || !listProperties.length) {
@@ -144,7 +142,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         body = buildError("Reference not set");
     }
     // currently not happening since this gets filtered out in PreviewComponent
-    else if (!(value instanceof firebase.firestore.DocumentReference)) {
+    else if (!(value instanceof EntityReference)) {
         body = buildError("Unexpected value", JSON.stringify(value));
     } else if (entity && !entity.values) {
         body = buildError("Reference does not exist", reference.path);
@@ -195,7 +193,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                                 e.stopPropagation();
                                 sideEntityController.open({
                                     entityId: entity.id,
-                                    collectionPath: reference.parent.path,
+                                    collectionPath: entity.path,
                                     schema,
                                     overrideSchemaResolver: false
                                 });
@@ -225,5 +223,5 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
 
 }
 
-const MemoReferencePreview = React.memo<PreviewComponentProps<firebase.firestore.DocumentReference>>(ReferencePreviewComponent) as React.FunctionComponent<PreviewComponentProps<firebase.firestore.DocumentReference>>;
+const MemoReferencePreview = React.memo<PreviewComponentProps<EntityReference>>(ReferencePreviewComponent) as React.FunctionComponent<PreviewComponentProps<EntityReference>>;
 

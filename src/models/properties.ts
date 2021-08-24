@@ -1,11 +1,10 @@
 import * as React from "react";
-import firebase from "firebase/app";
 import "firebase/firestore";
 
 import { FieldProps } from "./fields";
 import { PreviewComponentProps } from "../preview";
 import { ChipColor } from "./colors";
-import { EntityValues } from "./entities";
+import { EntityReference, EntityValues, GeoPoint } from "./entities";
 
 /**
  * @category Entity properties
@@ -15,9 +14,8 @@ export type CMSType =
     | number
     | boolean
     | Date
-    | firebase.firestore.Timestamp
-    | firebase.firestore.GeoPoint
-    | firebase.firestore.DocumentReference
+    | GeoPoint
+    | EntityReference
     | object
     | CMSType[];
 
@@ -39,11 +37,10 @@ export type Property<T extends CMSType = CMSType> =
         T extends number ? NumberProperty :
             T extends boolean ? BooleanProperty :
                 T extends Date ? TimestampProperty :
-                    T extends firebase.firestore.Timestamp ? TimestampProperty :
-                        T extends firebase.firestore.GeoPoint ? GeopointProperty :
-                            T extends firebase.firestore.DocumentReference ? ReferenceProperty :
-                                T extends Array<CMSType> ? ArrayProperty<T> :
-                                    T extends object ? MapProperty<T> : AnyProperty;
+                    T extends GeoPoint ? GeopointProperty :
+                        T extends EntityReference ? ReferenceProperty :
+                            T extends Array<CMSType> ? ArrayProperty<T> :
+                                T extends object ? MapProperty<T> : AnyProperty;
 
 /**
  * @category Entity properties
@@ -391,7 +388,7 @@ export interface GeopointProperty extends BaseProperty {
     /**
      * Configure how this property field is displayed
      */
-    config?: FieldConfig<firebase.firestore.GeoPoint>;
+    config?: FieldConfig<GeoPoint>;
 }
 
 /**
@@ -420,7 +417,7 @@ export interface ReferenceProperty<M extends { [Key: string]: any } = any>
     /**
      * Configure how this property field is displayed
      */
-    config?: FieldConfig<firebase.firestore.DocumentReference>;
+    config?: FieldConfig<EntityReference>;
 }
 
 /**
@@ -604,9 +601,11 @@ export interface StorageMeta {
     acceptedFiles?: StorageFileTypes[];
 
     /**
-     * Specific metadata set in your uploaded file
+     * Specific metadata set in your uploaded file.
+     * For the default Firebase implementation, the values passed here are of type
+     * `firebase.storage.UploadMetadata`
      */
-    metadata?: firebase.storage.UploadMetadata,
+    metadata?: any,
 
     /**
      * You can use this callback to customize the uploaded filename
@@ -675,16 +674,6 @@ export interface MapFieldConfig<T extends {}> extends FieldConfig<T> {
      * needed
      */
     pickOnlySomeKeys?: boolean;
-
-    /**
-     * Set this flag to true if you would like to remove values that are not
-     * present in the saved value but are mapped in the schema.
-     * This is useful if you are creating a custom field and need to have only
-     * some specific properties. If set to false, when saving a new map value,
-     * fields that exist in Firestore but not in the new value are not deleted.
-     * Defaults to false.
-     */
-    clearMissingValues?: boolean;
 
 }
 

@@ -4,6 +4,11 @@ title: Changelog
 sidebar_label: Changelog
 ---
 
+## Datasource:
+- You need to use datasource now
+- `EntitySaveProps` renamed to `EntityOnSaveProps`
+- `EntityDeleteProps` renamed to `EntityOnDeleteProps`
+
 ## [0.49.1] - 2021-08-15
 
 ### Changed
