@@ -113,7 +113,7 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
             transition: "border-color 300ms ease-in-out"
         },
         saved: {
-            border: `2px solid ${theme.palette.success.main}`
+            border: `2px solid ${theme.palette.success.light}`
         },
         disabled: {
             alpha: 0.8

@@ -7,8 +7,8 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 import {
     CMSFormFieldProps,
     Entity,
@@ -21,18 +21,18 @@ import {
 } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
 import { buildPropertyField } from "./form_factory";
-import {
-    checkUniqueField,
-    computeSchemaProperties,
-    initEntityValues
-} from "../models/firestore";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./ErrorFocus";
-import { isReadOnly } from "../models/utils";
+import {
+    computeSchemaProperties,
+    initEntityValues,
+    isReadOnly
+} from "../models/utils";
 import { CustomIdField } from "./CustomIdField";
+import { useDataSource } from "../hooks/useDataSource";
 
-export const useStyles = makeStyles((theme:Theme) => createStyles({
+export const useStyles = makeStyles((theme: Theme) => createStyles({
     stickyButtons: {
         marginTop: theme.spacing(2),
         background: "rgba(255,255,255,0.6)",
@@ -47,14 +47,14 @@ export const useStyles = makeStyles((theme:Theme) => createStyles({
         padding: theme.spacing(4),
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
-        [theme.breakpoints.down('lg')]: {
+        [theme.breakpoints.down("lg")]: {
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(2),
             paddingTop: theme.spacing(3),
             paddingBottom: theme.spacing(3)
         },
-        [theme.breakpoints.down('md')]: {
-            padding: theme.spacing(2),
+        [theme.breakpoints.down("md")]: {
+            padding: theme.spacing(2)
         }
     },
     button: {
@@ -107,23 +107,24 @@ interface EntityFormProps<M extends { [Key: string]: any }> {
     /**
      * The callback function when the form original values have been modified
      */
-    onValuesChanged(values?:EntityValues<M>): void;
+    onValuesChanged(values?: EntityValues<M>): void;
 
 }
 
 function EntityForm<M>({
-                                                                                                                  status,
-                                                                                                                  collectionPath,
-                                                                                                                  schema,
-                                                                                                                  entity,
-                                                                                                                  onEntitySave,
-                                                                                                                  onDiscard,
-                                                                                                                  onModified,
-                                                                                                                  containerRef,
-                                                                                                                  onValuesChanged
-                                                                                                              }: EntityFormProps<M>) {
+                           status,
+                           collectionPath,
+                           schema,
+                           entity,
+                           onEntitySave,
+                           onDiscard,
+                           onModified,
+                           containerRef,
+                           onValuesChanged
+                       }: EntityFormProps<M>) {
 
     const classes = useStyles();
+    const dataSource = useDataSource();
 
     /**
      * Base values are the ones this view is initialized from, we use them to
@@ -142,7 +143,7 @@ function EntityForm<M>({
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
 
-    const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseFirestoreValues  as EntityValues<M>);
+    const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseFirestoreValues as EntityValues<M>);
     const initialValues = initialValuesRef.current;
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
 
@@ -209,7 +210,7 @@ function EntityForm<M>({
                                                             name,
                                                             value,
                                                             property
-                                                        }) => checkUniqueField(collectionPath, name, value, property, entity?.id);
+                                                        }) => dataSource.checkUniqueField(collectionPath, name, value, property, entity?.id);
 
     const validationSchema = getYupEntitySchema(
         schema.properties,

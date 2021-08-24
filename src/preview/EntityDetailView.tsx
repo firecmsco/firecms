@@ -1,9 +1,4 @@
-import {
-    Entity,
-    EntityCollection,
-    EntitySchema,
-    listenEntityFromRef
-} from "../models";
+import { Entity, EntityCollection, EntitySchema } from "../models";
 import React, { useEffect, useState } from "react";
 import { Link as ReactLink } from "react-router-dom";
 
@@ -17,16 +12,20 @@ import {
     Theme,
     Tooltip
 } from "@material-ui/core";
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
-import { getCMSPathFrom, removeInitialSlash } from "../core/navigation";
+import {
+    getCMSPathFrom,
+    removeInitialAndTrailingSlashes,
+} from "../core/navigation";
 import { EntityCollectionTable } from "../core/components/EntityCollectionTable";
 import { useSideEntityController } from "../contexts";
+import { useDataSource } from "../hooks/useDataSource";
 
 
-export const useStyles = makeStyles((theme:Theme) => createStyles({
+export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
         height: "100%",
         display: "flex",
@@ -48,17 +47,18 @@ export const useStyles = makeStyles((theme:Theme) => createStyles({
 }));
 
 export function EntityDetailView<M extends { [Key: string]: any }>({
-                                                                     entity,
-                                                                     schema,
-                                                                     collectionPath,
-                                                                     subcollections
-                                                                 }: {
+                                                                       entity,
+                                                                       schema,
+                                                                       collectionPath,
+                                                                       subcollections
+                                                                   }: {
     entity?: Entity<M>,
     collectionPath: string;
     schema: EntitySchema<M>,
     subcollections?: EntityCollection<any>[];
 }) {
 
+    const dataSource = useDataSource();
     const classes = useStyles();
     const sideEntityController = useSideEntityController();
 
@@ -71,9 +71,10 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
         setTabsPosition(0);
         ref.current!.scrollTo({ top: 0 });
         const cancelSubscription =
-            entity ?
-                listenEntityFromRef<M>(
-                    entity?.reference,
+            entity && dataSource.listenEntity ?
+                dataSource.listenEntity<M>(
+                    entity?.path,
+                    entity?.id,
                     schema,
                     (e) => {
                         if (e) {
@@ -82,7 +83,7 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
                     })
                 :
                 () => {
-                };
+                }        ;
         return () => cancelSubscription();
     }, [entity]);
 
@@ -96,7 +97,8 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
                 className={classes.header}>
 
                 <Tooltip title={"Close"}>
-                    <IconButton onClick={(e) => sideEntityController.close()} size="large">
+                    <IconButton onClick={(e) => sideEntityController.close()}
+                                size="large">
                         <CloseIcon/>
                     </IconButton>
                 </Tooltip>
@@ -105,7 +107,7 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
                 <Tooltip title={"Full size"}>
                     <IconButton
                         component={ReactLink}
-                        to={getCMSPathFrom(entity.reference.path)}
+                        to={getCMSPathFrom(entity.path)}
                         size="large">
                         <EditIcon/>
                     </IconButton>
@@ -123,8 +125,9 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
 
                         {subcollections && subcollections.map(
                             (subcollection) =>
-                                <Tab key={`entity_detail_tab_${subcollection.name}`}
-                                     label={subcollection.name}/>
+                                <Tab
+                                    key={`entity_detail_tab_${subcollection.name}`}
+                                    label={subcollection.name}/>
                         )}
                     </Tabs>
 
@@ -145,13 +148,14 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
 
                 {subcollections && subcollections.map(
                     (subcollection, colIndex) => {
-                        const collectionPath = `${entity?.reference.path}/${removeInitialSlash(subcollection.relativePath)}`;
+                        const collectionPath = `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.relativePath)}`;
                         return <Box
                             key={`entity_detail_tab_content_${subcollection.name}`}
                             role="tabpanel"
                             flexGrow={1}
                             height={"100%"}
-                            width={"100%"} hidden={tabsPosition !== colIndex + 1}>
+                            width={"100%"}
+                            hidden={tabsPosition !== colIndex + 1}>
                             <EntityCollectionTable
                                 collectionPath={collectionPath}
                                 collectionConfig={subcollection}

@@ -2,7 +2,7 @@ import React, { createElement } from "react";
 import {
     ArrayProperty,
     BooleanProperty,
-    CMSType,
+    CMSType, EntityReference,
     MapProperty,
     NumberProperty,
     ReferenceProperty,
@@ -30,8 +30,6 @@ import ErrorView from "../core/components/ErrorView";
 
 import { PreviewComponentProps } from "./preview_component_props";
 
-import firebase from "firebase/app";
-import "firebase/firestore";
 import ArrayOneOfPreview from "./components/ArrayOneOfPreview";
 import Markdown from "./components/Markdown";
 
@@ -152,10 +150,10 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
             content = buildWrongValueType(name, property.dataType, value);
         }
     } else if (property.dataType === "reference") {
-        if (value instanceof firebase.firestore.DocumentReference) {
+        if (value instanceof EntityReference) {
             content = <ReferencePreview
                 {...fieldProps}
-                value={value}
+                value={value as EntityReference}
                 property={property as ReferenceProperty}
             />;
         } else {

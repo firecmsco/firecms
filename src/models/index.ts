@@ -1,3 +1,4 @@
+import { FirestoreDatasource } from "./data/firestore_datasource";
 
 export * from "./entities";
 export * from "./properties";
@@ -14,14 +15,6 @@ export type {
 export * from "./colors";
 
 export {
-    fetchEntity,
-    listenEntity,
-    listenEntityFromRef,
-    listenCollection,
-    saveEntity
-} from "./firestore";
-
-export {
     uploadFile,
     getDownloadURL
 } from "./storage";
@@ -34,3 +27,6 @@ export type {
 
 export type { TextSearchDelegate } from "./text_search_delegate";
 export { AlgoliaTextSearchDelegate } from "./text_search_delegate";
+
+export { FirestoreDatasource } from "./data/firestore_datasource";
+export type { DataSource } from "./data/datasource";

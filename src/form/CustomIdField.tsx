@@ -65,7 +65,7 @@ export function CustomIdField<M>
                     </IconButton>
 
                     {appConfig?.firebaseConfig &&
-                    <a href={`https://console.firebase.google.com/project/${(appConfig.firebaseConfig as any)["projectId"]}/firestore/data/${entity.reference.path}`}
+                    <a href={`https://console.firebase.google.com/project/${(appConfig.firebaseConfig as any)["projectId"]}/firestore/data/${entity.path}/${entity.id}`}
                        rel="noopener noreferrer"
                        target="_blank">
                         <IconButton onClick={(e) => e.stopPropagation()}
