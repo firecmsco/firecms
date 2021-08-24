@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
 import {
     buildPropertyFrom,
-    Entity,
+    Entity, EntityReference,
     EntitySchema,
     ExportConfig,
     Properties,
     Property
 } from "../../models";
-import {
-    computeSchemaProperties,
-    fetchCollection
-} from "../../models/firestore";
 import {
     Button,
     CircularProgress,
@@ -22,11 +18,12 @@ import {
     IconButton,
     Tooltip
 } from "@material-ui/core";
-import firebase from "firebase/app";
-import "firebase/firestore";
+
 import GetAppIcon from "@material-ui/icons/GetApp";
 import MuiAlert from "@material-ui/lab/Alert/Alert";
 import { CSVLink } from "react-csv";
+import { computeSchemaProperties } from "../../models/utils";
+import { useDataSource } from "../../hooks/useDataSource";
 
 type ExportButtonProps<M extends { [Key: string]: any }> = {
     schema: EntitySchema<M>;
@@ -44,6 +41,7 @@ export default function ExportButton<M extends { [Key: string]: any }>({
 ) {
 
 
+    const dataSource = useDataSource();
     const csvLinkEl = React.useRef<any>(null);
 
     const [data, setData] = React.useState<Entity<M>[]>();
@@ -105,7 +103,7 @@ export default function ExportButton<M extends { [Key: string]: any }>({
             setDataLoadingError(error);
         };
 
-        fetchCollection<M>(
+        dataSource.fetchCollection<M>(
             collectionPath,
             schema,
             undefined,
@@ -265,7 +263,7 @@ function processProperty(inputValue: any,
             value = inputValue;
         }
     } else if (property.dataType === "reference") {
-        const ref = inputValue ? inputValue as firebase.firestore.DocumentReference : undefined;
+        const ref = inputValue ? inputValue as EntityReference : undefined;
         value = ref ? ref.path : null;
     } else if (property.dataType === "timestamp") {
         value = inputValue ? inputValue.getTime() : null;

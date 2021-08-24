@@ -1,6 +1,5 @@
 import { Entity, EntitySchema } from "../../models";
 import React, { useState } from "react";
-import { deleteEntity } from "../../models/firestore";
 import {
     Button,
     Dialog,
@@ -11,6 +10,7 @@ import {
 import EntityPreview from "../../core/components/EntityPreview";
 import CircularProgressCenter from "../../core/internal/CircularProgressCenter";
 import { useCMSAppContext, useSnackbarController } from "../../contexts";
+import { useDataSource } from "../../hooks/useDataSource";
 
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
@@ -37,6 +37,7 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
                                                                         }
                                                                             : DeleteEntityDialogProps<M>) {
 
+    const dataSource = useDataSource();
     const snackbarContext = useSnackbarController();
     const [loading, setLoading] = useState(false);
 
@@ -93,10 +94,9 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
     };
 
     function performDelete(entity: Entity<M>): Promise<boolean> {
-        return deleteEntity({
+        return dataSource.deleteEntity({
             entity,
             schema,
-            collectionPath,
             onDeleteSuccess,
             onDeleteFailure,
             onPreDeleteHookError,

@@ -1,9 +1,4 @@
-import {
-    CollectionSize,
-    Entity,
-    EntityCollection,
-    fetchEntity
-} from "../../models";
+import { CollectionSize, Entity, EntityCollection } from "../../models";
 import {
     Button,
     Dialog,
@@ -11,16 +6,17 @@ import {
     Divider,
     Typography,
     useMediaQuery,
-    useTheme,
+    useTheme
 } from "@material-ui/core";
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 import React, { useEffect, useState } from "react";
 
 import CollectionTable from "../../collection/components/CollectionTable";
 import CollectionRowActions
     from "../../collection/internal/CollectionRowActions";
 import { useColumnIds } from "../../collection/common";
+import { useDataSource } from "../../hooks/useDataSource";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -66,7 +62,7 @@ export interface ReferenceDialogProps {
     /**
      * If `multiselect` is set to `false`, you will get the select entity
      * in this callback.
-     * @param entities
+     * @param entity
      * @callback
         */
     onSingleEntitySelected?(entity: Entity<any> | null): void;
@@ -105,6 +101,7 @@ export default function ReferenceDialog(
     }: ReferenceDialogProps) {
 
     const classes = useStyles();
+    const dataSource = useDataSource();
 
     const schema = collection.schema;
     const textSearchDelegate = collection.textSearchDelegate;
@@ -121,7 +118,7 @@ export default function ReferenceDialog(
     useEffect(() => {
         if (selectedEntityIds) {
             Promise.all(
-                selectedEntityIds.map((id) => fetchEntity(collectionPath, id, schema)))
+                selectedEntityIds.map((id) => dataSource.fetchEntity(collectionPath, id, schema)))
                 .then((entities) => {
                     setSelectedEntities(entities);
                 });

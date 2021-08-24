@@ -4,6 +4,7 @@ import {
     Authenticator,
     buildCollection,
     buildSchema,
+    FirestoreDatasource,
     CMSAppProvider,
     CMSMainView,
     NavigationBuilder,
@@ -106,6 +107,7 @@ export function SimpleAppWithProvider() {
         <CMSAppProvider
             authentication={myAuthenticator}
             navigation={navigation}
+            dataSource={FirestoreDatasource}
             firebaseConfig={firebaseConfig}>
             <CMSMainView
                 name={"My Online Shop"}/>

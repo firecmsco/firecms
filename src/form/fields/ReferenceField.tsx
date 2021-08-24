@@ -1,26 +1,25 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
+import React from "react";
 
-import {
-    Entity,
-    EntitySchema,
-    FieldProps,
-    listenEntityFromRef,
-    Property
-} from "../../models";
 import {
     Box,
     Button,
     FormControl,
     FormHelperText,
-    IconButton, Theme,
+    IconButton,
+    Theme,
     Tooltip,
     Typography
 } from "@material-ui/core";
-import React, { useEffect } from "react";
+import {
+    Entity,
+    EntityReference,
+    EntitySchema,
+    FieldProps,
+    Property
+} from "../../models";
 
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 
 import ErrorIcon from "@material-ui/icons/Error";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -34,8 +33,10 @@ import LabelWithIcon from "../components/LabelWithIcon";
 import { useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { useClearRestoreValue } from "../../hooks";
+import { useEntityFetch } from "../../hooks/useEntityFetch";
+import { getReferenceFrom } from "../../models/utils";
 
-export const useStyles = makeStyles((theme:Theme) => createStyles({
+export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
         elevation: 0,
         width: "100%",
@@ -68,19 +69,20 @@ export const useStyles = makeStyles((theme:Theme) => createStyles({
  * @category Form fields
  */
 export default function ReferenceField<M extends { [Key: string]: any }>({
-                                                                     name,
-                                                                     value,
-                                                                     setValue,
-                                                                     error,
-                                                                     showError,
-                                                                     disabled,
-                                                                     touched,
-                                                                     autoFocus,
-                                                                     property,
-                                                                     includeDescription,
-                                                                     context,
-                                                                     dependsOnOtherProperties
-                                                                 }: FieldProps<firebase.firestore.DocumentReference>) {
+                                                                             name,
+                                                                             value,
+                                                                             setValue,
+                                                                             error,
+                                                                             showError,
+                                                                             disabled,
+                                                                             touched,
+                                                                             autoFocus,
+                                                                             property,
+                                                                             includeDescription,
+                                                                             context,
+                                                                             dependsOnOtherProperties
+                                                                         }: FieldProps<EntityReference>) {
+
 
     useClearRestoreValue({
         property,
@@ -91,7 +93,6 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(autoFocus);
-    const [entity, setEntity] = React.useState<Entity<M>>();
     const sideEntityController = useSideEntityController();
 
     const schemaRegistry = useSchemasRegistry();
@@ -104,25 +105,22 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
     const schema = collectionConfig?.schema;
     const collectionPath = property.collectionPath;
 
-    const validValue = value && value instanceof firebase.firestore.DocumentReference;
-    useEffect(() => {
-        if (validValue && schema) {
-            const cancel = listenEntityFromRef(value, schema, (e => {
-                setEntity(e);
-            }));
-            return () => cancel();
-        } else {
-            setEntity(undefined);
-            return () => {
-            };
-        }
-    }, [value, schema]);
+    const validValue = value && value instanceof EntityReference;
+
+    const {
+        entity,
+        dataLoading,
+        dataLoadingError
+    } = useEntityFetch({
+        collectionPath: validValue ? value.path : undefined,
+        entityId: validValue ? value.id : undefined,
+        schema
+    });
 
     const handleEntityClick = (entity: Entity<M>) => {
         if (disabled)
             return;
-        const ref = entity ? entity.reference : null;
-        setValue(ref);
+        setValue(entity ? getReferenceFrom(entity) : null);
         setOpen(false);
     };
 
@@ -134,7 +132,6 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
         e.stopPropagation();
         setValue(null);
         setOpen(false);
-        setEntity(undefined);
     };
 
     const seeEntityDetails = (e: React.MouseEvent) => {
@@ -150,7 +147,6 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
     const onClose = () => {
         setOpen(false);
     };
-
 
     function buildEntityView(schema?: EntitySchema<any>) {
 

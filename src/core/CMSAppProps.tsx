@@ -1,8 +1,6 @@
 import React from "react";
-import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
-import "firebase/firestore";
 import {
     Authenticator,
     EntityCollection,

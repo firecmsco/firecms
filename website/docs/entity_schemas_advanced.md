@@ -23,7 +23,7 @@ type Product = {
     main_image: string;
     available: boolean;
     price: number;
-    related_products: firebase.firestore.DocumentReference[];
+    related_products: EntityReference[];
     publisher: {
         name: string;
         external_id: string;

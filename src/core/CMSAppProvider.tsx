@@ -1,10 +1,8 @@
 import React, { PropsWithChildren, useEffect } from "react";
 
 import firebase from "firebase/app";
-import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
-import "firebase/firestore";
 
 import {
     Authenticator,
@@ -26,6 +24,8 @@ import { SideEntityProvider } from "../contexts/SideEntityController";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import { EntitySideDialogs } from "./internal/EntitySideDialogs";
+import { DataSource } from "../models/data/datasource";
+import { FirestoreDatasource } from "../models/data/firestore_datasource";
 
 
 /**
@@ -103,7 +103,12 @@ export interface CMSAppProviderProps {
      * e.g.
      * '"Roboto", "Helvetica", "Arial", sans-serif'
      */
-    fontFamily?: string
+    fontFamily?: string;
+
+    /**
+     * Connector to your database
+     */
+    dataSource: DataSource;
 }
 
 /**
@@ -113,22 +118,19 @@ export interface CMSAppProviderProps {
  * This provider also contains the component in charge of displaying the side
  * entity dialogs, so you can display them outside the main CMS view.
  *
- * @param props
  * @constructor
  * @category Core
  */
-export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
+export function CMSAppProvider({
+                                   children,
+                                   navigation: navigationOrBuilder,
+                                   authentication,
+                                   firebaseConfig,
+                                   schemaResolver,
+                                   dataSource,
+                                   ...props
+                               }: PropsWithChildren<CMSAppProviderProps>) {
 
-    const {
-        children,
-        navigation: navigationOrBuilder,
-        authentication,
-        firebaseConfig,
-        schemaResolver,
-        primaryColor,
-        secondaryColor,
-        fontFamily
-    } = props;
 
     const [navigation, setNavigation] = React.useState<Navigation | undefined>(undefined);
     const [navigationLoadingError, setNavigationLoadingError] = React.useState<Error | undefined>(undefined);
@@ -154,10 +156,18 @@ export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
                     collections={navigation?.collections}
                     schemaResolver={schemaResolver}>
 
-                    <CMSAppContextProvider cmsAppConfig={props}
-                                           firebaseConfig={firebaseConfig}
-                                           navigation={navigation}
-                                           navigationLoadingError={navigationLoadingError}>
+                    <CMSAppContextProvider
+                        cmsAppConfig={{
+                            navigation: navigationOrBuilder,
+                            authentication,
+                            firebaseConfig,
+                            schemaResolver,
+                            dataSource,
+                            ...props
+                        }}
+                        firebaseConfig={firebaseConfig}
+                        navigation={navigation}
+                        navigationLoadingError={navigationLoadingError}>
 
                         <Router>
                             <SideEntityProvider
@@ -179,7 +189,7 @@ export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
 
 async function getNavigation(navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[],
                              user: firebase.User | null,
-                             authController:AuthController): Promise<Navigation> {
+                             authController: AuthController): Promise<Navigation> {
 
     if (Array.isArray(navigationOrCollections)) {
         return {

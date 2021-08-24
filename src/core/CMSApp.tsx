@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 
 import firebase from "firebase/app";
-import "firebase/analytics";
 import "firebase/auth";
 import "firebase/storage";
-import "firebase/firestore";
 
 import { CMSAppProps } from "./CMSAppProps";
 import { CMSMainView } from "./CMSMainView";
@@ -12,11 +10,10 @@ import { CMSAppProvider } from "./CMSAppProvider";
 import CircularProgressCenter from "./internal/CircularProgressCenter";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-import {Theme, ThemeProvider} from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/core/styles";
 import { createCMSDefaultTheme } from "./theme";
-import Checkbox from "@material-ui/core/Checkbox";
-import {  Typography } from "@material-ui/core";
-import { createTheme } from '@material-ui/core/styles';
+import { FirestoreDatasource } from "../models/data/firestore_datasource";
+
 /**
  * Main entry point for FireCMS. You can use this component as a full app,
  * by specifying collections and entity schemas.
@@ -127,6 +124,7 @@ export function CMSApp(props: CMSAppProps) {
     return (
         <ThemeProvider theme={theme}>
             <CMSAppProvider {...props}
+                            dataSource={FirestoreDatasource}
                             firebaseConfig={usedFirebaseConfig}>
                 <CssBaseline/>
                 <CMSMainView {...props}/>

@@ -5,7 +5,6 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import clsx from "clsx";
 import { CellStyleProps, useCellStyles } from "../components/styles";
-import { EntitySchema } from "../../models";
 import { getRowHeight } from "../common";
 
 

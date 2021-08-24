@@ -61,17 +61,9 @@ export const testEntitySchema = buildSchema({
         });
     },
     properties: {
-        string_array: {
-            title: "String array",
-            dataType: "array",
-            of: {
-                dataType: "string"
-            }
-        },
         content: {
             title: "Content",
             description: "Example of a complex array with multiple properties as children",
-            validation: { required: true },
             dataType: "array",
             columnWidth: 450,
             oneOf: {
@@ -86,8 +78,23 @@ export const testEntitySchema = buildSchema({
                         config: {
                             markdown: true
                         }
+                    },
+                    products: {
+                        dataType: "array",
+                        title: "Product",
+                        of: {
+                            dataType: "reference",
+                            collectionPath: "products"
+                        }
                     }
                 }
+            }
+        },
+        string_array: {
+            title: "String array",
+            dataType: "array",
+            of: {
+                dataType: "string"
             }
         },
         empty_string: {
@@ -142,7 +149,6 @@ export const testEntitySchema = buildSchema({
         actions: {
             title: "Actions",
             description: "Possible user actions",
-            validation: { required: true },
             dataType: "array",
             of: {
                 dataType: "map",

@@ -1,6 +1,6 @@
 import {
     ArrayProperty,
-    CMSType,
+    CMSType, EntityReference,
     EntitySchema,
     NumberProperty,
     Property,
@@ -18,9 +18,6 @@ import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { PreviewComponent } from "../../preview";
 import { CellStyleProps } from "../components/styles";
 import { TableReferenceField } from "./fields/TableReferenceField";
-
-import firebase from "firebase/app";
-import "firebase/firestore";
 
 import { getPreviewSizeFrom } from "../../preview/util";
 import { useClearRestoreValue } from "../../hooks";
@@ -219,7 +216,7 @@ const PropertyTableCell = <T extends CMSType, M extends { [Key: string]: any }>(
             allowScroll = true;
         } else if (property.dataType === "reference") {
             innerComponent = <TableReferenceField name={name as string}
-                                                  internalValue={internalValue as firebase.firestore.DocumentReference}
+                                                  internalValue={internalValue as EntityReference}
                                                   updateValue={updateValue}
                                                   disabled={disabled}
                                                   size={size}
@@ -250,7 +247,7 @@ const PropertyTableCell = <T extends CMSType, M extends { [Key: string]: any }>(
                 } else if (arrayProperty.of.dataType === "reference") {
                     innerComponent = <TableReferenceField name={name as string}
                                                           disabled={disabled}
-                                                          internalValue={internalValue as firebase.firestore.DocumentReference[]}
+                                                          internalValue={internalValue as EntityReference[]}
                                                           updateValue={updateValue}
                                                           size={size}
                                                           property={property as ArrayProperty}

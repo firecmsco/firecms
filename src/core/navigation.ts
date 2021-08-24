@@ -28,19 +28,23 @@ export function getEntityOrCollectionPath(path: string) {
 export function getEntityPath(entityId: string,
                               basePath: string,
                               subcollection?: string) {
-    return `${DATA_PATH}/${removeInitialSlash(basePath)}/${entityId}${subcollection ? "/" + subcollection : ""}`;
+    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(basePath)}/${entityId}${subcollection ? "/" + subcollection : ""}`;
 }
 
 export function getCMSPathFrom(fullPath: string) {
-    return `${DATA_PATH}/${removeInitialSlash(fullPath)}`;
+    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(fullPath)}`;
 }
 
 export function getRouterNewEntityPath(basePath: string) {
-    return `${DATA_PATH}/${removeInitialSlash(basePath)}#new`;
+    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(basePath)}#new`;
 }
 
 export function buildCollectionPath(view: EntityCollection) {
-    return `${DATA_PATH}/${removeInitialSlash(view.relativePath)}`;
+    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(view.relativePath)}`;
+}
+
+export function removeInitialAndTrailingSlashes(s: string) {
+    return removeInitialSlash(removeTrailingSlash(s));
 }
 
 export function removeInitialSlash(s: string) {
@@ -55,9 +59,6 @@ export function removeTrailingSlash(s: string) {
     else return s;
 }
 
-export function removeInitialAndTrailingSlashes(s: string) {
-    return removeInitialSlash(removeTrailingSlash(s));
-}
 
 export function addInitialSlash(s: string) {
     if (s.startsWith("/"))

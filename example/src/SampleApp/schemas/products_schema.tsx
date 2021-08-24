@@ -12,6 +12,7 @@ import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
 import { SampleExtraActions } from "../collection_actions/SampleExtraActions";
 import { SampleProductsView } from "../custom_schema_view/SampleProductsView";
 import { Locale, Product } from "../types";
+import firebase from "firebase";
 
 export const locales: EnumValues = {
     "es": "Spanish",
@@ -276,7 +277,10 @@ export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
     title: "Spanish title",
     builder: (entity: Entity<Product>) =>
         <AsyncPreviewComponent builder={
-            entity.reference.collection("locales")
+            firebase.firestore()
+                .collection(entity.path)
+                .doc(entity.id)
+                .collection("locales")
                 .doc("es")
                 .get()
                 .then((snapshot: any) => snapshot.get("name") as string)

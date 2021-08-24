@@ -1,6 +1,4 @@
 import React from "react";
-import firebase from "firebase/app";
-import "firebase/firestore";
 import { CMSAppContext } from "../contexts/CMSAppContext";
 import { EnumValues, PropertiesOrBuilder } from "./properties";
 
@@ -42,14 +40,14 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
      * Hook called when save is successful
      * @param entitySaveProps
      */
-    onSaveSuccess?(entitySaveProps: EntitySaveProps<M>)
+    onSaveSuccess?(entitySaveProps: EntityOnSaveProps<M>)
         : Promise<void> | void;
 
     /**
      * Hook called when saving fails
      * @param entitySaveProps
      */
-    onSaveFailure?(entitySaveProps: EntitySaveProps<M>)
+    onSaveFailure?(entitySaveProps: EntityOnSaveProps<M>)
         : Promise<void> | void;
 
     /**
@@ -58,7 +56,7 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
      * error snackbar gets displayed.
      * @param entitySaveProps
      */
-    onPreSave?(entitySaveProps: EntitySaveProps<M>)
+    onPreSave?(entitySaveProps: EntityOnSaveProps<M>)
         : Promise<EntityValues<M>> | EntityValues<M>
 
     /**
@@ -68,20 +66,87 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
      *
      * @param entityDeleteProps
      */
-    onPreDelete?(entityDeleteProps: EntityDeleteProps<M>): void;
+    onPreDelete?(entityDeleteProps: EntityOnDeleteProps<M>): void;
 
     /**
      * Hook called after the entity is deleted in Firestore.
      *
      * @param entityDeleteProps
      */
-    onDelete?(entityDeleteProps: EntityDeleteProps<M>): void;
+    onDelete?(entityDeleteProps: EntityOnDeleteProps<M>): void;
 
     /**
      * Array of builders for rendering additional panels in an entity view.
      * Useful if you need to render custom views
      */
     views?: EntityCustomView<M>[];
+}
+
+/**
+ * New or existing status
+ * @category Entities
+ */
+export type EntityStatus = "new" | "existing" | "copy";
+
+/**
+ * Representation of an entity fetched from Firestore
+ * @category Entities
+ */
+export interface Entity<M extends { [Key: string]: any }> {
+    /**
+     * Id of the entity
+     */
+    id: string;
+    /**
+     * A string representing the path of the referenced document (relative
+     * to the root of the database).
+     */
+    path: string;
+    /**
+     * Current values
+     */
+    values: EntityValues<M>;
+}
+
+/**
+ * This type represents a record of key value pairs as described in an
+ * entity schema.
+ * @category Entities
+ */
+export type EntityValues<M> = M;
+
+export class EntityReference  {
+    /**
+     * Id of the entity
+     */
+    readonly id: string;
+    /**
+     * A string representing the path of the referenced document (relative
+     * to the root of the database).
+     */
+    readonly path: string;
+
+    constructor(id:string, path:string) {
+        this.id = id;
+        this.path = path;
+    }
+}
+
+export class GeoPoint  {
+
+    /**
+     * The latitude of this GeoPoint instance.
+     */
+    readonly latitude: number;
+    /**
+     * The longitude of this GeoPoint instance.
+     */
+    readonly longitude: number;
+
+    constructor(latitude:number, longitude:number) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }
 
 export type InferSchemaType<S extends EntitySchema<any>> = S extends EntitySchema<infer M> ? M : never;
@@ -125,7 +190,7 @@ export type EntityCustomViewParams<M extends { [Key: string]: any } = any> = {
  * Parameters passed to hooks when an entity is saved
  * @category Entities
  */
-export interface EntitySaveProps<M extends { [Key: string]: any }> {
+export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
 
     /**
      * Resolved schema of the entity
@@ -162,7 +227,7 @@ export interface EntitySaveProps<M extends { [Key: string]: any }> {
  * Parameters passed to hooks when an entity is deleted
  * @category Entities
  */
-export interface EntityDeleteProps<M extends { [Key: string]: any }> {
+export interface EntityOnDeleteProps<M extends { [Key: string]: any }> {
 
     /**
      * Schema of the entity being deleted
@@ -190,28 +255,4 @@ export interface EntityDeleteProps<M extends { [Key: string]: any }> {
     context: CMSAppContext;
 }
 
-
-/**
- * New or existing status
- * @category Entities
- */
-export type EntityStatus = "new" | "existing" | "copy";
-
-/**
- * Representation of an entity fetched from Firestore
- * @category Entities
- */
-export interface Entity<M extends { [Key: string]: any }> {
-    id: string;
-    reference: firebase.firestore.DocumentReference;
-    values: EntityValues<M>;
-}
-
-
-/**
- * This type represents a record of key value pairs as described in an
- * entity schema.
- * @category Entities
- */
-export type EntityValues<M> = M;
 

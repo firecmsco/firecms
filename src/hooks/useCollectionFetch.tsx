@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-    Entity,
-    EntitySchema,
-    FilterValues,
-    listenCollection
-} from "../models";
+import { Entity, EntitySchema, FilterValues } from "../models";
+import { useDataSource } from "./useDataSource";
 
 type Order = "asc" | "desc" | undefined;
 
@@ -71,6 +67,7 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
         entitiesDisplayedFirst
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
 
+    const dataSource = useDataSource();
     const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];
     const [data, setData] = useState<Entity<M>[]>(initialEntities);
 
@@ -87,30 +84,49 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
         }
     };
 
+
     useEffect(() => {
 
         setDataLoading(true);
 
-        return listenCollection<M>(
-            collectionPath,
-            schema,
-            entities => {
-                setDataLoading(false);
-                setDataLoadingError(undefined);
-                updateData(entities);
-                setNoMoreToLoad(!itemCount || entities.length < itemCount);
-            },
-            (error) => {
-                console.error("ERROR", error);
-                setDataLoading(false);
-                setData([]);
-                setDataLoadingError(error);
-            },
-            filterValues,
-            itemCount,
-            undefined,
-            sortByProperty,
-            currentSort);
+        const onEntitiesUpdate = (entities: Entity<M>[]) => {
+            setDataLoading(false);
+            setDataLoadingError(undefined);
+            updateData(entities);
+            setNoMoreToLoad(!itemCount || entities.length < itemCount);
+        };
+        const onError = (error:Error) => {
+            console.error("ERROR", error);
+            setDataLoading(false);
+            setData([]);
+            setDataLoadingError(error);
+        };
+
+        if (dataSource.listenCollection) {
+            return dataSource.listenCollection<M>(
+                collectionPath,
+                schema,
+                onEntitiesUpdate,
+                onError,
+                filterValues,
+                itemCount,
+                undefined,
+                sortByProperty,
+                currentSort);
+        } else {
+            dataSource.fetchCollection<M>(
+                collectionPath,
+                schema,
+                filterValues,
+                itemCount,
+                undefined,
+                sortByProperty,
+                currentSort)
+                .then(onEntitiesUpdate)
+                .catch(onError);
+            return () => {
+            };
+        }
     }, [collectionPath, schema, itemCount, currentSort, sortByProperty, filterValues]);
 
     return {

@@ -6,25 +6,23 @@ import {
     ArrayProperty,
     CollectionSize,
     Entity,
-    EntitySchema,
+    EntityReference,
     ReferenceProperty
 } from "../../../models";
 import ReferenceDialog from "../../../core/components/ReferenceDialog";
 
-import firebase from "firebase/app";
-import "firebase/firestore";
-
 import { getPreviewSizeFrom } from "../../../preview/util";
 import { useInputStyles } from "./styles";
 import { useSchemasRegistry } from "../../../contexts/SchemaRegistry";
+import { getReferenceFrom } from "../../../models/utils";
 
 
 export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     name: string;
     disabled: boolean;
-    internalValue: firebase.firestore.DocumentReference | firebase.firestore.DocumentReference[] | undefined | null;
-    updateValue: (newValue: (firebase.firestore.DocumentReference | firebase.firestore.DocumentReference [] | null)) => void;
-    property: ReferenceProperty | ArrayProperty<firebase.firestore.DocumentReference[]>;
+    internalValue: EntityReference | EntityReference[] | undefined | null;
+    updateValue: (newValue: (EntityReference | EntityReference [] | null)) => void;
+    property: ReferenceProperty | ArrayProperty<EntityReference[]>;
     size: CollectionSize;
     setPreventOutsideClick: (value: any) => void;
 }) {
@@ -79,14 +77,13 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     };
 
     const onSingleValueSet = (entity: Entity<any>) => {
-        const ref = entity ? entity.reference : null;
-        updateValue(ref);
+        updateValue(entity ? getReferenceFrom(entity) : null);
         setPreventOutsideClick(false);
         setOpen(false);
     };
 
     const onMultipleEntitiesSelected = (entities: Entity<any>[]) => {
-        updateValue(entities.map((e) => e.reference));
+        updateValue(entities.map((e) => getReferenceFrom(e)));
     };
 
     const selectedIds = internalValue ?
@@ -97,10 +94,10 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     const valueNotSet = !internalValue || (Array.isArray(internalValue) && internalValue.length === 0);
 
     function buildSingleReferenceField() {
-        if (internalValue instanceof firebase.firestore.DocumentReference)
+        if (internalValue instanceof EntityReference)
             return <ReferencePreview name={name}
                                      onClick={disabled ? undefined : handleOpen}
-                                     value={internalValue as firebase.firestore.DocumentReference}
+                                     value={internalValue as EntityReference}
                                      property={usedProperty}
                                      size={getPreviewSizeFrom(size)}/>;
         else

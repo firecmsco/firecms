@@ -75,14 +75,13 @@ fields, common to all data types:
 
 ```tsx
 import { buildSchema } from "@camberi/firecms";
-import firebase from "firebase/app";
 
 type Product = {
     name: string;
     main_image: string;
     available: boolean;
     price: number;
-    related_products: firebase.firestore.DocumentReference[];
+    related_products: EntityReference[];
     publisher: {
         name: string;
         external_id: string;

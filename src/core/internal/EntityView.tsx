@@ -22,9 +22,7 @@ import {
     EntitySchema,
     EntityStatus,
     EntityValues,
-    listenEntity,
-    PermissionsBuilder,
-    saveEntity
+    PermissionsBuilder
 } from "../../models";
 import {
     useAuthController,
@@ -33,13 +31,17 @@ import {
     useSnackbarController
 } from "../../contexts";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";
-import { removeInitialSlash } from "../navigation";
+import {
+    removeInitialAndTrailingSlashes,
+    removeInitialSlash
+} from "../navigation";
 import CircularProgressCenter from "./CircularProgressCenter";
 import EntityPreview from "../components/EntityPreview";
-import { canEdit } from "../../util/permissions";
 
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
 import ErrorBoundary from "./ErrorBoundary";
+import { useEntityFetch } from "../../hooks/useEntityFetch";
+import { useDataSource } from "../../hooks/useDataSource";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>
@@ -135,15 +137,14 @@ function EntityView<M extends { [Key: string]: any }>({
 
     const classes = useStylesSide();
 
+    const dataSource = useDataSource();
     const sideEntityController = useSideEntityController();
     const snackbarContext = useSnackbarController();
-
     const context = useCMSAppContext();
     const authController = useAuthController();
 
-    const [entity, setEntity] = useState<Entity<M>>();
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
-    const [loading, setLoading] = useState<boolean>(true);
+    const [currentEntityId, setCurrentEntityId] = useState<string|undefined>(entityId);
     const [readOnly, setReadOnly] = useState<boolean>(false);
     const [tabsPosition, setTabsPosition] = React.useState(-1);
 
@@ -154,32 +155,14 @@ function EntityView<M extends { [Key: string]: any }>({
     const customViews = schema.views;
     const customViewsCount = customViews?.length ?? 0;
 
+    const {
+        entity,
+        dataLoading,
+        dataLoadingError
+    } = useEntityFetch({ collectionPath, entityId: currentEntityId, schema });
+
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
-
-    useEffect(() => {
-        if (entityId) {
-            const cancelSubscription = listenEntity<M>(
-                collectionPath,
-                entityId,
-                schema,
-                (e) => {
-                    if (e) {
-                        setStatus(copy ? "copy" : "existing");
-                        setEntity(e);
-                        setReadOnly(!canEdit(permissions, e, authController, collectionPath, context));
-                        console.debug("Updated entity from Firestore", e);
-                    }
-                    setLoading(false);
-                });
-            return () => cancelSubscription();
-        } else {
-            setStatus("new");
-            setLoading(false);
-        }
-        return () => {
-        };
-    }, [collectionPath, entityId]);
 
     useEffect(() => {
         if (!selectedSubpath)
@@ -245,7 +228,7 @@ function EntityView<M extends { [Key: string]: any }>({
         const onSaveSuccess = (updatedEntity: Entity<M>) => {
 
             console.log("onSaveSuccess");
-            setEntity(updatedEntity);
+            setCurrentEntityId(updatedEntity.id);
 
             snackbarContext.open({
                 type: "success",
@@ -277,7 +260,7 @@ function EntityView<M extends { [Key: string]: any }>({
             return;
         }
 
-        return saveEntity({
+        return dataSource.saveEntity({
             collectionPath,
             id,
             values,
@@ -295,8 +278,6 @@ function EntityView<M extends { [Key: string]: any }>({
         if (tabsPosition === -1)
             sideEntityController.close();
     }
-
-    const existingEntity = status === "existing";
 
     const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -342,7 +323,7 @@ function EntityView<M extends { [Key: string]: any }>({
 
     const subCollectionsViews = subcollections && subcollections.map(
         (subcollectionView, colIndex) => {
-            const collectionPath = entity ? `${entity?.reference.path}/${removeInitialSlash(subcollectionView.relativePath)}` : undefined;
+            const collectionPath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollectionView.relativePath)}` : undefined;
 
             return (
                 <Box
@@ -425,7 +406,7 @@ function EntityView<M extends { [Key: string]: any }>({
 
             <Box flexGrow={1}/>
 
-            {loading &&
+            {dataLoading &&
             <CircularProgress size={16} thickness={8}/>}
 
             <Tabs
@@ -470,7 +451,7 @@ function EntityView<M extends { [Key: string]: any }>({
     return <div
         className={clsx(classes.container, { [classes.containerWide]: tabsPosition !== -1 })}>
         {
-            loading ?
+            dataLoading ?
                 <CircularProgressCenter/>
                 :
                 <>
