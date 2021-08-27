@@ -8,13 +8,12 @@ import {
     Container,
     Divider,
     Grid,
-    IconButton,
     Theme,
-    Typography,
+    Typography
 } from "@material-ui/core";
 
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
 import { Link as ReactLink, useLocation } from "react-router-dom";
@@ -22,10 +21,10 @@ import { Link as ReactLink, useLocation } from "react-router-dom";
 import {
     BreadcrumbEntry,
     computeNavigation,
-    TopNavigationEntry
+    NavigationEntry
 } from "../navigation";
 import { useBreadcrumbsContext } from "../../contexts";
-import { CMSView, EntityCollection } from "../../models";
+import { Navigation } from "../../models";
 import { Markdown } from "../../preview";
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -44,13 +43,11 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 
 interface HomeRouteProps {
-    collections: EntityCollection[],
-    cmsViews: CMSView[] | undefined;
+    navigation: Navigation;
 }
 
 function HomeRoute({
-                       collections,
-                       cmsViews
+                       navigation
                    }: HomeRouteProps) {
 
     const classes = useStyles();
@@ -72,14 +69,14 @@ function HomeRoute({
     const {
         navigationEntries,
         groups
-    } = computeNavigation(collections, cmsViews, true);
+    } = computeNavigation(navigation, true);
 
     const allGroups: Array<string | null> = [...groups];
     if (navigationEntries.filter(e => !e.group).length > 0) {
         allGroups.push(null);
     }
 
-    function buildNavigationCard(entry: TopNavigationEntry) {
+    function buildNavigationCard(entry: NavigationEntry) {
         return (
             <Grid item xs={12} sm={6} md={4}
                   key={`nav_${entry.group}_${entry.name}`}>

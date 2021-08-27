@@ -13,8 +13,8 @@ import {
 import createStyles from '@material-ui/styles/createStyles';
 import makeStyles from '@material-ui/styles/makeStyles';
 import { Link as ReactLink } from "react-router-dom";
-import { CMSView, EntityCollection } from "../models";
-import { computeNavigation } from "./navigation";
+import { CMSView, EntityCollection, Navigation } from "../models";
+import { computeNavigation, NavigationEntry } from "./navigation";
 
 
 const drawerWidth = 280;
@@ -34,35 +34,27 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface CMSDrawerProps {
     logo: string | undefined,
-    collections: EntityCollection[],
     drawerOpen: boolean,
     closeDrawer: () => any,
-    cmsViews: CMSView[] | undefined;
-}
-
-interface NavigationEntry {
-    url: string;
-    name: string;
-    group?: string;
+    navigation:Navigation;
 }
 
 export function CMSDrawer({
                               logo,
-                              collections,
                               closeDrawer,
                               drawerOpen,
-                              cmsViews
+                              navigation
                           }: CMSDrawerProps) {
 
     const classes = useStyles();
     const {
         navigationEntries,
         groups
-    } = computeNavigation(collections, cmsViews, false);
+    } = computeNavigation(navigation, false);
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
-    function createNavigationEntry(index: number, group: string, entry: NavigationEntry) {
+    function createNavigationListItem(index: number, group: string, entry: NavigationEntry) {
         return <ListItem
             button
             key={`navigation_${index}`}
@@ -113,14 +105,14 @@ export function CMSDrawer({
                     </Box>
                     {Object.values(navigationEntries)
                         .filter(e => e.group === group)
-                        .map((view, index) => createNavigationEntry(index, group, view))}
+                        .map((view, index) => createNavigationListItem(index, group, view))}
                 </React.Fragment>
             ))}
 
             {ungroupedNavigationViews.length > 0 &&
             <Divider key={`divider_ungrouped`}/>}
 
-            {ungroupedNavigationViews.map((view, index) => createNavigationEntry(index, "none", view))}
+            {ungroupedNavigationViews.map((view, index) => createNavigationListItem(index, "none", view))}
 
         </List>
 

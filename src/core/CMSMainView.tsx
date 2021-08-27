@@ -116,9 +116,6 @@ export function CMSMainView(props: CMSMainViewProps) {
         return <CircularProgressCenter/>;
     }
 
-    const collections = cmsAppContext.navigation.collections;
-    const cmsViews = cmsAppContext.navigation.views;
-
     if (cmsAppContext.navigationLoadingError) {
         return (
             <div>
@@ -138,9 +135,8 @@ export function CMSMainView(props: CMSMainViewProps) {
                 <nav>
                     <CMSDrawer logo={logo}
                                drawerOpen={drawerOpen}
-                               collections={collections}
-                               closeDrawer={closeDrawer}
-                               cmsViews={cmsViews}/>
+                               navigation={cmsAppContext.navigation}
+                               closeDrawer={closeDrawer}/>
                 </nav>
 
                 <div className={classes.main}>
@@ -151,8 +147,7 @@ export function CMSMainView(props: CMSMainViewProps) {
                     <main
                         className={classes.content}>
                         <CMSRouterSwitch
-                            collections={collections}
-                            views={cmsViews}/>
+                            navigation={cmsAppContext.navigation}/>
                     </main>
                 </div>
 

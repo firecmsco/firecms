@@ -106,7 +106,7 @@ export interface CMSAppProviderProps {
  * @constructor
  * @category Core
  */
-export function CMSAppProvider(props: PropsWithChildren<CMSAppProviderProps>) {
+export function CMSAppProvider(props: CMSAppProviderProps) {
 
     const {
         children,

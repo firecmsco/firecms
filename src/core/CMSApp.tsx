@@ -95,6 +95,7 @@ export function CMSApp({
                                 firebaseConfig={usedFirebaseConfig}
                                 schemaResolver={schemaResolver}
                                 dateTimeFormat={dateTimeFormat}
+                                dataSource={FirestoreDatasource}
                                 locale={locale}>
                     {({ authController, cmsAppContext }) => {
                         if (!authController.canAccessMainView) {
@@ -103,8 +104,7 @@ export function CMSApp({
                                     logo={logo}
                                     skipLoginButtonEnabled={allowSkipLogin}
                                     signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
-                                    dataSource={FirestoreDatasource}
-                            firebaseConfig={usedFirebaseConfig}/>
+                                    firebaseConfig={usedFirebaseConfig}/>
                             );
                         }
                         return <CMSMainView name={name}

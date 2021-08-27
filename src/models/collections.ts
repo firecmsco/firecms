@@ -16,6 +16,7 @@ import { CMSAppContext } from "../contexts";
  */
 export interface EntityCollection<M extends { [Key: string]: any } = any,
     AdditionalKey extends string = string> {
+
     /**
      * Plural name of the view. E.g. 'products'
      */
@@ -110,7 +111,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     subcollections?: EntityCollection<any, any>[];
 
     /**
-     * Properties displayed in this collection. If this property is not set
+     * Properties displayed in this collection. If this prop is not set
      * every property is displayed
      */
     properties?: (Extract<keyof M, string> | AdditionalKey)[];

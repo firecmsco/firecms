@@ -26,7 +26,7 @@ export interface Navigation {
 
     /**
      * List of the mapped collections in the CMS.
-     * Each entry relates to a collection in the root Firestore database.
+     * Each entry relates to a collection in the root database.
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
