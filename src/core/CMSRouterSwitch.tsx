@@ -18,6 +18,7 @@ export function CMSRouterSwitch({ navigation }: {
     if (addInitialSlash(basePathname) === "/")
         return <HomeRoute navigation={navigation}/>;
 
+
     const matchedCollection = [...navigation.collections]
         // we reorder collections so that nested paths are included first
         .sort((a, b) => b.relativePath.length - a.relativePath.length)

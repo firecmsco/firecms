@@ -43,6 +43,10 @@ export function buildCollectionUrlPath(view: EntityCollection) {
     return `${DATA_PATH}/${removeInitialAndTrailingSlashes(view.relativePath)}`;
 }
 
+export function buildCollectionPath(view: EntityCollection) {
+    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(view.relativePath)}`;
+}
+
 export function removeInitialAndTrailingSlashes(s: string) {
     return removeInitialSlash(removeTrailingSlash(s));
 }

@@ -30,7 +30,6 @@ import { SideEntityProvider } from "../contexts/SideEntityController";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { EntitySideDialogs } from "./internal/EntitySideDialogs";
 import { DataSource } from "../models/data/datasource";
-import { FirestoreDatasource } from "../models/data/firestore_datasource";
 
 
 /**

@@ -8,12 +8,13 @@ import {
     Container,
     Divider,
     Grid,
+    IconButton,
     Theme,
-    Typography
+    Typography,
 } from "@material-ui/core";
 
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
 import { Link as ReactLink, useLocation } from "react-router-dom";
