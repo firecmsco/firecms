@@ -6,7 +6,7 @@ import * as functions from "firebase-functions";
  * gcloud firestore export gs://firecms_firestore_backups --project firecms-demo-27150
  * ```
  */
-const bucket = "gs://firecms_firestore_backups/2021-07-26T15:04:05_95236";
+const bucket = "gs://firecms_firestore_backups/2021-08-27T10:13:57_12516";
 
 export function eraseDatabase() {
     const firebase_tools = require("firebase-tools");
@@ -14,7 +14,7 @@ export function eraseDatabase() {
     const deleteConfig = {
         project: process.env.GCLOUD_PROJECT,
         recursive: true,
-        yes: true,ov
+        yes: true,
         token: functions.config().fb.token
     };
     return firebase_tools.firestore

@@ -69,7 +69,7 @@ function SampleApp() {
         }),
         extraActions: productExtraActionBuilder,
         subcollections: [localeCollection],
-        excludedProperties: ["images", "related_products"]
+        excludedProperties: ["images"]
     });
 
     const usersCollection = buildCollection({
@@ -86,7 +86,7 @@ function SampleApp() {
                 builder: () => "Content of a generated column"
             }
         ],
-        properties: ["first_name", "last_name", "email", "phone", "sample_additional", "picture"]
+        properties: ["first_name", "last_name", "email", "liked_products",  "picture", "phone", "sample_additional",]
     });
 
     const blogCollection = buildCollection({
@@ -98,7 +98,7 @@ function SampleApp() {
             additionalColumns: [sampleAdditionalExportColumn]
         },
         defaultSize: "l",
-        properties: ["name", "header_image", "status", "content", "reviewed", "products", "gold_text"],
+        properties: ["name", "header_image", "status", "content", "reviewed",  "gold_text"],
         description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
         textSearchDelegate: blogSearchDelegate,
         initialFilter: {

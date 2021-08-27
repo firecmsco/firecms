@@ -25,6 +25,7 @@ export function CMSRouterSwitch({ collections, views }: {
         </Route>;
     }
 
+
     let customRoutes: JSX.Element[] = [];
     if (views) {
         views.forEach((cmsView) => {
