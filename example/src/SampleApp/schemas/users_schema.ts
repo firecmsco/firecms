@@ -22,6 +22,15 @@ export const usersSchema = buildSchema({
             title: "Phone",
             dataType: "string"
         },
+        liked_products: {
+            dataType: "array",
+            title: "Liked products",
+            description: "Products this user has liked",
+            of: {
+                dataType: "reference",
+                collectionPath: "products"
+            }
+        },
         picture: {
             title: "Picture",
             dataType: "map",
