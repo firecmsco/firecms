@@ -8,12 +8,12 @@ import {
     ListItem,
     ListItemText,
     Theme,
-    Typography,
+    Typography
 } from "@material-ui/core";
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 import { Link as ReactLink } from "react-router-dom";
-import { CMSView, EntityCollection, Navigation } from "../models";
+import { Navigation } from "../models";
 import { computeNavigation, NavigationEntry } from "./navigation";
 
 

@@ -18,7 +18,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import {
     getCMSPathFrom,
-    removeInitialAndTrailingSlashes,
+    removeInitialAndTrailingSlashes
 } from "../core/navigation";
 import { EntityCollectionTable } from "../core/components/EntityCollectionTable";
 import { useSideEntityController } from "../contexts";
@@ -72,18 +72,19 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
         ref.current!.scrollTo({ top: 0 });
         const cancelSubscription =
             entity && dataSource.listenEntity ?
-                dataSource.listenEntity<M>(
-                    entity?.path,
-                    entity?.id,
+                dataSource.listenEntity<M>({
+                    path: entity?.path,
+                    entityId: entity?.id,
                     schema,
-                    (e) => {
+                    onUpdate: (e) => {
                         if (e) {
                             setUpdatedEntity(e);
                         }
-                    })
+                    }
+                })
                 :
                 () => {
-                }        ;
+                };
         return () => cancelSubscription();
     }, [entity]);
 

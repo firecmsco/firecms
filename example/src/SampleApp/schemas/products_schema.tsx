@@ -2,7 +2,6 @@ import {
     AdditionalColumnDelegate,
     AsyncPreviewComponent,
     buildSchema,
-    Entity,
     EntityCustomView,
     EnumValues,
     ExtraActionsParams
@@ -12,7 +11,6 @@ import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
 import { SampleExtraActions } from "../collection_actions/SampleExtraActions";
 import { SampleProductsView } from "../custom_schema_view/SampleProductsView";
 import { Locale, Product } from "../types";
-import firebase from "firebase";
 
 export const locales: EnumValues = {
     "es": "Spanish",
@@ -275,15 +273,13 @@ export const productSchema = buildSchema<any>({
 export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
     id: "spanish_title",
     title: "Spanish title",
-    builder: (entity: Entity<Product>) =>
+    builder: ({ entity, context }) =>
         <AsyncPreviewComponent builder={
-            firebase.firestore()
-                .collection(entity.path)
-                .doc(entity.id)
-                .collection("locales")
-                .doc("es")
-                .get()
-                .then((snapshot: any) => snapshot.get("name") as string)
+            context.dataSource.fetchEntity({
+                path: entity.path,
+                entityId: entity.id,
+                schema: localeSchema
+            }).then((entity) => entity.values.name)
         }/>
 };
 

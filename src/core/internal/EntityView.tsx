@@ -31,10 +31,7 @@ import {
     useSnackbarController
 } from "../../contexts";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";
-import {
-    removeInitialAndTrailingSlashes,
-    removeInitialSlash
-} from "../navigation";
+import { removeInitialAndTrailingSlashes } from "../navigation";
 import CircularProgressCenter from "./CircularProgressCenter";
 import EntityPreview from "../components/EntityPreview";
 

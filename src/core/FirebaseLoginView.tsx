@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
 import { Box, Button, Grid, Theme } from "@material-ui/core";
 
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 
-import firebase from "firebase/app";
+import firebase from "firebase/compat/app";
 import "firebase/auth";
 
 import { useAuthController } from "../contexts";
 
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
+import { FirebaseApp } from "firebase/app";
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -21,26 +23,33 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface LoginViewProps {
+export interface FirebaseLoginViewProps {
     skipLoginButtonEnabled?: boolean,
     logo?: string,
     // Any of the sign in string or configuration objects defined in https://firebase.google.com/docs/auth/web/firebaseui
     signInOptions: Array<string | any>;
-    firebaseConfig: Object;
+    firebaseApp: FirebaseApp;
 }
 
-export function LoginView({
-                              skipLoginButtonEnabled,
-                              logo,
-                              signInOptions,
-                              firebaseConfig
-                          }: LoginViewProps) {
-
+export function FirebaseLoginView({
+                                      skipLoginButtonEnabled,
+                                      logo,
+                                      signInOptions,
+                                      firebaseApp
+                                  }: FirebaseLoginViewProps) {
     const classes = useStyles();
 
     const authController = useAuthController();
 
     useEffect(() => {
+        if (firebase.apps.length === 0) {
+            try {
+                firebase.initializeApp(firebaseApp.options);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
         const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
 
         const uiConfig: firebaseui.auth.Config = {
@@ -73,9 +82,9 @@ export function LoginView({
                             your Firebase project
                         </Box>
 
-                        {firebaseConfig &&
+                        {firebaseApp &&
                         <Box p={2}>
-                            <a href={`https://console.firebase.google.com/project/${(firebaseConfig as any)["projectId"]}/authentication/providers`}
+                            <a href={`https://console.firebase.google.com/project/${firebaseApp.options.projectId}/authentication/providers`}
                                rel="noopener noreferrer"
                                target="_blank">
                                 <Button variant="outlined"
@@ -104,6 +113,7 @@ export function LoginView({
             justifyContent="center"
             style={{ minHeight: "100vh" }}
         >
+
             <Box m={1}>
                 {logo &&
                 <img className={classes.logo}

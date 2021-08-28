@@ -17,12 +17,7 @@ import { buildPropertyField } from "../form_factory";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 import { enumToObjectEntries } from "../../util/enums";
-import {
-    EnumValues,
-    FieldProps,
-    FormContext,
-    Property
-} from "../../models";
+import { EnumValues, FieldProps, FormContext, Property } from "../../models";
 
 
 /**

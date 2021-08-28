@@ -3,10 +3,14 @@ import { EntitySchema, EntityValues } from "./entities";
 import {
     ArrayProperty,
     BooleanProperty,
-    CMSType, GeopointProperty, MapProperty,
+    CMSType,
+    GeopointProperty,
+    MapProperty,
     NumberProperty,
-    Property, ReferenceProperty,
-    StringProperty, TimestampProperty
+    Property,
+    ReferenceProperty,
+    StringProperty,
+    TimestampProperty
 } from "./properties";
 
 /**

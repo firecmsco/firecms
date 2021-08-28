@@ -1,7 +1,4 @@
-import { RefObject } from "react";
-import { useEffect } from "react";
-import { useCallback } from "react";
-import { useRef } from "react";
+import { RefObject, useCallback, useEffect, useRef } from "react";
 
 interface Props {
     onResize: (event: Event) => void;

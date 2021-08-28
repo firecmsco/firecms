@@ -8,8 +8,8 @@ import {
     Theme,
     Typography
 } from "@material-ui/core";
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 import ClearIcon from "@material-ui/icons/Clear";
 
 import {

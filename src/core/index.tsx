@@ -1,4 +1,5 @@
 import { initCMSFirebase } from "./initCMSFirebase";
+import { FirebaseLoginView } from "./FirebaseLoginView";
 
 export { CMSApp } from "./CMSApp";
 export type {
@@ -7,7 +8,7 @@ export type {
 
 export { CMSAppProvider } from "./CMSAppProvider";
 export type {
-    CMSAppProviderProps
+    CMSAppProviderProps, EntityLinkBuilder
 } from "./CMSAppProvider";
 
 export { CMSMainView } from "./CMSMainView";
@@ -15,6 +16,13 @@ export type {
     CMSMainViewProps
 } from "./CMSMainView";
 
+export { FirebaseLoginView } from "./FirebaseLoginView";
+export type {
+    FirebaseLoginViewProps
+} from "./FirebaseLoginView";
+
 export * from "./components";
 
 export { initCMSFirebase } from "./initCMSFirebase";
+
+export { createCMSDefaultTheme } from "./theme";

@@ -1,22 +1,17 @@
 import React, { useEffect } from "react";
-
-import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/storage";
 
 import {
     Authenticator,
+    Entity,
     EntityCollection,
     Locale,
     Navigation,
     NavigationBuilder,
     SchemaResolver
 } from "../models";
-import {
-    AuthController,
-    AuthProvider,
-    useAuthHandler
-} from "../contexts/AuthController";
+import { AuthController, AuthProvider } from "../contexts/AuthController";
 import { SnackbarProvider } from "../contexts/SnackbarContext";
 import {
     SchemaRegistryContext,
@@ -29,8 +24,12 @@ import {
 import { SideEntityProvider } from "../contexts/SideEntityController";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { EntitySideDialogs } from "./internal/EntitySideDialogs";
-import { DataSource } from "../models/data/datasource";
+import { DataSource } from "../models/datasource";
+import { User } from "../models/user";
+import { StorageSource } from "../models/storage";
 
+
+export type EntityLinkBuilder = ({ entity }: { entity: Entity<any> }) => string;
 
 /**
  * Main CMS configuration.
@@ -42,7 +41,7 @@ export interface CMSAppProviderProps {
      *
      * @param props
      */
-    children: (props: { navigation: Navigation, authController: AuthController, cmsAppContext: CMSAppContext }) => React.ReactNode;
+    children: (props: { context: CMSAppContext }) => React.ReactNode;
 
     /**
      * Use this prop to specify the views that will be generated in the CMS.
@@ -62,12 +61,6 @@ export interface CMSAppProviderProps {
      * apply
      */
     authentication?: boolean | Authenticator;
-
-    /**
-     * Firebase configuration of the project. This component is not in charge
-     * of initialising Firebase and expects it to be already initialised.
-     */
-    firebaseConfig: Object;
 
     /**
      * Used to override schemas based on the collection path and entityId.
@@ -93,6 +86,24 @@ export interface CMSAppProviderProps {
      * Connector to your database
      */
     dataSource: DataSource;
+
+    /**
+     * Connector to your file upload/fetch implementation
+     */
+    storageSource: StorageSource;
+
+    /**
+     * Perform your auth operations here
+     */
+    authController: AuthController;
+
+    /**
+     * Optional link builder you can add to generate a button in your entity forms.
+     * The function must return a URL that gets opened when the button is clicked
+     *
+     * @param entityId
+     */
+    entityLinkBuilder?: EntityLinkBuilder;
 }
 
 /**
@@ -110,18 +121,32 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
     const {
         children,
         navigation: navigationOrBuilder,
-        authentication,
-        firebaseConfig,
+        entityLinkBuilder,
+        dateTimeFormat,
+        locale,
+        authController,
         schemaResolver,
+        storageSource,
         dataSource
     } = props;
 
     const [navigation, setNavigation] = React.useState<Navigation | undefined>(undefined);
     const [navigationLoadingError, setNavigationLoadingError] = React.useState<Error | undefined>(undefined);
 
-    const authController: AuthController = useAuthHandler({
-        authentication
-    });
+    async function getNavigation(navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[],
+                                 user: User | null,
+                                 authController: AuthController): Promise<Navigation> {
+
+        if (Array.isArray(navigationOrCollections)) {
+            return {
+                collections: navigationOrCollections
+            };
+        } else if (typeof navigationOrCollections === "function") {
+            return navigationOrCollections({ user, authController });
+        } else {
+            return navigationOrCollections;
+        }
+    }
 
     useEffect(() => {
         if (!authController.canAccessMainView) {
@@ -141,23 +166,33 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
                     schemaResolver={schemaResolver}>
                     <SchemaRegistryContext.Consumer>
                         {(schemasRegistryController) => {
-                            const cmsAppContext = {
-                                cmsAppConfig: props,
-                                firebaseConfig,
+                            const context:CMSAppContext = {
+                                authController,
+                                entityLinkBuilder,
+                                dateTimeFormat,
+                                locale,
                                 navigation,
                                 navigationLoadingError,
                                 dataSource,
-                                schemasRegistryController,
+                                storageSource,
+                                schemasRegistryController
                             };
                             return (
-                                <CMSAppContextProvider {...cmsAppContext}>
+                                <CMSAppContextProvider
+                                    dateTimeFormat={dateTimeFormat}
+                                    locale={locale}
+                                    dataSource={dataSource}
+                                    storageSource={storageSource}
+                                    authController={authController}
+                                    navigation={navigation}
+                                    navigationLoadingError={navigationLoadingError}
+                                    schemasRegistryController={schemasRegistryController}
+                                >
                                     <SideEntityProvider
                                         collections={navigation?.collections}>
                                         <BreadcrumbsProvider>
-                                            {navigation && children({
-                                                navigation,
-                                                authController,
-                                                cmsAppContext
+                                            {children({
+                                                context
                                             })}
                                             <EntitySideDialogs/>
                                         </BreadcrumbsProvider>
@@ -174,20 +209,7 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
 }
 
 
-async function getNavigation(navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[],
-                             user: firebase.User | null,
-                             authController: AuthController): Promise<Navigation> {
 
-    if (Array.isArray(navigationOrCollections)) {
-        return {
-            collections: navigationOrCollections
-        };
-    } else if (typeof navigationOrCollections === "function") {
-        return navigationOrCollections({ user, authController });
-    } else {
-        return navigationOrCollections;
-    }
-}
 
 
 

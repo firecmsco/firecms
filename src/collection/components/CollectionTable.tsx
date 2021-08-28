@@ -43,7 +43,7 @@ import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
 import { useCollectionFetch } from "../../hooks";
 import { useTextSearch } from "../../hooks/useTextSearch";
 import CollectionTableHeader from "../internal/CollectionTableHeader";
-import { useBreadcrumbsContext } from "../../contexts";
+import { CMSAppContext, useCMSAppContext } from "../../contexts";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -89,6 +89,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                                                pageSize = DEFAULT_PAGE_SIZE
                                            }: CollectionTableProps<M, AdditionalKey>) {
 
+    const context: CMSAppContext = useCMSAppContext();
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize);
 
@@ -454,7 +455,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                     disabledTooltip={"Additional columns can't be edited directly"}
                 >
                     <ErrorBoundary>
-                        {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder(entity)}
+                        {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder({ entity, context })}
                     </ErrorBoundary>
                 </TableCell>
             );

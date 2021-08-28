@@ -59,17 +59,19 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
 
         if (entityId && collectionPath && schema) {
             if (dataSource.listenEntity) {
-                return dataSource.listenEntity<M>(
-                    collectionPath,
+                return dataSource.listenEntity<M>({
+                    path: collectionPath,
                     entityId,
                     schema,
-                    onEntityUpdate,
-                    onError);
+                    onUpdate: onEntityUpdate,
+                    onError
+                });
             } else {
-                dataSource.fetchEntity<M>(
-                    collectionPath,
+                dataSource.fetchEntity<M>({
+                    path: collectionPath,
                     entityId,
-                    schema)
+                    schema
+                })
                     .then(onEntityUpdate)
                     .catch(onError);
                 return () => {

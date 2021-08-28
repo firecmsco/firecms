@@ -118,7 +118,11 @@ export default function ReferenceDialog(
     useEffect(() => {
         if (selectedEntityIds) {
             Promise.all(
-                selectedEntityIds.map((id) => dataSource.fetchEntity(collectionPath, id, schema)))
+                selectedEntityIds.map((id) => dataSource.fetchEntity({
+                    path: collectionPath,
+                    entityId: id,
+                    schema
+                })))
                 .then((entities) => {
                     setSelectedEntities(entities);
                 });

@@ -3,7 +3,6 @@ import {
     BooleanProperty,
     buildPropertyFrom,
     CMSType,
-    EntitySchema,
     EntityValues,
     GeopointProperty,
     MapProperty,

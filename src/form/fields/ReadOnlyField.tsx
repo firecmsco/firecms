@@ -1,4 +1,4 @@
-import { EntitySchema, FieldProps } from "../../models";
+import { FieldProps } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@material-ui/core";
 import React from "react";
 import { formStyles } from "../styles";

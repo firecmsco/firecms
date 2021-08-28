@@ -1,12 +1,10 @@
 import React from "react";
 
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/storage";
+import { GoogleAuthProvider } from "firebase/auth";
 
 import { CMSAppProps } from "./CMSAppProps";
 import { CMSMainView } from "./CMSMainView";
-import { CMSAppProvider } from "./CMSAppProvider";
+import { CMSAppProvider, EntityLinkBuilder } from "./CMSAppProvider";
 import { BrowserRouter as Router } from "react-router-dom";
 import CircularProgressCenter from "./internal/CircularProgressCenter";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,11 +12,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { createCMSDefaultTheme } from "./theme";
 import { initCMSFirebase } from "./initCMSFirebase";
-import { LoginView } from "./LoginView";
-import { FirestoreDatasource } from "../models/data/firestore_datasource";
+import { FirebaseLoginView } from "./FirebaseLoginView";
+import { AuthController } from "../contexts";
+import { useFirebaseAuthHandler } from "../hooks";
+import { useFirebaseStorageSource, useFirestoreDataSource } from "../models";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID
+    GoogleAuthProvider.PROVIDER_ID
 ];
 
 
@@ -55,11 +55,16 @@ export function CMSApp({
                        }: CMSAppProps) {
 
     const {
+        firebaseApp,
         firebaseConfigLoading,
-        usedFirebaseConfig,
         configError,
         firebaseConfigError
-    } = initCMSFirebase(onFirebaseInit, firebaseConfig);
+    } = initCMSFirebase({ onFirebaseInit, firebaseConfig });
+
+    const authController: AuthController = useFirebaseAuthHandler({
+        firebaseApp,
+        authentication
+    });
 
     if (configError) {
         return <div> {configError} </div>;
@@ -74,9 +79,12 @@ export function CMSApp({
         </div>;
     }
 
-    if (firebaseConfigLoading || !usedFirebaseConfig) {
+    if (firebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }
+
+    const dataSource = useFirestoreDataSource(firebaseApp!);
+    const storageSource = useFirebaseStorageSource(firebaseApp!);
 
     const mode: "light" | "dark" = "light";
     const theme = createCMSDefaultTheme({
@@ -86,27 +94,36 @@ export function CMSApp({
         fontFamily
     });
 
+    const entityLinkBuilder: EntityLinkBuilder = ({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`;
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <Router>
                 <CMSAppProvider navigation={navigation}
-                                authentication={authentication}
-                                firebaseConfig={usedFirebaseConfig}
+                                authController={authController}
                                 schemaResolver={schemaResolver}
                                 dateTimeFormat={dateTimeFormat}
-                                dataSource={FirestoreDatasource}
+                                dataSource={dataSource}
+                                storageSource={storageSource}
+                                entityLinkBuilder={entityLinkBuilder}
                                 locale={locale}>
-                    {({ authController, cmsAppContext }) => {
-                        if (!authController.canAccessMainView) {
+                    {({ context }) => {
+
+                        if (context.authController.authLoading) {
+                            return <CircularProgressCenter/>;
+                        }
+
+                        if (!context.authController.canAccessMainView) {
                             return (
-                                <LoginView
+                                <FirebaseLoginView
                                     logo={logo}
                                     skipLoginButtonEnabled={allowSkipLogin}
                                     signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
-                                    firebaseConfig={usedFirebaseConfig}/>
+                                    firebaseApp={firebaseApp}/>
                             );
                         }
+
                         return <CMSMainView name={name}
                                             logo={logo}
                                             toolbarExtraWidget={toolbarExtraWidget}/>;

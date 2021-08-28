@@ -11,12 +11,12 @@ import {
     Grid,
     List,
     ListItem,
+    Skeleton,
     Table,
     TableBody,
     TableCell,
     TableRow
 } from "@material-ui/core";
-import { Skeleton } from '@material-ui/core';
 import { PreviewSize } from "../../preview";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";

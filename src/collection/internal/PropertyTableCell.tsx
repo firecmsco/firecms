@@ -1,7 +1,7 @@
 import {
     ArrayProperty,
-    CMSType, EntityReference,
-    EntitySchema,
+    CMSType,
+    EntityReference,
     NumberProperty,
     Property,
     ReferenceProperty,

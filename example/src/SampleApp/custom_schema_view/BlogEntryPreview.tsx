@@ -8,27 +8,31 @@ import {
     Typography
 } from "@material-ui/core";
 import {
+    Entity,
     EntityCustomViewParams,
-    EntityValues,
     EntityReference,
+    EntityValues,
     InferSchemaType,
-    getDownloadURL,
-    Markdown
+    Markdown,
+    useDataSource,
+    useStorageSource
 } from "@camberi/firecms";
 import { Product } from "../types";
 import { blogSchema } from "../schemas/blog_schema";
-import firebase from "firebase";
+import { productSchema } from "../schemas/products_schema";
 
 
 export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<InferSchemaType<typeof blogSchema>>) {
 
+    const storage = useStorageSource();
+
     const [headerUrl, setHeaderUrl] = useState<string | undefined>();
     useEffect(() => {
         if (modifiedValues?.header_image) {
-            getDownloadURL(modifiedValues.header_image)
+            storage.getDownloadURL(modifiedValues.header_image)
                 .then((res) => setHeaderUrl(res));
         }
-    }, [modifiedValues?.header_image]);
+    }, [storage, modifiedValues?.header_image]);
 
     return (
         <Box>
@@ -100,13 +104,14 @@ export function Images({ storagePaths }: { storagePaths: string[] }) {
 
 export function StorageImage({ storagePath }: { storagePath: string }) {
 
+    const storage = useStorageSource();
     const [url, setUrl] = useState<string | undefined>();
     useEffect(() => {
         if (storagePath) {
-            getDownloadURL(storagePath)
+            storage.getDownloadURL(storagePath)
                 .then((res) => setUrl(res));
         }
-    }, [storagePath]);
+    }, [storage, storagePath]);
 
     if (!storagePath)
         return <></>;
@@ -134,15 +139,20 @@ export function Text({ markdownText }: { markdownText: string }) {
 
 export function Products({ references }: { references: EntityReference[] }) {
 
-    const [products, setProducts] = useState<object[] | undefined>();
+    const [products, setProducts] = useState<Entity<Product>[] | undefined>();
+    const dataSource = useDataSource();
 
     useEffect(() => {
         if (references) {
-            Promise.all(references.map((ref) => firebase.firestore().collection(ref.path).doc(ref.id).get().then(doc => doc.data())))
-                .then((results) => results.filter(r => !!r) as object[])
+            Promise.all(references.map((ref) => dataSource.fetchEntity({
+                path: ref.path,
+                entityId: ref.id,
+                schema: productSchema
+            })))
+                .then((results) => results.filter(r => !!r) as Entity<Product>[])
                 .then((results) => setProducts(results));
         }
-    }, [references]);
+    }, [references, dataSource]);
 
 
     if (!references)
@@ -153,7 +163,7 @@ export function Products({ references }: { references: EntityReference[] }) {
     return <Box>
         {products.map((p, index) => <ProductPreview
             key={`products_${index}`}
-            productValues={p as EntityValues<Product>}/>)}
+            productValues={p.values as EntityValues<Product>}/>)}
     </Box>;
 }
 

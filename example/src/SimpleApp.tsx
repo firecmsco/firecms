@@ -7,10 +7,9 @@ import {
     buildSchema,
     CMSApp,
     NavigationBuilder,
-    NavigationBuilderProps
+    NavigationBuilderProps,
+    User
 } from "@camberi/firecms";
-
-import firebase from "firebase/app";
 
 import "typeface-rubik";
 import "typeface-space-mono";
@@ -227,7 +226,7 @@ export default function App() {
         });
     };
 
-    const myAuthenticator: Authenticator = (user?: firebase.User) => {
+    const myAuthenticator: Authenticator = (user?: User) => {
         console.log("Allowing access to", user?.email);
         return true;
     };

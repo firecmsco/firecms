@@ -1,4 +1,4 @@
-import { CollectionSize, Entity, EntitySchema } from "../../models";
+import { CollectionSize, Entity } from "../../models";
 import { useTableStyles } from "../components/styles";
 
 import React, { MouseEvent } from "react";
@@ -10,11 +10,11 @@ import {
     ListItemText,
     Menu,
     MenuItem,
+    Skeleton,
     Tooltip,
     Typography
 } from "@material-ui/core";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
-import { Skeleton } from '@material-ui/core';
 
 /**
  *

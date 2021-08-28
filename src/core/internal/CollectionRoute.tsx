@@ -1,8 +1,8 @@
 import React from "react";
 import { EntityCollection } from "../../models";
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
-import { useLocation  } from "react-router-dom";
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
+import { useLocation } from "react-router-dom";
 import { useBreadcrumbsContext } from "../../contexts";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";
 

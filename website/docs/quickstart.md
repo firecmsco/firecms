@@ -60,7 +60,8 @@ import {
     buildSchema,
     CMSApp,
     NavigationBuilder,
-    NavigationBuilderProps
+    NavigationBuilderProps,
+    User
 } from "@camberi/firecms";
 
 import firebase from "firebase/app";
@@ -280,7 +281,7 @@ export function App() {
         });
     };
 
-    const myAuthenticator: Authenticator = (user?: firebase.User) => {
+    const myAuthenticator: Authenticator = (user?: User) => {
         console.log("Allowing access to", user?.email);
         return true;
     };

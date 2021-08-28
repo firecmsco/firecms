@@ -9,6 +9,27 @@ sidebar_label: Changelog
 - `EntitySaveProps` renamed to `EntityOnSaveProps`
 - `EntityDeleteProps` renamed to `EntityOnDeleteProps`
 
+- `AdditionalColumnDelegate` `builder` prop now receives an object including
+the entity and the app context, instead of only the entity as before:
+```tsx
+// Previous
+const previousProductAdditionalColumn: AdditionalColumnDelegate<Product> = {
+    id: "spanish_title",
+    title: "Spanish title",
+    builder: (entity: Entity<Product>) =>
+        <div>{entity.values.title}</div>
+};
+
+// Now
+const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
+    id: "spanish_title",
+    title: "Spanish title",
+    builder: ({ entity }) =>
+        <div>{entity.values.title}</div>
+};
+```
+
+
 ## [0.49.1] - 2021-08-15
 
 ### Changed

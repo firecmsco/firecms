@@ -1,14 +1,10 @@
 import React, { useEffect } from "react";
 
-import firebase from "firebase/app";
-import "firebase/analytics";
-import "firebase/auth";
-import "firebase/storage";
-import "firebase/firestore";
+import { FirebaseApp, initializeApp } from "firebase/app";
 
 export interface CMSFirebaseInitResult {
     firebaseConfigLoading: boolean,
-    usedFirebaseConfig? : object,
+    firebaseApp?: FirebaseApp;
     configError?: string,
     firebaseConfigError?: Error
 }
@@ -27,34 +23,31 @@ export interface CMSFirebaseInitResult {
  * @param onFirebaseInit
  * @param firebaseConfig
  */
-export function initCMSFirebase(onFirebaseInit: ((config: object) => void) | undefined, firebaseConfig: Object | undefined):CMSFirebaseInitResult {
+export function initCMSFirebase({ firebaseConfig, onFirebaseInit }: {
+    onFirebaseInit?: ((config: object) => void) | undefined,
+    firebaseConfig: Object | undefined
+}): CMSFirebaseInitResult {
 
-    const [usedFirebaseConfig, setUsedFirebaseConfig] = React.useState<Object>();
+    const [firebaseApp, setFirebaseApp] = React.useState<FirebaseApp | undefined>();
     const [firebaseConfigLoading, setFirebaseConfigLoading] = React.useState<boolean>(false);
     const [configError, setConfigError] = React.useState<string>();
     const [firebaseConfigError, setFirebaseConfigError] = React.useState<Error | undefined>();
 
     function initFirebase(config: Object) {
-        if (firebase.apps.length === 0) {
-            try {
-                firebase.initializeApp(config);
-                firebase.analytics();
-                setUsedFirebaseConfig(config);
-                setFirebaseConfigError(undefined);
-                setFirebaseConfigLoading(false);
-                if (onFirebaseInit)
-                    onFirebaseInit(config);
-            } catch (e) {
-                console.error(e);
-                setFirebaseConfigError(e);
-            }
+        try {
+            const initialisedFirebaseApp = initializeApp(config);
+            setFirebaseConfigError(undefined);
+            setFirebaseConfigLoading(false);
+            if (onFirebaseInit)
+                onFirebaseInit(config);
+            setFirebaseApp(initialisedFirebaseApp);
+        } catch (e) {
+            console.error(e);
+            setFirebaseConfigError(e);
         }
     }
 
     useEffect(() => {
-
-        if (firebase.apps.length > 0)
-            return;
 
         setFirebaseConfigLoading(true);
 
@@ -89,8 +82,8 @@ export function initCMSFirebase(onFirebaseInit: ((config: object) => void) | und
     }, []);
 
     return {
+        firebaseApp,
         firebaseConfigLoading,
-        usedFirebaseConfig,
         configError,
         firebaseConfigError
     };

@@ -1,12 +1,7 @@
-import {
-    Entity,
-    EntityCollection,
-    EntityCustomView,
-} from "../models";
+import { Entity, EntityCollection, EntityCustomView } from "../models";
 import { getNavigationEntriesFromPathInternal } from "../core/navigation";
 import { useEffect, useState } from "react";
 import { CMSAppContext, useCMSAppContext } from "../contexts/CMSAppContext";
-import { useDataSource } from "./useDataSource";
 
 /**
  * @ignore
@@ -55,16 +50,16 @@ interface NavigationCustom<M> {
  * well as a `schemaResolver` if provided.
  *
  * @param path
- * @param cmsAppContext
+ * @param context
  * @category Hooks and utilities
  */
 export function getNavigationFrom<M>({
-                                      path,
-                                      context
-                                  }: { path: string, context: CMSAppContext }): Promise<NavigationEntry<M>[]> {
+                                         path,
+                                         context
+                                     }: { path: string, context: CMSAppContext }): Promise<NavigationEntry<M>[]> {
 
 
-    const dataSource = context.cmsAppConfig.dataSource;
+    const dataSource = context.dataSource;
     const navigation = context.navigation;
     const schemasRegistryController = context.schemasRegistryController;
 
@@ -89,7 +84,11 @@ export function getNavigationFrom<M>({
             if (!schemaConfig?.schema) {
                 throw Error(`No schema defined in the navigation for the entity with path ${entry.collectionPath}`);
             }
-            return dataSource.fetchEntity(entry.collectionPath, entry.entityId, schemaConfig?.schema)
+            return dataSource.fetchEntity({
+                path: entry.collectionPath,
+                entityId: entry.entityId,
+                schema: schemaConfig?.schema
+            })
                 .then((entity) => {
                     return { ...entry, entity };
                 });

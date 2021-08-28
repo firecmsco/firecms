@@ -8,9 +8,6 @@ import { FieldProps } from "../../models";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
-import { useCMSAppContext } from "../../contexts";
-import { defaultDateFormat } from "../../util/dates";
-import { CMSAppContext } from "../../contexts/CMSAppContext";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -37,9 +34,6 @@ export default function DateTimeField({
 
 
     const internalValue = value || null;
-
-    const appConfig: CMSAppContext | undefined = useCMSAppContext();
-    const dateFormat: string = appConfig?.cmsAppConfig?.dateTimeFormat ?? defaultDateFormat;
 
     useClearRestoreValue({
         property,

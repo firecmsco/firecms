@@ -103,25 +103,27 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
         };
 
         if (dataSource.listenCollection) {
-            return dataSource.listenCollection<M>(
-                collectionPath,
+            return dataSource.listenCollection<M>({
+                path:collectionPath,
                 schema,
-                onEntitiesUpdate,
+                onUpdate: onEntitiesUpdate,
                 onError,
-                filterValues,
-                itemCount,
-                undefined,
-                sortByProperty,
-                currentSort);
+                filter :filterValues,
+                limit: itemCount,
+                startAfter :undefined,
+                orderBy: sortByProperty,
+                order: currentSort
+            });
         } else {
-            dataSource.fetchCollection<M>(
-                collectionPath,
+            dataSource.fetchCollection<M>({
+                path:collectionPath,
                 schema,
-                filterValues,
-                itemCount,
-                undefined,
-                sortByProperty,
-                currentSort)
+                filter: filterValues,
+                limit: itemCount,
+                startAfter: undefined,
+                orderBy: sortByProperty,
+                order: currentSort
+            })
                 .then(onEntitiesUpdate)
                 .catch(onError);
             return () => {

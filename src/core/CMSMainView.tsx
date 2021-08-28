@@ -8,7 +8,7 @@ import CircularProgressCenter from "./internal/CircularProgressCenter";
 import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./internal/CMSAppBar";
-import {  useCMSAppContext } from "../contexts";
+import { useCMSAppContext } from "../contexts";
 import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
 import LocalizationProvider from "@material-ui/lab/LocalizationProvider";
 
@@ -101,8 +101,8 @@ export function CMSMainView(props: CMSMainViewProps) {
         toolbarExtraWidget,
     } = props;
 
-    const cmsAppContext = useCMSAppContext();
-    const locale = cmsAppContext.cmsAppConfig.locale;
+    const context = useCMSAppContext();
+    const locale = context.locale;
 
     const dateUtilsLocale = locale ? locales[locale] : undefined;
 
@@ -113,16 +113,16 @@ export function CMSMainView(props: CMSMainViewProps) {
     const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
     const closeDrawer = () => setDrawerOpen(false);
 
-    if (!cmsAppContext.navigation) {
+    if (!context.navigation) {
         return <CircularProgressCenter/>;
     }
 
-    if (cmsAppContext.navigationLoadingError) {
+    if (context.navigationLoadingError) {
         return (
             <div>
                 <p>There was an error while loading
                     your navigation config</p>
-                <p>{cmsAppContext.navigationLoadingError}</p>
+                <p>{context.navigationLoadingError}</p>
             </div>
         );
     }
@@ -136,7 +136,7 @@ export function CMSMainView(props: CMSMainViewProps) {
                 <nav>
                     <CMSDrawer logo={logo}
                                drawerOpen={drawerOpen}
-                               navigation={cmsAppContext.navigation}
+                               navigation={context.navigation}
                                closeDrawer={closeDrawer}/>
                 </nav>
 
@@ -148,7 +148,7 @@ export function CMSMainView(props: CMSMainViewProps) {
                     <main
                         className={classes.content}>
                         <CMSRouterSwitch
-                            navigation={cmsAppContext.navigation}/>
+                            navigation={context.navigation}/>
                     </main>
                 </div>
 

@@ -1,4 +1,6 @@
 import React from "react";
+
+import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
 import {
     Authenticator,
     buildCollection,
@@ -7,10 +9,10 @@ import {
     EntityCollection,
     Navigation,
     NavigationBuilder,
-    NavigationBuilderProps
+    NavigationBuilderProps,
+    User
 } from "@camberi/firecms";
 
-import firebase from "firebase";
 import { IconButton, Tooltip } from "@material-ui/core";
 import { GitHub } from "@material-ui/icons";
 
@@ -86,7 +88,7 @@ function SampleApp() {
                 builder: () => "Content of a generated column"
             }
         ],
-        properties: ["first_name", "last_name", "email", "liked_products",  "picture", "phone", "sample_additional",]
+        properties: ["first_name", "last_name", "email", "liked_products", "picture", "phone", "sample_additional"]
     });
 
     const blogCollection = buildCollection({
@@ -98,7 +100,7 @@ function SampleApp() {
             additionalColumns: [sampleAdditionalExportColumn]
         },
         defaultSize: "l",
-        properties: ["name", "header_image", "status", "content", "reviewed",  "gold_text"],
+        properties: ["name", "header_image", "status", "content", "reviewed", "gold_text"],
         description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
         textSearchDelegate: blogSearchDelegate,
         initialFilter: {
@@ -117,7 +119,7 @@ function SampleApp() {
         }]
     });
 
-    const myAuthenticator: Authenticator = (user?: firebase.User) => {
+    const myAuthenticator: Authenticator = (user?: User) => {
         console.log("Allowing access to", user?.email);
         return true;
     };
@@ -182,8 +184,8 @@ function SampleApp() {
         name={"My Online Shop"}
         authentication={myAuthenticator}
         signInOptions={[
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            firebase.auth.EmailAuthProvider.PROVIDER_ID
+            GoogleAuthProvider.PROVIDER_ID,
+            EmailAuthProvider.PROVIDER_ID
         ]}
         allowSkipLogin={true}
         logo={logo}

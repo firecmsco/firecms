@@ -1,12 +1,22 @@
 import React, { useRef, useState } from "react";
 import "react-base-table/styles.css";
 
-import { EntitySchema, Property, WhereFilterOp } from "../../models";
+import { Property, WhereFilterOp } from "../../models";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { CMSColumn, Sort } from "../common";
-import { Badge, Box, Button, Divider, alpha, Grid, IconButton, Popover, Theme } from "@material-ui/core";
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import {
+    alpha,
+    Badge,
+    Box,
+    Button,
+    Divider,
+    Grid,
+    IconButton,
+    Popover,
+    Theme
+} from "@material-ui/core";
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowDropDownCircleIcon from "@material-ui/icons/ArrowDropDownCircle";

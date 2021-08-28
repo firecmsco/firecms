@@ -1,7 +1,7 @@
-import firebase from "firebase/app";
 import "firebase/auth";
 import { EntityCollection } from "./collections";
 import { AuthController } from "../contexts";
+import { User } from "./user";
 
 
 /**
@@ -16,7 +16,7 @@ export type NavigationBuilder =
 /**
  * @category Navigation
  */
-export type NavigationBuilderProps = { user: firebase.User | null, authController: AuthController }
+export type NavigationBuilderProps = { user: User | null, authController: AuthController }
 
 /**
  * In this interface you define the main navigation entries of the CMS

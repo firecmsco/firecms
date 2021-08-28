@@ -10,7 +10,7 @@ import {
     Paper,
     Select
 } from "@material-ui/core";
-import { SelectChangeEvent } from '@material-ui/core/Select';
+import { SelectChangeEvent } from "@material-ui/core/Select";
 
 import { formStyles } from "../styles";
 import { pick } from "../../util/objects";

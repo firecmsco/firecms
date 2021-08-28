@@ -19,8 +19,8 @@ export default function TimestampPreview({
 
 
     const appConfig: CMSAppContext | undefined = useCMSAppContext();
-    const dateUtilsLocale = appConfig?.cmsAppConfig.locale ? locales[appConfig?.cmsAppConfig.locale] : undefined;
-    const dateFormat: string = appConfig?.cmsAppConfig?.dateTimeFormat ?? defaultDateFormat;
+    const dateUtilsLocale = appConfig?.locale ? locales[appConfig?.locale] : undefined;
+    const dateFormat: string = appConfig?.dateTimeFormat ?? defaultDateFormat;
     const formattedDate = value ? format(value, dateFormat, { locale: dateUtilsLocale }) : "";
 
     return (

@@ -1,5 +1,3 @@
-import { CMSAppContext } from "./CMSAppContext";
-
 export type {
     SnackbarController, SnackbarMessageType
 } from "./SnackbarContext";

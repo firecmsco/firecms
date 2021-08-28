@@ -13,18 +13,14 @@ import {
 } from "@material-ui/core";
 
 import makeStyles from "@material-ui/styles/makeStyles";
-
-import firebase from "firebase/app";
 import "firebase/storage";
 
 import {
     ArrayProperty,
     FieldProps,
-    getDownloadURL,
     Property,
     StorageMeta,
-    StringProperty,
-    uploadFile
+    StringProperty
 } from "../../models";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -39,6 +35,7 @@ import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
 import { useClearRestoreValue } from "../../hooks";
 import { isReadOnly } from "../../models/utils";
+import { useStorageSource } from "../../hooks/useStorageSource";
 
 export const useStyles = makeStyles((theme: Theme) => ({
     dropZone: {
@@ -242,7 +239,7 @@ interface StorageFieldItem {
     storagePathOrDownloadUrl?: string;
     file?: File;
     fileName?: string;
-    metadata?: firebase.storage.UploadMetadata,
+    metadata?: any,
     size: PreviewSize
 }
 
@@ -274,6 +271,8 @@ export function StorageUpload({
                                   storagePathBuilder
                               }: StorageUploadProps) {
 
+    const storage = useStorageSource();
+
     if (multipleFilesSupported) {
         const arrayProperty = property as ArrayProperty<string[]>;
         if (arrayProperty.of) {
@@ -285,7 +284,7 @@ export function StorageUpload({
         }
     }
 
-    const metadata: firebase.storage.UploadMetadata | undefined = storageMeta?.metadata;
+    const metadata: any | undefined = storageMeta?.metadata;
 
     const classes = useStyles();
 
@@ -369,13 +368,13 @@ export function StorageUpload({
 
     const onFileUploadComplete = async (uploadedPath: string,
                                         entry: StorageFieldItem,
-                                        metadata?: firebase.storage.UploadMetadata) => {
+                                        metadata?: any) => {
 
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
         let downloadUrl: string | undefined;
         if (storageMeta.storeUrl) {
-            downloadUrl = await getDownloadURL(uploadedPath);
+            downloadUrl = await storage.getDownloadURL(uploadedPath);
         }
 
         let newValue: StorageFieldItem[];
@@ -614,11 +613,11 @@ export function StorageEntry({
 
 interface StorageUploadItemProps {
     storagePath: string;
-    metadata?: firebase.storage.UploadMetadata,
+    metadata?: any,
     entry: StorageFieldItem,
     onFileUploadComplete: (value: string,
                            entry: StorageFieldItem,
-                           metadata?: firebase.storage.UploadMetadata) => void;
+                           metadata?: any) => void;
     size: PreviewSize;
 }
 
@@ -630,11 +629,14 @@ export function StorageUploadProgress({
                                           size
                                       }: StorageUploadItemProps) {
 
+
+    const storage = useStorageSource();
+
     const classes = useStyles();
     const snackbarContext = useSnackbarController();
 
     const [error, setError] = React.useState<string>();
-    const [progress, setProgress] = React.useState<number>(-1);
+    const [loading, setLoading] = React.useState<boolean>(false);
 
     useEffect(() => {
         if (entry.file)
@@ -644,35 +646,22 @@ export function StorageUploadProgress({
     function upload(file: File, fileName?: string) {
 
         setError(undefined);
-        setProgress(0);
+        setLoading(true);
 
-        const uploadTask = uploadFile(file, fileName, storagePath, metadata);
-        uploadTask.on("state_changed", (snapshot) => {
-            const currentProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setProgress(currentProgress);
-            console.debug("Upload is " + currentProgress + "% done");
-            switch (snapshot.state) {
-                case firebase.storage.TaskState.PAUSED: // or 'paused'
-                    console.debug("Upload is paused");
-                    break;
-                case firebase.storage.TaskState.RUNNING: // or 'running'
-                    console.debug("Upload is running");
-                    break;
-            }
-        }, (e: any) => {
+        storage.uploadFile(file, fileName, storagePath, metadata)
+            .then(({ path }) => {
+                console.debug("Upload successful",);
+                setLoading(false);
+                onFileUploadComplete(path, entry, metadata);
+            }).catch(e => {
             console.error("Upload error", e);
             setError(e.message);
-            setProgress(-1);
+            setLoading(false);
             snackbarContext.open({
                 type: "error",
                 title: "Error uploading file",
                 message: e.message
             });
-
-        }, () => {
-            const fullPath = uploadTask.snapshot.ref.fullPath;
-            setProgress(-1);
-            onFileUploadComplete(fullPath, entry, metadata);
         });
     }
 
@@ -683,9 +672,8 @@ export function StorageUploadProgress({
                    className={size === "regular" ? classes.uploadItem : classes.uploadItemSmall}
                    variant={"outlined"}>
 
-                {progress > -1 &&
-                <LinearProgress variant="indeterminate"
-                                value={progress}/>}
+                {loading &&
+                <LinearProgress variant="indeterminate"/>}
 
                 {error && <p>Error uploading file: {error}</p>}
 

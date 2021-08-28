@@ -1,15 +1,37 @@
-import {
-    Entity,
-    EntityReference,
-    EntitySchema,
-    EntityStatus,
-    EntityValues
-} from "../entities";
-import { FilterValues } from "../collections";
-import { CMSAppContext } from "../../contexts";
-import { Property } from "../properties";
+import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
+import { FilterValues } from "./collections";
+import { CMSAppContext } from "../contexts";
+import { Property } from "./properties";
 
-export type SaveEntityProps<M extends { [Key: string]: any }> = {
+export type FetchEntityProps<M> = {
+    path: string,
+    entityId: string,
+    schema: EntitySchema<M>
+};
+
+export type ListenEntityProps<M> = FetchEntityProps<M> & {
+    onUpdate: (entity: Entity<M>) => void,
+    onError?: (error: Error) => void,
+};
+
+export type FetchCollectionProps<M> = {
+    path: string,
+    schema: EntitySchema<M>,
+    filter?: FilterValues<M>,
+    limit?: number,
+    startAfter?: any[],
+    orderBy?: string,
+    order?: "desc" | "asc"
+};
+
+export type ListenCollectionProps<M> =
+    FetchCollectionProps<M> &
+    {
+        onUpdate: (entities: Entity<M>[]) => void,
+        onError?: (error: Error) => void,
+    };
+
+export type SaveEntityProps<M> = {
     collectionPath: string,
     id: string | undefined,
     values: Partial<EntityValues<M>>,
@@ -22,7 +44,7 @@ export type SaveEntityProps<M extends { [Key: string]: any }> = {
     context: CMSAppContext;
 };
 
-export type DeleteEntityProps<M extends { [Key: string]: any }> = {
+export type DeleteEntityProps<M> = {
     entity: Entity<M>;
     schema: EntitySchema<M>;
     onDeleteSuccess?: (entity: Entity<M>) => void;
@@ -39,14 +61,15 @@ export type DeleteEntityProps<M extends { [Key: string]: any }> = {
  */
 export interface DataSource {
 
-    fetchCollection<M extends { [Key: string]: any }>(
-        path: string,
-        schema: EntitySchema<M>,
-        filter?: FilterValues<M>,
-        limit?: number,
-        startAfter?: any[],
-        orderBy?: string,
-        order?: "desc" | "asc"
+    fetchCollection<M>({
+                           path,
+                           schema,
+                           filter,
+                           limit,
+                           startAfter,
+                           orderBy,
+                           order
+                       }: FetchCollectionProps<M>
     ): Promise<Entity<M>[]>;
 
     /**
@@ -65,16 +88,18 @@ export interface DataSource {
      * @see useCollectionFetch if you need this functionality implemented as a hook
      * @category Firestore
      */
-    listenCollection?<M extends { [Key: string]: any }>(
-        path: string,
-        schema: EntitySchema<M>,
-        onSnapshot: (entity: Entity<M>[]) => void,
-        onError?: (error: Error) => void,
-        filter?: FilterValues<M>,
-        limit?: number,
-        startAfter?: any[],
-        orderBy?: string,
-        order?: "desc" | "asc"
+    listenCollection?<M>(
+        {
+            path,
+            schema,
+            filter,
+            limit,
+            startAfter,
+            orderBy,
+            order,
+            onUpdate,
+            onError
+        }: ListenCollectionProps<M>
     ): () => void;
 
     /**
@@ -84,10 +109,11 @@ export interface DataSource {
      * @param schema
      * @category Firestore
      */
-    fetchEntity<M extends { [Key: string]: any }>(
-        path: string,
-        entityId: string,
-        schema: EntitySchema<M>
+    fetchEntity<M>({
+                       path,
+                       entityId,
+                       schema
+                   }: FetchEntityProps<M>
     ): Promise<Entity<M>>;
 
     /**
@@ -100,13 +126,13 @@ export interface DataSource {
      * @return Function to cancel subscription
      * @category Firestore
      */
-    listenEntity?<M extends { [Key: string]: any }>(
-        path: string,
-        entityId: string,
-        schema: EntitySchema<M>,
-        onSnapshot: (entity: Entity<M>) => void,
-        onError?: (error: Error) => void,
-    ): () => void;
+    listenEntity?<M>({
+                         path,
+                         entityId,
+                         schema,
+                         onUpdate,
+                         onError
+                     }: ListenEntityProps<M>): () => void;
 
     /**
      * Save entity to the specified path. Note that Firestore does not allow
@@ -122,7 +148,7 @@ export interface DataSource {
      * @param onSaveSuccessHookError
      * @category Firestore
      */
-    saveEntity<M extends { [Key: string]: any }>(
+    saveEntity<M>(
         {
             collectionPath,
             id,
@@ -149,7 +175,7 @@ export interface DataSource {
      * @return was the whole deletion flow successful
      * @category Firestore
      */
-    deleteEntity<M extends { [Key: string]: any }>(
+    deleteEntity<M>(
         {
             entity,
             schema,

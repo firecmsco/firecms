@@ -2,7 +2,8 @@ import React, { createElement } from "react";
 import {
     ArrayProperty,
     BooleanProperty,
-    CMSType, EntityReference,
+    CMSType,
+    EntityReference,
     MapProperty,
     NumberProperty,
     ReferenceProperty,

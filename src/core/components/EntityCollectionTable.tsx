@@ -16,7 +16,7 @@ import {
     AdditionalColumnDelegate,
     CollectionSize,
     Entity,
-    EntityCollection,
+    EntityCollection
 } from "../../models";
 import CollectionTable from "../../collection/components/CollectionTable";
 
@@ -103,7 +103,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             id: getSubcollectionColumnId(subcollection),
             title: subcollection.name,
             width: 200,
-            builder: (entity: Entity<any>) => (
+            builder: ({ entity }) => (
                 <Button color={"primary"}
                         onClick={(event) => {
                             event.stopPropagation();

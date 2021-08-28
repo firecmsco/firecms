@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-    Entity,
-    EntitySchema,
-    TextSearchDelegate
-} from "../models";
+import { Entity, EntitySchema, TextSearchDelegate } from "../models";
 import { useDataSource } from "./useDataSource";
 
 /**
@@ -60,7 +56,11 @@ export function useTextSearch<M extends { [Key: string]: any }>(
                 const promises: Promise<Entity<M> | null>[] = ids
                     .map(async (id) => {
                             try {
-                                return await dataSource.fetchEntity(collectionPath, id, schema);
+                                return await dataSource.fetchEntity({
+                                    path: collectionPath,
+                                    entityId: id,
+                                    schema
+                                });
                             } catch (e) {
                                 console.error(e);
                                 return null;

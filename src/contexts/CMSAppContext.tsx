@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
-import { Navigation } from "../models";
-import {
-    SchemasRegistryController,
-    useSchemasRegistry
-} from "./SchemaRegistry";
-import { CMSAppProviderProps } from "../core/CMSAppProvider";
+import { DataSource, Locale, Navigation, SchemaResolver } from "../models";
+import { SchemasRegistryController } from "./SchemaRegistry";
+import { StorageSource } from "../models/storage";
+import { AuthController } from "./AuthController";
+import { EntityLinkBuilder } from "../core/CMSAppProvider";
 
 
 /**
@@ -15,14 +14,37 @@ export interface CMSAppContext {
     navigation?: Navigation;
     navigationLoadingError?: Error;
     schemasRegistryController: SchemasRegistryController;
-    cmsAppConfig: CMSAppProviderProps;
-    firebaseConfig: Object;
+    schemaResolver?: SchemaResolver;
+
+    /**
+     * Format of the dates in the CMS.
+     * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
+     */
+    dateTimeFormat?: string;
+
+    /**
+     * Locale of the CMS, currently only affecting dates
+     */
+    locale?: Locale;
+
+    /**
+     * Connector to your database
+     */
+    dataSource: DataSource;
+
+    storageSource: StorageSource;
+
+    authController: AuthController;
+
+    entityLinkBuilder?: EntityLinkBuilder;
+
 }
 
 const CMSAppContextInstance = React.createContext<CMSAppContext>({
     schemasRegistryController: {} as any,
-    cmsAppConfig: {} as any,
-    firebaseConfig: {}
+    dataSource: {} as any,
+    storageSource: {} as any,
+    authController: {} as any,
 });
 
 /**
@@ -40,34 +62,14 @@ export const useCMSAppContext = () => useContext(CMSAppContextInstance);
  *
  * @category Core
  */
-export interface CMSAppContextProps {
-    cmsAppConfig: CMSAppProviderProps;
-    children: React.ReactNode;
-    firebaseConfig: Object;
-    navigation?: Navigation;
-    navigationLoadingError?: Error;
-    schemasRegistryController: SchemasRegistryController;
-}
-
-export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
-                                                                        children,
-                                                                        firebaseConfig,
-                                                                        cmsAppConfig,
-                                                                        navigation,
-                                                                        navigationLoadingError,
-                                                                        schemasRegistryController
-                                                                    }) => {
-
+export const CMSAppContextProvider: React.FC<React.PropsWithChildren<CMSAppContext>> = ({
+                                                                                            children,
+                                                                                            ...context
+                                                                                        }) => {
 
     return (
         <CMSAppContextInstance.Provider
-            value={{
-                cmsAppConfig,
-                firebaseConfig,
-                navigation,
-                navigationLoadingError,
-                schemasRegistryController,
-            }}
+            value={context}
         >
             {children}
         </CMSAppContextInstance.Provider>

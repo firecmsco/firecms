@@ -19,8 +19,8 @@ export function EntitySideDialogs<M extends { [Key: string]: any }>() {
     const sideEntityController = useSideEntityController();
     const schemasRegistry = useSchemasRegistry();
 
-    const cmsAppContext = useCMSAppContext();
-    const locale = cmsAppContext.cmsAppConfig.locale;
+    const context = useCMSAppContext();
+    const locale = context.locale;
     const dateUtilsLocale = locale ? locales[locale] : undefined;
 
     const sidePanels = sideEntityController.sidePanels;

@@ -1,9 +1,4 @@
-import {
-    CMSView, Entity,
-    EntityCollection,
-    EntityCustomView,
-    Navigation
-} from "../models";
+import { EntityCollection, EntityCustomView, Navigation } from "../models";
 
 const DATA_PATH = `/c`;
 

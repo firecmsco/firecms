@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 
 import { renderSkeletonImageThumbnail } from "./SkeletonComponent";
-import { getDownloadURL } from "../../models";
 import UrlComponentPreview from "./UrlComponentPreview";
 import { PreviewComponentProps } from "../preview_component_props";
+import { useStorageSource } from "../../hooks/useStorageSource";
 
 /**
  * @category Preview components
@@ -14,6 +14,7 @@ export default function StorageThumbnail({
                                      property,
                                      size
                                  }: PreviewComponentProps<string>) {
+    const storage = useStorageSource();
 
     const storagePathOrDownloadUrl = value;
 
@@ -26,7 +27,7 @@ export default function StorageThumbnail({
         if (property.config?.storageMeta?.storeUrl)
             setUrl(storagePathOrDownloadUrl);
         else if (storagePathOrDownloadUrl)
-            getDownloadURL(storagePathOrDownloadUrl)
+            storage.getDownloadURL(storagePathOrDownloadUrl)
                 .then(function(downloadURL) {
                     if (!unmounted)
                         setUrl(downloadURL);

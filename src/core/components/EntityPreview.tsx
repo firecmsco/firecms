@@ -9,10 +9,10 @@ import {
     TableContainer,
     TableRow,
     Theme,
-    Typography,
+    Typography
 } from "@material-ui/core";
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 import {
     buildPropertyFrom,
     Entity,
@@ -88,11 +88,12 @@ export default function EntityPreview<M extends { [Key: string]: any }>(
                         <TableCell className={classes.valuePreview}>
                             <Box display="flex" alignItems="center">
                                 {entity.id}
-                                {appConfig?.firebaseConfig &&
-                                <a href={`https://console.firebase.google.com/project/${(appConfig.firebaseConfig as any)["projectId"]}/firestore/data/${entity.path}/${entity.id}`}
+                                {appConfig?.entityLinkBuilder &&
+                                <a href={appConfig.entityLinkBuilder({ entity })}
                                    rel="noopener noreferrer"
                                    target="_blank">
-                                    <IconButton aria-label="go-to-firestore" size="large">
+                                    <IconButton aria-label="go-to-firestore"
+                                                size="large">
                                         <OpenInNewIcon
                                             fontSize={"small"}/>
                                     </IconButton>

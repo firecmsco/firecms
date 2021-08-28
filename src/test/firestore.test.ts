@@ -1,10 +1,12 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { Timestamp } from "firebase/firestore";
 import { productSchema } from "./test_site_config";
 import { initEntityValues } from "../models/utils";
-import { FirestoreDatasource } from "../models/data/firestore_datasource";
+import { useFirestoreDataSource } from "../models/firebase_implementations/firestore_datasource";
 import { EntitySchema } from "../models";
 
+const firebaseApp = initializeApp({});
+const firestoreDatasource = useFirestoreDataSource(firebaseApp);
 
 it("timestamp conversion", () => {
 
@@ -18,9 +20,9 @@ it("timestamp conversion", () => {
         }
     };
 
-    const timestamp = firebase.firestore.Timestamp.now();
+    const timestamp = Timestamp.now();
     const date = timestamp.toDate();
-    expect(FirestoreDatasource.firestoreToCMSModel({ created_at: timestamp }, schema, "any")
+    expect((firestoreDatasource as any).firestoreToCMSModel({ created_at: timestamp }, schema, "any")
     ).toEqual({ created_at: date });
 });
 
@@ -39,11 +41,11 @@ it("timestamp array conversion", () => {
         }
     };
 
-    const timestamp = firebase.firestore.Timestamp.now();
+    const timestamp = Timestamp.now();
     const date = timestamp.toDate();
 
     expect(
-        FirestoreDatasource.firestoreToCMSModel({ my_array: [{ created_at: timestamp }] }, schema, "any")
+        (firestoreDatasource as any).firestoreToCMSModel({ my_array: [{ created_at: timestamp }] }, schema, "any")
     ).toEqual({ myArray: [{ created_at: date }] });
 
 });

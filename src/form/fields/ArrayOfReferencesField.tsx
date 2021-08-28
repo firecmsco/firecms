@@ -1,8 +1,4 @@
-import {
-    Entity, EntityReference,
-    FieldProps,
-    Property
-} from "../../models";
+import { Entity, EntityReference, FieldProps, Property } from "../../models";
 import {
     Box,
     Button,

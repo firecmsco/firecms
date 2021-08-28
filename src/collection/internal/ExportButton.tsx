@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import {
     buildPropertyFrom,
-    Entity, EntityReference,
+    Entity,
+    EntityReference,
     EntitySchema,
     ExportConfig,
     Properties,
@@ -103,14 +104,11 @@ export default function ExportButton<M extends { [Key: string]: any }>({
             setDataLoadingError(error);
         };
 
-        dataSource.fetchCollection<M>(
-            collectionPath,
+        dataSource.fetchCollection<M>({
+            path: collectionPath,
             schema,
-            undefined,
-            fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT,
-            undefined,
-            undefined,
-            undefined)
+            limit: fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT,
+        })
             .then(updateEntities)
             .catch(onFetchError);
 

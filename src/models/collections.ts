@@ -1,10 +1,10 @@
 import { TextSearchDelegate } from "./text_search_delegate";
 import { Entity, EntitySchema } from "./entities";
 import React from "react";
-import firebase from "firebase/app";
 import "firebase/auth";
 import { AuthController } from "../contexts/AuthController";
 import { CMSAppContext } from "../contexts";
+import { User } from "./user";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -214,7 +214,7 @@ export type PermissionsBuilder<M extends { [Key: string]: any }> =
     /**
      * Logged in user
      */
-    user: firebase.User | null;
+    user: User | null;
     /**
      * Entity being edited, might be null if it is new
      */
@@ -260,7 +260,10 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
     /**
      * Builder for the content of the cell for this column
      */
-    builder: (entity: Entity<M>) => React.ReactNode;
+    builder: ({ entity, context }: {
+        entity: Entity<M>,
+        context: CMSAppContext;
+    }) => React.ReactNode;
 
 }
 

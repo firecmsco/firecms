@@ -1,8 +1,8 @@
 import React from "react";
 import {
+    alpha,
     Box,
     CircularProgress,
-    alpha,
     Hidden,
     IconButton,
     InputBase,
@@ -11,11 +11,11 @@ import {
     Theme,
     Tooltip,
     useMediaQuery,
-    useTheme,
+    useTheme
 } from "@material-ui/core";
 
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 
 import { CollectionSize, EntitySchema } from "../../models";
 import SearchBar from "./SearchBar";

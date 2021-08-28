@@ -13,10 +13,10 @@ import {
     Slide,
     Theme,
     Toolbar,
-    Typography,
+    Typography
 } from "@material-ui/core";
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles";
+import makeStyles from "@material-ui/styles/makeStyles";
 import MenuIcon from "@material-ui/icons/Menu";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";

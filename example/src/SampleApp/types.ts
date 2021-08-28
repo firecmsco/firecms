@@ -1,5 +1,4 @@
-import firebase from "firebase";
-import firestore = firebase.firestore;
+import { EntityReference } from "@camberi/firecms";
 
 export type Product = {
     name: string;
@@ -13,14 +12,14 @@ export type Product = {
     description: string;
     amazon_link: string;
     images: string[];
-    related_products: firestore.DocumentReference[];
+    related_products: EntityReference[];
     publisher: {
         name: string;
 
     },
     available_locales: string[],
     uppercase_name: string,
-    added_on: firestore.Timestamp;
+    added_on: Date;
 }
 
 

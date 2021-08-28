@@ -8,8 +8,8 @@ import {
     Box,
     FormControl,
     IconButton,
-    Input,
     MenuItem,
+    OutlinedInput,
     Select as MuiSelect
 } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -123,7 +123,7 @@ export default function StringNumberFilterField({
             <Box flexGrow={1} ml={1}>
 
                 <FormControl fullWidth>
-                    {!enumValues && <Input
+                    {!enumValues && <OutlinedInput
                         fullWidth
                         key={`filter_${name}`}
                         type={dataType === "number" ? "number" : undefined}

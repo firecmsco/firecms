@@ -8,13 +8,13 @@ import {
     Box,
     FormControl,
     IconButton,
+    Input,
     MenuItem,
-    Select as MuiSelect,
-    Input
+    Select as MuiSelect
 } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import Tooltip from "@material-ui/core/Tooltip/Tooltip";
-import DateTimePicker  from "@material-ui/lab/DateTimePicker";
+import DateTimePicker from "@material-ui/lab/DateTimePicker";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { useInputStyles } from "../fields/styles";
 
