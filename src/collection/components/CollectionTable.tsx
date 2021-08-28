@@ -4,7 +4,7 @@ import Measure, { ContentRect } from "react-measure";
 import "react-base-table/styles.css";
 import { Box, Paper, Typography } from "@material-ui/core";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import { useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import {
     AdditionalColumnDelegate,
@@ -43,6 +43,7 @@ import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
 import { useCollectionFetch } from "../../hooks";
 import { useTextSearch } from "../../hooks/useTextSearch";
 import CollectionTableHeader from "../internal/CollectionTableHeader";
+import { useBreadcrumbsContext } from "../../contexts";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -152,15 +153,15 @@ export default function CollectionTable<M extends { [Key: string]: any },
         data: currentData
     });
 
-    const history = useHistory();
     const updatePopup = (value: boolean) => {
         setFocused(!value);
         setFormPopupOpen(value);
     };
 
-    history.listen(() => {
+    const { pathname } = useLocation();
+    React.useEffect(() => {
         setFormPopupOpen(false);
-    });
+    }, [pathname]);
 
     const loadNextPage = () => {
         if (!paginationEnabled || dataLoading || noMoreToLoad)

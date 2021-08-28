@@ -7,6 +7,7 @@ import {
 import { getSidePanelKey } from "./utils";
 
 const DEFAULT_SCHEMA_CONTROLLER = {
+    initialised: false,
     getSchemaConfig: (collectionPath: string, entityId?: string) => undefined,
     getCollectionConfig: (collectionPath: string, entityId?: string) => {
         throw Error("Reached wrong implementation");
@@ -28,6 +29,11 @@ const DEFAULT_SCHEMA_CONTROLLER = {
  * to specific entities.
  */
 export type SchemasRegistryController = {
+
+    /**
+     * Is the registry ready to be used
+     */
+    initialised: boolean;
     /**
      * Get props for path
      */
@@ -72,9 +78,11 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
                                                                                 schemaResolver
                                                                             }) => {
 
+    const initialised = collections !== undefined;
     const viewsRef = useRef<Record<string, Partial<SchemaConfig & { overrideSchemaResolver?: boolean }>>>({});
 
     const getSchemaConfig = (collectionPath: string, entityId?: string): SchemaConfig => {
+
         const sidePanelKey = getSidePanelKey(collectionPath, entityId);
 
         let result: Partial<SchemaConfig> = {};
@@ -160,6 +168,7 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
     return (
         <SchemaRegistryContext.Provider
             value={{
+                initialised,
                 getSchemaConfig,
                 getCollectionConfig,
                 setOverride,

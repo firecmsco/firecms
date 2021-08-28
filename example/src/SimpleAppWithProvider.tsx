@@ -109,8 +109,7 @@ export function SimpleAppWithProvider() {
             navigation={navigation}
             dataSource={FirestoreDatasource}
             firebaseConfig={firebaseConfig}>
-            <CMSMainView
-                name={"My Online Shop"}/>
+            {() => <CMSMainView name={"My Online Shop"}/>}
         </CMSAppProvider>
     );
 }

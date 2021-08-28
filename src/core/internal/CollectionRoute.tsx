@@ -1,8 +1,8 @@
 import React from "react";
-import { EntityCollection, EntitySchema } from "../../models";
+import { EntityCollection } from "../../models";
 import createStyles from '@material-ui/styles/createStyles';
 import makeStyles from '@material-ui/styles/makeStyles';
-import { useRouteMatch } from "react-router-dom";
+import { useLocation  } from "react-router-dom";
 import { useBreadcrumbsContext } from "../../contexts";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";
 
@@ -27,16 +27,16 @@ function CollectionRoute<M extends { [Key: string]: any }>({
                                                                           }
                                                                               : CollectionRouteProps<M>) {
 
-    const { url } = useRouteMatch();
+    const { pathname } = useLocation();
     const breadcrumbsContext = useBreadcrumbsContext();
     React.useEffect(() => {
         breadcrumbsContext.set({
             breadcrumbs: [{
                 title: collectionConfig.name,
-                url: url
+                url: pathname
             }]
         });
-    }, [url]);
+    }, [pathname]);
 
     const classes = useStyles();
 

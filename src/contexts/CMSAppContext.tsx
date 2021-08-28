@@ -40,12 +40,13 @@ export const useCMSAppContext = () => useContext(CMSAppContextInstance);
  *
  * @category Core
  */
-interface CMSAppContextProps {
+export interface CMSAppContextProps {
     cmsAppConfig: CMSAppProviderProps;
     children: React.ReactNode;
     firebaseConfig: Object;
     navigation?: Navigation;
     navigationLoadingError?: Error;
+    schemasRegistryController: SchemasRegistryController;
 }
 
 export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
@@ -54,9 +55,9 @@ export const CMSAppContextProvider: React.FC<CMSAppContextProps> = ({
                                                                         cmsAppConfig,
                                                                         navigation,
                                                                         navigationLoadingError,
+                                                                        schemasRegistryController
                                                                     }) => {
 
-    const schemasRegistryController = useSchemasRegistry();
 
     return (
         <CMSAppContextInstance.Provider

@@ -1,16 +1,14 @@
 import React from "react";
-import firebase from "firebase/app";
-import "firebase/auth";
 
-import { Theme} from "@material-ui/core";
-import {createStyles, makeStyles} from "@material-ui/styles";
+import { Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/styles";
+
 
 import CircularProgressCenter from "./internal/CircularProgressCenter";
 import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./internal/CMSAppBar";
-import { useAuthController, useCMSAppContext } from "../contexts";
-import { LoginView } from "./LoginView";
+import {  useCMSAppContext } from "../contexts";
 import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
 import LocalizationProvider from "@material-ui/lab/LocalizationProvider";
 
@@ -48,9 +46,6 @@ export interface CMSMainViewProps {
 
 }
 
-const DEFAULT_SIGN_IN_OPTIONS = [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID
-];
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -104,11 +99,9 @@ export function CMSMainView(props: CMSMainViewProps) {
         name,
         logo,
         toolbarExtraWidget,
-        allowSkipLogin
     } = props;
 
     const cmsAppContext = useCMSAppContext();
-    const signInOptions = cmsAppContext.cmsAppConfig.signInOptions ?? DEFAULT_SIGN_IN_OPTIONS;
     const locale = cmsAppContext.cmsAppConfig.locale;
 
     const dateUtilsLocale = locale ? locales[locale] : undefined;
@@ -120,64 +113,19 @@ export function CMSMainView(props: CMSMainViewProps) {
     const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
     const closeDrawer = () => setDrawerOpen(false);
 
-    const authController = useAuthController();
-
-    if (authController.authLoading) {
+    if (!cmsAppContext.navigation) {
         return <CircularProgressCenter/>;
     }
 
-    let view;
-    if (!authController.canAccessMainView) {
-        view = (
-            <LoginView
-                logo={logo}
-                skipLoginButtonEnabled={allowSkipLogin}
-                signInOptions={signInOptions}
-                firebaseConfig={cmsAppContext.firebaseConfig}/>
-        );
-    } else if (cmsAppContext.navigationLoadingError) {
-        view = (
+    if (cmsAppContext.navigationLoadingError) {
+        return (
             <div>
                 <p>There was an error while loading
                     your navigation config</p>
                 <p>{cmsAppContext.navigationLoadingError}</p>
             </div>
         );
-    } else {
-
-        if (!cmsAppContext.navigation) {
-            return <CircularProgressCenter/>;
-        }
-
-        const collections = cmsAppContext.navigation.collections;
-        const cmsViews = cmsAppContext.navigation.views;
-
-        view = (
-            <>
-                <nav>
-                    <CMSDrawer logo={logo}
-                               drawerOpen={drawerOpen}
-                               collections={collections}
-                               closeDrawer={closeDrawer}
-                               cmsViews={cmsViews}/>
-                </nav>
-
-                <div className={classes.main}>
-                    <CMSAppBar title={name}
-                               handleDrawerToggle={handleDrawerToggle}
-                               toolbarExtraWidget={toolbarExtraWidget}/>
-
-                    <main
-                        className={classes.content}>
-                        <CMSRouterSwitch
-                            collections={collections}
-                            views={cmsViews}/>
-                    </main>
-                </div>
-            </>
-        );
     }
-
 
     return (
         <LocalizationProvider
@@ -185,7 +133,25 @@ export function CMSMainView(props: CMSMainViewProps) {
             utils={DateFnsUtils}
             locale={dateUtilsLocale}>
             <DndProvider backend={HTML5Backend}>
-                {view}
+                <nav>
+                    <CMSDrawer logo={logo}
+                               drawerOpen={drawerOpen}
+                               navigation={cmsAppContext.navigation}
+                               closeDrawer={closeDrawer}/>
+                </nav>
+
+                <div className={classes.main}>
+
+                    <CMSAppBar title={name}
+                               handleDrawerToggle={handleDrawerToggle}
+                               toolbarExtraWidget={toolbarExtraWidget}/>
+                    <main
+                        className={classes.content}>
+                        <CMSRouterSwitch
+                            navigation={cmsAppContext.navigation}/>
+                    </main>
+                </div>
+
             </DndProvider>
         </LocalizationProvider>
     );

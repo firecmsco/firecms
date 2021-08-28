@@ -132,7 +132,7 @@ export const productSchema = buildSchema<any>({
             dataType: "boolean",
             title: "Available",
             columnWidth: 100,
-            description: "Test"
+            description: "Is this product available in the website"
         },
         price: ({ values }) => ({
             dataType: "number",

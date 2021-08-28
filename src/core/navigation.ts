@@ -1,8 +1,8 @@
 import {
-    CMSView,
+    CMSView, Entity,
     EntityCollection,
     EntityCustomView,
-    EntitySchema
+    Navigation
 } from "../models";
 
 const DATA_PATH = `/c`;
@@ -37,6 +37,10 @@ export function getCMSPathFrom(fullPath: string) {
 
 export function getRouterNewEntityPath(basePath: string) {
     return `${DATA_PATH}/${removeInitialAndTrailingSlashes(basePath)}#new`;
+}
+
+export function buildCollectionUrlPath(view: EntityCollection) {
+    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(view.relativePath)}`;
 }
 
 export function buildCollectionPath(view: EntityCollection) {
@@ -131,29 +135,29 @@ function getCollectionPathsCombinations(subpaths: string[]): string[] {
 
 }
 
-export type NavigationViewEntry<M>  =
+export type NavigationViewEntry<M> =
     | NavigationViewEntity<M>
     | NavigationViewCollection<M>
-    | NavigationViewCustom<M> ;
+    | NavigationViewCustom<M>;
 
-interface NavigationViewEntity<M>  {
+interface NavigationViewEntity<M> {
     type: "entity";
     entityId: string;
     collectionPath: string;
     fullPath: string;
-    parentCollection: EntityCollection<M> ;
+    parentCollection: EntityCollection<M>;
 }
 
-interface NavigationViewCollection<M>  {
+interface NavigationViewCollection<M> {
     type: "collection";
     fullPath: string;
-    collection: EntityCollection<M> ;
+    collection: EntityCollection<M>;
 }
 
 interface NavigationViewCustom<M> {
     type: "custom_view";
     fullPath: string;
-    view: EntityCustomView<M> ;
+    view: EntityCustomView<M>;
 }
 
 export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: any }>(props: {
@@ -177,7 +181,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
         const subpathCombination = subpathCombinations[i];
 
         const collection = allCollections && allCollections.find((entry) => entry.relativePath === subpathCombination);
-          if (collection) {
+        if (collection) {
             const collectionPath = currentFullPath && currentFullPath.length > 0
                 ? (currentFullPath + "/" + collection.relativePath)
                 : collection.relativePath;
@@ -199,7 +203,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                     fullPath: fullPath,
                     parentCollection: collection
                 });
-                if(nextSegments.length > 1){
+                if (nextSegments.length > 1) {
                     const newPath = nextSegments.slice(1).join("/");
                     const customViews = collection.schema.views;
                     const customView = customViews && customViews.find((entry) => entry.path === newPath);
@@ -212,8 +216,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                             fullPath: collectionPath,
                             view: customView
                         });
-                    }
-                    else if (collection.subcollections ) {
+                    } else if (collection.subcollections) {
                         result.push(...getNavigationEntriesFromPathInternal({
                             path: newPath,
                             customViews: customViews,
@@ -230,34 +233,33 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     return result;
 }
 
-export interface TopNavigationEntry {
+export interface NavigationEntry {
     url: string;
     name: string;
     description?: string;
     group?: string;
 }
 
-export function computeNavigation(navigation: EntityCollection[], cmsViews: CMSView[] | undefined, includeHiddenViews: boolean): {
-    navigationEntries: TopNavigationEntry[],
+export function computeNavigation(navigation:Navigation, includeHiddenViews: boolean): {
+    navigationEntries: NavigationEntry[],
     groups: string[]
 } {
-    const navigationEntries: TopNavigationEntry[] = [
-        ...navigation.map(view => ({
-            url: buildCollectionPath(view),
-            name: view.name,
-            description: view.description,
-            group: view.group
+    const navigationEntries: NavigationEntry[] = [
+        ...navigation.collections.map(collection => ({
+            url: buildCollectionUrlPath(collection),
+            name: collection.name,
+            group: collection.group
         })),
-        ...(cmsViews ?? []).map(cmsView =>
-            includeHiddenViews || !cmsView.hideFromNavigation ?
+        ...(navigation.views ?? []).map(view =>
+            includeHiddenViews || !view.hideFromNavigation ?
                 ({
-                    url: addInitialSlash(Array.isArray(cmsView.path) ? cmsView.path[0] : cmsView.path),
-                    name: cmsView.name,
-                    description: cmsView.description,
-                    group: cmsView.group
+                    url: addInitialSlash(Array.isArray(view.path) ? view.path[0] : view.path),
+                    name: view.name,
+                    description: view.description,
+                    group: view.group
                 })
                 : undefined)
-            .filter((view) => !!view) as TopNavigationEntry[]
+            .filter((view) => !!view) as NavigationEntry[]
     ];
 
     const groups: string[] = Array.from(new Set(

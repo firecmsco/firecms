@@ -474,14 +474,10 @@ function EntityView<M extends { [Key: string]: any }>({
 
                     </div>
 
-
+                    {/*TODO: This should be only on POP*/}
                     <Prompt
-                        message={(location, action) => {
-                            if (action === "POP" && isModified)
-                                return `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`;
-                            else return true;
-                        }
-                        }
+                        message={`You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`}
+                        when={isModified}
                     />
                 </>
         }

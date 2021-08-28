@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -18,21 +18,31 @@ import {
     useAuthHandler
 } from "../contexts/AuthController";
 import { SnackbarProvider } from "../contexts/SnackbarContext";
-import { SchemaRegistryProvider } from "../contexts/SchemaRegistry";
-import { CMSAppContextProvider } from "../contexts/CMSAppContext";
+import {
+    SchemaRegistryContext,
+    SchemaRegistryProvider
+} from "../contexts/SchemaRegistry";
+import {
+    CMSAppContext,
+    CMSAppContextProvider
+} from "../contexts/CMSAppContext";
 import { SideEntityProvider } from "../contexts/SideEntityController";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
-import { BrowserRouter as Router } from "react-router-dom";
 import { EntitySideDialogs } from "./internal/EntitySideDialogs";
 import { DataSource } from "../models/data/datasource";
-import { FirestoreDatasource } from "../models/data/firestore_datasource";
 
 
 /**
- * Main entry point that defines the CMS configuration
+ * Main CMS configuration.
  * @category Core
  */
 export interface CMSAppProviderProps {
+
+    /**
+     *
+     * @param props
+     */
+    children: (props: { navigation: Navigation, authController: AuthController, cmsAppContext: CMSAppContext }) => React.ReactNode;
 
     /**
      * Use this prop to specify the views that will be generated in the CMS.
@@ -52,15 +62,6 @@ export interface CMSAppProviderProps {
      * apply
      */
     authentication?: boolean | Authenticator;
-
-    /**
-     * List of sign in options that will be displayed in the login
-     * view if `authentication` is enabled. You can pass google providers strings,
-     * such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or full configuration
-     * objects such as specified in https://firebase.google.com/docs/auth/web/firebaseui
-     * Defaults to Google sign in only.
-     */
-    signInOptions?: Array<string | any>;
 
     /**
      * Firebase configuration of the project. This component is not in charge
@@ -89,23 +90,6 @@ export interface CMSAppProviderProps {
     locale?: Locale;
 
     /**
-     * Primary color of the theme of the CMS
-     */
-    primaryColor?: string;
-
-    /**
-     * Secondary color of the theme of the CMS
-     */
-    secondaryColor?: string
-
-    /**
-     * Font family string
-     * e.g.
-     * '"Roboto", "Helvetica", "Arial", sans-serif'
-     */
-    fontFamily?: string;
-
-    /**
      * Connector to your database
      */
     dataSource: DataSource;
@@ -121,16 +105,16 @@ export interface CMSAppProviderProps {
  * @constructor
  * @category Core
  */
-export function CMSAppProvider({
-                                   children,
-                                   navigation: navigationOrBuilder,
-                                   authentication,
-                                   firebaseConfig,
-                                   schemaResolver,
-                                   dataSource,
-                                   ...props
-                               }: PropsWithChildren<CMSAppProviderProps>) {
+export function CMSAppProvider(props: CMSAppProviderProps) {
 
+    const {
+        children,
+        navigation: navigationOrBuilder,
+        authentication,
+        firebaseConfig,
+        schemaResolver,
+        dataSource
+    } = props;
 
     const [navigation, setNavigation] = React.useState<Navigation | undefined>(undefined);
     const [navigationLoadingError, setNavigationLoadingError] = React.useState<Error | undefined>(undefined);
@@ -155,31 +139,34 @@ export function CMSAppProvider({
                 <SchemaRegistryProvider
                     collections={navigation?.collections}
                     schemaResolver={schemaResolver}>
-
-                    <CMSAppContextProvider
-                        cmsAppConfig={{
-                            navigation: navigationOrBuilder,
-                            authentication,
-                            firebaseConfig,
-                            schemaResolver,
-                            dataSource,
-                            ...props
+                    <SchemaRegistryContext.Consumer>
+                        {(schemasRegistryController) => {
+                            const cmsAppContext = {
+                                cmsAppConfig: props,
+                                firebaseConfig,
+                                navigation,
+                                navigationLoadingError,
+                                dataSource,
+                                schemasRegistryController,
+                            };
+                            return (
+                                <CMSAppContextProvider {...cmsAppContext}>
+                                    <SideEntityProvider
+                                        collections={navigation?.collections}>
+                                        <BreadcrumbsProvider>
+                                            {navigation && children({
+                                                navigation,
+                                                authController,
+                                                cmsAppContext
+                                            })}
+                                            <EntitySideDialogs/>
+                                        </BreadcrumbsProvider>
+                                    </SideEntityProvider>
+                                </CMSAppContextProvider>
+                            );
                         }}
-                        firebaseConfig={firebaseConfig}
-                        navigation={navigation}
-                        navigationLoadingError={navigationLoadingError}>
+                    </SchemaRegistryContext.Consumer>
 
-                        <Router>
-                            <SideEntityProvider
-                                collections={navigation?.collections}>
-                                <BreadcrumbsProvider>
-                                    {children}
-                                    <EntitySideDialogs/>
-                                </BreadcrumbsProvider>
-                            </SideEntityProvider>
-                        </Router>
-
-                    </CMSAppContextProvider>
                 </SchemaRegistryProvider>
             </SnackbarProvider>
         </AuthProvider>);
