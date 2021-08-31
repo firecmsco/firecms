@@ -10,7 +10,6 @@ import {
     Navigation,
     NavigationBuilder,
     NavigationBuilderProps,
-    User
 } from "@camberi/firecms";
 
 import { IconButton, Tooltip } from "@material-ui/core";
@@ -61,13 +60,12 @@ function SampleApp() {
         textSearchDelegate: productsSearchDelegate,
         additionalColumns: [productAdditionalColumn],
         indexes: [{ category: "desc", available: "desc" }],
-        permissions: ({ user, authController }) => ({
+        permissions: ({ user }) => ({
             edit: true,
             create: true,
             // we use some custom logic by storing user data in the 'extra;
-            // field of the authcontroller while building the main navigation
-            // (see below)
-            delete: authController.extra.roles.includes("admin")
+            // field of the user
+            delete: user && user.extra.roles.includes("admin")
         }),
         extraActions: productExtraActionBuilder,
         subcollections: [localeCollection],
@@ -119,7 +117,7 @@ function SampleApp() {
         }]
     });
 
-    const myAuthenticator: Authenticator = (user?: User) => {
+    const myAuthenticator: Authenticator = ({ user }) => {
         console.log("Allowing access to", user?.email);
         return true;
     };
@@ -152,17 +150,16 @@ function SampleApp() {
     };
 
     const navigation: NavigationBuilder = async ({
-                                                     user,
-                                                     authController
+                                                     user
                                                  }: NavigationBuilderProps) => {
 
         // This is a fake example of retrieving async data related to the user
         // and storing it in the authController
-        const sampleUser = await Promise.resolve({
+        const sampleUserData = await Promise.resolve({
             name: "John",
             roles: ["admin"]
         });
-        authController.setExtra(sampleUser);
+        if(user) user.extra = sampleUserData;
 
         const navigation: Navigation = {
             collections: [

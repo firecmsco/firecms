@@ -3,7 +3,12 @@ import { AuthController } from "../contexts";
 
 import React, { useEffect } from "react";
 
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut,
+    User as FirebaseUser
+} from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 
 interface FirebaseAuthHandlerProps {
@@ -35,7 +40,13 @@ export const useFirebaseAuthHandler = (
         );
     }, [firebaseApp]);
 
-    const updateFirebaseUser = async (user: User | null) => {
+    const updateFirebaseUser = async (firebaseUser: FirebaseUser | null) => {
+
+        const user: User | null = firebaseUser ? {
+            ...firebaseUser,
+            extra: null
+        } : null;
+
         setNotAllowedError(false);
         if (authentication instanceof Function && user) {
             const allowed = await authentication({ user });

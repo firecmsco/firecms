@@ -1,8 +1,7 @@
 import { TextSearchDelegate } from "./text_search_delegate";
 import { Entity, EntitySchema } from "./entities";
 import React from "react";
-import "firebase/auth";
-import { CMSAppContext } from "../contexts";
+import { AuthController, CMSAppContext } from "../contexts";
 import { User } from "./user";
 
 /**
@@ -195,6 +194,13 @@ export type Permissions = {
      * Can the user delete entities. Defaults to `true`
      */
     delete?: boolean;
+
+    /**
+     * Utility field you can use to store your custom data.
+     * e.g: Additional user data fetched from a Firestore document, or custom
+     * claims
+     */
+    extra?: any;
 }
 
 /**

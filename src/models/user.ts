@@ -43,4 +43,10 @@ export interface User {
      * Additional per provider such as displayName and profile information.
      */
     readonly providerData: any;
+
+    /**
+     * Additional data you can use to store any information relevat to you,
+     * such as roles.
+     */
+    extra:any;
 }

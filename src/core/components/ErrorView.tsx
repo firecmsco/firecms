@@ -21,6 +21,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+export type ErrorViewProps = { error: string, tooltip?: string };
 /**
  * Generic error view. Displayed for example when an unexpected value comes
  * from Firestore in a collection view.
@@ -32,7 +33,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 export default function ErrorView({
                                       error,
                                       tooltip
-                                  }: { error: string, tooltip?: string }): React.ReactElement {
+                                  }: ErrorViewProps): React.ReactElement {
     const classes = useStyles();
     const body = (
         <div

@@ -13,7 +13,6 @@ import {
 } from "@material-ui/core";
 
 import makeStyles from "@material-ui/styles/makeStyles";
-import "firebase/storage";
 
 import {
     ArrayProperty,
@@ -648,21 +647,22 @@ export function StorageUploadProgress({
         setError(undefined);
         setLoading(true);
 
-        storage.uploadFile(file, fileName, storagePath, metadata)
+        storage.uploadFile({ file, fileName, path: storagePath, metadata })
             .then(({ path }) => {
-                console.debug("Upload successful",);
+                console.debug("Upload successful");
                 setLoading(false);
                 onFileUploadComplete(path, entry, metadata);
-            }).catch(e => {
-            console.error("Upload error", e);
-            setError(e.message);
-            setLoading(false);
-            snackbarContext.open({
-                type: "error",
-                title: "Error uploading file",
-                message: e.message
+            })
+            .catch((e) => {
+                console.error("Upload error", e);
+                setError(e.message);
+                setLoading(false);
+                snackbarContext.open({
+                    type: "error",
+                    title: "Error uploading file",
+                    message: e.message
+                });
             });
-        });
     }
 
     return (

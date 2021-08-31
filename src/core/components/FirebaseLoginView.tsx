@@ -5,9 +5,8 @@ import createStyles from "@material-ui/styles/createStyles";
 import makeStyles from "@material-ui/styles/makeStyles";
 
 import firebase from "firebase/compat/app";
-import "firebase/auth";
 
-import { useAuthController } from "../contexts";
+import { useAuthController } from "../../contexts";
 
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
@@ -31,7 +30,7 @@ export interface FirebaseLoginViewProps {
     firebaseApp: FirebaseApp;
 }
 
-export function FirebaseLoginView({
+export default function FirebaseLoginView({
                                       skipLoginButtonEnabled,
                                       logo,
                                       signInOptions,

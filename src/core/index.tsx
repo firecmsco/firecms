@@ -1,6 +1,3 @@
-import { initCMSFirebase } from "./initCMSFirebase";
-import { FirebaseLoginView } from "./FirebaseLoginView";
-
 export { CMSApp } from "./CMSApp";
 export type {
     CMSAppProps
@@ -15,11 +12,6 @@ export { CMSMainView } from "./CMSMainView";
 export type {
     CMSMainViewProps
 } from "./CMSMainView";
-
-export { FirebaseLoginView } from "./FirebaseLoginView";
-export type {
-    FirebaseLoginViewProps
-} from "./FirebaseLoginView";
 
 export * from "./components";
 

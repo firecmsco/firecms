@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import "firebase/auth";
-import "firebase/storage";
 
 import {
     Authenticator,

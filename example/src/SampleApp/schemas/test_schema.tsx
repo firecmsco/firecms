@@ -47,13 +47,13 @@ export const testEntitySchema = buildSchema({
     onPreSave: ({
                     schema,
                     path,
-                    id,
+                    entityId,
                     values,
                     status,
                     context
                 }) => {
         return getNavigationFrom({
-            path: `${path}/${id}`,
+            path: `${path}/${entityId}`,
             context
         }).then((navigation) => {
             console.log("navigation", navigation);

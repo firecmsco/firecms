@@ -1,5 +1,4 @@
 import * as React from "react";
-import "firebase/firestore";
 
 import { FieldProps } from "./fields";
 import { PreviewComponentProps } from "../preview";

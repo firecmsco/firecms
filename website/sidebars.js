@@ -61,6 +61,7 @@ module.exports = {
                     type: 'category',
                     label: 'Types',
                     items: [
+                        'api/interfaces/user',
                         'api/interfaces/cmsappprops',
                         'api/interfaces/cmsview',
                         'api/interfaces/schemaconfig',

@@ -4,7 +4,7 @@ import { Theme } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
 
 
-import CircularProgressCenter from "./internal/CircularProgressCenter";
+import CircularProgressCenter from "./components/CircularProgressCenter";
 import { CMSDrawer } from "./CMSDrawer";
 import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./internal/CMSAppBar";

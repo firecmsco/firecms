@@ -4,12 +4,11 @@ import {
     getDownloadURL,
     getStorage,
     ref,
-    uploadBytes,
-    UploadMetadata
+    uploadBytes
 } from "firebase/storage";
-import { StorageSource } from "../storage";
+import { StorageSource, UploadFileProps, UploadFileResult } from "../storage";
 
-export function useFirebaseStorageSource(firebaseApp: FirebaseApp):StorageSource {
+export function useFirebaseStorageSource(firebaseApp: FirebaseApp): StorageSource {
 
     const storage: FirebaseStorage = getStorage(firebaseApp);
     const urlsCache: any = {};
@@ -18,10 +17,7 @@ export function useFirebaseStorageSource(firebaseApp: FirebaseApp):StorageSource
         /**
          * @category Storage
          */
-        uploadFile(file: File,
-                   fileName?: string,
-                   path?: string,
-                   metadata?: UploadMetadata)
+        uploadFile({ file, fileName, path, metadata }: UploadFileProps)
             : Promise<any> {
             const usedFilename = fileName ?? file.name;
             console.debug("Uploading file", usedFilename, file, path, metadata);

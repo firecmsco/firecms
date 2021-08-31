@@ -1,4 +1,3 @@
-import "firebase/auth";
 import { EntityCollection } from "./collections";
 import { AuthController } from "../contexts";
 import { User } from "./user";

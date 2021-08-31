@@ -7,8 +7,7 @@ import {
     buildSchema,
     CMSApp,
     NavigationBuilder,
-    NavigationBuilderProps,
-    User
+    NavigationBuilderProps
 } from "@camberi/firecms";
 
 import "typeface-rubik";
@@ -192,16 +191,16 @@ export default function App() {
 
     const navigation: NavigationBuilder = async ({
                                                      user,
-                                                     authController
                                                  }: NavigationBuilderProps) => {
 
         // This is a fake example of retrieving async data related to the user
-        // and storing it in the authController
-        const sampleUser = await Promise.resolve({
+        // and storing it in the user
+        const sampleUserData = await Promise.resolve({
             name: "John",
             roles: ["admin"]
         });
-        authController.setExtra(sampleUser);
+        if (user)
+            user.extra = sampleUserData;
 
         return ({
             collections: [
@@ -209,10 +208,10 @@ export default function App() {
                     relativePath: "products",
                     schema: productSchema,
                     name: "Products",
-                    permissions: ({ user, authController }) => ({
+                    permissions: ({ user }) => ({
                         edit: true,
                         create: true,
-                        delete: authController.extra.roles.includes("admin")
+                        delete: user && user.extra.roles.includes("admin")
                     }),
                     subcollections: [
                         buildCollection({
@@ -226,7 +225,7 @@ export default function App() {
         });
     };
 
-    const myAuthenticator: Authenticator = (user?: User) => {
+    const myAuthenticator: Authenticator = ({ user }) => {
         console.log("Allowing access to", user?.email);
         return true;
     };

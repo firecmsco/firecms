@@ -32,7 +32,7 @@ import {
 } from "../../contexts";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";
 import { removeInitialAndTrailingSlashes } from "../navigation";
-import CircularProgressCenter from "./CircularProgressCenter";
+import CircularProgressCenter from "../components/CircularProgressCenter";
 import EntityPreview from "../components/EntityPreview";
 
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";

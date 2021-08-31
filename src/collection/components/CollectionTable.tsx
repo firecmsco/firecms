@@ -35,7 +35,7 @@ import OutsideAlerter from "../../core/internal/OutsideAlerter";
 import CollectionRowActions from "../internal/CollectionRowActions";
 import { CollectionTableProps } from "./CollectionTableProps";
 import { TableCellProps } from "../internal/TableCellProps";
-import CircularProgressCenter from "../../core/internal/CircularProgressCenter";
+import CircularProgressCenter from "../../core/components/CircularProgressCenter";
 import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../../preview/util";
 import PropertyTableCell, { OnCellChangeParams } from "../internal/PropertyTableCell";

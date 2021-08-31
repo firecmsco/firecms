@@ -43,7 +43,7 @@ import {
 import { Markdown } from "../../preview";
 import { useDataSource } from "../../hooks/useDataSource";
 
-type EntityCollectionProps<M extends { [Key: string]: any }> = {
+export type EntityCollectionProps<M extends { [Key: string]: any }> = {
     path: string;
     collectionConfig: EntityCollection<M>;
 }

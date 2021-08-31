@@ -8,7 +8,7 @@ import {
     DialogTitle
 } from "@material-ui/core";
 import EntityPreview from "../../core/components/EntityPreview";
-import CircularProgressCenter from "../../core/internal/CircularProgressCenter";
+import CircularProgressCenter from "../../core/components/CircularProgressCenter";
 import { useCMSAppContext, useSnackbarController } from "../../contexts";
 import { useDataSource } from "../../hooks/useDataSource";
 

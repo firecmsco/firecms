@@ -77,7 +77,7 @@ export const productSchema = buildSchema<any>({
     onPreSave: ({
                     schema,
                     path,
-                    id,
+                    entityId,
                     values,
                     status
                 }) => {

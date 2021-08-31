@@ -1,37 +1,33 @@
 import React from "react";
 
-import {
-    Authenticator,
-    createCMSDefaultTheme,
-    useFirebaseAuthHandler,
-    buildCollection,
-    buildSchema,
-    useFirestoreDataSource,
-    useFirebaseStorageSource,
-    CMSAppProvider,
-    CMSMainView,
-    NavigationBuilder,
-    NavigationBuilderProps,
-    User,
-    AuthController,
-    FirebaseLoginView,
-    initCMSFirebase,
-    EntityLinkBuilder
-} from "@camberi/firecms";
-import { Box, CircularProgress } from "@material-ui/core";
-
-import  { FirebaseApp } from "firebase/app";
+import { FirebaseApp } from "firebase/app";
+import { GoogleAuthProvider } from "firebase/auth";
+import { ThemeProvider, CssBaseline } from "@material-ui/core";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import "typeface-rubik";
 import "typeface-space-mono";
 
+import {
+    AuthController,
+    Authenticator,
+    buildCollection,
+    buildSchema,
+    CircularProgressCenter,
+    CMSAppProvider,
+    CMSMainView,
+    createCMSDefaultTheme,
+    EntityLinkBuilder,
+    FirebaseLoginView,
+    initCMSFirebase,
+    NavigationBuilder,
+    NavigationBuilderProps,
+    useFirebaseAuthHandler,
+    useFirebaseStorageSource,
+    useFirestoreDataSource
+} from "@camberi/firecms";
+
 import { firebaseConfig } from "./firebase_config";
-import { ThemeProvider } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-
-import {GoogleAuthProvider} from "firebase/auth";
-
-import { BrowserRouter as Router } from "react-router-dom";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -74,11 +70,6 @@ const productSchema = buildSchema({
 
 export function SimpleAppWithProvider() {
 
-    const [
-        firebaseConfigInitialized,
-        setFirebaseConfigInitialized
-    ] = React.useState<boolean>(false);
-
     const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
         collections: [
             buildCollection({
@@ -94,7 +85,7 @@ export function SimpleAppWithProvider() {
         ]
     });
 
-    const myAuthenticator: Authenticator = (user?: User) => {
+    const myAuthenticator: Authenticator = ({ user }) => {
         console.log("Allowing access to", user?.email);
         return true;
     };
@@ -120,19 +111,11 @@ export function SimpleAppWithProvider() {
     }
 
     if (firebaseConfigLoading || !firebaseApp) {
-        return <Box
-            display="flex"
-            width={"100%"} height={"100vh"}>
-            <Box m="auto">
-                <CircularProgress/>
-            </Box>
-        </Box>;
+        return <CircularProgressCenter/>;
     }
 
     const mode: "light" | "dark" = "light";
-    const theme = createCMSDefaultTheme({
-        mode
-    });
+    const theme = createCMSDefaultTheme({ mode });
 
     const authController: AuthController = useFirebaseAuthHandler({
         firebaseApp: firebaseApp as FirebaseApp,
@@ -141,7 +124,9 @@ export function SimpleAppWithProvider() {
 
     const dataSource = useFirestoreDataSource(firebaseApp!);
     const storageSource = useFirebaseStorageSource(firebaseApp!);
-    const entityLinkBuilder:EntityLinkBuilder = ({entity}) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`
+
+    // This builder is only used to provide the button shortcuts in the entity views.
+    const entityLinkBuilder: EntityLinkBuilder = ({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`;
 
     return (
         <ThemeProvider theme={theme}>
@@ -152,7 +137,12 @@ export function SimpleAppWithProvider() {
                                 entityLinkBuilder={entityLinkBuilder}
                                 dataSource={dataSource}
                                 storageSource={storageSource}>
-                    {({  context }) => {
+                    {({ context }) => {
+
+                        if (context.authController.authLoading) {
+                            return <CircularProgressCenter/>;
+                        }
+
                         if (!context.authController.canAccessMainView) {
                             return (
                                 <FirebaseLoginView
@@ -161,7 +151,9 @@ export function SimpleAppWithProvider() {
                                     firebaseApp={firebaseApp}/>
                             );
                         }
+
                         return <CMSMainView name={"My Online Shop"}/>;
+
                     }}
                 </CMSAppProvider>
             </Router>

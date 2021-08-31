@@ -1,18 +1,16 @@
 import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
+import { ThemeProvider, CssBaseline } from "@material-ui/core";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import { CMSAppProps } from "./CMSAppProps";
 import { CMSMainView } from "./CMSMainView";
 import { CMSAppProvider, EntityLinkBuilder } from "./CMSAppProvider";
-import { BrowserRouter as Router } from "react-router-dom";
-import CircularProgressCenter from "./internal/CircularProgressCenter";
-import CssBaseline from "@material-ui/core/CssBaseline";
-
-import { ThemeProvider } from "@material-ui/core/styles";
+import { CircularProgressCenter } from "./components";
 import { createCMSDefaultTheme } from "./theme";
 import { initCMSFirebase } from "./initCMSFirebase";
-import { FirebaseLoginView } from "./FirebaseLoginView";
+import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { AuthController } from "../contexts";
 import { useFirebaseAuthHandler } from "../hooks";
 import { useFirebaseStorageSource, useFirestoreDataSource } from "../models";

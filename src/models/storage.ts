@@ -1,15 +1,24 @@
+export interface UploadFileProps {
+    file: File,
+    fileName?: string,
+    path?: string,
+    metadata?: any,
+}
 
 export interface UploadFileResult {
     path: string;
 }
+
 /**
  * @category Storage
  */
 export interface StorageSource {
-    uploadFile: (file: File,
-                 fileName?: string,
-                 path?: string,
-                 metadata?: any) => Promise<UploadFileResult>;
+    uploadFile: ({
+                     file,
+                     fileName,
+                     path,
+                     metadata
+                 }: UploadFileProps) => Promise<UploadFileResult>;
 
     getDownloadURL: (storagePath: string) => Promise<string>
 }
