@@ -1,8 +1,8 @@
 import { removeInitialAndTrailingSlashes } from "../core/navigation";
 
-export function getSidePanelKey(collectionPath: string, entityId?: string) {
+export function getSidePanelKey(path: string, entityId?: string) {
     if (entityId)
-        return `${removeInitialAndTrailingSlashes(collectionPath)}/${removeInitialAndTrailingSlashes(entityId)}`;
+        return `${removeInitialAndTrailingSlashes(path)}/${removeInitialAndTrailingSlashes(entityId)}`;
     else
-        return removeInitialAndTrailingSlashes(collectionPath);
+        return removeInitialAndTrailingSlashes(path);
 }

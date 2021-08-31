@@ -2,7 +2,6 @@ import { TextSearchDelegate } from "./text_search_delegate";
 import { Entity, EntitySchema } from "./entities";
 import React from "react";
 import "firebase/auth";
-import { AuthController } from "../contexts/AuthController";
 import { CMSAppContext } from "../contexts";
 import { User } from "./user";
 
@@ -124,12 +123,6 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     excludedProperties?: (Extract<keyof M, string> | AdditionalKey)[];
 
     /**
-     * Properties that can be filtered in this view
-     * DEPRECATED, it has no effect if set
-     */
-    filterableProperties?: (Extract<keyof M, string>)[];
-
-    /**
      * Initial filters applied to this collection.
      * Defaults to none.
      */
@@ -160,7 +153,7 @@ export type ExtraActionsParams<M extends { [Key: string]: any } = any> = {
     /**
      * Collection path of this entity
      */
-    collectionPath: string;
+    path: string;
 
     /**
      * The collection configuration
@@ -210,7 +203,19 @@ export type Permissions = {
  */
 export type PermissionsBuilder<M extends { [Key: string]: any }> =
     Permissions
-    | ((props: {
+    | (({
+            user,
+            entity,
+            path,
+            context
+        }: PermissionsBuilderProps<M>) => Permissions);
+
+
+/**
+ *
+ * @category Collections
+ */
+export type PermissionsBuilderProps<M extends { [Key: string]: any }> = {
     /**
      * Logged in user
      */
@@ -222,16 +227,12 @@ export type PermissionsBuilder<M extends { [Key: string]: any }> =
     /**
      * Collection path of this entity
      */
-    collectionPath: string;
-    /**
-     * Auth controller for additional auth operations
-     */
-    authController: AuthController;
+    path: string;
     /**
      * Context of the app status
      */
     context: CMSAppContext;
-}) => Permissions);
+};
 
 
 /**
@@ -305,7 +306,7 @@ export type ExportConfig = {
  */
 export type ExportMappingFunction = {
     key: string;
-    builder: (props: { entity: Entity<any> }) => Promise<string> | string
+    builder: ({entity}: { entity: Entity<any> }) => Promise<string> | string
 }
 
 /**

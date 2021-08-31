@@ -4,17 +4,17 @@ import { buildSchema, SchemaResolver } from "@camberi/firecms";
  * You can use a custom schema resolver to override schemas for specific
  * entities
  * @param entityId
- * @param collectionPath
+ * @param path
  */
 export const customSchemaResolver: SchemaResolver = ({
                                                   entityId,
-                                                  collectionPath
+                                                  path
                                               }: {
     entityId?: string;
-    collectionPath: string;
+    path: string;
 }) => {
 
-    if (entityId === "B0017TNJWY" && collectionPath === "products") {
+    if (entityId === "B0017TNJWY" && path === "products") {
         const customProductSchema = buildSchema({
             name: "Custom product",
             properties: {
@@ -27,7 +27,7 @@ export const customSchemaResolver: SchemaResolver = ({
             }
         });
 
-        console.log("Used custom schema resolver", collectionPath, entityId);
+        console.log("Used custom schema resolver", path, entityId);
         return { schema: customProductSchema };
     }
 };

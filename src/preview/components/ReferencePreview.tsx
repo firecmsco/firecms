@@ -104,9 +104,9 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     const previewProperties = property.previewProperties;
 
     const schemaRegistry = useSchemasRegistry();
-    const collectionConfig = schemaRegistry.getCollectionConfig(property.collectionPath);
+    const collectionConfig = schemaRegistry.getCollectionConfig(property.path);
     if (!collectionConfig) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${property.collectionPath}`);
+        throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
     }
 
     const schema = collectionConfig.schema;
@@ -117,7 +117,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         dataLoading,
         dataLoadingError
     } = useEntityFetch({
-        collectionPath: reference.path,
+        path: reference.path,
         entityId: reference.id,
         schema
     });
@@ -193,7 +193,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                                 e.stopPropagation();
                                 sideEntityController.open({
                                     entityId: entity.id,
-                                    collectionPath: entity.path,
+                                    path: entity.path,
                                     schema,
                                     overrideSchemaResolver: false
                                 });

@@ -1,5 +1,5 @@
 import {
-    Entity,
+    Entity, EntityOnDeleteProps,
     EntityReference,
     EntitySchema,
     EntityValues,
@@ -53,18 +53,18 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
      *
      * @param doc
      * @param schema
-     * @param collectionPath
+     * @param path
      * @category Firestore
      */
     function createEntityFromSchema<M extends { [Key: string]: any }>
     (
         doc: DocumentSnapshot,
         schema: EntitySchema<M>,
-        collectionPath: string
+        path: string
     ): Entity<M> {
 
         const data = doc.data() ?
-            sanitizeData(firestoreToCMSModel(doc.data(), schema, collectionPath) as EntityValues<M>, schema, collectionPath)
+            sanitizeData(firestoreToCMSModel(doc.data(), schema, path) as EntityValues<M>, schema, path)
             : undefined;
         return {
             id: doc.id,
@@ -92,12 +92,12 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
      * Also, Firestore references are replaced with {@link EntityReference}
      * @param data
      * @param schema
-     * @param collectionPath
+     * @param path
      * @category Firestore
      */
-    function firestoreToCMSModel(data: any, schema: EntitySchema<any>, collectionPath: string): any {
+    function firestoreToCMSModel(data: any, schema: EntitySchema<any>, path: string): any {
         return traverseValues(data,
-            computeSchemaProperties(schema, collectionPath),
+            computeSchemaProperties(schema, path),
             (value, property) => {
                 if (value === null)
                     return null;
@@ -123,7 +123,6 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
     }
 
     function buildQuery<M>(path: string, filter: FilterValues<M> | undefined, orderBy: string | undefined, order: "desc" | "asc" | undefined, startAfter: any[] | undefined, limit: number | undefined) {
-
 
         const collectionReference: Query = collection(db, path);
 
@@ -284,7 +283,7 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
         /**
          * Save entity to the specified path. Note that Firestore does not allow
          * undefined values.
-         * @param collectionPath
+         * @param path
          * @param id
          * @param data
          * @param schema
@@ -297,8 +296,8 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
          */
         async saveEntity<M extends { [Key: string]: any }>(
             {
-                collectionPath,
-                id,
+                path,
+                entityId,
                 values,
                 schema,
                 status,
@@ -309,7 +308,7 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
                 context
             }: SaveEntityProps<M>): Promise<void> {
 
-            const properties: Properties<M> = computeSchemaProperties(schema, collectionPath, id);
+            const properties: Properties<M> = computeSchemaProperties(schema, path, entityId);
             let updatedValues: EntityValues<M> = updateAutoValues(
                 {
                     inputValues: values,
@@ -324,8 +323,8 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
                 try {
                     updatedValues = await schema.onPreSave({
                         schema,
-                        collectionPath,
-                        id: id,
+                        path,
+                        entityId,
                         values: updatedValues,
                         status,
                         context
@@ -338,13 +337,13 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
                 }
             }
 
-            console.debug("Saving entity", collectionPath, id, updatedValues);
+            console.debug("Saving entity", path, entityId, updatedValues);
 
             let documentReference: DocumentReference;
-            if (id)
-                documentReference = doc(db, collectionPath, id);
+            if (entityId)
+                documentReference = doc(db, path, entityId);
             else
-                documentReference = doc(db, collectionPath);
+                documentReference = doc(db, path);
 
             const entity: Entity<M> = {
                 id: documentReference.id,
@@ -358,8 +357,8 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
                         if (schema.onSaveSuccess) {
                             schema.onSaveSuccess({
                                 schema,
-                                collectionPath,
-                                id,
+                                path,
+                                entityId,
                                 values: updatedValues,
                                 status,
                                 context
@@ -375,8 +374,8 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
                     if (schema.onSaveFailure) {
                         schema.onSaveFailure({
                             schema,
-                            collectionPath,
-                            id: id,
+                            path,
+                            entityId,
                             values: updatedValues,
                             status,
                             context
@@ -386,13 +385,11 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
                 });
         },
 
-
-
         /**
          * Delete an entity
          * @param entity
          * @param schema
-         * @param collectionPath
+         * @param path
          * @param onDeleteSuccess
          * @param onDeleteFailure
          * @param onPreDeleteHookError
@@ -415,11 +412,11 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
 
             console.debug("Deleting entity", entity.path, entity.id);
 
-            const entityDeleteProps = {
+            const entityDeleteProps:EntityOnDeleteProps<M> = {
                 entity,
                 schema,
-                id: entity.id,
-                collectionPath: entity.path,
+                entityId: entity.id,
+                path: entity.path,
                 context
             };
 

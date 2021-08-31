@@ -83,13 +83,13 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
 export function getYupEntitySchema<T extends CMSType, M extends { [Key: string]: any }>
 (properties: PropertiesOrBuilder<M>,
  values: Partial<EntityValues<M>>,
- collectionPath: string,
+ path: string,
  customFieldValidator?: CustomFieldValidator,
  entityId?: string): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties).forEach(([name, propertyOrBuilder]) => {
         objectSchema[name] = mapPropertyToYup({
-            property: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, values, collectionPath, entityId),
+            property: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, values, path, entityId),
             customFieldValidator,
             name
         });

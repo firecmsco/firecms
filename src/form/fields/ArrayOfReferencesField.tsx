@@ -58,11 +58,11 @@ export default function ArrayOfReferencesField({
 
     const schemaRegistry = useSchemasRegistry();
     const collectionConfig = useMemo(() => {
-        return schemaRegistry.getCollectionConfig(ofProperty.collectionPath);
-    }, [ofProperty.collectionPath]);
+        return schemaRegistry.getCollectionConfig(ofProperty.path);
+    }, [ofProperty.path]);
 
     if (!collectionConfig) {
-        console.error(`Couldn't find the corresponding collection view for the path: ${ofProperty.collectionPath}`);
+        console.error(`Couldn't find the corresponding collection view for the path: ${ofProperty.path}`);
     }
 
     const onEntryClick = () => {
@@ -135,7 +135,7 @@ export default function ArrayOfReferencesField({
             {collectionConfig && <ReferenceDialog open={open}
                                                   multiselect={true}
                                                   collection={collectionConfig}
-                                                  collectionPath={ofProperty.collectionPath}
+                                                  path={ofProperty.path}
                                                   onClose={onClose}
                                                   onMultipleEntitiesSelected={onMultipleEntitiesSelected}
                                                   selectedEntityIds={selectedIds}

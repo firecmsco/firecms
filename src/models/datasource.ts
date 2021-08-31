@@ -32,8 +32,8 @@ export type ListenCollectionProps<M> =
     };
 
 export type SaveEntityProps<M> = {
-    collectionPath: string,
-    id: string | undefined,
+    path: string,
+    entityId: string | undefined,
     values: Partial<EntityValues<M>>,
     schema: EntitySchema<M>,
     status: EntityStatus,
@@ -137,7 +137,7 @@ export interface DataSource {
     /**
      * Save entity to the specified path. Note that Firestore does not allow
      * undefined values.
-     * @param collectionPath
+     * @param path
      * @param id
      * @param data
      * @param schema
@@ -150,8 +150,8 @@ export interface DataSource {
      */
     saveEntity<M>(
         {
-            collectionPath,
-            id,
+            path,
+            entityId,
             values,
             schema,
             status,
@@ -166,7 +166,7 @@ export interface DataSource {
      * Delete an entity
      * @param entity
      * @param schema
-     * @param collectionPath
+     * @param path
      * @param onDeleteSuccess
      * @param onDeleteFailure
      * @param onPreDeleteHookError

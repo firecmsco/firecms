@@ -51,7 +51,7 @@ export interface ReferenceDialogProps {
     /**
      * Absolute path of the collection
      */
-    collectionPath: string;
+    path: string;
 
     /**
      * If you are opening the dialog for the first time, you can select some
@@ -96,7 +96,7 @@ export default function ReferenceDialog(
         open,
         multiselect,
         collection,
-        collectionPath,
+        path,
         selectedEntityIds
     }: ReferenceDialogProps) {
 
@@ -118,9 +118,9 @@ export default function ReferenceDialog(
     useEffect(() => {
         if (selectedEntityIds) {
             Promise.all(
-                selectedEntityIds.map((id) => dataSource.fetchEntity({
-                    path: collectionPath,
-                    entityId: id,
+                selectedEntityIds.map((entityId) => dataSource.fetchEntity({
+                    path,
+                    entityId,
                     schema
                 })))
                 .then((entities) => {
@@ -205,7 +205,7 @@ export default function ReferenceDialog(
             <div className={classes.dialogBody}>
 
                 {selectedEntities &&
-                <CollectionTable collectionPath={collectionPath}
+                <CollectionTable path={path}
                                  inlineEditing={false}
                                  schema={schema}
                                  toolbarActionsBuilder={toolbarActionsBuilder}

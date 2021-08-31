@@ -18,8 +18,8 @@ export type NavigationEntity<M> = {
     type: "entity";
     entity: Entity<M>;
     entityId: string;
-    collectionPath: string;
-    fullPath: string;
+    relativePath: string;
+    path: string;
     parentCollection: EntityCollection<M>;
 };
 
@@ -28,7 +28,7 @@ export type NavigationEntity<M> = {
  */
 export type NavigationCollection<M> = {
     type: "collection";
-    fullPath: string;
+    path: string;
     collection: EntityCollection<M>;
 };
 
@@ -37,7 +37,7 @@ export type NavigationCollection<M> = {
  */
 interface NavigationCustom<M> {
     type: "custom_view";
-    fullPath: string;
+    path: string;
     view: EntityCustomView<M>;
 }
 
@@ -80,12 +80,12 @@ export function getNavigationFrom<M>({
         if (entry.type === "collection") {
             return Promise.resolve(entry);
         } else if (entry.type === "entity") {
-            const schemaConfig = schemasRegistryController.getSchemaConfig(entry.collectionPath, entry.entityId);
+            const schemaConfig = schemasRegistryController.getSchemaConfig(entry.relativePath, entry.entityId);
             if (!schemaConfig?.schema) {
-                throw Error(`No schema defined in the navigation for the entity with path ${entry.collectionPath}`);
+                throw Error(`No schema defined in the navigation for the entity with path ${entry.relativePath}`);
             }
             return dataSource.fetchEntity({
-                path: entry.collectionPath,
+                path: entry.relativePath,
                 entityId: entry.entityId,
                 schema: schemaConfig?.schema
             })

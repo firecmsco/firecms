@@ -109,7 +109,7 @@ export const productSchema = buildSchema<Product>({
     name: "Product",
     onPreSave: ({
                     schema,
-                    collectionPath,
+                    path,
                     id,
                     values,
                     status
@@ -148,7 +148,7 @@ export const productSchema = buildSchema({
     name: "Product",
     onPreSave: ({
                     schema,
-                    collectionPath,
+                    path,
                     id,
                     values,
                     status

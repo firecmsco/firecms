@@ -6,7 +6,7 @@ export interface SideEntityPanelProps {
     /**
      * Absolute path of the entity
      */
-    collectionPath: string;
+    path: string;
 
     /**
      * Id of the entity, if not set, it means we are creating a new entity

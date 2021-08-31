@@ -12,7 +12,7 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
     /**
      * Absolute collection path
      */
-    collectionPath: string;
+    path: string;
 
     /**
      * Schema of the entity displayed by this collection
@@ -47,7 +47,7 @@ export type CollectionFetchResult<M extends { [Key: string]: any }> = {
 
 /**
  * This hook is used to fetch collections using a given schema
- * @param collectionPath
+ * @param path
  * @param schema
  * @param filter
  * @param sortByProperty
@@ -58,7 +58,7 @@ export type CollectionFetchResult<M extends { [Key: string]: any }> = {
  */
 export function useCollectionFetch<M extends { [Key: string]: any }>(
     {
-        collectionPath,
+        path,
         schema,
         filterValues,
         sortByProperty,
@@ -104,7 +104,7 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
 
         if (dataSource.listenCollection) {
             return dataSource.listenCollection<M>({
-                path:collectionPath,
+                path:path,
                 schema,
                 onUpdate: onEntitiesUpdate,
                 onError,
@@ -116,7 +116,7 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
             });
         } else {
             dataSource.fetchCollection<M>({
-                path:collectionPath,
+                path:path,
                 schema,
                 filter: filterValues,
                 limit: itemCount,
@@ -129,7 +129,7 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
             return () => {
             };
         }
-    }, [collectionPath, schema, itemCount, currentSort, sortByProperty, filterValues]);
+    }, [path, schema, itemCount, currentSort, sortByProperty, filterValues]);
 
     return {
         data,

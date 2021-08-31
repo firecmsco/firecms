@@ -75,7 +75,7 @@ interface EntityFormProps<M extends { [Key: string]: any }> {
     /**
      * Path of the collection this entity is located
      */
-    collectionPath: string;
+    path: string;
 
     /**
      * Schema of the entity this form represents
@@ -92,7 +92,15 @@ interface EntityFormProps<M extends { [Key: string]: any }> {
     /**
      * The callback function called when Save is clicked and validation is correct
      */
-    onEntitySave(schema: EntitySchema<M>, collectionPath: string, id: string | undefined, values: EntityValues<M>): Promise<void>;
+    onEntitySave(
+        props:
+            {
+                schema: EntitySchema<M>,
+                path: string,
+                entityId: string | undefined,
+                values: EntityValues<M>
+            }
+    ): Promise<void>;
 
     /**
      * The callback function called when discard is clicked
@@ -113,7 +121,7 @@ interface EntityFormProps<M extends { [Key: string]: any }> {
 
 function EntityForm<M>({
                            status,
-                           collectionPath,
+                           path,
                            schema,
                            entity,
                            onEntitySave,
@@ -134,7 +142,7 @@ function EntityForm<M>({
     if ((status === "existing" || status === "copy") && entity) {
         baseFirestoreValues = entity.values ?? {};
     } else if (status === "new") {
-        baseFirestoreValues = initEntityValues(schema, collectionPath);
+        baseFirestoreValues = initEntityValues(schema, path);
     } else {
         throw new Error("Form configured wrong");
     }
@@ -178,20 +186,20 @@ function EntityForm<M>({
         setSavingError(null);
         setCustomIdError(false);
 
-        let id: string | undefined;
+        let entityId: string | undefined;
         if (status === "existing") {
             if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
-            id = entity.id;
+            entityId = entity.id;
         } else if (status === "new" || status === "copy") {
             if (schema.customId) {
                 if (!customId) throw Error("Form misconfiguration when saving, customId should be set");
-                id = customId;
+                entityId = customId;
             }
         } else {
             throw Error("New FormType added, check EntityForm");
         }
 
-        onEntitySave(schema, collectionPath, id, values)
+        onEntitySave({ schema, path, entityId, values })
             .then(_ => {
                 initialValuesRef.current = values;
                 formikActions.setTouched({});
@@ -210,12 +218,12 @@ function EntityForm<M>({
                                                             name,
                                                             value,
                                                             property
-                                                        }) => dataSource.checkUniqueField(collectionPath, name, value, property, entity?.id);
+                                                        }) => dataSource.checkUniqueField(path, name, value, property, entity?.id);
 
     const validationSchema = getYupEntitySchema(
         schema.properties,
         internalValue as Partial<EntityValues<M>> ?? {},
-        collectionPath,
+        path,
         uniqueFieldValidator,
         entity?.id);
 
@@ -288,12 +296,12 @@ function EntityForm<M>({
                 }
 
                 const context: FormContext<M> = {
-                    entitySchema: schema,
+                    schema: schema,
                     entityId: entity?.id,
                     values
                 };
 
-                const schemaProperties: Properties<M> = computeSchemaProperties(schema, collectionPath, entity?.id, values as EntityValues<M>);
+                const schemaProperties: Properties<M> = computeSchemaProperties(schema, path, entity?.id, values as EntityValues<M>);
                 const formFields = (
                     <Grid container spacing={4}>
 

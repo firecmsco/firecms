@@ -23,20 +23,20 @@ export function isReadOnly(property: Property<any>): boolean {
 /**
  *
  * @param schema
- * @param collectionPath
+ * @param path
  * @param entityId
  * @param values
  * @ignore
  */
 export function computeSchemaProperties<M extends { [Key: string]: any }>(
     schema: EntitySchema<M>,
-    collectionPath: string,
+    path: string,
     entityId?: string | undefined,
     values?: Partial<EntityValues<M>>
 ): Properties<M> {
     return Object.entries(schema.properties)
         .map(([key, propertyOrBuilder]) => {
-            return { [key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, values ?? schema.defaultValues ?? {}, collectionPath, entityId) };
+            return { [key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, values ?? schema.defaultValues ?? {}, path, entityId) };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<M>;
 }
@@ -45,13 +45,13 @@ export function computeSchemaProperties<M extends { [Key: string]: any }>(
 /**
  * Functions used to set required fields to undefined in the initially created entity
  * @param schema
- * @param collectionPath
+ * @param path
  * @param entityId
  * @ignore
  */
 export function initEntityValues<M extends { [Key: string]: any }>
-(schema: EntitySchema<M>, collectionPath: string, entityId?: string): EntityValues<M> {
-    const properties: Properties<M> = computeSchemaProperties(schema, collectionPath, entityId);
+(schema: EntitySchema<M>, path: string, entityId?: string): EntityValues<M> {
+    const properties: Properties<M> = computeSchemaProperties(schema, path, entityId);
     return initWithProperties(properties, schema.defaultValues);
 }
 
@@ -132,17 +132,17 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
  * Add missing required fields, expected in the schema, to the values of an entity
  * @param values
  * @param schema
- * @param collectionPath
+ * @param path
  * @category Firestore
  */
 export function sanitizeData<M extends { [Key: string]: any }>
 (
     values: EntityValues<M>,
     schema: EntitySchema<M>,
-    collectionPath: string
+    path: string
 ) {
     let result: any = values;
-    Object.entries(computeSchemaProperties(schema, collectionPath))
+    Object.entries(computeSchemaProperties(schema, path))
         .forEach(([key, property]) => {
             if (values && values[key] !== undefined) result[key] = values[key];
             else if ((property as Property).validation?.required) result[key] = null;

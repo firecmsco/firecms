@@ -172,13 +172,13 @@ import { buildSchema, SchemaResolver } from "@camberi/firecms";
 
 const customSchemaResolver: SchemaResolver = ({
                                                   entityId,
-                                                  collectionPath
+                                                  path
                                               }: {
     entityId?: string;
-    collectionPath: string;
+    path: string;
 }) => {
 
-    if (entityId === "B0017TNJWY" && collectionPath === "products") {
+    if (entityId === "B0017TNJWY" && path === "products") {
         const customProductSchema = buildSchema({
             name: "Custom product",
             properties: {

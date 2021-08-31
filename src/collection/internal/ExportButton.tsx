@@ -28,7 +28,7 @@ import { useDataSource } from "../../hooks/useDataSource";
 
 type ExportButtonProps<M extends { [Key: string]: any }> = {
     schema: EntitySchema<M>;
-    collectionPath: string;
+    path: string;
     exportConfig?: ExportConfig;
 }
 
@@ -36,7 +36,7 @@ const INITIAL_DOCUMENTS_LIMIT = 200;
 
 export default function ExportButton<M extends { [Key: string]: any }>({
                                                                            schema,
-                                                                           collectionPath,
+                                                                           path,
                                                                            exportConfig
                                                                        }: ExportButtonProps<M>
 ) {
@@ -105,14 +105,14 @@ export default function ExportButton<M extends { [Key: string]: any }>({
         };
 
         dataSource.fetchCollection<M>({
-            path: collectionPath,
+            path,
             schema,
             limit: fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT,
         })
             .then(updateEntities)
             .catch(onFetchError);
 
-    }, [collectionPath, fetchLargeDataAccepted, schema, open]);
+    }, [path, fetchLargeDataAccepted, schema, open]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -122,13 +122,13 @@ export default function ExportButton<M extends { [Key: string]: any }>({
         setOpen(false);
     };
 
-    const properties = computeSchemaProperties(schema, collectionPath);
+    const properties = computeSchemaProperties(schema, path);
     const exportableData: any[] | undefined = data && data.map(e => ({ id: e.id, ...processProperties(e.values as any, properties) }));
     if (exportableData && additionalData) {
         additionalData.forEach((additional, index) => exportableData[index] = { ...exportableData[index], ...additional });
     }
 
-    const headers = getExportHeaders(properties, collectionPath, exportConfig);
+    const headers = getExportHeaders(properties, path, exportConfig);
 
     const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
 
@@ -214,13 +214,13 @@ export default function ExportButton<M extends { [Key: string]: any }>({
 type Header = { label: string, key: string };
 
 function getExportHeaders<M extends { [Key: string]: any }>(properties: Properties<M>,
-                                                            collectionPath: string,
+                                                            path: string,
                                                             exportConfig?: ExportConfig): Header[] {
     const headers = [
         { label: "id", key: "id" },
         ...Object.entries(properties)
             .map(([childKey, propertyOrBuilder]) => {
-                const property = buildPropertyFrom(propertyOrBuilder, {}, collectionPath, undefined);
+                const property = buildPropertyFrom(propertyOrBuilder, {}, path, undefined);
                 return getHeaders(property, childKey, "");
             })
             .flat()

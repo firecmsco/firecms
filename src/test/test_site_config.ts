@@ -24,8 +24,8 @@ export const productSchema = buildSchema({
     ],
     onPreSave: ({
                     schema,
-                    collectionPath,
-                    id,
+                    path,
+                    entityId,
                     values,
                     status
                 }) => {
@@ -155,7 +155,7 @@ export const productSchema = buildSchema({
             description: "Reference to self",
             of: {
                 dataType: "reference",
-                collectionPath: "products"
+                path: "products"
             }
         }),
         publisher: buildProperty({

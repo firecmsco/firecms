@@ -29,7 +29,7 @@ export function CMSRouterSwitch({ navigation }: {
     if (matchedCollection) {
         return <CollectionRoute
             key={`col_${matchedCollection.relativePath}`}
-            collectionPath={matchedCollection.relativePath}
+            path={matchedCollection.relativePath}
             collectionConfig={matchedCollection}
         />;
     }
@@ -76,7 +76,7 @@ export function CMSRouterSwitch({ navigation }: {
     //                 path={buildCollectionUrlPath(entityCollection)}
     //                 key={`navigation_${entityCollection.relativePath}`}>
     //                 <CollectionRoute
-    //                     collectionPath={entityCollection.relativePath}
+    //                     path={entityCollection.relativePath}
     //                     collectionConfig={entityCollection}
     //                 />
     //             </Route>

@@ -181,13 +181,17 @@ export type Properties<M extends { [Key: string]: any }> = {
 export type PropertyBuilderProps<T, M extends { [Key: string]: any }> =
     {
         values: Partial<M>;
-        collectionPath: string;
+        path: string;
         entityId?: string;
     };
 /**
  * @category Entity properties
  */
-export type PropertyBuilder<T extends CMSType, M> = (props: PropertyBuilderProps<T, M>) => Property<T>;
+export type PropertyBuilder<T extends CMSType, M> = ({
+                                                         values,
+                                                         path,
+                                                         entityId
+                                                     }: PropertyBuilderProps<T, M>) => Property<T>;
 
 /**
  * @category Entity properties
@@ -405,7 +409,7 @@ export interface ReferenceProperty<M extends { [Key: string]: any } = any>
      * the filters and search delegate existing there are applied to this view
      * as well.
      */
-    collectionPath: string;
+    path: string;
 
     /**
      * Properties that need to be rendered when displaying a preview of this

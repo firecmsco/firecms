@@ -11,7 +11,7 @@ export interface TextSearchProps<M extends { [Key: string]: any }> {
 
     textSearchDelegate?: TextSearchDelegate;
 
-    collectionPath: string;
+    path: string;
 
     schema: EntitySchema<M>;
 
@@ -29,7 +29,7 @@ export type TextSearchResult<M extends { [Key: string]: any }> = {
  *
  * @param searchString
  * @param textSearchDelegate
- * @param collectionPath
+ * @param path
  * @param schema
  * @category Hooks and utilities
  */
@@ -37,7 +37,7 @@ export function useTextSearch<M extends { [Key: string]: any }>(
     {
         searchString,
         textSearchDelegate,
-        collectionPath,
+        path,
         schema
     }: TextSearchProps<M>): TextSearchResult<M> {
 
@@ -54,11 +54,11 @@ export function useTextSearch<M extends { [Key: string]: any }>(
             } else {
                 const ids = await textSearchDelegate.performTextSearch(searchString);
                 const promises: Promise<Entity<M> | null>[] = ids
-                    .map(async (id) => {
+                    .map(async (entityId) => {
                             try {
                                 return await dataSource.fetchEntity({
-                                    path: collectionPath,
-                                    entityId: id,
+                                    path,
+                                    entityId,
                                     schema
                                 });
                             } catch (e) {
@@ -84,7 +84,7 @@ export function useTextSearch<M extends { [Key: string]: any }>(
             setTextSearchLoading(false);
         }
 
-    }, [collectionPath, schema, textSearchDelegate, searchString]);
+    }, [path, schema, textSearchDelegate, searchString]);
 
     return {
         textSearchData,

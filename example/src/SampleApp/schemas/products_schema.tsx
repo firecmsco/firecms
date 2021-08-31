@@ -76,7 +76,7 @@ export const productSchema = buildSchema<any>({
     ],
     onPreSave: ({
                     schema,
-                    collectionPath,
+                    path,
                     id,
                     values,
                     status
@@ -214,7 +214,7 @@ export const productSchema = buildSchema<any>({
             description: "Reference to self",
             of: {
                 dataType: "reference",
-                collectionPath: "products"
+                path: "products"
             }
         },
         publisher: {

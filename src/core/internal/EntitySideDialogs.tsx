@@ -29,7 +29,7 @@ export function EntitySideDialogs<M extends { [Key: string]: any }>() {
 
     function buildEntityView(panel: SideEntityPanelProps) {
 
-        const schemaProps: SchemaConfig | undefined = schemasRegistry.getSchemaConfig(panel.collectionPath, panel.entityId);
+        const schemaProps: SchemaConfig | undefined = schemasRegistry.getSchemaConfig(panel.path, panel.entityId);
 
         if (!schemaProps) {
             throw Error("ERROR: You are trying to open an entity with no schema defined.");

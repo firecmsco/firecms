@@ -66,7 +66,7 @@ const productSchema = buildSchema({
     name: "Product",
     onPreSave: ({
                     schema,
-                    collectionPath,
+                    path,
                     id,
                     values,
                     status
@@ -103,7 +103,7 @@ const productSchema = buildSchema({
 * `schema`: EntitySchema
   Resolved schema of the entity
 
-* `collectionPath`: string
+* `path`: string
   Full path where this entity is being saved
 
 * `id`?: string
@@ -124,7 +124,7 @@ const productSchema = buildSchema({
 * `schema`: EntitySchema
   Resolved schema of the entity
 
-* `collectionPath`: string
+* `path`: string
   Full path where this entity is being saved
 
 * `id`?: string

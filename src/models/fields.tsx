@@ -128,7 +128,7 @@ export interface FormContext<M extends { [Key: string]: any }> {
     /**
      * Schema of the entity being modified
      */
-    entitySchema: EntitySchema<M>;
+    schema: EntitySchema<M>;
 
     /**
      * Current values of the entity

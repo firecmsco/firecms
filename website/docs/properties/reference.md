@@ -3,7 +3,7 @@ id: reference
 title: Reference
 sidebar_label: Reference
 ---
-## `collectionPath`
+## `path`
 
 Absolute collection path of the collection this reference
   points to. The schema of the entity is inferred based on the root navigation,

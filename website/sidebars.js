@@ -199,6 +199,7 @@ module.exports = {
                         'api/types/filtervalues',
                         'api/types/permissions',
                         'api/types/permissionsbuilder',
+                        'api/types/permissionsbuilderprops',
                         'api/types/wherefilterop',
                         'api/types/oncellvaluechange',
                         'api/types/oncellvaluechangeparams',

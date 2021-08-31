@@ -200,12 +200,12 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
     /**
      * Full path where this entity is being saved
      */
-    collectionPath: string;
+    path: string;
 
     /**
      * Id of the entity or undefined if new
      */
-    id?: string;
+    entityId?: string;
 
     /**
      * Values being saved
@@ -237,12 +237,12 @@ export interface EntityOnDeleteProps<M extends { [Key: string]: any }> {
     /**
      * Firestore path of the parent collection
      */
-    collectionPath: string;
+    path: string;
 
     /**
      * Deleted entity id
      */
-    id: string;
+    entityId: string;
 
     /**
      * Deleted entity

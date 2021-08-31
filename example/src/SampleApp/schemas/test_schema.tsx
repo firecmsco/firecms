@@ -46,14 +46,14 @@ export const testEntitySchema = buildSchema({
     name: "Test entity",
     onPreSave: ({
                     schema,
-                    collectionPath,
+                    path,
                     id,
                     values,
                     status,
                     context
                 }) => {
         return getNavigationFrom({
-            path: `${collectionPath}/${id}`,
+            path: `${path}/${id}`,
             context
         }).then((navigation) => {
             console.log("navigation", navigation);
@@ -84,7 +84,7 @@ export const testEntitySchema = buildSchema({
                         title: "Product",
                         of: {
                             dataType: "reference",
-                            collectionPath: "products"
+                            path: "products"
                         }
                     }
                 }
@@ -107,7 +107,7 @@ export const testEntitySchema = buildSchema({
         product: {
             title: "Product",
             dataType: "reference",
-            collectionPath: "products",
+            path: "products",
             previewProperties: ["name", "main_image"]
         },
         products: {
@@ -115,7 +115,7 @@ export const testEntitySchema = buildSchema({
             dataType: "array",
             of: {
                 dataType: "reference",
-                collectionPath: "products",
+                path: "products",
                 previewProperties: ["name", "main_image"]
             }
         },

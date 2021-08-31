@@ -1,3 +1,7 @@
+/**
+ * This interface represents a user.
+ * It has the some of the same fields as a Firebase User
+ */
 export interface User {
     /**
      * The display name of the user.

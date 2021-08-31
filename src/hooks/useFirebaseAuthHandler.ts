@@ -38,7 +38,7 @@ export const useFirebaseAuthHandler = (
     const updateFirebaseUser = async (user: User | null) => {
         setNotAllowedError(false);
         if (authentication instanceof Function && user) {
-            const allowed = await authentication(user);
+            const allowed = await authentication({ user });
             if (allowed)
                 setLoggedUser(user);
             else

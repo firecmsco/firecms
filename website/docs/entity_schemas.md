@@ -142,7 +142,7 @@ export const productSchema = buildSchema<Product>({
             description: "Reference to self",
             of: {
                 dataType: "reference",
-                collectionPath: "products"
+                path: "products"
             }
         },
         publisher: {

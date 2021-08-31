@@ -28,7 +28,7 @@ export const usersSchema = buildSchema({
             description: "Products this user has liked",
             of: {
                 dataType: "reference",
-                collectionPath: "products"
+                path: "products"
             }
         },
         picture: {

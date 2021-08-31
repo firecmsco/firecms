@@ -15,14 +15,14 @@ import { useDataSource } from "../../hooks/useDataSource";
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
-    collectionPath: string,
+    path: string,
     schema: EntitySchema<M>,
     open: boolean;
     onClose: () => void;
 
-    onEntityDelete?(collectionPath: string, entity: Entity<M>): void;
+    onEntityDelete?(path: string, entity: Entity<M>): void;
 
-    onMultipleEntitiesDelete?(collectionPath: string, entities: Entity<M>[]): void;
+    onMultipleEntitiesDelete?(path: string, entities: Entity<M>[]): void;
 }
 
 export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
@@ -32,7 +32,7 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
                                                                             open,
                                                                             onEntityDelete,
                                                                             onMultipleEntitiesDelete,
-                                                                            collectionPath,
+                                                                            path,
                                                                             ...other
                                                                         }
                                                                             : DeleteEntityDialogProps<M>) {
@@ -116,7 +116,7 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
                     setLoading(false);
 
                     if (onMultipleEntitiesDelete && entityOrEntities)
-                        onMultipleEntitiesDelete(collectionPath, entityOrEntities as Entity<M>[]);
+                        onMultipleEntitiesDelete(path, entityOrEntities as Entity<M>[]);
 
                     if (results.every(Boolean)) {
                         snackbarContext.open({
@@ -142,7 +142,7 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
                     setLoading(false);
                     if (success) {
                         if (onEntityDelete && entityOrEntities)
-                            onEntityDelete(collectionPath, entityOrEntities as Entity<M>);
+                            onEntityDelete(path, entityOrEntities as Entity<M>);
                         snackbarContext.open({
                             type: "success",
                             message: `${schema.name} deleted`

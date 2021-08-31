@@ -73,7 +73,7 @@ interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     entity?: Entity<M>;
     customFieldValidator?: CustomFieldValidator;
     schema: EntitySchema<M>;
-    collectionPath: string;
+    path: string;
     tableKey: string;
     name?: keyof M;
     property?: Property;
@@ -98,7 +98,7 @@ function PopupFormField<M extends { [Key: string]: any }>({
                                                                              name,
                                                                              property,
                                                                              schema,
-                                                                             collectionPath,
+                                                                             path,
                                                                              cellRect,
                                                                              setPreventOutsideClick,
                                                                              formPopupOpen,
@@ -157,7 +157,7 @@ function PopupFormField<M extends { [Key: string]: any }>({
             { [name]: schema.properties[name] } as PropertiesOrBuilder<M>
             : {} as PropertiesOrBuilder<M>,
         entity?.values ?? {},
-        collectionPath,
+        path,
         customFieldValidator,
         entity?.id);
 
@@ -239,7 +239,7 @@ function PopupFormField<M extends { [Key: string]: any }>({
         const disabled = isSubmitting;
 
         const context: FormContext<M> = {
-            entitySchema: schema,
+            schema: schema,
             entityId: entity.id,
             values
         };

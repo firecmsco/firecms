@@ -18,12 +18,12 @@ export const useStyles = makeStyles(() =>
 
 interface CollectionRouteProps<M extends { [Key: string]: any }> {
     collectionConfig: EntityCollection<M>;
-    collectionPath: string
+    path: string
 }
 
 function CollectionRoute<M extends { [Key: string]: any }>({
                                                                               collectionConfig,
-                                                                              collectionPath
+                                                                              path
                                                                           }
                                                                               : CollectionRouteProps<M>) {
 
@@ -44,7 +44,7 @@ function CollectionRoute<M extends { [Key: string]: any }>({
         <div className={classes.root}>
 
             <EntityCollectionTable
-                collectionPath={collectionPath}
+                path={path}
                 collectionConfig={collectionConfig}/>
 
         </div>

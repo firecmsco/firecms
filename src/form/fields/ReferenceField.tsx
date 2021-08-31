@@ -97,13 +97,13 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
 
     const schemaRegistry = useSchemasRegistry();
 
-    const collectionConfig = schemaRegistry.getCollectionConfig(property.collectionPath);
+    const collectionConfig = schemaRegistry.getCollectionConfig(property.path);
     if (!collectionConfig) {
-        console.error(`Couldn't find the corresponding collection view for the path: ${property.collectionPath}`);
+        console.error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
     }
 
     const schema = collectionConfig?.schema;
-    const collectionPath = property.collectionPath;
+    const path = property.path;
 
     const validValue = value && value instanceof EntityReference;
 
@@ -112,7 +112,7 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
         dataLoading,
         dataLoadingError
     } = useEntityFetch({
-        collectionPath: validValue ? value.path : undefined,
+        path: validValue ? value.path : undefined,
         entityId: validValue ? value.id : undefined,
         schema
     });
@@ -139,7 +139,7 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
         if (entity)
             sideEntityController.open({
                 entityId: entity.id,
-                collectionPath,
+                path,
                 overrideSchemaResolver: false
             });
     };
@@ -306,7 +306,7 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
                 {collectionConfig && <ReferenceDialog open={open}
                                                       collection={collectionConfig}
                                                       multiselect={false}
-                                                      collectionPath={collectionPath}
+                                                      path={path}
                                                       onClose={onClose}
                                                       onSingleEntitySelected={handleEntityClick}
                 />}

@@ -8,8 +8,8 @@ import { getSidePanelKey } from "./utils";
 
 const DEFAULT_SCHEMA_CONTROLLER = {
     initialised: false,
-    getSchemaConfig: (collectionPath: string, entityId?: string) => undefined,
-    getCollectionConfig: (collectionPath: string, entityId?: string) => {
+    getSchemaConfig: (path: string, entityId?: string) => undefined,
+    getCollectionConfig: (path: string, entityId?: string) => {
         throw Error("Reached wrong implementation");
     },
     removeAllOverridesExcept: (keys: string[]) => {
@@ -37,12 +37,12 @@ export type SchemasRegistryController = {
     /**
      * Get props for path
      */
-    getSchemaConfig: (collectionPath: string, entityId?: string) => SchemaConfig | undefined;
+    getSchemaConfig: (path: string, entityId?: string) => SchemaConfig | undefined;
 
     /**
      * Get props for path
      */
-    getCollectionConfig: (collectionPath: string, entityId?: string) => EntityCollection | undefined;
+    getCollectionConfig: (path: string, entityId?: string) => EntityCollection | undefined;
 
     /**
      * Set props for path
@@ -81,15 +81,15 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
     const initialised = collections !== undefined;
     const viewsRef = useRef<Record<string, Partial<SchemaConfig & { overrideSchemaResolver?: boolean }>>>({});
 
-    const getSchemaConfig = (collectionPath: string, entityId?: string): SchemaConfig => {
+    const getSchemaConfig = (path: string, entityId?: string): SchemaConfig => {
 
-        const sidePanelKey = getSidePanelKey(collectionPath, entityId);
+        const sidePanelKey = getSidePanelKey(path, entityId);
 
         let result: Partial<SchemaConfig> = {};
         const overriddenProps = viewsRef.current[sidePanelKey];
         const resolvedProps: SchemaConfig | undefined = schemaResolver && schemaResolver({
             entityId,
-            collectionPath: removeInitialAndTrailingSlashes(collectionPath)
+            path: removeInitialAndTrailingSlashes(path)
         });
 
         if (resolvedProps)
@@ -115,7 +115,7 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
 
         }
 
-        const entityCollection: EntityCollection | undefined = getCollectionViewFromPath(collectionPath, collections);
+        const entityCollection: EntityCollection | undefined = getCollectionViewFromPath(path, collections);
         if (entityCollection) {
             const schema = entityCollection.schema;
             const subcollections = entityCollection.subcollections;
@@ -135,8 +135,8 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
 
     };
 
-    const getCollectionConfig = (collectionPath: string, entityId?: string) => {
-        return getCollectionViewFromPath(collectionPath, collections);
+    const getCollectionConfig = (path: string, entityId?: string) => {
+        return getCollectionViewFromPath(path, collections);
     };
 
     const setOverride = (

@@ -43,7 +43,7 @@ export type SideEntityController<M extends { [Key: string]: any }> = {
      * Open a new entity sideDialog. By default, the schema and configuration
      * of the view is fetched from the collections you have specified in the
      * navigation.
-     * At least you need to pass the collectionPath of the entity you would like
+     * At least you need to pass the path of the entity you would like
      * to edit. You can set an entityId if you would like to edit and existing one
      * (or a new one with that id).
      * If you wish, you can also override the `SchemaSidePanelProps` and choose
@@ -137,14 +137,14 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
             navigate(-1);
         } else {
             console.log("locationPanels.length === 0");
-            const newPath = getCMSPathFrom(lastSidePanel.collectionPath);
+            const newPath = getCMSPathFrom(lastSidePanel.path);
             navigate(newPath, { replace: true });
         }
 
     };
 
     const open = ({
-                      collectionPath,
+                      path,
                       entityId,
                       selectedSubpath,
                       copy,
@@ -155,7 +155,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        const sidePanelKey = getSidePanelKey(collectionPath, entityId);
+        const sidePanelKey = getSidePanelKey(path, entityId);
 
         if (schemaProps
             && (schemaProps.schema !== undefined
@@ -173,15 +173,15 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         }
 
         const newPath = entityId
-            ? getEntityPath(entityId, collectionPath, selectedSubpath)
-            : getRouterNewEntityPath(collectionPath);
+            ? getEntityPath(entityId, path, selectedSubpath)
+            : getRouterNewEntityPath(path);
 
         const lastSidePanel = sidePanels.length > 0 ? sidePanels[sidePanels.length - 1] : undefined;
 
         // If the side dialog is open currently, we update it
         if (entityId
             && lastSidePanel
-            && lastSidePanel.collectionPath == collectionPath
+            && lastSidePanel.path == path
             && lastSidePanel?.entityId === entityId) {
 
             const updatedPanel: ExtendedPanelProps = {
@@ -190,7 +190,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                 selectedSubpath
             };
             navigate(
-                getEntityPath(entityId, collectionPath, selectedSubpath),
+                getEntityPath(entityId, path, selectedSubpath),
                 {
                     replace: true,
                     state: {
@@ -202,7 +202,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
 
         } else {
             const newPanel: ExtendedPanelProps = {
-                collectionPath,
+                path,
                 entityId,
                 copy: copy !== undefined && copy,
                 sidePanelKey,
@@ -246,7 +246,7 @@ function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[]
         const navigationEntry = navigationViewsForPath[i];
 
         if (navigationEntry.type === "collection") {
-            lastCollectionPath = navigationEntry.fullPath;
+            lastCollectionPath = navigationEntry.path;
         }
 
         if (i > 0) { // the first collection is handled by the main navigation
@@ -254,7 +254,7 @@ function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[]
             if (navigationEntry.type === "entity") {
                 if (previousEntry.type === "collection") {
                     sidePanels.push({
-                            collectionPath: navigationEntry.collectionPath,
+                            path: navigationEntry.relativePath,
                             entityId: navigationEntry.entityId,
                             copy: false
                         }
@@ -279,7 +279,7 @@ function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[]
 
     if (newFlag) {
         sidePanels.push({
-            collectionPath: lastCollectionPath,
+            path: lastCollectionPath,
             copy: false
         });
     }

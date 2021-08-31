@@ -49,11 +49,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
 export function EntityDetailView<M extends { [Key: string]: any }>({
                                                                        entity,
                                                                        schema,
-                                                                       collectionPath,
+                                                                       path,
                                                                        subcollections
                                                                    }: {
     entity?: Entity<M>,
-    collectionPath: string;
+    path: string;
     schema: EntitySchema<M>,
     subcollections?: EntityCollection<any>[];
 }) {
@@ -149,7 +149,7 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
 
                 {subcollections && subcollections.map(
                     (subcollection, colIndex) => {
-                        const collectionPath = `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.relativePath)}`;
+                        const path = `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.relativePath)}`;
                         return <Box
                             key={`entity_detail_tab_content_${subcollection.name}`}
                             role="tabpanel"
@@ -158,7 +158,7 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
                             width={"100%"}
                             hidden={tabsPosition !== colIndex + 1}>
                             <EntityCollectionTable
-                                collectionPath={collectionPath}
+                                path={path}
                                 collectionConfig={subcollection}
                             />
                         </Box>;

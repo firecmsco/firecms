@@ -6,7 +6,7 @@ import { useDataSource } from "./useDataSource";
  * @category Hooks and utilities
  */
 export interface EntityFetchProps<M extends { [Key: string]: any }> {
-    collectionPath?: string,
+    path?: string,
     entityId?: string,
     schema?: EntitySchema<M>,
 }
@@ -30,7 +30,7 @@ export type EntityFetchResult<M extends { [Key: string]: any }> = {
  */
 export function useEntityFetch<M extends { [Key: string]: any }>(
     {
-        collectionPath,
+        path,
         entityId,
         schema
     }: EntityFetchProps<M>): EntityFetchResult<M> {
@@ -57,10 +57,10 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
             setDataLoadingError(error);
         };
 
-        if (entityId && collectionPath && schema) {
+        if (entityId && path && schema) {
             if (dataSource.listenEntity) {
                 return dataSource.listenEntity<M>({
-                    path: collectionPath,
+                    path,
                     entityId,
                     schema,
                     onUpdate: onEntityUpdate,
@@ -68,7 +68,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
                 });
             } else {
                 dataSource.fetchEntity<M>({
-                    path: collectionPath,
+                    path,
                     entityId,
                     schema
                 })
@@ -84,7 +84,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
             return () => {
             };
         }
-    }, [entityId, schema, collectionPath]);
+    }, [entityId, schema, path]);
 
     return {
         entity,

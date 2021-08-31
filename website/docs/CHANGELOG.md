@@ -29,6 +29,18 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
 };
 ```
 
+- General callbacks refactor. All callbacks now always return a single object
+  with the props as fields. The goal of this change is to make them predictable
+  and remove inconsistencies:
+  - Every field that was previously called `collectionPath` now is simply
+    called `path`.
+  - All entity id fields are now renamed to `entityId` (with the only exception
+    of the field `id` in `Entity`).
+
+- `PermissionsBuilder` no longer has an `authController` prop, but it can still
+be accessed through the `context` prop
+- `Authenticator` now receives an object with a `user` field instead of a User
+- `FormContext`: `entitySchema` is now called `schema`
 
 ## [0.49.1] - 2021-08-15
 

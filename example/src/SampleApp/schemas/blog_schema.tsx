@@ -71,7 +71,7 @@ export const blogSchema = buildSchema({
                         dataType: "array",
                         of: {
                             dataType: "reference",
-                            collectionPath: "products",
+                            path: "products",
                             previewProperties: ["name", "main_image"]
                         }
                     }

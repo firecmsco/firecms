@@ -158,7 +158,7 @@ export function ExampleCMSView() {
                 <Button
                     onClick={() => sideEntityController.open({
                         entityId: "B003WT1622",
-                        collectionPath: "/products-test",
+                        path: "/products-test",
                         schema: customProductSchema
                     })}
                     color="primary">

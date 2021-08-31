@@ -18,7 +18,7 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
     /**
      * Absolute collection path
      */
-    collectionPath: string;
+    path: string;
 
     /**
      * Schema of the entity displayed by this collection

@@ -69,7 +69,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
     AdditionalKey extends string = string>({
                                                initialFilter,
                                                initialSort,
-                                               collectionPath,
+                                               path,
                                                schema,
                                                displayedProperties,
                                                textSearchDelegate,
@@ -126,7 +126,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
         dataLoadingError
     } = useCollectionFetch({
         entitiesDisplayedFirst,
-        collectionPath,
+        path,
         schema,
         filterValues,
         sortByProperty,
@@ -140,7 +140,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
     } = useTextSearch({
         searchString,
         textSearchDelegate,
-        collectionPath,
+        path,
         schema
     });
 
@@ -223,7 +223,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
     const columns = useMemo(() => {
         const allColumns: CMSColumn[] = (Object.keys(schema.properties) as (keyof M)[])
             .map((key) => {
-                const property: Property<any> = buildPropertyFrom<any, M>(schema.properties[key], schema.defaultValues ?? {}, collectionPath);
+                const property: Property<any> = buildPropertyFrom<any, M>(schema.properties[key], schema.defaultValues ?? {}, path);
                 return ({
                     id: key as string,
                     type: "property",
@@ -659,7 +659,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                     tableKey={tableKey}
                     customFieldValidator={customFieldValidator}
                     schema={schema}
-                    collectionPath={collectionPath}
+                    path={path}
                     formPopupOpen={formPopupOpen}
                     onCellValueChange={onCellValueChange}
                     setPreventOutsideClick={setPreventOutsideClick}

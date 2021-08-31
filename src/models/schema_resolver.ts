@@ -32,5 +32,5 @@ export interface SchemaConfig {
  */
 export type SchemaResolver = (props: {
     entityId?: string,
-    collectionPath: string
+    path: string
 }) => SchemaConfig | undefined;

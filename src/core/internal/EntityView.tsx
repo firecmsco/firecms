@@ -113,7 +113,7 @@ const useStylesSide = makeStyles((theme: Theme) =>
 
 
 export interface EntitySideViewProps<M extends { [Key: string]: any }> {
-    collectionPath: string;
+    path: string;
     entityId?: string;
     copy?: boolean;
     selectedSubpath?: string;
@@ -123,7 +123,7 @@ export interface EntitySideViewProps<M extends { [Key: string]: any }> {
 }
 
 function EntityView<M extends { [Key: string]: any }>({
-                                                          collectionPath,
+                                                          path,
                                                           entityId,
                                                           selectedSubpath,
                                                           copy,
@@ -141,7 +141,7 @@ function EntityView<M extends { [Key: string]: any }>({
     const authController = useAuthController();
 
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
-    const [currentEntityId, setCurrentEntityId] = useState<string|undefined>(entityId);
+    const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
     const [readOnly, setReadOnly] = useState<boolean>(false);
     const [tabsPosition, setTabsPosition] = React.useState(-1);
 
@@ -156,7 +156,7 @@ function EntityView<M extends { [Key: string]: any }>({
         entity,
         dataLoading,
         dataLoadingError
-    } = useEntityFetch({ collectionPath, entityId: currentEntityId, schema });
+    } = useEntityFetch({ path, entityId: currentEntityId, schema });
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
@@ -199,7 +199,12 @@ function EntityView<M extends { [Key: string]: any }>({
     }, [window]);
 
 
-    async function onEntitySave(schema: EntitySchema<M>, collectionPath: string, id: string | undefined, values: EntityValues<M>): Promise<void> {
+    async function onEntitySave({
+                                    schema,
+                                    path,
+                                    entityId,
+                                    values
+                                }: { schema: EntitySchema<M>, path: string, entityId: string | undefined, values: EntityValues<M> }): Promise<void> {
 
         if (!status)
             return;
@@ -248,7 +253,7 @@ function EntityView<M extends { [Key: string]: any }>({
                 message: e?.message
             });
 
-            console.error("Error saving entity", collectionPath, entityId, values);
+            console.error("Error saving entity", path, entityId, values);
             console.error(e);
         };
 
@@ -258,8 +263,8 @@ function EntityView<M extends { [Key: string]: any }>({
         }
 
         return dataSource.saveEntity({
-            collectionPath,
-            id,
+            path,
+            entityId: entityId,
             values,
             schema,
             status,
@@ -281,7 +286,7 @@ function EntityView<M extends { [Key: string]: any }>({
     const form = !readOnly ? (
         <EntityForm
             status={status}
-            collectionPath={collectionPath}
+            path={path}
             schema={schema}
             onEntitySave={onEntitySave}
             onDiscard={onDiscard}
@@ -320,7 +325,7 @@ function EntityView<M extends { [Key: string]: any }>({
 
     const subCollectionsViews = subcollections && subcollections.map(
         (subcollectionView, colIndex) => {
-            const collectionPath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollectionView.relativePath)}` : undefined;
+            const path = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollectionView.relativePath)}` : undefined;
 
             return (
                 <Box
@@ -329,8 +334,8 @@ function EntityView<M extends { [Key: string]: any }>({
                     role="tabpanel"
                     flexGrow={1}
                     hidden={tabsPosition !== colIndex + customViewsCount}>
-                    {entity && collectionPath ?
-                        <EntityCollectionTable collectionPath={collectionPath}
+                    {entity && path ?
+                        <EntityCollectionTable path={path}
                                                collectionConfig={subcollectionView}
                         />
                         :
@@ -368,7 +373,7 @@ function EntityView<M extends { [Key: string]: any }>({
         setTabsPosition(value);
         if (entityId) {
             sideEntityController.open({
-                collectionPath,
+                path,
                 entityId,
                 selectedSubpath: getSelectedSubpath(value),
                 overrideSchemaResolver: false

@@ -138,20 +138,20 @@ export type NavigationViewEntry<M> =
 interface NavigationViewEntity<M> {
     type: "entity";
     entityId: string;
-    collectionPath: string;
-    fullPath: string;
+    relativePath: string;
+    path: string;
     parentCollection: EntityCollection<M>;
 }
 
 interface NavigationViewCollection<M> {
     type: "collection";
-    fullPath: string;
+    path: string;
     collection: EntityCollection<M>;
 }
 
 interface NavigationViewCustom<M> {
     type: "custom_view";
-    fullPath: string;
+    path: string;
     view: EntityCustomView<M>;
 }
 
@@ -177,25 +177,25 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
 
         const collection = allCollections && allCollections.find((entry) => entry.relativePath === subpathCombination);
         if (collection) {
-            const collectionPath = currentFullPath && currentFullPath.length > 0
+            const path = currentFullPath && currentFullPath.length > 0
                 ? (currentFullPath + "/" + collection.relativePath)
                 : collection.relativePath;
 
             result.push({
                 type: "collection",
-                fullPath: collectionPath,
+                path,
                 collection
             });
             const restOfThePath = removeInitialAndTrailingSlashes(path.replace(subpathCombination, ""));
             const nextSegments = restOfThePath.length > 0 ? restOfThePath.split("/") : [];
             if (nextSegments.length > 0) {
                 const entityId = nextSegments[0];
-                const fullPath = collectionPath + "/" + entityId;
+                const fullPath = path + "/" + entityId;
                 result.push({
                     type: "entity",
                     entityId: entityId,
-                    collectionPath,
-                    fullPath: fullPath,
+                    relativePath: path,
+                    path: fullPath,
                     parentCollection: collection
                 });
                 if (nextSegments.length > 1) {
@@ -203,12 +203,12 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                     const customViews = collection.schema.views;
                     const customView = customViews && customViews.find((entry) => entry.path === newPath);
                     if (customView) {
-                        const collectionPath = currentFullPath && currentFullPath.length > 0
+                        const path = currentFullPath && currentFullPath.length > 0
                             ? (currentFullPath + "/" + customView.path)
                             : customView.path;
                         result.push({
                             type: "custom_view",
-                            fullPath: collectionPath,
+                            path,
                             view: customView
                         });
                     } else if (collection.subcollections) {

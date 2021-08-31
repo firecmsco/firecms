@@ -11,7 +11,7 @@ function checkHasPermissionOnEntity<M extends { [Key: string]: any }>
 (permission: PermissionsBuilder<M> | Permissions | undefined,
  entity: Entity<M> | null,
  authController: AuthController,
- collectionPath:string,
+ path: string,
  context: CMSAppContext): Permissions {
 
     if (permission === undefined) {
@@ -22,8 +22,7 @@ function checkHasPermissionOnEntity<M extends { [Key: string]: any }>
         return permission({
             user: authController.loggedUser,
             entity,
-            authController,
-            collectionPath,
+            path,
             context
         });
     }
@@ -35,25 +34,25 @@ export function canEdit<M extends { [Key: string]: any }>
 (permission: PermissionsBuilder<M> | Permissions | undefined,
  entity: Entity<M>,
  authController: AuthController,
- collectionPath:string,
+ path: string,
  context: CMSAppContext): boolean {
-    return checkHasPermissionOnEntity(permission,  entity, authController, collectionPath, context).edit ?? DEFAULT_PERMISSIONS.edit;
+    return checkHasPermissionOnEntity(permission, entity, authController, path, context).edit ?? DEFAULT_PERMISSIONS.edit;
 }
 
 export function canCreate<M extends { [Key: string]: any }>
 (permission: PermissionsBuilder<M> | Permissions | undefined,
  authController: AuthController,
- collectionPath:string,
+ path: string,
  context: CMSAppContext): boolean {
-    return checkHasPermissionOnEntity(permission,  null, authController, collectionPath, context).create ?? DEFAULT_PERMISSIONS.create;
+    return checkHasPermissionOnEntity(permission, null, authController, path, context).create ?? DEFAULT_PERMISSIONS.create;
 }
 
 export function canDelete<M extends { [Key: string]: any }>
 (permission: PermissionsBuilder<M> | Permissions | undefined,
  entity: Entity<M>,
  authController: AuthController,
- collectionPath:string,
+ path: string,
  context: CMSAppContext): boolean {
-    return checkHasPermissionOnEntity(permission,  entity, authController, collectionPath, context).delete ?? DEFAULT_PERMISSIONS.delete;
+    return checkHasPermissionOnEntity(permission, entity, authController, path, context).delete ?? DEFAULT_PERMISSIONS.delete;
 }
 

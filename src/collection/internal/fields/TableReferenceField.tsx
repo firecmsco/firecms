@@ -50,14 +50,14 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     }
 
     const classes = useInputStyles();
-    const collectionPath = usedProperty.collectionPath;
+    const path = usedProperty.path;
 
     const [open, setOpen] = useState<boolean>(false);
 
     const schemaRegistry = useSchemasRegistry();
-    const collectionConfig = schemaRegistry.getCollectionConfig(usedProperty.collectionPath);
+    const collectionConfig = schemaRegistry.getCollectionConfig(usedProperty.path);
     if (!collectionConfig) {
-        console.error(`Couldn't find the corresponding collection view for the path: ${usedProperty.collectionPath}`);
+        console.error(`Couldn't find the corresponding collection view for the path: ${usedProperty.path}`);
     }
 
 
@@ -153,7 +153,7 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
             && open
             && <ReferenceDialog open={open}
                                 multiselect={multiselect}
-                                collectionPath={collectionPath}
+                                path={path}
                                 collection={collectionConfig}
                                 onClose={handleClose}
                                 onMultipleEntitiesSelected={onMultipleEntitiesSelected}
