@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Switch } from "@material-ui/core";
+import { Switch } from "@mui/material";
 
 export function TableSwitch(props: {
     error: Error | undefined;

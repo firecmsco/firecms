@@ -6,7 +6,7 @@ import {
     MenuItem,
     Paper,
     Select
-} from "@material-ui/core";
+} from "@mui/material";
 import { FastField, FieldProps as FormikFieldProps } from "formik";
 
 import { formStyles } from "../styles";

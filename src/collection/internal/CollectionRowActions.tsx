@@ -13,8 +13,8 @@ import {
     Skeleton,
     Tooltip,
     Typography
-} from "@material-ui/core";
-import { Delete, FileCopy, KeyboardTab, MoreVert } from "@material-ui/icons";
+} from "@mui/material";
+import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
 
 /**
  *

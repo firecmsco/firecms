@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Divider } from "@material-ui/core";
+import { Divider } from "@mui/material";
 
 import { useStyles } from "./styles";
 import PreviewComponent from "../PreviewComponent";

@@ -5,7 +5,7 @@ import {
     InputLabel,
     MenuItem,
     Select as MuiSelect
-} from "@material-ui/core";
+} from "@mui/material";
 import React from "react";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";

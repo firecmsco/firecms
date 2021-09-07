@@ -1,7 +1,7 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography } from "@mui/material";
 import React, { ErrorInfo } from "react";
 
-import ErrorIcon from "@material-ui/icons/Error";
+import ErrorIcon from "@mui/icons-material/Error";
 
 
 export default class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {

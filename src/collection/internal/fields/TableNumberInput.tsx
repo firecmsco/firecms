@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Input } from "@material-ui/core";
+import { Input } from "@mui/material";
 import clsx from "clsx";
 import { useInputStyles } from "./styles";
 

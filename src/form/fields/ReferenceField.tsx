@@ -9,7 +9,7 @@ import {
     Theme,
     Tooltip,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import {
     Entity,
     EntityReference,
@@ -18,12 +18,12 @@ import {
     Property
 } from "../../models";
 
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
-import ErrorIcon from "@material-ui/icons/Error";
-import ClearIcon from "@material-ui/icons/Clear";
-import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
+import ErrorIcon from "@mui/icons-material/Error";
+import ClearIcon from "@mui/icons-material/Clear";
+import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { FieldDescription } from "../../form/components";
 import { ErrorView } from "../../core/components";
 import ReferenceDialog from "../../core/components/ReferenceDialog";

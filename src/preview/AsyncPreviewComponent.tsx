@@ -1,4 +1,4 @@
-import { Skeleton } from "@material-ui/core";
+import { Skeleton } from "@mui/material";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { EntitySchema } from "../models";

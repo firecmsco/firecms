@@ -5,7 +5,7 @@ export type {
 
 export { CMSAppProvider } from "./CMSAppProvider";
 export type {
-    CMSAppProviderProps, EntityLinkBuilder
+    CMSAppProviderProps
 } from "./CMSAppProvider";
 
 export { CMSMainView } from "./CMSMainView";
@@ -15,6 +15,6 @@ export type {
 
 export * from "./components";
 
-export { initCMSFirebase } from "./initCMSFirebase";
+export { initialiseFirebase } from "./initialiseFirebase";
 
 export { createCMSDefaultTheme } from "./theme";

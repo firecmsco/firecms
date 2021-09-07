@@ -26,8 +26,8 @@ Example of a custom preview for a `boolean` property:
 import React, { ReactElement } from "react";
 import { PreviewComponentProps } from "@camberi/firecms";
 
-import CheckBoxOutlineBlank from "@material-ui/icons/CheckBoxOutlineBlank";
-import CheckBoxOutlined from "@material-ui/icons/CheckBoxOutlined";
+import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxOutlined from "@mui/icons-material/CheckBoxOutlined";
 
 export default function CustomBooleanPreview({
                                                  value, property, size

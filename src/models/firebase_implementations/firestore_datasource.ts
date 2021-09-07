@@ -1,5 +1,6 @@
 import {
-    Entity, EntityOnDeleteProps,
+    Entity,
+    EntityOnDeleteProps,
     EntityReference,
     EntitySchema,
     EntityValues,
@@ -45,7 +46,18 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 
-export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
+export type FirestoreDataSourceProps = {
+    firebaseApp: FirebaseApp
+};
+
+/**
+ * Use this hook to build a {@link DataSource} based on Firestore
+ * @param firebaseApp
+ * @category Firebase Auth, Firestore and FirebaseStorage
+ */
+export function useFirestoreDataSource({
+                                           firebaseApp
+                                       }: FirestoreDataSourceProps): DataSource {
 
     const db = getFirestore(firebaseApp);
 
@@ -159,7 +171,9 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
         return query(collectionReference, ...queryParams);
     }
 
-    const datasource:DataSource ={
+    return {
+
+        // textSearchEnabled: Boolean(textSearchDelegate),
 
         /**
          * Fetch entities in a Firestore path
@@ -412,7 +426,7 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
 
             console.debug("Deleting entity", entity.path, entity.id);
 
-            const entityDeleteProps:EntityOnDeleteProps<M> = {
+            const entityDeleteProps: EntityOnDeleteProps<M> = {
                 entity,
                 schema,
                 entityId: entity.id,
@@ -485,7 +499,5 @@ export function useFirestoreDataSource (firebaseApp: FirebaseApp):DataSource {
 
         }
     };
-
-    return datasource;
 
 }

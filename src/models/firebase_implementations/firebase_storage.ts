@@ -6,17 +6,22 @@ import {
     ref,
     uploadBytes
 } from "firebase/storage";
-import { StorageSource, UploadFileProps, UploadFileResult } from "../storage";
+import { StorageSource, UploadFileProps } from "../storage";
 
-export function useFirebaseStorageSource(firebaseApp: FirebaseApp): StorageSource {
+export type FirebaseStorageSourceProps = {
+    firebaseApp: FirebaseApp
+};
+
+/**
+ * Use this hook to build an {@link StorageSource} based on Firebase storage
+ * @category Firebase Auth, Firestore and FirebaseStorage
+ */
+export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceProps): StorageSource {
 
     const storage: FirebaseStorage = getStorage(firebaseApp);
     const urlsCache: any = {};
 
     return {
-        /**
-         * @category Storage
-         */
         uploadFile({ file, fileName, path, metadata }: UploadFileProps)
             : Promise<any> {
             const usedFilename = fileName ?? file.name;
@@ -26,9 +31,6 @@ export function useFirebaseStorageSource(firebaseApp: FirebaseApp): StorageSourc
             }));
         },
 
-        /**
-         * @category Storage
-         */
         getDownloadURL(storagePath: string): Promise<string> {
             if (urlsCache[storagePath])
                 return urlsCache[storagePath];

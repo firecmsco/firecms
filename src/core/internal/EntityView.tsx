@@ -9,10 +9,10 @@ import {
     Theme,
     useMediaQuery,
     useTheme
-} from "@material-ui/core";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
-import CloseIcon from "@material-ui/icons/Close";
+} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import CloseIcon from "@mui/icons-material/Close";
 import { Prompt } from "react-router-dom";
 import clsx from "clsx";
 import EntityForm from "../../form/EntityForm";

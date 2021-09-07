@@ -20,6 +20,8 @@ export { AlgoliaTextSearchDelegate } from "./text_search_delegate";
 export type { DataSource } from "./datasource";
 export type { StorageSource } from "./storage";
 
+export type { EntityLinkBuilder } from "./entity_link_builder";
+
 export {
     useFirestoreDataSource
 } from "./firebase_implementations/firestore_datasource";

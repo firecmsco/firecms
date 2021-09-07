@@ -27,7 +27,7 @@ cd my-cms
 - Install FireCMS and it's peer dependencies:
 
 ```
-yarn add @camberi/firecms firebase @material-ui/core @material-ui/icons @material-ui/pickers @material-ui/lab
+yarn add @camberi/firecms firebase@9 @mui/material @mui/icons-material @material-ui/pickers @mui/lab
 ```
 
 You will need to init Firebase, either with an existing project or a new one:

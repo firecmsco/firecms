@@ -10,8 +10,8 @@ import {
     Select as MuiSelect,
     TextField as MuiTextField,
     Tooltip
-} from "@material-ui/core";
-import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+} from "@mui/material";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { ErrorMessage } from "formik";
 

@@ -20,7 +20,7 @@ function checkHasPermissionOnEntity<M extends { [Key: string]: any }>
         return permission as Permissions;
     } else if (typeof permission === "function") {
         return permission({
-            user: authController.loggedUser,
+            user: authController.user,
             entity,
             path,
             context

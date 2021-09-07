@@ -2,18 +2,21 @@ import React, { useEffect } from "react";
 
 import {
     Authenticator,
+    DataSource,
     Entity,
-    EntityCollection,
+    EntityCollection, EntityLinkBuilder,
     Locale,
     Navigation,
     NavigationBuilder,
-    SchemaResolver
+    SchemaResolver,
+    StorageSource,
+    User
 } from "../models";
 import { AuthController, AuthProvider } from "../contexts/AuthController";
 import { SnackbarProvider } from "../contexts/SnackbarContext";
 import {
-    SchemaRegistryContext,
-    SchemaRegistryProvider
+    SchemaRegistryProvider,
+    useSchemaRegistryController
 } from "../contexts/SchemaRegistry";
 import {
     CMSAppContext,
@@ -22,12 +25,7 @@ import {
 import { SideEntityProvider } from "../contexts/SideEntityController";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { EntitySideDialogs } from "./internal/EntitySideDialogs";
-import { DataSource } from "../models/datasource";
-import { User } from "../models/user";
-import { StorageSource } from "../models/storage";
 
-
-export type EntityLinkBuilder = ({ entity }: { entity: Entity<any> }) => string;
 
 /**
  * Main CMS configuration.
@@ -150,59 +148,54 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
         if (!authController.canAccessMainView) {
             return;
         }
-        getNavigation(navigationOrBuilder, authController.loggedUser, authController)
+        getNavigation(navigationOrBuilder, authController.user, authController)
             .then((result: Navigation) => {
                 setNavigation(result);
             }).catch(setNavigationLoadingError);
-    }, [authController.loggedUser, authController.canAccessMainView, navigationOrBuilder]);
+    }, [authController.user, authController.canAccessMainView, navigationOrBuilder]);
+
+    if (navigationLoadingError) {
+        return (
+            <div>
+                <p>There was an error while loading your navigation config</p>
+                <p>{navigationLoadingError}</p>
+
+            </div>
+        );
+    }
+    const schemaRegistryController = useSchemaRegistryController(navigation?.collections, schemaResolver);
+
+    const context: CMSAppContext = {
+        authController,
+        entityLinkBuilder,
+        dateTimeFormat,
+        locale,
+        navigation,
+        dataSource,
+        storageSource,
+        schemaRegistryController
+    };
 
     return (
         <AuthProvider authController={authController}>
             <SnackbarProvider>
                 <SchemaRegistryProvider
-                    collections={navigation?.collections}
-                    schemaResolver={schemaResolver}>
-                    <SchemaRegistryContext.Consumer>
-                        {(schemasRegistryController) => {
-                            const context:CMSAppContext = {
-                                authController,
-                                entityLinkBuilder,
-                                dateTimeFormat,
-                                locale,
-                                navigation,
-                                navigationLoadingError,
-                                dataSource,
-                                storageSource,
-                                schemasRegistryController
-                            };
-                            return (
-                                <CMSAppContextProvider
-                                    dateTimeFormat={dateTimeFormat}
-                                    locale={locale}
-                                    dataSource={dataSource}
-                                    storageSource={storageSource}
-                                    authController={authController}
-                                    navigation={navigation}
-                                    navigationLoadingError={navigationLoadingError}
-                                    schemasRegistryController={schemasRegistryController}
-                                >
-                                    <SideEntityProvider
-                                        collections={navigation?.collections}>
-                                        <BreadcrumbsProvider>
-                                            {children({
-                                                context
-                                            })}
-                                            <EntitySideDialogs/>
-                                        </BreadcrumbsProvider>
-                                    </SideEntityProvider>
-                                </CMSAppContextProvider>
-                            );
-                        }}
-                    </SchemaRegistryContext.Consumer>
-
+                    schemaRegistryController={schemaRegistryController}>
+                    <CMSAppContextProvider {...context} >
+                        <SideEntityProvider
+                            collections={navigation?.collections}>
+                            <BreadcrumbsProvider>
+                                {children({
+                                    context
+                                })}
+                                <EntitySideDialogs/>
+                            </BreadcrumbsProvider>
+                        </SideEntityProvider>
+                    </CMSAppContextProvider>
                 </SchemaRegistryProvider>
             </SnackbarProvider>
-        </AuthProvider>);
+        </AuthProvider>
+    );
 
 }
 

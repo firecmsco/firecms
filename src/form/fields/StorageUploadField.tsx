@@ -10,9 +10,9 @@ import {
     Paper,
     Theme,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 
-import makeStyles from "@material-ui/styles/makeStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
 import {
     ArrayProperty,
@@ -22,7 +22,7 @@ import {
     StringProperty
 } from "../../models";
 import { useDropzone } from "react-dropzone";
-import ClearIcon from "@material-ui/icons/Clear";
+import ClearIcon from "@mui/icons-material/Clear";
 import { PreviewComponent, PreviewSize } from "../../preview";
 import deepEqual from "deep-equal";
 import { FieldDescription } from "../../form/components";

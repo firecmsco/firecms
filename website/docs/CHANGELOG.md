@@ -22,6 +22,28 @@ or the Firebase auth mechanism. If you are using `CMSApp`, you will not be
 largely impacted by the changes in this update, besides the callbacks and
 props specified bellow.
 
+There are two new classes that replace the Firebase ones:
+- `EntityReference`
+- `GeoPoint` (though the field is not implemented)
+
+If you have any models that use Firebase references such as:
+```tsx
+import firebase from "firebase/app";
+type User = {
+    // ...
+    liked_products: firebase.firestore.DocumentReference[];
+}
+```
+
+you should replace them by:
+```tsx
+import { EntityReference } from "@camberi/firecms";
+type User = {
+    // ...
+    liked_products: EntityReference[];
+}
+```
+
 On the other hand, if you were using `CMSAppProvider` and `CMSMainView`, they
 have been largely refactored, and now you will need to implement a bunch of
 extra stuff if you want to go down the super custom road. You will be responsible
@@ -36,6 +58,8 @@ You can check a complete example in: https://github.com/Camberi/firecms/blob/mas
       called `path`.
     - All entity id fields are now renamed to `entityId` (with the only exception
       of the field `id` in `Entity`).
+
+- `AuthController` `loggedUser` renamed to `user`
 
 - `EntitySaveProps` renamed to `EntityOnSaveProps`
 
@@ -262,9 +286,9 @@ property, which was provoking unfixable saving errors.
   If your build breaks, simply add these dependencies to your project:
 
 ```
-"@material-ui/core": "^4.11.4",
-"@material-ui/icons": "^4.11.2",
-"@material-ui/lab": "^4.0.0-alpha.58",
+"@mui/material": "^4.11.4",
+"@mui/icons-material": "^4.11.2",
+"@mui/lab": "^4.0.0-alpha.58",
 "@material-ui/pickers": "^3.3.10",
 ```
 

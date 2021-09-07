@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import { Entity, useSnackbarController } from "@camberi/firecms";
 
 export function SampleExtraActions({ selectedEntities }: {

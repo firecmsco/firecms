@@ -1,5 +1,5 @@
 import React, { ComponentType, ReactElement, useEffect, useState } from "react";
-import { FormHelperText } from "@material-ui/core";
+import { FormHelperText } from "@mui/material";
 
 import {
     FastField,

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { User } from "../models/user";
+import { User } from "../models";
 
 interface AuthProviderProps {
     authController: AuthController,
@@ -16,7 +16,7 @@ export interface AuthController {
      * Either the Firebase user, null if they skipped login or undefined
      * if they are in the login screen
      */
-    loggedUser: User | null;
+    user: User | null;
 
     /**
      * Has the user completed the steps to access the main view, after the
@@ -27,7 +27,7 @@ export interface AuthController {
     /**
      * Error dispatched by the auth provider
      */
-    authProviderError: any;
+    authError: any;
 
     /**
      * Set an auth provider error
@@ -45,11 +45,6 @@ export interface AuthController {
      * @param loading
      */
     setAuthLoading: (loading: boolean) => void;
-
-    /**
-     * Is the login skipped
-     */
-    loginSkipped: boolean;
 
     /**
      * The current user was not allowed access
@@ -83,15 +78,14 @@ export interface AuthController {
 }
 
 export const AuthContext = React.createContext<AuthController>({
-    loggedUser: null,
-    authProviderError: null,
+    user: null,
+    authError: null,
     canAccessMainView: false,
     setAuthProviderError: (error: Error) => {
     },
     authLoading: false,
     setAuthLoading: () => {
     },
-    loginSkipped: false,
     notAllowedError: false,
     skipLogin: () => {
     },

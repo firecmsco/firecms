@@ -1,6 +1,6 @@
 import { useInputStyles } from "./styles";
 import React, { useEffect, useState } from "react";
-import { TextareaAutosize } from "@material-ui/core";
+import { TextareaAutosize } from "@mui/material";
 import clsx from "clsx";
 
 export function TableInput(props: {

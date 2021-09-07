@@ -12,11 +12,11 @@
         "clear": "docusaurus clear"
     },
     "dependencies": {
-        "@docusaurus/core": "^2.0.0-beta.4",
-        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.4",
-        "@docusaurus/plugin-sitemap": "^2.0.0-beta.4",
-        "@docusaurus/preset-classic": "^2.0.0-beta.4",
-        "@docusaurus/theme-live-codeblock": "^2.0.0-beta.4",
+        "@docusaurus/core": "^2.0.0-beta.5",
+        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.5",
+        "@docusaurus/plugin-sitemap": "^2.0.0-beta.5",
+        "@docusaurus/preset-classic": "^2.0.0-beta.5",
+        "@docusaurus/theme-live-codeblock": "^2.0.0-beta.5",
         "aos": "^2.3.4",
         "clsx": "^1.1.1",
         "docusaurus-plugin-typedoc": "^0.14.2",
@@ -42,7 +42,7 @@
         ]
     },
     "devDependencies": {
-        "@docusaurus/module-type-aliases": "^2.0.0-beta.4",
+        "@docusaurus/module-type-aliases": "^2.0.0-beta.5",
         "@tsconfig/docusaurus": "^1.0.2",
         "@types/react": "^17.0.2",
         "@types/react-helmet": "^6.1.0",

@@ -28,7 +28,7 @@ const DEFAULT_SCHEMA_CONTROLLER = {
  * CMSApp as well as the `schemaResolver` in case you want to override schemas
  * to specific entities.
  */
-export type SchemasRegistryController = {
+export type SchemaRegistryController = {
 
     /**
      * Is the registry ready to be used
@@ -63,20 +63,15 @@ export type SchemasRegistryController = {
     ) => void;
 };
 
-export const SchemaRegistryContext = React.createContext<SchemasRegistryController>(DEFAULT_SCHEMA_CONTROLLER);
+export const SchemaRegistryContext = React.createContext<SchemaRegistryController>(DEFAULT_SCHEMA_CONTROLLER);
 export const useSchemasRegistry = () => useContext(SchemaRegistryContext);
 
 interface ViewRegistryProviderProps {
     children: React.ReactNode;
-    collections?: EntityCollection[];
-    schemaResolver?: SchemaResolver;
+    schemaRegistryController: SchemaRegistryController;
 }
 
-export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
-                                                                                children,
-                                                                                collections,
-                                                                                schemaResolver
-                                                                            }) => {
+export function useSchemaRegistryController(collections: EntityCollection[] | undefined, schemaResolver: SchemaResolver | undefined) {
 
     const initialised = collections !== undefined;
     const viewsRef = useRef<Record<string, Partial<SchemaConfig & { overrideSchemaResolver?: boolean }>>>({});
@@ -165,15 +160,24 @@ export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
         });
     };
 
+    const schemaRegistryController = {
+        initialised,
+        getSchemaConfig,
+        getCollectionConfig,
+        setOverride,
+        removeAllOverridesExcept
+    };
+    return schemaRegistryController;
+}
+
+export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
+                                                                                children,
+                                                                                schemaRegistryController
+                                                                            }) => {
+
     return (
         <SchemaRegistryContext.Provider
-            value={{
-                initialised,
-                getSchemaConfig,
-                getCollectionConfig,
-                setOverride,
-                removeAllOverridesExcept
-            }}
+            value={schemaRegistryController}
         >
             {children}
         </SchemaRegistryContext.Provider>

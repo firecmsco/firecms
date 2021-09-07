@@ -14,12 +14,12 @@ import {
     IconButton,
     Popover,
     Theme
-} from "@material-ui/core";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import ArrowDropDownCircleIcon from "@material-ui/icons/ArrowDropDownCircle";
+} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import StringNumberFilterField from "./filters/StringNumberFilterField";
 import BooleanFilterField from "./filters/BooleanFilterField";
 import { getIconForProperty } from "../../util/property_icons";

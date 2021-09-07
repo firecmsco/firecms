@@ -1,7 +1,7 @@
 import React, { CSSProperties, useMemo, useState } from "react";
 import clsx from "clsx";
-import { IconButton } from "@material-ui/core";
-import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+import { IconButton } from "@mui/material";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { PreviewSize } from "../../preview";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";

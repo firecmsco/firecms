@@ -1,8 +1,8 @@
 import React from "react";
-import { CardMedia, Link } from "@material-ui/core";
+import { CardMedia, Link } from "@mui/material";
 
-import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
-import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { MediaType } from "../../models";
 import { PreviewComponentProps } from "../preview_component_props";

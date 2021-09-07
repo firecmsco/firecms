@@ -6,7 +6,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle
-} from "@material-ui/core";
+} from "@mui/material";
 import EntityPreview from "../../core/components/EntityPreview";
 import CircularProgressCenter from "../../core/components/CircularProgressCenter";
 import { useCMSAppContext, useSnackbarController } from "../../contexts";

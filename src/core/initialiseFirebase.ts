@@ -22,8 +22,9 @@ export interface CMSFirebaseInitResult {
  *
  * @param onFirebaseInit
  * @param firebaseConfig
+ * @category Hooks and utilities Functions
  */
-export function initCMSFirebase({ firebaseConfig, onFirebaseInit }: {
+export function initialiseFirebase({ firebaseConfig, onFirebaseInit }: {
     onFirebaseInit?: ((config: object) => void) | undefined,
     firebaseConfig: Object | undefined
 }): CMSFirebaseInitResult {

@@ -61,14 +61,14 @@ export function getNavigationFrom<M>({
 
     const dataSource = context.dataSource;
     const navigation = context.navigation;
-    const schemasRegistryController = context.schemasRegistryController;
+    const schemaRegistryController = context.schemaRegistryController;
 
     if (!navigation) {
         throw Error("Calling getNavigationFrom, but main navigation has not yet been initialised");
     }
 
-    if (!schemasRegistryController) {
-        throw Error("Calling getNavigationFrom, but main schemasRegistryController has not yet been initialised");
+    if (!schemaRegistryController) {
+        throw Error("Calling getNavigationFrom, but main schemaRegistryController has not yet been initialised");
     }
 
     const navigationEntries = getNavigationEntriesFromPathInternal({
@@ -80,7 +80,7 @@ export function getNavigationFrom<M>({
         if (entry.type === "collection") {
             return Promise.resolve(entry);
         } else if (entry.type === "entity") {
-            const schemaConfig = schemasRegistryController.getSchemaConfig(entry.relativePath, entry.entityId);
+            const schemaConfig = schemaRegistryController.getSchemaConfig(entry.relativePath, entry.entityId);
             if (!schemaConfig?.schema) {
                 throw Error(`No schema defined in the navigation for the entity with path ${entry.relativePath}`);
             }
@@ -136,10 +136,6 @@ export function useNavigationFrom<M>(
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
 
     useEffect(() => {
-
-        if (context.navigationLoadingError) {
-            setDataLoadingError(context.navigationLoadingError);
-        }
 
         const navigation = context.navigation;
         if (navigation) {

@@ -9,9 +9,9 @@ import {
     ListItemText,
     Theme,
     Typography
-} from "@material-ui/core";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import { Link as ReactLink } from "react-router-dom";
 import { Navigation } from "../models";
 import { computeNavigation, NavigationEntry } from "./navigation";

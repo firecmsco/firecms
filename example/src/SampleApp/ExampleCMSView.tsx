@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button } from "@material-ui/core";
+import { Box, Button } from "@mui/material";
 
 import {
     buildSchema,
@@ -52,9 +52,9 @@ export function ExampleCMSView() {
 
                 <div>This is an example of an additional view</div>
 
-                {authController.loggedUser ?
+                {authController.user ?
                     <div>Logged in
-                        as {authController.loggedUser.displayName}</div>
+                        as {authController.user.displayName}</div>
                     :
                     <div>You are not logged in</div>}
 

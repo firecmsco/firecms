@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import InputBase from "@material-ui/core/InputBase";
-import { alpha, Theme } from "@material-ui/core/styles";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
-import { FormControl, IconButton } from "@material-ui/core";
+import InputBase from "@mui/material/InputBase";
+import { alpha, Theme } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import { FormControl, IconButton } from "@mui/material";
 
-import SearchIcon from "@material-ui/icons/Search";
-import ClearIcon from "@material-ui/icons/Clear";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 import clsx from "clsx";
 
 const useStyles = makeStyles((theme: Theme) =>

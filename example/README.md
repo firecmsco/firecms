@@ -10,10 +10,10 @@ the `package.json` file for:
 // ...
 "dependencies": {
     "@camberi/firecms": "latest",
-    "@material-ui/core": "^4.11.4",
-    "@material-ui/icons": "^4.11.2",
+    "@mui/material": "^4.11.4",
+    "@mui/icons-material": "^4.11.2",
     "@material-ui/pickers": "^3.3.10",
-    "@material-ui/lab": "^4.0.0-alpha.58",
+    "@mui/lab": "^4.0.0-alpha.58",
     "algoliasearch": "^4.9.1",
     "firebase": "^8.5.0",
     "react": "^17.0.2",

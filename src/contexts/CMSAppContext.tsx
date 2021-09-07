@@ -1,9 +1,13 @@
 import React, { useContext } from "react";
-import { DataSource, Locale, Navigation, SchemaResolver } from "../models";
-import { SchemasRegistryController } from "./SchemaRegistry";
-import { StorageSource } from "../models/storage";
+import {
+    DataSource,
+    EntityLinkBuilder,
+    Locale,
+    Navigation,
+    StorageSource
+} from "../models";
+import { SchemaRegistryController } from "./SchemaRegistry";
 import { AuthController } from "./AuthController";
-import { EntityLinkBuilder } from "../core/CMSAppProvider";
 
 
 /**
@@ -11,10 +15,12 @@ import { EntityLinkBuilder } from "../core/CMSAppProvider";
  * @category Hooks and utilities
  */
 export interface CMSAppContext {
+
+    /**
+     * Resolved navigation. This means that if you are using a
+     * {@link NavigationBuilder} this field will be undefined until resolved
+     */
     navigation?: Navigation;
-    navigationLoadingError?: Error;
-    schemasRegistryController: SchemasRegistryController;
-    schemaResolver?: SchemaResolver;
 
     /**
      * Format of the dates in the CMS.
@@ -28,23 +34,40 @@ export interface CMSAppContext {
     locale?: Locale;
 
     /**
-     * Connector to your database
+     * Connector to your database, e.g. your Firestore database
      */
     dataSource: DataSource;
 
+    /**
+     * Used storage implementation
+     */
     storageSource: StorageSource;
 
+    /**
+     * This controller is in charge of resolving the entity schemas from a given
+     * path. It takes into account the `navigation` prop set in the main level of the
+     * CMSApp as well as the `schemaResolver` in case you want to override schemas
+     * to specific entities.
+     */
+    schemaRegistryController: SchemaRegistryController;
+
+    /**
+     * Used auth controller
+     */
     authController: AuthController;
 
+    /**
+     * Builder for generating utility links for entities
+     */
     entityLinkBuilder?: EntityLinkBuilder;
 
 }
 
 const CMSAppContextInstance = React.createContext<CMSAppContext>({
-    schemasRegistryController: {} as any,
+    schemaRegistryController: {} as any,
     dataSource: {} as any,
     storageSource: {} as any,
-    authController: {} as any,
+    authController: {} as any
 });
 
 /**

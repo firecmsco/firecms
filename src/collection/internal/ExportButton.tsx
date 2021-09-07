@@ -18,10 +18,10 @@ import {
     DialogTitle,
     IconButton,
     Tooltip
-} from "@material-ui/core";
+} from "@mui/material";
 
-import GetAppIcon from "@material-ui/icons/GetApp";
-import MuiAlert from "@material-ui/lab/Alert/Alert";
+import GetAppIcon from "@mui/icons-material/GetApp";
+import MuiAlert from "@mui/lab/Alert/Alert";
 import { CSVLink } from "react-csv";
 import { computeSchemaProperties } from "../../models/utils";
 import { useDataSource } from "../../hooks/useDataSource";

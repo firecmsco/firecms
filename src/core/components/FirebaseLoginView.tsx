@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { Box, Button, Grid, Theme } from "@material-ui/core";
+import { Box, Button, Grid, Theme } from "@mui/material";
 
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
 import firebase from "firebase/compat/app";
 
@@ -30,6 +30,12 @@ export interface FirebaseLoginViewProps {
     firebaseApp: FirebaseApp;
 }
 
+/**
+ * Use this component to render a login view based on FirebaseUI, that updates
+ * the state of the {@link AuthController} based on the result
+ * @constructor
+ * @category Core components
+ */
 export default function FirebaseLoginView({
                                       skipLoginButtonEnabled,
                                       logo,
@@ -71,8 +77,8 @@ export default function FirebaseLoginView({
 
     function buildErrorView() {
         let errorView: any;
-        if (authController.authProviderError) {
-            if (authController.authProviderError.code === "auth/operation-not-allowed") {
+        if (authController.authError) {
+            if (authController.authError.code === "auth/operation-not-allowed") {
                 errorView =
                     <>
                         <Box p={2}>
@@ -96,7 +102,7 @@ export default function FirebaseLoginView({
             } else {
                 errorView =
                     <Box p={2}>
-                        {authController.authProviderError.message}
+                        {authController.authError.message}
                     </Box>;
             }
         }

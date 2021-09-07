@@ -1,19 +1,23 @@
 import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
-import { ThemeProvider, CssBaseline } from "@material-ui/core";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import { CMSAppProps } from "./CMSAppProps";
 import { CMSMainView } from "./CMSMainView";
-import { CMSAppProvider, EntityLinkBuilder } from "./CMSAppProvider";
-import { CircularProgressCenter } from "./components";
+import { CMSAppProvider } from "./CMSAppProvider";
+import { CircularProgressCenter, FirebaseLoginView } from "./components";
 import { createCMSDefaultTheme } from "./theme";
-import { initCMSFirebase } from "./initCMSFirebase";
-import { FirebaseLoginView } from "./components/FirebaseLoginView";
+import { initialiseFirebase } from "./initialiseFirebase";
 import { AuthController } from "../contexts";
 import { useFirebaseAuthHandler } from "../hooks";
-import { useFirebaseStorageSource, useFirestoreDataSource } from "../models";
+import {
+    EntityLinkBuilder,
+    useFirebaseStorageSource,
+    useFirestoreDataSource
+} from "../models";
+import { CMSRouterSwitch } from "./CMSRouterSwitch";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -57,7 +61,7 @@ export function CMSApp({
         firebaseConfigLoading,
         configError,
         firebaseConfigError
-    } = initCMSFirebase({ onFirebaseInit, firebaseConfig });
+    } = initialiseFirebase({ onFirebaseInit, firebaseConfig });
 
     const authController: AuthController = useFirebaseAuthHandler({
         firebaseApp,
@@ -81,8 +85,8 @@ export function CMSApp({
         return <CircularProgressCenter/>;
     }
 
-    const dataSource = useFirestoreDataSource(firebaseApp!);
-    const storageSource = useFirebaseStorageSource(firebaseApp!);
+    const dataSource = useFirestoreDataSource({ firebaseApp: firebaseApp! });
+    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp! });
 
     const mode: "light" | "dark" = "light";
     const theme = createCMSDefaultTheme({
@@ -108,7 +112,7 @@ export function CMSApp({
                                 locale={locale}>
                     {({ context }) => {
 
-                        if (context.authController.authLoading) {
+                        if (context.authController.authLoading || !context.navigation) {
                             return <CircularProgressCenter/>;
                         }
 
@@ -124,10 +128,12 @@ export function CMSApp({
 
                         return <CMSMainView name={name}
                                             logo={logo}
-                                            toolbarExtraWidget={toolbarExtraWidget}/>;
+                                            toolbarExtraWidget={toolbarExtraWidget}>
+                            <CMSRouterSwitch navigation={context.navigation}/>
+                        </CMSMainView>;
                     }}
                 </CMSAppProvider>
             </Router>
         </ThemeProvider>
-    );
+);
 }

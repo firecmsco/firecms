@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import BaseTable, { Column } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
 import "react-base-table/styles.css";
-import { Box, Paper, Typography } from "@material-ui/core";
-import AssignmentIcon from "@material-ui/icons/Assignment";
+import { Box, Paper, Typography } from "@mui/material";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import { useLocation } from "react-router-dom";
 
 import {

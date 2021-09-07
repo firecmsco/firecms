@@ -10,9 +10,9 @@ import {
     TableRow,
     Theme,
     Typography
-} from "@material-ui/core";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import {
     buildPropertyFrom,
     Entity,
@@ -21,7 +21,7 @@ import {
     PropertyOrBuilder
 } from "../../models";
 import PreviewComponent from "../../preview/PreviewComponent";
-import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../../util/property_icons";
 import ErrorBoundary from "../internal/ErrorBoundary";
 import { useCMSAppContext } from "../../contexts";

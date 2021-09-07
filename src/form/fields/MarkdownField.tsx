@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Box, FormControl, FormHelperText, Theme } from "@material-ui/core";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+import { Box, FormControl, FormHelperText, Theme } from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import MDEditor from "@uiw/react-md-editor";
 
 import { FieldProps } from "../../models";

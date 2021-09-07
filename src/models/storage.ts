@@ -20,5 +20,5 @@ export interface StorageSource {
                      metadata
                  }: UploadFileProps) => Promise<UploadFileResult>;
 
-    getDownloadURL: (storagePath: string) => Promise<string>
+    getDownloadURL: (path: string) => Promise<string>
 }

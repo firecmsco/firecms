@@ -1,6 +1,6 @@
-import { Chip, Theme } from "@material-ui/core";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+import { Chip, Theme } from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import React, { useMemo } from "react";
 import {
     ChipColorSchema,

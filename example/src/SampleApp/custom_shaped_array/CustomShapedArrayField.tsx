@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { Box, FormControl, FormHelperText, Paper } from "@material-ui/core";
+import { Box, FormControl, FormHelperText, Paper } from "@mui/material";
 import {
     buildPropertyField,
     FieldDescription,

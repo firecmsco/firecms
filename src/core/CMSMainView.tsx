@@ -1,16 +1,15 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
-import { Theme } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { Theme } from "@mui/material";
+import { createStyles, makeStyles } from "@mui/styles";
 
 
 import CircularProgressCenter from "./components/CircularProgressCenter";
 import { CMSDrawer } from "./CMSDrawer";
-import { CMSRouterSwitch } from "./CMSRouterSwitch";
 import { CMSAppBar } from "./internal/CMSAppBar";
 import { useCMSAppContext } from "../contexts";
-import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
-import LocalizationProvider from "@material-ui/lab/LocalizationProvider";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
 import DateFnsUtils from "@date-io/date-fns";
 import { DndProvider } from "react-dnd";
@@ -93,12 +92,13 @@ const useStyles = makeStyles((theme: Theme) =>
  * @constructor
  * @category Core
  */
-export function CMSMainView(props: CMSMainViewProps) {
+export function CMSMainView(props: PropsWithChildren<CMSMainViewProps>) {
 
     const {
+        children,
         name,
         logo,
-        toolbarExtraWidget,
+        toolbarExtraWidget
     } = props;
 
     const context = useCMSAppContext();
@@ -115,16 +115,6 @@ export function CMSMainView(props: CMSMainViewProps) {
 
     if (!context.navigation) {
         return <CircularProgressCenter/>;
-    }
-
-    if (context.navigationLoadingError) {
-        return (
-            <div>
-                <p>There was an error while loading
-                    your navigation config</p>
-                <p>{context.navigationLoadingError}</p>
-            </div>
-        );
     }
 
     return (
@@ -147,8 +137,7 @@ export function CMSMainView(props: CMSMainViewProps) {
                                toolbarExtraWidget={toolbarExtraWidget}/>
                     <main
                         className={classes.content}>
-                        <CMSRouterSwitch
-                            navigation={context.navigation}/>
+                        {children}
                     </main>
                 </div>
 

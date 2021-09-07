@@ -1,9 +1,9 @@
 import React from "react";
-import { Theme } from "@material-ui/core";
+import { Theme } from "@mui/material";
 
 
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
 
 export const useInputStyles = makeStyles<Theme>(theme => createStyles({

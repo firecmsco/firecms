@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
-import { Snackbar } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert/Alert";
+import { Snackbar } from "@mui/material";
+import Alert from "@mui/lab/Alert/Alert";
 
 const DEFAULT_STATE = {
     isOpen: false,
@@ -102,15 +102,15 @@ export const SnackbarProvider: React.FC<ISelectedEntityProviderProps> = ({ child
             <Snackbar open={isOpen}
                       autoHideDuration={3000}
                       onClose={(_) => close()}>
-                <MuiAlert elevation={1}
-                          variant="filled"
-                          onClose={(_) => close()}
-                          severity={type}>
+                <Alert elevation={1}
+                       variant="filled"
+                       onClose={(_) => close()}
+                       severity={type}>
 
                     {title && <div>{title}</div>}
                     {message && <div>{message}</div>}
 
-                </MuiAlert>
+                </Alert>
             </Snackbar>
 
         </SnackbarContext.Provider>

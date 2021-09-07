@@ -7,8 +7,8 @@ import {
     IconButton,
     Tooltip,
     Typography
-} from "@material-ui/core";
-import InfoIcon from "@material-ui/icons/InfoOutlined";
+} from "@mui/material";
+import InfoIcon from "@mui/icons-material/InfoOutlined";
 
 interface FieldDescriptionPopoverProps<T extends CMSType> {
     property: Property<T>,

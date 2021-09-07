@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckBox, CheckBoxOutlineBlank } from "@material-ui/icons";
+import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 import { PreviewComponentProps } from "../preview_component_props";
 
 /**

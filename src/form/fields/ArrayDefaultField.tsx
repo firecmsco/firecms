@@ -1,5 +1,5 @@
 import { CMSType, FieldProps, Property } from "../../models";
-import { FormControl, FormHelperText, Paper } from "@material-ui/core";
+import { FormControl, FormHelperText, Paper } from "@mui/material";
 import React, { useState } from "react";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";

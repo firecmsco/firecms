@@ -1,8 +1,8 @@
 import React, { ReactElement } from "react";
 import { PreviewComponentProps } from "@camberi/firecms";
 
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 
 
 export const useStyles = makeStyles(() =>

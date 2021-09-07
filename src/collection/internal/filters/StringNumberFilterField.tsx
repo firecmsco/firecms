@@ -11,10 +11,10 @@ import {
     MenuItem,
     OutlinedInput,
     Select as MuiSelect
-} from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
+} from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
-import Tooltip from "@material-ui/core/Tooltip/Tooltip";
+import Tooltip from "@mui/material/Tooltip/Tooltip";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../../util/enums";
 import { EnumValuesChip } from "../../../preview/components/CustomChip";
 

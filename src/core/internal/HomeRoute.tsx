@@ -10,12 +10,12 @@ import {
     Grid,
     Theme,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import { Link as ReactLink, useLocation } from "react-router-dom";
 
 import {

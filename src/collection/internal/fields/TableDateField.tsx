@@ -1,10 +1,10 @@
 import React from "react";
 import { useInputStyles } from "./styles";
-import { Box, TextField as MuiTextField, Typography } from "@material-ui/core";
+import { Box, TextField as MuiTextField, Typography } from "@mui/material";
 import { EmptyValue, TimestampPreview } from "../../../preview";
-import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { TimestampProperty } from "../../../models";
-import DateTimePicker from "@material-ui/lab/DateTimePicker";
+import DateTimePicker from "@mui/lab/DateTimePicker";
 
 export function TableDateField(props: {
     name: string;

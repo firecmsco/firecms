@@ -9,8 +9,8 @@ import {
     MenuItem,
     Paper,
     Select
-} from "@material-ui/core";
-import { SelectChangeEvent } from "@material-ui/core/Select";
+} from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 import { formStyles } from "../styles";
 import { pick } from "../../util/objects";

@@ -7,9 +7,9 @@ import {
     Typography,
     useMediaQuery,
     useTheme
-} from "@material-ui/core";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import React, { useEffect, useState } from "react";
 
 import CollectionTable from "../../collection/components/CollectionTable";

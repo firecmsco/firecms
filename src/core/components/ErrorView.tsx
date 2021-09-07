@@ -1,10 +1,10 @@
 import React from "react";
 import clsx from "clsx";
-import ErrorIcon from "@material-ui/icons/Error";
-import { Theme, Tooltip } from "@material-ui/core";
+import ErrorIcon from "@mui/icons-material/Error";
+import { Theme, Tooltip } from "@mui/material";
 
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({

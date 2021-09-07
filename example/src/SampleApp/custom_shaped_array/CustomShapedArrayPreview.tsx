@@ -5,7 +5,7 @@ import {
     Property
 } from "@camberi/firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
-import { Box } from "@material-ui/core";
+import { Box } from "@mui/material";
 
 export default function CustomShapedArrayPreview({
                                                      value,

@@ -1,7 +1,7 @@
 import { BooleanProperty, WhereFilterOp } from "../../../models";
-import { Checkbox, FormControlLabel, Theme } from "@material-ui/core";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+import { Checkbox, FormControlLabel, Theme } from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import React from "react";
 
 export const useStyles = makeStyles((theme: Theme) =>

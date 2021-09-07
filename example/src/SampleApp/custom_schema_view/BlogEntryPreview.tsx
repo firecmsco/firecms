@@ -6,7 +6,7 @@ import {
     CircularProgress,
     Container,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import {
     Entity,
     EntityCustomViewParams,

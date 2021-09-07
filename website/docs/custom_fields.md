@@ -50,7 +50,7 @@ entity, you can use the `context` field in CMSFieldProps.
 This is an example of a custom TextField that takes the background color as a prop
 
 ```tsx
-import { TextField, Theme, withStyles } from "@material-ui/core";
+import { TextField, Theme, withStyles } from "@mui/material";
 import React, { ReactElement } from "react";
 import { FieldDescription, FieldProps } from "@camberi/firecms";
 

@@ -5,7 +5,7 @@ import {
     FormControl,
     FormHelperText,
     Paper
-} from "@material-ui/core";
+} from "@mui/material";
 import { ReferencePreview } from "../../preview";
 import React, { useMemo } from "react";
 import LabelWithIcon from "../components/LabelWithIcon";

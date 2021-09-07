@@ -2,7 +2,7 @@ import React from "react";
 
 import { FirebaseApp } from "firebase/app";
 import { GoogleAuthProvider } from "firebase/auth";
-import { ThemeProvider, CssBaseline } from "@material-ui/core";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import "typeface-rubik";
@@ -19,7 +19,7 @@ import {
     createCMSDefaultTheme,
     EntityLinkBuilder,
     FirebaseLoginView,
-    initCMSFirebase,
+    initialiseFirebase,
     NavigationBuilder,
     NavigationBuilderProps,
     useFirebaseAuthHandler,
@@ -95,7 +95,7 @@ export function SimpleAppWithProvider() {
         firebaseConfigLoading,
         configError,
         firebaseConfigError
-    } = initCMSFirebase({ firebaseConfig });
+    } = initialiseFirebase({ firebaseConfig });
 
     if (configError) {
         return <div> {configError} </div>;
@@ -122,8 +122,8 @@ export function SimpleAppWithProvider() {
         authentication: myAuthenticator
     });
 
-    const dataSource = useFirestoreDataSource(firebaseApp!);
-    const storageSource = useFirebaseStorageSource(firebaseApp!);
+    const dataSource = useFirestoreDataSource({ firebaseApp: firebaseApp as FirebaseApp });
+    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp as FirebaseApp });
 
     // This builder is only used to provide the button shortcuts in the entity views.
     const entityLinkBuilder: EntityLinkBuilder = ({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`;

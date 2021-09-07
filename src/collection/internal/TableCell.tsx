@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Measure, { ContentRect } from "react-measure";
-import { IconButton, Tooltip } from "@material-ui/core";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
+import { IconButton, Tooltip } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import clsx from "clsx";
 import { CellStyleProps, useCellStyles } from "../components/styles";
 import { getRowHeight } from "../common";

@@ -1,7 +1,7 @@
 import React from "react";
 
-import { TextField as MuiTextField } from "@material-ui/core";
-import DateTimePicker from "@material-ui/lab/DateTimePicker";
+import { TextField as MuiTextField } from "@mui/material";
+import DateTimePicker from "@mui/lab/DateTimePicker";
 
 import { FieldProps } from "../../models";
 

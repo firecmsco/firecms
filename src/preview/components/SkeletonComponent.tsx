@@ -16,7 +16,7 @@ import {
     TableBody,
     TableCell,
     TableRow
-} from "@material-ui/core";
+} from "@mui/material";
 import { PreviewSize } from "../../preview";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";

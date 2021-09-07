@@ -1,5 +1,5 @@
 import { FieldProps } from "../../models";
-import { FormControl, FormHelperText, Paper } from "@material-ui/core";
+import { FormControl, FormHelperText, Paper } from "@mui/material";
 import React from "react";
 import { formStyles } from "../styles";
 import { PreviewComponent } from "../../preview";

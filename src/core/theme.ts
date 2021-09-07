@@ -1,6 +1,11 @@
-import { pink, red } from "@material-ui/core/colors";
-import { createTheme, Theme } from "@material-ui/core";
+import { pink, red } from "@mui/material/colors";
+import { createTheme, Theme } from "@mui/material";
 
+/**
+ * Use this function to build the default FireCMS MUI5 theme,
+ * with some overrides.
+ * @category Hooks and utilities Functions
+ */
 export const createCMSDefaultTheme = (
     { mode, primaryColor, secondaryColor, fontFamily }: {
         mode: "light" | "dark";

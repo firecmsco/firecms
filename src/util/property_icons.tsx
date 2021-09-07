@@ -1,20 +1,20 @@
 import { Property } from "../models";
-import ShortTextIcon from "@material-ui/icons/ShortText";
-import SubjectIcon from "@material-ui/icons/Subject";
-import AttachmentIcon from "@material-ui/icons/Attachment";
-import Crop75Icon from "@material-ui/icons/Crop75";
-import ListIcon from "@material-ui/icons/List";
-import ScheduleIcon from "@material-ui/icons/Schedule";
-import ListAltIcon from "@material-ui/icons/ListAlt";
+import ShortTextIcon from "@mui/icons-material/ShortText";
+import SubjectIcon from "@mui/icons-material/Subject";
+import AttachmentIcon from "@mui/icons-material/Attachment";
+import Crop75Icon from "@mui/icons-material/Crop75";
+import ListIcon from "@mui/icons-material/List";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 import React from "react";
-import RoomIcon from "@material-ui/icons/Room";
-import ViewListIcon from "@material-ui/icons/ViewList";
-import LinkIcon from "@material-ui/icons/Link";
-import EqualizerIcon from "@material-ui/icons/Equalizer";
-import PhotoIcon from "@material-ui/icons/Photo";
-import HttpIcon from "@material-ui/icons/Http";
-import FlagIcon from "@material-ui/icons/Flag";
-import AdjustIcon from "@material-ui/icons/Adjust";
+import RoomIcon from "@mui/icons-material/Room";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import LinkIcon from "@mui/icons-material/Link";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+import PhotoIcon from "@mui/icons-material/Photo";
+import HttpIcon from "@mui/icons-material/Http";
+import FlagIcon from "@mui/icons-material/Flag";
+import AdjustIcon from "@mui/icons-material/Adjust";
 
 export function getIdIcon(
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",

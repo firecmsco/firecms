@@ -11,11 +11,11 @@ import {
     Input,
     MenuItem,
     Select as MuiSelect
-} from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
-import Tooltip from "@material-ui/core/Tooltip/Tooltip";
-import DateTimePicker from "@material-ui/lab/DateTimePicker";
-import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+} from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+import Tooltip from "@mui/material/Tooltip/Tooltip";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useInputStyles } from "../fields/styles";
 
 interface DateTimeFilterFieldProps {

@@ -14,11 +14,11 @@ import {
     Theme,
     Toolbar,
     Typography
-} from "@material-ui/core";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
-import MenuIcon from "@material-ui/icons/Menu";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import MenuIcon from "@mui/icons-material/Menu";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { useAuthController, useBreadcrumbsContext } from "../../contexts";
 import ErrorBoundary from "./ErrorBoundary";
@@ -130,11 +130,11 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                     </ErrorBoundary>}
 
                     <Box p={1} mr={1}>
-                        {authController.loggedUser && authController.loggedUser.photoURL ?
+                        {authController.user && authController.user.photoURL ?
                             <Avatar
-                                src={authController.loggedUser.photoURL}/>
+                                src={authController.user.photoURL}/>
                             :
-                            <Avatar>{authController.loggedUser?.displayName ? authController.loggedUser.displayName[0] : "A"}</Avatar>
+                            <Avatar>{authController.user?.displayName ? authController.user.displayName[0] : "A"}</Avatar>
                         }
                     </Box>
 

@@ -12,14 +12,14 @@ import {
     Tooltip,
     useMediaQuery,
     useTheme
-} from "@material-ui/core";
+} from "@mui/material";
 
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
 import { CollectionSize, EntitySchema } from "../../models";
 import SearchBar from "./SearchBar";
-import ClearIcon from "@material-ui/icons/Clear";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

@@ -21,6 +21,7 @@ export type FetchCollectionProps<M> = {
     limit?: number,
     startAfter?: any[],
     orderBy?: string,
+    textSearch?: string,
     order?: "desc" | "asc"
 };
 
@@ -61,6 +62,25 @@ export type DeleteEntityProps<M> = {
  */
 export interface DataSource {
 
+    // /**
+    //  * Does this datasource support text search
+    //  */
+    // textSearchEnabled: boolean;
+
+    /**
+     * Fetch data from a collection
+     * @param path
+     * @param schema
+     * @param filter
+     * @param limit
+     * @param startAfter
+     * @param orderBy
+     * @param order
+     * @param textSearch
+     * @return Function to cancel subscription
+     * @see useCollectionFetch if you need this functionality implemented as a hook
+     * @category Firestore
+     */
     fetchCollection<M>({
                            path,
                            schema,
@@ -68,7 +88,8 @@ export interface DataSource {
                            limit,
                            startAfter,
                            orderBy,
-                           order
+                           order,
+                           textSearch
                        }: FetchCollectionProps<M>
     ): Promise<Entity<M>[]>;
 

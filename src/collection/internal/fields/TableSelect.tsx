@@ -1,7 +1,7 @@
 import { EnumValues } from "../../../models";
 import { ArrayEnumPreview } from "../../../preview";
 import React, { useState } from "react";
-import { Checkbox, ListItemText, MenuItem, Select } from "@material-ui/core";
+import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
 import { useInputStyles } from "./styles";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../../util/enums";
 import { EnumValuesChip } from "../../../preview/components/CustomChip";

@@ -1,6 +1,6 @@
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
-import { Theme } from "@material-ui/core";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import { Theme } from "@mui/material";
 
 
 export const formStyles = makeStyles((theme: Theme) => createStyles({

@@ -12,8 +12,8 @@ import {
     NavigationBuilderProps,
 } from "@camberi/firecms";
 
-import { IconButton, Tooltip } from "@material-ui/core";
-import { GitHub } from "@material-ui/icons";
+import { IconButton, Tooltip } from "@mui/material";
+import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
 import { ExampleCMSView } from "./ExampleCMSView";

@@ -6,7 +6,7 @@ import { useFirestoreDataSource } from "../models/firebase_implementations/fires
 import { EntitySchema } from "../models";
 
 const firebaseApp = initializeApp({});
-const firestoreDatasource = useFirestoreDataSource(firebaseApp);
+const firestoreDatasource = useFirestoreDataSource({ firebaseApp });
 
 it("timestamp conversion", () => {
 

@@ -16,6 +16,10 @@ interface FirebaseAuthHandlerProps {
     authentication?: boolean | Authenticator;
 }
 
+/**
+ * Use this hook to build an {@link AuthController} based on Firebase Auth
+ * @category Firebase Auth, Firestore and FirebaseStorage
+ */
 export const useFirebaseAuthHandler = (
     {
         firebaseApp,
@@ -83,12 +87,11 @@ export const useFirebaseAuthHandler = (
     const canAccessMainView = (!authenticationEnabled || Boolean(loggedUser) || loginSkipped) && !notAllowedError;
 
     return {
-        loggedUser,
-        authProviderError,
+        user: loggedUser,
+        authError: authProviderError,
         setAuthProviderError,
         authLoading,
         setAuthLoading,
-        loginSkipped,
         notAllowedError,
         skipLogin,
         signOut: onSignOut,

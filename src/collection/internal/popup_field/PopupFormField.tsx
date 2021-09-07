@@ -7,10 +7,10 @@ import {
     Portal,
     Theme,
     Typography
-} from "@material-ui/core";
-import createStyles from "@material-ui/styles/createStyles";
-import makeStyles from "@material-ui/styles/makeStyles";
-import ClearIcon from "@material-ui/icons/Clear";
+} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import ClearIcon from "@mui/icons-material/Clear";
 
 import {
     Entity,
