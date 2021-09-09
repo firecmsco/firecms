@@ -41,7 +41,6 @@ import { getPreviewSizeFrom } from "../../preview/util";
 import PropertyTableCell, { OnCellChangeParams } from "../internal/PropertyTableCell";
 import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
 import { useCollectionFetch } from "../../hooks";
-import { useTextSearch } from "../../hooks/useTextSearch";
 import CollectionTableHeader from "../internal/CollectionTableHeader";
 import { CMSAppContext, useCMSAppContext } from "../../contexts";
 
@@ -72,7 +71,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                                                path,
                                                schema,
                                                displayedProperties,
-                                               textSearchDelegate,
+                                               textSearchEnabled,
                                                additionalColumns,
                                                indexes,
                                                inlineEditing,
@@ -115,8 +114,6 @@ export default function CollectionTable<M extends { [Key: string]: any },
 
     const [searchString, setSearchString] = React.useState<string | undefined>();
 
-    const textSearchEnabled = !!textSearchDelegate;
-
     const filterIsSet = filterValues && Object.keys(filterValues).length > 0;
 
     const {
@@ -130,28 +127,16 @@ export default function CollectionTable<M extends { [Key: string]: any },
         schema,
         filterValues,
         sortByProperty,
+        searchString,
         currentSort,
         itemCount
     });
 
-    const {
-        textSearchData,
-        textSearchLoading
-    } = useTextSearch({
-        searchString,
-        textSearchDelegate,
-        path,
-        schema
-    });
-
     const textSearchInProgress = Boolean(searchString);
-
-    const currentData: Entity<M>[] = textSearchInProgress ? textSearchData : data;
-    const loading = textSearchInProgress ? textSearchLoading : dataLoading;
 
     const actions = toolbarActionsBuilder && toolbarActionsBuilder({
         size,
-        data: currentData
+        data
     });
 
     const updatePopup = (value: boolean) => {
@@ -263,7 +248,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
         const isDesc = sortByProperty === key && currentSort === "desc";
         const isAsc = sortByProperty === key && currentSort === "asc";
         const newSort = isDesc ? "asc" : (isAsc ? undefined : "desc");
-        const newSortProperty:Extract<keyof M, string> | undefined = isAsc ? undefined : key;
+        const newSortProperty: Extract<keyof M, string> | undefined = isAsc ? undefined : key;
 
         if (filterValues) {
             if (!isFilterCombinationValid(filterValues, indexes, newSortProperty, newSort)) {
@@ -455,7 +440,10 @@ export default function CollectionTable<M extends { [Key: string]: any },
                     disabledTooltip={"Additional columns can't be edited directly"}
                 >
                     <ErrorBoundary>
-                        {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder({ entity, context })}
+                        {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder({
+                            entity,
+                            context
+                        })}
                     </ErrorBoundary>
                 </TableCell>
             );
@@ -544,7 +532,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
     }
 
     function buildEmptyView<M extends { [Key: string]: any }>() {
-        if (loading)
+        if (dataLoading)
             return <CircularProgressCenter/>;
         return (
             <Box display="flex"
@@ -576,7 +564,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                         {tableSize?.bounds &&
                         <BaseTable
                             rowClassName={`${classes.tableRow} ${classes.tableRowClickable}`}
-                            data={currentData}
+                            data={data}
                             width={tableSize.bounds.width}
                             height={tableSize.bounds.height}
                             emptyRenderer={dataLoadingError ? buildErrorView() : buildEmptyView()}
@@ -647,7 +635,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                                         size={size}
                                         onSizeChanged={setSize}
                                         title={title}
-                                        loading={loading}/>
+                                        loading={dataLoading}/>
 
                 <PopupFormField
                     cellRect={popupCell?.cellRect}

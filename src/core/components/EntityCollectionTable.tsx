@@ -406,7 +406,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 displayedProperties={displayedProperties}
                 initialFilter={collectionConfig.initialFilter}
                 initialSort={collectionConfig.initialSort}
-                textSearchDelegate={collectionConfig.textSearchDelegate}
+                textSearchEnabled={collectionConfig.textSearchEnabled}
                 paginationEnabled={paginationEnabled}
                 pageSize={pageSize}
                 indexes={collectionConfig.indexes}

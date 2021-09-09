@@ -33,6 +33,8 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
     sortByProperty?: Extract<keyof M, string>;
 
     currentSort?: Order;
+
+    searchString?: string;
 }
 
 /**
@@ -64,6 +66,7 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
         sortByProperty,
         currentSort,
         itemCount,
+        searchString,
         entitiesDisplayedFirst
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
 
@@ -95,7 +98,7 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
             updateData(entities);
             setNoMoreToLoad(!itemCount || entities.length < itemCount);
         };
-        const onError = (error:Error) => {
+        const onError = (error: Error) => {
             console.error("ERROR", error);
             setDataLoading(false);
             setData([]);
@@ -104,20 +107,22 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
 
         if (dataSource.listenCollection) {
             return dataSource.listenCollection<M>({
-                path:path,
+                path: path,
                 schema,
                 onUpdate: onEntitiesUpdate,
                 onError,
-                filter :filterValues,
+                searchString,
+                filter: filterValues,
                 limit: itemCount,
-                startAfter :undefined,
+                startAfter: undefined,
                 orderBy: sortByProperty,
                 order: currentSort
             });
         } else {
             dataSource.fetchCollection<M>({
-                path:path,
+                path: path,
                 schema,
+                searchString,
                 filter: filterValues,
                 limit: itemCount,
                 startAfter: undefined,
@@ -129,7 +134,7 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
             return () => {
             };
         }
-    }, [path, schema, itemCount, currentSort, sortByProperty, filterValues]);
+    }, [path, schema, itemCount, currentSort, sortByProperty, filterValues, searchString]);
 
     return {
         data,

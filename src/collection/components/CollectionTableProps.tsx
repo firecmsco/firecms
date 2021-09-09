@@ -5,8 +5,7 @@ import {
     Entity,
     EntitySchema,
     FilterValues,
-    Property,
-    TextSearchDelegate
+    Property
 } from "../../models";
 import React from "react";
 
@@ -51,9 +50,10 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
     defaultSize?: CollectionSize;
 
     /**
-     * If a text search delegate is provided, a searchbar is displayed
+     * Flag to indicate if a search bar should be displayed on top of
+     * the collection table.
      */
-    textSearchDelegate?: TextSearchDelegate;
+    textSearchEnabled?: boolean;
 
     /**
      * Properties displayed in this collection. If this property is not set

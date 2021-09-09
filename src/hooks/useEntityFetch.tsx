@@ -59,6 +59,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
 
         if (entityId && path && schema) {
             if (dataSource.listenEntity) {
+                console.log("useEntityFetch listenEntity");
                 return dataSource.listenEntity<M>({
                     path,
                     entityId,

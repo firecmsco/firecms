@@ -9,7 +9,7 @@ import {
     EntityCollection,
     Navigation,
     NavigationBuilder,
-    NavigationBuilderProps,
+    NavigationBuilderProps
 } from "@camberi/firecms";
 
 import { IconButton, Tooltip } from "@mui/material";
@@ -18,11 +18,7 @@ import { GitHub } from "@mui/icons-material";
 import { firebaseConfig } from "../firebase_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/test_shop_logo.png";
-import {
-    blogSearchDelegate,
-    productsSearchDelegate,
-    usersSearchDelegate
-} from "./algolia_utils";
+import { textSearchDelegateResolver } from "./algolia_utils";
 import {
     localeSchema,
     productAdditionalColumn,
@@ -57,7 +53,7 @@ function SampleApp() {
         name: "Products",
         group: "Main",
         description: "List of the products currently sold in our shop",
-        textSearchDelegate: productsSearchDelegate,
+        textSearchEnabled: true,
         additionalColumns: [productAdditionalColumn],
         indexes: [{ category: "desc", available: "desc" }],
         permissions: ({ user }) => ({
@@ -65,7 +61,7 @@ function SampleApp() {
             create: true,
             // we use some custom logic by storing user data in the 'extra;
             // field of the user
-            delete: user && user.extra.roles.includes("admin")
+            delete: user && user.extra?.roles.includes("admin")
         }),
         extraActions: productExtraActionBuilder,
         subcollections: [localeCollection],
@@ -78,7 +74,7 @@ function SampleApp() {
         name: "Users",
         group: "Main",
         description: "Registered users",
-        textSearchDelegate: usersSearchDelegate,
+        textSearchEnabled: true,
         additionalColumns: [
             {
                 id: "sample_additional",
@@ -100,7 +96,7 @@ function SampleApp() {
         defaultSize: "l",
         properties: ["name", "header_image", "status", "content", "reviewed", "gold_text"],
         description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
-        textSearchDelegate: blogSearchDelegate,
+        textSearchEnabled: true,
         initialFilter: {
             "status": ["==", "published"]
         }
@@ -184,6 +180,7 @@ function SampleApp() {
             GoogleAuthProvider.PROVIDER_ID,
             EmailAuthProvider.PROVIDER_ID
         ]}
+        textSearchDelegateResolver={textSearchDelegateResolver}
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}

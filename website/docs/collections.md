@@ -58,8 +58,8 @@ in [Entity collections](api/interfaces/entitycollection.md)
 * `additionalColumns` You can add additional columns to the collection view by
   implementing an additional column delegate.
 
-* `textSearchDelegate` If a text search delegate is supplied, a search bar is
-  displayed on top.
+* `textSearchEnabled` Flag to indicate if a search bar should be displayed on top of
+  the collection table.
 
 * `permissions` You can specify an object with boolean permissions with the
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions

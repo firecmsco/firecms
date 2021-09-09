@@ -6,7 +6,7 @@ import {
     ref,
     uploadBytes
 } from "firebase/storage";
-import { StorageSource, UploadFileProps } from "../storage";
+import { StorageSource, UploadFileProps } from "../models/storage";
 
 export type FirebaseStorageSourceProps = {
     firebaseApp: FirebaseApp

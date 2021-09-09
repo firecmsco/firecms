@@ -21,7 +21,7 @@ export type FetchCollectionProps<M> = {
     limit?: number,
     startAfter?: any[],
     orderBy?: string,
-    textSearch?: string,
+    searchString?: string,
     order?: "desc" | "asc"
 };
 
@@ -56,16 +56,9 @@ export type DeleteEntityProps<M> = {
 };
 
 /**
- * Implement this interface and pass it to {@link CMSApp} or {@link CMSAppProvider}
- * if you would like to override the default Firestore data source.
- *
+ * Implement this interface and pass it to a {@link CMSAppProvider}
  */
 export interface DataSource {
-
-    // /**
-    //  * Does this datasource support text search
-    //  */
-    // textSearchEnabled: boolean;
 
     /**
      * Fetch data from a collection
@@ -76,7 +69,7 @@ export interface DataSource {
      * @param startAfter
      * @param orderBy
      * @param order
-     * @param textSearch
+     * @param searchString
      * @return Function to cancel subscription
      * @see useCollectionFetch if you need this functionality implemented as a hook
      * @category Firestore
@@ -89,7 +82,7 @@ export interface DataSource {
                            startAfter,
                            orderBy,
                            order,
-                           textSearch
+                           searchString
                        }: FetchCollectionProps<M>
     ): Promise<Entity<M>[]>;
 
@@ -105,6 +98,7 @@ export interface DataSource {
      * @param startAfter
      * @param orderBy
      * @param order
+     * @param searchString
      * @return Function to cancel subscription
      * @see useCollectionFetch if you need this functionality implemented as a hook
      * @category Firestore
@@ -116,6 +110,7 @@ export interface DataSource {
             filter,
             limit,
             startAfter,
+            searchString,
             orderBy,
             order,
             onUpdate,
@@ -160,7 +155,6 @@ export interface DataSource {
      * undefined values.
      * @param path
      * @param id
-     * @param data
      * @param schema
      * @param status
      * @param onSaveSuccess

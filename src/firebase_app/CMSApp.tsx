@@ -5,19 +5,19 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import { CMSAppProps } from "./CMSAppProps";
-import { CMSMainView } from "./CMSMainView";
-import { CMSAppProvider } from "./CMSAppProvider";
-import { CircularProgressCenter, FirebaseLoginView } from "./components";
-import { createCMSDefaultTheme } from "./theme";
-import { initialiseFirebase } from "./initialiseFirebase";
-import { AuthController } from "../contexts";
-import { useFirebaseAuthHandler } from "../hooks";
 import {
-    EntityLinkBuilder,
-    useFirebaseStorageSource,
-    useFirestoreDataSource
-} from "../models";
-import { CMSRouterSwitch } from "./CMSRouterSwitch";
+    CMSAppProvider,
+    CMSMainView,
+    createCMSDefaultTheme,
+    initialiseFirebase
+} from "../core";
+import { CMSRouterSwitch } from "../core/CMSRouterSwitch";
+import { CircularProgressCenter, FirebaseLoginView } from "../core/components";
+import { AuthController } from "../contexts";
+import { useFirebaseAuthHandler } from "./useFirebaseAuthHandler";
+import { EntityLinkBuilder } from "../models";
+import { useFirestoreDataSource } from "./useFirestoreDataSource";
+import { useFirebaseStorageSource } from "./useFirebaseStorageSource";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -45,6 +45,7 @@ export function CMSApp({
                            authentication,
                            schemaResolver,
                            navigation,
+                           textSearchDelegateResolver,
                            allowSkipLogin,
                            signInOptions,
                            firebaseConfig,
@@ -85,7 +86,7 @@ export function CMSApp({
         return <CircularProgressCenter/>;
     }
 
-    const dataSource = useFirestoreDataSource({ firebaseApp: firebaseApp! });
+    const dataSource = useFirestoreDataSource({ firebaseApp: firebaseApp! , textSearchDelegateResolver});
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp! });
 
     const mode: "light" | "dark" = "light";

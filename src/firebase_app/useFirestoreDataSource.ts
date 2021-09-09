@@ -5,15 +5,15 @@ import {
     EntitySchema,
     EntityValues,
     GeoPoint
-} from "../entities";
-import { FilterValues, WhereFilterOp } from "../collections";
-import { Properties, Property } from "../properties";
+} from "../models/entities";
+import { FilterValues, WhereFilterOp } from "../models/collections";
+import { Properties, Property } from "../models/properties";
 import {
     computeSchemaProperties,
     sanitizeData,
     traverseValues,
     updateAutoValues
-} from "../utils";
+} from "../models/utils";
 import deepEqual from "deep-equal";
 import {
     DataSource,
@@ -23,7 +23,7 @@ import {
     ListenCollectionProps,
     ListenEntityProps,
     SaveEntityProps
-} from "../datasource";
+} from "../models/datasource";
 import {
     collection,
     deleteDoc,
@@ -45,18 +45,22 @@ import {
     where as whereClause
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
+import { TextSearchDelegateResolver } from "./text_search_delegate";
 
 export type FirestoreDataSourceProps = {
-    firebaseApp: FirebaseApp
+    firebaseApp: FirebaseApp,
+    textSearchDelegateResolver?: TextSearchDelegateResolver
 };
 
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
+ * @param textSearchDelegateResolver
  * @category Firebase Auth, Firestore and FirebaseStorage
  */
 export function useFirestoreDataSource({
-                                           firebaseApp
+                                           firebaseApp,
+                                           textSearchDelegateResolver
                                        }: FirestoreDataSourceProps): DataSource {
 
     const db = getFirestore(firebaseApp);
@@ -171,9 +175,32 @@ export function useFirestoreDataSource({
         return query(collectionReference, ...queryParams);
     }
 
-    return {
+    function getAndBuildEntity<M>(path: string, entityId: string, schema: EntitySchema<M>) {
+        return getDoc(doc(db, path, entityId))
+            .then((docSnapshot) => createEntityFromSchema(docSnapshot, schema, path));
+    }
 
-        // textSearchEnabled: Boolean(textSearchDelegate),
+    async function performTextSearch<M>(path: string, searchString: string, schema: EntitySchema<M>): Promise<Entity<M>[]> {
+        if (!textSearchDelegateResolver)
+            throw Error("Trying to make text search without specifying a TextSearchDelegateResolver");
+        const ids = await textSearchDelegateResolver({ path, searchString });
+        if (!ids)
+            throw Error("The current path is not supported by the specified TextSearchDelegateResolver");
+        const promises: Promise<Entity<M> | null>[] = ids
+            .map(async (entityId) => {
+                    try {
+                        return await getAndBuildEntity(path, entityId, schema);
+                    } catch (e) {
+                        console.error(e);
+                        return null;
+                    }
+                }
+            );
+        return Promise.all(promises)
+            .then((res) => res.filter((e) => e !== null && e.values) as Entity<M>[]);
+    }
+
+    return {
 
         /**
          * Fetch entities in a Firestore path
@@ -182,6 +209,7 @@ export function useFirestoreDataSource({
          * @param filter
          * @param limit
          * @param startAfter
+         * @param searchString
          * @param orderBy
          * @param order
          * @return Function to cancel subscription
@@ -194,10 +222,15 @@ export function useFirestoreDataSource({
                                                               filter,
                                                               limit,
                                                               startAfter,
+                                                              searchString,
                                                               orderBy,
                                                               order
                                                           }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> {
+
+            if (searchString) {
+                return performTextSearch(path, searchString, schema);
+            }
 
             console.debug("Fetching collection", path, limit, filter, startAfter, orderBy, order);
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
@@ -229,6 +262,7 @@ export function useFirestoreDataSource({
                 filter,
                 limit,
                 startAfter,
+                searchString,
                 orderBy,
                 order,
                 onUpdate,
@@ -239,6 +273,16 @@ export function useFirestoreDataSource({
             console.debug("Listening collection", path, limit, filter, startAfter, orderBy, order);
 
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
+
+            if (searchString) {
+                performTextSearch(path, searchString, schema)
+                    .then(onUpdate)
+                    .catch((e) => {
+                        if (onError) onError(e);
+                    });
+                return () => {
+                };
+            }
 
             return onSnapshot(query,
                 (colSnapshot) =>
@@ -262,9 +306,7 @@ export function useFirestoreDataSource({
                                                       }: FetchEntityProps<M>
         ): Promise<Entity<M>> {
             console.debug("Fetch entity", path, entityId);
-            return getDoc(doc(db, path, entityId))
-                .then((docSnapshot) => createEntityFromSchema(docSnapshot, schema, path));
-
+            return getAndBuildEntity(path, entityId, schema);
         },
 
         /**

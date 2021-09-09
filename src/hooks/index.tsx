@@ -32,6 +32,3 @@ export {
     useDataSource
 } from "./useDataSource";
 
-export {
-    useFirebaseAuthHandler
-} from "./useFirebaseAuthHandler";

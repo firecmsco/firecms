@@ -104,7 +104,7 @@ export default function ReferenceDialog(
     const dataSource = useDataSource();
 
     const schema = collection.schema;
-    const textSearchDelegate = collection.textSearchDelegate;
+    const textSearchEnabled = collection.textSearchEnabled;
     const initialFilter = collection.initialFilter;
     const displayedProperties = useColumnIds(collection, false);
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
@@ -217,7 +217,7 @@ export default function ReferenceDialog(
                                  title={title}
                                  pageSize={pageSize}
                                  displayedProperties={displayedProperties}
-                                 textSearchDelegate={textSearchDelegate}
+                                 textSearchEnabled={textSearchEnabled}
                                  initialFilter={initialFilter}
                                  initialSort={collection.initialSort}
                                  entitiesDisplayedFirst={selectedEntities}

@@ -7,6 +7,7 @@ import {
     NavigationBuilder,
     SchemaResolver
 } from "../models";
+import { TextSearchDelegateResolver } from "./text_search_delegate";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -112,5 +113,7 @@ export interface CMSAppProps {
      * You can also override schemas in place, when using `useSideEntityController`
      */
     schemaResolver?: SchemaResolver;
+
+    textSearchDelegateResolver?: TextSearchDelegateResolver;
 }
 

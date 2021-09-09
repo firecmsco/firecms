@@ -1,7 +1,4 @@
-export { CMSApp } from "./CMSApp";
-export type {
-    CMSAppProps
-} from "./CMSAppProps";
+
 
 export { CMSAppProvider } from "./CMSAppProvider";
 export type {

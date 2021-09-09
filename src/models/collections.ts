@@ -1,7 +1,6 @@
-import { TextSearchDelegate } from "./text_search_delegate";
 import { Entity, EntitySchema } from "./entities";
 import React from "react";
-import { AuthController, CMSAppContext } from "../contexts";
+import { CMSAppContext } from "../contexts";
 import { User } from "./user";
 
 /**
@@ -64,9 +63,10 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey>[];
 
     /**
-     * If a text search delegate is supplied, a search bar is displayed on top
+     * Flag to indicate if a search bar should be displayed on top of
+     * the collection table.
      */
-    textSearchDelegate?: TextSearchDelegate;
+    textSearchEnabled?: boolean;
 
     /**
      * Permissions the logged-in user can perform on this collection.
@@ -312,7 +312,7 @@ export type ExportConfig = {
  */
 export type ExportMappingFunction = {
     key: string;
-    builder: ({entity}: { entity: Entity<any> }) => Promise<string> | string
+    builder: ({ entity }: { entity: Entity<any> }) => Promise<string> | string
 }
 
 /**

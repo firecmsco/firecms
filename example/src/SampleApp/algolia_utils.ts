@@ -1,7 +1,9 @@
 import algoliasearch, { SearchClient } from "algoliasearch";
 
-import { AlgoliaTextSearchDelegate } from "@camberi/firecms";
-
+import {
+    performAlgoliaTextSearch,
+    TextSearchDelegateResolver
+} from "@camberi/firecms";
 
 let client: SearchClient | undefined = undefined;
 if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
@@ -11,12 +13,17 @@ if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH
     console.error("Text search not enabled");
 }
 
-export const productsSearchDelegate = client && AlgoliaTextSearchDelegate(
-    client,
-    "products");
-export const usersSearchDelegate = client && AlgoliaTextSearchDelegate(
-    client,
-    "users");
-export const blogSearchDelegate = client && AlgoliaTextSearchDelegate(
-    client,
-    "blog");
+const productsIndex = client && client.initIndex("products");
+const usersIndex = client && client.initIndex("users");
+const blogIndex = client && client.initIndex("blog");
+
+export const textSearchDelegateResolver: TextSearchDelegateResolver =
+    ({ path, searchString }) => {
+        if (path === "products")
+            return productsIndex && performAlgoliaTextSearch(productsIndex, searchString);
+        if (path === "users")
+            return usersIndex && performAlgoliaTextSearch(usersIndex, searchString);
+        if (path === "blog")
+            return blogIndex && performAlgoliaTextSearch(blogIndex, searchString);
+        return undefined;
+    };

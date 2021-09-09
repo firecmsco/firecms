@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { Timestamp } from "firebase/firestore";
 import { productSchema } from "./test_site_config";
 import { initEntityValues } from "../models/utils";
-import { useFirestoreDataSource } from "../models/firebase_implementations/firestore_datasource";
+import { useFirestoreDataSource } from "../firebase_app/useFirestoreDataSource";
 import { EntitySchema } from "../models";
 
 const firebaseApp = initializeApp({});
