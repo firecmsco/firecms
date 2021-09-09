@@ -27,7 +27,7 @@ cd my-cms
 - Install FireCMS and it's peer dependencies:
 
 ```
-yarn add @camberi/firecms firebase @material-ui/core @material-ui/icons @material-ui/pickers @material-ui/lab
+yarn add @camberi/firecms firebase@8 @material-ui/core @material-ui/icons @material-ui/pickers @material-ui/lab
 ```
 
 You will need to init Firebase, either with an existing project or a new one:
@@ -241,8 +241,7 @@ const localeSchema = buildSchema({
     }
 });
 
-export function App() {
-
+export default function App() {
 
     const navigation: NavigationBuilder = async ({
                                                      user,

@@ -343,7 +343,7 @@ export async function saveEntity<M extends { [Key: string]: any }>(
                 status,
                 context
             });
-        } catch (e) {
+        } catch (e:any) {
             console.error(e);
             if (onPreSaveHookError)
                 onPreSaveHookError(e);
@@ -383,7 +383,7 @@ export async function saveEntity<M extends { [Key: string]: any }>(
                         context
                     });
                 }
-            } catch (e) {
+            } catch (e:any) {
                 if (onSaveSuccessHookError)
                     onSaveSuccessHookError(e);
             }
@@ -452,7 +452,7 @@ export async function deleteEntity<M extends { [Key: string]: any }>(
     if (schema.onPreDelete) {
         try {
             await schema.onPreDelete(entityDeleteProps);
-        } catch (e) {
+        } catch (e:any) {
             console.error(e);
             if (onPreDeleteHookError)
                 onPreDeleteHookError(entity, e);
@@ -467,7 +467,7 @@ export async function deleteEntity<M extends { [Key: string]: any }>(
                 schema.onDelete(entityDeleteProps);
             }
             return true;
-        } catch (e) {
+        } catch (e:any) {
             if (onDeleteSuccessHookError)
                 onDeleteSuccessHookError(entity, e);
             return false;
