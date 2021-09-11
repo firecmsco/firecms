@@ -372,15 +372,17 @@ export function StorageUpload({
 
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
-        let downloadUrl: string | undefined;
+        let uploadPathOrDownloadUrl = uploadedPath;
         if (storageMeta.storeUrl) {
-            downloadUrl = await getDownloadURL(uploadedPath);
+            uploadPathOrDownloadUrl = await getDownloadURL(uploadedPath);
+        }
+        if (storageMeta.postProcess) {
+            uploadPathOrDownloadUrl = await storageMeta.postProcess(uploadPathOrDownloadUrl);
         }
 
         let newValue: StorageFieldItem[];
 
-        entry.storagePathOrDownloadUrl = storageMeta.storeUrl ? downloadUrl : uploadedPath;
-        entry.file = entry.file;
+        entry.storagePathOrDownloadUrl = uploadPathOrDownloadUrl;
         entry.metadata = metadata;
         newValue = [...internalValue];
 
