@@ -669,7 +669,6 @@ export function StorageUploadProgress({
                 title: "Error uploading file",
                 message: e.message
             });
-
         }, async () => {
             const fullPath = uploadTask.snapshot.ref.fullPath;
             await onFileUploadComplete(fullPath, entry, metadata);
