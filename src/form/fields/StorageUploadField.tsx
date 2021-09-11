@@ -619,7 +619,7 @@ interface StorageUploadItemProps {
     entry: StorageFieldItem,
     onFileUploadComplete: (value: string,
                            entry: StorageFieldItem,
-                           metadata?: firebase.storage.UploadMetadata) => void;
+                           metadata?: firebase.storage.UploadMetadata) => Promise<void>;
     size: PreviewSize;
 }
 
@@ -670,10 +670,10 @@ export function StorageUploadProgress({
                 message: e.message
             });
 
-        }, () => {
+        }, async () => {
             const fullPath = uploadTask.snapshot.ref.fullPath;
+            await onFileUploadComplete(fullPath, entry, metadata);
             setProgress(-1);
-            onFileUploadComplete(fullPath, entry, metadata);
         });
     }
 
