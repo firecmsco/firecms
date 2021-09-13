@@ -95,7 +95,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
 
     const schemasRegistry = useSchemasRegistry();
 
-    const basePathname = location.state && location.state["base_pathname"] ? location.state["base_pathname"] : location.pathname;
+    const baseLocation = location.state && location.state["base_location"] ? location.state["base_location"] : location;
 
     useEffect(() => {
         if (schemasRegistry.initialised) {
@@ -194,7 +194,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                 {
                     replace: true,
                     state: {
-                        base_pathname: basePathname,
+                        base_location: baseLocation,
                         panels: [...sidePanels.slice(0, -1), updatedPanel]
                     }
                 }
@@ -212,7 +212,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                 newPath,
                 {
                     state: {
-                        base_pathname: basePathname,
+                        base_location: baseLocation,
                         panels: [...sidePanels, newPanel]
                     }
                 }

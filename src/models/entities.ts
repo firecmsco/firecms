@@ -210,7 +210,7 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
     /**
      * Values being saved
      */
-    values: EntityValues<M>;
+    values: Partial<EntityValues<M>>;
 
     /**
      * New or existing entity

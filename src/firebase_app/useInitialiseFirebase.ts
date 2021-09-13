@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { FirebaseApp, initializeApp } from "firebase/app";
 
-export interface CMSFirebaseInitResult {
+export interface InitialiseFirebaseResult {
     firebaseConfigLoading: boolean,
     firebaseApp?: FirebaseApp;
     configError?: string,
@@ -24,10 +24,10 @@ export interface CMSFirebaseInitResult {
  * @param firebaseConfig
  * @category Hooks and utilities Functions
  */
-export function initialiseFirebase({ firebaseConfig, onFirebaseInit }: {
+export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
     onFirebaseInit?: ((config: object) => void) | undefined,
     firebaseConfig: Object | undefined
-}): CMSFirebaseInitResult {
+}): InitialiseFirebaseResult {
 
     const [firebaseApp, setFirebaseApp] = React.useState<FirebaseApp | undefined>();
     const [firebaseConfigLoading, setFirebaseConfigLoading] = React.useState<boolean>(false);

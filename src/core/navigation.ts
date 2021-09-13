@@ -38,10 +38,6 @@ export function buildCollectionUrlPath(view: EntityCollection) {
     return `${DATA_PATH}/${removeInitialAndTrailingSlashes(view.relativePath)}`;
 }
 
-export function buildCollectionPath(view: EntityCollection) {
-    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(view.relativePath)}`;
-}
-
 export function removeInitialAndTrailingSlashes(s: string) {
     return removeInitialSlash(removeTrailingSlash(s));
 }
@@ -243,6 +239,7 @@ export function computeNavigation(navigation:Navigation, includeHiddenViews: boo
         ...navigation.collections.map(collection => ({
             url: buildCollectionUrlPath(collection),
             name: collection.name,
+            description: collection.description,
             group: collection.group
         })),
         ...(navigation.views ?? []).map(view =>

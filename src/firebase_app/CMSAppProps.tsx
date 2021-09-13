@@ -7,7 +7,7 @@ import {
     NavigationBuilder,
     SchemaResolver
 } from "../models";
-import { TextSearchDelegateResolver } from "./text_search_delegate";
+import { TextSearchDelegateResolver } from "./text_search";
 
 /**
  * Main entry point that defines the CMS configuration

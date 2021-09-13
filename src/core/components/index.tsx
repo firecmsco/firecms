@@ -1,3 +1,5 @@
+import { CMSHomeProps } from "./CMSHome";
+
 export type { ErrorViewProps } from "./ErrorView";
 export {
     default as ErrorView
@@ -22,8 +24,12 @@ export {
     default as CircularProgressCenter
 } from "./CircularProgressCenter";
 
-export type { FirebaseLoginViewProps } from "./FirebaseLoginView";
+export type { CMSHomeProps } from "./CMSHome";
 export {
-    default as FirebaseLoginView
-} from "./FirebaseLoginView";
+    default as CMSHome
+} from "./CMSHome";
+export {
+    default as BreadcrumbUpdater
+} from "./BreadcrumbUpdater";
+
 

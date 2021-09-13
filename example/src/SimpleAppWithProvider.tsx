@@ -2,7 +2,7 @@ import React from "react";
 
 import { FirebaseApp } from "firebase/app";
 import { GoogleAuthProvider } from "firebase/auth";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import "typeface-rubik";
@@ -15,16 +15,17 @@ import {
     buildSchema,
     CircularProgressCenter,
     CMSAppProvider,
-    CMSMainView,
+    CMSRoutes,
+    CMSScaffold,
     createCMSDefaultTheme,
     EntityLinkBuilder,
     FirebaseLoginView,
-    initialiseFirebase,
     NavigationBuilder,
     NavigationBuilderProps,
     useFirebaseAuthHandler,
     useFirebaseStorageSource,
-    useFirestoreDataSource
+    useFirestoreDataSource,
+    useInitialiseFirebase
 } from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
@@ -95,7 +96,7 @@ export function SimpleAppWithProvider() {
         firebaseConfigLoading,
         configError,
         firebaseConfigError
-    } = initialiseFirebase({ firebaseConfig });
+    } = useInitialiseFirebase({ firebaseConfig });
 
     if (configError) {
         return <div> {configError} </div>;
@@ -139,7 +140,7 @@ export function SimpleAppWithProvider() {
                                 storageSource={storageSource}>
                     {({ context }) => {
 
-                        if (context.authController.authLoading) {
+                        if (context.authController.authLoading || !context.navigation) {
                             return <CircularProgressCenter/>;
                         }
 
@@ -152,11 +153,14 @@ export function SimpleAppWithProvider() {
                             );
                         }
 
-                        return <CMSMainView name={"My Online Shop"}/>;
+                        return (
+                            <CMSScaffold name={"My Online Shop"}>
+                                <CMSRoutes navigation={context.navigation}/>
+                            </CMSScaffold>);
 
                     }}
                 </CMSAppProvider>
             </Router>
         </ThemeProvider>
-    );
+);
 }

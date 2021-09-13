@@ -2,27 +2,28 @@ import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+
+import {
+    CircularProgressCenter,
+    CMSAppProvider,
+    CMSScaffold,
+    CMSRoutes,
+    createCMSDefaultTheme
+} from "../core";
+import { AuthController } from "../contexts";
+import { EntityLinkBuilder } from "../models";
 
 import { CMSAppProps } from "./CMSAppProps";
-import {
-    CMSAppProvider,
-    CMSMainView,
-    createCMSDefaultTheme,
-    initialiseFirebase
-} from "../core";
-import { CMSRouterSwitch } from "../core/CMSRouterSwitch";
-import { CircularProgressCenter, FirebaseLoginView } from "../core/components";
-import { AuthController } from "../contexts";
 import { useFirebaseAuthHandler } from "./useFirebaseAuthHandler";
-import { EntityLinkBuilder } from "../models";
 import { useFirestoreDataSource } from "./useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./useFirebaseStorageSource";
+import { useInitialiseFirebase } from "./useInitialiseFirebase";
+import FirebaseLoginView from "./FirebaseLoginView";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
 ];
-
 
 /**
  * Main entry point for FireCMS. You can use this component as a full app,
@@ -32,7 +33,7 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * configuration object.
  *
  * If you are building a larger app and need finer control, you can use
- * {@link CMSAppProvider} and {@link CMSMainView} instead.
+ * {@link CMSAppProvider} and {@link CMSScaffold} instead.
  *
  * @param props
  * @constructor
@@ -62,7 +63,7 @@ export function CMSApp({
         firebaseConfigLoading,
         configError,
         firebaseConfigError
-    } = initialiseFirebase({ onFirebaseInit, firebaseConfig });
+    } = useInitialiseFirebase({ onFirebaseInit, firebaseConfig });
 
     const authController: AuthController = useFirebaseAuthHandler({
         firebaseApp,
@@ -86,7 +87,10 @@ export function CMSApp({
         return <CircularProgressCenter/>;
     }
 
-    const dataSource = useFirestoreDataSource({ firebaseApp: firebaseApp! , textSearchDelegateResolver});
+    const dataSource = useFirestoreDataSource({
+        firebaseApp: firebaseApp!,
+        textSearchDelegateResolver
+    });
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp! });
 
     const mode: "light" | "dark" = "light";
@@ -100,9 +104,11 @@ export function CMSApp({
     const entityLinkBuilder: EntityLinkBuilder = ({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`;
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <Router>
+        <BrowserRouter>
+            <ThemeProvider theme={theme}>
+
+                <CssBaseline/>
+
                 <CMSAppProvider navigation={navigation}
                                 authController={authController}
                                 schemaResolver={schemaResolver}
@@ -127,14 +133,16 @@ export function CMSApp({
                             );
                         }
 
-                        return <CMSMainView name={name}
-                                            logo={logo}
-                                            toolbarExtraWidget={toolbarExtraWidget}>
-                            <CMSRouterSwitch navigation={context.navigation}/>
-                        </CMSMainView>;
+                        return (
+                                <CMSScaffold name={name}
+                                             logo={logo}
+                                             toolbarExtraWidget={toolbarExtraWidget}>
+                                    <CMSRoutes navigation={context.navigation}/>
+                                </CMSScaffold>
+                        );
                     }}
                 </CMSAppProvider>
-            </Router>
-        </ThemeProvider>
-);
+            </ThemeProvider>
+        </BrowserRouter>
+    );
 }

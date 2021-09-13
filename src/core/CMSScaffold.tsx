@@ -20,7 +20,7 @@ import * as locales from "date-fns/locale";
 /**
  * @category Core
  */
-export interface CMSMainViewProps {
+export interface CMSScaffoldProps {
 
     /**
      * Name of the app, displayed as the main title and in the tab title
@@ -31,12 +31,6 @@ export interface CMSMainViewProps {
      * Logo to be displayed in the drawer of the CMS
      */
     logo?: string;
-
-    /**
-     * If authentication is enabled, allow the user to access the content
-     * without login.
-     */
-    allowSkipLogin?: boolean;
 
     /**
      * A component that gets rendered on the upper side of the main toolbar
@@ -92,7 +86,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * @constructor
  * @category Core
  */
-export function CMSMainView(props: PropsWithChildren<CMSMainViewProps>) {
+export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
 
     const {
         children,

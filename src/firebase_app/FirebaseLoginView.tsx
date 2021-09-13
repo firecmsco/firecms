@@ -6,7 +6,7 @@ import makeStyles from "@mui/styles/makeStyles";
 
 import firebase from "firebase/compat/app";
 
-import { useAuthController } from "../../contexts";
+import { useAuthController } from "../contexts";
 
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";

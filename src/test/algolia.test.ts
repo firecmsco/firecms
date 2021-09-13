@@ -6,10 +6,8 @@ it("Test Algolia search", async () => {
     const client = algoliasearch(
         "Y6FR1MDSVW",
         "f084e6dcc154c04295c8124dbb797ff1");
+    const usersIndex = client.initIndex("users");
 
-    await performAlgoliaTextSearch(
-        client,
-        "users",
-        "john").then(console.log);
+    await performAlgoliaTextSearch(usersIndex, "john").then(console.log);
     console.log("done");
 });

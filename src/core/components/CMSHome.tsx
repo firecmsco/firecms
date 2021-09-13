@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
     Box,
     Card,
@@ -16,14 +16,9 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
-import { Link as ReactLink, useLocation } from "react-router-dom";
+import { Link as ReactLink } from "react-router-dom";
 
-import {
-    BreadcrumbEntry,
-    computeNavigation,
-    NavigationEntry
-} from "../navigation";
-import { useBreadcrumbsContext } from "../../contexts";
+import { computeNavigation, NavigationEntry } from "../navigation";
 import { Navigation } from "../../models";
 import { Markdown } from "../../preview";
 
@@ -41,30 +36,21 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-
-interface HomeRouteProps {
+export interface CMSHomeProps {
     navigation: Navigation;
 }
 
-function HomeRoute({
+/**
+ * Default main view and entry point for the CMS
+ * This components takes navigation as an input and renders
+ * @param navigation
+ * @constructor
+ */
+function CMSHome({
                        navigation
-                   }: HomeRouteProps) {
+                   }: CMSHomeProps) {
 
     const classes = useStyles();
-    const { pathname } = useLocation();
-
-    const breadcrumb: BreadcrumbEntry = {
-        title: "Home",
-        url: pathname
-    };
-
-    const breadcrumbsContext = useBreadcrumbsContext();
-
-    useEffect(() => {
-        breadcrumbsContext.set({
-            breadcrumbs: [breadcrumb]
-        });
-    }, [pathname]);
 
     const {
         navigationEntries,
@@ -114,7 +100,6 @@ function HomeRoute({
         );
     }
 
-
     return (
         <Container>
             {allGroups.map((group, index) => (
@@ -145,4 +130,4 @@ function HomeRoute({
     );
 }
 
-export default HomeRoute;
+export default CMSHome;

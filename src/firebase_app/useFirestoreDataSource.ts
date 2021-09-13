@@ -45,7 +45,8 @@ import {
     where as whereClause
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { TextSearchDelegateResolver } from "./text_search_delegate";
+import { TextSearchDelegateResolver } from "./text_search";
+import firebase from "firebase/compat/app";
 
 export type FirestoreDataSourceProps = {
     firebaseApp: FirebaseApp,
@@ -365,15 +366,8 @@ export function useFirestoreDataSource({
             }: SaveEntityProps<M>): Promise<void> {
 
             const properties: Properties<M> = computeSchemaProperties(schema, path, entityId);
-            let updatedValues: EntityValues<M> = updateAutoValues(
-                {
-                    inputValues: values,
-                    properties,
-                    status,
-                    timestampNowValue: serverTimestamp(),
-                    referenceConverter: (value: EntityReference) => doc(db, value.path, value.id),
-                    geopointConverter: (value: GeoPoint) => new GeoPoint(value.latitude, value.longitude)
-                });
+
+            let updatedValues: EntityValues<M>;
 
             if (schema.onPreSave) {
                 try {
@@ -381,7 +375,7 @@ export function useFirestoreDataSource({
                         schema,
                         path,
                         entityId,
-                        values: updatedValues,
+                        values,
                         status,
                         context
                     });
@@ -392,6 +386,17 @@ export function useFirestoreDataSource({
                     return;
                 }
             }
+
+            updatedValues = updateAutoValues(
+                {
+                    inputValues: values,
+                    properties,
+                    status,
+                    timestampNowValue: serverTimestamp(),
+                    referenceConverter: (value: EntityReference) => doc(db, value.path, value.id),
+                    geopointConverter: (value: GeoPoint) => new firebase.firestore.GeoPoint(value.latitude, value.longitude)
+                });
+
 
             console.debug("Saving entity", path, entityId, updatedValues);
 
