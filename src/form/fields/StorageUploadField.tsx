@@ -372,15 +372,17 @@ export function StorageUpload({
 
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
-        let downloadUrl: string | undefined;
+        let uploadPathOrDownloadUrl = uploadedPath;
         if (storageMeta.storeUrl) {
-            downloadUrl = await getDownloadURL(uploadedPath);
+            uploadPathOrDownloadUrl = await getDownloadURL(uploadedPath);
+        }
+        if (storageMeta.postProcess) {
+            uploadPathOrDownloadUrl = await storageMeta.postProcess(uploadPathOrDownloadUrl);
         }
 
         let newValue: StorageFieldItem[];
 
-        entry.storagePathOrDownloadUrl = storageMeta.storeUrl ? downloadUrl : uploadedPath;
-        entry.file = entry.file;
+        entry.storagePathOrDownloadUrl = uploadPathOrDownloadUrl;
         entry.metadata = metadata;
         newValue = [...internalValue];
 
@@ -617,7 +619,7 @@ interface StorageUploadItemProps {
     entry: StorageFieldItem,
     onFileUploadComplete: (value: string,
                            entry: StorageFieldItem,
-                           metadata?: firebase.storage.UploadMetadata) => void;
+                           metadata?: firebase.storage.UploadMetadata) => Promise<void>;
     size: PreviewSize;
 }
 
@@ -667,11 +669,10 @@ export function StorageUploadProgress({
                 title: "Error uploading file",
                 message: e.message
             });
-
-        }, () => {
+        }, async () => {
             const fullPath = uploadTask.snapshot.ref.fullPath;
+            await onFileUploadComplete(fullPath, entry, metadata);
             setProgress(-1);
-            onFileUploadComplete(fullPath, entry, metadata);
         });
     }
 

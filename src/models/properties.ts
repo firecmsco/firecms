@@ -623,6 +623,10 @@ export interface StorageMeta {
      */
     storeUrl?: boolean,
 
+    /**
+     * Post process the path
+     */
+    postProcess?: (pathOrUrl: string) => Promise<string>
 }
 
 /**
