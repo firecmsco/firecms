@@ -19,7 +19,8 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
     description?: string;
 
     /**
-     * If this property is not set Firestore will create a random ID.
+     * If this property is not set, the property will be created by the
+     * datasource.
      * You can set the value to true to allow the users to choose the ID.
      * You can also pass a set of values (as an EnumValues object) to allow them
      * to pick from only those
@@ -60,7 +61,7 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
         : Promise<EntityValues<M>> | EntityValues<M>
 
     /**
-     * Hook called after the entity is deleted in Firestore.
+     * Hook called after the entity is deleted.
      * If you throw an error in this method the process stops, and an
      * error snackbar gets displayed.
      *
@@ -69,7 +70,7 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
     onPreDelete?(entityDeleteProps: EntityOnDeleteProps<M>): void;
 
     /**
-     * Hook called after the entity is deleted in Firestore.
+     * Hook called after the entity is deleted.
      *
      * @param entityDeleteProps
      */
@@ -89,7 +90,7 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
 export type EntityStatus = "new" | "existing" | "copy";
 
 /**
- * Representation of an entity fetched from Firestore
+ * Representation of an entity fetched from the datasource
  * @category Entities
  */
 export interface Entity<M extends { [Key: string]: any }> {
@@ -235,7 +236,7 @@ export interface EntityOnDeleteProps<M extends { [Key: string]: any }> {
     schema: EntitySchema<M>;
 
     /**
-     * Firestore path of the parent collection
+     * Path of the parent collection
      */
     path: string;
 

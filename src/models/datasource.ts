@@ -57,6 +57,7 @@ export type DeleteEntityProps<M> = {
 
 /**
  * Implement this interface and pass it to a {@link CMSAppProvider}
+ * @category Datasource
  */
 export interface DataSource {
 
@@ -72,7 +73,6 @@ export interface DataSource {
      * @param searchString
      * @return Function to cancel subscription
      * @see useCollectionFetch if you need this functionality implemented as a hook
-     * @category Firestore
      */
     fetchCollection<M>({
                            path,
@@ -101,7 +101,6 @@ export interface DataSource {
      * @param searchString
      * @return Function to cancel subscription
      * @see useCollectionFetch if you need this functionality implemented as a hook
-     * @category Firestore
      */
     listenCollection?<M>(
         {
@@ -123,7 +122,6 @@ export interface DataSource {
      * @param path
      * @param entityId
      * @param schema
-     * @category Firestore
      */
     fetchEntity<M>({
                        path,
@@ -140,7 +138,6 @@ export interface DataSource {
      * @param onSnapshot
      * @param onError
      * @return Function to cancel subscription
-     * @category Firestore
      */
     listenEntity?<M>({
                          path,
@@ -151,8 +148,7 @@ export interface DataSource {
                      }: ListenEntityProps<M>): () => void;
 
     /**
-     * Save entity to the specified path. Note that Firestore does not allow
-     * undefined values.
+     * Save entity to the specified path
      * @param path
      * @param id
      * @param schema
@@ -161,7 +157,6 @@ export interface DataSource {
      * @param onSaveFailure
      * @param onPreSaveHookError
      * @param onSaveSuccessHookError
-     * @category Firestore
      */
     saveEntity<M>(
         {
@@ -188,7 +183,6 @@ export interface DataSource {
      * @param onDeleteSuccessHookError
      * @param context
      * @return was the whole deletion flow successful
-     * @category Firestore
      */
     deleteEntity<M>(
         {
@@ -210,7 +204,6 @@ export interface DataSource {
      * @param property
      * @param entityId
      * @return `true` if there are no other fields besides the given entity
-     * @category Firestore
      */
     checkUniqueField(
         path: string,

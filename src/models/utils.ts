@@ -133,7 +133,7 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
  * @param values
  * @param schema
  * @param path
- * @category Firestore
+ * @category Datasource
  */
 export function sanitizeData<M extends { [Key: string]: any }>
 (

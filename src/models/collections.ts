@@ -25,7 +25,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     description?: string;
 
     /**
-     * Relative Firestore path of this view to its parent.
+     * Relative path of this view to its parent.
      * If this view is in the root the path is equal to the absolute one.
      * This path also determines the URL in FireCMS
      */
@@ -87,8 +87,9 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     selectionEnabled?: boolean;
 
     /**
-     * If you need to filter/sort by multiple properties in this collection, you
-     * need to create special indexes in Firestore.
+     * Combination of properties that can be sorted/filtered at the same time
+     * e.g. if Firestore is your data source, you need to create specific
+     * index combinations in your console.
      * You can then specify here the indexes created.
      */
     indexes?: CompositeIndex<Extract<keyof M, string>>[];
@@ -102,8 +103,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     exportable?: boolean | ExportConfig;
 
     /**
-     * Following the Firestore document and collection schema, you can add
-     * subcollections to your entity in the same way you define the root
+     * You can add subcollections to your entity in the same way you define the root
      * collections.
      */
     subcollections?: EntityCollection<any, any>[];
@@ -197,8 +197,7 @@ export type Permissions = {
 
     /**
      * Utility field you can use to store your custom data.
-     * e.g: Additional user data fetched from a Firestore document, or custom
-     * claims
+     * e.g: Additional user data fetched from your data source
      */
     extra?: any;
 }
@@ -316,7 +315,7 @@ export type ExportMappingFunction = {
 }
 
 /**
- * Used to indicate valid filter combinations (as created in Firestore)
+ * Used to indicate valid filter combinations (e.g. created in Firestore)
  * If the user selects a specific filter/sort combination, the CMS checks if it's
  * valid, otherwise it reverts to the simpler valid case
  * @category Collections

@@ -77,7 +77,8 @@ export interface FieldProps<T extends CMSType, CustomProps = any, M extends { [K
     includeDescription: boolean;
 
     /**
-     * Flag to indicate that the underlying value has been updated in Firestore
+     * Flag to indicate that the underlying value has been updated in the
+     * datasource
      */
     underlyingValueHasChanged: boolean;
 

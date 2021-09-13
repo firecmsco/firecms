@@ -18,8 +18,7 @@ export interface SchemaConfig {
     schema: EntitySchema<any>;
 
     /**
-     * Following the Firestore document and collection schema, you can add
-     * subcollections to your entity in the same way you define the root
+     * You can add subcollections to your entity in the same way you define the root
      * collections.
      */
     subcollections?: EntityCollection<any>[];

@@ -69,7 +69,7 @@ export type MediaType =
 interface BaseProperty {
 
     /**
-     * Firestore datatype of the property
+     * Datatype of the property
      */
     dataType: DataType;
 
@@ -142,8 +142,8 @@ export type EnumType = number | string;
 
 /**
  * We use this type to define mapping between string or number values in
- * Firestore to a label (such in a select dropdown).
- * The key in this Record is the value saved in Firestore, and the value in
+ * the data source to a label (such in a select dropdown).
+ * The key in this Record is the value saved in the datasource, and the value in
  * this record is the label displayed in the UI.
  * You can add additional customization by assigning a `EnumValueConfig` for the
  * label instead of a simple string (for enabling or disabling options and
@@ -271,8 +271,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
 
     /**
      * The property of this array.
-     * You can specify any property (except another Array property, since
-     * Firestore does not support it)
+     * You can specify any property (except another Array property)
      * You can leave this field empty only if you are providing a custom field,
      * otherwise an error will be thrown.
      */
@@ -618,7 +617,7 @@ export interface StorageMeta {
 
     /**
      * When set to true, this flag indicates that the download URL of the file
-     * will be saved in Firestore instead of the Cloud storage path.
+     * will be saved in the datasource instead of the Cloud storage path.
      * Note that the generated URL may use a token that, if disabled, may
      * make the URL unusable and lose the original reference to Cloud Storage,
      * so it is not encouraged to use this flag. Defaults to false
