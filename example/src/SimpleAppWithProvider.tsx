@@ -140,7 +140,7 @@ export function SimpleAppWithProvider() {
                                 storageSource={storageSource}>
                     {({ context }) => {
 
-                        if (context.authController.authLoading || !context.navigation) {
+                        if (context.authController.authLoading || context.navigationLoading) {
                             return <CircularProgressCenter/>;
                         }
 
@@ -155,7 +155,7 @@ export function SimpleAppWithProvider() {
 
                         return (
                             <CMSScaffold name={"My Online Shop"}>
-                                <CMSRoutes navigation={context.navigation}/>
+                                {context.navigation && <CMSRoutes navigation={context.navigation}/>}
                             </CMSScaffold>);
 
                     }}

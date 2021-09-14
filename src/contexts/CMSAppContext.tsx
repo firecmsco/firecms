@@ -22,6 +22,8 @@ export interface CMSAppContext {
      */
     navigation?: Navigation;
 
+    navigationLoading: boolean;
+
     /**
      * Format of the dates in the CMS.
      * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
@@ -64,6 +66,7 @@ export interface CMSAppContext {
 }
 
 const CMSAppContextInstance = React.createContext<CMSAppContext>({
+    navigationLoading: false,
     schemaRegistryController: {} as any,
     dataSource: {} as any,
     storageSource: {} as any,

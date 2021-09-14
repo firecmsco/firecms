@@ -42,6 +42,8 @@ import {
 } from "../../collection/components/CollectionTableProps";
 import { Markdown } from "../../preview";
 import { useDataSource } from "../../hooks/useDataSource";
+import { saveEntityInternal } from "../internal/data_logic";
+import { SaveEntityProps } from "../../models/datasource";
 
 export type EntityCollectionProps<M extends { [Key: string]: any }> = {
     path: string;
@@ -163,7 +165,8 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                                                                setSaved,
                                                                setError,
                                                                entity
-                                                           }) => dataSource.saveEntity({
+                                                           }) => {
+        const saveProps :SaveEntityProps<M>= {
             path,
             entityId: entity.id,
             values: {
@@ -171,14 +174,20 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 [name]: value
             },
             schema: collectionConfig.schema,
-            status: "existing",
+            status: "existing"
+        };
+
+        return saveEntityInternal({
+            dataSource,
+            saveProps,
+            context,
             onSaveSuccess: () => setSaved(true),
             onSaveFailure: ((e: Error) => {
                 setError(e);
             }),
-            context
-        }
-    );
+        });
+
+    };
 
     const open = anchorEl != null;
     const title = (

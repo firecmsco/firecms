@@ -8,9 +8,11 @@ import {
     DialogTitle
 } from "@mui/material";
 import EntityPreview from "../../core/components/EntityPreview";
-import CircularProgressCenter from "../../core/components/CircularProgressCenter";
+import CircularProgressCenter
+    from "../../core/components/CircularProgressCenter";
 import { useCMSAppContext, useSnackbarController } from "../../contexts";
-import { useDataSource } from "../../hooks/useDataSource";
+import { useDataSource } from "../../hooks";
+import { deleteEntityInternal } from "../../core/internal/data_logic";
 
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
@@ -26,16 +28,16 @@ export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
 }
 
 export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
-                                                                            entityOrEntitiesToDelete,
-                                                                            schema,
-                                                                            onClose,
-                                                                            open,
-                                                                            onEntityDelete,
-                                                                            onMultipleEntitiesDelete,
-                                                                            path,
-                                                                            ...other
-                                                                        }
-                                                                            : DeleteEntityDialogProps<M>) {
+                                                                                 entityOrEntitiesToDelete,
+                                                                                 schema,
+                                                                                 onClose,
+                                                                                 open,
+                                                                                 onEntityDelete,
+                                                                                 onMultipleEntitiesDelete,
+                                                                                 path,
+                                                                                 ...other
+                                                                             }
+                                                                                 : DeleteEntityDialogProps<M>) {
 
     const dataSource = useDataSource();
     const snackbarContext = useSnackbarController();
@@ -94,7 +96,8 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
     };
 
     function performDelete(entity: Entity<M>): Promise<boolean> {
-        return dataSource.deleteEntity({
+        return deleteEntityInternal({
+            dataSource,
             entity,
             schema,
             onDeleteSuccess,

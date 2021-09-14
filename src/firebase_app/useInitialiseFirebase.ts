@@ -42,7 +42,7 @@ export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
             if (onFirebaseInit)
                 onFirebaseInit(config);
             setFirebaseApp(initialisedFirebaseApp);
-        } catch (e) {
+        } catch (e:any) {
             console.error(e);
             setFirebaseConfigError(e);
         }

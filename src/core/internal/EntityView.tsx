@@ -17,6 +17,7 @@ import { Prompt } from "react-router-dom";
 import clsx from "clsx";
 import EntityForm from "../../form/EntityForm";
 import {
+    DataSource,
     Entity,
     EntityCollection,
     EntitySchema,
@@ -25,6 +26,7 @@ import {
     PermissionsBuilder
 } from "../../models";
 import {
+    CMSAppContext,
     useAuthController,
     useCMSAppContext,
     useSideEntityController,
@@ -39,6 +41,8 @@ import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
 import ErrorBoundary from "./ErrorBoundary";
 import { useEntityFetch } from "../../hooks/useEntityFetch";
 import { useDataSource } from "../../hooks/useDataSource";
+import { SaveEntityProps } from "../../models/datasource";
+import { saveEntityInternal } from "./data_logic";
 
 
 const useStylesSide = makeStyles((theme: Theme) =>
@@ -121,6 +125,7 @@ export interface EntitySideViewProps<M extends { [Key: string]: any }> {
     schema: EntitySchema<any>;
     subcollections?: EntityCollection<any>[];
 }
+
 
 function EntityView<M extends { [Key: string]: any }>({
                                                           path,
@@ -262,17 +267,22 @@ function EntityView<M extends { [Key: string]: any }>({
             return;
         }
 
-        return dataSource.saveEntity({
+        const saveProps = {
             path,
             entityId: entityId,
             values,
             schema,
             status,
+            context
+        };
+        return saveEntityInternal({
+            dataSource,
+            saveProps,
+            context,
             onSaveSuccess,
             onSaveFailure,
             onPreSaveHookError,
-            onSaveSuccessHookError,
-            context
+            onSaveSuccessHookError
         });
     }
 

@@ -119,7 +119,7 @@ export function CMSApp({
                                 locale={locale}>
                     {({ context }) => {
 
-                        if (context.authController.authLoading || !context.navigation) {
+                        if (context.authController.authLoading || context.navigationLoading) {
                             return <CircularProgressCenter/>;
                         }
 
@@ -137,7 +137,7 @@ export function CMSApp({
                                 <CMSScaffold name={name}
                                              logo={logo}
                                              toolbarExtraWidget={toolbarExtraWidget}>
-                                    <CMSRoutes navigation={context.navigation}/>
+                                    {context.navigation && <CMSRoutes navigation={context.navigation}/>}
                                 </CMSScaffold>
                         );
                     }}

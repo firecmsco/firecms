@@ -1,6 +1,5 @@
 import {
     Entity,
-    EntityOnDeleteProps,
     EntityReference,
     EntitySchema,
     EntityValues,
@@ -341,14 +340,10 @@ export function useFirestoreDataSource({
          * Save entity to the specified path. Note that Firestore does not allow
          * undefined values.
          * @param path
-         * @param id
-         * @param data
+         * @param entityId
+         * @param values
          * @param schema
          * @param status
-         * @param onSaveSuccess
-         * @param onSaveFailure
-         * @param onPreSaveHookError
-         * @param onSaveSuccessHookError
          * @category Firestore
          */
         async saveEntity<M extends { [Key: string]: any }>(
@@ -358,36 +353,11 @@ export function useFirestoreDataSource({
                 values,
                 schema,
                 status,
-                onSaveSuccess,
-                onSaveFailure,
-                onPreSaveHookError,
-                onSaveSuccessHookError,
-                context
-            }: SaveEntityProps<M>): Promise<void> {
+            }: SaveEntityProps<M>): Promise<Entity<M>> {
 
             const properties: Properties<M> = computeSchemaProperties(schema, path, entityId);
 
-            let updatedValues: EntityValues<M>;
-
-            if (schema.onPreSave) {
-                try {
-                    updatedValues = await schema.onPreSave({
-                        schema,
-                        path,
-                        entityId,
-                        values,
-                        status,
-                        context
-                    });
-                } catch (e) {
-                    console.error(e);
-                    if (onPreSaveHookError)
-                        onPreSaveHookError(e);
-                    return;
-                }
-            }
-
-            updatedValues = updateAutoValues(
+            const updatedValues: EntityValues<M> = updateAutoValues(
                 {
                     inputValues: values,
                     properties,
@@ -412,38 +382,7 @@ export function useFirestoreDataSource({
                 values: updatedValues
             };
 
-            return setDoc(documentReference, updatedValues, { merge: true })
-                .then(() => {
-                    try {
-                        if (schema.onSaveSuccess) {
-                            schema.onSaveSuccess({
-                                schema,
-                                path,
-                                entityId,
-                                values: updatedValues,
-                                status,
-                                context
-                            });
-                        }
-                    } catch (e) {
-                        if (onSaveSuccessHookError)
-                            onSaveSuccessHookError(e);
-                    }
-                    onSaveSuccess && onSaveSuccess(entity);
-                })
-                .catch((e) => {
-                    if (schema.onSaveFailure) {
-                        schema.onSaveFailure({
-                            schema,
-                            path,
-                            entityId,
-                            values: updatedValues,
-                            status,
-                            context
-                        });
-                    }
-                    if (onSaveFailure) onSaveFailure(e);
-                });
+            return setDoc(documentReference, updatedValues, { merge: true }).then(() => entity);
         },
 
         /**
@@ -451,10 +390,6 @@ export function useFirestoreDataSource({
          * @param entity
          * @param schema
          * @param path
-         * @param onDeleteSuccess
-         * @param onDeleteFailure
-         * @param onPreDeleteHookError
-         * @param onDeleteSuccessHookError
          * @param context
          * @return was the whole deletion flow successful
          * @category Firestore
@@ -463,53 +398,10 @@ export function useFirestoreDataSource({
             {
                 entity,
                 schema,
-                onDeleteSuccess,
-                onDeleteFailure,
-                onPreDeleteHookError,
-                onDeleteSuccessHookError,
                 context
             }: DeleteEntityProps<M>
-        ): Promise<boolean> {
-
-            console.debug("Deleting entity", entity.path, entity.id);
-
-            const entityDeleteProps: EntityOnDeleteProps<M> = {
-                entity,
-                schema,
-                entityId: entity.id,
-                path: entity.path,
-                context
-            };
-
-            if (schema.onPreDelete) {
-                try {
-                    await schema.onPreDelete(entityDeleteProps);
-                } catch (e) {
-                    console.error(e);
-                    if (onPreDeleteHookError)
-                        onPreDeleteHookError(entity, e);
-                    return false;
-                }
-            }
-
-            return deleteDoc(doc(db, entity.path, entity.id))
-                .then(() => {
-                    onDeleteSuccess && onDeleteSuccess(entity);
-                    try {
-                        if (schema.onDelete) {
-                            schema.onDelete(entityDeleteProps);
-                        }
-                        return true;
-                    } catch (e) {
-                        if (onDeleteSuccessHookError)
-                            onDeleteSuccessHookError(entity, e);
-                        return false;
-                    }
-                }).catch((e) => {
-                    if (onDeleteFailure) onDeleteFailure(entity, e);
-                    return false;
-                });
-
+        ): Promise<void> {
+            return deleteDoc(doc(db, entity.path, entity.id));
         },
 
         /**

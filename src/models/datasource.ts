@@ -38,20 +38,11 @@ export type SaveEntityProps<M> = {
     values: Partial<EntityValues<M>>,
     schema: EntitySchema<M>,
     status: EntityStatus,
-    onSaveSuccess?: (entity: Entity<M>) => void,
-    onSaveFailure?: (e: Error) => void,
-    onPreSaveHookError?: (e: Error) => void,
-    onSaveSuccessHookError?: (e: Error) => void;
-    context: CMSAppContext;
 };
 
 export type DeleteEntityProps<M> = {
     entity: Entity<M>;
     schema: EntitySchema<M>;
-    onDeleteSuccess?: (entity: Entity<M>) => void;
-    onDeleteFailure?: (entity: Entity<M>, e: Error) => void;
-    onPreDeleteHookError?: (entity: Entity<M>, e: Error) => void;
-    onDeleteSuccessHookError?: (entity: Entity<M>, e: Error) => void;
     context: CMSAppContext;
 };
 
@@ -164,23 +155,14 @@ export interface DataSource {
             entityId,
             values,
             schema,
-            status,
-            onSaveSuccess,
-            onSaveFailure,
-            onPreSaveHookError,
-            onSaveSuccessHookError,
-            context
-        }: SaveEntityProps<M>): Promise<void>;
+            status
+        }: SaveEntityProps<M>): Promise<Entity<M>>;
 
     /**
      * Delete an entity
      * @param entity
      * @param schema
      * @param path
-     * @param onDeleteSuccess
-     * @param onDeleteFailure
-     * @param onPreDeleteHookError
-     * @param onDeleteSuccessHookError
      * @param context
      * @return was the whole deletion flow successful
      */
@@ -188,13 +170,9 @@ export interface DataSource {
         {
             entity,
             schema,
-            onDeleteSuccess,
-            onDeleteFailure,
-            onPreDeleteHookError,
-            onDeleteSuccessHookError,
             context
         }: DeleteEntityProps<M>
-    ): Promise<boolean>;
+    ): Promise<void>;
 
     /**
      * Check if the given property is unique in the given collection

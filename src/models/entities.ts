@@ -1,5 +1,5 @@
 import React from "react";
-import { CMSAppContext } from "../contexts/CMSAppContext";
+import { CMSAppContext } from "../contexts";
 import { EnumValues, PropertiesOrBuilder } from "./properties";
 
 /**
@@ -58,7 +58,7 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
      * @param entitySaveProps
      */
     onPreSave?(entitySaveProps: EntityOnSaveProps<M>)
-        : Promise<EntityValues<M>> | EntityValues<M>
+        : Promise<Partial<EntityValues<M>>> | Partial<EntityValues<M>>;
 
     /**
      * Hook called after the entity is deleted.
@@ -170,10 +170,12 @@ export type EntityCustomView<M = any> =
  * @category Entities
  */
 export type EntityCustomViewParams<M extends { [Key: string]: any } = any> = {
+
     /**
      * Schema used by this entity
      */
     schema: EntitySchema<M extends EntitySchema<any> ? InferSchemaType<M> : M>;
+
     /**
      * Entity that this view refers to. It can be undefined if the entity is new
      */

@@ -127,6 +127,7 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
     } = props;
 
     const [navigation, setNavigation] = React.useState<Navigation | undefined>(undefined);
+    const [navigationLoading, setNavigationLoading] = React.useState<boolean>(false);
     const [navigationLoadingError, setNavigationLoadingError] = React.useState<Error | undefined>(undefined);
 
     async function getNavigation(navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[],
@@ -148,9 +149,11 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
         if (!authController.canAccessMainView) {
             return;
         }
+        setNavigationLoading(true);
         getNavigation(navigationOrBuilder, authController.user, authController)
             .then((result: Navigation) => {
                 setNavigation(result);
+                setNavigationLoading(false);
             }).catch(setNavigationLoadingError);
     }, [authController.user, authController.canAccessMainView, navigationOrBuilder]);
 
@@ -159,7 +162,6 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
             <div>
                 <p>There was an error while loading your navigation config</p>
                 <p>{navigationLoadingError}</p>
-
             </div>
         );
     }
@@ -171,6 +173,7 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
         dateTimeFormat,
         locale,
         navigation,
+        navigationLoading,
         dataSource,
         storageSource,
         schemaRegistryController
