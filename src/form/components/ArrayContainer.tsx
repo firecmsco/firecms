@@ -47,7 +47,6 @@ export default function ArrayContainer<T>({
             ? Object.values(internalIdsRef.current)
             : []);
 
-
     function getHashValue<T>(v: T) {
         if (typeof v === "object") {
             if ("id" in v)
@@ -97,6 +96,7 @@ export default function ArrayContainer<T>({
             };
 
             const insertInEnd = () => {
+                if (disabled) return;
                 const id = getRandomId();
                 const newIds: number[] = [...internalIds, id];
                 if (onInternalIdAdded)

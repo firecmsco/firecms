@@ -86,9 +86,8 @@ export default function ArrayOneOfField<T extends Array<any>>({
                 <ArrayContainer value={value}
                                 name={name}
                                 buildEntry={buildEntry}
-                                disabled={isSubmitting}
-                                includeAddButton={true}/>
-
+                                disabled={isSubmitting || Boolean(property.disabled)}
+                                includeAddButton={!property.disabled}/>
             </Paper>
 
             {includeDescription &&

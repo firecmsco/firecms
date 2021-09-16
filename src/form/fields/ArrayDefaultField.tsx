@@ -77,8 +77,8 @@ export default function ArrayDefaultField<T extends Array<any>>({
                                 name={name}
                                 buildEntry={buildEntry}
                                 onInternalIdAdded={setLastAddedId}
-                                disabled={isSubmitting}
-                                includeAddButton={true}/>
+                                disabled={isSubmitting || Boolean(property.disabled)}
+                                includeAddButton={!property.disabled}/>
 
             </Paper>
 
