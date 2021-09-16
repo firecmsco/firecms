@@ -68,5 +68,6 @@ html[data-theme=dark] .header-github-link:before {
 }
 
 img[alt=firebase_setup] {
-    max-width: 800px;
+    max-width: 100%;
+    width: 800px;
 }

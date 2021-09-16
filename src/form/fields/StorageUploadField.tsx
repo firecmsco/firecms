@@ -371,15 +371,17 @@ export function StorageUpload({
 
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
-        let downloadUrl: string | undefined;
+        let uploadPathOrDownloadUrl = uploadedPath;
         if (storageMeta.storeUrl) {
-            downloadUrl = await storage.getDownloadURL(uploadedPath);
+            uploadPathOrDownloadUrl = await storage.getDownloadURL(uploadedPath);
+        }
+        if (storageMeta.postProcess) {
+            uploadPathOrDownloadUrl = await storageMeta.postProcess(uploadPathOrDownloadUrl);
         }
 
         let newValue: StorageFieldItem[];
 
-        entry.storagePathOrDownloadUrl = storageMeta.storeUrl ? downloadUrl : uploadedPath;
-        entry.file = entry.file;
+        entry.storagePathOrDownloadUrl = uploadPathOrDownloadUrl;
         entry.metadata = metadata;
         newValue = [...internalValue];
 
@@ -616,7 +618,7 @@ interface StorageUploadItemProps {
     entry: StorageFieldItem,
     onFileUploadComplete: (value: string,
                            entry: StorageFieldItem,
-                           metadata?: any) => void;
+                           metadata?: any) => Promise<void>;
     size: PreviewSize;
 }
 
@@ -648,10 +650,10 @@ export function StorageUploadProgress({
         setLoading(true);
 
         storage.uploadFile({ file, fileName, path: storagePath, metadata })
-            .then(({ path }) => {
+            .then(async ({ path }) => {
                 console.debug("Upload successful");
+                await onFileUploadComplete(path, entry, metadata);
                 setLoading(false);
-                onFileUploadComplete(path, entry, metadata);
             })
             .catch((e) => {
                 console.error("Upload error", e);

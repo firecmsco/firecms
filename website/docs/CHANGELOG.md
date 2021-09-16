@@ -4,7 +4,7 @@ title: Changelog
 sidebar_label: Changelog
 ---
 
-## [0.50.0] - 2021-08-15
+## [1.0.0-alpha1] - 2021-08-15
 
 Many **breaking changes** in this version unfortunately. We have done a lot of
 internal refactorings with the primary goal of making internal and external APIs
@@ -94,6 +94,13 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
 - `Authenticator` now receives an object with a `user` field instead of a `User`
 
 - `FormContext`: `entitySchema` is now called `schema`
+
+## [0.50.0] - 2021-08-15
+
+### Changed
+
+- Added post process to storage metadata. @zhigang1992 thanks!
+- Disabling add button on disabled array properties
 
 ## [0.49.1] - 2021-08-15
 

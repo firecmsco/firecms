@@ -93,6 +93,7 @@ export default function ArrayContainer<T>({
             };
 
             const insertInEnd = () => {
+                if (disabled) return;
                 const id = getRandomId();
                 const newIds: number[] = [...internalIds, id];
                 if (onInternalIdAdded)

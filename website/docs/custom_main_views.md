@@ -44,7 +44,7 @@ For custom views you can define the following props:
 A quick example for a custom view:
 
 ```tsx
-export function App() {
+export default function App() {
 
     const productSchema = buildSchema({
         name: "Product",

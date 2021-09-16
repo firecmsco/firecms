@@ -242,8 +242,7 @@ const localeSchema = buildSchema({
     }
 });
 
-export function App() {
-
+export default function App() {
 
     const navigation: NavigationBuilder = async ({
                                                      user,
