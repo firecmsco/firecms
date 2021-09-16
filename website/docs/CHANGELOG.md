@@ -4,6 +4,13 @@ title: Changelog
 sidebar_label: Changelog
 ---
 
+## [0.50.0] - 2021-08-15
+
+### Changed
+
+- Added post process to storage metadata. @zhigang1992 thanks!
+- Disabling add button on disabled array properties
+
 ## [0.49.1] - 2021-08-15
 
 ### Changed
