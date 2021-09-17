@@ -1,8 +1,5 @@
-
 export { CMSAppProvider } from "./CMSAppProvider";
-export type {
-    CMSAppProviderProps
-} from "./CMSAppProvider";
+export type { CMSAppProviderProps } from "./CMSAppProvider";
 
 export { CMSRoutes } from "./CMSRoutes";
 
@@ -13,5 +10,6 @@ export type {
 
 export * from "./components";
 
+export type { SideEntityPanelProps } from "./SideEntityPanelProps";
 
 export { createCMSDefaultTheme } from "./theme";

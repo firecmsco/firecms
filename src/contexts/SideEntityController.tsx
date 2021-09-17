@@ -10,7 +10,7 @@ import {
     isCollectionPath,
     NavigationViewEntry
 } from "../core/navigation";
-import { SideEntityPanelProps } from "../models/side_panel";
+import { SideEntityPanelProps } from "../core/SideEntityPanelProps";
 import { useSchemasRegistry } from "./SchemaRegistry";
 import { getSidePanelKey } from "./utils";
 
@@ -47,7 +47,7 @@ export type SideEntityController<M extends { [Key: string]: any }> = {
      * to edit. You can set an entityId if you would like to edit and existing one
      * (or a new one with that id).
      * If you wish, you can also override the `SchemaSidePanelProps` and choose
-     * to override the CMSApp level SchemaResolver.
+     * to override the CMSAppProvider level SchemaResolver.
      * @param props
      */
     open: (props: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaResolver?: boolean }) => void;
@@ -63,7 +63,7 @@ const SideEntityPanelsController = React.createContext<SideEntityController<any>
  * using the open method of this controller.
  *
  * Consider that in order to use this hook you need to have a parent
- * `CMSApp` or a `CMSAppProvider`
+ * `FirebaseCMSApp` or a `CMSAppProvider`
  *
  * @see SideEntityController
  * @category Hooks and utilities

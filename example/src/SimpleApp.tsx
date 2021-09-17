@@ -5,7 +5,7 @@ import {
     buildCollection,
     buildProperty,
     buildSchema,
-    CMSApp,
+    FirebaseCMSApp,
     NavigationBuilder,
     NavigationBuilderProps
 } from "@camberi/firecms";
@@ -230,7 +230,7 @@ export default function App() {
         return true;
     };
 
-    return <CMSApp
+    return <FirebaseCMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
         navigation={navigation}

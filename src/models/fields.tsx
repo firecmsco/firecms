@@ -121,7 +121,7 @@ export interface FieldProps<T extends CMSType, CustomProps = any, M extends { [K
 }
 
 /**
- *
+ * Context passed to custom fields
  * @category Form custom fields
  */
 export interface FormContext<M extends { [Key: string]: any }> {

@@ -10,7 +10,7 @@ import { EntityDrawer } from "./EntityDrawer";
 import EntityView from "./EntityView";
 import { useCMSAppContext, useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { SideEntityPanelProps } from "../../models/side_panel";
+import { SideEntityPanelProps } from "../SideEntityPanelProps";
 import { CONTAINER_WIDTH } from "./common";
 
 

@@ -4,7 +4,7 @@ import { EnumValues, PropertiesOrBuilder } from "./properties";
 
 /**
  * Specification for defining an entity
- * @category Entities
+ * @category Models
  */
 export interface EntitySchema<M extends { [Key: string]: any }> {
 
@@ -85,13 +85,13 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
 
 /**
  * New or existing status
- * @category Entities
+ * @category Models
  */
 export type EntityStatus = "new" | "existing" | "copy";
 
 /**
  * Representation of an entity fetched from the datasource
- * @category Entities
+ * @category Models
  */
 export interface Entity<M extends { [Key: string]: any }> {
     /**
@@ -112,7 +112,7 @@ export interface Entity<M extends { [Key: string]: any }> {
 /**
  * This type represents a record of key value pairs as described in an
  * entity schema.
- * @category Entities
+ * @category Models
  */
 export type EntityValues<M> = M;
 
@@ -155,7 +155,7 @@ export type InferSchemaType<S extends EntitySchema<any>> = S extends EntitySchem
 /**
  * You can use this builder to render a custom panel in the entity detail view.
  * It gets rendered as a tab.
- * @category Entities
+ * @category Models
  */
 export type EntityCustomView<M = any> =
     {
@@ -167,7 +167,7 @@ export type EntityCustomView<M = any> =
 /**
  * Parameters passed to the builder in charge of rendering a custom panel for
  * an entity view.
- * @category Entities
+ * @category Models
  */
 export type EntityCustomViewParams<M extends { [Key: string]: any } = any> = {
 
@@ -191,7 +191,7 @@ export type EntityCustomViewParams<M extends { [Key: string]: any } = any> = {
 
 /**
  * Parameters passed to hooks when an entity is saved
- * @category Entities
+ * @category Models
  */
 export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
 
@@ -228,7 +228,7 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
 
 /**
  * Parameters passed to hooks when an entity is deleted
- * @category Entities
+ * @category Models
  */
 export interface EntityOnDeleteProps<M extends { [Key: string]: any }> {
 

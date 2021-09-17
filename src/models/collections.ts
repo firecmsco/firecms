@@ -9,7 +9,7 @@ import { User } from "./user";
  * menu navigation.
  *
  * If you need a lower level implementation you can check {@link CollectionTable}
- * @category Collections
+ * @category Models
  */
 export interface EntityCollection<M extends { [Key: string]: any } = any,
     AdditionalKey extends string = string> {
@@ -146,7 +146,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
 /**
  * Parameter passed to the `extraActions` builder in the collection configuration
  *
- * @category Collections
+ * @category Models
  */
 export type ExtraActionsParams<M extends { [Key: string]: any } = any> = {
     /**
@@ -173,13 +173,14 @@ export type ExtraActionsParams<M extends { [Key: string]: any } = any> = {
 
 /**
  * Sizes in which a collection can be rendered
- * @category Collections
+ * @category Models
  */
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
 
 /**
- * @category Collections
+ * Define the operations that can be performed in an entity.
+ * @category Models
  */
 export type Permissions = {
     /**
@@ -203,8 +204,9 @@ export type Permissions = {
 }
 
 /**
- *
- * @category Collections
+ * Builder used to assign `create`, `edit` and `delete` permissions to entities,
+ * based on the logged user, entity or collection path
+ * @category Models
  */
 export type PermissionsBuilder<M extends { [Key: string]: any }> =
     Permissions
@@ -215,10 +217,9 @@ export type PermissionsBuilder<M extends { [Key: string]: any }> =
             context
         }: PermissionsBuilderProps<M>) => Permissions);
 
-
 /**
- *
- * @category Collections
+ * Props passed to a {@link PermissionsBuilder}
+ * @category Models
  */
 export type PermissionsBuilderProps<M extends { [Key: string]: any }> = {
     /**
@@ -243,7 +244,7 @@ export type PermissionsBuilderProps<M extends { [Key: string]: any }> = {
 /**
  * Use this interface for adding additional columns to entity collection views.
  * If you need to do some async loading you can use AsyncPreviewComponent
- * @category Collections
+ * @category Models
  */
 export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any, AdditionalKey extends string = string> {
 
@@ -275,7 +276,7 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
 
 /**
  * Used to define filters applied in collections
- * @category Collections
+ * @category Models
  */
 export type FilterValues<M extends { [Key: string]: any }>
     = { [K in keyof M]?: [WhereFilterOp, any] };
@@ -284,7 +285,7 @@ export type FilterValues<M extends { [Key: string]: any }>
 /**
  * Filter conditions in a `Query.where()` clause are specified using the
  * strings '<', '<=', '==', '>=', '>', 'array-contains', 'in', and 'array-contains-any'.
- * @category Collections
+ * @category Models
  */
 export type WhereFilterOp =
     | "<"
@@ -300,14 +301,14 @@ export type WhereFilterOp =
 /**
  * You can use this configuration to add additional columns to the data
  * exports
- * @category Collections
+ * @category Models
  */
 export type ExportConfig = {
     additionalColumns: ExportMappingFunction[]
 }
 
 /**
- * @category Collections
+ * @category Models
  */
 export type ExportMappingFunction = {
     key: string;
@@ -318,7 +319,7 @@ export type ExportMappingFunction = {
  * Used to indicate valid filter combinations (e.g. created in Firestore)
  * If the user selects a specific filter/sort combination, the CMS checks if it's
  * valid, otherwise it reverts to the simpler valid case
- * @category Collections
+ * @category Models
  */
 export type CompositeIndex<Key extends string> = Partial<Record<Key, "asc" | "desc">>
 

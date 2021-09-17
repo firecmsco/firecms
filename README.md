@@ -11,7 +11,7 @@ as well as schemas for your entities.
 
 The goal of this CMS is to generate collection and form views that bind nicely
 to the Firestore collection/document model. We have built in many basic (and not
-so basic) use cases; but FireCMS is build with extensibility in mind, so it is
+so basic) use cases; but FireCMS is built with extensibility in mind, so it is
 easy to create your custom form fields, or your complete views.
 
 Note that this is a full application, with routing enabled and not a simple

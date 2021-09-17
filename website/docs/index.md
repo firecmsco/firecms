@@ -12,20 +12,21 @@ as well as schemas for your entities.
 
 The goal of this CMS is to generate collection and form views that bind nicely
 to the Firestore collection/document model. We have built in many basic (and not
-so basic) use cases; but FireCMS is build with extensibility in mind, so it is
+so basic) use cases; but FireCMS is built with extensibility in mind, so it is
 easy to create your custom form fields, or your complete views.
 
 There are two ways to build views in FireCMS:
 
-- The **standard way**: Create mapping configurations for **collections** (to Firestore collections)
-  and **schemas** (to Firestore documents). The best way to get a grasp of how
+- By creating mapping configurations for **collections** (to datasource collections, Firestore by default)
+  and **schemas** (to datasource entities, by default Firestore documents).
+  The best way to get a grasp of how
   this works is checking the [Quickstart](quickstart.md),
   [Collections](collections.md) and [Entity schema](entity_schemas.md)
   documentation.
 - Create **custom views** that sit in the main level of your navigation tree. In
   this case you can build your custom React component and make use of the
   internal components of the CMS as well as the provided hooks.
-  Check [Custom main views](custom_main_views.md) for more details
+  Check [Custom top level views](custom_top_level_views.md) for more details
 
 ### Core technologies
 
@@ -81,4 +82,10 @@ linked to it, you can omit the `firebaseConfig` specification, since it gets
 picked up automatically.
 
 More details in [the deployment section](deployment.md)
+
+:::note
+It is also possible to use FireCMS without using Firebase, by defining
+your own implementations for auth, datasource, and data storage.
+[More info](custom_cms_app.md)
+:::
 

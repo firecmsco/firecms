@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 
 import { FirebaseApp, initializeApp } from "firebase/app";
 
+/**
+ * @category Firebase
+ */
 export interface InitialiseFirebaseResult {
     firebaseConfigLoading: boolean,
     firebaseApp?: FirebaseApp;
@@ -17,12 +20,12 @@ export interface InitialiseFirebaseResult {
  * configuration.
  *
  * You most likely only need to use this if you are developing a custom app
- * that is not using {@link CMSApp}. You can also not use this component
+ * that is not using {@link FirebaseCMSApp}. You can also not use this component
  * and initialise Firebase yourself.
  *
  * @param onFirebaseInit
  * @param firebaseConfig
- * @category Hooks and utilities Functions
+ * @category Firebase
  */
 export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
     onFirebaseInit?: ((config: object) => void) | undefined,

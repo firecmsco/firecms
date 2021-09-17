@@ -13,6 +13,7 @@ export type BreadcrumbRouteProps = {
  * @param title
  * @param path
  * @constructor
+ * @category Core components
  */
 function BreadcrumbUpdater({
                       children,

@@ -14,7 +14,7 @@ views.
 You can build your preview as a React component that takes
 [PreviewComponentProps](api/interfaces/previewcomponentprops.md) as props.
 
-`PreviewComponentProps` has 2 generic types: the first one is the type of the
+`PreviewComponentProps` has two generic types: the first one is the type of the
 property, such as `string` or `boolean` and the second one (optional) is the
 type for any custom props you would like to pass to the preview, just like
 done when defining custom fields.

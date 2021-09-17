@@ -1,5 +1,5 @@
 /**
- * @category Colors
+ * @category Models
  */
 export type ChipColor =
     | "blueLighter"

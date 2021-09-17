@@ -7,6 +7,7 @@ export type TextSearchDelegateResolver = (props: { path: string, searchString: s
  * returning the ids of the entities.
  * @param index
  * @param query
+ * @category Firebase
  */
 export function performAlgoliaTextSearch(index: SearchIndex, query: string): Promise<readonly string[]> {
 

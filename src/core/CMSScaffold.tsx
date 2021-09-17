@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 
-import { Theme } from "@mui/material";
+import { Drawer, Theme } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
 
 
@@ -39,7 +39,6 @@ export interface CMSScaffoldProps {
 
 }
 
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         logo: {
@@ -71,13 +70,15 @@ const useStyles = makeStyles((theme: Theme) =>
             height: 216,
             flexGrow: 1,
             maxWidth: 400
+        },
+        drawerPaper: {
+            width: 280
         }
     })
 );
 
 /**
- * This is the main view of the CMS, it will display the login screen
- * if the user is not authenticated or the main app otherwise.
+ * This view acts as a scaffold for FireCMS.
  *
  * It is in charge of displaying the navigation drawer, top bar and main
  * collection views.
@@ -107,10 +108,6 @@ export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
     const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
     const closeDrawer = () => setDrawerOpen(false);
 
-    if (!context.navigation) {
-        return <CircularProgressCenter/>;
-    }
-
     return (
         <LocalizationProvider
             dateAdapter={AdapterDateFns}
@@ -118,10 +115,22 @@ export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
             locale={dateUtilsLocale}>
             <DndProvider backend={HTML5Backend}>
                 <nav>
-                    <CMSDrawer logo={logo}
-                               drawerOpen={drawerOpen}
-                               navigation={context.navigation}
-                               closeDrawer={closeDrawer}/>
+                    <Drawer
+                        variant="temporary"
+                        anchor={"left"}
+                        open={drawerOpen}
+                        onClose={closeDrawer}
+                        classes={{
+                            paper: classes.drawerPaper
+                        }}
+                        ModalProps={{
+                            keepMounted: true
+                        }}
+                    >
+                        {context.navigation && <CMSDrawer logo={logo}
+                                                          navigation={context.navigation}
+                                                          closeDrawer={closeDrawer}/>}
+                    </Drawer>
                 </nav>
 
                 <div className={classes.main}>

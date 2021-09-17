@@ -36,6 +36,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ * @category Core components
+ */
 export interface CMSHomeProps {
     navigation: Navigation;
 }
@@ -45,6 +48,7 @@ export interface CMSHomeProps {
  * This components takes navigation as an input and renders
  * @param navigation
  * @constructor
+ * @category Core components
  */
 function CMSHome({
                        navigation

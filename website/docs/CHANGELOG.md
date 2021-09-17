@@ -4,13 +4,13 @@ title: Changelog
 sidebar_label: Changelog
 ---
 
-## [1.0.0-alpha1] - 2021-08-15
+## [1.0.0-beta1] - 2021-08-15
 
 Many **breaking changes** in this version unfortunately. We have done a lot of
 internal refactorings with the primary goal of making internal and external APIs
 more predictable and consistent.
 
-In this change there are major updates to some dependencies, now using:
+In this version there are major updates to some dependencies, now using:
 - MaterialUI v5
 - React Router v6
 - Firebase JS SDK 9
@@ -44,18 +44,16 @@ type User = {
 }
 ```
 
-On the other hand, if you were using `CMSAppProvider` and `CMSMainView`, they
-have been largely refactored, and now you will need to implement a bunch of
-extra stuff if you want to go down the super custom road. You will be responsible
-for initialising the material theme, Firebase and providing the Router.
-On the plus side, this is going to give you a ton of room for customisation.
-You can check a complete example in: https://github.com/Camberi/firecms/blob/master/example/src/SimpleAppWithProvider.tsx
+- **`CMSApp` has been renamed to `FirebaseCMSApp`** in order to better
+  reflect that that implementation of FireCMS uses Firebase as the backend
 
 - General callbacks refactor. **All callbacks** now always return a single object
   with the props as fields. The goal of this change is to make them predictable
   and remove inconsistencies:
     - Every field that was previously called `collectionPath` now is simply
       called `path`.
+    - Every field that was previously called `entitySchema` now is simply
+      called `schema`.
     - All entity id fields are now renamed to `entityId` (with the only exception
       of the field `id` in `Entity`).
 
@@ -88,12 +86,20 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
 - `PermissionsBuilder` no longer has an `authController` prop, but it can still
   be accessed through the `context` prop. Related, the new `User` type includes
   an `extra` field you can use to store additional user data, such as roles.
-  See https://github.com/Camberi/firecms/blob/master/example/src/SimpleAppWithProvider.tsx
+  See https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx
   for an example
 
 - `Authenticator` now receives an object with a `user` field instead of a `User`
 
-- `FormContext`: `entitySchema` is now called `schema`
+- `FormContext` `entitySchema` is now called `schema`
+
+- If you were using `CMSAppProvider` and `CMSMainView`, they
+  have been largely refactored, and now you will need to implement a bunch of
+  extra stuff if you want to go down the super custom road. You will be responsible
+  for initialising the material theme, Firebase (or your own backend) and providing the Router.
+  On the plus side, this is going to give you a ton of room for customisation.
+  You can check a complete example in:
+  https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx
 
 ## [0.50.0] - 2021-08-15
 
@@ -361,7 +367,7 @@ property, which was provoking unfixable saving errors.
       the CMS hooks.
     - `CMSMainView` which includes the views of the app including login screen
       and main collection and entity components. You can see an
-      example [here](https://github.com/Camberi/firecms/blob/master/example/src/SimpleAppWithProvider.tsx)
+      example [here](https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx)
 - Fix for a bug when saving entities.
 - [BREAKING] `AuthContextController` has been renamed to `AuthController`
 

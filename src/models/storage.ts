@@ -1,3 +1,6 @@
+/**
+ * @category Storage
+ */
 export interface UploadFileProps {
     file: File,
     fileName?: string,
@@ -5,6 +8,9 @@ export interface UploadFileProps {
     metadata?: any,
 }
 
+/**
+ * @category Storage
+ */
 export interface UploadFileResult {
     path: string;
 }

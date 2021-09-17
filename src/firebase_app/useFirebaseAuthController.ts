@@ -18,9 +18,9 @@ interface FirebaseAuthHandlerProps {
 
 /**
  * Use this hook to build an {@link AuthController} based on Firebase Auth
- * @category Firebase Auth, Firestore and FirebaseStorage
+ * @category Firebase
  */
-export const useFirebaseAuthHandler = (
+export const useFirebaseAuthController = (
     {
         firebaseApp,
         authentication

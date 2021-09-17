@@ -2,7 +2,7 @@ import { User } from "./user";
 
 /**
  * Implement this function to allow access to specific users
- * @category Authentication
+ * @category Models
  */
 export type Authenticator = ({ user }: {
     user?: User

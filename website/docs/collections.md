@@ -74,7 +74,8 @@ in [Entity collections](api/interfaces/entitycollection.md)
   You can also set an `ExportConfig` configuration object to customize the
   export and add additional values. Defaults to `true`
 
-:::note In the examples you might see references to the type `Product`
+:::note
+In the examples you might see references to the type `Product`
 (which defines the model) or the schema `productSchema`, as declared in
 the [entity schemas section](entity_schemas.md)
 :::
@@ -90,7 +91,7 @@ const productsCollection = buildCollection<Product>({
     name: "Products",
     group: "Main",
     description: "List of the products currently sold in our shop",
-    textSearchDelegate: productsSearchDelegate,
+    textSearchEnabled: true,
     additionalColumns: [productAdditionalColumn],
     indexes: [{ price: "desc", available: "desc" }],
     permissions: ({ user, authController }) => ({

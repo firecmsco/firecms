@@ -46,7 +46,7 @@ interface NavigationCustom<M> {
  * collection, entity or entity custom_view) for the given path. You need to pass the app context
  * that you receive in different callbacks, such as the save hooks.
  *
- * It will take into account the `navigation` provided at the `CMSApp` level, as
+ * It will take into account the `navigation` provided at the `CMSAppProvider` level, as
  * well as a `schemaResolver` if provided.
  *
  * @param path
@@ -121,7 +121,7 @@ export type NavigationFrom<M> = {
 /**
  * Use this hook to retrieve an array of navigation entries (resolved
  * collection or entity) for the given path. You can use this hook
- * in any React component that lives under `CMSApp`
+ * in any React component that lives under `CMSAppProvider`
  * @category Hooks and utilities
  */
 export function useNavigationFrom<M>(

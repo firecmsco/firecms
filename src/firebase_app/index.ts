@@ -1,13 +1,13 @@
 import { InitialiseFirebaseResult } from "./useInitialiseFirebase";
 
-export { CMSApp } from "./CMSApp";
+export { FirebaseCMSApp } from "./FirebaseCMSApp";
 export type {
-    CMSAppProps
-} from "./CMSAppProps";
+    FirebaseCMSAppProps
+} from "./FirebaseCMSAppProps";
 
 export {
-    useFirebaseAuthHandler
-} from "./useFirebaseAuthHandler";
+    useFirebaseAuthController
+} from "./useFirebaseAuthController";
 
 export {
     useFirestoreDataSource

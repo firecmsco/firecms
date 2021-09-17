@@ -77,7 +77,7 @@ const CMSAppContextInstance = React.createContext<CMSAppContext>({
  * Hook to retrieve the CMSAppContext.
  *
  * Consider that in order to use this hook you need to have a parent
- * `CMSApp` or a `CMSAppProvider`
+ * `CMSAppProvider`
  *
  * @see CMSAppContext
  * @category Hooks and utilities

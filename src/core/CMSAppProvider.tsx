@@ -103,7 +103,7 @@ export interface CMSAppProviderProps {
 }
 
 /**
- * If you are using independent components of the CMS instead of `CMSApp`
+ * If you are using independent components of the CMS
  * you need to wrap them with this provider, so the internal hooks work.
  *
  * This provider also contains the component in charge of displaying the side

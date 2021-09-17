@@ -12,9 +12,8 @@ interface AuthProviderProps {
 export interface AuthController {
 
     /**
-     * The Firebase user currently logged in
-     * Either the Firebase user, null if they skipped login or undefined
-     * if they are in the login screen
+     * The user currently logged in
+     * The values can be: the user object, null if they skipped login
      */
     user: User | null;
 
@@ -99,7 +98,7 @@ export const AuthContext = React.createContext<AuthController>({
  * Hook to retrieve the AuthContext.
  *
  * Consider that in order to use this hook you need to have a parent
- * `CMSApp` or a `CMSAppProvider`
+ * `FirebaseCMSApp` or a `CMSAppProvider`
  *
  * @see AuthController
  * @category Hooks and utilities

@@ -27,7 +27,7 @@ cd my-cms
 - Install FireCMS and it's peer dependencies:
 
 ```
-yarn add @camberi/firecms firebase@9 @mui/material @mui/icons-material @material-ui/pickers @mui/lab
+yarn add @camberi/firecms firebase@9 @mui/material@next @mui/icons-material@next @mui/lab@next @emotion/react @emotion/styled @mui/styles@next
 ```
 
 You will need to init Firebase, either with an existing project or a new one:
@@ -58,13 +58,10 @@ import {
     buildCollection,
     buildProperty,
     buildSchema,
-    CMSApp,
+    FirebaseCMSApp,
     NavigationBuilder,
-    NavigationBuilderProps,
-    User
+    NavigationBuilderProps
 } from "@camberi/firecms";
-
-import firebase from "firebase/app";
 
 import "typeface-rubik";
 import "typeface-space-mono";
@@ -246,16 +243,16 @@ export default function App() {
 
     const navigation: NavigationBuilder = async ({
                                                      user,
-                                                     authController
                                                  }: NavigationBuilderProps) => {
 
         // This is a fake example of retrieving async data related to the user
-        // and storing it in the authController
-        const sampleUser = await Promise.resolve({
+        // and storing it in the user
+        const sampleUserData = await Promise.resolve({
             name: "John",
             roles: ["admin"]
         });
-        authController.setExtra(sampleUser);
+        if (user)
+            user.extra = sampleUserData;
 
         return ({
             collections: [
@@ -263,10 +260,10 @@ export default function App() {
                     relativePath: "products",
                     schema: productSchema,
                     name: "Products",
-                    permissions: ({ user, authController }) => ({
+                    permissions: ({ user }) => ({
                         edit: true,
                         create: true,
-                        delete: authController.extra.roles.includes("admin")
+                        delete: user && user.extra.roles.includes("admin")
                     }),
                     subcollections: [
                         buildCollection({
@@ -280,12 +277,12 @@ export default function App() {
         });
     };
 
-    const myAuthenticator: Authenticator = (user?: User) => {
+    const myAuthenticator: Authenticator = ({ user }) => {
         console.log("Allowing access to", user?.email);
         return true;
     };
 
-    return <CMSApp
+    return <FirebaseCMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
         navigation={navigation}

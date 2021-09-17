@@ -14,7 +14,7 @@ module.exports = {
             'docusaurus-plugin-typedoc',
             {
                 entryPoints: [
-                    '../src/index.tsx',
+                    '../src/index.ts',
                     // '../src/core/index.tsx',
                     // '../src/models/index.ts',
                     // '../src/collection/index.tsx',
@@ -45,12 +45,6 @@ module.exports = {
                     to: 'docs',
                     activeBaseRegex: 'docs(/)?$',
                     label: 'Docs',
-                    position: 'left'
-                },
-                {
-                    to: 'docs/api',
-                    // activeBasePath: 'api',
-                    label: 'API',
                     position: 'left'
                 },
                 {
@@ -93,10 +87,6 @@ module.exports = {
                         {
                             label: 'Docs',
                             to: 'docs/'
-                        },
-                        {
-                            label: 'API',
-                            to: 'docs/api/'
                         },
                         {
                             label: 'Demo',

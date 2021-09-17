@@ -6,20 +6,20 @@ import { User } from "./user";
 /**
  * You can use this builder to customize the navigation, based on the logged in
  * user
- * @category Navigation
+ * @category Models
  */
 export type NavigationBuilder =
     ((props: NavigationBuilderProps) => Promise<Navigation>)
     | ((props: NavigationBuilderProps) => Navigation);
 
 /**
- * @category Navigation
+ * @category Models
  */
 export type NavigationBuilderProps = { user: User | null, authController: AuthController }
 
 /**
  * In this interface you define the main navigation entries of the CMS
- * @category Navigation
+ * @category Models
  */
 export interface Navigation {
 
@@ -43,7 +43,7 @@ export interface Navigation {
 /**
  * Custom additional views created by the developer, added to the main
  * navigation.
- * @category Navigation
+ * @category Models
  */
 export interface CMSView {
 

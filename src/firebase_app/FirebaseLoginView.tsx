@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ * @category Firebase
+ */
 export interface FirebaseLoginViewProps {
     skipLoginButtonEnabled?: boolean,
     logo?: string,
@@ -34,7 +37,7 @@ export interface FirebaseLoginViewProps {
  * Use this component to render a login view based on FirebaseUI, that updates
  * the state of the {@link AuthController} based on the result
  * @constructor
- * @category Core components
+ * @category Firebase
  */
 export default function FirebaseLoginView({
                                       skipLoginButtonEnabled,

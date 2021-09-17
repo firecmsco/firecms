@@ -1,5 +1,5 @@
 /**
- * @category Locales
+ * @category Models
  */
 export type Locale =
     "af" |

@@ -46,6 +46,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ * @category Core components
+ */
 export interface EntityPreviewProps<M extends { [Key: string]: any }> {
     entity: Entity<M>;
     schema: EntitySchema<M>;

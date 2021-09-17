@@ -30,7 +30,9 @@ export const useStyles = makeStyles(theme => createStyles({
     }
 }));
 
-
+/**
+ * @category Core components
+ */
 export interface ReferenceDialogProps {
 
     /**

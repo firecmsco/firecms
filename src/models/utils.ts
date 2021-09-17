@@ -83,6 +83,11 @@ function initPropertyValue(key: string, property: Property, defaultValue: any) {
     return value;
 }
 
+/**
+ * Update the automatic values in an entity before save
+ * @category Datasource
+ */
+
 export function updateAutoValues<M extends { [Key: string]: any }>({
                                                                        inputValues,
                                                                        properties,

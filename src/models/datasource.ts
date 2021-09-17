@@ -3,17 +3,26 @@ import { FilterValues } from "./collections";
 import { CMSAppContext } from "../contexts";
 import { Property } from "./properties";
 
+/**
+ * @category Datasource
+ */
 export type FetchEntityProps<M> = {
     path: string,
     entityId: string,
     schema: EntitySchema<M>
 };
 
+/**
+ * @category Datasource
+ */
 export type ListenEntityProps<M> = FetchEntityProps<M> & {
     onUpdate: (entity: Entity<M>) => void,
     onError?: (error: Error) => void,
 };
 
+/**
+ * @category Datasource
+ */
 export type FetchCollectionProps<M> = {
     path: string,
     schema: EntitySchema<M>,
@@ -25,6 +34,9 @@ export type FetchCollectionProps<M> = {
     order?: "desc" | "asc"
 };
 
+/**
+ * @category Datasource
+ */
 export type ListenCollectionProps<M> =
     FetchCollectionProps<M> &
     {
@@ -32,6 +44,9 @@ export type ListenCollectionProps<M> =
         onError?: (error: Error) => void,
     };
 
+/**
+ * @category Datasource
+ */
 export type SaveEntityProps<M> = {
     path: string,
     entityId: string | undefined,
@@ -40,6 +55,9 @@ export type SaveEntityProps<M> = {
     status: EntityStatus,
 };
 
+/**
+ * @category Datasource
+ */
 export type DeleteEntityProps<M> = {
     entity: Entity<M>;
     schema: EntitySchema<M>;

@@ -4,7 +4,7 @@ import { createTheme, Theme } from "@mui/material";
 /**
  * Use this function to build the default FireCMS MUI5 theme,
  * with some overrides.
- * @category Hooks and utilities Functions
+ * @category Hooks and utilities
  */
 export const createCMSDefaultTheme = (
     { mode, primaryColor, secondaryColor, fontFamily }: {

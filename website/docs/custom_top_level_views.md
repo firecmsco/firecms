@@ -1,7 +1,7 @@
 ---
-id: custom_main_views
-title: Custom views
-sidebar_label: Custom views
+id: custom_top_level_views
+title: Custom top level views
+sidebar_label: Custom top level views
 ---
 
 If you need to develop a custom view that does not map directly to a Firestore
@@ -74,7 +74,7 @@ export default function App() {
         ]
     });
 
-    return <CMSApp
+    return <FirebaseCMSApp
         name={"My Online Shop"}
         navigation={navigation}
         firebaseConfig={firebaseConfig}

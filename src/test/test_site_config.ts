@@ -4,7 +4,7 @@ import {
     buildSchema,
     EnumValues
 } from "../models";
-import { CMSAppProps } from "../firebase_app/CMSAppProps";
+import { FirebaseCMSAppProps } from "../firebase_app/FirebaseCMSAppProps";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -247,7 +247,7 @@ const subcollections = [
     })
 ];
 
-export const siteConfig: CMSAppProps = {
+export const siteConfig: FirebaseCMSAppProps = {
     name: "Test site",
     navigation: [
         buildCollection({

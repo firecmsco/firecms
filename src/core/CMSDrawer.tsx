@@ -2,7 +2,6 @@ import React from "react";
 import {
     Box,
     Divider,
-    Drawer,
     Link,
     List,
     ListItem,
@@ -17,16 +16,11 @@ import { Navigation } from "../models";
 import { computeNavigation, NavigationEntry } from "./navigation";
 
 
-const drawerWidth = 280;
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         logo: {
             padding: theme.spacing(3),
-            maxWidth: drawerWidth
-        },
-        drawerPaper: {
-            width: drawerWidth
-            // letterSpacing: "1px"
+            maxWidth: 280
         }
     })
 );
@@ -34,15 +28,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface CMSDrawerProps {
     logo: string | undefined,
-    drawerOpen: boolean,
     closeDrawer: () => any,
-    navigation:Navigation;
+    navigation: Navigation;
 }
 
 export function CMSDrawer({
                               logo,
                               closeDrawer,
-                              drawerOpen,
                               navigation
                           }: CMSDrawerProps) {
 
@@ -68,18 +60,7 @@ export function CMSDrawer({
         </ListItem>;
     }
 
-    return <Drawer
-        variant="temporary"
-        anchor={"left"}
-        open={drawerOpen}
-        onClose={closeDrawer}
-        classes={{
-            paper: classes.drawerPaper
-        }}
-        ModalProps={{
-            keepMounted: true
-        }}
-    >
+    return <>
 
         {logo &&
         <Link
@@ -116,5 +97,5 @@ export function CMSDrawer({
 
         </List>
 
-    </Drawer>;
+    </>;
 }

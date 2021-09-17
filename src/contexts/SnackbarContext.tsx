@@ -51,7 +51,7 @@ export const SnackbarContext = React.createContext<SnackbarController>(DEFAULT_S
  * Hook to retrieve the SnackbarContext.
  *
  * Consider that in order to use this hook you need to have a parent
- * `CMSApp` or a `CMSAppProvider`
+ * `FirebaseCMSApp` or a `CMSAppProvider`
  *
  * @see SnackbarController
  * @category Hooks and utilities

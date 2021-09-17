@@ -4,7 +4,7 @@ import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
 import {
     Authenticator,
     buildCollection,
-    CMSApp,
+    FirebaseCMSApp,
     CMSView,
     EntityCollection,
     Navigation,
@@ -150,7 +150,7 @@ function SampleApp() {
                                                  }: NavigationBuilderProps) => {
 
         // This is a fake example of retrieving async data related to the user
-        // and storing it in the authController
+        // and storing it in the user
         const sampleUserData = await Promise.resolve({
             name: "John",
             roles: ["admin"]
@@ -173,7 +173,7 @@ function SampleApp() {
         return navigation;
     };
 
-    return <CMSApp
+    return <FirebaseCMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
         signInOptions={[

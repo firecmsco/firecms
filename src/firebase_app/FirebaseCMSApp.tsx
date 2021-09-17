@@ -14,8 +14,8 @@ import {
 import { AuthController } from "../contexts";
 import { EntityLinkBuilder } from "../models";
 
-import { CMSAppProps } from "./CMSAppProps";
-import { useFirebaseAuthHandler } from "./useFirebaseAuthHandler";
+import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
+import { useFirebaseAuthController } from "./useFirebaseAuthController";
 import { useFirestoreDataSource } from "./useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./useInitialiseFirebase";
@@ -37,9 +37,9 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  *
  * @param props
  * @constructor
- * @category Core
+ * @category Firebase
  */
-export function CMSApp({
+export function FirebaseCMSApp({
                            name,
                            logo,
                            toolbarExtraWidget,
@@ -56,7 +56,7 @@ export function CMSApp({
                            fontFamily,
                            dateTimeFormat,
                            locale
-                       }: CMSAppProps) {
+                       }: FirebaseCMSAppProps) {
 
     const {
         firebaseApp,
@@ -65,7 +65,7 @@ export function CMSApp({
         firebaseConfigError
     } = useInitialiseFirebase({ onFirebaseInit, firebaseConfig });
 
-    const authController: AuthController = useFirebaseAuthHandler({
+    const authController: AuthController = useFirebaseAuthController({
         firebaseApp,
         authentication
     });

@@ -62,7 +62,7 @@ const PIXEL_NEXT_PAGE_OFFSET = 1200;
  *
  * @see CollectionTableProps
  * @see EntityCollectionTable
- * @category Collection components
+ * @category Core components
  */
 export default function CollectionTable<M extends { [Key: string]: any },
     AdditionalKey extends string = string>({

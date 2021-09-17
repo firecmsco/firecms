@@ -56,7 +56,7 @@ The props provided by this context are:
   edit. You can set an entityId if you would like to edit and existing one
   (or a new one with that id). If you wish, you can also override
   the `SchemaSidePanelProps` (such as schema or subcollections) and choose to
-  override the CMSApp level `SchemaResolver`.
+  override the `CMSAppProvider` level `SchemaResolver`.
 
 Example:
 

@@ -14,7 +14,7 @@ export type FirebaseStorageSourceProps = {
 
 /**
  * Use this hook to build an {@link StorageSource} based on Firebase storage
- * @category Firebase Auth, Firestore and FirebaseStorage
+ * @category Firebase
  */
 export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceProps): StorageSource {
 

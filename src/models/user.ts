@@ -1,6 +1,8 @@
 /**
  * This interface represents a user.
  * It has the some of the same fields as a Firebase User
+ *
+ * @category Models
  */
 export interface User {
     /**

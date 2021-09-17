@@ -11,9 +11,9 @@ import { TextSearchDelegateResolver } from "./text_search";
 
 /**
  * Main entry point that defines the CMS configuration
- * @category Core
+ * @category Firebase
  */
-export interface CMSAppProps {
+export interface FirebaseCMSAppProps {
 
     /**
      * Name of the app, displayed as the main title and in the tab title

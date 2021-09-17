@@ -14,6 +14,7 @@ import CMSHome from "./components/CMSHome";
  *
  * @param navigation
  * @constructor
+ * @category Core components
  */
 export function CMSRoutes({ navigation }: {
     navigation: Navigation

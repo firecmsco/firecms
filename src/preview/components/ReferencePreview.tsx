@@ -93,13 +93,6 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
 
     const referenceClasses = useReferenceStyles({ size });
 
-    // TODO: remove when https://github.com/firebase/firebase-js-sdk/issues/4125 is fixed and replace with instance check of DocumentReference
-    const isFirestoreReference = value
-        && typeof value === "object"
-        && "firestore" in value
-        && typeof value["firestore"] === "object";
-    // const isFirestoreReference = value instanceof models.firestore.DocumentReference;
-
     const reference: EntityReference = value;
     const previewProperties = property.previewProperties;
 

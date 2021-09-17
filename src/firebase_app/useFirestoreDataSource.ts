@@ -56,7 +56,7 @@ export type FirestoreDataSourceProps = {
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
  * @param textSearchDelegateResolver
- * @category Firebase Auth, Firestore and FirebaseStorage
+ * @category Firebase
  */
 export function useFirestoreDataSource({
                                            firebaseApp,

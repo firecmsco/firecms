@@ -23,6 +23,7 @@
         "Firestore",
         "Locales",
         "Navigation",
+        "Firebase Auth, Firestore and FirebaseStorage",
         "*"
     ]
 }

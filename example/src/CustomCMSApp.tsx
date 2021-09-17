@@ -22,7 +22,7 @@ import {
     FirebaseLoginView,
     NavigationBuilder,
     NavigationBuilderProps,
-    useFirebaseAuthHandler,
+    useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase
@@ -69,7 +69,7 @@ const productSchema = buildSchema({
     }
 });
 
-export function SimpleAppWithProvider() {
+export function CustomCMSApp() {
 
     const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
         collections: [
@@ -118,7 +118,7 @@ export function SimpleAppWithProvider() {
     const mode: "light" | "dark" = "light";
     const theme = createCMSDefaultTheme({ mode });
 
-    const authController: AuthController = useFirebaseAuthHandler({
+    const authController: AuthController = useFirebaseAuthController({
         firebaseApp: firebaseApp as FirebaseApp,
         authentication: myAuthenticator
     });
@@ -156,7 +156,8 @@ export function SimpleAppWithProvider() {
                         return (
                             <CMSScaffold name={"My Online Shop"}>
                                 {context.navigation && <CMSRoutes navigation={context.navigation}/>}
-                            </CMSScaffold>);
+                            </CMSScaffold>
+                        );
 
                     }}
                 </CMSAppProvider>
