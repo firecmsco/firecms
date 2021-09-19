@@ -290,8 +290,6 @@ function EntityView<M extends { [Key: string]: any }>({
             sideEntityController.close();
     }
 
-    const containerRef = React.useRef<HTMLDivElement>(null);
-
     const form = !readOnly ? (
         <EntityForm
             status={status}
@@ -301,8 +299,7 @@ function EntityView<M extends { [Key: string]: any }>({
             onDiscard={onDiscard}
             onValuesChanged={setModifiedValues}
             onModified={setModified}
-            entity={entity}
-            containerRef={containerRef}/>
+            entity={entity}/>
     ) : (
         <EntityPreview
             entity={entity as any}
@@ -468,8 +465,7 @@ function EntityView<M extends { [Key: string]: any }>({
 
                     {header}
 
-                    <div className={classes.tabsContainer}
-                         ref={containerRef}>
+                    <div className={classes.tabsContainer}>
 
                         <Box
                             role="tabpanel"

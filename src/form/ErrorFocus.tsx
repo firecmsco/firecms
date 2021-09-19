@@ -15,11 +15,14 @@ export const ErrorFocus = ({ containerRef }:
             );
 
             if (errorElement && containerRef?.current) {
-                console.debug("Scrolling to error", keys[0]);
-                containerRef.current.scrollTo({
-                    top: containerRef.current?.scrollTop + errorElement.getBoundingClientRect().top - 64,
-                    behavior: "smooth"
-                });
+                const scrollableParent = getScrollableParent(containerRef.current);
+                if (scrollableParent) {
+                    const top = errorElement.getBoundingClientRect().top;
+                    scrollableParent.scrollTo({
+                        top: scrollableParent.scrollTop + top - 64,
+                        behavior: "smooth"
+                    });
+                }
                 const input = errorElement.querySelector("input");
                 if (input) input.focus();
             }
@@ -28,4 +31,19 @@ export const ErrorFocus = ({ containerRef }:
 
     // This component does not render anything by itself.
     return null;
+};
+
+const isScrollable = (ele: HTMLElement | null) => {
+    const hasScrollableContent = ele && ele.scrollHeight > ele.clientHeight;
+
+    const overflowYStyle = ele ? window.getComputedStyle(ele).overflowY : null;
+    const isOverflowHidden = overflowYStyle && overflowYStyle.indexOf("hidden") !== -1;
+
+    return hasScrollableContent && !isOverflowHidden;
+};
+
+const getScrollableParent = (ele: HTMLElement | null): HTMLElement | null => {
+    return (!ele || ele === document.body)
+        ? document.body
+        : (isScrollable(ele) ? ele : getScrollableParent(ele.parentNode as HTMLElement));
 };

@@ -73,10 +73,6 @@ function initPropertyValue(key: string, property: Property, defaultValue: any) {
         value = initWithProperties(property.properties, defaultValue);
     } else if (defaultValue !== undefined) {
         value = defaultValue;
-    } else if (property.dataType === "array") {
-        value = [];
-    } else if (property.dataType === "boolean") {
-        value = false;
     } else {
         value = undefined;
     }

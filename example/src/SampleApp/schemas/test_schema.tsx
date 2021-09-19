@@ -97,10 +97,18 @@ export const testEntitySchema = buildSchema({
                 dataType: "string"
             }
         },
+        required_string: {
+            title: "Required String",
+            dataType: "string",
+            validation: {
+                required: true
+            }
+        },
         empty_string: {
             title: "Empty String",
             dataType: "string",
             validation: {
+                required: true,
                 unique: true
             }
         },

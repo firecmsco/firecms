@@ -23,7 +23,7 @@ import {
     isReadOnly
 } from "../models/utils";
 import { CustomIdField } from "./CustomIdField";
-import { useDataSource } from "../hooks/data/useDataSource";
+import { useDataSource } from "../hooks";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     stickyButtons: {
@@ -36,7 +36,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         zIndex: 200
     },
     container: {
-        height: "100%",
         padding: theme.spacing(4),
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
@@ -80,12 +79,11 @@ interface EntityFormProps<M extends { [Key: string]: any }> {
      * has changed in the datasource
      */
     entity?: Entity<M>;
-    containerRef: React.RefObject<HTMLDivElement>;
 
     /**
      * The callback function called when Save is clicked and validation is correct
      */
-    onEntitySave(
+    onEntitySave?(
         props:
             {
                 schema: EntitySchema<M>,
@@ -98,17 +96,17 @@ interface EntityFormProps<M extends { [Key: string]: any }> {
     /**
      * The callback function called when discard is clicked
      */
-    onDiscard(): void;
+    onDiscard?(): void;
 
     /**
      * The callback function when the form original values have been modified
      */
-    onModified(dirty: boolean): void;
+    onModified?(dirty: boolean): void;
 
     /**
      * The callback function when the form original values have been modified
      */
-    onValuesChanged(values?: EntityValues<M>): void;
+    onValuesChanged?(values?: EntityValues<M>): void;
 
 }
 
@@ -120,7 +118,6 @@ function EntityForm<M>({
                            onEntitySave,
                            onDiscard,
                            onModified,
-                           containerRef,
                            onValuesChanged
                        }: EntityFormProps<M>) {
 
@@ -139,6 +136,8 @@ function EntityForm<M>({
     } else {
         throw new Error("Form configured wrong");
     }
+
+    const formRef = React.useRef<HTMLDivElement>(null);
 
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
@@ -192,18 +191,19 @@ function EntityForm<M>({
             throw Error("New FormType added, check EntityForm");
         }
 
-        onEntitySave({ schema, path, entityId, values })
-            .then(_ => {
-                initialValuesRef.current = values;
-                formikActions.setTouched({});
-            })
-            .catch(e => {
-                console.error(e);
-                setSavingError(e);
-            })
-            .finally(() => {
-                formikActions.setSubmitting(false);
-            });
+        if (onEntitySave)
+            onEntitySave({ schema, path, entityId, values })
+                .then(_ => {
+                    initialValuesRef.current = values;
+                    formikActions.setTouched({});
+                })
+                .catch(e => {
+                    console.error(e);
+                    setSavingError(e);
+                })
+                .finally(() => {
+                    formikActions.setSubmitting(false);
+                });
 
     }
 
@@ -271,9 +271,11 @@ function EntityForm<M>({
 
                 const modified = useMemo(() => !deepEqual(baseDataSourceValues, values), [baseDataSourceValues, values]);
                 useEffect(() => {
-                    onModified(modified);
+                    if (onModified)
+                        onModified(modified);
                     setInternalValue(values);
-                    onValuesChanged(values);
+                    if (onValuesChanged)
+                        onValuesChanged(values);
                 }, [modified, values]);
 
                 if (underlyingChanges && entity) {
@@ -335,7 +337,8 @@ function EntityForm<M>({
 
                 return (
                     <Container maxWidth={"sm"}
-                               className={classes.container}>
+                               className={classes.container}
+                               ref={formRef}>
 
                         <CustomIdField schema={schema as EntitySchema<any>}
                                        status={status}
@@ -367,7 +370,7 @@ function EntityForm<M>({
                         </Form>
 
 
-                        <ErrorFocus containerRef={containerRef}/>
+                        <ErrorFocus containerRef={formRef}/>
 
                     </Container>
                 );
