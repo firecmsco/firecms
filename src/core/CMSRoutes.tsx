@@ -2,7 +2,11 @@ import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView, Navigation } from "../models";
-import { addInitialSlash, buildCollectionUrl } from "./navigation";
+import {
+    addInitialSlash,
+    buildCollectionUrl,
+    removeTrailingSlash
+} from "./navigation";
 import { EntityCollectionTable } from "./components/EntityCollectionTable";
 import BreadcrumbUpdater from "./components/BreadcrumbUpdater";
 import CMSHome from "./components/CMSHome";
@@ -44,7 +48,6 @@ export function CMSRoutes({ HomePage }: {
                 element={
                     <BreadcrumbUpdater
                         path={addInitialSlash(path)}
-                        key={`navigation_${path}`}
                         title={cmsView.name}>
                         {cmsView.view}
                     </BreadcrumbUpdater>}
@@ -63,13 +66,13 @@ export function CMSRoutes({ HomePage }: {
         // we reorder collections so that nested paths are included first
         .sort((a, b) => b.relativePath.length - a.relativePath.length)
         .map(entityCollection => {
-                const urlPath = buildCollectionUrl(entityCollection.relativePath);
+                const urlPath = removeTrailingSlash(buildCollectionUrl(entityCollection.relativePath)) + "/*";
                 return (
                     <Route path={urlPath}
+                           key={`navigation_${entityCollection.relativePath}`}
                            element={
                                <BreadcrumbUpdater
                                    path={urlPath}
-                                   key={`navigation_${entityCollection.relativePath}`}
                                    title={entityCollection.name}>
                                    <EntityCollectionTable
                                        path={entityCollection.relativePath}

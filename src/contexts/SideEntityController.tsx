@@ -113,7 +113,6 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                                                                       }) => {
 
     const location = useLocation();
-
     const navigate = useNavigate();
     const initialised = useRef<boolean>(false);
     const [sidePanels, setSidePanels] = useState<ExtendedPanelProps[]>([]);
@@ -137,13 +136,16 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         }
     }, [location?.state, schemasRegistry.initialised]);
 
-
     // only on initialisation
     useEffect(() => {
+        console.log("initialised.current", initialised.current, collections);
         if (collections && !initialised.current) {
             if (isCollectionPath(location.pathname)) {
                 const newFlag = location.hash === "#new";
-                const sidePanels = buildSidePanelsFromUrl(getEntityOrCollectionPath(location.pathname), collections, newFlag);
+                const entityOrCollectionPath = getEntityOrCollectionPath(location.pathname);
+                console.log("entityOrCollectionPath", entityOrCollectionPath);
+                const sidePanels = buildSidePanelsFromUrl(entityOrCollectionPath, collections, newFlag);
+                console.log("sidePanels", sidePanels, location.pathname);
                 setSidePanels(sidePanels);
             }
             initialised.current = true;
@@ -258,12 +260,13 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
     );
 };
 
-function buildSidePanelsFromUrl(path: string, allCollections: EntityCollection[], newFlag: boolean): ExtendedPanelProps[] {
+function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): ExtendedPanelProps[] {
 
     const navigationViewsForPath: NavigationViewEntry<any>[] = getNavigationEntriesFromPathInternal({
         path,
-        allCollections
+        collections
     });
+    console.log("navigationViewsForPath", navigationViewsForPath);
 
     let sidePanels: ExtendedPanelProps[] = [];
     let lastCollectionPath = "";

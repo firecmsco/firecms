@@ -60,20 +60,6 @@ export interface AuthController {
      */
     signOut: () => void;
 
-    /**
-     * Utility field you can use to store your custom data.
-     * e.g: Additional user data fetched from a Firestore document, or custom
-     * claims
-     */
-    extra?: any;
-
-    /**
-     * You can use this method to store any extra data you would like to
-     * associate your user to.
-     * e.g: Additional user data fetched from a Firestore document, or custom
-     * claims
-     */
-    setExtra: (extra: any) => void;
 }
 
 export const AuthContext = React.createContext<AuthController>({
@@ -89,8 +75,6 @@ export const AuthContext = React.createContext<AuthController>({
     skipLogin: () => {
     },
     signOut: () => {
-    },
-    setExtra: (extra: any) => {
     }
 });
 

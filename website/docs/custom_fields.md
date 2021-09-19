@@ -5,66 +5,38 @@ sidebar_label: Custom fields
 ---
 
 If you need a custom field for your property you can do it by passing a React
-component to the `field` prop of a property `config`. The React component must
-accept the props of type `CMSFieldProps`. The bare minimum you need to implement is a field that displays the
-received `value` and uses the `setValue` callback.
-
-You can also specify your own props that are passed to your component in `customProps`
-
-## Custom field props - CMSFieldProps
-
-* `name` The name of the property, such as `age`. You can use nested and array
-  indexed such as `address.street` or `people[3]`
-
-* `property` The CMS property you are binding this field to
-
-* `context` The context where this field is being rendered. You get a
-  context as a prop when creating a custom field.
-
-* `includeDescription` Should the description be included in this field
-
-* `underlyingValueHasChanged` Has the value of this property been updated
-  in the database while this field is being edited
-
-* `tableMode` Is this field being rendered in a table
-
-* `partOfArray` Is this field part of an array
-
-* `autoFocus` Should the field take focus when rendered. When opening the
-  popup view in table mode, it makes sense to put the focus on the only
-  field rendered.
-
-* `disabled` Should this field be disabled
-
-* `dependsOnOtherProperties` This flag is used to avoid using Formik
-  FastField internally, which prevents being updated from the values
+component to the `Field` prop of a property `config`. The React component must
+accept the props of type `[FieldProps](api/interfaces/fieldprops.md)`.
+The bare minimum you need to implement
+is a field that displays the received `value` and uses the `setValue` callback.
 
 You can also pass custom props to your custom field, which you then receive in
-the `customProps`.
+the `customProps` prop.
 
 If you are developing a custom field and need to access the values of the
-entity, you can use the `context` field in CMSFieldProps.
+entity, you can use the `context` field in FieldProps.
+
+You can check all the props `[FieldProps](api/interfaces/fieldprops.md)`
 
 ## Example
 
 This is an example of a custom TextField that takes the background color as a prop
 
 ```tsx
-import { TextField, Theme, withStyles } from "@mui/material";
-import React, { ReactElement } from "react";
+import React from "react";
+import { TextField, Theme } from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
 import { FieldDescription, FieldProps } from "@camberi/firecms";
 
 interface CustomColorTextFieldProps {
     color: string
 }
 
-export const TextFieldWithStyles = withStyles((theme: Theme) => ({
-    root: (props: any) => ({
-        "& .MuiFilledInput-root": {
-            backgroundColor: props.customcolor
-        }
+const useStyles = makeStyles<Theme, { customColor: string }>(() => ({
+    root: ({ customColor }) => ({
+        backgroundColor: customColor
     })
-}))(TextField);
+}));
 
 export default function CustomColorTextField({
                                                  property,
@@ -76,25 +48,28 @@ export default function CustomColorTextField({
                                                  isSubmitting,
                                                  context, // the rest of the entity values here
                                                  ...props
-                                             }: FieldProps<string, CustomColorTextFieldProps>)
-    : ReactElement {
+                                             }: FieldProps<string, CustomColorTextFieldProps>) {
+
+    const classes = useStyles({ customColor: customProps.color });
 
     return (
         <>
-            <TextFieldWithStyles required={property.validation?.required}
-                                 error={!!error}
-                                 disabled={isSubmitting}
-                                 label={property.title}
-                                 value={value ?? ""}
-                                 onChange={(evt: any) => {
-                                     setValue(
-                                         evt.target.value
-                                     );
-                                 }}
-                                 helperText={error}
-                                 fullWidth
-                                 variant={"filled"}
-                                 customcolor={customProps.color}/>
+            <TextField required={property.validation?.required}
+                       classes={{
+                           root: classes.root
+                       }}
+                       error={!!error}
+                       disabled={isSubmitting}
+                       label={property.title}
+                       value={value ?? ""}
+                       onChange={(evt: any) => {
+                           setValue(
+                               evt.target.value
+                           );
+                       }}
+                       helperText={error}
+                       fullWidth
+                       variant={"filled"}/>
 
             <FieldDescription property={property}/>
         </>

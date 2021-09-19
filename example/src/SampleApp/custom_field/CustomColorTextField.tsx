@@ -1,19 +1,17 @@
+import React from "react";
 import { TextField, Theme } from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
-import React, { ReactElement } from "react";
+import makeStyles from "@mui/styles/makeStyles";
 import { FieldDescription, FieldProps } from "@camberi/firecms";
 
 interface CustomColorTextFieldProps {
     color: string
 }
 
-export const TextFieldWithStyles = withStyles((theme: Theme) => ({
-    root: (props: any) => ({
-        "& .MuiFilledInput-root": {
-            backgroundColor: props.customcolor
-        }
+const useStyles = makeStyles<Theme, { customColor: string }>(() => ({
+    root: ({ customColor }) => ({
+        backgroundColor: customColor
     })
-}))(TextField);
+}));
 
 export default function CustomColorTextField({
                                                  property,
@@ -25,25 +23,28 @@ export default function CustomColorTextField({
                                                  isSubmitting,
                                                  context, // the rest of the entity values here
                                                  ...props
-                                             }: FieldProps<string, CustomColorTextFieldProps>)
-    : ReactElement {
+                                             }: FieldProps<string, CustomColorTextFieldProps>) {
+
+    const classes = useStyles({ customColor: customProps.color });
 
     return (
         <>
-            <TextFieldWithStyles required={property.validation?.required}
-                                 error={!!error}
-                                 disabled={isSubmitting}
-                                 label={property.title}
-                                 value={value ?? ""}
-                                 onChange={(evt: any) => {
-                                     setValue(
-                                         evt.target.value
-                                     );
-                                 }}
-                                 helperText={error}
-                                 fullWidth
-                                 variant={"filled"}
-                                 customcolor={customProps.color}/>
+            <TextField required={property.validation?.required}
+                       classes={{
+                           root: classes.root
+                       }}
+                       error={!!error}
+                       disabled={isSubmitting}
+                       label={property.title}
+                       value={value ?? ""}
+                       onChange={(evt: any) => {
+                           setValue(
+                               evt.target.value
+                           );
+                       }}
+                       helperText={error}
+                       fullWidth
+                       variant={"filled"}/>
 
             <FieldDescription property={property}/>
         </>

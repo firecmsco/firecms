@@ -29,12 +29,6 @@ it("collection view matches ok", () => {
     ).toEqual("locales");
 
     expect(
-        getCollectionViewFromPath("products/pid/not_existing", collectionViews)
-    ).toEqual(
-       undefined
-    );
-
-    expect(
         () => getCollectionViewFromPath("products/pid", collectionViews)
     ).toThrow(
         "Collection paths must have an odd number of segments: products/pid"
@@ -42,9 +36,8 @@ it("collection view matches ok", () => {
 
     expect(
         getCollectionViewFromPath("products", [])
-    ).toThrow(
-       undefined
-    );
+    ).toEqual(undefined);
+
     const collectionViewFromPath10 = getCollectionViewFromPath("products/id/subcollection_inline", collectionViews);
     expect(
         collectionViewFromPath10 && collectionViewFromPath10.relativePath
@@ -56,7 +49,7 @@ it("build entity collection array", () => {
 
     const collections = getNavigationEntriesFromPathInternal({
         path: "products/pid",
-        allCollections: collectionViews
+        collections: collectionViews
     });
     console.log(collections);
     // expect(
@@ -66,24 +59,20 @@ it("build entity collection array", () => {
 
 it("Custom view internal", () => {
 
-    const collections = getNavigationEntriesFromPathInternal({
+    const navigationEntries = getNavigationEntriesFromPathInternal({
         path: "products/pid/custom_view",
-        allCollections: collectionViews
+        collections: collectionViews
     });
-    console.log(collections);
-    // expect(
-    //     collections.map((collection) => collection.relativePath)
-    // ).toEqual(["products", "locales"]);
+    console.log(navigationEntries);
+    expect(navigationEntries.length).toEqual(3);
 });
 
 it("build entity collection array 2", () => {
 
-    const collections = getNavigationEntriesFromPathInternal({
+    const navigationEntries = getNavigationEntriesFromPathInternal({
         path: "products/pid/locales/yep",
-        allCollections: collectionViews
+        collections: collectionViews
     });
-    console.log(collections);
-    // expect(
-    //     collections.map((collection) => collection.relativePath)
-    // ).toEqual(["products", "locales"]);
+    console.log(navigationEntries);
+    expect(navigationEntries.length).toEqual(4);
 });

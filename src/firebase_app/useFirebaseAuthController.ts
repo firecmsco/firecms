@@ -32,7 +32,6 @@ export const useFirebaseAuthController = (
     const [authLoading, setAuthLoading] = React.useState(true);
     const [loginSkipped, setLoginSkipped] = React.useState<boolean>(false);
     const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
-    const [extra, setExtra] = React.useState<any>();
 
     useEffect(() => {
         if (!firebaseApp) return;
@@ -95,8 +94,6 @@ export const useFirebaseAuthController = (
         notAllowedError,
         skipLogin,
         signOut: onSignOut,
-        canAccessMainView,
-        extra,
-        setExtra
+        canAccessMainView
     };
 };

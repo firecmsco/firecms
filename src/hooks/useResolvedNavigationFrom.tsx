@@ -73,7 +73,7 @@ export function resolveNavigationFrom<M>({
 
     const navigationEntries = getNavigationEntriesFromPathInternal({
         path,
-        allCollections: navigation.collections
+        collections: navigation.collections
     });
 
     const resultPromises: Promise<NavigationEntry<any>>[] = navigationEntries.map((entry) => {

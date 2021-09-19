@@ -84,6 +84,8 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
         <div>{entity.values.title}</div>
 };
 ```
+- `AuthController` no longer has `extra` and `setExtra` props. If you need that
+  functionality, you can use the `extra` field in the `User`
 
 - `PermissionsBuilder` no longer has an `authController` prop, but it can still
   be accessed through the `context` prop. Related, the new `User` type includes

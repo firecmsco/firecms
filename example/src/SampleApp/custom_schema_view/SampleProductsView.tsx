@@ -17,18 +17,7 @@ export function SampleProductsView({ entity, modifiedValues }: {
         });
     };
 
-    const includePropertyValue = (key:string, value: any ): boolean => {
-        if (key === "related_products")
-            return false;
-        return true;
-    };
-
-    const values = modifiedValues ?
-        Object.entries(modifiedValues)
-            .filter(([key, value]) => includePropertyValue(key, value))
-            .map(([key, value]) => ({ [key]: value }))
-            .reduce((a, b) => ({ ...a, ...b }))
-        : {};
+    const values = modifiedValues ? modifiedValues : {};
 
     return (
         <Box
@@ -62,9 +51,6 @@ export function SampleProductsView({ entity, modifiedValues }: {
                         {JSON.stringify(values, null, 2)}
                     </p>}
 
-                    <small>
-                        Note that "Related products" is intentionally excluded from this JSON preview
-                    </small>
 
                 </Box>
 
