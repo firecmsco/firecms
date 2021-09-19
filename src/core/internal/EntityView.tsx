@@ -17,7 +17,6 @@ import { Prompt } from "react-router-dom";
 import clsx from "clsx";
 import EntityForm from "../../form/EntityForm";
 import {
-    DataSource,
     Entity,
     EntityCollection,
     EntitySchema,
@@ -26,7 +25,6 @@ import {
     PermissionsBuilder
 } from "../../models";
 import {
-    CMSAppContext,
     useAuthController,
     useCMSAppContext,
     useSideEntityController,
@@ -39,11 +37,12 @@ import EntityPreview from "../components/EntityPreview";
 
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
 import ErrorBoundary from "./ErrorBoundary";
-import { useEntityFetch } from "../../hooks/useEntityFetch";
-import { useDataSource } from "../../hooks/useDataSource";
-import { SaveEntityProps } from "../../models/datasource";
-import { saveEntityInternal } from "./data_logic";
-
+import {
+    saveEntityWithCallbacks,
+    useDataSource,
+    useEntityFetch
+} from "../../hooks";
+import { canEdit } from "../util/permissions";
 
 const useStylesSide = makeStyles((theme: Theme) =>
     createStyles({
@@ -163,6 +162,11 @@ function EntityView<M extends { [Key: string]: any }>({
         dataLoadingError
     } = useEntityFetch({ path, entityId: currentEntityId, schema });
 
+    useEffect(() => {
+        if (entity)
+            setReadOnly(!canEdit(permissions, entity, authController, path, context));
+    }, [entity]);
+
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
 
@@ -203,6 +207,53 @@ function EntityView<M extends { [Key: string]: any }>({
 
     }, [window]);
 
+    const onPreSaveHookError = (e: Error) => {
+        snackbarContext.open({
+            type: "error",
+            title: "Error before saving",
+            message: e?.message
+        });
+        console.error(e);
+    };
+
+    const onSaveSuccessHookError = (e: Error) => {
+        snackbarContext.open({
+            type: "error",
+            title: `${schema.name}: Error after saving (entity is saved)`,
+            message: e?.message
+        });
+        console.error(e);
+    };
+
+    const onSaveSuccess = (updatedEntity: Entity<M>) => {
+
+        console.log("onSaveSuccess");
+        setCurrentEntityId(updatedEntity.id);
+
+        snackbarContext.open({
+            type: "success",
+            message: `${schema.name}: Saved correctly`
+        });
+
+        setStatus("existing");
+        setModified(false);
+
+        if (tabsPosition === -1)
+            sideEntityController.close();
+
+    };
+
+    const onSaveFailure = (e: Error) => {
+
+        snackbarContext.open({
+            type: "error",
+            title: `${schema.name}: Error saving`,
+            message: e?.message
+        });
+
+        console.error("Error saving entity", path, entityId);
+        console.error(e);
+    };
 
     async function onEntitySave({
                                     schema,
@@ -214,70 +265,18 @@ function EntityView<M extends { [Key: string]: any }>({
         if (!status)
             return;
 
-        const onPreSaveHookError = (e: Error) => {
-            snackbarContext.open({
-                type: "error",
-                title: "Error before saving",
-                message: e?.message
-            });
-            console.error(e);
-        };
-
-        const onSaveSuccessHookError = (e: Error) => {
-            snackbarContext.open({
-                type: "error",
-                title: `${schema.name}: Error after saving (entity is saved)`,
-                message: e?.message
-            });
-            console.error(e);
-        };
-
-        const onSaveSuccess = (updatedEntity: Entity<M>) => {
-
-            console.log("onSaveSuccess");
-            setCurrentEntityId(updatedEntity.id);
-
-            snackbarContext.open({
-                type: "success",
-                message: `${schema.name}: Saved correctly`
-            });
-
-            setStatus("existing");
-            setModified(false);
-
-            if (tabsPosition === -1)
-                sideEntityController.close();
-
-        };
-
-        const onSaveFailure = (e: Error) => {
-
-            snackbarContext.open({
-                type: "error",
-                title: `${schema.name}: Error saving`,
-                message: e?.message
-            });
-
-            console.error("Error saving entity", path, entityId, values);
-            console.error(e);
-        };
-
         if (status === "existing" && !isModified) {
             sideEntityController.close();
             return;
         }
 
-        const saveProps = {
+        return saveEntityWithCallbacks({
             path,
             entityId: entityId,
             values,
             schema,
             status,
-            context
-        };
-        return saveEntityInternal({
             dataSource,
-            saveProps,
             context,
             onSaveSuccess,
             onSaveFailure,
@@ -334,19 +333,19 @@ function EntityView<M extends { [Key: string]: any }>({
     );
 
     const subCollectionsViews = subcollections && subcollections.map(
-        (subcollectionView, colIndex) => {
-            const path = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollectionView.relativePath)}` : undefined;
+        (subcollection, colIndex) => {
+            const path = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.relativePath)}` : undefined;
 
             return (
                 <Box
                     className={classes.subcollectionPanel}
-                    key={`subcol_${subcollectionView.name}_${colIndex}`}
+                    key={`subcol_${subcollection.name}_${colIndex}`}
                     role="tabpanel"
                     flexGrow={1}
                     hidden={tabsPosition !== colIndex + customViewsCount}>
                     {entity && path ?
                         <EntityCollectionTable path={path}
-                                               collectionConfig={subcollectionView}
+                                               collection={subcollection}
                         />
                         :
                         <Box m={3}
@@ -355,8 +354,7 @@ function EntityView<M extends { [Key: string]: any }>({
                              justifyContent={"center"}>
                             <Box>
                                 You need to save your entity before
-                                adding
-                                additional collections
+                                adding additional collections
                             </Box>
                         </Box>
                     }

@@ -1,4 +1,4 @@
-import { Property } from "../models";
+import { Property } from "../../models";
 import ShortTextIcon from "@mui/icons-material/ShortText";
 import SubjectIcon from "@mui/icons-material/Subject";
 import AttachmentIcon from "@mui/icons-material/Attachment";

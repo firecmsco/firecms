@@ -16,7 +16,6 @@ In the simplest case, you will want to create some properties, include them
 in an entity schema, include it in a collection and include that in a CMS
 instance.
 
-
 ## FirebaseCMSApp
 
 The entry point for setting up a FireCMS app based on Firebase is the `FirebaseCMSApp`.
@@ -25,6 +24,12 @@ Firestore, and Firebase Storage as backend services.
 
 Internally it will create a `CMSAppProvider` which holds the main state and
 logic of the app, and create the app scaffold and routes.
+
+:::note
+It is also possible to use FireCMS by using lower level components and including
+`CMSAppProvider` in your code, even without using Firebase.
+[More info](custom_cms_app.md)
+:::
 
 You can define the following specs:
 

@@ -514,14 +514,14 @@ export interface FieldConfig<T extends CMSType, CustomProps = any> {
      * You can customize it by passing custom props that are received
      * in the component.
      */
-    field?: React.ComponentType<FieldProps<T, CustomProps>>;
+    Field?: React.ComponentType<FieldProps<T, CustomProps>>;
 
     /**
      * Configure how a property is displayed as a preview, e.g. in the collection
      * view. You can customize it by passing custom props that are received
      * in the component.
      */
-    preview?: React.ComponentType<PreviewComponentProps<T, CustomProps>>;
+    Preview?: React.ComponentType<PreviewComponentProps<T, CustomProps>>;
 
     /**
      * Additional props that are passed to the components defined in `field`

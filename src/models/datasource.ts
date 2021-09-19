@@ -1,6 +1,5 @@
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
 import { FilterValues } from "./collections";
-import { CMSAppContext } from "../contexts";
 import { Property } from "./properties";
 
 /**
@@ -61,7 +60,6 @@ export type SaveEntityProps<M> = {
 export type DeleteEntityProps<M> = {
     entity: Entity<M>;
     schema: EntitySchema<M>;
-    context: CMSAppContext;
 };
 
 /**
@@ -162,10 +160,6 @@ export interface DataSource {
      * @param id
      * @param schema
      * @param status
-     * @param onSaveSuccess
-     * @param onSaveFailure
-     * @param onPreSaveHookError
-     * @param onSaveSuccessHookError
      */
     saveEntity<M>(
         {
@@ -181,14 +175,12 @@ export interface DataSource {
      * @param entity
      * @param schema
      * @param path
-     * @param context
      * @return was the whole deletion flow successful
      */
     deleteEntity<M>(
         {
             entity,
-            schema,
-            context
+            schema
         }: DeleteEntityProps<M>
     ): Promise<void>;
 

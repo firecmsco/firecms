@@ -16,7 +16,7 @@ import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
-import { enumToObjectEntries } from "../../util/enums";
+import { enumToObjectEntries } from "../../core/util/enums";
 import { EnumValues, FieldProps, FormContext, Property } from "../../models";
 
 

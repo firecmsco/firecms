@@ -1,4 +1,4 @@
-import { ChipColor, EnumValueConfig, EnumValues } from "../models";
+import { ChipColor, EnumValueConfig, EnumValues } from "../../models";
 
 export function enumToObjectEntries(enumValues: EnumValues): [string, string | EnumValueConfig][] {
     return enumValues instanceof Map

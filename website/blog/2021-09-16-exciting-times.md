@@ -53,15 +53,13 @@ imagined! We have tweaked the APIs to try to accommodate those requirements but
 we have come to the conclusion that a bigger change was needed.
 
 The result is a big rework of the internal APIs and components that improves
-reusability and customisation.
+re-usability and customisation.
 
-If you are using `CMSApp`, so FireCMS as a standalone app, this will not affect
-you too much (besides some API updates). You can still use FireCMS as it was
-originally meant to, a simple way to map entities and collections to awesome
-views.
+If you are using `FirebaseCMSApp` (previously `CMSApp`), so FireCMS as a
+standalone app, you will need to update some APIs (see the [Updating from alpha versions](../docs/updating_from_alpha_versions))
 
 But, but, but... If you need more customisation you can now completely
-override `CMSApp` and reuse all it's internal components. This means you now
+override `FirebaseCMSApp` and reuse all its internal components. This means you now
 have control of the MUI theme (adapted to V5), the CMS routes (adapted to React
 Router 6), or how you display the different parts, such as the side dialogs, or
 add your own.

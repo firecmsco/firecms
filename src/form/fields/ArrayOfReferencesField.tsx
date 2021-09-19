@@ -1,11 +1,5 @@
 import { Entity, EntityReference, FieldProps, Property } from "../../models";
-import {
-    Box,
-    Button,
-    FormControl,
-    FormHelperText,
-    Paper
-} from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, Paper } from "@mui/material";
 import { ReferencePreview } from "../../preview";
 import React, { useMemo } from "react";
 import LabelWithIcon from "../components/LabelWithIcon";

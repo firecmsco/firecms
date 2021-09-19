@@ -13,7 +13,6 @@ import {
     traverseValues,
     updateAutoValues
 } from "../models/utils";
-import deepEqual from "deep-equal";
 import {
     DataSource,
     DeleteEntityProps,
@@ -29,6 +28,7 @@ import {
     doc,
     DocumentReference,
     DocumentSnapshot,
+    GeoPoint as FirestoreGeoPoint,
     getDoc,
     getDocs,
     getFirestore,
@@ -45,7 +45,6 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { TextSearchDelegateResolver } from "./text_search";
-import firebase from "firebase/compat/app";
 
 export type FirestoreDataSourceProps = {
     firebaseApp: FirebaseApp,
@@ -118,7 +117,7 @@ export function useFirestoreDataSource({
                 if (value === null)
                     return null;
 
-                if (deepEqual(value, serverTimestamp())) {
+                if (serverTimestamp().isEqual(value)) {
                     return null;
                 }
 
@@ -364,9 +363,8 @@ export function useFirestoreDataSource({
                     status,
                     timestampNowValue: serverTimestamp(),
                     referenceConverter: (value: EntityReference) => doc(db, value.path, value.id),
-                    geopointConverter: (value: GeoPoint) => new firebase.firestore.GeoPoint(value.latitude, value.longitude)
+                    geopointConverter: (value: GeoPoint) => new FirestoreGeoPoint(value.latitude, value.longitude)
                 });
-
 
             console.debug("Saving entity", path, entityId, updatedValues);
 
@@ -389,16 +387,12 @@ export function useFirestoreDataSource({
          * Delete an entity
          * @param entity
          * @param schema
-         * @param path
-         * @param context
-         * @return was the whole deletion flow successful
          * @category Firestore
          */
         async deleteEntity<M extends { [Key: string]: any }>(
             {
                 entity,
                 schema,
-                context
             }: DeleteEntityProps<M>
         ): Promise<void> {
             return deleteDoc(doc(db, entity.path, entity.id));

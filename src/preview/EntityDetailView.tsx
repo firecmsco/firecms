@@ -17,12 +17,12 @@ import makeStyles from "@mui/styles/makeStyles";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import {
-    getCMSPathFrom,
+    buildCollectionUrl,
     removeInitialAndTrailingSlashes
 } from "../core/navigation";
 import { EntityCollectionTable } from "../core/components/EntityCollectionTable";
 import { useSideEntityController } from "../contexts";
-import { useDataSource } from "../hooks/useDataSource";
+import { useDataSource } from "../hooks";
 
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -108,7 +108,7 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
                 <Tooltip title={"Full size"}>
                     <IconButton
                         component={ReactLink}
-                        to={getCMSPathFrom(entity.path)}
+                        to={buildCollectionUrl(entity.path)}
                         size="large">
                         <EditIcon/>
                     </IconButton>
@@ -159,7 +159,7 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
                             hidden={tabsPosition !== colIndex + 1}>
                             <EntityCollectionTable
                                 path={path}
-                                collectionConfig={subcollection}
+                                collection={subcollection}
                             />
                         </Box>;
                     }

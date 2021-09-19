@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Entity, EntitySchema, FilterValues } from "../models";
+import { Entity, EntitySchema, FilterValues } from "../../models";
 import { useDataSource } from "./useDataSource";
 
 type Order = "asc" | "desc" | undefined;

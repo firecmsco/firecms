@@ -69,8 +69,8 @@ export function CustomIdField<M>
                        rel="noopener noreferrer"
                        target="_blank">
                         <IconButton onClick={(e) => e.stopPropagation()}
-                                    aria-label="go-to-firestore" size="large">
-                            <Tooltip title={"Open in Firestore console"}>
+                                    aria-label="go-to-datasource" size="large">
+                            <Tooltip title={"Open in the console"}>
                                 <OpenInNewIcon fontSize={"small"}/>
                             </Tooltip>
                         </IconButton>

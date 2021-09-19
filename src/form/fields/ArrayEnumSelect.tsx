@@ -12,7 +12,10 @@ import React from "react";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
-import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
+import {
+    enumToObjectEntries,
+    isEnumValueDisabled
+} from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 /**

@@ -6,13 +6,13 @@ import {
     ChipColorSchema,
     getColorSchemeForKey,
     getColorSchemeForSeed
-} from "../../util/chip_utils";
+} from "../../core/util/chip_utils";
 import { ChipColor, EnumValues } from "../../models";
 import {
     buildEnumLabel,
     getColorSchemaKey,
     getLabelOrConfigFrom
-} from "../../util/enums";
+} from "../../core/util/enums";
 
 const useStyles = makeStyles<Theme, { schema: ChipColorSchema, error: any }>((theme: Theme) =>
     createStyles({

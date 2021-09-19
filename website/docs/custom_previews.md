@@ -50,7 +50,7 @@ export const blogSchema = buildSchema({
             title: "Reviewed",
             dataType: "boolean",
             config: {
-                preview: CustomBooleanPreview
+                Preview: CustomBooleanPreview
             }
         },
     }

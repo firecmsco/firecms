@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { BreadcrumbEntry } from "../core/navigation";
 
 const DEFAULT_NAVIGATION = {
     breadcrumbs: [],
@@ -9,7 +8,13 @@ const DEFAULT_NAVIGATION = {
     }
 };
 
-export type { BreadcrumbEntry };
+/**
+ * @category Hooks and utilities
+ */
+export interface BreadcrumbEntry {
+    title: string;
+    url: string;
+}
 
 /**
  * @category Hooks and utilities

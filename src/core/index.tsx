@@ -8,8 +8,10 @@ export type {
     CMSScaffoldProps
 } from "./CMSScaffold";
 
-export * from "./components";
+export type {
+    CMSDrawerProps
+} from "./CMSDrawer";
 
-export type { SideEntityPanelProps } from "./SideEntityPanelProps";
+export * from "./components";
 
 export { createCMSDefaultTheme } from "./theme";

@@ -51,8 +51,8 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
 
     if (value === undefined) {
         content = <EmptyValue/>;
-    } else if (property.config?.preview) {
-        content = createElement(property.config.preview as React.ComponentType<PreviewComponentProps>,
+    } else if (property.config?.Preview) {
+        content = createElement(property.config.Preview as React.ComponentType<PreviewComponentProps>,
             {
                 name,
                 value,

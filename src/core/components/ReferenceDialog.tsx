@@ -16,7 +16,7 @@ import CollectionTable from "../../collection/components/CollectionTable";
 import CollectionRowActions
     from "../../collection/internal/CollectionRowActions";
 import { useColumnIds } from "../../collection/common";
-import { useDataSource } from "../../hooks/useDataSource";
+import { useDataSource } from "../../hooks/data/useDataSource";
 
 
 export const useStyles = makeStyles(theme => createStyles({

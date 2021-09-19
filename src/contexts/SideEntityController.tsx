@@ -2,15 +2,14 @@ import { EntityCollection, SchemaConfig } from "../models";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-    getCMSPathFrom,
+    buildCollectionUrl,
+    buildNewEntityUrl,
     getEntityOrCollectionPath,
     getEntityPath,
     getNavigationEntriesFromPathInternal,
-    getRouterNewEntityPath,
     isCollectionPath,
     NavigationViewEntry
 } from "../core/navigation";
-import { SideEntityPanelProps } from "../core/SideEntityPanelProps";
 import { useSchemasRegistry } from "./SchemaRegistry";
 import { getSidePanelKey } from "./utils";
 
@@ -22,7 +21,33 @@ const DEFAULT_SIDE_ENTITY = {
     }
 };
 
-export type { SideEntityPanelProps, SchemaConfig } ;
+/**
+ * Props used to open a side dialog
+ * @category Hooks and utilities
+ */
+export interface SideEntityPanelProps {
+    /**
+     * Absolute path of the entity
+     */
+    path: string;
+
+    /**
+     * Id of the entity, if not set, it means we are creating a new entity
+     */
+    entityId?: string;
+
+    /**
+     * Set this flag to true if you want to make a copy of an existing entity
+     */
+    copy?: boolean;
+
+    /**
+     * Open the entity with a selected subcollection view. If the panel for this
+     * entity was already open, it is replaced.
+     */
+    selectedSubpath?: string;
+
+}
 
 /**
  * Controller to open the side dialog displaying entity forms
@@ -137,7 +162,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
             navigate(-1);
         } else {
             console.log("locationPanels.length === 0");
-            const newPath = getCMSPathFrom(lastSidePanel.path);
+            const newPath = buildCollectionUrl(lastSidePanel.path);
             navigate(newPath, { replace: true });
         }
 
@@ -174,7 +199,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
 
         const newPath = entityId
             ? getEntityPath(entityId, path, selectedSubpath)
-            : getRouterNewEntityPath(path);
+            : buildNewEntityUrl(path);
 
         const lastSidePanel = sidePanels.length > 0 ? sidePanels[sidePanels.length - 1] : undefined;
 

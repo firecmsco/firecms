@@ -115,7 +115,7 @@ export const blogSchema = buildSchema({
             description: "This field is using a custom component defined by the developer",
             dataType: "string",
             config: {
-                field: CustomColorTextField,
+                Field: CustomColorTextField,
                 customProps: {
                     color: "gold"
                 }

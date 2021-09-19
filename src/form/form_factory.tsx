@@ -73,8 +73,8 @@ export function buildPropertyField<T extends CMSType = any, M = any>
     let component: ComponentType<FieldProps<T, any, M>> | undefined;
     if (isReadOnly(property)) {
         component = ReadOnlyField;
-    } else if (property.config?.field) {
-        component = property.config?.field as ComponentType<FieldProps<T>>;
+    } else if (property.config?.Field) {
+        component = property.config?.Field as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
         if (of) {
@@ -138,7 +138,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
 
         // we use the standard Field for user defined fields, since it rebuilds
         // when there are changes in other values, in contrast to FastField
-        const FieldComponent = dependsOnOtherProperties || property.config?.field ? Field : FastField;
+        const FieldComponent = dependsOnOtherProperties || property.config?.Field ? Field : FastField;
 
         return (
             <FieldComponent
@@ -255,7 +255,7 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
 
             {underlyingValueHasChanged && !isSubmitting &&
             <FormHelperText>
-                This value has been updated in Firestore
+                This value has been updated elsewhere
             </FormHelperText>}
 
         </>);

@@ -22,7 +22,7 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import StringNumberFilterField from "./filters/StringNumberFilterField";
 import BooleanFilterField from "./filters/BooleanFilterField";
-import { getIconForProperty } from "../../util/property_icons";
+import { getIconForProperty } from "../../core/util/property_icons";
 import { useTableStyles } from "../components/styles";
 import clsx from "clsx";
 import DateTimeFilterField from "./filters/DateTimeFilterfield";

@@ -15,7 +15,10 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
-import { enumToObjectEntries, isEnumValueDisabled } from "../../../util/enums";
+import {
+    enumToObjectEntries,
+    isEnumValueDisabled
+} from "../../../core/util/enums";
 import { EnumValuesChip } from "../../../preview/components/CustomChip";
 
 interface StringNumberFilterFieldProps {

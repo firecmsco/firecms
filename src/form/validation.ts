@@ -24,7 +24,7 @@ import {
     ObjectSchema,
     StringSchema
 } from "yup";
-import { enumToObjectEntries } from "../util/enums";
+import { enumToObjectEntries } from "../core/util/enums";
 
 // Add custom unique function for array values
 declare module "yup" {

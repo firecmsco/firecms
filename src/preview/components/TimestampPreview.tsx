@@ -4,7 +4,7 @@ import { useCMSAppContext } from "../../contexts";
 
 import format from "date-fns/format";
 import * as locales from "date-fns/locale";
-import { defaultDateFormat } from "../../util/dates";
+import { defaultDateFormat } from "../../core/util/dates";
 import { CMSAppContext } from "../../contexts/CMSAppContext";
 
 /**

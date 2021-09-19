@@ -2,14 +2,6 @@ import { EntityCollection, EntityCustomView, Navigation } from "../models";
 
 const DATA_PATH = `/c`;
 
-/**
- * @category Hooks and utilities
- */
-export interface BreadcrumbEntry {
-    title: string;
-    url: string;
-}
-
 export function isCollectionPath(path: string) {
     return path.startsWith(`${DATA_PATH}/`);
 }
@@ -26,16 +18,12 @@ export function getEntityPath(entityId: string,
     return `${DATA_PATH}/${removeInitialAndTrailingSlashes(basePath)}/${entityId}${subcollection ? "/" + subcollection : ""}`;
 }
 
-export function getCMSPathFrom(fullPath: string) {
-    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(fullPath)}`;
+export function buildCollectionUrl(path: string) {
+    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(path)}`;
 }
 
-export function getRouterNewEntityPath(basePath: string) {
+export function buildNewEntityUrl(basePath: string) {
     return `${DATA_PATH}/${removeInitialAndTrailingSlashes(basePath)}#new`;
-}
-
-export function buildCollectionUrlPath(view: EntityCollection) {
-    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(view.relativePath)}`;
 }
 
 export function removeInitialAndTrailingSlashes(s: string) {
@@ -61,9 +49,6 @@ export function addInitialSlash(s: string) {
     else return `/${s}`;
 }
 
-export function getCollectionPathFrom(s: string) {
-    return s.substr(0, s.lastIndexOf("/"));
-}
 
 /**
  * Find the corresponding view at any depth for a given path.
@@ -224,20 +209,20 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     return result;
 }
 
-export interface NavigationEntry {
+export interface TopNavigationEntry {
     url: string;
     name: string;
     description?: string;
     group?: string;
 }
 
-export function computeNavigation(navigation:Navigation, includeHiddenViews: boolean): {
-    navigationEntries: NavigationEntry[],
+export function computeTopNavigation(navigation:Navigation, includeHiddenViews: boolean): {
+    navigationEntries: TopNavigationEntry[],
     groups: string[]
 } {
-    const navigationEntries: NavigationEntry[] = [
+    const navigationEntries: TopNavigationEntry[] = [
         ...navigation.collections.map(collection => ({
-            url: buildCollectionUrlPath(collection),
+            url: buildCollectionUrl(collection.relativePath),
             name: collection.name,
             description: collection.description,
             group: collection.group
@@ -251,7 +236,7 @@ export function computeNavigation(navigation:Navigation, includeHiddenViews: boo
                     group: view.group
                 })
                 : undefined)
-            .filter((view) => !!view) as NavigationEntry[]
+            .filter((view) => !!view) as TopNavigationEntry[]
     ];
 
     const groups: string[] = Array.from(new Set(

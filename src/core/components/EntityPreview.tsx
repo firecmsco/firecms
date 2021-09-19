@@ -22,7 +22,7 @@ import {
 } from "../../models";
 import PreviewComponent from "../../preview/PreviewComponent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { getIconForProperty, getIdIcon } from "../../util/property_icons";
+import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import ErrorBoundary from "../internal/ErrorBoundary";
 import { useCMSAppContext } from "../../contexts";
 import { CMSAppContext } from "../../contexts/CMSAppContext";
@@ -95,7 +95,7 @@ export default function EntityPreview<M extends { [Key: string]: any }>(
                                 <a href={appConfig.entityLinkBuilder({ entity })}
                                    rel="noopener noreferrer"
                                    target="_blank">
-                                    <IconButton aria-label="go-to-firestore"
+                                    <IconButton aria-label="go-to-entity-datasource"
                                                 size="large">
                                         <OpenInNewIcon
                                             fontSize={"small"}/>

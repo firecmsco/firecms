@@ -155,7 +155,7 @@ export function CustomCMSApp() {
 
                         return (
                             <CMSScaffold name={"My Online Shop"}>
-                                {context.navigation && <CMSRoutes navigation={context.navigation}/>}
+                                <CMSRoutes/>
                             </CMSScaffold>
                         );
 

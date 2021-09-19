@@ -1,5 +1,5 @@
 import { hashString } from "./hash";
-import { ChipColor } from "../models";
+import { ChipColor } from "../../models";
 
 export interface ChipColorSchema {
     color: string;

@@ -1,5 +1,3 @@
-import { CMSHomeProps } from "./CMSHome";
-
 export type { ErrorViewProps } from "./ErrorView";
 export {
     default as ErrorView
@@ -24,7 +22,6 @@ export {
     default as CircularProgressCenter
 } from "./CircularProgressCenter";
 
-export type { CMSHomeProps } from "./CMSHome";
 export {
     default as CMSHome
 } from "./CMSHome";

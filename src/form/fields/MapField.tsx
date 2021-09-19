@@ -13,7 +13,7 @@ import {
 import { SelectChangeEvent } from "@mui/material/Select";
 
 import { formStyles } from "../styles";
-import { pick } from "../../util/objects";
+import { pick } from "../../core/util/objects";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";

@@ -1,4 +1,4 @@
-import { getColorSchemeForSeed } from "../util/chip_utils";
+import { getColorSchemeForSeed } from "../core/util/chip_utils";
 
 it("chip colors", () => {
 

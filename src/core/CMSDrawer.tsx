@@ -12,8 +12,8 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import { Link as ReactLink } from "react-router-dom";
-import { Navigation } from "../models";
-import { computeNavigation, NavigationEntry } from "./navigation";
+import { computeTopNavigation, TopNavigationEntry } from "./navigation";
+import { useNavigation } from "../hooks";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -25,28 +25,34 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-
-interface CMSDrawerProps {
+/**
+ * Props used in case you need to override the default drawer
+ * @category Core
+ */
+export interface CMSDrawerProps {
     logo: string | undefined,
     closeDrawer: () => any,
-    navigation: Navigation;
 }
 
 export function CMSDrawer({
                               logo,
                               closeDrawer,
-                              navigation
                           }: CMSDrawerProps) {
 
     const classes = useStyles();
+
+    const navigation = useNavigation();
+    if (!navigation)
+        return <></>;
+
     const {
         navigationEntries,
         groups
-    } = computeNavigation(navigation, false);
+    } = computeTopNavigation(navigation, false);
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
-    function createNavigationListItem(index: number, group: string, entry: NavigationEntry) {
+    function createNavigationListItem(index: number, group: string, entry: TopNavigationEntry) {
         return <ListItem
             button
             key={`navigation_${index}`}

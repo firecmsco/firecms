@@ -7,8 +7,8 @@ import { BrowserRouter } from "react-router-dom";
 import {
     CircularProgressCenter,
     CMSAppProvider,
-    CMSScaffold,
     CMSRoutes,
+    CMSScaffold,
     createCMSDefaultTheme
 } from "../core";
 import { AuthController } from "../contexts";
@@ -40,23 +40,23 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * @category Firebase
  */
 export function FirebaseCMSApp({
-                           name,
-                           logo,
-                           toolbarExtraWidget,
-                           authentication,
-                           schemaResolver,
-                           navigation,
-                           textSearchDelegateResolver,
-                           allowSkipLogin,
-                           signInOptions,
-                           firebaseConfig,
-                           onFirebaseInit,
-                           primaryColor,
-                           secondaryColor,
-                           fontFamily,
-                           dateTimeFormat,
-                           locale
-                       }: FirebaseCMSAppProps) {
+                                   name,
+                                   logo,
+                                   toolbarExtraWidget,
+                                   authentication,
+                                   schemaResolver,
+                                   navigation,
+                                   textSearchDelegateResolver,
+                                   allowSkipLogin,
+                                   signInOptions,
+                                   firebaseConfig,
+                                   onFirebaseInit,
+                                   primaryColor,
+                                   secondaryColor,
+                                   fontFamily,
+                                   dateTimeFormat,
+                                   locale
+                               }: FirebaseCMSAppProps) {
 
     const {
         firebaseApp,
@@ -134,11 +134,11 @@ export function FirebaseCMSApp({
                         }
 
                         return (
-                                <CMSScaffold name={name}
-                                             logo={logo}
-                                             toolbarExtraWidget={toolbarExtraWidget}>
-                                    {context.navigation && <CMSRoutes navigation={context.navigation}/>}
-                                </CMSScaffold>
+                            <CMSScaffold name={name}
+                                         logo={logo}
+                                         toolbarExtraWidget={toolbarExtraWidget}>
+                                <CMSRoutes/>
+                            </CMSScaffold>
                         );
                     }}
                 </CMSAppProvider>

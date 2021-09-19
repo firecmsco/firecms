@@ -11,8 +11,7 @@ import EntityPreview from "../../core/components/EntityPreview";
 import CircularProgressCenter
     from "../../core/components/CircularProgressCenter";
 import { useCMSAppContext, useSnackbarController } from "../../contexts";
-import { useDataSource } from "../../hooks";
-import { deleteEntityInternal } from "../../core/internal/data_logic";
+import { deleteEntityWithCallbacks, useDataSource } from "../../hooks";
 
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
@@ -96,7 +95,7 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
     };
 
     function performDelete(entity: Entity<M>): Promise<boolean> {
-        return deleteEntityInternal({
+        return deleteEntityWithCallbacks({
             dataSource,
             entity,
             schema,

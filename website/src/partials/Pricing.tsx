@@ -33,7 +33,7 @@ function Pricing() {
                 Community
             </h3>
         </div>
-        <div className="m-8 text-lg text-center">
+        <div className="my-8 mx-4 text-lg text-center">
             <p>
                 FireCMS is totally <b>FREE</b>
             </p>
@@ -72,18 +72,18 @@ function Pricing() {
                 Advanced
             </h3>
         </div>
-        <div className="m-8 text-lg text-center">
+        <div className="my-8 mx-4 text-lg text-center">
             <p>
                 Do you need help setting up your project?
             </p>
             <p>
                 Or maybe you need to
-                build some features that are not included in the library
-                (such as custom fields, or full views)?
+                build some features that are not included in the library?
             </p>
             <p>
-                No problem! We are here to help. Just get in touch with us
-                and tell us about what you need.
+                No problem! We are here to help.
+                We can build a super tailored admin panel for your project, with
+                custom views, forms or even your own backend
             </p>
             <p>🙌</p>
         </div>

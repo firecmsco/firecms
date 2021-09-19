@@ -16,7 +16,8 @@ import {
     AdditionalColumnDelegate,
     CollectionSize,
     Entity,
-    EntityCollection
+    EntityCollection,
+    SaveEntityProps
 } from "../../models";
 import CollectionTable from "../../collection/components/CollectionTable";
 
@@ -35,23 +36,18 @@ import {
     useColumnIds
 } from "../../collection/common";
 
-import { canCreate, canDelete, canEdit } from "../../util/permissions";
-import {
-    OnCellValueChange,
-    UniqueFieldValidator
-} from "../../collection/components/CollectionTableProps";
+import { canCreate, canDelete, canEdit } from "../util/permissions";
+import { OnCellValueChange, UniqueFieldValidator } from "../../collection";
 import { Markdown } from "../../preview";
-import { useDataSource } from "../../hooks/useDataSource";
-import { saveEntityInternal } from "../internal/data_logic";
-import { SaveEntityProps } from "../../models/datasource";
+import { saveEntityWithCallbacks, useDataSource } from "../../hooks";
 
 export type EntityCollectionProps<M extends { [Key: string]: any }> = {
     path: string;
-    collectionConfig: EntityCollection<M>;
+    collection: EntityCollection<M>;
 }
 
 /**
- * This component is in charge of binding a Firestore path with an {@link EntityCollection}
+ * This component is in charge of binding a datasource path with an {@link EntityCollection}
  * where it's configuration is defined. This is useful if you have defined already
  * your entity collections and need to build a custom component.
  *
@@ -60,7 +56,7 @@ export type EntityCollectionProps<M extends { [Key: string]: any }> = {
  * exclusively with config options.
  *
  * If you need a lower level implementation with more granular options, you
- * can try {@link CollectionTable}, which still does data fetching from Firestore.
+ * can try {@link CollectionTable}, which still does data fetching from the datasource.
  *
  * @param path
  * @param collectionConfig
@@ -69,33 +65,33 @@ export type EntityCollectionProps<M extends { [Key: string]: any }> = {
  */
 export default function EntityCollectionTable<M extends { [Key: string]: any }>({
                                                                                                    path,
-                                                                                                   collectionConfig
+                                                                                                   collection
                                                                                                }: EntityCollectionProps<M>
 ) {
 
     const sideEntityController = useSideEntityController();
-
     const dataSource = useDataSource();
-    const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
-
     const context = useCMSAppContext();
     const authController = useAuthController();
+
+    const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
     const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
 
-    const exportable = collectionConfig.exportable === undefined || collectionConfig.exportable;
-    const inlineEditing = collectionConfig.inlineEditing === undefined || collectionConfig.inlineEditing;
+    const exportable = collection.exportable === undefined || collection.exportable;
+    const inlineEditing = collection.inlineEditing === undefined || collection.inlineEditing;
 
-    const selectionEnabled = collectionConfig.selectionEnabled === undefined || collectionConfig.selectionEnabled;
-    const paginationEnabled = collectionConfig.pagination === undefined || Boolean(collectionConfig.pagination);
-    const pageSize = typeof collectionConfig.pagination === "number" ? collectionConfig.pagination : undefined;
-    const displayedProperties = useColumnIds(collectionConfig, true);
+    const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
+    const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
+    const pageSize = typeof collection.pagination === "number" ? collection.pagination : undefined;
+
+    const displayedProperties = useColumnIds(collection, true);
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
-    const subcollectionColumns: AdditionalColumnDelegate<any>[] = collectionConfig.subcollections?.map((subcollection) => {
+    const subcollectionColumns: AdditionalColumnDelegate<any>[] = collection.subcollections?.map((subcollection) => {
         return {
             id: getSubcollectionColumnId(subcollection),
             title: subcollection.name,
@@ -108,9 +104,9 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                                 path,
                                 entityId: entity.id,
                                 selectedSubpath: subcollection.relativePath,
-                                permissions: collectionConfig.permissions,
-                                schema: collectionConfig.schema,
-                                subcollections: collectionConfig.subcollections,
+                                permissions: collection.permissions,
+                                schema: collection.schema,
+                                subcollections: collection.subcollections,
                                 overrideSchemaResolver: false
                             });
                         }}>
@@ -120,15 +116,15 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
         };
     }) ?? [];
 
-    const additionalColumns = [...(collectionConfig.additionalColumns ?? []), ...subcollectionColumns];
+    const additionalColumns = [...(collection.additionalColumns ?? []), ...subcollectionColumns];
 
     const onEntityClick = (entity: Entity<M>) => {
         sideEntityController.open({
             entityId: entity.id,
             path,
-            permissions: collectionConfig.permissions,
-            schema: collectionConfig.schema,
-            subcollections: collectionConfig.subcollections,
+            permissions: collection.permissions,
+            schema: collection.schema,
+            subcollections: collection.subcollections,
             overrideSchemaResolver: false
         });
     };
@@ -137,9 +133,9 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
         e.stopPropagation();
         return path && sideEntityController.open({
             path,
-            permissions: collectionConfig.permissions,
-            schema: collectionConfig.schema,
-            subcollections: collectionConfig.subcollections,
+            permissions: collection.permissions,
+            schema: collection.schema,
+            subcollections: collection.subcollections,
             overrideSchemaResolver: false
         });
     };
@@ -153,7 +149,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
     };
 
     const checkInlineEditing = (entity: Entity<any>) => {
-        if (!canEdit(collectionConfig.permissions, entity, authController, path, context)) {
+        if (!canEdit(collection.permissions, entity, authController, path, context)) {
             return false;
         }
         return inlineEditing;
@@ -173,13 +169,13 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 ...entity.values,
                 [name]: value
             },
-            schema: collectionConfig.schema,
+            schema: collection.schema,
             status: "existing"
         };
 
-        return saveEntityInternal({
+        return saveEntityWithCallbacks({
+            ...saveProps,
             dataSource,
-            saveProps,
             context,
             onSaveSuccess: () => setSaved(true),
             onSaveFailure: ((e: Error) => {
@@ -203,14 +199,14 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     maxWidth: "160px",
-                    cursor: collectionConfig.description ? "pointer" : "inherit"
+                    cursor: collection.description ? "pointer" : "inherit"
                 }}
-                onClick={collectionConfig.description ? (e) => {
+                onClick={collection.description ? (e) => {
                     setAnchorEl(e.currentTarget);
                     e.stopPropagation();
                 } : undefined}
             >
-                {`${collectionConfig.name}`}
+                {`${collection.name}`}
             </Typography>
             <Typography
                 style={{
@@ -227,7 +223,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 {`/${path}`}
             </Typography>
 
-            {collectionConfig.description &&
+            {collection.description &&
             <Popover
                 id={"info-dialog"}
                 open={open}
@@ -247,7 +243,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             >
 
                 <Box m={2}>
-                    <Markdown source={collectionConfig.description}/>
+                    <Markdown source={collection.description}/>
                 </Box>
 
             </Popover>
@@ -281,9 +277,9 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
 
         const isSelected = selectedEntities.indexOf(entity) > -1;
 
-        const createEnabled = canCreate(collectionConfig.permissions, authController, path, context);
-        const editEnabled = canEdit(collectionConfig.permissions, entity, authController, path, context);
-        const deleteEnabled = canDelete(collectionConfig.permissions, entity, authController, path, context);
+        const createEnabled = canCreate(collection.permissions, authController, path, context);
+        const editEnabled = canEdit(collection.permissions, entity, authController, path, context);
+        const deleteEnabled = canDelete(collection.permissions, entity, authController, path, context);
 
         const onCopyClicked = (entity: Entity<M>) => sideEntityController.open({
             entityId: entity.id,
@@ -294,8 +290,8 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: collectionConfig.schema,
-            subcollections: collectionConfig.subcollections,
+            schema: collection.schema,
+            subcollections: collection.subcollections,
             overrideSchemaResolver: false
         });
 
@@ -307,8 +303,8 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: collectionConfig.schema,
-            subcollections: collectionConfig.subcollections,
+            schema: collection.schema,
+            subcollections: collection.subcollections,
             overrideSchemaResolver: false
         });
 
@@ -332,14 +328,14 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                                        data
                                    }: { size: CollectionSize, data: Entity<any>[] }) {
 
-        const addButton = canCreate(collectionConfig.permissions, authController, path, context) && onNewClick && (largeLayout ?
+        const addButton = canCreate(collection.permissions, authController, path, context) && onNewClick && (largeLayout ?
             <Button
                 onClick={onNewClick}
                 startIcon={<Add/>}
                 size="large"
                 variant="contained"
                 color="primary">
-                Add {collectionConfig.schema.name}
+                Add {collection.schema.name}
             </Button>
             : <Button
                 onClick={onNewClick}
@@ -350,7 +346,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 <Add/>
             </Button>);
 
-        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collectionConfig.permissions, entity, authController, path, context));
+        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collection.permissions, entity, authController, path, context));
         const onMultipleDeleteClick = (event: React.MouseEvent) => {
             event.stopPropagation();
             setDeleteEntityClicked(selectedEntities);
@@ -380,16 +376,16 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 </span>
             </Tooltip>;
 
-        const extraActions = collectionConfig.extraActions ? collectionConfig.extraActions({
+        const extraActions = collection.extraActions ? collection.extraActions({
             path,
-            collection: collectionConfig,
+            collection,
             selectedEntities,
             context
         }) : undefined;
 
         const exportButton = exportable &&
-            <ExportButton schema={collectionConfig.schema}
-                          exportConfig={typeof collectionConfig.exportable === "object" ? collectionConfig.exportable : undefined}
+            <ExportButton schema={collection.schema}
+                          exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
                           path={path}/>;
 
         return (
@@ -409,16 +405,16 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 title={title}
                 frozenIdColumn={largeLayout}
                 path={path}
-                schema={collectionConfig.schema}
+                schema={collection.schema}
                 additionalColumns={additionalColumns}
-                defaultSize={collectionConfig.defaultSize}
+                defaultSize={collection.defaultSize}
                 displayedProperties={displayedProperties}
-                initialFilter={collectionConfig.initialFilter}
-                initialSort={collectionConfig.initialSort}
-                textSearchEnabled={collectionConfig.textSearchEnabled}
+                initialFilter={collection.initialFilter}
+                initialSort={collection.initialSort}
+                textSearchEnabled={collection.textSearchEnabled}
                 paginationEnabled={paginationEnabled}
                 pageSize={pageSize}
-                indexes={collectionConfig.indexes}
+                indexes={collection.indexes}
                 inlineEditing={checkInlineEditing}
                 uniqueFieldValidator={uniqueFieldValidator}
                 onEntityClick={onEntityClick}
@@ -429,7 +425,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
 
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 path={path}
-                                schema={collectionConfig.schema}
+                                schema={collection.schema}
                                 open={!!deleteEntityClicked}
                                 onEntityDelete={internalOnEntityDelete}
                                 onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}

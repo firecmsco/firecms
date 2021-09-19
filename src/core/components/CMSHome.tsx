@@ -18,9 +18,9 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import { Link as ReactLink } from "react-router-dom";
 
-import { computeNavigation, NavigationEntry } from "../navigation";
-import { Navigation } from "../../models";
+import { computeTopNavigation, TopNavigationEntry } from "../navigation";
 import { Markdown } from "../../preview";
+import { useNavigation } from "../../hooks";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,36 +37,29 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
- * @category Core components
- */
-export interface CMSHomeProps {
-    navigation: Navigation;
-}
-
-/**
  * Default main view and entry point for the CMS
  * This components takes navigation as an input and renders
- * @param navigation
  * @constructor
  * @category Core components
  */
-function CMSHome({
-                       navigation
-                   }: CMSHomeProps) {
+function CMSHome() {
 
     const classes = useStyles();
+    const navigation = useNavigation();
+    if (!navigation)
+        return <></>;
 
     const {
         navigationEntries,
         groups
-    } = computeNavigation(navigation, true);
+    } = computeTopNavigation(navigation, true);
 
     const allGroups: Array<string | null> = [...groups];
     if (navigationEntries.filter(e => !e.group).length > 0) {
         allGroups.push(null);
     }
 
-    function buildNavigationCard(entry: NavigationEntry) {
+    function buildNavigationCard(entry: TopNavigationEntry) {
         return (
             <Grid item xs={12} sm={6} md={4}
                   key={`nav_${entry.group}_${entry.name}`}>

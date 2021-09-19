@@ -75,7 +75,7 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
 
     /**
      * If you need to filter/sort by multiple properties in this collection, you
-     * need to create special indexes in Firestore.
+     * may need to create special indexes in your datasource (e.g. Firestore).
      * You can then specify here the indexes created.
      */
     indexes?: CompositeIndex<Extract<keyof M, string>>[];

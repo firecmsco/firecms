@@ -10,8 +10,8 @@ import { EntityDrawer } from "./EntityDrawer";
 import EntityView from "./EntityView";
 import { useCMSAppContext, useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { SideEntityPanelProps } from "../SideEntityPanelProps";
 import { CONTAINER_WIDTH } from "./common";
+import { SideEntityPanelProps } from "../../contexts/SideEntityController";
 
 
 export function EntitySideDialogs<M extends { [Key: string]: any }>() {

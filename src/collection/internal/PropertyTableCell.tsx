@@ -77,8 +77,8 @@ const PropertyTableCell = <T extends CMSType, M extends { [Key: string]: any }>(
     const [error, setError] = useState<Error | undefined>();
     const [saved, setSaved] = useState<boolean>(false);
 
-    const customField = Boolean(property.config?.field);
-    const customPreview = Boolean(property.config?.preview);
+    const customField = Boolean(property.config?.Field);
+    const customPreview = Boolean(property.config?.Preview);
     const readOnly = isReadOnly(property);
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     let disabled = Boolean(property.disabled);

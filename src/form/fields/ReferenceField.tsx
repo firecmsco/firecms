@@ -33,7 +33,7 @@ import LabelWithIcon from "../components/LabelWithIcon";
 import { useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { useClearRestoreValue } from "../../hooks";
-import { useEntityFetch } from "../../hooks/useEntityFetch";
+import { useEntityFetch } from "../../hooks/data/useEntityFetch";
 import { getReferenceFrom } from "../../models/utils";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({

@@ -3,8 +3,8 @@ import React, { useEffect } from "react";
 import {
     Authenticator,
     DataSource,
-    Entity,
-    EntityCollection, EntityLinkBuilder,
+    EntityCollection,
+    EntityLinkBuilder,
     Locale,
     Navigation,
     NavigationBuilder,

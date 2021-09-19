@@ -24,7 +24,7 @@ import GetAppIcon from "@mui/icons-material/GetApp";
 import MuiAlert from "@mui/lab/Alert/Alert";
 import { CSVLink } from "react-csv";
 import { computeSchemaProperties } from "../../models/utils";
-import { useDataSource } from "../../hooks/useDataSource";
+import { useDataSource } from "../../hooks/data/useDataSource";
 
 type ExportButtonProps<M extends { [Key: string]: any }> = {
     schema: EntitySchema<M>;

@@ -1,8 +1,4 @@
-import {
-    Box,
-    CircularProgress,
-    CircularProgressProps
-} from "@mui/material";
+import { Box, CircularProgress, CircularProgressProps } from "@mui/material";
 import React from "react";
 
 /**

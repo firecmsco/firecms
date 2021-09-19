@@ -2,7 +2,7 @@ import {
     buildEnumValueConfig,
     buildProperty,
     buildSchema,
-    getNavigationFrom
+    resolveNavigationFrom
 } from "@camberi/firecms";
 import { locales } from "./products_schema";
 import CustomShapedArrayField
@@ -52,11 +52,11 @@ export const testEntitySchema = buildSchema({
                     status,
                     context
                 }) => {
-        return getNavigationFrom({
+        return resolveNavigationFrom({
             path: `${path}/${entityId}`,
             context
-        }).then((navigation) => {
-            console.log("navigation", navigation);
+        }).then((navigationEntries) => {
+            console.log("navigationEntries", navigationEntries);
             return values;
         });
     },
@@ -130,8 +130,8 @@ export const testEntitySchema = buildSchema({
             title: "My shaped array",
             dataType: "array",
             config: {
-                field: CustomShapedArrayField,
-                preview: CustomShapedArrayPreview,
+                Field: CustomShapedArrayField,
+                Preview: CustomShapedArrayPreview,
                 customProps: {
                     properties: [
                         buildProperty({

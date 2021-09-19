@@ -1,12 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-    Box,
-    Button,
-    Container,
-    Grid,
-    Theme,
-    Typography
-} from "@mui/material";
+import { Box, Button, Container, Grid, Theme, Typography } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import {
@@ -30,7 +23,7 @@ import {
     isReadOnly
 } from "../models/utils";
 import { CustomIdField } from "./CustomIdField";
-import { useDataSource } from "../hooks/useDataSource";
+import { useDataSource } from "../hooks/data/useDataSource";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     stickyButtons: {
@@ -84,7 +77,7 @@ interface EntityFormProps<M extends { [Key: string]: any }> {
 
     /**
      * The updated entity is passed from the parent component when the underlying data
-     * has changed in Firestore
+     * has changed in the datasource
      */
     entity?: Entity<M>;
     containerRef: React.RefObject<HTMLDivElement>;
@@ -136,13 +129,13 @@ function EntityForm<M>({
 
     /**
      * Base values are the ones this view is initialized from, we use them to
-     * compare them with underlying changes in Firestore
+     * compare them with underlying changes in the datasource
      */
-    let baseFirestoreValues: Partial<EntityValues<M>>;
+    let baseDataSourceValues: Partial<EntityValues<M>>;
     if ((status === "existing" || status === "copy") && entity) {
-        baseFirestoreValues = entity.values ?? {};
+        baseDataSourceValues = entity.values ?? {};
     } else if (status === "new") {
-        baseFirestoreValues = initEntityValues(schema, path);
+        baseDataSourceValues = initEntityValues(schema, path);
     } else {
         throw new Error("Form configured wrong");
     }
@@ -151,7 +144,7 @@ function EntityForm<M>({
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<any>();
 
-    const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseFirestoreValues as EntityValues<M>);
+    const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
     const initialValues = initialValuesRef.current;
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
 
@@ -162,7 +155,7 @@ function EntityForm<M>({
             return Object.keys(schema.properties)
                 .map((key) => {
                     const initialValue = (initialValues as any)[key];
-                    const latestValue = (baseFirestoreValues as any)[key];
+                    const latestValue = (baseDataSourceValues as any)[key];
                     if (!deepEqual(initialValue, latestValue)) {
                         return { [key]: latestValue };
                     }
@@ -172,7 +165,7 @@ function EntityForm<M>({
         } else {
             return {};
         }
-    }, [initialValues, baseFirestoreValues]);
+    }, [initialValues, baseDataSourceValues]);
 
     function saveValues(values: EntityValues<M>, formikActions: FormikHelpers<EntityValues<M>>) {
 
@@ -276,7 +269,7 @@ function EntityForm<M>({
                   dirty
               }) => {
 
-                const modified = useMemo(() => !deepEqual(baseFirestoreValues, values), [baseFirestoreValues, values]);
+                const modified = useMemo(() => !deepEqual(baseDataSourceValues, values), [baseDataSourceValues, values]);
                 useEffect(() => {
                     onModified(modified);
                     setInternalValue(values);
@@ -289,7 +282,7 @@ function EntityForm<M>({
                     Object.entries(underlyingChanges).forEach(([key, value]) => {
                         const formValue = (values as any)[key];
                         if (!deepEqual(value, formValue) && !(touched as any)[key]) {
-                            console.debug("Updated value from Firestore:", key, value);
+                            console.debug("Updated value from the datasource:", key, value);
                             setFieldValue(key, value !== undefined ? value : null);
                         }
                     });

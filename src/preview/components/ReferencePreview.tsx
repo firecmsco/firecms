@@ -21,7 +21,7 @@ import SkeletonComponent from "./SkeletonComponent";
 import PreviewComponent from "../PreviewComponent";
 import ErrorView from "../../core/components/ErrorView";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { useEntityFetch } from "../../hooks/useEntityFetch";
+import { useEntityFetch } from "../../hooks/data/useEntityFetch";
 
 /**
  * @category Preview components

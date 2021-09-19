@@ -1,5 +1,5 @@
-import { DataSource } from "../models";
-import { useCMSAppContext } from "../contexts";
+import { DataSource } from "../../models";
+import { useCMSAppContext } from "../../contexts";
 
 /**
  * Use this hook to get the datasource being used

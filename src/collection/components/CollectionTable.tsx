@@ -35,7 +35,8 @@ import OutsideAlerter from "../../core/internal/OutsideAlerter";
 import CollectionRowActions from "../internal/CollectionRowActions";
 import { CollectionTableProps } from "./CollectionTableProps";
 import { TableCellProps } from "../internal/TableCellProps";
-import CircularProgressCenter from "../../core/components/CircularProgressCenter";
+import CircularProgressCenter
+    from "../../core/components/CircularProgressCenter";
 import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../../preview/util";
 import PropertyTableCell, { OnCellChangeParams } from "../internal/PropertyTableCell";
@@ -514,7 +515,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                      margin={6}>
 
                     <Typography variant={"h6"}>
-                        {"Error fetching data from Firestore"}
+                        {"Error fetching data from the data source"}
                     </Typography>
 
                     {dataLoadingError?.name && <Typography>

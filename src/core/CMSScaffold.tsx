@@ -1,11 +1,8 @@
 import React, { PropsWithChildren } from "react";
 
-import { Drawer, Theme } from "@mui/material";
+import { Drawer as MuiDrawer, Theme } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
-
-
-import CircularProgressCenter from "./components/CircularProgressCenter";
-import { CMSDrawer } from "./CMSDrawer";
+import { CMSDrawer, CMSDrawerProps } from "./CMSDrawer";
 import { CMSAppBar } from "./internal/CMSAppBar";
 import { useCMSAppContext } from "../contexts";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -36,6 +33,11 @@ export interface CMSScaffoldProps {
      * A component that gets rendered on the upper side of the main toolbar
      */
     toolbarExtraWidget?: React.ReactNode;
+
+    /**
+     * In case you need to override the view that gets rendered as a drawer
+     */
+    Drawer?: React.ComponentType<CMSDrawerProps>;
 
 }
 
@@ -93,7 +95,8 @@ export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
         children,
         name,
         logo,
-        toolbarExtraWidget
+        toolbarExtraWidget,
+        Drawer
     } = props;
 
     const context = useCMSAppContext();
@@ -108,6 +111,7 @@ export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
     const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
     const closeDrawer = () => setDrawerOpen(false);
 
+    const UsedDrawer = Drawer ? Drawer : CMSDrawer;
     return (
         <LocalizationProvider
             dateAdapter={AdapterDateFns}
@@ -115,7 +119,7 @@ export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
             locale={dateUtilsLocale}>
             <DndProvider backend={HTML5Backend}>
                 <nav>
-                    <Drawer
+                    <MuiDrawer
                         variant="temporary"
                         anchor={"left"}
                         open={drawerOpen}
@@ -127,10 +131,8 @@ export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
                             keepMounted: true
                         }}
                     >
-                        {context.navigation && <CMSDrawer logo={logo}
-                                                          navigation={context.navigation}
-                                                          closeDrawer={closeDrawer}/>}
-                    </Drawer>
+                        <UsedDrawer logo={logo} closeDrawer={closeDrawer}/>
+                    </MuiDrawer>
                 </nav>
 
                 <div className={classes.main}>

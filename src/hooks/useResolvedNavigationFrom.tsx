@@ -1,7 +1,7 @@
 import { Entity, EntityCollection, EntityCustomView } from "../models";
 import { getNavigationEntriesFromPathInternal } from "../core/navigation";
 import { useEffect, useState } from "react";
-import { CMSAppContext, useCMSAppContext } from "../contexts/CMSAppContext";
+import { CMSAppContext, useCMSAppContext } from "../contexts";
 
 /**
  * @ignore
@@ -53,7 +53,7 @@ interface NavigationCustom<M> {
  * @param context
  * @category Hooks and utilities
  */
-export function getNavigationFrom<M>({
+export function resolveNavigationFrom<M>({
                                          path,
                                          context
                                      }: { path: string, context: CMSAppContext }): Promise<NavigationEntry<M>[]> {
@@ -124,7 +124,7 @@ export type NavigationFrom<M> = {
  * in any React component that lives under `CMSAppProvider`
  * @category Hooks and utilities
  */
-export function useNavigationFrom<M>(
+export function useResolvedNavigationFrom<M>(
     {
         path
     }: NavigationFromProps): NavigationFrom<M> {
@@ -141,7 +141,7 @@ export function useNavigationFrom<M>(
         if (navigation) {
             setDataLoading(true);
             setDataLoadingError(undefined);
-            getNavigationFrom<M>({ path, context })
+            resolveNavigationFrom<M>({ path, context })
                 .then((res) => {
                     setData(res);
                 })
