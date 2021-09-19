@@ -7,7 +7,7 @@ import {
     NavigationBuilder,
     SchemaResolver
 } from "../models";
-import { TextSearchDelegateResolver } from "./text_search";
+import { FirestoreTextSearchController } from "./text_search";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -114,6 +114,18 @@ export interface FirebaseCMSAppProps {
      */
     schemaResolver?: SchemaResolver;
 
-    textSearchDelegateResolver?: TextSearchDelegateResolver;
+    /**
+     * Use this controller to return text search results as document ids, that
+     * get then fetched from Firestore.
+     *
+     */
+    textSearchController?: FirestoreTextSearchController;
+
+    /**
+     * In case you need to override the home page.
+     * You may want to use {@link useNavigation} in order to get the resolved
+     * navigation.
+     */
+    HomePage?: React.ComponentType;
 }
 

@@ -30,6 +30,11 @@ export {
 
 export * from "./components";
 
+export type { EntityFormProps } from "./EntityForm";
+export {
+    default as EntityForm
+} from "./EntityForm";
+
 export { buildPropertyField } from "./form_factory";
 
 

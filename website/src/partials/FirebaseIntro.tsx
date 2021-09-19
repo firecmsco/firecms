@@ -53,7 +53,7 @@ function FirebaseIntro() {
                         Don't build another admin tool
                     </h2>
                     <p className="text-xl text-gray-500 dark:text-gray-200">
-                        <b>FireCMS</b> is an open source CMS built by <b>developers
+                        <b>FireCMS</b> is an open source headless CMS built by <b>developers
                         for developers</b>.
                         <br/>
                         Get a back office app for your Firebase project in

@@ -9,8 +9,9 @@ import {
 } from "./navigation";
 import { EntityCollectionTable } from "./components/EntityCollectionTable";
 import BreadcrumbUpdater from "./components/BreadcrumbUpdater";
-import CMSHome from "./components/CMSHome";
+import CMSHomePage from "./components/CMSHomePage";
 import { useNavigation } from "../hooks";
+// import { CMSTopRoute } from "./internal/CMSTopRoute";
 
 /**
  * This component is in charge of taking a {@link Navigation} and rendering
@@ -48,6 +49,7 @@ export function CMSRoutes({ HomePage }: {
                 element={
                     <BreadcrumbUpdater
                         path={addInitialSlash(path)}
+                        key={`navigation_${path}`}
                         title={cmsView.name}>
                         {cmsView.view}
                     </BreadcrumbUpdater>}
@@ -66,15 +68,16 @@ export function CMSRoutes({ HomePage }: {
         // we reorder collections so that nested paths are included first
         .sort((a, b) => b.relativePath.length - a.relativePath.length)
         .map(entityCollection => {
-                const urlPath = removeTrailingSlash(buildCollectionUrl(entityCollection.relativePath)) + "/*";
+                const urlPath = removeTrailingSlash(buildCollectionUrl(entityCollection.relativePath));
                 return (
-                    <Route path={urlPath}
+                    <Route path={urlPath + "/*"}
                            key={`navigation_${entityCollection.relativePath}`}
                            element={
                                <BreadcrumbUpdater
                                    path={urlPath}
                                    title={entityCollection.name}>
                                    <EntityCollectionTable
+                                       key={`collection_table_${entityCollection.relativePath}`}
                                        path={entityCollection.relativePath}
                                        collection={entityCollection}/>
                                </BreadcrumbUpdater>
@@ -90,7 +93,7 @@ export function CMSRoutes({ HomePage }: {
                        path={"/"}
                        key={`navigation_home`}
                        title={"Home"}>
-                       {HomePage ? <HomePage/> : <CMSHome/>}
+                       {HomePage ? <HomePage/> : <CMSHomePage/>}
                    </BreadcrumbUpdater>
                }/>;
 

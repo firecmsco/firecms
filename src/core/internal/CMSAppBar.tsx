@@ -74,7 +74,7 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                 <Toolbar>
                     <IconButton
                         color="inherit"
-                        aria-label="open drawer"
+                        aria-label="Open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
                         className={classes.menuButton}

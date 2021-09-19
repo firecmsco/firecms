@@ -57,7 +57,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }));
 
-interface EntityFormProps<M extends { [Key: string]: any }> {
+/**
+ *
+ * @category Core components
+ */
+export interface EntityFormProps<M extends { [Key: string]: any }> {
 
     /**
      * New or existing status
@@ -99,7 +103,8 @@ interface EntityFormProps<M extends { [Key: string]: any }> {
     onDiscard?(): void;
 
     /**
-     * The callback function when the form original values have been modified
+     * The callback function when the form is dirty, so the values are different
+     * from the original ones
      */
     onModified?(dirty: boolean): void;
 
@@ -110,7 +115,20 @@ interface EntityFormProps<M extends { [Key: string]: any }> {
 
 }
 
-function EntityForm<M>({
+/**
+ * This is the form used internally by the CMS
+ * @param status
+ * @param path
+ * @param schema
+ * @param entity
+ * @param onEntitySave
+ * @param onDiscard
+ * @param onModified
+ * @param onValuesChanged
+ * @constructor
+ * @category Core components
+ */
+export default function EntityForm<M>({
                            status,
                            path,
                            schema,
@@ -378,5 +396,3 @@ function EntityForm<M>({
         </Formik>
     );
 }
-
-export default React.memo<EntityFormProps<any>>(EntityForm);

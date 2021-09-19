@@ -2,7 +2,7 @@ import algoliasearch, { SearchClient } from "algoliasearch";
 
 import {
     performAlgoliaTextSearch,
-    TextSearchDelegateResolver
+    FirestoreTextSearchController
 } from "@camberi/firecms";
 
 let client: SearchClient | undefined = undefined;
@@ -17,7 +17,7 @@ const productsIndex = client && client.initIndex("products");
 const usersIndex = client && client.initIndex("users");
 const blogIndex = client && client.initIndex("blog");
 
-export const textSearchDelegateResolver: TextSearchDelegateResolver =
+export const textSearchController: FirestoreTextSearchController =
     ({ path, searchString }) => {
         if (path === "products")
             return productsIndex && performAlgoliaTextSearch(productsIndex, searchString);

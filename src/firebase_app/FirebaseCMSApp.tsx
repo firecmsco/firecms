@@ -46,7 +46,7 @@ export function FirebaseCMSApp({
                                    authentication,
                                    schemaResolver,
                                    navigation,
-                                   textSearchDelegateResolver,
+                                   textSearchController,
                                    allowSkipLogin,
                                    signInOptions,
                                    firebaseConfig,
@@ -55,7 +55,8 @@ export function FirebaseCMSApp({
                                    secondaryColor,
                                    fontFamily,
                                    dateTimeFormat,
-                                   locale
+                                   locale,
+                                   HomePage
                                }: FirebaseCMSAppProps) {
 
     const {
@@ -89,7 +90,7 @@ export function FirebaseCMSApp({
 
     const dataSource = useFirestoreDataSource({
         firebaseApp: firebaseApp!,
-        textSearchDelegateResolver
+        textSearchController
     });
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp! });
 
@@ -137,7 +138,7 @@ export function FirebaseCMSApp({
                             <CMSScaffold name={name}
                                          logo={logo}
                                          toolbarExtraWidget={toolbarExtraWidget}>
-                                <CMSRoutes/>
+                                <CMSRoutes HomePage={HomePage}/>
                             </CMSScaffold>
                         );
                     }}

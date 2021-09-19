@@ -49,14 +49,14 @@ subcollections.
 ## Where we are going
 
 In the last year, we have seen developers integrate FireCMS in ways we had never
-imagined! We have tweaked the APIs to try to accommodate those requirements but
+imagined! We have tweaked the APIs to try to accommodate those requirements, but
 we have come to the conclusion that a bigger change was needed.
 
 The result is a big rework of the internal APIs and components that improves
 re-usability and customisation.
 
 If you are using `FirebaseCMSApp` (previously `CMSApp`), so FireCMS as a
-standalone app, you will need to update some APIs (see the [Updating from alpha versions](../docs/updating_from_alpha_versions))
+standalone app, you will need to update some APIs (see the [Migrating from alpha versions](../docs/migrating_from_alpha_versions))
 
 But, but, but... If you need more customisation you can now completely
 override `FirebaseCMSApp` and reuse all its internal components. This means you now
@@ -71,3 +71,20 @@ been isolated into 3 components, one for authentication (auth controller), one
 for the data source and one for storage. These components are abstracted away
 behind their respective interfaces. This means you can replace any of those
 parts with your custom implementation!
+
+We have two new types (besides the already existing `AuthController`), that
+abstract away the services provided by Firebase:
+- [`DataSource`](../docs/api/interfaces/datasource), in charge of handling data
+  operation (fetch, listen, save, delete).
+- [`StorageSource`](../docs/api/interfaces/storagesource), in charge of dealing
+  with file storage operations.
+
+We provide implementation for using Firebase Auth, Firestore and Firebase Storage,
+assigned by default if you use `FirebaseCMSApp`.
+
+This means that you are now able to use FireCMS with any backend, auth or storage
+solution. If you want to go this way, you can check an [example implementation](../docs/custom_cms_app)
+of FireCMS that uses the internal components instead of `FirebaseCMSApp`
+
+
+

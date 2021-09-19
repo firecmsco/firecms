@@ -37,12 +37,13 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
- * Default main view and entry point for the CMS
- * This components takes navigation as an input and renders
+ * Default entry view for the CMS under the path "/"
+ * This components takes navigation as an input and renders cards
+ * for each entry, including title and description.
  * @constructor
  * @category Core components
  */
-function CMSHome() {
+function CMSHomePage() {
 
     const classes = useStyles();
     const navigation = useNavigation();
@@ -127,4 +128,4 @@ function CMSHome() {
     );
 }
 
-export default CMSHome;
+export default CMSHomePage;

@@ -175,12 +175,15 @@ const TableCell = <T, M extends { [Key: string]: any }>({
                 {selected && !disabled && showExpandIcon &&
                 <IconButton
                     ref={iconRef}
-                    color={"default"}
+                    color={"inherit"}
                     size={"small"}
                     onClick={onIconClick}>
                     <svg
                         className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
-                        width="20" height="20" viewBox="0 0 24 24">
+                        fill={"#666"}
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24">
                         <path className="cls-2"
                               d="M20,5a1,1,0,0,0-1-1L14,4h0a1,1,0,0,0,0,2h2.57L13.29,9.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L18,7.42V10a1,1,0,0,0,1,1h0a1,1,0,0,0,1-1Z"/>
                         <path className="cls-2"

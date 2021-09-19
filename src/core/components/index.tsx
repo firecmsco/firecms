@@ -23,8 +23,8 @@ export {
 } from "./CircularProgressCenter";
 
 export {
-    default as CMSHome
-} from "./CMSHome";
+    default as CMSHomePage
+} from "./CMSHomePage";
 export {
     default as BreadcrumbUpdater
 } from "./BreadcrumbUpdater";

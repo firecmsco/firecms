@@ -52,7 +52,8 @@ export function CustomIdField<M>
                 <InputAdornment position="end">
 
                     <IconButton onClick={(e) => copy(entity.id)}
-                                aria-label="copy-id" size="large">
+                                aria-label="copy-id"
+                                size="large">
                         <Tooltip title={"Copy"}>
                             <svg
                                 className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}

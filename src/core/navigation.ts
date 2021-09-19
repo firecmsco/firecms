@@ -12,18 +12,18 @@ export function getEntityOrCollectionPath(path: string) {
     throw Error("Expected path starting with " + DATA_PATH);
 }
 
-export function getEntityPath(entityId: string,
-                              basePath: string,
-                              subcollection?: string) {
-    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(basePath)}/${entityId}${subcollection ? "/" + subcollection : ""}`;
+export function buildEntityUrl(entityId: string,
+                               path: string,
+                               subcollection?: string) {
+    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(path)}/${entityId}${subcollection ? "/" + subcollection : ""}`;
 }
 
 export function buildCollectionUrl(path: string) {
     return `${DATA_PATH}/${removeInitialAndTrailingSlashes(path)}`;
 }
 
-export function buildNewEntityUrl(basePath: string) {
-    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(basePath)}#new`;
+export function buildNewEntityUrl(path: string) {
+    return `${DATA_PATH}/${removeInitialAndTrailingSlashes(path)}#new`;
 }
 
 export function removeInitialAndTrailingSlashes(s: string) {

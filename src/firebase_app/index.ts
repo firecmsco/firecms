@@ -18,7 +18,7 @@ export {
 } from "./useFirebaseStorageSource";
 
 
-export type { TextSearchDelegateResolver } from "./text_search";
+export type { FirestoreTextSearchController } from "./text_search";
 export { performAlgoliaTextSearch } from "./text_search";
 
 export type { FirebaseLoginViewProps } from "./FirebaseLoginView";

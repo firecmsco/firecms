@@ -12,18 +12,19 @@ import {
     StorageSource,
     User
 } from "../models";
-import { AuthController, AuthProvider } from "../contexts/AuthController";
-import { SnackbarProvider } from "../contexts/SnackbarContext";
+import {
+    AuthController,
+    AuthProvider,
+    BreadcrumbsProvider,
+    CMSAppContext,
+    CMSAppContextProvider,
+    SideEntityProvider,
+    SnackbarProvider
+} from "../contexts";
 import {
     SchemaRegistryProvider,
     useSchemaRegistryController
 } from "../contexts/SchemaRegistry";
-import {
-    CMSAppContext,
-    CMSAppContextProvider
-} from "../contexts/CMSAppContext";
-import { SideEntityProvider } from "../contexts/SideEntityController";
-import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { EntitySideDialogs } from "./internal/EntitySideDialogs";
 
 
@@ -96,8 +97,6 @@ export interface CMSAppProviderProps {
     /**
      * Optional link builder you can add to generate a button in your entity forms.
      * The function must return a URL that gets opened when the button is clicked
-     *
-     * @param entityId
      */
     entityLinkBuilder?: EntityLinkBuilder;
 }

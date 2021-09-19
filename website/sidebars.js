@@ -46,7 +46,7 @@ module.exports = {
         'firebase_setup',
         'deployment',
         'custom_cms_app',
-        'updating_from_alpha_versions',
+        'migrating_from_alpha_versions',
         'changelog',
         {
             type: 'category',

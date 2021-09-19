@@ -13,7 +13,12 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import CloseIcon from "@mui/icons-material/Close";
-import { Prompt } from "react-router-dom";
+import {
+    useBlocker,
+    useLocation,
+    useMatch,
+    useNavigate
+} from "react-router-dom";
 import clsx from "clsx";
 import EntityForm from "../../form/EntityForm";
 import {
@@ -31,7 +36,10 @@ import {
     useSnackbarController
 } from "../../contexts";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";
-import { removeInitialAndTrailingSlashes } from "../navigation";
+import {
+    buildCollectionUrl,
+    removeInitialAndTrailingSlashes
+} from "../navigation";
 import CircularProgressCenter from "../components/CircularProgressCenter";
 import EntityPreview from "../components/EntityPreview";
 
@@ -115,7 +123,7 @@ const useStylesSide = makeStyles((theme: Theme) =>
 );
 
 
-export interface EntitySideViewProps<M extends { [Key: string]: any }> {
+export interface SideEntityViewProps<M extends { [Key: string]: any }> {
     path: string;
     entityId?: string;
     copy?: boolean;
@@ -126,15 +134,15 @@ export interface EntitySideViewProps<M extends { [Key: string]: any }> {
 }
 
 
-function EntityView<M extends { [Key: string]: any }>({
-                                                          path,
-                                                          entityId,
-                                                          selectedSubpath,
-                                                          copy,
-                                                          permissions,
-                                                          schema,
-                                                          subcollections
-                                                      }: EntitySideViewProps<M>) {
+function SideEntityView<M extends { [Key: string]: any }>({
+                                                              path,
+                                                              entityId,
+                                                              selectedSubpath,
+                                                              copy,
+                                                              permissions,
+                                                              schema,
+                                                              subcollections
+                                                          }: SideEntityViewProps<M>) {
 
     const classes = useStylesSide();
 
@@ -143,6 +151,12 @@ function EntityView<M extends { [Key: string]: any }>({
     const snackbarContext = useSnackbarController();
     const context = useCMSAppContext();
     const authController = useAuthController();
+
+    const location = useLocation();
+    const match = useMatch({
+        path: buildCollectionUrl(`${path}/${entityId}/*`),
+        caseSensitive: false,
+    });
 
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
     const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
@@ -155,6 +169,26 @@ function EntityView<M extends { [Key: string]: any }>({
 
     const customViews = schema.views;
     const customViewsCount = customViews?.length ?? 0;
+    const navigate = useNavigate();
+
+    useBlocker(({ action, location: nextLocation, retry }) => {
+            switch (action) {
+                case 'PUSH':
+                case 'REPLACE': {
+                    retry();
+                    return;
+                }
+                case 'POP': {
+                    const answer = confirm(`You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`);
+                    if (answer) {
+                        navigate(nextLocation);
+                    }
+                    return;
+                }
+            }
+        },
+        isModified
+    );
 
     const {
         entity,
@@ -227,7 +261,6 @@ function EntityView<M extends { [Key: string]: any }>({
 
     const onSaveSuccess = (updatedEntity: Entity<M>) => {
 
-        console.log("onSaveSuccess");
         setCurrentEntityId(updatedEntity.id);
 
         snackbarContext.open({
@@ -480,14 +513,9 @@ function EntityView<M extends { [Key: string]: any }>({
 
                     </div>
 
-                    {/*TODO: This should be only on POP*/}
-                    <Prompt
-                        message={`You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`}
-                        when={isModified}
-                    />
                 </>
         }
     </div>;
 }
 
-export default React.memo(EntityView);
+export default React.memo(SideEntityView);

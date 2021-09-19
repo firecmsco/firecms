@@ -44,22 +44,22 @@ import {
     where as whereClause
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { TextSearchDelegateResolver } from "./text_search";
+import { FirestoreTextSearchController } from "./text_search";
 
 export type FirestoreDataSourceProps = {
     firebaseApp: FirebaseApp,
-    textSearchDelegateResolver?: TextSearchDelegateResolver
+    textSearchController?: FirestoreTextSearchController
 };
 
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
- * @param textSearchDelegateResolver
+ * @param textSearchController
  * @category Firebase
  */
 export function useFirestoreDataSource({
                                            firebaseApp,
-                                           textSearchDelegateResolver
+                                           textSearchController
                                        }: FirestoreDataSourceProps): DataSource {
 
     const db = getFirestore(firebaseApp);
@@ -180,11 +180,11 @@ export function useFirestoreDataSource({
     }
 
     async function performTextSearch<M>(path: string, searchString: string, schema: EntitySchema<M>): Promise<Entity<M>[]> {
-        if (!textSearchDelegateResolver)
-            throw Error("Trying to make text search without specifying a TextSearchDelegateResolver");
-        const ids = await textSearchDelegateResolver({ path, searchString });
+        if (!textSearchController)
+            throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
+        const ids = await textSearchController({ path, searchString });
         if (!ids)
-            throw Error("The current path is not supported by the specified TextSearchDelegateResolver");
+            throw Error("The current path is not supported by the specified FirestoreTextSearchController");
         const promises: Promise<Entity<M> | null>[] = ids
             .map(async (entityId) => {
                     try {

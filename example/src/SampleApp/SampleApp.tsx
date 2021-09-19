@@ -4,9 +4,9 @@ import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
 import {
     Authenticator,
     buildCollection,
-    FirebaseCMSApp,
     CMSView,
     EntityCollection,
+    FirebaseCMSApp,
     Navigation,
     NavigationBuilder,
     NavigationBuilderProps
@@ -18,7 +18,7 @@ import { GitHub } from "@mui/icons-material";
 import { firebaseConfig } from "../firebase_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/test_shop_logo.png";
-import { textSearchDelegateResolver } from "./algolia_utils";
+import { textSearchController } from "./algolia_utils";
 import {
     localeSchema,
     productAdditionalColumn,
@@ -155,7 +155,7 @@ function SampleApp() {
             name: "John",
             roles: ["admin"]
         });
-        if(user) user.extra = sampleUserData;
+        if (user) user.extra = sampleUserData;
 
         const navigation: Navigation = {
             collections: [
@@ -180,7 +180,7 @@ function SampleApp() {
             GoogleAuthProvider.PROVIDER_ID,
             EmailAuthProvider.PROVIDER_ID
         ]}
-        textSearchDelegateResolver={textSearchDelegateResolver}
+        textSearchController={textSearchController}
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}

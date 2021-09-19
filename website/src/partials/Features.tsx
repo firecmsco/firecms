@@ -56,7 +56,8 @@ function Features() {
                                 </div>
 
                                 <p className="text-xl text-gray-500">
-                                    FireCMS provides all the flexibility you need with the best
+                                    FireCMS provides all the flexibility you
+                                    need with the best
                                     UX.
                                 </p>
                                 <p className="text-xl text-gray-500">
@@ -196,11 +197,10 @@ function Features() {
 
                                 </div>
                                 <p className="text-xl text-gray-500">
-                                    FireCMS a CMS built to work with every
-                                    existing
-                                    Firebase/Firestore project. It does not
-                                    enforce
-                                    any data structure.
+                                    FireCMS is a headless CMS built to work
+                                    with every existing Firebase/Firestore
+                                    project. It does not
+                                    enforce any data structure.
                                 </p>
                                 <p className="text-xl text-gray-500">
                                     Use the integrated hooks and callbacks to

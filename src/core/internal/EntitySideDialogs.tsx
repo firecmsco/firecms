@@ -7,11 +7,14 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 import { EntityDrawer } from "./EntityDrawer";
-import EntityView from "./EntityView";
-import { useCMSAppContext, useSideEntityController } from "../../contexts";
+import SideEntityView from "./SideEntityView";
+import {
+    SideEntityPanelProps,
+    useCMSAppContext,
+    useSideEntityController
+} from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
 import { CONTAINER_WIDTH } from "./common";
-import { SideEntityPanelProps } from "../../contexts/SideEntityController";
 
 
 export function EntitySideDialogs<M extends { [Key: string]: any }>() {
@@ -36,8 +39,8 @@ export function EntitySideDialogs<M extends { [Key: string]: any }>() {
         }
 
         return (
-            <EntityView
-                key={`side-form-route-${panel.entityId}`}
+            <SideEntityView
+                key={`side-entity-view-${panel.entityId}`}
                 {...schemaProps}
                 {...panel}/>
         );
