@@ -33,10 +33,10 @@ fields, common to all data types:
 
 * `description` Property description.
 
-* `longDescription` Width in pixels of this column in the collection view. If
-  not set, the width is inferred based on the other configurations.
+* `longDescription` Longer description of a field, displayed under a popover.
 
-* `columnWidth` Longer description of a field, displayed under a popover.
+* `columnWidth` Width in pixels of this column in the collection view. If
+  not set, the width is inferred based on the other configurations.
 
 * `disabled` Is this a read only property.
 
