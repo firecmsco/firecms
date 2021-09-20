@@ -67,7 +67,11 @@ fields, common to all data types:
 
 * `onSaveSuccess` Hook called when save is successful.
 
-* `onPreSave` Hook called when saving fails.
+* `onSaveFailure` Hook called when saving fails.
+
+* `onPreDelete` Hook called after the entity is deleted in Firestore. If you throw an error in this method the process stops, and an error snackbar gets displayed.
+
+* `onDelete` Hook called after the entity is deleted in Firestore.
 
 * `defaultValues` Object defining the initial values of the entity on creation.
 
