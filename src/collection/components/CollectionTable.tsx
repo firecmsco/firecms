@@ -24,7 +24,7 @@ import {
     getRowHeight,
     isPropertyFilterable,
     Sort
-} from "../common";
+} from "../internal/common";
 import CollectionTableToolbar from "../internal/CollectionTableToolbar";
 import PreviewComponent from "../../preview/PreviewComponent";
 import SkeletonComponent from "../../preview/components/SkeletonComponent";

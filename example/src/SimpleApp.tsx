@@ -23,12 +23,6 @@ const firebaseConfig = {
     appId: ""
 };
 
-const locales = {
-    "de-DE": "German",
-    "en-US": "English (United States)",
-    "es-ES": "Spanish (Spain)",
-    "es-419": "Spanish (South America)"
-};
 
 type Product = {
     name: string;
@@ -158,7 +152,11 @@ const productSchema = buildSchema<Product>({
 });
 
 const localeSchema = buildSchema({
-    customId: locales,
+    customId: {
+        "de-DE": "German",
+        "en-US": "English (United States)",
+        "es-ES": "Spanish (Spain)"
+    },
     name: "Locale",
     properties: {
         title: {
@@ -187,7 +185,6 @@ const localeSchema = buildSchema({
 });
 
 export default function App() {
-
 
     const navigation: NavigationBuilder = async ({
                                                      user,

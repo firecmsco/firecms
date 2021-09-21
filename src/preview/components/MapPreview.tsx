@@ -12,7 +12,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import PreviewComponent from "../PreviewComponent";
 import { MapProperty } from "../../models";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
-import { PreviewComponentProps } from "../preview_component_props";
+import { PreviewComponentProps } from "../PreviewComponentProps";
 
 const useStyles = makeStyles(() =>
     createStyles({

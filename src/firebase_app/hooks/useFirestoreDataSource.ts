@@ -4,15 +4,15 @@ import {
     EntitySchema,
     EntityValues,
     GeoPoint
-} from "../models/entities";
-import { FilterValues, WhereFilterOp } from "../models/collections";
-import { Properties, Property } from "../models/properties";
+} from "../../models/entities";
+import { FilterValues, WhereFilterOp } from "../../models/collections";
+import { Properties, Property } from "../../models/properties";
 import {
     computeSchemaProperties,
     sanitizeData,
     traverseValues,
     updateAutoValues
-} from "../models/utils";
+} from "../../models/utils";
 import {
     DataSource,
     DeleteEntityProps,
@@ -21,7 +21,7 @@ import {
     ListenCollectionProps,
     ListenEntityProps,
     SaveEntityProps
-} from "../models/datasource";
+} from "../../models/datasource";
 import {
     collection,
     deleteDoc,
@@ -44,7 +44,7 @@ import {
     where as whereClause
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { FirestoreTextSearchController } from "./text_search";
+import { FirestoreTextSearchController } from "../models/text_search";
 
 export type FirestoreDataSourceProps = {
     firebaseApp: FirebaseApp,

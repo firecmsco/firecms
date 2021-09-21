@@ -34,13 +34,16 @@ import ExportButton from "../../collection/internal/ExportButton";
 import {
     getSubcollectionColumnId,
     useColumnIds
-} from "../../collection/common";
+} from "../../collection/internal/common";
 
 import { canCreate, canDelete, canEdit } from "../util/permissions";
 import { OnCellValueChange, UniqueFieldValidator } from "../../collection";
 import { Markdown } from "../../preview";
 import { saveEntityWithCallbacks, useDataSource } from "../../hooks";
 
+/**
+ * @category Core components
+ */
 export type EntityCollectionProps<M extends { [Key: string]: any }> = {
     path: string;
     collection: EntityCollection<M>;

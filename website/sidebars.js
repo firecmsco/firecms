@@ -7,7 +7,7 @@ module.exports = {
         },
         'quickstart',
         'firebase_cms_app',
-        'cms_config',
+        'navigation',
         {
             type: 'category',
             label: 'Default views',

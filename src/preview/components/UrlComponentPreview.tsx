@@ -5,7 +5,7 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { MediaType } from "../../models";
-import { PreviewComponentProps } from "../preview_component_props";
+import { PreviewComponentProps } from "../PreviewComponentProps";
 import ImagePreview from "./ImagePreview";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";

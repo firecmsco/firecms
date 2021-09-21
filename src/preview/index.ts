@@ -2,9 +2,9 @@ export { default as PreviewComponent } from "./PreviewComponent";
 
 export type {
     PreviewComponentProps, PreviewSize
-} from "./preview_component_props";
+} from "./PreviewComponentProps";
 
-export { default as AsyncPreviewComponent } from "./AsyncPreviewComponent";
+export { default as AsyncPreviewComponent } from "./components/AsyncPreviewComponent";
 
 export {
     default as ArrayOfStringsPreview

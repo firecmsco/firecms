@@ -3,7 +3,7 @@ import "react-base-table/styles.css";
 
 import { Property, WhereFilterOp } from "../../models";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
-import { CMSColumn, Sort } from "../common";
+import { CMSColumn, Sort } from "./common";
 import {
     alpha,
     Badge,

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { EnumValuesChip } from "./CustomChip";
-import { PreviewComponentProps } from "../preview_component_props";
+import { PreviewComponentProps } from "../PreviewComponentProps";
 
 /**
  * @category Preview components

@@ -29,7 +29,7 @@ import MapPreview from "./components/MapPreview";
 import ArrayOfReferencesPreview from "./components/ArrayOfReferencesPreview";
 import ErrorView from "../core/components/ErrorView";
 
-import { PreviewComponentProps } from "./preview_component_props";
+import { PreviewComponentProps } from "./PreviewComponentProps";
 
 import ArrayOneOfPreview from "./components/ArrayOneOfPreview";
 import Markdown from "./components/Markdown";

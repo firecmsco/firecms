@@ -1,6 +1,6 @@
 import React from "react";
 import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
-import { PreviewComponentProps } from "../preview_component_props";
+import { PreviewComponentProps } from "../PreviewComponentProps";
 
 /**
  * @category Preview components

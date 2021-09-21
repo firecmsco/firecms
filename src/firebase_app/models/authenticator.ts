@@ -1,8 +1,8 @@
-import { User } from "./user";
+import { User } from "../../models";
 
 /**
  * Implement this function to allow access to specific users
- * @category Models
+ * @category Firebase
  */
 export type Authenticator = ({ user }: {
     user?: User

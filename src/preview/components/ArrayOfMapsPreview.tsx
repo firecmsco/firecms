@@ -5,7 +5,7 @@ import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { useStyles } from "./styles";
 import PreviewComponent from "../PreviewComponent";
-import { PreviewComponentProps } from "../preview_component_props";
+import { PreviewComponentProps } from "../PreviewComponentProps";
 
 /**
  * @category Preview components

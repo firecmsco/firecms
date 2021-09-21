@@ -12,17 +12,15 @@ import {
     EntityCustomViewParams,
     EntityReference,
     EntityValues,
-    InferSchemaType,
     Markdown,
     useDataSource,
     useStorageSource
 } from "@camberi/firecms";
 import { Product } from "../types";
-import { blogSchema } from "../schemas/blog_schema";
 import { productSchema } from "../schemas/products_schema";
 
 
-export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<InferSchemaType<typeof blogSchema>>) {
+export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams) {
 
     const storage = useStorageSource();
 

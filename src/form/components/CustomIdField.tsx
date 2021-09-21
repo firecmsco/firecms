@@ -15,10 +15,10 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { ErrorMessage } from "formik";
 
-import { Entity, EntitySchema, EntityStatus } from "../models";
-import { useCMSAppContext, useSnackbarController } from "../contexts";
-import { CMSAppContext } from "../contexts/CMSAppContext";
-import { formStyles } from "./styles";
+import { Entity, EntitySchema, EntityStatus } from "../../models";
+import { useCMSAppContext, useSnackbarController } from "../../contexts";
+import { CMSAppContext } from "../../contexts/CMSAppContext";
+import { formStyles } from "../styles";
 
 
 export function CustomIdField<M>

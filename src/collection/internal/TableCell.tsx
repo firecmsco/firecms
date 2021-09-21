@@ -5,7 +5,7 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import clsx from "clsx";
 import { CellStyleProps, useCellStyles } from "../components/styles";
-import { getRowHeight } from "../common";
+import { getRowHeight } from "./common";
 
 
 interface TableCellProps<T, M extends { [Key: string]: any }> {

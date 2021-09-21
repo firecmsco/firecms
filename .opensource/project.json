@@ -8,9 +8,9 @@
     "pages": {
         "website/docs/index.md": "Intro",
         "website/docs/quickstart.md": "Quickstart",
-        "website/docs/cms_config.md": "CMS Config",
+        "website/docs/navigation.md": "Navigation",
         "website/docs/entity_schemas.md": "Entity schemas",
-        "website/docs/collections.md": "collections",
+        "website/docs/collections.md": "Collections",
         "website/docs/custom_fields.md": "Custom fields",
         "website/docs/custom_views.md": "Custom views",
         "website/docs/custom_previews.md": "Custom previews",

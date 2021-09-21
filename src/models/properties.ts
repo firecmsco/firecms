@@ -31,6 +31,9 @@ type AnyProperty =
     ArrayProperty |
     MapProperty;
 
+/**
+ * @category Entity properties
+ */
 export type Property<T extends CMSType = CMSType> =
     T extends string ? StringProperty :
         T extends number ? NumberProperty :

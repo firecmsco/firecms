@@ -6,6 +6,9 @@ import {
 } from "../../models";
 import { CMSAppContext } from "../../contexts";
 
+/**
+ * @category Hooks and utilities
+ */
 export type DeleteEntityWithCallbacksProps<M> = DeleteEntityProps<M> & {
     onDeleteSuccess?: (entity: Entity<M>) => void;
     onDeleteFailure?: (entity: Entity<M>, e: Error) => void;
@@ -31,6 +34,7 @@ export type DeleteEntityWithCallbacksProps<M> = DeleteEntityProps<M> & {
  * @param onPreDeleteHookError
  * @param onDeleteSuccessHookError
  * @param context
+ * @category Hooks and utilities
  */
 export async function deleteEntityWithCallbacks<M>({
                                                        dataSource,

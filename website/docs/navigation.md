@@ -1,7 +1,7 @@
 ---
-id: cms_config
-title: CMS config
-sidebar_label: CMS config
+id: navigation
+title: Navigation
+sidebar_label: Navigation
 ---
 
 ### Navigation and custom views

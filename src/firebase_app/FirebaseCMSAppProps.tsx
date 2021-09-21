@@ -1,13 +1,13 @@
 import React from "react";
 import {
-    Authenticator,
     EntityCollection,
     Locale,
     Navigation,
     NavigationBuilder,
     SchemaResolver
 } from "../models";
-import { FirestoreTextSearchController } from "./text_search";
+import { Authenticator } from "./models/authenticator";
+import { FirestoreTextSearchController } from "./models/text_search";
 
 /**
  * Main entry point that defines the CMS configuration

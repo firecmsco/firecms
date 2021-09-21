@@ -62,7 +62,7 @@ export interface AuthController {
 
 }
 
-export const AuthContext = React.createContext<AuthController>({
+const AuthContext = React.createContext<AuthController>({
     user: null,
     authError: null,
     canAccessMainView: false,

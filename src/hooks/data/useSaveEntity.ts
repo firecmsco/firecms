@@ -8,6 +8,9 @@ import { CMSAppContext, useCMSAppContext } from "../../contexts";
 import { useEffect } from "react";
 import { useDataSource } from "./useDataSource";
 
+/**
+ * @category Hooks and utilities
+ */
 export type SaveEntityWithCallbacksProps<M> =
     SaveEntityProps<M> &
     {
@@ -29,6 +32,7 @@ export type SaveEntityWithCallbacksProps<M> =
  * @param onSaveFailure
  * @param onPreSaveHookError
  * @param onSaveSuccessHookError
+ * @category Hooks and utilities
  */
 export function useSaveEntity<M extends { [Key: string]: any }>({
                                                                     schema,
@@ -86,6 +90,7 @@ export function useSaveEntity<M extends { [Key: string]: any }>({
  * @param onSaveSuccessHookError
  * @see useDataSource
  * @see useSaveEntity
+ * @category Hooks and utilities
  */
 export async function saveEntityWithCallbacks<M>({
                                                 schema,

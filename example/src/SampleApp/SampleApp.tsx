@@ -18,13 +18,14 @@ import { GitHub } from "@mui/icons-material";
 import { firebaseConfig } from "../firebase_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/test_shop_logo.png";
-import { textSearchController } from "./algolia_utils";
+import { textSearchController } from "./text_search";
 import {
     localeSchema,
     productAdditionalColumn,
     productExtraActionBuilder,
     productSchema
 } from "./schemas/products_schema";
+
 import { usersSchema } from "./schemas/users_schema";
 import {
     blogSchema,
@@ -59,7 +60,7 @@ function SampleApp() {
         permissions: ({ user }) => ({
             edit: true,
             create: true,
-            // we use some custom logic by storing user data in the 'extra;
+            // we use some custom logic by storing user data in the `extra`
             // field of the user
             delete: user && user.extra?.roles.includes("admin")
         }),

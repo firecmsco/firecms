@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 
 import {
-    Authenticator,
     DataSource,
     EntityCollection,
     EntityLinkBuilder,
@@ -13,19 +12,16 @@ import {
     User
 } from "../models";
 import {
-    AuthController,
-    AuthProvider,
-    BreadcrumbsProvider,
-    CMSAppContext,
-    CMSAppContextProvider,
-    SideEntityProvider,
-    SnackbarProvider
-} from "../contexts";
-import {
     SchemaRegistryProvider,
     useSchemaRegistryController
 } from "../contexts/SchemaRegistry";
 import { EntitySideDialogs } from "./internal/EntitySideDialogs";
+import { AuthController, CMSAppContext } from "../contexts";
+import { AuthProvider } from "../contexts/AuthController";
+import { SnackbarProvider } from "../contexts/SnackbarContext";
+import { CMSAppContextProvider } from "../contexts/CMSAppContext";
+import { SideEntityProvider } from "../contexts/SideEntityController";
+import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 
 
 /**
@@ -49,15 +45,6 @@ export interface CMSAppProviderProps {
      * can use a `NavigationBuilder`
      */
     navigation: Navigation | NavigationBuilder | EntityCollection[];
-
-    /**
-     * Do the users need to log in to access the CMS.
-     * You can specify an Authenticator function to discriminate which users can
-     * access the CMS or not.
-     * If not specified, authentication is enabled but no user restrictions
-     * apply
-     */
-    authentication?: boolean | Authenticator;
 
     /**
      * Used to override schemas based on the collection path and entityId.

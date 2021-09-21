@@ -16,13 +16,13 @@ import { Form, Formik, FormikHelpers } from "formik";
 import { buildPropertyField } from "./form_factory";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
-import { ErrorFocus } from "./ErrorFocus";
+import { ErrorFocus } from "./components/ErrorFocus";
 import {
     computeSchemaProperties,
     initEntityValues,
     isReadOnly
 } from "../models/utils";
-import { CustomIdField } from "./CustomIdField";
+import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({

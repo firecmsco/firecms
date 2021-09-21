@@ -1,5 +1,5 @@
-import { Authenticator, User } from "../models";
-import { AuthController } from "../contexts";
+import {  User } from "../../models";
+import { AuthController } from "../../contexts";
 
 import React, { useEffect } from "react";
 
@@ -10,6 +10,7 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
+import { Authenticator } from "../models/authenticator";
 
 interface FirebaseAuthHandlerProps {
     firebaseApp?: FirebaseApp,
@@ -47,7 +48,7 @@ export const useFirebaseAuthController = (
 
         const user: User | null = firebaseUser ? {
             ...firebaseUser,
-            extra: null
+            extra: loggedUser ? loggedUser.extra : null
         } : null;
 
         setNotAllowedError(false);

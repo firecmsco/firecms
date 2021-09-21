@@ -116,7 +116,7 @@ export interface Entity<M extends { [Key: string]: any }> {
  */
 export type EntityValues<M> = M;
 
-export class EntityReference  {
+export class EntityReference {
     /**
      * Id of the entity
      */
@@ -127,13 +127,13 @@ export class EntityReference  {
      */
     readonly path: string;
 
-    constructor(id:string, path:string) {
+    constructor(id: string, path: string) {
         this.id = id;
         this.path = path;
     }
 }
 
-export class GeoPoint  {
+export class GeoPoint {
 
     /**
      * The latitude of this GeoPoint instance.
@@ -144,12 +144,15 @@ export class GeoPoint  {
      */
     readonly longitude: number;
 
-    constructor(latitude:number, longitude:number) {
+    constructor(latitude: number, longitude: number) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
 }
 
+/**
+ * @ignore
+ */
 export type InferSchemaType<S extends EntitySchema<any>> = S extends EntitySchema<infer M> ? M : never;
 
 /**
@@ -174,12 +177,12 @@ export type EntityCustomViewParams<M extends { [Key: string]: any } = any> = {
     /**
      * Schema used by this entity
      */
-    schema: EntitySchema<M extends EntitySchema<any> ? InferSchemaType<M> : M>;
+    schema: EntitySchema<M>;
 
     /**
      * Entity that this view refers to. It can be undefined if the entity is new
      */
-    entity?: Entity<M extends EntitySchema<any> ? InferSchemaType<M> : M>;
+    entity?: Entity<M>;
 
     /**
      * Modified values in the form that have not been saved yet.

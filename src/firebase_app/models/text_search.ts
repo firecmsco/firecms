@@ -8,6 +8,7 @@ import { SearchIndex } from "algoliasearch";
  * Note that you will get text search requests for collections that have the
  * `textSearchEnabled` flag set to `true`.
  * @see performAlgoliaTextSearch
+ * @category Firebase
  */
 export type FirestoreTextSearchController = (props: { path: string, searchString: string }) => Promise<readonly string[]> | undefined;
 

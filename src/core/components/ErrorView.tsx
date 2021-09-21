@@ -21,7 +21,11 @@ export const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ * @category Core components
+ */
 export type ErrorViewProps = { error: string, tooltip?: string };
+
 /**
  * Generic error view. Displayed for example when an unexpected value comes
  * from the datasource in a collection view.

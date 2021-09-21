@@ -1,4 +1,4 @@
-import { PreviewComponentProps } from "../preview_component_props";
+import { PreviewComponentProps } from "../PreviewComponentProps";
 import { NumberProperty, StringProperty } from "../../models";
 import ArrayEnumPreview from "./ArrayEnumPreview";
 

@@ -1,7 +1,7 @@
 import { Skeleton } from "@mui/material";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { EntitySchema } from "../models";
+import { EntitySchema } from "../../models";
 
 export interface AsyncPreviewComponentProps<M extends { [Key: string]: any }> {
 

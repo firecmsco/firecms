@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import CollectionTable from "../../collection/components/CollectionTable";
 import CollectionRowActions
     from "../../collection/internal/CollectionRowActions";
-import { useColumnIds } from "../../collection/common";
+import { useColumnIds } from "../../collection/internal/common";
 import { useDataSource } from "../../hooks/data/useDataSource";
 
 

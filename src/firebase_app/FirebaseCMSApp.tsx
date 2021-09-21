@@ -15,11 +15,11 @@ import { AuthController } from "../contexts";
 import { EntityLinkBuilder } from "../models";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
-import { useFirebaseAuthController } from "./useFirebaseAuthController";
-import { useFirestoreDataSource } from "./useFirestoreDataSource";
-import { useFirebaseStorageSource } from "./useFirebaseStorageSource";
-import { useInitialiseFirebase } from "./useInitialiseFirebase";
-import FirebaseLoginView from "./FirebaseLoginView";
+import { useFirebaseAuthController } from "./hooks/useFirebaseAuthController";
+import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
+import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
+import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
+import FirebaseLoginView from "./components/FirebaseLoginView";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID

@@ -1,5 +1,5 @@
 import React, { MouseEventHandler } from "react";
-import { CMSType, Property } from "../models/properties";
+import { CMSType, Property } from "../models";
 
 /**
  * @category Preview components

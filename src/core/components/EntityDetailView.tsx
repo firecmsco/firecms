@@ -1,8 +1,8 @@
-import { Entity, EntityCollection, EntitySchema } from "../models";
+import { Entity, EntityCollection, EntitySchema } from "../../models";
 import React, { useEffect, useState } from "react";
 import { Link as ReactLink } from "react-router-dom";
 
-import EntityPreview from "../core/components/EntityPreview";
+import EntityPreview from "./EntityPreview";
 import {
     Box,
     Container,
@@ -19,10 +19,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import {
     buildCollectionUrl,
     removeInitialAndTrailingSlashes
-} from "../core/navigation";
-import { EntityCollectionTable } from "../core/components/EntityCollectionTable";
-import { useSideEntityController } from "../contexts";
-import { useDataSource } from "../hooks";
+} from "../navigation";
+import { EntityCollectionTable } from "./EntityCollectionTable";
+import { useSideEntityController } from "../../contexts";
+import { useDataSource } from "../../hooks";
 
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -46,6 +46,14 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }));
 
+/**
+ * Show a view with details of an Entity properties
+ * @param entity
+ * @param schema
+ * @param path
+ * @param subcollections
+ * @constructor
+ */
 export function EntityDetailView<M extends { [Key: string]: any }>({
                                                                        entity,
                                                                        schema,

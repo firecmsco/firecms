@@ -69,6 +69,11 @@ const productSchema = buildSchema({
     }
 });
 
+/**
+ * This is an example of how to use the components provided by FireCMS for
+ * a better customisation.
+ * @constructor
+ */
 export function CustomCMSApp() {
 
     const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
@@ -104,10 +109,7 @@ export function CustomCMSApp() {
 
     if (firebaseConfigError) {
         return <div>
-            It seems like the provided Firebase config is not correct. If you
-            are using the credentials provided automatically by Firebase
-            Hosting, make sure you link your Firebase app to Firebase
-            Hosting.
+            It seems like the provided Firebase config is not correct
         </div>;
     }
 

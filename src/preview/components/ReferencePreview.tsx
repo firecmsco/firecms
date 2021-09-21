@@ -14,7 +14,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { EntityReference, Property } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { PreviewComponentProps, PreviewSize } from "../preview_component_props";
+import { PreviewComponentProps, PreviewSize } from "../PreviewComponentProps";
 import { useSideEntityController } from "../../contexts";
 
 import SkeletonComponent from "./SkeletonComponent";

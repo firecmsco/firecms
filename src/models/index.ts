@@ -7,7 +7,6 @@ export * from "./locales";
 export * from "./user";
 export * from "./colors";
 export * from "./storage";
-export * from "./authenticator";
 export * from "./schema_resolver";
 export * from "./fields";
 export * from "./datasource";

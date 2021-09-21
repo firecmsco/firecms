@@ -1,6 +1,6 @@
 import React from "react";
 import { StringProperty } from "../../models";
-import { PreviewComponentProps } from "../preview_component_props";
+import { PreviewComponentProps } from "../PreviewComponentProps";
 
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import StringPreview from "./StringPreview";

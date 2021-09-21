@@ -5,7 +5,7 @@ import {
     EntityCollection,
     Property,
     StringProperty
-} from "../models";
+} from "../../models";
 
 export interface CMSColumn {
     id: string;
