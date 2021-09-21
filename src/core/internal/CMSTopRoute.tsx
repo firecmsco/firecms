@@ -18,7 +18,7 @@ const transitionStyles = {
     exited: { opacity: 0 }
 };
 
-export const CMSTopRoute = ({ path, element } : any) => {
+export const CMSTopRoute = ({ path, element }: any) => {
     const resolvedPath = useResolvedPath(path);
     const match = useMatch(resolvedPath.pathname);
     return (
@@ -37,4 +37,4 @@ export const CMSTopRoute = ({ path, element } : any) => {
             )}
         </Transition>
     );
-}
+};

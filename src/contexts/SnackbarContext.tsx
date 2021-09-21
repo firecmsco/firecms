@@ -23,7 +23,7 @@ export type SnackbarMessageType = "success" | "info" | "warning" | "error";
  * Controller to display snackbars
  * @category Hooks and utilities
  */
-export type SnackbarController = {
+export interface SnackbarController {
     /**
      * Is there currently an open snackbar
      */

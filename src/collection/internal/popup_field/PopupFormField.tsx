@@ -34,7 +34,7 @@ import { buildPropertyField } from "../../../form/form_factory";
 import clsx from "clsx";
 import ElementResizeListener from "./ElementResizeListener";
 
-export const useStyles = makeStyles((theme:Theme) => createStyles({
+export const useStyles = makeStyles((theme: Theme) => createStyles({
     form: {
         display: "flex",
         flexDirection: "column"
@@ -92,21 +92,21 @@ interface PopupFormFieldProps<M extends { [Key: string]: any }> {
 }
 
 function PopupFormField<M extends { [Key: string]: any }>({
-                                                                             tableKey,
-                                                                             entity,
-                                                                             customFieldValidator,
-                                                                             name,
-                                                                             property,
-                                                                             schema,
-                                                                             path,
-                                                                             cellRect,
-                                                                             setPreventOutsideClick,
-                                                                             formPopupOpen,
-                                                                             setFormPopupOpen,
-                                                                             columnIndex,
-                                                                             usedPropertyBuilder,
-                                                                             onCellValueChange
-                                                                         }: PopupFormFieldProps<M>) {
+                                                              tableKey,
+                                                              entity,
+                                                              customFieldValidator,
+                                                              name,
+                                                              property,
+                                                              schema,
+                                                              path,
+                                                              cellRect,
+                                                              setPreventOutsideClick,
+                                                              formPopupOpen,
+                                                              setFormPopupOpen,
+                                                              columnIndex,
+                                                              usedPropertyBuilder,
+                                                              onCellValueChange
+                                                          }: PopupFormFieldProps<M>) {
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     // const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();

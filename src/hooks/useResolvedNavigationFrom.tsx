@@ -14,19 +14,19 @@ export type NavigationEntry<M> =
 /**
  * @ignore
  */
-export type NavigationEntity<M> = {
+export interface NavigationEntity<M> {
     type: "entity";
     entity: Entity<M>;
     entityId: string;
     relativePath: string;
     path: string;
     parentCollection: EntityCollection<M>;
-};
+}
 
 /**
  * @ignore
  */
-export type NavigationCollection<M> = {
+export interface NavigationCollection<M> {
     type: "collection";
     path: string;
     collection: EntityCollection<M>;
@@ -54,9 +54,9 @@ interface NavigationCustom<M> {
  * @category Hooks and utilities
  */
 export function resolveNavigationFrom<M>({
-                                         path,
-                                         context
-                                     }: { path: string, context: CMSAppContext }): Promise<NavigationEntry<M>[]> {
+                                             path,
+                                             context
+                                         }: { path: string, context: CMSAppContext }): Promise<NavigationEntry<M>[]> {
 
 
     const dataSource = context.dataSource;
@@ -112,7 +112,7 @@ export interface NavigationFromProps {
 /**
  * @category Hooks and utilities
  */
-export type NavigationFrom<M> = {
+export interface NavigationFrom<M> {
     data?: NavigationEntry<M>[]
     dataLoading: boolean,
     dataLoadingError?: Error

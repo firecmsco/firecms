@@ -19,7 +19,7 @@ export interface BreadcrumbEntry {
 /**
  * @category Hooks and utilities
  */
-export type BreadcrumbsController = {
+export interface BreadcrumbsController {
     breadcrumbs: BreadcrumbEntry[];
     set: (props: {
         breadcrumbs: BreadcrumbEntry[];

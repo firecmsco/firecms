@@ -10,7 +10,7 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
 
-const useStyles = makeStyles((theme:Theme) => createStyles({
+const useStyles = makeStyles((theme: Theme) => createStyles({
     arrayEntry: {
         marginBottom: theme.spacing(1),
         borderRadius: "4px",
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme:Theme) => createStyles({
     }
 }));
 
-type ArrayEntryProps = {
+interface ArrayEntryProps {
     id: any
     name: string,
     moveItem: (dragIndex: number, hoverIndex: number) => void,

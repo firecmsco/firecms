@@ -11,11 +11,11 @@ import { PreviewComponentProps } from "../PreviewComponentProps";
  * @category Preview components
  */
 export default function ArrayOfMapsPreview<T>({
-                                       name,
-                                       value,
-                                       property,
-                                       size
-                                   }: PreviewComponentProps<object[]>) {
+                                                  name,
+                                                  value,
+                                                  property,
+                                                  size
+                                              }: PreviewComponentProps<object[]>) {
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");

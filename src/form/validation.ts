@@ -50,7 +50,7 @@ export type CustomFieldValidator = (props: {
     parentProperty?: MapProperty | ArrayProperty
 }) => Promise<boolean>;
 
-type PropertyContext<PT extends Property> = {
+interface PropertyContext<PT extends Property> {
     property: PT,
     parentProperty?: MapProperty | ArrayProperty,
     customFieldValidator?: CustomFieldValidator,
@@ -98,11 +98,11 @@ export function getYupEntitySchema<T extends CMSType, M extends { [Key: string]:
 }
 
 export function getYupMapObjectSchema<M extends { [Key: string]: any }>({
-                                                                                           property,
-                                                                                           parentProperty,
-                                                                                           customFieldValidator,
-                                                                                           name
-                                                                                       }: PropertyContext<MapProperty>): ObjectSchema<any> {
+                                                                            property,
+                                                                            parentProperty,
+                                                                            customFieldValidator,
+                                                                            name
+                                                                        }: PropertyContext<MapProperty>): ObjectSchema<any> {
     const objectSchema: any = {};
     if (property.properties)
         Object.entries(property.properties).forEach(([childName, childProperty]: [string, Property]) => {
@@ -251,11 +251,11 @@ function getYupDateSchema({
 }
 
 function getYupReferenceSchema<M extends { [Key: string]: any }>({
-                                                           property,
-                                                           parentProperty,
-                                                           customFieldValidator,
-                                                           name
-                                                       }: PropertyContext<ReferenceProperty>): AnySchema {
+                                                                     property,
+                                                                     parentProperty,
+                                                                     customFieldValidator,
+                                                                     name
+                                                                 }: PropertyContext<ReferenceProperty>): AnySchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {

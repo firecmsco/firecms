@@ -93,21 +93,21 @@ export function useSaveEntity<M extends { [Key: string]: any }>({
  * @category Hooks and utilities
  */
 export async function saveEntityWithCallbacks<M>({
-                                                schema,
-                                                path,
-                                                entityId,
-                                                values,
-                                                status,
-                                                dataSource,
-                                                context,
-                                                onSaveSuccess,
-                                                onSaveFailure,
-                                                onPreSaveHookError,
-                                                onSaveSuccessHookError
-                                            }: SaveEntityWithCallbacksProps<M> & {
-                                                dataSource: DataSource,
-                                                context: CMSAppContext,
-                                            }
+                                                     schema,
+                                                     path,
+                                                     entityId,
+                                                     values,
+                                                     status,
+                                                     dataSource,
+                                                     context,
+                                                     onSaveSuccess,
+                                                     onSaveFailure,
+                                                     onPreSaveHookError,
+                                                     onSaveSuccessHookError
+                                                 }: SaveEntityWithCallbacksProps<M> & {
+                                                     dataSource: DataSource,
+                                                     context: CMSAppContext,
+                                                 }
 ): Promise<void> {
 
     let updatedValues: Partial<EntityValues<M>>;

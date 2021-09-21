@@ -129,15 +129,15 @@ export interface EntityFormProps<M extends { [Key: string]: any }> {
  * @category Core components
  */
 export default function EntityForm<M>({
-                           status,
-                           path,
-                           schema,
-                           entity,
-                           onEntitySave,
-                           onDiscard,
-                           onModified,
-                           onValuesChanged
-                       }: EntityFormProps<M>) {
+                                          status,
+                                          path,
+                                          schema,
+                                          entity,
+                                          onEntitySave,
+                                          onDiscard,
+                                          onModified,
+                                          onValuesChanged
+                                      }: EntityFormProps<M>) {
 
     const classes = useStyles();
     const dataSource = useDataSource();

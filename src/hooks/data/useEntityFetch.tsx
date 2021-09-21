@@ -14,7 +14,7 @@ export interface EntityFetchProps<M extends { [Key: string]: any }> {
 /**
  * @category Hooks and utilities
  */
-export type EntityFetchResult<M extends { [Key: string]: any }> = {
+export interface EntityFetchResult<M extends { [Key: string]: any }> {
     entity?: Entity<M>,
     dataLoading: boolean,
     dataLoadingError?: Error

@@ -25,13 +25,14 @@ export interface SkeletonComponentProps<T> {
     property: Property,
     size: PreviewSize
 }
+
 /**
  * @category Preview components
  */
 export default function SkeletonComponent<T>({
-                                         property,
-                                         size
-                                     }: SkeletonComponentProps<T>
+                                                 property,
+                                                 size
+                                             }: SkeletonComponentProps<T>
 ) {
 
     if (!property) {
@@ -217,8 +218,8 @@ function renderGenericArrayCell(
 function renderUrlAudioComponent() {
     return (
         <Skeleton variant="rectangular"
-                         width={300}
-                         height={100}/>
+                  width={300}
+                  height={100}/>
     );
 }
 
@@ -226,8 +227,8 @@ export function renderSkeletonImageThumbnail(size: PreviewSize) {
     const imageSize = size === "tiny" ? 40 : size === "small" ? 100 : 200;
     return (
         <Skeleton variant="rectangular"
-                         width={imageSize}
-                         height={imageSize}/>
+                  width={imageSize}
+                  height={imageSize}/>
     );
 }
 
@@ -235,8 +236,8 @@ function renderUrlVideo(size: PreviewSize) {
 
     return (
         <Skeleton variant="rectangular"
-                         width={size !== "regular" ? 300 : 500}
-                         height={size !== "regular" ? 200 : 250}/>
+                  width={size !== "regular" ? 300 : 500}
+                  height={size !== "regular" ? 200 : 250}/>
     );
 }
 

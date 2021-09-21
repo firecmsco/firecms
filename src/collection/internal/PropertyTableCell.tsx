@@ -46,25 +46,30 @@ export interface PropertyTableCellProps<T extends CMSType, M extends { [Key: str
 /**
  * Props passed in a callback when the content of a cell in a table has been edited
  */
-export type OnCellChangeParams<T> = { value: T, name: string, setError: (e: Error) => void, setSaved: (saved: boolean) => void };
+export interface OnCellChangeParams<T> {
+    value: T,
+    name: string,
+    setError: (e: Error) => void,
+    setSaved: (saved: boolean) => void
+};
 
 const PropertyTableCell = <T extends CMSType, M extends { [Key: string]: any }>({
-                                                                                                   selected,
-                                                                                                   focused,
-                                                                                                   name,
-                                                                                                   setPreventOutsideClick,
-                                                                                                   setFocused,
-                                                                                                   onValueChange,
-                                                                                                   select,
-                                                                                                   openPopup,
-                                                                                                   value,
-                                                                                                   property,
-                                                                                                   validation,
-                                                                                                   size,
-                                                                                                   align,
-                                                                                                   width,
-                                                                                                   height
-                                                                                               }: PropertyTableCellProps<T, M> & CellStyleProps) => {
+                                                                                    selected,
+                                                                                    focused,
+                                                                                    name,
+                                                                                    setPreventOutsideClick,
+                                                                                    setFocused,
+                                                                                    onValueChange,
+                                                                                    select,
+                                                                                    openPopup,
+                                                                                    value,
+                                                                                    property,
+                                                                                    validation,
+                                                                                    size,
+                                                                                    align,
+                                                                                    width,
+                                                                                    height
+                                                                                }: PropertyTableCellProps<T, M> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
 

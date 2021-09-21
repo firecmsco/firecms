@@ -23,20 +23,20 @@ interface TableCellProps<T, M extends { [Key: string]: any }> {
 }
 
 const TableCell = <T, M extends { [Key: string]: any }>({
-                                                                           children,
-                                                                           selected,
-                                                                           focused,
-                                                                           disabled,
-                                                                           disabledTooltip,
-                                                                           size,
-                                                                           saved,
-                                                                           error,
-                                                                           align,
-                                                                           allowScroll,
-                                                                           openPopup,
-                                                                           select,
-                                                                           showExpandIcon = true
-                                                                       }: TableCellProps<T, M> & CellStyleProps) => {
+                                                            children,
+                                                            selected,
+                                                            focused,
+                                                            disabled,
+                                                            disabledTooltip,
+                                                            size,
+                                                            saved,
+                                                            error,
+                                                            align,
+                                                            allowScroll,
+                                                            openPopup,
+                                                            select,
+                                                            showExpandIcon = true
+                                                        }: TableCellProps<T, M> & CellStyleProps) => {
 
     const ref = React.createRef<HTMLDivElement>();
 

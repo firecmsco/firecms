@@ -40,7 +40,7 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
 /**
  * @category Hooks and utilities
  */
-export type CollectionFetchResult<M extends { [Key: string]: any }> = {
+export interface CollectionFetchResult<M extends { [Key: string]: any }> {
     data: Entity<M>[]
     dataLoading: boolean,
     noMoreToLoad: boolean,

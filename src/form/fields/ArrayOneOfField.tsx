@@ -96,7 +96,7 @@ export default function ArrayOneOfField<T extends Array<any>>({
     );
 }
 
-type ArrayOneOfEntryProps = {
+interface ArrayOneOfEntryProps {
     name: string;
     index: number;
     value: any;

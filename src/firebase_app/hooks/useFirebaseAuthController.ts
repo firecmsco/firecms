@@ -1,4 +1,4 @@
-import {  User } from "../../models";
+import { User } from "../../models";
 import { AuthController } from "../../contexts";
 
 import React, { useEffect } from "react";

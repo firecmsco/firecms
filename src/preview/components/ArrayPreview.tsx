@@ -12,11 +12,11 @@ import { Property } from "../../models";
  * @category Preview components
  */
 export default function ArrayPreview({
-                                 name,
-                                 value,
-                                 property,
-                                 size
-                             }: PreviewComponentProps<any[]>) {
+                                         name,
+                                         value,
+                                         property,
+                                         size
+                                     }: PreviewComponentProps<any[]>) {
 
     if (!property.of) {
         throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);

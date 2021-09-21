@@ -155,7 +155,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
     const location = useLocation();
     const match = useMatch({
         path: buildCollectionUrl(`${path}/${entityId}/*`),
-        caseSensitive: false,
+        caseSensitive: false
     });
 
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
@@ -173,12 +173,12 @@ function SideEntityView<M extends { [Key: string]: any }>({
 
     useBlocker(({ action, location: nextLocation, retry }) => {
             switch (action) {
-                case 'PUSH':
-                case 'REPLACE': {
+                case "PUSH":
+                case "REPLACE": {
                     retry();
                     return;
                 }
-                case 'POP': {
+                case "POP": {
                     const answer = confirm(`You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`);
                     if (answer) {
                         navigate(nextLocation);

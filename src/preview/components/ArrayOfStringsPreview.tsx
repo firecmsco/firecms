@@ -10,11 +10,11 @@ import { useStyles } from "./styles";
  * @category Preview components
  */
 export default function ArrayOfStringsPreview({
-                                          name,
-                                          value,
-                                          property,
-                                          size
-                                      }: PreviewComponentProps<string[]>) {
+                                                  name,
+                                                  value,
+                                                  property,
+                                                  size
+                                              }: PreviewComponentProps<string[]>) {
 
     const classes = useStyles();
 

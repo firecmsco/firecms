@@ -5,7 +5,7 @@ import { Property } from "./properties";
 /**
  * @category Datasource
  */
-export type FetchEntityProps<M> = {
+export interface FetchEntityProps<M> {
     path: string,
     entityId: string,
     schema: EntitySchema<M>
@@ -22,7 +22,7 @@ export type ListenEntityProps<M> = FetchEntityProps<M> & {
 /**
  * @category Datasource
  */
-export type FetchCollectionProps<M> = {
+export interface FetchCollectionProps<M> {
     path: string,
     schema: EntitySchema<M>,
     filter?: FilterValues<M>,
@@ -46,7 +46,7 @@ export type ListenCollectionProps<M> =
 /**
  * @category Datasource
  */
-export type SaveEntityProps<M> = {
+export interface SaveEntityProps<M> {
     path: string,
     entityId: string | undefined,
     values: Partial<EntityValues<M>>,
@@ -57,7 +57,7 @@ export type SaveEntityProps<M> = {
 /**
  * @category Datasource
  */
-export type DeleteEntityProps<M> = {
+export interface DeleteEntityProps<M> {
     entity: Entity<M>;
     schema: EntitySchema<M>;
 };

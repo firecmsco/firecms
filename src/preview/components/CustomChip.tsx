@@ -31,7 +31,7 @@ const useStyles = makeStyles<Theme, { schema: ChipColorSchema, error: any }>((th
 );
 
 
-type EnumValuesChipProps = {
+interface EnumValuesChipProps {
     enumValues: EnumValues;
     enumKey: any;
     small: boolean;
@@ -58,7 +58,7 @@ export function EnumValuesChip({
 }
 
 
-type EnumChipProps = {
+interface EnumChipProps {
     colorSeed: string;
     colorSchemaKey?: ChipColor;
     label: string;
@@ -71,13 +71,13 @@ type EnumChipProps = {
  * @category Preview components
  */
 export default function CustomChip({
-                               colorSeed,
-                               label,
-                               colorSchemaKey,
-                               error,
-                               outlined,
-                               small
-                           }: EnumChipProps) {
+                                       colorSeed,
+                                       label,
+                                       colorSchemaKey,
+                                       error,
+                                       outlined,
+                                       small
+                                   }: EnumChipProps) {
 
     const schema = useMemo(() => colorSchemaKey ? getColorSchemeForKey(colorSchemaKey) : getColorSchemeForSeed(colorSeed), [colorSeed]);
     const classes = useStyles({ schema, error });

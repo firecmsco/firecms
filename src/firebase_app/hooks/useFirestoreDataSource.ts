@@ -46,7 +46,7 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../models/text_search";
 
-export type FirestoreDataSourceProps = {
+export interface FirestoreDataSourceProps {
     firebaseApp: FirebaseApp,
     textSearchController?: FirestoreTextSearchController
 };
@@ -351,7 +351,7 @@ export function useFirestoreDataSource({
                 entityId,
                 values,
                 schema,
-                status,
+                status
             }: SaveEntityProps<M>): Promise<Entity<M>> {
 
             const properties: Properties<M> = computeSchemaProperties(schema, path, entityId);
@@ -392,7 +392,7 @@ export function useFirestoreDataSource({
         async deleteEntity<M extends { [Key: string]: any }>(
             {
                 entity,
-                schema,
+                schema
             }: DeleteEntityProps<M>
         ): Promise<void> {
             return deleteDoc(doc(db, entity.path, entity.id));

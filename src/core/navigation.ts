@@ -217,7 +217,7 @@ export interface TopNavigationEntry {
     group?: string;
 }
 
-export function computeTopNavigation(navigation:Navigation, includeHiddenViews: boolean): {
+export function computeTopNavigation(navigation: Navigation, includeHiddenViews: boolean): {
     navigationEntries: TopNavigationEntry[],
     groups: string[]
 } {

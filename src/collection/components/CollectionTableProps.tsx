@@ -142,11 +142,11 @@ export type OnCellValueChange<T, M extends { [Key: string]: any }> = (params: On
  * Props passed in a callback when the content of a cell in a table has been edited
  * @category Collection components
  */
-export type OnCellValueChangeParams<T, M extends { [Key: string]: any }> = {
+export interface OnCellValueChangeParams<T, M extends { [Key: string]: any }> {
     value: T,
     name: string,
     entity: Entity<M>,
     setSaved: (saved: boolean) => void
     setError: (e: Error) => void
-};
+}
 

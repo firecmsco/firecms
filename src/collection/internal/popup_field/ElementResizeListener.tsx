@@ -23,7 +23,7 @@ const ElementResizeListener: React.FC<Props> = ({ onResize }) => {
     const onLoad = useCallback(() => {
         const obj = objectRef.current;
         if (obj && obj.contentDocument && obj.contentDocument.defaultView) {
-            obj.contentDocument.defaultView.addEventListener('resize', _onResize);
+            obj.contentDocument.defaultView.addEventListener("resize", _onResize);
         }
     }, []);
 
@@ -31,30 +31,30 @@ const ElementResizeListener: React.FC<Props> = ({ onResize }) => {
         return () => {
             const obj = objectRef.current;
             if (obj && obj.contentDocument && obj.contentDocument.defaultView) {
-                obj.contentDocument.defaultView.removeEventListener('resize', _onResize);
+                obj.contentDocument.defaultView.removeEventListener("resize", _onResize);
             }
-        }
+        };
     }, []);
 
     return (
         <object
             onLoad={onLoad}
             ref={objectRef} tabIndex={-1}
-            type={'text/html'}
-            data={'about:blank'}
-            title={''}
+            type={"text/html"}
+            data={"about:blank"}
+            title={""}
             style={{
-                position: 'absolute',
+                position: "absolute",
                 top: 0,
                 left: 0,
-                height: '100%',
-                width: '100%',
-                pointerEvents: 'none',
+                height: "100%",
+                width: "100%",
+                pointerEvents: "none",
                 zIndex: -1,
-                opacity: 0,
+                opacity: 0
             }}
         />
-    )
-}
+    );
+};
 
 export default ElementResizeListener;

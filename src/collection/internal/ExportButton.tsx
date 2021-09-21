@@ -26,7 +26,7 @@ import { CSVLink } from "react-csv";
 import { computeSchemaProperties } from "../../models/utils";
 import { useDataSource } from "../../hooks/data/useDataSource";
 
-type ExportButtonProps<M extends { [Key: string]: any }> = {
+interface ExportButtonProps<M extends { [Key: string]: any }> {
     schema: EntitySchema<M>;
     path: string;
     exportConfig?: ExportConfig;
@@ -107,7 +107,7 @@ export default function ExportButton<M extends { [Key: string]: any }>({
         dataSource.fetchCollection<M>({
             path,
             schema,
-            limit: fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT,
+            limit: fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT
         })
             .then(updateEntities)
             .catch(onFetchError);
@@ -135,7 +135,8 @@ export default function ExportButton<M extends { [Key: string]: any }>({
     return <>
 
         <Tooltip title={"Export"}>
-            <IconButton color={"primary"} onClick={handleClickOpen} size="large">
+            <IconButton color={"primary"} onClick={handleClickOpen}
+                        size="large">
                 <GetAppIcon/>
             </IconButton>
         </Tooltip>
@@ -211,7 +212,10 @@ export default function ExportButton<M extends { [Key: string]: any }>({
     </>;
 }
 
-type Header = { label: string, key: string };
+interface Header {
+    label: string,
+    key: string
+};
 
 function getExportHeaders<M extends { [Key: string]: any }>(properties: Properties<M>,
                                                             path: string,

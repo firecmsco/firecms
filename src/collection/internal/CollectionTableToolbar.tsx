@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         toolbar: {
             minHeight: 56,
-            [theme.breakpoints.down('xl')]: {
+            [theme.breakpoints.down("xl")]: {
                 paddingLeft: theme.spacing(.5),
                 paddingRight: theme.spacing(.5)
             },
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: "flex",
             alignItems: "center",
             "& > *": {
-                [theme.breakpoints.down('md')]: {
+                [theme.breakpoints.down("md")]: {
                     marginRight: theme.spacing(.5)
                 },
                 marginRight: theme.spacing(1)
@@ -100,6 +100,7 @@ interface CollectionTableToolbarProps<M extends { [Key: string]: any }> {
     title?: React.ReactNode,
     onTextSearch?: (searchString?: string) => void;
     onSizeChanged: (size: CollectionSize) => void;
+
     clearFilter(): void;
 }
 

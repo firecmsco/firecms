@@ -6,11 +6,11 @@ import ArrayEnumPreview from "./ArrayEnumPreview";
  * @category Preview components
  */
 export default function ArrayPropertyEnumPreview({
-                                             name,
-                                             value,
-                                             property,
-                                             size
-                                         }: PreviewComponentProps<string[] | number[]>) {
+                                                     name,
+                                                     value,
+                                                     property,
+                                                     size
+                                                 }: PreviewComponentProps<string[] | number[]>) {
 
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayEnumPreview");

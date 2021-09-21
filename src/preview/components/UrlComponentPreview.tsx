@@ -15,10 +15,10 @@ import { getThumbnailMeasure } from "../util";
  * @category Preview components
  */
 export default function UrlComponentPreview({
-                                        value,
-                                        property,
-                                        size
-                                    }: PreviewComponentProps<string>): React.ReactElement {
+                                                value,
+                                                property,
+                                                size
+                                            }: PreviewComponentProps<string>): React.ReactElement {
 
     const classes = useStyles();
 

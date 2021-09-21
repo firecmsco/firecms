@@ -36,7 +36,7 @@ export interface CMSDrawerProps {
 
 export function CMSDrawer({
                               logo,
-                              closeDrawer,
+                              closeDrawer
                           }: CMSDrawerProps) {
 
     const classes = useStyles();

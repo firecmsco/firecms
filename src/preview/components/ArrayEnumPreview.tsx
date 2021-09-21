@@ -10,11 +10,11 @@ import { useStyles } from "./styles";
  * @category Preview components
  */
 export default function ArrayEnumPreview({
-                                     name,
-                                     value,
-                                     enumValues,
-                                     size
-                                 }: {
+                                             name,
+                                             value,
+                                             enumValues,
+                                             size
+                                         }: {
     value: string[] | number[],
     name: string | undefined,
     enumValues: EnumValues,

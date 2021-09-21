@@ -8,7 +8,7 @@ import {
 } from "firebase/storage";
 import { StorageSource, UploadFileProps } from "../../models/storage";
 
-export type FirebaseStorageSourceProps = {
+export interface FirebaseStorageSourceProps {
     firebaseApp: FirebaseApp
 };
 

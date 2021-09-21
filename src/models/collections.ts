@@ -148,7 +148,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
  *
  * @category Models
  */
-export type ExtraActionsParams<M extends { [Key: string]: any } = any> = {
+export interface ExtraActionsParams<M extends { [Key: string]: any } = any> {
     /**
      * Collection path of this entity
      */
@@ -182,7 +182,7 @@ export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
  * Define the operations that can be performed in an entity.
  * @category Models
  */
-export type Permissions = {
+export interface Permissions {
     /**
      * Can the user add new entities. Defaults to `true`
      */
@@ -221,7 +221,7 @@ export type PermissionsBuilder<M extends { [Key: string]: any }> =
  * Props passed to a {@link PermissionsBuilder}
  * @category Models
  */
-export type PermissionsBuilderProps<M extends { [Key: string]: any }> = {
+export interface PermissionsBuilderProps<M extends { [Key: string]: any }> {
     /**
      * Logged in user
      */
@@ -303,14 +303,14 @@ export type WhereFilterOp =
  * exports
  * @category Models
  */
-export type ExportConfig = {
+export interface ExportConfig {
     additionalColumns: ExportMappingFunction[]
 }
 
 /**
  * @category Models
  */
-export type ExportMappingFunction = {
+export interface ExportMappingFunction {
     key: string;
     builder: ({ entity }: { entity: Entity<any> }) => Promise<string> | string
 }

@@ -7,11 +7,11 @@ import ReferencePreview from "./ReferencePreview";
  * @category Preview components
  */
 export default function ArrayOfReferencesPreview({
-                                             name,
-                                             value,
-                                             property,
-                                             size
-                                         }: PreviewComponentProps<any[]>) {
+                                                     name,
+                                                     value,
+                                                     property,
+                                                     size
+                                                 }: PreviewComponentProps<any[]>) {
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "reference")
         throw Error("Picked wrong preview component ArrayOfReferencesPreview");

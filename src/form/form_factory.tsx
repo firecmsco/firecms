@@ -68,7 +68,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
      partOfArray,
      autoFocus,
      dependsOnOtherProperties
- }: CMSFormFieldProps< M>): ReactElement<CMSFormFieldProps< M>> {
+ }: CMSFormFieldProps<M>): ReactElement<CMSFormFieldProps<M>> {
 
     let component: ComponentType<FieldProps<T, any, M>> | undefined;
     if (isReadOnly(property)) {

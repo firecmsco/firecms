@@ -44,7 +44,7 @@ import { saveEntityWithCallbacks, useDataSource } from "../../hooks";
 /**
  * @category Core components
  */
-export type EntityCollectionProps<M extends { [Key: string]: any }> = {
+export interface EntityCollectionProps<M extends { [Key: string]: any }> {
     path: string;
     collection: EntityCollection<M>;
 }
@@ -67,9 +67,9 @@ export type EntityCollectionProps<M extends { [Key: string]: any }> = {
  * @category Core components
  */
 export default function EntityCollectionTable<M extends { [Key: string]: any }>({
-                                                                                                   path,
-                                                                                                   collection
-                                                                                               }: EntityCollectionProps<M>
+                                                                                    path,
+                                                                                    collection
+                                                                                }: EntityCollectionProps<M>
 ) {
 
     const sideEntityController = useSideEntityController();
@@ -159,13 +159,13 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
     };
 
     const onCellChanged: OnCellValueChange<any, M> = ({
-                                                               value,
-                                                               name,
-                                                               setSaved,
-                                                               setError,
-                                                               entity
-                                                           }) => {
-        const saveProps :SaveEntityProps<M>= {
+                                                          value,
+                                                          name,
+                                                          setSaved,
+                                                          setError,
+                                                          entity
+                                                      }) => {
+        const saveProps: SaveEntityProps<M> = {
             path,
             entityId: entity.id,
             values: {
@@ -183,7 +183,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             onSaveSuccess: () => setSaved(true),
             onSaveFailure: ((e: Error) => {
                 setError(e);
-            }),
+            })
         });
 
     };

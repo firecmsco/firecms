@@ -36,6 +36,11 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
      * When creating a new entity, set some values as already initialized
      */
     defaultValues?: any;
+    /**
+     * Array of builders for rendering additional panels in an entity view.
+     * Useful if you need to render custom views
+     */
+    views?: EntityCustomView<M>[];
 
     /**
      * Hook called when save is successful
@@ -75,12 +80,6 @@ export interface EntitySchema<M extends { [Key: string]: any }> {
      * @param entityDeleteProps
      */
     onDelete?(entityDeleteProps: EntityOnDeleteProps<M>): void;
-
-    /**
-     * Array of builders for rendering additional panels in an entity view.
-     * Useful if you need to render custom views
-     */
-    views?: EntityCustomView<M>[];
 }
 
 /**
@@ -172,7 +171,7 @@ export type EntityCustomView<M = any> =
  * an entity view.
  * @category Models
  */
-export type EntityCustomViewParams<M extends { [Key: string]: any } = any> = {
+export interface EntityCustomViewParams<M extends { [Key: string]: any } = any> {
 
     /**
      * Schema used by this entity

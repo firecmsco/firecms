@@ -197,11 +197,11 @@ interface FilterFormProps<M> {
 
 
 function FilterForm<M>({
-                        id,
-                        property,
-                        onFilterUpdate,
-                        filter
-                    }: FilterFormProps<M>) {
+                           id,
+                           property,
+                           onFilterUpdate,
+                           filter
+                       }: FilterFormProps<M>) {
 
 
     const tableClasses = useTableStyles();

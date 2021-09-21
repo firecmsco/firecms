@@ -9,11 +9,11 @@ import { useStorageSource } from "../../hooks/useStorageSource";
  * @category Preview components
  */
 export default function StorageThumbnail({
-                                     name,
-                                     value,
-                                     property,
-                                     size
-                                 }: PreviewComponentProps<string>) {
+                                             name,
+                                             value,
+                                             property,
+                                             size
+                                         }: PreviewComponentProps<string>) {
     const storage = useStorageSource();
 
     const storagePathOrDownloadUrl = value;

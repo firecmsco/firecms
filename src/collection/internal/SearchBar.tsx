@@ -99,7 +99,7 @@ export default function SearchBar({ onTextSearch }: SearchBarProps) {
         <FormControl>
             <div className={classes.search}>
                 <div className={classes.searchIcon}>
-                    <SearchIcon htmlColor={'#666'}/>
+                    <SearchIcon htmlColor={"#666"}/>
                 </div>
                 <InputBase
                     placeholder="Search"

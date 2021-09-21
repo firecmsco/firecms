@@ -11,11 +11,11 @@ import { CMSAppContext } from "../../contexts/CMSAppContext";
  * @category Preview components
  */
 export default function TimestampPreview({
-                                     name,
-                                     value,
-                                     property,
-                                     size
-                                 }: PreviewComponentProps<Date>): React.ReactElement {
+                                             name,
+                                             value,
+                                             property,
+                                             size
+                                         }: PreviewComponentProps<Date>): React.ReactElement {
 
 
     const appConfig: CMSAppContext | undefined = useCMSAppContext();

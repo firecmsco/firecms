@@ -85,14 +85,14 @@ export const createCMSDefaultTheme = (
                         }
                     }
                 }
-            },
-        //     MuiFormControlLabel: {
-        //         styleOverrides: {
-        //             label: {
-        //                 width: "100%"
-        //             }
-        //         }
-        //     }
+            }
+            //     MuiFormControlLabel: {
+            //         styleOverrides: {
+            //             label: {
+            //                 width: "100%"
+            //             }
+            //         }
+            //     }
         }
     });
 

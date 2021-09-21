@@ -50,5 +50,5 @@ export interface User {
      * Additional data you can use to store any information relevant to you,
      * such as roles.
      */
-    extra:any;
+    extra: any;
 }

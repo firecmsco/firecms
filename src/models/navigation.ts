@@ -15,7 +15,10 @@ export type NavigationBuilder =
 /**
  * @category Models
  */
-export type NavigationBuilderProps = { user: User | null, authController: AuthController }
+export interface NavigationBuilderProps {
+    user: User | null,
+    authController: AuthController
+}
 
 /**
  * In this interface you define the main navigation entries of the CMS

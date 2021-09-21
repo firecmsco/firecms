@@ -47,7 +47,7 @@ export function CustomIdField<M>
 
     const appConfig: CMSAppContext | undefined = useCMSAppContext();
     const inputProps = entity ? {
-        className: classes.input,
+            className: classes.input,
             endAdornment: (
                 <InputAdornment position="end">
 

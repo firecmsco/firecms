@@ -28,7 +28,7 @@ const DEFAULT_SCHEMA_CONTROLLER = {
  * CMSApp as well as the `schemaResolver` in case you want to override schemas
  * to specific entities.
  */
-export type SchemaRegistryController = {
+export interface SchemaRegistryController {
 
     /**
      * Is the registry ready to be used

@@ -7,7 +7,7 @@ import React from "react";
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         formControl: {
-            width: "200px",
+            width: "200px"
         },
         label: {
             width: "100%",
@@ -51,7 +51,7 @@ export default function BooleanFilterField({
         <FormControlLabel
             className={classes.formControl}
             labelPlacement={"end"}
-            checked={valueSet&& valueSetToTrue}
+            checked={valueSet && valueSetToTrue}
             control={
                 <Checkbox
                     key={`filter-${name}`}

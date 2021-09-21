@@ -95,8 +95,9 @@ export default function EntityPreview<M extends { [Key: string]: any }>(
                                 <a href={appConfig.entityLinkBuilder({ entity })}
                                    rel="noopener noreferrer"
                                    target="_blank">
-                                    <IconButton aria-label="go-to-entity-datasource"
-                                                size="large">
+                                    <IconButton
+                                        aria-label="go-to-entity-datasource"
+                                        size="large">
                                         <OpenInNewIcon
                                             fontSize={"small"}/>
                                     </IconButton>

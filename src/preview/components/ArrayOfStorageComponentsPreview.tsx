@@ -10,11 +10,11 @@ import { Property } from "../../models";
  * @category Preview components
  */
 export default function ArrayOfStorageComponentsPreview({
-                                                    name,
-                                                    value,
-                                                    property,
-                                                    size
-                                                }: PreviewComponentProps<any[]>) {
+                                                            name,
+                                                            value,
+                                                            property,
+                                                            size
+                                                        }: PreviewComponentProps<any[]>) {
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStorageComponentsPreview");

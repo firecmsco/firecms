@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-type DraggableProps = {
+interface DraggableProps {
     containerRef: React.RefObject<HTMLDivElement>,
     ref: React.RefObject<HTMLDivElement>,
     x?: number;

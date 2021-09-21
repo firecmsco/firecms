@@ -16,18 +16,18 @@ import ErrorBoundary from "../../core/internal/ErrorBoundary";
  * @category Form fields
  */
 export default function ReadOnlyField<M extends { [Key: string]: any }>({
-                                                                  name,
-                                                                  value,
-                                                                  setValue,
-                                                                  error,
-                                                                  showError,
-                                                                  isSubmitting,
-                                                                  touched,
-                                                                  tableMode,
-                                                                  property,
-                                                                  includeDescription,
-                                                                  context
-                                                              }: FieldProps<any>) {
+                                                                            name,
+                                                                            value,
+                                                                            setValue,
+                                                                            error,
+                                                                            showError,
+                                                                            isSubmitting,
+                                                                            touched,
+                                                                            tableMode,
+                                                                            property,
+                                                                            includeDescription,
+                                                                            context
+                                                                        }: FieldProps<any>) {
 
     const classes = formStyles();
 

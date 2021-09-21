@@ -6,7 +6,10 @@ import { PreviewSize } from "../../preview";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
 
-type ImagePreviewProps = { size: PreviewSize, url: string };
+interface ImagePreviewProps {
+    size: PreviewSize,
+    url: string
+};
 
 /**
  * @category Preview components

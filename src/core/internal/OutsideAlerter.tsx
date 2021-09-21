@@ -10,10 +10,10 @@ interface OutsideAlerterProps {
  * Component that alerts if you click outside of it
  */
 export default function OutsideAlerter({
-                                   children,
-                                   enabled,
-                                   onOutsideClick
-                               }: OutsideAlerterProps) {
+                                           children,
+                                           enabled,
+                                           onOutsideClick
+                                       }: OutsideAlerterProps) {
 
     const ref = React.useRef<HTMLDivElement>(null);
 

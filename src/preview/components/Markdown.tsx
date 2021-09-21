@@ -2,7 +2,7 @@ import React from "react";
 
 import MarkdownPreview from "@uiw/react-markdown-preview";
 
-type MarkdownProps = {
+interface MarkdownProps {
     source: string
 };
 

@@ -4,16 +4,18 @@ export type {
     PreviewComponentProps, PreviewSize
 } from "./PreviewComponentProps";
 
-export { default as AsyncPreviewComponent } from "./components/AsyncPreviewComponent";
+export {
+    default as AsyncPreviewComponent
+} from "./components/AsyncPreviewComponent";
 
 export {
     default as ArrayOfStringsPreview
 } from "./components/ArrayOfStringsPreview";
 export {
-    default as ArrayEnumPreview,
+    default as ArrayEnumPreview
 } from "./components/ArrayEnumPreview";
 export {
-    default as  ArrayPropertyEnumPreview
+    default as ArrayPropertyEnumPreview
 } from "./components/ArrayPropertyEnumPreview";
 export { default as BooleanPreview } from "./components/BooleanPreview";
 export { default as CustomChip } from "./components/CustomChip";

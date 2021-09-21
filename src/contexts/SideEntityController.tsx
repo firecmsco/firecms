@@ -3,9 +3,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
     buildCollectionUrl,
+    buildEntityUrl,
     buildNewEntityUrl,
     getEntityOrCollectionPath,
-    buildEntityUrl,
     getNavigationEntriesFromPathInternal,
     isCollectionPath,
     NavigationViewEntry
@@ -53,7 +53,7 @@ export interface SideEntityPanelProps {
  * Controller to open the side dialog displaying entity forms
  * @category Hooks and utilities
  */
-export type SideEntityController<M extends { [Key: string]: any }> = {
+export interface SideEntityController<M extends { [Key: string]: any }> {
     /**
      * Close the last panel
      */

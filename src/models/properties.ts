@@ -120,7 +120,7 @@ interface BaseProperty {
 /**
  * @category Entity properties
  */
-export type PropertyDisabledConfig = {
+export interface PropertyDisabledConfig {
 
     /**
      * Enable this flag if you would like to clear the value of the field
@@ -163,7 +163,7 @@ export type EnumValues =
  * Configuration for a particular entry in an `EnumValues`
  * @category Entity properties
  */
-export type EnumValueConfig = {
+export interface EnumValueConfig {
     label: string;
     disabled?: boolean;
     color?: ChipColor;
@@ -636,7 +636,7 @@ export interface StorageMeta {
 /**
  * @category Entity properties
  */
-export type UploadedFileContext = {
+export interface UploadedFileContext {
     /**
      * Uploaded file
      */
