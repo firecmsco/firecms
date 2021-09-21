@@ -33,10 +33,10 @@ fields, common to all data types:
 
 * `description` Property description.
 
-* `longDescription` Width in pixels of this column in the collection view. If
-  not set, the width is inferred based on the other configurations.
+* `longDescription` Longer description of a field, displayed under a popover.
 
-* `columnWidth` Longer description of a field, displayed under a popover.
+* `columnWidth` Width in pixels of this column in the collection view. If
+  not set, the width is inferred based on the other configurations.
 
 * `disabled` Is this a read only property.
 
@@ -67,7 +67,11 @@ fields, common to all data types:
 
 * `onSaveSuccess` Hook called when save is successful.
 
-* `onPreSave` Hook called when saving fails.
+* `onSaveFailure` Hook called when saving fails.
+
+* `onPreDelete` Hook called after the entity is deleted in Firestore. If you throw an error in this method the process stops, and an error snackbar gets displayed.
+
+* `onDelete` Hook called after the entity is deleted in Firestore.
 
 * `defaultValues` Object defining the initial values of the entity on creation.
 
