@@ -129,7 +129,7 @@ export interface SideEntityViewProps<M extends { [Key: string]: any }> {
     copy?: boolean;
     selectedSubpath?: string;
     permissions?: PermissionsBuilder<any>;
-    schema: EntitySchema<any>;
+    schema: EntitySchema;
     subcollections?: EntityCollection<any>[];
 }
 

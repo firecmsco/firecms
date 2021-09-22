@@ -7,18 +7,25 @@ slug: /
 
 FireCMS is an open source **headless CMS** and admin panel built by developers
 for developers. It generates CRUD views based on your configuration. You define
-views that are mapped to absolute or relative paths in your Firestore database,
+views that are mapped to absolute or relative paths in your datasource,
 as well as schemas for your entities.
 
 The goal of this CMS is to generate collection and form views that bind nicely
-to the Firestore collection/document model. We have built in many basic (and not
+to the collection/document model. We have built in many basic (and not
 so basic) use cases; but FireCMS is built with extensibility in mind, so it is
 easy to create your custom form fields, or your complete views.
 
+::: note Custom backend
+FireCMS was built with Firebase/Firestore as the default backend, but nothing
+stops you from implementing your own `DataSource`, `AuthController` and
+`StorageSource` and override the default implementations.
+:::
+
 There are two ways to build views in FireCMS:
 
-- By creating mapping configurations for **collections** (to datasource collections, Firestore by default)
-  and **schemas** (to datasource entities, by default Firestore documents).
+- By creating mapping configurations for **collections** (to datasource
+  collections, such as Firestore collections)
+  and **schemas** (to datasource entities, such as Firestore documents).
   The best way to get a grasp of how
   this works is checking the [Quickstart](quickstart.md),
   [Collections](collections.md) and [Entity schema](entity_schemas.md)
@@ -34,25 +41,20 @@ FireCMS is based on this great technologies:
 
 - Typescript
 - Firebase
-- React + React Router
+- React
+- React Router
 - Material UI
 - Formik + Yup
 
 :::important
 
-Note that this is a full application, with routing enabled and not a simple
-component.
-
+You can use this library as a full application, with routing enabled.
+But if you need better customisation and to use the internal components, tweak the
+MUI theme, control the routes or replace the backend altogether
+(including auth, storage and data), you can do it starting from version 1.0.0.
+Check the details in the [Custom CMSApp](custom_cms_app.md) section
 :::
 
-## Use
-
-FireCMS is a purely a React app that uses your Firebase project as a backend, so
-you do not need a specific backend to make it run. Just build your project
-following the installation instructions and deploy it in the way you prefer. A
-very easy way is using Firebase Hosting.
-
-##
 
 ## Real time support
 
@@ -65,15 +67,16 @@ the user. This makes it suitable for advanced cases where you trigger a Cloud
 Function after saving an entity that modifies some values, and you want to get
 real time updates.
 
-## Firebase requirements
+## Firebase
 
+If Firebase is your chosen backend:
 * You need to enable the **Firestore** database in your Firebase project.
-* If you have enabled **authentication** in the CMS config, you need to enable
+* If you want to have  **authentication** enabled in your CMS config, you need to enable
   the corresponding auth method in your project.
 * Also, if you are using **storage** fields in your string properties, you need
   to enable Firebase Storage.
 
-More details in [Firebase setup section](firebase_setup.md)
+More details in [Firebase setup section](firebase_setup.md).
 
 ## Deployment to Firebase hosting
 
@@ -82,10 +85,4 @@ linked to it, you can omit the `firebaseConfig` specification, since it gets
 picked up automatically.
 
 More details in [the deployment section](deployment.md)
-
-:::note
-It is also possible to use FireCMS without using Firebase, by defining
-your own implementations for auth, datasource, and data storage.
-[More info](custom_cms_app.md)
-:::
 

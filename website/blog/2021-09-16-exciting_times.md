@@ -14,7 +14,7 @@ and APIs, we are ready to start the beta release of version 1.0.0 💃
 
 In the last months we've been focused on improving the CMS quality by
 doing a lot of internal restructuring that is also going to affect the public
-facing APIs (though we try to keep these changes to a minimum!).
+facing APIs.
 
 
 ## A bit of background

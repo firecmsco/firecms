@@ -49,7 +49,7 @@ import { FirestoreTextSearchController } from "../models/text_search";
 export interface FirestoreDataSourceProps {
     firebaseApp: FirebaseApp,
     textSearchController?: FirestoreTextSearchController
-};
+}
 
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
@@ -110,7 +110,7 @@ export function useFirestoreDataSource({
      * @param path
      * @category Firestore
      */
-    function firestoreToCMSModel(data: any, schema: EntitySchema<any>, path: string): any {
+    function firestoreToCMSModel(data: any, schema: EntitySchema, path: string): any {
         return traverseValues(data,
             computeSchemaProperties(schema, path),
             (value, property) => {

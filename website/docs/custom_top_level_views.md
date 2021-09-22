@@ -34,7 +34,8 @@ For custom views you can define the following props:
 
 * `view`: React.ReactNode
 
-  Component to be rendered
+  Component to be rendered. This can be any React component, and can use any
+  of the provided hooks
 
 * `group`?: string
 
@@ -44,6 +45,15 @@ For custom views you can define the following props:
 A quick example for a custom view:
 
 ```tsx
+import {
+    buildSchema,
+    CMSView,
+    NavigationBuilder,
+    NavigationBuilderProps,
+    buildCollection,
+    FirebaseCMSApp
+} from "@camberi/firecms"
+
 export default function App() {
 
     const productSchema = buildSchema({
@@ -61,6 +71,7 @@ export default function App() {
         path: ["additional", "additional/:id"],
         name: "Additional view",
         description: "This is an example of an additional view that is defined by the user",
+        // This can be any React component
         view: <ExampleCMSView/>
     }];
 
@@ -71,7 +82,8 @@ export default function App() {
                 schema: productSchema,
                 name: "Products"
             })
-        ]
+        ],
+        views: customViews
     });
 
     return <FirebaseCMSApp
@@ -140,9 +152,9 @@ export function ExampleCMSView() {
 
                 <div>This is an example of an additional view</div>
 
-                {authController.loggedUser ?
+                {authController.user ?
                     <div>Logged in
-                        as {authController.loggedUser.displayName}</div>
+                        as {authController.user.displayName}</div>
                     :
                     <div>You are not logged in</div>}
 

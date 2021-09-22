@@ -32,8 +32,7 @@ import { PreviewComponent, SkeletonComponent } from "../../preview";
 import LabelWithIcon from "../components/LabelWithIcon";
 import { useSideEntityController } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { useClearRestoreValue } from "../../hooks";
-import { useEntityFetch } from "../../hooks/data/useEntityFetch";
+import { useClearRestoreValue, useEntityFetch } from "../../hooks";
 import { getReferenceFrom } from "../../models/utils";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -148,7 +147,7 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
         setOpen(false);
     };
 
-    function buildEntityView(schema?: EntitySchema<any>) {
+    function buildEntityView(schema?: EntitySchema) {
 
         const missingEntity = entity && !entity.values;
 

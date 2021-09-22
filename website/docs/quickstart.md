@@ -30,17 +30,6 @@ cd my-cms
 yarn add @camberi/firecms firebase@9 @mui/material@next @mui/icons-material@next @mui/lab@next @emotion/react @emotion/styled @mui/styles@next
 ```
 
-You will need to init Firebase, either with an existing project or a new one:
-
-```
-firebase init
-```
-
-:::note
-You don't need to enable any of the services, besides Firebase Hosting if you
-would like to deploy it there. Check the [Deployment to Firebase Hosting](deployment.md)
-section if you need additional support
-:::
 
 You can replace the content of the file App.tsx with the following sample code.
 
@@ -246,7 +235,7 @@ export default function App() {
                                                  }: NavigationBuilderProps) => {
 
         // This is a fake example of retrieving async data related to the user
-        // and storing it in the user
+        // and storing it in the user extra field
         const sampleUserData = await Promise.resolve({
             name: "John",
             roles: ["admin"]

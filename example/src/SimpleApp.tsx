@@ -191,7 +191,7 @@ export default function App() {
                                                  }: NavigationBuilderProps) => {
 
         // This is a fake example of retrieving async data related to the user
-        // and storing it in the user
+        // and storing it in the user extra field
         const sampleUserData = await Promise.resolve({
             name: "John",
             roles: ["admin"]

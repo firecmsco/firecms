@@ -6,7 +6,7 @@ import { EnumValues, PropertiesOrBuilder } from "./properties";
  * Specification for defining an entity
  * @category Models
  */
-export interface EntitySchema<M extends { [Key: string]: any }> {
+export interface EntitySchema<M extends { [Key: string]: any } = any> {
 
     /**
      * Singular name of the entity as displayed in an Add button . E.g. Product
@@ -152,7 +152,7 @@ export class GeoPoint {
 /**
  * @ignore
  */
-export type InferSchemaType<S extends EntitySchema<any>> = S extends EntitySchema<infer M> ? M : never;
+export type InferSchemaType<S extends EntitySchema> = S extends EntitySchema<infer M> ? M : never;
 
 /**
  * You can use this builder to render a custom panel in the entity detail view.
@@ -189,7 +189,7 @@ export interface EntityCustomViewParams<M extends { [Key: string]: any } = any> 
      * are the same as in `entity`
      */
     modifiedValues?: EntityValues<M>;
-};
+}
 
 /**
  * Parameters passed to hooks when an entity is saved

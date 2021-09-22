@@ -25,7 +25,14 @@ version of Firebase JS SDK 9, so tree shaking has no effect.
 We are taking steps to abstract away all the Firebase specific details behind
 our own interfaces, giving developers more flexibility, even allowing to replace
 the Firestore datasource, the Firebase Storage implementation or the Firebase
-auth mechanism. If you are using `CMSApp` (called
+auth mechanism.
+
+All the code related to Firebase/Firestore is now located in an internal package
+called `firebase_app` and it is the only place where there are references to
+Firebase code. Essentially, you can build a CMS replacing all the services without
+touching that specific package.
+
+If you are using `CMSApp` (called
 `FirebaseCMSApp` from now on), you will not be largely impacted by the changes
 in this update, besides the callbacks and props specified bellow.
 
@@ -105,7 +112,11 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
   functionality, you can use the `extra` field in the `User`
 
 - `PermissionsBuilder` no longer has an `authController` prop, but it can still
-  be accessed through the `context` prop. Related, the new `User` type includes
+  be accessed through the `context` prop.
+
+- The `AuthController` was used in conjunction with the `PermissionsBuilder`
+  to store data specific to a user. You can store now that data in the user itself.
+  The new `User` type includes
   an `extra` field you can use to store additional user data, such as roles.
   See https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx
   for an example
@@ -132,6 +143,18 @@ from the collection level. In your collection, you can now set
 the `textSearchEnabled` flag to true to display the search bar.
 
 This goes in the direction of building a generic core of the CMS that is not
-directly coupled with Firebase/Firestore
+directly coupled with Firebase/Firestore. We have removed search delegates
+at the collection level, and now you can find them at the datasource level.
+
+The interface created for the Datasource is now agnostic, and we understand that
+the text search is part of the API in `listenCollection` or `fetchCollection`,
+instead of being a separate delegate, like until now.
+
+The text search implementation has been moved to the `firebase_app` level.
+You can now define a `FirestoreTextSearchController` where you need to return
+the search ids, based on the collection `path` and the `searchString`, instead
+of having a single TextSearchDelegate per collection.
+
+Check an example of the [new implementation](firebase_cms_app#text-search)
 
 

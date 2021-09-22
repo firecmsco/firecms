@@ -36,6 +36,15 @@ You will also be responsible to initialise your MUI5 theme and your react-router
 You can see an example
 [here](https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx)
 
+:::note How did it go?
+This feature has been added in version 1.0.0.
+If you have been using FireCMS in this way, we would love to hear your feedback
+either in https://www.reddit.com/r/firecms/ or directly at hello@camberi.com
+:::
+
+
+### Example custom app
+
 ```tsx
 import React from "react";
 

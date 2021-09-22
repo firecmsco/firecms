@@ -208,7 +208,7 @@ export interface Permissions {
  * based on the logged user, entity or collection path
  * @category Models
  */
-export type PermissionsBuilder<M extends { [Key: string]: any }> =
+export type PermissionsBuilder<M extends { [Key: string]: any } = any> =
     Permissions
     | (({
             user,
@@ -221,7 +221,7 @@ export type PermissionsBuilder<M extends { [Key: string]: any }> =
  * Props passed to a {@link PermissionsBuilder}
  * @category Models
  */
-export interface PermissionsBuilderProps<M extends { [Key: string]: any }> {
+export interface PermissionsBuilderProps<M extends { [Key: string]: any } = any> {
     /**
      * Logged in user
      */

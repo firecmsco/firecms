@@ -358,7 +358,7 @@ export default function EntityForm<M>({
                                className={classes.container}
                                ref={formRef}>
 
-                        <CustomIdField schema={schema as EntitySchema<any>}
+                        <CustomIdField schema={schema as EntitySchema}
                                        status={status}
                                        onChange={setCustomId}
                                        error={customIdError}

@@ -13,7 +13,10 @@ In order to accomplish that you can pass an array of `EntityCustomView`
 to your schema. Like in this example:
 
 ```tsx
-const sampleView: EntityCustomViewBuilder = {
+import React from "react";
+import { EntityCustomView, buildSchema } from "@camberi/firecms";
+
+const sampleView: EntityCustomView = {
     path: "preview",
     name: "Blog entry preview",
     builder: ({ schema, entity, modifiedValues }) => (
@@ -86,7 +89,7 @@ const blogSchema = buildSchema({
                     }
                 }
             }
-        },
+        }
     }
 })
 ```

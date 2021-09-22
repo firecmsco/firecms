@@ -178,6 +178,8 @@ You can define the `edit`, `create` and `delete` permissions at the collection
 level, also depending on the logged-in user.
 
 ```tsx
+import { buildCollection } from "@camberi/firecms";
+
 buildCollection({
     relativePath: "products",
     schema: productSchema,
@@ -189,19 +191,4 @@ buildCollection({
     })
 });
 ```
-
-### Text search
-
-Firestore does not support native text search, so we need to rely on external
-solutions. If you specify a `textSearchDelegate` to the collection view, you
-will see a search bar on top. The delegate is in charge of returning the
-matching ids, from the search string.
-
-A delegate using AlgoliaSearch is included, where you need to specify your
-credentials and index. For this to work you need to set up an AlgoliaSearch
-account and manage the indexing of your documents. There is a full backend
-example included in the code, which indexes documents with Cloud Functions.
-
-You can also implement your own `TextSearchDelegate`, and would love to hear how
-you come around this problem.
 

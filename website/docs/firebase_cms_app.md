@@ -28,88 +28,97 @@ logic of the app, and create the app scaffold and routes.
 :::note
 It is also possible to use FireCMS by using lower level components and including
 `CMSAppProvider` in your code, even without using Firebase.
-[More info](custom_cms_app.md)
+More details in the [Custom CMSApp](custom_cms_app.md) section
 :::
 
-You can define the following specs:
+You can find an example of a basic `FirebaseCMSApp` implementation in the
+[quickstart section](quickstart.md)
 
-- `name`
+### Text search
 
-  Name of the app, displayed as the main title and in the tab title.
+Firestore does not support native text search, so we need to rely on external
+solutions. If you specify a `textSearchEnabled` flag to the collection view, you
+will see a search bar on top of the collection view.
 
-- `navigation`
+:::note
+The solution described here is specific for Firestore, if you are
+developing your own datasource, you are free to implement text search in
+whatever way it makes sense.
+:::
 
-  Use this prop to specify the views that will be generated in the
-  CMS. You will usually want to create a `Navigation` object that includes
-  collection views where you specify the path and the schema. Additionally, you
-  can add custom views to the root navigation. In you need to customize the
-  navigation based on the logged user you can use a `NavigationBuilder`
+:::note
+Find all the available props for `FirebaseCMSApp` [here](./api/functions/firebasecmsapp.md)
+:::
 
-- `logo`
+You need to define a `FirestoreTextSearchController` and pass it to your
+`FirebaseCMSApp` component (or `useFirestoreDataSource` if you are building a
+custom app). Typically, you will want to index your entities in some external
+solution, such as Algolia. For this to work you need to set up an AlgoliaSearch
+account and manage the indexing of your documents. There is a full backend
+example included in the code, which indexes documents with Cloud Functions.
 
-  Logo to be displayed in the drawer of the CMS.
+We provide a utility method for performing searches in Algolia `performAlgoliaTextSearch`
 
-- `authentication`
+Example:
+```tsx
+import algoliasearch, { SearchClient } from "algoliasearch";
 
-  Do the users need to log in to access the CMS. You can
-  specify an Authenticator function to discriminate which users can access the
-  CMS or not. If not specified, authentication is enabled but no user
-  restrictions apply.
+import {
+    performAlgoliaTextSearch,
+    FirestoreTextSearchController,
+    buildSchema,
+    buildCollection,
+    FirebaseCMSApp,
+    NavigationBuilder,
+    NavigationBuilderProps
+} from "@camberi/firecms";
 
-- `signInOptions`
+const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
 
-  List of sign in options that will be displayed in the login
-  view if `authentication` is enabled. You can pass google providers strings,
-  such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or full configuration
-  objects such as specified in https://firebase.google.com/docs/auth/web/firebaseui
-  Defaults to Google sign in only.
+const productsIndex = client.initIndex("products");
+const usersIndex = client.initIndex("users");
+const blogIndex = client.initIndex("blog");
 
-- `allowSkipLogin`
+const textSearchController: FirestoreTextSearchController =
+    ({ path, searchString }) => {
+        if (path === "products")
+            return performAlgoliaTextSearch(productsIndex, searchString);
+        if (path === "users")
+            return performAlgoliaTextSearch(usersIndex, searchString);
+        if (path === "blog")
+            return performAlgoliaTextSearch(blogIndex, searchString);
+        return undefined;
+    };
 
-  If authentication is enabled, allow the user to access the
-  content without login.
+export default function App() {
 
-- `firebaseConfig`
+    const productSchema = buildSchema({
+        name: "Product",
+        properties: {
+            name: {
+                title: "Name",
+                validation: { required: true },
+                dataType: "string"
+            }
+        }
+    });
+    const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
+        collections: [
+            buildCollection({
+                relativePath: "products",
+                schema: productSchema,
+                name: "Products"
+            })
+        ]
+    });
 
-  Firebase configuration of the project. If you afe deploying
-  the app to Firebase hosting, you don't need to specify this value.
+    return <FirebaseCMSApp
+        name={"My Online Shop"}
+        navigation={navigation}
+        textSearchController={textSearchController}
+        firebaseConfig={firebaseConfig}
+    />;
+}
 
-- `onFirebaseInit`
-
-  An optional callback after Firebase has been initialised.
-  Useful for using the local emulator or retrieving the used configuration.
-
-- `primaryColor`
-
-  Primary color of the theme of the CMS.
-
-- `secondaryColor`
-
-  Primary color of the theme of the CMS.
-
-- `fontFamily`
-
-  Font family string. e.g. '"Roboto", "Helvetica", "Arial",
-  sans-serif'.
-
-- `toolbarExtraWidget`
-
-  A component that gets rendered on the upper side of the
-  main toolbar.
-
-- `dateTimeFormat`
-
-  Format of the dates in the CMS. Defaults to 'MMMM dd, yyyy,
-  HH:mm:ss'
-
-- `locale`
-
-  Locale of the CMS, currently only affecting dates
-
-- `schemaResolver`
-
-  Used to override schemas based on the collection path and
-  entityId. This resolver allows to override the schema for specific entities,
-  or specific collections, app wide. This overrides schemas all through the app.
-  You can also override schemas in place, when using `useSideEntityController`
+```
 

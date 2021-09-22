@@ -6,45 +6,59 @@ module.exports = {
             id: 'intro'
         },
         'quickstart',
-        'firebase_cms_app',
-        'navigation',
         {
             type: 'category',
-            label: 'Default views',
+            label: 'General configuration',
             items: [
-                'entity_schemas',
-                'collections',
                 {
                     type: 'category',
-                    label: 'Properties',
+                    label: 'Entity Schemas',
                     items: [
-                        'properties/string',
-                        'properties/number',
-                        'properties/boolean',
-                        'properties/reference',
-                        'properties/timestamp',
-                        'properties/array',
-                        'properties/map',
-                        'properties/geopoint'
+                        'entity_schemas',
+                        {
+                            type: 'category',
+                            label: 'Properties',
+                            items: [
+                                'properties/string',
+                                'properties/number',
+                                'properties/boolean',
+                                'properties/reference',
+                                'properties/timestamp',
+                                'properties/array',
+                                'properties/map',
+                                'properties/geopoint'
+                            ]
+                        },
+                        'saving_callbacks',
+                        'conditional_fields',
+                        'custom_fields',
+                        'custom_previews',
+                        'custom_schema_views',
                     ]
                 },
-                'saving_callbacks',
-                'conditional_fields',
-                'custom_fields',
-                'custom_previews',
-                'custom_schema_views'
+                'collections',
+                'navigation',
+                'custom_top_level_views',
+                {
+                    type: 'category',
+                    label: 'Provided hooks',
+                    items: [
+                        'hooks/use_auth_controller',
+                        'hooks/use_side_entity_controller',
+                        'hooks/use_snackbar_controller',
+                    ]
+                },
             ]
         },
         {
             type: 'category',
-            label: 'Custom main views',
+            label: 'Firebase CMS app',
             items: [
-                'custom_top_level_views',
-                'contexts/hooks'
+                'firebase_cms_app',
+                'firebase_setup',
+                'deployment',
             ]
         },
-        'firebase_setup',
-        'deployment',
         'custom_cms_app',
         'migrating_from_alpha_versions',
         'changelog',

@@ -78,7 +78,7 @@ fields, common to all data types:
 ### Sample entity schema
 
 ```tsx
-import { buildSchema } from "@camberi/firecms";
+import { buildSchema, EntityReference } from "@camberi/firecms";
 
 type Product = {
     name: string;

@@ -48,46 +48,5 @@ FireCMS provides a set of **builder functions** that just return the input they
 receive but are useful for using the features of the type system and validate
 your schemas and properties at compile time.
 
-* `buildNavigation`
-* `buildCollection`
-* `buildSchema`
-* `buildProperties`
-* `buildProperty`
-* `buildProperty`
-* `buildEnumValueConfig`
 
-
-### Schema resolver
-
-You may want to override the schema definition for particular entities. In
-that case you can define a schema resolver in the CMSApp level.
-
-```tsx
-import { buildSchema, SchemaResolver } from "@camberi/firecms";
-
-const customSchemaResolver: SchemaResolver = ({
-                                                  entityId,
-                                                  path
-                                              }: {
-    entityId?: string;
-    path: string;
-}) => {
-
-    if (entityId === "B0017TNJWY" && path === "products") {
-        const customProductSchema = buildSchema({
-            name: "Custom product",
-            properties: {
-                name: {
-                    title: "Name",
-                    description: "This entity is using a schema overridden by a schema resolver",
-                    validation: { required: true },
-                    dataType: "string"
-                }
-            }
-        });
-
-        return { schema: customProductSchema };
-    }
-};
-```
 

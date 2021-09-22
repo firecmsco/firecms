@@ -74,7 +74,8 @@ export interface CMSView {
     hideFromNavigation?: boolean;
 
     /**
-     * Component to be rendered
+     * Component to be rendered. This can be any React component, and can use
+     * any of the provided hooks
      */
     view: React.ReactNode;
 

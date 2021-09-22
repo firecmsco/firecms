@@ -16,26 +16,39 @@ containing a `string` and an error snackbar will be displayed.
 :::
 
 ```tsx
-const productSchema = buildSchema({
+import React from "react";
+
+import {
+    buildSchema,
+    EntityOnDeleteProps,
+    EntityOnSaveProps
+} from "@camberi/firecms";
+
+type Product = {
+    name: string;
+    uppercase_name: string;
+}
+
+const productSchema = buildSchema<Product>({
 
     name: "Product",
 
     onPreSave: ({
                     schema,
                     path,
-                    id,
+                    entityId,
                     values,
                     status
                 }) => {
-        values.uppercase_name = values.name.toUpperCase();
+        values.uppercase_name = values.name?.toUpperCase();
         return values;
     },
 
-    onSaveSuccess: (props: EntitySaveProps<Product>) => {
+    onSaveSuccess: (props: EntityOnSaveProps<Product>) => {
         console.log("onSaveSuccess", props);
     },
 
-    onSaveFailure: (props: EntitySaveProps<Product>) => {
+    onSaveFailure: (props: EntityOnSaveProps<Product>) => {
         console.log("onSaveFailure", props);
     },
 
@@ -44,14 +57,14 @@ const productSchema = buildSchema({
                       path,
                       entityId,
                       entity,
-                      context,
-                  }: EntityDeleteProps<Product>
+                      context
+                  }: EntityOnDeleteProps<Product>
     ) => {
-        if(context.authController.user)
-        throw Error("Product deletion not allowed");
+        if (context.authController.user)
+            throw Error("Product deletion not allowed");
     },
 
-    onDelete: (props: EntityDeleteProps<Product>) => {
+    onDelete: (props: EntityOnDeleteProps<Product>) => {
         console.log("onDelete", props);
     },
 
@@ -66,7 +79,7 @@ const productSchema = buildSchema({
             dataType: "string",
             disabled: true,
             description: "This field gets updated with a preSave callback"
-        },
+        }
     }
 });
 ```
@@ -79,8 +92,7 @@ const productSchema = buildSchema({
 
 * `entityId`?: string Id of the entity or undefined if new
 
-* `values`: EntityValues<S, Key>
-  Values being saved
+* `values`: EntityValues<M> Values being saved
 
 * `status`: EntityStatus New or existing entity
 
@@ -94,8 +106,7 @@ const productSchema = buildSchema({
 
 * `entityId`?: string Id of the entity or undefined if new
 
-* `entity`: Entity<S, Key>
-  Deleted entity
+* `entity`: Entity<M> Deleted entity
 
 * `context`: CMSAppContext Context of the app status
 
