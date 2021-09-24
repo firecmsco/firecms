@@ -46,11 +46,31 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
         borderTopLeftRadius: "2px",
         borderTopRightRadius: "2px",
-        backgroundColor: "rgba(0, 0, 0, 0.09)",
-        borderBottom: `1px solid ${darken(theme.palette.background.default, 0.1)}`,
+        backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
+        // borderBottom: `1px solid ${darken(theme.palette.background.default, 0.1)}`,
+        "&::before": {
+            borderBottom: theme.palette.mode === "light" ? "1px solid rgba(0, 0, 0, 0.42)" : "1px solid rgba(255, 255, 255, 0.7)",
+            left: 0,
+            bottom: 0,
+            content: "\"\\00a0\"",
+            position: "absolute",
+            right: 0,
+            transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+            pointerEvents: "none"
+        },
+        "&::after": {
+            content: "\"\"",
+            transition: "transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+            left: 0,
+            bottom: 0,
+            position: "absolute",
+            right: 0,
+            transform: "scaleX(0)",
+            borderBottom: `2px solid ${theme.palette.primary.main}`
+        },
         "&:hover": {
             cursor: "pointer",
-            backgroundColor: lighten(theme.palette.background.default, 0.1)
+            backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
         },
         color: "#838383",
         fontWeight: theme.typography.fontWeightMedium

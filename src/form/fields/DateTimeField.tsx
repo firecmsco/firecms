@@ -7,7 +7,8 @@ import { FieldProps } from "../../models";
 
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { useClearRestoreValue } from "../../hooks/useClearRestoreValue";
+import { useClearRestoreValue } from "../../hooks";
+import { formStyles } from "../styles";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -33,6 +34,7 @@ export default function DateTimeField({
                                       }: DateTimeFieldProps) {
 
 
+    const classes = formStyles();
     const internalValue = value || null;
 
     useClearRestoreValue({
@@ -42,16 +44,21 @@ export default function DateTimeField({
     });
 
     return (
-        <React.Fragment>
+        <>
 
             <DateTimePicker
                 clearable
+                className={classes.input}
                 autoFocus={autoFocus}
                 value={internalValue}
                 label={<LabelWithIcon scaledIcon={false} property={property}/>}
                 renderInput={(props) => (
                     <MuiTextField {...props}
                                   fullWidth
+                                  InputProps={{
+                                      ...props.InputProps,
+                                      className: classes.input
+                                  }}
                                   error={showError}
                         // format={dateFormat}
                                   variant={"filled"}
@@ -68,6 +75,6 @@ export default function DateTimeField({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-        </React.Fragment>
+        </>
     );
 }
