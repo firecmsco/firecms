@@ -21,6 +21,7 @@ import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import FirebaseLoginView from "./components/FirebaseLoginView";
 import { EntitySideDialogs } from "../core/internal/EntitySideDialogs";
+import { FireCMSLogo } from "../core/components/FireCMSLogo";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID

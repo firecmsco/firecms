@@ -14,6 +14,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { Link as ReactLink } from "react-router-dom";
 import { computeTopNavigation, TopNavigationEntry } from "./navigation";
 import { useNavigation } from "../hooks";
+import { FireCMSLogo } from "./components/FireCMSLogo";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -66,17 +67,28 @@ export function CMSDrawer({
         </ListItem>;
     }
 
+    let logoComponent;
+    if (logo) {
+        logoComponent = <img className={classes.logo}
+                             src={logo}
+                             alt={"Logo"}/>;
+    } else {
+        logoComponent = <FireCMSLogo/>;
+    }
+
     return <>
 
-        {logo &&
         <Link
             key={`breadcrumb-home`}
             color="inherit"
             onClick={closeDrawer}
             component={ReactLink}
+            style={{
+                padding: "16px"
+            }}
             to={"/"}>
-            <img className={classes.logo} src={logo} alt={"Logo"}/>
-        </Link>}
+            {logoComponent}
+        </Link>
 
         <List>
 

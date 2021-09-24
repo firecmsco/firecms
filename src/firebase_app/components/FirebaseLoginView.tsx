@@ -11,6 +11,7 @@ import { useAuthController } from "../../contexts";
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
 import { FirebaseApp } from "firebase/app";
+import { FireCMSLogo } from "../../core/components/FireCMSLogo";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -112,6 +113,15 @@ export default function FirebaseLoginView({
         return errorView;
     }
 
+    let logoComponent;
+    if(logo){
+        logoComponent = <img className={classes.logo}
+             src={logo}
+             alt={"Logo"}/>;
+    } else{
+        logoComponent = <FireCMSLogo/>;
+    }
+
     return (
         <Grid
             container
@@ -123,10 +133,7 @@ export default function FirebaseLoginView({
         >
 
             <Box m={1}>
-                {logo &&
-                <img className={classes.logo}
-                     src={logo}
-                     alt={"Logo"}/>}
+                {logoComponent}
             </Box>
 
             <div id="firebase-ui"/>

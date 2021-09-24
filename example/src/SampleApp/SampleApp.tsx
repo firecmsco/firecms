@@ -17,7 +17,7 @@ import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
 import { ExampleCMSView } from "./ExampleCMSView";
-import logo from "./images/test_shop_logo.png";
+import logo from "./images/demo_logo.png";
 import { textSearchController } from "./text_search";
 import {
     localeSchema,
@@ -183,7 +183,7 @@ function SampleApp() {
         ]}
         textSearchController={textSearchController}
         allowSkipLogin={true}
-        logo={logo}
+        // logo={logo}
         navigation={navigation}
         schemaResolver={customSchemaResolver}
         firebaseConfig={firebaseConfig}
