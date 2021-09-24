@@ -61,6 +61,10 @@ export const testEntitySchema = buildSchema({
         });
     },
     properties: {
+        test_date: {
+            title: "Test date",
+            dataType: "timestamp"
+        },
         content: {
             title: "Content",
             description: "Example of a complex array with multiple properties as children",
@@ -271,10 +275,6 @@ export const testEntitySchema = buildSchema({
                     acceptedFiles: ["image/*"]
                 }
             }
-        },
-        test_date: {
-            title: "Test date",
-            dataType: "timestamp"
         },
         created_at: {
             title: "Created at",

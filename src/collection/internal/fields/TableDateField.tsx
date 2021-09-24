@@ -1,10 +1,9 @@
 import React from "react";
 import { useInputStyles } from "./styles";
 import { Box, TextField as MuiTextField, Typography } from "@mui/material";
-import { EmptyValue, TimestampPreview } from "../../../preview";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { TimestampProperty } from "../../../models";
 import DateTimePicker from "@mui/lab/DateTimePicker";
+import { EmptyValue, TimestampPreview } from "../../../preview";
 
 export function TableDateField(props: {
     name: string;
@@ -43,7 +42,8 @@ export function TableDateField(props: {
             <Box flexGrow={1}>
                 {internalValue &&
                 <Typography variant={"body2"}>
-                    <TimestampPreview value={internalValue} property={property}
+                    <TimestampPreview value={internalValue}
+                                      property={property}
                                       size={"regular"}/>
                 </Typography>}
                 {!internalValue && <EmptyValue/>}
@@ -55,25 +55,24 @@ export function TableDateField(props: {
                     disabled={disabled}
                     renderInput={(props) => (
                         <MuiTextField
+                            {...props}
                             style={{
                                 height: "100%"
                             }}
                             variant={"standard"}
-                            error={!!error}
+                            error={Boolean(error)}
                             InputProps={{
-                                startAdornment: (
-                                    <CalendarTodayIcon fontSize={"small"}/>
-                                ),
+                                ...props.InputProps,
                                 classes: {
                                     input: classes.hidden
                                 },
                                 disableUnderline: true
                             }}
                         />
-
                     )}
                     InputAdornmentProps={{
                         style: {
+                            fontSize: "small",
                             height: 26
                         }
                     }}
