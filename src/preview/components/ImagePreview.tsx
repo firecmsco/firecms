@@ -32,6 +32,7 @@ const useImageStyles = makeStyles<Theme, { imageSize: number }>(theme => createS
             maxHeight: "100%"
         },
         previewIcon: {
+            borderRadius: "9999px",
             position: "absolute",
             bottom: -4,
             right: -4,
@@ -87,15 +88,17 @@ export default function ImagePreview({ size, url }: ImagePreviewProps) {
                  style={imageStyle}/>
 
             {onHover && (
-                <IconButton
+                <a
                     className={imageClasses.previewIcon}
-                    size={"small"}
                     href={url}
                     rel="noopener noreferrer"
-                    target="_blank"
-                    onClick={(e) => e.stopPropagation()}>
-                    <OpenInNewIcon htmlColor={"#666"} fontSize={"small"}/>
-                </IconButton>
+                    target="_blank">
+                    <IconButton
+                        size={"small"}
+                        onClick={(e) => e.stopPropagation()}>
+                        <OpenInNewIcon htmlColor={"#666"} fontSize={"small"}/>
+                    </IconButton>
+                </a>
             )}
         </div>
 

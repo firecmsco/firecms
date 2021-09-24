@@ -101,6 +101,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     thumbnailCloseIcon: {
         position: "absolute",
+        borderRadius: "9999px",
         top: -8,
         right: -8,
         zIndex: 100,
@@ -720,8 +721,10 @@ export function StorageItemPreview({
                 variant={"outlined"}>
 
                 {!disabled &&
+
+                <a
+                    className={classes.thumbnailCloseIcon}>
                     <IconButton
-                        className={classes.thumbnailCloseIcon}
                         size={"small"}
                         onClick={(event) => {
                             event.stopPropagation();
@@ -729,6 +732,7 @@ export function StorageItemPreview({
                         }}>
                         <ClearIcon fontSize={"small"}/>
                     </IconButton>
+                </a>
                 }
 
                 {value &&

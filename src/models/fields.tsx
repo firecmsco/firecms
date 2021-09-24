@@ -1,4 +1,3 @@
-import React from "react";
 import { EntitySchema, EntityValues } from "./entities";
 import {
     ArrayProperty,

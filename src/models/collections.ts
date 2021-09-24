@@ -1,5 +1,4 @@
 import { Entity, EntitySchema } from "./entities";
-import React from "react";
 import { CMSAppContext } from "../contexts";
 import { User } from "./user";
 
