@@ -82,7 +82,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
                 backgroundColor: darken(theme.palette.background.default, .1)
             },
             "&:focus": {
-                backgroundColor: darken(theme.palette.background.default, .2),
+                backgroundColor:  darken(theme.palette.background.default, .2),
                 "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
                     color: theme.palette.text.primary
                 }

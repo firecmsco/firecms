@@ -27,7 +27,7 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
         height: "100%",
         fontSize: "0.750rem",
         textTransform: "uppercase",
-        fontWeight: 600
+        fontWeight: 600,
     },
     tableRow: {
         display: "flex",

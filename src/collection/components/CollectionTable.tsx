@@ -581,6 +581,9 @@ export default function CollectionTable<M extends { [Key: string]: any },
                             overscanRowCount={2}
                             onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
                             onEndReached={loadNextPage}
+                            components={{
+                                TableCell: Cell
+                            }}
                             rowEventHandlers={
                                 { onClick: onRowClick }
                             }
@@ -694,3 +697,8 @@ function isFilterCombinationValid<M extends { [Key: string]: any }>(filterValues
             Object.entries(filterValues).every(([key, value]) => compositeIndex[key] !== undefined && (!sortDirection || compositeIndex[key] === sortDirection))
         ) !== undefined;
 }
+
+const Cell = ({ className, cellData }: any) => {
+    console.log("Cell", className, cellData);
+    return <div className={className}>{cellData}</div>;
+};
