@@ -19,7 +19,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             "& .w-md-editor-toolbar": {
-                backgroundColor: "rgba(0, 0, 0, 0.09)"
+                backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)": "rgba(255, 255, 255, 0.13)",
             }
         }
     })

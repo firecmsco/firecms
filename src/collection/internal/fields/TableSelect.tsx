@@ -1,6 +1,6 @@
 import { EnumValues } from "../../../models";
 import { ArrayEnumPreview } from "../../../preview";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
 import { useInputStyles } from "./styles";
 import {
@@ -31,6 +31,7 @@ export function TableSelect(props: {
         internalValue,
         disabled,
         small,
+        focused,
         updateValue,
         multiple,
         setPreventOutsideClick,
@@ -53,21 +54,18 @@ export function TableSelect(props: {
     const validValue = (Array.isArray(internalValue) && multiple) ||
         (!Array.isArray(internalValue) && !multiple);
 
-    // TODO: this is bugged in MUI 4.0, change if this commit is merged https://github.com/mui-org/material-ui/commit/6cfcae3ab3b2fc1045562002752304f9cf8bdca5
-    // const ref = React.createRef<HTMLInputElement>();
-    // useEffect(() => {
-    //     if (ref.current && focused) {
-    //         ref.current?.focus({ preventScroll: true });
-    //     }
-    // }, [focused, ref.current]);
+    const ref = React.createRef<HTMLInputElement>();
+    useEffect(() => {
+        if (ref.current && focused) {
+            ref.current?.focus({ preventScroll: true });
+        }
+    }, [focused, ref.current]);
 
     return (
         <Select
-            // TODO: related to prev. replace autofocus with ref, it makes the scroll jump when rendered
-            autoFocus
             variant={"standard"}
             key={`table_select_${name}`}
-            // inputRef={ref}
+            inputRef={ref}
             className={classes.select}
             classes={{ root: classes.selectRoot }}
             open={open}

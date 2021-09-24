@@ -34,16 +34,6 @@ export const useStyles = makeStyles((theme: Theme) =>
                 borderBottom: 0
             }
         },
-        imageWrap: {
-            position: "relative",
-            maxWidth: "100%",
-            maxHeight: "100%"
-        },
-        imageTiny: {
-            position: "relative",
-            maxWidth: "100%",
-            maxHeight: "100%"
-        },
         link: {
             display: "flex",
             wordBreak: "break-word",

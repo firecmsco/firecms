@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import BaseTable, { Column } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
-import "react-base-table/styles.css";
+import "./table_styles.css";
 import { Box, Paper, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { useLocation } from "react-router-dom";
@@ -489,7 +489,12 @@ export default function CollectionTable<M extends { [Key: string]: any },
 
             <ErrorBoundary>
                 {columnIndex === 0 ?
-                    <div className={classes.headerTypography}>
+                    <div className={classes.header}
+                         style={{
+                             display: "flex",
+                             justifyContent: "center",
+                             alignItems: "center"
+                         }}>
                         Id
                     </div>
                     :
@@ -576,6 +581,9 @@ export default function CollectionTable<M extends { [Key: string]: any },
                             overscanRowCount={2}
                             onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
                             onEndReached={loadNextPage}
+                            components={{
+                                TableCell: Cell
+                            }}
                             rowEventHandlers={
                                 { onClick: onRowClick }
                             }
@@ -689,3 +697,8 @@ function isFilterCombinationValid<M extends { [Key: string]: any }>(filterValues
             Object.entries(filterValues).every(([key, value]) => compositeIndex[key] !== undefined && (!sortDirection || compositeIndex[key] === sortDirection))
         ) !== undefined;
 }
+
+const Cell = ({ className, cellData }: any) => {
+    console.log("Cell", className, cellData);
+    return <div className={className}>{cellData}</div>;
+};

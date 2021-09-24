@@ -6,6 +6,8 @@ import {
     FormControl,
     FormHelperText,
     IconButton,
+    lighten,
+    darken,
     Theme,
     Tooltip,
     Typography
@@ -45,10 +47,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         borderTopLeftRadius: "2px",
         borderTopRightRadius: "2px",
         backgroundColor: "rgba(0, 0, 0, 0.09)",
-        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+        borderBottom: `1px solid ${darken(theme.palette.background.default, 0.1)}`,
         "&:hover": {
             cursor: "pointer",
-            backgroundColor: "#dedede"
+            backgroundColor: lighten(theme.palette.background.default, 0.1)
         },
         color: "#838383",
         fontWeight: theme.typography.fontWeightMedium

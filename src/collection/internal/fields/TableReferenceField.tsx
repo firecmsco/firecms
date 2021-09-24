@@ -52,6 +52,7 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     const classes = useInputStyles();
     const path = usedProperty.path;
 
+    const [onHover, setOnHover] = useState(false);
     const [open, setOpen] = useState<boolean>(false);
 
     const schemaRegistry = useSchemasRegistry();
@@ -99,7 +100,9 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
                                      onClick={disabled ? undefined : handleOpen}
                                      value={internalValue as EntityReference}
                                      property={usedProperty}
-                                     size={getPreviewSizeFrom(size)}/>;
+                                     onHover={onHover}
+                                     size={getPreviewSizeFrom(size)}
+            />;
         else
             return <ErrorView error={"Data is not a reference"}/>;
     }
@@ -114,6 +117,7 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
                             name={`${name}[${index}]`}
                             onClick={disabled ? undefined : handleOpen}
                             size={"tiny"}
+                            onHover={onHover}
                             value={v}
                             property={usedProperty}
 
@@ -130,7 +134,10 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
         return <ErrorView error={"The specified collection does not exist"}/>;
 
     return (
-        <>
+        <div
+            onMouseEnter={() => setOnHover(true)}
+            onMouseMove={() => setOnHover(true)}
+            onMouseLeave={() => setOnHover(false)}>
 
             {internalValue && !multiselect &&
             buildSingleReferenceField()
@@ -162,6 +169,6 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
             />}
 
 
-        </>
+        </div>
     );
 }

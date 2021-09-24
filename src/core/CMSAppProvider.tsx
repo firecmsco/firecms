@@ -15,14 +15,15 @@ import {
     SchemaRegistryProvider,
     useSchemaRegistryController
 } from "../contexts/SchemaRegistry";
-import { EntitySideDialogs } from "./internal/EntitySideDialogs";
 import { AuthController, CMSAppContext } from "../contexts";
 import { AuthProvider } from "../contexts/AuthController";
 import { SnackbarProvider } from "../contexts/SnackbarContext";
 import { CMSAppContextProvider } from "../contexts/CMSAppContext";
 import { SideEntityProvider } from "../contexts/SideEntityController";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
+import { ModeProvider, ModeStateContext } from "../contexts/ModeState";
 
+import "@camberi/firecms/dist/index.css";
 
 /**
  * Main CMS configuration.
@@ -34,7 +35,7 @@ export interface CMSAppProviderProps {
      *
      * @param props
      */
-    children: (props: { context: CMSAppContext }) => React.ReactNode;
+    children: (props: { context: CMSAppContext, mode: "dark" | "light" }) => React.ReactNode;
 
     /**
      * Use this prop to specify the views that will be generated in the CMS.
@@ -166,24 +167,30 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
     };
 
     return (
-        <AuthProvider authController={authController}>
-            <SnackbarProvider>
-                <SchemaRegistryProvider
-                    schemaRegistryController={schemaRegistryController}>
-                    <CMSAppContextProvider {...context} >
-                        <SideEntityProvider
-                            collections={navigation?.collections}>
-                            <BreadcrumbsProvider>
-                                {children({
-                                    context
-                                })}
-                                <EntitySideDialogs/>
-                            </BreadcrumbsProvider>
-                        </SideEntityProvider>
-                    </CMSAppContextProvider>
-                </SchemaRegistryProvider>
-            </SnackbarProvider>
-        </AuthProvider>
+        <ModeProvider>
+            <AuthProvider authController={authController}>
+                <SnackbarProvider>
+                    <SchemaRegistryProvider
+                        schemaRegistryController={schemaRegistryController}>
+                        <CMSAppContextProvider {...context} >
+                            <SideEntityProvider
+                                collections={navigation?.collections}>
+                                <BreadcrumbsProvider>
+                                    <ModeStateContext.Consumer>
+                                        {({ mode }) => {
+                                            return children({
+                                                context,
+                                                mode
+                                            });
+                                        }}
+                                    </ModeStateContext.Consumer>
+                                </BreadcrumbsProvider>
+                            </SideEntityProvider>
+                        </CMSAppContextProvider>
+                    </SchemaRegistryProvider>
+                </SnackbarProvider>
+            </AuthProvider>
+        </ModeProvider>
     );
 
 }

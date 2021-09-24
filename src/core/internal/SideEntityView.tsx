@@ -74,7 +74,7 @@ const useStylesSide = makeStyles((theme: Theme) =>
             width: TAB_WIDTH,
             height: "100%",
             overflow: "auto",
-            borderLeft: "1px solid #eeeeee",
+            borderLeft: `1px solid ${theme.palette.divider}`,
             [theme.breakpoints.down("lg")]: {
                 borderLeft: "inherit",
                 width: CONTAINER_FULL_WIDTH
@@ -116,7 +116,7 @@ const useStylesSide = makeStyles((theme: Theme) =>
             paddingTop: theme.spacing(2),
             display: "flex",
             alignItems: "center",
-            backgroundColor: theme.palette.background.default
+            backgroundColor: theme.palette.background.paper
         }
 
     })

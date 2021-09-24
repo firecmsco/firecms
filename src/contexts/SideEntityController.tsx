@@ -88,7 +88,7 @@ const SideEntityPanelsController = React.createContext<SideEntityController<any>
  * using the open method of this controller.
  *
  * Consider that in order to use this hook you need to have a parent
- * `FirebaseCMSApp` or a `CMSAppProvider`
+ * `CMSAppProvider`
  *
  * @see SideEntityController
  * @category Hooks and utilities

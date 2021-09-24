@@ -42,6 +42,7 @@ export default function ArrayOfReferencesField({
     }
 
     const [open, setOpen] = React.useState(false);
+    const [onHover, setOnHover] = React.useState(false);
     const selectedIds = value && Array.isArray(value) ? value.map((ref) => ref.id) : [];
 
     useClearRestoreValue({
@@ -75,11 +76,19 @@ export default function ArrayOfReferencesField({
         const entryValue = value && value.length > index ? value[index] : undefined;
         if (!entryValue)
             return <div>Internal ERROR</div>;
-        return <ReferencePreview
-            value={entryValue}
-            property={ofProperty}
-            size={"regular"}
-            onClick={onEntryClick}/>;
+        return (
+            <div
+                onMouseEnter={() => setOnHover(true)}
+                onMouseMove={() => setOnHover(true)}
+                onMouseLeave={() => setOnHover(false)}>
+                <ReferencePreview
+                    value={entryValue}
+                    property={ofProperty}
+                    onHover={onHover}
+                    size={"regular"}
+                    onClick={onEntryClick}/>
+            </div>
+        );
     };
 
 
@@ -94,10 +103,12 @@ export default function ArrayOfReferencesField({
 
                 <Paper variant={"outlined"}
                        className={classes.paper}>
+
                     {!collectionConfig && <ErrorView
                         error={"The specified collection does not exist. Check console"}/>}
 
                     {collectionConfig && <>
+
                         <ArrayContainer value={value}
                                         name={name}
                                         buildEntry={buildEntry}

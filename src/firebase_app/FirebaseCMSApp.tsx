@@ -20,6 +20,7 @@ import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import FirebaseLoginView from "./components/FirebaseLoginView";
+import { EntitySideDialogs } from "../core/internal/EntitySideDialogs";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -89,61 +90,63 @@ export function FirebaseCMSApp({
     }
 
     const dataSource = useFirestoreDataSource({
-        firebaseApp: firebaseApp!,
+        firebaseApp: firebaseApp,
         textSearchController
     });
-    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp! });
-
-    const mode: "light" | "dark" = "light";
-    const theme = createCMSDefaultTheme({
-        mode,
-        primaryColor,
-        secondaryColor,
-        fontFamily
-    });
+    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
     const entityLinkBuilder: EntityLinkBuilder = ({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`;
 
     return (
+
         <BrowserRouter>
-            <ThemeProvider theme={theme}>
+            <CMSAppProvider navigation={navigation}
+                            authController={authController}
+                            schemaResolver={schemaResolver}
+                            dateTimeFormat={dateTimeFormat}
+                            dataSource={dataSource}
+                            storageSource={storageSource}
+                            entityLinkBuilder={entityLinkBuilder}
+                            locale={locale}>
+                {({ context, mode }) => {
 
-                <CssBaseline/>
+                    const theme = createCMSDefaultTheme({
+                        mode: mode,
+                        primaryColor,
+                        secondaryColor,
+                        fontFamily
+                    });
 
-                <CMSAppProvider navigation={navigation}
-                                authController={authController}
-                                schemaResolver={schemaResolver}
-                                dateTimeFormat={dateTimeFormat}
-                                dataSource={dataSource}
-                                storageSource={storageSource}
-                                entityLinkBuilder={entityLinkBuilder}
-                                locale={locale}>
-                    {({ context }) => {
-
-                        if (context.authController.authLoading || context.navigationLoading) {
-                            return <CircularProgressCenter/>;
-                        }
-
-                        if (!context.authController.canAccessMainView) {
-                            return (
-                                <FirebaseLoginView
-                                    logo={logo}
-                                    skipLoginButtonEnabled={allowSkipLogin}
-                                    signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
-                                    firebaseApp={firebaseApp}/>
-                            );
-                        }
-
-                        return (
+                    let component;
+                    if (context.authController.authLoading || context.navigationLoading) {
+                        component = <CircularProgressCenter/>;
+                    } else if (!context.authController.canAccessMainView) {
+                        component = (
+                            <FirebaseLoginView
+                                logo={logo}
+                                skipLoginButtonEnabled={allowSkipLogin}
+                                signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
+                                firebaseApp={firebaseApp}/>
+                        );
+                    } else {
+                        component = (
                             <CMSScaffold name={name}
                                          logo={logo}
                                          toolbarExtraWidget={toolbarExtraWidget}>
                                 <CMSRoutes HomePage={HomePage}/>
+                                <EntitySideDialogs/>
                             </CMSScaffold>
                         );
-                    }}
-                </CMSAppProvider>
-            </ThemeProvider>
+                    }
+
+                    return (
+                        <ThemeProvider theme={theme}>
+                            <CssBaseline/>
+                            {component}
+                        </ThemeProvider>
+                    );
+                }}
+            </CMSAppProvider>
         </BrowserRouter>
     );
 }

@@ -1,13 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 
-import {
-    Box,
-    Button,
-    IconButton,
-    Portal,
-    Theme,
-    Typography
-} from "@mui/material";
+import { Button, IconButton, Portal, Theme, Typography } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -30,7 +23,7 @@ import OutsideAlerter from "../../../core/internal/OutsideAlerter";
 import { useWindowSize } from "../../../hooks/useWindowSize";
 import { isReadOnly } from "../../../models/utils";
 import { OnCellValueChangeParams } from "../../components/CollectionTableProps";
-import { buildPropertyField } from "../../../form/form_factory";
+import { buildPropertyField } from "../../../form";
 import clsx from "clsx";
 import ElementResizeListener from "./ElementResizeListener";
 
@@ -50,7 +43,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         userSelect: "none",
         position: "fixed",
         zIndex: 1300,
-        boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
+        boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
         borderRadius: "4px",
         backgroundColor: theme.palette.background.paper
         // transition: "transform 250ms ease-out",
@@ -325,20 +318,21 @@ function PopupFormField<M extends { [Key: string]: any }>({
 
                 {form}
 
-                <Box position={"absolute"}
-                     top={-14}
-                     right={-14}>
-                    <IconButton
-                        size={"small"}
-                        style={{ backgroundColor: "#666" }}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            setFormPopupOpen(false);
-                        }}>
-                        <ClearIcon style={{ color: "white" }}
-                                   fontSize={"small"}/>
-                    </IconButton>
-                </Box>
+                <IconButton
+                    size={"small"}
+                    style={{
+                        position: "absolute",
+                        top: -14,
+                        right: -14,
+                        backgroundColor: "#666"
+                    }}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        setFormPopupOpen(false);
+                    }}>
+                    <ClearIcon style={{ color: "white" }}
+                               fontSize={"small"}/>
+                </IconButton>
             </div>
 
         </div>

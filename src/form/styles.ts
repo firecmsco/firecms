@@ -23,17 +23,6 @@ export const formStyles = makeStyles((theme: Theme) => createStyles({
     inputLabel: {
         marginTop: "4px",
         marginLeft: "4px"
-        // display: "inline-flex",
-        // alignItems: "center",
-        // height: "14px"
-    },
-    stickyButtons: {
-        marginTop: theme.spacing(2),
-        backgroundColor: "#ffffffb8",
-        borderTop: "solid 1px #f9f9f9",
-        position: "sticky",
-        bottom: 0,
-        zIndex: 200
     },
     buttons: {
         display: "flex",

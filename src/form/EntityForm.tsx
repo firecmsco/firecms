@@ -28,9 +28,9 @@ import { useDataSource } from "../hooks";
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     stickyButtons: {
         marginTop: theme.spacing(2),
-        background: "rgba(255,255,255,0.6)",
-        backdropFilter: "blur(3px)",
-        borderTop: "solid 1px #f9f9f9",
+        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)": "rgba(255, 255, 255, 0)",
+        backdropFilter: "blur(4px)",
+        borderTop: theme.palette.divider,
         position: "sticky",
         bottom: 0,
         zIndex: 200

@@ -1,7 +1,7 @@
 import React from "react";
 import {
     Box,
-    Card,
+    Paper,
     CardActionArea,
     CardActions,
     CardContent,
@@ -62,9 +62,11 @@ function CMSHomePage() {
 
     function buildNavigationCard(entry: TopNavigationEntry) {
         return (
-            <Grid item xs={12} sm={6} md={4}
+            <Grid item xs={12}
+                  sm={6}
+                  md={4}
                   key={`nav_${entry.group}_${entry.name}`}>
-                <Card elevation={0}>
+                <Paper variant={"outlined"}>
 
                     <CardActionArea
                         className={classes.card}
@@ -93,7 +95,7 @@ function CMSHomePage() {
                         </CardActions>
 
                     </CardActionArea>
-                </Card>
+                </Paper>
             </Grid>
         );
     }
