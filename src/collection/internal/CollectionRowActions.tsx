@@ -2,7 +2,6 @@ import { CollectionSize, Entity } from "../../models";
 import { useTableStyles } from "../components/styles";
 
 import React, { MouseEvent } from "react";
-import "react-base-table/styles.css";
 import {
     Checkbox,
     IconButton,

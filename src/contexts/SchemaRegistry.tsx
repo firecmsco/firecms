@@ -61,7 +61,7 @@ export interface SchemaRegistryController {
     removeAllOverridesExcept: (
         keys: string[]
     ) => void;
-};
+}
 
 export const SchemaRegistryContext = React.createContext<SchemaRegistryController>(DEFAULT_SCHEMA_CONTROLLER);
 export const useSchemasRegistry = () => useContext(SchemaRegistryContext);

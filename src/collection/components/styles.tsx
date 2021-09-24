@@ -1,5 +1,5 @@
 import React from "react";
-import { Theme } from "@mui/material";
+import { alpha, Theme } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import { CollectionSize } from "../../models";
@@ -17,8 +17,14 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
         height: "100%",
         flexGrow: 1
     },
-    headerTypography: {
-        color: "rgba(0,0,0,0.55)",
+    header: {
+        width: "calc(100% + 24px)",
+        margin: "0px -12px",
+        padding: "0px 12px",
+        color: theme.palette.text.secondary,
+        backgroundColor: theme.palette.background.default,
+        transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+        height: "100%",
         fontSize: "0.750rem",
         textTransform: "uppercase",
         fontWeight: 600
@@ -35,16 +41,18 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
         padding: "0px !important"
     },
     selected: {
-        backgroundColor: "#eee",
+        backgroundColor: alpha(theme.palette.background.default, .5),
         border: `2px solid ${theme.palette.primary.dark}`,
         padding: theme.spacing(2)
     },
     cellButtonsWrap: {
+        width: "100%",
         height: "100%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        flexDirection: "column"
+        flexDirection: "column",
+        backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, .8) : alpha(theme.palette.background.default, .8)
     },
     cellButtons: {
         minWidth: 138
@@ -57,12 +65,10 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
     }
 }));
 
-
 export interface CellStyleProps {
     size: CollectionSize;
     align: "right" | "left" | "center";
 }
-
 
 export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: boolean }>(theme => createStyles({
         tableCell: {
@@ -87,7 +93,7 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
                 }
             },
             "&:hover": {
-                backgroundColor: ({ disabled }: any) => disabled ? undefined : "#eee"
+                backgroundColor: ({ disabled }: any) => disabled ? undefined : (theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default)
             },
             justifyContent: ({ align }) => {
                 switch (align) {
@@ -108,7 +114,7 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
             border: `2px solid ${theme.palette.error.light} !important`
         },
         selected: {
-            backgroundColor: "#f9f9f9",
+            backgroundColor: theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default,
             border: "2px solid #5E9ED6",
             transition: "border-color 300ms ease-in-out"
         },
@@ -122,14 +128,13 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
             position: "absolute",
             top: 2,
             right: 2
-            // fontSize: "16px",
         },
         arrow: {
-            color: "#ff1744"
+            color: theme.palette.error.light
         },
         tooltip: {
             margin: "0 8px",
-            backgroundColor: "#ff1744"
+            backgroundColor: theme.palette.error.light
         },
         centered: {
             alignItems: "center"

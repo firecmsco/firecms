@@ -3,6 +3,7 @@ import {
     alpha,
     Box,
     CircularProgress,
+    darken,
     Hidden,
     IconButton,
     InputBase,
@@ -31,9 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             paddingLeft: theme.spacing(1),
             paddingRight: theme.spacing(1),
-            zIndex: 100,
-            backgroundColor: theme.palette.background.paper,
-            borderBottom: "1px solid rgba(224, 224, 224, 1)",
+            backgroundColor: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.background.default,
+            borderBottom: `1px solid ${theme.palette.divider}`,
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
@@ -63,7 +63,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
         input: {
             borderRadius: 4,
             position: "relative",
-            backgroundColor: alpha(theme.palette.common.black, 0.05),
+            backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.05) : darken(theme.palette.background.default, .2),
             fontSize: 14,
             fontWeight: theme.typography.fontWeightMedium,
             padding: "10px 26px 10px 12px",
@@ -73,18 +73,18 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
             }
         },
         item: {
-            backgroundColor: "#f5f5f5",
+            backgroundColor: theme.palette.background.default,
             fontSize: 14,
             fontWeight: theme.typography.fontWeightMedium,
             paddingTop: theme.spacing(1),
             paddingBottom: theme.spacing(1),
             "&:hover": {
-                backgroundColor: "#eeeeee"
+                backgroundColor: darken(theme.palette.background.default, .1)
             },
             "&:focus": {
-                backgroundColor: "#e3e3e3",
+                backgroundColor: darken(theme.palette.background.default, .2),
                 "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-                    color: theme.palette.common.white
+                    color: theme.palette.text.primary
                 }
             }
         }
@@ -142,11 +142,7 @@ export default function CollectionTableToolbar<M extends { [Key: string]: any }>
                         borderRadius: 4
                     }
                 },
-                elevation: 1,
-                anchorOrigin: {
-                    vertical: "bottom",
-                    horizontal: "left"
-                }
+                elevation: 1
             }}
             input={<InputBase classes={{
                 root: sizeClasses.root,

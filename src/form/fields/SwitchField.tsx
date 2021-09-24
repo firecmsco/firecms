@@ -29,12 +29,12 @@ export const useStyles = makeStyles((theme: Theme) =>
             position: "relative",
             display: "inline-flex",
             alignItems: "center",
-            backgroundColor: "rgba(0, 0, 0, 0.06)",
+            backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
             borderTopLeftRadius: "4px",
             borderTopRightRadius: "4px",
             transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
             "&::before": {
-                borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+                borderBottom: theme.palette.mode === "light" ? "1px solid rgba(0, 0, 0, 0.42)" : "1px solid rgba(255, 255, 255, 0.7)",
                 left: 0,
                 bottom: 0,
                 content: "\"\\00a0\"",
@@ -54,12 +54,12 @@ export const useStyles = makeStyles((theme: Theme) =>
                 borderBottom: `2px solid ${theme.palette.primary.main}`
             },
             "&:hover": {
-                backgroundColor: "rgba(0, 0, 0, 0.09)"
+                backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
             }
         },
         focus: {
             "&::before": {
-                borderBottom: "1px solid rgba(0, 0, 0, 0.87)"
+                borderBottom: theme.palette.mode === "light" ? "1px solid rgba(255, 255, 255, 0.7)" : "1px solid rgba(0, 0, 0, 0.87)"
             },
             "&::after": {
                 transform: "scaleX(1)",

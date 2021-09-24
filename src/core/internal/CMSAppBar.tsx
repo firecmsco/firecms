@@ -18,13 +18,17 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import MenuIcon from "@mui/icons-material/Menu";
+import Brightness5Icon from "@mui/icons-material/Brightness5";
+import Brightness3Icon from "@mui/icons-material/Brightness3";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
-import { useAuthController, useBreadcrumbsContext } from "../../contexts";
+import { useAuthController, useBreadcrumbsContext, useModeState } from "../../contexts";
 import ErrorBoundary from "./ErrorBoundary";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        appbar: {
+        },
         menuButton: {
             marginRight: theme.spacing(2)
         },
@@ -67,10 +71,15 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
     const { breadcrumbs } = breadcrumbsContext;
 
     const authController = useAuthController();
+    const { mode, toggleMode } = useModeState();
 
     return (
-        <Slide direction="down" in={true} mountOnEnter unmountOnExit>
-            <AppBar position={"relative"} elevation={2}>
+        <Slide
+            direction="down" in={true} mountOnEnter unmountOnExit>
+            <AppBar
+                className={classes.appbar}
+                position={"relative"}
+                elevation={1}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -128,6 +137,20 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                             toolbarExtraWidget
                         }
                     </ErrorBoundary>}
+
+
+                    <Box p={1} mr={1}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="Open drawer"
+                            edge="start"
+                            onClick={() => toggleMode()}
+                            size="large">
+                            {mode === "dark" ?
+                                <Brightness3Icon/> :
+                                <Brightness5Icon/>}
+                        </IconButton>
+                    </Box>
 
                     <Box p={1} mr={1}>
                         {authController.user && authController.user.photoURL ?

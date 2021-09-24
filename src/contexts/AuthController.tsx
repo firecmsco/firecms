@@ -82,7 +82,7 @@ const AuthContext = React.createContext<AuthController>({
  * Hook to retrieve the AuthContext.
  *
  * Consider that in order to use this hook you need to have a parent
- * `FirebaseCMSApp` or a `CMSAppProvider`
+ * `CMSAppProvider`
  *
  * @see AuthController
  * @category Hooks and utilities

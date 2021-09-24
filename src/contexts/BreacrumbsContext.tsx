@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 
-const DEFAULT_NAVIGATION = {
+const DEFAULT_BREADCRUMBS_CONTROLLER = {
     breadcrumbs: [],
     set: (props: {
         breadcrumbs: BreadcrumbEntry[];
@@ -24,15 +24,15 @@ export interface BreadcrumbsController {
     set: (props: {
         breadcrumbs: BreadcrumbEntry[];
     }) => void;
-};
+}
 
-export const BreadcrumbContext = React.createContext<BreadcrumbsController>(DEFAULT_NAVIGATION);
+export const BreadcrumbContext = React.createContext<BreadcrumbsController>(DEFAULT_BREADCRUMBS_CONTROLLER);
 
 /**
  * Hook to retrieve the BreadcrumbContext.
  *
  * Consider that in order to use this hook you need to have a parent
- * `FirebaseCMSApp` or a `CMSAppProvider`
+ * `CMSAppProvider`
  *
  * @see BreadcrumbsController
  * @category Hooks and utilities

@@ -1,11 +1,10 @@
 import React, { useRef, useState } from "react";
-import "react-base-table/styles.css";
 
 import { Property, WhereFilterOp } from "../../models";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { CMSColumn, Sort } from "./common";
 import {
-    alpha,
+    darken,
     Badge,
     Box,
     Button,
@@ -33,10 +32,9 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
         width: "calc(100% + 24px)",
         margin: "0px -12px",
         padding: "0px 12px",
-        color: onHover ? "rgba(0, 0, 0, 0.87)" : "rgba(0,0,0,0.55)",
-        backgroundColor: onHover ? alpha(theme.palette.common.black, 0.03) : alpha(theme.palette.common.black, 0.01),
+        color: onHover ? theme.palette.text.primary : theme.palette.text.secondary,
+        backgroundColor: onHover ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
         transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-        height: "100%"
     }),
     headerTitle: ({ align }) => ({
         overflow: "hidden",
@@ -52,7 +50,7 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
         paddingTop: "4px"
     },
     headerIconButton: {
-        backgroundColor: "#f5f5f5"
+        backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
     }
 }));
 
@@ -98,7 +96,7 @@ export default function CollectionTableHeader<M extends { [Key: string]: any },
     return (
         <ErrorBoundary>
             <Grid
-                className={clsx(classes.header, tableClasses.headerTypography)}
+                className={clsx(classes.header, tableClasses.header)}
                 ref={ref}
                 wrap={"nowrap"}
                 alignItems={"center"}

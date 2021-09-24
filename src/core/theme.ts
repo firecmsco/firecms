@@ -18,7 +18,8 @@ export const createCMSDefaultTheme = (
         palette: {
             mode: mode,
             background: {
-                default: mode === "dark" ? "#424242" : "#f6f8f9"
+                default: mode === "dark" ? "#242424" : "#f6f7f8"
+                // default: mode === "dark" ? "#242424" : "rgb(240 240 240)"
             },
             primary: {
                 main: primaryColor ? primaryColor : "#0070f4"
@@ -67,16 +68,6 @@ export const createCMSDefaultTheme = (
                     }
                 }
             },
-            // MuiInputLabel: {
-            //     styleOverrides: {
-            //         root: {
-            //             marginTop: "4px",
-            //         },
-            //         filled: {
-            //             marginTop: "4px",
-            //         }
-            //     }
-            // },
             MuiInputBase: {
                 styleOverrides: {
                     root: {
@@ -86,13 +77,6 @@ export const createCMSDefaultTheme = (
                     }
                 }
             }
-            //     MuiFormControlLabel: {
-            //         styleOverrides: {
-            //             label: {
-            //                 width: "100%"
-            //             }
-            //         }
-            //     }
         }
     });
 

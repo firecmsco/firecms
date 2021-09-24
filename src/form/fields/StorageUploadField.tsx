@@ -32,9 +32,8 @@ import ErrorBoundary from "../../core/internal/ErrorBoundary";
 
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
-import { useClearRestoreValue } from "../../hooks";
+import { useClearRestoreValue, useStorageSource } from "../../hooks";
 import { isReadOnly } from "../../models/utils";
-import { useStorageSource } from "../../hooks/useStorageSource";
 
 export const useStyles = makeStyles((theme: Theme) => ({
     dropZone: {
@@ -44,8 +43,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
         outline: 0,
         borderTopLeftRadius: "2px",
         borderTopRightRadius: "2px",
-        backgroundColor: "rgba(0, 0, 0, 0.06)",
-        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+        backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
+        borderBottom: theme.palette.mode === "light" ? "1px solid rgba(0, 0, 0, 0.42)" : "1px solid rgba(255, 255, 255, 0.7)",
         boxSizing: "border-box",
         transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
         "&:focus": {
@@ -59,7 +58,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     nonActiveDrop: {
         "&:hover": {
-            backgroundColor: "rgba(0, 0, 0, 0.09)"
+            backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
         }
     },
     activeDrop: {
@@ -99,6 +98,13 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     arrayEntryDragging: {
         cursor: "move"
+    },
+    thumbnailCloseIcon: {
+        position: "absolute",
+        top: -8,
+        right: -8,
+        zIndex: 100,
+        backgroundColor: theme.palette.background.paper
     }
 }));
 
@@ -713,20 +719,17 @@ export function StorageItemPreview({
                 className={size === "regular" ? classes.uploadItem : classes.uploadItemSmall}
                 variant={"outlined"}>
 
-                {!disabled && <Box position={"absolute"}
-                                   top={-8}
-                                   right={-8}
-                                   style={{ zIndex: 100 }}>
+                {!disabled &&
                     <IconButton
+                        className={classes.thumbnailCloseIcon}
                         size={"small"}
-                        style={{ backgroundColor: "white" }}
                         onClick={(event) => {
                             event.stopPropagation();
                             onClear(value);
                         }}>
                         <ClearIcon fontSize={"small"}/>
                     </IconButton>
-                </Box>}
+                }
 
                 {value &&
                 <ErrorBoundary>

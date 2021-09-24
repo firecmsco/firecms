@@ -2,7 +2,9 @@ import * as React from "react";
 import clsx from "clsx";
 
 import {
+    darken,
     IconButton,
+    lighten,
     Paper,
     Skeleton,
     Theme,
@@ -21,21 +23,25 @@ import SkeletonComponent from "./SkeletonComponent";
 import PreviewComponent from "../PreviewComponent";
 import ErrorView from "../../core/components/ErrorView";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { useEntityFetch } from "../../hooks/data/useEntityFetch";
+import { useEntityFetch } from "../../hooks";
+
+export type ReferencePreviewProps =
+    PreviewComponentProps<EntityReference>
+    & { onHover?: boolean };
 
 /**
  * @category Preview components
  */
-export default function ReferencePreview(props: PreviewComponentProps<EntityReference>) {
+export default function ReferencePreview(props: ReferencePreviewProps) {
     return <MemoReferencePreview {...props} />;
 }
 
-const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Theme) =>
+const useReferenceStyles = makeStyles<Theme, { size: PreviewSize, onHover?: boolean }>((theme: Theme) =>
     createStyles({
         paper: {
             display: "flex",
             color: "#838383",
-            backgroundColor: "rgba(0, 0, 0, 0.02)",
+            backgroundColor: darken(theme.palette.background.default, 0.1),
             borderRadius: "2px",
             overflow: "hidden",
             fontWeight: theme.typography.fontWeightMedium
@@ -73,13 +79,10 @@ const useReferenceStyles = makeStyles<Theme, { size: PreviewSize }>((theme: Them
         },
         clickable: {
             tabindex: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.09)",
+            backgroundColor: ({ onHover }) => onHover ? (theme.palette.mode === "dark" ? lighten(theme.palette.background.default, 0.1) : darken(theme.palette.background.default, 0.15)) : darken(theme.palette.background.default, 0.1),
             transition: "background-color 300ms ease, box-shadow 300ms ease",
-            "&:hover": {
-                cursor: "pointer",
-                backgroundColor: "#e7e7e7",
-                boxShadow: "0 0 0 2px rgba(0,0,0,0.1)"
-            }
+            boxShadow: ({ onHover }) => onHover ? "0 0 0 2px rgba(128,128,128,0.05)" : undefined,
+            cursor: ({ onHover }) => onHover ? "pointer" : undefined
         }
     }));
 
@@ -88,10 +91,11 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         value,
         property,
         onClick,
-        size
-    }: PreviewComponentProps<EntityReference>) {
+        size,
+        onHover
+    }: ReferencePreviewProps) {
 
-    const referenceClasses = useReferenceStyles({ size });
+    const referenceClasses = useReferenceStyles({ size, onHover });
 
     const reference: EntityReference = value;
     const previewProperties = property.previewProperties;
@@ -216,5 +220,5 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
 
 }
 
-const MemoReferencePreview = React.memo<PreviewComponentProps<EntityReference>>(ReferencePreviewComponent) as React.FunctionComponent<PreviewComponentProps<EntityReference>>;
+const MemoReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewComponent) as React.FunctionComponent<ReferencePreviewProps>;
 
