@@ -73,7 +73,9 @@ export function CMSDrawer({
                              src={logo}
                              alt={"Logo"}/>;
     } else {
-        logoComponent = <FireCMSLogo/>;
+        logoComponent = <div className={classes.logo}>
+            <FireCMSLogo/>
+        </div>;
     }
 
     return <>
@@ -83,9 +85,6 @@ export function CMSDrawer({
             color="inherit"
             onClick={closeDrawer}
             component={ReactLink}
-            style={{
-                padding: "16px"
-            }}
             to={"/"}>
             {logoComponent}
         </Link>

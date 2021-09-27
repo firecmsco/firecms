@@ -237,7 +237,7 @@ export interface PermissionsBuilderProps<M extends { [Key: string]: any } = any>
      * Context of the app status
      */
     context: CMSAppContext;
-};
+}
 
 
 /**
@@ -320,5 +320,5 @@ export interface ExportMappingFunction {
  * valid, otherwise it reverts to the simpler valid case
  * @category Models
  */
-export type CompositeIndex<Key extends string> = Partial<Record<Key, "asc" | "desc">>
+export type CompositeIndex<Key extends string> = Partial<Record<Key, "asc" | "desc">>;
 

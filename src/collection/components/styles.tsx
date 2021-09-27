@@ -17,6 +17,11 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
         height: "100%",
         flexGrow: 1
     },
+    headerTypography: {
+        fontSize: "0.750rem",
+        fontWeight: 600,
+        textTransform: "uppercase"
+    },
     header: {
         width: "calc(100% + 24px)",
         margin: "0px -12px",
@@ -27,7 +32,7 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
         height: "100%",
         fontSize: "0.750rem",
         textTransform: "uppercase",
-        fontWeight: 600,
+        fontWeight: 600
     },
     tableRow: {
         display: "flex",

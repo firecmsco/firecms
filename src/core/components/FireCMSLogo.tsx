@@ -3,7 +3,7 @@ import React from "react";
 export function FireCMSLogo() {
     return (
         <svg
-            width="200" height="200"
+            width="232" height="232"
              viewBox="0 0 599 599" version="1.1"
              xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -41,7 +41,7 @@ export function FireCMSLogo() {
                           offset="100%"/>
                 </radialGradient>
             </defs>
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none"
+            <g id="Page-1" stroke="none" strokeWidth="1" fill="none"
                fillRule="evenodd">
                 <g id="firecms_logo">
                     <circle fill="url(#radialGradient-1)" cx="299.5" cy="299.5"

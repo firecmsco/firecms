@@ -688,6 +688,7 @@ export interface MapFieldConfig<T extends {}> extends FieldConfig<T> {
 
 /**
  * MIME types for storage fields
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
  * @category Entity properties
  */
 export type StorageFileTypes =
@@ -697,7 +698,7 @@ export type StorageFileTypes =
     | "application/*"
     | "text/*"
     | "font/*"
-    | string; // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+    | string;
 
 /**
  * @category Entity properties

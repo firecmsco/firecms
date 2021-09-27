@@ -183,7 +183,7 @@ function SampleApp() {
         ]}
         textSearchController={textSearchController}
         allowSkipLogin={true}
-        // logo={logo}
+        logo={logo}
         navigation={navigation}
         schemaResolver={customSchemaResolver}
         firebaseConfig={firebaseConfig}

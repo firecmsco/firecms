@@ -114,12 +114,14 @@ export default function FirebaseLoginView({
     }
 
     let logoComponent;
-    if(logo){
+    if (logo) {
         logoComponent = <img className={classes.logo}
-             src={logo}
-             alt={"Logo"}/>;
-    } else{
-        logoComponent = <FireCMSLogo/>;
+                             src={logo}
+                             alt={"Logo"}/>;
+    } else {
+        logoComponent = <div className={classes.logo}>
+            <FireCMSLogo/>
+        </div>;
     }
 
     return (
