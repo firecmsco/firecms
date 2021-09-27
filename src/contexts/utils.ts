@@ -1,4 +1,4 @@
-import { removeInitialAndTrailingSlashes } from "../core/navigation";
+import { removeInitialAndTrailingSlashes } from "../core/util/navigation_utils";
 
 export function getSidePanelKey(path: string, entityId?: string) {
     if (entityId)

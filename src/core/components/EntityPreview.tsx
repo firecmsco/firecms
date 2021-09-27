@@ -25,7 +25,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import ErrorBoundary from "../internal/ErrorBoundary";
 import { useCMSAppContext } from "../../contexts";
-import { CMSAppContext } from "../../contexts/CMSAppContext";
+import { CMSAppContext } from "../../contexts";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({

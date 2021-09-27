@@ -6,11 +6,15 @@ import {
     ref,
     uploadBytes
 } from "firebase/storage";
-import { StorageSource, UploadFileProps } from "../../models/storage";
+import { StorageSource, UploadFileProps } from "../../models";
+import { useEffect, useState } from "react";
 
+/**
+ * @category Firebase
+ */
 export interface FirebaseStorageSourceProps {
-    firebaseApp: FirebaseApp
-};
+    firebaseApp?: FirebaseApp
+}
 
 /**
  * Use this hook to build an {@link StorageSource} based on Firebase storage
@@ -18,12 +22,19 @@ export interface FirebaseStorageSourceProps {
  */
 export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceProps): StorageSource {
 
-    const storage: FirebaseStorage = getStorage(firebaseApp);
+    const [storage, setStorage] = useState<FirebaseStorage>();
+
+    useEffect(() => {
+        if (!firebaseApp) return;
+        setStorage(getStorage(firebaseApp));
+    }, [firebaseApp]);
+
     const urlsCache: any = {};
 
     return {
         uploadFile({ file, fileName, path, metadata }: UploadFileProps)
             : Promise<any> {
+            if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             const usedFilename = fileName ?? file.name;
             console.debug("Uploading file", usedFilename, file, path, metadata);
             return uploadBytes(ref(storage, `${path}/${usedFilename}`), file, metadata).then(snapshot => ({
@@ -32,6 +43,7 @@ export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceP
         },
 
         getDownloadURL(storagePath: string): Promise<string> {
+            if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             if (urlsCache[storagePath])
                 return urlsCache[storagePath];
             const downloadURL = getDownloadURL(ref(storage, storagePath));

@@ -45,11 +45,6 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
     column: {
         padding: "0px !important"
     },
-    selected: {
-        backgroundColor: alpha(theme.palette.background.default, .5),
-        border: `2px solid ${theme.palette.primary.dark}`,
-        padding: theme.spacing(2)
-    },
     cellButtonsWrap: {
         width: "100%",
         height: "100%",

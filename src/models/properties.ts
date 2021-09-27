@@ -660,7 +660,7 @@ export interface UploadedFileContext {
     /**
      * Values of the current entity
      */
-    entityValues: EntityValues<any>;
+    values: EntityValues<any>;
 
     /**
      * Storage meta specified by the developer

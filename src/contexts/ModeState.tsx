@@ -1,5 +1,5 @@
 import { useMediaQuery } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 const DEFAULT_MODE_STATE: ModeState = {
     mode: "light",
@@ -40,6 +40,10 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
     const [mode, setMode] = useState<"light" | "dark">(prefersDarkMode ? "dark" : "light");
+
+    useEffect(() => {
+        setMode(prefersDarkMode ? "dark" : "light");
+    }, [prefersDarkMode]);
 
     const toggleMode = () => {
         if (mode === "light") setMode("dark");

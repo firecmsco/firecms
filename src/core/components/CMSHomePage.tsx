@@ -18,7 +18,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import { Link as ReactLink } from "react-router-dom";
 
-import { computeTopNavigation, TopNavigationEntry } from "../navigation";
+import { computeTopNavigation, TopNavigationEntry } from "../util/navigation_utils";
 import { Markdown } from "../../preview";
 import { useNavigation } from "../../hooks";
 
@@ -46,14 +46,14 @@ export const useStyles = makeStyles((theme: Theme) =>
 function CMSHomePage() {
 
     const classes = useStyles();
-    const navigation = useNavigation();
-    if (!navigation)
+    const navigationContext = useNavigation();
+    if (!navigationContext.navigation)
         return <></>;
 
     const {
         navigationEntries,
         groups
-    } = computeTopNavigation(navigation, true);
+    } = computeTopNavigation(navigationContext.navigation, navigationContext, true);
 
     const allGroups: Array<string | null> = [...groups];
     if (navigationEntries.filter(e => !e.group).length > 0) {

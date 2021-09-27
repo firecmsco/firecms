@@ -84,6 +84,8 @@ type User = {
 
 - `EntityDeleteProps` renamed to `EntityOnDeleteProps`
 
+- `UploadedFileContext` `entityValues` renamed to `values`
+
 - `useNavigationFrom` renamed to `useResolvedNavigationFrom`
 - `getNavigationFrom` renamed to `resolveNavigationFrom`
 

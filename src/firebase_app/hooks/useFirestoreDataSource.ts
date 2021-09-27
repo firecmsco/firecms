@@ -1,12 +1,21 @@
 import {
+    DataSource,
+    DeleteEntityProps,
     Entity,
     EntityReference,
     EntitySchema,
     EntityValues,
-    GeoPoint
-} from "../../models/entities";
-import { FilterValues, WhereFilterOp } from "../../models/collections";
-import { Properties, Property } from "../../models/properties";
+    FetchCollectionProps,
+    FetchEntityProps,
+    FilterValues,
+    GeoPoint,
+    ListenCollectionProps,
+    ListenEntityProps,
+    Properties,
+    Property,
+    SaveEntityProps,
+    WhereFilterOp
+} from "../../models";
 import {
     computeSchemaProperties,
     sanitizeData,
@@ -14,20 +23,12 @@ import {
     updateAutoValues
 } from "../../models/utils";
 import {
-    DataSource,
-    DeleteEntityProps,
-    FetchCollectionProps,
-    FetchEntityProps,
-    ListenCollectionProps,
-    ListenEntityProps,
-    SaveEntityProps
-} from "../../models/datasource";
-import {
     collection,
     deleteDoc,
     doc,
     DocumentReference,
     DocumentSnapshot,
+    Firestore,
     GeoPoint as FirestoreGeoPoint,
     getDoc,
     getDocs,
@@ -45,9 +46,13 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../models/text_search";
+import { useEffect, useState } from "react";
 
+/**
+ * @category Firebase
+ */
 export interface FirestoreDataSourceProps {
-    firebaseApp: FirebaseApp,
+    firebaseApp?: FirebaseApp,
     textSearchController?: FirestoreTextSearchController
 }
 
@@ -62,7 +67,13 @@ export function useFirestoreDataSource({
                                            textSearchController
                                        }: FirestoreDataSourceProps): DataSource {
 
-    const db = getFirestore(firebaseApp);
+    const [firestore, setFirestore] = useState<Firestore>();
+
+    useEffect(() => {
+        if (!firebaseApp) return;
+        const db = getFirestore(firebaseApp);
+        setFirestore(db);
+    }, [firebaseApp]);
 
     /**
      *
@@ -139,7 +150,9 @@ export function useFirestoreDataSource({
 
     function buildQuery<M>(path: string, filter: FilterValues<M> | undefined, orderBy: string | undefined, order: "desc" | "asc" | undefined, startAfter: any[] | undefined, limit: number | undefined) {
 
-        const collectionReference: Query = collection(db, path);
+        if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+
+        const collectionReference: Query = collection(firestore, path);
 
         const queryParams = [];
         if (filter) {
@@ -175,7 +188,8 @@ export function useFirestoreDataSource({
     }
 
     function getAndBuildEntity<M>(path: string, entityId: string, schema: EntitySchema<M>) {
-        return getDoc(doc(db, path, entityId))
+        if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+        return getDoc(doc(firestore, path, entityId))
             .then((docSnapshot) => createEntityFromSchema(docSnapshot, schema, path));
     }
 
@@ -326,9 +340,10 @@ export function useFirestoreDataSource({
                 onUpdate,
                 onError
             }: ListenEntityProps<M>): () => void {
+            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
             console.debug("Listening entity", path, entityId);
             return onSnapshot(
-                doc(db, path, entityId),
+                doc(firestore, path, entityId),
                 (docSnapshot) => onUpdate(createEntityFromSchema(docSnapshot, schema, path)),
                 onError
             );
@@ -354,6 +369,7 @@ export function useFirestoreDataSource({
                 status
             }: SaveEntityProps<M>): Promise<Entity<M>> {
 
+            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
             const properties: Properties<M> = computeSchemaProperties(schema, path, entityId);
 
             const updatedValues: EntityValues<M> = updateAutoValues(
@@ -362,7 +378,7 @@ export function useFirestoreDataSource({
                     properties,
                     status,
                     timestampNowValue: serverTimestamp(),
-                    referenceConverter: (value: EntityReference) => doc(db, value.path, value.id),
+                    referenceConverter: (value: EntityReference) => doc(firestore, value.path, value.id),
                     geopointConverter: (value: GeoPoint) => new FirestoreGeoPoint(value.latitude, value.longitude)
                 });
 
@@ -370,9 +386,9 @@ export function useFirestoreDataSource({
 
             let documentReference: DocumentReference;
             if (entityId)
-                documentReference = doc(db, path, entityId);
+                documentReference = doc(firestore, path, entityId);
             else
-                documentReference = doc(db, path);
+                documentReference = doc(firestore, path);
 
             const entity: Entity<M> = {
                 id: documentReference.id,
@@ -395,7 +411,8 @@ export function useFirestoreDataSource({
                 schema
             }: DeleteEntityProps<M>
         ): Promise<void> {
-            return deleteDoc(doc(db, entity.path, entity.id));
+            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+            return deleteDoc(doc(firestore, entity.path, entity.id));
         },
 
         /**
@@ -415,6 +432,9 @@ export function useFirestoreDataSource({
             property: Property,
             entityId?: string
         ): Promise<boolean> {
+
+            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+
             console.debug("Check unique field entity", path, name, value, entityId);
 
             if (property.dataType === "array") {
@@ -424,7 +444,7 @@ export function useFirestoreDataSource({
             if (value === undefined || value === null) {
                 return Promise.resolve(true);
             }
-            const q = query(collection(db, path), whereClause(name, "==", value));
+            const q = query(collection(firestore, path), whereClause(name, "==", value));
             return getDocs(q)
                 .then((snapshots) =>
                     snapshots.docs.filter(doc => doc.id !== entityId).length === 0

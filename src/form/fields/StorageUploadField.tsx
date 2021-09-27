@@ -157,7 +157,7 @@ export default function StorageUploadField({
         if (storageMeta.fileName) {
             const fileName = storageMeta.fileName({
                 entityId: context.entityId,
-                entityValues: context.values,
+                values: context.values,
                 property,
                 file,
                 storageMeta,
@@ -179,7 +179,7 @@ export default function StorageUploadField({
         if (typeof storageMeta.storagePath === "function") {
             const storagePath = storageMeta.storagePath({
                 entityId: context.entityId,
-                entityValues: context.values,
+                values: context.values,
                 property,
                 file,
                 storageMeta,

@@ -1,6 +1,5 @@
 import React from "react";
 
-import { FirebaseApp } from "firebase/app";
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -18,7 +17,7 @@ import {
     CMSRoutes,
     CMSScaffold,
     createCMSDefaultTheme,
-    EntityLinkBuilder,
+    EntitySideDialogs,
     FirebaseLoginView,
     NavigationBuilder,
     NavigationBuilderProps,
@@ -103,13 +102,27 @@ export function CustomCMSApp() {
         firebaseConfigError
     } = useInitialiseFirebase({ firebaseConfig });
 
+    const authController: AuthController = useFirebaseAuthController({
+        firebaseApp,
+        authentication: myAuthenticator
+    });
+
+    const dataSource = useFirestoreDataSource({
+        firebaseApp: firebaseApp
+        // You can add your `FirestoreTextSearchController` here
+    });
+    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
+
     if (configError) {
         return <div> {configError} </div>;
     }
 
     if (firebaseConfigError) {
         return <div>
-            It seems like the provided Firebase config is not correct
+            It seems like the provided Firebase config is not correct. If you
+            are using the credentials provided automatically by Firebase
+            Hosting, make sure you link your Firebase app to Firebase
+            Hosting.
         </div>;
     }
 
@@ -117,53 +130,46 @@ export function CustomCMSApp() {
         return <CircularProgressCenter/>;
     }
 
-    const mode: "light" | "dark" = "light";
-    const theme = createCMSDefaultTheme({ mode });
-
-    const authController: AuthController = useFirebaseAuthController({
-        firebaseApp: firebaseApp as FirebaseApp,
-        authentication: myAuthenticator
-    });
-
-    const dataSource = useFirestoreDataSource({ firebaseApp: firebaseApp as FirebaseApp });
-    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp as FirebaseApp });
-
-    // This builder is only used to provide the button shortcuts in the entity views.
-    const entityLinkBuilder: EntityLinkBuilder = ({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`;
-
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <Router>
-                <CMSAppProvider navigation={navigation}
-                                authController={authController}
-                                entityLinkBuilder={entityLinkBuilder}
-                                dataSource={dataSource}
-                                storageSource={storageSource}>
-                    {({ context }) => {
+        <Router>
+            <CMSAppProvider navigation={navigation}
+                            authController={authController}
+                            dataSource={dataSource}
+                            storageSource={storageSource}
+                            entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+            >
+                {({ context, mode }) => {
 
-                        if (context.authController.authLoading || context.navigationLoading) {
-                            return <CircularProgressCenter/>;
-                        }
+                    const theme = createCMSDefaultTheme({ mode });
 
-                        if (!context.authController.canAccessMainView) {
-                            return (
-                                <FirebaseLoginView
-                                    skipLoginButtonEnabled={false}
-                                    signInOptions={DEFAULT_SIGN_IN_OPTIONS}
-                                    firebaseApp={firebaseApp}/>
-                            );
-                        }
-
-                        return (
+                    let component;
+                    if (context.authController.authLoading || context.navigationLoading) {
+                        component = <CircularProgressCenter/>;
+                    } else if (!context.authController.canAccessMainView) {
+                        component = (
+                            <FirebaseLoginView
+                                skipLoginButtonEnabled={false}
+                                signInOptions={DEFAULT_SIGN_IN_OPTIONS}
+                                firebaseApp={firebaseApp}/>
+                        );
+                    } else {
+                        component = (
                             <CMSScaffold name={"My Online Shop"}>
                                 <CMSRoutes/>
+                                <EntitySideDialogs/>
                             </CMSScaffold>
                         );
+                    }
 
-                    }}
-                </CMSAppProvider>
-            </Router>
-        </ThemeProvider>
-);
+                    return (
+                        <ThemeProvider theme={theme}>
+                            <CssBaseline/>
+                            {component}
+                        </ThemeProvider>
+                    );
+                }}
+            </CMSAppProvider>
+        </Router>
+    );
+
 }

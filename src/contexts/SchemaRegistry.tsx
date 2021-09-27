@@ -3,7 +3,7 @@ import { EntityCollection, SchemaConfig, SchemaResolver } from "../models";
 import {
     getCollectionViewFromPath,
     removeInitialAndTrailingSlashes
-} from "../core/navigation";
+} from "../core/util/navigation_utils";
 import { getSidePanelKey } from "./utils";
 
 const DEFAULT_SCHEMA_CONTROLLER = {

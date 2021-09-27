@@ -63,6 +63,16 @@ export interface CMSAppContext {
      */
     entityLinkBuilder?: EntityLinkBuilder;
 
+    /**
+     * Default path under the navigation routes of the CMS will be created
+     */
+    basePath: string;
+
+    /**
+     * Default path under the collection routes of the CMS will be created
+     */
+    baseCollectionPath:string;
+
 }
 
 const CMSAppContextInstance = React.createContext<CMSAppContext>({
@@ -70,7 +80,9 @@ const CMSAppContextInstance = React.createContext<CMSAppContext>({
     schemaRegistryController: {} as any,
     dataSource: {} as any,
     storageSource: {} as any,
-    authController: {} as any
+    authController: {} as any,
+    basePath: "",
+    baseCollectionPath:"",
 });
 
 /**

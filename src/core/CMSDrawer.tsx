@@ -12,7 +12,7 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import { Link as ReactLink } from "react-router-dom";
-import { computeTopNavigation, TopNavigationEntry } from "./navigation";
+import { computeTopNavigation, TopNavigationEntry } from "./util/navigation_utils";
 import { useNavigation } from "../hooks";
 import { FireCMSLogo } from "./components/FireCMSLogo";
 
@@ -42,14 +42,14 @@ export function CMSDrawer({
 
     const classes = useStyles();
 
-    const navigation = useNavigation();
-    if (!navigation)
+    const navigationContext = useNavigation();
+    if (!navigationContext.navigation)
         return <></>;
 
     const {
         navigationEntries,
         groups
-    } = computeTopNavigation(navigation, false);
+    } = computeTopNavigation(navigationContext.navigation, navigationContext, true);
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
@@ -96,7 +96,8 @@ export function CMSDrawer({
                     key={`drawer_group_${group}`}>
                     <Divider key={`divider_${group}`}/>
                     <Box pt={2} pl={2} pr={2} pb={0.5}>
-                        <Typography variant={"caption"} color={"textSecondary"}
+                        <Typography variant={"caption"}
+                                    color={"textSecondary"}
                                     className={"weight-500"}>
                             {group.toUpperCase()}
                         </Typography>

@@ -53,7 +53,7 @@ export default function ArrayContainer<T>({
             else if (v instanceof Date)
                 return v.toLocaleString();
             else if (v instanceof GeoPoint)
-                return hash({ latitude: v.latitude, longitude: v.longitude });
+                return hash(v);
         }
         return hash(v, { ignoreUnknown: true });
     }

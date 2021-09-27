@@ -127,5 +127,15 @@ export interface FirebaseCMSAppProps {
      * navigation.
      */
     HomePage?: React.ComponentType;
+
+    /**
+     * Default path under the navigation routes of the CMS will be created
+     */
+    basePath?: string;
+
+    /**
+     * Default path under the collection routes of the CMS will be created
+     */
+    baseCollectionPath?:string;
 }
 

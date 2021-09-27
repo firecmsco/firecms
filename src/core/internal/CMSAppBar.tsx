@@ -24,6 +24,7 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { useAuthController, useBreadcrumbsContext, useModeState } from "../../contexts";
 import ErrorBoundary from "./ErrorBoundary";
+import { useNavigation } from "../../hooks";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -72,6 +73,7 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
 
     const authController = useAuthController();
     const { mode, toggleMode } = useModeState();
+    const navigationContext = useNavigation();
 
     return (
         <Slide

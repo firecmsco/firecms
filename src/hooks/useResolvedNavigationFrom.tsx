@@ -1,20 +1,22 @@
 import { Entity, EntityCollection, EntityCustomView } from "../models";
-import { getNavigationEntriesFromPathInternal } from "../core/navigation";
 import { useEffect, useState } from "react";
 import { CMSAppContext, useCMSAppContext } from "../contexts";
+import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";
 
 /**
- * @ignore
+ * @see resolveNavigationFrom
+ * @category Hooks and utilities
  */
-export type NavigationEntry<M> =
-    | NavigationEntity<M>
-    | NavigationCollection<M>
-    | NavigationCustom<M>;
+export type ResolvedNavigationEntry<M> =
+    | ResolvedNavigationEntity<M>
+    | ResolvedNavigationCollection<M>
+    | ResolvedNavigationEntityCustom<M>;
 
 /**
- * @ignore
+ * @see resolveNavigationFrom
+ * @category Hooks and utilities
  */
-export interface NavigationEntity<M> {
+export interface ResolvedNavigationEntity<M> {
     type: "entity";
     entity: Entity<M>;
     entityId: string;
@@ -24,18 +26,20 @@ export interface NavigationEntity<M> {
 }
 
 /**
- * @ignore
+ * @see resolveNavigationFrom
+ * @category Hooks and utilities
  */
-export interface NavigationCollection<M> {
+export interface ResolvedNavigationCollection<M> {
     type: "collection";
     path: string;
     collection: EntityCollection<M>;
-};
+}
 
 /**
- * @ignore
+ * @see resolveNavigationFrom
+ * @category Hooks and utilities
  */
-interface NavigationCustom<M> {
+interface ResolvedNavigationEntityCustom<M> {
     type: "custom_view";
     path: string;
     view: EntityCustomView<M>;
@@ -56,7 +60,7 @@ interface NavigationCustom<M> {
 export function resolveNavigationFrom<M>({
                                              path,
                                              context
-                                         }: { path: string, context: CMSAppContext }): Promise<NavigationEntry<M>[]> {
+                                         }: { path: string, context: CMSAppContext }): Promise<ResolvedNavigationEntry<M>[]> {
 
 
     const dataSource = context.dataSource;
@@ -76,7 +80,7 @@ export function resolveNavigationFrom<M>({
         collections: navigation.collections
     });
 
-    const resultPromises: Promise<NavigationEntry<any>>[] = navigationEntries.map((entry) => {
+    const resultPromises: Promise<ResolvedNavigationEntry<any>>[] = navigationEntries.map((entry) => {
         if (entry.type === "collection") {
             return Promise.resolve(entry);
         } else if (entry.type === "entity") {
@@ -113,7 +117,7 @@ export interface NavigationFromProps {
  * @category Hooks and utilities
  */
 export interface NavigationFrom<M> {
-    data?: NavigationEntry<M>[]
+    data?: ResolvedNavigationEntry<M>[]
     dataLoading: boolean,
     dataLoadingError?: Error
 }
@@ -131,7 +135,7 @@ export function useResolvedNavigationFrom<M>(
 
     const context: CMSAppContext = useCMSAppContext();
 
-    const [data, setData] = useState<NavigationEntry<M>[] | undefined>();
+    const [data, setData] = useState<ResolvedNavigationEntry<M>[] | undefined>();
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
 

@@ -5,11 +5,9 @@ sidebar_label: Quickstart
 ---
 
 :::note
-
 Please note that in order to use FireCMS you need an existing Firebase project
 with some requirements. Check the [Firebase setup section](firebase_setup.md) if
 you need additional support
-
 :::
 
 - Create a new React app including Typescript:
@@ -27,9 +25,8 @@ cd my-cms
 - Install FireCMS and it's peer dependencies:
 
 ```
-yarn add @camberi/firecms firebase@9 @mui/material@next @mui/icons-material@next @mui/lab@next @emotion/react @emotion/styled @mui/styles@next
+yarn add @camberi/firecms firebase@9 @mui/material@5 @mui/icons-material@5 @mui/lab@5 @mui/styles@5 @emotion/react @emotion/styled react-router@^6.0.0-beta.4 react-router-dom@^6.0.0-beta.4
 ```
-
 
 You can replace the content of the file App.tsx with the following sample code.
 

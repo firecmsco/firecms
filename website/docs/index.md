@@ -15,13 +15,7 @@ to the collection/document model. We have built in many basic (and not
 so basic) use cases; but FireCMS is built with extensibility in mind, so it is
 easy to create your custom form fields, or your complete views.
 
-::: note Custom backend
-FireCMS was built with Firebase/Firestore as the default backend, but nothing
-stops you from implementing your own `DataSource`, `AuthController` and
-`StorageSource` and override the default implementations.
-:::
-
-There are two ways to build views in FireCMS:
+There are two ways to build top level views in FireCMS:
 
 - By creating mapping configurations for **collections** (to datasource
   collections, such as Firestore collections)
@@ -34,6 +28,13 @@ There are two ways to build views in FireCMS:
   this case you can build your custom React component and make use of the
   internal components of the CMS as well as the provided hooks.
   Check [Custom top level views](custom_top_level_views.md) for more details
+
+
+:::note Custom backend
+FireCMS was built with Firebase/Firestore as the default backend, but nothing
+stops you from implementing your own `DataSource`, `AuthController` and
+`StorageSource` and override the default implementations.
+:::
 
 ### Core technologies
 

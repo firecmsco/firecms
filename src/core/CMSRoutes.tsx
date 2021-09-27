@@ -2,17 +2,20 @@ import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView, Navigation } from "../models";
-import {
-    addInitialSlash,
-    buildCollectionUrl,
-    removeTrailingSlash
-} from "./navigation";
 import { EntityCollectionTable } from "./components/EntityCollectionTable";
 import BreadcrumbUpdater from "./components/BreadcrumbUpdater";
 import CMSHomePage from "./components/CMSHomePage";
 import { useNavigation } from "../hooks";
 
-// import { CMSTopRoute } from "./internal/CMSTopRoute";
+/**
+ * @category Core components
+ */
+export type CMSRoutesProps = {
+    /**
+     * In case you need to override the home page
+     */
+    HomePage?: React.ComponentType;
+};
 
 /**
  * This component is in charge of taking a {@link Navigation} and rendering
@@ -22,15 +25,12 @@ import { useNavigation } from "../hooks";
  * @constructor
  * @category Core components
  */
-export function CMSRoutes({ HomePage }: {
-    /**
-     * In case you need to override the home page
-     */
-    HomePage?: React.ComponentType;
-}) {
+export function CMSRoutes({ HomePage }: CMSRoutesProps) {
 
     const location = useLocation();
-    const navigation = useNavigation();
+    const navigationContext = useNavigation();
+    const navigation = navigationContext.navigation;
+
     if (!navigation)
         return <></>;
 
@@ -46,10 +46,10 @@ export function CMSRoutes({ HomePage }: {
         const buildCMSViewRoute = (path: string, cmsView: CMSView) => {
             return <Route
                 key={"navigation_view_" + path}
-                path={addInitialSlash(path)}
+                path={path}
                 element={
                     <BreadcrumbUpdater
-                        path={addInitialSlash(path)}
+                        path={path}
                         key={`navigation_${path}`}
                         title={cmsView.name}>
                         {cmsView.view}
@@ -69,7 +69,7 @@ export function CMSRoutes({ HomePage }: {
         // we reorder collections so that nested paths are included first
         .sort((a, b) => b.relativePath.length - a.relativePath.length)
         .map(entityCollection => {
-                const urlPath = removeTrailingSlash(buildCollectionUrl(entityCollection.relativePath));
+                const urlPath = navigationContext.buildCollectionPath(entityCollection.relativePath);
                 return (
                     <Route path={urlPath + "/*"}
                            key={`navigation_${entityCollection.relativePath}`}

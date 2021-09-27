@@ -1,28 +1,21 @@
 import { Entity, EntityCollection, EntitySchema } from "../../models";
 import React, { useEffect, useState } from "react";
-import { Link as ReactLink } from "react-router-dom";
 
 import EntityPreview from "./EntityPreview";
 import {
     Box,
     Container,
-    IconButton,
     Tab,
     Tabs,
     Theme,
-    Tooltip
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
 import {
-    buildCollectionUrl,
     removeInitialAndTrailingSlashes
-} from "../navigation";
+} from "../util/navigation_utils";
 import { EntityCollectionTable } from "./EntityCollectionTable";
-import { useSideEntityController } from "../../contexts";
-import { useDataSource } from "../../hooks";
+import { useDataSource, useNavigation } from "../../hooks";
 
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -68,7 +61,8 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
 
     const dataSource = useDataSource();
     const classes = useStyles();
-    const sideEntityController = useSideEntityController();
+
+    const navigationContext = useNavigation();
 
     const [updatedEntity, setUpdatedEntity] = useState<Entity<M> | undefined>(entity);
     const [tabsPosition, setTabsPosition] = React.useState(0);
@@ -102,26 +96,8 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
             disableGutters={true}
             fixed={true}>
 
-            <Box
+            <div
                 className={classes.header}>
-
-                <Tooltip title={"Close"}>
-                    <IconButton onClick={(e) => sideEntityController.close()}
-                                size="large">
-                        <CloseIcon/>
-                    </IconButton>
-                </Tooltip>
-
-                {entity &&
-                <Tooltip title={"Full size"}>
-                    <IconButton
-                        component={ReactLink}
-                        to={buildCollectionUrl(entity.path)}
-                        size="large">
-                        <EditIcon/>
-                    </IconButton>
-                </Tooltip>
-                }
 
                 <Box paddingTop={2} paddingLeft={2} paddingRight={2}>
                     <Tabs
@@ -141,7 +117,7 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
                     </Tabs>
 
                 </Box>
-            </Box>
+            </div>
 
             <div className={classes.container}
                  ref={ref}>

@@ -92,7 +92,7 @@ const productSchema = buildSchema<Product>({
 
 * `entityId`?: string Id of the entity or undefined if new
 
-* `values`: EntityValues<M> Values being saved
+* `values`: EntityValues Values being saved
 
 * `status`: EntityStatus New or existing entity
 
@@ -106,7 +106,7 @@ const productSchema = buildSchema<Product>({
 
 * `entityId`?: string Id of the entity or undefined if new
 
-* `entity`: Entity<M> Deleted entity
+* `entity`: Entity Deleted entity
 
 * `context`: CMSAppContext Context of the app status
 

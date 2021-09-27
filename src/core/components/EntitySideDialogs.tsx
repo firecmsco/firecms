@@ -6,23 +6,29 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
-import { EntityDrawer } from "./EntityDrawer";
-import SideEntityView from "./SideEntityView";
+import { EntityDrawer } from "../internal/EntityDrawer";
+import SideEntityView from "../internal/SideEntityView";
 import {
     SideEntityPanelProps,
     useCMSAppContext,
     useSideEntityController
 } from "../../contexts";
 import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { CONTAINER_WIDTH } from "./common";
+import { CONTAINER_WIDTH } from "../internal/common";
 
-
-export function EntitySideDialogs<M extends { [Key: string]: any }>() {
+/**
+ * This is the component in charge of rendering the side dialogs used
+ * for editing entities. Use the {@link useSideEntityController} to open
+ * and control the dialogs.
+ * {@see useSideEntityController}
+ * @category Core components
+ */
+export default function EntitySideDialogs<M extends { [Key: string]: any }>() {
 
     const sideEntityController = useSideEntityController();
     const schemasRegistry = useSchemasRegistry();
-
     const context = useCMSAppContext();
+
     const locale = context.locale;
     const dateUtilsLocale = locale ? locales[locale] : undefined;
 

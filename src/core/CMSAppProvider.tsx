@@ -25,6 +25,8 @@ import { ModeProvider, ModeStateContext } from "../contexts/ModeState";
 
 import "@camberi/firecms/dist/index.css";
 
+const DEFAULT_COLLECTION_PATH = `/c`;
+
 /**
  * Main CMS configuration.
  * @category Core
@@ -87,6 +89,17 @@ export interface CMSAppProviderProps {
      * The function must return a URL that gets opened when the button is clicked
      */
     entityLinkBuilder?: EntityLinkBuilder;
+
+    /**
+     * Default path under the navigation routes of the CMS will be created
+     */
+    basePath?: string;
+
+    /**
+     * Default path under the collection routes of the CMS will be created
+     */
+    baseCollectionPath?: string;
+
 }
 
 /**
@@ -110,7 +123,9 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
         authController,
         schemaResolver,
         storageSource,
-        dataSource
+        dataSource,
+        basePath,
+        baseCollectionPath
     } = props;
 
     const [navigation, setNavigation] = React.useState<Navigation | undefined>(undefined);
@@ -163,7 +178,9 @@ export function CMSAppProvider(props: CMSAppProviderProps) {
         navigationLoading,
         dataSource,
         storageSource,
-        schemaRegistryController
+        schemaRegistryController,
+        basePath: basePath ?? "/",
+        baseCollectionPath: baseCollectionPath ?? DEFAULT_COLLECTION_PATH
     };
 
     return (

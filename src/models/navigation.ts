@@ -43,6 +43,28 @@ export interface Navigation {
 }
 
 
+export type NavigationContext  =  {
+
+    navigation?: Navigation;
+
+    isCollectionPath: (path: string) => boolean;
+
+    getEntityOrCollectionPath: (path: string) => string;
+
+    buildEntityPath: (entityId: string,
+                     path: string,
+                     subcollection?: string) => string;
+
+    buildCollectionPath: (path: string) => string;
+
+    buildNewEntityPath: (path: string) => string;
+
+    buildCMSURL: (path: string) => string;
+
+    buildHomeUrl: () => string;
+}
+
+
 /**
  * Custom additional views created by the developer, added to the main
  * navigation.

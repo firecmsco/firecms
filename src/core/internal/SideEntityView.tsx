@@ -37,9 +37,8 @@ import {
 } from "../../contexts";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";
 import {
-    buildCollectionUrl,
     removeInitialAndTrailingSlashes
-} from "../navigation";
+} from "../util/navigation_utils";
 import CircularProgressCenter from "../components/CircularProgressCenter";
 import EntityPreview from "../components/EntityPreview";
 
@@ -151,12 +150,6 @@ function SideEntityView<M extends { [Key: string]: any }>({
     const snackbarContext = useSnackbarController();
     const context = useCMSAppContext();
     const authController = useAuthController();
-
-    const location = useLocation();
-    const match = useMatch({
-        path: buildCollectionUrl(`${path}/${entityId}/*`),
-        caseSensitive: false
-    });
 
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
     const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);

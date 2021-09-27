@@ -4,7 +4,7 @@ import {
     buildSchema,
     EnumValues
 } from "../models";
-import { FirebaseCMSAppProps } from "../firebase_app/FirebaseCMSAppProps";
+import { FirebaseCMSAppProps } from "../firebase_app";
 
 const locales: EnumValues = {
     "de-DE": "German",

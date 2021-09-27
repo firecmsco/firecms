@@ -1,17 +1,10 @@
 import { EntityCollection, SchemaConfig } from "../models";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-    buildCollectionUrl,
-    buildEntityUrl,
-    buildNewEntityUrl,
-    getEntityOrCollectionPath,
-    getNavigationEntriesFromPathInternal,
-    isCollectionPath,
-    NavigationViewEntry
-} from "../core/navigation";
 import { useSchemasRegistry } from "./SchemaRegistry";
 import { getSidePanelKey } from "./utils";
+import { getNavigationEntriesFromPathInternal, NavigationViewInternal } from "../core/util/navigation_from_path";
+import { useNavigation } from "../hooks";
 
 const DEFAULT_SIDE_ENTITY = {
     sidePanels: [],
@@ -114,6 +107,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
 
     const location = useLocation();
     const navigate = useNavigate();
+    const navigationContext = useNavigation();
     const initialised = useRef<boolean>(false);
     const [sidePanels, setSidePanels] = useState<ExtendedPanelProps[]>([]);
 
@@ -139,15 +133,16 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
     // only on initialisation
     useEffect(() => {
         if (collections && !initialised.current) {
-            if (isCollectionPath(location.pathname)) {
+            if (navigationContext.isCollectionPath(location.pathname)) {
                 const newFlag = location.hash === "#new";
-                const entityOrCollectionPath = getEntityOrCollectionPath(location.pathname);
+                console.log("location.pathname", location.pathname);
+                const entityOrCollectionPath = navigationContext.getEntityOrCollectionPath(location.pathname);
                 const sidePanels = buildSidePanelsFromUrl(entityOrCollectionPath, collections, newFlag);
                 setSidePanels(sidePanels);
             }
             initialised.current = true;
         }
-    }, [location, collections]);
+    }, [location, collections, navigationContext]);
 
     const close = () => {
 
@@ -159,7 +154,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         if (locationPanels && locationPanels.length > 0) {
             navigate(-1);
         } else {
-            const newPath = buildCollectionUrl(lastSidePanel.path);
+            const newPath = navigationContext.buildCollectionPath(lastSidePanel.path);
             setSidePanels([]);
             navigate(newPath, { replace: true });
         }
@@ -196,8 +191,8 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         }
 
         const newPath = entityId
-            ? buildEntityUrl(entityId, path, selectedSubpath)
-            : buildNewEntityUrl(path);
+            ? navigationContext.buildEntityPath(entityId, path, selectedSubpath)
+            : navigationContext.buildNewEntityPath(path);
 
         const lastSidePanel = sidePanels.length > 0 ? sidePanels[sidePanels.length - 1] : undefined;
 
@@ -213,7 +208,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                 selectedSubpath
             };
             navigate(
-                buildEntityUrl(entityId, path, selectedSubpath),
+                navigationContext.buildEntityPath(entityId, path, selectedSubpath),
                 {
                     replace: true,
                     state: {
@@ -258,7 +253,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
 
 function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): ExtendedPanelProps[] {
 
-    const navigationViewsForPath: NavigationViewEntry<any>[] = getNavigationEntriesFromPathInternal({
+    const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPathInternal({
         path,
         collections
     });
