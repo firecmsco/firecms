@@ -1,8 +1,8 @@
 import { InitialiseFirebaseResult } from "./hooks/useInitialiseFirebase";
 
 export {
-    useFirebaseAuthController
-} from "./hooks/useFirebaseAuthController";
+    useFirebaseAuthDelegate
+} from "./hooks/useFirebaseAuthDelegate";
 
 export {
     useFirestoreDataSource
@@ -27,5 +27,3 @@ export { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 
 export type { FirestoreTextSearchController } from "./models/text_search";
 export { performAlgoliaTextSearch } from "./models/text_search";
-
-export * from "./models/authenticator";

@@ -7,29 +7,24 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
-import { Authenticator } from "../models/authenticator";
-import { AuthController, User } from "../../models";
+import { AuthDelegate, User } from "../../models";
 
 interface FirebaseAuthHandlerProps {
     firebaseApp?: FirebaseApp,
-    authentication?: boolean | Authenticator;
 }
 
 /**
- * Use this hook to build an {@link AuthController} based on Firebase Auth
+ * Use this hook to build an {@link AuthDelegate} based on Firebase Auth
  * @category Firebase
  */
-export const useFirebaseAuthController = (
+export const useFirebaseAuthDelegate = (
     {
-        firebaseApp,
-        authentication
-    }: FirebaseAuthHandlerProps): AuthController => {
+        firebaseApp
+    }: FirebaseAuthHandlerProps): AuthDelegate => {
 
     const [loggedUser, setLoggedUser] = React.useState<User | null>(null);
     const [authProviderError, setAuthProviderError] = React.useState<any>();
-
     const [authLoading, setAuthLoading] = React.useState(true);
-    const [loginSkipped, setLoginSkipped] = React.useState<boolean>(false);
     const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
 
     useEffect(() => {
@@ -48,51 +43,26 @@ export const useFirebaseAuthController = (
             ...firebaseUser,
             extra: loggedUser ? loggedUser.extra : null
         } : null;
-
         setNotAllowedError(false);
-        if (authentication instanceof Function && user) {
-            const allowed = await authentication({ user });
-            if (allowed)
-                setLoggedUser(user);
-            else
-                setNotAllowedError(true);
-        } else {
-            setLoggedUser(user);
-        }
-
+        setLoggedUser(user);
         setAuthLoading(false);
     };
-
-    function skipLogin() {
-        setNotAllowedError(false);
-        setLoginSkipped(true);
-        setLoggedUser(null);
-        setAuthProviderError(null);
-    }
 
     function onSignOut() {
         const auth = getAuth(firebaseApp);
         signOut(auth)
             .then(_ => {
                 setNotAllowedError(false);
-                setLoginSkipped(false);
                 setLoggedUser(null);
                 setAuthProviderError(null);
             });
     }
 
-    const authenticationEnabled = authentication === undefined || !!authentication;
-    const canAccessMainView = (!authenticationEnabled || Boolean(loggedUser) || loginSkipped) && !notAllowedError;
-
     return {
         user: loggedUser,
         authError: authProviderError,
-        setAuthProviderError,
         authLoading,
-        setAuthLoading,
         notAllowedError,
-        skipLogin,
-        signOut: onSignOut,
-        canAccessMainView
+        signOut: onSignOut
     };
 };

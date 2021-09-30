@@ -66,10 +66,8 @@ export default function FirebaseLoginView({
                 signInSuccessWithAuthResult: (authResult) => {
                     return true;
                 },
-                uiShown: () => authController.setAuthLoading(false),
                 signInFailure: async (e) => {
                     console.error("signInFailure", e);
-                    authController.setAuthProviderError(e);
                 }
             },
             signInFlow: "popup",
@@ -87,8 +85,7 @@ export default function FirebaseLoginView({
                     <>
                         <Box p={2}>
                             You need to enable the corresponding login provider
-                            in
-                            your Firebase project
+                            in your Firebase project
                         </Box>
 
                         {firebaseApp &&

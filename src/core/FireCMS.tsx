@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
     AuthController,
+    AuthDelegate,
+    Authenticator,
     DataSource,
     EntityCollection,
     EntityLinkBuilder,
@@ -10,7 +12,8 @@ import {
     Navigation,
     NavigationBuilder,
     SchemaResolver,
-    StorageSource
+    StorageSource,
+    User
 } from "../models";
 import { SnackbarProvider } from "./contexts/SnackbarContext";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
@@ -62,6 +65,15 @@ export interface FireCMSProps {
     navigation: Navigation | NavigationBuilder | EntityCollection[];
 
     /**
+     * Do the users need to log in to access the CMS.
+     * You can specify an Authenticator function to discriminate which users can
+     * access the CMS or not.
+     * If not specified, authentication is enabled but no user restrictions
+     * apply.
+     */
+    authentication?: boolean | Authenticator;
+
+    /**
      * Used to override schemas based on the collection path and entityId.
      * This resolver allows to override the schema for specific entities, or
      * specific collections, app wide. This overrides schemas all through the app.
@@ -92,9 +104,10 @@ export interface FireCMSProps {
     storageSource: StorageSource;
 
     /**
-     * Perform your auth operations here
+     * Delegate for implementing your auth operations.
+     * @see useFirebaseAuthDelegate
      */
-    authController: AuthController;
+    authDelegate: AuthDelegate;
 
     /**
      * Optional link builder you can add to generate a button in your entity forms.
@@ -114,6 +127,53 @@ export interface FireCMSProps {
 
 }
 
+function useBuildAuthController({
+                                    authDelegate,
+                                    authentication
+                                }: { authDelegate: AuthDelegate, authentication?: boolean | Authenticator }): AuthController {
+
+    const [user, setUser] = React.useState<User | null>(null);
+    const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
+    const [loginSkipped, setLoginSkipped] = React.useState<boolean>(false);
+
+    function skipLogin() {
+        setNotAllowedError(false);
+        setLoginSkipped(true);
+        setUser(null);
+    }
+
+    async function checkAuthentication() {
+        const delegateUser = authDelegate.user;
+        if (authentication instanceof Function && delegateUser) {
+            const allowed = await authentication({ user: delegateUser });
+            if (allowed)
+                setUser(delegateUser);
+            else
+                setNotAllowedError(true);
+        } else {
+            setUser(delegateUser);
+        }
+    }
+
+    useEffect(() => {
+        checkAuthentication();
+    }, [authDelegate]);
+
+    const authenticationEnabled = authentication === undefined || !!authentication;
+    const canAccessMainView = (!authenticationEnabled || Boolean(user) || loginSkipped) && !notAllowedError;
+
+    return {
+        user,
+        loginSkipped,
+        canAccessMainView,
+        authError: authDelegate.authError,
+        authLoading: authDelegate.authLoading,
+        notAllowedError,
+        skipLogin,
+        signOut: authDelegate.signOut
+    };
+}
+
 /**
  * If you are using independent components of the CMS
  * you need to wrap them with this main component, so the internal hooks work.
@@ -127,9 +187,10 @@ export function FireCMS(props: FireCMSProps) {
         children,
         navigation: navigationOrBuilder,
         entityLinkBuilder,
+        authentication,
         dateTimeFormat,
         locale,
-        authController,
+        authDelegate,
         schemaResolver,
         storageSource,
         dataSource,
@@ -139,6 +200,11 @@ export function FireCMS(props: FireCMSProps) {
 
     const usedBasePath = basePath ?? "/";
     const usedBasedCollectionPath = baseCollectionPath ?? DEFAULT_COLLECTION_PATH;
+
+    const authController = useBuildAuthController({
+        authDelegate,
+        authentication
+    });
 
     const navigationContext = useBuildNavigationContext({
         basePath: usedBasePath,
@@ -150,7 +216,7 @@ export function FireCMS(props: FireCMSProps) {
     const schemaRegistryController = useBuildSchemaRegistryController(navigationContext, schemaResolver);
     const sideEntityController = useBuildSideEntityController(navigationContext, schemaRegistryController);
 
-    const loading = authController.authLoading || navigationContext.loading;
+    const loading = authDelegate.authLoading || navigationContext.loading;
 
     const context: FireCMSContext = {
         authController,

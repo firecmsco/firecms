@@ -8,7 +8,7 @@ import "typeface-rubik";
 import "typeface-space-mono";
 
 import {
-    AuthController,
+    AuthDelegate,
     Authenticator,
     buildCollection,
     buildSchema,
@@ -21,7 +21,7 @@ import {
     NavigationRoutes,
     Scaffold,
     SideEntityDialogs,
-    useFirebaseAuthController,
+    useFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase
@@ -102,9 +102,8 @@ export function CustomCMSApp() {
         firebaseConfigError
     } = useInitialiseFirebase({ firebaseConfig });
 
-    const authController: AuthController = useFirebaseAuthController({
+    const authDelegate: AuthDelegate = useFirebaseAuthDelegate({
         firebaseApp,
-        authentication: myAuthenticator
     });
 
     const dataSource = useFirestoreDataSource({
@@ -133,7 +132,8 @@ export function CustomCMSApp() {
     return (
         <Router>
             <FireCMS navigation={navigation}
-                     authController={authController}
+                     authDelegate={authDelegate}
+                     authentication={myAuthenticator}
                      dataSource={dataSource}
                      storageSource={storageSource}
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}

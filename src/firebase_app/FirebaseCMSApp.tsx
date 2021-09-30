@@ -2,24 +2,24 @@ import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import {
     CircularProgressCenter,
+    createCMSDefaultTheme,
     FireCMS,
     NavigationRoutes,
     Scaffold,
-    createCMSDefaultTheme,
     SideEntityDialogs
 } from "../core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
-import { useFirebaseAuthController } from "./hooks/useFirebaseAuthController";
+import { useFirebaseAuthDelegate } from "./hooks/useFirebaseAuthDelegate";
 import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import FirebaseLoginView from "./components/FirebaseLoginView";
-import { AuthController } from "../models/auth";
+import { AuthDelegate } from "../models/auth";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -71,9 +71,8 @@ export function FirebaseCMSApp({
         firebaseConfigError
     } = useInitialiseFirebase({ onFirebaseInit, firebaseConfig });
 
-    const authController: AuthController = useFirebaseAuthController({
-        firebaseApp,
-        authentication
+    const authDelegate: AuthDelegate = useFirebaseAuthDelegate({
+        firebaseApp
     });
 
     const dataSource = useFirestoreDataSource({
@@ -102,7 +101,8 @@ export function FirebaseCMSApp({
     return (
         <BrowserRouter basename={basePath}>
             <FireCMS navigation={navigation}
-                     authController={authController}
+                     authDelegate={authDelegate}
+                     authentication={authentication}
                      schemaResolver={schemaResolver}
                      dateTimeFormat={dateTimeFormat}
                      dataSource={dataSource}

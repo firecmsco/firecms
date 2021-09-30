@@ -1,12 +1,12 @@
 import React from "react";
 import {
+    Authenticator,
     EntityCollection,
     Locale,
     Navigation,
     NavigationBuilder,
     SchemaResolver
 } from "../models";
-import { Authenticator } from "./models/authenticator";
 import { FirestoreTextSearchController } from "./models/text_search";
 
 /**
