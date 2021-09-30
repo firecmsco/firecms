@@ -1,5 +1,5 @@
+import { AuthController } from "./auth";
 import { EntityCollection } from "./collections";
-import { AuthController } from "../contexts";
 import { User } from "./user";
 
 
@@ -42,26 +42,38 @@ export interface Navigation {
 
 }
 
-
+/**
+ * Context that includes the resolved navigation and utility methods and
+ * attributes.
+ * @category Models
+ */
 export type NavigationContext  =  {
 
     navigation?: Navigation;
 
+    loading: boolean;
+
+    navigationLoadingError?: any;
+
     isCollectionPath: (path: string) => boolean;
 
-    getEntityOrCollectionPath: (path: string) => string;
-
-    buildEntityPath: (entityId: string,
-                     path: string,
-                     subcollection?: string) => string;
+    getEntityOrCollectionPath: (cmsPath: string) => string;
 
     buildCollectionPath: (path: string) => string;
 
-    buildNewEntityPath: (path: string) => string;
-
-    buildCMSURL: (path: string) => string;
+    buildCMSUrl: (path: string) => string;
 
     buildHomeUrl: () => string;
+
+    /**
+     * Default path under the navigation routes of the CMS will be created
+     */
+    basePath: string;
+
+    /**
+     * Default path under the collection routes of the CMS will be created
+     */
+    baseCollectionPath: string;
 }
 
 

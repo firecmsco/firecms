@@ -1,97 +1,19 @@
-import { EntityCollection, SchemaConfig } from "../models";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import {
+    EntityCollection,
+    NavigationContext,
+    SchemaConfig,
+    SideEntityController,
+    SideEntityPanelProps,
+    SchemaRegistryController
+} from "../../models";
+import { getNavigationEntriesFromPathInternal, NavigationViewInternal } from "../util/navigation_from_path";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSchemasRegistry } from "./SchemaRegistry";
-import { getSidePanelKey } from "./utils";
-import { getNavigationEntriesFromPathInternal, NavigationViewInternal } from "../core/util/navigation_from_path";
-import { useNavigation } from "../hooks";
-
-const DEFAULT_SIDE_ENTITY = {
-    sidePanels: [],
-    close: () => {
-    },
-    open: (props: SideEntityPanelProps & Partial<SchemaConfig>) => {
-    }
-};
-
-/**
- * Props used to open a side dialog
- * @category Hooks and utilities
- */
-export interface SideEntityPanelProps {
-    /**
-     * Absolute path of the entity
-     */
-    path: string;
-
-    /**
-     * Id of the entity, if not set, it means we are creating a new entity
-     */
-    entityId?: string;
-
-    /**
-     * Set this flag to true if you want to make a copy of an existing entity
-     */
-    copy?: boolean;
-
-    /**
-     * Open the entity with a selected subcollection view. If the panel for this
-     * entity was already open, it is replaced.
-     */
-    selectedSubpath?: string;
-
-}
-
-/**
- * Controller to open the side dialog displaying entity forms
- * @category Hooks and utilities
- */
-export interface SideEntityController<M extends { [Key: string]: any }> {
-    /**
-     * Close the last panel
-     */
-    close: () => void;
-
-    /**
-     * List of side entity panels currently open
-     */
-    sidePanels: SideEntityPanelProps[];
-
-    /**
-     * Open a new entity sideDialog. By default, the schema and configuration
-     * of the view is fetched from the collections you have specified in the
-     * navigation.
-     * At least you need to pass the path of the entity you would like
-     * to edit. You can set an entityId if you would like to edit and existing one
-     * (or a new one with that id).
-     * If you wish, you can also override the `SchemaSidePanelProps` and choose
-     * to override the CMSAppProvider level SchemaResolver.
-     * @param props
-     */
-    open: (props: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaResolver?: boolean }) => void;
-};
+import { getSidePanelKey } from "../contexts/utils";
+import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 
 
-const SideEntityPanelsController = React.createContext<SideEntityController<any>>(DEFAULT_SIDE_ENTITY);
-
-/**
- * Get a reference to the controller used to open side dialogs for entity
- * edition. You can open side panels using schemas specified in the general
- * navigation, overriding them using a `SchemaResolver` or explicitly
- * using the open method of this controller.
- *
- * Consider that in order to use this hook you need to have a parent
- * `CMSAppProvider`
- *
- * @see SideEntityController
- * @category Hooks and utilities
- */
-export const useSideEntityController = () => useContext(SideEntityPanelsController);
-
-interface SideEntityProviderProps {
-    children: React.ReactNode;
-    collections?: EntityCollection[];
-}
+const NEW_URL_HASH = "new";
 
 type ExtendedPanelProps = SideEntityPanelProps & {
     /**
@@ -100,42 +22,38 @@ type ExtendedPanelProps = SideEntityPanelProps & {
     sidePanelKey?: string;
 };
 
-export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
-                                                                          children,
-                                                                          collections
-                                                                      }) => {
+
+export const useBuildSideEntityController = (navigationContext: NavigationContext, schemaRegistryController:SchemaRegistryController): SideEntityController => {
 
     const location = useLocation();
     const navigate = useNavigate();
-    const navigationContext = useNavigation();
     const initialised = useRef<boolean>(false);
     const [sidePanels, setSidePanels] = useState<ExtendedPanelProps[]>([]);
 
-    const schemasRegistry = useSchemasRegistry();
+    const collections = navigationContext.navigation?.collections;
 
     const baseLocation = location.state && location.state["base_location"] ? location.state["base_location"] : location;
 
     useEffect(() => {
-        if (schemasRegistry.initialised) {
+        if (schemaRegistryController.initialised) {
             if (location?.state && location.state["panels"]) {
                 const customSchemaKeys = (location.state["panels"] as ExtendedPanelProps[])
                     .map((e) => e.sidePanelKey)
                     .filter((k) => !!k) as string[];
-                schemasRegistry.removeAllOverridesExcept(customSchemaKeys);
+                schemaRegistryController.removeAllOverridesExcept(customSchemaKeys);
                 setSidePanels(location.state["panels"]);
             } else {
-                schemasRegistry.removeAllOverridesExcept([]);
+                schemaRegistryController.removeAllOverridesExcept([]);
                 setSidePanels([]);
             }
         }
-    }, [location?.state, schemasRegistry.initialised]);
+    }, [location?.state, schemaRegistryController.initialised]);
 
     // only on initialisation
     useEffect(() => {
         if (collections && !initialised.current) {
             if (navigationContext.isCollectionPath(location.pathname)) {
-                const newFlag = location.hash === "#new";
-                console.log("location.pathname", location.pathname);
+                const newFlag = location.hash === `#${NEW_URL_HASH}`;
                 const entityOrCollectionPath = navigationContext.getEntityOrCollectionPath(location.pathname);
                 const sidePanels = buildSidePanelsFromUrl(entityOrCollectionPath, collections, newFlag);
                 setSidePanels(sidePanels);
@@ -183,16 +101,17 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
             const schema = schemaProps.schema;
             const subcollections = schemaProps.subcollections;
             const overrideSchemaResolver = schemaProps.overrideSchemaResolver;
-            schemasRegistry.setOverride(
+            schemaRegistryController.setOverride(
                 sidePanelKey,
                 { permissions, schema, subcollections },
                 overrideSchemaResolver
             );
         }
 
+        const cleanPath = removeInitialAndTrailingSlashes(path);
         const newPath = entityId
-            ? navigationContext.buildEntityPath(entityId, path, selectedSubpath)
-            : navigationContext.buildNewEntityPath(path);
+            ? navigationContext.buildCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath ? selectedSubpath : ""}`)
+            : navigationContext.buildCollectionPath(`${cleanPath}#${NEW_URL_HASH}`);
 
         const lastSidePanel = sidePanels.length > 0 ? sidePanels[sidePanels.length - 1] : undefined;
 
@@ -208,7 +127,7 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
                 selectedSubpath
             };
             navigate(
-                navigationContext.buildEntityPath(entityId, path, selectedSubpath),
+                navigationContext.buildCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath ? selectedSubpath : ""}`),
                 {
                     replace: true,
                     state: {
@@ -238,17 +157,11 @@ export const SideEntityProvider: React.FC<SideEntityProviderProps> = ({
         }
     };
 
-    return (
-        <SideEntityPanelsController.Provider
-            value={{
-                sidePanels,
-                close,
-                open
-            }}
-        >
-            {children}
-        </SideEntityPanelsController.Provider>
-    );
+    return {
+        sidePanels,
+        close,
+        open
+    };
 };
 
 function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): ExtendedPanelProps[] {

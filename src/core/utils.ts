@@ -1,13 +1,15 @@
-import { Properties, Property, PropertyOrBuilder } from "./properties";
 import {
     Entity,
     EntityReference,
     EntitySchema,
     EntityStatus,
     EntityValues,
-    GeoPoint
-} from "./entities";
-import { buildPropertyFrom } from "./builders";
+    GeoPoint,
+    Properties,
+    Property,
+    PropertyOrBuilder
+} from "../models";
+import { buildPropertyFrom } from "./util/property_builder";
 
 export function isReadOnly(property: Property<any>): boolean {
     if (property.readOnly)

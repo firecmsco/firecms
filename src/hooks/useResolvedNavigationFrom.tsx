@@ -1,7 +1,12 @@
-import { Entity, EntityCollection, EntityCustomView } from "../models";
+import {
+    Entity,
+    EntityCollection,
+    EntityCustomView,
+    FireCMSContext
+} from "../models";
 import { useEffect, useState } from "react";
-import { CMSAppContext, useCMSAppContext } from "../contexts";
 import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";
+import { useFireCMSContext } from "./useFireCMSContext";
 
 /**
  * @see resolveNavigationFrom
@@ -50,7 +55,7 @@ interface ResolvedNavigationEntityCustom<M> {
  * collection, entity or entity custom_view) for the given path. You need to pass the app context
  * that you receive in different callbacks, such as the save hooks.
  *
- * It will take into account the `navigation` provided at the `CMSAppProvider` level, as
+ * It will take into account the `navigation` provided at the `FireCMS` level, as
  * well as a `schemaResolver` if provided.
  *
  * @param path
@@ -60,11 +65,11 @@ interface ResolvedNavigationEntityCustom<M> {
 export function resolveNavigationFrom<M>({
                                              path,
                                              context
-                                         }: { path: string, context: CMSAppContext }): Promise<ResolvedNavigationEntry<M>[]> {
+                                         }: { path: string, context: FireCMSContext }): Promise<ResolvedNavigationEntry<M>[]> {
 
 
     const dataSource = context.dataSource;
-    const navigation = context.navigation;
+    const navigation = context.navigationContext.navigation;
     const schemaRegistryController = context.schemaRegistryController;
 
     if (!navigation) {
@@ -125,7 +130,7 @@ export interface NavigationFrom<M> {
 /**
  * Use this hook to retrieve an array of navigation entries (resolved
  * collection or entity) for the given path. You can use this hook
- * in any React component that lives under `CMSAppProvider`
+ * in any React component that lives under `FireCMS`
  * @category Hooks and utilities
  */
 export function useResolvedNavigationFrom<M>(
@@ -133,7 +138,7 @@ export function useResolvedNavigationFrom<M>(
         path
     }: NavigationFromProps): NavigationFrom<M> {
 
-    const context: CMSAppContext = useCMSAppContext();
+    const context: FireCMSContext = useFireCMSContext();
 
     const [data, setData] = useState<ResolvedNavigationEntry<M>[] | undefined>();
     const [dataLoading, setDataLoading] = useState<boolean>(false);
@@ -141,7 +146,7 @@ export function useResolvedNavigationFrom<M>(
 
     useEffect(() => {
 
-        const navigation = context.navigation;
+        const navigation = context.navigationContext.navigation;
         if (navigation) {
             setDataLoading(true);
             setDataLoadingError(undefined);
@@ -155,7 +160,7 @@ export function useResolvedNavigationFrom<M>(
 
     }, [path, context]);
 
-    if (!context.navigation) {
+    if (!context.navigationContext.navigation) {
         return { dataLoading: true };
     }
 

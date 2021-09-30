@@ -5,6 +5,7 @@ import {
     buildCollection,
     buildProperty,
     buildSchema,
+    EntityReference,
     FirebaseCMSApp,
     NavigationBuilder,
     NavigationBuilderProps
@@ -23,12 +24,18 @@ const firebaseConfig = {
     appId: ""
 };
 
+const locales = {
+    "en-US": "English (United States)",
+    "es-ES": "Spanish (Spain)",
+    "de-DE": "German"
+};
 
 type Product = {
     name: string;
     price: number;
     status: string;
     published: boolean;
+    related_products: EntityReference[];
     main_image: string;
     tags: string[];
     description: string;
@@ -85,7 +92,16 @@ const productSchema = buildSchema<Product>({
                     }
             )
         }),
-        main_image: buildProperty({
+        related_products: {
+            dataType: "array",
+            title: "Related products",
+            description: "Reference to self",
+            of: {
+                dataType: "reference",
+                path: "products"
+            }
+        },
+        main_image: buildProperty({ // The `buildProperty` method is an utility function used for type checking
             title: "Image",
             dataType: "string",
             config: {
@@ -152,11 +168,7 @@ const productSchema = buildSchema<Product>({
 });
 
 const localeSchema = buildSchema({
-    customId: {
-        "de-DE": "German",
-        "en-US": "English (United States)",
-        "es-ES": "Spanish (Spain)"
-    },
+    customId: locales,
     name: "Locale",
     properties: {
         title: {
@@ -191,7 +203,7 @@ export default function App() {
                                                  }: NavigationBuilderProps) => {
 
         // This is a fake example of retrieving async data related to the user
-        // and storing it in the user extra field
+        // and storing it in the user extra field.
         const sampleUserData = await Promise.resolve({
             name: "John",
             roles: ["admin"]
@@ -208,6 +220,7 @@ export default function App() {
                     permissions: ({ user }) => ({
                         edit: true,
                         create: true,
+                        // we have created the roles object in the navigation builder
                         delete: user && user.extra.roles.includes("admin")
                     }),
                     subcollections: [

@@ -61,7 +61,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                 path: collectionPath,
                 collection
             });
-            const restOfThePath = removeInitialAndTrailingSlashes(path.replace(subpathCombination, ""));
+            const restOfThePath = removeInitialAndTrailingSlashes(removeInitialAndTrailingSlashes(path).replace(subpathCombination, ""));
             const nextSegments = restOfThePath.length > 0 ? restOfThePath.split("/") : [];
             if (nextSegments.length > 0) {
                 const entityId = nextSegments[0];

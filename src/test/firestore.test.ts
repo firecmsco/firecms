@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { Timestamp } from "firebase/firestore";
 import { productSchema } from "./test_site_config";
-import { initEntityValues } from "../models/utils";
+import { initEntityValues } from "../core/utils";
 import { useFirestoreDataSource } from "../firebase_app/hooks/useFirestoreDataSource";
 import { EntitySchema } from "../models";
 

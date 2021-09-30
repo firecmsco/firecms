@@ -17,13 +17,15 @@ import { EntityReference, Property } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { PreviewComponentProps, PreviewSize } from "../PreviewComponentProps";
-import { useSideEntityController } from "../../contexts";
 
 import SkeletonComponent from "./SkeletonComponent";
 import PreviewComponent from "../PreviewComponent";
 import ErrorView from "../../core/components/ErrorView";
-import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { useEntityFetch } from "../../hooks";
+import {
+    useEntityFetch,
+    useFireCMSContext,
+    useSideEntityController
+} from "../../hooks";
 
 export type ReferencePreviewProps =
     PreviewComponentProps<EntityReference>
@@ -100,14 +102,15 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     const reference: EntityReference = value;
     const previewProperties = property.previewProperties;
 
-    const schemaRegistry = useSchemasRegistry();
-    const collectionConfig = schemaRegistry.getCollectionConfig(property.path);
+    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
+    const sideEntityController = useSideEntityController();
+
+    const collectionConfig = schemaRegistryController.getCollectionConfig(property.path);
     if (!collectionConfig) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
     }
 
     const schema = collectionConfig.schema;
-    const sideEntityController = useSideEntityController();
 
     const {
         entity,

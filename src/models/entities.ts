@@ -1,5 +1,5 @@
-import { CMSAppContext } from "../contexts";
 import { EnumValues, PropertiesOrBuilder } from "./properties";
+import { FireCMSContext } from "./firecms_context";
 
 /**
  * Specification for defining an entity
@@ -225,7 +225,7 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
     /**
      * Context of the app status
      */
-    context: CMSAppContext;
+    context: FireCMSContext;
 }
 
 /**
@@ -257,7 +257,7 @@ export interface EntityOnDeleteProps<M extends { [Key: string]: any }> {
     /**
      * Context of the app status
      */
-    context: CMSAppContext;
+    context: FireCMSContext;
 }
 
 

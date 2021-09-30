@@ -4,10 +4,10 @@ title: useAuthController
 sidebar_label: useAuthController
 ---
 
-FireCMS provides different hooks that allow you to interact with the internal
-state of the app. Please note that in order to use this hook you **must** be in
+:::note
+Please note that in order to use these hooks you **must** be in
 a component (you can't use them directly from a callback function).
-
+:::
 
 ## `useAuthController`
 For state and operations regarding authentication.

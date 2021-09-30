@@ -22,12 +22,12 @@ The entry point for setting up a FireCMS app based on Firebase is the `FirebaseC
 This component is in charge of building a full FireCMS instance, using Firebase Auth,
 Firestore, and Firebase Storage as backend services.
 
-Internally it will create a `CMSAppProvider` which holds the main state and
+Internally it will create a `FireCMS` which holds the main state and
 logic of the app, and create the app scaffold and routes.
 
 :::note
 It is also possible to use FireCMS by using lower level components and including
-`CMSAppProvider` in your code, even without using Firebase.
+`FireCMS` in your code, even without using Firebase.
 More details in the [Custom CMSApp](custom_cms_app.md) section
 :::
 

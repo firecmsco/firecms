@@ -29,12 +29,6 @@ import {
     EntityValues,
     PermissionsBuilder
 } from "../../models";
-import {
-    useAuthController,
-    useCMSAppContext,
-    useSideEntityController,
-    useSnackbarController
-} from "../../contexts";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";
 import {
     removeInitialAndTrailingSlashes
@@ -46,8 +40,12 @@ import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
 import ErrorBoundary from "./ErrorBoundary";
 import {
     saveEntityWithCallbacks,
+    useAuthController,
     useDataSource,
-    useEntityFetch
+    useEntityFetch,
+    useFireCMSContext,
+    useSideEntityController,
+    useSnackbarController
 } from "../../hooks";
 import { canEdit } from "../util/permissions";
 
@@ -148,7 +146,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
     const dataSource = useDataSource();
     const sideEntityController = useSideEntityController();
     const snackbarContext = useSnackbarController();
-    const context = useCMSAppContext();
+    const context = useFireCMSContext();
     const authController = useAuthController();
 
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));

@@ -42,6 +42,8 @@ For custom views you can define the following props:
   Optional field used to group top level navigation entries under a
   navigation view.
 
+
+### Example:
 A quick example for a custom view:
 
 ```tsx

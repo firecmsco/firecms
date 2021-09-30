@@ -1,15 +1,19 @@
-export type { CMSAppProviderProps } from "./CMSAppProvider";
-export { CMSAppProvider } from "./CMSAppProvider";
+export type { FireCMSProps } from "./FireCMS";
+export { FireCMS } from "./FireCMS";
 
-export type { CMSRoutesProps } from "./CMSRoutes";
-export { CMSRoutes } from "./CMSRoutes";
+export type { NavigationRoutesProps } from "./NavigationRoutes";
+export { NavigationRoutes } from "./NavigationRoutes";
 
-export type { CMSScaffoldProps } from "./CMSScaffold";
-export { CMSScaffold } from "./CMSScaffold";
+export type { ScaffoldProps } from "./Scaffold";
+export { Scaffold } from "./Scaffold";
 
-export type { CMSDrawerProps } from "./CMSDrawer";
-export { CMSDrawer } from "./CMSDrawer";
+export type { DrawerProps } from "./Drawer";
+export { Drawer } from "./Drawer";
+
+export { SideEntityDialogs} from "./SideEntityDialogs";
 
 export * from "./components";
 
 export { createCMSDefaultTheme } from "./theme";
+
+export * from "./builders";

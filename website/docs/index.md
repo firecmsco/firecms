@@ -6,9 +6,9 @@ slug: /
 ---
 
 FireCMS is an open source **headless CMS** and admin panel built by developers
-for developers. It generates CRUD views based on your configuration. You define
-views that are mapped to absolute or relative paths in your datasource,
-as well as schemas for your entities.
+for developers. It generates CRUD views, both in a spreadsheet view or powerful forms,
+with very little configuration. You define views that are mapped to absolute or
+relative paths in your datasource, as well as schemas for your entities.
 
 The goal of this CMS is to generate collection and form views that bind nicely
 to the collection/document model. We have built in many basic (and not

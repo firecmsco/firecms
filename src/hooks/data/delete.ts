@@ -2,9 +2,9 @@ import {
     DataSource,
     DeleteEntityProps,
     Entity,
-    EntityOnDeleteProps
+    EntityOnDeleteProps,
+    FireCMSContext
 } from "../../models";
-import { CMSAppContext } from "../../contexts";
 
 /**
  * @category Hooks and utilities
@@ -47,7 +47,7 @@ export async function deleteEntityWithCallbacks<M>({
                                                        context
                                                    }: DeleteEntityWithCallbacksProps<M> & {
                                                        dataSource: DataSource,
-                                                       context: CMSAppContext
+                                                       context: FireCMSContext
                                                    }
 ): Promise<boolean> {
 

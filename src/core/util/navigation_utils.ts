@@ -93,13 +93,17 @@ export interface TopNavigationEntry {
 }
 
 export function computeTopNavigation(
-    navigation: Navigation,
     navigationContext: NavigationContext,
     includeHiddenViews: boolean
 ): {
     navigationEntries: TopNavigationEntry[],
     groups: string[]
 } {
+
+    const navigation = navigationContext.navigation;
+    if(!navigation)
+        throw Error("You can only use `computeTopNavigation` with an initialised navigationContext");
+
     const navigationEntries: TopNavigationEntry[] = [
         ...navigation.collections.map(collection => ({
             url: navigationContext.buildCollectionPath(collection.relativePath),
@@ -110,7 +114,7 @@ export function computeTopNavigation(
         ...(navigation.views ?? []).map(view =>
             includeHiddenViews || !view.hideFromNavigation ?
                 ({
-                    url: navigationContext.buildCMSURL(Array.isArray(view.path) ? view.path[0] : view.path),
+                    url: navigationContext.buildCMSUrl(Array.isArray(view.path) ? view.path[0] : view.path),
                     name: view.name,
                     description: view.description,
                     group: view.group

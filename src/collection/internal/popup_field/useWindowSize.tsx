@@ -3,7 +3,7 @@ import { useLayoutEffect, useState } from "react";
 interface WindowSize {
     width: number,
     height: number
-};
+}
 
 export function useWindowSize(): WindowSize {
     const [size, setSize] = useState<WindowSize>({ width: 0, height: 0 });

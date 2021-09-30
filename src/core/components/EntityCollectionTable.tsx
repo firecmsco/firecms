@@ -21,12 +21,6 @@ import {
 } from "../../models";
 import CollectionTable from "../../collection/components/CollectionTable";
 
-import {
-    useAuthController,
-    useCMSAppContext,
-    useSideEntityController
-} from "../../contexts";
-
 import CollectionRowActions
     from "../../collection/internal/CollectionRowActions";
 import DeleteEntityDialog from "../../collection/internal/DeleteEntityDialog";
@@ -39,7 +33,12 @@ import {
 import { canCreate, canDelete, canEdit } from "../util/permissions";
 import { OnCellValueChange, UniqueFieldValidator } from "../../collection";
 import { Markdown } from "../../preview";
-import { saveEntityWithCallbacks, useDataSource } from "../../hooks";
+import {
+    saveEntityWithCallbacks,
+    useAuthController,
+    useDataSource, useFireCMSContext,
+    useSideEntityController
+} from "../../hooks";
 
 /**
  * @category Core components
@@ -74,7 +73,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
 
     const sideEntityController = useSideEntityController();
     const dataSource = useDataSource();
-    const context = useCMSAppContext();
+    const context = useFireCMSContext();
     const authController = useAuthController();
 
     const theme = useTheme();
@@ -417,7 +416,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 textSearchEnabled={collection.textSearchEnabled}
                 paginationEnabled={paginationEnabled}
                 pageSize={pageSize}
-                indexes={collection.indexes}
+                filterCombinations={collection.filterCombinations}
                 inlineEditing={checkInlineEditing}
                 uniqueFieldValidator={uniqueFieldValidator}
                 onEntityClick={onEntityClick}

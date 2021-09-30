@@ -4,8 +4,13 @@ title: Collections
 sidebar_label: Collections
 ---
 
+In FireCMS, collections represent groups of entities. Collections need to be
+associated with an entity schema. You can find collections
+at the **top level** of the navigation tree (the entries displayed in the home
+page and the navigation drawer), or as **subcollections**
+
 Once you have defined at least one entity schema, you can include it in a
-collection. You can find collection views as the first level of navigation in
+**collection**. You can find collection views as the first level of navigation in
 the main menu, or as subcollections inside other collections, following the
 Firestore data schema.
 
@@ -15,7 +20,7 @@ in [Entity collections](api/interfaces/entitycollection.md)
 * `name` The plural name of the view. E.g. 'products'.
 
 * `relativePath` Relative Firestore path of this view to its parent. If this
-  view is in the root the path is equal to the absolute one. This path also
+  view is in the root the path, it is equal to the absolute one. This path also
   determines the URL in FireCMS.
 
 * `subcollections` Following the Firestore document and collection schema, you
@@ -25,19 +30,21 @@ in [Entity collections](api/interfaces/entitycollection.md)
 * `defaultSize` Default size of the rendered collection.
 
 * `group` Optional field used to group top level navigation entries under a
-  navigation view. If you set this value in a subcollection it has no effect.
+  navigation view. If you set this value in a subcollection, it has no effect.
 
 * `description` Optional description of this view. You can use Markdown.
 
-* `properties` Properties displayed in this collection. If this property is not
-  set every property is displayed.
+* `properties` Properties displayed in this collection. If this prop is not
+  set, every property is displayed.
 
-* `excludedProperties` Properties that should NOT get displayed in the
+* `excludedProperties` Properties that should **not** get displayed in the
   collection view. All the other properties from the entity are displayed. It
   has no effect if the `properties` value is set.
 
-* `indexes` If you need to filter/sort by multiple properties in this
-  collection, you need to create special indexes in Firestore. You can then
+* `filterCombinations` If you need to filter/sort by multiple properties in this
+  collection, you can define the supported filter combinations here.
+  In the case of Firestore, you need to create special indexes in the console to
+  support filtering/sorting by more than one property. You can then
   specify here the indexes created.
 
 * `initialFilter` Initial filters applied to this collection.
@@ -63,16 +70,17 @@ in [Entity collections](api/interfaces/entitycollection.md)
 
 * `permissions` You can specify an object with boolean permissions with the
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions
-  the user can perform. You can also pass a `PermissionsBuilder` to customize
-  the permissions based on user or entity.
+  the user can perform. You can also pass a [`PermissionsBuilder`](./api/types/permissionsbuilder.md)
+  to customize the permissions based on user or entity.
 
 * `inlineEditing` Can the elements in this collection be edited inline in the
   collection view. If this flag is set to false but `permissions.edit` is `true`
   , entities can still be edited in the side panel.
 
 * `exportable` Should the data in this collection view include an export button.
-  You can also set an `ExportConfig` configuration object to customize the
-  export and add additional values. Defaults to `true`
+  You can also set an [`ExportConfig`](./api/interfaces/exportconfig.md)
+  configuration object to customize the export and add additional values.
+  Defaults to `true`
 
 :::note
 In the examples you might see references to the type `Product`
@@ -93,7 +101,7 @@ const productsCollection = buildCollection<Product>({
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
     additionalColumns: [productAdditionalColumn],
-    indexes: [{ price: "desc", available: "desc" }],
+    filterCombinations: [{ price: "desc", available: "desc" }],
     permissions: ({ user, authController }) => ({
         edit: true,
         create: true,

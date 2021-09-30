@@ -1,13 +1,12 @@
 import { Entity, EntitySchema } from "./entities";
-import { CMSAppContext } from "../contexts";
 import { User } from "./user";
+import { FireCMSContext } from "./firecms_context";
 
 /**
  * This interface represents a view that includes a collection of entities.
  * It can be in the root level of the configuration, defining the main
- * menu navigation.
+ * menu navigation. You can also find it as a subcollection of a different one.
  *
- * If you need a lower level implementation you can check {@link CollectionTable}
  * @category Models
  */
 export interface EntityCollection<M extends { [Key: string]: any } = any,
@@ -86,12 +85,13 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     selectionEnabled?: boolean;
 
     /**
-     * Combination of properties that can be sorted/filtered at the same time
-     * e.g. if Firestore is your data source, you need to create specific
-     * index combinations in your console.
-     * You can then specify here the indexes created.
+     * If you need to filter/sort by multiple properties in this
+     * collection, you can define the supported filter combinations here.
+     * In the case of Firestore, you need to create special indexes in the console to
+     * support filtering/sorting by more than one property. You can then
+     * specify here the indexes created.
      */
-    indexes?: CompositeIndex<Extract<keyof M, string>>[];
+    filterCombinations?: FilterCombination<Extract<keyof M, string>>[];
 
     /**
      * Should the data in this collection view include an export button.
@@ -166,7 +166,7 @@ export interface ExtraActionsParams<M extends { [Key: string]: any } = any> {
     /**
      * Context of the app status
      */
-    context: CMSAppContext;
+    context: FireCMSContext;
 };
 
 
@@ -236,7 +236,7 @@ export interface PermissionsBuilderProps<M extends { [Key: string]: any } = any>
     /**
      * Context of the app status
      */
-    context: CMSAppContext;
+    context: FireCMSContext;
 }
 
 
@@ -268,7 +268,7 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
      */
     builder: ({ entity, context }: {
         entity: Entity<M>,
-        context: CMSAppContext;
+        context: FireCMSContext;
     }) => React.ReactNode;
 
 }
@@ -320,5 +320,5 @@ export interface ExportMappingFunction {
  * valid, otherwise it reverts to the simpler valid case
  * @category Models
  */
-export type CompositeIndex<Key extends string> = Partial<Record<Key, "asc" | "desc">>;
+export type FilterCombination<Key extends string> = Partial<Record<Key, "asc" | "desc">>;
 

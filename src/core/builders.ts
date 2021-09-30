@@ -1,11 +1,17 @@
 import {
+    AdditionalColumnDelegate,
     ArrayProperty,
     BooleanProperty,
     CMSType,
+    EntityCollection,
+    EntitySchema,
+    EntityValues,
     EnumValueConfig,
     EnumValues,
     GeopointProperty,
     MapProperty,
+    Navigation,
+    NavigationBuilder,
     NumberProperty,
     Properties,
     PropertiesOrBuilder,
@@ -15,32 +21,8 @@ import {
     ReferenceProperty,
     StringProperty,
     TimestampProperty
-} from "./properties";
-import {
-    EntitySchema,
-    EntityValues,
-    Navigation,
-    NavigationBuilder
 } from "../models";
-import { AdditionalColumnDelegate, EntityCollection } from "./collections";
 
-/**
- * Identity function we use to defeat the type system of Typescript and build
- * properties
- * @category Builder
- */
-export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: any }>(
-    propertyOrBuilder: PropertyOrBuilder<T, M>,
-    values: Partial<EntityValues<M>>,
-    path: string,
-    entityId?: string
-): Property<T> {
-    if (typeof propertyOrBuilder === "function") {
-        return propertyOrBuilder({ values, entityId, path });
-    } else {
-        return propertyOrBuilder;
-    }
-}
 
 /**
  * Identity function we use to defeat the type system of Typescript and build

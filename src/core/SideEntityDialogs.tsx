@@ -1,33 +1,30 @@
 import React from "react";
-import { SchemaConfig } from "../../models";
+import { SchemaConfig, SideEntityPanelProps } from "../models";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
-import { EntityDrawer } from "../internal/EntityDrawer";
-import SideEntityView from "../internal/SideEntityView";
-import {
-    SideEntityPanelProps,
-    useCMSAppContext,
-    useSideEntityController
-} from "../../contexts";
-import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { CONTAINER_WIDTH } from "../internal/common";
+import { EntityDrawer } from "./internal/EntityDrawer";
+import SideEntityView from "./internal/SideEntityView";
+import { CONTAINER_WIDTH } from "./internal/common";
+import { useFireCMSContext, useSideEntityController } from "../hooks";
 
 /**
  * This is the component in charge of rendering the side dialogs used
  * for editing entities. Use the {@link useSideEntityController} to open
  * and control the dialogs.
+ * This component needs a parent {@link FireCMS}
  * {@see useSideEntityController}
  * @category Core components
  */
-export default function EntitySideDialogs<M extends { [Key: string]: any }>() {
+export function SideEntityDialogs<M extends { [Key: string]: any }>() {
 
     const sideEntityController = useSideEntityController();
-    const schemasRegistry = useSchemasRegistry();
-    const context = useCMSAppContext();
+    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
+
+    const context = useFireCMSContext();
 
     const locale = context.locale;
     const dateUtilsLocale = locale ? locales[locale] : undefined;
@@ -38,7 +35,7 @@ export default function EntitySideDialogs<M extends { [Key: string]: any }>() {
 
     function buildEntityView(panel: SideEntityPanelProps) {
 
-        const schemaProps: SchemaConfig | undefined = schemasRegistry.getSchemaConfig(panel.path, panel.entityId);
+        const schemaProps: SchemaConfig | undefined = schemaRegistryController.getSchemaConfig(panel.path, panel.entityId);
 
         if (!schemaProps) {
             throw Error("ERROR: You are trying to open an entity with no schema defined.");

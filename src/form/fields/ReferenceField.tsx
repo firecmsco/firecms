@@ -6,19 +6,10 @@ import {
     FormControl,
     FormHelperText,
     IconButton,
-    lighten,
-    darken,
     Theme,
     Tooltip,
     Typography
 } from "@mui/material";
-import {
-    Entity,
-    EntityReference,
-    EntitySchema,
-    FieldProps,
-    Property
-} from "../../models";
 
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
@@ -26,16 +17,26 @@ import makeStyles from "@mui/styles/makeStyles";
 import ErrorIcon from "@mui/icons-material/Error";
 import ClearIcon from "@mui/icons-material/Clear";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
+
+import {
+    Entity,
+    EntityReference,
+    EntitySchema,
+    FieldProps,
+    Property
+} from "../../models";
 import { FieldDescription } from "../../form/components";
 import { ErrorView } from "../../core/components";
 import ReferenceDialog from "../../core/components/ReferenceDialog";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { PreviewComponent, SkeletonComponent } from "../../preview";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { useSideEntityController } from "../../contexts";
-import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
-import { useClearRestoreValue, useEntityFetch } from "../../hooks";
-import { getReferenceFrom } from "../../models/utils";
+import {
+    useClearRestoreValue,
+    useEntityFetch, useFireCMSContext,
+    useSideEntityController
+} from "../../hooks";
+import { getReferenceFrom } from "../../core/utils";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -116,9 +117,9 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
     const [open, setOpen] = React.useState(autoFocus);
     const sideEntityController = useSideEntityController();
 
-    const schemaRegistry = useSchemasRegistry();
+    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
 
-    const collectionConfig = schemaRegistry.getCollectionConfig(property.path);
+    const collectionConfig = schemaRegistryController.getCollectionConfig(property.path);
     if (!collectionConfig) {
         console.error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
     }

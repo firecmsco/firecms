@@ -1,12 +1,12 @@
 import {
     DataSource,
     Entity,
-    EntityValues,
+    EntityValues, FireCMSContext,
     SaveEntityProps
 } from "../../models";
-import { CMSAppContext, useCMSAppContext } from "../../contexts";
 import { useEffect } from "react";
 import { useDataSource } from "./useDataSource";
+import { useFireCMSContext } from "../useFireCMSContext";
 
 /**
  * @category Hooks and utilities
@@ -47,7 +47,7 @@ export function useSaveEntity<M extends { [Key: string]: any }>({
                                                                 }: SaveEntityWithCallbacksProps<M>) {
 
     const dataSource = useDataSource();
-    const context = useCMSAppContext();
+    const context = useFireCMSContext();
     useEffect(() => {
         saveEntityWithCallbacks(
             {
@@ -106,7 +106,7 @@ export async function saveEntityWithCallbacks<M>({
                                                      onSaveSuccessHookError
                                                  }: SaveEntityWithCallbacksProps<M> & {
                                                      dataSource: DataSource,
-                                                     context: CMSAppContext,
+                                                     context: FireCMSContext,
                                                  }
 ): Promise<void> {
 

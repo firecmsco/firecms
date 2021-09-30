@@ -4,7 +4,6 @@ title: useSideEntityController
 sidebar_label: useSideEntityController
 ---
 
-
 You can use this controller to open the side entity view used to edit entities.
 This is the same controller the CMS uses when you click on an entity in a collection
 view
@@ -20,7 +19,7 @@ The props provided by this context are:
   edit. You can set an entityId if you would like to edit and existing one
   (or a new one with that id). If you wish, you can also override
   the `SchemaSidePanelProps` (such as schema or subcollections) and choose to
-  override the `CMSAppProvider` level `SchemaResolver`.
+  override the `FireCMS` level `SchemaResolver`.
 
 Example:
 
@@ -63,7 +62,7 @@ export function ExampleCMSView() {
 ### Schema resolver
 
 You may want to override the schema definition for particular entities in. In
-that case you can define a schema resolver in the CMSAppProvider level.
+that case you can define a schema resolver in the FireCMS level.
 
 In order to do that, you can specify a `SchemaResolver` that is in charge of
 resolving the `path` and `entityId` and returning a `SchemaConfig`, where you
@@ -103,4 +102,4 @@ const customSchemaResolver: SchemaResolver = ({
 };
 ```
 
-Then you can pass `customSchemaResolver` to your `FirebaseCMSApp` or `CMSAppProvider`
+Then you can pass `schemaResolver` to your `FirebaseCMSApp` or `FireCMS`

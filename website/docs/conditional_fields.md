@@ -5,11 +5,15 @@ sidebar_label: Conditional fields
 ---
 
 When defining the properties of a schema, you can choose to use a builder
-(`PropertyBuilder`), instead of assigning the property configuration directly.
-In the builder you receive `PropertyBuilderProps` and return your property.
+[`PropertyBuilder`](api/types/propertybuilder.md), instead of assigning the
+property configuration directly. In the builder you
+receive [`PropertyBuilderProps`](api/types/propertybuilderprops.md)
+and return your property.
 
 This is useful for changing property configurations like available values on the
 fly, based on other values.
+
+### Example 1
 
 Example of field that gets enabled or disabled based on other values:
 
@@ -51,4 +55,66 @@ export const productSchema: EntitySchema = buildSchema<Partial<Product>>({
         })
     }
 });
+```
+
+### Example 2:
+
+A `User` type that has a `source` field that can be of type `facebook`
+or `apple`, and its fields change accordingly
+
+```tsx
+import {
+    buildSchema,
+    EntitySchema,
+    buildProperty,
+    buildProperties
+} from "@camberi/firecms";
+
+type User = {
+    source: {
+        type: "facebook",
+        facebookId: string
+    } | {
+        type: "apple",
+        appleId: number
+    }
+}
+
+export const userSchema: EntitySchema = buildSchema<User>({
+    name: "User",
+    properties: {
+        source: ({ values }) => {
+            const properties = buildProperties<any>({
+                type: {
+                    dataType: "string",
+                    config: {
+                        enumValues: {
+                            "facebook": "FacebookId",
+                            "apple": "Apple"
+                        }
+                    }
+                }
+            });
+
+            if (values.source) {
+                if ((values.source as any).type === "facebook") {
+                    properties["facebookId"] = buildProperty({
+                        dataType: "string"
+                    });
+                } else if ((values.source as any).type === "apple") {
+                    properties["appleId"] = buildProperty({
+                        dataType: "number"
+                    });
+                }
+            }
+
+            return ({
+                dataType: "map",
+                title: "Source",
+                properties: properties
+            });
+        }
+    }
+});
+
 ```

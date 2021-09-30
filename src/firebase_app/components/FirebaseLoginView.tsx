@@ -6,12 +6,12 @@ import makeStyles from "@mui/styles/makeStyles";
 
 import firebase from "firebase/compat/app";
 
-import { useAuthController } from "../../contexts";
 
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
 import { FirebaseApp } from "firebase/app";
 import { FireCMSLogo } from "../../core/components/FireCMSLogo";
+import { useAuthController } from "../../hooks";
 
 
 const useStyles = makeStyles((theme: Theme) =>

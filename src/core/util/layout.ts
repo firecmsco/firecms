@@ -1,5 +1,5 @@
 import { Property } from "../../models";
-import { isReadOnly } from "../../models/utils";
+import { isReadOnly } from "../utils";
 
 export function getColumnsForProperty(property: Property): "xs" | "sm" | "md" {
 

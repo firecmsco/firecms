@@ -1,78 +1,21 @@
-import React, { useContext, useRef } from "react";
-import { EntityCollection, SchemaConfig, SchemaResolver } from "../models";
+import React, { useRef } from "react";
+import {
+    EntityCollection,
+    NavigationContext,
+    SchemaConfig,
+    SchemaResolver
+} from "../../models";
 import {
     getCollectionViewFromPath,
     removeInitialAndTrailingSlashes
-} from "../core/util/navigation_utils";
+} from "../util/navigation_utils";
 import { getSidePanelKey } from "./utils";
 
-const DEFAULT_SCHEMA_CONTROLLER = {
-    initialised: false,
-    getSchemaConfig: (path: string, entityId?: string) => undefined,
-    getCollectionConfig: (path: string, entityId?: string) => {
-        throw Error("Reached wrong implementation");
-    },
-    removeAllOverridesExcept: (keys: string[]) => {
-    },
-    setOverride: (
-        entityPath: string,
-        schemaConfig: Partial<SchemaConfig> | null
-    ) => {
-        throw Error("Reached wrong implementation");
-    }
-};
 
-/**
- * This controller is in charge of resolving the entity schemas from a given
- * path. It takes into account the `navigation` prop set in the main level of the
- * CMSApp as well as the `schemaResolver` in case you want to override schemas
- * to specific entities.
- */
-export interface SchemaRegistryController {
 
-    /**
-     * Is the registry ready to be used
-     */
-    initialised: boolean;
-    /**
-     * Get props for path
-     */
-    getSchemaConfig: (path: string, entityId?: string) => SchemaConfig | undefined;
+export function useBuildSchemaRegistryController(navigationContext: NavigationContext, schemaResolver: SchemaResolver | undefined) {
 
-    /**
-     * Get props for path
-     */
-    getCollectionConfig: (path: string, entityId?: string) => EntityCollection | undefined;
-
-    /**
-     * Set props for path
-     * @return used key
-     */
-    setOverride: (
-        entityPath: string,
-        schemaConfig: Partial<SchemaConfig> | null,
-        overrideSchemaResolver?: boolean
-    ) => string | undefined;
-
-    /**
-     * Remove all keys not used
-     * @param used keys
-     */
-    removeAllOverridesExcept: (
-        keys: string[]
-    ) => void;
-}
-
-export const SchemaRegistryContext = React.createContext<SchemaRegistryController>(DEFAULT_SCHEMA_CONTROLLER);
-export const useSchemasRegistry = () => useContext(SchemaRegistryContext);
-
-interface ViewRegistryProviderProps {
-    children: React.ReactNode;
-    schemaRegistryController: SchemaRegistryController;
-}
-
-export function useSchemaRegistryController(collections: EntityCollection[] | undefined, schemaResolver: SchemaResolver | undefined) {
-
+    const collections = navigationContext.navigation?.collections;
     const initialised = collections !== undefined;
     const viewsRef = useRef<Record<string, Partial<SchemaConfig & { overrideSchemaResolver?: boolean }>>>({});
 
@@ -160,28 +103,13 @@ export function useSchemaRegistryController(collections: EntityCollection[] | un
         });
     };
 
-    const schemaRegistryController = {
+    return {
         initialised,
         getSchemaConfig,
         getCollectionConfig,
         setOverride,
         removeAllOverridesExcept
     };
-    return schemaRegistryController;
 }
-
-export const SchemaRegistryProvider: React.FC<ViewRegistryProviderProps> = ({
-                                                                                children,
-                                                                                schemaRegistryController
-                                                                            }) => {
-
-    return (
-        <SchemaRegistryContext.Provider
-            value={schemaRegistryController}
-        >
-            {children}
-        </SchemaRegistryContext.Provider>
-    );
-};
 
 

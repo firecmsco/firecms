@@ -21,7 +21,7 @@ import {
     sanitizeData,
     traverseValues,
     updateAutoValues
-} from "../../models/utils";
+} from "../../core/utils";
 import {
     collection,
     deleteDoc,

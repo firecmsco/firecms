@@ -12,7 +12,10 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import { Link as ReactLink } from "react-router-dom";
-import { computeTopNavigation, TopNavigationEntry } from "./util/navigation_utils";
+import {
+    computeTopNavigation,
+    TopNavigationEntry
+} from "./util/navigation_utils";
 import { useNavigation } from "../hooks";
 import { FireCMSLogo } from "./components/FireCMSLogo";
 
@@ -30,15 +33,19 @@ const useStyles = makeStyles((theme: Theme) =>
  * Props used in case you need to override the default drawer
  * @category Core
  */
-export interface CMSDrawerProps {
+export interface DrawerProps {
     logo: string | undefined,
     closeDrawer: () => any,
 }
 
-export function CMSDrawer({
-                              logo,
-                              closeDrawer
-                          }: CMSDrawerProps) {
+/**
+ * Default drawer used in the CMS
+ * @category Core
+ */
+export function Drawer({
+                           logo,
+                           closeDrawer
+                       }: DrawerProps) {
 
     const classes = useStyles();
 
@@ -49,7 +56,7 @@ export function CMSDrawer({
     const {
         navigationEntries,
         groups
-    } = computeTopNavigation(navigationContext.navigation, navigationContext, true);
+    } = computeTopNavigation(navigationContext, true);
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 

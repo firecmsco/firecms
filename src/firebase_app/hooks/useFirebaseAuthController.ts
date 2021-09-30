@@ -1,5 +1,4 @@
 import { User } from "../../models";
-import { AuthController } from "../../contexts";
 
 import React, { useEffect } from "react";
 
@@ -11,6 +10,7 @@ import {
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import { Authenticator } from "../models/authenticator";
+import { AuthController } from "../../models/auth";
 
 interface FirebaseAuthHandlerProps {
     firebaseApp?: FirebaseApp,

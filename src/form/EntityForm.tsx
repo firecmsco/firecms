@@ -21,7 +21,7 @@ import {
     computeSchemaProperties,
     initEntityValues,
     isReadOnly
-} from "../models/utils";
+} from "../core/utils";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 

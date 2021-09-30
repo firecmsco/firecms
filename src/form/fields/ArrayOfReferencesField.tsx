@@ -7,10 +7,9 @@ import ArrayContainer from "../components/ArrayContainer";
 import ReferenceDialog from "../../core/components/ReferenceDialog";
 import { formStyles } from "../styles";
 import FieldDescription from "../components/FieldDescription";
-import { useClearRestoreValue } from "../../hooks";
-import { useSchemasRegistry } from "../../contexts/SchemaRegistry";
+import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
 import { ErrorView } from "../../core/components";
-import { getReferenceFrom } from "../../models/utils";
+import { getReferenceFrom } from "../../core/utils";
 
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -51,9 +50,9 @@ export default function ArrayOfReferencesField({
         setValue
     });
 
-    const schemaRegistry = useSchemasRegistry();
+    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
     const collectionConfig = useMemo(() => {
-        return schemaRegistry.getCollectionConfig(ofProperty.path);
+        return schemaRegistryController.getCollectionConfig(ofProperty.path);
     }, [ofProperty.path]);
 
     if (!collectionConfig) {

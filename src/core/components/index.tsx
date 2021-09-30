@@ -19,15 +19,11 @@ export {
 } from "./EntityCollectionTable";
 
 export {
-    default as EntitySideDialogs
-} from "./EntitySideDialogs";
-
-export {
     default as CircularProgressCenter
 } from "./CircularProgressCenter";
 export {
     default as CMSHomePage
-} from "./CMSHomePage";
+} from "./HomePage";
 export {
     default as BreadcrumbUpdater
 } from "./BreadcrumbUpdater";

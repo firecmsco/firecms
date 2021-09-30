@@ -10,6 +10,8 @@ after it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
 This is useful if you need to add some logic or edit some fields before/after
 saving or deleting entities.
 
+All callbacks are asynchronous.
+
 :::note
 You can stop the execution of these callbacks by throwing an `Error`
 containing a `string` and an error snackbar will be displayed.
@@ -96,7 +98,7 @@ const productSchema = buildSchema<Product>({
 
 * `status`: EntityStatus New or existing entity
 
-* `context`: CMSAppContext Context of the app status
+* `context`: FireCMSContext Context of the app status
 
 #### EntityOnDeleteProps
 
@@ -108,5 +110,5 @@ const productSchema = buildSchema<Product>({
 
 * `entity`: Entity Deleted entity
 
-* `context`: CMSAppContext Context of the app status
+* `context`: FireCMSContext Context of the app status
 

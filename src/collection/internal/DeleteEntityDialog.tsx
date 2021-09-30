@@ -10,8 +10,7 @@ import {
 import EntityPreview from "../../core/components/EntityPreview";
 import CircularProgressCenter
     from "../../core/components/CircularProgressCenter";
-import { useCMSAppContext, useSnackbarController } from "../../contexts";
-import { deleteEntityWithCallbacks, useDataSource } from "../../hooks";
+import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../../hooks";
 
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
@@ -44,7 +43,7 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
 
     const entityOrEntitiesRef = React.useRef<Entity<M> | Entity<M>[]>();
     const [multipleEntities, setMultipleEntities] = React.useState<boolean>();
-    const context = useCMSAppContext();
+    const context = useFireCMSContext();
 
     React.useEffect(() => {
         if (entityOrEntitiesToDelete) {

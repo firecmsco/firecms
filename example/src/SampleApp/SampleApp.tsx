@@ -56,7 +56,7 @@ function SampleApp() {
         description: "List of the products currently sold in our shop",
         textSearchEnabled: true,
         additionalColumns: [productAdditionalColumn],
-        indexes: [{ category: "desc", available: "desc" }],
+        filterCombinations: [{ category: "desc", available: "desc" }],
         permissions: ({ user }) => ({
             edit: true,
             create: true,

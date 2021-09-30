@@ -8,14 +8,13 @@ import { useLocation } from "react-router-dom";
 
 import {
     AdditionalColumnDelegate,
-    buildPropertyFrom,
     CMSType,
     CollectionSize,
-    CompositeIndex,
+    FilterCombination,
     Entity,
     FilterValues,
     Property,
-    WhereFilterOp
+    WhereFilterOp, FireCMSContext
 } from "../../models";
 import {
     CMSColumn,
@@ -41,9 +40,9 @@ import { useTableStyles } from "./styles";
 import { getPreviewSizeFrom } from "../../preview/util";
 import PropertyTableCell, { OnCellChangeParams } from "../internal/PropertyTableCell";
 import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
-import { useCollectionFetch } from "../../hooks";
+import { useCollectionFetch, useFireCMSContext } from "../../hooks";
 import CollectionTableHeader from "../internal/CollectionTableHeader";
-import { CMSAppContext, useCMSAppContext } from "../../contexts";
+import { buildPropertyFrom } from "../../core/util/property_builder";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -74,7 +73,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                                                displayedProperties,
                                                textSearchEnabled,
                                                additionalColumns,
-                                               indexes,
+                                               filterCombinations,
                                                inlineEditing,
                                                toolbarActionsBuilder,
                                                title,
@@ -89,7 +88,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                                                pageSize = DEFAULT_PAGE_SIZE
                                            }: CollectionTableProps<M, AdditionalKey>) {
 
-    const context: CMSAppContext = useCMSAppContext();
+    const context: FireCMSContext = useFireCMSContext();
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize);
 
@@ -252,7 +251,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
         const newSortProperty: Extract<keyof M, string> | undefined = isAsc ? undefined : key;
 
         if (filterValues) {
-            if (!isFilterCombinationValid(filterValues, indexes, newSortProperty, newSort)) {
+            if (!isFilterCombinationValid(filterValues, filterCombinations, newSortProperty, newSort)) {
                 // reset filters
                 setFilterValues({});
             }
@@ -474,7 +473,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                 newFilterValue[column.id] = filterForProperty;
             }
 
-            const isNewFilterCombinationValid = isFilterCombinationValid(newFilterValue, indexes, sortByProperty, currentSort);
+            const isNewFilterCombinationValid = isFilterCombinationValid(newFilterValue, filterCombinations, sortByProperty, currentSort);
             if (!isNewFilterCombinationValid) {
                 newFilterValue = filterForProperty ? { [column.id]: filterForProperty } as FilterValues<M> : {};
             }
@@ -674,7 +673,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
 
 }
 
-function isFilterCombinationValid<M extends { [Key: string]: any }>(filterValues: FilterValues<M>, indexes?: CompositeIndex<Extract<keyof M, string>>[], sortKey?: keyof M, sortDirection?: "asc" | "desc"): boolean {
+function isFilterCombinationValid<M extends { [Key: string]: any }>(filterValues: FilterValues<M>, indexes?: FilterCombination<Extract<keyof M, string>>[], sortKey?: keyof M, sortDirection?: "asc" | "desc"): boolean {
 
     // Order by clause cannot contain a field with an equality filter available
     const values: [WhereFilterOp, any][] = Object.values(filterValues) as [WhereFilterOp, any][];

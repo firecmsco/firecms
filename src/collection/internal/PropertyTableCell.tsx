@@ -22,7 +22,7 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 import { getPreviewSizeFrom } from "../../preview/util";
 import { useClearRestoreValue } from "../../hooks";
 import deepEqual from "deep-equal";
-import { isReadOnly } from "../../models/utils";
+import { isReadOnly } from "../../core/utils";
 import TableCell from "./TableCell";
 import { AnySchema } from "yup";
 

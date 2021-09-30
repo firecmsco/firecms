@@ -1,5 +1,6 @@
 import { useMediaQuery } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { ModeState } from "../../hooks";
 
 const DEFAULT_MODE_STATE: ModeState = {
     mode: "light",
@@ -9,28 +10,10 @@ const DEFAULT_MODE_STATE: ModeState = {
     }
 };
 
-/**
- * @category Hooks and utilities
- */
-export interface ModeState {
-    mode: "light" | "dark";
-    setMode: (mode: "light" | "dark") => void;
-    toggleMode: () => void;
-}
+
 
 export const ModeStateContext = React.createContext<ModeState>(DEFAULT_MODE_STATE);
 
-/**
- * Hook to retrieve the current mode ("light" | "dark"), and `setMode`
- * or `toggle` functions to change it.
- *
- * Consider that in order to use this hook you need to have a parent
- * `CMSAppProvider`
- *
- * @see ModeState
- * @category Hooks and utilities
- */
-export const useModeState = () => useContext(ModeStateContext);
 
 interface ModeProviderProps {
     children: React.ReactNode;

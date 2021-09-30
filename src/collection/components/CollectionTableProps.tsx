@@ -1,13 +1,13 @@
+import React from "react";
 import {
     AdditionalColumnDelegate,
     CollectionSize,
-    CompositeIndex,
+    FilterCombination,
     Entity,
     EntitySchema,
     FilterValues,
     Property
 } from "../../models";
-import React from "react";
 
 /**
  * @category Collection components
@@ -78,7 +78,7 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
      * may need to create special indexes in your datasource (e.g. Firestore).
      * You can then specify here the indexes created.
      */
-    indexes?: CompositeIndex<Extract<keyof M, string>>[];
+    filterCombinations?: FilterCombination<Extract<keyof M, string>>[];
 
     /**
      * List of entities that will be displayed on top, no matter the ordering.

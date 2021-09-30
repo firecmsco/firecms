@@ -63,7 +63,7 @@ export interface DeleteEntityProps<M> {
 };
 
 /**
- * Implement this interface and pass it to a {@link CMSAppProvider}
+ * Implement this interface and pass it to a {@link FireCMS}
  * @category Datasource
  */
 export interface DataSource {

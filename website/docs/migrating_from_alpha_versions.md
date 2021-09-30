@@ -66,7 +66,13 @@ type User = {
 ## API changes
 
 - **`CMSApp` has been renamed to `FirebaseCMSApp`** in order to better reflect
-  that that implementation of FireCMS uses Firebase as the backend
+  that that implementation of `FireCMS` uses Firebase as the backend
+
+- `CMSAppProvider` has been renamed to `FireCMS`, it is now the main component
+  of the CMS, in charge of initialising navigation and all the contexts.
+
+- `CMSAppContext` has been renamed to `FireCMSContext`
+- `useCMSAppContext` has been renamed to `useFireCMSContext`
 
 - General callbacks refactor. **All callbacks** now always return a single
   object with the props as fields. The goal of this change is to make them
@@ -129,10 +135,17 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
 
 - `field` prop in properties has been renamed to `Field`
 - `preview` prop in properties has been renamed to `Preview`
+- `indexes` prop in `EntityCollection` has been renamed to `filterCombinations`
 
 - If you were using `CMSAppProvider` and `CMSMainView`, they have been largely
   refactored, and now you will need to implement a bunch of extra stuff if you
-  want to go down the super custom road. You will be responsible for
+  want to go down the super custom road.
+  Those components have now been turned into:
+    - [`FireCMS`](api/functions/firecms.md)
+    - [`Scaffold`](api/functions/scaffold.md)
+    - [`NavigationRoutes`](api/functions/navigationroutes.md)
+    - [`SideEntityDialogs`](api/functions/sideentitydialogs.md)
+  You will be responsible for
   initialising the material theme, Firebase (or your own backend) and providing
   the Router. On the plus side, this is going to give you a ton of room for
   customisation. You can check a complete example in:

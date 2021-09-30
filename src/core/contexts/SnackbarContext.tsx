@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Snackbar } from "@mui/material";
 import Alert from "@mui/lab/Alert/Alert";
+import { SnackbarController, SnackbarMessageType } from "../../hooks/useSnackbarController";
 
 const DEFAULT_STATE = {
     isOpen: false,
@@ -13,56 +14,9 @@ const DEFAULT_STATE = {
     }
 };
 
-/**
- * Possible snackbar types
- * @category Hooks and utilities
- */
-export type SnackbarMessageType = "success" | "info" | "warning" | "error";
-
-/**
- * Controller to display snackbars
- * @category Hooks and utilities
- */
-export interface SnackbarController {
-    /**
-     * Is there currently an open snackbar
-     */
-    isOpen: boolean;
-
-    /**
-     * Close the currently open snackbar
-     */
-    close: () => void;
-
-    /**
-     * Display a new snackbar. You need to specify the type and message.
-     * You can optionally specify a title
-     */
-    open: (props: {
-        type: SnackbarMessageType;
-        title?: string;
-        message: string;
-    }) => void;
-}
-
 export const SnackbarContext = React.createContext<SnackbarController>(DEFAULT_STATE);
 
-/**
- * Hook to retrieve the SnackbarContext.
- *
- * Consider that in order to use this hook you need to have a parent
- * `CMSAppProvider`
- *
- * @see SnackbarController
- * @category Hooks and utilities
- */
-export const useSnackbarController = () => useContext<SnackbarController>(SnackbarContext);
-
-interface ISelectedEntityProviderProps {
-    children: React.ReactNode;
-}
-
-export const SnackbarProvider: React.FC<ISelectedEntityProviderProps> = ({ children }) => {
+export const SnackbarProvider: React.FC = ({ children }) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState<string | undefined>(undefined);

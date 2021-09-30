@@ -15,11 +15,14 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { ErrorMessage } from "formik";
 
-import { Entity, EntitySchema, EntityStatus } from "../../models";
-import { useCMSAppContext, useSnackbarController } from "../../contexts";
-import { CMSAppContext } from "../../contexts/CMSAppContext";
+import {
+    Entity,
+    EntitySchema,
+    EntityStatus,
+    FireCMSContext
+} from "../../models";
 import { formStyles } from "../styles";
-
+import { useFireCMSContext, useSnackbarController } from "../../hooks";
 
 export function CustomIdField<M>
 ({ schema, status, onChange, error, entity }: {
@@ -45,42 +48,41 @@ export function CustomIdField<M>
         })
     });
 
-    const appConfig: CMSAppContext | undefined = useCMSAppContext();
-    const inputProps = entity ? {
-            className: classes.input,
-            endAdornment: (
-                <InputAdornment position="end">
+    const appConfig: FireCMSContext | undefined = useFireCMSContext();
+    const inputProps = {
+        className: classes.input,
+        endAdornment: entity ? (
+            <InputAdornment position="end">
 
-                    <IconButton onClick={(e) => copy(entity.id)}
-                                aria-label="copy-id"
-                                size="large">
-                        <Tooltip title={"Copy"}>
-                            <svg
-                                className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
-                                fill={"currentColor"}
-                                width="20" height="20" viewBox="0 0 24 24">
-                                <path
-                                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                            </svg>
+                <IconButton onClick={(e) => copy(entity.id)}
+                            aria-label="copy-id"
+                            size="large">
+                    <Tooltip title={"Copy"}>
+                        <svg
+                            className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
+                            fill={"currentColor"}
+                            width="20" height="20" viewBox="0 0 24 24">
+                            <path
+                                d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                    </Tooltip>
+                </IconButton>
+
+                {appConfig?.entityLinkBuilder &&
+                <a href={appConfig.entityLinkBuilder({ entity })}
+                   rel="noopener noreferrer"
+                   target="_blank">
+                    <IconButton onClick={(e) => e.stopPropagation()}
+                                aria-label="go-to-datasource" size="large">
+                        <Tooltip title={"Open in the console"}>
+                            <OpenInNewIcon fontSize={"small"}/>
                         </Tooltip>
                     </IconButton>
+                </a>}
 
-                    {appConfig?.entityLinkBuilder &&
-                    <a href={appConfig.entityLinkBuilder({ entity })}
-                       rel="noopener noreferrer"
-                       target="_blank">
-                        <IconButton onClick={(e) => e.stopPropagation()}
-                                    aria-label="go-to-datasource" size="large">
-                            <Tooltip title={"Open in the console"}>
-                                <OpenInNewIcon fontSize={"small"}/>
-                            </Tooltip>
-                        </IconButton>
-                    </a>}
-
-                </InputAdornment>
-            )
-        } :
-        undefined;
+            </InputAdornment>
+        ) : undefined
+    };
 
     const fieldProps: any = {
         label: idSetAutomatically ? "Id is set automatically" : "Id",

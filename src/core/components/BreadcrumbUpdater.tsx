@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
-import { useBreadcrumbsContext } from "../../contexts";
 import { EntityCollectionTable } from "./EntityCollectionTable";
+import { useBreadcrumbsContext } from "../../hooks/useBreadcrumbsContext";
 
 export interface BreadcrumbRouteProps {
     title: string;

@@ -13,14 +13,14 @@ import {
     buildCollection,
     buildSchema,
     CircularProgressCenter,
-    CMSAppProvider,
-    CMSRoutes,
-    CMSScaffold,
     createCMSDefaultTheme,
-    EntitySideDialogs,
     FirebaseLoginView,
+    FireCMS,
     NavigationBuilder,
     NavigationBuilderProps,
+    NavigationRoutes,
+    Scaffold,
+    SideEntityDialogs,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDataSource,
@@ -132,18 +132,18 @@ export function CustomCMSApp() {
 
     return (
         <Router>
-            <CMSAppProvider navigation={navigation}
-                            authController={authController}
-                            dataSource={dataSource}
-                            storageSource={storageSource}
-                            entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+            <FireCMS navigation={navigation}
+                     authController={authController}
+                     dataSource={dataSource}
+                     storageSource={storageSource}
+                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
             >
-                {({ context, mode }) => {
+                {({ context, mode, loading }) => {
 
                     const theme = createCMSDefaultTheme({ mode });
 
                     let component;
-                    if (context.authController.authLoading || context.navigationLoading) {
+                    if (loading) {
                         component = <CircularProgressCenter/>;
                     } else if (!context.authController.canAccessMainView) {
                         component = (
@@ -154,10 +154,10 @@ export function CustomCMSApp() {
                         );
                     } else {
                         component = (
-                            <CMSScaffold name={"My Online Shop"}>
-                                <CMSRoutes/>
-                                <EntitySideDialogs/>
-                            </CMSScaffold>
+                            <Scaffold name={"My Online Shop"}>
+                                <NavigationRoutes/>
+                                <SideEntityDialogs/>
+                            </Scaffold>
                         );
                     }
 
@@ -168,7 +168,7 @@ export function CustomCMSApp() {
                         </ThemeProvider>
                     );
                 }}
-            </CMSAppProvider>
+            </FireCMS>
         </Router>
     );
 

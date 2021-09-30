@@ -22,9 +22,10 @@ use them in your app and combine them with your code
 
 Some top-level components that you will find useful (same ones as used
 by `FirebaseCMSApp`):
-- [`CMSAppProvider`](api/functions/cmsappprovider.md)
-- [`CMSScaffold`](api/functions/cmsscaffold.md)
-- [`CMSRoutes`](api/functions/cmsroutes.md)
+- [`FireCMS`](api/functions/firecms.md)
+- [`Scaffold`](api/functions/scaffold.md)
+- [`NavigationRoutes`](api/functions/navigationroutes.md)
+- [`SideEntityDialogs`](api/functions/sideentitydialogs.md)
 - [`useInitialiseFirebase`](api/functions/useinitialisefirebase.md)
 - [`useFirebaseAuthController`](api/functions/usefirebaseauthcontroller.md)
 - [`useFirebaseStorageSource`](api/functions/usefirebasestoragesource.md)
@@ -48,7 +49,6 @@ either in https://www.reddit.com/r/firecms/ or directly at hello@camberi.com
 ```tsx
 import React from "react";
 
-import { FirebaseApp } from "firebase/app";
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -62,11 +62,11 @@ import {
     buildCollection,
     buildSchema,
     CircularProgressCenter,
-    CMSAppProvider,
-    CMSRoutes,
-    CMSScaffold,
+    FireCMS,
+    NavigationRoutes,
+    Scaffold,
     createCMSDefaultTheme,
-    EntityLinkBuilder,
+    SideEntityDialogs,
     FirebaseLoginView,
     NavigationBuilder,
     NavigationBuilderProps,
@@ -117,6 +117,11 @@ const productSchema = buildSchema({
     }
 });
 
+/**
+ * This is an example of how to use the components provided by FireCMS for
+ * a better customisation.
+ * @constructor
+ */
 export function CustomCMSApp() {
 
     const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
@@ -146,6 +151,17 @@ export function CustomCMSApp() {
         firebaseConfigError
     } = useInitialiseFirebase({ firebaseConfig });
 
+    const authController: AuthController = useFirebaseAuthController({
+        firebaseApp,
+        authentication: myAuthenticator
+    });
+
+    const dataSource = useFirestoreDataSource({
+        firebaseApp: firebaseApp
+        // You can add your `FirestoreTextSearchController` here
+    });
+    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
+
     if (configError) {
         return <div> {configError} </div>;
     }
@@ -163,57 +179,49 @@ export function CustomCMSApp() {
         return <CircularProgressCenter/>;
     }
 
-    const mode: "light" | "dark" = "light";
-    const theme = createCMSDefaultTheme({ mode });
-
-    const authController: AuthController = useFirebaseAuthController({
-        firebaseApp: firebaseApp as FirebaseApp,
-        authentication: myAuthenticator
-    });
-
-    const dataSource = useFirestoreDataSource({ firebaseApp: firebaseApp as FirebaseApp });
-    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp as FirebaseApp });
-
-    // This builder is only used to provide the button shortcuts in the entity views.
-    const entityLinkBuilder: EntityLinkBuilder = ({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`;
-
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <Router>
-                <CMSAppProvider navigation={navigation}
-                                authController={authController}
-                                entityLinkBuilder={entityLinkBuilder}
-                                dataSource={dataSource}
-                                storageSource={storageSource}>
-                    {({ context }) => {
+        <Router>
+            <FireCMS navigation={navigation}
+                     authController={authController}
+                     dataSource={dataSource}
+                     storageSource={storageSource}
+                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+            >
+                {({ context, mode }) => {
 
-                        if (context.authController.authLoading || context.navigationLoading) {
-                            return <CircularProgressCenter/>;
-                        }
+                    const theme = createCMSDefaultTheme({ mode });
 
-                        if (!context.authController.canAccessMainView) {
-                            return (
-                                <FirebaseLoginView
-                                    skipLoginButtonEnabled={false}
-                                    signInOptions={DEFAULT_SIGN_IN_OPTIONS}
-                                    firebaseApp={firebaseApp}/>
-                            );
-                        }
-
-                        return (
-                            <CMSScaffold name={"My Online Shop"}>
-                                {context.navigation && <CMSRoutes navigation={context.navigation}/>}
-                            </CMSScaffold>
+                    let component;
+                    if (context.loading) {
+                        component = <CircularProgressCenter/>;
+                    } else if (!context.authController.canAccessMainView) {
+                        component = (
+                            <FirebaseLoginView
+                                skipLoginButtonEnabled={false}
+                                signInOptions={DEFAULT_SIGN_IN_OPTIONS}
+                                firebaseApp={firebaseApp}/>
                         );
+                    } else {
+                        component = (
+                            <Scaffold name={"My Online Shop"}>
+                                <NavigationRoutes/>
+                                <SideEntityDialogs/>
+                            </Scaffold>
+                        );
+                    }
 
-                    }}
-                </CMSAppProvider>
-            </Router>
-        </ThemeProvider>
-);
+                    return (
+                        <ThemeProvider theme={theme}>
+                            <CssBaseline/>
+                            {component}
+                        </ThemeProvider>
+                    );
+                }}
+            </FireCMS>
+        </Router>
+    );
+
 }
-
 ```
 
 

@@ -14,9 +14,9 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import {
-    buildPropertyFrom,
     Entity,
     EntitySchema,
+    FireCMSContext,
     Property,
     PropertyOrBuilder
 } from "../../models";
@@ -24,8 +24,8 @@ import PreviewComponent from "../../preview/PreviewComponent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import ErrorBoundary from "../internal/ErrorBoundary";
-import { useCMSAppContext } from "../../contexts";
-import { CMSAppContext } from "../../contexts";
+import { useFireCMSContext } from "../../hooks";
+import { buildPropertyFrom } from "../util/property_builder";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -69,7 +69,7 @@ export default function EntityPreview<M extends { [Key: string]: any }>(
 
     const classes = useStyles();
 
-    const appConfig: CMSAppContext | undefined = useCMSAppContext();
+    const appConfig: FireCMSContext | undefined = useFireCMSContext();
     return (
         <TableContainer>
             <Table aria-label="entity table">

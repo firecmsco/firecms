@@ -1,7 +1,6 @@
 import {
     ArrayProperty,
     BooleanProperty,
-    buildPropertyFrom,
     CMSType,
     EntityValues,
     GeopointProperty,
@@ -25,6 +24,7 @@ import {
     StringSchema
 } from "yup";
 import { enumToObjectEntries } from "../core/util/enums";
+import { buildPropertyFrom } from "../core/util/property_builder";
 
 // Add custom unique function for array values
 declare module "yup" {

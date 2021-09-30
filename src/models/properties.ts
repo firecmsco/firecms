@@ -1,5 +1,3 @@
-import React from "react";
-
 import { FieldProps } from "./fields";
 import { PreviewComponentProps } from "../preview";
 import { ChipColor } from "./colors";

@@ -4,10 +4,11 @@ title: Navigation
 sidebar_label: Navigation
 ---
 
-### Navigation and custom views
+FireCMS takes care of the navigation for you, it generates routes and menus based
+on the configuration that you set up.
 
-You have two main ways of creating views in FireCMS, either creating entity
-collections that get mapped to CMS views, or create your own React views.
+You have two main ways of creating the top level views in FireCMS, either creating entity
+collections that get mapped to CMS views, or create your own top level React views.
 
 You can check all the possible configurations for defining [collections](collections.md)
 and [entity schemas](entity_schemas.md) in their respective documents.

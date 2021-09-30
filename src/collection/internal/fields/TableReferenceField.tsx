@@ -13,8 +13,8 @@ import ReferenceDialog from "../../../core/components/ReferenceDialog";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
 import { useInputStyles } from "./styles";
-import { useSchemasRegistry } from "../../../contexts/SchemaRegistry";
-import { getReferenceFrom } from "../../../models/utils";
+import { getReferenceFrom } from "../../../core/utils";
+import { useFireCMSContext } from "../../../hooks";
 
 
 export function TableReferenceField<M extends { [Key: string]: any }>(props: {
@@ -55,8 +55,8 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     const [onHover, setOnHover] = useState(false);
     const [open, setOpen] = useState<boolean>(false);
 
-    const schemaRegistry = useSchemasRegistry();
-    const collectionConfig = schemaRegistry.getCollectionConfig(usedProperty.path);
+    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
+    const collectionConfig = schemaRegistryController.getCollectionConfig(usedProperty.path);
     if (!collectionConfig) {
         console.error(`Couldn't find the corresponding collection view for the path: ${usedProperty.path}`);
     }

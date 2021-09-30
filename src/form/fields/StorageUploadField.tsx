@@ -27,13 +27,16 @@ import { PreviewComponent, PreviewSize } from "../../preview";
 import deepEqual from "deep-equal";
 import { FieldDescription } from "../../form/components";
 import LabelWithIcon from "../components/LabelWithIcon";
-import { useSnackbarController } from "../../contexts";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
-import { useClearRestoreValue, useStorageSource } from "../../hooks";
-import { isReadOnly } from "../../models/utils";
+import {
+    useClearRestoreValue,
+    useSnackbarController,
+    useStorageSource
+} from "../../hooks";
+import { isReadOnly } from "../../core/utils";
 
 export const useStyles = makeStyles((theme: Theme) => ({
     dropZone: {

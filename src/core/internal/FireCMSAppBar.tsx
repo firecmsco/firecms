@@ -22,9 +22,9 @@ import Brightness5Icon from "@mui/icons-material/Brightness5";
 import Brightness3Icon from "@mui/icons-material/Brightness3";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
-import { useAuthController, useBreadcrumbsContext, useModeState } from "../../contexts";
 import ErrorBoundary from "./ErrorBoundary";
-import { useNavigation } from "../../hooks";
+import { useAuthController, useModeState } from "../../hooks";
+import { useBreadcrumbsContext } from "../../hooks/useBreadcrumbsContext";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,7 +60,7 @@ interface CMSAppBarProps {
     toolbarExtraWidget?: React.ReactNode;
 }
 
-export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
+export const FireCMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
                                                                        title,
                                                                        handleDrawerToggle,
                                                                        toolbarExtraWidget
@@ -73,7 +73,6 @@ export const CMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
 
     const authController = useAuthController();
     const { mode, toggleMode } = useModeState();
-    const navigationContext = useNavigation();
 
     return (
         <Slide

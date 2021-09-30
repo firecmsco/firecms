@@ -19,12 +19,10 @@ That is the object that you need to pass to the CMS.
 
 ![firebase_setup](../static/img/firebase_setup_app.png)
 
-:::tip
-
+:::tip Firebase Hosting
 Note that you can also link your new webapp to **Firebase Hosting** which will
-allow you to deploy it with very little effort. You can also create the
+allow you to deploy it with very little effort. You can create the
 Firebase Hosting site at a later stage and link it to your webapp.
-
 :::
 
 ### Authentication

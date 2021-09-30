@@ -8,7 +8,17 @@ The core of the CMS are **entities**, which are defined by an `EntitySchema`. In
 the schema you define the properties, which are related to the Firestore data
 types.
 
-Check the full API reference in [Entity schemas](api/interfaces/entityschema.md)
+The `name` and `properties` you define for your entity schema, will be used to
+generate the fields in the spreadsheet like collection tables, and the fields
+in the generated forms.
+
+:::note
+FireCMS provides around 15 different fields (such as text fields, selects, and
+complex ones like reference or sortable array fields). If your use case is not
+covered by one of the provided fields, you can create your own [custom field](custom_fields.md).
+:::
+
+Check the full API reference in [Entity schema API](api/interfaces/entityschema.md)
 
 - `name` A singular name of the entity as displayed in an Add button. E.g.
   Product
@@ -21,59 +31,6 @@ Check the full API reference in [Entity schemas](api/interfaces/entityschema.md)
   those.
 
 - `properties` Object defining the properties for the entity schema.
-
-### Entity properties
-
-You can specify the properties of an entity, using the following configuration
-fields, common to all data types:
-
-* `dataType` Firestore datatype of the property.
-
-* `title` Property title (e.g. Product).
-
-* `description` Property description.
-
-* `longDescription` Longer description of a field, displayed under a popover.
-
-* `columnWidth` Width in pixels of this column in the collection view. If
-  not set, the width is inferred based on the other configurations.
-
-* `disabled` Is this a read only property.
-
-* `config`
-  You can see more details about how to implement
-  [custom fields](custom_fields.md)
-
-    * `field`
-      If you need to render a custom field, you can create a component that
-      takes `FieldProps` as props. You receive the value, a function to update
-      the value and additional utility props such as if there is an error. You
-      can customize it by passing custom props that are received in the
-      component.
-
-    * `preview`
-      Configure how a property is displayed as a preview, e.g. in the collection
-      view. You can customize it by passing custom props that are received in
-      the component.
-
-    * `customProps`
-      Additional props that are passed to the components defined in `field` or
-      in `preview`.
-
-
-* `onPreSave` Hook called before saving, you need to return the values that will
-  get saved. If you throw an error in this method the process stops, and an
-  error snackbar gets displayed. (example bellow)
-
-* `onSaveSuccess` Hook called when save is successful.
-
-* `onSaveFailure` Hook called when saving fails.
-
-* `onPreDelete` Hook called after the entity is deleted in Firestore. If you throw an error in this method the process stops, and an error snackbar gets displayed.
-
-* `onDelete` Hook called after the entity is deleted in Firestore.
-
-* `defaultValues` Object defining the initial values of the entity on creation.
 
 ### Sample entity schema
 

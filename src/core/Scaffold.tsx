@@ -2,9 +2,8 @@ import React, { PropsWithChildren } from "react";
 
 import { Drawer as MuiDrawer, Theme } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
-import { CMSDrawer, CMSDrawerProps } from "./CMSDrawer";
-import { CMSAppBar } from "./internal/CMSAppBar";
-import { useCMSAppContext } from "../contexts";
+import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
+import { FireCMSAppBar } from "./internal/FireCMSAppBar";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
@@ -12,12 +11,13 @@ import DateFnsUtils from "@date-io/date-fns";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import * as locales from "date-fns/locale";
+import { useFireCMSContext } from "../hooks";
 
 
 /**
  * @category Core
  */
-export interface CMSScaffoldProps {
+export interface ScaffoldProps {
 
     /**
      * Name of the app, displayed as the main title and in the tab title
@@ -37,16 +37,12 @@ export interface CMSScaffoldProps {
     /**
      * In case you need to override the view that gets rendered as a drawer
      */
-    Drawer?: React.ComponentType<CMSDrawerProps>;
+    Drawer?: React.ComponentType<DrawerProps>;
 
 }
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        logo: {
-            padding: theme.spacing(3),
-            maxWidth: 240
-        },
         main: {
             display: "flex",
             flexDirection: "column",
@@ -59,20 +55,6 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "100%",
             overflow: "auto"
         },
-        tableNoBottomBorder: {
-            "&:last-child th, &:last-child td": {
-                borderBottom: 0
-            }
-        },
-        filter: {
-            flexGrow: 1,
-            padding: theme.spacing(1)
-        },
-        tree: {
-            height: 216,
-            flexGrow: 1,
-            maxWidth: 400
-        },
         drawerPaper: {
             width: 280
         }
@@ -84,12 +66,13 @@ const useStyles = makeStyles((theme: Theme) =>
  *
  * It is in charge of displaying the navigation drawer, top bar and main
  * collection views.
+ * This component needs a parent {@link FireCMS}
  *
  * @param props
  * @constructor
  * @category Core
  */
-export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
+export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
 
     const {
         children,
@@ -99,7 +82,7 @@ export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
         Drawer
     } = props;
 
-    const context = useCMSAppContext();
+    const context = useFireCMSContext();
     const locale = context.locale;
 
     const dateUtilsLocale = locale ? locales[locale] : undefined;
@@ -111,7 +94,7 @@ export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
     const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
     const closeDrawer = () => setDrawerOpen(false);
 
-    const UsedDrawer = Drawer ? Drawer : CMSDrawer;
+    const UsedDrawer = Drawer ? Drawer : FireCMSDrawer;
     return (
         <LocalizationProvider
             dateAdapter={AdapterDateFns}
@@ -137,9 +120,9 @@ export function CMSScaffold(props: PropsWithChildren<CMSScaffoldProps>) {
 
                 <div className={classes.main}>
 
-                    <CMSAppBar title={name}
-                               handleDrawerToggle={handleDrawerToggle}
-                               toolbarExtraWidget={toolbarExtraWidget}/>
+                    <FireCMSAppBar title={name}
+                                   handleDrawerToggle={handleDrawerToggle}
+                                   toolbarExtraWidget={toolbarExtraWidget}/>
                     <main
                         className={classes.content}>
                         {children}

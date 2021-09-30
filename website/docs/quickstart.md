@@ -5,10 +5,25 @@ sidebar_label: Quickstart
 ---
 
 :::note
-Please note that in order to use FireCMS you need an existing Firebase project
-with some requirements. Check the [Firebase setup section](firebase_setup.md) if
-you need additional support
+Please note that in order to use FireCMS as described in this quickstart guide,
+you need an existing Firebase project with features enabled, such as Google
+authentication, Firestore and Firebase storage.
+Check the [Firebase setup section](firebase_setup.md) if you need additional
+support
 :::
+
+Let's build a very simple CMS that creates a collection of products, with
+some properties. It includes samples of some advanced features, such as
+dynamic conditional fields or references (to the same products' collection,
+for simplicity).
+
+We are defining our `Product` type for better type checking and code clarity
+but it is not compulsory.
+
+Authentication and authorization are also enabled, and make use of the `extra`
+field in the `User` to check for permissions.
+
+### Steps:
 
 - Create a new React app including Typescript:
 
@@ -25,7 +40,7 @@ cd my-cms
 - Install FireCMS and it's peer dependencies:
 
 ```
-yarn add @camberi/firecms firebase@9 @mui/material@5 @mui/icons-material@5 @mui/lab@5 @mui/styles@5 @emotion/react @emotion/styled react-router@^6.0.0-beta.4 react-router-dom@^6.0.0-beta.4
+yarn add @camberi/firecms firebase@9 @mui/material@5 @mui/icons-material@5 @mui/lab@5 @mui/styles@5 @emotion/react @emotion/styled react-router@^6.0.0-beta.5 react-router-dom@^6.0.0-beta.5
 ```
 
 You can replace the content of the file App.tsx with the following sample code.
@@ -44,6 +59,7 @@ import {
     buildCollection,
     buildProperty,
     buildSchema,
+    EntityReference,
     FirebaseCMSApp,
     NavigationBuilder,
     NavigationBuilderProps
@@ -63,10 +79,9 @@ const firebaseConfig = {
 };
 
 const locales = {
-    "de-DE": "German",
     "en-US": "English (United States)",
     "es-ES": "Spanish (Spain)",
-    "es-419": "Spanish (South America)"
+    "de-DE": "German"
 };
 
 type Product = {
@@ -74,6 +89,7 @@ type Product = {
     price: number;
     status: string;
     published: boolean;
+    related_products: EntityReference[];
     main_image: string;
     tags: string[];
     description: string;
@@ -130,7 +146,16 @@ const productSchema = buildSchema<Product>({
                     }
             )
         }),
-        main_image: buildProperty({
+        related_products: {
+            dataType: "array",
+            title: "Related products",
+            description: "Reference to self",
+            of: {
+                dataType: "reference",
+                path: "products"
+            }
+        },
+        main_image: buildProperty({ // The `buildProperty` method is an utility function used for type checking
             title: "Image",
             dataType: "string",
             config: {
@@ -232,7 +257,7 @@ export default function App() {
                                                  }: NavigationBuilderProps) => {
 
         // This is a fake example of retrieving async data related to the user
-        // and storing it in the user extra field
+        // and storing it in the user extra field.
         const sampleUserData = await Promise.resolve({
             name: "John",
             roles: ["admin"]
@@ -249,6 +274,7 @@ export default function App() {
                     permissions: ({ user }) => ({
                         edit: true,
                         create: true,
+                        // we have created the roles object in the navigation builder
                         delete: user && user.extra.roles.includes("admin")
                     }),
                     subcollections: [
@@ -277,9 +303,11 @@ export default function App() {
 }
 ```
 
-Then simply run
+Then simply run:
 
 ```
 yarn start
 ```
+
+You should be able to see your FireCMS instance in your browser, awesome!
 

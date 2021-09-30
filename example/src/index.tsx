@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import SampleApp from "./SampleApp/SampleApp";
-import { CustomCMSApp } from "./CustomCMSApp";
+// import { CustomCMSApp } from "./CustomCMSApp";
 
 ReactDOM.render(
-    <CustomCMSApp/>,
+    <SampleApp/>,
     document.getElementById("root")
 );

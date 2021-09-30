@@ -30,7 +30,7 @@ import ReadOnlyField from "./fields/ReadOnlyField";
 import MarkdownField from "./fields/MarkdownField";
 
 import ArrayOfReferencesField from "./fields/ArrayOfReferencesField";
-import { isReadOnly } from "../models/utils";
+import { isReadOnly } from "../core/utils";
 import deepEqual from "deep-equal";
 
 

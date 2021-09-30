@@ -4,13 +4,13 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView, Navigation } from "../models";
 import { EntityCollectionTable } from "./components/EntityCollectionTable";
 import BreadcrumbUpdater from "./components/BreadcrumbUpdater";
-import CMSHomePage from "./components/CMSHomePage";
+import FireCMSHomePage from "./components/HomePage";
 import { useNavigation } from "../hooks";
 
 /**
  * @category Core components
  */
-export type CMSRoutesProps = {
+export type NavigationRoutesProps = {
     /**
      * In case you need to override the home page
      */
@@ -21,11 +21,12 @@ export type CMSRoutesProps = {
  * This component is in charge of taking a {@link Navigation} and rendering
  * all the related routes (entity collection root views, custom views
  * or the home route).
+ * This component needs a parent {@link FireCMS}
  *
  * @constructor
  * @category Core components
  */
-export function CMSRoutes({ HomePage }: CMSRoutesProps) {
+export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
     const location = useLocation();
     const navigationContext = useNavigation();
@@ -94,7 +95,7 @@ export function CMSRoutes({ HomePage }: CMSRoutesProps) {
                        path={"/"}
                        key={`navigation_home`}
                        title={"Home"}>
-                       {HomePage ? <HomePage/> : <CMSHomePage/>}
+                       {HomePage ? <HomePage/> : <FireCMSHomePage/>}
                    </BreadcrumbUpdater>
                }/>;
 

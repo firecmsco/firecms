@@ -43,7 +43,7 @@ export const useStyles = makeStyles((theme: Theme) =>
  * @constructor
  * @category Core components
  */
-function CMSHomePage() {
+function HomePage() {
 
     const classes = useStyles();
     const navigationContext = useNavigation();
@@ -53,7 +53,7 @@ function CMSHomePage() {
     const {
         navigationEntries,
         groups
-    } = computeTopNavigation(navigationContext.navigation, navigationContext, true);
+    } = computeTopNavigation(navigationContext, true);
 
     const allGroups: Array<string | null> = [...groups];
     if (navigationEntries.filter(e => !e.group).length > 0) {
@@ -130,4 +130,4 @@ function CMSHomePage() {
     );
 }
 
-export default CMSHomePage;
+export default HomePage;
