@@ -4,6 +4,7 @@ import {
     buildSchema,
     EntityCustomView,
     EnumValues,
+    EntityCallbacks,
     ExtraActionsParams
 } from "@camberi/firecms";
 
@@ -69,29 +70,11 @@ const sampleView: EntityCustomView = {
 
 
 
-export const productSchema = buildSchema<any>({
+export const productSchema = buildSchema<Product>({
     name: "Product",
     views: [
         sampleView
     ],
-    onPreSave: ({
-                    schema,
-                    path,
-                    entityId,
-                    values,
-                    status
-                }) => {
-        values.uppercase_name = values.name.toUpperCase();
-        return values;
-    },
-
-    onSaveSuccess: (props) => {
-        console.log("onSaveSuccess", props);
-    },
-
-    onDelete: (props) => {
-        console.log("onDelete", props);
-    },
 
     properties: {
         name: {
@@ -265,10 +248,32 @@ export const productSchema = buildSchema<any>({
             name: "Default publisher"
         }
     },
+
+});
+
+export const productCallbacks:EntityCallbacks = {
+    onPreSave: ({
+                    schema,
+                    path,
+                    entityId,
+                    values,
+                    status
+                }) => {
+        values.uppercase_name = values.name.toUpperCase();
+        return values;
+    },
+
+    onSaveSuccess: (props) => {
+        console.log("onSaveSuccess", props);
+    },
+
+    onDelete: (props) => {
+        console.log("onDelete", props);
+    },
     onPreDelete: () => {
         throw Error("Product deletion not allowed in this demo");
     }
-});
+};
 
 export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
     id: "spanish_title",

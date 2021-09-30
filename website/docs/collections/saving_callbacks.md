@@ -7,6 +7,8 @@ sidebar_label: Saving and deleting callbacks
 When you are saving an entity you can attach different callbacks before and
 after it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
 
+These callbacks are defined at the collection level under the prop `callbacks`.
+
 This is useful if you need to add some logic or edit some fields before/after
 saving or deleting entities.
 
@@ -34,7 +36,22 @@ type Product = {
 const productSchema = buildSchema<Product>({
 
     name: "Product",
+    properties: {
+        name: {
+            title: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        uppercase_name: {
+            title: "Uppercase Name",
+            dataType: "string",
+            disabled: true,
+            description: "This field gets updated with a preSave callback"
+        }
+    }
+});
 
+const productCallbacks = buildEntityCallbacks({
     onPreSave: ({
                     schema,
                     path,
@@ -69,20 +86,6 @@ const productSchema = buildSchema<Product>({
     onDelete: (props: EntityOnDeleteProps<Product>) => {
         console.log("onDelete", props);
     },
-
-    properties: {
-        name: {
-            title: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        uppercase_name: {
-            title: "Uppercase Name",
-            dataType: "string",
-            disabled: true,
-            description: "This field gets updated with a preSave callback"
-        }
-    }
 });
 ```
 

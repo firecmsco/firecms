@@ -1,4 +1,4 @@
-import { Entity, EntitySchema } from "../../models";
+import { Entity, EntityCallbacks, EntitySchema } from "../../models";
 import React, { useState } from "react";
 import {
     Button,
@@ -10,7 +10,12 @@ import {
 import EntityPreview from "../../core/components/EntityPreview";
 import CircularProgressCenter
     from "../../core/components/CircularProgressCenter";
-import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../../hooks";
+import {
+    deleteEntityWithCallbacks,
+    useDataSource,
+    useFireCMSContext,
+    useSnackbarController
+} from "../../hooks";
 
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
@@ -19,6 +24,7 @@ export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
     schema: EntitySchema<M>,
     open: boolean;
     onClose: () => void;
+    callbacks?: EntityCallbacks<M>,
 
     onEntityDelete?(path: string, entity: Entity<M>): void;
 
@@ -30,6 +36,7 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
                                                                                  schema,
                                                                                  onClose,
                                                                                  open,
+                                                                                 callbacks,
                                                                                  onEntityDelete,
                                                                                  onMultipleEntitiesDelete,
                                                                                  path,
@@ -98,6 +105,7 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
             dataSource,
             entity,
             schema,
+            callbacks,
             onDeleteSuccess,
             onDeleteFailure,
             onPreDeleteHookError,

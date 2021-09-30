@@ -42,44 +42,6 @@ export interface EntitySchema<M extends { [Key: string]: any } = any> {
      */
     views?: EntityCustomView<M>[];
 
-    /**
-     * Hook called when save is successful
-     * @param entitySaveProps
-     */
-    onSaveSuccess?(entitySaveProps: EntityOnSaveProps<M>)
-        : Promise<void> | void;
-
-    /**
-     * Hook called when saving fails
-     * @param entitySaveProps
-     */
-    onSaveFailure?(entitySaveProps: EntityOnSaveProps<M>)
-        : Promise<void> | void;
-
-    /**
-     * Hook called before saving, you need to return the values that will get
-     * saved. If you throw an error in this method the process stops, and an
-     * error snackbar gets displayed.
-     * @param entitySaveProps
-     */
-    onPreSave?(entitySaveProps: EntityOnSaveProps<M>)
-        : Promise<Partial<EntityValues<M>>> | Partial<EntityValues<M>>;
-
-    /**
-     * Hook called after the entity is deleted.
-     * If you throw an error in this method the process stops, and an
-     * error snackbar gets displayed.
-     *
-     * @param entityDeleteProps
-     */
-    onPreDelete?(entityDeleteProps: EntityOnDeleteProps<M>): void;
-
-    /**
-     * Hook called after the entity is deleted.
-     *
-     * @param entityDeleteProps
-     */
-    onDelete?(entityDeleteProps: EntityOnDeleteProps<M>): void;
 }
 
 /**
@@ -115,6 +77,9 @@ export interface Entity<M extends { [Key: string]: any }> {
  */
 export type EntityValues<M> = M;
 
+/**
+ * Class used to create a reference to an entity in a different path
+ */
 export class EntityReference {
     /**
      * Id of the entity
@@ -190,74 +155,4 @@ export interface EntityCustomViewParams<M extends { [Key: string]: any } = any> 
      */
     modifiedValues?: EntityValues<M>;
 }
-
-/**
- * Parameters passed to hooks when an entity is saved
- * @category Models
- */
-export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
-
-    /**
-     * Resolved schema of the entity
-     */
-    schema: EntitySchema<M>;
-
-    /**
-     * Full path where this entity is being saved
-     */
-    path: string;
-
-    /**
-     * Id of the entity or undefined if new
-     */
-    entityId?: string;
-
-    /**
-     * Values being saved
-     */
-    values: Partial<EntityValues<M>>;
-
-    /**
-     * New or existing entity
-     */
-    status: EntityStatus;
-
-    /**
-     * Context of the app status
-     */
-    context: FireCMSContext;
-}
-
-/**
- * Parameters passed to hooks when an entity is deleted
- * @category Models
- */
-export interface EntityOnDeleteProps<M extends { [Key: string]: any }> {
-
-    /**
-     * Schema of the entity being deleted
-     */
-    schema: EntitySchema<M>;
-
-    /**
-     * Path of the parent collection
-     */
-    path: string;
-
-    /**
-     * Deleted entity id
-     */
-    entityId: string;
-
-    /**
-     * Deleted entity
-     */
-    entity: Entity<M>;
-
-    /**
-     * Context of the app status
-     */
-    context: FireCMSContext;
-}
-
 

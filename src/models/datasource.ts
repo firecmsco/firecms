@@ -1,6 +1,7 @@
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
 import { FilterValues } from "./collections";
 import { Property } from "./properties";
+import { EntityCallbacks } from "./entity_callbacks";
 
 /**
  * @category Datasource
@@ -9,7 +10,7 @@ export interface FetchEntityProps<M> {
     path: string,
     entityId: string,
     schema: EntitySchema<M>
-};
+}
 
 /**
  * @category Datasource
@@ -17,7 +18,7 @@ export interface FetchEntityProps<M> {
 export type ListenEntityProps<M> = FetchEntityProps<M> & {
     onUpdate: (entity: Entity<M>) => void,
     onError?: (error: Error) => void,
-};
+}
 
 /**
  * @category Datasource
@@ -31,7 +32,7 @@ export interface FetchCollectionProps<M> {
     orderBy?: string,
     searchString?: string,
     order?: "desc" | "asc"
-};
+}
 
 /**
  * @category Datasource
@@ -47,12 +48,12 @@ export type ListenCollectionProps<M> =
  * @category Datasource
  */
 export interface SaveEntityProps<M> {
-    path: string,
-    entityId: string | undefined,
-    values: Partial<EntityValues<M>>,
-    schema: EntitySchema<M>,
-    status: EntityStatus,
-};
+    path: string;
+    entityId: string | undefined;
+    values: Partial<EntityValues<M>>;
+    schema: EntitySchema<M>;
+    status: EntityStatus;
+}
 
 /**
  * @category Datasource
@@ -60,10 +61,12 @@ export interface SaveEntityProps<M> {
 export interface DeleteEntityProps<M> {
     entity: Entity<M>;
     schema: EntitySchema<M>;
-};
+}
 
 /**
  * Implement this interface and pass it to a {@link FireCMS}
+ * to connect it to your data source.
+ * A Firestore implementation of this interface can be found in {@link useFirestoreDataSource}
  * @category Datasource
  */
 export interface DataSource {

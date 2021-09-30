@@ -1,10 +1,13 @@
+import { useEffect } from "react";
+
 import {
     DataSource,
     Entity,
-    EntityValues, FireCMSContext,
+    EntityCallbacks,
+    EntityValues,
+    FireCMSContext,
     SaveEntityProps
 } from "../../models";
-import { useEffect } from "react";
 import { useDataSource } from "./useDataSource";
 import { useFireCMSContext } from "../useFireCMSContext";
 
@@ -14,6 +17,7 @@ import { useFireCMSContext } from "../useFireCMSContext";
 export type SaveEntityWithCallbacksProps<M> =
     SaveEntityProps<M> &
     {
+        callbacks?: EntityCallbacks<M>;
         onSaveSuccess?: (updatedEntity: Entity<M>) => void,
         onSaveFailure?: (e: Error) => void,
         onPreSaveHookError?: (e: Error) => void,
@@ -26,6 +30,7 @@ export type SaveEntityWithCallbacksProps<M> =
  * @param schema
  * @param path
  * @param entityId
+ * @param callbacks
  * @param values
  * @param status
  * @param onSaveSuccess
@@ -38,6 +43,7 @@ export function useSaveEntity<M extends { [Key: string]: any }>({
                                                                     schema,
                                                                     path,
                                                                     entityId,
+                                                                    callbacks,
                                                                     values,
                                                                     status,
                                                                     onSaveSuccess,
@@ -54,6 +60,7 @@ export function useSaveEntity<M extends { [Key: string]: any }>({
                 dataSource,
                 context,
                 schema,
+                callbacks,
                 path,
                 entityId,
                 values,
@@ -96,6 +103,7 @@ export async function saveEntityWithCallbacks<M>({
                                                      schema,
                                                      path,
                                                      entityId,
+                                                     callbacks,
                                                      values,
                                                      status,
                                                      dataSource,
@@ -112,9 +120,9 @@ export async function saveEntityWithCallbacks<M>({
 
     let updatedValues: Partial<EntityValues<M>>;
 
-    if (schema.onPreSave) {
+    if (callbacks?.onPreSave) {
         try {
-            updatedValues = await schema.onPreSave({
+            updatedValues = await callbacks.onPreSave({
                 schema,
                 path,
                 entityId,
@@ -140,8 +148,8 @@ export async function saveEntityWithCallbacks<M>({
         status
     }).then((entity) => {
         try {
-            if (schema.onSaveSuccess) {
-                schema.onSaveSuccess({
+            if (callbacks?.onSaveSuccess) {
+                callbacks.onSaveSuccess({
                     schema,
                     path,
                     entityId,
@@ -158,8 +166,8 @@ export async function saveEntityWithCallbacks<M>({
             onSaveSuccess(entity);
     })
         .catch((e) => {
-            if (schema.onSaveFailure) {
-                schema.onSaveFailure({
+            if (callbacks?.onSaveFailure) {
+                callbacks.onSaveFailure({
                     schema,
                     path,
                     entityId,

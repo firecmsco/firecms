@@ -1,6 +1,8 @@
+import React from "react";
 import { Entity, EntitySchema } from "./entities";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
+import { EntityCallbacks } from "./entity_callbacks";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -33,6 +35,19 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * Schema representing the entities of this view
      */
     schema: EntitySchema<M>;
+
+    /**
+     * Properties displayed in this collection. If this prop is not set
+     * every property is displayed
+     */
+    properties?: (Extract<keyof M, string> | AdditionalKey)[];
+
+    /**
+     * Properties that should NOT get displayed in the collection view.
+     * All the other properties from the the entity are displayed
+     * It has no effect if the properties value is set.
+     */
+    excludedProperties?: (Extract<keyof M, string> | AdditionalKey)[];
 
     /**
      * Default size of the rendered collection
@@ -103,22 +118,17 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
 
     /**
      * You can add subcollections to your entity in the same way you define the root
-     * collections.
+     * collections. The collections added here will be displayed when opening
+     * the side dialog of an entity.
      */
     subcollections?: EntityCollection<any, any>[];
 
     /**
-     * Properties displayed in this collection. If this prop is not set
-     * every property is displayed
+     * This interface defines all the callbacks that can be used when an entity
+     * is being created, updated or deleted.
+     * Useful for adding your own logic or blocking the execution of the operation.
      */
-    properties?: (Extract<keyof M, string> | AdditionalKey)[];
-
-    /**
-     * Properties that should NOT get displayed in the collection view.
-     * All the other properties from the the entity are displayed
-     * It has no effect if the properties value is set.
-     */
-    excludedProperties?: (Extract<keyof M, string> | AdditionalKey)[];
+    callbacks?: EntityCallbacks;
 
     /**
      * Initial filters applied to this collection.
@@ -167,7 +177,7 @@ export interface ExtraActionsParams<M extends { [Key: string]: any } = any> {
      * Context of the app status
      */
     context: FireCMSContext;
-};
+}
 
 
 /**

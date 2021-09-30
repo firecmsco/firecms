@@ -3,7 +3,8 @@ import {
     buildProperties,
     buildProperty,
     buildSchema,
-    resolveNavigationFrom
+    resolveNavigationFrom,
+    EntityCallbacks
 } from "@camberi/firecms";
 import { locales } from "./products_schema";
 import CustomShapedArrayField
@@ -45,22 +46,6 @@ const relaxedStatus = new Map([
 export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
-    onPreSave: ({
-                    schema,
-                    path,
-                    entityId,
-                    values,
-                    status,
-                    context
-                }) => {
-        return resolveNavigationFrom({
-            path: `${path}/${entityId}`,
-            context
-        }).then((navigationEntries) => {
-            console.log("navigationEntries", navigationEntries);
-            return values;
-        });
-    },
     properties: {
         source: ({ values }) => {
 
@@ -358,5 +343,23 @@ export const testEntitySchema = buildSchema({
     }
 });
 
+export const testCallbacks :EntityCallbacks= {
 
+    onPreSave: ({
+                    schema,
+                    path,
+                    entityId,
+                    values,
+                    status,
+                    context
+                }) => {
+        return resolveNavigationFrom({
+            path: `${path}/${entityId}`,
+            context
+        }).then((navigationEntries) => {
+            console.log("navigationEntries", navigationEntries);
+            return values;
+        });
+    },
+};
 

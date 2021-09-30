@@ -15,7 +15,7 @@ the main menu, or as subcollections inside other collections, following the
 Firestore data schema.
 
 Check the full API reference
-in [Entity collections](api/interfaces/entitycollection.md)
+in [Entity collections](../api/interfaces/entitycollection.md)
 
 * `name` The plural name of the view. E.g. 'products'.
 
@@ -70,7 +70,7 @@ in [Entity collections](api/interfaces/entitycollection.md)
 
 * `permissions` You can specify an object with boolean permissions with the
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions
-  the user can perform. You can also pass a [`PermissionsBuilder`](./api/types/permissionsbuilder.md)
+  the user can perform. You can also pass a [`PermissionsBuilder`](../api/types/permissionsbuilder.md)
   to customize the permissions based on user or entity.
 
 * `inlineEditing` Can the elements in this collection be edited inline in the
@@ -78,20 +78,20 @@ in [Entity collections](api/interfaces/entitycollection.md)
   , entities can still be edited in the side panel.
 
 * `exportable` Should the data in this collection view include an export button.
-  You can also set an [`ExportConfig`](./api/interfaces/exportconfig.md)
+  You can also set an [`ExportConfig`](../api/interfaces/exportconfig.md)
   configuration object to customize the export and add additional values.
   Defaults to `true`
 
 :::note
 In the examples you might see references to the type `Product`
 (which defines the model) or the schema `productSchema`, as declared in
-the [entity schemas section](entity_schemas.md)
+the [entity schemas section](../entity_schemas.md)
 :::
 
 ### Sample collection
 
 ```tsx
-import { buildCollection } from "@camberi/firecms";
+import { buildCollection } from "dist/index";
 
 const productsCollection = buildCollection<Product>({
     relativePath: "products",
@@ -126,7 +126,7 @@ entity, you can use the utility component `AsyncPreviewComponent` to show a
 loading indicator.
 
 ```tsx
-import { buildCollection, AdditionalColumnDelegate } from "@camberi/firecms";
+import { buildCollection, AdditionalColumnDelegate, AsyncPreviewComponent } from "@camberi/firecms";
 
 export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
     id: "spanish_title",
@@ -179,24 +179,3 @@ const productsCollection = buildCollection<Product>({
     ]
 });
 ```
-
-### Permissions
-
-You can define the `edit`, `create` and `delete` permissions at the collection
-level, also depending on the logged-in user.
-
-```tsx
-import { buildCollection } from "@camberi/firecms";
-
-buildCollection({
-    relativePath: "products",
-    schema: productSchema,
-    name: "Products",
-    permissions: ({ user }) => ({
-        edit: true,
-        create: true,
-        delete: true
-    })
-});
-```
-

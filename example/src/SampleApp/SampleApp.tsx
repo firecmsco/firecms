@@ -21,7 +21,7 @@ import logo from "./images/demo_logo.png";
 import { textSearchController } from "./text_search";
 import {
     localeSchema,
-    productAdditionalColumn,
+    productAdditionalColumn, productCallbacks,
     productExtraActionBuilder,
     productSchema
 } from "./schemas/products_schema";
@@ -31,7 +31,7 @@ import {
     blogSchema,
     sampleAdditionalExportColumn
 } from "./schemas/blog_schema";
-import { testEntitySchema } from "./schemas/test_schema";
+import { testCallbacks, testEntitySchema } from "./schemas/test_schema";
 import { customSchemaResolver } from "./schemas/custom_schema_resolver";
 
 import "typeface-rubik";
@@ -51,6 +51,7 @@ function SampleApp() {
     const productsCollection = buildCollection<Product>({
         relativePath: "products",
         schema: productSchema,
+        callbacks: productCallbacks,
         name: "Products",
         group: "Main",
         description: "List of the products currently sold in our shop",
@@ -106,6 +107,7 @@ function SampleApp() {
     const testCollection = buildCollection({
         relativePath: "test_entity",
         schema: testEntitySchema,
+        callbacks: testCallbacks,
         name: "Test entity",
         subcollections: [{
             relativePath: "test_subcollection",

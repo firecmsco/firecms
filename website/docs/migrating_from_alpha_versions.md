@@ -172,4 +172,9 @@ of having a single TextSearchDelegate per collection.
 
 Check an example of the [new implementation](firebase_cms_app#text-search)
 
+## Saving and deleting callbacks
+
+The callbacks that were previously related to a schema have been moved to the
+collection level, and are now bundled up under the optional `callbacks` prop.
+
 

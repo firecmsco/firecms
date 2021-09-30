@@ -48,6 +48,7 @@ import {
     useSnackbarController
 } from "../../hooks";
 import { canEdit } from "../util/permissions";
+import { EntityCallbacks } from "../../models/entity_callbacks";
 
 const useStylesSide = makeStyles((theme: Theme) =>
     createStyles({
@@ -122,18 +123,20 @@ const useStylesSide = makeStyles((theme: Theme) =>
 
 export interface SideEntityViewProps<M extends { [Key: string]: any }> {
     path: string;
+    schema: EntitySchema;
     entityId?: string;
     copy?: boolean;
     selectedSubpath?: string;
-    permissions?: PermissionsBuilder<any>;
-    schema: EntitySchema;
-    subcollections?: EntityCollection<any>[];
+    permissions?: PermissionsBuilder<M>;
+    callbacks?: EntityCallbacks<M>;
+    subcollections?: EntityCollection[];
 }
 
 
 function SideEntityView<M extends { [Key: string]: any }>({
                                                               path,
                                                               entityId,
+                                                              callbacks,
                                                               selectedSubpath,
                                                               copy,
                                                               permissions,
@@ -297,6 +300,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
         return saveEntityWithCallbacks({
             path,
             entityId: entityId,
+            callbacks,
             values,
             schema,
             status,

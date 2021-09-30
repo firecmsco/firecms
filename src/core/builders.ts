@@ -2,7 +2,7 @@ import {
     AdditionalColumnDelegate,
     ArrayProperty,
     BooleanProperty,
-    CMSType,
+    CMSType, EntityCallbacks,
     EntityCollection,
     EntitySchema,
     EntityValues,
@@ -127,6 +127,18 @@ export function buildEnumValueConfig(
     enumValueConfig: EnumValueConfig
 ): EnumValueConfig {
     return enumValueConfig;
+}
+
+/**
+ * Identity function we use to defeat the type system of Typescript and preserve
+ * the properties keys.
+ * @param callbacks
+ * @category Builder
+ */
+export function buildEntityCallbacks<M>(
+    callbacks: EntityCallbacks<M>
+): EntityCallbacks<M> {
+    return callbacks;
 }
 
 /**

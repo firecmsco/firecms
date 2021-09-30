@@ -1,8 +1,9 @@
 import {
-    EnumValues
+    EnumValues, InferSchemaType
 } from "../models";
 import { FirebaseCMSAppProps } from "../firebase_app";
 import { buildCollection, buildProperty, buildSchema } from "../core";
+import { EntityCallbacks } from "../models/entity_callbacks";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -20,25 +21,6 @@ export const productSchema = buildSchema({
             builder: ({}) => undefined
         }
     ],
-    onPreSave: ({
-                    schema,
-                    path,
-                    entityId,
-                    values,
-                    status
-                }) => {
-        values.uppercase_name = (values.name as string).toUpperCase();
-        return values;
-    },
-
-    onSaveSuccess: (props) => {
-        console.log("onSaveSuccess", props);
-    },
-
-    onDelete: (props) => {
-        console.log("onDelete", props);
-    },
-
     properties: {
         name: buildProperty({
             dataType: "string",
@@ -203,9 +185,6 @@ export const productSchema = buildSchema({
         publisher: {
             name: "Default publisher"
         }
-    },
-    onPreDelete: () => {
-        throw Error("Product deletion not allowed in this demo");
     }
 });
 
@@ -245,24 +224,51 @@ const subcollections = [
     })
 ];
 
+const productCallbacks :EntityCallbacks<InferSchemaType<typeof productSchema>> = {
+    onPreSave: ({
+                    schema,
+                    path,
+                    entityId,
+                    values,
+                    status
+                }) => {
+        values.uppercase_name = (values.name as string).toUpperCase();
+        return values;
+    },
+
+    onSaveSuccess: (props) => {
+        console.log("onSaveSuccess", props);
+    },
+
+    onDelete: (props) => {
+        console.log("onDelete", props);
+    },
+    onPreDelete: () => {
+        throw Error("Product deletion not allowed in this demo");
+    }
+};
+
 export const siteConfig: FirebaseCMSAppProps = {
     name: "Test site",
     navigation: [
         buildCollection({
             relativePath: "products",
             schema: productSchema,
+            callbacks: productCallbacks,
             name: "Products",
             subcollections: subcollections
         }),
         buildCollection({
             relativePath: "sites/es/products",
             schema: productSchema,
+            callbacks: productCallbacks,
             name: "Products",
             subcollections: subcollections
         }),
         buildCollection({
             relativePath: "products/id/subcollection_inline",
             schema: productSchema,
+            callbacks: productCallbacks,
             name: "Products",
             subcollections: subcollections
         })

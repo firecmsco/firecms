@@ -1,15 +1,16 @@
 import {
     DataSource,
     DeleteEntityProps,
-    Entity,
-    EntityOnDeleteProps,
-    FireCMSContext
+    Entity, EntityCallbacks,
+    FireCMSContext,
+    EntityOnDeleteProps
 } from "../../models";
 
 /**
  * @category Hooks and utilities
  */
 export type DeleteEntityWithCallbacksProps<M> = DeleteEntityProps<M> & {
+    callbacks?: EntityCallbacks<M>;
     onDeleteSuccess?: (entity: Entity<M>) => void;
     onDeleteFailure?: (entity: Entity<M>, e: Error) => void;
     onPreDeleteHookError?: (entity: Entity<M>, e: Error) => void;
@@ -29,6 +30,7 @@ export type DeleteEntityWithCallbacksProps<M> = DeleteEntityProps<M> & {
  * @param dataSource
  * @param entity
  * @param schema
+ * @param callbacks
  * @param onDeleteSuccess
  * @param onDeleteFailure
  * @param onPreDeleteHookError
@@ -40,6 +42,7 @@ export async function deleteEntityWithCallbacks<M>({
                                                        dataSource,
                                                        entity,
                                                        schema,
+                                                       callbacks,
                                                        onDeleteSuccess,
                                                        onDeleteFailure,
                                                        onPreDeleteHookError,
@@ -61,9 +64,9 @@ export async function deleteEntityWithCallbacks<M>({
         context
     };
 
-    if (schema.onPreDelete) {
+    if (callbacks?.onPreDelete) {
         try {
-            await schema.onPreDelete(entityDeleteProps);
+            await callbacks.onPreDelete(entityDeleteProps);
         } catch (e: any) {
             console.error(e);
             if (onPreDeleteHookError)
@@ -77,8 +80,8 @@ export async function deleteEntityWithCallbacks<M>({
     }).then(() => {
         onDeleteSuccess && onDeleteSuccess(entity);
         try {
-            if (schema.onDelete) {
-                schema.onDelete(entityDeleteProps);
+            if (callbacks?.onDelete) {
+                callbacks.onDelete(entityDeleteProps);
             }
             return true;
         } catch (e: any) {

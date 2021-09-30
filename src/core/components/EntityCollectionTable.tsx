@@ -109,6 +109,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                                 permissions: collection.permissions,
                                 schema: collection.schema,
                                 subcollections: collection.subcollections,
+                                callbacks: collection.callbacks,
                                 overrideSchemaResolver: false
                             });
                         }}>
@@ -127,6 +128,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             permissions: collection.permissions,
             schema: collection.schema,
             subcollections: collection.subcollections,
+            callbacks: collection.callbacks,
             overrideSchemaResolver: false
         });
     };
@@ -138,6 +140,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             permissions: collection.permissions,
             schema: collection.schema,
             subcollections: collection.subcollections,
+            callbacks: collection.callbacks,
             overrideSchemaResolver: false
         });
     };
@@ -177,6 +180,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
 
         return saveEntityWithCallbacks({
             ...saveProps,
+            callbacks: collection.callbacks,
             dataSource,
             context,
             onSaveSuccess: () => setSaved(true),
@@ -294,6 +298,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             },
             schema: collection.schema,
             subcollections: collection.subcollections,
+            callbacks: collection.callbacks,
             overrideSchemaResolver: false
         });
 
@@ -307,6 +312,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             },
             schema: collection.schema,
             subcollections: collection.subcollections,
+            callbacks: collection.callbacks,
             overrideSchemaResolver: false
         });
 
@@ -428,6 +434,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 path={path}
                                 schema={collection.schema}
+                                callbacks={collection.callbacks}
                                 open={!!deleteEntityClicked}
                                 onEntityDelete={internalOnEntityDelete}
                                 onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}

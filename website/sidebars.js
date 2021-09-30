@@ -26,14 +26,21 @@ module.exports = {
                         'properties/geopoint'
                     ]
                 },
-                'saving_callbacks',
                 'conditional_fields',
                 'custom_fields',
                 'custom_previews',
                 'custom_schema_views',
             ]
         },
-        'collections',
+        {
+            type: 'category',
+            label: 'Collections',
+            items: [
+                'collections/collections',
+                'collections/saving_callbacks',
+                'collections/permissions',
+            ]
+        },
         'navigation',
         'custom_top_level_views',
         {
@@ -43,6 +50,7 @@ module.exports = {
                 'hooks/use_auth_controller',
                 'hooks/use_side_entity_controller',
                 'hooks/use_snackbar_controller',
+                'hooks/use_firecms_context',
             ]
         },
         {
@@ -77,5 +85,3 @@ module.exports = {
     ],
 }
 
-// HTML RegEXP:    \<li\>\<a href\=\"\/docs\/([a-zA-Z\s\/]+)\"\>[a-zA-Z\s\/]+\<\/a\>\<\/li\>
-// replace by:     '$1',

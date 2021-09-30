@@ -41,14 +41,16 @@ export function useBuildSchemaRegistryController(navigationContext: NavigationCo
                     ...overriddenProps,
                     permissions: result.permissions || overriddenProps.permissions,
                     schema: result.schema || overriddenProps.schema,
-                    subcollections: result.subcollections || overriddenProps.subcollections
+                    subcollections: result.subcollections || overriddenProps.subcollections,
+                    callbacks: result.callbacks || overriddenProps.callbacks
                 };
             else
                 result = {
                     ...result,
                     permissions: overriddenProps.permissions ?? result.permissions,
                     schema: overriddenProps.schema ?? result.schema,
-                    subcollections: overriddenProps.subcollections ?? result.subcollections
+                    subcollections: overriddenProps.subcollections ?? result.subcollections,
+                    callbacks: overriddenProps.callbacks ?? result.callbacks
                 };
 
         }
@@ -57,11 +59,13 @@ export function useBuildSchemaRegistryController(navigationContext: NavigationCo
         if (entityCollection) {
             const schema = entityCollection.schema;
             const subcollections = entityCollection.subcollections;
+            const callbacks = entityCollection.callbacks;
             const permissions = entityCollection.permissions;
             result = {
                 ...result,
                 schema: result.schema ?? schema,
                 subcollections: result.subcollections ?? subcollections,
+                callbacks: result.callbacks ?? callbacks,
                 permissions: result.permissions ?? permissions
             };
         }
