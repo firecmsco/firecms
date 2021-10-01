@@ -9,6 +9,8 @@ many **breaking changes**. We have done a lot of internal refactorings with the
 primary goal of making internal and external APIs more predictable and
 consistent.
 
+Oh, and we have a very awesome new dark theme too ;)
+
 ## Core dependencies update
 
 In version 1.0.0 there are major updates to some dependencies, now using:
@@ -17,10 +19,15 @@ In version 1.0.0 there are major updates to some dependencies, now using:
 - React Router v6
 - Firebase JS SDK 9
 
+Run this command to add the new dependencies:
+```
+yarn add @camberi/firecms firebase@9 @mui/material@5 @mui/icons-material@5 @mui/lab@5 @mui/styles@5 @emotion/react @emotion/styled react-router@^6.0.0-beta.5 react-router-dom@^6.0.0-beta.5
+```
+
+> You may want to remove previous dependencies or @material-ui
+
 Unfortunately we still need to rely on FirebaseUI, which still uses the compat
 version of Firebase JS SDK 9, so tree shaking has no effect.
-
-We have a very awesome new dark theme too ;)
 
 ## Separation of concerns
 
@@ -118,23 +125,16 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
 };
 ```
 
-- `AuthController` no longer has `extra` and `setExtra` props. If you need that
-  functionality, you can use the `extra` field in the `User`
-
-- The `AuthController` was used in conjunction with the `PermissionsBuilder`
-  to store data specific to a user. You can store now that data in the user itself.
-  The new `User` type includes
-  an `extra` field you can use to store additional user data, such as roles.
-  See https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx
-  for an example
-
 - `Authenticator` now receives an object with a `user` field instead of a `User`
 
 - `FormContext` `entitySchema` is now called `schema`
 
 - `field` prop in properties has been renamed to `Field`
+
 - `preview` prop in properties has been renamed to `Preview`
+
 - `indexes` prop in `EntityCollection` has been renamed to `filterCombinations`
+
 - `relativePath` prop in `EntityCollection` has been renamed to `path`
 
 - If you were using `CMSAppProvider` and `CMSMainView`, they have been largely
@@ -145,6 +145,7 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
     - [`Scaffold`](api/functions/scaffold.md)
     - [`NavigationRoutes`](api/functions/navigationroutes.md)
     - [`SideEntityDialogs`](api/functions/sideentitydialogs.md)
+
   You will be responsible for
   initialising the material theme, Firebase (or your own backend) and providing
   the Router. On the plus side, this is going to give you a ton of room for

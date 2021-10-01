@@ -30,6 +30,14 @@ module.exports = {
         ]
     ],
     themeConfig: {
+        announcementBar: {
+            id: 'new_version',
+            content:
+                'Version 1.0.0-beta1 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/migrating_from_alpha_versions">migration guide</a>',
+            backgroundColor: '#FF5B79',
+            textColor: 'black',
+            isCloseable: true,
+        },
         colorMode:{
             defaultMode: 'dark',
             respectPrefersColorScheme: false,
@@ -45,6 +53,12 @@ module.exports = {
                     to: 'docs',
                     activeBaseRegex: 'docs(/)?$',
                     label: 'Docs',
+                    position: 'left'
+                },
+                {
+                    to: 'docs/api',
+                    // activeBasePath: 'api',
+                    label: 'API',
                     position: 'left'
                 },
                 {
