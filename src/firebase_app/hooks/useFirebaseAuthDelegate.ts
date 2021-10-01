@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
     getAuth,
@@ -22,10 +22,15 @@ export const useFirebaseAuthDelegate = (
         firebaseApp
     }: FirebaseAuthHandlerProps): AuthDelegate => {
 
-    const [loggedUser, setLoggedUser] = React.useState<User | null>(null);
-    const [authProviderError, setAuthProviderError] = React.useState<any>();
-    const [authLoading, setAuthLoading] = React.useState(true);
-    const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
+    const [loggedUser, setLoggedUser] = useState<User | null>(null);
+    const [authProviderError, setAuthProviderError] = useState<any>();
+    const [authLoading, setAuthLoading] = useState(true);
+    const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
+
+    function skipLogin() {
+        setLoginSkipped(true);
+        setLoggedUser(null);
+    }
 
     useEffect(() => {
         if (!firebaseApp) return;
@@ -41,9 +46,7 @@ export const useFirebaseAuthDelegate = (
 
         const user: User | null = firebaseUser ? {
             ...firebaseUser,
-            extra: loggedUser ? loggedUser.extra : null
         } : null;
-        setNotAllowedError(false);
         setLoggedUser(user);
         setAuthLoading(false);
     };
@@ -52,7 +55,6 @@ export const useFirebaseAuthDelegate = (
         const auth = getAuth(firebaseApp);
         signOut(auth)
             .then(_ => {
-                setNotAllowedError(false);
                 setLoggedUser(null);
                 setAuthProviderError(null);
             });
@@ -62,7 +64,8 @@ export const useFirebaseAuthDelegate = (
         user: loggedUser,
         authError: authProviderError,
         authLoading,
-        notAllowedError,
-        signOut: onSignOut
+        signOut: onSignOut,
+        loginSkipped,
+        skipLogin
     };
 };

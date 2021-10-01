@@ -18,7 +18,7 @@ import {
     Entity,
     EntityReference,
     EntitySchema,
-    ExportConfig,
+    ExportConfig, MapProperty,
     Properties,
     Property
 } from "../../models";
@@ -257,7 +257,7 @@ function processProperty(inputValue: any,
 
     let value;
     if (property.dataType === "map" && property.properties) {
-        value = processProperties(inputValue, property.properties);
+        value = processProperties(inputValue, property.properties as Properties<any>);
     } else if (property.dataType === "array") {
         if (property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => processProperty(e, property.of as Property));

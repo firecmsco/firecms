@@ -15,7 +15,7 @@ export type Product = {
     related_products: EntityReference[];
     publisher: {
         name: string;
-
+        external_id: string;
     },
     available_locales: string[],
     uppercase_name: string,

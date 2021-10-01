@@ -72,7 +72,7 @@ function initWithProperties<M extends { [Key: string]: any }>
 function initPropertyValue(key: string, property: Property, defaultValue: any) {
     let value: any;
     if (property.dataType === "map" && property.properties) {
-        value = initWithProperties(property.properties, defaultValue);
+        value = initWithProperties(property.properties as Properties<any>, defaultValue);
     } else if (defaultValue !== undefined) {
         value = defaultValue;
     } else {
@@ -180,7 +180,7 @@ export function traverseValue(inputValue: any,
 
     let value;
     if (property.dataType === "map" && property.properties) {
-        value = traverseValues(inputValue, property.properties, operation);
+        value = traverseValues(inputValue, property.properties as Properties<any>, operation);
     } else if (property.dataType === "array") {
         if (property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => traverseValue(e, property.of as Property, operation));

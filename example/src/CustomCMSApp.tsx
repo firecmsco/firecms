@@ -150,7 +150,8 @@ export function CustomCMSApp() {
                             <FirebaseLoginView
                                 skipLoginButtonEnabled={false}
                                 signInOptions={DEFAULT_SIGN_IN_OPTIONS}
-                                firebaseApp={firebaseApp}/>
+                                firebaseApp={firebaseApp}
+                                authDelegate={authDelegate}/>
                         );
                     } else {
                         component = (

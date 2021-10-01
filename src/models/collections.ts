@@ -3,6 +3,7 @@ import { Entity, EntitySchema } from "./entities";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
+import { AuthController } from "./auth";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -223,6 +224,7 @@ export type PermissionsBuilder<M extends { [Key: string]: any } = any> =
             user,
             entity,
             path,
+            authController,
             context
         }: PermissionsBuilderProps<M>) => Permissions);
 
@@ -243,6 +245,10 @@ export interface PermissionsBuilderProps<M extends { [Key: string]: any } = any>
      * Collection path of this entity
      */
     path: string;
+    /**
+     * Auth controller
+     */
+    authController: AuthController;
     /**
      * Context of the app status
      */

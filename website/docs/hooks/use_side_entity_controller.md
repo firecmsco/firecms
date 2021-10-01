@@ -4,9 +4,25 @@ title: useSideEntityController
 sidebar_label: useSideEntityController
 ---
 
+:::note
+Please note that in order to use these hooks you **must** be in
+a component (you can't use them directly from a callback function).
+Anyhow, callbacks usually include a `FireCMSContext`, which includes all
+the controllers.
+:::
+
 You can use this controller to open the side entity view used to edit entities.
 This is the same controller the CMS uses when you click on an entity in a collection
-view
+view.
+
+Using this controller you can open a form in a side dialog, also if the path and
+entity schema are not included in the main navigation defined in `FireCMS`.
+
+:::tip
+If you want to override the entity schema of some entity or path, at the app
+level, you can pass a `SchemaResolver` to your `FireCMS` instance to set
+an override.
+:::
 
 The props provided by this context are:
 

@@ -4,7 +4,7 @@ title: Migrating from alpha versions
 sidebar_label: Migrating from alpha versions
 ---
 
-If you were using the app in the alpha versions (before 1.0.0), you will find
+If you were using the app in the alpha versions (before 1.0.0-beta1), you will find
 many **breaking changes**. We have done a lot of internal refactorings with the
 primary goal of making internal and external APIs more predictable and
 consistent.
@@ -19,6 +19,8 @@ In version 1.0.0 there are major updates to some dependencies, now using:
 
 Unfortunately we still need to rely on FirebaseUI, which still uses the compat
 version of Firebase JS SDK 9, so tree shaking has no effect.
+
+We have a very awesome new dark theme too ;)
 
 ## Separation of concerns
 
@@ -66,13 +68,13 @@ type User = {
 ## API changes
 
 - **`CMSApp` has been renamed to `FirebaseCMSApp`** in order to better reflect
-  that that implementation of `FireCMS` uses Firebase as the backend
+  that that implementation of `FireCMS` uses Firebase as the backend.
 
 - `CMSAppProvider` has been renamed to `FireCMS`, it is now the main component
   of the CMS, in charge of initialising navigation and all the contexts.
 
-- `CMSAppContext` has been renamed to `FireCMSContext`
-- `useCMSAppContext` has been renamed to `useFireCMSContext`
+- `CMSAppContext` has been renamed to `FireCMSContext`.
+- `useCMSAppContext` has been renamed to `useFireCMSContext`.
 
 - General callbacks refactor. **All callbacks** now always return a single
   object with the props as fields. The goal of this change is to make them
@@ -118,9 +120,6 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
 
 - `AuthController` no longer has `extra` and `setExtra` props. If you need that
   functionality, you can use the `extra` field in the `User`
-
-- `PermissionsBuilder` no longer has an `authController` prop, but it can still
-  be accessed through the `context` prop.
 
 - The `AuthController` was used in conjunction with the `PermissionsBuilder`
   to store data specific to a user. You can store now that data in the user itself.

@@ -18,7 +18,7 @@ complex ones like reference or sortable array fields). If your use case is not
 covered by one of the provided fields, you can create your own [custom field](custom_fields.md).
 :::
 
-Check the full API reference in [Entity schema API](api/interfaces/entityschema.md)
+Check the full API reference in [Entity schema API](../api/interfaces/entityschema.md)
 
 - `name` A singular name of the entity as displayed in an Add button. E.g.
   Product
@@ -35,7 +35,7 @@ Check the full API reference in [Entity schema API](api/interfaces/entityschema.
 ### Sample entity schema
 
 ```tsx
-import { buildSchema, EntityReference } from "@camberi/firecms";
+import { buildSchema, EntityReference } from "dist/index";
 
 type Product = {
     name: string;

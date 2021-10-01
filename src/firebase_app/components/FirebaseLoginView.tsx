@@ -5,12 +5,12 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
 import firebase from "firebase/compat/app";
-
-
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
+
 import { FirebaseApp } from "firebase/app";
 import { FireCMSLogo } from "../../core/components/FireCMSLogo";
+import { AuthDelegate } from "../../models";
 import { useAuthController } from "../../hooks";
 
 
@@ -32,6 +32,7 @@ export interface FirebaseLoginViewProps {
     // Any of the sign in string or configuration objects defined in https://firebase.google.com/docs/auth/web/firebaseui
     signInOptions: Array<string | any>;
     firebaseApp: FirebaseApp;
+    authDelegate: AuthDelegate
 }
 
 /**
@@ -44,10 +45,10 @@ export default function FirebaseLoginView({
                                               skipLoginButtonEnabled,
                                               logo,
                                               signInOptions,
-                                              firebaseApp
+                                              firebaseApp,
+                                              authDelegate
                                           }: FirebaseLoginViewProps) {
     const classes = useStyles();
-
     const authController = useAuthController();
 
     useEffect(() => {
@@ -79,8 +80,8 @@ export default function FirebaseLoginView({
 
     function buildErrorView() {
         let errorView: any;
-        if (authController.authError) {
-            if (authController.authError.code === "auth/operation-not-allowed") {
+        if (authDelegate.authError) {
+            if (authDelegate.authError.code === "auth/operation-not-allowed") {
                 errorView =
                     <>
                         <Box p={2}>
@@ -103,7 +104,7 @@ export default function FirebaseLoginView({
             } else {
                 errorView =
                     <Box p={2}>
-                        {authController.authError.message}
+                        {authDelegate.authError.message}
                     </Box>;
             }
         }
@@ -139,7 +140,7 @@ export default function FirebaseLoginView({
 
             {skipLoginButtonEnabled &&
             <Box m={2}>
-                <Button onClick={authController.skipLogin}>
+                <Button onClick={authDelegate.skipLogin}>
                     Skip login
                 </Button>
             </Box>

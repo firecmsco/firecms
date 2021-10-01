@@ -12,7 +12,7 @@ But there are a few situations where you may want to have more control and build
 your app using the same components that we use internally.
 
 In the process of having a cleaner code, all the code related to Firebase has
-been isolated into 3 components, one for authentication (auth controller), one
+been isolated into 3 components, one for authentication (auth delegate), one
 for the data source and one for storage. These components are abstracted away
 behind their respective interfaces. This means you can replace any of those
 services with your custom implementation!
@@ -27,7 +27,7 @@ by `FirebaseCMSApp`):
 - [`NavigationRoutes`](api/functions/navigationroutes.md)
 - [`SideEntityDialogs`](api/functions/sideentitydialogs.md)
 - [`useInitialiseFirebase`](api/functions/useinitialisefirebase.md)
-- [`useFirebaseAuthController`](api/functions/usefirebaseauthcontroller.md)
+- [`useFirebaseAuthDelegate`](api/functions/usefirebaseauthdelegate.md)
 - [`useFirebaseStorageSource`](api/functions/usefirebasestoragesource.md)
 - [`useFirestoreDataSource`](api/functions/usefirestoredatasource.md)
 
@@ -39,8 +39,8 @@ You can see an example
 
 :::note How did it go?
 This feature has been added in version 1.0.0.
-If you have been using FireCMS in this way, we would love to hear your feedback
-either in https://www.reddit.com/r/firecms/ or directly at hello@camberi.com
+If you have been using FireCMS with a custom backend, we would love to hear your feedback
+either in https://www.reddit.com/r/firecms/ or directly at hello@camberi.com 😊
 :::
 
 
@@ -57,20 +57,20 @@ import "typeface-rubik";
 import "typeface-space-mono";
 
 import {
-    AuthController,
+    AuthDelegate,
     Authenticator,
     buildCollection,
     buildSchema,
     CircularProgressCenter,
-    FireCMS,
-    NavigationRoutes,
-    Scaffold,
     createCMSDefaultTheme,
-    SideEntityDialogs,
     FirebaseLoginView,
+    FireCMS,
     NavigationBuilder,
     NavigationBuilderProps,
-    useFirebaseAuthController,
+    NavigationRoutes,
+    Scaffold,
+    SideEntityDialogs,
+    useFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase
@@ -120,7 +120,6 @@ const productSchema = buildSchema({
 /**
  * This is an example of how to use the components provided by FireCMS for
  * a better customisation.
- * @constructor
  */
 export function CustomCMSApp() {
 
@@ -151,9 +150,8 @@ export function CustomCMSApp() {
         firebaseConfigError
     } = useInitialiseFirebase({ firebaseConfig });
 
-    const authController: AuthController = useFirebaseAuthController({
+    const authDelegate: AuthDelegate = useFirebaseAuthDelegate({
         firebaseApp,
-        authentication: myAuthenticator
     });
 
     const dataSource = useFirestoreDataSource({
@@ -182,24 +180,26 @@ export function CustomCMSApp() {
     return (
         <Router>
             <FireCMS navigation={navigation}
-                     authController={authController}
+                     authentication={myAuthenticator}
+                     authDelegate={authDelegate}
                      dataSource={dataSource}
                      storageSource={storageSource}
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
             >
-                {({ context, mode }) => {
+                {({ context, mode, loading }) => {
 
                     const theme = createCMSDefaultTheme({ mode });
 
                     let component;
-                    if (context.loading) {
+                    if (loading) {
                         component = <CircularProgressCenter/>;
                     } else if (!context.authController.canAccessMainView) {
                         component = (
                             <FirebaseLoginView
                                 skipLoginButtonEnabled={false}
                                 signInOptions={DEFAULT_SIGN_IN_OPTIONS}
-                                firebaseApp={firebaseApp}/>
+                                firebaseApp={firebaseApp}
+                                authDelegate={authDelegate}/>
                         );
                     } else {
                         component = (

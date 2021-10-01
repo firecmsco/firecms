@@ -111,7 +111,7 @@ export function FirebaseCMSApp({
                      locale={locale}
                      basePath={basePath}
                      baseCollectionPath={baseCollectionPath}>
-                {({ context, mode,loading }) => {
+                {({ context, mode, loading }) => {
 
                     const theme = createCMSDefaultTheme({
                         mode,
@@ -129,7 +129,8 @@ export function FirebaseCMSApp({
                                 logo={logo}
                                 skipLoginButtonEnabled={allowSkipLogin}
                                 signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
-                                firebaseApp={firebaseApp}/>
+                                firebaseApp={firebaseApp}
+                                authDelegate={authDelegate}/>
                         );
                     } else {
                         component = (

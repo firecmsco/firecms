@@ -49,9 +49,9 @@ export default function MapField<T extends object>({
 
     let mapProperties: Record<string, Property>;
     if (!pickOnlySomeKeys) {
-        mapProperties = property.properties;
+        mapProperties = property.properties as Properties<any>;
     } else if (value) {
-        mapProperties = pick(property.properties,
+        mapProperties = pick(property.properties as Properties<any>,
             ...Object.keys(value)
                 .filter(key => key in property.properties!)
         );

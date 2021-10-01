@@ -6,12 +6,13 @@ sidebar_label: Changelog
 
 ## [1.0.0-beta1] - 2021-09-15
 
-Many **breaking changes** in this version unfortunately. We have done a lot of
-internal refactorings with the primary goal of making internal and external APIs
-more predictable and consistent.
+Many **breaking changes** in this version unfortunately, but it's for the
+better!
+We have done a lot of internal refactorings with the primary goal of making
+internal and external APIs more predictable and consistent.
 
-You can find a list of all the changes and help in [Migrating from alpha versions](migrating_from_alpha_versions.md)
-
+You can find a list of all the changes and help
+in [Migrating from alpha versions](migrating_from_alpha_versions.md)
 
 ## [0.50.0] - 2021-08-15
 
@@ -41,16 +42,16 @@ You are now encouraged to define your model like:
 ```tsx
 type Product = {
     name: string;
-    price:number;
+    price: number;
 }
 const productSchema = buildSchema<Product>({
     // ...
-    properties:{
-      name: {
-        dataType: "string",
+    properties: {
+        name: {
+            dataType: "string",
+            // ...
+        },
         // ...
-      },
-      // ...
     }
     // ...
 });
@@ -58,11 +59,11 @@ const productSchema = buildSchema<Product>({
 
 If you would still like to use inferred types from schemas using something like
 `typeof productSchema`, you can still do it if you wrap it in a new type
-`InferSchemaType`, but this is not encouraged.
-In the previous example `InferSchemaType<typeOf productSchema>` is the same
-type as `Product`.
+`InferSchemaType`, but this is not encouraged. In the previous
+example `InferSchemaType<typeOf productSchema>` is the same type as `Product`.
 
 Related changes:
+
 - Wherever you had defined your own schema, using `buildSchema()`
   and where using that as a type parameter, it can be changed to the defined
   type or just removed.
@@ -70,15 +71,15 @@ Related changes:
 
 If you need more info: https://firecms.co/blog/types_refactor
 
-
 ## [0.48.0] - 2021-08-13
 
 ### Changed
+
 - Fix for changes in forms not updating correctly when a real time update
   happened in Firestore
 - Fix for popup view position
 - Fix for popup view validating only the corresponding cell and not the whole
-property, which was provoking unfixable saving errors.
+  property, which was provoking unfixable saving errors.
 
 ## [0.47.0] - 2021-08-10
 
@@ -186,7 +187,7 @@ property, which was provoking unfixable saving errors.
 
 ### Added
 
-- Added `extra` and `setExtra` fields in auth controller to store custom user
+- Added `extra` and `setExtra` fields in `authController` to store custom user
   data.
 
 ### Changed

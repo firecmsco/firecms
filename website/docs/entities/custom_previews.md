@@ -12,7 +12,7 @@ how the preview of a property is displayed in collection and other read only
 views.
 
 You can build your preview as a React component that takes
-[PreviewComponentProps](api/interfaces/previewcomponentprops.md) as props.
+[PreviewComponentProps](../api/interfaces/previewcomponentprops.md) as props.
 
 `PreviewComponentProps` has two generic types: the first one is the type of the
 property, such as `string` or `boolean` and the second one (optional) is the
@@ -24,7 +24,7 @@ Example of a custom preview for a `boolean` property:
 
 ```tsx
 import React, { ReactElement } from "react";
-import { PreviewComponentProps } from "@camberi/firecms";
+import { PreviewComponentProps } from "dist/index";
 
 import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxOutlined from "@mui/icons-material/CheckBoxOutlined";

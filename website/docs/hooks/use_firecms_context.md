@@ -19,7 +19,6 @@ The props provided by this context are:
 
 * `storageSource`: Used storage implementation
 
-
 * `schemaRegistryController`: This controller is in charge of resolving the entity schemas from a given
   path. It takes into account the `navigation` prop set in the main level of the
   CMSApp as well as the `schemaResolver` in case you want to override schemas

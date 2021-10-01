@@ -24,6 +24,7 @@ import { useBuildNavigationContext } from "./internal/useBuildNavigationContext"
 
 import "@camberi/firecms/dist/index.css";
 import { useBuildSchemaRegistryController } from "./contexts/useBuildSchemaRegistryController";
+import { useBuildAuthController } from "./internal/useBuildAuthController";
 
 const DEFAULT_COLLECTION_PATH = `/c`;
 
@@ -127,52 +128,6 @@ export interface FireCMSProps {
 
 }
 
-function useBuildAuthController({
-                                    authDelegate,
-                                    authentication
-                                }: { authDelegate: AuthDelegate, authentication?: boolean | Authenticator }): AuthController {
-
-    const [user, setUser] = React.useState<User | null>(null);
-    const [notAllowedError, setNotAllowedError] = React.useState<boolean>(false);
-    const [loginSkipped, setLoginSkipped] = React.useState<boolean>(false);
-
-    function skipLogin() {
-        setNotAllowedError(false);
-        setLoginSkipped(true);
-        setUser(null);
-    }
-
-    async function checkAuthentication() {
-        const delegateUser = authDelegate.user;
-        if (authentication instanceof Function && delegateUser) {
-            const allowed = await authentication({ user: delegateUser });
-            if (allowed)
-                setUser(delegateUser);
-            else
-                setNotAllowedError(true);
-        } else {
-            setUser(delegateUser);
-        }
-    }
-
-    useEffect(() => {
-        checkAuthentication();
-    }, [authDelegate]);
-
-    const authenticationEnabled = authentication === undefined || !!authentication;
-    const canAccessMainView = (!authenticationEnabled || Boolean(user) || loginSkipped) && !notAllowedError;
-
-    return {
-        user,
-        loginSkipped,
-        canAccessMainView,
-        authError: authDelegate.authError,
-        authLoading: authDelegate.authLoading,
-        notAllowedError,
-        skipLogin,
-        signOut: authDelegate.signOut
-    };
-}
 
 /**
  * If you are using independent components of the CMS

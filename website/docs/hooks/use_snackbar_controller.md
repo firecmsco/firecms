@@ -4,7 +4,15 @@ title: useSnackbarController
 sidebar_label: useSnackbarController
 ---
 
-For displaying snackbars
+:::note
+Please note that in order to use these hooks you **must** be in
+a component (you can't use them directly from a callback function).
+Anyhow, callbacks usually include a `FireCMSContext`, which includes all
+the controllers.
+:::
+
+Use this hook to get a snackbar controller to display snackbars, with a message,
+a type and an optional title.
 
 The props provided by this context are:
 

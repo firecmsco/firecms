@@ -10,26 +10,26 @@ module.exports = {
             type: 'category',
             label: 'Entities',
             items: [
-                'entity_schemas',
+                'entities/entity_schemas',
                 {
                     type: 'category',
                     label: 'Properties',
                     items: [
-                        'properties/properties_intro',
-                        'properties/string',
-                        'properties/number',
-                        'properties/boolean',
-                        'properties/reference',
-                        'properties/timestamp',
-                        'properties/array',
-                        'properties/map',
-                        'properties/geopoint'
+                        'entities/properties/properties_intro',
+                        'entities/properties/string',
+                        'entities/properties/number',
+                        'entities/properties/boolean',
+                        'entities/properties/reference',
+                        'entities/properties/timestamp',
+                        'entities/properties/array',
+                        'entities/properties/map',
+                        'entities/properties/geopoint'
                     ]
                 },
-                'conditional_fields',
-                'custom_fields',
-                'custom_previews',
-                'custom_schema_views',
+                'entities/conditional_fields',
+                'entities/custom_fields',
+                'entities/custom_previews',
+                'entities/custom_schema_views',
             ]
         },
         {

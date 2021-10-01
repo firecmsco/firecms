@@ -85,7 +85,7 @@ in [Entity collections](../api/interfaces/entitycollection.md)
 :::note
 In the examples you might see references to the type `Product`
 (which defines the model) or the schema `productSchema`, as declared in
-the [entity schemas section](../entity_schemas.md)
+the [entity schemas section](../entities/entity_schemas.md)
 :::
 
 ### Sample collection

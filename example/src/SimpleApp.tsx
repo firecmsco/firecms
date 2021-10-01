@@ -200,6 +200,7 @@ export default function App() {
 
     const navigation: NavigationBuilder = async ({
                                                      user,
+                                                     authController,
                                                  }: NavigationBuilderProps) => {
 
         // This is a fake example of retrieving async data related to the user
@@ -208,8 +209,7 @@ export default function App() {
             name: "John",
             roles: ["admin"]
         });
-        if (user)
-            user.extra = sampleUserData;
+        authController.setExtra(sampleUserData);
 
         return ({
             collections: [
@@ -217,11 +217,11 @@ export default function App() {
                     relativePath: "products",
                     schema: productSchema,
                     name: "Products",
-                    permissions: ({ user }) => ({
+                    permissions: ({ authController }) => ({
                         edit: true,
                         create: true,
                         // we have created the roles object in the navigation builder
-                        delete: user && user.extra.roles.includes("admin")
+                        delete: authController.extra.roles.includes("admin")
                     }),
                     subcollections: [
                         buildCollection({

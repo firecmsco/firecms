@@ -9,7 +9,7 @@ you define based on your collections and entity schemas. It handles
 navigation for you as well as authentication and login.
 
 However, there is a lot of room to customization, including [custom top level views](custom_top_level_views.md),
-[custom schema views](custom_schema_views.md), and [custom fields](custom_fields.md)
+[custom schema views](entities/custom_schema_views.md), and [custom fields](entities/custom_fields.md)
 for your entity properties, in case the basic use cases we include don't suit your needs.
 
 In the simplest case, you will want to create some properties, include them

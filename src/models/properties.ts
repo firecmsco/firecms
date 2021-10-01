@@ -325,15 +325,14 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
 /**
  * @category Entity properties
  */
-export interface MapProperty<T extends object = any,
-    Key extends string = string> extends BaseProperty {
+export interface MapProperty<T extends { [Key: string]: any } = any> extends BaseProperty {
 
     dataType: "map";
 
     /**
      * Record of properties included in this map.
      */
-    properties?: Properties<any>;
+    properties?: Properties<any>; // TODO: this should be Properties<T> but it breaks if building properties without `buildProperties`
 
     /**
      * Rules for validating this property

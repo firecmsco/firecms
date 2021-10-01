@@ -58,12 +58,12 @@ function SampleApp() {
         textSearchEnabled: true,
         additionalColumns: [productAdditionalColumn],
         filterCombinations: [{ category: "desc", available: "desc" }],
-        permissions: ({ user }) => ({
+        permissions: ({ authController }) => ({
             edit: true,
             create: true,
             // we use some custom logic by storing user data in the `extra`
             // field of the user
-            delete: user && user.extra?.roles.includes("admin")
+            delete: authController.extra.roles.includes("admin")
         }),
         extraActions: productExtraActionBuilder,
         subcollections: [localeCollection],
@@ -149,7 +149,8 @@ function SampleApp() {
     };
 
     const navigation: NavigationBuilder = async ({
-                                                     user
+                                                     user,
+                                                     authController
                                                  }: NavigationBuilderProps) => {
 
         // This is a fake example of retrieving async data related to the user
@@ -158,7 +159,7 @@ function SampleApp() {
             name: "John",
             roles: ["admin"]
         });
-        if (user) user.extra = sampleUserData;
+        authController.setExtra(sampleUserData);
 
         const navigation: Navigation = {
             collections: [

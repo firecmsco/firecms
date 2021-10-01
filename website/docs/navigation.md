@@ -11,7 +11,7 @@ You have two main ways of creating the top level views in FireCMS, either creati
 collections that get mapped to CMS views, or create your own top level React views.
 
 You can check all the possible configurations for defining [collections](collections/collections.md)
-and [entity schemas](entity_schemas.md) in their respective documents.
+and [entity schemas](entities/entity_schemas.md) in their respective documents.
 
 Otherwise, you can define your own [custom top level views](custom_top_level_views.md).
 
