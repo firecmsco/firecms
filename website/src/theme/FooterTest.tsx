@@ -42,17 +42,17 @@ function FooterTest() {
                                 </svg>
                             </Link>
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-600 dark:text-gray-200">
                             <Link
                                 to="#"
-                                className="text-gray-500 hover:text-gray-900 hover:underline transition duration-150 ease-in-out"
+                                className="text-gray-600 dark:text-gray-200 hover:text-gray-900 hover:underline transition duration-150 ease-in-out"
                             >
                                 Terms
                             </Link>{" "}
                             ·{" "}
                             <Link
                                 to="#"
-                                className="text-gray-500 hover:text-gray-900 hover:underline transition duration-150 ease-in-out"
+                                className="text-gray-600 dark:text-gray-200 hover:text-gray-900 hover:underline transition duration-150 ease-in-out"
                             >
                                 Privacy Policy
                             </Link>
@@ -65,7 +65,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Web Studio
                                 </Link>
@@ -73,7 +73,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     DynamicBox Flex
                                 </Link>
@@ -81,7 +81,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Programming Forms
                                 </Link>
@@ -89,7 +89,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Integrations
                                 </Link>
@@ -97,7 +97,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Command-line
                                 </Link>
@@ -111,7 +111,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Documentation
                                 </Link>
@@ -119,7 +119,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Tutorials & Guides
                                 </Link>
@@ -127,7 +127,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Blog
                                 </Link>
@@ -135,7 +135,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Support Center
                                 </Link>
@@ -143,7 +143,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Partners
                                 </Link>
@@ -157,7 +157,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Home
                                 </Link>
@@ -165,7 +165,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     About us
                                 </Link>
@@ -173,7 +173,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Company values
                                 </Link>
@@ -181,7 +181,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Pricing
                                 </Link>
@@ -189,7 +189,7 @@ function FooterTest() {
                             <li className="mb-2">
                                 <Link
                                     to="#"
-                                    className="text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out"
+                                    className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
                                 >
                                     Privacy Policy
                                 </Link>
@@ -199,7 +199,7 @@ function FooterTest() {
 
                     <div className="sm:col-span-6 md:col-span-3 lg:col-span-3">
                         <h6 className="text-gray-800 font-medium mb-2">Subscribe</h6>
-                        <p className="text-sm text-gray-500 mb-4">
+                        <p className="text-sm text-gray-600 dark:text-gray-200 mb-4">
                             Get the latest news and articles to your inbox every
                             month.
                         </p>
@@ -252,7 +252,7 @@ function FooterTest() {
                         <li>
                             <Link
                                 to="#"
-                                className="flex justify-center items-center text-gray-500 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
+                                className="flex justify-center items-center text-gray-600 dark:text-gray-200 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
                                 aria-label="Twitter"
                             >
                                 <svg
@@ -268,7 +268,7 @@ function FooterTest() {
                         <li className="ml-4">
                             <Link
                                 to="#"
-                                className="flex justify-center items-center text-gray-500 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
+                                className="flex justify-center items-center text-gray-600 dark:text-gray-200 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
                                 aria-label="Github"
                             >
                                 <svg
@@ -284,7 +284,7 @@ function FooterTest() {
                         <li className="ml-4">
                             <Link
                                 to="#"
-                                className="flex justify-center items-center text-gray-500 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
+                                className="flex justify-center items-center text-gray-600 dark:text-gray-200 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
                                 aria-label="Facebook"
                             >
                                 <svg
@@ -299,7 +299,7 @@ function FooterTest() {
                         </li>
                     </ul>
 
-                    <div className="text-sm text-gray-500 mr-4">
+                    <div className="text-sm text-gray-600 dark:text-gray-200 mr-4">
                         Made by{" "}
                         <a
                             className="text-blue-600 hover:underline"

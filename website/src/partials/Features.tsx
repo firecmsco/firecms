@@ -55,18 +55,17 @@ function Features() {
 
                                 </div>
 
-                                <p className="text-xl text-gray-500">
+                                <p className="text-xl text-gray-600 dark:text-gray-200">
                                     FireCMS provides all the flexibility you
-                                    need with the best
-                                    UX.
+                                    need with the best UX.
                                 </p>
-                                <p className="text-xl text-gray-500">
+                                <p className="text-xl text-gray-600 dark:text-gray-200">
                                     Edit your collections and entities using
                                     both a <b>spreadsheet
                                     view</b> and <b>powerful forms</b>.
                                 </p>
 
-                                <p className="text-xl text-gray-500">
+                                <p className="text-xl text-gray-600 dark:text-gray-200">
                                     Map your collections and document schemas to
                                     beautiful views generated automatically
                                 </p>
@@ -163,7 +162,7 @@ function Features() {
                                     </div>
                                 </div>
 
-                                <p className="md:text-right text-xl text-gray-500">
+                                <p className="md:text-right text-xl text-gray-600 dark:text-gray-200">
                                     Define your entity schemas and choose from
                                     multiple form widgets and validation
                                     options.
@@ -196,13 +195,13 @@ function Features() {
                                     </h3>
 
                                 </div>
-                                <p className="text-xl text-gray-500">
+                                <p className="text-xl text-gray-600 dark:text-gray-200">
                                     FireCMS is a headless CMS built to work
                                     with every existing Firebase/Firestore
                                     project. It does not
                                     enforce any data structure.
                                 </p>
-                                <p className="text-xl text-gray-500">
+                                <p className="text-xl text-gray-600 dark:text-gray-200">
                                     Use the integrated hooks and callbacks to
                                     integrate your business logic in multiple
                                     ways.
@@ -301,7 +300,7 @@ const productCallbacks = buildEntityCallbacks({
                                     </div>
                                 </div>
 
-                                <p className="md:text-right text-xl text-gray-500">
+                                <p className="md:text-right text-xl text-gray-600 dark:text-gray-200">
                                     FireCMS allows developers to extend it
                                     in any way they need, while
                                     keeping it extremely simple to kickstart a
@@ -309,7 +308,7 @@ const productCallbacks = buildEntityCallbacks({
                                     configuration. We use <b>sensible defaults
                                     that can be overridden or extended</b>.
                                 </p>
-                                <p className="md:text-right text-xl text-gray-500">
+                                <p className="md:text-right text-xl text-gray-600 dark:text-gray-200">
                                     Integrate your own custom form fields as
                                     React components, as well as preview
                                     widgets.

@@ -195,7 +195,7 @@ function FeaturesBlocks() {
                         data-aos="fade-up"
                         data-aos-delay="100">
                         <h2 className="h2 mb-4">Full set of features</h2>
-                        <p className="text-xl text-gray-500">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             Everything you need to kickstart your Firebase-based
                             project with the best low-code solution
                         </p>
@@ -205,90 +205,117 @@ function FeaturesBlocks() {
                         className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
                         <div
                             data-aos="fade-up"
-                            data-aos-delay="100"
-                            className="relative flex flex-col items-center p-6 rounded shadow-lg bg-white dark:bg-opacity-5">
-                            {iconStars}
-                            <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                                Schema validation
-                            </h4>
-                            <p className="text-gray-500 text-center">
-                                Define your data types and validation to ensure
-                                consistency
-                            </p>
+                            data-aos-delay="100">
+                            <div
+                                className="relative flex flex-col items-center p-6 rounded shadow-lg bg-white dark:bg-opacity-5">
+                                {iconStars}
+                                <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                                    Schema validation
+                                </h4>
+                                <p className="text-gray-600 dark:text-gray-200 text-center">
+                                    Define your data types and validation to
+                                    ensure
+                                    consistency
+                                </p>
+                            </div>
                         </div>
 
                         <div
                             data-aos="fade-up"
-                            data-aos-delay="150"
-                            className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
-                            {iconTalking}
-                            <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                                Reference support
-                            </h4>
-                            <p className="text-gray-500 text-center">
-                                Link entities in different collections in a
-                                seamless way
-                            </p>
+                            data-aos-delay="150">
+                            <div
+                                className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
+                                {iconTalking}
+                                <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                                    Reference support
+                                </h4>
+                                <p className="text-gray-600 dark:text-gray-200 text-center">
+                                    Link entities in different collections in a
+                                    seamless way
+                                </p>
+                            </div>
                         </div>
 
                         <div
                             data-aos="fade-up"
-                            data-aos-delay="200"
-                            className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
-                            {iconDoor}
-                            <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                                Role system
-                            </h4>
-                            <p className="text-gray-500 text-center">
-                                Define different app configurations based
-                                on the logged user
-                            </p>
+                            data-aos-delay="200">
+                            <div
+                                className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
+                                {iconDoor}
+                                <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                                    Role system
+                                </h4>
+                                <p className="text-gray-600 dark:text-gray-200 text-center">
+                                    Define different app configurations based
+                                    on the logged user
+                                </p>
+                            </div>
+
                         </div>
 
                         <div
                             data-aos="fade-up"
-                            data-aos-delay="100"
-                            className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
-                            {iconCards}
-                            <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                                Customization
-                            </h4>
-                            <p className="text-gray-500 text-center">
-                                Custom form fields, hooks and full views based
-                                on React
-                            </p>
+                            data-aos-delay="100">
+                            <div
+                                className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
+                                {iconCards}
+                                <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                                    Customization
+                                </h4>
+                                <p className="text-gray-600 dark:text-gray-200 text-center">
+                                    Custom form fields, hooks and full views
+                                    based
+                                    on React
+                                </p>
+                            </div>
                         </div>
 
                         <div
                             data-aos="fade-up"
-                            data-aos-delay="150"
-                            className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
-                            {iconArrows}
-                            <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                                Subcollection support
-                            </h4>
-                            <p className="text-gray-500 text-center">
-                                Complete navigation for collections under other
-                                entities
-                            </p>
+                            data-aos-delay="150">
+                            <div
+                                className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
+                                {iconArrows}
+                                <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                                    Subcollection support
+                                </h4>
+                                <p className="text-gray-600 dark:text-gray-200 text-center">
+                                    Complete navigation for collections under
+                                    other
+                                    entities
+                                </p>
+                            </div>
                         </div>
                         <div
                             data-aos="fade-up"
-                            data-aos-delay="200"
-                            className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
+                            data-aos-delay="200">
+                            <div
+                                className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg dark:bg-opacity-5">
 
-                            {iconRadar}
+                                {iconRadar}
 
-                            <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                                Real time support
-                            </h4>
-                            <p className="text-gray-500 text-center">
-                                In every view of your CMS, ideal for background
-                                updates
-                            </p>
+                                <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                                    Real time support
+                                </h4>
+                                <p className="text-gray-600 dark:text-gray-200 text-center">
+                                    In every view of your CMS, ideal for
+                                    background
+                                    updates
+                                </p>
+                            </div>
                         </div>
                     </div>
 
+                    <div
+                        className="max-w-3xl mx-auto text-center py-12 md:py-20"
+                        data-aos="fade-up"
+                        data-aos-delay="100">
+                        <h2 className="h2 mb-4">Build and launch fast!</h2>
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                            And when you have built it, enjoy your super custom
+                            headless CMS/admin-panel
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>

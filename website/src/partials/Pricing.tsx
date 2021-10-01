@@ -101,21 +101,22 @@ function Pricing() {
 
     return (
         <section
-            className="relative mx-auto text-center py-12 md:py-20"
-            data-aos="fade-up"
-            data-aos-delay="100">
+            className="relative mx-auto text-center py-12 md:py-20">
 
             <h2 className="h2 ">
                 Pricing
             </h2>
 
-            {/*<p className="text-xl text-gray-500 dark:text-gray-200">*/}
+            {/*<p className="text-xl text-gray-600 dark:text-gray-200 dark:text-gray-200">*/}
             {/*    This is the best part*/}
             {/*</p>*/}
 
             <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
 
-                <div className="md:grid md:grid-cols-2 content-center">
+                <div className="md:grid md:grid-cols-2 content-center"
+                     data-aos="fade-up"
+                     data-aos-delay="100"
+                >
 
                     {community}
 
