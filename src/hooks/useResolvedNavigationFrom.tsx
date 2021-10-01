@@ -25,7 +25,6 @@ export interface ResolvedNavigationEntity<M> {
     type: "entity";
     entity: Entity<M>;
     entityId: string;
-    relativePath: string;
     path: string;
     parentCollection: EntityCollection<M>;
 }
@@ -89,12 +88,12 @@ export function resolveNavigationFrom<M>({
         if (entry.type === "collection") {
             return Promise.resolve(entry);
         } else if (entry.type === "entity") {
-            const schemaConfig = schemaRegistryController.getSchemaConfig(entry.relativePath, entry.entityId);
+            const schemaConfig = schemaRegistryController.getSchemaConfig(entry.path, entry.entityId);
             if (!schemaConfig?.schema) {
-                throw Error(`No schema defined in the navigation for the entity with path ${entry.relativePath}`);
+                throw Error(`No schema defined in the navigation for the entity with path ${entry.path}`);
             }
             return dataSource.fetchEntity({
-                path: entry.relativePath,
+                path: entry.path,
                 entityId: entry.entityId,
                 schema: schemaConfig?.schema
             })

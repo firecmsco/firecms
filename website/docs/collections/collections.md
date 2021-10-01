@@ -19,7 +19,7 @@ in [Entity collections](../api/interfaces/entitycollection.md)
 
 * `name` The plural name of the view. E.g. 'products'.
 
-* `relativePath` Relative Firestore path of this view to its parent. If this
+* `path` Relative Firestore path of this view to its parent. If this
   view is in the root the path, it is equal to the absolute one. This path also
   determines the URL in FireCMS.
 
@@ -94,7 +94,7 @@ the [entity schemas section](../entities/entity_schemas.md)
 import { buildCollection } from "dist/index";
 
 const productsCollection = buildCollection<Product>({
-    relativePath: "products",
+    path: "products",
     schema: productSchema,
     name: "Products",
     group: "Main",
@@ -168,7 +168,7 @@ In order to do so, just pass the indexes configuration to your collection:
 import { buildCollection } from "@camberi/firecms";
 
 const productsCollection = buildCollection<Product>({
-    relativePath: "products",
+    path: "products",
     schema: productSchema,
     name: "Products",
     indexes: [

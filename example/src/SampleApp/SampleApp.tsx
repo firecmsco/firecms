@@ -43,13 +43,13 @@ function SampleApp() {
     const localeCollection: EntityCollection<Locale> =
         buildCollection({
             name: "Locales",
-            relativePath: "locales",
+            path: "locales",
             schema: localeSchema,
             defaultSize: "m"
         });
 
     const productsCollection = buildCollection<Product>({
-        relativePath: "products",
+        path: "products",
         schema: productSchema,
         callbacks: productCallbacks,
         name: "Products",
@@ -71,7 +71,7 @@ function SampleApp() {
     });
 
     const usersCollection = buildCollection({
-        relativePath: "users",
+        path: "users",
         schema: usersSchema,
         name: "Users",
         group: "Main",
@@ -88,7 +88,7 @@ function SampleApp() {
     });
 
     const blogCollection = buildCollection({
-        relativePath: "blog",
+        path: "blog",
         schema: blogSchema,
         name: "Blog",
         group: "Content",
@@ -105,12 +105,12 @@ function SampleApp() {
     });
 
     const testCollection = buildCollection({
-        relativePath: "test_entity",
+        path: "test_entity",
         schema: testEntitySchema,
         callbacks: testCallbacks,
         name: "Test entity",
         subcollections: [{
-            relativePath: "test_subcollection",
+            path: "test_subcollection",
             schema: testEntitySchema,
             name: "Test entity"
         }]

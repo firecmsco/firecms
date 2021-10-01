@@ -30,7 +30,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * If this view is in the root the path is equal to the absolute one.
      * This path also determines the URL in FireCMS
      */
-    relativePath: string;
+    path: string;
 
     /**
      * Schema representing the entities of this view

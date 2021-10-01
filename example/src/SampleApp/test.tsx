@@ -70,7 +70,7 @@ const productCallbacks = buildEntityCallbacks<Product>({
 
 const productsCollection = buildCollection<Product>({
     name: "Products",
-    relativePath: "products",
+    path: "products",
     schema: productSchema,
     callbacks: productCallbacks
 });

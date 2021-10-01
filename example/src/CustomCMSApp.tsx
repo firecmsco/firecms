@@ -78,7 +78,7 @@ export function CustomCMSApp() {
     const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
         collections: [
             buildCollection({
-                relativePath: "products",
+                path: "products",
                 schema: productSchema,
                 name: "Products",
                 permissions: ({ user }) => ({

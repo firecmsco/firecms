@@ -211,7 +211,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
 
         if (subcollections && selectedSubpath) {
             const index = subcollections
-                .map((c) => c.relativePath)
+                .map((c) => c.path)
                 .findIndex((p) => p === selectedSubpath);
             setTabsPosition(index + customViewsCount);
         }
@@ -359,7 +359,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
 
     const subCollectionsViews = subcollections && subcollections.map(
         (subcollection, colIndex) => {
-            const path = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.relativePath)}` : undefined;
+            const path = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
 
             return (
                 <Box
@@ -396,7 +396,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
         }
 
         if (subcollections) {
-            return subcollections[value - customViewsCount].relativePath;
+            return subcollections[value - customViewsCount].path;
         }
 
         throw Error("Something is wrong in getSelectedSubpath");

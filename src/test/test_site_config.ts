@@ -192,7 +192,7 @@ export const productSchema = buildSchema({
 const subcollections = [
     buildCollection({
         name: "Locales",
-        relativePath: "locales",
+        path: "locales",
         schema: {
             customId: locales,
             name: "Locale",
@@ -252,21 +252,21 @@ export const siteConfig: FirebaseCMSAppProps = {
     name: "Test site",
     navigation: [
         buildCollection({
-            relativePath: "products",
+            path: "products",
             schema: productSchema,
             callbacks: productCallbacks,
             name: "Products",
             subcollections: subcollections
         }),
         buildCollection({
-            relativePath: "sites/es/products",
+            path: "sites/es/products",
             schema: productSchema,
             callbacks: productCallbacks,
             name: "Products",
             subcollections: subcollections
         }),
         buildCollection({
-            relativePath: "products/id/subcollection_inline",
+            path: "products/id/subcollection_inline",
             schema: productSchema,
             callbacks: productCallbacks,
             name: "Products",

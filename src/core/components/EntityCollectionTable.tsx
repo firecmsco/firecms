@@ -105,7 +105,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                             sideEntityController.open({
                                 path,
                                 entityId: entity.id,
-                                selectedSubpath: subcollection.relativePath,
+                                selectedSubpath: subcollection.path,
                                 permissions: collection.permissions,
                                 schema: collection.schema,
                                 subcollections: collection.subcollections,

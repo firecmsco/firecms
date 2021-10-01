@@ -12,7 +12,6 @@ export type NavigationViewInternal<M> =
 interface NavigationViewEntityInternal<M> {
     type: "entity";
     entityId: string;
-    relativePath: string;
     path: string;
     parentCollection: EntityCollection<M>;
 }
@@ -49,12 +48,12 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
 
-        const collection = collections && collections.find((entry) => entry.relativePath === subpathCombination);
+        const collection = collections && collections.find((entry) => entry.path === subpathCombination);
 
         if (collection) {
             const collectionPath = currentFullPath && currentFullPath.length > 0
-                ? (currentFullPath + "/" + collection.relativePath)
-                : collection.relativePath;
+                ? (currentFullPath + "/" + collection.path)
+                : collection.path;
 
             result.push({
                 type: "collection",
@@ -69,8 +68,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                 result.push({
                     type: "entity",
                     entityId: entityId,
-                    relativePath: collectionPath,
-                    path: fullPath,
+                    path: collectionPath,
                     parentCollection: collection
                 });
                 if (nextSegments.length > 1) {
@@ -83,7 +81,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                             : customView.path;
                         result.push({
                             type: "custom_view",
-                            path,
+                            path: path,
                             view: customView
                         });
                     } else if (collection.subcollections) {

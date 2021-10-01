@@ -214,7 +214,7 @@ export default function App() {
         return ({
             collections: [
                 buildCollection({
-                    relativePath: "products",
+                    path: "products",
                     schema: productSchema,
                     name: "Products",
                     permissions: ({ authController }) => ({
@@ -226,7 +226,7 @@ export default function App() {
                     subcollections: [
                         buildCollection({
                             name: "Locales",
-                            relativePath: "locales",
+                            path: "locales",
                             schema: localeSchema
                         })
                     ]

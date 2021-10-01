@@ -13,7 +13,7 @@ In the simpler case, you can directly assign the permissions
 import { buildCollection } from "@camberi/firecms";
 
 buildCollection({
-    relativePath: "products",
+    path: "products",
     schema: productSchema,
     name: "Products",
     permissions: {
@@ -28,7 +28,7 @@ buildCollection({
 import { buildCollection } from "@camberi/firecms";
 
 buildCollection({
-    relativePath: "products",
+    path: "products",
     schema: productSchema,
     name: "Products",
     permissions: ({ user }) => ({

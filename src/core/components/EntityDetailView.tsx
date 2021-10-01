@@ -133,7 +133,7 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
 
                 {subcollections && subcollections.map(
                     (subcollection, colIndex) => {
-                        const path = `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.relativePath)}`;
+                        const path = `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}`;
                         return <Box
                             key={`entity_detail_tab_content_${subcollection.name}`}
                             role="tabpanel"

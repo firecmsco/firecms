@@ -121,7 +121,7 @@ export function getRowHeight(size: CollectionSize): number {
 }
 
 export function getSubcollectionColumnId(collection: EntityCollection) {
-    return `subcollection_${collection.relativePath}`;
+    return `subcollection_${collection.path}`;
 }
 
 export function useColumnIds(view: EntityCollection, includeSubcollections: boolean) {

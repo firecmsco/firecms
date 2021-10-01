@@ -135,6 +135,7 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
 - `field` prop in properties has been renamed to `Field`
 - `preview` prop in properties has been renamed to `Preview`
 - `indexes` prop in `EntityCollection` has been renamed to `filterCombinations`
+- `relativePath` prop in `EntityCollection` has been renamed to `path`
 
 - If you were using `CMSAppProvider` and `CMSMainView`, they have been largely
   refactored, and now you will need to implement a bunch of extra stuff if you

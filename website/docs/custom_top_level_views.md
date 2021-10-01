@@ -80,7 +80,7 @@ export default function App() {
     const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
         collections: [
             buildCollection({
-                relativePath: "products",
+                path: "products",
                 schema: productSchema,
                 name: "Products"
             })

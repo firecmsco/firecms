@@ -185,7 +185,7 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
             if (navigationEntry.type === "entity") {
                 if (previousEntry.type === "collection") {
                     sidePanels.push({
-                            path: navigationEntry.relativePath,
+                            path: navigationEntry.path,
                             entityId: navigationEntry.entityId,
                             copy: false
                         }
@@ -201,7 +201,7 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
                 if (previousEntry.type === "entity") {
                     const lastSidePanel: ExtendedPanelProps = sidePanels[sidePanels.length - 1];
                     if (lastSidePanel)
-                        lastSidePanel.selectedSubpath = navigationEntry.collection.relativePath;
+                        lastSidePanel.selectedSubpath = navigationEntry.collection.path;
                 }
             }
         }

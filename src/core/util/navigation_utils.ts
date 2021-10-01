@@ -51,7 +51,7 @@ function getCollectionViewFromPathInternal<M extends { [Key: string]: any }>(pat
     let result: EntityCollection | undefined = undefined;
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
-        const navigationEntry = collectionViews && collectionViews.find((entry) => entry.relativePath === subpathCombination);
+        const navigationEntry = collectionViews && collectionViews.find((entry) => entry.path === subpathCombination);
 
         if (navigationEntry) {
 
@@ -106,7 +106,7 @@ export function computeTopNavigation(
 
     const navigationEntries: TopNavigationEntry[] = [
         ...navigation.collections.map(collection => ({
-            url: navigationContext.buildCollectionPath(collection.relativePath),
+            url: navigationContext.buildCollectionPath(collection.path),
             name: collection.name,
             description: collection.description,
             group: collection.group
