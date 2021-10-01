@@ -13,13 +13,13 @@ export type CMSType =
     | Date
     | GeoPoint
     | EntityReference
-    | object
+    | { [Key: string]: any }
     | CMSType[];
 
 /**
- * @category Entity properties
+ * @ignore
  */
-type AnyProperty =
+export type AnyProperty =
     StringProperty |
     NumberProperty |
     BooleanProperty |
@@ -40,7 +40,7 @@ export type Property<T extends CMSType = CMSType> =
                     T extends GeoPoint ? GeopointProperty :
                         T extends EntityReference ? ReferenceProperty :
                             T extends Array<CMSType> ? ArrayProperty<T> :
-                                T extends object ? MapProperty<T> : AnyProperty;
+                                T extends { [Key: string]: any } ? MapProperty<T> : AnyProperty;
 
 /**
  * @category Entity properties

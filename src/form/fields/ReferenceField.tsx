@@ -19,6 +19,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 
 import {
+    AnyProperty,
     Entity,
     EntityReference,
     EntitySchema,
@@ -170,7 +171,7 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
         setOpen(false);
     };
 
-    function buildEntityView(schema?: EntitySchema) {
+    function buildEntityView(schema?: EntitySchema<any>) {
 
         const missingEntity = entity && !entity.values;
 
@@ -223,11 +224,11 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
                                             <PreviewComponent
                                                 name={key as string}
                                                 value={(entity.values as any)[key]}
-                                                property={propertyKey as Property}
+                                                property={propertyKey as AnyProperty}
                                                 size={"tiny"}/>
                                             :
                                             <SkeletonComponent
-                                                property={propertyKey as Property}
+                                                property={propertyKey as AnyProperty}
                                                 size={"tiny"}/>}
                                     </ErrorBoundary>
                                 </Box>

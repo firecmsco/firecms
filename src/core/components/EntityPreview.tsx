@@ -14,6 +14,7 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import {
+    AnyProperty,
     Entity,
     EntitySchema,
     FireCMSContext,
@@ -135,7 +136,7 @@ export default function EntityPreview<M extends { [Key: string]: any }>(
                                         <PreviewComponent
                                             name={key}
                                             value={value}
-                                            property={property}
+                                            property={property as AnyProperty}
                                             size={"regular"}/>
                                     </ErrorBoundary>
                                 </TableCell>

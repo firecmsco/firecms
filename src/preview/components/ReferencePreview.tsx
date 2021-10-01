@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import { EntityReference, Property } from "../../models";
+import { AnyProperty, EntityReference, Property } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { PreviewComponentProps, PreviewSize } from "../PreviewComponentProps";
@@ -172,11 +172,11 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                                 {entity ?
                                     <PreviewComponent name={key as string}
                                                       value={entity.values[key as string]}
-                                                      property={property as Property}
+                                                      property={property as AnyProperty}
                                                       size={"tiny"}/>
                                     :
                                     <SkeletonComponent
-                                        property={property as Property}
+                                        property={property as AnyProperty}
                                         size={"tiny"}/>
                                 }
                             </div>
