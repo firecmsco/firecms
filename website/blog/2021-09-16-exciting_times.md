@@ -15,6 +15,10 @@ Exciting times for our project!
 After more than 60 releases, and numerous refinements of the internal components
 and APIs, we are ready to start the beta release of version 1.0.0 💃
 
+We now consider that the code and the UX and UI are mature enough
+to create a beta release (though we have multiple instances of previous versions
+already in production!).
+
 In the last months we've been focused on improving the CMS quality by
 doing a lot of internal restructuring that is also going to affect the public
 facing APIs.
@@ -38,10 +42,10 @@ Firebase code in most layers of the code.
 The original coupling to Firebase and specially the data structure of Firestore
 has influenced many aspects of this project. The way we create entities based on
 documents and collections and subcollections mimics the Firestore data
-structure. What seemed like a limitation has turned out to be a great
-opportunity to think of a great UI.
+structure. What seemed like a limitation has turned out to be an
+opportunity to think of a **great UI**.
 
-At Camberi we have a special passion for user experience and believe that
+At Camberi we have a special passion for **user experience** and believe that
 internal admin tools don't always receive the love they deserve.
 
 In this time, we have developed some high quality components such as the
@@ -63,7 +67,8 @@ and improvements, including a very awesome new **dark mode**!
 If you are using `FirebaseCMSApp` (previously `CMSApp`), so FireCMS as a
 standalone app, you will need to update some APIs (see the [Migrating from alpha versions](../docs/migrating_from_alpha_versions)).
 
-But, but, but... If you need more customisation you can now completely
+But, but, but...
+If you need more customisation you can now completely
 override `FirebaseCMSApp` and reuse all its internal components. This means you now
 have control of the MUI theme (adapted to V5), the CMS routes (adapted to React
 Router 6), or how you display the different parts, such as the side dialogs, or
@@ -113,7 +118,8 @@ and nowhere else. This means the core of FireCMS has been completely isolated
 from Firebase and is now much more maintainable and extendable.
 
 We have got a lot of PRs and support from out users and would love to foster
-that participation going forward
+that participation going forward. A cleaner code will help everyone involved
+and allow for more and better features!
 
 
 

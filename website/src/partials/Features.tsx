@@ -228,10 +228,6 @@ function Features() {
                                     >
                                         {`const productSchema: EntitySchema = buildSchema({
     name: "Product",
-    onPreSave: ({ values }) => {
-        values.uppercase = values.name.toUpperCase();
-        return values;
-    },
     properties: {
         name: {
             dataType: "string",
@@ -245,6 +241,13 @@ function Features() {
     },
     defaultValues: {
         name: "Default name",
+    }
+});
+
+const productCallbacks = buildEntityCallbacks({
+    onPreSave: ({ values }) => {
+        values.uppercase = values.name.toUpperCase();
+        return values;
     }
 });`}
                                     </SyntaxHighlighter>

@@ -32,10 +32,11 @@ npx create-react-app my-cms --template typescript
 ```
 
 - Go into the new directory:
-
+yarn start
 ```
 cd my-cms
 ```
+
 
 - Install FireCMS and it's peer dependencies:
 

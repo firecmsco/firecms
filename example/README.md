@@ -10,12 +10,13 @@ the `package.json` file for:
 // ...
 "dependencies": {
     "@camberi/firecms": "latest",
-    "@mui/material": "^4.11.4",
-    "@mui/icons-material": "^4.11.2",
-    "@material-ui/pickers": "^3.3.10",
-    "@mui/lab": "^4.0.0-alpha.58",
-    "algoliasearch": "^4.9.1",
-    "firebase": "^8.5.0",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "5",
+    "@mui/lab": "^5.0.0-alpha.49",
+    "@mui/material": "5",
+    "@mui/styles": "5",
+    "firebase": "9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^4.0.3"
