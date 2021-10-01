@@ -346,7 +346,7 @@ function getYupArraySchema<T>({
             schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true) :
             schema.notRequired().nullable(true);
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} should be min ${validation.min} entries long`);
-        if (validation.max) schema = schema.max(validation.max, `${property.title} should be max ${validation.min} entries long`);
+        if (validation.max) schema = schema.max(validation.max, `${property.title} should be max ${validation.max} entries long`);
     } else {
         schema = schema.notRequired().nullable(true);
     }
