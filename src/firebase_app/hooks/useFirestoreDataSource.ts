@@ -24,6 +24,7 @@ import {
 } from "../../core/utils";
 import {
     collection,
+    CollectionReference,
     deleteDoc,
     doc,
     DocumentReference,
@@ -360,7 +361,7 @@ export function useFirestoreDataSource({
          * @param status
          * @category Firestore
          */
-        async saveEntity<M extends { [Key: string]: any }>(
+        saveEntity: async function <M extends { [Key: string]: any }>(
             {
                 path,
                 entityId,
@@ -371,8 +372,9 @@ export function useFirestoreDataSource({
 
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
             const properties: Properties<M> = computeSchemaProperties(schema, path, entityId);
+            const collectionReference: CollectionReference = collection(firestore, path);
 
-            const updatedValues: EntityValues<M> = updateAutoValues(
+            const updatedFirestoreValues: EntityValues<M> = updateAutoValues(
                 {
                     inputValues: values,
                     properties,
@@ -382,21 +384,19 @@ export function useFirestoreDataSource({
                     geopointConverter: (value: GeoPoint) => new FirestoreGeoPoint(value.latitude, value.longitude)
                 });
 
-            console.debug("Saving entity", path, entityId, updatedValues);
+            console.debug("Saving entity", path, entityId, updatedFirestoreValues);
 
             let documentReference: DocumentReference;
             if (entityId)
-                documentReference = doc(firestore, path, entityId);
+                documentReference = doc(collectionReference, entityId);
             else
-                documentReference = doc(firestore, path);
+                documentReference = doc(collectionReference);
 
-            const entity: Entity<M> = {
+            return setDoc(documentReference, updatedFirestoreValues, { merge: true }).then(() => ({
                 id: documentReference.id,
                 path: documentReference.path,
-                values: updatedValues
-            };
-
-            return setDoc(documentReference, updatedValues, { merge: true }).then(() => entity);
+                values: firestoreToCMSModel(updatedFirestoreValues, schema, path) as EntityValues<M>
+            }));
         },
 
         /**
