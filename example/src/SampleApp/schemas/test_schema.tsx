@@ -89,6 +89,8 @@ export const testEntitySchema = buildSchema({
             dataType: "array",
             columnWidth: 450,
             oneOf: {
+                typeField: "type",
+                valueField: "value",
                 properties: {
                     title: {
                         title: "Title",

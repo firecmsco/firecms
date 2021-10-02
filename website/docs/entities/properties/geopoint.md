@@ -4,5 +4,5 @@ title: Geopoint
 sidebar_label: Geopoint
 ---
 
-*THIS PROPERTY IS CURRENTLY NOT SUPPORTED*
+> *THIS PROPERTY IS CURRENTLY NOT SUPPORTED*
 

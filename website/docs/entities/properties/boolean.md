@@ -4,6 +4,17 @@ title: Boolean
 sidebar_label: Boolean
 ---
 
+```tsx
+import { buildProperty } from "./builders";
+
+const availableProperty = buildProperty({
+    title: "Available",
+    dataType: "boolean"
+});
+```
+
+
+
 ## `validation`
 
 * `required` Should this field be compulsory.

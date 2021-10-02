@@ -13,6 +13,20 @@ Firestore does not support it)
 You can leave this field empty only if you are providing a custom field or
 provide a `oneOf` field otherwise an error will be thrown.
 
+Example `of` array property:
+```tsx
+import { buildProperty } from "@camberi/firecms";
+
+const productReferences = buildProperty({
+    title: "Products",
+    dataType: "array",
+    of: {
+        dataType: "reference",
+            path: "products",
+            previewProperties: ["name", "main_image"]
+    }
+});
+```
 
 ##  `oneOf`
 
@@ -29,6 +43,40 @@ You can customise the `type` and `value` fields to suit your needs.
 
 An example use case for this feature may be a blog entry, where you have
 images and text blocks using markdown.
+
+Example of `oneOf` field:
+```tsx
+import { buildProperty } from "@camberi/firecms";
+
+const contentProperty = buildProperty({
+    title: "Content",
+    description: "Example of a complex array with multiple properties as children",
+    validation: { required: true },
+    dataType: "array",
+    oneOf: {
+        title: "Content",
+        description: "Example of a complex array with multiple properties as children",
+        dataType: "array",
+        oneOf: {
+            typeField: "type",
+            valueField: "value",
+            properties: {
+                title: {
+                    title: "Title",
+                    dataType: "string"
+                },
+                text: {
+                    dataType: "string",
+                    title: "Text",
+                    config: {
+                        markdown: true
+                    }
+                }
+            }
+        }
+    }
+});
+```
 
 ## `validation`
 

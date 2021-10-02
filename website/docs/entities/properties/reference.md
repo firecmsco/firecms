@@ -3,6 +3,18 @@ id: reference
 title: Reference
 sidebar_label: Reference
 ---
+
+```tsx
+import { buildProperty } from "./builders";
+
+const productsReferenceProperty = buildProperty({
+    title: "Product",
+    dataType: "reference",
+    path: "products",
+    previewProperties: ["name", "main_image"]
+});
+```
+
 ## `path`
 
 Absolute collection path of the collection this reference

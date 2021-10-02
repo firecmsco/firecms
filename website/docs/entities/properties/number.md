@@ -4,11 +4,52 @@ title: Number
 sidebar_label: Number
 ---
 
+```tsx
+import { buildProperty } from "./builders";
+
+const rangeProperty = buildProperty({
+    title: "Range",
+    validation: {
+        min: 0,
+        max: 3
+    },
+    dataType: "number"
+});
+```
+
+
 ## `config`
 
-* `enumValues` You can use the enum values providing a map of possible
+### `enumValues`
+You can use the enum values providing a map of possible
   exclusive values the property can take, mapped to the label that it is
   displayed in the dropdown.
+
+
+```tsx
+import { buildProperty } from "./builders";
+
+const property = buildProperty({
+    title: "Status",
+    dataType: "number",
+    config: {
+        enumValues: new Map([
+            ["-1", buildEnumValueConfig({
+                label: "Lightly tense",
+                color: "redLighter"
+            })],
+            ["0", buildEnumValueConfig({
+                label: "Normal",
+                color: "grayLight"
+            })],
+            ["1", buildEnumValueConfig({
+                label: "Lightly relaxed",
+                color: "blueLighter"
+            })]
+        ])
+    }
+});
+```
 
 ## `validation`
 
