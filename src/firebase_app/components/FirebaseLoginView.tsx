@@ -122,6 +122,15 @@ export default function FirebaseLoginView({
         </div>;
     }
 
+    let notAllowedMessage: string | undefined;
+    if (authController.notAllowedError) {
+        if (typeof authController.notAllowedError === "string") {
+            notAllowedMessage = authController.notAllowedError;
+        } else {
+            notAllowedMessage = "It looks like you don't have access to the CMS, based on the specified Authenticator configuration";
+        }
+    }
+
     return (
         <Grid
             container
@@ -148,10 +157,9 @@ export default function FirebaseLoginView({
 
             <Grid item xs={12}>
 
-                {authController.notAllowedError &&
+                {notAllowedMessage &&
                 <Box p={2}>
-                    It looks like you don't have access to the CMS, based
-                    on the specified Authenticator configuration
+                    {notAllowedMessage}
                 </Box>}
 
                 {buildErrorView()}

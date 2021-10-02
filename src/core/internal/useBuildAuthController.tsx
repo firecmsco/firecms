@@ -7,22 +7,29 @@ import {
 } from "../../models";
 
 export function useBuildAuthController({
-                                    authDelegate,
-                                    authentication
-                                }: { authDelegate: AuthDelegate, authentication?: boolean | Authenticator }): AuthController {
+                                           authDelegate,
+                                           authentication
+                                       }: { authDelegate: AuthDelegate, authentication?: boolean | Authenticator }): AuthController {
 
     const [user, setUser] = useState<User | null>(null);
-    const [notAllowedError, setNotAllowedError] = useState<boolean>(false);
+    const [notAllowedError, setNotAllowedError] = useState<any>(false);
     const [extra, setExtra] = useState<any>();
 
     async function checkAuthentication() {
         const delegateUser = authDelegate.user;
         if (authentication instanceof Function && delegateUser) {
-            const allowed = await authentication({ user: delegateUser });
-            if (allowed)
-                setUser(delegateUser);
-            else
-                setNotAllowedError(true);
+            try {
+                const allowed = await authentication({
+                    user: delegateUser,
+                    authController
+                });
+                if (allowed)
+                    setUser(delegateUser);
+                else
+                    setNotAllowedError(true);
+            } catch (e) {
+                setNotAllowedError(e);
+            }
         } else {
             setUser(delegateUser);
         }
@@ -37,7 +44,7 @@ export function useBuildAuthController({
     const authenticationEnabled = authentication === undefined || !!authentication;
     const canAccessMainView = (!authenticationEnabled || Boolean(user) || Boolean(loginSkipped)) && !notAllowedError;
 
-    return {
+    const authController:AuthController = {
         user,
         loginSkipped,
         canAccessMainView,
@@ -47,4 +54,5 @@ export function useBuildAuthController({
         setExtra,
         authDelegate
     };
+    return authController;
 }

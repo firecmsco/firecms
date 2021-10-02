@@ -258,14 +258,6 @@ export default function App() {
                                                      authController
                                                  }: NavigationBuilderProps) => {
 
-        // This is a fake example of retrieving async data related to the user
-        // and storing it in the user extra field.
-        const sampleUserData = await Promise.resolve({
-            name: "John",
-            roles: ["admin"]
-        });
-        authController.setExtra(sampleUserData);
-
         return ({
             collections: [
                 buildCollection({
@@ -290,8 +282,14 @@ export default function App() {
         });
     };
 
-    const myAuthenticator: Authenticator = ({ user }) => {
+    const myAuthenticator: Authenticator = async ({ user, authController }) => {
         console.log("Allowing access to", user?.email);
+        // This is an example of retrieving async data related to the user
+        // and storing it in the user extra field.
+        const sampleUserData = await Promise.resolve({
+            roles: ["admin"]
+        });
+        authController.setExtra(sampleUserData);
         return true;
     };
 

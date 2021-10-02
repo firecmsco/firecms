@@ -221,9 +221,9 @@ export interface Permissions {
 export type PermissionsBuilder<M extends { [Key: string]: any } = any> =
     Permissions
     | (({
-            user,
             entity,
             path,
+            user,
             authController,
             context
         }: PermissionsBuilderProps<M>) => Permissions);
@@ -234,10 +234,6 @@ export type PermissionsBuilder<M extends { [Key: string]: any } = any> =
  */
 export interface PermissionsBuilderProps<M extends { [Key: string]: any } = any> {
     /**
-     * Logged in user
-     */
-    user: User | null;
-    /**
      * Entity being edited, might be null if it is new
      */
     entity: Entity<M> | null;
@@ -245,6 +241,10 @@ export interface PermissionsBuilderProps<M extends { [Key: string]: any } = any>
      * Collection path of this entity
      */
     path: string;
+    /**
+     * Logged in user
+     */
+    user: User | null;
     /**
      * Auth controller
      */

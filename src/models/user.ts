@@ -4,6 +4,8 @@
  *
  * @category Models
  */
+import { AuthController } from "./auth";
+
 export interface User {
     /**
      * The display name of the user.
@@ -50,9 +52,12 @@ export interface User {
 
 
 /**
- * Implement this function to allow access to specific users
+ * Implement this function to allow access to specific users.
+ * You might want to load additional properties for a user asynchronously
+ * and store it using the `setExtra` method in the `authController`
  * @category Models
  */
 export type Authenticator = ({ user }: {
-    user?: User
+    user?: User,
+    authController: AuthController;
 }) => boolean | Promise<boolean>;

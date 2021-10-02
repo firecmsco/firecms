@@ -116,11 +116,6 @@ function SampleApp() {
         }]
     });
 
-    const myAuthenticator: Authenticator = ({ user }) => {
-        console.log("Allowing access to", user?.email);
-        return true;
-    };
-
     const githubLink = (
         <Tooltip
             title="See this project on GitHub. This button is only present in this demo">
@@ -148,18 +143,23 @@ function SampleApp() {
         // models.firestore().useEmulator("localhost", 8080);
     };
 
+    const myAuthenticator: Authenticator = async ({ user, authController }) => {
+        // This is an example of retrieving async data related to the user
+        // and storing it in the user extra field
+        const sampleUserData = await Promise.resolve({
+            roles: ["admin"]
+        });
+        authController.setExtra(sampleUserData);
+        console.log("Allowing access to", user?.email);
+        return true;
+    };
+
     const navigation: NavigationBuilder = async ({
                                                      user,
                                                      authController
                                                  }: NavigationBuilderProps) => {
-
-        // This is a fake example of retrieving async data related to the user
-        // and storing it in the user extra field
-        const sampleUserData = await Promise.resolve({
-            name: "John",
-            roles: ["admin"]
-        });
-        authController.setExtra(sampleUserData);
+        if(authController.extra)
+            console.log("Custom data stored in the authController", authController.extra);
 
         const navigation: Navigation = {
             collections: [

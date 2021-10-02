@@ -304,8 +304,7 @@ const productCallbacks = buildEntityCallbacks({
                                     FireCMS allows developers to extend it
                                     in any way they need, while
                                     keeping it extremely simple to kickstart a
-                                    new project, with the bare minimum
-                                    configuration. We use <b>sensible defaults
+                                    new project. We use <b>sensible defaults
                                     that can be overridden or extended</b>.
                                 </p>
                                 <p className="md:text-right text-xl text-gray-600 dark:text-gray-200">

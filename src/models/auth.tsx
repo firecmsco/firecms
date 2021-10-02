@@ -28,7 +28,7 @@ export interface AuthController {
     /**
      * The current user was not allowed access
      */
-    notAllowedError: boolean;
+    notAllowedError: any;
 
     /**
      * Sign out

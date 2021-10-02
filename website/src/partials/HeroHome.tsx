@@ -31,40 +31,41 @@ function HeroHome({}) {
                 )}
             </BrowserOnly>
 
-            <div
-                className="flex items-center justify-center px-4 sm:px-6 lg:mt-44 md:mt-40 mt-32">
+            <div className="grid grid-cols-1 md:grid-cols-2">
 
-                <div className="text-center">
-                    <h1
-                        className="block text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-3"
-                    >
+                <div
+                    className="flex items-center justify-center px-4 sm:px-6 lg:mt-44 md:mt-40 mt-32">
+
+                    <div className="text-center">
+                        <h1
+                            className="block text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-3"
+                        >
                             <span
                                 data-aos="zoom-y-out"
                                 data-aos-delay="50"
                                 className="block">Your </span>
-                        <span
-                            data-aos="zoom-y-out"
-                            data-aos-delay="100"
-                            className="block">Firestore-based </span>
+                            <span
+                                data-aos="zoom-y-out"
+                                data-aos-delay="100"
+                                className="block">Firestore-based </span>
 
-                        <span
-                            data-aos="zoom-y-out"
-                            data-aos-delay="150"
-                            style={{
-                                mixBlendMode: "color-dodge"
-                            }}
-                            className="block text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-3 block text-purple-600 text-8xl md:text-9xl">CMS</span>
-                    </h1>
+                            <span
+                                data-aos="zoom-y-out"
+                                data-aos-delay="150"
+                                style={{
+                                    mixBlendMode: "color-dodge"
+                                }}
+                                className="block text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-3 block text-purple-600 text-8xl md:text-9xl">CMS</span>
+                        </h1>
 
-                    <div className="max-w-3xl mx-auto mt-14"
-                        // data-aos="zoom-y-out"
-                        // data-aos-delay="200"
-                    >
-                        <HeroButtons/>
+                        <div className="max-w-3xl mx-auto mt-14"
+                        >
+                            <HeroButtons/>
+                        </div>
+
                     </div>
 
                 </div>
-
             </div>
 
         </section>
