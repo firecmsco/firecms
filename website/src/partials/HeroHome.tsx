@@ -31,7 +31,7 @@ function HeroHome({}) {
                 )}
             </BrowserOnly>
 
-            <div className="grid grid-cols-1 md:grid-cols-2">
+            {/*<div className="grid grid-cols-1 md:grid-cols-2">*/}
 
                 <div
                     className="flex items-center justify-center px-4 sm:px-6 lg:mt-44 md:mt-40 mt-32">
@@ -66,7 +66,7 @@ function HeroHome({}) {
                     </div>
 
                 </div>
-            </div>
+            {/*</div>*/}
 
         </section>
     );
