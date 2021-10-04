@@ -324,7 +324,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 size={size}
                 toggleEntitySelection={toggleEntitySelection}
                 onEditClicked={onEditClicked}
-                onCopyClicked={editEnabled ? onCopyClicked : undefined}
+                onCopyClicked={createEnabled ? onCopyClicked : undefined}
                 onDeleteClicked={deleteEnabled ? setDeleteEntityClicked : undefined}
             />
         );

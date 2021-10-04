@@ -94,7 +94,7 @@ export default function CollectionRowActions<M extends { [Key: string]: any }>({
             <div className={classes.cellButtons}
             >
                 {editEnabled &&
-                <Tooltip title={"Edit"}>
+                <Tooltip title={`Edit ${entity.id}`}>
                     <IconButton
                         onClick={(event: MouseEvent) => {
                             event.stopPropagation();
@@ -108,7 +108,7 @@ export default function CollectionRowActions<M extends { [Key: string]: any }>({
                 }
 
                 {selectionEnabled &&
-                <Tooltip title={"Select"}>
+                <Tooltip title={`Select ${entity.id}`}>
                     <Checkbox
                         checked={isSelected}
                         onChange={onCheckboxChange}
@@ -131,7 +131,7 @@ export default function CollectionRowActions<M extends { [Key: string]: any }>({
                         <ListItemIcon>
                             <Delete/>
                         </ListItemIcon>
-                        <ListItemText primary="Delete"/>
+                        <ListItemText primary={"Delete"}/>
                     </MenuItem>}
 
                     {copyEnabled && <MenuItem onClick={onCopyClick}>
