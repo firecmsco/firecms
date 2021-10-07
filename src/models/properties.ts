@@ -134,6 +134,11 @@ export interface PropertyDisabledConfig {
      * needs to be enabled)
      */
     disabledMessage?: string;
+
+    /**
+     * Set this flag to true if you want to hide this field when disabled
+     */
+    hidden?: boolean;
 }
 
 /**
@@ -155,7 +160,7 @@ export type EnumType = number | string;
  */
 export type EnumValues =
     Record<string | number, string | EnumValueConfig>
-    | Map<string, string | EnumValueConfig>;
+    | Map<string | number, string | EnumValueConfig>;
 
 /**
  * Configuration for a particular entry in an `EnumValues`

@@ -141,10 +141,6 @@ function PopupFormField<M extends { [Key: string]: any }>({
         [formPopupOpen]
     );
 
-    const onOutsideClick = () => {
-        // selectedCell.closePopup();
-    };
-
     const validationSchema = getYupEntitySchema(
         name ?
             { [name]: schema.properties[name] } as PropertiesOrBuilder<M>
@@ -237,40 +233,35 @@ function PopupFormField<M extends { [Key: string]: any }>({
             values
         };
 
-        return <OutsideAlerter
-            enabled={true}
-            onOutsideClick={onOutsideClick}>
+        return <Form
+            className={classes.form}
+            onSubmit={handleSubmit}
+            noValidate>
 
-            <Form
-                className={classes.form}
-                onSubmit={handleSubmit}
-                noValidate>
+            {name && property && buildPropertyField<any, M>({
+                name: name as string,
+                disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
+                property,
+                includeDescription: false,
+                underlyingValueHasChanged: false,
+                context,
+                tableMode: true,
+                partOfArray: false,
+                autoFocus: formPopupOpen,
+                dependsOnOtherProperties: usedPropertyBuilder
+            })}
 
-                {name && property && buildPropertyField<any, M>({
-                    name: name as string,
-                    disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
-                    property,
-                    includeDescription: false,
-                    underlyingValueHasChanged: false,
-                    context,
-                    tableMode: true,
-                    partOfArray: false,
-                    autoFocus: formPopupOpen,
-                    dependsOnOtherProperties: usedPropertyBuilder
-                })}
+            <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={disabled}
+            >
+                Save
+            </Button>
 
-                <Button
-                    className={classes.button}
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    disabled={disabled}
-                >
-                    Save
-                </Button>
-
-            </Form>
-        </OutsideAlerter>;
+        </Form>;
     };
 
     const form = entity && (

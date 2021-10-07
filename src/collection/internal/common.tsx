@@ -3,9 +3,9 @@ import {
     ArrayProperty,
     CollectionSize,
     EntityCollection,
-    Property,
-    StringProperty
+    Property
 } from "../../models";
+import { buildPropertyFrom } from "../../core/util/property_builder";
 
 export interface CMSColumn {
     id: string;
@@ -61,22 +61,21 @@ export function getPropertyColumnWidth(property: Property, size: CollectionSize)
     }
 
     if (property.dataType === "string") {
-        const stringProperty = property as StringProperty;
-        if (stringProperty.config?.url) {
-            if (stringProperty.config?.url === "video" || stringProperty.config?.storageMeta?.mediaType === "video")
+        if (property.config?.url) {
+            if (property.config?.url === "video" || property.config?.storageMeta?.mediaType === "video")
                 return 340;
-            else if (stringProperty.config?.url === "audio" || stringProperty.config?.storageMeta?.mediaType === "audio")
+            else if (property.config?.url === "audio" || property.config?.storageMeta?.mediaType === "audio")
                 return 300;
             return 240;
-        } else if (stringProperty.config?.storageMeta) {
+        } else if (property.config?.storageMeta) {
             return 220;
-        } else if (stringProperty.config?.enumValues) {
+        } else if (property.config?.enumValues) {
             return 200;
-        } else if (stringProperty.config?.multiline) {
+        } else if (property.config?.multiline) {
             return 300;
-        } else if (stringProperty.config?.markdown) {
+        } else if (property.config?.markdown) {
             return 300;
-        } else if (stringProperty.validation?.email) {
+        } else if (property.validation?.email) {
             return 200;
         } else {
             return 200;
@@ -89,6 +88,9 @@ export function getPropertyColumnWidth(property: Property, size: CollectionSize)
             return 300;
         }
     } else if (property.dataType === "number") {
+        if (property.config?.enumValues) {
+            return 200;
+        }
         return 140;
     } else if (property.dataType === "map") {
         return 360;
@@ -124,13 +126,21 @@ export function getSubcollectionColumnId(collection: EntityCollection) {
     return `subcollection_${collection.path}`;
 }
 
-export function useColumnIds(view: EntityCollection, includeSubcollections: boolean) {
+export function useColumnIds(view: EntityCollection, includeSubcollections: boolean): string[] {
     const initialDisplayedProperties = view.properties;
     const excludedProperties = view.excludedProperties;
     const additionalColumns = view.additionalColumns ?? [];
     const subCollections: EntityCollection[] = view.subcollections ?? [];
 
     return useMemo(() => {
+
+        const hiddenColumnIds: string[] = Object.entries(view.schema.properties)
+            .filter(([_, propertyOrBuilder]) => {
+                const property = buildPropertyFrom(propertyOrBuilder, view.schema.defaultValues ?? {}, view.path);
+                return property.disabled && typeof property.disabled === "object" && property.disabled.hidden;
+            })
+            .map(([propertyKey, _]) => propertyKey);
+
         const subcollectionIds = subCollections.map((collection) => getSubcollectionColumnId(collection));
         const columnIds: string[] = [
             ...Object.keys(view.schema.properties) as string[],
@@ -146,10 +156,10 @@ export function useColumnIds(view: EntityCollection, includeSubcollections: bool
             result = columnIds
                 .filter(id => !(excludedProperties as string[]).includes(id));
         } else {
-            result = columnIds;
+            result = columnIds.filter((columnId) => !hiddenColumnIds.includes(columnId));
         }
         if (includeSubcollections)
             result.push(...subcollectionIds);
         return result;
-    }, []);
+    }, [initialDisplayedProperties, excludedProperties, additionalColumns, subCollections]);
 }

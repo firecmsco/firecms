@@ -60,12 +60,17 @@ export default function Select<T extends EnumType>({
         >
 
             <InputLabel id={`${name}-select-label`}
-                        className={classes.inputLabel}>
+                        classes={{
+                            root: classes.inputLabel,
+                            shrink: classes.shrinkInputLabel
+                        }}>
                 <LabelWithIcon property={property}/>
             </InputLabel>
 
             <MuiSelect
-                className={classes.select}
+                classes={{
+                    root: classes.input
+                }}
                 variant={"filled"}
                 labelId={`${name}-select-label`}
                 autoFocus={autoFocus}
@@ -76,6 +81,7 @@ export default function Select<T extends EnumType>({
                     const newValue = eventValue ?
                         (property.dataType === "number" ? parseFloat(eventValue) : eventValue)
                         : null;
+
                     return setValue(newValue);
                 }}
                 renderValue={(enumKey: any) => {

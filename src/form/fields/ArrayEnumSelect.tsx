@@ -1,4 +1,4 @@
-import { EnumType, EnumValues, FieldProps } from "../../models";
+import { EnumType, FieldProps } from "../../models";
 import {
     Checkbox,
     FormControl,
@@ -17,6 +17,8 @@ import {
     isEnumValueDisabled
 } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
+import { formStyles } from "../styles";
+import ArrayEnumPreview from "../../preview/components/ArrayEnumPreview";
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -33,8 +35,11 @@ export default function ArrayEnumSelect({
                                             showError,
                                             disabled,
                                             property,
-                                            includeDescription
+                                            includeDescription,
+                                            autoFocus
                                         }: FieldProps<EnumType[]>) {
+
+    const classes = formStyles();
 
     if (!property.of) {
         throw Error("Using wrong component ArrayEnumSelect");
@@ -44,12 +49,11 @@ export default function ArrayEnumSelect({
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
-    const enumValues: EnumValues | undefined = property.of.config?.enumValues;
+    const enumValues = property.of.config?.enumValues;
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");
     }
-
     useClearRestoreValue({
         property,
         value,
@@ -57,71 +61,74 @@ export default function ArrayEnumSelect({
     });
 
     const validValue = !!value && Array.isArray(value);
-    return <FormControl
-        fullWidth
-        required={property.validation?.required}
-        error={showError}
-    >
-        <div style={{ marginTop: "-4px" }}>
-            <InputLabel id={`${name}-multiselect-label`} style={{
-                marginLeft: "10px"
-            }}>
+    return (
+        <FormControl
+            variant="filled"
+            fullWidth
+            required={property.validation?.required}
+            error={showError}
+        >
+
+            <InputLabel id={`${name}-multiselect-label`}
+                        classes={{
+                            root: classes.inputLabel,
+                            shrink: classes.shrinkInputLabel
+                        }}>
                 <LabelWithIcon property={property}/>
             </InputLabel>
-        </div>
 
-        <MuiSelect multiple
-                   variant={"filled"}
-                   labelId={`${name}-multiselect-label`}
-                   value={validValue ? value : []}
-                   style={{ minHeight: "64px", padding: "4px" }}
-                   disabled={disabled}
-                   onChange={(evt: any) => {
-                       return setValue(
-                           evt.target.value
-                       );
-                   }}
-                   renderValue={(selected: any) => (
-                       <div>
-                           {selected && selected.map((key: any) => {
+            <MuiSelect
+                multiple
+                classes={{
+                    root: classes.input
+                }}
+                variant={"filled"}
+                labelId={`${name}-multiselect-label`}
+                value={validValue ? value.map(v => v.toString()) : []}
+                autoFocus={autoFocus}
+                disabled={disabled}
+                onChange={(evt: any) => {
+                    let newValue;
+                    if (property.of?.dataType === "number")
+                        newValue = evt.target.value ? evt.target.value.map((e: any) => parseFloat(e)) : [];
+                    else
+                        newValue = evt.target.value;
+                    return setValue(
+                        newValue
+                    );
+                }}
+                renderValue={(selected: any) => (
+                    <ArrayEnumPreview value={selected}
+                                      name={name}
+                                      enumValues={enumValues}
+                                      size={"regular"}/>
+                )}>
 
-                               if (!key) return null;
+                {enumToObjectEntries(enumValues)
+                    .map(([enumKey, labelOrConfig]) => {
+                        const checked = validValue && value.map(v => v.toString()).includes(enumKey.toString());
+                        return (
+                            <MenuItem key={`form-select-${name}-${enumKey}`}
+                                      value={enumKey}
+                                      disabled={isEnumValueDisabled(labelOrConfig)}
+                                      dense={true}>
+                                <Checkbox checked={checked}/>
+                                <ListItemText primary={
+                                    <EnumValuesChip
+                                        enumKey={enumKey}
+                                        enumValues={enumValues}
+                                        small={true}/>
+                                }/>
+                            </MenuItem>
+                        );
+                    })}
+            </MuiSelect>
 
-                               return <EnumValuesChip
-                                   key={`array_enum_${key}`}
-                                   enumKey={key}
-                                   enumValues={enumValues}
-                                   small={false}/>;
-                           })}
-                       </div>
-                   )}>
+            {includeDescription &&
+            <FieldDescription property={property}/>}
 
+            {showError && <FormHelperText>{error}</FormHelperText>}
 
-            {enumToObjectEntries(enumValues).map(([enumKey, labelOrConfig]) => {
-
-                const chip = <EnumValuesChip
-                    enumKey={enumKey}
-                    enumValues={enumValues}
-                    small={false}/>;
-
-                return (
-                    <MenuItem key={`form-select-${name}-${enumKey}`}
-                              value={enumKey}
-                              disabled={isEnumValueDisabled(labelOrConfig)}
-                              dense={true}>
-                        <Checkbox
-                            checked={validValue && (value as any[]).includes(enumKey)}/>
-                        <ListItemText primary={chip}/>
-                    </MenuItem>
-                );
-            })}
-
-        </MuiSelect>
-
-        <FormHelperText>{error}</FormHelperText>
-
-        {includeDescription &&
-        <FieldDescription property={property}/>}
-
-    </FormControl>;
+        </FormControl>
+    );
 }

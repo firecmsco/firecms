@@ -3,14 +3,15 @@ import {
     buildProperties,
     buildProperty,
     buildSchema,
-    resolveNavigationFrom,
-    EntityCallbacks
+    EntityCallbacks,
+    resolveNavigationFrom
 } from "@camberi/firecms";
 import { locales } from "./products_schema";
 import CustomShapedArrayField
     from "../custom_shaped_array/CustomShapedArrayField";
 import CustomShapedArrayPreview
     from "../custom_shaped_array/CustomShapedArrayPreview";
+import { CustomField } from "../custom_field/SubPropertyField";
 
 const relaxedStatus = new Map([
     ["-3", buildEnumValueConfig({
@@ -47,6 +48,73 @@ export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
     properties: {
+        available_locales: {
+            title: "Available locales",
+            dataType: "array",
+            of: {
+                dataType: "string",
+                config: {
+                    enumValues: locales
+                }
+            }
+        },
+        title: ({ values, entityId }) => {
+            if (values?.available_locales && Array.isArray(values.available_locales) && values.available_locales.includes("de"))
+                return ({
+                    dataType: "string",
+                    title: "Title disabled",
+                    disabled: {
+                        hidden: true,
+                        clearOnDisabled: true,
+                        tooltip: "Disabled because German is selected"
+                    }
+                });
+            return ({
+                dataType: "string",
+                title: "Title"
+            });
+        },
+        number_enum: {
+            dataType: "array",
+            title: "Licences",
+            validation: { required: true },
+            of: {
+                dataType: "number",
+                config: {
+                    enumValues: {
+                        0: "start",
+                        1: "standard",
+                        2: "premium"
+                    }
+                }
+            }
+        },
+        simple_enum: {
+            dataType: "string",
+            title: "Simple enum",
+            config: {
+                enumValues: {
+                    "facebook": "FacebookId",
+                    "apple": "Apple"
+                }
+            }
+        },
+        validated_custom: {
+            dataType: "map",
+            title: "Validated custom field",
+            properties: {
+                sample: {
+                    title: "Sample",
+                    dataType: "string",
+                    validation: {
+                        required: true
+                    }
+                }
+            },
+            config: {
+                Field: CustomField
+            }
+        },
         source: ({ values }) => {
 
             const properties = buildProperties<any>({
@@ -232,31 +300,6 @@ export const testEntitySchema = buildSchema({
                 enumValues: relaxedStatus
             }
         },
-        available_locales: {
-            title: "Available locales",
-            dataType: "array",
-            of: {
-                dataType: "string",
-                config: {
-                    enumValues: locales
-                }
-            }
-        },
-        title: ({ values, entityId }) => {
-            if (values?.available_locales && Array.isArray(values.available_locales) && values.available_locales.includes("de"))
-                return ({
-                    dataType: "string",
-                    title: "Title disabled",
-                    disabled: {
-                        clearOnDisabled: true,
-                        tooltip: "Disabled because German is selected"
-                    }
-                });
-            return ({
-                dataType: "string",
-                title: "Title"
-            });
-        },
         tags: {
             title: "Tags",
             dataType: "array",
@@ -345,7 +388,7 @@ export const testEntitySchema = buildSchema({
     }
 });
 
-export const testCallbacks :EntityCallbacks= {
+export const testCallbacks: EntityCallbacks = {
 
     onPreSave: ({
                     schema,
@@ -362,6 +405,6 @@ export const testCallbacks :EntityCallbacks= {
             console.log("navigationEntries", navigationEntries);
             return values;
         });
-    },
+    }
 };
 

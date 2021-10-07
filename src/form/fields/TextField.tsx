@@ -110,7 +110,11 @@ export default function TextField<T extends string | number>({
                 disabled={valueIsInfinity}
                 fullWidth>
 
-                <InputLabel className={classes.inputLabel}>
+                <InputLabel
+                    classes={{
+                        root: classes.inputLabel,
+                        shrink: classes.shrinkInputLabel
+                    }}>
                     <LabelWithIcon property={property}/>
                 </InputLabel>
 

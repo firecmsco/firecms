@@ -77,7 +77,7 @@ export default function MarkdownField({
 
             {!tableMode && <FormHelperText filled
                                            required={property.validation?.required}>
-                <LabelWithIcon scaledIcon={true} property={property}/>
+                <LabelWithIcon property={property}/>
             </FormHelperText>}
 
             <div className={classes.root}>

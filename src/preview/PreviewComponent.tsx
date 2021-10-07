@@ -121,6 +121,13 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
                             value={value as string[]}
                             property={property as ArrayProperty}/>;
                     }
+                } else if (arrayProperty.of.dataType === "number") {
+                    if (arrayProperty.of.config?.enumValues) {
+                        content = <ArrayPropertyEnumPreview
+                            {...fieldProps}
+                            value={value as string[]}
+                            property={property as ArrayProperty}/>;
+                    }
                 } else {
                     content = <ArrayPreview {...fieldProps}
                                             value={value}

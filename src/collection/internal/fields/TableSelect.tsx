@@ -81,11 +81,14 @@ export function TableSelect(props: {
             }}
             disableUnderline
             error={!!error}
-            value={validValue ? internalValue : (multiple ? [] : "")}
+            value={validValue
+                ? (multiple ? (internalValue as any[]).map(v => v.toString()) : internalValue)
+                : (multiple ? [] : "")}
             onChange={(evt) => {
                 if (valueType === "number") {
                     if (multiple) {
-                        updateValue((evt.target.value as string[]).map((v) => parseFloat(v)));
+                        const newValue = (evt.target.value as string[]).map((v) => parseFloat(v));
+                        updateValue(newValue);
                     } else {
                         updateValue(parseFloat(evt.target.value as string));
                     }
@@ -123,7 +126,7 @@ export function TableSelect(props: {
                                   disabled={isEnumValueDisabled(labelOrConfig)}
                                   dense={true}>
                             <Checkbox
-                                checked={Array.isArray(internalValue) && (internalValue as any[]).includes(key)}/>
+                                checked={Array.isArray(internalValue) && (internalValue as any[]).map(v => v.toString()).includes(key.toString())}/>
                             <ListItemText primary={chip}/>
                         </MenuItem>
                     );

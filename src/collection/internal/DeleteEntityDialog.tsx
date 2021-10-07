@@ -48,20 +48,19 @@ export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
     const snackbarContext = useSnackbarController();
     const [loading, setLoading] = useState(false);
 
-    const entityOrEntitiesRef = React.useRef<Entity<M> | Entity<M>[]>();
+    const [entityOrEntities, setUsedEntityOrEntities] = React.useState<Entity<M> | Entity<M>[]>();
     const [multipleEntities, setMultipleEntities] = React.useState<boolean>();
     const context = useFireCMSContext();
 
     React.useEffect(() => {
         if (entityOrEntitiesToDelete) {
-            entityOrEntitiesRef.current = Array.isArray(entityOrEntitiesToDelete) && entityOrEntitiesToDelete.length === 1
+            const revisedEntityOrEntities = Array.isArray(entityOrEntitiesToDelete) && entityOrEntitiesToDelete.length === 1
                 ? entityOrEntitiesToDelete[0]
                 : entityOrEntitiesToDelete;
-            setMultipleEntities(Array.isArray(entityOrEntitiesRef.current));
+            setUsedEntityOrEntities(revisedEntityOrEntities);
+            setMultipleEntities(Array.isArray(revisedEntityOrEntities));
         }
     }, [entityOrEntitiesToDelete]);
-
-    const entityOrEntities = entityOrEntitiesRef.current;
 
     const handleCancel = () => {
         onClose();

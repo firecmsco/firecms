@@ -4,7 +4,6 @@ import { getIconForProperty } from "../../core/util/property_icons";
 
 interface LabelWithIconProps {
     property: Property<any>,
-    scaledIcon?: boolean
 }
 
 /**
@@ -13,8 +12,7 @@ interface LabelWithIconProps {
  * @category Form custom fields
  */
 export default function LabelWithIcon({
-                                          property,
-                                          scaledIcon
+                                          property
                                       }: LabelWithIconProps) {
 
     return (

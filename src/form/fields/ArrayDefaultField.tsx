@@ -68,7 +68,7 @@ export default function ArrayDefaultField<T extends Array<any>>({
 
             {!tableMode && <FormHelperText filled
                                            required={property.validation?.required}>
-                <LabelWithIcon scaledIcon={true} property={property}/>
+                <LabelWithIcon property={property}/>
             </FormHelperText>}
 
             <Paper variant={"outlined"}

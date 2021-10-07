@@ -23,6 +23,8 @@ export default function ArrayPropertyEnumPreview({
 
     const enumValues = ofProperty.config?.enumValues;
 
-    return <ArrayEnumPreview name={name} value={value} enumValues={enumValues}
+    return <ArrayEnumPreview name={name}
+                             value={value}
+                             enumValues={enumValues}
                              size={size}/>;
 }

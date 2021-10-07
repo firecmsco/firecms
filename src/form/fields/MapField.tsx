@@ -103,7 +103,7 @@ export default function MapField<T extends object>({
 
             {!tableMode && <FormHelperText filled
                                            required={property.validation?.required}>
-                <LabelWithIcon scaledIcon={true} property={property}/>
+                <LabelWithIcon property={property}/>
             </FormHelperText>}
 
             <Paper elevation={0} variant={"outlined"} className={classes.paper}>

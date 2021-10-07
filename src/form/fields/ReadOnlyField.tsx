@@ -37,7 +37,7 @@ export default function ReadOnlyField<M extends { [Key: string]: any }>({
 
             {!tableMode && <FormHelperText filled
                                            required={property.validation?.required}>
-                <LabelWithIcon scaledIcon={true} property={property}/>
+                <LabelWithIcon property={property}/>
             </FormHelperText>}
 
             <Paper

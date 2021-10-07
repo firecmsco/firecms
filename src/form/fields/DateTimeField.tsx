@@ -51,7 +51,9 @@ export default function DateTimeField({
                 className={classes.input}
                 autoFocus={autoFocus}
                 value={internalValue}
-                label={<LabelWithIcon scaledIcon={false} property={property}/>}
+                label={
+                    <LabelWithIcon property={property}/>
+                }
                 renderInput={(props) => (
                     <MuiTextField {...props}
                                   fullWidth

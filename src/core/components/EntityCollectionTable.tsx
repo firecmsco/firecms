@@ -151,6 +151,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
 
     const internalOnMultipleEntitiesDelete = (path: string, entities: Entity<M>[]) => {
         setSelectedEntities([]);
+        setDeleteEntityClicked(undefined);
     };
 
     const checkInlineEditing = (entity: Entity<any>) => {
@@ -266,6 +267,7 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
             newValue = [...selectedEntities, entity];
         }
         setSelectedEntities(newValue);
+        setDeleteEntityClicked(undefined);
     };
 
 

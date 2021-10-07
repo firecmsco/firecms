@@ -20,6 +20,7 @@ import { ErrorFocus } from "./components/ErrorFocus";
 import {
     computeSchemaProperties,
     initEntityValues,
+    isHidden,
     isReadOnly
 } from "../core/utils";
 import { CustomIdField } from "./components/CustomIdField";
@@ -28,7 +29,7 @@ import { useDataSource } from "../hooks";
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     stickyButtons: {
         marginTop: theme.spacing(2),
-        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)": "rgba(255, 255, 255, 0)",
+        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
         backdropFilter: "blur(4px)",
         borderTop: theme.palette.divider,
         position: "sticky",
@@ -318,37 +319,39 @@ export default function EntityForm<M>({
                 const formFields = (
                     <Grid container spacing={4}>
 
-                        {Object.entries<Property>(schemaProperties).map(([key, property]) => {
+                        {Object.entries<Property>(schemaProperties)
+                            .filter(([key, property]) => !isHidden(property))
+                            .map(([key, property]) => {
 
-                            const underlyingValueHasChanged: boolean =
-                                !!underlyingChanges
-                                && Object.keys(underlyingChanges).includes(key)
-                                && !!(touched as any)[key];
+                                const underlyingValueHasChanged: boolean =
+                                    !!underlyingChanges
+                                    && Object.keys(underlyingChanges).includes(key)
+                                    && !!(touched as any)[key];
 
-                            const dependsOnOtherProperties = typeof (schema.properties as any)[key] === "function";
+                                const dependsOnOtherProperties = typeof (schema.properties as any)[key] === "function";
 
-                            const disabled = isSubmitting || isReadOnly(property) || !!property.disabled;
-                            const cmsFormFieldProps: CMSFormFieldProps<any> = {
-                                name: key,
-                                disabled: disabled,
-                                property: property,
-                                includeDescription: true,
-                                underlyingValueHasChanged: underlyingValueHasChanged,
-                                context: context,
-                                tableMode: false,
-                                partOfArray: false,
-                                autoFocus: false,
-                                dependsOnOtherProperties: dependsOnOtherProperties
-                            };
-                            return (
-                                <Grid item
-                                      xs={12}
-                                      id={`form_field_${key}`}
-                                      key={`field_${schema.name}_${key}`}>
-                                    {buildPropertyField(cmsFormFieldProps)}
-                                </Grid>
-                            );
-                        })}
+                                const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
+                                const cmsFormFieldProps: CMSFormFieldProps = {
+                                    name: key,
+                                    disabled: disabled,
+                                    property: property,
+                                    includeDescription: true,
+                                    underlyingValueHasChanged: underlyingValueHasChanged,
+                                    context: context,
+                                    tableMode: false,
+                                    partOfArray: false,
+                                    autoFocus: false,
+                                    dependsOnOtherProperties: dependsOnOtherProperties
+                                };
+                                return (
+                                    <Grid item
+                                          xs={12}
+                                          id={`form_field_${key}`}
+                                          key={`field_${schema.name}_${key}`}>
+                                        {buildPropertyField(cmsFormFieldProps)}
+                                    </Grid>
+                                );
+                            })}
 
                     </Grid>
                 );

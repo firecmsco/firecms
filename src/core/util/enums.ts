@@ -1,18 +1,18 @@
 import { ChipColor, EnumValueConfig, EnumValues } from "../../models";
 
-export function enumToObjectEntries(enumValues: EnumValues): [string, string | EnumValueConfig][] {
+export function enumToObjectEntries(enumValues: EnumValues): [string | number, string | EnumValueConfig][] {
     return enumValues instanceof Map
         ? Array.from(enumValues.entries())
         : Object.entries<string | EnumValueConfig>(enumValues);
 }
 
-export function getLabelOrConfigFrom(enumValues: EnumValues, key: string): string | EnumValueConfig | undefined {
+export function getLabelOrConfigFrom(enumValues: EnumValues, key: string | number): string | EnumValueConfig | undefined {
     return enumValues instanceof Map
         ? enumValues.get(key)
         : enumValues[key];
 }
 
-export function getColorSchemaKey(enumValues: EnumValues, key: string): ChipColor | undefined {
+export function getColorSchemaKey(enumValues: EnumValues, key: string | number): ChipColor | undefined {
     const labelOrConfig = getLabelOrConfigFrom(enumValues, key);
     if (typeof labelOrConfig === "object" && "color" in labelOrConfig) {
         return labelOrConfig["color"];

@@ -207,7 +207,7 @@ export default function StorageUploadField({
             {!tableMode &&
             <FormHelperText filled
                             required={property.validation?.required}>
-                <LabelWithIcon scaledIcon={true} property={property}/>
+                <LabelWithIcon property={property}/>
             </FormHelperText>}
 
             <StorageUpload

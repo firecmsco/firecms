@@ -128,7 +128,7 @@ const SwitchFieldComponent = React.forwardRef(function({
                     label={
                         <Typography color={"textSecondary"}>
                             <LabelWithIcon
-                                scaledIcon={true}
+
                                 property={property}/>
                         </Typography>}
                 />

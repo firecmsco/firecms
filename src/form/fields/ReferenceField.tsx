@@ -23,8 +23,7 @@ import {
     Entity,
     EntityReference,
     EntitySchema,
-    FieldProps,
-    Property
+    FieldProps
 } from "../../models";
 import { FieldDescription } from "../../form/components";
 import { ErrorView } from "../../core/components";
@@ -34,7 +33,8 @@ import { PreviewComponent, SkeletonComponent } from "../../preview";
 import LabelWithIcon from "../components/LabelWithIcon";
 import {
     useClearRestoreValue,
-    useEntityFetch, useFireCMSContext,
+    useEntityFetch,
+    useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";
@@ -266,7 +266,7 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
                         <Box flexGrow={1}>
                             <FormHelperText filled
                                             required={property.validation?.required}>
-                                <LabelWithIcon scaledIcon={true}
+                                <LabelWithIcon
                                                property={property}/>
                             </FormHelperText>
                         </Box>
