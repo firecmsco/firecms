@@ -4,7 +4,27 @@ title: Changelog
 sidebar_label: Changelog
 ---
 
-## [1.0.0-beta1] - 2021-09-15
+## [1.0.0-beta2] - 2021-10-07
+### Changed
+- When copying an entity the permission used is `create` now, instead of `edit`.
+- Fix for entities not being saved when new or copy was clicked
+- Fix for multiple delete keeping old state.
+- Fix multiple form styles.
+- Fix for array of number enums.
+
+### Added
+Added `hidden` configuration to disabled fields:
+```tsx
+buildProperty({
+    dataType: "string",
+    title: "Hidden field",
+    disabled: {
+        hidden: true
+    }
+})
+```
+
+## [1.0.0-beta1] - 2021-10-01
 
 Many **breaking changes** in this version unfortunately, but it's for the
 better!
