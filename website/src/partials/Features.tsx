@@ -346,7 +346,7 @@ const arrowIcon = <svg
 
 const tickIcon = <svg width="16px" height="16px" viewBox="0 0 20 15"
                       version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none"
+    <g id="Page-1" stroke="none" strokeWidth="1" fill="none"
        fill-rule="evenodd">
         <g id="check_black_24dp" transform="translate(-2.000000, -5.000000)">
             <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>

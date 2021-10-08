@@ -4,19 +4,20 @@
     "private": true,
     "scripts": {
         "docusaurus": "docusaurus",
-        "start": "TYPEDOC_WATCH=true docusaurus start",
-        "build": "TYPEDOC_WATCH=false docusaurus build",
+        "start": "yarn run copyChangelog && TYPEDOC_WATCH=true docusaurus start",
+        "build": "yarn run copyChangelog && TYPEDOC_WATCH=false docusaurus build",
+        "copyChangelog": "echo '---' > ./docs/CHANGELOG.md && echo 'id: changelog' >> ./docs/CHANGELOG.md && echo 'title: Changelog' >> ./docs/CHANGELOG.md && echo '---' >> ./docs/CHANGELOG.md && cat ../CHANGELOG.md >> ./docs/CHANGELOG.md ",
         "swizzle": "docusaurus swizzle --danger",
         "deploy": "docusaurus deploy",
         "serve": "docusaurus serve",
         "clear": "docusaurus clear"
     },
     "dependencies": {
-        "@docusaurus/core": "^2.0.0-beta.6",
-        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.6",
-        "@docusaurus/plugin-sitemap": "^2.0.0-beta.6",
-        "@docusaurus/preset-classic": "^2.0.0-beta.6",
-        "@docusaurus/theme-live-codeblock": "^2.0.0-beta.6",
+        "@docusaurus/core": "^2.0.0-beta.7",
+        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.7",
+        "@docusaurus/plugin-sitemap": "^2.0.0-beta.7",
+        "@docusaurus/preset-classic": "^2.0.0-beta.7",
+        "@docusaurus/theme-live-codeblock": "^2.0.0-beta.7",
         "aos": "^2.3.4",
         "clsx": "^1.1.1",
         "docusaurus-plugin-typedoc": "^0.14.2",
@@ -42,7 +43,7 @@
         ]
     },
     "devDependencies": {
-        "@docusaurus/module-type-aliases": "^2.0.0-beta.6",
+        "@docusaurus/module-type-aliases": "^2.0.0-beta.7",
         "@tsconfig/docusaurus": "^1.0.2",
         "@types/react": "^17.0.2",
         "@types/react-helmet": "^6.1.0",
