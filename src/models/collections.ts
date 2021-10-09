@@ -206,11 +206,6 @@ export interface Permissions {
      */
     delete?: boolean;
 
-    /**
-     * Utility field you can use to store your custom data.
-     * e.g: Additional user data fetched from your data source
-     */
-    extra?: any;
 }
 
 /**

@@ -1,108 +1,163 @@
-![logo](https://firecms.co/img/logo_small.png)
+<p align="center">
+  <a href="https://firecms.co">
+    <img src="https://firecms.co/img/logo_small.png" width="240px" alt="FireCMS logo" />
+  </a>
+</p>
 
-# FireCMS
+<h1 align="center">FireCMS</h1>
+<h3 align="center">Awesome Firebase/Firestore-based headless CMS</h3>
+<p align="center"><a href="https://demo.firecms.co">Live demo</a></p>
 
-> Awesome Firebase/Firestore-based headless CMS, developed by Camberi
+<br />
 
-FireCMS is a headless CMS and admin panel based on Firebase, built by developers
-for developers. It generates CRUD views based on your configuration. You define
-views that are mapped to absolute or relative paths in your Firestore database,
-as well as schemas for your entities.
-
-The goal of this CMS is to generate collection and form views that bind nicely
-to the Firestore collection/document model. We have built in many basic (and not
-so basic) use cases; but FireCMS is built with extensibility in mind, so it is
-easy to create your custom form fields, or your complete views.
-
-Note that this is a full application, with routing enabled and not a simple
-component.
+![video](https://firecms.co/img/dark_mode.mp4)
 
 [![NPM](https://img.shields.io/npm/v/@camberi/firecms.svg)](https://www.npmjs.com/package/@camberi/firecms) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
+### Your CMS with no effort
+
+FireCMS is a headless CMS and admin panel, built by developers for developers.
+
+It integrates by default with **Firebase and Firestore** but it can be used with
+any backend.
+
+It generates **CRUD views** based on your configuration. It is easy to set up
+for the straight forward cases and easy to extend and customise.
+
+The goal of this CMS is to generate collection and form views that bind nicely
+to the collection/document model. We have built in many basic (and not so basic)
+use cases; but FireCMS is built with extensibility in mind, so it is easy to
+create your views or override the existing ones.
+
+FireCMS does **not** enforce any data structure on your side, and works out of
+the box with any project.
 
 ### Core technologies
 
 FireCMS is based on this great technologies:
 
 - Typescript
-- Firebase
-- React + React Router
-- Material UI
+- Firebase SDK 9
+- React + React Router 6
+- Material UI 5
 - Formik + Yup
 
 ### Quickstart
 
-The easiest way to get going is to check our docs!
+The easiest way to get going is to check our quickstart guide! You will just
+need to follow some quick steps:
 
-https://firecms.co
+https://firecms.co/docs/quickstart
 
 ### Demo
 
-Check the demo with all the core functionalities. You can modify the data, but
-it gets periodically restored.
+Check the demo with all the core functionalities.
 
 https://demo.firecms.co
+
+> You can modify the data, but it gets periodically restored.
 
 ### Changelog
 
 https://firecms.co/docs/changelog
 
-## Install
-
-In your React project, simply install the dependency.
-
-```bash
-npm install @camberi/firecms
-```
-
-or
-
-```bash
-yarn add @camberi/firecms
-```
-
 ## Features
 
-### CMS
+FireCMS has been meticulously built to make it extremely easy for developers to
+build a CMS/admin tool. At the same time it offers the best data editing
+experience and has an extremely thoughtful UX designed to make it super easy to
+use, for marketers and content managers.
 
-- [x] Real-time Collection views for entities
-- [x] Infinite scrolling in collections with optional pagination
-- [x] Collection text search integration
-- [x] Data export
-- [x] Granular permissions based on user or specific collections/entities
-- [x] All login methods supported by Firebase
-- [x] Custom authenticator to control access
-- [x] Custom additional views in main navigation
-- [x] Filters for string, numbers, booleans, arrays and dates
-- [ ] Allow set up of a project using a CLI create-firecms-app
+### Powerful spreadsheet view
 
-### Entity edition
+We have developed a super performant windowed spreadsheet view for collections,
+where you can do inline editing on most of the common fields, and have a popup
+view in the rest of the cases and your custom field implementations.
 
-- [x] Create, read, update, delete views
-- [x] Form for editing entities
-- [x] Implementation of fields for every property (except Geopoint)
-- [x] Conditional fields in forms
-- [x] Native support for Google Storage references and file upload.
-- [x] Advanced validation for fields using yup
-- [x] Inline editing
-- [x] Hooks on pre and post saving and deletion of entities
-- [x] Enhanced reference, and array of reference, fields for relational data
-- [x] Drag and drop reordering of arrays
-- [x] Custom fields defined by the developer.
-- [x] Subcollection support
+It has **real-time** support, making it suitable for apps that need to be always
+updated.
 
-#### Included example
+It also supports **text search** (through an external provider such as Algolia,
+if you are using Firestore), as well as **filtering and sorting** and
+**exporting** data
+
+
+### Powerful forms
+
+![fields](https://firecms.co/img/post_editing.png)
+
+When editing an entity, FireCMS offers a nested system of side dialogs that
+allow to navigate through **subcollections** and access custom views (such as a
+custom form, or a blog preview). This functionality can be also accessed
+programmatically though the hook `useSideEntityController`.
+
+FireCMS includes **more than 15 built-in fields** with hundreds of customization
+and validation options. The components have been meticulously crafted for a
+great user experience, and we include advanced features such as **references**
+to other collections, **markdown** or **arrays reordering**.
+
+If your use case is not supported, you can build your own **custom field**, just
+as any other React component.
+
+It also supports **conditional fields** in forms, allowing for declaring rules
+of what fields are active , based on your own logic.
+
+![fields](https://firecms.co/img/form_fields.png)
+
+### Authentication, permissions and role system
+
+You will be able to define which navigation views can a user see, and the
+operations (create, edit, delete) that can be executed on them, based on your
+role system. You can even define this configuration on a per-entity or
+collection level.
+
+By default, all the authorization mechanisms of Firebase are supported, but you
+are free to implement your own.
+
+### Relational support
+
+You can define references to entities in other collections, and benefit from the
+integrated reference fields and shortcuts included.
+
+It is also possible to define subcollections at the entity level, so you can nest
+data in a collection/document/collection model
+
+### Files storage
+
+FireCMS supports uploading files to Firebase Storage out of the box, and
+provides specific fields for handling single and multiple file uploads, also
+allowing for reordering.
+
+You can change the Firebase Storage implementation with your own.
+
+### Your logic
+
+You can add your custom logic or validation in multiple points of the user flow.
+There are built-in hooks `onPreSave`, `onSaveSuccess`, `onSaveFailure`,
+`onPreDelete` and `onDelete`.
+
+FireCMS has a good separation of concerns. All the logic related to
+Firebase/Firestore is abstracted away behind 3 interfaces: `DataSource`,
+`StorageSource` and `AuthDelegate`. This means you can extend or even
+completely replace those 3 implementations with your own.
+
+
+## Included example
 
 You can access the code for the demo project under
 [`example`](https://github.com/Camberi/firecms/tree/master/example). It includes
 every feature provided by this CMS.
 
+Keep in mind you need to update the dependencies in that project if you want to
+use it as it is, without linking it to the library source code. More details
+in its README
+
 ## Contact and support
 
-If you need general support you can open a GitHub issue or ask you question on
-[Reddit](https://www.reddit.com/r/firecms/)
+If you need general support you can open a GitHub issue.
 
-Do you need consulting setting up your Firestore-based CMS in no time?
-We are happy to help!
+Do you need consulting setting up your Firestore-based CMS in no time? We are
+happy to help!
 `hello@camberi.com`
 
 ## License

@@ -10,7 +10,7 @@ author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
 
 ![Dark mode](../static/img/dark_mode.png)
 
-Exciting times for our project!
+> Exciting times for our project!
 
 After more than 60 releases, and numerous refinements of the internal components
 and APIs, we are ready to start the beta release of version 1.0.0 💃
