@@ -1,7 +1,14 @@
 This is a full-blown app that uses every feature of FireCMS in one way or
-another
+another.
 
 ## Testing the example
+
+For development purposes the dependencies of this project are linked directly to
+the parent library. This example folder is not meant to be copied as it is
+(since how dependencies are linked). In any case, if you would like to use this
+example outside the development flow, you can just replace the dependencies
+in `package.json` from `link:../...` to regular npm packages, and it will work
+just fine.
 
 If you just want to run the example, you can replace the linked dependencies in
 the `package.json` file for:
@@ -26,8 +33,8 @@ the `package.json` file for:
 ## Developing the CMS
 
 This example is used for development purposes. Dependencies in `package.json`
-are linked to the parent folder. In order you to it work for development
-purposes you need to run first:
+are linked to the parent folder. In order to make it work for development
+purposes, you need to run first:
 
 ```
 yarn
@@ -47,17 +54,9 @@ yarn
 yarn build
 ```
 
-You can also run `yarn start` instead of `yarn build`on both folders if you want
-the library to build automatically on changes, useful while developing.
-
-### Linking to the CMS source code
-
-For development purposes the dependencies of this project are linked directly to
-the parent library. This example folder is not meant to be copied as it is
-(since how dependencies are linked). In any case, if you would like to use this
-example outside the development flow, you can just replace the dependencies
-in `package.json` from `link:../...` to regular npm packages, and it will work
-just fine.
+You can also run `yarn start` instead of `yarn build`on both folders, in
+parallel, if you want the library to build automatically on changes, useful
+while developing.
 
 ### Algolia search
 
