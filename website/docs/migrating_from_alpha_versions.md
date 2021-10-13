@@ -24,7 +24,7 @@ Run this command to add the new dependencies:
 yarn add @camberi/firecms firebase@9 @mui/material@5 @mui/icons-material@5 @mui/lab@5 @mui/styles@5 @emotion/react @emotion/styled react-router@^6.0.0-beta.5 react-router-dom@^6.0.0-beta.5
 ```
 
-> You may want to remove previous dependencies or @material-ui
+> You may want to remove previous dependencies to @material-ui
 
 Unfortunately we still need to rely on FirebaseUI, which still uses the compat
 version of Firebase JS SDK 9, so tree shaking has no effect.
@@ -171,7 +171,7 @@ You can now define a `FirestoreTextSearchController` where you need to return
 the search ids, based on the collection `path` and the `searchString`, instead
 of having a single TextSearchDelegate per collection.
 
-Check an example of the [new implementation](firebase_cms_app#text-search)
+Check an example of the [new implementation](./firebase_cms_app#text-search)
 
 ## Saving and deleting callbacks
 

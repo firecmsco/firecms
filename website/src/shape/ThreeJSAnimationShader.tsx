@@ -60,7 +60,8 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
     const requestRef = useRef<number>(-1);
 
     const { isDarkTheme } = useThemeContext();
-    const wireframe = isDarkTheme;
+    // const wireframe = isDarkTheme;
+    const wireframe = true;
 
     useEffect(() => {
         if (sceneStateRef.current)

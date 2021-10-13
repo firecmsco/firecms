@@ -11,9 +11,7 @@
 <br />
 
 <p align="center">
-    <video width="600" height="400" controls>
-      <source src="https://firecms.co/img/dark_mode.mp4" type="video/mp4">
-    </video>
+    <img src="https://firecms.co/img/dark_mode.webp" alt="Intro video" style="max-width: 100%;">
 </p>
 
 

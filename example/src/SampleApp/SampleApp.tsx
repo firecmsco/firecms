@@ -1,5 +1,6 @@
 import React from "react";
 
+import { getAnalytics } from "firebase/analytics";
 import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
 import {
     Authenticator,
@@ -37,6 +38,9 @@ import { customSchemaResolver } from "./schemas/custom_schema_resolver";
 import "typeface-rubik";
 import "typeface-space-mono";
 import { Locale, Product } from "./types";
+
+// Just calling analytics enabled screen tracking
+getAnalytics();
 
 function SampleApp() {
 
