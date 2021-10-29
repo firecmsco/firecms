@@ -1,53 +1,32 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import BaseTable, { Column } from "react-base-table";
+import React, { useRef } from "react";
+import BaseTable, { Column, ColumnShape } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
 import "./table_styles.css";
 import { Box, Paper, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import { useLocation } from "react-router-dom";
 
 import {
-    AdditionalColumnDelegate,
-    CMSType,
     CollectionSize,
-    FilterCombination,
     Entity,
+    FilterCombination,
     FilterValues,
-    Property,
-    WhereFilterOp, FireCMSContext
+    WhereFilterOp
 } from "../../models";
-import {
-    CMSColumn,
-    getCellAlignment,
-    getPropertyColumnWidth,
-    getRowHeight,
-    isPropertyFilterable,
-    Sort
-} from "../internal/common";
+import { getRowHeight, Sort } from "../internal/common";
 import CollectionTableToolbar from "../internal/CollectionTableToolbar";
-import PreviewComponent from "../../preview/PreviewComponent";
-import SkeletonComponent from "../../preview/components/SkeletonComponent";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
-import TableCell from "../internal/TableCell";
-import PopupFormField from "../internal/popup_field/PopupFormField";
 import OutsideAlerter from "../../core/internal/OutsideAlerter";
 import CollectionRowActions from "../internal/CollectionRowActions";
 import { CollectionTableProps } from "./CollectionTableProps";
-import { TableCellProps } from "../internal/TableCellProps";
 import CircularProgressCenter
     from "../../core/components/CircularProgressCenter";
 import { useTableStyles } from "./styles";
-import { getPreviewSizeFrom } from "../../preview/util";
-import PropertyTableCell, { OnCellChangeParams } from "../internal/PropertyTableCell";
-import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
-import { useCollectionFetch, useFireCMSContext } from "../../hooks";
+import { useCollectionFetch } from "../../hooks";
 import CollectionTableHeader from "../internal/CollectionTableHeader";
-import { buildPropertyFrom } from "../../core/util/property_builder";
 
 const DEFAULT_PAGE_SIZE = 50;
 
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
-
 
 /**
  * This component is in charge of rendering a collection table with a high
@@ -70,9 +49,8 @@ export default function CollectionTable<M extends { [Key: string]: any },
                                                initialSort,
                                                path,
                                                schema,
-                                               displayedProperties,
+                                               columns,
                                                textSearchEnabled,
-                                               additionalColumns,
                                                filterCombinations,
                                                inlineEditing,
                                                toolbarActionsBuilder,
@@ -80,15 +58,12 @@ export default function CollectionTable<M extends { [Key: string]: any },
                                                tableRowActionsBuilder,
                                                defaultSize = "m",
                                                frozenIdColumn,
-                                               uniqueFieldValidator,
                                                entitiesDisplayedFirst,
                                                paginationEnabled,
                                                onEntityClick,
-                                               onCellValueChange,
+                                               onColumnResize,
                                                pageSize = DEFAULT_PAGE_SIZE
                                            }: CollectionTableProps<M, AdditionalKey>) {
-
-    const context: FireCMSContext = useFireCMSContext();
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize);
 
@@ -100,16 +75,10 @@ export default function CollectionTable<M extends { [Key: string]: any },
 
     const [tableSize, setTableSize] = React.useState<ContentRect | undefined>();
 
-    const [tableKey] = React.useState<string>(Math.random().toString(36));
     const tableRef = useRef<BaseTable>(null);
 
     const classes = useTableStyles();
 
-    const [selectedCell, setSelectedCell] = React.useState<TableCellProps<M>>(undefined);
-    const [popupCell, setPopupCell] = React.useState<TableCellProps<M>>(undefined);
-    const [focused, setFocused] = React.useState<boolean>(false);
-
-    const [formPopupOpen, setFormPopupOpen] = React.useState<boolean>(false);
     const [preventOutsideClick, setPreventOutsideClick] = React.useState<boolean>(false);
 
     const [searchString, setSearchString] = React.useState<string | undefined>();
@@ -139,16 +108,6 @@ export default function CollectionTable<M extends { [Key: string]: any },
         data
     });
 
-    const updatePopup = (value: boolean) => {
-        setFocused(!value);
-        setFormPopupOpen(value);
-    };
-
-    const { pathname } = useLocation();
-    React.useEffect(() => {
-        setFormPopupOpen(false);
-    }, [pathname]);
-
     const loadNextPage = () => {
         if (!paginationEnabled || dataLoading || noMoreToLoad)
             return;
@@ -160,28 +119,6 @@ export default function CollectionTable<M extends { [Key: string]: any },
         setItemCount(pageSize);
     };
 
-    const select = (cell: TableCellProps<M>) => {
-        setSelectedCell(cell);
-        setFocused(true);
-        if (!formPopupOpen) {
-            setPopupCell(cell);
-        }
-    };
-
-    const unselect = useCallback(() => {
-        setSelectedCell(undefined);
-        setFocused(false);
-        setPreventOutsideClick(false);
-    }, []);
-
-    const additionalColumnsMap: Record<string, AdditionalColumnDelegate<M, string>> = useMemo(() => {
-        return additionalColumns ?
-            additionalColumns
-                .map((aC) => ({ [aC.id]: aC }))
-                .reduce((a, b) => ({ ...a, ...b }), [])
-            : {};
-    }, [additionalColumns]);
-
     const scrollToTop = () => {
         if (tableRef.current) {
             tableRef.current.scrollToTop(0);
@@ -189,58 +126,8 @@ export default function CollectionTable<M extends { [Key: string]: any },
     };
 
     const handleClickOutside = () => {
-        unselect();
+        // unselect();
     };
-
-    // on ESC key press
-    useEffect(() => {
-        const escFunction = (event: any) => {
-            if (event.keyCode === 27) {
-                unselect();
-            }
-        };
-        document.addEventListener("keydown", escFunction, false);
-        return () => {
-            document.removeEventListener("keydown", escFunction, false);
-        };
-    });
-
-    const columns = useMemo(() => {
-        const allColumns: CMSColumn[] = (Object.keys(schema.properties) as (keyof M)[])
-            .map((key) => {
-                const property: Property<any> = buildPropertyFrom<any, M>(schema.properties[key], schema.defaultValues ?? {}, path);
-                return ({
-                    id: key as string,
-                    type: "property",
-                    property,
-                    align: getCellAlignment(property),
-                    label: property.title || key as string,
-                    sortable: true,
-                    filterable: isPropertyFilterable(property),
-                    width: getPropertyColumnWidth(property, size)
-                });
-            });
-
-        if (additionalColumns) {
-            const items: CMSColumn[] = additionalColumns.map((additionalColumn) =>
-                ({
-                    id: additionalColumn.id,
-                    type: "additional",
-                    align: "left",
-                    sortable: false,
-                    filterable: false,
-                    label: additionalColumn.title,
-                    width: additionalColumn.width ?? 200
-                }));
-            allColumns.push(...items);
-        }
-
-        return displayedProperties
-            .map((p) => {
-                return allColumns.find(c => c.id === p);
-            }).filter(c => !!c) as CMSColumn[];
-
-    }, [displayedProperties]);
 
 
     const onColumnSort = (key: Extract<keyof M, string>) => {
@@ -298,161 +185,6 @@ export default function CollectionTable<M extends { [Key: string]: any },
             return;
         return onEntityClick && onEntityClick(entity);
     };
-
-    const cellRenderer = ({
-                              column,
-                              columnIndex,
-                              rowData,
-                              rowIndex
-                          }: any) => {
-
-        const entity: Entity<M> = rowData;
-
-        if (columnIndex === 0) {
-            return buildIdColumn({
-                size,
-                entity
-            });
-        }
-
-        if (column.type === "property") {
-
-            const name = column.dataKey as keyof M;
-            const propertyOrBuilder = schema.properties[name];
-            const property: Property<any> = buildPropertyFrom<CMSType, M>(propertyOrBuilder, entity.values, entity.id);
-            const usedPropertyBuilder = typeof propertyOrBuilder === "function";
-
-            const inlineEditingEnabled = checkInlineEditing(entity);
-
-            if (!inlineEditingEnabled) {
-                return (
-                    <TableCell
-                        key={`preview_cell_${name}_${rowIndex}_${columnIndex}`}
-                        size={size}
-                        align={column.align}
-                        disabled={true}>
-                        <PreviewComponent
-                            width={column.width}
-                            height={column.height}
-                            name={`preview_${name}_${rowIndex}_${columnIndex}`}
-                            property={property}
-                            value={entity.values[name]}
-                            size={getPreviewSizeFrom(size)}
-                        />
-                    </TableCell>
-                );
-            } else {
-
-                const openPopup = (cellRect: DOMRect | undefined) => {
-                    if (!cellRect) {
-                        setPopupCell(undefined);
-                    } else {
-                        setPopupCell({
-                            columnIndex,
-                            // rowIndex,
-                            width: column.width,
-                            height: column.height,
-                            entity,
-                            cellRect,
-                            name: name,
-                            property,
-                            usedPropertyBuilder
-                        });
-                    }
-                    updatePopup(true);
-                };
-
-                const onSelect = (cellRect: DOMRect | undefined) => {
-                    if (!cellRect) {
-                        select(undefined);
-                    } else {
-                        const selectedConfig = {
-                            columnIndex,
-                            // rowIndex,
-                            width: column.width,
-                            height: column.height,
-                            entity,
-                            cellRect,
-                            name: name,
-                            property,
-                            usedPropertyBuilder
-                        };
-                        select(selectedConfig);
-                    }
-                };
-
-                const selected = selectedCell?.columnIndex === columnIndex
-                    && selectedCell?.entity.id === entity.id;
-
-                const isFocused = selected && focused;
-
-                const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
-                    ? ({ name, value, property }) => uniqueFieldValidator({
-                        name, value, property, entityId: entity.id
-                    }) : undefined;
-
-                const validation = mapPropertyToYup({
-                    property,
-                    customFieldValidator,
-                    name
-                });
-
-                const onValueChange = onCellValueChange
-                    ? (props: OnCellChangeParams<any>) => onCellValueChange({
-                        ...props,
-                        entity
-                    })
-                    : undefined;
-
-                return entity ?
-                    <PropertyTableCell
-                        key={`table_cell_${name}_${rowIndex}_${columnIndex}`}
-                        size={size}
-                        align={column.align}
-                        name={name as string}
-                        validation={validation}
-                        onValueChange={onValueChange}
-                        selected={selected}
-                        focused={isFocused}
-                        setPreventOutsideClick={setPreventOutsideClick}
-                        setFocused={setFocused}
-                        value={entity?.values ? entity.values[name] : undefined}
-                        property={property}
-                        openPopup={openPopup}
-                        select={onSelect}
-                        width={column.width}
-                        height={column.height}/>
-                    :
-                    <SkeletonComponent property={property}
-                                       size={getPreviewSizeFrom(size)}/>;
-            }
-
-        } else if (column.type === "additional") {
-            return (
-                <TableCell
-                    focused={false}
-                    selected={false}
-                    disabled={true}
-                    size={size}
-                    align={"left"}
-                    allowScroll={false}
-                    showExpandIcon={false}
-                    disabledTooltip={"Additional columns can't be edited directly"}
-                >
-                    <ErrorBoundary>
-                        {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder({
-                            entity,
-                            context
-                        })}
-                    </ErrorBoundary>
-                </TableCell>
-            );
-
-        } else {
-            return <Box>Internal ERROR</Box>;
-        }
-    };
-
 
     const headerRenderer = ({ columnIndex }: any) => {
 
@@ -557,6 +289,19 @@ export default function CollectionTable<M extends { [Key: string]: any },
         );
     }
 
+    const onBaseTableColumnResize = ({
+                                         column,
+                                         width
+                                     }: { column: ColumnShape; width: number }) => {
+        if (onColumnResize) {
+            onColumnResize({
+                width,
+                type: column.type,
+                key: column.key as string
+            });
+        }
+    };
+
     const body =
         (
             <Measure
@@ -570,6 +315,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                         <BaseTable
                             rowClassName={`${classes.tableRow} ${classes.tableRowClickable}`}
                             data={data}
+                            onColumnResizeEnd={onBaseTableColumnResize}
                             width={tableSize.bounds.width}
                             height={tableSize.bounds.height}
                             emptyRenderer={dataLoadingError ? buildErrorView() : buildEmptyView()}
@@ -580,9 +326,6 @@ export default function CollectionTable<M extends { [Key: string]: any },
                             overscanRowCount={2}
                             onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
                             onEndReached={loadNextPage}
-                            components={{
-                                TableCell: Cell
-                            }}
                             rowEventHandlers={
                                 { onClick: onRowClick }
                             }
@@ -590,7 +333,14 @@ export default function CollectionTable<M extends { [Key: string]: any },
 
                             <Column
                                 headerRenderer={headerRenderer}
-                                cellRenderer={cellRenderer}
+                                cellRenderer={({
+                                                   rowData
+                                               }: any) =>
+                                    buildIdColumn({
+                                        size,
+                                        entity: rowData
+                                    })
+                                }
                                 align={"center"}
                                 key={"header-id"}
                                 dataKey={"id"}
@@ -605,7 +355,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                                     title={column.label}
                                     className={classes.column}
                                     headerRenderer={headerRenderer}
-                                    cellRenderer={cellRenderer}
+                                    cellRenderer={column.cellRenderer}
                                     height={getRowHeight(size)}
                                     align={column.align}
                                     flexGrow={1}
@@ -621,22 +371,14 @@ export default function CollectionTable<M extends { [Key: string]: any },
             </Measure>
 
         );
-    const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
-        ? ({ name, value, property }) => uniqueFieldValidator({
-            name,
-            value,
-            property,
-            entityId: selectedCell?.entity.id
-        })
-        : undefined;
+
 
     return (
         <>
 
             <Paper className={classes.root}>
 
-                <CollectionTableToolbar schema={schema}
-                                        filterIsSet={filterIsSet}
+                <CollectionTableToolbar filterIsSet={filterIsSet}
                                         onTextSearch={textSearchEnabled ? setSearchString : undefined}
                                         clearFilter={clearFilter}
                                         actions={actions}
@@ -644,23 +386,6 @@ export default function CollectionTable<M extends { [Key: string]: any },
                                         onSizeChanged={setSize}
                                         title={title}
                                         loading={dataLoading}/>
-
-                <PopupFormField
-                    cellRect={popupCell?.cellRect}
-                    columnIndex={popupCell?.columnIndex}
-                    name={popupCell?.name}
-                    property={popupCell?.property}
-                    usedPropertyBuilder={popupCell?.usedPropertyBuilder ?? false}
-                    entity={popupCell?.entity}
-                    tableKey={tableKey}
-                    customFieldValidator={customFieldValidator}
-                    schema={schema}
-                    path={path}
-                    formPopupOpen={formPopupOpen}
-                    onCellValueChange={onCellValueChange}
-                    setPreventOutsideClick={setPreventOutsideClick}
-                    setFormPopupOpen={updatePopup}
-                />
 
                 <OutsideAlerter enabled={!preventOutsideClick}
                                 onOutsideClick={handleClickOutside}>
@@ -696,8 +421,3 @@ function isFilterCombinationValid<M extends { [Key: string]: any }>(filterValues
             Object.entries(filterValues).every(([key, value]) => compositeIndex[key] !== undefined && (!sortDirection || compositeIndex[key] === sortDirection))
         ) !== undefined;
 }
-
-const Cell = ({ className, cellData }: any) => {
-    console.log("Cell", className, cellData);
-    return <div className={className}>{cellData}</div>;
-};

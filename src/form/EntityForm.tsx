@@ -226,18 +226,21 @@ export default function EntityForm<M>({
 
     }
 
+
+    const entityId = status === "existing" ? entity?.id : undefined;
+
     const uniqueFieldValidator: CustomFieldValidator = ({
                                                             name,
                                                             value,
                                                             property
-                                                        }) => dataSource.checkUniqueField(path, name, value, property, entity?.id);
+                                                        }) => dataSource.checkUniqueField(path, name, value, property, entityId);
 
     const validationSchema = getYupEntitySchema(
         schema.properties,
         internalValue as Partial<EntityValues<M>> ?? {},
         path,
         uniqueFieldValidator,
-        entity?.id);
+        entityId);
 
     function buildButtons(isSubmitting: boolean, modified: boolean) {
         const disabled = isSubmitting || (!modified && status === "existing");
@@ -308,14 +311,13 @@ export default function EntityForm<M>({
                         }
                     });
                 }
-
                 const context: FormContext<M> = {
                     schema: schema,
-                    entityId: entity?.id,
+                    entityId: entityId,
                     values
                 };
 
-                const schemaProperties: Properties<M> = computeSchemaProperties(schema, path, entity?.id, values as EntityValues<M>);
+                const schemaProperties: Properties<M> = computeSchemaProperties(schema, path, entityId, values as EntityValues<M>);
                 const formFields = (
                     <Grid container spacing={4}>
 

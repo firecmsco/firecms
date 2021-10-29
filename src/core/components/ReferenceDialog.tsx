@@ -17,6 +17,7 @@ import CollectionRowActions
     from "../../collection/internal/CollectionRowActions";
 import { useColumnIds } from "../../collection/internal/common";
 import { useDataSource } from "../../hooks/data/useDataSource";
+import { buildColumnsFromSchema } from "../../collection/components/util";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -193,6 +194,15 @@ export default function ReferenceDialog(
             {`Select ${schema.name}`}
         </Typography>);
 
+    const { cmsColumns } = buildColumnsFromSchema({
+        schema: collection.schema,
+        additionalColumns: collection.additionalColumns,
+        displayedProperties,
+        path,
+        inlineEditing: false,
+        size: "s", // todo
+    });
+
     return (
 
         <Dialog
@@ -215,10 +225,9 @@ export default function ReferenceDialog(
                                  tableRowActionsBuilder={tableRowActionsBuilder}
                                  paginationEnabled={paginationEnabled}
                                  defaultSize={collection.defaultSize}
-                                 additionalColumns={collection.additionalColumns}
+                                 columns={cmsColumns}
                                  title={title}
                                  pageSize={pageSize}
-                                 displayedProperties={displayedProperties}
                                  textSearchEnabled={textSearchEnabled}
                                  initialFilter={initialFilter}
                                  initialSort={collection.initialSort}

@@ -18,7 +18,7 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
-import { CollectionSize, EntitySchema } from "../../models";
+import { CollectionSize } from "../../models";
 import SearchBar from "./SearchBar";
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -92,7 +92,6 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
 );
 
 interface CollectionTableToolbarProps<M extends { [Key: string]: any }> {
-    schema: EntitySchema<M>;
     size: CollectionSize;
     filterIsSet: boolean;
     actions?: React.ReactNode;

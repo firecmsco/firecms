@@ -39,9 +39,6 @@ import "typeface-rubik";
 import "typeface-space-mono";
 import { Locale, Product } from "./types";
 
-// Just calling analytics enabled screen tracking
-getAnalytics();
-
 function SampleApp() {
 
     const localeCollection: EntityCollection<Locale> =
@@ -144,7 +141,8 @@ function SampleApp() {
 
 
     const onFirebaseInit = (config: Object) => {
-        // models.firestore().useEmulator("localhost", 8080);
+        // Just calling analytics enables screen tracking
+        getAnalytics();
     };
 
     const myAuthenticator: Authenticator = async ({ user, authController }) => {

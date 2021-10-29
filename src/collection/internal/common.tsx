@@ -16,6 +16,12 @@ export interface CMSColumn {
     sortable: boolean;
     filterable: boolean;
     width: number;
+    cellRenderer: ({
+                       column,
+                       columnIndex,
+                       rowData,
+                       rowIndex
+                   }: any) => React.ReactNode;
 }
 
 export type Sort = "asc" | "desc" | undefined;
@@ -54,7 +60,7 @@ export function isPropertyFilterable(property: Property): boolean {
     }
 }
 
-export function getPropertyColumnWidth(property: Property, size: CollectionSize): number {
+export function getPropertyColumnWidth(property: Property): number {
 
     if (property.columnWidth) {
         return property.columnWidth;
@@ -83,7 +89,7 @@ export function getPropertyColumnWidth(property: Property, size: CollectionSize)
     } else if (property.dataType === "array") {
         const arrayProperty = property as ArrayProperty;
         if (arrayProperty.of) {
-            return getPropertyColumnWidth(arrayProperty.of as Property, size);
+            return getPropertyColumnWidth(arrayProperty.of as Property);
         } else {
             return 300;
         }

@@ -210,6 +210,13 @@ export const testEntitySchema = buildSchema({
             path: "products",
             previewProperties: ["name", "main_image"]
         },
+        disabled_product: {
+            title: "Disabled product",
+            dataType: "reference",
+            path: "products",
+            disabled: true,
+            previewProperties: ["name", "main_image"]
+        },
         products: {
             title: "Products",
             dataType: "array",

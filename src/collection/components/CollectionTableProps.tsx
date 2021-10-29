@@ -2,12 +2,18 @@ import React from "react";
 import {
     AdditionalColumnDelegate,
     CollectionSize,
-    FilterCombination,
     Entity,
     EntitySchema,
+    FilterCombination,
     FilterValues,
     Property
 } from "../../models";
+import { CMSColumn } from "../internal/common";
+
+/**
+ * @category Collection components
+ */
+export type OnColumnResizeParams = { width: number, key: string, type: "property" | "additional" };
 
 /**
  * @category Collection components
@@ -59,14 +65,7 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
      * Properties displayed in this collection. If this property is not set
      * every property is displayed, you can filter
      */
-    displayedProperties: string[];
-
-    /**
-     * You can add additional columns to the collection view by implementing
-     * an additional column delegate.
-     * Usually defined by the end user.
-     */
-    additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey>[];
+    columns: CMSColumn[];
 
     /**
      * Can the table be edited inline
@@ -108,15 +107,6 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
     frozenIdColumn?: boolean;
 
     /**
-     * Use this callback to validate if an entity field should be unique
-     */
-    uniqueFieldValidator?: UniqueFieldValidator;
-    /**
-     * Callback when the value of a cell has been edited
-     * @param params
-     */
-    onCellValueChange?: OnCellValueChange<unknown, M>;
-    /**
      * How many entries are loaded per page
      */
     pageSize?: number;
@@ -125,6 +115,11 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
      * Callback when anywhere on the table is clicked
      */
     onEntityClick?(entity: Entity<M>): void;
+
+    /**
+     * Callback when a column is resized
+     */
+    onColumnResize?(params: OnColumnResizeParams): void;
 }
 
 /**

@@ -6,7 +6,8 @@ export type {
     UniqueFieldValidator,
     OnCellValueChange,
     OnCellValueChangeParams,
-    CollectionTableProps
+    CollectionTableProps,
+    OnColumnResizeParams
 } from "./components/CollectionTableProps";
 
 

@@ -107,7 +107,7 @@ function HomePage() {
                     {allGroups.length > 0 && <>
                         <Typography color={"textSecondary"}
                                     className={"weight-500"}>
-                            {group?.toUpperCase() ?? "Ungrouped".toUpperCase()}
+                            {group?.toUpperCase() ?? "Collections".toUpperCase()}
                         </Typography>
                         <Divider/>
                     </>}

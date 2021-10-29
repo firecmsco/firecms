@@ -79,8 +79,17 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     disabled: {
         backgroundColor: "rgba(0, 0, 0, 0.12)",
-        color: "rgba(0, 0, 0, 0.38)",
-        borderBottomStyle: "dotted"
+        color: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)",
+        "&::before": {
+            borderBottom: theme.palette.mode === "light" ? "1px dotted rgba(0, 0, 0, 0.42)" : "1px dotted rgba(255, 255, 255, 0.7)",
+        },
+        "&::after": {
+            borderBottom: `2px dotted ${theme.palette.primary.main}`
+        },
+        "&:hover": {
+            cursor: "inherit",
+            backgroundColor: "rgba(0, 0, 0, 0.12)",
+        },
     }
 }));
 
@@ -242,10 +251,10 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
                             justifyContent="center"
                             display="flex">
                     <Box flexGrow={1} textAlign={"center"}>No value set</Box>
-                    <Button variant="outlined"
+                    {!disabled && <Button variant="outlined"
                             color="primary">
                         Set
-                    </Button>
+                    </Button>}
                 </Box>;
             }
         }
@@ -287,8 +296,7 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
                             <Tooltip title={`See details for ${entity.id}`}>
                                 <span>
                                 <IconButton
-                                    disabled={disabled}
-                                    onClick={disabled ? undefined : seeEntityDetails}
+                                    onClick={seeEntityDetails}
                                     size="large">
                                     <KeyboardTabIcon/>
                                 </IconButton>

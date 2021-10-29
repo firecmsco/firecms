@@ -56,7 +56,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     disabled: {
         backgroundColor: "rgba(0, 0, 0, 0.12)",
-        color: "rgba(0, 0, 0, 0.38)",
+        color: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)",
         borderBottom: `1px dotted ${theme.palette.grey[400]}`
     },
     nonActiveDrop: {

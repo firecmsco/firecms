@@ -31,14 +31,20 @@ import {
 } from "../../collection/internal/common";
 
 import { canCreate, canDelete, canEdit } from "../util/permissions";
-import { OnCellValueChange, UniqueFieldValidator } from "../../collection";
+import {
+    OnCellValueChange,
+    OnColumnResizeParams,
+    UniqueFieldValidator
+} from "../../collection";
 import { Markdown } from "../../preview";
 import {
     saveEntityWithCallbacks,
     useAuthController,
-    useDataSource, useFireCMSContext,
+    useDataSource,
+    useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
+import { buildColumnsFromSchema } from "../../collection/components/util";
 
 /**
  * @category Core components
@@ -46,6 +52,11 @@ import {
 export interface EntityCollectionProps<M extends { [Key: string]: any }> {
     path: string;
     collection: EntityCollection<M>;
+}
+
+function getCollectionConfig(storageKey: string) {
+    const item = localStorage.getItem(storageKey);
+    return item ? JSON.parse(item) : {};
 }
 
 /**
@@ -189,6 +200,15 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 setError(e);
             })
         });
+
+    };
+
+    const onColumnResize = ({ width, key, type }: OnColumnResizeParams) => {
+        console.log("onColumnResize", width, key, type);
+        const storageKey = `collection_config_${path}`;
+        const collectionConfig = getCollectionConfig(storageKey);
+
+        localStorage.setItem(storageKey, JSON.stringify({}));
 
     };
 
@@ -408,6 +428,17 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
         );
     }
 
+    const { cmsColumns, children } = buildColumnsFromSchema({
+        schema: collection.schema,
+        additionalColumns,
+        displayedProperties,
+        path,
+        inlineEditing,
+        size: "s", // todo
+        onCellValueChange: onCellChanged,
+        uniqueFieldValidator
+    });
+
     return (
         <>
 
@@ -415,10 +446,9 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 title={title}
                 frozenIdColumn={largeLayout}
                 path={path}
+                columns={cmsColumns}
                 schema={collection.schema}
-                additionalColumns={additionalColumns}
                 defaultSize={collection.defaultSize}
-                displayedProperties={displayedProperties}
                 initialFilter={collection.initialFilter}
                 initialSort={collection.initialSort}
                 textSearchEnabled={collection.textSearchEnabled}
@@ -426,12 +456,13 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
                 pageSize={pageSize}
                 filterCombinations={collection.filterCombinations}
                 inlineEditing={checkInlineEditing}
-                uniqueFieldValidator={uniqueFieldValidator}
                 onEntityClick={onEntityClick}
-                onCellValueChange={onCellChanged}
+                onColumnResize={onColumnResize}
                 tableRowActionsBuilder={tableRowActionsBuilder}
                 toolbarActionsBuilder={toolbarActionsBuilder}
             />
+
+            {children}
 
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 path={path}
