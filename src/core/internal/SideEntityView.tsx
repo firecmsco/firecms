@@ -13,16 +13,11 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import CloseIcon from "@mui/icons-material/Close";
-import {
-    useBlocker,
-    useLocation,
-    useMatch,
-    useNavigate
-} from "react-router-dom";
 import clsx from "clsx";
 import EntityForm from "../../form/EntityForm";
 import {
     Entity,
+    EntityCallbacks,
     EntityCollection,
     EntitySchema,
     EntityStatus,
@@ -30,9 +25,7 @@ import {
     PermissionsBuilder
 } from "../../models";
 import { EntityCollectionTable } from "../components/EntityCollectionTable";
-import {
-    removeInitialAndTrailingSlashes
-} from "../util/navigation_utils";
+import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 import CircularProgressCenter from "../components/CircularProgressCenter";
 import EntityPreview from "../components/EntityPreview";
 
@@ -48,7 +41,8 @@ import {
     useSnackbarController
 } from "../../hooks";
 import { canEdit } from "../util/permissions";
-import { EntityCallbacks } from "../../models/entity_callbacks";
+import { useNavigate } from "react-router-dom";
+import { useUnsavedChangesDialog } from "./useUnsavedChangesDialog";
 
 const useStylesSide = makeStyles((theme: Theme) =>
     createStyles({
@@ -158,30 +152,16 @@ function SideEntityView<M extends { [Key: string]: any }>({
     const [tabsPosition, setTabsPosition] = React.useState(-1);
 
     // have the original values of the form changed?
-    const [isModified, setModified] = useState(false);
+    const [blockedNavigation, setBlockedNavigation] = useState(false);
     const [modifiedValues, setModifiedValues] = useState<EntityValues<any> | undefined>();
 
     const customViews = schema.views;
     const customViewsCount = customViews?.length ?? 0;
-    const navigate = useNavigate();
 
-    useBlocker(({ action, location: nextLocation, retry }) => {
-            switch (action) {
-                case "PUSH":
-                case "REPLACE": {
-                    retry();
-                    return;
-                }
-                case "POP": {
-                    const answer = confirm(`You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`);
-                    if (answer) {
-                        navigate(nextLocation);
-                    }
-                    return;
-                }
-            }
-        },
-        isModified
+    const { unsavedChangesDialog } = useUnsavedChangesDialog(
+        blockedNavigation,
+        () => setBlockedNavigation(false),
+        schema.name
     );
 
     const {
@@ -219,7 +199,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
 
     useEffect(() => {
         function beforeunload(e: any) {
-            if (isModified) {
+            if (blockedNavigation) {
                 e.preventDefault();
                 e.returnValue = `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`;
             }
@@ -263,7 +243,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
         });
 
         setStatus("existing");
-        setModified(false);
+        setBlockedNavigation(false);
 
         if (tabsPosition === -1)
             sideEntityController.close();
@@ -292,7 +272,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
         if (!status)
             return;
 
-        if (status === "existing" && !isModified) {
+        if (status === "existing" && !blockedNavigation) {
             sideEntityController.close();
             return;
         }
@@ -326,7 +306,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
             onEntitySave={onEntitySave}
             onDiscard={onDiscard}
             onValuesChanged={setModifiedValues}
-            onModified={setModified}
+            onModified={setBlockedNavigation}
             entity={entity}/>
     ) : (
         <EntityPreview
@@ -349,7 +329,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
                         {customView.builder({
                             schema,
                             entity,
-                            modifiedValues: isModified ? modifiedValues : entity?.values
+                            modifiedValues: blockedNavigation ? modifiedValues : entity?.values
                         })}
                     </ErrorBoundary>
                 </Box>
@@ -510,6 +490,9 @@ function SideEntityView<M extends { [Key: string]: any }>({
 
                 </>
         }
+
+        {unsavedChangesDialog}
+
     </div>;
 }
 

@@ -66,8 +66,8 @@
         "firebase": "^9.0.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
-        "react-router": "^6.0.0-beta.5",
-        "react-router-dom": "^6.0.0-beta.5",
+        "react-router": "^6.0.0-beta.7",
+        "react-router-dom": "^6.0.0-beta.7",
         "react-scripts": "^4.0.3"
     },
     "eslintConfig": {
@@ -107,8 +107,8 @@
         "npm-run-all": "^4.1.5",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
-        "react-router": "^6.0.0-beta.5",
-        "react-router-dom": "^6.0.0-beta.5",
+        "react-router": "^6.0.0-beta.7",
+        "react-router-dom": "^6.0.0-beta.7",
         "react-scripts": "^4.0.3",
         "typescript": "^4.4.3",
         "tsd":  "0.17.0"
