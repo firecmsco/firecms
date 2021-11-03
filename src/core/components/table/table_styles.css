@@ -1,6 +1,7 @@
 .BaseTable {
     box-shadow: 0 2px 4px 0 rgba(128, 128, 128, 0.2);
     /*background-color: #ffffff;*/
+    contain: strict;
     position: relative;
     box-sizing: border-box;
     font-size: 13px;

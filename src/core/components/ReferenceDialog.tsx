@@ -1,23 +1,19 @@
+import React, { useEffect, useState } from "react";
 import { CollectionSize, Entity, EntityCollection } from "../../models";
 import {
     Button,
     Dialog,
     DialogActions,
     Divider,
-    Typography,
-    useMediaQuery,
-    useTheme
+    Typography
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import React, { useEffect, useState } from "react";
 
 import CollectionTable from "../../collection/components/CollectionTable";
 import CollectionRowActions
     from "../../collection/internal/CollectionRowActions";
-import { useColumnIds } from "../../collection/internal/common";
-import { useDataSource } from "../../hooks/data/useDataSource";
-import { buildColumnsFromSchema } from "../../collection/components/util";
+import { useDataSource } from "../../hooks";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -107,14 +103,6 @@ export default function ReferenceDialog(
     const dataSource = useDataSource();
 
     const schema = collection.schema;
-    const textSearchEnabled = collection.textSearchEnabled;
-    const initialFilter = collection.initialFilter;
-    const displayedProperties = useColumnIds(collection, false);
-    const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
-    const pageSize = typeof collection.pagination === "number" ? collection.pagination : undefined;
-
-    const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
 
@@ -194,15 +182,6 @@ export default function ReferenceDialog(
             {`Select ${schema.name}`}
         </Typography>);
 
-    const { cmsColumns } = buildColumnsFromSchema({
-        schema: collection.schema,
-        additionalColumns: collection.additionalColumns,
-        displayedProperties,
-        path,
-        inlineEditing: false,
-        size: "s", // todo
-    });
-
     return (
 
         <Dialog
@@ -219,20 +198,12 @@ export default function ReferenceDialog(
                 {selectedEntities &&
                 <CollectionTable path={path}
                                  inlineEditing={false}
-                                 schema={schema}
+                                 collection={collection}
                                  toolbarActionsBuilder={toolbarActionsBuilder}
                                  onEntityClick={onEntityClick}
                                  tableRowActionsBuilder={tableRowActionsBuilder}
-                                 paginationEnabled={paginationEnabled}
-                                 defaultSize={collection.defaultSize}
-                                 columns={cmsColumns}
                                  title={title}
-                                 pageSize={pageSize}
-                                 textSearchEnabled={textSearchEnabled}
-                                 initialFilter={initialFilter}
-                                 initialSort={collection.initialSort}
                                  entitiesDisplayedFirst={selectedEntities}
-                                 frozenIdColumn={largeLayout}
                 />}
             </div>
 

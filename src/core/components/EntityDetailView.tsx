@@ -14,7 +14,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import {
     removeInitialAndTrailingSlashes
 } from "../util/navigation_utils";
-import { EntityCollectionTable } from "./EntityCollectionTable";
+import { EntityCollectionView } from "./EntityCollectionView";
 import { useDataSource, useNavigation } from "../../hooks";
 
 
@@ -141,7 +141,7 @@ export function EntityDetailView<M extends { [Key: string]: any }>({
                             height={"100%"}
                             width={"100%"}
                             hidden={tabsPosition !== colIndex + 1}>
-                            <EntityCollectionTable
+                            <EntityCollectionView
                                 path={path}
                                 collection={subcollection}
                             />

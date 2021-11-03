@@ -1,9 +1,4 @@
-import {
-    CMSColumn,
-    getCellAlignment,
-    getPropertyColumnWidth,
-    isPropertyFilterable
-} from "../internal/common";
+import { getCellAlignment, getPropertyColumnWidth } from "../internal/common";
 import {
     AdditionalColumnDelegate,
     CMSType,
@@ -16,13 +11,13 @@ import {
 } from "../../models";
 import { buildPropertyFrom } from "../../core/util/property_builder";
 import React, { useCallback, useEffect, useMemo } from "react";
-import TableCell from "../internal/TableCell";
+import TableCell from "../../core/components/table/TableCell";
 import PreviewComponent from "../../preview/PreviewComponent";
 import { getPreviewSizeFrom } from "../../preview/util";
 import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
 import PropertyTableCell, { OnCellChangeParams } from "../internal/PropertyTableCell";
 import SkeletonComponent from "../../preview/components/SkeletonComponent";
-import { TableCellProps } from "../internal/TableCellProps";
+import { TableCellProps } from "../../core/components/table/TableCellProps";
 import {
     OnCellValueChange,
     UniqueFieldValidator
@@ -30,6 +25,11 @@ import {
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
 import PopupFormField from "../internal/popup_field/PopupFormField";
+import {
+    TableColumn,
+    TableColumnFilter
+} from "../../core/components/table/TableProps";
+import { getIconForProperty } from "../../core/util/property_icons";
 
 
 export type ColumnsFromSchemaProps<M, AdditionalKey extends string> = {
@@ -81,6 +81,16 @@ export type ColumnsFromSchemaProps<M, AdditionalKey extends string> = {
 
 };
 
+export function checkInlineEditing<M>(inlineEditing: ((entity: Entity<any>) => boolean) | boolean, entity: Entity<M>) {
+    if (typeof inlineEditing === "boolean") {
+        return inlineEditing;
+    } else if (typeof inlineEditing === "function") {
+        return inlineEditing(entity);
+    } else {
+        return true;
+    }
+}
+
 
 export function buildColumnsFromSchema<M, AdditionalKey extends string>({
                                                                             schema,
@@ -92,7 +102,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
                                                                             onCellValueChange,
                                                                             uniqueFieldValidator
                                                                         }: ColumnsFromSchemaProps<M, AdditionalKey>
-): { cmsColumns: CMSColumn[], children: React.ReactElement, selectedCell: TableCellProps<M> } {
+): { columns: TableColumn[], popupFormField: React.ReactElement, selectedCell: TableCellProps<M> } {
 
 
     const context: FireCMSContext = useFireCMSContext();
@@ -128,7 +138,6 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
     });
 
     const select = (cell: TableCellProps<M>) => {
-        console.log("select", cell);
         setSelectedCell(cell);
         setFocused(true);
         if (!formPopupOpen) {
@@ -142,16 +151,6 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
         setPreventOutsideClick(false);
     }, []);
 
-
-    function checkInlineEditing<M>(entity: Entity<M>) {
-        if (typeof inlineEditing === "boolean") {
-            return inlineEditing;
-        } else if (typeof inlineEditing === "function") {
-            return inlineEditing(entity);
-        } else {
-            return true;
-        }
-    }
 
     const updatePopup = (value: boolean) => {
         setFocused(!value);
@@ -172,7 +171,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
         const property: Property<any> = buildPropertyFrom<CMSType, M>(propertyOrBuilder, entity.values, entity.id);
         const usedPropertyBuilder = typeof propertyOrBuilder === "function";
 
-        const inlineEditingEnabled = checkInlineEditing(entity);
+        const inlineEditingEnabled = checkInlineEditing(inlineEditing, entity);
 
         if (!inlineEditingEnabled) {
             return (
@@ -310,8 +309,43 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
 
     };
 
-    const cmsColumns = useMemo(() => {
-        const allColumns: CMSColumn[] = (Object.keys(schema.properties) as (keyof M)[])
+
+    function buildFilterableFromProperty(property: Property,
+                                         isArray: boolean = false): TableColumnFilter | undefined {
+
+        if (property.dataType === "number" || property.dataType === "string") {
+            const title = property.title;
+            const enumValues = property.config?.enumValues;
+            return {
+                dataType: property.dataType,
+                isArray,
+                title,
+                enumValues
+            };
+        } else if (property.dataType === "array" && property.of) {
+            return buildFilterableFromProperty(property.of, true);
+        } else if (property.dataType === "boolean") {
+            const title = property.title;
+            return {
+                dataType: property.dataType,
+                isArray,
+                title
+            };
+        } else if (property.dataType === "timestamp") {
+            const title = property.title;
+            return {
+                dataType: property.dataType,
+                isArray,
+                title
+            };
+        }
+
+        return undefined;
+
+    }
+
+    const columns = useMemo(() => {
+        const allColumns: TableColumn[] = (Object.keys(schema.properties) as (keyof M)[])
             .map((key) => {
                 const property: Property<any> = buildPropertyFrom<any, M>(schema.properties[key], schema.defaultValues ?? {}, path);
                 return ({
@@ -319,22 +353,22 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
                     type: "property",
                     property,
                     align: getCellAlignment(property),
+                    icon: (hoverOrOpen) => getIconForProperty(property, hoverOrOpen ? undefined : "disabled", "small"),
                     label: property.title || key as string,
                     sortable: true,
-                    filterable: isPropertyFilterable(property),
+                    filter: buildFilterableFromProperty(property),
                     width: getPropertyColumnWidth(property),
                     cellRenderer: propertyCellRenderer
                 });
             });
 
         if (additionalColumns) {
-            const items: CMSColumn[] = additionalColumns.map((additionalColumn) =>
+            const items: TableColumn[] = additionalColumns.map((additionalColumn) =>
                 ({
                     id: additionalColumn.id,
                     type: "additional",
                     align: "left",
                     sortable: false,
-                    filterable: false,
                     label: additionalColumn.title,
                     width: additionalColumn.width ?? 200,
                     cellRenderer: additionalCellRenderer
@@ -345,9 +379,9 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
         return displayedProperties
             .map((p) => {
                 return allColumns.find(c => c.id === p);
-            }).filter(c => !!c) as CMSColumn[];
+            }).filter(c => !!c) as TableColumn[];
 
-    }, [displayedProperties, selectedCell]);
+    }, [displayedProperties, selectedCell, size]);
 
 
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
@@ -359,7 +393,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
         })
         : undefined;
 
-    const children = <>
+    const popupFormField = <>
         <PopupFormField
             cellRect={popupCell?.cellRect}
             columnIndex={popupCell?.columnIndex}
@@ -378,6 +412,6 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
         />
     </>;
 
-    return { selectedCell, cmsColumns, children };
+    return { selectedCell, columns: columns, popupFormField };
 
 }

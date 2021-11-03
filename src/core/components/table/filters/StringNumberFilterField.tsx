@@ -1,9 +1,10 @@
 import {
     ArrayProperty,
+    EnumValues,
     NumberProperty,
     StringProperty,
     WhereFilterOp
-} from "../../../models";
+} from "../../../../models";
 import {
     Box,
     FormControl,
@@ -18,14 +19,17 @@ import Tooltip from "@mui/material/Tooltip/Tooltip";
 import {
     enumToObjectEntries,
     isEnumValueDisabled
-} from "../../../core/util/enums";
-import { EnumValuesChip } from "../../../preview/components/CustomChip";
+} from "../../../util/enums";
+import { EnumValuesChip } from "../../../../preview/components/CustomChip";
 
 interface StringNumberFilterFieldProps {
     name: string,
+    dataType: "string" | "number";
     value?: [op: WhereFilterOp, fieldValue: any];
     setValue: (value?: [op: WhereFilterOp, newValue: any]) => void;
-    property: ArrayProperty<string[] | number[]> | StringProperty | NumberProperty,
+    isArray?: boolean;
+    enumValues?: EnumValues;
+    title?: string;
 }
 
 const operationLabels = {
@@ -44,21 +48,13 @@ const multipleSelectOperations = ["array-contains-any", "in"];
 
 export default function StringNumberFilterField({
                                                     name,
-                                                    property,
                                                     value,
-                                                    setValue
+                                                    setValue,
+                                                    dataType,
+                                                    isArray,
+                                                    enumValues,
+                                                    title
                                                 }: StringNumberFilterFieldProps) {
-
-    const isArray = property.dataType === "array";
-    if (isArray && !(property as ArrayProperty).of) {
-        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
-    }
-    const usedProperty: StringProperty | NumberProperty = property.dataType === "array"
-        ? (property as ArrayProperty).of as StringProperty | NumberProperty
-        : property;
-
-    const dataType = usedProperty.dataType;
-    const enumValues = usedProperty.config?.enumValues;
 
     const possibleOperations: (keyof typeof operationLabels) [] = isArray ?
         ["array-contains"] :
@@ -145,7 +141,7 @@ export default function StringNumberFilterField({
                         key={`filter-select-${multiple}-${name}`}
                         multiple={multiple}
                         value={internalValue !== undefined ? internalValue : isArray ? [] : ""}
-                        onChange={(evt: any) => updateFilter(operation, property.dataType === "number" ? parseInt(evt.target.value) : evt.target.value)}
+                        onChange={(evt: any) => updateFilter(operation, dataType === "number" ? parseInt(evt.target.value) : evt.target.value)}
                         renderValue={multiple ? (selected: any) =>
                             (
                                 <div>
@@ -179,7 +175,7 @@ export default function StringNumberFilterField({
                 <IconButton
                     onClick={(e) => updateFilter(operation, undefined)}
                     size={"small"}>
-                    <Tooltip title={`Clear ${property.title}`}>
+                    <Tooltip title={`Clear ${title}`}>
                         <ClearIcon fontSize={"small"}/>
                     </Tooltip>
                 </IconButton>

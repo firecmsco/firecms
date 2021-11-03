@@ -1,14 +1,12 @@
 import React from "react";
 import {
-    AdditionalColumnDelegate,
     CollectionSize,
-    Entity,
-    EntitySchema,
+    Entity, EntityCollection,
     FilterCombination,
     FilterValues,
     Property
 } from "../../models";
-import { CMSColumn } from "../internal/common";
+
 
 /**
  * @category Collection components
@@ -26,9 +24,9 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
     path: string;
 
     /**
-     * Schema of the entity displayed by this collection
+     * Collection
      */
-    schema: EntitySchema<M>;
+    collection: EntityCollection<M>;
 
     /**
      * Override the title in the toolbar
@@ -36,48 +34,9 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
     title?: React.ReactNode;
 
     /**
-     * In case this table should have some filters set by default
-     */
-    initialFilter?: FilterValues<M>;
-
-    /**
-     * Default sort applied to this collection
-     */
-    initialSort?: [Extract<keyof M, string>, "asc" | "desc"];
-
-    /**
-     * If enabled, content is loaded in batch
-     */
-    paginationEnabled: boolean;
-
-    /**
-     * Default table size before being changed with the selector
-     */
-    defaultSize?: CollectionSize;
-
-    /**
-     * Flag to indicate if a search bar should be displayed on top of
-     * the collection table.
-     */
-    textSearchEnabled?: boolean;
-
-    /**
-     * Properties displayed in this collection. If this property is not set
-     * every property is displayed, you can filter
-     */
-    columns: CMSColumn[];
-
-    /**
      * Can the table be edited inline
      */
     inlineEditing: ((entity: Entity<any>) => boolean) | boolean;
-
-    /**
-     * If you need to filter/sort by multiple properties in this collection, you
-     * may need to create special indexes in your datasource (e.g. Firestore).
-     * You can then specify here the indexes created.
-     */
-    filterCombinations?: FilterCombination<Extract<keyof M, string>>[];
 
     /**
      * List of entities that will be displayed on top, no matter the ordering.
@@ -100,16 +59,6 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
                                   entity,
                                   size
                               }: { entity: Entity<M>, size: CollectionSize }) => React.ReactNode;
-
-    /**
-     * Is the id column frozen to the left.
-     */
-    frozenIdColumn?: boolean;
-
-    /**
-     * How many entries are loaded per page
-     */
-    pageSize?: number;
 
     /**
      * Callback when anywhere on the table is clicked

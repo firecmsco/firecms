@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 
-import { Property, WhereFilterOp } from "../../models";
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
-import { CMSColumn, Sort } from "./common";
+import { WhereFilterOp } from "../../../models";
+import ErrorBoundary from "../../internal/ErrorBoundary";
+import { Sort } from "../../../collection/internal/common";
 import {
-    darken,
     Badge,
     Box,
     Button,
+    darken,
     Divider,
     Grid,
     IconButton,
@@ -19,12 +19,15 @@ import makeStyles from "@mui/styles/makeStyles";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import StringNumberFilterField from "./filters/StringNumberFilterField";
-import BooleanFilterField from "./filters/BooleanFilterField";
-import { getIconForProperty } from "../../core/util/property_icons";
-import { useTableStyles } from "../components/styles";
+import { useTableStyles } from "./styles";
 import clsx from "clsx";
-import DateTimeFilterField from "./filters/DateTimeFilterfield";
+import { TableColumn, TableColumnFilter } from "./TableProps";
+import StringNumberFilterField
+    from "./filters/StringNumberFilterField";
+import BooleanFilterField
+    from "./filters/BooleanFilterField";
+import DateTimeFilterField
+    from "./filters/DateTimeFilterfield";
 
 export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | "left" | "center" }>
 (theme => createStyles({
@@ -34,7 +37,7 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
         padding: "0px 12px",
         color: onHover ? theme.palette.text.primary : theme.palette.text.secondary,
         backgroundColor: onHover ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
-        transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+        transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
     }),
     headerTitle: ({ align }) => ({
         overflow: "hidden",
@@ -55,15 +58,14 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
 }));
 
 
-export default function CollectionTableHeader<M extends { [Key: string]: any },
-    AdditionalKey extends string = string>({
-                                               sort,
-                                               onColumnSort,
-                                               onFilterUpdate,
-                                               filter,
-                                               column
-                                           }: {
-    column: CMSColumn;
+export default function TableHeader<M extends { [Key: string]: any }>({
+                                                                          sort,
+                                                                          onColumnSort,
+                                                                          onFilterUpdate,
+                                                                          filter,
+                                                                          column
+                                                                      }: {
+    column: TableColumn;
     onColumnSort: (key: Extract<keyof M, string>) => void;
     onFilterUpdate: (filterForProperty?: [WhereFilterOp, any]) => void;
     filter?: [WhereFilterOp, any];
@@ -105,7 +107,6 @@ export default function CollectionTableHeader<M extends { [Key: string]: any },
                 onMouseLeave={() => setOnHover(false)}
                 container>
 
-
                 <Grid item xs={true} className={classes.headerTitle}>
                     <Box
                         display={"flex"}
@@ -113,7 +114,7 @@ export default function CollectionTableHeader<M extends { [Key: string]: any },
                         alignItems={"center"}
                         justifyContent={column.align === "right" ? "flex-end" : (column.align === "center" ? "center" : "flex-start")}>
                         <Box className={classes.headerIcon}>
-                            {column.property && getIconForProperty(column.property, onHover || open ? undefined : "disabled", "small")}
+                            {column.icon && column.icon(onHover || open)}
                         </Box>
                         <Box className={classes.headerTitleInternal}>
                             {column.label}
@@ -144,7 +145,7 @@ export default function CollectionTableHeader<M extends { [Key: string]: any },
                 </Grid>
                 }
 
-                {column.filterable && <Grid item>
+                {column.filter && <Grid item>
                     <Badge color="secondary"
                            variant="dot"
                            overlap="circular"
@@ -161,7 +162,7 @@ export default function CollectionTableHeader<M extends { [Key: string]: any },
                 </Grid>}
             </Grid>
 
-            {column.sortable && column.property && <Popover
+            {column.sortable && <Popover
                 id={id}
                 open={open}
                 elevation={2}
@@ -176,8 +177,7 @@ export default function CollectionTableHeader<M extends { [Key: string]: any },
                     horizontal: "right"
                 }}
             >
-                <FilterForm id={column.id as keyof M}
-                            property={column.property}
+                <FilterForm column={column}
                             filter={filter}
                             onFilterUpdate={update}/>
             </Popover>}
@@ -187,51 +187,23 @@ export default function CollectionTableHeader<M extends { [Key: string]: any },
 }
 
 interface FilterFormProps<M> {
-    id: keyof M;
-    property: Property;
+    column: TableColumn;
     onFilterUpdate: (filter?: [WhereFilterOp, any]) => void;
     filter?: [WhereFilterOp, any];
 }
 
 
 function FilterForm<M>({
-                           id,
-                           property,
+                           column,
                            onFilterUpdate,
                            filter
                        }: FilterFormProps<M>) {
 
 
+    const id = column.id;
     const tableClasses = useTableStyles();
 
     const [filterInternal, setFilterInternal] = useState<[WhereFilterOp, any] | undefined>(filter);
-
-    function createFilterField(property: Property): JSX.Element {
-
-        if (property.dataType === "number" || property.dataType === "string") {
-            return <StringNumberFilterField value={filterInternal}
-                                            setValue={setFilterInternal}
-                                            name={id as string}
-                                            property={property}/>;
-        } else if (property.dataType === "array" && property.of) {
-            return createFilterField(property.of);
-        } else if (property.dataType === "boolean") {
-            return <BooleanFilterField value={filterInternal}
-                                       setValue={setFilterInternal}
-                                       name={id as string}
-                                       property={property}/>;
-        } else if (property.dataType === "timestamp") {
-            return <DateTimeFilterField value={filterInternal}
-                                        setValue={setFilterInternal}
-                                        name={id as string}
-                                        property={property}/>;
-        }
-
-        return (
-            <div>{`Currently the field ${property.dataType} is not supported`}</div>
-        );
-    }
-
 
     const submit = (e: any) => {
         onFilterUpdate(filterInternal);
@@ -243,17 +215,57 @@ function FilterForm<M>({
 
     const filterIsSet = !!filter;
 
+    function createFilterField(id: string,
+                               filterConfig: TableColumnFilter,
+                               filterValue: [WhereFilterOp, any] | undefined,
+                               setFilterValue: (filterValue?: [WhereFilterOp, any]) => void,
+                               isArray: boolean = false
+    ): JSX.Element {
+
+        if (filterConfig.dataType === "number" || filterConfig.dataType === "string") {
+            const dataType = filterConfig.dataType;
+            const title = filterConfig.title;
+            const enumValues = filterConfig.enumValues;
+            return <StringNumberFilterField value={filterValue}
+                                            setValue={setFilterValue}
+                                            name={id as string}
+                                            dataType={dataType}
+                                            isArray={isArray}
+                                            enumValues={enumValues}
+                                            title={title}/>;
+        } else if (filterConfig.dataType === "boolean") {
+            const title = filterConfig.title;
+            return <BooleanFilterField value={filterValue}
+                                       setValue={setFilterValue}
+                                       name={id as string}
+                                       title={title}/>;
+        } else if (filterConfig.dataType === "timestamp") {
+            const title = filterConfig.title;
+            return <DateTimeFilterField value={filterValue}
+                                        setValue={setFilterValue}
+                                        name={id as string}
+                                        isArray={isArray}
+                                        title={title}/>;
+        }
+
+        return (
+            <div>{`Currently the field ${filterConfig.dataType} is not supported`}</div>
+        );
+    }
+
+
     return (
         <>
 
             <Box p={2} className={tableClasses.headerTypography}>
-                {property.title ?? id}
+                {column.label ?? id}
             </Box>
+
             <Divider/>
 
-            <Box p={2}>
-                {createFilterField(property)}
-            </Box>
+            {column.filter && <Box p={2}>
+                {createFilterField(id, column.filter, filterInternal, setFilterInternal, false)}
+            </Box>}
 
             <Box display="flex"
                  justifyContent="flex-end"

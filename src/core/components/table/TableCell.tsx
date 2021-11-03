@@ -4,11 +4,11 @@ import { IconButton, Tooltip } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import clsx from "clsx";
-import { CellStyleProps, useCellStyles } from "../components/styles";
+import { CellStyleProps, useCellStyles } from "./styles";
 import { getRowHeight } from "./common";
 
 
-interface TableCellProps<T, M extends { [Key: string]: any }> {
+interface TableCellProps<T, M> {
     children: React.ReactNode;
     disabled: boolean;
     saved?: boolean;
@@ -22,7 +22,7 @@ interface TableCellProps<T, M extends { [Key: string]: any }> {
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
-const TableCell = <T, M extends { [Key: string]: any }>({
+const TableCell = <T, M>({
                                                             children,
                                                             selected,
                                                             focused,

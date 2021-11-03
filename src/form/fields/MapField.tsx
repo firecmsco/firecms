@@ -18,6 +18,7 @@ import LabelWithIcon from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
 import { FieldDescription } from "../components";
+import { isHidden } from "../../core/utils";
 
 /**
  * Field that renders the children property fields
@@ -70,7 +71,6 @@ export default function MapField<T extends object>({
         const keys = Object.keys(property.properties!)
             .filter((key) => !value || !(key in value));
 
-
         const handleAddProperty = (event: SelectChangeEvent) => {
             setValue({
                 ...value,
@@ -109,6 +109,7 @@ export default function MapField<T extends object>({
             <Paper elevation={0} variant={"outlined"} className={classes.paper}>
                 <Grid container spacing={2}>
                     {Object.entries(mapProperties)
+                        .filter(([_, property]) => !isHidden(property))
                         .map(([entryKey, childProperty], index) => {
                                 return (
                                     <Grid item

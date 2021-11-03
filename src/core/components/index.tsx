@@ -13,10 +13,10 @@ export {
     default as ReferenceDialog
 } from "./ReferenceDialog";
 
-export type { EntityCollectionProps } from "./EntityCollectionTable";
+export type { EntityCollectionViewProps } from "./EntityCollectionView";
 export {
-    default as EntityCollectionTable
-} from "./EntityCollectionTable";
+    default as EntityCollectionView
+} from "./EntityCollectionView";
 
 export {
     default as CircularProgressCenter

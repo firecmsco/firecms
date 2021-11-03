@@ -124,7 +124,14 @@ export const testEntitySchema = buildSchema({
                         enumValues: {
                             "facebook": "FacebookId",
                             "apple": "Apple"
-                        }
+                        },
+                    }
+                },
+                hidden_field: {
+                    title: "Hidden",
+                    dataType: "string",
+                    disabled: {
+                        hidden: false
                     }
                 }
             });
@@ -276,6 +283,13 @@ export const testEntitySchema = buildSchema({
                                 complete: "Complete",
                                 continue: "Continue"
                             }
+                        }
+                    },
+                    hidden_field: {
+                        title: "Hidden",
+                        dataType: "string",
+                        disabled: {
+                            hidden: true
                         }
                     }
                 }

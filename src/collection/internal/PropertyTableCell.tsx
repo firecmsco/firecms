@@ -16,14 +16,14 @@ import { TableSwitch } from "./fields/TableSwitch";
 import { TableDateField } from "./fields/TableDateField";
 import ErrorBoundary from "../../core/internal/ErrorBoundary";
 import { PreviewComponent } from "../../preview";
-import { CellStyleProps } from "../components/styles";
+import { CellStyleProps } from "../../core/components/table/styles";
 import { TableReferenceField } from "./fields/TableReferenceField";
 
 import { getPreviewSizeFrom } from "../../preview/util";
 import { useClearRestoreValue } from "../../hooks";
 import deepEqual from "deep-equal";
 import { isReadOnly } from "../../core/utils";
-import TableCell from "./TableCell";
+import TableCell from "../../core/components/table/TableCell";
 import { AnySchema } from "yup";
 
 

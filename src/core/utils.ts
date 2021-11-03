@@ -22,9 +22,8 @@ export function isReadOnly(property: Property<any>): boolean {
 }
 
 export function isHidden(property: Property<any>): boolean {
-    if (typeof property.disabled === "object" && Boolean(property.disabled.hidden))
-        return true;
-    return false;
+    return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
+
 }
 
 

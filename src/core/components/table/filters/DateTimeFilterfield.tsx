@@ -3,7 +3,7 @@ import {
     ArrayProperty,
     TimestampProperty,
     WhereFilterOp
-} from "../../../models";
+} from "../../../../models";
 import {
     Box,
     FormControl,
@@ -16,13 +16,13 @@ import ClearIcon from "@mui/icons-material/Clear";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import { useInputStyles } from "../fields/styles";
 
 interface DateTimeFilterFieldProps {
     name: string,
     value?: [op: WhereFilterOp, fieldValue: any];
     setValue: (value?: [op: WhereFilterOp, newValue: any]) => void;
-    property: ArrayProperty<Date[]> | TimestampProperty,
+    isArray?: boolean;
+    title?: string;
 }
 
 
@@ -43,18 +43,12 @@ const multipleSelectOperations = ["array-contains-any", "in"];
 
 export default function DateTimeFilterField({
                                                 name,
-                                                property,
+                                                isArray,
                                                 value,
-                                                setValue
+                                                setValue,
+                                                title
                                             }: DateTimeFilterFieldProps) {
 
-
-    const classes = useInputStyles();
-
-    const isArray = property.dataType === "array";
-    if (isArray && !(property as ArrayProperty).of) {
-        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
-    }
     const possibleOperations: (keyof typeof operationLabels) [] = isArray ?
         ["array-contains"] :
         ["==", "!=", ">", "<", ">=", "<="];
@@ -135,7 +129,7 @@ export default function DateTimeFilterField({
                 <IconButton
                     onClick={(e) => updateFilter(operation, undefined)}
                     size={"small"}>
-                    <Tooltip title={`Clear ${property.title}`}>
+                    <Tooltip title={`Clear ${title}`}>
                         <ClearIcon fontSize={"small"}/>
                     </Tooltip>
                 </IconButton>

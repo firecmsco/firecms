@@ -7,22 +7,7 @@ import {
 } from "../../models";
 import { buildPropertyFrom } from "../../core/util/property_builder";
 
-export interface CMSColumn {
-    id: string;
-    type: "property" | "additional";
-    label: string;
-    property?: Property;
-    align: "right" | "left" | "center";
-    sortable: boolean;
-    filterable: boolean;
-    width: number;
-    cellRenderer: ({
-                       column,
-                       columnIndex,
-                       rowData,
-                       rowIndex
-                   }: any) => React.ReactNode;
-}
+
 
 export type Sort = "asc" | "desc" | undefined;
 
@@ -111,22 +96,6 @@ export function getPropertyColumnWidth(property: Property): number {
     }
 }
 
-export function getRowHeight(size: CollectionSize): number {
-    switch (size) {
-        case "xl":
-            return 400;
-        case "l":
-            return 280;
-        case "m":
-            return 140;
-        case "s":
-            return 80;
-        case "xs":
-            return 54;
-        default:
-            throw Error("Missing mapping for collection size -> height");
-    }
-}
 
 export function getSubcollectionColumnId(collection: EntityCollection) {
     return `subcollection_${collection.path}`;

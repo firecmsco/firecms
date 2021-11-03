@@ -11,45 +11,27 @@ import {
 } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 
-
-import {
-    AdditionalColumnDelegate,
-    CollectionSize,
-    Entity,
-    EntityCollection,
-    SaveEntityProps
-} from "../../models";
+import { CollectionSize, Entity, EntityCollection } from "../../models";
 import CollectionTable from "../../collection/components/CollectionTable";
 
 import CollectionRowActions
     from "../../collection/internal/CollectionRowActions";
 import DeleteEntityDialog from "../../collection/internal/DeleteEntityDialog";
 import ExportButton from "../../collection/internal/ExportButton";
-import {
-    getSubcollectionColumnId,
-    useColumnIds
-} from "../../collection/internal/common";
 
 import { canCreate, canDelete, canEdit } from "../util/permissions";
-import {
-    OnCellValueChange,
-    OnColumnResizeParams,
-    UniqueFieldValidator
-} from "../../collection";
+import { OnColumnResizeParams } from "../../collection";
 import { Markdown } from "../../preview";
 import {
-    saveEntityWithCallbacks,
     useAuthController,
-    useDataSource,
     useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
-import { buildColumnsFromSchema } from "../../collection/components/util";
 
 /**
  * @category Core components
  */
-export interface EntityCollectionProps<M extends { [Key: string]: any }> {
+export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
     path: string;
     collection: EntityCollection<M>;
 }
@@ -69,21 +51,20 @@ function getCollectionConfig(storageKey: string) {
  * exclusively with config options.
  *
  * If you need a lower level implementation with more granular options, you
- * can try {@link CollectionTable}, which still does data fetching from the datasource.
+ * can try {@link CollectionTable}.
  *
  * @param path
  * @param collectionConfig
  * @constructor
  * @category Core components
  */
-export default function EntityCollectionTable<M extends { [Key: string]: any }>({
+export default function EntityCollectionView<M extends { [Key: string]: any }>({
                                                                                     path,
                                                                                     collection
-                                                                                }: EntityCollectionProps<M>
+                                                                                }: EntityCollectionViewProps<M>
 ) {
 
     const sideEntityController = useSideEntityController();
-    const dataSource = useDataSource();
     const context = useFireCMSContext();
     const authController = useAuthController();
 
@@ -97,40 +78,8 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
     const inlineEditing = collection.inlineEditing === undefined || collection.inlineEditing;
 
     const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
-    const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
-    const pageSize = typeof collection.pagination === "number" ? collection.pagination : undefined;
-
-    const displayedProperties = useColumnIds(collection, true);
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-
-    const subcollectionColumns: AdditionalColumnDelegate<any>[] = collection.subcollections?.map((subcollection) => {
-        return {
-            id: getSubcollectionColumnId(subcollection),
-            title: subcollection.name,
-            width: 200,
-            builder: ({ entity }) => (
-                <Button color={"primary"}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            sideEntityController.open({
-                                path,
-                                entityId: entity.id,
-                                selectedSubpath: subcollection.path,
-                                permissions: collection.permissions,
-                                schema: collection.schema,
-                                subcollections: collection.subcollections,
-                                callbacks: collection.callbacks,
-                                overrideSchemaResolver: false
-                            });
-                        }}>
-                    {subcollection.name}
-                </Button>
-            )
-        };
-    }) ?? [];
-
-    const additionalColumns = [...(collection.additionalColumns ?? []), ...subcollectionColumns];
 
     const onEntityClick = (entity: Entity<M>) => {
         sideEntityController.open({
@@ -172,36 +121,6 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
         return inlineEditing;
     };
 
-    const onCellChanged: OnCellValueChange<any, M> = ({
-                                                          value,
-                                                          name,
-                                                          setSaved,
-                                                          setError,
-                                                          entity
-                                                      }) => {
-        const saveProps: SaveEntityProps<M> = {
-            path,
-            entityId: entity.id,
-            values: {
-                ...entity.values,
-                [name]: value
-            },
-            schema: collection.schema,
-            status: "existing"
-        };
-
-        return saveEntityWithCallbacks({
-            ...saveProps,
-            callbacks: collection.callbacks,
-            dataSource,
-            context,
-            onSaveSuccess: () => setSaved(true),
-            onSaveFailure: ((e: Error) => {
-                setError(e);
-            })
-        });
-
-    };
 
     const onColumnResize = ({ width, key, type }: OnColumnResizeParams) => {
         console.log("onColumnResize", width, key, type);
@@ -289,14 +208,6 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
         setSelectedEntities(newValue);
         setDeleteEntityClicked(undefined);
     };
-
-
-    const uniqueFieldValidator: UniqueFieldValidator = ({
-                                                            name,
-                                                            value,
-                                                            property,
-                                                            entityId
-                                                        }) => dataSource.checkUniqueField(path, name, value, property, entityId);
 
     const tableRowActionsBuilder = ({
                                         entity,
@@ -428,41 +339,19 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
         );
     }
 
-    const { cmsColumns, children } = buildColumnsFromSchema({
-        schema: collection.schema,
-        additionalColumns,
-        displayedProperties,
-        path,
-        inlineEditing,
-        size: "s", // todo
-        onCellValueChange: onCellChanged,
-        uniqueFieldValidator
-    });
-
     return (
         <>
 
             <CollectionTable
                 title={title}
-                frozenIdColumn={largeLayout}
                 path={path}
-                columns={cmsColumns}
-                schema={collection.schema}
-                defaultSize={collection.defaultSize}
-                initialFilter={collection.initialFilter}
-                initialSort={collection.initialSort}
-                textSearchEnabled={collection.textSearchEnabled}
-                paginationEnabled={paginationEnabled}
-                pageSize={pageSize}
-                filterCombinations={collection.filterCombinations}
+                collection={collection}
                 inlineEditing={checkInlineEditing}
                 onEntityClick={onEntityClick}
                 onColumnResize={onColumnResize}
                 tableRowActionsBuilder={tableRowActionsBuilder}
                 toolbarActionsBuilder={toolbarActionsBuilder}
             />
-
-            {children}
 
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 path={path}
@@ -476,4 +365,4 @@ export default function EntityCollectionTable<M extends { [Key: string]: any }>(
     );
 }
 
-export { EntityCollectionTable };
+export { EntityCollectionView };

@@ -288,8 +288,7 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
  * Used to define filters applied in collections
  * @category Models
  */
-export type FilterValues<M extends { [Key: string]: any }>
-    = { [K in keyof M]?: [WhereFilterOp, any] };
+export type FilterValues<M> = { [K in keyof M]?: [WhereFilterOp, any] };
 
 
 /**

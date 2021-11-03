@@ -24,7 +24,7 @@ import {
     EntityValues,
     PermissionsBuilder
 } from "../../models";
-import { EntityCollectionTable } from "../components/EntityCollectionTable";
+import { EntityCollectionView } from "../components/EntityCollectionView";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 import CircularProgressCenter from "../components/CircularProgressCenter";
 import EntityPreview from "../components/EntityPreview";
@@ -41,7 +41,6 @@ import {
     useSnackbarController
 } from "../../hooks";
 import { canEdit } from "../util/permissions";
-import { useNavigate } from "react-router-dom";
 import { useUnsavedChangesDialog } from "./useUnsavedChangesDialog";
 
 const useStylesSide = makeStyles((theme: Theme) =>
@@ -349,7 +348,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
                     flexGrow={1}
                     hidden={tabsPosition !== colIndex + customViewsCount}>
                     {entity && path ?
-                        <EntityCollectionTable path={path}
+                        <EntityCollectionView path={path}
                                                collection={subcollection}
                         />
                         :

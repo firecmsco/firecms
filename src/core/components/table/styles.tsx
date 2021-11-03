@@ -2,7 +2,7 @@ import React from "react";
 import { alpha, Theme } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import { CollectionSize } from "../../models";
+import { CollectionSize } from "../../../models";
 
 
 export const useTableStyles = makeStyles<Theme>(theme => createStyles({
@@ -78,6 +78,7 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
             border: "2px solid transparent",
             borderRadius: 4,
             overflow: "hidden",
+            contain: "strict",
             display: "flex",
             padding: ({ size }) => {
                 switch (size) {

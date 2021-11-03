@@ -1,4 +1,4 @@
-import { BooleanProperty, WhereFilterOp } from "../../../models";
+import { BooleanProperty, WhereFilterOp } from "../../../../models";
 import { Checkbox, FormControlLabel, Theme } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
@@ -20,12 +20,12 @@ interface BooleanFieldProps {
     name: string,
     value?: [op: WhereFilterOp, fieldValue: any];
     setValue: (value?: [op: WhereFilterOp, newValue: any]) => void;
-    property: BooleanProperty,
+    title?: string;
 }
 
 export default function BooleanFilterField({
                                                name,
-                                               property,
+                                               title,
                                                value,
                                                setValue
                                            }: BooleanFieldProps) {
@@ -66,7 +66,7 @@ export default function BooleanFilterField({
                     }}
                 />
             }
-            label={!valueSet ? "No filter" : (valueSetToTrue ? `${property.title} is true` : `${property.title} is false`)}
+            label={!valueSet ? "No filter" : (valueSetToTrue ? `${title} is true` : `${title} is false`)}
         />
     );
 

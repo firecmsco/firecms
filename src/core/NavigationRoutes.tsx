@@ -2,7 +2,7 @@ import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView, Navigation } from "../models";
-import { EntityCollectionTable } from "./components/EntityCollectionTable";
+import { EntityCollectionView } from "./components/EntityCollectionView";
 import BreadcrumbUpdater from "./components/BreadcrumbUpdater";
 import FireCMSHomePage from "./components/HomePage";
 import { useNavigation } from "../hooks";
@@ -78,7 +78,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                <BreadcrumbUpdater
                                    path={urlPath}
                                    title={entityCollection.name}>
-                                   <EntityCollectionTable
+                                   <EntityCollectionView
                                        key={`collection_table_${entityCollection.path}`}
                                        path={entityCollection.path}
                                        collection={entityCollection}/>

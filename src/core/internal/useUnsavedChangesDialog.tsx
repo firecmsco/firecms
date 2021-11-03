@@ -13,8 +13,6 @@ export function useUnsavedChangesDialog(when: boolean, onSuccess: () => void, sc
     const [nextLocation, setNextLocation] = React.useState<any | undefined>();
     const { navigator } = React.useContext(UNSAFE_NavigationContext);
 
-    console.log(nextLocation);
-
     const navigate = useNavigate();
 
     const handleCancel = () => {

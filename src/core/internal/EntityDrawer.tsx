@@ -58,8 +58,8 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => createStyles({
 
 
 const defaultTransitionDuration = {
-    enter: 255,
-    exit: 195
+    enter: 225,
+    exit: 175
 };
 
 /**

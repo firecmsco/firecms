@@ -55,15 +55,18 @@ export type EntityStatus = "new" | "existing" | "copy";
  * @category Models
  */
 export interface Entity<M extends { [Key: string]: any }> {
+
     /**
      * Id of the entity
      */
     id: string;
+
     /**
      * A string representing the path of the referenced document (relative
      * to the root of the database).
      */
     path: string;
+
     /**
      * Current values
      */

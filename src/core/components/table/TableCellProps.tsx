@@ -1,5 +1,5 @@
 import React from "react";
-import { Entity, Property } from "../../models";
+import { Entity, Property } from "../../../models";
 
 
 export type TableCellProps<M> =
