@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { FieldDescription } from "../../form/components";
-import LabelWithIcon from "../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 import {
     enumToObjectEntries,
@@ -27,19 +27,19 @@ type SelectProps<T extends EnumType> = FieldProps<T>;
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function Select<T extends EnumType>({
-                                                       name,
-                                                       value,
-                                                       setValue,
-                                                       error,
-                                                       showError,
-                                                       disabled,
-                                                       autoFocus,
-                                                       touched,
-                                                       property,
-                                                       includeDescription,
-                                                       dependsOnOtherProperties
-                                                   }: SelectProps<T>) {
+export function Select<T extends EnumType>({
+                                               name,
+                                               value,
+                                               setValue,
+                                               error,
+                                               showError,
+                                               disabled,
+                                               autoFocus,
+                                               touched,
+                                               property,
+                                               includeDescription,
+                                               dependsOnOtherProperties
+                                           }: SelectProps<T>) {
 
     const classes = formStyles();
     const enumValues = property.config?.enumValues as EnumValues;

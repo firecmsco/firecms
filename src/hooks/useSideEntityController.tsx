@@ -1,4 +1,4 @@
-import { AuthController , SideEntityController} from "../models";
+import { AuthController, SideEntityController } from "../models";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 /**

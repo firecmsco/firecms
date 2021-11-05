@@ -5,12 +5,12 @@ import { PreviewComponentProps } from "../PreviewComponentProps";
 /**
  * @category Preview components
  */
-export default function BooleanPreview({
-                                           name,
-                                           value,
-                                           property,
-                                           size
-                                       }: PreviewComponentProps<boolean>): React.ReactElement {
+export function BooleanPreview({
+                                   name,
+                                   value,
+                                   property,
+                                   size
+                               }: PreviewComponentProps<boolean>): React.ReactElement {
 
     return value ?
         <CheckBox color="secondary"/>

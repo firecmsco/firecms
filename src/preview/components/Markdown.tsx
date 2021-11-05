@@ -4,14 +4,14 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 
 interface MarkdownProps {
     source: string
-};
+}
 
 /**
  * @category Preview components
  */
-export default function Markdown({
-                                     source
-                                 }: MarkdownProps) {
+export function Markdown({
+                             source
+                         }: MarkdownProps) {
     return <MarkdownPreview source={typeof source === "string" ? source : ""}
                             style={{
                                 fontSize: "inherit",

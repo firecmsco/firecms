@@ -1,14 +1,13 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView, Navigation } from "../models";
-import { EntityCollectionView } from "./components/EntityCollectionView";
-import BreadcrumbUpdater from "./components/BreadcrumbUpdater";
-import FireCMSHomePage from "./components/HomePage";
+import { EntityCollectionView, FireCMSHomePage } from "./components";
 import { useNavigation } from "../hooks";
+import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
 
 /**
- * @category Core components
+ * @category Components
  */
 export type NavigationRoutesProps = {
     /**
@@ -24,7 +23,7 @@ export type NavigationRoutesProps = {
  * This component needs a parent {@link FireCMS}
  *
  * @constructor
- * @category Core components
+ * @category Components
  */
 export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
@@ -110,4 +109,38 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
         </Routes>
     );
+}
+
+
+interface BreadcrumbRouteProps {
+    title: string;
+    path: string;
+}
+
+/**
+ * This component updates the breadcrumb in the app bar when rendered
+ * @param children
+ * @param title
+ * @param path
+ * @constructor
+ * @category Components
+ */
+function BreadcrumbUpdater({
+                               children,
+                               title,
+                               path
+                           }
+                               : PropsWithChildren<BreadcrumbRouteProps>) {
+
+    const breadcrumbsContext = useBreadcrumbsContext();
+    React.useEffect(() => {
+        breadcrumbsContext.set({
+            breadcrumbs: [{
+                title: title,
+                url: path
+            }]
+        });
+    }, [path]);
+
+    return <> {children}</>;
 }

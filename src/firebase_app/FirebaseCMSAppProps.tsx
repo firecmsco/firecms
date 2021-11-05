@@ -136,6 +136,6 @@ export interface FirebaseCMSAppProps {
     /**
      * Default path under the collection routes of the CMS will be created
      */
-    baseCollectionPath?:string;
+    baseCollectionPath?: string;
 }
 

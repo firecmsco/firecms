@@ -7,7 +7,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 import { EntityDrawer } from "./internal/EntityDrawer";
-import SideEntityView from "./internal/SideEntityView";
+import { SideEntityView } from "./internal/SideEntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
 import { useFireCMSContext, useSideEntityController } from "../hooks";
 
@@ -17,7 +17,7 @@ import { useFireCMSContext, useSideEntityController } from "../hooks";
  * and control the dialogs.
  * This component needs a parent {@link FireCMS}
  * {@see useSideEntityController}
- * @category Core components
+ * @category Components
  */
 export function SideEntityDialogs<M extends { [Key: string]: any }>() {
 

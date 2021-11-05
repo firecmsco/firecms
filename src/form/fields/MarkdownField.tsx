@@ -7,7 +7,7 @@ import MDEditor from "@uiw/react-md-editor";
 
 import { FieldProps } from "../../models";
 import { FieldDescription } from "../../form/components";
-import LabelWithIcon from "../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 
 import { useClearRestoreValue } from "../../hooks";
 
@@ -19,7 +19,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             "& .w-md-editor-toolbar": {
-                backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)": "rgba(255, 255, 255, 0.13)",
+                backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
             }
         }
     })
@@ -32,21 +32,21 @@ export const useStyles = makeStyles((theme: Theme) =>
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function MarkdownField({
-                                          name,
-                                          value,
-                                          setValue,
-                                          error,
-                                          showError,
-                                          disabled,
-                                          autoFocus,
-                                          touched,
-                                          property,
-                                          tableMode,
-                                          includeDescription,
-                                          context,
-                                          dependsOnOtherProperties
-                                      }: MarkDownFieldProps) {
+export function MarkdownField({
+                                  name,
+                                  value,
+                                  setValue,
+                                  error,
+                                  showError,
+                                  disabled,
+                                  autoFocus,
+                                  touched,
+                                  property,
+                                  tableMode,
+                                  includeDescription,
+                                  context,
+                                  dependsOnOtherProperties
+                              }: MarkDownFieldProps) {
 
     const classes = useStyles();
 

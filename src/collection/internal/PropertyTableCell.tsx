@@ -14,7 +14,7 @@ import { TableSelect } from "./fields/TableSelect";
 import { NumberTableInput } from "./fields/TableNumberInput";
 import { TableSwitch } from "./fields/TableSwitch";
 import { TableDateField } from "./fields/TableDateField";
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { PreviewComponent } from "../../preview";
 import { CellStyleProps } from "../../core/components/table/styles";
 import { TableReferenceField } from "./fields/TableReferenceField";
@@ -23,7 +23,7 @@ import { getPreviewSizeFrom } from "../../preview/util";
 import { useClearRestoreValue } from "../../hooks";
 import deepEqual from "deep-equal";
 import { isReadOnly } from "../../core/utils";
-import TableCell from "../../core/components/table/TableCell";
+import { TableCell } from "../../core/components/table/TableCell";
 import { AnySchema } from "yup";
 
 
@@ -51,25 +51,25 @@ export interface OnCellChangeParams<T> {
     name: string,
     setError: (e: Error) => void,
     setSaved: (saved: boolean) => void
-};
+}
 
-const PropertyTableCell = <T extends CMSType, M extends { [Key: string]: any }>({
-                                                                                    selected,
-                                                                                    focused,
-                                                                                    name,
-                                                                                    setPreventOutsideClick,
-                                                                                    setFocused,
-                                                                                    onValueChange,
-                                                                                    select,
-                                                                                    openPopup,
-                                                                                    value,
-                                                                                    property,
-                                                                                    validation,
-                                                                                    size,
-                                                                                    align,
-                                                                                    width,
-                                                                                    height
-                                                                                }: PropertyTableCellProps<T, M> & CellStyleProps) => {
+const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]: any }>({
+                                                                                            selected,
+                                                                                            focused,
+                                                                                            name,
+                                                                                            setPreventOutsideClick,
+                                                                                            setFocused,
+                                                                                            onValueChange,
+                                                                                            select,
+                                                                                            openPopup,
+                                                                                            value,
+                                                                                            property,
+                                                                                            validation,
+                                                                                            size,
+                                                                                            align,
+                                                                                            width,
+                                                                                            height
+                                                                                        }: PropertyTableCellProps<T, M> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
 
@@ -308,6 +308,6 @@ const PropertyTableCell = <T extends CMSType, M extends { [Key: string]: any }>(
 
 };
 
-export default React.memo<PropertyTableCellProps<any, any> & CellStyleProps>(PropertyTableCell) as React.FunctionComponent<PropertyTableCellProps<any, any> & CellStyleProps>;
+export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any> & CellStyleProps>(PropertyTableCellInternal) as React.FunctionComponent<PropertyTableCellProps<any, any> & CellStyleProps>;
 
 

@@ -1,11 +1,4 @@
 import {
-    ArrayProperty,
-    EnumValues,
-    NumberProperty,
-    StringProperty,
-    WhereFilterOp
-} from "../../../../models";
-import {
     Box,
     FormControl,
     IconButton,
@@ -16,19 +9,16 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
-import {
-    enumToObjectEntries,
-    isEnumValueDisabled
-} from "../../../util/enums";
 import { EnumValuesChip } from "../../../../preview/components/CustomChip";
+import { TableEnumValues, TableWhereFilterOp } from "../TableProps";
 
 interface StringNumberFilterFieldProps {
     name: string,
     dataType: "string" | "number";
-    value?: [op: WhereFilterOp, fieldValue: any];
-    setValue: (value?: [op: WhereFilterOp, newValue: any]) => void;
+    value?: [op: TableWhereFilterOp, fieldValue: any];
+    setValue: (value?: [op: TableWhereFilterOp, newValue: any]) => void;
     isArray?: boolean;
-    enumValues?: EnumValues;
+    enumValues?: TableEnumValues;
     title?: string;
 }
 
@@ -46,15 +36,15 @@ const operationLabels = {
 
 const multipleSelectOperations = ["array-contains-any", "in"];
 
-export default function StringNumberFilterField({
-                                                    name,
-                                                    value,
-                                                    setValue,
-                                                    dataType,
-                                                    isArray,
-                                                    enumValues,
-                                                    title
-                                                }: StringNumberFilterFieldProps) {
+export function StringNumberFilterField({
+                                            name,
+                                            value,
+                                            setValue,
+                                            dataType,
+                                            isArray,
+                                            enumValues,
+                                            title
+                                        }: StringNumberFilterFieldProps) {
 
     const possibleOperations: (keyof typeof operationLabels) [] = isArray ?
         ["array-contains"] :
@@ -66,10 +56,10 @@ export default function StringNumberFilterField({
             possibleOperations.push("in");
 
     const [fieldOperation, fieldValue] = value ? value : [possibleOperations[0], undefined];
-    const [operation, setOperation] = useState<WhereFilterOp>(fieldOperation);
+    const [operation, setOperation] = useState<TableWhereFilterOp>(fieldOperation);
     const [internalValue, setInternalValue] = useState<string | number | string[] | number[] | undefined>(fieldValue);
 
-    function updateFilter(op: WhereFilterOp, val: string | number | string[] | number[] | undefined) {
+    function updateFilter(op: TableWhereFilterOp, val: string | number | string[] | number[] | undefined) {
         let newValue = val;
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
@@ -154,10 +144,9 @@ export default function StringNumberFilterField({
                                     })}
                                 </div>
                             ) : undefined}>
-                        {enumToObjectEntries(enumValues).map(([enumKey, labelOrConfig]) => {
+                        {Object.entries(enumValues).map(([enumKey, labelOrConfig]) => {
                             return (
                                 <MenuItem
-                                    disabled={isEnumValueDisabled(labelOrConfig)}
                                     key={`select_${name}_${enumKey}`}
                                     value={enumKey}>
                                     <EnumValuesChip

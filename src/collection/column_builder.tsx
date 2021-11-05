@@ -1,35 +1,31 @@
-import { getCellAlignment, getPropertyColumnWidth } from "../internal/common";
+import { getCellAlignment, getPropertyColumnWidth } from "./internal/common";
 import {
     AdditionalColumnDelegate,
     CMSType,
     CollectionSize,
     Entity,
     EntitySchema,
+    EnumValues,
     FireCMSContext,
     Property,
     PropertyOrBuilder
-} from "../../models";
-import { buildPropertyFrom } from "../../core/util/property_builder";
+} from "../models";
+import { buildPropertyFrom } from "../core/util/property_builder";
 import React, { useCallback, useEffect, useMemo } from "react";
-import TableCell from "../../core/components/table/TableCell";
-import PreviewComponent from "../../preview/PreviewComponent";
-import { getPreviewSizeFrom } from "../../preview/util";
-import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
-import PropertyTableCell, { OnCellChangeParams } from "../internal/PropertyTableCell";
-import SkeletonComponent from "../../preview/components/SkeletonComponent";
-import { TableCellProps } from "../../core/components/table/TableCellProps";
+import { TableCell } from "../core/components/table/TableCell";
+import { PreviewComponent, SkeletonComponent } from "../preview";
+import { getPreviewSizeFrom } from "../preview/util";
+import { CustomFieldValidator, mapPropertyToYup } from "../form/validation";
 import {
-    OnCellValueChange,
-    UniqueFieldValidator
-} from "./CollectionTableProps";
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
-import { useFireCMSContext } from "../../hooks";
-import PopupFormField from "../internal/popup_field/PopupFormField";
-import {
-    TableColumn,
-    TableColumnFilter
-} from "../../core/components/table/TableProps";
-import { getIconForProperty } from "../../core/util/property_icons";
+    OnCellChangeParams,
+    PropertyTableCell
+} from "./internal/PropertyTableCell";
+import { ErrorBoundary } from "../core/internal/ErrorBoundary";
+import { useFireCMSContext } from "../hooks";
+import { PopupFormField } from "./internal/popup_field/PopupFormField";
+import { TableColumn, TableColumnFilter, TableEnumValues } from "../core";
+import { getIconForProperty } from "../core/util/property_icons";
+import { enumToObjectEntries, isEnumValueDisabled } from "../core/util/enums";
 
 
 export type ColumnsFromSchemaProps<M, AdditionalKey extends string> = {
@@ -43,7 +39,6 @@ export type ColumnsFromSchemaProps<M, AdditionalKey extends string> = {
      * Schema of the entity displayed by this collection
      */
     schema: EntitySchema<M>;
-
 
     /**
      * Properties displayed in this collection. If this property is not set
@@ -81,6 +76,30 @@ export type ColumnsFromSchemaProps<M, AdditionalKey extends string> = {
 
 };
 
+/**
+ * @category Collection components
+ */
+export type UniqueFieldValidator = (props: { name: string, value: any, property: Property, entityId?: string }) => Promise<boolean>;
+
+/**
+ * Callback when a cell has changed in a table
+ * @category Collection components
+ */
+export type OnCellValueChange<T, M extends { [Key: string]: any }> = (params: OnCellValueChangeParams<T, M>) => Promise<void>;
+
+/**
+ * Props passed in a callback when the content of a cell in a table has been edited
+ * @category Collection components
+ */
+export interface OnCellValueChangeParams<T, M extends { [Key: string]: any }> {
+    value: T,
+    name: string,
+    entity: Entity<M>,
+    setSaved: (saved: boolean) => void
+    setError: (e: Error) => void
+}
+
+
 export function checkInlineEditing<M>(inlineEditing: ((entity: Entity<any>) => boolean) | boolean, entity: Entity<M>) {
     if (typeof inlineEditing === "boolean") {
         return inlineEditing;
@@ -90,6 +109,18 @@ export function checkInlineEditing<M>(inlineEditing: ((entity: Entity<any>) => b
         return true;
     }
 }
+
+type SelectedCellProps<M> =
+    {
+        key: keyof M,
+        columnIndex: number,
+        cellRect: DOMRect;
+        width: number,
+        height: number,
+        property: Property,
+        entity: Entity<any>,
+        usedPropertyBuilder: boolean,
+    };
 
 
 export function buildColumnsFromSchema<M, AdditionalKey extends string>({
@@ -102,13 +133,12 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
                                                                             onCellValueChange,
                                                                             uniqueFieldValidator
                                                                         }: ColumnsFromSchemaProps<M, AdditionalKey>
-): { columns: TableColumn[], popupFormField: React.ReactElement, selectedCell: TableCellProps<M> } {
-
+): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
 
     const context: FireCMSContext = useFireCMSContext();
 
-    const [selectedCell, setSelectedCell] = React.useState<TableCellProps<M>>(undefined);
-    const [popupCell, setPopupCell] = React.useState<TableCellProps<M>>(undefined);
+    const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
+    const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M>| undefined>(undefined);
     const [focused, setFocused] = React.useState<boolean>(false);
 
     const [formPopupOpen, setFormPopupOpen] = React.useState<boolean>(false);
@@ -137,7 +167,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
         };
     });
 
-    const select = (cell: TableCellProps<M>) => {
+    const select = (cell?: SelectedCellProps<M>) => {
         setSelectedCell(cell);
         setFocused(true);
         if (!formPopupOpen) {
@@ -166,8 +196,8 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
 
         const entity: Entity<M> = rowData;
 
-        const name = column.dataKey as keyof M;
-        const propertyOrBuilder: PropertyOrBuilder<any, M> = schema.properties[name];
+        const key = column.dataKey as keyof M;
+        const propertyOrBuilder: PropertyOrBuilder<any, M> = schema.properties[key];
         const property: Property<any> = buildPropertyFrom<CMSType, M>(propertyOrBuilder, entity.values, entity.id);
         const usedPropertyBuilder = typeof propertyOrBuilder === "function";
 
@@ -176,16 +206,16 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
         if (!inlineEditingEnabled) {
             return (
                 <TableCell
-                    key={`preview_cell_${name}_${rowIndex}_${columnIndex}`}
+                    key={`preview_cell_${key}_${rowIndex}_${columnIndex}`}
                     size={size}
                     align={column.align}
                     disabled={true}>
                     <PreviewComponent
                         width={column.width}
                         height={column.height}
-                        name={`preview_${name}_${rowIndex}_${columnIndex}`}
+                        name={`preview_${key}_${rowIndex}_${columnIndex}`}
                         property={property}
-                        value={entity.values[name]}
+                        value={entity.values[key]}
                         size={getPreviewSizeFrom(size)}
                     />
                 </TableCell>
@@ -203,7 +233,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
                         height: column.height,
                         entity,
                         cellRect,
-                        name: name,
+                        key,
                         property,
                         usedPropertyBuilder
                     });
@@ -215,18 +245,17 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
                 if (!cellRect) {
                     select(undefined);
                 } else {
-                    const selectedConfig = {
+                    select({
                         columnIndex,
                         // rowIndex,
                         width: column.width,
                         height: column.height,
                         entity,
                         cellRect,
-                        name: name,
+                        key,
                         property,
                         usedPropertyBuilder
-                    };
-                    select(selectedConfig);
+                    });
                 }
             };
 
@@ -243,7 +272,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
             const validation = mapPropertyToYup({
                 property,
                 customFieldValidator,
-                name
+                name: key
             });
 
             const onValueChange = onCellValueChange
@@ -255,17 +284,17 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
 
             return entity ?
                 <PropertyTableCell
-                    key={`table_cell_${name}_${rowIndex}_${columnIndex}`}
+                    key={`table_cell_${key}_${rowIndex}_${columnIndex}`}
                     size={size}
                     align={column.align}
-                    name={name as string}
+                    name={key as string}
                     validation={validation}
                     onValueChange={onValueChange}
                     selected={selected}
                     focused={isFocused}
                     setPreventOutsideClick={setPreventOutsideClick}
                     setFocused={setFocused}
-                    value={entity?.values ? entity.values[name] : undefined}
+                    value={entity?.values ? entity.values[key] : undefined}
                     property={property}
                     openPopup={openPopup}
                     select={onSelect}
@@ -310,6 +339,13 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
     };
 
 
+    function buildFilterEnumValues(values: EnumValues): TableEnumValues {
+        return enumToObjectEntries(values)
+            .filter(([enumKey, labelOrConfig]) => {
+                return isEnumValueDisabled(labelOrConfig);
+            }).reduce((a, b) => ({ ...a, ...b }), {});
+    }
+
     function buildFilterableFromProperty(property: Property,
                                          isArray: boolean = false): TableColumnFilter | undefined {
 
@@ -320,7 +356,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
                 dataType: property.dataType,
                 isArray,
                 title,
-                enumValues
+                enumValues: enumValues ? buildFilterEnumValues(enumValues) : undefined
             };
         } else if (property.dataType === "array" && property.of) {
             return buildFilterableFromProperty(property.of, true);
@@ -345,12 +381,11 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
     }
 
     const columns = useMemo(() => {
-        const allColumns: TableColumn[] = (Object.keys(schema.properties) as (keyof M)[])
+        const allColumns: TableColumn<M>[] = (Object.keys(schema.properties) as (keyof M)[])
             .map((key) => {
                 const property: Property<any> = buildPropertyFrom<any, M>(schema.properties[key], schema.defaultValues ?? {}, path);
                 return ({
-                    id: key as string,
-                    type: "property",
+                    key: key as string,
                     property,
                     align: getCellAlignment(property),
                     icon: (hoverOrOpen) => getIconForProperty(property, hoverOrOpen ? undefined : "disabled", "small"),
@@ -363,9 +398,9 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
             });
 
         if (additionalColumns) {
-            const items: TableColumn[] = additionalColumns.map((additionalColumn) =>
+            const items: TableColumn<M>[] = additionalColumns.map((additionalColumn) =>
                 ({
-                    id: additionalColumn.id,
+                    key: additionalColumn.id,
                     type: "additional",
                     align: "left",
                     sortable: false,
@@ -378,8 +413,8 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
 
         return displayedProperties
             .map((p) => {
-                return allColumns.find(c => c.id === p);
-            }).filter(c => !!c) as TableColumn[];
+                return allColumns.find(c => c.key === p);
+            }).filter(c => !!c) as TableColumn<M>[];
 
     }, [displayedProperties, selectedCell, size]);
 
@@ -397,7 +432,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
         <PopupFormField
             cellRect={popupCell?.cellRect}
             columnIndex={popupCell?.columnIndex}
-            name={popupCell?.name}
+            name={popupCell?.key}
             property={popupCell?.property}
             usedPropertyBuilder={popupCell?.usedPropertyBuilder ?? false}
             entity={popupCell?.entity}
@@ -412,6 +447,6 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
         />
     </>;
 
-    return { selectedCell, columns: columns, popupFormField };
+    return { columns, popupFormField };
 
 }

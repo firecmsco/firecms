@@ -1,7 +1,5 @@
 import { useContext } from "react";
-import {
-    BreadcrumbContext,
-} from "../core/contexts/BreacrumbsContext";
+import { BreadcrumbContext } from "../core/contexts/BreacrumbsContext";
 
 
 /**
@@ -31,4 +29,4 @@ export interface BreadcrumbEntry {
  * @see BreadcrumbsController
  * @category Hooks and utilities
  */
-export const useBreadcrumbsContext = ():BreadcrumbsController => useContext(BreadcrumbContext);
+export const useBreadcrumbsContext = (): BreadcrumbsController => useContext(BreadcrumbContext);

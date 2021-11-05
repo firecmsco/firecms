@@ -44,7 +44,7 @@ export function useBuildAuthController({
     const authenticationEnabled = authentication === undefined || !!authentication;
     const canAccessMainView = (!authenticationEnabled || Boolean(user) || Boolean(loginSkipped)) && !notAllowedError;
 
-    const authController:AuthController = {
+    const authController: AuthController = {
         user,
         loginSkipped,
         canAccessMainView,

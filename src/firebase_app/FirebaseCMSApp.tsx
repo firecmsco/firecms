@@ -18,8 +18,8 @@ import { useFirebaseAuthDelegate } from "./hooks/useFirebaseAuthDelegate";
 import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
-import FirebaseLoginView from "./components/FirebaseLoginView";
-import { AuthDelegate } from "../models/auth";
+import { FirebaseLoginView } from "./components/FirebaseLoginView";
+import { AuthDelegate } from "../models";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID

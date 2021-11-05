@@ -26,8 +26,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { PreviewComponent, PreviewSize } from "../../preview";
 import deepEqual from "deep-equal";
 import { FieldDescription } from "../../form/components";
-import LabelWithIcon from "../components/LabelWithIcon";
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import { LabelWithIcon } from "../components/LabelWithIcon";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 import clsx from "clsx";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
@@ -121,19 +121,19 @@ type StorageUploadFieldProps = FieldProps<string | string[]>;
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function StorageUploadField({
-                                               name,
-                                               value,
-                                               setValue,
-                                               error,
-                                               showError,
-                                               autoFocus,
-                                               tableMode,
-                                               property,
-                                               includeDescription,
-                                               context,
-                                               isSubmitting
-                                           }: StorageUploadFieldProps) {
+export function StorageUploadField({
+                                       name,
+                                       value,
+                                       setValue,
+                                       error,
+                                       showError,
+                                       autoFocus,
+                                       tableMode,
+                                       property,
+                                       includeDescription,
+                                       context,
+                                       isSubmitting
+                                   }: StorageUploadFieldProps) {
 
     const multipleFilesSupported = property.dataType === "array";
     const disabled = isReadOnly(property) || !!property.disabled || isSubmitting;

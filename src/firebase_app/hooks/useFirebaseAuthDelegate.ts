@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
     getAuth,
@@ -45,7 +45,7 @@ export const useFirebaseAuthDelegate = (
     const updateFirebaseUser = async (firebaseUser: FirebaseUser | null) => {
 
         const user: User | null = firebaseUser ? {
-            ...firebaseUser,
+            ...firebaseUser
         } : null;
         setLoggedUser(user);
         setAuthLoading(false);

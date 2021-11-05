@@ -12,7 +12,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import React, { useState } from "react";
 import { FieldProps } from "../../models";
 import { FieldDescription } from "../../form/components";
-import LabelWithIcon from "../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -153,7 +153,7 @@ const SwitchFieldComponent = React.forwardRef(function({
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function(props: SwitchFieldProps) {
+export const SwitchField = (props: SwitchFieldProps) => {
     return <SwitchFieldComponent {...props}/>;
-}
+};
 

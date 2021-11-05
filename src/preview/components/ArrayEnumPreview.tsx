@@ -2,19 +2,19 @@ import { EnumValues } from "../../models";
 
 import React from "react";
 
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { EnumValuesChip } from "./CustomChip";
 import { useStyles } from "./styles";
 
 /**
  * @category Preview components
  */
-export default function ArrayEnumPreview({
-                                             name,
-                                             value,
-                                             enumValues,
-                                             size
-                                         }: {
+export function ArrayEnumPreview({
+                                     name,
+                                     value,
+                                     enumValues,
+                                     size
+                                 }: {
     value: string[] | number[],
     name: string | undefined,
     enumValues: EnumValues,

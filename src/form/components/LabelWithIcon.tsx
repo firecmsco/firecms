@@ -11,9 +11,9 @@ interface LabelWithIconProps {
  * icon
  * @category Form custom fields
  */
-export default function LabelWithIcon({
-                                          property
-                                      }: LabelWithIconProps) {
+export function LabelWithIcon({
+                                  property
+                              }: LabelWithIconProps) {
 
     return (
         <>

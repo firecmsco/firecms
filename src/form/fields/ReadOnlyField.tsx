@@ -4,8 +4,8 @@ import React from "react";
 import { formStyles } from "../styles";
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../form/components";
-import LabelWithIcon from "../components/LabelWithIcon";
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import { LabelWithIcon } from "../components/LabelWithIcon";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 /**
  *
@@ -15,19 +15,19 @@ import ErrorBoundary from "../../core/internal/ErrorBoundary";
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function ReadOnlyField<M extends { [Key: string]: any }>({
-                                                                            name,
-                                                                            value,
-                                                                            setValue,
-                                                                            error,
-                                                                            showError,
-                                                                            isSubmitting,
-                                                                            touched,
-                                                                            tableMode,
-                                                                            property,
-                                                                            includeDescription,
-                                                                            context
-                                                                        }: FieldProps<any>) {
+export function ReadOnlyField<M extends { [Key: string]: any }>({
+                                                                    name,
+                                                                    value,
+                                                                    setValue,
+                                                                    error,
+                                                                    showError,
+                                                                    isSubmitting,
+                                                                    touched,
+                                                                    tableMode,
+                                                                    property,
+                                                                    includeDescription,
+                                                                    context
+                                                                }: FieldProps<any>) {
 
     const classes = formStyles();
 

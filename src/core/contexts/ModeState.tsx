@@ -11,7 +11,6 @@ const DEFAULT_MODE_STATE: ModeState = {
 };
 
 
-
 export const ModeStateContext = React.createContext<ModeState>(DEFAULT_MODE_STATE);
 
 

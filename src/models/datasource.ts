@@ -1,7 +1,6 @@
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
 import { FilterValues } from "./collections";
 import { Property } from "./properties";
-import { EntityCallbacks } from "./entity_callbacks";
 
 /**
  * @category Datasource
@@ -51,6 +50,7 @@ export interface SaveEntityProps<M> {
     path: string;
     entityId: string | undefined;
     values: Partial<EntityValues<M>>;
+    previousValues?: Partial<EntityValues<M>>;
     schema: EntitySchema<M>;
     status: EntityStatus;
 }

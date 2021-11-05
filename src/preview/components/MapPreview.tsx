@@ -9,9 +9,9 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
-import PreviewComponent from "../PreviewComponent";
+import { PreviewComponent } from "../PreviewComponent";
 import { MapProperty } from "../../models";
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { PreviewComponentProps } from "../PreviewComponentProps";
 
 const useStyles = makeStyles(() =>
@@ -30,12 +30,12 @@ const useStyles = makeStyles(() =>
 /**
  * @category Preview components
  */
-export default function MapPreview<T extends {}>({
-                                                     name,
-                                                     value,
-                                                     property,
-                                                     size
-                                                 }: PreviewComponentProps<T>) {
+export function MapPreview<T extends {}>({
+                                             name,
+                                             value,
+                                             property,
+                                             size
+                                         }: PreviewComponentProps<T>) {
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPreview");

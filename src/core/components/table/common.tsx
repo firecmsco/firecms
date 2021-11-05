@@ -1,6 +1,6 @@
-import { CollectionSize } from "../../../models";
+import { TableSize } from "./TableProps";
 
-export function getRowHeight(size: CollectionSize): number {
+export function getRowHeight(size: TableSize): number {
     switch (size) {
         case "xl":
             return 400;

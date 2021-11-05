@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { FieldDescription } from "../../form/components";
-import LabelWithIcon from "../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 import {
     enumToObjectEntries,
@@ -18,7 +18,7 @@ import {
 } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 import { formStyles } from "../styles";
-import ArrayEnumPreview from "../../preview/components/ArrayEnumPreview";
+import { ArrayEnumPreview } from "../../preview/components/ArrayEnumPreview";
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -27,17 +27,17 @@ import ArrayEnumPreview from "../../preview/components/ArrayEnumPreview";
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function ArrayEnumSelect({
-                                            name,
-                                            value,
-                                            setValue,
-                                            error,
-                                            showError,
-                                            disabled,
-                                            property,
-                                            includeDescription,
-                                            autoFocus
-                                        }: FieldProps<EnumType[]>) {
+export function ArrayEnumSelect({
+                                    name,
+                                    value,
+                                    setValue,
+                                    error,
+                                    showError,
+                                    disabled,
+                                    property,
+                                    includeDescription,
+                                    autoFocus
+                                }: FieldProps<EnumType[]>) {
 
     const classes = formStyles();
 

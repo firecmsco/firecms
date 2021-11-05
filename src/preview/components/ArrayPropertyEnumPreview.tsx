@@ -1,16 +1,16 @@
 import { PreviewComponentProps } from "../PreviewComponentProps";
 import { NumberProperty, StringProperty } from "../../models";
-import ArrayEnumPreview from "./ArrayEnumPreview";
+import { ArrayEnumPreview } from "./ArrayEnumPreview";
 
 /**
  * @category Preview components
  */
-export default function ArrayPropertyEnumPreview({
-                                                     name,
-                                                     value,
-                                                     property,
-                                                     size
-                                                 }: PreviewComponentProps<string[] | number[]>) {
+export function ArrayPropertyEnumPreview({
+                                             name,
+                                             value,
+                                             property,
+                                             size
+                                         }: PreviewComponentProps<string[] | number[]>) {
 
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayEnumPreview");

@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import {
-    AuthController,
     AuthDelegate,
     Authenticator,
     DataSource,
@@ -12,8 +11,7 @@ import {
     Navigation,
     NavigationBuilder,
     SchemaResolver,
-    StorageSource,
-    User
+    StorageSource
 } from "../models";
 import { SnackbarProvider } from "./contexts/SnackbarContext";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";

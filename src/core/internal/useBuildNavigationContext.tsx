@@ -3,17 +3,18 @@ import {
     EntityCollection,
     Navigation,
     NavigationBuilder,
-    NavigationContext, User
+    NavigationContext,
+    User
 } from "../../models";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 import { AuthController } from "../../models/auth";
 
 export function useBuildNavigationContext({
-                                       basePath,
-                                       baseCollectionPath,
-                                       authController,
-                                       navigationOrBuilder
-                                   }: {
+                                              basePath,
+                                              baseCollectionPath,
+                                              authController,
+                                              navigationOrBuilder
+                                          }: {
     basePath: string,
     baseCollectionPath: string,
     authController: AuthController;

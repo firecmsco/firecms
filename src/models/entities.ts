@@ -1,5 +1,4 @@
 import { EnumValues, PropertiesOrBuilder } from "./properties";
-import { FireCMSContext } from "./firecms_context";
 
 /**
  * Specification for defining an entity

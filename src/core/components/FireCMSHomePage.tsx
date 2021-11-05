@@ -1,13 +1,13 @@
 import React from "react";
 import {
     Box,
-    Paper,
     CardActionArea,
     CardActions,
     CardContent,
     Container,
     Divider,
     Grid,
+    Paper,
     Theme,
     Typography
 } from "@mui/material";
@@ -18,7 +18,10 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import { Link as ReactLink } from "react-router-dom";
 
-import { computeTopNavigation, TopNavigationEntry } from "../util/navigation_utils";
+import {
+    computeTopNavigation,
+    TopNavigationEntry
+} from "../util/navigation_utils";
 import { Markdown } from "../../preview";
 import { useNavigation } from "../../hooks";
 
@@ -41,9 +44,9 @@ export const useStyles = makeStyles((theme: Theme) =>
  * This components takes navigation as an input and renders cards
  * for each entry, including title and description.
  * @constructor
- * @category Core components
+ * @category Components
  */
-function HomePage() {
+export function FireCMSHomePage() {
 
     const classes = useStyles();
     const navigationContext = useNavigation();
@@ -130,4 +133,3 @@ function HomePage() {
     );
 }
 
-export default HomePage;

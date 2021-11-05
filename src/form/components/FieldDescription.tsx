@@ -18,7 +18,7 @@ interface FieldDescriptionPopoverProps<T extends CMSType> {
  * Render the field description for a property
  * @category Form custom fields
  */
-export default function FieldDescription<T extends CMSType>({ property }: FieldDescriptionPopoverProps<T>) {
+export function FieldDescription<T extends CMSType>({ property }: FieldDescriptionPopoverProps<T>) {
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     return (
 
@@ -47,4 +47,4 @@ export default function FieldDescription<T extends CMSType>({ property }: FieldD
 
         </Box>
     );
-};
+}

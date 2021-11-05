@@ -41,13 +41,13 @@ export interface FirebaseLoginViewProps {
  * @constructor
  * @category Firebase
  */
-export default function FirebaseLoginView({
-                                              skipLoginButtonEnabled,
-                                              logo,
-                                              signInOptions,
-                                              firebaseApp,
-                                              authDelegate
-                                          }: FirebaseLoginViewProps) {
+export function FirebaseLoginView({
+                                      skipLoginButtonEnabled,
+                                      logo,
+                                      signInOptions,
+                                      firebaseApp,
+                                      authDelegate
+                                  }: FirebaseLoginViewProps) {
     const classes = useStyles();
     const authController = useAuthController();
 

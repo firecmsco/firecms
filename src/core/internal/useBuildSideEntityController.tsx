@@ -2,11 +2,14 @@ import {
     EntityCollection,
     NavigationContext,
     SchemaConfig,
+    SchemaRegistryController,
     SideEntityController,
-    SideEntityPanelProps,
-    SchemaRegistryController
+    SideEntityPanelProps
 } from "../../models";
-import { getNavigationEntriesFromPathInternal, NavigationViewInternal } from "../util/navigation_from_path";
+import {
+    getNavigationEntriesFromPathInternal,
+    NavigationViewInternal
+} from "../util/navigation_from_path";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getSidePanelKey } from "../contexts/utils";
@@ -23,7 +26,7 @@ type ExtendedPanelProps = SideEntityPanelProps & {
 };
 
 
-export const useBuildSideEntityController = (navigationContext: NavigationContext, schemaRegistryController:SchemaRegistryController): SideEntityController => {
+export const useBuildSideEntityController = (navigationContext: NavigationContext, schemaRegistryController: SchemaRegistryController): SideEntityController => {
 
     const location = useLocation();
     const navigate = useNavigate();

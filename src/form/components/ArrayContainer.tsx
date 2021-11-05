@@ -3,7 +3,7 @@ import { Box, Button } from "@mui/material";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import hash from "object-hash";
 
-import ArrayEntry from "./ArrayEntry";
+import { ArrayEntry } from "./ArrayEntry";
 import { GeoPoint } from "../../models";
 
 interface ArrayContainerProps<T> {
@@ -18,14 +18,14 @@ interface ArrayContainerProps<T> {
 /**
  * @category Form custom fields
  */
-export default function ArrayContainer<T>({
-                                              name,
-                                              value,
-                                              disabled,
-                                              buildEntry,
-                                              onInternalIdAdded,
-                                              includeAddButton
-                                          }: ArrayContainerProps<T>) {
+export function ArrayContainer<T>({
+                                      name,
+                                      value,
+                                      disabled,
+                                      buildEntry,
+                                      onInternalIdAdded,
+                                      includeAddButton
+                                  }: ArrayContainerProps<T>) {
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
 

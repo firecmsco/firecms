@@ -11,33 +11,32 @@ import {
     TimestampProperty
 } from "../models";
 
-import ArrayPreview from "./components/ArrayPreview";
-import ArrayOfMapsPreview from "./components/ArrayOfMapsPreview";
-import ArrayOfStorageComponentsPreview
-    from "./components/ArrayOfStorageComponentsPreview";
-import ArrayOfStringsPreview from "./components/ArrayOfStringsPreview";
-import ArrayPropertyEnumPreview from "./components/ArrayPropertyEnumPreview";
-import ReferencePreview from "./components/ReferencePreview";
-import BooleanPreview from "./components/BooleanPreview";
-import EmptyValue from "./components/EmptyValue";
-import NumberPreview from "./components/NumberPreview";
-import StringPreview from "./components/StringPreview";
-import TimestampPreview from "./components/TimestampPreview";
-import UrlComponentPreview from "./components/UrlComponentPreview";
-import StorageThumbnail from "./components/StorageThumbnail";
-import MapPreview from "./components/MapPreview";
-import ArrayOfReferencesPreview from "./components/ArrayOfReferencesPreview";
-import ErrorView from "../core/components/ErrorView";
+import { ArrayPreview } from "./components/ArrayPreview";
+import { ArrayOfMapsPreview } from "./components/ArrayOfMapsPreview";
+import { ArrayOfStorageComponentsPreview } from "./components/ArrayOfStorageComponentsPreview";
+import { ArrayOfStringsPreview } from "./components/ArrayOfStringsPreview";
+import { ArrayPropertyEnumPreview } from "./components/ArrayPropertyEnumPreview";
+import { ReferencePreview } from "./components/ReferencePreview";
+import { BooleanPreview } from "./components/BooleanPreview";
+import { EmptyValue } from "./components/EmptyValue";
+import { NumberPreview } from "./components/NumberPreview";
+import { StringPreview } from "./components/StringPreview";
+import { TimestampPreview } from "./components/TimestampPreview";
+import { UrlComponentPreview } from "./components/UrlComponentPreview";
+import { StorageThumbnail } from "./components/StorageThumbnail";
+import { MapPreview } from "./components/MapPreview";
+import { ArrayOfReferencesPreview } from "./components/ArrayOfReferencesPreview";
+import { ErrorView } from "../core/components/ErrorView";
 
 import { PreviewComponentProps } from "./PreviewComponentProps";
 
-import ArrayOneOfPreview from "./components/ArrayOneOfPreview";
-import Markdown from "./components/Markdown";
+import { ArrayOneOfPreview } from "./components/ArrayOneOfPreview";
+import { Markdown } from "./components/Markdown";
 
 /**
  * @category Preview components
  */
-export default function PreviewComponent<T extends CMSType>(props: PreviewComponentProps<T>) {
+export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps<T>) {
     return <MemoPreviewComponent {...props} />;
 }
 

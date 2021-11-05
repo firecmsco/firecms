@@ -10,7 +10,7 @@ export { Scaffold } from "./Scaffold";
 export type { DrawerProps } from "./Drawer";
 export { Drawer } from "./Drawer";
 
-export { SideEntityDialogs} from "./SideEntityDialogs";
+export { SideEntityDialogs } from "./SideEntityDialogs";
 
 export * from "./components";
 

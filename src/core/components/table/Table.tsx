@@ -3,13 +3,18 @@ import BaseTable, { Column, ColumnShape } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
 import { Box, Paper, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import clsx from "clsx";
 
-import { FilterValues, WhereFilterOp } from "../../../models";
-import ErrorBoundary from "../../internal/ErrorBoundary";
-import CircularProgressCenter from "../CircularProgressCenter";
+import { ErrorBoundary } from "../../internal/ErrorBoundary";
+import { CircularProgressCenter } from "../CircularProgressCenter";
 import { useTableStyles } from "./styles";
-import TableHeader from "./TableHeader";
-import { TableProps } from "./TableProps";
+import { TableHeader } from "./TableHeader";
+import {
+    TableColumn,
+    TableFilterValues,
+    TableProps,
+    TableWhereFilterOp
+} from "./TableProps";
 
 import "./table_styles.css";
 import { getRowHeight } from "./common";
@@ -17,30 +22,38 @@ import { getRowHeight } from "./common";
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
 
 /**
+ * This is a Table component that allows displaying arbitrary data, not
+ * necessarily related to entities or properties. It is the component
+ * that powers the entity collections but has a generic API so it
+ * can be reused.
  *
- * @see CollectionTableProps
- * @see EntityCollectionTable
- * @category Core components
+ * If you have an entity collection defined, you probably want to use
+ * {@link CollectionTable} or {@link EntityCollectionView}
+ *
+ * @see CollectionTable
+ * @see EntityCollectionView
+ * @category Components
  */
-export default function Table<T>({
-                                     data,
-                                     idColumnBuilder,
-                                     onResetPagination,
-                                     onEndReached,
-                                     size,
-                                     columns,
-                                     frozenIdColumn,
-                                     onRowClick,
-                                     onColumnResize,
-                                     filter,
-                                     checkFilterCombination,
-                                     onFilterUpdate,
-                                     sortBy,
-                                     error,
-                                     emptyMessage,
-                                     onSortByUpdate,
-                                     loading
-                                 }: TableProps<T>) {
+export function Table<T>({
+                             data,
+                             idColumnBuilder,
+                             onResetPagination,
+                             onEndReached,
+                             size,
+                             columns,
+                             frozenIdColumn,
+                             onRowClick,
+                             onColumnResize,
+                             filter,
+                             checkFilterCombination,
+                             onFilterUpdate,
+                             sortBy,
+                             error,
+                             emptyMessage,
+                             onSortByUpdate,
+                             loading,
+                             hoverRow = true
+                         }: TableProps<T>) {
 
     const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
     const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
@@ -51,12 +64,12 @@ export default function Table<T>({
 
     const classes = useTableStyles();
 
-    const onColumnSort = (key: Extract<keyof T, string>) => {
+    const onColumnSort = (key: string) => {
 
         const isDesc = sortByProperty === key && currentSort === "desc";
         const isAsc = sortByProperty === key && currentSort === "asc";
         const newSort = isDesc ? "asc" : (isAsc ? undefined : "desc");
-        const newSortProperty: Extract<keyof T, string> | undefined = isAsc ? undefined : key;
+        const newSortProperty: string | undefined = isAsc ? undefined : key;
 
         const newSortBy: [string, "asc" | "desc"] | undefined = newSort && newSortProperty ? [newSortProperty, newSort] : undefined;
         if (filter) {
@@ -88,41 +101,40 @@ export default function Table<T>({
         }
     };
 
-    const clickRow = ({ rowData }: any) => {
+    const clickRow = (props: { rowData: T; rowIndex: number; rowKey: string ; event: React.SyntheticEvent }) => {
         if (!onRowClick)
             return;
-        const entry = rowData as T;
-        return onRowClick && onRowClick(entry);
+        onRowClick(props);
     };
 
     const headerRenderer = ({ columnIndex }: any) => {
 
         const column = columns[columnIndex - 1];
 
-        const filterForThisProperty: [WhereFilterOp, any] | undefined =
-            column && filter && filter[column.id] ?
-                filter[column.id]
+        const filterForThisProperty: [TableWhereFilterOp, any] | undefined =
+            column && filter && filter[column.key] ?
+                filter[column.key]
                 : undefined;
 
-        const onInternalFilterUpdate = (filterForProperty?: [WhereFilterOp, any]) => {
+        const onInternalFilterUpdate = (filterForProperty?: [TableWhereFilterOp, any]) => {
 
-            let newFilterValue = filter ? { ...filter } : {};
+            let newFilterValue: TableFilterValues<any> = filter ? { ...filter } : {};
 
             if (!filterForProperty) {
-                delete newFilterValue[column.id];
+                delete newFilterValue[column.key];
             } else {
-                newFilterValue[column.id] = filterForProperty;
+                newFilterValue[column.key] = filterForProperty;
             }
 
             const newSortBy: [string, "asc" | "desc"] | undefined = sortByProperty && currentSort ? [sortByProperty, currentSort] : undefined;
             const isNewFilterCombinationValid = !checkFilterCombination || checkFilterCombination(newFilterValue, newSortBy);
             if (!isNewFilterCombinationValid) {
-                newFilterValue = filterForProperty ? { [column.id]: filterForProperty } as FilterValues<T> : {};
+                newFilterValue = filterForProperty ? { [column.key]: filterForProperty } as TableFilterValues<T> : {};
             }
 
             if (onFilterUpdate) onFilterUpdate(newFilterValue);
 
-            if (column.id !== sortByProperty) {
+            if (column.key !== sortByProperty) {
                 resetSort();
             }
         };
@@ -143,7 +155,7 @@ export default function Table<T>({
                     <TableHeader
                         onFilterUpdate={onInternalFilterUpdate}
                         filter={filterForThisProperty}
-                        sort={sortByProperty === column.id ? currentSort : undefined}
+                        sort={sortByProperty === column.key ? currentSort : undefined}
                         onColumnSort={onColumnSort}
                         column={column}/>
 
@@ -207,8 +219,8 @@ export default function Table<T>({
         if (onColumnResize) {
             onColumnResize({
                 width,
-                type: column.type,
-                key: column.key as string
+                key: column.key as string,
+                column: column as TableColumn<any>
             });
         }
     };
@@ -226,7 +238,7 @@ export default function Table<T>({
 
                         {tableSize?.bounds &&
                         <BaseTable
-                            rowClassName={`${classes.tableRow} ${classes.tableRowClickable}`}
+                            rowClassName={clsx(classes.tableRow, { [classes.tableRowClickable]: hoverRow })}
                             data={data}
                             onColumnResizeEnd={onBaseTableColumnResize}
                             width={tableSize.bounds.width}
@@ -240,7 +252,7 @@ export default function Table<T>({
                             onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
                             onEndReached={onEndReached}
                             rowEventHandlers={
-                                { onClick: clickRow }
+                                { onClick: clickRow as any }
                             }
                         >
 
@@ -263,7 +275,7 @@ export default function Table<T>({
 
                             {columns.map((column) =>
                                 <Column
-                                    key={column.id}
+                                    key={column.key}
                                     title={column.label}
                                     className={classes.column}
                                     headerRenderer={headerRenderer}
@@ -274,7 +286,7 @@ export default function Table<T>({
                                     flexShrink={0}
                                     resizable={true}
                                     size={size}
-                                    dataKey={column.id}
+                                    dataKey={column.key}
                                     width={column.width}/>)
                             }
                         </BaseTable>}

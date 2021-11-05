@@ -1,12 +1,6 @@
 import React, { useMemo } from "react";
-import {
-    ArrayProperty,
-    CollectionSize,
-    EntityCollection,
-    Property
-} from "../../models";
+import { ArrayProperty, EntityCollection, Property } from "../../models";
 import { buildPropertyFrom } from "../../core/util/property_builder";
-
 
 
 export type Sort = "asc" | "desc" | undefined;

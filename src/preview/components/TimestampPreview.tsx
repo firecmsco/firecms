@@ -10,12 +10,12 @@ import { useFireCMSContext } from "../../hooks";
 /**
  * @category Preview components
  */
-export default function TimestampPreview({
-                                             name,
-                                             value,
-                                             property,
-                                             size
-                                         }: PreviewComponentProps<Date>): React.ReactElement {
+export function TimestampPreview({
+                                     name,
+                                     value,
+                                     property,
+                                     size
+                                 }: PreviewComponentProps<Date>): React.ReactElement {
 
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();

@@ -17,9 +17,9 @@ const useStyles = makeStyles<Theme>(theme => createStyles({
 /**
  * @category Preview components
  */
-export default function EmptyValue() {
+export function EmptyValue() {
     const classes = useStyles();
     return (
         <div className={classes.root}/>
     );
-};
+}

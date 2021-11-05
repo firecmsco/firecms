@@ -25,12 +25,11 @@ import {
     EntitySchema,
     FieldProps
 } from "../../models";
-import { FieldDescription } from "../../form/components";
-import { ErrorView } from "../../core/components";
-import ReferenceDialog from "../../core/components/ReferenceDialog";
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import { FieldDescription } from "../../form";
+import { ErrorView, ReferenceDialog } from "../../core";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { PreviewComponent, SkeletonComponent } from "../../preview";
-import LabelWithIcon from "../components/LabelWithIcon";
+import { LabelWithIcon } from "../components";
 import {
     useClearRestoreValue,
     useEntityFetch,
@@ -81,15 +80,15 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         backgroundColor: "rgba(0, 0, 0, 0.12)",
         color: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)",
         "&::before": {
-            borderBottom: theme.palette.mode === "light" ? "1px dotted rgba(0, 0, 0, 0.42)" : "1px dotted rgba(255, 255, 255, 0.7)",
+            borderBottom: theme.palette.mode === "light" ? "1px dotted rgba(0, 0, 0, 0.42)" : "1px dotted rgba(255, 255, 255, 0.7)"
         },
         "&::after": {
             borderBottom: `2px dotted ${theme.palette.primary.main}`
         },
         "&:hover": {
             cursor: "inherit",
-            backgroundColor: "rgba(0, 0, 0, 0.12)",
-        },
+            backgroundColor: "rgba(0, 0, 0, 0.12)"
+        }
     }
 }));
 
@@ -100,20 +99,20 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function ReferenceField<M extends { [Key: string]: any }>({
-                                                                             name,
-                                                                             value,
-                                                                             setValue,
-                                                                             error,
-                                                                             showError,
-                                                                             disabled,
-                                                                             touched,
-                                                                             autoFocus,
-                                                                             property,
-                                                                             includeDescription,
-                                                                             context,
-                                                                             dependsOnOtherProperties
-                                                                         }: FieldProps<EntityReference>) {
+export function ReferenceField<M extends { [Key: string]: any }>({
+                                                                     name,
+                                                                     value,
+                                                                     setValue,
+                                                                     error,
+                                                                     showError,
+                                                                     disabled,
+                                                                     touched,
+                                                                     autoFocus,
+                                                                     property,
+                                                                     includeDescription,
+                                                                     context,
+                                                                     dependsOnOtherProperties
+                                                                 }: FieldProps<EntityReference>) {
 
 
     useClearRestoreValue({
@@ -252,7 +251,7 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
                             display="flex">
                     <Box flexGrow={1} textAlign={"center"}>No value set</Box>
                     {!disabled && <Button variant="outlined"
-                            color="primary">
+                                          color="primary">
                         Set
                     </Button>}
                 </Box>;
@@ -276,7 +275,7 @@ export default function ReferenceField<M extends { [Key: string]: any }>({
                             <FormHelperText filled
                                             required={property.validation?.required}>
                                 <LabelWithIcon
-                                               property={property}/>
+                                    property={property}/>
                             </FormHelperText>
                         </Box>
 

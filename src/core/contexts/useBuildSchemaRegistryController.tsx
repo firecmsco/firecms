@@ -12,7 +12,6 @@ import {
 import { getSidePanelKey } from "./utils";
 
 
-
 export function useBuildSchemaRegistryController(navigationContext: NavigationContext, schemaResolver: SchemaResolver | undefined) {
 
     const collections = navigationContext.navigation?.collections;

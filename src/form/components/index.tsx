@@ -1,17 +1,17 @@
 export {
-    default as ArrayContainer
+    ArrayContainer
 } from "./ArrayContainer";
 
 export {
-    default as ArrayEntry
+    ArrayEntry
 } from "./ArrayEntry";
 
 export {
-    default as FieldDescription
+    FieldDescription
 } from "./FieldDescription";
 
 export {
-    default as LabelWithIcon
+    LabelWithIcon
 } from "./LabelWithIcon";
 
 

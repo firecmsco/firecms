@@ -47,7 +47,7 @@ export interface Navigation {
  * attributes.
  * @category Models
  */
-export type NavigationContext  =  {
+export type NavigationContext = {
 
     navigation?: Navigation;
 

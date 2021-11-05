@@ -3,20 +3,20 @@ import React from "react";
 import { Divider } from "@mui/material";
 
 import { useStyles } from "./styles";
-import PreviewComponent from "../PreviewComponent";
+import { PreviewComponent } from "../PreviewComponent";
 import { PreviewComponentProps, PreviewSize } from "../../preview";
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { Property } from "../../models";
 
 /**
  * @category Preview components
  */
-export default function ArrayOneOfPreview({
-                                              name,
-                                              value,
-                                              property,
-                                              size
-                                          }: PreviewComponentProps<any[]>) {
+export function ArrayOneOfPreview({
+                                      name,
+                                      value,
+                                      property,
+                                      size
+                                  }: PreviewComponentProps<any[]>) {
 
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayPreview");

@@ -2,16 +2,10 @@ import React from "react";
 import { alpha, Theme } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import { CollectionSize } from "../../../models";
+import { TableSize } from "./TableProps";
 
 
 export const useTableStyles = makeStyles<Theme>(theme => createStyles({
-    root: {
-        height: "100%",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column"
-    },
     tableContainer: {
         width: "100%",
         height: "100%",
@@ -35,12 +29,15 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
         fontWeight: 600
     },
     tableRow: {
+        cursor: "pointer",
         display: "flex",
         alignItems: "center",
         fontSize: "0.875rem"
     },
     tableRowClickable: {
-        cursor: "pointer"
+        "&:hover": {
+            backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, .6) : alpha(theme.palette.background.default, .5)
+        }
     },
     column: {
         padding: "0px !important"
@@ -66,7 +63,7 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
 }));
 
 export interface CellStyleProps {
-    size: CollectionSize;
+    size: TableSize;
     align: "right" | "left" | "center";
 }
 

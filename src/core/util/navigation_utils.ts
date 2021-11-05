@@ -1,4 +1,4 @@
-import { EntityCollection, Navigation, NavigationContext } from "../../models";
+import { EntityCollection, NavigationContext } from "../../models";
 
 export function removeInitialAndTrailingSlashes(s: string): string {
     return removeInitialSlash(removeTrailingSlash(s));
@@ -101,7 +101,7 @@ export function computeTopNavigation(
 } {
 
     const navigation = navigationContext.navigation;
-    if(!navigation)
+    if (!navigation)
         throw Error("You can only use `computeTopNavigation` with an initialised navigationContext");
 
     const navigationEntries: TopNavigationEntry[] = [

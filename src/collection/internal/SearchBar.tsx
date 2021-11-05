@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: "center",
             height: 40,
             borderRadius: theme.shape.borderRadius,
-            backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.05) :darken(theme.palette.background.default, .2),
+            backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.05) : darken(theme.palette.background.default, .2),
             "&:hover": {
                 backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.10) : darken(theme.palette.background.default, .3)
             },
@@ -63,7 +63,7 @@ interface SearchBarProps {
     onTextSearch: (searchString?: string) => void;
 }
 
-export default function SearchBar({ onTextSearch }: SearchBarProps) {
+export function SearchBar({ onTextSearch }: SearchBarProps) {
 
     const classes = useStyles();
 

@@ -4,8 +4,8 @@ export function FireCMSLogo() {
     return (
         <svg
             width="232" height="232"
-             viewBox="0 0 599 599" version="1.1"
-             xmlns="http://www.w3.org/2000/svg">
+            viewBox="0 0 599 599" version="1.1"
+            xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <radialGradient cx="28.6213569%" cy="43.1133328%"
                                 fx="28.6213569%"
@@ -53,6 +53,6 @@ export function FireCMSLogo() {
                 </g>
             </g>
         </svg>
-);
+    );
 
 }

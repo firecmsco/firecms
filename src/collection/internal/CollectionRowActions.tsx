@@ -29,26 +29,26 @@ import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
  *
  * @category Collection components
  */
-export default function CollectionRowActions<M extends { [Key: string]: any }>({
-                                                                                   entity,
-                                                                                   isSelected,
-                                                                                   selectionEnabled,
-                                                                                   size,
-                                                                                   toggleEntitySelection,
-                                                                                   onCopyClicked,
-                                                                                   onEditClicked,
-                                                                                   onDeleteClicked
-                                                                               }:
-                                                                                   {
-                                                                                       entity: Entity<M>,
-                                                                                       size: CollectionSize,
-                                                                                       isSelected?: boolean,
-                                                                                       selectionEnabled?: boolean,
-                                                                                       toggleEntitySelection?: (entity: Entity<M>) => void
-                                                                                       onEditClicked?: (entity: Entity<M>) => void,
-                                                                                       onCopyClicked?: (entity: Entity<M>) => void,
-                                                                                       onDeleteClicked?: (entity: Entity<M>) => void,
-                                                                                   }) {
+export function CollectionRowActions<M extends { [Key: string]: any }>({
+                                                                           entity,
+                                                                           isSelected,
+                                                                           selectionEnabled,
+                                                                           size,
+                                                                           toggleEntitySelection,
+                                                                           onCopyClicked,
+                                                                           onEditClicked,
+                                                                           onDeleteClicked
+                                                                       }:
+                                                                           {
+                                                                               entity: Entity<M>,
+                                                                               size: CollectionSize,
+                                                                               isSelected?: boolean,
+                                                                               selectionEnabled?: boolean,
+                                                                               toggleEntitySelection?: (entity: Entity<M>) => void
+                                                                               onEditClicked?: (entity: Entity<M>) => void,
+                                                                               onCopyClicked?: (entity: Entity<M>) => void,
+                                                                               onDeleteClicked?: (entity: Entity<M>) => void,
+                                                                           }) {
 
     const editEnabled = Boolean(onEditClicked);
     const copyEnabled = Boolean(onCopyClicked);

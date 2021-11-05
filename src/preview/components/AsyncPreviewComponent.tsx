@@ -50,6 +50,6 @@ const MemoAsyncPreviewComponent = React.memo(AsyncPreviewComponentInternal) as R
  *
  * @category Preview components
  */
-export default function AsyncPreviewComponent(props: AsyncPreviewComponentProps<EntitySchema>) {
+export function AsyncPreviewComponent(props: AsyncPreviewComponentProps<EntitySchema>) {
     return <MemoAsyncPreviewComponent {...props} />;
 }

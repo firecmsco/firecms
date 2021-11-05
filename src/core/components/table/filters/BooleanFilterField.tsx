@@ -1,8 +1,8 @@
-import { BooleanProperty, WhereFilterOp } from "../../../../models";
+import React from "react";
 import { Checkbox, FormControlLabel, Theme } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import React from "react";
+import { TableWhereFilterOp } from "../TableProps";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,17 +18,17 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 interface BooleanFieldProps {
     name: string,
-    value?: [op: WhereFilterOp, fieldValue: any];
-    setValue: (value?: [op: WhereFilterOp, newValue: any]) => void;
+    value?: [op: TableWhereFilterOp, fieldValue: any];
+    setValue: (value?: [op: TableWhereFilterOp, newValue: any]) => void;
     title?: string;
 }
 
-export default function BooleanFilterField({
-                                               name,
-                                               title,
-                                               value,
-                                               setValue
-                                           }: BooleanFieldProps) {
+export function BooleanFilterField({
+                                       name,
+                                       title,
+                                       value,
+                                       setValue
+                                   }: BooleanFieldProps) {
 
     const classes = useStyles();
 

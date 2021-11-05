@@ -35,7 +35,7 @@ interface EnumValuesChipProps {
     enumValues: EnumValues;
     enumKey: any;
     small: boolean;
-};
+}
 
 /**
  * @category Preview components
@@ -65,19 +65,19 @@ interface EnumChipProps {
     error?: boolean;
     outlined?: boolean;
     small: boolean;
-};
+}
 
 /**
  * @category Preview components
  */
-export default function CustomChip({
-                                       colorSeed,
-                                       label,
-                                       colorSchemaKey,
-                                       error,
-                                       outlined,
-                                       small
-                                   }: EnumChipProps) {
+export function CustomChip({
+                               colorSeed,
+                               label,
+                               colorSchemaKey,
+                               error,
+                               outlined,
+                               small
+                           }: EnumChipProps) {
 
     const schema = useMemo(() => colorSchemaKey ? getColorSchemeForKey(colorSchemaKey) : getColorSchemeForSeed(colorSeed), [colorSeed]);
     const classes = useStyles({ schema, error });

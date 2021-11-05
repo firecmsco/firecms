@@ -6,7 +6,7 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 import { FieldProps } from "../../models";
 
 import { FieldDescription } from "../../form/components";
-import LabelWithIcon from "../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 import { formStyles } from "../styles";
 
@@ -19,19 +19,19 @@ type DateTimeFieldProps = FieldProps<Date>;
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function DateTimeField({
-                                          name,
-                                          value,
-                                          setValue,
-                                          autoFocus,
-                                          error,
-                                          showError,
-                                          disabled,
-                                          touched,
-                                          property,
-                                          includeDescription,
-                                          dependsOnOtherProperties
-                                      }: DateTimeFieldProps) {
+export function DateTimeField({
+                                  name,
+                                  value,
+                                  setValue,
+                                  autoFocus,
+                                  error,
+                                  showError,
+                                  disabled,
+                                  touched,
+                                  property,
+                                  includeDescription,
+                                  dependsOnOtherProperties
+                              }: DateTimeFieldProps) {
 
 
     const classes = formStyles();

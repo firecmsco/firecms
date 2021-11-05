@@ -1,17 +1,11 @@
 import React from "react";
-import {
-    CollectionSize,
-    Entity, EntityCollection,
-    FilterCombination,
-    FilterValues,
-    Property
-} from "../../models";
+import { CollectionSize, Entity, EntityCollection } from "../models";
 
 
 /**
  * @category Collection components
  */
-export type OnColumnResizeParams = { width: number, key: string, type: "property" | "additional" };
+export type OnColumnResizeParams = { width: number, key: string };
 
 /**
  * @category Collection components
@@ -69,28 +63,10 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
      * Callback when a column is resized
      */
     onColumnResize?(params: OnColumnResizeParams): void;
-}
 
-/**
- * @category Collection components
- */
-export type UniqueFieldValidator = (props: { name: string, value: any, property: Property, entityId?: string }) => Promise<boolean>;
-
-/**
- * Callback when a cell has changed in a table
- * @category Collection components
- */
-export type OnCellValueChange<T, M extends { [Key: string]: any }> = (params: OnCellValueChangeParams<T, M>) => Promise<void>;
-
-/**
- * Props passed in a callback when the content of a cell in a table has been edited
- * @category Collection components
- */
-export interface OnCellValueChangeParams<T, M extends { [Key: string]: any }> {
-    value: T,
-    name: string,
-    entity: Entity<M>,
-    setSaved: (saved: boolean) => void
-    setError: (e: Error) => void
+    /**
+     * Should apply a different style to a row when hovering
+     */
+    hoverRow?: boolean;
 }
 

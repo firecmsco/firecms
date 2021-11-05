@@ -1,21 +1,21 @@
 import React from "react";
 import { ArrayProperty, MapProperty } from "../../models";
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { useStyles } from "./styles";
-import PreviewComponent from "../PreviewComponent";
+import { PreviewComponent } from "../PreviewComponent";
 import { PreviewComponentProps } from "../PreviewComponentProps";
 
 /**
  * @category Preview components
  */
-export default function ArrayOfMapsPreview<T>({
-                                                  name,
-                                                  value,
-                                                  property,
-                                                  size
-                                              }: PreviewComponentProps<object[]>) {
+export function ArrayOfMapsPreview<T>({
+                                          name,
+                                          value,
+                                          property,
+                                          size
+                                      }: PreviewComponentProps<object[]>) {
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");

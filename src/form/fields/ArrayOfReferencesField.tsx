@@ -1,14 +1,13 @@
+import React, { useMemo } from "react";
 import { Entity, EntityReference, FieldProps, Property } from "../../models";
 import { Box, Button, FormControl, FormHelperText, Paper } from "@mui/material";
 import { ReferencePreview } from "../../preview";
-import React, { useMemo } from "react";
-import LabelWithIcon from "../components/LabelWithIcon";
-import ArrayContainer from "../components/ArrayContainer";
-import ReferenceDialog from "../../core/components/ReferenceDialog";
+import { LabelWithIcon } from "../components/LabelWithIcon";
+import { ArrayContainer } from "../components/ArrayContainer";
+import { ErrorView, ReferenceDialog } from "../../core/components";
 import { formStyles } from "../styles";
-import FieldDescription from "../components/FieldDescription";
+import { FieldDescription } from "../components/FieldDescription";
 import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
-import { ErrorView } from "../../core/components";
 import { getReferenceFrom } from "../../core/utils";
 
 
@@ -21,17 +20,17 @@ type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function ArrayOfReferencesField({
-                                                   name,
-                                                   value,
-                                                   error,
-                                                   showError,
-                                                   isSubmitting,
-                                                   tableMode,
-                                                   property,
-                                                   includeDescription,
-                                                   setValue
-                                               }: ArrayOfReferencesFieldProps) {
+export function ArrayOfReferencesField({
+                                           name,
+                                           value,
+                                           error,
+                                           showError,
+                                           isSubmitting,
+                                           tableMode,
+                                           property,
+                                           includeDescription,
+                                           setValue
+                                       }: ArrayOfReferencesFieldProps) {
 
     const classes = formStyles();
 

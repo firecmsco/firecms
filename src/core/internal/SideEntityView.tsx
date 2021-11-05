@@ -14,7 +14,7 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import CloseIcon from "@mui/icons-material/Close";
 import clsx from "clsx";
-import EntityForm from "../../form/EntityForm";
+import { EntityForm } from "../../form";
 import {
     Entity,
     EntityCallbacks,
@@ -24,13 +24,15 @@ import {
     EntityValues,
     PermissionsBuilder
 } from "../../models";
-import { EntityCollectionView } from "../components/EntityCollectionView";
+import {
+    CircularProgressCenter,
+    EntityCollectionView,
+    EntityPreview
+} from "../components";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
-import CircularProgressCenter from "../components/CircularProgressCenter";
-import EntityPreview from "../components/EntityPreview";
 
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
-import ErrorBoundary from "./ErrorBoundary";
+import { ErrorBoundary } from "./ErrorBoundary";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -126,16 +128,16 @@ export interface SideEntityViewProps<M extends { [Key: string]: any }> {
 }
 
 
-function SideEntityView<M extends { [Key: string]: any }>({
-                                                              path,
-                                                              entityId,
-                                                              callbacks,
-                                                              selectedSubpath,
-                                                              copy,
-                                                              permissions,
-                                                              schema,
-                                                              subcollections
-                                                          }: SideEntityViewProps<M>) {
+export function SideEntityView<M extends { [Key: string]: any }>({
+                                                                     path,
+                                                                     entityId,
+                                                                     callbacks,
+                                                                     selectedSubpath,
+                                                                     copy,
+                                                                     permissions,
+                                                                     schema,
+                                                                     subcollections
+                                                                 }: SideEntityViewProps<M>) {
 
     const classes = useStylesSide();
 
@@ -265,8 +267,15 @@ function SideEntityView<M extends { [Key: string]: any }>({
                                     schema,
                                     path,
                                     entityId,
-                                    values
-                                }: { schema: EntitySchema<M>, path: string, entityId: string | undefined, values: EntityValues<M> }): Promise<void> {
+                                    values,
+                                    previousValues
+                                }: {
+        schema: EntitySchema<M>,
+        path: string,
+        entityId: string | undefined,
+        values: EntityValues<M>,
+        previousValues?: EntityValues<M>,
+    }): Promise<void> {
 
         if (!status)
             return;
@@ -281,6 +290,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
             entityId: entityId,
             callbacks,
             values,
+            previousValues,
             schema,
             status,
             dataSource,
@@ -349,7 +359,7 @@ function SideEntityView<M extends { [Key: string]: any }>({
                     hidden={tabsPosition !== colIndex + customViewsCount}>
                     {entity && path ?
                         <EntityCollectionView path={path}
-                                               collection={subcollection}
+                                              collection={subcollection}
                         />
                         :
                         <Box m={3}
@@ -494,5 +504,3 @@ function SideEntityView<M extends { [Key: string]: any }>({
 
     </div>;
 }
-
-export default React.memo(SideEntityView);

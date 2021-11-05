@@ -1,6 +1,4 @@
-import {
-    EnumValues, InferSchemaType
-} from "../models";
+import { EnumValues, InferSchemaType } from "../models";
 import { FirebaseCMSAppProps } from "../firebase_app";
 import { buildCollection, buildProperty, buildSchema } from "../core";
 import { EntityCallbacks } from "../models/entity_callbacks";
@@ -107,6 +105,9 @@ export const productSchema = buildSchema({
         amazon_link: buildProperty({
             dataType: "string",
             title: "Amazon link",
+            validation: {
+                url: true
+            },
             config: {
                 url: true
             }
@@ -224,14 +225,16 @@ const subcollections = [
     })
 ];
 
-const productCallbacks :EntityCallbacks<InferSchemaType<typeof productSchema>> = {
+const productCallbacks: EntityCallbacks<InferSchemaType<typeof productSchema>> = {
     onPreSave: ({
                     schema,
                     path,
                     entityId,
                     values,
+                    previousValues,
                     status
                 }) => {
+        console.log(previousValues);
         values.uppercase_name = (values.name as string).toUpperCase();
         return values;
     },

@@ -19,7 +19,7 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
 import { CollectionSize } from "../../models";
-import SearchBar from "./SearchBar";
+import { SearchBar } from "./SearchBar";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -82,7 +82,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
                 backgroundColor: darken(theme.palette.background.default, .1)
             },
             "&:focus": {
-                backgroundColor:  darken(theme.palette.background.default, .2),
+                backgroundColor: darken(theme.palette.background.default, .2),
                 "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
                     color: theme.palette.text.primary
                 }
@@ -103,7 +103,7 @@ interface CollectionTableToolbarProps<M extends { [Key: string]: any }> {
     clearFilter(): void;
 }
 
-export default function CollectionTableToolbar<M extends { [Key: string]: any }>(props: CollectionTableToolbarProps<M>) {
+export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: CollectionTableToolbarProps<M>) {
     const classes = useStyles();
     const sizeClasses = useSizeSelectStyles();
 

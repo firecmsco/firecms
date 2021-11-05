@@ -45,6 +45,7 @@ export function useSaveEntity<M extends { [Key: string]: any }>({
                                                                     entityId,
                                                                     callbacks,
                                                                     values,
+                                                                    previousValues,
                                                                     status,
                                                                     onSaveSuccess,
                                                                     onSaveFailure,
@@ -64,6 +65,7 @@ export function useSaveEntity<M extends { [Key: string]: any }>({
                 path,
                 entityId,
                 values,
+                previousValues,
                 status,
                 onSaveSuccess,
                 onSaveFailure,
@@ -87,7 +89,9 @@ export function useSaveEntity<M extends { [Key: string]: any }>({
  * @param schema
  * @param path
  * @param entityId
+ * @param callbacks
  * @param values
+ * @param previousValues
  * @param status
  * @param dataSource
  * @param context
@@ -105,6 +109,7 @@ export async function saveEntityWithCallbacks<M>({
                                                      entityId,
                                                      callbacks,
                                                      values,
+                                                     previousValues,
                                                      status,
                                                      dataSource,
                                                      context,
@@ -127,6 +132,7 @@ export async function saveEntityWithCallbacks<M>({
                 path,
                 entityId,
                 values,
+                previousValues,
                 status,
                 context
             });
@@ -145,6 +151,7 @@ export async function saveEntityWithCallbacks<M>({
         path,
         entityId,
         values: updatedValues,
+        previousValues,
         status
     }).then((entity) => {
         try {
@@ -154,6 +161,7 @@ export async function saveEntityWithCallbacks<M>({
                     path,
                     entityId,
                     values: updatedValues,
+                    previousValues,
                     status,
                     context
                 });
@@ -172,6 +180,7 @@ export async function saveEntityWithCallbacks<M>({
                     path,
                     entityId,
                     values: updatedValues,
+                    previousValues,
                     status,
                     context
                 });

@@ -1,11 +1,14 @@
 .BaseTable {
     box-shadow: 0 2px 4px 0 rgba(128, 128, 128, 0.2);
-    /*background-color: #ffffff;*/
     contain: strict;
     position: relative;
     box-sizing: border-box;
     font-size: 13px;
 }
+
+/*.BaseTable__row:hover, .BaseTable__row--hovered {*/
+/*    background-color: rgba(0, 0, 0, 0.05);*/
+/*}*/
 
 .BaseTable--disabled {
     opacity: 0.7;
@@ -25,7 +28,6 @@
 }
 
 .BaseTable__table {
-    /*background-color: #ffffff;*/
     position: absolute;
     top: 0;
     display: flex;
@@ -38,16 +40,7 @@
 }
 
 .BaseTable__table-main .BaseTable__header-cell:first-child, .BaseTable__table-main .BaseTable__row-cell:first-child {
-    /*padding-left: 15px;*/
     padding: 0;
-}
-
-.BaseTable__table-main .BaseTable__header-cell:last-child, .BaseTable__table-main .BaseTable__row-cell:last-child {
-    /*padding-right: 15px;*/
-}
-
-.BaseTable__table-main .BaseTable__header {
-    /*background-color: #f8f8f8;*/
 }
 
 .BaseTable__table-frozen-left .BaseTable__body {
@@ -67,7 +60,6 @@
 }
 
 .BaseTable__table-frozen-left .BaseTable__header-cell:first-child, .BaseTable__table-frozen-left .BaseTable__row-cell:first-child {
-    /*padding-left: 15px;*/
     padding: 0;
 }
 
@@ -254,7 +246,6 @@
     top: 0;
     bottom: 0;
     overflow: hidden;
-    /*background-color: #ffffff;*/
 }
 
 .BaseTable__overlay {

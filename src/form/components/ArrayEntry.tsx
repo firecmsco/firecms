@@ -35,7 +35,7 @@ interface ArrayEntryProps {
     type: string
     index: number,
     remove: (index: number) => void,
-};
+}
 
 /**
  * @category Form custom fields
@@ -150,4 +150,3 @@ export function ArrayEntry({
     );
 }
 
-export default ArrayEntry;

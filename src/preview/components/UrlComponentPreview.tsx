@@ -6,7 +6,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { MediaType } from "../../models";
 import { PreviewComponentProps } from "../PreviewComponentProps";
-import ImagePreview from "./ImagePreview";
+import { ImagePreview } from "./ImagePreview";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
 
@@ -14,11 +14,11 @@ import { getThumbnailMeasure } from "../util";
 /**
  * @category Preview components
  */
-export default function UrlComponentPreview({
-                                                value,
-                                                property,
-                                                size
-                                            }: PreviewComponentProps<string>): React.ReactElement {
+export function UrlComponentPreview({
+                                        value,
+                                        property,
+                                        size
+                                    }: PreviewComponentProps<string>): React.ReactElement {
 
     const classes = useStyles();
 

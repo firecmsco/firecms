@@ -1,10 +1,5 @@
 import React, { useState } from "react";
 import {
-    ArrayProperty,
-    TimestampProperty,
-    WhereFilterOp
-} from "../../../../models";
-import {
     Box,
     FormControl,
     IconButton,
@@ -16,11 +11,12 @@ import ClearIcon from "@mui/icons-material/Clear";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import { TableWhereFilterOp } from "../TableProps";
 
 interface DateTimeFilterFieldProps {
     name: string,
-    value?: [op: WhereFilterOp, fieldValue: any];
-    setValue: (value?: [op: WhereFilterOp, newValue: any]) => void;
+    value?: [op: TableWhereFilterOp, fieldValue: any];
+    setValue: (value?: [op: TableWhereFilterOp, newValue: any]) => void;
     isArray?: boolean;
     title?: string;
 }
@@ -41,23 +37,23 @@ const operationLabels = {
 const multipleSelectOperations = ["array-contains-any", "in"];
 
 
-export default function DateTimeFilterField({
-                                                name,
-                                                isArray,
-                                                value,
-                                                setValue,
-                                                title
-                                            }: DateTimeFilterFieldProps) {
+export function DateTimeFilterField({
+                                        name,
+                                        isArray,
+                                        value,
+                                        setValue,
+                                        title
+                                    }: DateTimeFilterFieldProps) {
 
     const possibleOperations: (keyof typeof operationLabels) [] = isArray ?
         ["array-contains"] :
         ["==", "!=", ">", "<", ">=", "<="];
 
     const [fieldOperation, fieldValue] = value ? value : [possibleOperations[0], undefined];
-    const [operation, setOperation] = useState<WhereFilterOp>(fieldOperation);
+    const [operation, setOperation] = useState<TableWhereFilterOp>(fieldOperation);
     const [internalValue, setInternalValue] = useState<Date | undefined>(fieldValue);
 
-    function updateFilter(op: WhereFilterOp, val: Date | undefined) {
+    function updateFilter(op: TableWhereFilterOp, val: Date | undefined) {
         let newValue: Date | undefined = val;
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);

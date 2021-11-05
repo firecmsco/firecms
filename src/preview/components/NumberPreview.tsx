@@ -6,12 +6,12 @@ import { PreviewComponentProps } from "../PreviewComponentProps";
 /**
  * @category Preview components
  */
-export default function NumberPreview({
-                                          name,
-                                          value,
-                                          property,
-                                          size
-                                      }: PreviewComponentProps<number>): React.ReactElement {
+export function NumberPreview({
+                                  name,
+                                  value,
+                                  property,
+                                  size
+                              }: PreviewComponentProps<number>): React.ReactElement {
 
     if (property.config?.enumValues) {
         const enumKey = value;

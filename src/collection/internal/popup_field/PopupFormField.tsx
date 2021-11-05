@@ -19,13 +19,12 @@ import {
     CustomFieldValidator,
     getYupEntitySchema
 } from "../../../form/validation";
-import OutsideAlerter from "../../../core/internal/OutsideAlerter";
 import { useWindowSize } from "./useWindowSize";
 import { isReadOnly } from "../../../core/utils";
-import { OnCellValueChangeParams } from "../../components/CollectionTableProps";
 import { buildPropertyField } from "../../../form";
 import clsx from "clsx";
-import ElementResizeListener from "./ElementResizeListener";
+import { ElementResizeListener } from "./ElementResizeListener";
+import { OnCellValueChangeParams } from "../../column_builder";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     form: {
@@ -84,22 +83,22 @@ interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     onCellValueChange?: (params: OnCellValueChangeParams<any, M>) => Promise<void>;
 }
 
-function PopupFormField<M extends { [Key: string]: any }>({
-                                                              tableKey,
-                                                              entity,
-                                                              customFieldValidator,
-                                                              name,
-                                                              property,
-                                                              schema,
-                                                              path,
-                                                              cellRect,
-                                                              setPreventOutsideClick,
-                                                              formPopupOpen,
-                                                              setFormPopupOpen,
-                                                              columnIndex,
-                                                              usedPropertyBuilder,
-                                                              onCellValueChange
-                                                          }: PopupFormFieldProps<M>) {
+export function PopupFormField<M extends { [Key: string]: any }>({
+                                                                     tableKey,
+                                                                     entity,
+                                                                     customFieldValidator,
+                                                                     name,
+                                                                     property,
+                                                                     schema,
+                                                                     path,
+                                                                     cellRect,
+                                                                     setPreventOutsideClick,
+                                                                     formPopupOpen,
+                                                                     setFormPopupOpen,
+                                                                     columnIndex,
+                                                                     usedPropertyBuilder,
+                                                                     onCellValueChange
+                                                                 }: PopupFormFieldProps<M>) {
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     // const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
@@ -336,5 +335,3 @@ function PopupFormField<M extends { [Key: string]: any }>({
     );
 
 }
-
-export default PopupFormField;

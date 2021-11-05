@@ -1,19 +1,11 @@
 import { Entity, EntityCollection, EntitySchema } from "../../models";
 import React, { useEffect, useState } from "react";
 
-import EntityPreview from "./EntityPreview";
-import {
-    Box,
-    Container,
-    Tab,
-    Tabs,
-    Theme,
-} from "@mui/material";
+import { EntityPreview } from "./EntityPreview";
+import { Box, Container, Tab, Tabs, Theme } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import {
-    removeInitialAndTrailingSlashes
-} from "../util/navigation_utils";
+import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 import { EntityCollectionView } from "./EntityCollectionView";
 import { useDataSource, useNavigation } from "../../hooks";
 

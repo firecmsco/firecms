@@ -7,7 +7,7 @@ import React from "react";
  * @constructor
  * @ignore
  */
-export default function CircularProgressCenter(props: CircularProgressProps) {
+export function CircularProgressCenter(props: CircularProgressProps) {
     return (
         <Box
             display="flex"

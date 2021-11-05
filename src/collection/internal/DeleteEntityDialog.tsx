@@ -7,9 +7,7 @@ import {
     DialogContent,
     DialogTitle
 } from "@mui/material";
-import EntityPreview from "../../core/components/EntityPreview";
-import CircularProgressCenter
-    from "../../core/components/CircularProgressCenter";
+import { CircularProgressCenter, EntityPreview } from "../../core/components";
 import {
     deleteEntityWithCallbacks,
     useDataSource,
@@ -31,18 +29,18 @@ export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
     onMultipleEntitiesDelete?(path: string, entities: Entity<M>[]): void;
 }
 
-export default function DeleteEntityDialog<M extends { [Key: string]: any }>({
-                                                                                 entityOrEntitiesToDelete,
-                                                                                 schema,
-                                                                                 onClose,
-                                                                                 open,
-                                                                                 callbacks,
-                                                                                 onEntityDelete,
-                                                                                 onMultipleEntitiesDelete,
-                                                                                 path,
-                                                                                 ...other
-                                                                             }
-                                                                                 : DeleteEntityDialogProps<M>) {
+export function DeleteEntityDialog<M extends { [Key: string]: any }>({
+                                                                         entityOrEntitiesToDelete,
+                                                                         schema,
+                                                                         onClose,
+                                                                         open,
+                                                                         callbacks,
+                                                                         onEntityDelete,
+                                                                         onMultipleEntitiesDelete,
+                                                                         path,
+                                                                         ...other
+                                                                     }
+                                                                         : DeleteEntityDialogProps<M>) {
 
     const dataSource = useDataSource();
     const snackbarContext = useSnackbarController();

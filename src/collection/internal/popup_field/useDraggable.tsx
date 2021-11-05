@@ -6,7 +6,7 @@ interface DraggableProps {
     x?: number;
     y?: number;
     onMove: (x: number, y: number) => void,
-};
+}
 
 export function useDraggable({
                                  containerRef,

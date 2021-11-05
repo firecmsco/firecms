@@ -1,6 +1,7 @@
 import {
     AuthController,
-    Entity, FireCMSContext,
+    Entity,
+    FireCMSContext,
     Permissions,
     PermissionsBuilder
 } from "../../models";

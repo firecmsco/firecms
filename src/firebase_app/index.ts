@@ -19,7 +19,7 @@ export type {
 
 export type { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 export {
-    default as FirebaseLoginView
+    FirebaseLoginView
 } from "./components/FirebaseLoginView";
 
 export type { InitialiseFirebaseResult } from "./hooks/useInitialiseFirebase";

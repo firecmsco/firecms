@@ -98,4 +98,4 @@ export type AuthDelegate = {
      */
     skipLogin?: () => void;
 
-} ;
+};

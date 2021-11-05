@@ -13,8 +13,8 @@ import React from "react";
 
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../form/components";
-import LabelWithIcon from "../components/LabelWithIcon";
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
+import { LabelWithIcon } from "../components/LabelWithIcon";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";
 import { formStyles } from "../styles";
 
@@ -28,19 +28,19 @@ interface TextFieldProps<T extends string | number> extends FieldProps<T> {
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function TextField<T extends string | number>({
-                                                                 name,
-                                                                 value,
-                                                                 setValue,
-                                                                 error,
-                                                                 showError,
-                                                                 disabled,
-                                                                 autoFocus,
-                                                                 property,
-                                                                 includeDescription,
-                                                                 allowInfinity,
-                                                                 dependsOnOtherProperties
-                                                             }: TextFieldProps<T>) {
+export function TextField<T extends string | number>({
+                                                         name,
+                                                         value,
+                                                         setValue,
+                                                         error,
+                                                         showError,
+                                                         disabled,
+                                                         autoFocus,
+                                                         property,
+                                                         includeDescription,
+                                                         allowInfinity,
+                                                         dependsOnOtherProperties
+                                                     }: TextFieldProps<T>) {
 
     const classes = formStyles();
 

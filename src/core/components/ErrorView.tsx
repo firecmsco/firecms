@@ -22,12 +22,12 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
- * @category Core components
+ * @category Components
  */
 export interface ErrorViewProps {
     error: string,
     tooltip?: string
-};
+}
 
 /**
  * Generic error view. Displayed for example when an unexpected value comes
@@ -35,12 +35,12 @@ export interface ErrorViewProps {
  * @param error
  * @param tooltip
  * @constructor
- * @category Core components
+ * @category Components
  */
-export default function ErrorView({
-                                      error,
-                                      tooltip
-                                  }: ErrorViewProps): React.ReactElement {
+export function ErrorView({
+                              error,
+                              tooltip
+                          }: ErrorViewProps): React.ReactElement {
     const classes = useStyles();
     const body = (
         <div

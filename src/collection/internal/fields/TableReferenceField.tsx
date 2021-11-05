@@ -9,7 +9,7 @@ import {
     EntityReference,
     ReferenceProperty
 } from "../../../models";
-import ReferenceDialog from "../../../core/components/ReferenceDialog";
+import { ReferenceDialog } from "../../../core/components/ReferenceDialog";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
 import { useInputStyles } from "./styles";

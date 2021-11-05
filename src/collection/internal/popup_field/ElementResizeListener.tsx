@@ -2,9 +2,9 @@ import { RefObject, useCallback, useEffect, useRef } from "react";
 
 interface Props {
     onResize: (event: Event) => void;
-};
+}
 
-const ElementResizeListener: React.FC<Props> = ({ onResize }) => {
+export const ElementResizeListener: React.FC<Props> = ({ onResize }) => {
     const rafRef = useRef(0);
     const objectRef: RefObject<HTMLObjectElement> = useRef(null);
     const onResizeRef = useRef(onResize);
@@ -56,5 +56,3 @@ const ElementResizeListener: React.FC<Props> = ({ onResize }) => {
         />
     );
 };
-
-export default ElementResizeListener;

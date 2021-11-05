@@ -1,18 +1,18 @@
 import React from "react";
 
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
-import CustomChip, { EnumValuesChip } from "./CustomChip";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { CustomChip, EnumValuesChip } from "./CustomChip";
 import { PreviewComponentProps } from "../PreviewComponentProps";
 
 /**
  * @category Preview components
  */
-export default function StringPreview({
-                                          name,
-                                          value,
-                                          property,
-                                          size
-                                      }: PreviewComponentProps<string>): React.ReactElement {
+export function StringPreview({
+                                  name,
+                                  value,
+                                  property,
+                                  size
+                              }: PreviewComponentProps<string>): React.ReactElement {
 
     if (property.config?.enumValues) {
         const enumKey = value;

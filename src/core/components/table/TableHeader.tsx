@@ -1,8 +1,6 @@
 import React, { useRef, useState } from "react";
 
-import { WhereFilterOp } from "../../../models";
-import ErrorBoundary from "../../internal/ErrorBoundary";
-import { Sort } from "../../../collection/internal/common";
+import clsx from "clsx";
 import {
     Badge,
     Box,
@@ -19,15 +17,18 @@ import makeStyles from "@mui/styles/makeStyles";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
+
 import { useTableStyles } from "./styles";
-import clsx from "clsx";
-import { TableColumn, TableColumnFilter } from "./TableProps";
-import StringNumberFilterField
-    from "./filters/StringNumberFilterField";
-import BooleanFilterField
-    from "./filters/BooleanFilterField";
-import DateTimeFilterField
-    from "./filters/DateTimeFilterfield";
+import {
+    TableColumn,
+    TableColumnFilter,
+    TableSort,
+    TableWhereFilterOp
+} from "./TableProps";
+import { StringNumberFilterField } from "./filters/StringNumberFilterField";
+import { BooleanFilterField } from "./filters/BooleanFilterField";
+import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
+import { ErrorBoundary } from "../../internal/ErrorBoundary";
 
 export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | "left" | "center" }>
 (theme => createStyles({
@@ -58,18 +59,18 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
 }));
 
 
-export default function TableHeader<M extends { [Key: string]: any }>({
-                                                                          sort,
-                                                                          onColumnSort,
-                                                                          onFilterUpdate,
-                                                                          filter,
-                                                                          column
-                                                                      }: {
-    column: TableColumn;
+export function TableHeader<M extends { [Key: string]: any }>({
+                                                                  sort,
+                                                                  onColumnSort,
+                                                                  onFilterUpdate,
+                                                                  filter,
+                                                                  column
+                                                              }: {
+    column: TableColumn<M>;
     onColumnSort: (key: Extract<keyof M, string>) => void;
-    onFilterUpdate: (filterForProperty?: [WhereFilterOp, any]) => void;
-    filter?: [WhereFilterOp, any];
-    sort: Sort;
+    onFilterUpdate: (filterForProperty?: [TableWhereFilterOp, any]) => void;
+    filter?: [TableWhereFilterOp, any];
+    sort: TableSort;
 }) {
 
     const [onHover, setOnHover] = useState(false);
@@ -88,9 +89,9 @@ export default function TableHeader<M extends { [Key: string]: any }>({
         setOpen(false);
     };
 
-    const id = open ? `popover_${column.id}` : undefined;
+    const id = open ? `popover_${column.key}` : undefined;
 
-    const update = (filterForProperty?: [WhereFilterOp, any]) => {
+    const update = (filterForProperty?: [TableWhereFilterOp, any]) => {
         onFilterUpdate(filterForProperty);
         setOpen(false);
     };
@@ -132,7 +133,7 @@ export default function TableHeader<M extends { [Key: string]: any }>({
                             size={"small"}
                             className={classes.headerIconButton}
                             onClick={() => {
-                                onColumnSort(column.id as Extract<keyof M, string>);
+                                onColumnSort(column.key as Extract<keyof M, string>);
                             }}
                         >
                             {!sort && <ArrowDownwardIcon fontSize={"small"}/>}
@@ -187,9 +188,9 @@ export default function TableHeader<M extends { [Key: string]: any }>({
 }
 
 interface FilterFormProps<M> {
-    column: TableColumn;
-    onFilterUpdate: (filter?: [WhereFilterOp, any]) => void;
-    filter?: [WhereFilterOp, any];
+    column: TableColumn<M>;
+    onFilterUpdate: (filter?: [TableWhereFilterOp, any]) => void;
+    filter?: [TableWhereFilterOp, any];
 }
 
 
@@ -200,10 +201,10 @@ function FilterForm<M>({
                        }: FilterFormProps<M>) {
 
 
-    const id = column.id;
+    const id = column.key;
     const tableClasses = useTableStyles();
 
-    const [filterInternal, setFilterInternal] = useState<[WhereFilterOp, any] | undefined>(filter);
+    const [filterInternal, setFilterInternal] = useState<[TableWhereFilterOp, any] | undefined>(filter);
 
     const submit = (e: any) => {
         onFilterUpdate(filterInternal);
@@ -217,8 +218,8 @@ function FilterForm<M>({
 
     function createFilterField(id: string,
                                filterConfig: TableColumnFilter,
-                               filterValue: [WhereFilterOp, any] | undefined,
-                               setFilterValue: (filterValue?: [WhereFilterOp, any]) => void,
+                               filterValue: [TableWhereFilterOp, any] | undefined,
+                               setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void,
                                isArray: boolean = false
     ): JSX.Element {
 

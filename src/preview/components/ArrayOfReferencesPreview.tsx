@@ -1,17 +1,17 @@
 import { PreviewComponentProps, PreviewSize } from "../PreviewComponentProps";
 import { useStyles } from "./styles";
 import { ReferenceProperty } from "../../models";
-import ReferencePreview from "./ReferencePreview";
+import { ReferencePreview } from "./ReferencePreview";
 
 /**
  * @category Preview components
  */
-export default function ArrayOfReferencesPreview({
-                                                     name,
-                                                     value,
-                                                     property,
-                                                     size
-                                                 }: PreviewComponentProps<any[]>) {
+export function ArrayOfReferencesPreview({
+                                             name,
+                                             value,
+                                             property,
+                                             size
+                                         }: PreviewComponentProps<any[]>) {
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "reference")
         throw Error("Picked wrong preview component ArrayOfReferencesPreview");

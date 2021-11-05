@@ -12,15 +12,13 @@ import {
 import { Add, Delete } from "@mui/icons-material";
 
 import { CollectionSize, Entity, EntityCollection } from "../../models";
-import CollectionTable from "../../collection/components/CollectionTable";
+import { CollectionTable, OnColumnResizeParams } from "../../collection";
 
-import CollectionRowActions
-    from "../../collection/internal/CollectionRowActions";
-import DeleteEntityDialog from "../../collection/internal/DeleteEntityDialog";
-import ExportButton from "../../collection/internal/ExportButton";
+import { CollectionRowActions } from "../../collection/internal/CollectionRowActions";
+import { DeleteEntityDialog } from "../../collection/internal/DeleteEntityDialog";
+import { ExportButton } from "../../collection/internal/ExportButton";
 
 import { canCreate, canDelete, canEdit } from "../util/permissions";
-import { OnColumnResizeParams } from "../../collection";
 import { Markdown } from "../../preview";
 import {
     useAuthController,
@@ -29,7 +27,7 @@ import {
 } from "../../hooks";
 
 /**
- * @category Core components
+ * @category Components
  */
 export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
     path: string;
@@ -46,22 +44,29 @@ function getCollectionConfig(storageKey: string) {
  * where it's configuration is defined. This is useful if you have defined already
  * your entity collections and need to build a custom component.
  *
- * Please note that you only need to use this component if you are building
+ * This component is the default one used for displaying entity collections
+ * and is in charge of generating all the specific actions and customization
+ * of the lower level {@link CollectionTable}
+ *
+ * Please **note** that you only need to use this component if you are building
  * a custom view. If you just need to create a default view you can do it
  * exclusively with config options.
  *
  * If you need a lower level implementation with more granular options, you
  * can try {@link CollectionTable}.
  *
+ * If you need a table that is not bound to the datasource or entities and
+ * properties at all, you can check {@link Table}
+ *
  * @param path
  * @param collectionConfig
  * @constructor
- * @category Core components
+ * @category Components
  */
-export default function EntityCollectionView<M extends { [Key: string]: any }>({
-                                                                                    path,
-                                                                                    collection
-                                                                                }: EntityCollectionViewProps<M>
+export function EntityCollectionView<M extends { [Key: string]: any }>({
+                                                                           path,
+                                                                           collection
+                                                                       }: EntityCollectionViewProps<M>
 ) {
 
     const sideEntityController = useSideEntityController();
@@ -75,9 +80,9 @@ export default function EntityCollectionView<M extends { [Key: string]: any }>({
     const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
 
     const exportable = collection.exportable === undefined || collection.exportable;
-    const inlineEditing = collection.inlineEditing === undefined || collection.inlineEditing;
 
     const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
+    const hoverRow = collection.inlineEditing !== undefined && !collection.inlineEditing;
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
@@ -118,12 +123,12 @@ export default function EntityCollectionView<M extends { [Key: string]: any }>({
         if (!canEdit(collection.permissions, entity, authController, path, context)) {
             return false;
         }
-        return inlineEditing;
+        return collection.inlineEditing === undefined || collection.inlineEditing;
     };
 
 
-    const onColumnResize = ({ width, key, type }: OnColumnResizeParams) => {
-        console.log("onColumnResize", width, key, type);
+    const onColumnResize = ({ width, key }: OnColumnResizeParams) => {
+        console.log("onColumnResize", width, key);
         const storageKey = `collection_config_${path}`;
         const collectionConfig = getCollectionConfig(storageKey);
 
@@ -351,6 +356,7 @@ export default function EntityCollectionView<M extends { [Key: string]: any }>({
                 onColumnResize={onColumnResize}
                 tableRowActionsBuilder={tableRowActionsBuilder}
                 toolbarActionsBuilder={toolbarActionsBuilder}
+                hoverRow={hoverRow}
             />
 
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
@@ -365,4 +371,3 @@ export default function EntityCollectionView<M extends { [Key: string]: any }>({
     );
 }
 
-export { EntityCollectionView };

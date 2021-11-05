@@ -60,7 +60,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
 
 /**
  *
- * @category Core components
+ * @category Components
  */
 export interface EntityFormProps<M extends { [Key: string]: any }> {
 
@@ -94,7 +94,8 @@ export interface EntityFormProps<M extends { [Key: string]: any }> {
                 schema: EntitySchema<M>,
                 path: string,
                 entityId: string | undefined,
-                values: EntityValues<M>
+                values: EntityValues<M>,
+                previousValues?: EntityValues<M>
             }
     ): Promise<void>;
 
@@ -127,18 +128,18 @@ export interface EntityFormProps<M extends { [Key: string]: any }> {
  * @param onModified
  * @param onValuesChanged
  * @constructor
- * @category Core components
+ * @category Components
  */
-export default function EntityForm<M>({
-                                          status,
-                                          path,
-                                          schema,
-                                          entity,
-                                          onEntitySave,
-                                          onDiscard,
-                                          onModified,
-                                          onValuesChanged
-                                      }: EntityFormProps<M>) {
+export function EntityForm<M>({
+                                  status,
+                                  path,
+                                  schema,
+                                  entity,
+                                  onEntitySave,
+                                  onDiscard,
+                                  onModified,
+                                  onValuesChanged
+                              }: EntityFormProps<M>) {
 
     const classes = useStyles();
     const dataSource = useDataSource();
@@ -211,7 +212,13 @@ export default function EntityForm<M>({
         }
 
         if (onEntitySave)
-            onEntitySave({ schema, path, entityId, values })
+            onEntitySave({
+                schema,
+                path,
+                entityId,
+                values,
+                previousValues: entity?.values
+            })
                 .then(_ => {
                     initialValuesRef.current = values;
                     formikActions.setTouched({});

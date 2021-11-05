@@ -1,6 +1,4 @@
-import {
-    getCollectionViewFromPath,
-} from "../core/util/navigation_utils";
+import { getCollectionViewFromPath } from "../core/util/navigation_utils";
 import { siteConfig } from "./test_site_config";
 import { EntityCollection } from "../models";
 import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";

@@ -22,14 +22,13 @@ import Brightness5Icon from "@mui/icons-material/Brightness5";
 import Brightness3Icon from "@mui/icons-material/Brightness3";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
-import ErrorBoundary from "./ErrorBoundary";
+import { ErrorBoundary } from "./ErrorBoundary";
 import { useAuthController, useModeState } from "../../hooks";
 import { useBreadcrumbsContext } from "../../hooks/useBreadcrumbsContext";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        appbar: {
-        },
+        appbar: {},
         menuButton: {
             marginRight: theme.spacing(2)
         },
@@ -61,10 +60,10 @@ interface CMSAppBarProps {
 }
 
 export const FireCMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
-                                                                       title,
-                                                                       handleDrawerToggle,
-                                                                       toolbarExtraWidget
-                                                                   }) => {
+                                                                           title,
+                                                                           handleDrawerToggle,
+                                                                           toolbarExtraWidget
+                                                                       }) => {
 
     const classes = useStyles();
 

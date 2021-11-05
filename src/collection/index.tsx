@@ -1,14 +1,17 @@
 export {
-    default as CollectionTable
-} from "./components/CollectionTable";
+    CollectionTable
+} from "./CollectionTable";
+
+export type {
+    CollectionTableProps,
+    OnColumnResizeParams
+} from "./CollectionTableProps";
 
 export type {
     UniqueFieldValidator,
     OnCellValueChange,
-    OnCellValueChangeParams,
-    CollectionTableProps,
-    OnColumnResizeParams
-} from "./components/CollectionTableProps";
+    OnCellValueChangeParams
+} from "./column_builder";
 
 
 

@@ -2,19 +2,19 @@ import React from "react";
 import { StringProperty } from "../../models";
 import { PreviewComponentProps } from "../PreviewComponentProps";
 
-import ErrorBoundary from "../../core/internal/ErrorBoundary";
-import StringPreview from "./StringPreview";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { StringPreview } from "./StringPreview";
 import { useStyles } from "./styles";
 
 /**
  * @category Preview components
  */
-export default function ArrayOfStringsPreview({
-                                                  name,
-                                                  value,
-                                                  property,
-                                                  size
-                                              }: PreviewComponentProps<string[]>) {
+export function ArrayOfStringsPreview({
+                                          name,
+                                          value,
+                                          property,
+                                          size
+                                      }: PreviewComponentProps<string[]>) {
 
     const classes = useStyles();
 

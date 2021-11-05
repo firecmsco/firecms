@@ -13,14 +13,14 @@ import {
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import { AnyProperty, EntityReference, Property } from "../../models";
+import { AnyProperty, EntityReference } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { PreviewComponentProps, PreviewSize } from "../PreviewComponentProps";
 
-import SkeletonComponent from "./SkeletonComponent";
-import PreviewComponent from "../PreviewComponent";
-import ErrorView from "../../core/components/ErrorView";
+import { SkeletonComponent } from "./SkeletonComponent";
+import { PreviewComponent } from "../PreviewComponent";
+import { ErrorView } from "../../core";
 import {
     useEntityFetch,
     useFireCMSContext,
@@ -34,7 +34,7 @@ export type ReferencePreviewProps =
 /**
  * @category Preview components
  */
-export default function ReferencePreview(props: ReferencePreviewProps) {
+export function ReferencePreview(props: ReferencePreviewProps) {
     return <MemoReferencePreview {...props} />;
 }
 

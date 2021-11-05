@@ -18,7 +18,7 @@ import {
     Entity,
     EntityReference,
     EntitySchema,
-    ExportConfig, MapProperty,
+    ExportConfig,
     Properties,
     Property
 } from "../../models";
@@ -34,11 +34,11 @@ interface ExportButtonProps<M extends { [Key: string]: any }> {
 
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
-export default function ExportButton<M extends { [Key: string]: any }>({
-                                                                           schema,
-                                                                           path,
-                                                                           exportConfig
-                                                                       }: ExportButtonProps<M>
+export function ExportButton<M extends { [Key: string]: any }>({
+                                                                   schema,
+                                                                   path,
+                                                                   exportConfig
+                                                               }: ExportButtonProps<M>
 ) {
 
 
@@ -215,7 +215,7 @@ export default function ExportButton<M extends { [Key: string]: any }>({
 interface Header {
     label: string,
     key: string
-};
+}
 
 function getExportHeaders<M extends { [Key: string]: any }>(properties: Properties<M>,
                                                             path: string,

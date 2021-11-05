@@ -1,5 +1,7 @@
 import React from "react";
-import { Button, Paper, useMediaQuery, useTheme } from "@mui/material";
+import { Button, Paper, Theme, useMediaQuery, useTheme } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import createStyles from "@mui/styles/createStyles";
 
 import {
     AdditionalColumnDelegate,
@@ -9,44 +11,64 @@ import {
     FilterValues,
     SaveEntityProps,
     WhereFilterOp
-} from "../../models";
-import { getSubcollectionColumnId, useColumnIds } from "../internal/common";
-import CollectionTableToolbar from "../internal/CollectionTableToolbar";
-import CollectionRowActions from "../internal/CollectionRowActions";
+} from "../models";
+import { getSubcollectionColumnId, useColumnIds } from "./internal/common";
+import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
+import { CollectionRowActions } from "./internal/CollectionRowActions";
 import {
-    CollectionTableProps,
-    OnCellValueChange,
-    UniqueFieldValidator
+    CollectionTableProps
 } from "./CollectionTableProps";
-import { useTableStyles } from "../../core/components/table/styles";
 import {
     saveEntityWithCallbacks,
     useCollectionFetch,
     useDataSource,
     useFireCMSContext,
     useSideEntityController
-} from "../../hooks";
-import Table from "../../core/components/table/Table";
-import { buildColumnsFromSchema, checkInlineEditing } from "./util";
+} from "../hooks";
+import { Table } from "../core";
+import {
+    buildColumnsFromSchema,
+    checkInlineEditing, OnCellValueChange,
+    UniqueFieldValidator
+} from "./column_builder";
 
 const DEFAULT_PAGE_SIZE = 50;
 
+export const useStyles = makeStyles<Theme>(theme => createStyles({
+    root: {
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column"
+    }
+}));
+
+
 /**
  * This component is in charge of rendering a collection table with a high
- * degree of customization.
+ * degree of customization. It is in charge of fetching data from
+ * the {@link DataSource} and holding the state of filtering and sorting.
+ *
+ * This component is used internally by {@link EntityCollectionView} and
+ * {@link ReferenceDialog}
  *
  * Please note that you only need to use this component if you are building
  * a custom view. If you just need to create a default view you can do it
  * exclusively with config options.
  *
- * If you just want to bind a EntityCollection to a collection table you can
+ * If you want to bind a EntityCollection to a table with the default
+ * options you see in colelctions in the top level navigation, you can
  * check {@link EntityCollectionView}
  *
+ * If you need a table that is not bound to the datasource or entities and
+ * properties at all, you can check {@link Table}
+ *
  * @see CollectionTableProps
- * @see EntityCollectionTable
- * @category Core components
+ * @see EntityCollectionView
+ * @see Table
+ * @category Components
  */
-export default function CollectionTable<M extends { [Key: string]: any },
+export function CollectionTable<M extends { [Key: string]: any },
     AdditionalKey extends string = string>({
                                                path,
                                                collection,
@@ -56,7 +78,8 @@ export default function CollectionTable<M extends { [Key: string]: any },
                                                tableRowActionsBuilder,
                                                entitiesDisplayedFirst,
                                                onEntityClick,
-                                               onColumnResize
+                                               onColumnResize,
+                                               hoverRow = true
                                            }: CollectionTableProps<M, AdditionalKey>) {
 
     const context = useFireCMSContext();
@@ -86,7 +109,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
 
     const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
 
-    const classes = useTableStyles();
+    const classes = useStyles();
 
     const subcollectionColumns: AdditionalColumnDelegate<any>[] = collection.subcollections?.map((subcollection) => {
         return {
@@ -140,6 +163,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                 ...entity.values,
                 [name]: value
             },
+            previousValues: entity.values,
             schema: collection.schema,
             status: "existing"
         };
@@ -215,17 +239,16 @@ export default function CollectionTable<M extends { [Key: string]: any },
 
     };
 
-    const onRowClick = ({ rowData }: any) => {
-        const entity = rowData as Entity<M>;
-        if (checkInlineEditing(inlineEditing, entity))
+    const onRowClick = ({ rowData }: { rowData: Entity<M> }) => {
+        if (checkInlineEditing(inlineEditing, rowData))
             return;
-        return onEntityClick && onEntityClick(entity);
+        return onEntityClick && onEntityClick(rowData);
     };
 
-    function isFilterCombinationValid<M extends { [Key: string]: any }>(
+    function isFilterCombinationValid<M>(
         filterValues: FilterValues<M>,
         indexes?: FilterCombination<Extract<keyof M, string>>[],
-        sortBy?: [Extract<keyof M, string>, "asc" | "desc"]
+        sortBy?: [string, "asc" | "desc"]
     ): boolean {
 
         const sortKey = sortBy ? sortBy[0] : undefined;
@@ -291,6 +314,7 @@ export default function CollectionTable<M extends { [Key: string]: any },
                 onFilterUpdate={setFilterValues}
                 sortBy={sortBy}
                 onSortByUpdate={setSortBy as any}
+                hoverRow={hoverRow}
                 checkFilterCombination={(filterValues, sortBy) => isFilterCombinationValid(filterValues, filterCombinations, sortBy)}
             />
 

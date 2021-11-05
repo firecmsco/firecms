@@ -29,10 +29,10 @@ export interface SkeletonComponentProps<T> {
 /**
  * @category Preview components
  */
-export default function SkeletonComponent<T>({
-                                                 property,
-                                                 size
-                                             }: SkeletonComponentProps<T>
+export function SkeletonComponent<T>({
+                                         property,
+                                         size
+                                     }: SkeletonComponentProps<T>
 ) {
 
     if (!property) {

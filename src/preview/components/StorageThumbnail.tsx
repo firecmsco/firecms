@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 
 import { renderSkeletonImageThumbnail } from "./SkeletonComponent";
-import UrlComponentPreview from "./UrlComponentPreview";
+import { UrlComponentPreview } from "./UrlComponentPreview";
 import { PreviewComponentProps } from "../PreviewComponentProps";
-import { useStorageSource } from "../../hooks/useStorageSource";
+import { useStorageSource } from "../../hooks";
 
 /**
  * @category Preview components
  */
-export default function StorageThumbnail({
-                                             name,
-                                             value,
-                                             property,
-                                             size
-                                         }: PreviewComponentProps<string>) {
+export function StorageThumbnail({
+                                     name,
+                                     value,
+                                     property,
+                                     size
+                                 }: PreviewComponentProps<string>) {
     const storage = useStorageSource();
 
     const storagePathOrDownloadUrl = value;

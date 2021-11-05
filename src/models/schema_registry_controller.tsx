@@ -6,6 +6,8 @@ import { SchemaConfig } from "./schema_resolver";
  * path. It takes into account the `navigation` prop set in the main level of the
  * `FireCMS` app as well as the `schemaResolver` in case you want to override schemas
  * to specific entities.
+ *
+ * @category Hooks and utilities
  */
 export interface SchemaRegistryController {
 

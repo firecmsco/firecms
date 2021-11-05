@@ -22,21 +22,21 @@ interface TableCellProps<T, M> {
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
-const TableCell = <T, M>({
-                                                            children,
-                                                            selected,
-                                                            focused,
-                                                            disabled,
-                                                            disabledTooltip,
-                                                            size,
-                                                            saved,
-                                                            error,
-                                                            align,
-                                                            allowScroll,
-                                                            openPopup,
-                                                            select,
-                                                            showExpandIcon = true
-                                                        }: TableCellProps<T, M> & CellStyleProps) => {
+const TableCellInternal = <T, M>({
+                                     children,
+                                     selected,
+                                     focused,
+                                     disabled,
+                                     disabledTooltip,
+                                     size,
+                                     saved,
+                                     error,
+                                     align,
+                                     allowScroll,
+                                     openPopup,
+                                     select,
+                                     showExpandIcon = true
+                                 }: TableCellProps<T, M> & CellStyleProps) => {
 
     const ref = React.createRef<HTMLDivElement>();
 
@@ -215,6 +215,7 @@ const TableCell = <T, M>({
     );
 };
 
-export default React.memo<TableCellProps<any, any> & CellStyleProps>(TableCell) as React.FunctionComponent<TableCellProps<any, any> & CellStyleProps>;
+export const TableCell = React.memo<TableCellProps<any, any> & CellStyleProps>(TableCellInternal) as React.FunctionComponent<TableCellProps<any, any> & CellStyleProps>;
+
 
 

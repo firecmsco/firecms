@@ -10,9 +10,8 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
-import CollectionTable from "../../collection/components/CollectionTable";
-import CollectionRowActions
-    from "../../collection/internal/CollectionRowActions";
+import { CollectionTable } from "../../collection";
+import { CollectionRowActions } from "../../collection/internal/CollectionRowActions";
 import { useDataSource } from "../../hooks";
 
 
@@ -28,7 +27,7 @@ export const useStyles = makeStyles(theme => createStyles({
 }));
 
 /**
- * @category Core components
+ * @category Components
  */
 export interface ReferenceDialogProps {
 
@@ -85,9 +84,9 @@ export interface ReferenceDialogProps {
 /**
  * This component renders an overlay dialog that allows to select entities
  * in a given collection
- * @category Core components
+ * @category Components
  */
-export default function ReferenceDialog(
+export function ReferenceDialog(
     {
         onSingleEntitySelected,
         onMultipleEntitiesSelected,
@@ -197,8 +196,8 @@ export default function ReferenceDialog(
 
                 {selectedEntities &&
                 <CollectionTable path={path}
-                                 inlineEditing={false}
                                  collection={collection}
+                                 inlineEditing={false}
                                  toolbarActionsBuilder={toolbarActionsBuilder}
                                  onEntityClick={onEntityClick}
                                  tableRowActionsBuilder={tableRowActionsBuilder}

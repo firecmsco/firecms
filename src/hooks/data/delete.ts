@@ -1,9 +1,10 @@
 import {
     DataSource,
     DeleteEntityProps,
-    Entity, EntityCallbacks,
-    FireCMSContext,
-    EntityOnDeleteProps
+    Entity,
+    EntityCallbacks,
+    EntityOnDeleteProps,
+    FireCMSContext
 } from "../../models";
 
 /**

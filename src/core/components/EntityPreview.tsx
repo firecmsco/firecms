@@ -21,10 +21,10 @@ import {
     Property,
     PropertyOrBuilder
 } from "../../models";
-import PreviewComponent from "../../preview/PreviewComponent";
+import { PreviewComponent } from "../../preview/PreviewComponent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
-import ErrorBoundary from "../internal/ErrorBoundary";
+import { ErrorBoundary } from "../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
 import { buildPropertyFrom } from "../util/property_builder";
 
@@ -48,7 +48,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
- * @category Core components
+ * @category Components
  */
 export interface EntityPreviewProps<M extends { [Key: string]: any }> {
     entity: Entity<M>;
@@ -60,9 +60,9 @@ export interface EntityPreviewProps<M extends { [Key: string]: any }> {
  * @param entity
  * @param schema
  * @constructor
- * @category Core components
+ * @category Components
  */
-export default function EntityPreview<M extends { [Key: string]: any }>(
+export function EntityPreview<M extends { [Key: string]: any }>(
     {
         entity,
         schema

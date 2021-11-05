@@ -2,8 +2,8 @@ import { CMSType, FieldProps, Property } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@mui/material";
 import React, { useState } from "react";
 import { FieldDescription } from "../../form/components";
-import LabelWithIcon from "../components/LabelWithIcon";
-import ArrayContainer from "../components/ArrayContainer";
+import { LabelWithIcon } from "../components/LabelWithIcon";
+import { ArrayContainer } from "../components/ArrayContainer";
 import { formStyles } from "../styles";
 import { buildPropertyField } from "../form_factory";
 import { useClearRestoreValue } from "../../hooks";
@@ -16,21 +16,21 @@ import { useClearRestoreValue } from "../../hooks";
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function ArrayDefaultField<T extends Array<any>>({
-                                                                    name,
-                                                                    value,
-                                                                    error,
-                                                                    showError,
-                                                                    isSubmitting,
-                                                                    setValue,
-                                                                    tableMode,
-                                                                    property,
-                                                                    includeDescription,
-                                                                    underlyingValueHasChanged,
-                                                                    context,
-                                                                    disabled,
-                                                                    dependsOnOtherProperties
-                                                                }: FieldProps<T>) {
+export function ArrayDefaultField<T extends Array<any>>({
+                                                            name,
+                                                            value,
+                                                            error,
+                                                            showError,
+                                                            isSubmitting,
+                                                            setValue,
+                                                            tableMode,
+                                                            property,
+                                                            includeDescription,
+                                                            underlyingValueHasChanged,
+                                                            context,
+                                                            disabled,
+                                                            dependsOnOtherProperties
+                                                        }: FieldProps<T>) {
 
     if (!property.of)
         throw Error("ArrayDefaultField misconfiguration. Property `of` not set");

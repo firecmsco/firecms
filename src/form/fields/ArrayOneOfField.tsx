@@ -10,11 +10,11 @@ import {
 import { FastField, FieldProps as FormikFieldProps } from "formik";
 
 import { formStyles } from "../styles";
-import ArrayContainer from "../components/ArrayContainer";
-import FieldDescription from "../components/FieldDescription";
+import { ArrayContainer } from "../components/ArrayContainer";
+import { FieldDescription } from "../components/FieldDescription";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
-import LabelWithIcon from "../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 import { enumToObjectEntries } from "../../core/util/enums";
 import { EnumValues, FieldProps, FormContext, Property } from "../../models";
@@ -28,21 +28,21 @@ import { EnumValues, FieldProps, FormContext, Property } from "../../models";
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function ArrayOneOfField<T extends Array<any>>({
-                                                                  name,
-                                                                  value,
-                                                                  error,
-                                                                  showError,
-                                                                  isSubmitting,
-                                                                  setValue,
-                                                                  tableMode,
-                                                                  property,
-                                                                  includeDescription,
-                                                                  underlyingValueHasChanged,
-                                                                  context,
-                                                                  disabled,
-                                                                  dependsOnOtherProperties
-                                                              }: FieldProps<T>) {
+export function ArrayOneOfField<T extends Array<any>>({
+                                                          name,
+                                                          value,
+                                                          error,
+                                                          showError,
+                                                          isSubmitting,
+                                                          setValue,
+                                                          tableMode,
+                                                          property,
+                                                          includeDescription,
+                                                          underlyingValueHasChanged,
+                                                          context,
+                                                          disabled,
+                                                          dependsOnOtherProperties
+                                                      }: FieldProps<T>) {
 
     if (!property.oneOf)
         throw Error("ArrayOneOfField misconfiguration. Property `oneOf` not set");

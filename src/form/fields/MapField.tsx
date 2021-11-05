@@ -14,7 +14,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 
 import { formStyles } from "../styles";
 import { pick } from "../../core/util/objects";
-import LabelWithIcon from "../components/LabelWithIcon";
+import { LabelWithIcon } from "../components/LabelWithIcon";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
 import { FieldDescription } from "../components";
@@ -27,18 +27,18 @@ import { isHidden } from "../../core/utils";
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function MapField<T extends object>({
-                                                       name,
-                                                       value,
-                                                       showError,
-                                                       disabled,
-                                                       property,
-                                                       setValue,
-                                                       tableMode,
-                                                       includeDescription,
-                                                       underlyingValueHasChanged,
-                                                       context
-                                                   }: FieldProps<T>) {
+export function MapField<T extends object>({
+                                               name,
+                                               value,
+                                               showError,
+                                               disabled,
+                                               property,
+                                               setValue,
+                                               tableMode,
+                                               includeDescription,
+                                               underlyingValueHasChanged,
+                                               context
+                                           }: FieldProps<T>) {
 
     const classes = formStyles();
 

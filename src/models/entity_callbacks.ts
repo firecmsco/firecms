@@ -77,6 +77,11 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
     values: Partial<EntityValues<M>>;
 
     /**
+     * Values being saved
+     */
+    previousValues?: Partial<EntityValues<M>>;
+
+    /**
      * New or existing entity
      */
     status: EntityStatus;
