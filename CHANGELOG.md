@@ -1,9 +1,26 @@
-## [1.0.0-beta3] - 2021-10-07
+## [1.0.0-beta3] - 2021-11-07
+
 ### Changed
+
 - `EntityCollectionTable` has been renamed to `EntityCollectionView`
+- Reference visual fix
+  [144](https://github.com/Camberi/firecms/issues/144)
+- Removed `entityId` to `PropertyBuilder` when copying an entity
+  [145](https://github.com/Camberi/firecms/issues/145)
+- Fix and reimplemented navigation blocking behaviour
+  [146](https://github.com/Camberi/firecms/issues/146)
+- Hiding correctly `hidden` properties if they are in a `MapProperty
+
+### Added
+
+- New `Table` component used internally by `CollectionTable`. `Table` is not
+  coupled with our entities and collections models and can be used as a single
+  component. It includes generic sorting and filtering capabilities.
 
 ## [1.0.0-beta2] - 2021-10-07
+
 ### Changed
+
 - When copying an entity the permission used is `create` now, instead of `edit`.
 - Fix for entities not being saved when new or copy was clicked
 - Fix for multiple delete keeping old state.
@@ -11,7 +28,9 @@
 - Fix for array of number enums.
 
 ### Added
+
 Added `hidden` configuration to disabled fields:
+
 ```tsx
 buildProperty({
     dataType: "string",
