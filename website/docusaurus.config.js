@@ -33,7 +33,7 @@ module.exports = {
         announcementBar: {
             id: 'new_version',
             content:
-                'Version 1.0.0-beta2 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/migrating_from_alpha_versions">migration guide</a>',
+                'Version 1.0.0-beta3 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/migrating_from_alpha_versions">migration guide</a>',
             backgroundColor: '#FF5B79',
             textColor: 'black',
             isCloseable: true,
