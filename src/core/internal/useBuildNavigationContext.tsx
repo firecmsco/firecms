@@ -1,40 +1,59 @@
 import React, { useEffect, useState } from "react";
 import {
+    AuthController,
+    DataSource,
     EntityCollection,
+    Locale,
     Navigation,
     NavigationBuilder,
     NavigationContext,
+    StorageSource,
     User
 } from "../../models";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
-import { AuthController } from "../../models/auth";
 
 export function useBuildNavigationContext({
                                               basePath,
                                               baseCollectionPath,
                                               authController,
-                                              navigationOrBuilder
+                                              navigationOrBuilder,
+                                              dateTimeFormat,
+                                              locale,
+                                              dataSource,
+                                              storageSource
                                           }: {
     basePath: string,
     baseCollectionPath: string,
     authController: AuthController;
-    navigationOrBuilder: Navigation | NavigationBuilder | EntityCollection[]
+    navigationOrBuilder: Navigation | NavigationBuilder | EntityCollection[];
+    dateTimeFormat?: string;
+    locale?: Locale;
+    dataSource: DataSource;
+    storageSource: StorageSource;
 }): NavigationContext {
 
     const [navigation, setNavigation] = useState<Navigation | undefined>(undefined);
     const [navigationLoading, setNavigationLoading] = useState<boolean>(false);
     const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
 
-    async function getNavigation(navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[],
-                                 user: User | null,
-                                 authController: AuthController): Promise<Navigation> {
+    async function getNavigation({ navigationOrCollections, user, authController, dateTimeFormat, locale, dataSource, storageSource }:
+                                     {
+                                         navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[],
+                                         user: User | null,
+                                         authController: AuthController,
+                                         dateTimeFormat?: string,
+                                         locale?: Locale,
+                                         dataSource: DataSource,
+                                         storageSource: StorageSource
+                                     }
+    ): Promise<Navigation> {
 
         if (Array.isArray(navigationOrCollections)) {
             return {
                 collections: navigationOrCollections
             };
         } else if (typeof navigationOrCollections === "function") {
-            return navigationOrCollections({ user, authController });
+            return navigationOrCollections({ user, authController, dateTimeFormat,locale, dataSource, storageSource });
         } else {
             return navigationOrCollections;
         }
@@ -45,7 +64,15 @@ export function useBuildNavigationContext({
             return;
         }
         setNavigationLoading(true);
-        getNavigation(navigationOrBuilder, authController.user, authController)
+        getNavigation({
+            navigationOrCollections: navigationOrBuilder,
+            user: authController            .user,
+            authController,
+            dateTimeFormat,
+            locale,
+            dataSource,
+            storageSource
+        })
             .then((result: Navigation) => {
                 setNavigation(result);
                 setNavigationLoading(false);

@@ -1,4 +1,7 @@
 import { AuthController } from "./auth";
+import { Locale } from "./locales";
+import { DataSource } from "./datasource";
+import { StorageSource } from "./storage";
 
 /**
  * This interface represents a user.
@@ -62,6 +65,34 @@ export type User = {
  * @category Models
  */
 export type Authenticator = ({ user }: {
-    user?: User,
+    /**
+     * Logged in user or null
+     */
+    user: User | null;
+
+    /**
+     * AuthController
+     */
     authController: AuthController;
+
+    /**
+     * Format of the dates in the CMS.
+     * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
+     */
+    dateTimeFormat?: string;
+
+    /**
+     * Locale of the CMS, currently only affecting dates
+     */
+    locale?: Locale;
+
+    /**
+     * Connector to your database, e.g. your Firestore database
+     */
+    dataSource: DataSource;
+
+    /**
+     * Used storage implementation
+     */
+    storageSource: StorageSource;
 }) => boolean | Promise<boolean>;

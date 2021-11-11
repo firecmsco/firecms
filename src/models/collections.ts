@@ -321,7 +321,7 @@ export interface ExportConfig {
  */
 export interface ExportMappingFunction {
     key: string;
-    builder: ({ entity }: { entity: Entity<any> }) => Promise<string> | string
+    builder: ({ entity, context }: { entity: Entity<any>, context: FireCMSContext }) => Promise<string> | string;
 }
 
 /**

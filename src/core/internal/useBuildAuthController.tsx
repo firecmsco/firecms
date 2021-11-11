@@ -3,13 +3,27 @@ import {
     AuthController,
     AuthDelegate,
     Authenticator,
+    DataSource,
+    Locale,
+    StorageSource,
     User
 } from "../../models";
 
 export function useBuildAuthController({
                                            authDelegate,
-                                           authentication
-                                       }: { authDelegate: AuthDelegate, authentication?: boolean | Authenticator }): AuthController {
+                                           authentication,
+                                           dateTimeFormat,
+                                           locale,
+                                           dataSource,
+                                           storageSource
+                                       }: {
+    authDelegate: AuthDelegate,
+    authentication?: boolean | Authenticator,
+    dateTimeFormat?: string;
+    locale?: Locale;
+    dataSource: DataSource;
+    storageSource: StorageSource;
+}): AuthController {
 
     const [user, setUser] = useState<User | null>(null);
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
@@ -21,7 +35,11 @@ export function useBuildAuthController({
             try {
                 const allowed = await authentication({
                     user: delegateUser,
-                    authController
+                    authController,
+                    dateTimeFormat,
+                    locale,
+                    dataSource,
+                    storageSource
                 });
                 if (allowed)
                     setUser(delegateUser);

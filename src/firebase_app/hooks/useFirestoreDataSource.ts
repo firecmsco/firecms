@@ -79,19 +79,21 @@ export function useFirestoreDataSource({
     /**
      *
      * @param doc
-     * @param schema
      * @param path
+     * @param schema
      * @category Firestore
      */
     function createEntityFromSchema<M extends { [Key: string]: any }>
     (
         doc: DocumentSnapshot,
-        schema: EntitySchema<M>,
-        path: string
+        path: string,
+        schema?: EntitySchema<M>
     ): Entity<M> {
 
         const data = doc.data() ?
-            sanitizeData(firestoreToCMSModel(doc.data(), schema, path) as EntityValues<M>, schema, path)
+            schema ?
+                sanitizeData(firestoreToCMSModel(doc.data(), schema, path) as EntityValues<M>, schema, path)
+                : doc.data()
             : undefined;
         return {
             id: doc.id,
@@ -191,7 +193,7 @@ export function useFirestoreDataSource({
     function getAndBuildEntity<M>(path: string, entityId: string, schema: EntitySchema<M>) {
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
         return getDoc(doc(firestore, path, entityId))
-            .then((docSnapshot) => createEntityFromSchema(docSnapshot, schema, path));
+            .then((docSnapshot) => createEntityFromSchema(docSnapshot, path, schema));
     }
 
     async function performTextSearch<M>(path: string, searchString: string, schema: EntitySchema<M>): Promise<Entity<M>[]> {
@@ -250,7 +252,7 @@ export function useFirestoreDataSource({
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
             return getDocs(query)
                 .then((snapshot) =>
-                    snapshot.docs.map((doc) => createEntityFromSchema(doc, schema, path)));
+                    snapshot.docs.map((doc) => createEntityFromSchema(doc, path, schema)));
         },
 
 
@@ -299,8 +301,11 @@ export function useFirestoreDataSource({
             }
 
             return onSnapshot(query,
-                (colSnapshot) =>
-                    onUpdate(colSnapshot.docs.map((doc) => createEntityFromSchema(doc, schema, path))),
+                { includeMetadataChanges: false },
+                (snapshot) => {
+                    if (!snapshot.metadata.hasPendingWrites)
+                        onUpdate(snapshot.docs.map((doc) => createEntityFromSchema(doc, path, schema)));
+                },
                 onError
             );
         },
@@ -319,7 +324,7 @@ export function useFirestoreDataSource({
                                                           schema
                                                       }: FetchEntityProps<M>
         ): Promise<Entity<M>> {
-            console.debug("Fetch entity", path, entityId);
+            // console.debug("Fetch entity", path, entityId);
             return getAndBuildEntity(path, entityId, schema);
         },
 
@@ -342,10 +347,10 @@ export function useFirestoreDataSource({
                 onError
             }: ListenEntityProps<M>): () => void {
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
-            console.debug("Listening entity", path, entityId);
+            // console.debug("Listening entity", path, entityId);
             return onSnapshot(
                 doc(firestore, path, entityId),
-                (docSnapshot) => onUpdate(createEntityFromSchema(docSnapshot, schema, path)),
+                (docSnapshot) => onUpdate(createEntityFromSchema(docSnapshot, path, schema)),
                 onError
             );
         },

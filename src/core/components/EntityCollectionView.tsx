@@ -11,7 +11,12 @@ import {
 } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 
-import { CollectionSize, Entity, EntityCollection } from "../../models";
+import {
+    AnyProperty,
+    CollectionSize,
+    Entity,
+    EntityCollection
+} from "../../models";
 import { CollectionTable, OnColumnResizeParams } from "../../collection";
 
 import { CollectionRowActions } from "../../collection/internal/CollectionRowActions";
@@ -25,6 +30,12 @@ import {
     useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
+import {
+    getCollectionConfig,
+    PartialEntityCollection,
+    saveCollectionConfig
+} from "../util/storage";
+import { mergeDeep } from "../util/objects";
 
 /**
  * @category Components
@@ -32,11 +43,6 @@ import {
 export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
     path: string;
     collection: EntityCollection<M>;
-}
-
-function getCollectionConfig(storageKey: string) {
-    const item = localStorage.getItem(storageKey);
-    return item ? JSON.parse(item) : {};
 }
 
 /**
@@ -78,11 +84,14 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
     const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
+    const [extraConfiguration, setExtraConfiguration] = useState<PartialEntityCollection<M>>(getCollectionConfig(path));
 
-    const exportable = collection.exportable === undefined || collection.exportable;
+    const mergedCollection: EntityCollection = mergeDeep(collection, extraConfiguration) as any;
 
-    const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
-    const hoverRow = collection.inlineEditing !== undefined && !collection.inlineEditing;
+    const exportable = mergedCollection.exportable === undefined || mergedCollection.exportable;
+
+    const selectionEnabled = mergedCollection.selectionEnabled === undefined || mergedCollection.selectionEnabled;
+    const hoverRow = mergedCollection.inlineEditing !== undefined && !mergedCollection.inlineEditing;
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
@@ -90,10 +99,10 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         sideEntityController.open({
             entityId: entity.id,
             path,
-            permissions: collection.permissions,
-            schema: collection.schema,
-            subcollections: collection.subcollections,
-            callbacks: collection.callbacks,
+            permissions: mergedCollection.permissions,
+            schema: mergedCollection.schema,
+            subcollections: mergedCollection.subcollections,
+            callbacks: mergedCollection.callbacks,
             overrideSchemaResolver: false
         });
     };
@@ -102,10 +111,10 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         e.stopPropagation();
         return path && sideEntityController.open({
             path,
-            permissions: collection.permissions,
-            schema: collection.schema,
-            subcollections: collection.subcollections,
-            callbacks: collection.callbacks,
+            permissions: mergedCollection.permissions,
+            schema: mergedCollection.schema,
+            subcollections: mergedCollection.subcollections,
+            callbacks: mergedCollection.callbacks,
             overrideSchemaResolver: false
         });
     };
@@ -120,20 +129,20 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
     };
 
     const checkInlineEditing = (entity: Entity<any>) => {
-        if (!canEdit(collection.permissions, entity, authController, path, context)) {
+        if (!canEdit(mergedCollection.permissions, entity, authController, path, context)) {
             return false;
         }
-        return collection.inlineEditing === undefined || collection.inlineEditing;
+        return mergedCollection.inlineEditing === undefined || mergedCollection.inlineEditing;
     };
 
 
     const onColumnResize = ({ width, key }: OnColumnResizeParams) => {
         console.log("onColumnResize", width, key);
-        const storageKey = `collection_config_${path}`;
-        const collectionConfig = getCollectionConfig(storageKey);
-
-        localStorage.setItem(storageKey, JSON.stringify({}));
-
+        const key1: keyof M = key as keyof M;
+        const property: Partial<AnyProperty> = { columnWidth: width };
+        const newCollection: PartialEntityCollection<M> = { ...extraConfiguration, ...{ schema: { properties: { [key1]: property } } } };
+        setExtraConfiguration(newCollection);
+        saveCollectionConfig(path, newCollection);
     };
 
     const open = anchorEl != null;
@@ -150,14 +159,14 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     maxWidth: "160px",
-                    cursor: collection.description ? "pointer" : "inherit"
+                    cursor: mergedCollection.description ? "pointer" : "inherit"
                 }}
-                onClick={collection.description ? (e) => {
+                onClick={mergedCollection.description ? (e) => {
                     setAnchorEl(e.currentTarget);
                     e.stopPropagation();
                 } : undefined}
             >
-                {`${collection.name}`}
+                {`${mergedCollection.name}`}
             </Typography>
             <Typography
                 style={{
@@ -174,7 +183,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 {`/${path}`}
             </Typography>
 
-            {collection.description &&
+            {mergedCollection.description &&
             <Popover
                 id={"info-dialog"}
                 open={open}
@@ -194,7 +203,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             >
 
                 <Box m={2}>
-                    <Markdown source={collection.description}/>
+                    <Markdown source={mergedCollection.description}/>
                 </Box>
 
             </Popover>
@@ -221,9 +230,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
         const isSelected = selectedEntities.indexOf(entity) > -1;
 
-        const createEnabled = canCreate(collection.permissions, authController, path, context);
-        const editEnabled = canEdit(collection.permissions, entity, authController, path, context);
-        const deleteEnabled = canDelete(collection.permissions, entity, authController, path, context);
+        const createEnabled = canCreate(mergedCollection.permissions, authController, path, context);
+        const editEnabled = canEdit(mergedCollection.permissions, entity, authController, path, context);
+        const deleteEnabled = canDelete(mergedCollection.permissions, entity, authController, path, context);
 
         const onCopyClicked = (entity: Entity<M>) => sideEntityController.open({
             entityId: entity.id,
@@ -234,9 +243,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: collection.schema,
-            subcollections: collection.subcollections,
-            callbacks: collection.callbacks,
+            schema: mergedCollection.schema,
+            subcollections: mergedCollection.subcollections,
+            callbacks: mergedCollection.callbacks,
             overrideSchemaResolver: false
         });
 
@@ -248,9 +257,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: collection.schema,
-            subcollections: collection.subcollections,
-            callbacks: collection.callbacks,
+            schema: mergedCollection.schema,
+            subcollections: mergedCollection.subcollections,
+            callbacks: mergedCollection.callbacks,
             overrideSchemaResolver: false
         });
 
@@ -274,14 +283,14 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                                        data
                                    }: { size: CollectionSize, data: Entity<any>[] }) {
 
-        const addButton = canCreate(collection.permissions, authController, path, context) && onNewClick && (largeLayout ?
+        const addButton = canCreate(mergedCollection.permissions, authController, path, context) && onNewClick && (largeLayout ?
             <Button
                 onClick={onNewClick}
                 startIcon={<Add/>}
                 size="large"
                 variant="contained"
                 color="primary">
-                Add {collection.schema.name}
+                Add {mergedCollection.schema.name}
             </Button>
             : <Button
                 onClick={onNewClick}
@@ -292,7 +301,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 <Add/>
             </Button>);
 
-        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collection.permissions, entity, authController, path, context));
+        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(mergedCollection.permissions, entity, authController, path, context));
         const onMultipleDeleteClick = (event: React.MouseEvent) => {
             event.stopPropagation();
             setDeleteEntityClicked(selectedEntities);
@@ -322,7 +331,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 </span>
             </Tooltip>;
 
-        const extraActions = collection.extraActions ? collection.extraActions({
+        const extraActions = mergedCollection.extraActions ? mergedCollection.extraActions({
             path,
             collection,
             selectedEntities,
@@ -330,8 +339,8 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         }) : undefined;
 
         const exportButton = exportable &&
-            <ExportButton schema={collection.schema}
-                          exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
+            <ExportButton schema={mergedCollection.schema}
+                          exportConfig={typeof mergedCollection.exportable === "object" ? mergedCollection.exportable : undefined}
                           path={path}/>;
 
         return (
@@ -350,7 +359,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             <CollectionTable
                 title={title}
                 path={path}
-                collection={collection}
+                collection={mergedCollection}
                 inlineEditing={checkInlineEditing}
                 onEntityClick={onEntityClick}
                 onColumnResize={onColumnResize}
@@ -361,8 +370,8 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 path={path}
-                                schema={collection.schema}
-                                callbacks={collection.callbacks}
+                                schema={mergedCollection.schema}
+                                callbacks={mergedCollection.callbacks}
                                 open={!!deleteEntityClicked}
                                 onEntityDelete={internalOnEntityDelete}
                                 onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}

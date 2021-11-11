@@ -1,3 +1,13 @@
+## [1.0.0-beta4] - 2021-11-
+
+### Added
+
+- Added additional props to `NavigationBuilder` and `Authenticator`, including
+  `dataSource` and `storageSource`. These are useful if you need to fetch some
+  data from your datasource (such as if you want to check if a logged user
+  has an entry in Firestore) and apply the corresponding permissions
+  or navigation.
+
 ## [1.0.0-beta3] - 2021-11-07
 
 ### Changed

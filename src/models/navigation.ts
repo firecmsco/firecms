@@ -1,6 +1,10 @@
 import { AuthController } from "./auth";
 import { EntityCollection } from "./collections";
 import { User } from "./user";
+import { FireCMSContext } from "./firecms_context";
+import { Locale } from "./locales";
+import { DataSource } from "./datasource";
+import { StorageSource } from "./storage";
 
 
 /**
@@ -16,8 +20,36 @@ export type NavigationBuilder =
  * @category Models
  */
 export interface NavigationBuilderProps {
-    user: User | null,
-    authController: AuthController
+    /**
+     * Logged in user or null
+     */
+    user: User | null;
+
+    /**
+     * AuthController
+     */
+    authController: AuthController;
+
+    /**
+     * Format of the dates in the CMS.
+     * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
+     */
+    dateTimeFormat?: string;
+
+    /**
+     * Locale of the CMS, currently only affecting dates
+     */
+    locale?: Locale;
+
+    /**
+     * Connector to your database, e.g. your Firestore database
+     */
+    dataSource: DataSource;
+
+    /**
+     * Used storage implementation
+     */
+    storageSource: StorageSource;
 }
 
 /**
@@ -74,6 +106,7 @@ export type NavigationContext = {
      * Default path under the collection routes of the CMS will be created
      */
     baseCollectionPath: string;
+
 }
 
 

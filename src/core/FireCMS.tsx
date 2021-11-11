@@ -156,14 +156,22 @@ export function FireCMS(props: FireCMSProps) {
 
     const authController = useBuildAuthController({
         authDelegate,
-        authentication
+        authentication,
+        dateTimeFormat,
+        locale,
+        dataSource,
+        storageSource,
     });
 
     const navigationContext = useBuildNavigationContext({
         basePath: usedBasePath,
         baseCollectionPath: usedBasedCollectionPath,
         authController,
-        navigationOrBuilder
+        navigationOrBuilder,
+        dateTimeFormat,
+        locale,
+        dataSource,
+        storageSource,
     });
 
     const schemaRegistryController = useBuildSchemaRegistryController(navigationContext, schemaResolver);

@@ -23,7 +23,7 @@ import {
     Property
 } from "../../models";
 import { computeSchemaProperties } from "../../core/utils";
-import { useDataSource } from "../../hooks";
+import { useDataSource, useFireCMSContext } from "../../hooks";
 import { buildPropertyFrom } from "../../core/util/property_builder";
 
 interface ExportButtonProps<M extends { [Key: string]: any }> {
@@ -43,6 +43,7 @@ export function ExportButton<M extends { [Key: string]: any }>({
 
 
     const dataSource = useDataSource();
+    const context = useFireCMSContext();
     const csvLinkEl = React.useRef<any>(null);
 
     const [data, setData] = React.useState<Entity<M>[]>();
@@ -91,7 +92,7 @@ export function ExportButton<M extends { [Key: string]: any }>({
 
             const resolvedColumnsValues: Record<string, any>[] = await Promise.all(entities.map(async (entity) => {
                 return (await Promise.all(additionalColumns.map(async (column) => {
-                    return { [column.key]: await column.builder({ entity }) };
+                    return { [column.key]: await column.builder({ entity, context }) };
                 }))).reduce((a, b) => ({ ...a, ...b }), {});
             }));
 
