@@ -4,9 +4,12 @@
 
 - Added additional props to `NavigationBuilder` and `Authenticator`, including
   `dataSource` and `storageSource`. These are useful if you need to fetch some
-  data from your datasource (such as if you want to check if a logged user
-  has an entry in Firestore) and apply the corresponding permissions
-  or navigation.
+  data from your datasource (such as if you want to check if a logged user has
+  an entry in Firestore) and apply the corresponding permissions or navigation.
+- `useCollectionFetch` now uses `sortBy` in the format
+  `[Extract<keyof M, string>, "asc" | "desc"]` for consistency
+- Internal work around to prevent collections going back to the start due to
+  Firestore returning incomplete collection data
 
 ## [1.0.0-beta3] - 2021-11-07
 

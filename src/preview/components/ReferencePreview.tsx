@@ -119,7 +119,8 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     } = useEntityFetch({
         path: reference.path,
         entityId: reference.id,
-        schema
+        schema,
+        useCache: true
     });
 
     let listProperties = previewProperties;

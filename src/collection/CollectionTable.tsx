@@ -104,9 +104,6 @@ export function CollectionTable<M extends { [Key: string]: any },
     const [filterValues, setFilterValues] = React.useState<FilterValues<M> | undefined>(initialFilter || {});
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSort);
 
-    const sortByProperty = sortBy ? sortBy[0] : undefined;
-    const currentSort = sortBy ? sortBy[1] : undefined;
-
     const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
 
     const classes = useStyles();
@@ -204,9 +201,8 @@ export function CollectionTable<M extends { [Key: string]: any },
         path,
         schema,
         filterValues,
-        sortByProperty,
+        sortBy,
         searchString,
-        currentSort,
         itemCount
     });
 

@@ -145,7 +145,8 @@ export function ReferenceField<M extends { [Key: string]: any }>({
     } = useEntityFetch({
         path: validValue ? value.path : undefined,
         entityId: validValue ? value.id : undefined,
-        schema
+        schema,
+        useCache: true
     });
 
     const handleEntityClick = (entity: Entity<M>) => {

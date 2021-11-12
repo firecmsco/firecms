@@ -169,7 +169,12 @@ export function SideEntityView<M extends { [Key: string]: any }>({
         entity,
         dataLoading,
         dataLoadingError
-    } = useEntityFetch({ path, entityId: currentEntityId, schema });
+    } = useEntityFetch({
+        path,
+        entityId: currentEntityId,
+        schema,
+        useCache: false
+    });
 
     useEffect(() => {
         if (entity)

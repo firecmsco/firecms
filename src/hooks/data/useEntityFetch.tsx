@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Entity, EntitySchema } from "../../models";
 import { useDataSource } from "./useDataSource";
 
@@ -6,9 +6,10 @@ import { useDataSource } from "./useDataSource";
  * @category Hooks and utilities
  */
 export interface EntityFetchProps<M extends { [Key: string]: any }> {
-    path?: string,
-    entityId?: string,
-    schema?: EntitySchema<M>,
+    path?: string;
+    entityId?: string;
+    schema?: EntitySchema<M>;
+    useCache?: boolean;
 }
 
 /**
@@ -20,19 +21,23 @@ export interface EntityFetchResult<M extends { [Key: string]: any }> {
     dataLoadingError?: Error
 }
 
+const CACHE = {};
+
 /**
  * This hook is used to fetch an entity.
  * It gives real time updates if the datasource supports it.
  * @param path
  * @param schema
  * @param entityId
+ * @param listen
  * @category Hooks and utilities
  */
 export function useEntityFetch<M extends { [Key: string]: any }>(
     {
         path,
         entityId,
-        schema
+        schema,
+        useCache = false
     }: EntityFetchProps<M>): EntityFetchResult<M> {
 
     const dataSource = useDataSource();
@@ -45,6 +50,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
         setDataLoading(true);
 
         const onEntityUpdate = (updatedEntity: Entity<M> | undefined) => {
+            CACHE[`${path}/${entityId}`] = updatedEntity;
             setEntity(updatedEntity);
             setDataLoading(false);
             setDataLoadingError(undefined);
@@ -57,7 +63,15 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
             setDataLoadingError(error);
         };
 
-        if (entityId && path && schema) {
+        if(useCache && CACHE[`${path}/${entityId}`]){
+            setEntity(CACHE[`${path}/${entityId}`]);
+            setDataLoading(false);
+            setDataLoadingError(undefined);
+            return () => {
+            };
+        }
+
+        else if (entityId && path && schema) {
             if (dataSource.listenEntity) {
                 return dataSource.listenEntity<M>({
                     path,

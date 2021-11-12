@@ -19,7 +19,9 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
      */
     schema: EntitySchema<M>;
 
-
+    /**
+     * Number of entities to fetch
+     */
     itemCount?: number;
 
     /**
@@ -28,12 +30,19 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
      */
     entitiesDisplayedFirst?: Entity<M>[];
 
+    /**
+     * Filter the fetched data by the property
+     */
     filterValues?: FilterValues<M>;
 
-    sortByProperty?: Extract<keyof M, string>;
+    /**
+     * Sort the results by
+     */
+    sortBy?: [Extract<keyof M, string>, "asc" | "desc"];
 
-    currentSort?: Order;
-
+    /**
+     * Search string
+     */
     searchString?: string;
 }
 
@@ -52,8 +61,7 @@ export interface CollectionFetchResult<M extends { [Key: string]: any }> {
  * @param path
  * @param schema
  * @param filter
- * @param sortByProperty
- * @param currentSort
+ * @param sortBy
  * @param itemCount
  * @param entitiesDisplayedFirst
  * @category Hooks and utilities
@@ -63,12 +71,14 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
         path,
         schema,
         filterValues,
-        sortByProperty,
-        currentSort,
+        sortBy,
         itemCount,
         searchString,
         entitiesDisplayedFirst
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
+
+    const sortByProperty = sortBy ? sortBy[0] : undefined;
+    const currentSort = sortBy ? sortBy[1] : undefined;
 
     const dataSource = useDataSource();
     const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];
@@ -90,10 +100,9 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
         }
     };
 
-
     useEffect(() => {
         resetData.current = true;
-    }, [path, itemCount, currentSort, sortByProperty, filterValues, searchString]);
+    }, [path, currentSort, sortByProperty, filterValues, searchString]);
 
     useEffect(() => {
 
