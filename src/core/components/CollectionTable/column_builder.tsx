@@ -9,23 +9,23 @@ import {
     FireCMSContext,
     Property,
     PropertyOrBuilder
-} from "../models";
-import { buildPropertyFrom } from "../core/util/property_builder";
+} from "../../../models";
+import { buildPropertyFrom } from "../../util/property_builder";
 import React, { useCallback, useEffect, useMemo } from "react";
-import { TableCell } from "../core/components/table/TableCell";
-import { PreviewComponent, SkeletonComponent } from "../preview";
-import { getPreviewSizeFrom } from "../preview/util";
-import { CustomFieldValidator, mapPropertyToYup } from "../form/validation";
+import { TableCell } from "../Table/TableCell";
+import { PreviewComponent, SkeletonComponent } from "../../../preview";
+import { getPreviewSizeFrom } from "../../../preview/util";
+import { CustomFieldValidator, mapPropertyToYup } from "../../../form/validation";
 import {
     OnCellChangeParams,
     PropertyTableCell
 } from "./internal/PropertyTableCell";
-import { ErrorBoundary } from "../core/internal/ErrorBoundary";
-import { useFireCMSContext } from "../hooks";
+import { ErrorBoundary } from "../../internal/ErrorBoundary";
+import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
-import { TableColumn, TableColumnFilter, TableEnumValues } from "../core";
-import { getIconForProperty } from "../core/util/property_icons";
-import { enumToObjectEntries, isEnumValueDisabled } from "../core/util/enums";
+import { TableColumn, TableColumnFilter, TableEnumValues } from "../../index";
+import { getIconForProperty } from "../../util/property_icons";
+import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
 
 
 export type ColumnsFromSchemaProps<M, AdditionalKey extends string> = {

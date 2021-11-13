@@ -7,23 +7,23 @@ import {
     ReferenceProperty,
     StringProperty,
     TimestampProperty
-} from "../../models";
+} from "../../../../models";
 import React, { useCallback, useEffect, useState } from "react";
 import { TableInput } from "./fields/TableInput";
 import { TableSelect } from "./fields/TableSelect";
 import { NumberTableInput } from "./fields/TableNumberInput";
 import { TableSwitch } from "./fields/TableSwitch";
 import { TableDateField } from "./fields/TableDateField";
-import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
-import { PreviewComponent } from "../../preview";
-import { CellStyleProps } from "../../core/components/table/styles";
+import { ErrorBoundary } from "../../../internal/ErrorBoundary";
+import { PreviewComponent } from "../../../../preview";
+import { CellStyleProps } from "../../Table/styles";
 import { TableReferenceField } from "./fields/TableReferenceField";
 
-import { getPreviewSizeFrom } from "../../preview/util";
-import { useClearRestoreValue } from "../../hooks";
+import { getPreviewSizeFrom } from "../../../../preview/util";
+import { useClearRestoreValue } from "../../../../hooks";
 import deepEqual from "deep-equal";
-import { isReadOnly } from "../../core/utils";
-import { TableCell } from "../../core/components/table/TableCell";
+import { isReadOnly } from "../../../utils";
+import { TableCell } from "../../Table/TableCell";
 import { AnySchema } from "yup";
 
 

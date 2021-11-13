@@ -12,16 +12,16 @@ import {
     FormContext,
     PropertiesOrBuilder,
     Property
-} from "../../../models";
+} from "../../../../../models";
 import { Form, Formik, FormikProps } from "formik";
 import { useDraggable } from "./useDraggable";
 import {
     CustomFieldValidator,
     getYupEntitySchema
-} from "../../../form/validation";
+} from "../../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
-import { isReadOnly } from "../../../core/utils";
-import { buildPropertyField } from "../../../form";
+import { isReadOnly } from "../../../../utils";
+import { buildPropertyField } from "../../../../../form";
 import clsx from "clsx";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../column_builder";

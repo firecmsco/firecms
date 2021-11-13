@@ -1,5 +1,5 @@
-import { CollectionSize, Entity } from "../../models";
-import { useTableStyles } from "../../core/components/table/styles";
+import { CollectionSize, Entity } from "../../../../models";
+import { useTableStyles } from "../../Table/styles";
 
 import React, { MouseEvent } from "react";
 import {

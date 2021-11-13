@@ -10,8 +10,8 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
-import { CollectionTable } from "../../collection";
-import { CollectionRowActions } from "../../collection/internal/CollectionRowActions";
+import { CollectionTable } from "./CollectionTable";
+import { CollectionRowActions } from "./CollectionTable/internal/CollectionRowActions";
 import { useDataSource } from "../../hooks";
 
 

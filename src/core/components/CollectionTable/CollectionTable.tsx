@@ -11,7 +11,7 @@ import {
     FilterValues,
     SaveEntityProps,
     WhereFilterOp
-} from "../models";
+} from "../../../models";
 import { getSubcollectionColumnId, useColumnIds } from "./internal/common";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { CollectionRowActions } from "./internal/CollectionRowActions";
@@ -24,8 +24,8 @@ import {
     useDataSource,
     useFireCMSContext,
     useSideEntityController
-} from "../hooks";
-import { Table } from "../core";
+} from "../../../hooks";
+import { Table } from "../../index";
 import {
     buildColumnsFromSchema,
     checkInlineEditing, OnCellValueChange,

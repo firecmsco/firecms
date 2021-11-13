@@ -21,10 +21,10 @@ import {
     ExportConfig,
     Properties,
     Property
-} from "../../models";
-import { computeSchemaProperties } from "../../core/utils";
-import { useDataSource, useFireCMSContext } from "../../hooks";
-import { buildPropertyFrom } from "../../core/util/property_builder";
+} from "../../../../models";
+import { computeSchemaProperties } from "../../../utils";
+import { useDataSource, useFireCMSContext } from "../../../../hooks";
+import { buildPropertyFrom } from "../../../util/property_builder";
 
 interface ExportButtonProps<M extends { [Key: string]: any }> {
     schema: EntitySchema<M>;

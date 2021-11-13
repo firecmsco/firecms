@@ -154,7 +154,8 @@ export function EntityForm<M>({
     } else if (status === "new") {
         baseDataSourceValues = initEntityValues(schema, path);
     } else {
-        throw new Error("Form configured wrong");
+        console.error({status, entity});
+        throw new Error("Form has not been initialised with the correct parameters");
     }
 
     const formRef = React.useRef<HTMLDivElement>(null);

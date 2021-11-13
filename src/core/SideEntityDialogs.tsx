@@ -10,6 +10,7 @@ import { EntityDrawer } from "./internal/EntityDrawer";
 import { SideEntityView } from "./internal/SideEntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
 import { useFireCMSContext, useSideEntityController } from "../hooks";
+import { ErrorBoundary } from "./internal/ErrorBoundary";
 
 /**
  * This is the component in charge of rendering the side dialogs used
@@ -42,10 +43,12 @@ export function SideEntityDialogs<M extends { [Key: string]: any }>() {
         }
 
         return (
-            <SideEntityView
-                key={`side-entity-view-${panel.entityId}`}
-                {...schemaProps}
-                {...panel}/>
+            <ErrorBoundary>
+                <SideEntityView
+                    key={`side-entity-view-${panel.entityId}`}
+                    {...schemaProps}
+                    {...panel}/>
+            </ErrorBoundary>
         );
     }
 

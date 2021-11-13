@@ -1,9 +1,9 @@
 import React from "react";
 import { useInputStyles } from "./styles";
 import { Box, TextField as MuiTextField, Typography } from "@mui/material";
-import { TimestampProperty } from "../../../models";
+import { TimestampProperty } from "../../../../../models";
 import DateTimePicker from "@mui/lab/DateTimePicker";
-import { EmptyValue, TimestampPreview } from "../../../preview";
+import { EmptyValue, TimestampPreview } from "../../../../../preview";
 
 export function TableDateField(props: {
     name: string;

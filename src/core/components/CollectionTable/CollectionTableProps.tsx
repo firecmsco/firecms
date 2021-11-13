@@ -1,5 +1,5 @@
 import React from "react";
-import { CollectionSize, Entity, EntityCollection } from "../models";
+import { CollectionSize, Entity, EntityCollection } from "../../../models";
 
 
 /**

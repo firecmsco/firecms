@@ -57,7 +57,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
         };
 
         const onError = (error: Error) => {
-            console.error("ERROR", error);
+            console.error("ERROR fetching entity", error);
             setDataLoading(false);
             setEntity(undefined);
             setDataLoadingError(error);

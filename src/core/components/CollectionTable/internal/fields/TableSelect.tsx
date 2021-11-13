@@ -1,13 +1,13 @@
-import { EnumValues } from "../../../models";
-import { ArrayEnumPreview } from "../../../preview";
+import { EnumValues } from "../../../../../models";
+import { ArrayEnumPreview } from "../../../../../preview";
 import React, { useEffect, useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
 import { useInputStyles } from "./styles";
 import {
     enumToObjectEntries,
     isEnumValueDisabled
-} from "../../../core/util/enums";
-import { EnumValuesChip } from "../../../preview/components/CustomChip";
+} from "../../../../util/enums";
+import { EnumValuesChip } from "../../../../../preview/components/CustomChip";
 
 export function TableSelect(props: {
     name: string;

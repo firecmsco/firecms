@@ -1,4 +1,4 @@
-import { Entity, EntityCallbacks, EntitySchema } from "../../models";
+import { Entity, EntityCallbacks, EntitySchema } from "../../../../models";
 import React, { useState } from "react";
 import {
     Button,
@@ -7,13 +7,13 @@ import {
     DialogContent,
     DialogTitle
 } from "@mui/material";
-import { CircularProgressCenter, EntityPreview } from "../../core/components";
+import { CircularProgressCenter, EntityPreview } from "../../index";
 import {
     deleteEntityWithCallbacks,
     useDataSource,
     useFireCMSContext,
     useSnackbarController
-} from "../../hooks";
+} from "../../../../hooks";
 
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {

@@ -2,9 +2,9 @@ import {
     AdditionalColumnDelegate,
     AsyncPreviewComponent,
     buildSchema,
+    EntityCallbacks,
     EntityCustomView,
     EnumValues,
-    EntityCallbacks,
     ExtraActionsParams
 } from "@camberi/firecms";
 
@@ -67,7 +67,6 @@ const sampleView: EntityCustomView = {
         <SampleProductsView entity={entity}
                             modifiedValues={modifiedValues}/>
 };
-
 
 
 export const productSchema = buildSchema<Product>({
@@ -148,7 +147,7 @@ export const productSchema = buildSchema<Product>({
         public: {
             dataType: "boolean",
             title: "Public",
-            description: "Should this product be visible in the website",
+            description: "Should this product be visible in the website"
             // longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros."
         },
         brand: {
@@ -239,7 +238,7 @@ export const productSchema = buildSchema<Product>({
             dataType: "timestamp",
             title: "Added on",
             autoValue: "on_create"
-        },
+        }
 
     },
     defaultValues: {
@@ -247,11 +246,11 @@ export const productSchema = buildSchema<Product>({
         publisher: {
             name: "Default publisher"
         }
-    },
+    }
 
 });
 
-export const productCallbacks:EntityCallbacks = {
+export const productCallbacks: EntityCallbacks = {
     onPreSave: ({
                     schema,
                     path,
@@ -333,9 +332,10 @@ export const localeSchema = buildSchema<Locale>({
 
 
 export const productExtraActionBuilder = ({
-                                              selectedEntities
+                                              selectionController
                                           }: ExtraActionsParams) => {
     return (
-        <SampleExtraActions selectedEntities={selectedEntities}/>
+        <SampleExtraActions
+            selectionController={selectionController}/>
     );
 };

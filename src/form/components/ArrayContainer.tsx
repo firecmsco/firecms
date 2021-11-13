@@ -47,6 +47,7 @@ export function ArrayContainer<T>({
             : []);
 
     function getHashValue<T>(v: T) {
+        if (!v) return null;
         if (typeof v === "object") {
             if ("id" in v)
                 return (v as any)["id"];

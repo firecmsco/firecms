@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { Button } from "@mui/material";
-import { ReferencePreview } from "../../../preview";
-import { ErrorView } from "../../../core/components";
+import { ReferencePreview } from "../../../../../preview";
+import { ErrorView } from "../../../index";
 import {
     ArrayProperty,
     CollectionSize,
     Entity,
     EntityReference,
     ReferenceProperty
-} from "../../../models";
-import { ReferenceDialog } from "../../../core/components/ReferenceDialog";
+} from "../../../../../models";
+import { ReferenceDialog } from "../../../ReferenceDialog";
 
-import { getPreviewSizeFrom } from "../../../preview/util";
+import { getPreviewSizeFrom } from "../../../../../preview/util";
 import { useInputStyles } from "./styles";
-import { getReferenceFrom } from "../../../core/utils";
-import { useFireCMSContext } from "../../../hooks";
+import { getReferenceFrom } from "../../../../utils";
+import { useFireCMSContext } from "../../../../../hooks";
 
 
 export function TableReferenceField<M extends { [Key: string]: any }>(props: {

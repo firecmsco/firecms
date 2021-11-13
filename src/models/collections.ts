@@ -151,6 +151,13 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      */
     extraActions?: (extraActionsParams: ExtraActionsParams<M>) => React.ReactNode;
 
+    /**
+     * Pass your own selection controller if you want to control selected
+     * entities externally.
+     * @see useSelectionController
+     */
+    selectionController?: SelectionController<M>;
+
 }
 
 /**
@@ -170,14 +177,28 @@ export interface ExtraActionsParams<M extends { [Key: string]: any } = any> {
     collection: EntityCollection<M>;
 
     /**
-     * The entities currently selected in this collection
+     * Use this controller to get the selected entities and to update the
+     * selected entities state
      */
-    selectedEntities?: Entity<M>[];
+    selectionController: SelectionController<M>;
 
     /**
      * Context of the app status
      */
     context: FireCMSContext;
+}
+
+/**
+ * Use this controller to retrieve the selected entities or modify them in
+ * an {@link EntityCollection}
+ * If you want to pass a `SelectionController` to
+ * @category Models
+ */
+export type SelectionController<M = any> = {
+    selectedEntities: Entity<M>[];
+    setSelectedEntities: (selectedEntities: Entity<M>[]) => void;
+    isEntitySelected: (entity: Entity<M>) => boolean;
+    toggleEntitySelection: (entity: Entity<M>) => void;
 }
 
 
@@ -321,7 +342,10 @@ export interface ExportConfig {
  */
 export interface ExportMappingFunction {
     key: string;
-    builder: ({ entity, context }: { entity: Entity<any>, context: FireCMSContext }) => Promise<string> | string;
+    builder: ({
+                  entity,
+                  context
+              }: { entity: Entity<any>, context: FireCMSContext }) => Promise<string> | string;
 }
 
 /**

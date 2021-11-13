@@ -312,7 +312,7 @@ export function SideEntityView<M extends { [Key: string]: any }>({
             sideEntityController.close();
     }
 
-    const form = !readOnly ? (
+    const body = !readOnly ? (
         <EntityForm
             status={status}
             path={path}
@@ -493,7 +493,7 @@ export function SideEntityView<M extends { [Key: string]: any }>({
                             role="tabpanel"
                             hidden={!largeLayout && tabsPosition !== -1}
                             className={classes.form}>
-                            {form}
+                            {body}
                         </Box>
 
                         {customViewsView}
