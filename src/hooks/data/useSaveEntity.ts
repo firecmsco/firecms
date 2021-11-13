@@ -159,7 +159,7 @@ export async function saveEntityWithCallbacks<M>({
                 callbacks.onSaveSuccess({
                     schema,
                     path,
-                    entityId,
+                    entityId: entity.id,
                     values: updatedValues,
                     previousValues,
                     status,
