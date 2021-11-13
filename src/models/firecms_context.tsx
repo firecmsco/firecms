@@ -6,6 +6,7 @@ import { NavigationContext } from "./navigation";
 import { SideEntityController } from "./side_entity_controller";
 import { AuthController } from "./auth";
 import { EntityLinkBuilder } from "./entity_link_builder";
+import { User } from "./user";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -14,7 +15,7 @@ import { EntityLinkBuilder } from "./entity_link_builder";
  * @category Hooks and utilities
  * @see useFireCMSContext
  */
-export interface FireCMSContext {
+export interface FireCMSContext<UserType extends User = User> {
 
     /**
      * Format of the dates in the CMS.
@@ -61,7 +62,7 @@ export interface FireCMSContext {
     /**
      * Used auth controller
      */
-    authController: AuthController;
+    authController: AuthController<UserType>;
 
     /**
      * Builder for generating utility links for entities

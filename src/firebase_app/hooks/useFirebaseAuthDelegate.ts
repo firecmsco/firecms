@@ -7,7 +7,7 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
-import { AuthDelegate, User } from "../../models";
+import { AuthDelegate } from "../../models";
 
 interface FirebaseAuthHandlerProps {
     firebaseApp?: FirebaseApp,
@@ -20,9 +20,9 @@ interface FirebaseAuthHandlerProps {
 export const useFirebaseAuthDelegate = (
     {
         firebaseApp
-    }: FirebaseAuthHandlerProps): AuthDelegate => {
+    }: FirebaseAuthHandlerProps): AuthDelegate<FirebaseUser> => {
 
-    const [loggedUser, setLoggedUser] = useState<User | null>(null);
+    const [loggedUser, setLoggedUser] = useState<FirebaseUser | null>(null);
     const [authProviderError, setAuthProviderError] = useState<any>();
     const [authLoading, setAuthLoading] = useState(true);
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
@@ -43,11 +43,7 @@ export const useFirebaseAuthDelegate = (
     }, [firebaseApp]);
 
     const updateFirebaseUser = async (firebaseUser: FirebaseUser | null) => {
-
-        const user: User | null = firebaseUser ? {
-            ...firebaseUser
-        } : null;
-        setLoggedUser(user);
+        setLoggedUser(firebaseUser);
         setAuthLoading(false);
     };
 

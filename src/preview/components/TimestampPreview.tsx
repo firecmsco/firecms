@@ -18,7 +18,7 @@ export function TimestampPreview({
                                  }: PreviewComponentProps<Date>): React.ReactElement {
 
 
-    const appConfig: FireCMSContext | undefined = useFireCMSContext();
+    const appConfig: FireCMSContext<any> | undefined = useFireCMSContext();
     const dateUtilsLocale = appConfig?.locale ? locales[appConfig?.locale] : undefined;
     const dateFormat: string = appConfig?.dateTimeFormat ?? defaultDateFormat;
     const formattedDate = value ? format(value, dateFormat, { locale: dateUtilsLocale }) : "";

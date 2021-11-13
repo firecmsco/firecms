@@ -8,6 +8,7 @@ import {
     SchemaResolver
 } from "../models";
 import { FirestoreTextSearchController } from "./models/text_search";
+import { User as FirebaseUser } from "firebase/auth";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -33,7 +34,7 @@ export interface FirebaseCMSAppProps {
      * In you need to customize the navigation based on the logged user you
      * can use a `NavigationBuilder`
      */
-    navigation: Navigation | NavigationBuilder | EntityCollection[];
+    navigation: Navigation | NavigationBuilder<FirebaseUser> | EntityCollection[];
 
     /**
      * Do the users need to log in to access the CMS.
@@ -42,7 +43,7 @@ export interface FirebaseCMSAppProps {
      * If not specified, authentication is enabled but no user restrictions
      * apply
      */
-    authentication?: boolean | Authenticator;
+    authentication?: boolean | Authenticator<FirebaseUser>;
 
     /**
      * List of sign in options that will be displayed in the login

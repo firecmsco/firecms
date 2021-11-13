@@ -6,16 +6,34 @@
   `dataSource` and `storageSource`. These are useful if you need to fetch some
   data from your datasource (such as if you want to check if a logged user has
   an entry in Firestore) and apply the corresponding permissions or navigation.
-- [BREAKING] `useCollectionFetch` now uses `sortBy` in the format
-  `[Extract<keyof M, string>, "asc" | "desc"]` for consistency
-- Internal work around to prevent collections going back to the start due to
-  Firestore returning incomplete collection data
 - Added `SelectionController` to `EntityCollectionView`. You can use
   `useSelectionController` and pass it your custom `EntityCollectionView`
-  if you want to control the selected entities.
+  if you want to control the selected entities. If you are
+  using `FirebaseCMSApp` as an entry point, you can define your
+  `Autheticator` as:
+    ```tsx
+    import { User as FirebaseUser } from "firebase/auth";
+    const myAuthenticator: Authenticator<FirebaseUser> = async ({
+                                                                    user,
+                                                                    authController
+                                                                }) => {
+        console.log("Allowing access to", user?.email);
+        // ...
+        return true;
+    };
+    ```
+
+### Changed
+
+- The `User` types have been replaced by generics all through the app. Types
+  like `AuthController` or `NavigationBuilder` now have a generic argument that
+  allows to define the user type. In the case of
+- Internal work around to prevent collections going back to the start due to
+  Firestore returning incomplete collection data.
+- [BREAKING] `useCollectionFetch` now uses `sortBy` in the format
+  `[Extract<keyof M, string>, "asc" | "desc"]` for consistency
 - [BREAKING] `extraActions` in `EntityCollection` now
-  receives `selectionController`
-  instead of `selectedEntities`
+  receives `selectionController`  instead of `selectedEntities`.
 
 ## [1.0.0-beta3] - 2021-11-07
 

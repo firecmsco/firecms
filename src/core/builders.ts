@@ -19,7 +19,8 @@ import {
     PropertyOrBuilder,
     ReferenceProperty,
     StringProperty,
-    TimestampProperty
+    TimestampProperty,
+    User
 } from "../models";
 
 
@@ -29,9 +30,9 @@ import {
  * @param navigation
  * @category Builder
  */
-export function buildNavigation(
-    navigation: Navigation | NavigationBuilder
-): Navigation | NavigationBuilder {
+export function buildNavigation<UserType>(
+    navigation: Navigation | NavigationBuilder<UserType>
+): Navigation | NavigationBuilder<UserType> {
     return navigation;
 }
 
@@ -146,8 +147,8 @@ export function buildEntityCallbacks<M>(
  * @param additionalColumnDelegate
  * @category Builder
  */
-export function buildAdditionalColumnDelegate<M extends { [Key: string]: any }, AdditionalKey extends string = string>(
-    additionalColumnDelegate: AdditionalColumnDelegate<M, AdditionalKey>
-): AdditionalColumnDelegate<M, AdditionalKey> {
+export function buildAdditionalColumnDelegate<M extends { [Key: string]: any }, AdditionalKey extends string = string, UserType = User>(
+    additionalColumnDelegate: AdditionalColumnDelegate<M, AdditionalKey, UserType>
+): AdditionalColumnDelegate<M, AdditionalKey, UserType> {
     return additionalColumnDelegate;
 }

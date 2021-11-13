@@ -10,7 +10,9 @@ import {
 /**
  * @category Hooks and utilities
  */
-export type DeleteEntityWithCallbacksProps<M> = DeleteEntityProps<M> & {
+export type DeleteEntityWithCallbacksProps<M, UserType> =
+    DeleteEntityProps<M>
+    & {
     callbacks?: EntityCallbacks<M>;
     onDeleteSuccess?: (entity: Entity<M>) => void;
     onDeleteFailure?: (entity: Entity<M>, e: Error) => void;
@@ -39,20 +41,20 @@ export type DeleteEntityWithCallbacksProps<M> = DeleteEntityProps<M> & {
  * @param context
  * @category Hooks and utilities
  */
-export async function deleteEntityWithCallbacks<M>({
-                                                       dataSource,
-                                                       entity,
-                                                       schema,
-                                                       callbacks,
-                                                       onDeleteSuccess,
-                                                       onDeleteFailure,
-                                                       onPreDeleteHookError,
-                                                       onDeleteSuccessHookError,
-                                                       context
-                                                   }: DeleteEntityWithCallbacksProps<M> & {
-                                                       dataSource: DataSource,
-                                                       context: FireCMSContext
-                                                   }
+export async function deleteEntityWithCallbacks<M, UserType>({
+                                                                 dataSource,
+                                                                 entity,
+                                                                 schema,
+                                                                 callbacks,
+                                                                 onDeleteSuccess,
+                                                                 onDeleteFailure,
+                                                                 onPreDeleteHookError,
+                                                                 onDeleteSuccessHookError,
+                                                                 context
+                                                             }: DeleteEntityWithCallbacksProps<M, UserType> & {
+                                                                 dataSource: DataSource,
+                                                                 context: FireCMSContext<UserType>
+                                                             }
 ): Promise<boolean> {
 
     console.debug("Deleting entity", entity.path, entity.id);

@@ -13,7 +13,8 @@ import { AuthController } from "./auth";
  * @category Models
  */
 export interface EntityCollection<M extends { [Key: string]: any } = any,
-    AdditionalKey extends string = string> {
+    AdditionalKey extends string = string,
+    UserType = User> {
 
     /**
      * Plural name of the view. E.g. 'products'
@@ -74,7 +75,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * You can add additional columns to the collection view by implementing
      * an additional column delegate.q
      */
-    additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey>[];
+    additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey, UserType>[];
 
     /**
      * Flag to indicate if a search bar should be displayed on top of
@@ -86,7 +87,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`
      */
-    permissions?: PermissionsBuilder<M>;
+    permissions?: PermissionsBuilder<M, UserType>;
 
     /**
      * Can the elements in this collection be edited inline in the collection
@@ -115,7 +116,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * the export and add additional values.
      * Defaults to `true`
      */
-    exportable?: boolean | ExportConfig;
+    exportable?: boolean | ExportConfig<UserType>;
 
     /**
      * You can add subcollections to your entity in the same way you define the root
@@ -129,7 +130,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * is being created, updated or deleted.
      * Useful for adding your own logic or blocking the execution of the operation.
      */
-    callbacks?: EntityCallbacks;
+    callbacks?: EntityCallbacks<M>;
 
     /**
      * Initial filters applied to this collection.
@@ -149,7 +150,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * @param selectedEntities current selected entities by the end user or
      * undefined if none
      */
-    extraActions?: (extraActionsParams: ExtraActionsParams<M>) => React.ReactNode;
+    extraActions?: (extraActionsParams: ExtraActionsParams<M, UserType>) => React.ReactNode;
 
     /**
      * Pass your own selection controller if you want to control selected
@@ -165,7 +166,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
  *
  * @category Models
  */
-export interface ExtraActionsParams<M extends { [Key: string]: any } = any> {
+export interface ExtraActionsParams<M extends { [Key: string]: any } = any, UserType = User> {
     /**
      * Collection path of this entity
      */
@@ -185,7 +186,7 @@ export interface ExtraActionsParams<M extends { [Key: string]: any } = any> {
     /**
      * Context of the app status
      */
-    context: FireCMSContext;
+    context: FireCMSContext<UserType>;
 }
 
 /**
@@ -234,7 +235,7 @@ export interface Permissions {
  * based on the logged user, entity or collection path
  * @category Models
  */
-export type PermissionsBuilder<M extends { [Key: string]: any } = any> =
+export type PermissionsBuilder<M extends { [Key: string]: any }, UserType = User> =
     Permissions
     | (({
             entity,
@@ -242,13 +243,13 @@ export type PermissionsBuilder<M extends { [Key: string]: any } = any> =
             user,
             authController,
             context
-        }: PermissionsBuilderProps<M>) => Permissions);
+        }: PermissionsBuilderProps<M, UserType>) => Permissions);
 
 /**
  * Props passed to a {@link PermissionsBuilder}
  * @category Models
  */
-export interface PermissionsBuilderProps<M extends { [Key: string]: any } = any> {
+export interface PermissionsBuilderProps<M extends { [Key: string]: any }, UserType = User> {
     /**
      * Entity being edited, might be null if it is new
      */
@@ -260,15 +261,15 @@ export interface PermissionsBuilderProps<M extends { [Key: string]: any } = any>
     /**
      * Logged in user
      */
-    user: User | null;
+    user: UserType | null;
     /**
      * Auth controller
      */
-    authController: AuthController;
+    authController: AuthController<UserType>;
     /**
      * Context of the app status
      */
-    context: FireCMSContext;
+    context: FireCMSContext<UserType>;
 }
 
 
@@ -277,7 +278,9 @@ export interface PermissionsBuilderProps<M extends { [Key: string]: any } = any>
  * If you need to do some async loading you can use AsyncPreviewComponent
  * @category Models
  */
-export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any, AdditionalKey extends string = string> {
+export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any,
+    AdditionalKey extends string = string,
+    UserType = User> {
 
     /**
      * Id of this column. You can use this id in the `properties` field of the
@@ -300,7 +303,7 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
      */
     builder: ({ entity, context }: {
         entity: Entity<M>,
-        context: FireCMSContext;
+        context: FireCMSContext<UserType>;
     }) => React.ReactNode;
 
 }
@@ -333,19 +336,19 @@ export type WhereFilterOp =
  * exports
  * @category Models
  */
-export interface ExportConfig {
-    additionalColumns: ExportMappingFunction[]
+export interface ExportConfig<UserType extends User = User> {
+    additionalColumns: ExportMappingFunction<UserType> []
 }
 
 /**
  * @category Models
  */
-export interface ExportMappingFunction {
+export interface ExportMappingFunction<UserType extends User = User> {
     key: string;
     builder: ({
                   entity,
                   context
-              }: { entity: Entity<any>, context: FireCMSContext }) => Promise<string> | string;
+              }: { entity: Entity<any>, context: FireCMSContext<UserType> }) => Promise<string> | string;
 }
 
 /**

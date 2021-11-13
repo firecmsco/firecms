@@ -16,7 +16,7 @@ import {
 } from "../../../../hooks";
 
 
-export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
+export interface DeleteEntityDialogProps<M extends { [Key: string]: any }, UserType> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
     path: string,
     schema: EntitySchema<M>,
@@ -29,7 +29,7 @@ export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
     onMultipleEntitiesDelete?(path: string, entities: Entity<M>[]): void;
 }
 
-export function DeleteEntityDialog<M extends { [Key: string]: any }>({
+export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
                                                                          entityOrEntitiesToDelete,
                                                                          schema,
                                                                          onClose,
@@ -40,7 +40,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                                                                          path,
                                                                          ...other
                                                                      }
-                                                                         : DeleteEntityDialogProps<M>) {
+                                                                         : DeleteEntityDialogProps<M, UserType>) {
 
     const dataSource = useDataSource();
     const snackbarContext = useSnackbarController();

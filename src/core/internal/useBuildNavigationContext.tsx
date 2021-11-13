@@ -12,7 +12,7 @@ import {
 } from "../../models";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 
-export function useBuildNavigationContext({
+export function useBuildNavigationContext<UserType>({
                                               basePath,
                                               baseCollectionPath,
                                               authController,
@@ -24,8 +24,8 @@ export function useBuildNavigationContext({
                                           }: {
     basePath: string,
     baseCollectionPath: string,
-    authController: AuthController;
-    navigationOrBuilder: Navigation | NavigationBuilder | EntityCollection[];
+    authController: AuthController<UserType>;
+    navigationOrBuilder: Navigation | NavigationBuilder<UserType>  | EntityCollection[];
     dateTimeFormat?: string;
     locale?: Locale;
     dataSource: DataSource;
@@ -36,11 +36,11 @@ export function useBuildNavigationContext({
     const [navigationLoading, setNavigationLoading] = useState<boolean>(false);
     const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
 
-    async function getNavigation({ navigationOrCollections, user, authController, dateTimeFormat, locale, dataSource, storageSource }:
+    async function getNavigation<UserType>({ navigationOrCollections, user, authController, dateTimeFormat, locale, dataSource, storageSource }:
                                      {
-                                         navigationOrCollections: Navigation | NavigationBuilder | EntityCollection[],
+                                         navigationOrCollections: Navigation | NavigationBuilder<UserType>  | EntityCollection[],
                                          user: User | null,
-                                         authController: AuthController,
+                                         authController: AuthController<UserType>,
                                          dateTimeFormat?: string,
                                          locale?: Locale,
                                          dataSource: DataSource,

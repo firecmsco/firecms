@@ -26,19 +26,19 @@ import { computeSchemaProperties } from "../../../utils";
 import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { buildPropertyFrom } from "../../../util/property_builder";
 
-interface ExportButtonProps<M extends { [Key: string]: any }> {
+interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
     schema: EntitySchema<M>;
     path: string;
-    exportConfig?: ExportConfig;
+    exportConfig?: ExportConfig<UserType>;
 }
 
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
-export function ExportButton<M extends { [Key: string]: any }>({
+export function ExportButton<M extends { [Key: string]: any }, UserType>({
                                                                    schema,
                                                                    path,
                                                                    exportConfig
-                                                               }: ExportButtonProps<M>
+                                                               }: ExportButtonProps<M, UserType>
 ) {
 
 
@@ -218,9 +218,9 @@ interface Header {
     key: string
 }
 
-function getExportHeaders<M extends { [Key: string]: any }>(properties: Properties<M>,
+function getExportHeaders<M extends { [Key: string]: any}, UserType>(properties: Properties<M>,
                                                             path: string,
-                                                            exportConfig?: ExportConfig): Header[] {
+                                                            exportConfig?: ExportConfig<UserType>): Header[] {
     const headers = [
         { label: "id", key: "id" },
         ...Object.entries(properties)

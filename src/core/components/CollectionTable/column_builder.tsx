@@ -15,7 +15,10 @@ import React, { useCallback, useEffect, useMemo } from "react";
 import { TableCell } from "../Table/TableCell";
 import { PreviewComponent, SkeletonComponent } from "../../../preview";
 import { getPreviewSizeFrom } from "../../../preview/util";
-import { CustomFieldValidator, mapPropertyToYup } from "../../../form/validation";
+import {
+    CustomFieldValidator,
+    mapPropertyToYup
+} from "../../../form/validation";
 import {
     OnCellChangeParams,
     PropertyTableCell
@@ -28,7 +31,7 @@ import { getIconForProperty } from "../../util/property_icons";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
 
 
-export type ColumnsFromSchemaProps<M, AdditionalKey extends string> = {
+export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = {
 
     /**
      * Absolute collection path
@@ -51,7 +54,7 @@ export type ColumnsFromSchemaProps<M, AdditionalKey extends string> = {
      * an additional column delegate.
      * Usually defined by the end user.
      */
-    additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey>[];
+    additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey, UserType>[];
 
     /**
      * Can the table be edited inline
@@ -123,7 +126,7 @@ type SelectedCellProps<M> =
     };
 
 
-export function buildColumnsFromSchema<M, AdditionalKey extends string>({
+export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType>({
                                                                             schema,
                                                                             additionalColumns,
                                                                             displayedProperties,
@@ -132,10 +135,10 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
                                                                             size,
                                                                             onCellValueChange,
                                                                             uniqueFieldValidator
-                                                                        }: ColumnsFromSchemaProps<M, AdditionalKey>
+                                                                        }: ColumnsFromSchemaProps<M, AdditionalKey, UserType>
 ): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
 
-    const context: FireCMSContext = useFireCMSContext();
+    const context: FireCMSContext<UserType> = useFireCMSContext();
 
     const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M>| undefined>(undefined);
@@ -146,7 +149,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string>({
 
     const [tableKey] = React.useState<string>(Math.random().toString(36));
 
-    const additionalColumnsMap: Record<string, AdditionalColumnDelegate<M, string>> = useMemo(() => {
+    const additionalColumnsMap: Record<string, AdditionalColumnDelegate<M, string, UserType>> = useMemo(() => {
         return additionalColumns ?
             additionalColumns
                 .map((aC) => ({ [aC.id]: aC }))

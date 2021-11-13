@@ -1,17 +1,18 @@
 import { EntitySchema } from "./entities";
 import { EntityCollection, PermissionsBuilder } from "./collections";
 import { EntityCallbacks } from "./entity_callbacks";
+import { User } from "./user";
 
 /**
  * You can add these additional props to override properties in a SchemaResolver
  * @category Models
  */
-export interface SchemaConfig<M = any> {
+export interface SchemaConfig<M = any, UserType = User> {
 
     /**
      * Can the elements in this collection be added and edited.
      */
-    permissions?: PermissionsBuilder;
+    permissions?: PermissionsBuilder<M, UserType>;
 
     /**
      * Schema representing the entities of this view

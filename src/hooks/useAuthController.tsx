@@ -1,4 +1,4 @@
-import { AuthController } from "../models";
+import { AuthController, User } from "../models";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 /**
@@ -10,7 +10,7 @@ import { useFireCMSContext } from "./useFireCMSContext";
  * @see AuthController
  * @category Hooks and utilities
  */
-export function useAuthController(): AuthController {
+export function useAuthController<UserType extends User = User>(): AuthController<UserType> {
     const context = useFireCMSContext();
     return context.authController;
 }

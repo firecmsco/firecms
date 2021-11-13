@@ -10,14 +10,13 @@ import {
     FilterCombination,
     FilterValues,
     SaveEntityProps,
+    User,
     WhereFilterOp
 } from "../../../models";
 import { getSubcollectionColumnId, useColumnIds } from "./internal/common";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { CollectionRowActions } from "./internal/CollectionRowActions";
-import {
-    CollectionTableProps
-} from "./CollectionTableProps";
+import { CollectionTableProps } from "./CollectionTableProps";
 import {
     saveEntityWithCallbacks,
     useCollectionFetch,
@@ -28,7 +27,8 @@ import {
 import { Table } from "../../index";
 import {
     buildColumnsFromSchema,
-    checkInlineEditing, OnCellValueChange,
+    checkInlineEditing,
+    OnCellValueChange,
     UniqueFieldValidator
 } from "./column_builder";
 
@@ -69,18 +69,20 @@ export const useStyles = makeStyles<Theme>(theme => createStyles({
  * @category Components
  */
 export function CollectionTable<M extends { [Key: string]: any },
-    AdditionalKey extends string = string>({
-                                               path,
-                                               collection,
-                                               inlineEditing,
-                                               toolbarActionsBuilder,
-                                               title,
-                                               tableRowActionsBuilder,
-                                               entitiesDisplayedFirst,
-                                               onEntityClick,
-                                               onColumnResize,
-                                               hoverRow = true
-                                           }: CollectionTableProps<M, AdditionalKey>) {
+    AdditionalKey extends string = string,
+    UserType = User>
+({
+     path,
+     collection,
+     inlineEditing,
+     toolbarActionsBuilder,
+     title,
+     tableRowActionsBuilder,
+     entitiesDisplayedFirst,
+     onEntityClick,
+     onColumnResize,
+     hoverRow = true
+ }: CollectionTableProps<M, AdditionalKey>) {
 
     const context = useFireCMSContext();
     const dataSource = useDataSource();
@@ -108,7 +110,7 @@ export function CollectionTable<M extends { [Key: string]: any },
 
     const classes = useStyles();
 
-    const subcollectionColumns: AdditionalColumnDelegate<any>[] = collection.subcollections?.map((subcollection) => {
+    const subcollectionColumns: AdditionalColumnDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
         return {
             id: getSubcollectionColumnId(subcollection),
             title: subcollection.name,

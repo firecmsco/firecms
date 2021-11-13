@@ -1,7 +1,11 @@
 import React from "react";
 
 import { getAnalytics } from "firebase/analytics";
-import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import {
+    EmailAuthProvider,
+    GoogleAuthProvider,
+    User as FirebaseUser
+} from "firebase/auth";
 import {
     Authenticator,
     buildCollection,
@@ -22,7 +26,8 @@ import logo from "./images/demo_logo.png";
 import { textSearchController } from "./text_search";
 import {
     localeSchema,
-    productAdditionalColumn, productCallbacks,
+    productAdditionalColumn,
+    productCallbacks,
     productExtraActionBuilder,
     productSchema
 } from "./schemas/products_schema";
@@ -145,22 +150,25 @@ function SampleApp() {
         getAnalytics();
     };
 
-    const myAuthenticator: Authenticator = async ({ user, authController }) => {
+    const myAuthenticator: Authenticator<FirebaseUser> = async ({
+                                                                    user,
+                                                                    authController
+                                                                }) => {
         // This is an example of retrieving async data related to the user
         // and storing it in the user extra field
         const sampleUserData = await Promise.resolve({
             roles: ["admin"]
         });
         authController.setExtra(sampleUserData);
-        console.log("Allowing access to", user?.email);
+        console.log("Allowing access to", user);
         return true;
     };
 
-    const navigation: NavigationBuilder = async ({
-                                                     user,
-                                                     authController
-                                                 }: NavigationBuilderProps) => {
-        if(authController.extra)
+    const navigation: NavigationBuilder<FirebaseUser> = async ({
+                                                                   user,
+                                                                   authController
+                                                               }: NavigationBuilderProps) => {
+        if (authController.extra)
             console.log("Custom data stored in the authController", authController.extra);
 
         const navigation: Navigation = {

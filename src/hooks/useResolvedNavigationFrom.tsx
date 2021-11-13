@@ -61,10 +61,10 @@ interface ResolvedNavigationEntityCustom<M> {
  * @param context
  * @category Hooks and utilities
  */
-export function resolveNavigationFrom<M>({
+export function resolveNavigationFrom<M, UserType>({
                                              path,
                                              context
-                                         }: { path: string, context: FireCMSContext }): Promise<ResolvedNavigationEntry<M>[]> {
+                                         }: { path: string, context: FireCMSContext<UserType> }): Promise<ResolvedNavigationEntry<M>[]> {
 
 
     const dataSource = context.dataSource;
@@ -132,12 +132,12 @@ export interface NavigationFrom<M> {
  * in any React component that lives under `FireCMS`
  * @category Hooks and utilities
  */
-export function useResolvedNavigationFrom<M>(
+export function useResolvedNavigationFrom<M, UserType>(
     {
         path
     }: NavigationFromProps): NavigationFrom<M> {
 
-    const context: FireCMSContext = useFireCMSContext();
+    const context: FireCMSContext<UserType> = useFireCMSContext();
 
     const [data, setData] = useState<ResolvedNavigationEntry<M>[] | undefined>();
     const [dataLoading, setDataLoading] = useState<boolean>(false);
@@ -149,7 +149,7 @@ export function useResolvedNavigationFrom<M>(
         if (navigation) {
             setDataLoading(true);
             setDataLoadingError(undefined);
-            resolveNavigationFrom<M>({ path, context })
+            resolveNavigationFrom<M,UserType>({ path, context })
                 .then((res) => {
                     setData(res);
                 })

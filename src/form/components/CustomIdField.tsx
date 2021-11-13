@@ -24,7 +24,7 @@ import {
 import { formStyles } from "../styles";
 import { useFireCMSContext, useSnackbarController } from "../../hooks";
 
-export function CustomIdField<M>
+export function CustomIdField<M, UserType>
 ({ schema, status, onChange, error, entity }: {
     schema: EntitySchema<M>,
     status: EntityStatus,
@@ -48,7 +48,7 @@ export function CustomIdField<M>
         })
     });
 
-    const appConfig: FireCMSContext | undefined = useFireCMSContext();
+    const appConfig: FireCMSContext<UserType> | undefined = useFireCMSContext();
     const inputProps = {
         className: classes.input,
         endAdornment: entity ? (

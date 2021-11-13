@@ -1,7 +1,6 @@
 import { AuthController } from "./auth";
 import { EntityCollection } from "./collections";
 import { User } from "./user";
-import { FireCMSContext } from "./firecms_context";
 import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
@@ -12,23 +11,23 @@ import { StorageSource } from "./storage";
  * user
  * @category Models
  */
-export type NavigationBuilder =
-    ((props: NavigationBuilderProps) => Promise<Navigation>)
-    | ((props: NavigationBuilderProps) => Navigation);
+export type NavigationBuilder<UserType extends User = User> =
+    ((props: NavigationBuilderProps<UserType> ) => Promise<Navigation>)
+    | ((props: NavigationBuilderProps<UserType> ) => Navigation);
 
 /**
  * @category Models
  */
-export interface NavigationBuilderProps {
+export interface NavigationBuilderProps<UserType extends User = User> {
     /**
      * Logged in user or null
      */
-    user: User | null;
+    user: UserType | null;
 
     /**
      * AuthController
      */
-    authController: AuthController;
+    authController: AuthController<UserType>;
 
     /**
      * Format of the dates in the CMS.

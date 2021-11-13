@@ -6,13 +6,13 @@ import { User } from "./user";
  * Controller for retrieving the logged user or performing auth related operations
  * @category Hooks and utilities
  */
-export interface AuthController {
+export interface AuthController<UserType extends User = User> {
 
     /**
      * The user currently logged in
      * The values can be: the user object, null if they skipped login
      */
-    user: User | null;
+    user: UserType | null;
 
     /**
      * Has the user skipped the login process
@@ -54,7 +54,7 @@ export interface AuthController {
      * Delegate in charge of connecting to a backend and performing the auth
      * operations.
      */
-    authDelegate: AuthDelegate;
+    authDelegate: AuthDelegate<UserType>;
 
 }
 
@@ -65,13 +65,13 @@ export interface AuthController {
  * for an example.
  * @category Hooks and utilities
  */
-export type AuthDelegate = {
+export type AuthDelegate<UserType extends User = User> = {
 
     /**
      * The user currently logged in
      * The values can be: the user object, null if they skipped login
      */
-    user: User | null;
+    user: UserType | null;
 
     /**
      * Error dispatched by the auth provider

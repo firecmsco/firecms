@@ -9,7 +9,7 @@ import {
     User
 } from "../../models";
 
-export function useBuildAuthController({
+export function useBuildAuthController<UserType>({
                                            authDelegate,
                                            authentication,
                                            dateTimeFormat,
@@ -18,12 +18,12 @@ export function useBuildAuthController({
                                            storageSource
                                        }: {
     authDelegate: AuthDelegate,
-    authentication?: boolean | Authenticator,
+    authentication?: boolean | Authenticator<UserType>,
     dateTimeFormat?: string;
     locale?: Locale;
     dataSource: DataSource;
     storageSource: StorageSource;
-}): AuthController {
+}): AuthController<UserType> {
 
     const [user, setUser] = useState<User | null>(null);
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
@@ -62,7 +62,7 @@ export function useBuildAuthController({
     const authenticationEnabled = authentication === undefined || !!authentication;
     const canAccessMainView = (!authenticationEnabled || Boolean(user) || Boolean(loginSkipped)) && !notAllowedError;
 
-    const authController: AuthController = {
+    const authController: AuthController<UserType> = {
         user,
         loginSkipped,
         canAccessMainView,

@@ -103,7 +103,7 @@ export function useSaveEntity<M extends { [Key: string]: any }>({
  * @see useSaveEntity
  * @category Hooks and utilities
  */
-export async function saveEntityWithCallbacks<M>({
+export async function saveEntityWithCallbacks<M, UserType>({
                                                      schema,
                                                      path,
                                                      entityId,
@@ -119,7 +119,7 @@ export async function saveEntityWithCallbacks<M>({
                                                      onSaveSuccessHookError
                                                  }: SaveEntityWithCallbacksProps<M> & {
                                                      dataSource: DataSource,
-                                                     context: FireCMSContext,
+                                                     context: FireCMSContext<UserType> ,
                                                  }
 ): Promise<void> {
 

@@ -116,19 +116,19 @@ const useStylesSide = makeStyles((theme: Theme) =>
 );
 
 
-export interface SideEntityViewProps<M extends { [Key: string]: any }> {
+export interface SideEntityViewProps<M extends { [Key: string]: any }, UserType> {
     path: string;
     schema: EntitySchema;
     entityId?: string;
     copy?: boolean;
     selectedSubpath?: string;
-    permissions?: PermissionsBuilder<M>;
+    permissions?: PermissionsBuilder<M, UserType>;
     callbacks?: EntityCallbacks<M>;
     subcollections?: EntityCollection[];
 }
 
 
-export function SideEntityView<M extends { [Key: string]: any }>({
+export function SideEntityView<M extends { [Key: string]: any }, UserType>({
                                                                      path,
                                                                      entityId,
                                                                      callbacks,
@@ -137,7 +137,7 @@ export function SideEntityView<M extends { [Key: string]: any }>({
                                                                      permissions,
                                                                      schema,
                                                                      subcollections
-                                                                 }: SideEntityViewProps<M>) {
+                                                                 }: SideEntityViewProps<M, UserType>) {
 
     const classes = useStylesSide();
 
@@ -145,7 +145,7 @@ export function SideEntityView<M extends { [Key: string]: any }>({
     const sideEntityController = useSideEntityController();
     const snackbarContext = useSnackbarController();
     const context = useFireCMSContext();
-    const authController = useAuthController();
+    const authController = useAuthController<UserType>();
 
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
     const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);

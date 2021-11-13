@@ -29,7 +29,7 @@ const DEFAULT_COLLECTION_PATH = `/c`;
 /**
  * @category Core
  */
-export interface FireCMSProps {
+export interface FireCMSProps<UserType> {
 
     /**
      * Use this function to return the components you want to render under
@@ -61,7 +61,7 @@ export interface FireCMSProps {
      * In you need to customize the navigation based on the logged user you
      * can use a `NavigationBuilder`
      */
-    navigation: Navigation | NavigationBuilder | EntityCollection[];
+    navigation: Navigation | NavigationBuilder<UserType> | EntityCollection[];
 
     /**
      * Do the users need to log in to access the CMS.
@@ -70,7 +70,7 @@ export interface FireCMSProps {
      * If not specified, authentication is enabled but no user restrictions
      * apply.
      */
-    authentication?: boolean | Authenticator;
+    authentication?: boolean | Authenticator<UserType>;
 
     /**
      * Used to override schemas based on the collection path and entityId.
@@ -134,7 +134,7 @@ export interface FireCMSProps {
  * @constructor
  * @category Core
  */
-export function FireCMS(props: FireCMSProps) {
+export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
 
     const {
         children,
