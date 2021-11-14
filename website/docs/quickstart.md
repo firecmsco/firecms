@@ -55,6 +55,7 @@ If you don't know where to find the Firebase app config, check the
 ```tsx
 import React from "react";
 
+import { User as FirebaseUser } from "firebase/auth";
 import {
     Authenticator,
     buildCollection,
@@ -282,7 +283,10 @@ export default function App() {
         });
     };
 
-    const myAuthenticator: Authenticator = async ({ user, authController }) => {
+    const myAuthenticator: Authenticator<FirebaseUser> = async ({
+                                                                    user,
+                                                                    authController
+                                                                }) => {
         console.log("Allowing access to", user?.email);
         // This is an example of retrieving async data related to the user
         // and storing it in the user extra field.

@@ -1,12 +1,11 @@
 ---
-id: migrating_from_alpha_versions
-title: Migrating from alpha versions
+id: migrating_from_alpha_versions title: Migrating from alpha versions
 sidebar_label: Migrating from alpha versions
 ---
 
-If you were using the app in the alpha versions (before 1.0.0-beta1), you will find
-many **breaking changes**. We have done a lot of internal refactorings with the
-primary goal of making internal and external APIs more predictable and
+If you were using the app in the alpha versions (before 1.0.0-beta1), you will
+find many **breaking changes**. We have done a lot of internal refactorings with
+the primary goal of making internal and external APIs more predictable and
 consistent.
 
 Oh, and we have a very awesome new dark theme too ;)
@@ -20,6 +19,7 @@ In version 1.0.0 there are major updates to some dependencies, now using:
 - Firebase JS SDK 9
 
 Run this command to add the new dependencies:
+
 ```
 yarn add @camberi/firecms firebase@9 @mui/material@5 @mui/icons-material@5 @mui/lab@5 @mui/styles@5 @emotion/react @emotion/styled react-router@^6.0.0-beta.7 react-router-dom@6.0.0-beta.5
 ```
@@ -38,8 +38,8 @@ auth mechanism.
 
 All the code related to Firebase/Firestore is now located in an internal package
 called `firebase_app` and it is the only place where there are references to
-Firebase code. Essentially, you can build a CMS replacing all the services without
-touching that specific package.
+Firebase code. Essentially, you can build a CMS replacing all the services
+without touching that specific package.
 
 If you are using `CMSApp` (called
 `FirebaseCMSApp` from now on), you will not be largely impacted by the changes
@@ -126,6 +126,20 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
 ```
 
 - `Authenticator` now receives an object with a `user` field instead of a `User`
+  . It is also generically typed now, so you can specify the type for the user.
+  If you are using the default `FirebaseCMSApp`, you can specify your
+  authenticator like:
+```tsx
+import { User as FirebaseUser } from "firebase/auth";
+const myAuthenticator: Authenticator<FirebaseUser> = async ({
+                                                                user,
+                                                                authController
+                                                            }) => {
+    console.log("Allowing access to", user?.email);
+    // ...
+    return true;
+};
+```
 
 - `FormContext` `entitySchema` is now called `schema`
 
@@ -139,17 +153,16 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
 
 - If you were using `CMSAppProvider` and `CMSMainView`, they have been largely
   refactored, and now you will need to implement a bunch of extra stuff if you
-  want to go down the super custom road.
-  Those components have now been turned into:
+  want to go down the super custom road. Those components have now been turned
+  into:
     - [`FireCMS`](api/functions/firecms.md)
     - [`Scaffold`](api/functions/scaffold.md)
     - [`NavigationRoutes`](api/functions/navigationroutes.md)
     - [`SideEntityDialogs`](api/functions/sideentitydialogs.md)
 
-  You will be responsible for
-  initialising the material theme, Firebase (or your own backend) and providing
-  the Router. On the plus side, this is going to give you a ton of room for
-  customisation. You can check a complete example in:
+  You will be responsible for initialising the material theme, Firebase (or your
+  own backend) and providing the Router. On the plus side, this is going to give
+  you a ton of room for customisation. You can check a complete example in:
   https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx
 
 ## Text search
@@ -159,17 +172,17 @@ from the collection level. In your collection, you can now set
 the `textSearchEnabled` flag to true to display the search bar.
 
 This goes in the direction of building a generic core of the CMS that is not
-directly coupled with Firebase/Firestore. We have removed search delegates
-at the collection level, and now you can find them at the datasource level.
+directly coupled with Firebase/Firestore. We have removed search delegates at
+the collection level, and now you can find them at the datasource level.
 
 The interface created for the Datasource is now agnostic, and we understand that
 the text search is part of the API in `listenCollection` or `fetchCollection`,
 instead of being a separate delegate, like until now.
 
-The text search implementation has been moved to the `firebase_app` level.
-You can now define a `FirestoreTextSearchController` where you need to return
-the search ids, based on the collection `path` and the `searchString`, instead
-of having a single TextSearchDelegate per collection.
+The text search implementation has been moved to the `firebase_app` level. You
+can now define a `FirestoreTextSearchController` where you need to return the
+search ids, based on the collection `path` and the `searchString`, instead of
+having a single TextSearchDelegate per collection.
 
 Check an example of the [new implementation](./firebase_cms_app#text-search)
 

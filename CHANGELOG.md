@@ -1,4 +1,4 @@
-## [1.0.0-beta4] - 2021-11-
+## [1.0.0-beta4] - 2021-11-14
 
 ### Added
 
@@ -11,18 +11,19 @@
   if you want to control the selected entities. If you are
   using `FirebaseCMSApp` as an entry point, you can define your
   `Autheticator` as:
-    ```tsx
-    import { User as FirebaseUser } from "firebase/auth";
-    const myAuthenticator: Authenticator<FirebaseUser> = async ({
-                                                                    user,
-                                                                    authController
-                                                                }) => {
-        console.log("Allowing access to", user?.email);
-        // ...
-        return true;
-    };
-    ```
--  Implemented dark mode for markdown fields
+```tsx
+import { User as FirebaseUser } from "firebase/auth";
+const myAuthenticator: Authenticator<FirebaseUser> = async ({
+                                                                user,
+                                                                authController
+                                                            }) => {
+    console.log("Allowing access to", user?.email);
+    // ...
+    return true;
+};
+```
+- Implemented dark mode for markdown fields
+- Column sizes and collections tables are now persisted in local storage
 
 ### Changed
 
