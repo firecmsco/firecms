@@ -146,9 +146,6 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     /**
      * Builder for rendering additional components such as buttons in the
      * collection toolbar
-     * @param entityCollection this collection view
-     * @param selectedEntities current selected entities by the end user or
-     * undefined if none
      */
     extraActions?: (extraActionsParams: ExtraActionsParams<M, UserType>) => React.ReactNode;
 

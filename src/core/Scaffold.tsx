@@ -36,6 +36,7 @@ export interface ScaffoldProps {
 
     /**
      * In case you need to override the view that gets rendered as a drawer
+     * @see FireCMSDrawer
      */
     Drawer?: React.ComponentType<DrawerProps>;
 

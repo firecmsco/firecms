@@ -28,7 +28,11 @@ import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter, TableEnumValues } from "../../index";
 import { getIconForProperty } from "../../util/property_icons";
-import { enumToObjectEntries, isEnumValueDisabled } from "../../util/enums";
+import {
+    buildEnumLabel,
+    enumToObjectEntries,
+    isEnumValueDisabled
+} from "../../util/enums";
 
 
 export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = {
@@ -127,21 +131,21 @@ type SelectedCellProps<M> =
 
 
 export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType>({
-                                                                            schema,
-                                                                            additionalColumns,
-                                                                            displayedProperties,
-                                                                            path,
-                                                                            inlineEditing,
-                                                                            size,
-                                                                            onCellValueChange,
-                                                                            uniqueFieldValidator
-                                                                        }: ColumnsFromSchemaProps<M, AdditionalKey, UserType>
+                                                                                      schema,
+                                                                                      additionalColumns,
+                                                                                      displayedProperties,
+                                                                                      path,
+                                                                                      inlineEditing,
+                                                                                      size,
+                                                                                      onCellValueChange,
+                                                                                      uniqueFieldValidator
+                                                                                  }: ColumnsFromSchemaProps<M, AdditionalKey, UserType>
 ): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
 
     const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
-    const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M>| undefined>(undefined);
+    const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
     const [focused, setFocused] = React.useState<boolean>(false);
 
     const [formPopupOpen, setFormPopupOpen] = React.useState<boolean>(false);
@@ -341,12 +345,11 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
     };
 
-
     function buildFilterEnumValues(values: EnumValues): TableEnumValues {
         return enumToObjectEntries(values)
-            .filter(([enumKey, labelOrConfig]) => {
-                return isEnumValueDisabled(labelOrConfig);
-            }).reduce((a, b) => ({ ...a, ...b }), {});
+            .filter(([enumKey, labelOrConfig]) => !isEnumValueDisabled(labelOrConfig))
+            .map(([enumKey, labelOrConfig]) => ({ [enumKey]: buildEnumLabel(labelOrConfig) as string }))
+            .reduce((a, b) => ({ ...a, ...b }), {});
     }
 
     function buildFilterableFromProperty(property: Property,
