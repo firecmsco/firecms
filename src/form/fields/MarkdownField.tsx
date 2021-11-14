@@ -6,8 +6,8 @@ import makeStyles from "@mui/styles/makeStyles";
 import MDEditor from "@uiw/react-md-editor";
 
 import { FieldProps } from "../../models";
-import { FieldDescription } from "../../form/components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import { FieldDescription } from "../../form";
+import { LabelWithIcon } from "../components";
 
 import { useClearRestoreValue } from "../../hooks";
 
@@ -18,8 +18,25 @@ interface MarkDownFieldProps extends FieldProps<string> {
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
+            "& .w-md-editor-toolbar li > button": {
+                color: "inherit",
+            },
+            "& .w-md-editor-toolbar li.active > button": {
+                color: theme.palette.primary.main,
+            },
+            "& .w-md-editor-text-pre": {
+                color: "inherit",
+            },
+            "& .wmde-markdown-color code.language-markdown": {
+                color: "inherit",
+            },
+            "& .w-md-editor": {
+                color: "inherit",
+                backgroundColor: theme.palette.mode === "light" ? "rgb(240, 240, 240)" : "#323232"
+            },
             "& .w-md-editor-toolbar": {
-                backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
+                borderBottom: "inherit",
+                backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.09)"
             }
         }
     })
