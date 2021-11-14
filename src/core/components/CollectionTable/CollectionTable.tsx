@@ -81,6 +81,7 @@ export function CollectionTable<M extends { [Key: string]: any },
      entitiesDisplayedFirst,
      onEntityClick,
      onColumnResize,
+     onSizeChanged,
      hoverRow = true
  }: CollectionTableProps<M, AdditionalKey>) {
 
@@ -186,7 +187,7 @@ export function CollectionTable<M extends { [Key: string]: any },
         displayedProperties,
         path,
         inlineEditing,
-        size: size,
+        size,
         onCellValueChange: onCellChanged,
         uniqueFieldValidator
     });
@@ -281,6 +282,11 @@ export function CollectionTable<M extends { [Key: string]: any },
             ) !== undefined;
     }
 
+    const updateSize = (size: CollectionSize) => {
+        if (onSizeChanged)
+            onSizeChanged(size);
+        setSize(size);
+    };
 
     return (
 
@@ -291,7 +297,7 @@ export function CollectionTable<M extends { [Key: string]: any },
                                     clearFilter={clearFilter}
                                     actions={actions}
                                     size={size}
-                                    onSizeChanged={setSize}
+                                    onSizeChanged={updateSize}
                                     title={title}
                                     loading={dataLoading}/>
 

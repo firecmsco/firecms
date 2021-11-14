@@ -32,8 +32,8 @@ import {
     useSideEntityController
 } from "../../hooks";
 import {
-    getCollectionConfig,
     PartialEntityCollection,
+    getCollectionConfig,
     saveCollectionConfig
 } from "../util/storage";
 import { mergeDeep } from "../util/objects";
@@ -185,6 +185,12 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
     const onColumnResize = ({ width, key }: OnColumnResizeParams) => {
         const property: Partial<AnyProperty> = { columnWidth: width };
         const newCollection: PartialEntityCollection<M> = mergeDeep(extraConfiguration, { schema: { properties: { [key as keyof M]: property } } });
+        setExtraConfiguration(newCollection);
+        saveCollectionConfig(path, newCollection);
+    };
+
+    const onSizeChanged = (size: CollectionSize) => {
+        const newCollection: PartialEntityCollection<M> = mergeDeep(extraConfiguration, { defaultSize: size });
         setExtraConfiguration(newCollection);
         saveCollectionConfig(path, newCollection);
     };
@@ -390,6 +396,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 title={title}
                 path={path}
                 collection={collection}
+                onSizeChanged={onSizeChanged}
                 inlineEditing={checkInlineEditing}
                 onEntityClick={onEntityClick}
                 onColumnResize={onColumnResize}

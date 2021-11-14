@@ -22,6 +22,7 @@
         return true;
     };
     ```
+-  Implemented dark mode for markdown fields
 
 ### Changed
 
@@ -34,6 +35,7 @@
   `[Extract<keyof M, string>, "asc" | "desc"]` for consistency
 - [BREAKING] `extraActions` in `EntityCollection` now
   receives `selectionController`  instead of `selectedEntities`.
+- Fix for filters in tables including `enumValues`
 
 ## [1.0.0-beta3] - 2021-11-07
 

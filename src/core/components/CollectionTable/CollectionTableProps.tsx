@@ -65,6 +65,11 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
     onColumnResize?(params: OnColumnResizeParams): void;
 
     /**
+     * Callback when the selected size of the table is changed
+     */
+    onSizeChanged?(size: CollectionSize): void;
+
+    /**
      * Should apply a different style to a row when hovering
      */
     hoverRow?: boolean;
