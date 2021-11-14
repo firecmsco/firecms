@@ -1,5 +1,6 @@
 ---
-id: migrating_from_alpha_versions title: Migrating from alpha versions
+id: migrating_from_alpha_versions
+title: Migrating from alpha versions
 sidebar_label: Migrating from alpha versions
 ---
 
