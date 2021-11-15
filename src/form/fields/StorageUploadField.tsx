@@ -648,10 +648,15 @@ export function StorageUploadProgress({
 
     const [error, setError] = React.useState<string>();
     const [loading, setLoading] = React.useState<boolean>(false);
+    const mounted = React.useRef(false);
 
     useEffect(() => {
+        mounted.current = true;
         if (entry.file)
             upload(entry.file, entry.fileName);
+        return () => {
+            mounted.current = false;
+        };
     }, []);
 
     function upload(file: File, fileName?: string) {
@@ -663,12 +668,15 @@ export function StorageUploadProgress({
             .then(async ({ path }) => {
                 console.debug("Upload successful");
                 await onFileUploadComplete(path, entry, metadata);
-                setLoading(false);
+                if (mounted.current)
+                    setLoading(false);
             })
             .catch((e) => {
                 console.error("Upload error", e);
-                setError(e.message);
-                setLoading(false);
+                if (mounted.current) {
+                    setError(e.message);
+                    setLoading(false);
+                }
                 snackbarContext.open({
                     type: "error",
                     title: "Error uploading file",
