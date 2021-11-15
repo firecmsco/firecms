@@ -3,7 +3,6 @@ import {
     Box,
     CircularProgress,
     IconButton,
-    Paper,
     Tab,
     Tabs,
     Theme,
@@ -43,26 +42,25 @@ import {
     useSnackbarController
 } from "../../hooks";
 import { canEdit } from "../util/permissions";
-import { useUnsavedChangesDialog } from "./useUnsavedChangesDialog";
 
-const useStylesSide = makeStyles((theme: Theme) =>
+const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: Theme) =>
     createStyles({
-        container: {
+        container: ({ containerWidth }) => ({
             display: "flex",
             flexDirection: "column",
-            width: CONTAINER_WIDTH,
+            width: containerWidth,
             height: "100%",
             [theme.breakpoints.down("sm")]: {
                 width: CONTAINER_FULL_WIDTH
             },
             transition: "width 250ms ease-in-out"
-        },
-        containerWide: {
-            width: `calc(${TAB_WIDTH} + ${CONTAINER_WIDTH})`,
+        }),
+        containerWide: ({ containerWidth }) => ({
+            width: `calc(${TAB_WIDTH} + ${containerWidth})`,
             [theme.breakpoints.down("lg")]: {
                 width: CONTAINER_FULL_WIDTH
             }
-        },
+        }),
         subcollectionPanel: {
             width: TAB_WIDTH,
             height: "100%",
@@ -73,19 +71,19 @@ const useStylesSide = makeStyles((theme: Theme) =>
                 width: CONTAINER_FULL_WIDTH
             }
         },
-        tabsContainer: {
+        tabsContainer: ({ containerWidth }) => ({
             flexGrow: 1,
             height: "100%",
-            width: `calc(${TAB_WIDTH} + ${CONTAINER_WIDTH})`,
+            width: `calc(${TAB_WIDTH} + ${containerWidth})`,
             [theme.breakpoints.down("lg")]: {
                 width: CONTAINER_FULL_WIDTH
             },
             display: "flex",
             overflow: "auto",
             flexDirection: "row"
-        },
-        form: {
-            width: CONTAINER_WIDTH,
+        }),
+        form: ({ containerWidth }) => ({
+            width: containerWidth,
             maxWidth: "100%",
             height: "100%",
             overflow: "auto",
@@ -93,7 +91,7 @@ const useStylesSide = makeStyles((theme: Theme) =>
                 maxWidth: CONTAINER_FULL_WIDTH,
                 width: CONTAINER_FULL_WIDTH
             }
-        },
+        }),
         tabBar: {
             paddingLeft: theme.spacing(1),
             paddingRight: theme.spacing(1),
@@ -116,7 +114,7 @@ const useStylesSide = makeStyles((theme: Theme) =>
 );
 
 
-export interface SideEntityViewProps<M extends { [Key: string]: any }, UserType> {
+export interface EntityViewProps<M extends { [Key: string]: any }, UserType> {
     path: string;
     schema: EntitySchema;
     entityId?: string;
@@ -125,21 +123,26 @@ export interface SideEntityViewProps<M extends { [Key: string]: any }, UserType>
     permissions?: PermissionsBuilder<M, UserType>;
     callbacks?: EntityCallbacks<M>;
     subcollections?: EntityCollection[];
+    width?: number | string;
+    onModifiedValues: (modified: boolean) => void;
 }
 
 
-export function SideEntityView<M extends { [Key: string]: any }, UserType>({
-                                                                     path,
-                                                                     entityId,
-                                                                     callbacks,
-                                                                     selectedSubpath,
-                                                                     copy,
-                                                                     permissions,
-                                                                     schema,
-                                                                     subcollections
-                                                                 }: SideEntityViewProps<M, UserType>) {
+export function EntityView<M extends { [Key: string]: any }, UserType>({
+                                                                           path,
+                                                                           entityId,
+                                                                           callbacks,
+                                                                           selectedSubpath,
+                                                                           copy,
+                                                                           permissions,
+                                                                           schema,
+                                                                           subcollections,
+                                                                           onModifiedValues,
+                                                                           width
+                                                                       }: EntityViewProps<M, UserType>) {
 
-    const classes = useStylesSide();
+    const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
+    const classes = useStylesSide({ containerWidth: resolvedWidth ?? CONTAINER_WIDTH });
 
     const dataSource = useDataSource();
     const sideEntityController = useSideEntityController();
@@ -152,18 +155,28 @@ export function SideEntityView<M extends { [Key: string]: any }, UserType>({
     const [readOnly, setReadOnly] = useState<boolean>(false);
     const [tabsPosition, setTabsPosition] = React.useState(-1);
 
-    // have the original values of the form changed?
-    const [blockedNavigation, setBlockedNavigation] = useState(false);
     const [modifiedValues, setModifiedValues] = useState<EntityValues<any> | undefined>();
 
     const customViews = schema.views;
     const customViewsCount = customViews?.length ?? 0;
 
-    const { unsavedChangesDialog } = useUnsavedChangesDialog(
-        blockedNavigation,
-        () => setBlockedNavigation(false),
-        schema.name
-    );
+    useEffect(() => {
+        function beforeunload(e: any) {
+            if (modifiedValues) {
+                e.preventDefault();
+                e.returnValue = `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`;
+            }
+        }
+
+        if (typeof window !== "undefined")
+            window.addEventListener("beforeunload", beforeunload);
+
+        return () => {
+            if (typeof window !== "undefined")
+                window.removeEventListener("beforeunload", beforeunload);
+        };
+
+    }, [window]);
 
     const {
         entity,
@@ -203,23 +216,6 @@ export function SideEntityView<M extends { [Key: string]: any }, UserType>({
         }
     }, [selectedSubpath]);
 
-    useEffect(() => {
-        function beforeunload(e: any) {
-            if (blockedNavigation) {
-                e.preventDefault();
-                e.returnValue = `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`;
-            }
-        }
-
-        if (typeof window !== "undefined")
-            window.addEventListener("beforeunload", beforeunload);
-
-        return () => {
-            if (typeof window !== "undefined")
-                window.removeEventListener("beforeunload", beforeunload);
-        };
-
-    }, [window]);
 
     const onPreSaveHookError = (e: Error) => {
         snackbarContext.open({
@@ -249,7 +245,7 @@ export function SideEntityView<M extends { [Key: string]: any }, UserType>({
         });
 
         setStatus("existing");
-        setBlockedNavigation(false);
+        onModifiedValues(false);
 
         if (tabsPosition === -1)
             sideEntityController.close();
@@ -285,11 +281,6 @@ export function SideEntityView<M extends { [Key: string]: any }, UserType>({
         if (!status)
             return;
 
-        if (status === "existing" && !blockedNavigation) {
-            sideEntityController.close();
-            return;
-        }
-
         return saveEntityWithCallbacks({
             path,
             entityId: entityId,
@@ -320,7 +311,7 @@ export function SideEntityView<M extends { [Key: string]: any }, UserType>({
             onEntitySave={onEntitySave}
             onDiscard={onDiscard}
             onValuesChanged={setModifiedValues}
-            onModified={setBlockedNavigation}
+            onModified={onModifiedValues}
             entity={entity}/>
     ) : (
         <EntityPreview
@@ -343,7 +334,7 @@ export function SideEntityView<M extends { [Key: string]: any }, UserType>({
                         {customView.builder({
                             schema,
                             entity,
-                            modifiedValues: blockedNavigation ? modifiedValues : entity?.values
+                            modifiedValues: modifiedValues ?? entity?.values
                         })}
                     </ErrorBoundary>
                 </Box>
@@ -408,7 +399,7 @@ export function SideEntityView<M extends { [Key: string]: any }, UserType>({
         }
     }
 
-    const header = <Paper elevation={0} variant={"outlined"}>
+    const header = (
         <div className={classes.header}>
 
             <IconButton onClick={(e) => sideEntityController.close()}
@@ -475,7 +466,7 @@ export function SideEntityView<M extends { [Key: string]: any }, UserType>({
             </Tabs>
         </div>
 
-    </Paper>;
+    );
 
     return <div
         className={clsx(classes.container, { [classes.containerWide]: tabsPosition !== -1 })}>
@@ -504,8 +495,6 @@ export function SideEntityView<M extends { [Key: string]: any }, UserType>({
 
                 </>
         }
-
-        {unsavedChangesDialog}
 
     </div>;
 }

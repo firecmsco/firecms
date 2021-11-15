@@ -81,7 +81,8 @@ export function ExampleCMSView({
                     onClick={() => sideEntityController.open({
                         entityId: "B003WT1622",
                         path: "/products-test",
-                        schema: customProductSchema
+                        schema: customProductSchema,
+                        width: 800
                     })}
                     color="primary">
                     Open entity with custom schema

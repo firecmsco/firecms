@@ -4,12 +4,6 @@ import { Drawer as MuiDrawer, Theme } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { FireCMSAppBar } from "./internal/FireCMSAppBar";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-
-import DateFnsUtils from "@date-io/date-fns";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import * as locales from "date-fns/locale";
 import { useFireCMSContext } from "../hooks";
 
@@ -83,11 +77,6 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
         Drawer
     } = props;
 
-    const context = useFireCMSContext();
-    const locale = context.locale;
-
-    const dateUtilsLocale = locale ? locales[locale] : undefined;
-
     const classes = useStyles();
 
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -97,41 +86,37 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
 
     const UsedDrawer = Drawer ? Drawer : FireCMSDrawer;
     return (
-        <LocalizationProvider
-            dateAdapter={AdapterDateFns}
-            utils={DateFnsUtils}
-            locale={dateUtilsLocale}>
-            <DndProvider backend={HTML5Backend}>
-                <nav>
-                    <MuiDrawer
-                        variant="temporary"
-                        anchor={"left"}
-                        open={drawerOpen}
-                        onClose={closeDrawer}
-                        classes={{
-                            paper: classes.drawerPaper
-                        }}
-                        ModalProps={{
-                            keepMounted: true
-                        }}
-                    >
-                        <UsedDrawer logo={logo} closeDrawer={closeDrawer}/>
-                    </MuiDrawer>
-                </nav>
 
-                <div className={classes.main}>
+        <>
+            <nav>
+                <MuiDrawer
+                    variant="temporary"
+                    anchor={"left"}
+                    open={drawerOpen}
+                    onClose={closeDrawer}
+                    classes={{
+                        paper: classes.drawerPaper
+                    }}
+                    ModalProps={{
+                        keepMounted: true
+                    }}
+                >
+                    <UsedDrawer logo={logo} closeDrawer={closeDrawer}/>
+                </MuiDrawer>
+            </nav>
 
-                    <FireCMSAppBar title={name}
-                                   handleDrawerToggle={handleDrawerToggle}
-                                   toolbarExtraWidget={toolbarExtraWidget}/>
-                    <main
-                        className={classes.content}>
-                        {children}
-                    </main>
-                </div>
+            <div className={classes.main}>
 
-            </DndProvider>
-        </LocalizationProvider>
+                <FireCMSAppBar title={name}
+                               handleDrawerToggle={handleDrawerToggle}
+                               toolbarExtraWidget={toolbarExtraWidget}/>
+                <main
+                    className={classes.content}>
+                    {children}
+                </main>
+            </div>
+
+        </>
     );
 
 

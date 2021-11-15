@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Entity, EntitySchema, FilterValues } from "../../models";
 import { useDataSource } from "./useDataSource";
-
-type Order = "asc" | "desc" | undefined;
 
 /**
  * @category Hooks and utilities
@@ -84,9 +82,6 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
     const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];
     const [data, setData] = useState<Entity<M>[]>(initialEntities);
 
-    // this is a hack to prevent false updates from Firestore, which returns less data than requested for some reason
-    const resetData = useRef<boolean>(false);
-
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
     const [noMoreToLoad, setNoMoreToLoad] = useState<boolean>(false);
@@ -101,20 +96,13 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
     };
 
     useEffect(() => {
-        resetData.current = true;
-    }, [path, currentSort, sortByProperty, filterValues, searchString]);
-
-    useEffect(() => {
 
         setDataLoading(true);
 
         const onEntitiesUpdate = (entities: Entity<M>[]) => {
             setDataLoading(false);
             setDataLoadingError(undefined);
-            if (resetData.current || entities.length >= data.length) {
-                resetData.current = false;
-                updateData(entities);
-            }
+            updateData(entities);
             setNoMoreToLoad(!itemCount || entities.length < itemCount);
         };
 

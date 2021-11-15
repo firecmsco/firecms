@@ -8,7 +8,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export function useUnsavedChangesDialog(when: boolean, onSuccess: () => void, schemaName: string): { unsavedChangesDialog: JSX.Element } {
+export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () => void):
+    {
+        navigationWasBlocked: boolean,
+        handleCancel: () => void,
+        handleOk: () => void
+    } {
 
     const [nextLocation, setNextLocation] = React.useState<any | undefined>();
     const { navigator } = React.useContext(UNSAFE_NavigationContext);
@@ -33,10 +38,6 @@ export function useUnsavedChangesDialog(when: boolean, onSuccess: () => void, sc
             }
             case "POP": {
                 setNextLocation(nextLocation);
-                // const answer = confirm(`You have unsaved changes in this ${schemaName}. Are you sure you want to leave this page?`);
-                // if (answer) {
-                //     navigate(nextLocation);
-                // }
                 return;
             }
         }
@@ -58,29 +59,23 @@ export function useUnsavedChangesDialog(when: boolean, onSuccess: () => void, sc
         });
 
         return unblock;
-    }, [navigator, blocker, when, schemaName]);
+    }, [navigator, blocker, when]);
 
-    const unsavedChangesDialog = <UnsavedChangesDialog
-        open={Boolean(nextLocation)}
-        schemaName={schemaName}
-        handleOk={handleOk}
-        handleCancel={handleCancel}/>;
-
-    return { unsavedChangesDialog: unsavedChangesDialog };
+    return { navigationWasBlocked: Boolean(nextLocation), handleCancel, handleOk };
 }
 
 export interface UnsavedChangesDialogProps {
-    schemaName: string;
     open: boolean;
+    schemaName: string;
     handleOk: () => void;
     handleCancel: () => void;
 }
 
 export function UnsavedChangesDialog({
-                                         schemaName,
                                          open,
                                          handleOk,
-                                         handleCancel
+                                         handleCancel,
+                                         schemaName
                                      }: UnsavedChangesDialogProps) {
 
     return (
@@ -96,7 +91,8 @@ export function UnsavedChangesDialog({
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     You have unsaved changes in this {schemaName}. Are you sure
-                    you want to leave this page?</DialogContentText>
+                    you want to leave this page?
+                </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleCancel} autoFocus> Cancel </Button>

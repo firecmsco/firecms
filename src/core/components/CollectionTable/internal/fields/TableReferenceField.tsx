@@ -56,11 +56,10 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     const [open, setOpen] = useState<boolean>(false);
 
     const schemaRegistryController = useFireCMSContext().schemaRegistryController;
-    const collectionConfig = schemaRegistryController.getCollectionConfig(usedProperty.path);
+    const collectionConfig = schemaRegistryController.getCollectionConfig(path);
     if (!collectionConfig) {
-        console.error(`Couldn't find the corresponding collection view for the path: ${usedProperty.path}`);
+        console.error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
-
 
     const handleOpen = (event: React.MouseEvent) => {
         if (disabled)

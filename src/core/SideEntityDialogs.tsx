@@ -1,16 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { SchemaConfig, SideEntityPanelProps } from "../models";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DateFnsUtils from "@date-io/date-fns";
-import * as locales from "date-fns/locale";
-import { EntityDrawer } from "./internal/EntityDrawer";
-import { SideEntityView } from "./internal/SideEntityView";
+import { SideDialogDrawer } from "./internal/SideDialogDrawer";
+import { EntityView } from "./internal/EntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
 import { useFireCMSContext, useSideEntityController } from "../hooks";
 import { ErrorBoundary } from "./internal/ErrorBoundary";
+import {
+    UnsavedChangesDialog,
+    useNavigationUnsavedChangesDialog
+} from "./internal/useUnsavedChangesDialog";
 
 /**
  * This is the component in charge of rendering the side dialogs used
@@ -23,66 +21,99 @@ import { ErrorBoundary } from "./internal/ErrorBoundary";
 export function SideEntityDialogs<M extends { [Key: string]: any }>() {
 
     const sideEntityController = useSideEntityController();
-    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
-
-    const context = useFireCMSContext();
-
-    const locale = context.locale;
-    const dateUtilsLocale = locale ? locales[locale] : undefined;
 
     const sidePanels = sideEntityController.sidePanels;
 
+    //  we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed
     const allPanels = [...sidePanels, undefined];
 
-    function buildEntityView(panel: SideEntityPanelProps) {
+    return <>
+        {
+            allPanels.map((panel: SideEntityPanelProps | undefined, index) =>
+                (
+                    <SideEntityDialog
+                        key={`side_entity_dialog_${index}`}
+                        panel={panel}
+                        offsetPosition={sidePanels.length - index - 1}/>
 
-        const schemaProps: SchemaConfig | undefined = schemaRegistryController.getSchemaConfig(panel.path, panel.entityId);
-
-        if (!schemaProps) {
-            throw Error("ERROR: You are trying to open an entity with no schema defined.");
+                ))
         }
+    </>;
+}
 
-        return (
-            <ErrorBoundary>
-                <SideEntityView
-                    key={`side-entity-view-${panel.entityId}`}
-                    {...schemaProps}
-                    {...panel}/>
-            </ErrorBoundary>
-        );
+function SideEntityDialog({
+                              panel,
+                              offsetPosition
+                          }: { panel?: SideEntityPanelProps, offsetPosition: number }) {
+
+    if (!panel) {
+        return <SideDialogDrawer
+            open={false}
+            offsetPosition={offsetPosition}>
+            <div style={{ width: CONTAINER_WIDTH }}/>
+        </SideDialogDrawer>;
+    }
+
+    // have the original values of the form changed?
+    const [modifiedValues, setModifiedValues] = useState(false);
+    // was the closing of the dialog requested by the drawer
+    const [drawerCloseRequested, setDrawerCloseRequested] = useState(false);
+
+    const {
+        navigationWasBlocked,
+        handleOk: handleNavigationOk,
+        handleCancel: handleNavigationCancel
+    } = useNavigationUnsavedChangesDialog(
+        modifiedValues && !drawerCloseRequested,
+        () => setModifiedValues(false)
+    );
+
+    const handleDrawerCloseOk = () => {
+        setModifiedValues(false);
+        setDrawerCloseRequested(false);
+        sideEntityController.close();
+    };
+    const handleDrawerCloseCancel = () => {
+        setDrawerCloseRequested(false);
+    };
+
+    const sideEntityController = useSideEntityController();
+    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
+    const schemaProps: SchemaConfig | undefined = schemaRegistryController.getSchemaConfig(panel.path, panel.entityId);
+    if (!schemaProps) {
+        throw Error("ERROR: You are trying to open an entity with no schema defined.");
     }
 
     return (
-        <LocalizationProvider
-            dateAdapter={AdapterDateFns}
-            utils={DateFnsUtils}
-            locale={dateUtilsLocale}>
-            <DndProvider backend={HTML5Backend}>
-                {/* we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed */}
-                {
-                    allPanels.map((panel: SideEntityPanelProps | undefined, index) => {
-                        return (
-                            <EntityDrawer
-                                key={`side_menu_${index}`}
-                                open={panel !== undefined}
-                                onClose={() => {
-                                    sideEntityController.close();
-                                }}
-                                offsetPosition={sidePanels.length - index - 1}
-                            >
+        <>
 
-                                {panel && buildEntityView(panel)}
+            <SideDialogDrawer
+                open={panel !== undefined}
+                onClose={() => {
+                    if (modifiedValues) {
+                        setDrawerCloseRequested(true);
+                    } else {
+                        sideEntityController.close();
+                    }
+                }}
+                offsetPosition={offsetPosition}
+            >
+                 <ErrorBoundary>
+                    <EntityView
+                        {...schemaProps}
+                        {...panel}
+                        onModifiedValues={setModifiedValues}
+                    />
+                </ErrorBoundary>
+            </SideDialogDrawer>
 
-                                {!panel &&
-                                <div style={{ width: CONTAINER_WIDTH }}/>}
+            <UnsavedChangesDialog
+                open={navigationWasBlocked || drawerCloseRequested}
+                handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
+                handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
+                schemaName={schemaProps.schema.name}/>
 
-                            </EntityDrawer>
-                        );
-                    })
-                }
-
-            </DndProvider>
-        </LocalizationProvider>
+        </>
     );
 }
 

@@ -1,6 +1,5 @@
 import { SchemaConfig } from "./schema_resolver";
 
-
 /**
  * Props used to open a side dialog
  * @category Hooks and utilities
@@ -26,6 +25,12 @@ export interface SideEntityPanelProps {
      * entity was already open, it is replaced.
      */
     selectedSubpath?: string;
+
+    /**
+     * Use this prop to override the width of the side dialog.
+     * e.g. "600px"
+     */
+    width?: number | string;
 
 }
 

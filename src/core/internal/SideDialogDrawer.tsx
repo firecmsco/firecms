@@ -66,7 +66,7 @@ const defaultTransitionDuration = {
  * The props of the [Modal](/api/modal/) component are available
  * when `variant="temporary"` is set.
  */
-export const EntityDrawer = React.forwardRef<HTMLDivElement, EntityDrawerProps>(function EntityDrawer(props, ref) {
+export const SideDialogDrawer = React.forwardRef<HTMLDivElement, EntityDrawerProps>(function EntityDrawer(props, ref) {
 
     const {
         children,

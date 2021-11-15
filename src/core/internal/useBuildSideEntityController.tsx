@@ -37,17 +37,20 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
 
     const baseLocation = location.state && location.state["base_location"] ? location.state["base_location"] : location;
 
+    const updatePanels = (newPanels: ExtendedPanelProps[]) => {
+        setSidePanels(newPanels);
+        const customSchemaKeys = newPanels
+            .map((e) => e.sidePanelKey)
+            .filter((k) => !!k) as string[];
+        schemaRegistryController.removeAllOverridesExcept(customSchemaKeys);
+    };
+
     useEffect(() => {
         if (schemaRegistryController.initialised) {
             if (location?.state && location.state["panels"]) {
-                const customSchemaKeys = (location.state["panels"] as ExtendedPanelProps[])
-                    .map((e) => e.sidePanelKey)
-                    .filter((k) => !!k) as string[];
-                schemaRegistryController.removeAllOverridesExcept(customSchemaKeys);
-                setSidePanels(location.state["panels"]);
+                updatePanels(location.state["panels"] as ExtendedPanelProps[]);
             } else {
-                schemaRegistryController.removeAllOverridesExcept([]);
-                setSidePanels([]);
+                updatePanels([]);
             }
         }
     }, [location?.state, schemaRegistryController.initialised]);
@@ -59,11 +62,11 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 const newFlag = location.hash === `#${NEW_URL_HASH}`;
                 const entityOrCollectionPath = navigationContext.getEntityOrCollectionPath(location.pathname);
                 const sidePanels = buildSidePanelsFromUrl(entityOrCollectionPath, collections, newFlag);
-                setSidePanels(sidePanels);
+                updatePanels(sidePanels);
             }
             initialised.current = true;
         }
-    }, [location, collections, navigationContext]);
+    }, [location, collections]);
 
     const close = () => {
 
@@ -73,6 +76,8 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
         const lastSidePanel = sidePanels[sidePanels.length - 1];
         const locationPanels = location?.state && location.state["panels"];
         if (locationPanels && locationPanels.length > 0) {
+            const updatedPanels = [...locationPanels.slice(0, -1)];
+            setSidePanels(updatedPanels);
             navigate(-1);
         } else {
             const newPath = navigationContext.buildCollectionPath(lastSidePanel.path);
@@ -87,6 +92,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                       entityId,
                       selectedSubpath,
                       copy,
+                      width,
                       ...schemaProps
                   }: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaResolver?: boolean }) => {
 
@@ -129,13 +135,15 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 sidePanelKey,
                 selectedSubpath
             };
+            const updatedPanels = [...sidePanels.slice(0, -1), updatedPanel];
+            updatePanels(updatedPanels);
             navigate(
                 navigationContext.buildCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath ? selectedSubpath : ""}`),
                 {
                     replace: true,
                     state: {
                         base_location: baseLocation,
-                        panels: [...sidePanels.slice(0, -1), updatedPanel]
+                        panels: updatedPanels
                     }
                 }
             );
@@ -145,15 +153,18 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 path,
                 entityId,
                 copy: copy !== undefined && copy,
+                width,
                 sidePanelKey,
                 selectedSubpath
             };
+            const updatedPanels = [...sidePanels, newPanel];
+            updatePanels(updatedPanels);
             navigate(
                 newPath,
                 {
                     state: {
                         base_location: baseLocation,
-                        panels: [...sidePanels, newPanel]
+                        panels: updatedPanels
                     }
                 }
             );

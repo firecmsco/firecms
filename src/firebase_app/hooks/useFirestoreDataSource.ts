@@ -47,7 +47,7 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../models/text_search";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 /**
  * @category Firebase
@@ -68,12 +68,12 @@ export function useFirestoreDataSource({
                                            textSearchController
                                        }: FirestoreDataSourceProps): DataSource {
 
-    const [firestore, setFirestore] = useState<Firestore>();
+    const firestoreRef = useRef<Firestore>();
+    const firestore = firestoreRef.current;
 
     useEffect(() => {
         if (!firebaseApp) return;
-        const db = getFirestore(firebaseApp);
-        setFirestore(db);
+        firestoreRef.current = getFirestore(firebaseApp);
     }, [firebaseApp]);
 
     /**

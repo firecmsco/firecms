@@ -7,6 +7,7 @@ import { SideEntityController } from "./side_entity_controller";
 import { AuthController } from "./auth";
 import { EntityLinkBuilder } from "./entity_link_builder";
 import { User } from "./user";
+import { SnackbarController } from "../hooks";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -69,5 +70,9 @@ export interface FireCMSContext<UserType extends User = User> {
      */
     entityLinkBuilder?: EntityLinkBuilder;
 
+    /**
+     * Use this controller to display snackbars
+     */
+    // snackbarController: SnackbarController;
 
 }

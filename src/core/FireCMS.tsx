@@ -1,5 +1,12 @@
 import React from "react";
 
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateFnsUtils from "@date-io/date-fns";
+import * as locales from "date-fns/locale";
+
 import {
     AuthDelegate,
     Authenticator,
@@ -154,13 +161,14 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
     const usedBasePath = basePath ?? "/";
     const usedBasedCollectionPath = baseCollectionPath ?? DEFAULT_COLLECTION_PATH;
 
+    const dateUtilsLocale = locale ? locales[locale] : undefined;
     const authController = useBuildAuthController({
         authDelegate,
         authentication,
         dateTimeFormat,
         locale,
         dataSource,
-        storageSource,
+        storageSource
     });
 
     const navigationContext = useBuildNavigationContext({
@@ -171,7 +179,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         dateTimeFormat,
         locale,
         dataSource,
-        storageSource,
+        storageSource
     });
 
     const schemaRegistryController = useBuildSchemaRegistryController(navigationContext, schemaResolver);
@@ -205,15 +213,21 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
             <SnackbarProvider>
                 <FireCMSContextProvider {...context} >
                     <BreadcrumbsProvider>
-                        <ModeStateContext.Consumer>
-                            {({ mode }) => {
-                                return children({
-                                    context,
-                                    mode,
-                                    loading
-                                });
-                            }}
-                        </ModeStateContext.Consumer>
+                        <LocalizationProvider
+                            dateAdapter={AdapterDateFns}
+                            utils={DateFnsUtils}
+                            locale={dateUtilsLocale}>
+                            <DndProvider backend={HTML5Backend}>
+                                <ModeStateContext.Consumer>
+                                    {({ mode }) => {
+                                        return children({
+                                            context,
+                                            mode,
+                                            loading
+                                        });
+                                    }}
+                                </ModeStateContext.Consumer></DndProvider>
+                        </LocalizationProvider>
                     </BreadcrumbsProvider>
                 </FireCMSContextProvider>
             </SnackbarProvider>
