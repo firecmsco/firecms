@@ -14,6 +14,7 @@ export type NavigationRoutesProps = {
      * In case you need to override the home page
      */
     HomePage?: React.ComponentType;
+    basePath?: string;
 };
 
 /**
@@ -25,7 +26,7 @@ export type NavigationRoutesProps = {
  * @constructor
  * @category Components
  */
-export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
+export function NavigationRoutes({ HomePage, basePath }: NavigationRoutesProps) {
 
     const location = useLocation();
     const navigationContext = useNavigation();
@@ -46,7 +47,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
         const buildCMSViewRoute = (path: string, cmsView: CMSView) => {
             return <Route
                 key={"navigation_view_" + path}
-                path={path}
+                path={basePath + "/" + path}
                 element={
                     <BreadcrumbUpdater
                         path={path}
