@@ -1,4 +1,4 @@
-import { EnumType, EnumValues, FieldProps } from "../../models";
+import React from "react";
 import {
     FormControl,
     FormHelperText,
@@ -6,9 +6,10 @@ import {
     MenuItem,
     Select as MuiSelect
 } from "@mui/material";
-import React from "react";
-import { FieldDescription } from "../../form/components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+
+import { EnumType, EnumValues, FieldProps } from "../../models";
+import { FieldDescription } from "../../form";
+import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import {
     enumToObjectEntries,
@@ -69,7 +70,7 @@ export function Select<T extends EnumType>({
 
             <MuiSelect
                 classes={{
-                    root: classes.input
+                    select: classes.input
                 }}
                 variant={"filled"}
                 labelId={`${name}-select-label`}

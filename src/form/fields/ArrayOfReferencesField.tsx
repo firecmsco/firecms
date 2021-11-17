@@ -1,12 +1,10 @@
 import React, { useMemo } from "react";
-import { Entity, EntityReference, FieldProps, Property } from "../../models";
 import { Box, Button, FormControl, FormHelperText, Paper } from "@mui/material";
+import { Entity, EntityReference, FieldProps, Property } from "../../models";
 import { ReferencePreview } from "../../preview";
-import { LabelWithIcon } from "../components/LabelWithIcon";
-import { ArrayContainer } from "../components/ArrayContainer";
-import { ErrorView, ReferenceDialog } from "../../core/components";
+import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
+import { ErrorView, ReferenceDialog } from "../../core";
 import { formStyles } from "../styles";
-import { FieldDescription } from "../components/FieldDescription";
 import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";
 

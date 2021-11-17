@@ -5,8 +5,8 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 
 import { FieldProps } from "../../models";
 
-import { FieldDescription } from "../../form/components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import { FieldDescription } from "../../form";
+import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { formStyles } from "../styles";
 

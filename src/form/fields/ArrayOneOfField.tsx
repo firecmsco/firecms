@@ -10,11 +10,9 @@ import {
 import { FastField, FieldProps as FormikFieldProps } from "formik";
 
 import { formStyles } from "../styles";
-import { ArrayContainer } from "../components/ArrayContainer";
-import { FieldDescription } from "../components/FieldDescription";
+import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
-import { LabelWithIcon } from "../components/LabelWithIcon";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 import { enumToObjectEntries } from "../../core/util/enums";
 import { EnumValues, FieldProps, FormContext, Property } from "../../models";

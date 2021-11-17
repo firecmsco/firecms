@@ -14,10 +14,9 @@ import { SelectChangeEvent } from "@mui/material/Select";
 
 import { formStyles } from "../styles";
 import { pick } from "../../core/util/objects";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
-import { FieldDescription } from "../components";
 import { isHidden } from "../../core/utils";
 
 /**

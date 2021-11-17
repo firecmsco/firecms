@@ -124,7 +124,7 @@ export const testEntitySchema = buildSchema({
                         enumValues: {
                             "facebook": "FacebookId",
                             "apple": "Apple"
-                        },
+                        }
                     }
                 },
                 hidden_field: {
@@ -273,6 +273,10 @@ export const testEntitySchema = buildSchema({
                         validation: { required: true },
                         dataType: "string"
                     },
+                    description: {
+                        title: "Description",
+                        dataType: "string"
+                    },
                     type: {
                         title: "Type",
                         description: "Action type that determines the user flow",
@@ -292,6 +296,9 @@ export const testEntitySchema = buildSchema({
                             hidden: true
                         }
                     }
+                },
+                config: {
+                    pickOnlySomeKeys: true
                 }
             }
         },

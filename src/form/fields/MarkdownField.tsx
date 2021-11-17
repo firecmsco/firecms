@@ -24,8 +24,8 @@ export const useStyles = makeStyles((theme: Theme) =>
             "& .w-md-editor-toolbar li.active > button": {
                 color: theme.palette.primary.main,
             },
-            "& .w-md-editor-text-pre": {
-                color: "inherit",
+            "& .w-md-editor-text-pre, & .w-md-editor-text-pre .title": {
+                color: "inherit !important",
             },
             "& .wmde-markdown-color code.language-markdown": {
                 color: "inherit",

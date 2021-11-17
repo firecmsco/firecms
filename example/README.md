@@ -21,9 +21,9 @@ the `package.json` file for:
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "5",
     "@mui/lab": "^5.0.0-alpha.49",
-    "@mui/material": "5",
-    "@mui/styles": "5",
-    "firebase": "9",
+    "@mui/material": "^5.0.0",
+    "@mui/styles": "^5.0.0",
+    "firebase": "^9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^4.0.3"
@@ -33,7 +33,12 @@ the `package.json` file for:
 ## Developing the CMS
 
 This example is used for development purposes. Dependencies in `package.json`
-are linked to the parent folder. In order to make it work for development
+are linked to the parent folder.
+
+You need to specify a valid Firebase config in the file `firebase_config.ts`
+which is not in VCS, but there is a template `firebase_config.ts.template`
+
+In order to make it work for development
 purposes, you need to run first:
 
 ```

@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
     FormControl,
     FormControlLabel,
@@ -9,10 +10,10 @@ import {
 import clsx from "clsx";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import React, { useState } from "react";
+
 import { FieldProps } from "../../models";
-import { FieldDescription } from "../../form/components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import { FieldDescription } from "../../form";
+import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 
 export const useStyles = makeStyles((theme: Theme) =>

@@ -2,6 +2,7 @@
     "compilerOptions": {
         "outDir": "dist",
         "module": "esnext",
+        "target": "esnext",
         "lib": [
             "dom",
             "dom.iterable",
@@ -19,7 +20,6 @@
         "strictNullChecks": true,
         "suppressImplicitAnyIndexErrors": true,
         "allowSyntheticDefaultImports": true,
-        "target": "es5",
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,

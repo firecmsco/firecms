@@ -1,4 +1,4 @@
-import { FieldProps, MediaType, StringProperty } from "../../models";
+import React from "react";
 import {
     Box,
     FilledInput,
@@ -9,11 +9,11 @@ import {
     Switch,
     Typography
 } from "@mui/material";
-import React from "react";
 
+import { FieldProps, MediaType, StringProperty } from "../../models";
 import { PreviewComponent } from "../../preview";
-import { FieldDescription } from "../../form/components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import { FieldDescription } from "../../form";
+import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";
 import { formStyles } from "../styles";

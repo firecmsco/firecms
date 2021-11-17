@@ -1,4 +1,4 @@
-import { EnumType, FieldProps } from "../../models";
+import React from "react";
 import {
     Checkbox,
     FormControl,
@@ -8,9 +8,9 @@ import {
     MenuItem,
     Select as MuiSelect
 } from "@mui/material";
-import React from "react";
-import { FieldDescription } from "../../form/components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import { EnumType, FieldProps } from "../../models";
+import { FieldDescription } from "../../form";
+import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import {
     enumToObjectEntries,
@@ -18,7 +18,7 @@ import {
 } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 import { formStyles } from "../styles";
-import { ArrayEnumPreview } from "../../preview/components/ArrayEnumPreview";
+import { ArrayEnumPreview } from "../../preview";
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -80,7 +80,7 @@ export function ArrayEnumSelect({
             <MuiSelect
                 multiple
                 classes={{
-                    root: classes.input
+                    select: classes.input
                 }}
                 variant={"filled"}
                 labelId={`${name}-multiselect-label`}

@@ -1,10 +1,11 @@
-import { FieldProps } from "../../models";
-import { FormControl, FormHelperText, Paper } from "@mui/material";
 import React from "react";
+import { FormControl, FormHelperText, Paper } from "@mui/material";
+
+import { FieldProps } from "../../models";
 import { formStyles } from "../styles";
 import { PreviewComponent } from "../../preview";
-import { FieldDescription } from "../../form/components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
+import { FieldDescription } from "../../form";
+import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 /**

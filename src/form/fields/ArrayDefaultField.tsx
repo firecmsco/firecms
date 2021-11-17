@@ -1,9 +1,8 @@
+import React, { useState } from "react";
 import { CMSType, FieldProps, Property } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@mui/material";
-import React, { useState } from "react";
-import { FieldDescription } from "../../form/components";
-import { LabelWithIcon } from "../components/LabelWithIcon";
-import { ArrayContainer } from "../components/ArrayContainer";
+import { FieldDescription } from "../../form";
+import { ArrayContainer, LabelWithIcon } from "../components";
 import { formStyles } from "../styles";
 import { buildPropertyField } from "../form_factory";
 import { useClearRestoreValue } from "../../hooks";

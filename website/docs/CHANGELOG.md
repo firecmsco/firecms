@@ -2,12 +2,76 @@
 id: changelog
 title: Changelog
 ---
-## [1.0.0-beta3] - 2021-10-07
+## [1.0.0-beta5] - 2021-11-
+
+## Added
+- `snackbarController` added to `FireCMSContext` so it can be used in callbacks.
+- `width` parameter added to `SideEntityController`'s `open` function, so you
+  can select the width of the side view.
+
+## [1.0.0-beta4] - 2021-11-14
+
+### Added
+
+- Added additional props to `NavigationBuilder` and `Authenticator`, including
+  `dataSource` and `storageSource`. These are useful if you need to fetch some
+  data from your datasource (such as if you want to check if a logged user has
+  an entry in Firestore) and apply the corresponding permissions or navigation.
+- Added `SelectionController` to `EntityCollectionView`. You can use
+  `useSelectionController` and pass it your custom `EntityCollectionView`
+  if you want to control the selected entities. If you are
+  using `FirebaseCMSApp` as an entry point, you can define your
+  `Autheticator` as:
+```tsx
+import { User as FirebaseUser } from "firebase/auth";
+const myAuthenticator: Authenticator<FirebaseUser> = async ({
+                                                                user,
+                                                                authController
+                                                            }) => {
+    console.log("Allowing access to", user?.email);
+    // ...
+    return true;
+};
+```
+- Implemented dark mode for markdown fields
+- Column sizes and collections tables are now persisted in local storage
+
 ### Changed
+
+- The `User` types have been replaced by generics all through the app. Types
+  like `AuthController` or `NavigationBuilder` now have a generic argument that
+  allows to define the user type. In the case of
+- Internal work around to prevent collections going back to the start due to
+  Firestore returning incomplete collection data.
+- [BREAKING] `useCollectionFetch` now uses `sortBy` in the format
+  `[Extract<keyof M, string>, "asc" | "desc"]` for consistency
+- [BREAKING] `extraActions` in `EntityCollection` now
+  receives `selectionController`  instead of `selectedEntities`.
+- Fix for filters in tables including `enumValues`
+
+## [1.0.0-beta3] - 2021-11-07
+
+### Changed
+
 - `EntityCollectionTable` has been renamed to `EntityCollectionView`
+- Reference visual fix
+  [144](https://github.com/Camberi/firecms/issues/144)
+- Removed `entityId` to `PropertyBuilder` when copying an entity
+  [145](https://github.com/Camberi/firecms/issues/145)
+- Fix and reimplemented navigation blocking behaviour
+  [146](https://github.com/Camberi/firecms/issues/146)
+- Hiding correctly `hidden` properties if they are in a `MapProperty
+
+### Added
+
+- New `Table` component used internally by `CollectionTable`. `Table` is not
+  coupled with our entities and collections models and can be used as a single
+  component. It includes generic sorting and filtering capabilities.
 
 ## [1.0.0-beta2] - 2021-10-07
+
 ### Changed
+
 - When copying an entity the permission used is `create` now, instead of `edit`.
 - Fix for entities not being saved when new or copy was clicked
 - Fix for multiple delete keeping old state.
@@ -15,7 +79,9 @@ title: Changelog
 - Fix for array of number enums.
 
 ### Added
+
 Added `hidden` configuration to disabled fields:
+
 ```tsx
 buildProperty({
     dataType: "string",

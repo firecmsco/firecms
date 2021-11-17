@@ -67,7 +67,7 @@ export function TableSelect(props: {
             key={`table_select_${name}`}
             inputRef={ref}
             className={classes.select}
-            classes={{ root: classes.selectRoot }}
+            classes={{ select: classes.selectRoot }}
             open={open}
             disabled={disabled}
             multiple={multiple}
