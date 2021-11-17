@@ -8,7 +8,8 @@ export const FireCMSContextInstance = React.createContext<FireCMSContext>({
     schemaRegistryController: {} as any,
     dataSource: {} as any,
     storageSource: {} as any,
-    authController: {} as any
+    authController: {} as any,
+    snackbarController: {} as any
 });
 
 

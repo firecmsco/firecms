@@ -73,6 +73,6 @@ export interface FireCMSContext<UserType extends User = User> {
     /**
      * Use this controller to display snackbars
      */
-    // snackbarController: SnackbarController;
+    snackbarController: SnackbarController;
 
 }

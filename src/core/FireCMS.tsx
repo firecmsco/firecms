@@ -20,7 +20,7 @@ import {
     SchemaResolver,
     StorageSource
 } from "../models";
-import { SnackbarProvider } from "./contexts/SnackbarContext";
+import { SnackbarContext, SnackbarProvider } from "./contexts/SnackbarContext";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { ModeProvider, ModeStateContext } from "./contexts/ModeState";
@@ -187,18 +187,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
 
     const loading = authDelegate.authLoading || navigationContext.loading;
 
-    const context: FireCMSContext = {
-        authController,
-        sideEntityController,
-        entityLinkBuilder,
-        dateTimeFormat,
-        locale,
-        navigationContext,
-        dataSource,
-        storageSource,
-        schemaRegistryController
-    };
-
     if (navigationContext.navigationLoadingError) {
         return (
             <div>
@@ -211,25 +199,46 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
     return (
         <ModeProvider>
             <SnackbarProvider>
-                <FireCMSContextProvider {...context} >
-                    <BreadcrumbsProvider>
-                        <LocalizationProvider
-                            dateAdapter={AdapterDateFns}
-                            utils={DateFnsUtils}
-                            locale={dateUtilsLocale}>
-                            <DndProvider backend={HTML5Backend}>
-                                <ModeStateContext.Consumer>
-                                    {({ mode }) => {
-                                        return children({
-                                            context,
-                                            mode,
-                                            loading
-                                        });
-                                    }}
-                                </ModeStateContext.Consumer></DndProvider>
-                        </LocalizationProvider>
-                    </BreadcrumbsProvider>
-                </FireCMSContextProvider>
+                <SnackbarContext.Consumer>
+                    {(snackbarController) => {
+
+                        const context: FireCMSContext = {
+                            authController,
+                            sideEntityController,
+                            entityLinkBuilder,
+                            dateTimeFormat,
+                            locale,
+                            navigationContext,
+                            dataSource,
+                            storageSource,
+                            schemaRegistryController,
+                            snackbarController
+                        };
+
+                        return (
+                            <FireCMSContextProvider {...context} >
+                                <BreadcrumbsProvider>
+                                    <LocalizationProvider
+                                        dateAdapter={AdapterDateFns}
+                                        utils={DateFnsUtils}
+                                        locale={dateUtilsLocale}>
+                                        <DndProvider backend={HTML5Backend}>
+                                            <ModeStateContext.Consumer>
+                                                {({ mode }) => {
+                                                    return children({
+                                                        context,
+                                                        mode,
+                                                        loading
+                                                    });
+                                                }}
+                                            </ModeStateContext.Consumer>
+                                        </DndProvider>
+                                    </LocalizationProvider>
+                                </BreadcrumbsProvider>
+                            </FireCMSContextProvider>
+                        );
+                    }}
+                </SnackbarContext.Consumer>
             </SnackbarProvider>
         </ModeProvider>
     );
