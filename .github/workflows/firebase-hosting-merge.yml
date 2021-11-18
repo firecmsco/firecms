@@ -9,16 +9,17 @@ name: Deploy website to Firebase Hosting on merge
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-#    defaults:
-#        run:
-#            working-directory: ./website
+    defaults:
+        run:
+            working-directory: ./website
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '12'
-      - run: yarn
-      - run: cd website && yarn && yarn build
+          node-version: '14'
+#      - run: yarn
+#      - run: cd website && yarn && yarn build
+      - run: yarn && yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entryPoint: website
