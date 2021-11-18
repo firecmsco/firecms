@@ -22,7 +22,7 @@ In version 1.0.0 there are major updates to some dependencies, now using:
 Run this command to add the new dependencies:
 
 ```
-yarn add @camberi/firecms firebase@9 @mui/material@^5.1.0 @mui/icons-material@^5.1.0 @mui/lab@^5.0.0-alpha.55 @mui/styles@^5.1.0 @emotion/react @emotion/styled react-router@^6.0.0-beta.7 react-router-dom@6.0.0-beta.5
+yarn add @camberi/firecms firebase@^9.0.0 @mui/material@^5.1.0 @mui/icons-material@^5.1.0 @mui/lab@^5.0.0-alpha.55 @mui/styles@^5.1.0 @emotion/react @emotion/styled react-router@^6.0.0 react-router-dom@^6.0.0
 ```
 
 > You may want to remove previous dependencies to @material-ui

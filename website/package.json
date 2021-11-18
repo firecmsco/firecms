@@ -12,18 +12,20 @@
         "serve": "docusaurus serve",
         "clear": "docusaurus clear"
     },
+    "engines": {
+        "node": ">=14"
+    },
     "dependencies": {
-        "@docusaurus/core": "^2.0.0-beta.7",
-        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.7",
-        "@docusaurus/plugin-sitemap": "^2.0.0-beta.7",
-        "@docusaurus/preset-classic": "^2.0.0-beta.7",
-        "@docusaurus/theme-live-codeblock": "^2.0.0-beta.7",
+        "@docusaurus/core": "^2.0.0-beta.9",
+        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.9",
+        "@docusaurus/plugin-sitemap": "^2.0.0-beta.9",
+        "@docusaurus/preset-classic": "^2.0.0-beta.9",
         "aos": "^2.3.4",
         "clsx": "^1.1.1",
         "docusaurus-plugin-typedoc": "^0.14.2",
         "postprocessing": "^6.22.3",
-        "react": "^16.8.4",
-        "react-dom": "^16.8.4",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
         "react-syntax-highlighter": "^15.4.4",
         "react-transition-group": "^4.4.1",
         "tailwindcss": "^2.2.15",
