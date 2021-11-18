@@ -20,7 +20,9 @@ interface ModeProviderProps {
 
 export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 
-    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+    const prefersDarkModeQuery = useMediaQuery("(prefers-color-scheme: dark)");
+    const prefersDarkModeStorage: boolean | null = localStorage.getItem("prefers-dark-mode") != null ? localStorage.getItem("prefers-dark-mode") === "true" : null;
+    const prefersDarkMode = prefersDarkModeStorage ?? prefersDarkModeQuery;
     const [mode, setMode] = useState<"light" | "dark">(prefersDarkMode ? "dark" : "light");
 
     useEffect(() => {
@@ -28,8 +30,19 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
     }, [prefersDarkMode]);
 
     const toggleMode = () => {
-        if (mode === "light") setMode("dark");
-        else setMode("light");
+        if (mode === "light") {
+            if (!prefersDarkModeQuery)
+                localStorage.setItem("prefers-dark-mode", "true");
+            else
+                localStorage.removeItem("prefers-dark-mode");
+            setMode("dark");
+        } else {
+            if (prefersDarkModeQuery)
+                localStorage.setItem("prefers-dark-mode", "false");
+            else
+                localStorage.removeItem("prefers-dark-mode");
+            setMode("light");
+        }
     };
 
     return (
