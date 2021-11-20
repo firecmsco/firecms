@@ -1,9 +1,9 @@
 # Example backend
-This is a very simple backend that is based in Google Cloud Functions and it is
+This is a very simple backend that is based in Google Cloud Functions, and it is
 only in charge of indexing changes to the collections `users`, `products` and
 `blog` to Algolia.
 
-You need to have billing enabled in your Firebase project to deploy Cloud
+You need to have billing enabled in your Firebase projects to deploy Cloud
 Functions.
 
 ## Config

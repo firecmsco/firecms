@@ -1,10 +1,12 @@
 import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+admin.initializeApp();
+
 import { DocumentSnapshot } from "firebase-functions/lib/providers/firestore";
 import { deleteInAlgolia, indexInAlgolia } from "./algolia";
-import {  importDatabaseBackup } from "./backup";
+import { importDatabaseBackup } from "./backup";
 
-
-export { setProductAvailableLocales } from "./products";
+export { setProductAvailableLocales, onDeleteSubcollections } from "./products";
 
 function updateIndex(snap: functions.Change<DocumentSnapshot>, indexName: string) {
     if (!snap.after.exists) return deleteInAlgolia(indexName, snap.after.id);

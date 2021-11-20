@@ -14,12 +14,12 @@
     },
     "main": "lib/index.js",
     "dependencies": {
-        "axios": "^0.21.1",
+        "@google-cloud/firestore": "^4.11.0",
         "algoliasearch": "^4.9.1",
+        "axios": "^0.21.1",
         "firebase-admin": "^9.7.0",
-        "firebase-functions": "^3.13.2",
-        "firebase-tools": "^9.10.2",
-        "@google-cloud/firestore": "^4.11.0"
+        "firebase-functions": "^3.16.0",
+        "firebase-tools": "^9.10.2"
     },
     "devDependencies": {
         "tslint": "^6.1.3",

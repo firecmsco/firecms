@@ -48,6 +48,23 @@ export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
     properties: {
+        gallery: {
+            title: 'Gallery',
+            dataType: 'array',
+            of: {
+                dataType: 'string',
+                config: {
+                    storageMeta: {
+                        mediaType: 'image',
+                        storagePath: 'images',
+                        acceptedFiles: ['image/*'],
+                        metadata: {
+                            cacheControl: 'max-age=1000000',
+                        },
+                    },
+                },
+            },
+        },
         available_locales: {
             title: "Available locales",
             dataType: "array",

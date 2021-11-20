@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import {
     DataSource,
     Entity,
@@ -9,7 +7,6 @@ import {
     SaveEntityProps
 } from "../../models";
 import { useDataSource } from "./useDataSource";
-import { useFireCMSContext } from "../useFireCMSContext";
 
 /**
  * @category Hooks and utilities
@@ -23,58 +20,6 @@ export type SaveEntityWithCallbacksProps<M> =
         onPreSaveHookError?: (e: Error) => void,
         onSaveSuccessHookError?: (e: Error) => void
     }
-
-/**
- * Use this hook if you want to save your entity every time `path`, `entityId` or
- * `values` change
- * @param schema
- * @param path
- * @param entityId
- * @param callbacks
- * @param values
- * @param status
- * @param onSaveSuccess
- * @param onSaveFailure
- * @param onPreSaveHookError
- * @param onSaveSuccessHookError
- * @category Hooks and utilities
- */
-export function useSaveEntity<M extends { [Key: string]: any }>({
-                                                                    schema,
-                                                                    path,
-                                                                    entityId,
-                                                                    callbacks,
-                                                                    values,
-                                                                    previousValues,
-                                                                    status,
-                                                                    onSaveSuccess,
-                                                                    onSaveFailure,
-                                                                    onPreSaveHookError,
-                                                                    onSaveSuccessHookError
-                                                                }: SaveEntityWithCallbacksProps<M>) {
-
-    const dataSource = useDataSource();
-    const context = useFireCMSContext();
-    useEffect(() => {
-        saveEntityWithCallbacks(
-            {
-                dataSource,
-                context,
-                schema,
-                callbacks,
-                path,
-                entityId,
-                values,
-                previousValues,
-                status,
-                onSaveSuccess,
-                onSaveFailure,
-                onPreSaveHookError,
-                onSaveSuccessHookError
-            });
-    }, [path, entityId, values]);
-
-}
 
 /**
  * This function is in charge of saving an entity to the datasource.
@@ -100,7 +45,6 @@ export function useSaveEntity<M extends { [Key: string]: any }>({
  * @param onPreSaveHookError
  * @param onSaveSuccessHookError
  * @see useDataSource
- * @see useSaveEntity
  * @category Hooks and utilities
  */
 export async function saveEntityWithCallbacks<M, UserType>({

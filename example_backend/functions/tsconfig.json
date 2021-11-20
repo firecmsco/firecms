@@ -1,12 +1,18 @@
 {
     "compilerOptions": {
+        "lib": [
+            "es7",
+            "dom"
+        ],
         "module": "commonjs",
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "outDir": "lib",
         "sourceMap": true,
         "strict": true,
-        "target": "es2017"
+        "target": "es2018",
+        "skipLibCheck": true,
+        "experimentalDecorators": true
     },
     "compileOnSave": true,
     "include": [

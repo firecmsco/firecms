@@ -2,7 +2,6 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import DocumentReference = admin.firestore.DocumentReference;
 
-
 /**
  * When a locale is updated, we check update the 'available_locales' field in the product
  */
@@ -33,3 +32,15 @@ function availableLocalesForProduct(productRef: DocumentReference): Promise<stri
                 .filter((localeDoc) => localeDoc.get("selectable"))
                 .map((localeDoc) => localeDoc.id));
 }
+
+/**
+ * When a locale is updated, we check update the 'available_locales' field in the product
+ */
+export const onDeleteSubcollections = functions
+    .region('europe-west3')
+    .firestore
+    .document('/products/{productId}')
+    .onDelete((snapshot, context) => {
+        const firestore = admin.firestore();
+        return firestore.recursiveDelete(snapshot.ref);
+    });
