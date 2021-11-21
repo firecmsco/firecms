@@ -5,18 +5,6 @@ import featuresBg from "@site/static/img/features-bg.png";
 // @ts-ignore
 import featuresElement from "@site/static/img/features-element.png";
 
-// @ts-ignore
-import ReactLogo from "@site/static/img/reactjs-icon.svg";
-// @ts-ignore
-import FireCMSLogo from "@site/static/img/firecms_logo.svg";
-// @ts-ignore
-import FirebaseLogo from "@site/static/img/firebase.svg";
-// @ts-ignore
-import pricePreview from "@site/static/img/price.png";
-// @ts-ignore
-import cmsPreviewVideo from "@site/static/img/editing.mp4";
-// @ts-ignore
-import customFieldVideo from "@site/static/img/custom_fields.mp4";
 
 import useThemeContext from "@theme/hooks/useThemeContext";
 import useBaseUrl from "@docusaurus/useBaseUrl";

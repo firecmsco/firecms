@@ -6,9 +6,7 @@ function HeroButtons() {
 
     const { isDarkTheme } = useThemeContext();
 
-    return <div
-        className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center"
-    >
+    return <div>
 
         <a
             className={"btn mb-4 sm:mb-0 font-bold py-4 bg-black text-white font-bold hover:bg-gray-900 hover:text-white uppercase border border-solid w-full sm:w-auto rounded"}

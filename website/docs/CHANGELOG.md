@@ -8,6 +8,8 @@ title: Changelog
 - `snackbarController` added to `FireCMSContext` so it can be used in callbacks.
 - `width` parameter added to `SideEntityController`'s `open` function, so you
   can select the width of the side view.
+- The user selection regarding dark mode is now persisted in local storage
+  (if different from the system selection)
 
 ## [1.0.0-beta4] - 2021-11-14
 

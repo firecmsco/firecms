@@ -493,7 +493,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         <canvas
             style={{
                 height: "100vh",
-                maxHeight: "800px",
+                maxHeight: "1000px",
                 width: "100vw",
                 position: "fixed",
                 top: `0px`,
