@@ -1,15 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 // import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 // import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
-import {
-    DepthOfFieldEffect,
-    BloomEffect,
-    ShockWaveEffect,
-    EffectComposer,
-    EffectPass,
-    RenderPass
-} from "postprocessing";
+import { DepthOfFieldEffect, EffectComposer, RenderPass } from "postprocessing";
 
 
 // @ts-ignore
@@ -28,12 +21,18 @@ type SceneState = {
     composer: EffectComposer,
     camera: THREE.OrthographicCamera,
     scene: THREE.Scene,
-    geometry: THREE.BufferGeometry,
-    material: THREE.MeshStandardMaterial,
-    mesh: THREE.Mesh,
+    meshes: THREE.Mesh[],
 }
 
 type AnimationProps = {}
+
+const red = new THREE.Color(1.0, .0, .0);
+const magenta = new THREE.Color(.97, .34, .45);
+const cyan = new THREE.Color(.53, .96, 1.);
+const blue = new THREE.Color(.46, .32, .87);
+const yellow = new THREE.Color(1., .69, .0);
+const black = new THREE.Color(.0, .0, .0);
+const white = new THREE.Color(1.0, 1.0, 1.0);
 
 export default function ThreeJSAnimationShader({}: AnimationProps) {
 
@@ -43,7 +42,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
     useEffect(() => {
         const listener = () => {
             if (typeof window !== "undefined")
-                scrollRef.current = window?.pageYOffset ?? 0;
+                scrollRef.current = window?.scrollY ?? 0;
         };
         listener();
         if (typeof window !== "undefined")
@@ -59,21 +58,13 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
     const requestRef = useRef<number>(-1);
 
-    const { isDarkTheme } = useThemeContext();
-    // const wireframe = isDarkTheme;
     const wireframe = true;
 
-    useEffect(() => {
-        if (sceneStateRef.current)
-            sceneStateRef.current.material.wireframe = wireframe;
-    }, [wireframe]);
-
-    function buildNightGeometry() {
+    function buildNightGeometry(radius: number, complexity: number) {
 
         const vertices: { pos: number[], norm: number[], uv: number[] }[] = [];
 
-        const dodecahedron = new THREE.DodecahedronGeometry(SPHERE_RADIUS, 18);
-
+        const dodecahedron = new THREE.DodecahedronGeometry(radius, complexity);
 
         for (let i = 0; i < dodecahedron.attributes.position.count; i++) {
             const x = dodecahedron.attributes.position.array[i * 3];
@@ -114,52 +105,25 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
             "position",
             new THREE.BufferAttribute(new Float32Array(positions), positionNumComponents));
 
-        console.log("geometry vertices count", geometry.attributes.position.array.length);
         const merged = BufferGeometryUtils.mergeVertices(geometry);
         merged.computeVertexNormals();
-        console.log("merged vertices count", merged.attributes.position.array.length);
+        console.log("vertices count", merged.attributes.position.array.length);
 
         return merged;
     }
 
 
-    function initScene(ref: HTMLCanvasElement, width: number, height: number): SceneState {
-
-        console.log("initScene");
-        const renderer = new THREE.WebGLRenderer({
-            // antialias: true,
-            alpha: true,
-            canvas: ref
-        });
-
-        // if (!isDarkTheme)
-        //     renderer.setClearColor(0xffffff);
-
-        renderer.setSize(width, height);
-        if (typeof window !== "undefined")
-            renderer.setPixelRatio(window?.devicePixelRatio > 1 ? 1.5 : 1);
-
-        const scene = new THREE.Scene();
-        // const geometry = isDarkTheme ? buildNightGeometry() : buildDayGeometry();
-        const geometry = buildNightGeometry();
-
-        const red = new THREE.Color(1.0, .0, .0);
-        const magenta = new THREE.Color(.97, .34, .45);
-        const cyan = new THREE.Color(.53, .96, 1.);
-        const blue = new THREE.Color(.46, .32, .87);
-        const yellow = new THREE.Color(1., .69, .0);
-        const black = new THREE.Color(.0, .0, .0);
-        const white = new THREE.Color(1.0, 1.0, 1.0);
-
+    function buildMainLayers(cyan: THREE.Color, yellow: THREE.Color, blue: THREE.Color, magenta: THREE.Color, red: THREE.Color) {
         const layers: any[] = [];
+
         layers.push({
             is_active: 1,
-            color: cyan,
-            sin: new THREE.Vector3(1, 0, 0),
-            cos: new THREE.Vector3(0, 0, 0),
-            time_dilation: new THREE.Vector3(.8, .7, .7),
-            coef: new THREE.Vector3(1, 0, 0),
-            constant: new THREE.Vector3(0, -1, 1)
+            color: magenta,
+            sin: new THREE.Vector3(0, 1, 0),
+            cos: new THREE.Vector3(1, 0, 0),
+            time_dilation: new THREE.Vector3(.3, .8, 1),
+            coef: new THREE.Vector3(.3, 1, -.3),
+            constant: new THREE.Vector3(0, -.7, .5)
         });
         layers.push({
             is_active: 1,
@@ -202,12 +166,12 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         layers.push({
             is_active: 1,
-            color: magenta,
-            sin: new THREE.Vector3(0, 1, 0),
-            cos: new THREE.Vector3(1, 0, 0),
-            time_dilation: new THREE.Vector3(.3, .8, 1),
-            coef: new THREE.Vector3(.3, 1, -.3),
-            constant: new THREE.Vector3(0, -.7, .5)
+            color: red,
+            sin: new THREE.Vector3(1, 0, 1),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.9, 1, 1),
+            coef: new THREE.Vector3(1, 0, .9),
+            constant: new THREE.Vector3(0, -1, .2)
         });
 
         layers.push({
@@ -243,138 +207,233 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         layers.push({
             is_active: 1,
             color: cyan,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.8, .7, .7),
+            coef: new THREE.Vector3(1, 0, 0),
+            constant: new THREE.Vector3(0, -1, 1)
+        });
+        // layers.push({
+        //     is_active: 1,
+        //     color: cyan,
+        //     sin: new THREE.Vector3(0, 1, 0),
+        //     cos: new THREE.Vector3(0, 0, 0),
+        //     time_dilation: new THREE.Vector3(.7, .9, .8),
+        //     coef: new THREE.Vector3(1, 0, 0),
+        //     constant: new THREE.Vector3(0, -.8, 1)
+        // });
+        //
+        // layers.push({
+        //     is_active: 1,
+        //     color: blue,
+        //     sin: new THREE.Vector3(0, 0, 1),
+        //     cos: new THREE.Vector3(0, 1, 1),
+        //     time_dilation: new THREE.Vector3(.7, .4, .5),
+        //     coef: new THREE.Vector3(.3, -.5, 1),
+        //     constant: new THREE.Vector3(0, -.4, .5)
+        // });
+        //
+        //
+        // layers.push({
+        //     is_active: 1,
+        //     color: magenta,
+        //     sin: new THREE.Vector3(0, 1, 0),
+        //     cos: new THREE.Vector3(1, 0, 1),
+        //     time_dilation: new THREE.Vector3(.4, .6, 1.1),
+        //     coef: new THREE.Vector3(.1, .8, .5),
+        //     constant: new THREE.Vector3(0, -.5, .7)
+        // });
+        // layers.push({
+        //     is_active: 1,
+        //     color: cyan,
+        //     sin: new THREE.Vector3(1, 0, 0),
+        //     cos: new THREE.Vector3(0, 0, 0),
+        //     time_dilation: new THREE.Vector3(1, .9, 1),
+        //     coef: new THREE.Vector3(1, 0, 0),
+        //     constant: new THREE.Vector3(0, -1, -.7)
+        // });
+        // layers.push({
+        //     is_active: 1,
+        //     color: blue,
+        //     sin: new THREE.Vector3(1, 0, 0),
+        //     cos: new THREE.Vector3(0, 0, 0),
+        //     time_dilation: new THREE.Vector3(.9, .8, .7),
+        //     coef: new THREE.Vector3(.5, 0, .4),
+        //     constant: new THREE.Vector3(0, -.9, .3)
+        // });
+        //
+        //
+        // layers.push({
+        //     is_active: 1,
+        //     color: cyan,
+        //     sin: new THREE.Vector3(0, 1, 0),
+        //     cos: new THREE.Vector3(1, 0, 1),
+        //     time_dilation: new THREE.Vector3(.4, .9, .3),
+        //     coef: new THREE.Vector3(.3, 1, -.3),
+        //     constant: new THREE.Vector3(.3, -1.1, .5)
+        // });
+        //
+        // layers.push({
+        //     is_active: 1,
+        //     color: blue,
+        //     sin: new THREE.Vector3(1, 0, 1),
+        //     cos: new THREE.Vector3(0, 1, 0),
+        //     time_dilation: new THREE.Vector3(.6, .7, 1),
+        //     coef: new THREE.Vector3(.2, .2, .6),
+        //     constant: new THREE.Vector3(.2, -.7 - .3)
+        // });
+        //
+        // layers.push({
+        //     is_active: 1,
+        //     color: red,
+        //     sin: new THREE.Vector3(0, 0, 1),
+        //     cos: new THREE.Vector3(1, 1, 0),
+        //     time_dilation: new THREE.Vector3(.6, .5, .5),
+        //     coef: new THREE.Vector3(.3, -.5, 1),
+        //     constant: new THREE.Vector3(0, -.5, .4)
+        // });
+        //
+        // layers.push({
+        //     is_active: 1,
+        //     color: yellow,
+        //     sin: new THREE.Vector3(1, 1, 0),
+        //     cos: new THREE.Vector3(0, 0, 1),
+        //     time_dilation: new THREE.Vector3(.9, .9, 1),
+        //     coef: new THREE.Vector3(-.1, -.6, .5),
+        //     constant: new THREE.Vector3(-0.7, -.7, .8)
+        // });
+        //
+        // layers.push({
+        //     is_active: 1,
+        //     color: magenta,
+        //     sin: new THREE.Vector3(0, 0, 0),
+        //     cos: new THREE.Vector3(1, 1, 1),
+        //     time_dilation: new THREE.Vector3(.7, .8, 1),
+        //     coef: new THREE.Vector3(-.45, .85, .55),
+        //     constant: new THREE.Vector3(0, -.85, 0)
+        // });
+        //
+        // layers.push({
+        //     is_active: 1,
+        //     color: blue,
+        //     sin: new THREE.Vector3(0, 1, 1),
+        //     cos: new THREE.Vector3(1, 0, 0),
+        //     time_dilation: new THREE.Vector3(.9, .7, .7),
+        //     coef: new THREE.Vector3(-.4, .9, .4),
+        //     constant: new THREE.Vector3(-.2, -.4, .6)
+        // });
+        return layers;
+    }
+    function buildSmallLayers(cyan: THREE.Color, yellow: THREE.Color, blue: THREE.Color, magenta: THREE.Color, red: THREE.Color) {
+        const layers: any[] = [];
+        layers.push({
+            is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.8, .7, .7),
+            coef: new THREE.Vector3(1, 0, 0),
+            constant: new THREE.Vector3(0, 1, -1)
+        });
+        layers.push({
+            is_active: 1,
+            color: yellow,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 1, 0),
+            time_dilation: new THREE.Vector3(1, 1, 1),
+            coef: new THREE.Vector3(1, 1, 0),
+            constant: new THREE.Vector3(0, -.9, 0)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(1.1, 1, 1),
+            coef: new THREE.Vector3(1, 0, 0),
+            constant: new THREE.Vector3(0, -1, -.2)
+        });
+        layers.push({
+            is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(1, 1, 0),
+            cos: new THREE.Vector3(0, 0, 1),
+            time_dilation: new THREE.Vector3(.7, .6, 1),
+            coef: new THREE.Vector3(.3, .3, .7),
+            constant: new THREE.Vector3(-1.0, -.8, -.3)
+        });
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.7, 1, 1),
+            coef: new THREE.Vector3(-.3, 0, .3),
+            constant: new THREE.Vector3(0, -.8, .2)
+        });
+
+
+        layers.push({
+            is_active: 1,
+            color: magenta,
+            sin: new THREE.Vector3(0, 1, 0),
+            cos: new THREE.Vector3(1, 0, 0),
+            time_dilation: new THREE.Vector3(.3, .8, 1),
+            coef: new THREE.Vector3(.3, 1, -.3),
+            constant: new THREE.Vector3(0, .7, -.5)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.9, 1, 1),
+            coef: new THREE.Vector3(-1, 1, 0),
+            constant: new THREE.Vector3(0, 1, .2)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(1, 1, 0),
+            cos: new THREE.Vector3(0, 0, 1),
+            time_dilation: new THREE.Vector3(.7, .6, 1),
+            coef: new THREE.Vector3(-.4, .8, .5),
+            constant: new THREE.Vector3(0, .8, 1.0)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: yellow,
+            sin: new THREE.Vector3(1, 1, 1),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.8, .8, .8),
+            coef: new THREE.Vector3(-.5, .8, .3),
+            constant: new THREE.Vector3(.1, .5, -.7)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: cyan,
             sin: new THREE.Vector3(0, 1, 0),
             cos: new THREE.Vector3(0, 0, 0),
             time_dilation: new THREE.Vector3(.7, .9, .8),
-            coef: new THREE.Vector3(1, 0, 0),
-            constant: new THREE.Vector3(0, -.8, 1)
+            coef: new THREE.Vector3(1, 1, 0),
+            constant: new THREE.Vector3(0, .8, 1)
         });
+        return layers;
+    }
 
-        layers.push({
-            is_active: 1,
-            color: blue,
-            sin: new THREE.Vector3(0, 0, 1),
-            cos: new THREE.Vector3(0, 1, 1),
-            time_dilation: new THREE.Vector3(.7, .4, .5),
-            coef: new THREE.Vector3(.3, -.5, 1),
-            constant: new THREE.Vector3(0, -.4, .5)
-        });
-
-
-        layers.push({
-            is_active: 1,
-            color: magenta,
-            sin: new THREE.Vector3(0, 1, 0),
-            cos: new THREE.Vector3(1, 0, 1),
-            time_dilation: new THREE.Vector3(.4, .6, 1.1),
-            coef: new THREE.Vector3(.1, .8, .5),
-            constant: new THREE.Vector3(0, -.5, .7)
-        });
-        layers.push({
-            is_active: 1,
-            color: yellow,
-            sin: new THREE.Vector3(0, 0, 0),
-            cos: new THREE.Vector3(1, 0, 0),
-            time_dilation: new THREE.Vector3(1, 1, .9),
-            coef: new THREE.Vector3(1, 0, 0),
-            constant: new THREE.Vector3(0, -.7, 0)
-        });
-
-        layers.push({
-            is_active: 1,
-            color: red,
-            sin: new THREE.Vector3(1, 0, 1),
-            cos: new THREE.Vector3(0, 0, 0),
-            time_dilation: new THREE.Vector3(.9, 1, 1),
-            coef: new THREE.Vector3(1, 0, .9),
-            constant: new THREE.Vector3(0, -1, .2)
-        });
-        layers.push({
-            is_active: 1,
-            color: cyan,
-            sin: new THREE.Vector3(1, 0, 0),
-            cos: new THREE.Vector3(0, 0, 0),
-            time_dilation: new THREE.Vector3(1, .9, 1),
-            coef: new THREE.Vector3(1, 0, 0),
-            constant: new THREE.Vector3(0, -1, -.7)
-        });
-        layers.push({
-            is_active: 1,
-            color: blue,
-            sin: new THREE.Vector3(1, 0, 0),
-            cos: new THREE.Vector3(0, 0, 0),
-            time_dilation: new THREE.Vector3(.9, .8, .7),
-            coef: new THREE.Vector3(.5, 0, .4),
-            constant: new THREE.Vector3(0, -.9, .3)
-        });
-
-
-        layers.push({
-            is_active: 1,
-            color: cyan,
-            sin: new THREE.Vector3(0, 1, 0),
-            cos: new THREE.Vector3(1, 0, 1),
-            time_dilation: new THREE.Vector3(.4, .9, .3),
-            coef: new THREE.Vector3(.3, 1, -.3),
-            constant: new THREE.Vector3(.3, -1.1, .5)
-        });
-
-        layers.push({
-            is_active: 1,
-            color: blue,
-            sin: new THREE.Vector3(1, 0, 1),
-            cos: new THREE.Vector3(0, 1, 0),
-            time_dilation: new THREE.Vector3(.6, .7, 1),
-            coef: new THREE.Vector3(.2, .2, .6),
-            constant: new THREE.Vector3(.2, -.7 - .3)
-        });
-
-        layers.push({
-            is_active: 1,
-            color: red,
-            sin: new THREE.Vector3(0, 0, 1),
-            cos: new THREE.Vector3(1, 1, 0),
-            time_dilation: new THREE.Vector3(.6, .5, .5),
-            coef: new THREE.Vector3(.3, -.5, 1),
-            constant: new THREE.Vector3(0, -.5, .4)
-        });
-
-        layers.push({
-            is_active: 1,
-            color: yellow,
-            sin: new THREE.Vector3(1, 1, 0),
-            cos: new THREE.Vector3(0, 0, 1),
-            time_dilation: new THREE.Vector3(.9, .9, 1),
-            coef: new THREE.Vector3(-.1, -.6, .5),
-            constant: new THREE.Vector3(-0.7, -.7, .8)
-        });
-
-        layers.push({
-            is_active: 1,
-            color: magenta,
-            sin: new THREE.Vector3(0, 0, 0),
-            cos: new THREE.Vector3(1, 1, 1),
-            time_dilation: new THREE.Vector3(.7, .8, 1),
-            coef: new THREE.Vector3(-.45, .85, .55),
-            constant: new THREE.Vector3(0, -.85, 0)
-        });
-
-        layers.push({
-            is_active: 1,
-            color: blue,
-            sin: new THREE.Vector3(0, 1, 1),
-            cos: new THREE.Vector3(1, 0, 0),
-            time_dilation: new THREE.Vector3(.9, .7, .7),
-            coef: new THREE.Vector3(-.4, .9, .4),
-            constant: new THREE.Vector3(-.2, -.4, .6)
-        });
+    function buildMaterial(width: number, height: number, radius: number, displacement: number, layers:any[]) {
 
         const uniforms = {
             u_time: { value: 0 },
             u_resolution: { value: new THREE.Vector2(width, height) },
             bright: { value: BRIGHT },
-            u_sphere_radius: { value: SPHERE_RADIUS },
-            u_displacement_ratio: { value: DISPLACEMENT_RADIO },
+            u_sphere_radius: { value: radius },
+            u_displacement_ratio: { value: displacement },
             u_base_color: { value: red },
             u_layers: { value: layers },
             u_layers_count: { value: layers.length }
@@ -387,12 +446,68 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         });
 
         material.wireframe = wireframe;
+        return material;
+    }
 
+    function createShape(width: number, height: number, radius:number, displacement: number, positionX, positionY) {
+        const layers = buildSmallLayers(cyan, yellow, blue, magenta, red);
+        const material = buildMaterial(width, height, radius, displacement, layers);
+        const geometry = buildNightGeometry(radius, radius * 2);
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.initialPositionY = positionY;
+        mesh.position.x = positionX;
+        return mesh;
+    }
+
+    function initScene(ref: HTMLCanvasElement, width: number, height: number): SceneState {
+
+        const renderer = new THREE.WebGLRenderer({
+            // antialias: true,
+            alpha: true,
+            canvas: ref
+        });
+
+        // if (!isDarkTheme)
+        //     renderer.setClearColor(0xffffff);
+
+        renderer.setSize(width, height);
+        if (typeof window !== "undefined")
+            renderer.setPixelRatio(window?.devicePixelRatio > 1 ? 1.5 : 1);
+
+        const meshes: THREE.Mesh[] = [];
+
+        const scene = new THREE.Scene();
+
+
+        const layers = buildMainLayers(cyan, yellow, blue, magenta, red);
+        const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, layers);
+
+        const geometry = buildNightGeometry(SPHERE_RADIUS, 18);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = .2;
-        mesh.position.y = 14;
-
+        mesh.initialPositionY = 14;
         scene.add(mesh);
+        meshes.push(mesh);
+
+        const mesh2 = createShape(width, height, 2, 1/4, 3, -10);
+        scene.add(mesh2);
+        meshes.push(mesh2);
+
+        const mesh3 = createShape(width, height, 1, 1/1.5, -2, -15);
+        scene.add(mesh3);
+        meshes.push(mesh3);
+
+        const mesh4 = createShape(width, height, 1.5, 1/1.5, -1, -25);
+        scene.add(mesh4);
+        meshes.push(mesh4);
+
+        const mesh5 = createShape(width, height, 1, 1/1.5, -6.5, -35);
+        scene.add(mesh5);
+        meshes.push(mesh5);
+
+        const mesh6 = createShape(width, height, 2.5, 1/1.5, 6.5, -45);
+        scene.add(mesh6);
+        meshes.push(mesh6);
 
         const left = width / -CAMERA_FACTOR;
         const right = width / CAMERA_FACTOR;
@@ -407,7 +522,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         const renderPass = new RenderPass(scene, camera);
         composer.addPass(renderPass);
         const depthOfFieldEffect = new DepthOfFieldEffect(camera, {
-            focusDistance : .0,
+            focusDistance: .0,
             focalLength: 1,
             bokehScale: 6
         });
@@ -418,9 +533,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
             composer,
             camera,
             scene,
-            geometry,
-            material,
-            mesh
+            meshes
         };
     }
 
@@ -444,12 +557,8 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         sceneStateRef.current = initScene(canvasRef.current, width, height);
 
         const {
-            renderer,
             composer,
-            camera,
-            scene,
-            mesh,
-            material
+            meshes
         } = sceneStateRef.current;
 
         //RENDER LOOP
@@ -457,8 +566,11 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         function render() {
 
-            mesh.position.y = 14 + scrollRef.current / 140;
-            material.uniforms.u_time.value = clockRef.current.getElapsedTime() * TIME_DILATION;
+            meshes.forEach((mesh) => {
+                mesh.material.uniforms.u_time.value = clockRef.current.getElapsedTime() * TIME_DILATION;
+                mesh.position.y = mesh.initialPositionY + scrollRef.current / 140;
+                mesh.rotation.x = scrollRef.current / 2000;
+            });
 
             composer.render();
             requestRef.current = requestAnimationFrame(render);
@@ -524,7 +636,7 @@ function buildVertexShader() {
     uniform float u_time;
 
     uniform int u_layers_count;
-    uniform Layer u_layers[22];
+    uniform Layer u_layers[10];
     uniform vec2 u_resolution;
     uniform vec3 u_base_color;
     uniform float u_sphere_radius;
@@ -739,7 +851,7 @@ function buildVertexShader() {
         color -= (1.0-st.z) / 3.0;
 
 
-        for (int i = 0; i < 22; i++) {
+        for (int i = 0; i < u_layers_count; i++) {
             // if(u_layers[i].is_active == 1.0){
                 vec3 nColor = u_layers[i].color;
                 vec3 constant = u_layers[i].constant;
@@ -779,7 +891,7 @@ function buildVertexShader() {
                         smoothstep( 0.0, .9,
                             1.05 -
                             distance(st, normalize(vec3(x, y, z) ) ) )
-                    , 7.0);
+                    , 2.0);
                 color = blendNormal(color, nColor, amount);
             // }
         }
