@@ -150,7 +150,7 @@ export function EntityForm<M>({
      */
     let baseDataSourceValues: Partial<EntityValues<M>>;
     if ((status === "existing" || status === "copy") && entity) {
-        baseDataSourceValues = entity.values ?? {};
+        baseDataSourceValues = entity.values ?? initEntityValues(schema, path);
     } else if (status === "new") {
         baseDataSourceValues = initEntityValues(schema, path);
     } else {
