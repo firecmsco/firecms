@@ -2,7 +2,7 @@
 id: changelog
 title: Changelog
 ---
-## [1.0.0-beta5] - 2021-11-22
+## [1.0.0-beta5] - 2021-11-
 
 ## Added
 - `snackbarController` added to `FireCMSContext` so it can be used in callbacks.

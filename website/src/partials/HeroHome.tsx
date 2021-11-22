@@ -22,7 +22,7 @@ function HeroHome({}) {
     const video = <div
         data-aos="fade-up"
         data-aos-delay="400"
-        className="px-8 sm:px-16 md:px-24 xl:px-4">
+        className="max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4">
         <video
             className={"rounded-xl shadow-md border-gray-200"}
             width="100%" loop autoPlay muted>
