@@ -161,6 +161,8 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
             : {};
     }, [additionalColumns]);
 
+    console.log("additionalColumns", additionalColumns)
+
     // on ESC key press
     useEffect(() => {
         const escFunction = (event: any) => {
