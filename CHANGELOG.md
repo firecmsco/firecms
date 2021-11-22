@@ -7,6 +7,10 @@
 - The user selection regarding dark mode is now persisted in local storage
   (if different from the system selection)
 
+### Changed
+
+- Fix for data not being refreshed correctly in collections.
+
 ## [1.0.0-beta4] - 2021-11-14
 
 ### Added

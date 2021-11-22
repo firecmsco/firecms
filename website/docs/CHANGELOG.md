@@ -2,7 +2,7 @@
 id: changelog
 title: Changelog
 ---
-## [1.0.0-beta5] - 2021-11-
+## [1.0.0-beta5] - 2021-11-22
 
 ## Added
 - `snackbarController` added to `FireCMSContext` so it can be used in callbacks.
@@ -10,6 +10,10 @@ title: Changelog
   can select the width of the side view.
 - The user selection regarding dark mode is now persisted in local storage
   (if different from the system selection)
+
+### Changed
+
+- Fix for data not being refreshed correctly in collections.
 
 ## [1.0.0-beta4] - 2021-11-14
 

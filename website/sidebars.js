@@ -39,6 +39,7 @@ module.exports = {
                 'collections/collections',
                 'collections/saving_callbacks',
                 'collections/permissions',
+                'collections/exporting_data',
             ]
         },
         'navigation',
