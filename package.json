@@ -1,16 +1,19 @@
 {
-    "name": "@camberi/firecms",
+    "name": "firecms",
     "version": "1.0.0-beta5",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
     "license": "MIT",
-    "repository": "git@github.com:Camberi/firecms.git",
+    "repository": "git@github.com:Artem-Ostankov/firecms.git",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "module": "dist/index.modern.js",
     "source": "src/index.ts",
     "engines": {
         "node": ">=12"
+    },
+    "publishConfig": {
+        "@Artem-Ostankov:registry": "https://npm.pkg.github.com"
     },
     "keywords": [
         "firebase",
