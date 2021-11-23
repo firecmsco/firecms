@@ -115,6 +115,7 @@ function SampleApp() {
         schema: testEntitySchema,
         callbacks: testCallbacks,
         name: "Test entity",
+        properties: ["subcollection_test_subcollection", "gallery"],
         subcollections: [{
             path: "test_subcollection",
             schema: testEntitySchema,

@@ -329,7 +329,7 @@ export function EntityForm<M>({
                 const formFields = (
                     <Grid container spacing={4}>
 
-                        {Object.entries<Property>(schemaProperties)
+                        {Object.entries<Property>(schemaProperties as Record<string, Property<any>>)
                             .filter(([key, property]) => !isHidden(property))
                             .map(([key, property]) => {
 

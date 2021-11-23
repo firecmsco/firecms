@@ -176,7 +176,7 @@ export interface EnumValueConfig {
  * Record of properties of an entity or a map property
  * @category Entity properties
  */
-export type Properties<M extends { [Key: string]: any }> = {
+export type Properties<M extends { [Key: string]: any } = any> = {
     [k in keyof M]: Property<M[k]>;
 };
 
@@ -337,7 +337,7 @@ export interface MapProperty<T extends { [Key: string]: any } = any> extends Bas
     /**
      * Record of properties included in this map.
      */
-    properties?: Properties<any>; // TODO: this should be Properties<T> but it breaks if building properties without `buildProperties`
+    properties?: Properties<Partial<T>>; // TODO: this should be Properties<T> but it breaks if building properties without `buildProperties`
 
     /**
      * Rules for validating this property
