@@ -2,7 +2,9 @@
     "parser": "@typescript-eslint/eslint-plugin",
     "extends": [
         "standard",
-        "standard-react"
+        "standard-react",
+        "plugin:prettier/recommended",
+        "prettier"
     ],
     "env": {
         "node": true
