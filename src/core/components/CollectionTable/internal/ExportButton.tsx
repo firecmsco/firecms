@@ -258,7 +258,7 @@ function processProperty(inputValue: any,
 
     let value;
     if (property.dataType === "map" && property.properties) {
-        value = processProperties(inputValue, property.properties as Properties<any>);
+        value = processProperties(inputValue, property.properties as Properties);
     } else if (property.dataType === "array") {
         if (property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => processProperty(e, property.of as Property));

@@ -3,8 +3,8 @@ import React from "react";
 import { Divider } from "@mui/material";
 
 import { useStyles } from "./styles";
-import { PreviewComponent } from "../PreviewComponent";
-import { PreviewComponentProps, PreviewSize } from "../../preview";
+import { PreviewComponent } from "../internal";
+import { PreviewComponentProps, PreviewSize } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { Property } from "../../models";
 

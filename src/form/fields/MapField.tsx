@@ -49,9 +49,9 @@ export function MapField<T extends object>({
 
     let mapProperties: Record<string, Property>;
     if (!pickOnlySomeKeys) {
-        mapProperties = property.properties as Properties<any>;
+        mapProperties = property.properties as Properties;
     } else if (value) {
-        mapProperties = pick(property.properties as Properties<any>,
+        mapProperties = pick(property.properties as Properties,
             ...Object.keys(value)
                 .filter(key => key in property.properties!)
         );
@@ -89,7 +89,7 @@ export function MapField<T extends object>({
                     onChange={handleAddProperty}>
                     {keys.map((key) => (
                         <MenuItem key={key} value={key}>
-                            {(property.properties as Properties<any>)[key].title || key}
+                            {(property.properties as Properties)[key].title || key}
                         </MenuItem>
                     ))}
                 </Select>

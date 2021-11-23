@@ -301,12 +301,12 @@ export function useFirestoreDataSource({
             }
 
             return onSnapshot(query,
-                { includeMetadataChanges: false },
-                (snapshot) => {
-                    if (!snapshot.metadata.hasPendingWrites)
+                {
+                    next: (snapshot) => {
                         onUpdate(snapshot.docs.map((doc) => createEntityFromSchema(doc, path, schema)));
-                },
-                onError
+                    },
+                    error: onError
+                }
             );
         },
 
@@ -350,8 +350,8 @@ export function useFirestoreDataSource({
             // console.debug("Listening entity", path, entityId);
             return onSnapshot(
                 doc(firestore, path, entityId),
-                (docSnapshot) => onUpdate(createEntityFromSchema(docSnapshot, path, schema)),
-                onError
+                {next: (docSnapshot) => onUpdate(createEntityFromSchema(docSnapshot, path, schema)),
+                error: onError}
             );
         },
 

@@ -6,7 +6,6 @@ import {
     Breadcrumbs,
     Button,
     Chip,
-    emphasize,
     Hidden,
     IconButton,
     Link,
@@ -43,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             "&:active": {
                 boxShadow: theme.shadows[1],
-                backgroundColor: emphasize(theme.palette.grey[300], 0.12)
+                backgroundColor: theme.palette.grey[400]
             }
         }
     })
@@ -59,11 +58,12 @@ interface CMSAppBarProps {
     toolbarExtraWidget?: React.ReactNode;
 }
 
-export const FireCMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
-                                                                           title,
-                                                                           handleDrawerToggle,
-                                                                           toolbarExtraWidget
-                                                                       }) => {
+
+export function FireCMSAppBar({
+                                  title,
+                                  handleDrawerToggle,
+                                  toolbarExtraWidget
+                              }: CMSAppBarProps) {
 
     const classes = useStyles();
 
@@ -171,4 +171,4 @@ export const FireCMSAppBar: React.FunctionComponent<CMSAppBarProps> = ({
             </AppBar>
         </Slide>
     );
-};
+}

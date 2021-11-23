@@ -1,6 +1,5 @@
 import React from "react";
 
-import { useClipboard } from "use-clipboard-hook";
 import {
     FormControl,
     IconButton,
@@ -22,7 +21,11 @@ import {
     FireCMSContext
 } from "../../models";
 import { formStyles } from "../styles";
-import { useFireCMSContext, useSnackbarController } from "../../hooks";
+import {
+    useClipboard,
+    useFireCMSContext,
+    useSnackbarController
+} from "../../hooks";
 
 export function CustomIdField<M, UserType>
 ({ schema, status, onChange, error, entity }: {

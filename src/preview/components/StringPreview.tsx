@@ -2,7 +2,7 @@ import React from "react";
 
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { CustomChip, EnumValuesChip } from "./CustomChip";
-import { PreviewComponentProps } from "../PreviewComponentProps";
+import { PreviewComponentProps } from "../internal";
 
 /**
  * @category Preview components

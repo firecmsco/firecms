@@ -9,10 +9,9 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
-import { PreviewComponent } from "../PreviewComponent";
+import { PreviewComponent, PreviewComponentProps } from "../internal";
 import { MapProperty } from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
-import { PreviewComponentProps } from "../PreviewComponentProps";
 
 const useStyles = makeStyles(() =>
     createStyles({

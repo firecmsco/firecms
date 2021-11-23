@@ -180,7 +180,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
         setOpen(false);
     };
 
-    function buildEntityView(schema?: EntitySchema<any>) {
+    function buildEntityView(schema?: EntitySchema) {
 
         const missingEntity = entity && !entity.values;
 

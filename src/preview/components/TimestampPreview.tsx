@@ -1,4 +1,4 @@
-import { PreviewComponentProps } from "../../preview";
+import { PreviewComponentProps } from "../internal";
 import React from "react";
 
 import format from "date-fns/format";

@@ -15,4 +15,5 @@ export * from "./useSideEntityController";
 export * from "./useFireCMSContext";
 export * from "./useSnackbarController";
 export * from "./useModeState";
+export * from "./useClipboard";
 

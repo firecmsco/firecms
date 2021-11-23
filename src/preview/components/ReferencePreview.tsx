@@ -16,10 +16,10 @@ import makeStyles from "@mui/styles/makeStyles";
 import { AnyProperty, EntityReference } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { PreviewComponentProps, PreviewSize } from "../PreviewComponentProps";
+import { PreviewComponentProps, PreviewSize } from "../internal";
 
 import { SkeletonComponent } from "./SkeletonComponent";
-import { PreviewComponent } from "../PreviewComponent";
+import { PreviewComponent } from "../internal";
 import { ErrorView } from "../../core";
 import {
     useEntityFetch,

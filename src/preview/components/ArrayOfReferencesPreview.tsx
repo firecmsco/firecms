@@ -1,4 +1,4 @@
-import { PreviewComponentProps, PreviewSize } from "../PreviewComponentProps";
+import { PreviewComponentProps, PreviewSize } from "../internal";
 import { useStyles } from "./styles";
 import { ReferenceProperty } from "../../models";
 import { ReferencePreview } from "./ReferencePreview";
