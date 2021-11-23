@@ -1,6 +1,6 @@
-## [1.0.0-beta5] - 2021-11-
+## [1.0.0-beta5] - 2021-11-22
 
-## Added
+### Added
 - `snackbarController` added to `FireCMSContext` so it can be used in callbacks.
 - `width` parameter added to `SideEntityController`'s `open` function, so you
   can select the width of the side view.
