@@ -1,4 +1,4 @@
-import {getValueInPath} from "../core/util/csv";
+import {getValueInPath} from "../core/util/objects";
 
 const obj = {
     "id": "022QFOrveCab2YUT88iw",
@@ -40,4 +40,6 @@ it("Test path acccess in object", () => {
     expect(getValueInPath(obj, "picture.medium")).toEqual("https://randomuser.me/api/portraits/med/men/17.jpg");
     expect(getValueInPath(obj, "location.timezone.offset")).toEqual("+4:00");
     expect(getValueInPath(obj, "nope")).toEqual(undefined);
+    expect(getValueInPath(obj, "nope.nope")).toEqual(undefined);
+    expect(getValueInPath(obj, "nope.nope.nope.nope")).toEqual(undefined);
 });
