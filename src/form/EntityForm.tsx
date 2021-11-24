@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Box, Button, Container, Grid, Theme, Typography } from "@mui/material";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
+import {Box, Button, Container, Grid, Theme, Typography} from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import {
@@ -12,19 +12,19 @@ import {
     Properties,
     Property
 } from "../models";
-import { Form, Formik, FormikHelpers } from "formik";
-import { buildPropertyField } from "./form_factory";
-import { CustomFieldValidator, getYupEntitySchema } from "./validation";
+import {Form, Formik, FormikHelpers} from "formik";
+import {buildPropertyField} from "./form_factory";
+import {CustomFieldValidator, getYupEntitySchema} from "./validation";
 import deepEqual from "deep-equal";
-import { ErrorFocus } from "./components/ErrorFocus";
+import {ErrorFocus} from "./components/ErrorFocus";
 import {
     computeSchemaProperties,
     initEntityValues,
     isHidden,
     isReadOnly
 } from "../core/utils";
-import { CustomIdField } from "./components/CustomIdField";
-import { useDataSource } from "../hooks";
+import {CustomIdField} from "./components/CustomIdField";
+import {useDataSource} from "../hooks";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     stickyButtons: {
@@ -141,6 +141,7 @@ export function EntityForm<M>({
                                   onValuesChanged
                               }: EntityFormProps<M>) {
 
+
     const classes = useStyles();
     const dataSource = useDataSource();
 
@@ -177,17 +178,17 @@ export function EntityForm<M>({
                     const initialValue = (initialValues as any)[key];
                     const latestValue = (baseDataSourceValues as any)[key];
                     if (!deepEqual(initialValue, latestValue)) {
-                        return { [key]: latestValue };
+                        return {[key]: latestValue};
                     }
                     return {};
                 })
-                .reduce((a, b) => ({ ...a, ...b }), {}) as Partial<EntityValues<M>>;
+                .reduce((a, b) => ({...a, ...b}), {}) as Partial<EntityValues<M>>;
         } else {
             return {};
         }
     }, [initialValues, baseDataSourceValues]);
 
-    function saveValues(values: EntityValues<M>, formikActions: FormikHelpers<EntityValues<M>>) {
+    const saveValues = useCallback((values: EntityValues<M>, formikActions: FormikHelpers<EntityValues<M>>) => {
 
         if (mustSetCustomId && !customId) {
             console.error("Missing custom Id");
@@ -232,23 +233,34 @@ export function EntityForm<M>({
                     formikActions.setSubmitting(false);
                 });
 
-    }
+    }, [
+        status,
+        path,
+        schema,
+        entity,
+        onEntitySave,
+        onDiscard,
+        onModified,
+        onValuesChanged,
+        mustSetCustomId,
+        customId
+    ]);
 
 
     const entityId = status === "existing" ? entity?.id : undefined;
 
-    const uniqueFieldValidator: CustomFieldValidator = ({
-                                                            name,
-                                                            value,
-                                                            property
-                                                        }) => dataSource.checkUniqueField(path, name, value, property, entityId);
+    const uniqueFieldValidator: CustomFieldValidator = useCallback(({
+                                                                        name,
+                                                                        value,
+                                                                        property
+                                                                    }) => dataSource.checkUniqueField(path, name, value, property, entityId), [path,entityId ]);
 
-    const validationSchema = getYupEntitySchema(
+    const validationSchema = useMemo( () => getYupEntitySchema(
         schema.properties,
         internalValue as Partial<EntityValues<M>> ?? {},
         path,
         uniqueFieldValidator,
-        entityId);
+        entityId), []);
 
     function buildButtons(isSubmitting: boolean, modified: boolean) {
         const disabled = isSubmitting || (!modified && status === "existing");
@@ -409,3 +421,5 @@ export function EntityForm<M>({
         </Formik>
     );
 }
+
+export default EntityForm;

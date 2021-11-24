@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback, useMemo} from "react";
 import { Button, Paper, Theme, useMediaQuery, useTheme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import createStyles from "@mui/styles/createStyles";
@@ -111,45 +111,46 @@ export function CollectionTable<M extends { [Key: string]: any },
 
     const classes = useStyles();
 
-    const subcollectionColumns: AdditionalColumnDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
-        return {
-            id: getSubcollectionColumnId(subcollection),
-            title: subcollection.name,
-            width: 200,
-            builder: ({ entity }) => (
-                <Button color={"primary"}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            sideEntityController.open({
-                                path,
-                                entityId: entity.id,
-                                selectedSubpath: subcollection.path,
-                                permissions: collection.permissions,
-                                schema: collection.schema,
-                                subcollections: collection.subcollections,
-                                callbacks: collection.callbacks,
-                                overrideSchemaResolver: false
-                            });
-                        }}>
-                    {subcollection.name}
-                </Button>
-            )
-        };
-    }) ?? [];
-
-    const additionalColumns = [...(collection.additionalColumns ?? []), ...subcollectionColumns];
+    const additionalColumns = useMemo(() => {
+        const subcollectionColumns: AdditionalColumnDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
+            return {
+                id: getSubcollectionColumnId(subcollection),
+                title: subcollection.name,
+                width: 200,
+                builder: ({entity}) => (
+                    <Button color={"primary"}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                sideEntityController.open({
+                                    path,
+                                    entityId: entity.id,
+                                    selectedSubpath: subcollection.path,
+                                    permissions: collection.permissions,
+                                    schema: collection.schema,
+                                    subcollections: collection.subcollections,
+                                    callbacks: collection.callbacks,
+                                    overrideSchemaResolver: false
+                                });
+                            }}>
+                        {subcollection.name}
+                    </Button>
+                )
+            };
+        }) ?? [];
+        return [...(collection.additionalColumns ?? []), ...subcollectionColumns];
+    }, [collection]);
 
     const displayedProperties = useColumnIds(collection, true);
 
-    const uniqueFieldValidator: UniqueFieldValidator = ({
+    const uniqueFieldValidator: UniqueFieldValidator = useCallback(({
                                                             name,
                                                             value,
                                                             property,
                                                             entityId
-                                                        }) => dataSource.checkUniqueField(path, name, value, property, entityId);
+                                                        }) => dataSource.checkUniqueField(path, name, value, property, entityId),[path]);
 
 
-    const onCellChanged: OnCellValueChange<any, M> = ({
+    const onCellChanged: OnCellValueChange<any, M> = useCallback(({
                                                           value,
                                                           name,
                                                           setSaved,
@@ -179,7 +180,7 @@ export function CollectionTable<M extends { [Key: string]: any },
             })
         });
 
-    };
+    }, [path, collection]);
 
     const { columns, popupFormField } = buildColumnsFromSchema({
         schema,

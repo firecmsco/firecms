@@ -1,6 +1,12 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useState
+} from "react";
 
-import { Button, IconButton, Portal, Theme, Typography } from "@mui/material";
+import {Button, IconButton, Portal, Theme, Typography} from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -13,18 +19,19 @@ import {
     PropertiesOrBuilder,
     Property
 } from "../../../../../models";
-import { Form, Formik, FormikProps } from "formik";
-import { useDraggable } from "./useDraggable";
+import {Form, Formik, FormikProps} from "formik";
+import {useDraggable} from "./useDraggable";
 import {
     CustomFieldValidator,
     getYupEntitySchema
 } from "../../../../../form/validation";
-import { useWindowSize } from "./useWindowSize";
-import { isReadOnly } from "../../../../utils";
-import { buildPropertyField } from "../../../../../form";
+import {useWindowSize} from "./useWindowSize";
+import {isReadOnly} from "../../../../utils";
+import {buildPropertyField} from "../../../../../form";
 import clsx from "clsx";
-import { ElementResizeListener } from "./ElementResizeListener";
-import { OnCellValueChangeParams } from "../../column_builder";
+import {ElementResizeListener} from "./ElementResizeListener";
+import {OnCellValueChangeParams} from "../../column_builder";
+import {ErrorView} from "../../../ErrorView";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     form: {
@@ -115,7 +122,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         ref,
         x: popupLocation?.x,
         y: popupLocation?.y,
-        onMove: (x, y) => onMove({ x, y })
+        onMove: (x, y) => onMove({x, y})
     });
 
     useEffect(
@@ -140,14 +147,14 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         [formPopupOpen]
     );
 
-    const validationSchema = getYupEntitySchema(
+    const validationSchema = useMemo(() => getYupEntitySchema(
         name ?
-            { [name]: schema.properties[name] } as PropertiesOrBuilder<M>
+            {[name]: schema.properties[name]} as PropertiesOrBuilder<M>
             : {} as PropertiesOrBuilder<M>,
         entity?.values ?? {},
         path,
         customFieldValidator,
-        entity?.id);
+        entity?.id), [name, schema, path, entity]);
 
     function getInitialLocation() {
         if (!cellRect) throw Error("getInitialLocation error");
@@ -162,18 +169,11 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         };
     }
 
-    const updatePopupLocation = (position?: { x: number, y: number }) => {
-        if (!cellRect || !draggableBoundingRect) return;
 
-        const newPosition = normalizePosition(position ?? getInitialLocation());
-        if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
-            setPopupLocation(newPosition);
-    };
-
-    function normalizePosition({
+    const normalizePosition =  useCallback(({
                                    x,
                                    y
-                               }: { x: number, y: number }) {
+                               }: { x: number, y: number }) => {
         if (!ref.current?.getBoundingClientRect())
             throw Error("normalizePosition called before draggableBoundingRect is set");
 
@@ -181,7 +181,15 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             x: Math.max(0, Math.min(x, windowSize.width - ref.current?.getBoundingClientRect().width)),
             y: Math.max(0, Math.min(y, windowSize.height - ref.current?.getBoundingClientRect().height))
         };
-    }
+    },[ref.current, windowSize]);
+
+    const updatePopupLocation = (position?: { x: number, y: number }) => {
+        if (!cellRect || !draggableBoundingRect) return;
+
+        const newPosition = normalizePosition(position ?? getInitialLocation());
+        if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
+            setPopupLocation(newPosition);
+    };
 
     const adaptResize = () => {
         if (!draggableBoundingRect) return;
@@ -208,11 +216,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         return Promise.resolve();
     };
 
-
-    if (!entity)
-        return <></>;
-
-    const renderForm = ({
+    const renderForm = useCallback(({
                             handleChange,
                             values,
                             errors,
@@ -223,6 +227,9 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                             handleSubmit,
                             isSubmitting
                         }: FormikProps<EntityValues<M>>) => {
+
+        if(!entity)
+            return <ErrorView error={"PopupFormField missconfiguration"}/>;
 
         const disabled = isSubmitting;
 
@@ -261,7 +268,10 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             </Button>
 
         </Form>;
-    };
+    }, [entity, schema]);
+
+    if (!entity)
+        return <></>;
 
     const form = entity && (
         <div
@@ -297,7 +307,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         <div
             key={`draggable_${name}_${entity.id}`}
             className={clsx(classes.popup,
-                { [classes.hidden]: !formPopupOpen }
+                {[classes.hidden]: !formPopupOpen}
             )}
             ref={containerRef}>
 
@@ -320,7 +330,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         event.stopPropagation();
                         setFormPopupOpen(false);
                     }}>
-                    <ClearIcon style={{ color: "white" }}
+                    <ClearIcon style={{color: "white"}}
                                fontSize={"small"}/>
                 </IconButton>
             </div>
@@ -335,3 +345,5 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     );
 
 }
+
+

@@ -1,5 +1,6 @@
 import React, {useEffect, useRef} from "react";
 import {
+    Alert,
     Button,
     CircularProgress,
     Dialog,
@@ -12,7 +13,6 @@ import {
 } from "@mui/material";
 
 import GetAppIcon from "@mui/icons-material/GetApp";
-import MuiAlert from "@mui/lab/Alert/Alert";
 import {Entity, EntitySchema, ExportConfig} from "../../../../models";
 import {useDataSource, useFireCMSContext} from "../../../../hooks";
 import {downloadCSV} from "../../../util/csv";
@@ -166,7 +166,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
                     {needsToAcceptFetchAllData
                     &&
-                    <MuiAlert elevation={1}
+                    <Alert elevation={1}
                               variant="filled"
                               severity={"warning"}>
                         <div>
@@ -177,7 +177,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
                             Would you like to proceed?
                         </div>
 
-                    </MuiAlert>}
+                    </Alert>}
 
                 </DialogContentText>
             </DialogContent>

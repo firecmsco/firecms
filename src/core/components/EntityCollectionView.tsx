@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {
     Box,
     Button,
@@ -141,7 +141,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         setDeleteEntityClicked(undefined);
     }, [selectedEntities]);
 
-    const onEntityClick = (entity: Entity<M>) => {
+    const onEntityClick = useCallback((entity: Entity<M>) => {
         return sideEntityController.open({
             entityId: entity.id,
             path,
@@ -151,9 +151,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             callbacks: collection.callbacks,
             overrideSchemaResolver: false
         });
-    };
+    }, [collection]);
 
-    const onNewClick = (e: React.MouseEvent) => {
+    const onNewClick = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         return sideEntityController.open({
             path,
@@ -163,40 +163,40 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             callbacks: collection.callbacks,
             overrideSchemaResolver: false
         });
-    };
+    }, [collection]);
 
-    const internalOnEntityDelete = (path: string, entity: Entity<M>) => {
+    const internalOnEntityDelete = useCallback( (path: string, entity: Entity<M>) => {
         setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
-    };
+    }, [selectedEntities]);
 
-    const internalOnMultipleEntitiesDelete = (path: string, entities: Entity<M>[]) => {
+    const internalOnMultipleEntitiesDelete = useCallback((path: string, entities: Entity<M>[]) => {
         setSelectedEntities([]);
         setDeleteEntityClicked(undefined);
-    };
+    }, []);
 
-    const checkInlineEditing = (entity: Entity<any>) => {
+    const checkInlineEditing = useCallback((entity: Entity<any>) => {
         if (!canEdit(collection.permissions, entity, authController, path, context)) {
             return false;
         }
         return collection.inlineEditing === undefined || collection.inlineEditing;
-    };
+    }, [collection]);
 
 
-    const onColumnResize = ({ width, key }: OnColumnResizeParams) => {
+    const onColumnResize = useCallback(({ width, key }: OnColumnResizeParams) => {
         const property: Partial<AnyProperty> = { columnWidth: width };
         const newCollection: PartialEntityCollection<M> = mergeDeep(extraConfiguration, { schema: { properties: { [key as keyof M]: property } } });
         setExtraConfiguration(newCollection);
         saveCollectionConfig(path, newCollection);
-    };
+    }, [path]);
 
-    const onSizeChanged = (size: CollectionSize) => {
+    const onSizeChanged = useCallback((size: CollectionSize) => {
         const newCollection: PartialEntityCollection<M> = mergeDeep(extraConfiguration, { defaultSize: size });
         setExtraConfiguration(newCollection);
         saveCollectionConfig(path, newCollection);
-    };
+    }, [path]);
 
     const open = anchorEl != null;
-    const title = (
+    const title = useMemo(() => (
         <div style={{
             padding: "4px"
         }}>
@@ -260,9 +260,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             }
 
         </div>
-    );
+    ), [path, collection]);
 
-    const tableRowActionsBuilder = ({
+    const tableRowActionsBuilder = useCallback(({
                                         entity,
                                         size
                                     }: { entity: Entity<any>, size: CollectionSize }) => {
@@ -315,9 +315,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             />
         );
 
-    };
+    },[path]);
 
-    function toolbarActionsBuilder(_: { size: CollectionSize, data: Entity<any>[] }) {
+    const toolbarActionsBuilder = useCallback((_: { size: CollectionSize, data: Entity<any>[] }) => {
 
         const addButton = canCreate(collection.permissions, authController, path, context) && onNewClick && (largeLayout ?
             <Button
@@ -387,7 +387,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 {addButton}
             </>
         );
-    }
+    },[path, collection]);
 
     return (
         <>
@@ -416,4 +416,6 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         </>
     );
 }
+
+export default EntityCollectionView;
 

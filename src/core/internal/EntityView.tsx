@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {lazy, Suspense, useCallback, useEffect, useState} from "react";
 import {
     Box,
     CircularProgress,
@@ -13,7 +13,6 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import CloseIcon from "@mui/icons-material/Close";
 import clsx from "clsx";
-import { EntityForm } from "../../form";
 import {
     Entity,
     EntityCallbacks,
@@ -24,14 +23,12 @@ import {
     PermissionsBuilder
 } from "../../models";
 import {
-    CircularProgressCenter,
-    EntityCollectionView,
-    EntityPreview
+    CircularProgressCenter
 } from "../components";
-import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
+import {removeInitialAndTrailingSlashes} from "../util/navigation_utils";
 
-import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
-import { ErrorBoundary } from "./ErrorBoundary";
+import {CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH} from "./common";
+import {ErrorBoundary} from "./ErrorBoundary";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -41,11 +38,16 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "../../hooks";
-import { canEdit } from "../util/permissions";
+import {canEdit} from "../util/permissions";
+
+
+const EntityCollectionView = lazy(() => import( "../components/EntityCollectionView"));
+const EntityForm = lazy(() => import( "../../form/EntityForm"));
+const EntityPreview = lazy(() => import( "../components/EntityPreview"));
 
 const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: Theme) =>
     createStyles({
-        container: ({ containerWidth }) => ({
+        container: ({containerWidth}) => ({
             display: "flex",
             flexDirection: "column",
             width: containerWidth,
@@ -55,7 +57,7 @@ const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: The
             },
             transition: "width 250ms ease-in-out"
         }),
-        containerWide: ({ containerWidth }) => ({
+        containerWide: ({containerWidth}) => ({
             width: `calc(${TAB_WIDTH} + ${containerWidth})`,
             [theme.breakpoints.down("lg")]: {
                 width: CONTAINER_FULL_WIDTH
@@ -71,7 +73,7 @@ const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: The
                 width: CONTAINER_FULL_WIDTH
             }
         },
-        tabsContainer: ({ containerWidth }) => ({
+        tabsContainer: ({containerWidth}) => ({
             flexGrow: 1,
             height: "100%",
             width: `calc(${TAB_WIDTH} + ${containerWidth})`,
@@ -82,7 +84,7 @@ const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: The
             overflow: "auto",
             flexDirection: "row"
         }),
-        form: ({ containerWidth }) => ({
+        form: ({containerWidth}) => ({
             width: containerWidth,
             maxWidth: "100%",
             height: "100%",
@@ -142,7 +144,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                        }: EntityViewProps<M, UserType>) {
 
     const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
-    const classes = useStylesSide({ containerWidth: resolvedWidth ?? CONTAINER_WIDTH });
+    const classes = useStylesSide({containerWidth: resolvedWidth ?? CONTAINER_WIDTH});
 
     const dataSource = useDataSource();
     const sideEntityController = useSideEntityController();
@@ -217,25 +219,25 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }, [selectedSubpath]);
 
 
-    const onPreSaveHookError = (e: Error) => {
+    const onPreSaveHookError = useCallback((e: Error) => {
         snackbarContext.open({
             type: "error",
             title: "Error before saving",
             message: e?.message
         });
         console.error(e);
-    };
+    }, []);
 
-    const onSaveSuccessHookError = (e: Error) => {
+    const onSaveSuccessHookError = useCallback((e: Error) => {
         snackbarContext.open({
             type: "error",
             title: `${schema.name}: Error after saving (entity is saved)`,
             message: e?.message
         });
         console.error(e);
-    };
+    }, []);
 
-    const onSaveSuccess = (updatedEntity: Entity<M>) => {
+    const onSaveSuccess = useCallback((updatedEntity: Entity<M>) => {
 
         setCurrentEntityId(updatedEntity.id);
 
@@ -250,9 +252,9 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         if (tabsPosition === -1)
             sideEntityController.close();
 
-    };
+    }, []);
 
-    const onSaveFailure = (e: Error) => {
+    const onSaveFailure = useCallback((e: Error) => {
 
         snackbarContext.open({
             type: "error",
@@ -262,28 +264,28 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
         console.error("Error saving entity", path, entityId);
         console.error(e);
-    };
+    }, []);
 
-    async function onEntitySave({
-                                    schema,
-                                    path,
-                                    entityId,
-                                    values,
-                                    previousValues
-                                }: {
+    const onEntitySave = useCallback(async ({
+                                                schema,
+                                                path,
+                                                entityId,
+                                                values,
+                                                previousValues
+                                            }: {
         schema: EntitySchema<M>,
         path: string,
         entityId: string | undefined,
         values: EntityValues<M>,
         previousValues?: EntityValues<M>,
-    }): Promise<void> {
+    }): Promise<void> => {
 
         if (!status)
             return;
 
         return saveEntityWithCallbacks({
             path,
-            entityId: entityId,
+            entityId,
             callbacks,
             values,
             previousValues,
@@ -296,7 +298,11 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             onPreSaveHookError,
             onSaveSuccessHookError
         });
-    }
+    }, [
+        callbacks,
+        dataSource,
+        context,
+    ]);
 
     function onDiscard() {
         if (tabsPosition === -1)
@@ -304,19 +310,23 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }
 
     const body = !readOnly ? (
-        <EntityForm
-            status={status}
-            path={path}
-            schema={schema}
-            onEntitySave={onEntitySave}
-            onDiscard={onDiscard}
-            onValuesChanged={setModifiedValues}
-            onModified={onModifiedValues}
-            entity={entity}/>
+            <Suspense fallback={<CircularProgressCenter/>}>
+                <EntityForm
+                    status={status}
+                    path={path}
+                    schema={schema}
+                    onEntitySave={onEntitySave as any}
+                    onDiscard={onDiscard}
+                    onValuesChanged={setModifiedValues}
+                    onModified={onModifiedValues}
+                    entity={entity}/>
+            </Suspense>
     ) : (
-        <EntityPreview
-            entity={entity as any}
-            schema={schema}/>
+        <Suspense fallback={<CircularProgressCenter/>}>
+            <EntityPreview
+                entity={entity as any}
+                schema={schema}/>
+        </Suspense>
     );
 
     const customViewsView: JSX.Element[] | undefined = customViews && customViews.map(
@@ -354,9 +364,11 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     flexGrow={1}
                     hidden={tabsPosition !== colIndex + customViewsCount}>
                     {entity && path ?
-                        <EntityCollectionView path={path}
-                                              collection={subcollection}
-                        />
+                        <Suspense fallback={<CircularProgressCenter/>}>
+                            <EntityCollectionView path={path}
+                                                  collection={subcollection}
+                            />
+                        </Suspense>
                         :
                         <Box m={3}
                              display={"flex"}
@@ -373,7 +385,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         }
     );
 
-    function getSelectedSubpath(value: number) {
+    const getSelectedSubpath = useCallback((value: number) => {
         if (value == -1) return undefined;
 
         if (customViews && value < customViewsCount) {
@@ -385,9 +397,9 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         }
 
         throw Error("Something is wrong in getSelectedSubpath");
-    }
+    }, [customViews]);
 
-    function onSideTabClick(value: number) {
+    const onSideTabClick = useCallback((value: number) => {
         setTabsPosition(value);
         if (entityId) {
             sideEntityController.open({
@@ -397,7 +409,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 overrideSchemaResolver: false
             });
         }
-    }
+    }, []);
 
     const header = (
         <div className={classes.header}>
@@ -469,7 +481,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     );
 
     return <div
-        className={clsx(classes.container, { [classes.containerWide]: tabsPosition !== -1 })}>
+        className={clsx(classes.container, {[classes.containerWide]: tabsPosition !== -1})}>
         {
             dataLoading ?
                 <CircularProgressCenter/>
@@ -498,3 +510,4 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     </div>;
 }
+

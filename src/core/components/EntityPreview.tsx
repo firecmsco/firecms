@@ -150,3 +150,5 @@ export function EntityPreview<M extends { [Key: string]: any }>(
     );
 
 }
+
+export default EntityPreview;

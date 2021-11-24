@@ -1,3 +1,4 @@
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
     EntityCollection,
     NavigationContext,
@@ -10,7 +11,6 @@ import {
     getNavigationEntriesFromPathInternal,
     NavigationViewInternal
 } from "../util/navigation_from_path";
-import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getSidePanelKey } from "../contexts/utils";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
@@ -37,13 +37,13 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
 
     const baseLocation = location.state && location.state["base_location"] ? location.state["base_location"] : location;
 
-    const updatePanels = (newPanels: ExtendedPanelProps[]) => {
+    const updatePanels = useCallback((newPanels: ExtendedPanelProps[]) => {
         setSidePanels(newPanels);
         const customSchemaKeys = newPanels
             .map((e) => e.sidePanelKey)
             .filter((k) => !!k) as string[];
         schemaRegistryController.removeAllOverridesExcept(customSchemaKeys);
-    };
+    },[location]);
 
     useEffect(() => {
         if (schemaRegistryController.initialised) {
@@ -68,7 +68,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
         }
     }, [location, collections]);
 
-    const close = () => {
+    const close = useCallback(() => {
 
         if (sidePanels.length === 0)
             return;
@@ -85,9 +85,9 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             navigate(newPath, { replace: true });
         }
 
-    };
+    }, [sidePanels, location]);
 
-    const open = ({
+    const open = useCallback(({
                       path,
                       entityId,
                       selectedSubpath,
@@ -169,7 +169,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 }
             );
         }
-    };
+    },[sidePanels, location]);
 
     return {
         sidePanels,

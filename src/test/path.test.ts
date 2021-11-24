@@ -39,6 +39,8 @@ it("Test path acccess in object", () => {
     expect(getValueInPath(obj, "email")).toEqual("jesus.riley@example.com");
     expect(getValueInPath(obj, "picture.medium")).toEqual("https://randomuser.me/api/portraits/med/men/17.jpg");
     expect(getValueInPath(obj, "location.timezone.offset")).toEqual("+4:00");
+    expect(getValueInPath(obj, "location.street.number")).toEqual(3570);
+    expect(getValueInPath(obj, "location.street.nope")).toEqual(undefined);
     expect(getValueInPath(obj, "nope")).toEqual(undefined);
     expect(getValueInPath(obj, "nope.nope")).toEqual(undefined);
     expect(getValueInPath(obj, "nope.nope.nope.nope")).toEqual(undefined);

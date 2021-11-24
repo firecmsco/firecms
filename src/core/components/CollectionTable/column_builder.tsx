@@ -1,4 +1,4 @@
-import { getCellAlignment, getPropertyColumnWidth } from "./internal/common";
+import {getCellAlignment, getPropertyColumnWidth} from "./internal/common";
 import {
     AdditionalColumnDelegate,
     CMSType,
@@ -10,24 +10,21 @@ import {
     Property,
     PropertyOrBuilder
 } from "../../../models";
-import { buildPropertyFrom } from "../../util/property_builder";
-import React, { useCallback, useEffect, useMemo } from "react";
-import { TableCell } from "../Table/TableCell";
-import { PreviewComponent, SkeletonComponent } from "../../../preview";
-import { getPreviewSizeFrom } from "../../../preview/util";
-import {
-    CustomFieldValidator,
-    mapPropertyToYup
-} from "../../../form/validation";
+import {buildPropertyFrom} from "../../util/property_builder";
+import React, {useCallback, useEffect, useMemo} from "react";
+import {TableCell} from "../Table/TableCell";
+import {PreviewComponent, SkeletonComponent} from "../../../preview";
+import {getPreviewSizeFrom} from "../../../preview/util";
+import {CustomFieldValidator, mapPropertyToYup} from "../../../form/validation";
 import {
     OnCellChangeParams,
     PropertyTableCell
 } from "./internal/PropertyTableCell";
-import { ErrorBoundary } from "../../internal/ErrorBoundary";
-import { useFireCMSContext } from "../../../hooks";
-import { PopupFormField } from "./internal/popup_field/PopupFormField";
-import { TableColumn, TableColumnFilter, TableEnumValues } from "../../index";
-import { getIconForProperty } from "../../util/property_icons";
+import {ErrorBoundary} from "../../internal/ErrorBoundary";
+import {useFireCMSContext} from "../../../hooks";
+import {PopupFormField} from "./internal/popup_field/PopupFormField";
+import {TableColumn, TableColumnFilter, TableEnumValues} from "../../index";
+import {getIconForProperty} from "../../util/property_icons";
 import {
     buildEnumLabel,
     enumToObjectEntries,
@@ -156,8 +153,8 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
     const additionalColumnsMap: Record<string, AdditionalColumnDelegate<M, string, UserType>> = useMemo(() => {
         return additionalColumns ?
             additionalColumns
-                .map((aC) => ({ [aC.id]: aC }))
-                .reduce((a, b) => ({ ...a, ...b }), [])
+                .map((aC) => ({[aC.id]: aC}))
+                .reduce((a, b) => ({...a, ...b}), [])
             : {};
     }, [additionalColumns]);
 
@@ -174,13 +171,13 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
         };
     });
 
-    const select = (cell?: SelectedCellProps<M>) => {
+    const select = useCallback((cell?: SelectedCellProps<M>) => {
         setSelectedCell(cell);
         setFocused(true);
         if (!formPopupOpen) {
             setPopupCell(cell);
         }
-    };
+    }, [formPopupOpen]);
 
     const unselect = useCallback(() => {
         setSelectedCell(undefined);
@@ -188,172 +185,18 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
         setPreventOutsideClick(false);
     }, []);
 
-
-    const updatePopup = (value: boolean) => {
+    const updatePopup = useCallback((value: boolean) => {
         setFocused(!value);
         setFormPopupOpen(value);
-    };
+    }, []);
 
-    const propertyCellRenderer = ({
-                                      column,
-                                      columnIndex,
-                                      rowData,
-                                      rowIndex
-                                  }: any) => {
+    const buildFilterEnumValues = useCallback((values: EnumValues): TableEnumValues => enumToObjectEntries(values)
+        .filter(([enumKey, labelOrConfig]) => !isEnumValueDisabled(labelOrConfig))
+        .map(([enumKey, labelOrConfig]) => ({[enumKey]: buildEnumLabel(labelOrConfig) as string}))
+        .reduce((a, b) => ({...a, ...b}), {}), []);
 
-        const entity: Entity<M> = rowData;
-
-        const key = column.dataKey as keyof M;
-        const propertyOrBuilder: PropertyOrBuilder<any, M> = schema.properties[key];
-        const property: Property<any> = buildPropertyFrom<CMSType, M>(propertyOrBuilder, entity.values, entity.id);
-        const usedPropertyBuilder = typeof propertyOrBuilder === "function";
-
-        const inlineEditingEnabled = checkInlineEditing(inlineEditing, entity);
-
-        if (!inlineEditingEnabled) {
-            return (
-                <TableCell
-                    key={`preview_cell_${key}_${rowIndex}_${columnIndex}`}
-                    size={size}
-                    align={column.align}
-                    disabled={true}>
-                    <PreviewComponent
-                        width={column.width}
-                        height={column.height}
-                        name={`preview_${key}_${rowIndex}_${columnIndex}`}
-                        property={property}
-                        value={entity.values[key]}
-                        size={getPreviewSizeFrom(size)}
-                    />
-                </TableCell>
-            );
-        } else {
-
-            const openPopup = (cellRect: DOMRect | undefined) => {
-                if (!cellRect) {
-                    setPopupCell(undefined);
-                } else {
-                    setPopupCell({
-                        columnIndex,
-                        // rowIndex,
-                        width: column.width,
-                        height: column.height,
-                        entity,
-                        cellRect,
-                        key,
-                        property,
-                        usedPropertyBuilder
-                    });
-                }
-                updatePopup(true);
-            };
-
-            const onSelect = (cellRect: DOMRect | undefined) => {
-                if (!cellRect) {
-                    select(undefined);
-                } else {
-                    select({
-                        columnIndex,
-                        // rowIndex,
-                        width: column.width,
-                        height: column.height,
-                        entity,
-                        cellRect,
-                        key,
-                        property,
-                        usedPropertyBuilder
-                    });
-                }
-            };
-
-            const selected = selectedCell?.columnIndex === columnIndex
-                && selectedCell?.entity.id === entity.id;
-
-            const isFocused = selected && focused;
-
-            const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
-                ? ({ name, value, property }) => uniqueFieldValidator({
-                    name, value, property, entityId: entity.id
-                }) : undefined;
-
-            const validation = mapPropertyToYup({
-                property,
-                customFieldValidator,
-                name: key
-            });
-
-            const onValueChange = onCellValueChange
-                ? (props: OnCellChangeParams<any>) => onCellValueChange({
-                    ...props,
-                    entity
-                })
-                : undefined;
-
-            return entity ?
-                <PropertyTableCell
-                    key={`table_cell_${key}_${rowIndex}_${columnIndex}`}
-                    size={size}
-                    align={column.align}
-                    name={key as string}
-                    validation={validation}
-                    onValueChange={onValueChange}
-                    selected={selected}
-                    focused={isFocused}
-                    setPreventOutsideClick={setPreventOutsideClick}
-                    setFocused={setFocused}
-                    value={entity?.values ? entity.values[key] : undefined}
-                    property={property}
-                    openPopup={openPopup}
-                    select={onSelect}
-                    width={column.width}
-                    height={column.height}/>
-                :
-                <SkeletonComponent property={property}
-                                   size={getPreviewSizeFrom(size)}/>;
-        }
-
-
-    };
-    const additionalCellRenderer = ({
-                                        column,
-                                        columnIndex,
-                                        rowData,
-                                        rowIndex
-                                    }: any) => {
-
-        const entity: Entity<M> = rowData;
-
-        return (
-            <TableCell
-                focused={false}
-                selected={false}
-                disabled={true}
-                size={size}
-                align={"left"}
-                allowScroll={false}
-                showExpandIcon={false}
-                disabledTooltip={"Additional columns can't be edited directly"}
-            >
-                <ErrorBoundary>
-                    {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder({
-                        entity,
-                        context
-                    })}
-                </ErrorBoundary>
-            </TableCell>
-        );
-
-    };
-
-    function buildFilterEnumValues(values: EnumValues): TableEnumValues {
-        return enumToObjectEntries(values)
-            .filter(([enumKey, labelOrConfig]) => !isEnumValueDisabled(labelOrConfig))
-            .map(([enumKey, labelOrConfig]) => ({ [enumKey]: buildEnumLabel(labelOrConfig) as string }))
-            .reduce((a, b) => ({ ...a, ...b }), {});
-    }
-
-    function buildFilterableFromProperty(property: Property,
-                                         isArray: boolean = false): TableColumnFilter | undefined {
+    const buildFilterableFromProperty = useCallback((property: Property,
+                                                     isArray: boolean = false): TableColumnFilter | undefined => {
 
         if (property.dataType === "number" || property.dataType === "string") {
             const title = property.title;
@@ -384,9 +227,161 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
         return undefined;
 
-    }
+    }, []);
 
     const columns = useMemo(() => {
+
+        const propertyCellRenderer = ({
+                                          column,
+                                          columnIndex,
+                                          rowData,
+                                          rowIndex
+                                      }: any) => {
+
+            const entity: Entity<M> = rowData;
+
+            const key = column.dataKey as keyof M;
+            const propertyOrBuilder: PropertyOrBuilder<any, M> = schema.properties[key];
+            const property: Property<any> = buildPropertyFrom<CMSType, M>(propertyOrBuilder, entity.values, entity.id);
+            const usedPropertyBuilder = typeof propertyOrBuilder === "function";
+
+            const inlineEditingEnabled = checkInlineEditing(inlineEditing, entity);
+
+            if (!inlineEditingEnabled) {
+                return (
+                    <TableCell
+                        key={`preview_cell_${key}_${rowIndex}_${columnIndex}`}
+                        size={size}
+                        align={column.align}
+                        disabled={true}>
+                        <PreviewComponent
+                            width={column.width}
+                            height={column.height}
+                            name={`preview_${key}_${rowIndex}_${columnIndex}`}
+                            property={property}
+                            value={entity.values[key]}
+                            size={getPreviewSizeFrom(size)}
+                        />
+                    </TableCell>
+                );
+            } else {
+
+                const openPopup = (cellRect: DOMRect | undefined) => {
+                    if (!cellRect) {
+                        setPopupCell(undefined);
+                    } else {
+                        setPopupCell({
+                            columnIndex,
+                            width: column.width,
+                            height: column.height,
+                            entity,
+                            cellRect,
+                            key,
+                            property,
+                            usedPropertyBuilder
+                        });
+                    }
+                    updatePopup(true);
+                };
+
+                const onSelect = (cellRect: DOMRect | undefined) => {
+                    if (!cellRect) {
+                        select(undefined);
+                    } else {
+                        select({
+                            columnIndex,
+                            // rowIndex,
+                            width: column.width,
+                            height: column.height,
+                            entity,
+                            cellRect,
+                            key,
+                            property,
+                            usedPropertyBuilder
+                        });
+                    }
+                };
+
+                const selected = selectedCell?.columnIndex === columnIndex
+                    && selectedCell?.entity.id === entity.id;
+
+                const isFocused = selected && focused;
+
+                const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
+                    ? ({name, value, property}) => uniqueFieldValidator({
+                        name, value, property, entityId: entity.id
+                    }) : undefined;
+
+                const validation = mapPropertyToYup({
+                    property,
+                    customFieldValidator,
+                    name: key
+                });
+
+                const onValueChange = onCellValueChange
+                    ? (props: OnCellChangeParams<any>) => onCellValueChange({
+                        ...props,
+                        entity
+                    })
+                    : undefined;
+
+                return entity ?
+                    <PropertyTableCell
+                        key={`table_cell_${key}_${rowIndex}_${columnIndex}`}
+                        size={size}
+                        align={column.align}
+                        name={key as string}
+                        validation={validation}
+                        onValueChange={onValueChange}
+                        selected={selected}
+                        focused={isFocused}
+                        setPreventOutsideClick={setPreventOutsideClick}
+                        setFocused={setFocused}
+                        value={entity?.values ? entity.values[key] : undefined}
+                        property={property}
+                        openPopup={openPopup}
+                        select={onSelect}
+                        width={column.width}
+                        height={column.height}/>
+                    :
+                    <SkeletonComponent property={property}
+                                       size={getPreviewSizeFrom(size)}/>;
+            }
+
+
+        };
+
+        const additionalCellRenderer = ({
+                                            column,
+                                            columnIndex,
+                                            rowData,
+                                            rowIndex
+                                        }: any) => {
+
+            const entity: Entity<M> = rowData;
+
+            return (
+                <TableCell
+                    focused={false}
+                    selected={false}
+                    disabled={true}
+                    size={size}
+                    align={"left"}
+                    allowScroll={false}
+                    showExpandIcon={false}
+                    disabledTooltip={"Additional columns can't be edited directly"}
+                >
+                    <ErrorBoundary>
+                        {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder({
+                            entity,
+                            context
+                        })}
+                    </ErrorBoundary>
+                </TableCell>
+            );
+
+        };
+
         const allColumns: TableColumn<M>[] = (Object.keys(schema.properties) as (keyof M)[])
             .map((key) => {
                 const property: Property<any> = buildPropertyFrom<any, M>(schema.properties[key], schema.defaultValues ?? {}, path);
@@ -426,7 +421,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
 
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
-        ? ({ name, value, property }) => uniqueFieldValidator({
+        ? ({name, value, property}) => uniqueFieldValidator({
             name,
             value,
             property,
@@ -453,6 +448,6 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
         />
     </>;
 
-    return { columns, popupFormField };
+    return {columns, popupFormField};
 
 }
