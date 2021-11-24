@@ -43,11 +43,11 @@ export function ArrayOneOfPreview({
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
                     <div className={classes.arrayItemBig}>
                         <ErrorBoundary>
-                            <PreviewComponent
+                            {value && <PreviewComponent
                                 name={name}
                                 value={value[valueField]}
                                 property={properties[value[typeField]] as Property<any>}
-                                size={childSize}/>
+                                size={childSize}/>}
                         </ErrorBoundary>
                     </div>
                     {index < values.length - 1 && <Divider/>}

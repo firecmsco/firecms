@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useRef} from "react";
 import {
     Button,
     CircularProgress,
@@ -13,18 +13,9 @@ import {
 
 import GetAppIcon from "@mui/icons-material/GetApp";
 import MuiAlert from "@mui/lab/Alert/Alert";
-import { CSVLink } from "react-csv";
-import {
-    Entity,
-    EntityReference,
-    EntitySchema,
-    ExportConfig,
-    Properties,
-    Property
-} from "../../../../models";
-import { computeSchemaProperties } from "../../../utils";
-import { useDataSource, useFireCMSContext } from "../../../../hooks";
-import { buildPropertyFrom } from "../../../util/property_builder";
+import {Entity, EntitySchema, ExportConfig} from "../../../../models";
+import {useDataSource, useFireCMSContext} from "../../../../hooks";
+import {downloadCSV} from "../../../util/csv";
 
 interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
     schema: EntitySchema<M>;
@@ -35,19 +26,18 @@ interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
 export function ExportButton<M extends { [Key: string]: any }, UserType>({
-                                                                   schema,
-                                                                   path,
-                                                                   exportConfig
-                                                               }: ExportButtonProps<M, UserType>
+                                                                             schema,
+                                                                             path,
+                                                                             exportConfig
+                                                                         }: ExportButtonProps<M, UserType>
 ) {
-
 
     const dataSource = useDataSource();
     const context = useFireCMSContext();
-    const csvLinkEl = React.useRef<any>(null);
 
-    const [data, setData] = React.useState<Entity<M>[]>();
-    const [additionalData, setAdditionalData] = React.useState<Record<string, any>[]>();
+    const dataRef = useRef<Entity<M>[]>();
+    const additionalDataRef = useRef<Record<string, any>[]>();
+
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = React.useState<Error | undefined>();
 
@@ -59,6 +49,17 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
     const [open, setOpen] = React.useState(false);
 
+    function doDownload<M>(data:Entity<M>[] | undefined,
+                           additionalData:Record<string, any>[] | undefined,
+                           schema:EntitySchema,
+                           path:string,
+                           exportConfig:ExportConfig | undefined){
+        if (!data)
+            throw Error("Trying to perform export without loading data first");
+
+        downloadCSV(data, additionalData, schema, path, exportConfig)
+    }
+
     useEffect(() => {
 
         if (!open) return;
@@ -69,17 +70,19 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             if (entities.length >= INITIAL_DOCUMENTS_LIMIT) {
                 setHasLargeAmountOfData(true);
             }
-            setData(entities);
-            await fetchAdditionalColumns(entities);
+
+            const pendingDownload = dataRef.current && entities.length > dataRef.current.length && fetchLargeDataAccepted;
+
+            dataRef.current = entities;
+            const additionalColumnsData = await fetchAdditionalColumns(entities);
+            additionalDataRef.current = additionalColumnsData;
             setDataLoading(false);
             setDataLoadingError(undefined);
 
-            // this is hack used to trigger the CSV download after
-            // fetching additional data
-            if (data && entities.length > data.length && fetchLargeDataAccepted && csvLinkEl.current)
-                setTimeout(() => {
-                    csvLinkEl.current.link.click();
-                });
+            if (pendingDownload) {
+                doDownload(entities, additionalColumnsData, schema, path, exportConfig);
+                handleClose();
+            }
         };
 
         const fetchAdditionalColumns = async (entities: Entity<M>[]) => {
@@ -92,11 +95,15 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
             const resolvedColumnsValues: Record<string, any>[] = await Promise.all(entities.map(async (entity) => {
                 return (await Promise.all(additionalColumns.map(async (column) => {
-                    return { [column.key]: await column.builder({ entity, context }) };
-                }))).reduce((a, b) => ({ ...a, ...b }), {});
+                    return {
+                        [column.key]: await column.builder({
+                            entity,
+                            context
+                        })
+                    };
+                }))).reduce((a, b) => ({...a, ...b}), {});
             }));
-
-            setAdditionalData(resolvedColumnsValues);
+            return resolvedColumnsValues;
         };
 
         const onFetchError = (error: Error) => {
@@ -123,15 +130,17 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
         setOpen(false);
     };
 
-    const properties = computeSchemaProperties(schema, path);
-    const exportableData: any[] | undefined = data && data.map(e => ({ id: e.id, ...processProperties(e.values as any, properties) }));
-    if (exportableData && additionalData) {
-        additionalData.forEach((additional, index) => exportableData[index] = { ...exportableData[index], ...additional });
-    }
-
-    const headers = getExportHeaders(properties, path, exportConfig);
 
     const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
+
+    function onOkClicked() {
+         if (needsToAcceptFetchAllData) {
+             setFetchLargeDataAccepted(true);
+         } else {
+             doDownload(dataRef.current, additionalDataRef.current, schema, path, exportConfig);
+             handleClose();
+         }
+    }
 
     return <>
 
@@ -162,8 +171,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
                               severity={"warning"}>
                         <div>
                             This collections has a large number
-                            of documents (more
-                            than {INITIAL_DOCUMENTS_LIMIT}).
+                            of documents (more than {INITIAL_DOCUMENTS_LIMIT}).
                         </div>
                         <div>
                             Would you like to proceed?
@@ -175,118 +183,23 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             </DialogContent>
 
             <DialogActions>
+
+                {dataLoading && <CircularProgress size={16} thickness={8}/>}
+
                 <Button color="primary" onClick={handleClose}>
                     Cancel
                 </Button>
 
-                {dataLoading && <CircularProgress size={16} thickness={8}/>}
-
-                {exportableData &&
-                <CSVLink headers={headers}
-                         data={exportableData}
-                         ref={csvLinkEl}
-                         filename={schema.name}
-                         style={{
-                             textDecoration: "none"
-                         }}
-                         asyncOnClick={true}
-                         onClick={(event, done) => {
-                             if (needsToAcceptFetchAllData) {
-                                 setFetchLargeDataAccepted(true);
-                                 done(false);
-                             } else {
-                                 handleClose();
-                                 done(true);
-                             }
-                         }}
-                         target="_blank"
-                >
-                    <Button color="primary">
-                        Download
-                    </Button>
-                </CSVLink>
-                }
+                <Button color="primary"
+                        disabled={dataLoading}
+                        onClick={onOkClicked}>
+                    Download
+                </Button>
 
             </DialogActions>
+
         </Dialog>
 
     </>;
-}
-
-interface Header {
-    label: string,
-    key: string
-}
-
-function getExportHeaders<M extends { [Key: string]: any}, UserType>(properties: Properties<M>,
-                                                            path: string,
-                                                            exportConfig?: ExportConfig<UserType>): Header[] {
-    const headers = [
-        { label: "id", key: "id" },
-        ...Object.entries(properties)
-            .map(([childKey, propertyOrBuilder]) => {
-                const property = buildPropertyFrom(propertyOrBuilder, {}, path, undefined);
-                return getHeaders(property, childKey, "");
-            })
-            .flat()
-    ];
-
-    if (exportConfig?.additionalColumns) {
-        headers.push(...exportConfig.additionalColumns.map((column) => ({
-            label: column.key,
-            key: column.key
-        })));
-    }
-
-    return headers;
-}
-
-function getHeaders(property: Property, propertyKey: string, prefix: string = ""): Header[] {
-    let currentKey = prefix ? `${prefix}.${propertyKey}` : propertyKey;
-    if (property.dataType === "map" && property.properties) {
-        return Object.entries(property.properties)
-            .map(([childKey, p]) => getHeaders(p, childKey, currentKey))
-            .flat();
-    } else {
-        return [{ label: currentKey, key: currentKey }];
-    }
-}
-
-
-function processProperty(inputValue: any,
-                         property: Property): any {
-
-    let value;
-    if (property.dataType === "map" && property.properties) {
-        value = processProperties(inputValue, property.properties as Properties);
-    } else if (property.dataType === "array") {
-        if (property.of && Array.isArray(inputValue)) {
-            value = inputValue.map((e) => processProperty(e, property.of as Property));
-        } else {
-            value = inputValue;
-        }
-    } else if (property.dataType === "reference") {
-        const ref = inputValue ? inputValue as EntityReference : undefined;
-        value = ref ? ref.path : null;
-    } else if (property.dataType === "timestamp") {
-        value = inputValue ? inputValue.getTime() : null;
-    } else {
-        value = inputValue;
-    }
-
-    return value;
-}
-
-function processProperties<M extends { [Key: string]: any }>
-(inputValues: Record<keyof M, any>, properties: Properties<M>): Record<keyof M, any> {
-    const updatedValues = Object.entries(properties)
-        .map(([key, property]) => {
-            const inputValue = inputValues && (inputValues as any)[key];
-            const updatedValue = processProperty(inputValue, property as Property);
-            if (updatedValue === undefined) return {};
-            return ({ [key]: updatedValue });
-        })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as Record<keyof M, any>;
-    return { ...inputValues, ...updatedValues };
 }
 

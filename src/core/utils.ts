@@ -9,7 +9,7 @@ import {
     Property,
     PropertyOrBuilder
 } from "../models";
-import { buildPropertyFrom } from "./util/property_builder";
+import {buildPropertyFrom} from "./util/property_builder";
 
 export function isReadOnly(property: Property<any>): boolean {
     if (property.readOnly)
@@ -43,9 +43,9 @@ export function computeSchemaProperties<M extends { [Key: string]: any }>(
 ): Properties<M> {
     return Object.entries(schema.properties)
         .map(([key, propertyOrBuilder]) => {
-            return { [key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, values ?? schema.defaultValues ?? {}, path, entityId) };
+            return {[key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, values ?? schema.defaultValues ?? {}, path, entityId)};
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<M>;
+        .reduce((a, b) => ({...a, ...b}), {}) as Properties<M>;
 }
 
 
@@ -69,9 +69,9 @@ function initWithProperties<M extends { [Key: string]: any }>
         .map(([key, property]) => {
             const propertyDefaultValue = defaultValues && key in defaultValues ? (defaultValues as any)[key] : undefined;
             const value = initPropertyValue(key, property as Property, propertyDefaultValue);
-            return value === undefined ? {} : { [key]: value };
+            return value === undefined ? {} : {[key]: value};
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
+        .reduce((a, b) => ({...a, ...b}), {}) as EntityValues<M>;
 }
 
 function initPropertyValue(key: string, property: Property, defaultValue: any) {
@@ -173,10 +173,10 @@ export function traverseValues<M extends { [Key: string]: any }>(
             const inputValue = inputValues && (inputValues as any)[key];
             const updatedValue = traverseValue(inputValue, property as Property, operation);
             if (updatedValue === undefined) return {};
-            return ({ [key]: updatedValue });
+            return ({[key]: updatedValue});
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
-    return { ...inputValues, ...updatedValues };
+        .reduce((a, b) => ({...a, ...b}), {}) as EntityValues<M>;
+    return {...inputValues, ...updatedValues};
 }
 
 export function traverseValue(inputValue: any,
@@ -193,10 +193,11 @@ export function traverseValue(inputValue: any,
             const typeField = property.oneOf!.typeField ?? "type";
             const valueField = property.oneOf!.valueField ?? "value";
             value = inputValue.map((e) => {
-                if (typeof e !== "object") return inputValue;
+                if (e === null) return null;
+                if (typeof e !== "object") return e;
                 const type = e[typeField];
                 const childProperty = property.oneOf!.properties[type];
-                if (!type || !childProperty) return inputValue;
+                if (!type || !childProperty) return e;
                 return {
                     [typeField]: type,
                     [valueField]: traverseValue(e[valueField], childProperty, operation)

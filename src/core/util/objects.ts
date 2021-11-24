@@ -22,3 +22,14 @@ export function mergeDeep<T>(target:T, source:any):T {
     }
     return output;
 }
+
+export function getValueInPath(o: object, path: string): any {
+    if (path in o) {
+        return o[path];
+    }
+    if (path.includes(".")) {
+        const pathSegments = path.split(".");
+        return getValueInPath(o[pathSegments[0]], pathSegments.slice(1).join("."))
+    }
+    return undefined;
+}

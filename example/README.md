@@ -67,7 +67,7 @@ while developing.
 
 The example backend included in this package indexes various collections to
 Algolia, using Cloud functions. If you deploy it, your data will be indexed.
-Then you can add your appId and searchKey to the .env file in the root of this
+Then you can add your `appId` and `searchKey` to the `.env` file in the root of this
 example project.
 
 Note that you only need to have a Cloud Functions backend such as this one if

@@ -97,6 +97,10 @@ export class EntityReference {
         this.id = id;
         this.path = path;
     }
+
+    get pathWithId() {
+        return `${this.path}/${this.id}`;
+    }
 }
 
 export class GeoPoint {
