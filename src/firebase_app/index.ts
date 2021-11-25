@@ -25,5 +25,7 @@ export {
 export type { InitialiseFirebaseResult } from "./hooks/useInitialiseFirebase";
 export { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 
+export type { FirebaseAuthDelegate } from "./models/auth";
+
 export type { FirestoreTextSearchController } from "./models/text_search";
 export { performAlgoliaTextSearch } from "./models/text_search";

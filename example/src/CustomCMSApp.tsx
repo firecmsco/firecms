@@ -8,7 +8,7 @@ import "typeface-rubik";
 import "typeface-space-mono";
 
 import {
-    AuthDelegate,
+    FirebaseAuthDelegate,
     Authenticator,
     buildCollection,
     buildSchema,
@@ -75,6 +75,8 @@ const productSchema = buildSchema({
  */
 export function CustomCMSApp() {
 
+    const signInOptions = DEFAULT_SIGN_IN_OPTIONS;
+
     const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
         collections: [
             buildCollection({
@@ -102,8 +104,9 @@ export function CustomCMSApp() {
         firebaseConfigError
     } = useInitialiseFirebase({ firebaseConfig });
 
-    const authDelegate: AuthDelegate = useFirebaseAuthDelegate({
+    const authDelegate: FirebaseAuthDelegate = useFirebaseAuthDelegate({
         firebaseApp,
+        signInOptions
     });
 
     const dataSource = useFirestoreDataSource({
@@ -149,7 +152,7 @@ export function CustomCMSApp() {
                         component = (
                             <FirebaseLoginView
                                 skipLoginButtonEnabled={false}
-                                signInOptions={DEFAULT_SIGN_IN_OPTIONS}
+                                signInOptions={signInOptions}
                                 firebaseApp={firebaseApp}
                                 authDelegate={authDelegate}/>
                         );

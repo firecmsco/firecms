@@ -26,12 +26,14 @@ export function useBuildAuthController<UserType>({
 }): AuthController<UserType> {
 
     const [user, setUser] = useState<User | null>(null);
+    const [authLoading, setAuthLoading] = useState<boolean>(false);
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
     const [extra, setExtra] = useState<any>();
 
     async function checkAuthentication() {
         const delegateUser = authDelegate.user;
         if (authentication instanceof Function && delegateUser) {
+            setAuthLoading(true);
             try {
                 const allowed = await authentication({
                     user: delegateUser,
@@ -47,7 +49,9 @@ export function useBuildAuthController<UserType>({
                     setNotAllowedError(true);
             } catch (e) {
                 setNotAllowedError(e);
+                authDelegate.signOut();
             }
+            setAuthLoading(false);
         } else {
             setUser(delegateUser);
         }
@@ -66,6 +70,8 @@ export function useBuildAuthController<UserType>({
         user,
         loginSkipped,
         canAccessMainView,
+        initialLoading: authDelegate.initialLoading ?? false,
+        authLoading: authLoading ,
         notAllowedError,
         signOut: authDelegate.signOut,
         extra,

@@ -232,6 +232,11 @@ export default function App() {
                                                                     user,
                                                                     authController
                                                                 }) => {
+
+        if(user?.email?.includes("flanders")){
+            throw Error("Stupid Flanders!");
+        }
+
         console.log("Allowing access to", user?.email);
         // This is an example of retrieving async data related to the user
         // and storing it in the user extra field.

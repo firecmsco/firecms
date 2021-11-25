@@ -38,7 +38,6 @@
         "@uiw/react-md-editor": "^3.4.10",
         "date-fns": "^2.21.3",
         "deep-equal": "^2.0.5",
-        "firebaseui": "~0.600",
         "formik": "^2.2.9",
         "history": "^5",
         "object-hash": "^2.2.0",

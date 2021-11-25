@@ -1,7 +1,7 @@
 import React, {lazy, Suspense, useCallback, useEffect, useState} from "react";
 import {
     Box,
-    CircularProgress,
+    CircularProgress, Divider,
     IconButton,
     Tab,
     Tabs,
@@ -435,6 +435,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                         onSideTabClick(-1);
                     }}/>
             </Tabs>
+
+            <Divider/>
 
             <Box flexGrow={1}/>
 

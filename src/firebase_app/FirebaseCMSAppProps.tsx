@@ -9,6 +9,7 @@ import {
 } from "../models";
 import { FirestoreTextSearchController } from "./models/text_search";
 import { User as FirebaseUser } from "firebase/auth";
+import { FirebaseSignInOption, FirebaseSignInProvider } from "./models/auth";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -52,7 +53,7 @@ export interface FirebaseCMSAppProps {
      * objects such as specified in https://firebase.google.com/docs/auth/web/firebaseui
      * Defaults to Google sign in only.
      */
-    signInOptions?: Array<string | any>;
+    signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
 
     /**
      * If authentication is enabled, allow the user to access the content

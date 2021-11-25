@@ -26,6 +26,19 @@ export interface AuthController<UserType extends User = User> {
     canAccessMainView: boolean;
 
     /**
+     * Initial loading flag. It is used not to display the login screen
+     * when the app first loads and it has not been checked whether the user
+     * is logged in or not.
+     */
+    initialLoading: boolean;
+
+    /**
+     * If you have defined an {@link Authenticator}, this flag will be set to
+     * true while it loads
+     */
+    authLoading: boolean;
+
+    /**
      * The current user was not allowed access
      */
     notAllowedError: any;
@@ -79,9 +92,11 @@ export type AuthDelegate<UserType extends User = User> = {
     authError?: any;
 
     /**
-     * Is the login process ongoing
+     * Initial loading flag. It is used not to display the login screen
+     * when the app first loads and it has not been checked whether the user
+     * is logged in or not.
      */
-    authLoading: boolean;
+    initialLoading?: boolean;
 
     /**
      * Sign out

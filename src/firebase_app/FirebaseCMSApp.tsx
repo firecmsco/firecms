@@ -19,7 +19,7 @@ import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
-import { AuthDelegate } from "../models";
+import { FirebaseAuthDelegate } from "./models/auth";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -51,7 +51,7 @@ export function FirebaseCMSApp({
                                    navigation,
                                    textSearchController,
                                    allowSkipLogin,
-                                   signInOptions,
+                                   signInOptions = DEFAULT_SIGN_IN_OPTIONS,
                                    firebaseConfig,
                                    onFirebaseInit,
                                    primaryColor,
@@ -71,8 +71,9 @@ export function FirebaseCMSApp({
         firebaseConfigError
     } = useInitialiseFirebase({ onFirebaseInit, firebaseConfig });
 
-    const authDelegate: AuthDelegate = useFirebaseAuthDelegate({
-        firebaseApp
+    const authDelegate: FirebaseAuthDelegate = useFirebaseAuthDelegate({
+        firebaseApp,
+        signInOptions
     });
 
     const dataSource = useFirestoreDataSource({

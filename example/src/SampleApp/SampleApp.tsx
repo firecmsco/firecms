@@ -1,11 +1,7 @@
 import React from "react";
 
 import { getAnalytics } from "firebase/analytics";
-import {
-    EmailAuthProvider,
-    GoogleAuthProvider,
-    User as FirebaseUser
-} from "firebase/auth";
+import { User as FirebaseUser } from "firebase/auth";
 import {
     Authenticator,
     buildCollection,
@@ -154,11 +150,17 @@ function SampleApp() {
                                                                     user,
                                                                     authController
                                                                 }) => {
+
+        if(user?.email?.includes("flanders")){
+            throw Error("Stupid Flanders!");
+        }
+
         // This is an example of retrieving async data related to the user
         // and storing it in the user extra field
         const sampleUserData = await Promise.resolve({
             roles: ["admin"]
         });
+
         authController.setExtra(sampleUserData);
         console.log("Allowing access to", user);
         return true;
@@ -191,8 +193,14 @@ function SampleApp() {
         name={"My Online Shop"}
         authentication={myAuthenticator}
         signInOptions={[
-            GoogleAuthProvider.PROVIDER_ID,
-            EmailAuthProvider.PROVIDER_ID
+            'password',
+            // 'anonymous',
+            'google.com',
+            // 'facebook.com',
+            'github.com',
+            // 'twitter.com',
+            // 'microsoft.com',
+            // 'apple.com'
         ]}
         textSearchController={textSearchController}
         allowSkipLogin={true}

@@ -185,7 +185,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
     const schemaRegistryController = useBuildSchemaRegistryController(navigationContext, schemaResolver);
     const sideEntityController = useBuildSideEntityController(navigationContext, schemaRegistryController);
 
-    const loading = authDelegate.authLoading || navigationContext.loading;
+    const loading = authController.authLoading || authController.initialLoading || navigationContext.loading;
 
     if (navigationContext.navigationLoadingError) {
         return (

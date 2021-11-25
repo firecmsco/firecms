@@ -73,6 +73,10 @@ export function FireCMSAppBar({
     const authController = useAuthController();
     const { mode, toggleMode } = useModeState();
 
+    const initial = authController.user?.displayName ?
+        authController.user.displayName[0].toUpperCase()
+        : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
+
     return (
         <Slide
             direction="down" in={true} mountOnEnter unmountOnExit>
@@ -157,7 +161,7 @@ export function FireCMSAppBar({
                             <Avatar
                                 src={authController.user.photoURL}/>
                             :
-                            <Avatar>{authController.user?.displayName ? authController.user.displayName[0] : "A"}</Avatar>
+                            <Avatar>{initial}</Avatar>
                         }
                     </Box>
 

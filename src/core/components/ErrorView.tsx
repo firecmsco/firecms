@@ -16,7 +16,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             margin: theme.spacing(1)
         },
         text: {
-            paddingLeft: theme.spacing(1)
+            paddingLeft: theme.spacing(2)
         }
     })
 );
