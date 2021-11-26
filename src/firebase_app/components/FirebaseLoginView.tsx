@@ -339,7 +339,7 @@ function LoginForm({
                 </Grid>
 
                 <Grid item xs={12}>
-                    {buildOauthLoginButtons(authDelegate, availableProviders, mode)}
+                    {availableProviders && buildOauthLoginButtons(authDelegate, availableProviders, mode)}
                 </Grid>
             </Grid>
         );

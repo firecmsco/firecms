@@ -197,7 +197,7 @@ function SampleApp() {
             // 'anonymous',
             'google.com',
             // 'facebook.com',
-            'github.com',
+            // 'github.com',
             // 'twitter.com',
             // 'microsoft.com',
             // 'apple.com'
