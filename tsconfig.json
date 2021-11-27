@@ -6,7 +6,7 @@
         "lib": [
             "dom",
             "dom.iterable",
-            "esnext"
+            "es6"
         ],
         "moduleResolution": "node",
         "jsx": "react-jsx",
@@ -26,7 +26,8 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "noEmit": true
+        "noEmit": true,
+        "jsxImportSource": "@emotion/react"
     },
     "include": [
         "src",

@@ -1,3 +1,4 @@
+/* @jsxImportSource @emotion/react */
 import React from "react";
 import {
     AppBar,
@@ -10,6 +11,8 @@ import {
     IconButton,
     Link,
     Slide,
+    Slider,
+    styled,
     Theme,
     Toolbar,
     Typography
@@ -24,6 +27,7 @@ import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useAuthController, useModeState } from "../../hooks";
 import { useBreadcrumbsContext } from "../../hooks/useBreadcrumbsContext";
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

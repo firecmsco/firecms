@@ -7,7 +7,7 @@ import clsx from "clsx";
 
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
 import { CircularProgressCenter } from "../CircularProgressCenter";
-import { useTableStyles } from "./styles";
+import { baseTableCss, useTableStyles } from "./styles";
 import { TableHeader } from "./TableHeader";
 import {
     TableColumn,
@@ -16,7 +16,6 @@ import {
     TableWhereFilterOp
 } from "./TableProps";
 
-import "./table_styles.css";
 import { getRowHeight } from "./common";
 
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
@@ -232,66 +231,69 @@ export function Table<T>({
             <Measure
                 bounds
                 onResize={setTableSize}>
-                {({ measureRef }) => (
-                    <div ref={measureRef}
-                         className={classes.tableContainer}>
+                {({ measureRef }) => {
+                    return (
+                        <div ref={measureRef}
+                             className={classes.tableContainer}
+                             css={baseTableCss}>
 
-                        {tableSize?.bounds &&
-                        <BaseTable
-                            rowClassName={clsx(classes.tableRow, { [classes.tableRowClickable]: hoverRow })}
-                            data={data}
-                            onColumnResizeEnd={onBaseTableColumnResize}
-                            width={tableSize.bounds.width}
-                            height={tableSize.bounds.height}
-                            emptyRenderer={error ? buildErrorView() : buildEmptyView()}
-                            fixed
-                            ignoreFunctionInColumnCompare={false}
-                            rowHeight={getRowHeight(size)}
-                            ref={tableRef}
-                            overscanRowCount={2}
-                            onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
-                            onEndReached={onEndReached}
-                            rowEventHandlers={
-                                { onClick: clickRow as any }
-                            }
-                        >
-
-                            <Column
-                                headerRenderer={headerRenderer}
-                                cellRenderer={({
-                                                   rowData
-                                               }: any) =>
-                                    idColumnBuilder ? idColumnBuilder({
-                                        size,
-                                        entry: rowData
-                                    }) : null
+                            {tableSize?.bounds &&
+                            <BaseTable
+                                rowClassName={clsx(classes.tableRow, { [classes.tableRowClickable]: hoverRow })}
+                                data={data}
+                                onColumnResizeEnd={onBaseTableColumnResize}
+                                width={tableSize.bounds.width}
+                                height={tableSize.bounds.height}
+                                emptyRenderer={error ? buildErrorView() : buildEmptyView()}
+                                fixed
+                                ignoreFunctionInColumnCompare={false}
+                                rowHeight={getRowHeight(size)}
+                                ref={tableRef}
+                                overscanRowCount={2}
+                                onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
+                                onEndReached={onEndReached}
+                                rowEventHandlers={
+                                    { onClick: clickRow as any }
                                 }
-                                align={"center"}
-                                key={"header-id"}
-                                dataKey={"id"}
-                                flexShrink={0}
-                                frozen={frozenIdColumn ? "left" : undefined}
-                                width={160}/>
+                            >
 
-                            {columns.map((column) =>
                                 <Column
-                                    key={column.key}
-                                    title={column.label}
-                                    className={classes.column}
                                     headerRenderer={headerRenderer}
-                                    cellRenderer={column.cellRenderer}
-                                    height={getRowHeight(size)}
-                                    align={column.align}
-                                    flexGrow={1}
+                                    cellRenderer={({
+                                                       rowData
+                                                   }: any) =>
+                                        idColumnBuilder ? idColumnBuilder({
+                                            size,
+                                            entry: rowData
+                                        }) : null
+                                    }
+                                    align={"center"}
+                                    key={"header-id"}
+                                    dataKey={"id"}
                                     flexShrink={0}
-                                    resizable={true}
-                                    size={size}
-                                    dataKey={column.key}
-                                    width={column.width}/>)
-                            }
-                        </BaseTable>}
-                    </div>
-                )}
+                                    frozen={frozenIdColumn ? "left" : undefined}
+                                    width={160}/>
+
+                                {columns.map((column) =>
+                                    <Column
+                                        key={column.key}
+                                        title={column.label}
+                                        className={classes.column}
+                                        headerRenderer={headerRenderer}
+                                        cellRenderer={column.cellRenderer}
+                                        height={getRowHeight(size)}
+                                        align={column.align}
+                                        flexGrow={1}
+                                        flexShrink={0}
+                                        resizable={true}
+                                        size={size}
+                                        dataKey={column.key}
+                                        width={column.width}/>)
+                                }
+                            </BaseTable>}
+                        </div>
+                    );
+                }}
             </Measure>
 
         </>

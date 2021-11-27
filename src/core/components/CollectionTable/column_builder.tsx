@@ -429,7 +429,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
         })
         : undefined;
 
-    const popupFormField = <>
+    const popupFormField = (
         <PopupFormField
             cellRect={popupCell?.cellRect}
             columnIndex={popupCell?.columnIndex}
@@ -446,7 +446,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
             setPreventOutsideClick={setPreventOutsideClick}
             setFormPopupOpen={updatePopup}
         />
-    </>;
+    );
 
     return {columns, popupFormField};
 

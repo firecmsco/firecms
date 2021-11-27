@@ -35,7 +35,7 @@
     },
     "dependencies": {
         "@date-io/date-fns": "^2.11.0",
-        "@uiw/react-md-editor": "^3.4.10",
+        "@uiw/react-md-editor": "^3.8.2",
         "date-fns": "^2.21.3",
         "deep-equal": "^2.0.5",
         "formik": "^2.2.9",

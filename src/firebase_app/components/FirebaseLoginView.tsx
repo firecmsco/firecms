@@ -4,8 +4,10 @@ import {
     Box,
     Button,
     CircularProgress,
+    Fade,
     Grid,
     IconButton,
+    Slide,
     TextField,
     Theme,
     Typography
@@ -139,66 +141,74 @@ export function FirebaseLoginView({
 
 
     return (
-        <Box sx={{
-            display: 'flex',
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "100vh",
-            p: 2
-        }}>
+        <Fade
+            in={true}
+            timeout={500}
+            mountOnEnter
+            unmountOnExit>
             <Box sx={{
                 display: 'flex',
                 flexDirection: "column",
+                justifyContent: "center",
                 alignItems: "center",
-                width: "100%",
-                maxWidth: 340
+                minHeight: "100vh",
+                p: 2
             }}>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: "column",
+                    alignItems: "center",
+                    width: "100%",
+                    maxWidth: 340
+                }}>
 
-                <Box m={1}>
-                    {logoComponent}
-                </Box>
-
-                {notAllowedMessage &&
-                <Box p={2}>
-                    <ErrorView
-                        error={notAllowedMessage}/>
-                </Box>}
-
-                {buildErrorView()}
-
-                {!passwordLoginSelected && <>
-
-                    {buildOauthLoginButtons(authDelegate, resolvedSignInOptions, modeState.mode)}
-
-                    {resolvedSignInOptions.includes("password") && <LoginButton
-                        text={"Email/password"}
-                        icon={<EmailIcon fontSize={"large"}/>}
-                        onClick={() => setPasswordLoginSelected(true)}/>}
-
-
-                    {resolvedSignInOptions.includes("anonymous") && <LoginButton
-                        text={"Log in anonymously"}
-                        icon={<PersonOutlineIcon fontSize={"large"}/>}
-                        onClick={authDelegate.anonymousLogin}/>}
-
-                    {skipLoginButtonEnabled &&
                     <Box m={1}>
-                        <Button onClick={authDelegate.skipLogin}>
-                            Skip login
-                        </Button>
+                        {logoComponent}
                     </Box>
-                    }
 
-                </>}
+                    {notAllowedMessage &&
+                    <Box p={2}>
+                        <ErrorView
+                            error={notAllowedMessage}/>
+                    </Box>}
 
-                {passwordLoginSelected && <LoginForm
-                    authDelegate={authDelegate}
-                    onClose={() => setPasswordLoginSelected(false)}
-                    mode={modeState.mode}/>}
+                    {buildErrorView()}
 
+                    {!passwordLoginSelected && <>
+
+                        {buildOauthLoginButtons(authDelegate, resolvedSignInOptions, modeState.mode)}
+
+                        {resolvedSignInOptions.includes("password") &&
+                        <LoginButton
+                            text={"Email/password"}
+                            icon={<EmailIcon fontSize={"large"}/>}
+                            onClick={() => setPasswordLoginSelected(true)}/>}
+
+
+                        {resolvedSignInOptions.includes("anonymous") &&
+                        <LoginButton
+                            text={"Log in anonymously"}
+                            icon={<PersonOutlineIcon fontSize={"large"}/>}
+                            onClick={authDelegate.anonymousLogin}/>}
+
+                        {skipLoginButtonEnabled &&
+                        <Box m={1}>
+                            <Button onClick={authDelegate.skipLogin}>
+                                Skip login
+                            </Button>
+                        </Box>
+                        }
+
+                    </>}
+
+                    {passwordLoginSelected && <LoginForm
+                        authDelegate={authDelegate}
+                        onClose={() => setPasswordLoginSelected(false)}
+                        mode={modeState.mode}/>}
+
+                </Box>
             </Box>
-        </Box>
+        </Fade>
     );
 }
 
@@ -346,59 +356,65 @@ function LoginForm({
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Grid container spacing={1}>
-                <Grid item xs={12}>
-                    <IconButton
-                        onClick={onBackPressed}>
-                        <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
-                    </IconButton>
+        <Slide
+            direction="up"
+            in={true}
+            mountOnEnter
+            unmountOnExit>
+            <form onSubmit={handleSubmit}>
+                <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                        <IconButton
+                            onClick={onBackPressed}>
+                            <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
+                        </IconButton>
+                    </Grid>
+
+                    <Grid item xs={12} sx={{ p: 1 }}>
+                        <Typography align={"center"}
+                                    variant={"subtitle2"}>{label}</Typography>
+                    </Grid>
+
+                    <Grid item xs={12}
+                          sx={{ display: shouldShowEmail ? "inherit" : "none" }}>
+                        <TextField placeholder="Email" fullWidth autoFocus
+                                   value={email}
+                                   disabled={authDelegate.authLoading}
+                                   type="email"
+                                   onChange={(event) => setEmail(event.target.value)}/>
+                    </Grid>
+
+                    <Grid item xs={12}
+                          sx={{ display: loginMode || registrationMode ? "inherit" : "none" }}>
+                        <TextField placeholder="Password" fullWidth
+                                   value={password}
+                                   disabled={authDelegate.authLoading}
+                                   inputRef={passwordRef}
+                                   type="password"
+                                   onChange={(event) => setPassword(event.target.value)}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Box sx={{
+                            display: "flex",
+                            justifyContent: "end",
+                            alignItems: "center",
+                            width: "100%"
+                        }}>
+
+                            {authDelegate.authLoading &&
+                            <CircularProgress sx={{ p: 1 }} size={16}
+                                              thickness={8}/>
+                            }
+
+                            <Button type="submit">
+                                {button}
+                            </Button>
+                        </Box>
+                    </Grid>
                 </Grid>
-
-                <Grid item xs={12} sx={{ p: 1 }}>
-                    <Typography align={"center"}
-                                variant={"subtitle2"}>{label}</Typography>
-                </Grid>
-
-                <Grid item xs={12}
-                      sx={{ display: shouldShowEmail ? "inherit" : "none" }}>
-                    <TextField placeholder="Email" fullWidth autoFocus
-                               value={email}
-                               disabled={authDelegate.authLoading}
-                               type="email"
-                               onChange={(event) => setEmail(event.target.value)}/>
-                </Grid>
-
-                <Grid item xs={12}
-                      sx={{ display: loginMode || registrationMode ? "inherit" : "none" }}>
-                    <TextField placeholder="Password" fullWidth
-                               value={password}
-                               disabled={authDelegate.authLoading}
-                               inputRef={passwordRef}
-                               type="password"
-                               onChange={(event) => setPassword(event.target.value)}/>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <Box sx={{
-                        display: "flex",
-                        justifyContent: "end",
-                        alignItems: "center",
-                        width: "100%"
-                    }}>
-
-                        {authDelegate.authLoading &&
-                        <CircularProgress sx={{ p: 1 }} size={16}
-                                          thickness={8}/>
-                        }
-
-                        <Button type="submit">
-                            {button}
-                        </Button>
-                    </Box>
-                </Grid>
-            </Grid>
-        </form>
+            </form>
+        </Slide>
     );
 
 }

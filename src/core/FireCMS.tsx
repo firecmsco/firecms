@@ -27,7 +27,6 @@ import { ModeProvider, ModeStateContext } from "./contexts/ModeState";
 import { useBuildSideEntityController } from "./internal/useBuildSideEntityController";
 import { useBuildNavigationContext } from "./internal/useBuildNavigationContext";
 
-import "@camberi/firecms/dist/index.css";
 import { useBuildSchemaRegistryController } from "./contexts/useBuildSchemaRegistryController";
 import { useBuildAuthController } from "./internal/useBuildAuthController";
 

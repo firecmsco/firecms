@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, styled } from "@mui/material";
 
 import {
     buildSchema,
