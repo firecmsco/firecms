@@ -90,8 +90,10 @@ export function UnsavedChangesDialog({
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    You have unsaved changes in this {schemaName}. Are you sure
-                    you want to leave this page?
+                    You have unsaved changes in this <b>{schemaName}</b>.
+                </DialogContentText>
+                <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to leave this page?
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

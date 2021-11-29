@@ -6,7 +6,7 @@
         "lib": [
             "dom",
             "dom.iterable",
-            "es6"
+            "esnext"
         ],
         "moduleResolution": "node",
         "jsx": "react-jsx",

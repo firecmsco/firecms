@@ -77,7 +77,8 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
     } else if (property.dataType === "reference") {
         return getYupReferenceSchema(propertyContext);
     }
-    throw Error("Unsupported data type in yup mapping: " + property);
+    console.error("Unsupported data type in yup mapping", property)
+    throw Error("Unsupported data type in yup mapping");
 }
 
 export function getYupEntitySchema<T extends CMSType, M extends { [Key: string]: any }>

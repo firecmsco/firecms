@@ -9,7 +9,7 @@ export function TableInput(props: {
     multiline: boolean;
     focused: boolean;
     disabled: boolean;
-    updateValue: (newValue: (string | undefined)) => void;
+    updateValue: (newValue: (string | null)) => void;
 }) {
     const { disabled, value, multiline, updateValue, focused } = props;
     const [internalValue, setInternalValue] = useState<typeof value>(value);
@@ -26,6 +26,7 @@ export function TableInput(props: {
             const handler = setTimeout(doUpdate, 300);
 
             return () => {
+                console.log("handler", handler);
                 clearTimeout(handler);
             };
 

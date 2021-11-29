@@ -330,27 +330,28 @@ export interface CellStyleProps {
     align: "right" | "left" | "center";
 }
 
-export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: boolean }>(theme => createStyles({
-        tableCell: {
-            position: "relative",
-            height: "100%",
-            width: "100%",
-            border: "2px solid transparent",
-            borderRadius: 4,
-            overflow: "hidden",
-            contain: "strict",
-            display: "flex",
-            padding: ({ size }) => {
-                switch (size) {
-                    case "l":
-                    case "xl":
-                        return theme.spacing(2);
-                    case "m":
-                        return theme.spacing(1);
-                    case "s":
-                        return theme.spacing(0.5);
-                    default:
-                        return theme.spacing(0.25);
+export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: boolean, removePadding?: boolean }>(theme => createStyles({
+    tableCell: {
+        position: "relative",
+        height: "100%",
+        width: "100%",
+        border: "2px solid transparent",
+        borderRadius: 4,
+        overflow: "hidden",
+        contain: "strict",
+        display: "flex",
+        padding: ({ size, removePadding }) => {
+            if (removePadding) return 0;
+            switch (size) {
+                case "l":
+                case "xl":
+                    return theme.spacing(2);
+                case "m":
+                    return theme.spacing(1);
+                case "s":
+                    return theme.spacing(0.5);
+                default:
+                    return theme.spacing(0.25);
                 }
             },
             "&:hover": {
@@ -370,6 +371,9 @@ export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: bool
         },
         fullWidth: {
             width: "100%"
+        },
+        fullHeight: {
+            height: "100%"
         },
         error: {
             border: `2px solid ${theme.palette.error.light} !important`

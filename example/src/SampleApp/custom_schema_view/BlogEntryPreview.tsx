@@ -12,6 +12,7 @@ import {
     EntityCustomViewParams,
     EntityReference,
     EntityValues,
+    ErrorView,
     Markdown,
     useDataSource,
     useStorageSource
@@ -72,7 +73,8 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams) {
                                 return <Products
                                     key={`preview_products_${index}`}
                                     references={entry.value}/>;
-                            else throw Error(`Unsupported component ${entry.type}`);
+                            return <ErrorView
+                                error={"Unexpected value in blog entry"}/>
                         }
                     )}
 

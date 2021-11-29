@@ -436,8 +436,6 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     }}/>
             </Tabs>
 
-            <Divider/>
-
             <Box flexGrow={1}/>
 
             {dataLoading &&
@@ -491,6 +489,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 <>
 
                     {header}
+
+                    <Divider/>
 
                     <div className={classes.tabsContainer}>
 

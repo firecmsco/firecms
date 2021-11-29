@@ -1,4 +1,4 @@
-import {getCellAlignment, getPropertyColumnWidth} from "./internal/common";
+import { getCellAlignment, getPropertyColumnWidth } from "./internal/common";
 import {
     AdditionalColumnDelegate,
     CMSType,
@@ -10,21 +10,24 @@ import {
     Property,
     PropertyOrBuilder
 } from "../../../models";
-import {buildPropertyFrom} from "../../util/property_builder";
-import React, {useCallback, useEffect, useMemo} from "react";
-import {TableCell} from "../Table/TableCell";
-import {PreviewComponent, SkeletonComponent} from "../../../preview";
-import {getPreviewSizeFrom} from "../../../preview/util";
-import {CustomFieldValidator, mapPropertyToYup} from "../../../form/validation";
+import { buildPropertyFrom } from "../../util/property_builder";
+import React, { useCallback, useEffect, useMemo } from "react";
+import { TableCell } from "../Table/TableCell";
+import { PreviewComponent, SkeletonComponent } from "../../../preview";
+import { getPreviewSizeFrom } from "../../../preview/util";
+import {
+    CustomFieldValidator,
+    mapPropertyToYup
+} from "../../../form/validation";
 import {
     OnCellChangeParams,
     PropertyTableCell
 } from "./internal/PropertyTableCell";
-import {ErrorBoundary} from "../../internal/ErrorBoundary";
-import {useFireCMSContext} from "../../../hooks";
-import {PopupFormField} from "./internal/popup_field/PopupFormField";
-import {TableColumn, TableColumnFilter, TableEnumValues} from "../../index";
-import {getIconForProperty} from "../../util/property_icons";
+import { ErrorBoundary } from "../../internal/ErrorBoundary";
+import { useFireCMSContext } from "../../../hooks";
+import { PopupFormField } from "./internal/popup_field/PopupFormField";
+import { TableColumn, TableColumnFilter, TableEnumValues } from "../../index";
+import { getIconForProperty } from "../../util/property_icons";
 import {
     buildEnumLabel,
     enumToObjectEntries,
@@ -240,8 +243,8 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
             const entity: Entity<M> = rowData;
 
-            const key = column.dataKey as keyof M;
-            const propertyOrBuilder: PropertyOrBuilder<any, M> = schema.properties[key];
+            const name = column.dataKey as keyof M;
+            const propertyOrBuilder: PropertyOrBuilder<any, M> = schema.properties[name];
             const property: Property<any> = buildPropertyFrom<CMSType, M>(propertyOrBuilder, entity.values, entity.id);
             const usedPropertyBuilder = typeof propertyOrBuilder === "function";
 
@@ -250,16 +253,16 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
             if (!inlineEditingEnabled) {
                 return (
                     <TableCell
-                        key={`preview_cell_${key}_${rowIndex}_${columnIndex}`}
+                        key={`preview_cell_${name}_${rowIndex}_${columnIndex}`}
                         size={size}
                         align={column.align}
                         disabled={true}>
                         <PreviewComponent
                             width={column.width}
                             height={column.height}
-                            name={`preview_${key}_${rowIndex}_${columnIndex}`}
+                            name={`preview_${name}_${rowIndex}_${columnIndex}`}
                             property={property}
-                            value={entity.values[key]}
+                            value={entity.values[name]}
                             size={getPreviewSizeFrom(size)}
                         />
                     </TableCell>
@@ -276,7 +279,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                             height: column.height,
                             entity,
                             cellRect,
-                            key,
+                            key: name,
                             property,
                             usedPropertyBuilder
                         });
@@ -295,7 +298,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                             height: column.height,
                             entity,
                             cellRect,
-                            key,
+                            key: name,
                             property,
                             usedPropertyBuilder
                         });
@@ -312,10 +315,11 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                         name, value, property, entityId: entity.id
                     }) : undefined;
 
+                console.debug("mapPropertyToYup", name, property);
                 const validation = mapPropertyToYup({
                     property,
                     customFieldValidator,
-                    name: key
+                    name: name
                 });
 
                 const onValueChange = onCellValueChange
@@ -327,22 +331,24 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
                 return entity ?
                     <PropertyTableCell
-                        key={`table_cell_${key}_${rowIndex}_${columnIndex}`}
+                        key={`table_cell_${name}_${rowIndex}_${columnIndex}`}
                         size={size}
                         align={column.align}
-                        name={key as string}
+                        name={name as string}
                         validation={validation}
                         onValueChange={onValueChange}
                         selected={selected}
                         focused={isFocused}
                         setPreventOutsideClick={setPreventOutsideClick}
                         setFocused={setFocused}
-                        value={entity?.values ? entity.values[key] : undefined}
+                        value={entity?.values ? entity.values[name] : undefined}
                         property={property}
                         openPopup={openPopup}
                         select={onSelect}
                         width={column.width}
-                        height={column.height}/>
+                        height={column.height}
+                        entityId={entity.id}
+                        entityValues={entity.values}/>
                     :
                     <SkeletonComponent property={property}
                                        size={getPreviewSizeFrom(size)}/>;
@@ -417,7 +423,15 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                 return allColumns.find(c => c.key === p);
             }).filter(c => !!c) as TableColumn<M>[];
 
-    }, [displayedProperties, selectedCell, size]);
+    }, [
+        displayedProperties,
+        selectedCell,
+        size,
+        schema,
+        additionalColumns,
+        path,
+        inlineEditing,
+    ]);
 
 
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator

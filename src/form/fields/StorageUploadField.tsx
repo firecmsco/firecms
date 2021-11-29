@@ -6,8 +6,8 @@ import {
     FormControl,
     FormHelperText,
     IconButton,
-    LinearProgress,
     Paper,
+    Skeleton,
     Theme,
     Typography
 } from "@mui/material";
@@ -73,11 +73,11 @@ export const useStyles = makeStyles((theme: Theme) => ({
         transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
         background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.09) 10px, rgba(0, 0, 0, 0.12) 10px, rgba(0, 0, 0, 0.12) 20px) !important",
         border: "2px solid",
-        borderColor: theme.palette.success.main
+        borderColor: theme.palette.success.light
     },
     rejectDrop: {
         border: "2px solid",
-        borderColor: theme.palette.error.main
+        borderColor: theme.palette.error.light
     },
     uploadItem: {
         padding: theme.spacing(1),
@@ -692,8 +692,10 @@ export function StorageUploadProgress({
                    className={size === "regular" ? classes.uploadItem : classes.uploadItemSmall}
                    variant={"outlined"}>
 
-                {loading &&
-                <LinearProgress variant="indeterminate"/>}
+                {loading && <Skeleton variant="rectangular" sx={{
+                    width: "100%",
+                    height: "100%"
+                }}/>}
 
                 {error && <p>Error uploading file: {error}</p>}
 

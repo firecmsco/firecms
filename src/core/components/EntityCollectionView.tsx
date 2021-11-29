@@ -151,7 +151,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             callbacks: collection.callbacks,
             overrideSchemaResolver: false
         });
-    }, [collection]);
+    }, [path, collection]);
 
     const onNewClick = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
@@ -163,7 +163,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             callbacks: collection.callbacks,
             overrideSchemaResolver: false
         });
-    }, [collection]);
+    }, [path, collection]);
 
     const internalOnEntityDelete = useCallback( (path: string, entity: Entity<M>) => {
         setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));

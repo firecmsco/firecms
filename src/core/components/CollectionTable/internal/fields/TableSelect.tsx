@@ -18,7 +18,7 @@ export function TableSelect(props: {
     small: boolean;
     internalValue: string | number | string[] | number[] | undefined;
     valueType: "string" | "number";
-    updateValue: (newValue: (string | number | string[] | number[] | undefined)) => void;
+    updateValue: (newValue: (string | number | string[] | number[] | null)) => void;
     focused: boolean;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     setPreventOutsideClick: (value: any) => void;
@@ -93,7 +93,10 @@ export function TableSelect(props: {
                         updateValue(parseFloat(evt.target.value as string));
                     }
                 } else if (valueType === "string") {
-                    updateValue(evt.target.value as typeof internalValue);
+                    if (!evt.target.value)
+                        updateValue(null)
+                    else
+                        updateValue(evt.target.value);
                 } else {
                     throw Error("Missing mapping in TableSelect");
                 }

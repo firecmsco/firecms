@@ -18,6 +18,8 @@ interface TableCellProps<T, M> {
     focused?: boolean;
     selected?: boolean;
     showExpandIcon?: boolean;
+    removePadding?: boolean;
+    fullHeight?: boolean;
     select?: (cellRect: DOMRect | undefined) => void;
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
@@ -34,6 +36,8 @@ const TableCellInternal = <T, M>({
                                      align,
                                      allowScroll,
                                      openPopup,
+                                     removePadding,
+                                     fullHeight,
                                      select,
                                      showExpandIcon = true
                                  }: TableCellProps<T, M> & CellStyleProps) => {
@@ -71,38 +75,33 @@ const TableCellInternal = <T, M>({
         };
     }, [saved]);
 
+    const doOpenPopup = useCallback(() => {
+        if (openPopup) {
+            const cellRect = ref && ref?.current?.getBoundingClientRect();
+            openPopup(cellRect);
+        }
+    }, [openPopup, ref?.current]);
+
     const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (event.detail == 3) {
             doOpenPopup();
         }
     };
 
-    function doOpenPopup() {
-        if (openPopup) {
-            const cellRect = ref && ref?.current?.getBoundingClientRect();
-            openPopup(cellRect);
-        }
-    }
-
-    const onIconClick = (event: any) => {
-        doOpenPopup();
-    };
-
-    const onFocus = (event: React.SyntheticEvent<HTMLDivElement>) => {
+    const onFocus = useCallback((event: React.SyntheticEvent<HTMLDivElement>) => {
         onSelect();
         event.stopPropagation();
-    };
+    }, [ref, select, selected, disabled]);
 
-    const onSelect = () => {
+    const onSelect = useCallback(() => {
         if (!select) return;
         const cellRect = ref && ref?.current?.getBoundingClientRect();
-
         if (disabled) {
             select(undefined);
         } else if (!selected && cellRect) {
             select(cellRect);
         }
-    };
+    }, [ref, select, selected, disabled]);
 
     const onMeasure = useCallback((contentRect: ContentRect) => {
         if (contentRect?.bounds) {
@@ -112,11 +111,11 @@ const TableCellInternal = <T, M>({
         }
     }, [maxHeight]);
 
-
     const cellClasses = useCellStyles({
         size,
         align,
-        disabled: disabled
+        disabled,
+        removePadding
     });
 
     const measuredDiv = <Measure
@@ -125,11 +124,12 @@ const TableCellInternal = <T, M>({
     >
         {({ measureRef }) => (
             <div ref={measureRef}
-                 className={clsx(cellClasses.fullWidth)}>
+                 className={clsx(cellClasses.fullWidth, { [cellClasses.fullHeight]: fullHeight })}>
                 {children}
             </div>
         )}
     </Measure>;
+
     return (
         <div
             tabIndex={selected || disabled ? undefined : 0}
@@ -146,12 +146,14 @@ const TableCellInternal = <T, M>({
                     [cellClasses.centered]: disabled || !isOverflowing,
                     [cellClasses.error]: error,
                     [cellClasses.saved]: selected && internalSaved,
-                    [cellClasses.selected]: !error && selected || focused
+                    [cellClasses.selected]: !error && selected || focused,
+                    [cellClasses.fullHeight]: fullHeight
                 })}>
 
             <div className={clsx(cellClasses.fullWidth, {
                 [cellClasses.faded]: !disabled && !allowScroll && isOverflowing,
-                [cellClasses.scrollable]: !disabled && allowScroll && isOverflowing
+                [cellClasses.scrollable]: !disabled && allowScroll && isOverflowing,
+                [cellClasses.fullHeight]: fullHeight
             })}>
                 {measuredDiv}
             </div>
@@ -177,7 +179,7 @@ const TableCellInternal = <T, M>({
                     ref={iconRef}
                     color={"inherit"}
                     size={"small"}
-                    onClick={onIconClick}>
+                    onClick={doOpenPopup}>
                     <svg
                         className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
                         fill={"#666"}

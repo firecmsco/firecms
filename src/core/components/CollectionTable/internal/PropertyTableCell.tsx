@@ -2,6 +2,7 @@ import {
     ArrayProperty,
     CMSType,
     EntityReference,
+    EntityValues,
     NumberProperty,
     Property,
     ReferenceProperty,
@@ -25,6 +26,7 @@ import deepEqual from "deep-equal";
 import { isReadOnly } from "../../../utils";
 import { TableCell } from "../../Table/TableCell";
 import { AnySchema } from "yup";
+import { TableStorageUpload } from "./fields/TableStorageUpload";
 
 
 export interface PropertyTableCellProps<T extends CMSType, M extends { [Key: string]: any }> {
@@ -39,6 +41,8 @@ export interface PropertyTableCellProps<T extends CMSType, M extends { [Key: str
     property: Property<T>;
     height: number;
     width: number;
+    entityId: string;
+    entityValues: EntityValues<any>;
     validation: AnySchema;
     onValueChange?: (params: OnCellChangeParams<T>) => void
 }
@@ -68,7 +72,9 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
                                                                                             size,
                                                                                             align,
                                                                                             width,
-                                                                                            height
+                                                                                            height,
+                                                                                            entityId,
+                                                                                            entityValues
                                                                                         }: PropertyTableCellProps<T, M> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
@@ -144,9 +150,30 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
     let innerComponent: JSX.Element | undefined;
     let allowScroll = false;
     let showExpandIcon = false;
+    let removePadding = false;
+    let fullHeight = false;
 
     if (!readOnly && !customField && (!customPreview || selected)) {
-        if (selected && property.dataType === "number") {
+        const isAStorageProperty = (property.dataType === "string" && property.config?.storageMeta) ||
+            (property.dataType === "array" && property.of?.dataType === "string" && property.of?.config?.storageMeta);
+        if (isAStorageProperty) {
+            innerComponent = <TableStorageUpload error={error}
+                                                 disabled={disabled}
+                                                 focused={focused}
+                                                 property={property as StringProperty | ArrayProperty<string[]>}
+                                                 entityId={entityId}
+                                                 entityValues={entityValues}
+                                                 internalValue={internalValue}
+                                                 previewSize={getPreviewSizeFrom(size)}
+                                                 updateValue={updateValue}
+                                                 name={name as string}
+                                                 onBlur={onBlur}
+                                                 setPreventOutsideClick={setPreventOutsideClick}
+            />;
+            showExpandIcon = true;
+            fullHeight = true;
+            removePadding = true;
+        } else if (selected && property.dataType === "number") {
             const numberProperty = property as NumberProperty;
             if (numberProperty.config?.enumValues) {
                 innerComponent = <TableSelect name={name as string}
@@ -292,6 +319,8 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
             focused={focused}
             disabled={disabled || readOnly}
             disabledTooltip={disabledTooltip ?? "Disabled"}
+            removePadding={removePadding}
+            fullHeight={fullHeight}
             size={size}
             saved={saved}
             error={error}

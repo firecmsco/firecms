@@ -107,7 +107,6 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                                      onCellValueChange
                                                                  }: PopupFormFieldProps<M>) {
 
-    console.log("PopupFormField", property);
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     // const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();

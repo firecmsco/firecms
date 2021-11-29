@@ -6,7 +6,7 @@ export function TableSwitch(props: {
     internalValue?: boolean;
     focused: boolean;
     disabled: boolean;
-    updateValue: (newValue: (boolean | undefined)) => void;
+    updateValue: (newValue: (boolean | null)) => void;
 }) {
     const { disabled, internalValue, updateValue, focused } = props;
 
