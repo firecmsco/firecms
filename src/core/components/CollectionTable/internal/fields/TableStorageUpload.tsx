@@ -189,8 +189,7 @@ interface StorageFieldItem {
     storagePathOrDownloadUrl?: string;
     file?: File;
     fileName?: string;
-    metadata?: any,
-    size: PreviewSize
+    metadata?: any
 }
 
 interface StorageUploadProps {
@@ -207,17 +206,17 @@ interface StorageUploadProps {
     storagePathBuilder: (file: File) => string;
 }
 
-export function StorageUpload({
-                                  property,
-                                  name,
-                                  value,
-                                  onChange,
-                                  multipleFilesSupported,
-                                  previewSize: previewSizeInput,
-                                  disabled,
-                                  autoFocus,
-                                  storageMeta,
-                                  fileNameBuilder,
+function StorageUpload({
+                           property,
+                           name,
+                           value,
+                           onChange,
+                           multipleFilesSupported,
+                           previewSize: previewSizeInput,
+                           disabled,
+                           autoFocus,
+                           storageMeta,
+                           fileNameBuilder,
                                   storagePathBuilder
                               }: StorageUploadProps) {
 
@@ -287,16 +286,14 @@ export function StorageUpload({
                     id: getRandomId(),
                     file,
                     fileName: fileNameBuilder(file),
-                    metadata,
-                    size: previewSize
+                    metadata
                 } as StorageFieldItem)))];
         } else {
             newInternalValue = [{
                 id: getRandomId(),
                 file: acceptedFiles[0],
                 fileName: fileNameBuilder(acceptedFiles[0]),
-                metadata,
-                size: previewSize
+                metadata
             }];
         }
 
@@ -394,16 +391,17 @@ export function StorageUpload({
                 if (entry.storagePathOrDownloadUrl) {
                     child = (
                         <StorageItemPreview
-                            name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
+                            key={`storage_preview_${index}`}
                             property={renderProperty}
                             disabled={disabled}
                             value={entry.storagePathOrDownloadUrl}
                             onClear={onClear}
-                            size={entry.size}/>
+                            size={previewSize}/>
                     );
                 } else if (entry.file) {
                     child = (
                         <StorageUploadProgress
+                            key={`storage_progress_${index}`}
                             entry={entry}
                             metadata={metadata}
                             storagePath={storagePathBuilder(entry.file)}
@@ -523,7 +521,6 @@ export function StorageUploadProgress({
 
     const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
 
-
     return (
 
         <Box m={1} sx={{
@@ -545,7 +542,6 @@ export function StorageUploadProgress({
 }
 
 interface StorageItemPreviewProps {
-    name: string;
     property: StringProperty;
     value: string,
     onClear: (value: string) => void;
@@ -554,11 +550,8 @@ interface StorageItemPreviewProps {
 }
 
 export function StorageItemPreview({
-                                       name,
                                        property,
                                        value,
-                                       onClear,
-                                       disabled,
                                        size
                                    }: StorageItemPreviewProps) {
 
@@ -570,8 +563,7 @@ export function StorageItemPreview({
 
             {value &&
             <ErrorBoundary>
-                <PreviewComponent name={name}
-                                  value={value}
+                <PreviewComponent value={value}
                                   property={property}
                                   size={size}/>
             </ErrorBoundary>

@@ -1,3 +1,20 @@
+## [1.0.0-beta6] - 2021-11-
+
+### Added
+- New custom login screen that replaces FirebaseUi. 
+- Replaced `react-csv` with custom CSV implementation
+- The previous changes were blocking SSR and build tools such as Vite, but more
+testing is needed.
+- New type added `EntitySchemaResolver`, used mostly internally for resolving
+entity schemas (that means computing the property builders and transforming them
+to a `ResolvedEntitySchema`)
+
+### Changed
+
+- Fix for collections not refreshing correctly
+- [BREAKING] `schemaResolver` at the `FireCMS` level has been renamed to 
+ `schemaOverrideHandler`.
+ 
 ## [1.0.0-beta5] - 2021-11-22
 
 ### Added

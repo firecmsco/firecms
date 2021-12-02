@@ -1,17 +1,4 @@
-import { AnyProperty, EntityCollection, EntitySchema } from "../../models";
-
-
-export type PartialProperties<M> = Record<any, Partial<AnyProperty>>;
-
-export type PartialEntityCollection<M> =
-    Omit<Partial<EntityCollection<M>>, "schema">
-    & {
-    schema:
-        Omit<Partial<EntitySchema<M>>, "properties"> &
-        {
-            properties: PartialProperties<M>
-        }
-}
+import { PartialEntityCollection } from "../../models";
 
 /**
  * Remove the entity ids from a given path

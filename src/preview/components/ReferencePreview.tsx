@@ -26,6 +26,7 @@ import {
     useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
+import { useBuildSchemaResolver } from "../../hooks/useBuildSchemaResolver";
 
 export type ReferencePreviewProps =
     PreviewComponentProps<EntityReference>
@@ -195,8 +196,8 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                                 sideEntityController.open({
                                     entityId: entity.id,
                                     path: entity.path,
-                                    schema,
-                                    overrideSchemaResolver: false
+                                    schema: schema,
+                                    overrideSchemaRegistry: false
                                 });
                             }}>
                             <KeyboardTabIcon fontSize={"small"}/>

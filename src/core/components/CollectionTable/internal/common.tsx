@@ -1,6 +1,10 @@
 import React, { useMemo } from "react";
-import { ArrayProperty, EntityCollection, Property } from "../../../../models";
-import { buildPropertyFrom } from "../../../util/property_builder";
+import {
+    ArrayProperty,
+    EntityCollection,
+    Property,
+    ResolvedEntitySchema
+} from "../../../../models";
 
 
 export type Sort = "asc" | "desc" | undefined;
@@ -95,24 +99,25 @@ export function getSubcollectionColumnId(collection: EntityCollection) {
     return `subcollection_${collection.path}`;
 }
 
-export function useColumnIds(view: EntityCollection, includeSubcollections: boolean): string[] {
-    const initialDisplayedProperties = view.properties;
-    const excludedProperties = view.excludedProperties;
-    const additionalColumns = view.additionalColumns ?? [];
-    const subCollections: EntityCollection[] = view.subcollections ?? [];
+export function useColumnIds<M>(entityCollection: EntityCollection<M>, resolvedSchema:ResolvedEntitySchema<M>, includeSubcollections: boolean): string[] {
+    const initialDisplayedProperties = entityCollection.properties;
+    const excludedProperties = entityCollection.excludedProperties;
+    const additionalColumns = entityCollection.additionalColumns ?? [];
+    const subCollections: EntityCollection[] = entityCollection.subcollections ?? [];
 
     return useMemo(() => {
 
-        const hiddenColumnIds: string[] = Object.entries(view.schema.properties)
-            .filter(([_, propertyOrBuilder]) => {
-                const property = buildPropertyFrom(propertyOrBuilder, view.schema.defaultValues ?? {}, view.path);
+        const properties = resolvedSchema.properties;
+
+        const hiddenColumnIds: string[] = Object.entries(properties)
+            .filter(([_, property]) => {
                 return property.disabled && typeof property.disabled === "object" && property.disabled.hidden;
             })
             .map(([propertyKey, _]) => propertyKey);
 
         const subcollectionIds = subCollections.map((collection) => getSubcollectionColumnId(collection));
         const columnIds: string[] = [
-            ...Object.keys(view.schema.properties) as string[],
+            ...Object.keys(entityCollection.schema.properties) as string[],
             ...additionalColumns.map((column) => column.id)
         ];
         let result: string[];

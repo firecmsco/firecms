@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import {
     Alert,
     Button,
@@ -13,12 +13,18 @@ import {
 } from "@mui/material";
 
 import GetAppIcon from "@mui/icons-material/GetApp";
-import {Entity, EntitySchema, ExportConfig} from "../../../../models";
-import {useDataSource, useFireCMSContext} from "../../../../hooks";
-import {downloadCSV} from "../../../util/csv";
+import {
+    Entity,
+    EntitySchema,
+    EntitySchemaResolver,
+    ExportConfig
+} from "../../../../models";
+import { useDataSource, useFireCMSContext } from "../../../../hooks";
+import { downloadCSV } from "../../../util/csv";
 
 interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
     schema: EntitySchema<M>;
+    schemaResolver: EntitySchemaResolver<M>;
     path: string;
     exportConfig?: ExportConfig<UserType>;
 }
@@ -27,6 +33,7 @@ const INITIAL_DOCUMENTS_LIMIT = 200;
 
 export function ExportButton<M extends { [Key: string]: any }, UserType>({
                                                                              schema,
+                                                                             schemaResolver,
                                                                              path,
                                                                              exportConfig
                                                                          }: ExportButtonProps<M, UserType>
@@ -49,15 +56,17 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
     const [open, setOpen] = React.useState(false);
 
-    function doDownload<M>(data:Entity<M>[] | undefined,
-                           additionalData:Record<string, any>[] | undefined,
-                           schema:EntitySchema,
-                           path:string,
-                           exportConfig:ExportConfig | undefined){
+    function doDownload<M>(data: Entity<M>[] | undefined,
+                           additionalData: Record<string, any>[] | undefined,
+                           schema: EntitySchema<M>,
+                           schemaResolver: EntitySchemaResolver<M>,
+                           path: string,
+                           exportConfig: ExportConfig | undefined) {
         if (!data)
             throw Error("Trying to perform export without loading data first");
 
-        downloadCSV(data, additionalData, schema, path, exportConfig)
+        const resolvedSchema = schemaResolver({});
+        downloadCSV(data, additionalData, resolvedSchema, path, exportConfig);
     }
 
     useEffect(() => {
@@ -80,7 +89,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             setDataLoadingError(undefined);
 
             if (pendingDownload) {
-                doDownload(entities, additionalColumnsData, schema, path, exportConfig);
+                doDownload(entities, additionalColumnsData, schema, schemaResolver, path, exportConfig);
                 handleClose();
             }
         };
@@ -114,7 +123,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
         dataSource.fetchCollection<M>({
             path,
-            schema,
+            schema:schemaResolver,
             limit: fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT
         })
             .then(updateEntities)
@@ -137,7 +146,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
          if (needsToAcceptFetchAllData) {
              setFetchLargeDataAccepted(true);
          } else {
-             doDownload(dataRef.current, additionalDataRef.current, schema, path, exportConfig);
+             doDownload(dataRef.current, additionalDataRef.current, schema, schemaResolver, path, exportConfig);
              handleClose();
          }
     }

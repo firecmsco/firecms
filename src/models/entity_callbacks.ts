@@ -1,4 +1,9 @@
-import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
+import {
+    Entity,
+    EntityStatus,
+    EntityValues,
+    ResolvedEntitySchema
+} from "./entities";
 import { FireCMSContext } from "./firecms_context";
 
 /**
@@ -59,7 +64,7 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
     /**
      * Resolved schema of the entity
      */
-    schema: EntitySchema<M>;
+    schema: ResolvedEntitySchema<M>;
 
     /**
      * Full path where this entity is being saved
@@ -101,7 +106,7 @@ export interface EntityOnDeleteProps<M extends { [Key: string]: any }> {
     /**
      * Schema of the entity being deleted
      */
-    schema: EntitySchema<M>;
+    schema: ResolvedEntitySchema<M>;
 
     /**
      * Path of the parent collection

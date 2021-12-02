@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { Entity, EntitySchema, FilterValues } from "../../models";
+import {
+    Entity,
+    EntitySchema,
+    EntitySchemaResolver,
+    FilterValues
+} from "../../models";
 import { useDataSource } from "./useDataSource";
 
 /**
@@ -15,7 +20,7 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
     /**
      * Schema of the entity displayed by this collection
      */
-    schema: EntitySchema<M>;
+    schemaResolver: EntitySchemaResolver<M>;
 
     /**
      * Number of entities to fetch
@@ -57,17 +62,18 @@ export interface CollectionFetchResult<M extends { [Key: string]: any }> {
 /**
  * This hook is used to fetch collections using a given schema
  * @param path
- * @param schema
- * @param filter
+ * @param schemaResolver
+ * @param filterValues
  * @param sortBy
  * @param itemCount
+ * @param searchString
  * @param entitiesDisplayedFirst
  * @category Hooks and utilities
  */
-export function useCollectionFetch<M extends { [Key: string]: any }>(
+export function useCollectionFetch<M>(
     {
         path,
-        schema,
+        schemaResolver,
         filterValues,
         sortBy,
         itemCount,
@@ -116,7 +122,7 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
         if (dataSource.listenCollection) {
             return dataSource.listenCollection<M>({
                 path: path,
-                schema,
+                schema: schemaResolver,
                 onUpdate: onEntitiesUpdate,
                 onError,
                 searchString,
@@ -129,7 +135,7 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
         } else {
             dataSource.fetchCollection<M>({
                 path: path,
-                schema,
+                schema: schemaResolver,
                 searchString,
                 filter: filterValues,
                 limit: itemCount,
@@ -142,7 +148,7 @@ export function useCollectionFetch<M extends { [Key: string]: any }>(
             return () => {
             };
         }
-    }, [path, schema, itemCount, currentSort, sortByProperty, filterValues, searchString]);
+    }, [path, itemCount, currentSort, sortByProperty, filterValues, searchString]);
 
     return {
         data,

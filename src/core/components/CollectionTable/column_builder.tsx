@@ -1,14 +1,12 @@
 import { getCellAlignment, getPropertyColumnWidth } from "./internal/common";
 import {
     AdditionalColumnDelegate,
-    CMSType,
     CollectionSize,
     Entity,
-    EntitySchema,
+    EntitySchemaResolver,
     EnumValues,
     FireCMSContext,
-    Property,
-    PropertyOrBuilder
+    Property
 } from "../../../models";
 import { buildPropertyFrom } from "../../util/property_builder";
 import React, { useCallback, useEffect, useMemo } from "react";
@@ -43,9 +41,9 @@ export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = 
     path: string;
 
     /**
-     * Schema of the entity displayed by this collection
+     * Use to resolve the schema properties for specific path, entity id or values
      */
-    schema: EntitySchema<M>;
+    schemaResolver: EntitySchemaResolver<M>;
 
     /**
      * Properties displayed in this collection. If this property is not set
@@ -125,13 +123,12 @@ type SelectedCellProps<M> =
         width: number,
         height: number,
         property: Property,
-        entity: Entity<any>,
-        usedPropertyBuilder: boolean,
+        entity: Entity<any>
     };
 
 
 export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType>({
-                                                                                      schema,
+                                                                                      schemaResolver,
                                                                                       additionalColumns,
                                                                                       displayedProperties,
                                                                                       path,
@@ -188,10 +185,10 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
         setPreventOutsideClick(false);
     }, []);
 
-    const updatePopup = useCallback((value: boolean) => {
+    const updatePopup = (value: boolean) => {
         setFocused(!value);
         setFormPopupOpen(value);
-    }, []);
+    };
 
     const buildFilterEnumValues = useCallback((values: EnumValues): TableEnumValues => enumToObjectEntries(values)
         .filter(([enumKey, labelOrConfig]) => !isEnumValueDisabled(labelOrConfig))
@@ -232,6 +229,12 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
     }, []);
 
+
+    const resolvedSchema = schemaResolver({
+        values: popupCell?.entity?.values,
+        entityId: popupCell?.entity?.id
+    });
+
     const columns = useMemo(() => {
 
         const propertyCellRenderer = ({
@@ -241,12 +244,16 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                                           rowIndex
                                       }: any) => {
 
+
             const entity: Entity<M> = rowData;
 
             const name = column.dataKey as keyof M;
-            const propertyOrBuilder: PropertyOrBuilder<any, M> = schema.properties[name];
-            const property: Property<any> = buildPropertyFrom<CMSType, M>(propertyOrBuilder, entity.values, entity.id);
-            const usedPropertyBuilder = typeof propertyOrBuilder === "function";
+
+            const resolvedSchema = schemaResolver({
+                entityId: entity.id,
+                values: entity.values
+            });
+            const property = resolvedSchema.properties[name] as Property<any>;
 
             const inlineEditingEnabled = checkInlineEditing(inlineEditing, entity);
 
@@ -280,8 +287,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                             entity,
                             cellRect,
                             key: name,
-                            property,
-                            usedPropertyBuilder
+                            property
                         });
                     }
                     updatePopup(true);
@@ -299,8 +305,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                             entity,
                             cellRect,
                             key: name,
-                            property,
-                            usedPropertyBuilder
+                            property
                         });
                     }
                 };
@@ -315,7 +320,6 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                         name, value, property, entityId: entity.id
                     }) : undefined;
 
-                console.debug("mapPropertyToYup", name, property);
                 const validation = mapPropertyToYup({
                     property,
                     customFieldValidator,
@@ -388,9 +392,13 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
         };
 
-        const allColumns: TableColumn<M>[] = (Object.keys(schema.properties) as (keyof M)[])
+        const allColumns: TableColumn<M>[] = (Object.keys(resolvedSchema.properties) as (keyof M)[])
             .map((key) => {
-                const property: Property<any> = buildPropertyFrom<any, M>(schema.properties[key], schema.defaultValues ?? {}, path);
+                const property: Property<any> = buildPropertyFrom<any, M>({
+                    propertyOrBuilder: resolvedSchema.properties[key],
+                    values: resolvedSchema.defaultValues ?? {},
+                    path: path,
+                });
                 return ({
                     key: key as string,
                     property,
@@ -427,7 +435,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
         displayedProperties,
         selectedCell,
         size,
-        schema,
+        resolvedSchema,
         additionalColumns,
         path,
         inlineEditing,
@@ -435,7 +443,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
 
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
-        ? ({name, value, property}) => uniqueFieldValidator({
+        ? ({ name, value, property }) => uniqueFieldValidator({
             name,
             value,
             property,
@@ -449,11 +457,10 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
             columnIndex={popupCell?.columnIndex}
             name={popupCell?.key}
             property={popupCell?.property}
-            usedPropertyBuilder={popupCell?.usedPropertyBuilder ?? false}
             entity={popupCell?.entity}
             tableKey={tableKey}
             customFieldValidator={customFieldValidator}
-            schema={schema}
+            schema={resolvedSchema}
             path={path}
             formPopupOpen={formPopupOpen}
             onCellValueChange={onCellValueChange}

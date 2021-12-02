@@ -104,7 +104,7 @@ export function FirebaseCMSApp({
             <FireCMS navigation={navigation}
                      authDelegate={authDelegate}
                      authentication={authentication}
-                     schemaResolver={schemaResolver}
+                     schemaOverrideHandler={schemaResolver}
                      dateTimeFormat={dateTimeFormat}
                      dataSource={dataSource}
                      storageSource={storageSource}

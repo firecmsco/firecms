@@ -43,7 +43,7 @@ export const baseTableCss = css`
     left: 0;
   }
 
-  & .BaseTable__table-main .BaseTable__header-cell:first-child, .BaseTable__table-main .BaseTable__row-cell:first-child {
+  & .BaseTable__table-main .BaseTable__header-cell:first-of-type, .BaseTable__table-main .BaseTable__row-cell:first-of-type {
     padding: 0;
   }
 
@@ -63,7 +63,7 @@ export const baseTableCss = css`
     left: 0;
   }
 
-  & .BaseTable__table-frozen-left .BaseTable__header-cell:first-child, .BaseTable__table-frozen-left .BaseTable__row-cell:first-child {
+  & .BaseTable__table-frozen-left .BaseTable__header-cell:first-of-type, .BaseTable__table-frozen-left .BaseTable__row-cell:first-of-type {
     padding: 0;
   }
 

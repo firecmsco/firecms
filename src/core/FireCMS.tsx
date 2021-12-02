@@ -17,7 +17,7 @@ import {
     Locale,
     Navigation,
     NavigationBuilder,
-    SchemaResolver,
+    SchemaOverrideHandler,
     StorageSource
 } from "../models";
 import { SnackbarContext, SnackbarProvider } from "./contexts/SnackbarContext";
@@ -83,9 +83,9 @@ export interface FireCMSProps<UserType> {
      * This resolver allows to override the schema for specific entities, or
      * specific collections, app wide. This overrides schemas all through the app.
      *
-     * You can also override schemas in place, when using `useSideEntityController`
+     * You can also override schemas in place, when using {@link useSideEntityController}
      */
-    schemaResolver?: SchemaResolver;
+    schemaOverrideHandler?: SchemaOverrideHandler;
 
     /**
      * Format of the dates in the CMS.
@@ -150,7 +150,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         dateTimeFormat,
         locale,
         authDelegate,
-        schemaResolver,
+        schemaOverrideHandler,
         storageSource,
         dataSource,
         basePath,
@@ -181,7 +181,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         storageSource
     });
 
-    const schemaRegistryController = useBuildSchemaRegistryController(navigationContext, schemaResolver);
+    const schemaRegistryController = useBuildSchemaRegistryController(navigationContext, schemaOverrideHandler);
     const sideEntityController = useBuildSideEntityController(navigationContext, schemaRegistryController);
 
     const loading = authController.authLoading || authController.initialLoading || navigationContext.loading;

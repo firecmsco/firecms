@@ -5,7 +5,7 @@ import {
     Locale,
     Navigation,
     NavigationBuilder,
-    SchemaResolver
+    SchemaOverrideHandler
 } from "../models";
 import { FirestoreTextSearchController } from "./models/text_search";
 import { User as FirebaseUser } from "firebase/auth";
@@ -114,7 +114,7 @@ export interface FirebaseCMSAppProps {
      *
      * You can also override schemas in place, when using `useSideEntityController`
      */
-    schemaResolver?: SchemaResolver;
+    schemaResolver?: SchemaOverrideHandler;
 
     /**
      * Use this controller to return text search results as document ids, that

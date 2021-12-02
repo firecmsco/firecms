@@ -16,17 +16,15 @@ import makeStyles from "@mui/styles/makeStyles";
 import {
     AnyProperty,
     Entity,
-    EntitySchema,
     FireCMSContext,
     Property,
-    PropertyOrBuilder
+    ResolvedEntitySchema
 } from "../../models";
 import { PreviewComponent } from "../../preview/PreviewComponent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import { ErrorBoundary } from "../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
-import { buildPropertyFrom } from "../util/property_builder";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,27 +48,33 @@ export const useStyles = makeStyles((theme: Theme) =>
 /**
  * @category Components
  */
-export interface EntityPreviewProps<M extends { [Key: string]: any }> {
+export interface EntityPreviewProps<M> {
     entity: Entity<M>;
-    schema: EntitySchema<M>;
+    schema: ResolvedEntitySchema<M>;
+    path: string;
 }
 
 /**
  * Use this component to render a preview of a property values
  * @param entity
  * @param schema
+ * @param path
  * @constructor
  * @category Components
  */
-export function EntityPreview<M extends { [Key: string]: any }>(
+export function EntityPreview<M>(
     {
         entity,
-        schema
+        schema,
+        path
     }: EntityPreviewProps<M>) {
 
     const classes = useStyles();
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
+
+    const properties:Record<string, Property> = schema.properties;
+
     return (
         <TableContainer>
             <Table aria-label="entity table">
@@ -107,28 +111,28 @@ export function EntityPreview<M extends { [Key: string]: any }>(
                         </TableCell>
                     </TableRow>
 
-                    {schema && Object.entries(schema.properties).map(([key, propertyOrBuilder]) => {
-                        const value = (entity.values as any)[key];
-                        const property: Property = buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, entity.values, entity.id);
-                        return (
-                            <TableRow
-                                key={"entity_prev" + property.title + key}>
-                                <TableCell align="right"
-                                           component="td"
-                                           scope="row"
-                                           className={classes.titleCell}>
-                                    <Typography
-                                        style={{ paddingLeft: "16px" }}
-                                        variant={"caption"}
-                                        color={"textSecondary"}>
-                                        {property.title}
-                                    </Typography>
-                                </TableCell>
+                    {schema && Object.entries(properties)
+                        .map(([key, property]) => {
+                            const value = (entity.values as any)[key];
+                            return (
+                                <TableRow
+                                    key={"entity_prev" + property.title + key}>
+                                    <TableCell align="right"
+                                               component="td"
+                                               scope="row"
+                                               className={classes.titleCell}>
+                                        <Typography
+                                            style={{ paddingLeft: "16px" }}
+                                            variant={"caption"}
+                                            color={"textSecondary"}>
+                                            {property.title}
+                                        </Typography>
+                                    </TableCell>
 
-                                <TableCell padding="none"
-                                           className={classes.iconCell}>
-                                    {getIconForProperty(property, "disabled", "small")}
-                                </TableCell>
+                                    <TableCell padding="none"
+                                               className={classes.iconCell}>
+                                        {getIconForProperty(property, "disabled", "small")}
+                                    </TableCell>
 
                                 <TableCell
                                     className={classes.valuePreview}>

@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from "react";
+import React, { useCallback, useMemo } from "react";
 import { Button, Paper, Theme, useMediaQuery, useTheme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import createStyles from "@mui/styles/createStyles";
@@ -56,8 +56,8 @@ export const useStyles = makeStyles<Theme>(theme => createStyles({
  * a custom view. If you just need to create a default view you can do it
  * exclusively with config options.
  *
- * If you want to bind a EntityCollection to a table with the default
- * options you see in colelctions in the top level navigation, you can
+ * If you want to bind a {@link EntityCollection} to a table with the default
+ * options you see in collections in the top level navigation, you can
  * check {@link EntityCollectionView}
  *
  * If you need a table that is not bound to the datasource or entities and
@@ -68,12 +68,16 @@ export const useStyles = makeStyles<Theme>(theme => createStyles({
  * @see Table
  * @category Components
  */
-export function CollectionTable<M extends { [Key: string]: any },
+export const CollectionTable = React.memo<CollectionTableProps<any, any>>(CollectionTableInternal) as React.FunctionComponent<CollectionTableProps<any, any>>;
+
+
+export function CollectionTableInternal<M extends { [Key: string]: any },
     AdditionalKey extends string = string,
     UserType = User>
 ({
      path,
      collection,
+     schemaResolver,
      inlineEditing,
      toolbarActionsBuilder,
      title,
@@ -85,6 +89,7 @@ export function CollectionTable<M extends { [Key: string]: any },
      hoverRow = true
  }: CollectionTableProps<M, AdditionalKey>) {
 
+
     const context = useFireCMSContext();
     const dataSource = useDataSource();
     const sideEntityController = useSideEntityController();
@@ -94,7 +99,6 @@ export function CollectionTable<M extends { [Key: string]: any },
 
     const [size, setSize] = React.useState<CollectionSize>(collection.defaultSize ?? "m");
 
-    const schema = collection.schema;
     const initialFilter = collection.initialFilter;
     const initialSort = collection.initialSort;
     const filterCombinations = collection.filterCombinations;
@@ -126,10 +130,10 @@ export function CollectionTable<M extends { [Key: string]: any },
                                     entityId: entity.id,
                                     selectedSubpath: subcollection.path,
                                     permissions: collection.permissions,
-                                    schema: collection.schema,
+                                    schema: schemaResolver,
                                     subcollections: collection.subcollections,
                                     callbacks: collection.callbacks,
-                                    overrideSchemaResolver: false
+                                    overrideSchemaRegistry: false
                                 });
                             }}>
                         {subcollection.name}
@@ -140,7 +144,8 @@ export function CollectionTable<M extends { [Key: string]: any },
         return [...(collection.additionalColumns ?? []), ...subcollectionColumns];
     }, [collection]);
 
-    const displayedProperties = useColumnIds(collection, true);
+    const resolvedSchema = schemaResolver({});
+    const displayedProperties = useColumnIds(collection, resolvedSchema, true);
 
     const uniqueFieldValidator: UniqueFieldValidator = useCallback(({
                                                             name,
@@ -165,7 +170,7 @@ export function CollectionTable<M extends { [Key: string]: any },
                 [name]: value
             },
             previousValues: entity.values,
-            schema: collection.schema,
+            schema: schemaResolver,
             status: "existing"
         };
 
@@ -180,10 +185,10 @@ export function CollectionTable<M extends { [Key: string]: any },
             })
         });
 
-    }, [path, collection]);
+    }, [path, collection, schemaResolver]);
 
     const { columns, popupFormField } = buildColumnsFromSchema({
-        schema,
+        schemaResolver,
         additionalColumns,
         displayedProperties,
         path,
@@ -203,7 +208,7 @@ export function CollectionTable<M extends { [Key: string]: any },
     } = useCollectionFetch({
         entitiesDisplayedFirst,
         path,
-        schema,
+        schemaResolver,
         filterValues,
         sortBy,
         searchString,

@@ -7,6 +7,7 @@ import {
     SaveEntityProps
 } from "../../models";
 import { useDataSource } from "./useDataSource";
+import { resolveSchema } from "../../core/utils";
 
 /**
  * @category Hooks and utilities
@@ -48,31 +49,37 @@ export type SaveEntityWithCallbacksProps<M> =
  * @category Hooks and utilities
  */
 export async function saveEntityWithCallbacks<M, UserType>({
-                                                     schema,
-                                                     path,
-                                                     entityId,
-                                                     callbacks,
-                                                     values,
-                                                     previousValues,
-                                                     status,
-                                                     dataSource,
-                                                     context,
-                                                     onSaveSuccess,
-                                                     onSaveFailure,
-                                                     onPreSaveHookError,
-                                                     onSaveSuccessHookError
-                                                 }: SaveEntityWithCallbacksProps<M> & {
-                                                     dataSource: DataSource,
-                                                     context: FireCMSContext<UserType> ,
-                                                 }
+                                                               schema,
+                                                               path,
+                                                               entityId,
+                                                               callbacks,
+                                                               values,
+                                                               previousValues,
+                                                               status,
+                                                               dataSource,
+                                                               context,
+                                                               onSaveSuccess,
+                                                               onSaveFailure,
+                                                               onPreSaveHookError,
+                                                               onSaveSuccessHookError
+                                                           }: SaveEntityWithCallbacksProps<M> & {
+                                                               dataSource: DataSource,
+                                                               context: FireCMSContext<UserType>,
+                                                           }
 ): Promise<void> {
 
     let updatedValues: Partial<EntityValues<M>>;
 
     if (callbacks?.onPreSave) {
         try {
+            const resolvedSchema = resolveSchema({
+                values: previousValues as EntityValues<M>,
+                entityId,
+                schemaOrResolver: schema,
+                path
+            });
             updatedValues = await callbacks.onPreSave({
-                schema,
+                schema: resolvedSchema,
                 path,
                 entityId,
                 values,
@@ -100,8 +107,14 @@ export async function saveEntityWithCallbacks<M, UserType>({
     }).then((entity) => {
         try {
             if (callbacks?.onSaveSuccess) {
+                const resolvedSchema = resolveSchema({
+                    values: updatedValues as EntityValues<M>,
+                    entityId,
+                    schemaOrResolver: schema,
+                    path
+                });
                 callbacks.onSaveSuccess({
-                    schema,
+                    schema: resolvedSchema,
                     path,
                     entityId: entity.id,
                     values: updatedValues,
@@ -119,8 +132,14 @@ export async function saveEntityWithCallbacks<M, UserType>({
     })
         .catch((e) => {
             if (callbacks?.onSaveFailure) {
+                const resolvedSchema = resolveSchema({
+                    values: updatedValues as EntityValues<M>,
+                    entityId,
+                    schemaOrResolver: schema,
+                    path
+                });
                 callbacks.onSaveFailure({
-                    schema,
+                    schema: resolvedSchema,
                     path,
                     entityId,
                     values: updatedValues,

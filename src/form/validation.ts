@@ -6,9 +6,8 @@ import {
     GeopointProperty,
     MapProperty,
     NumberProperty,
-    PropertiesOrBuilder,
+    Properties,
     Property,
-    PropertyOrBuilder,
     ReferenceProperty,
     StringProperty,
     TimestampProperty
@@ -24,7 +23,6 @@ import {
     StringSchema
 } from "yup";
 import { enumToObjectEntries } from "../core/util/enums";
-import { buildPropertyFrom } from "../core/util/property_builder";
 
 // Add custom unique function for array values
 declare module "yup" {
@@ -82,15 +80,12 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
 }
 
 export function getYupEntitySchema<T extends CMSType, M extends { [Key: string]: any }>
-(properties: PropertiesOrBuilder<M>,
- values: Partial<EntityValues<M>>,
- path: string,
- customFieldValidator?: CustomFieldValidator,
- entityId?: string): ObjectSchema<any> {
+(properties: Properties<M>,
+ customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
     const objectSchema: any = {};
-    Object.entries(properties).forEach(([name, propertyOrBuilder]) => {
+    Object.entries(properties).forEach(([name, property]) => {
         objectSchema[name] = mapPropertyToYup({
-            property: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, values, path, entityId),
+            property,
             customFieldValidator,
             name
         });

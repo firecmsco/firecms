@@ -3,7 +3,7 @@ import {
     EntityCollection,
     NavigationContext,
     SchemaConfig,
-    SchemaResolver
+    SchemaOverrideHandler
 } from "../../models";
 import {
     getCollectionViewFromPath,
@@ -12,11 +12,11 @@ import {
 import { getSidePanelKey } from "./utils";
 
 
-export function useBuildSchemaRegistryController(navigationContext: NavigationContext, schemaResolver: SchemaResolver | undefined) {
+export function useBuildSchemaRegistryController(navigationContext: NavigationContext, schemaOverrideHandler: SchemaOverrideHandler | undefined) {
 
     const collections = navigationContext.navigation?.collections;
     const initialised = collections !== undefined;
-    const viewsRef = useRef<Record<string, Partial<SchemaConfig & { overrideSchemaResolver?: boolean }>>>({});
+    const viewsRef = useRef<Record<string, Partial<SchemaConfig & { overrideSchemaRegistry?: boolean }>>>({});
 
     const getSchemaConfig = (path: string, entityId?: string): SchemaConfig => {
 
@@ -24,7 +24,7 @@ export function useBuildSchemaRegistryController(navigationContext: NavigationCo
 
         let result: Partial<SchemaConfig> = {};
         const overriddenProps = viewsRef.current[sidePanelKey];
-        const resolvedProps: SchemaConfig | undefined = schemaResolver && schemaResolver({
+        const resolvedProps: SchemaConfig | undefined = schemaOverrideHandler && schemaOverrideHandler({
             entityId,
             path: removeInitialAndTrailingSlashes(path)
         });
@@ -34,7 +34,7 @@ export function useBuildSchemaRegistryController(navigationContext: NavigationCo
 
         if (overriddenProps) {
             // override schema resolver default to true
-            const shouldOverrideResolver = overriddenProps.overrideSchemaResolver === undefined || overriddenProps.overrideSchemaResolver;
+            const shouldOverrideResolver = overriddenProps.overrideSchemaRegistry === undefined || overriddenProps.overrideSchemaRegistry;
             if (shouldOverrideResolver)
                 result = {
                     ...overriddenProps,
@@ -83,7 +83,7 @@ export function useBuildSchemaRegistryController(navigationContext: NavigationCo
     const setOverride = (
         entityPath: string,
         schemaConfig: Partial<SchemaConfig> | null,
-        overrideSchemaResolver?: boolean
+        overrideSchemaRegistry?: boolean
     ) => {
         if (!schemaConfig) {
             delete viewsRef.current[entityPath];
@@ -91,7 +91,7 @@ export function useBuildSchemaRegistryController(navigationContext: NavigationCo
         } else {
             viewsRef.current[entityPath] = {
                 ...schemaConfig,
-                overrideSchemaResolver
+                overrideSchemaRegistry
             };
             return entityPath;
         }

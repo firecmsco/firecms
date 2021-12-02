@@ -1,4 +1,4 @@
-import { EntitySchema } from "./entities";
+import { EntitySchema, EntitySchemaResolver } from "./entities";
 import { EntityCollection, PermissionsBuilder } from "./collections";
 import { EntityCallbacks } from "./entity_callbacks";
 import { User } from "./user";
@@ -17,7 +17,7 @@ export interface SchemaConfig<M = any, UserType = User> {
     /**
      * Schema representing the entities of this view
      */
-    schema: EntitySchema<M>;
+    schema: EntitySchema<M> | EntitySchemaResolver<M>;
 
     /**
      * You can add subcollections to your entity in the same way you define the root
@@ -38,7 +38,7 @@ export interface SchemaConfig<M = any, UserType = User> {
  * Used to override schemas based on the collection path and entityId.
  * @category Models
  */
-export type SchemaResolver = (props: {
+export type SchemaOverrideHandler = (props: {
     entityId?: string,
     path: string
 }) => SchemaConfig | undefined;

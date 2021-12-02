@@ -1,5 +1,5 @@
 import { useInputStyles } from "./styles";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TextareaAutosize } from "@mui/material";
 import clsx from "clsx";
 
@@ -26,7 +26,6 @@ export function TableInput(props: {
             const handler = setTimeout(doUpdate, 300);
 
             return () => {
-                console.log("handler", handler);
                 clearTimeout(handler);
             };
 

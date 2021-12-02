@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { Timestamp } from "firebase/firestore";
 import { productSchema } from "./test_site_config";
-import { initEntityValues } from "../core/utils";
-import { useFirestoreDataSource } from "../firebase_app/hooks/useFirestoreDataSource";
+import { computeProperties, initWithProperties } from "../core/utils";
+import { useFirestoreDataSource } from "../firebase_app";
 import { EntitySchema } from "../models";
 
 const firebaseApp = initializeApp({});
@@ -52,7 +52,12 @@ it("timestamp array conversion", () => {
 
 it("Initial values", () => {
 
-    const initialisedValues = initEntityValues(productSchema, "test");
+    const properties = computeProperties({
+        propertiesOrBuilder: productSchema.properties,
+        path: "test",
+        values: productSchema.defaultValues
+    });
+    const initialisedValues = initWithProperties(properties, productSchema.defaultValues);
     console.log(initialisedValues);
     expect(
         Object.values(initialisedValues).filter((v) => v === undefined)

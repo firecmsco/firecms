@@ -1,15 +1,15 @@
 import {
     Entity,
-    EntityReference,
-    EntitySchema,
+    EntityReference, EntitySchema, EntitySchemaResolver,
     EntityStatus,
     EntityValues,
     GeoPoint,
     Properties,
-    Property,
-    PropertyOrBuilder
+    PropertiesOrBuilder,
+    Property, ResolvedEntitySchema
 } from "../models";
-import {buildPropertyFrom} from "./util/property_builder";
+import { buildPropertyFrom } from "./util/property_builder";
+import { buildSchemaResolver } from "../hooks/useBuildSchemaResolver";
 
 export function isReadOnly(property: Property<any>): boolean {
     if (property.readOnly)
@@ -23,47 +23,40 @@ export function isReadOnly(property: Property<any>): boolean {
 
 export function isHidden(property: Property<any>): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
-
 }
-
 
 /**
  *
- * @param schema
+ * @param propertiesOrBuilder
+ * @param values
  * @param path
  * @param entityId
- * @param values
  * @ignore
  */
-export function computeSchemaProperties<M extends { [Key: string]: any }>(
-    schema: EntitySchema<M>,
-    path: string,
-    entityId?: string | undefined,
-    values?: Partial<EntityValues<M>>
-): Properties<M> {
-    return Object.entries(schema.properties)
+export function computeProperties<M extends { [Key: string]: any }>(
+    { propertiesOrBuilder, path, entityId, values }: {
+        propertiesOrBuilder: PropertiesOrBuilder<M>,
+        path: string,
+        entityId?: string | undefined,
+        values?: Partial<EntityValues<M>>,
+    }): Properties<M> {
+    return Object.entries(propertiesOrBuilder)
         .map(([key, propertyOrBuilder]) => {
-            return {[key]: buildPropertyFrom(propertyOrBuilder as PropertyOrBuilder<any, M>, values ?? schema.defaultValues ?? {}, path, entityId)};
+            return {
+                [key]: buildPropertyFrom({
+                    propertyOrBuilder,
+                    values: values ?? {},
+                    path,
+                    entityId
+                })
+            };
         })
         .reduce((a, b) => ({...a, ...b}), {}) as Properties<M>;
 }
 
 
-/**
- * Functions used to set required fields to undefined in the initially created entity
- * @param schema
- * @param path
- * @param entityId
- * @ignore
- */
-export function initEntityValues<M extends { [Key: string]: any }>
-(schema: EntitySchema<M>, path: string, entityId?: string): EntityValues<M> {
-    const properties: Properties<M> = computeSchemaProperties(schema, path, entityId);
-    return initWithProperties(properties, schema.defaultValues);
-}
 
-
-function initWithProperties<M extends { [Key: string]: any }>
+export function initWithProperties<M extends { [Key: string]: any }>
 (properties: Properties<M>, defaultValues?: Partial<EntityValues<M>>): EntityValues<M> {
     return Object.entries(properties)
         .map(([key, property]) => {
@@ -139,18 +132,18 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
 /**
  * Add missing required fields, expected in the schema, to the values of an entity
  * @param values
- * @param schema
+ * @param properties
  * @param path
  * @category Datasource
  */
 export function sanitizeData<M extends { [Key: string]: any }>
 (
     values: EntityValues<M>,
-    schema: EntitySchema<M>,
+    properties: Properties<M>,
     path: string
 ) {
     let result: any = values;
-    Object.entries(computeSchemaProperties(schema, path))
+    Object.entries(properties)
         .forEach(([key, property]) => {
             if (values && values[key] !== undefined) result[key] = values[key];
             else if ((property as Property).validation?.required) result[key] = null;
@@ -211,4 +204,31 @@ export function traverseValue(inputValue: any,
     }
 
     return value;
+}
+
+/**
+ * Use this function to resolve an `EntitySchema` or a `EntitySchemaResolver`
+ * into a resolved one
+ * @param schema
+ * @param entityId
+ * @param values
+ * @param path
+ */
+export function resolveSchema<M>({
+                              schemaOrResolver,
+                              entityId,
+                              values,
+                              path
+                          }: {
+    schemaOrResolver: EntitySchema<M> | EntitySchemaResolver<M>,
+    path: string
+    entityId?: string,
+    values?: EntityValues<M>,
+}): ResolvedEntitySchema<M> {
+    if (typeof schemaOrResolver === "function") {
+        return schemaOrResolver({ entityId, values });
+    } else {
+        const schemaResolver = buildSchemaResolver({ schema: schemaOrResolver, path });
+        return schemaResolver({ entityId, values });
+    }
 }

@@ -1,10 +1,12 @@
-import { SchemaConfig } from "./schema_resolver";
+import { SchemaConfig } from "./schema_override";
+import { EntitySchema } from "./entities";
 
 /**
  * Props used to open a side dialog
  * @category Hooks and utilities
  */
 export interface SideEntityPanelProps {
+
     /**
      * Absolute path of the entity
      */
@@ -21,7 +23,7 @@ export interface SideEntityPanelProps {
     copy?: boolean;
 
     /**
-     * Open the entity with a selected subcollection view. If the panel for this
+     * Open the entity with a selected sub-collection view. If the panel for this
      * entity was already open, it is replaced.
      */
     selectedSubpath?: string;
@@ -56,9 +58,11 @@ export interface SideEntityController {
      * At least you need to pass the path of the entity you would like
      * to edit. You can set an entityId if you would like to edit and existing one
      * (or a new one with that id).
-     * If you wish, you can also override the `SchemaSidePanelProps` and choose
-     * to override the FireCMS level SchemaResolver.
+     * If you wish, you can also override the `SchemaConfig` and choose
+     * to override the FireCMS level `SchemaRegistryController`.
      * @param props
      */
-    open: (props: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaResolver?: boolean }) => void;
+    open: (props: SideEntityPanelProps
+        & Partial<SchemaConfig>
+        & { overrideSchemaRegistry?: boolean }) => void;
 }

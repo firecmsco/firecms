@@ -3,8 +3,8 @@ import {
     DeleteEntityProps,
     Entity,
     EntityCallbacks,
-    EntityOnDeleteProps,
-    FireCMSContext
+    EntityOnDeleteProps, EntitySchema,
+    FireCMSContext, ResolvedEntitySchema
 } from "../../models";
 
 /**
@@ -52,6 +52,7 @@ export async function deleteEntityWithCallbacks<M, UserType>({
                                                                  onDeleteSuccessHookError,
                                                                  context
                                                              }: DeleteEntityWithCallbacksProps<M, UserType> & {
+                                                                 schema: ResolvedEntitySchema<M>,
                                                                  dataSource: DataSource,
                                                                  context: FireCMSContext<UserType>
                                                              }
@@ -78,8 +79,7 @@ export async function deleteEntityWithCallbacks<M, UserType>({
         }
     }
     return dataSource.deleteEntity({
-        entity,
-        schema
+        entity
     }).then(() => {
         onDeleteSuccess && onDeleteSuccess(entity);
         try {

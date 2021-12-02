@@ -1,4 +1,4 @@
-import { buildSchema, SchemaResolver } from "@camberi/firecms";
+import { buildSchema, SchemaOverrideHandler } from "@camberi/firecms";
 
 /**
  * You can use a custom schema resolver to override schemas for specific
@@ -6,7 +6,7 @@ import { buildSchema, SchemaResolver } from "@camberi/firecms";
  * @param entityId
  * @param path
  */
-export const customSchemaResolver: SchemaResolver = ({
+export const customSchemaResolver: SchemaOverrideHandler = ({
                                                   entityId,
                                                   path
                                               }: {

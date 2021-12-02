@@ -1,4 +1,4 @@
-import { EntitySchema, EntityValues } from "./entities";
+import { EntitySchema, EntityValues, ResolvedEntitySchema } from "./entities";
 import {
     ArrayProperty,
     BooleanProperty,
@@ -128,7 +128,7 @@ export interface FormContext<M extends { [Key: string]: any }> {
     /**
      * Schema of the entity being modified
      */
-    schema: EntitySchema<M>;
+    schema: ResolvedEntitySchema<M>;
 
     /**
      * Current values of the entity

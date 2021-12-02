@@ -28,13 +28,13 @@ The props provided by this context are:
 
 * `close()` Close the last panel
 * `sidePanels` List of side entity panels currently open
-* `open (props: SideEntityPanelProps & Partial<SchemaSidePanelProps>)`
+* `open (props: SideEntityPanelProps & Partial<SchemaConfig>)`
   Open a new entity sideDialog. By default, the schema and configuration of the
   view is fetched from the collections you have specified in the navigation. At
   least you need to pass the path of the entity you would like to
   edit. You can set an entityId if you would like to edit and existing one
   (or a new one with that id). If you wish, you can also override
-  the `SchemaSidePanelProps` (such as schema or subcollections) and choose to
+  the `SchemaConfig` (such as schema or subcollections) and choose to
   override the `FireCMS` level `SchemaResolver`.
 
 Example:

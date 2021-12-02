@@ -1,30 +1,29 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
-import {Box, Button, Container, Grid, Theme, Typography} from "@mui/material";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Box, Button, Container, Grid, Theme, Typography } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import {
     CMSFormFieldProps,
     Entity,
-    EntitySchema,
+    EntitySchema, EntitySchemaResolver,
     EntityStatus,
     EntityValues,
     FormContext,
     Properties,
-    Property
+    Property, ResolvedEntitySchema
 } from "../models";
-import {Form, Formik, FormikHelpers} from "formik";
-import {buildPropertyField} from "./form_factory";
-import {CustomFieldValidator, getYupEntitySchema} from "./validation";
+import { Form, Formik, FormikHelpers } from "formik";
+import { buildPropertyField } from "./form_factory";
+import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
-import {ErrorFocus} from "./components/ErrorFocus";
+import { ErrorFocus } from "./components/ErrorFocus";
 import {
-    computeSchemaProperties,
-    initEntityValues,
+    initWithProperties,
     isHidden,
-    isReadOnly
+    isReadOnly, resolveSchema
 } from "../core/utils";
-import {CustomIdField} from "./components/CustomIdField";
-import {useDataSource} from "../hooks";
+import { CustomIdField } from "./components/CustomIdField";
+import { useDataSource } from "../hooks";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     stickyButtons: {
@@ -62,7 +61,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
  *
  * @category Components
  */
-export interface EntityFormProps<M extends { [Key: string]: any }> {
+export interface EntityFormProps<M> {
 
     /**
      * New or existing status
@@ -75,9 +74,9 @@ export interface EntityFormProps<M extends { [Key: string]: any }> {
     path: string;
 
     /**
-     * Schema of the entity this form represents
+     * Use to resolve the schema properties for specific path, entity id or values
      */
-    schema: EntitySchema<M>;
+    schemaOrResolver: EntitySchema<M> & EntitySchemaResolver<M>;
 
     /**
      * The updated entity is passed from the parent component when the underlying data
@@ -122,6 +121,7 @@ export interface EntityFormProps<M extends { [Key: string]: any }> {
  * @param status
  * @param path
  * @param schema
+ * @param schemaResolver
  * @param entity
  * @param onEntitySave
  * @param onDiscard
@@ -133,7 +133,7 @@ export interface EntityFormProps<M extends { [Key: string]: any }> {
 export function EntityForm<M>({
                                   status,
                                   path,
-                                  schema,
+                                  schemaOrResolver,
                                   entity,
                                   onEntitySave,
                                   onDiscard,
@@ -149,15 +149,24 @@ export function EntityForm<M>({
      * Base values are the ones this view is initialized from, we use them to
      * compare them with underlying changes in the datasource
      */
-    let baseDataSourceValues: Partial<EntityValues<M>>;
-    if ((status === "existing" || status === "copy") && entity) {
-        baseDataSourceValues = entity.values ?? initEntityValues(schema, path);
-    } else if (status === "new") {
-        baseDataSourceValues = initEntityValues(schema, path);
-    } else {
-        console.error({status, entity});
-        throw new Error("Form has not been initialised with the correct parameters");
-    }
+    const entityId = status === "existing" ? entity?.id : undefined;
+    const initialResolvedSchema: ResolvedEntitySchema<M> = resolveSchema({
+        schemaOrResolver,
+        path,
+        entityId,
+    });
+
+    const baseDataSourceValues: Partial<EntityValues<M>> = useMemo(() => {
+        const properties = initialResolvedSchema.properties;
+        if ((status === "existing" || status === "copy") && entity) {
+            return entity.values ?? initWithProperties(properties, schema.defaultValues);
+        } else if (status === "new") {
+            return initWithProperties(properties, schema.defaultValues);
+        } else {
+            console.error({ status, entity });
+            throw new Error("Form has not been initialised with the correct parameters");
+        }
+    }, [status, initialResolvedSchema, path, entity]);
 
     const formRef = React.useRef<HTMLDivElement>(null);
 
@@ -168,6 +177,13 @@ export function EntityForm<M>({
     const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
     const initialValues = initialValuesRef.current;
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
+
+    const schema: ResolvedEntitySchema<M> = resolveSchema({
+        schemaOrResolver,
+        path,
+        entityId,
+        values: internalValue
+    });
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") && !!schema.customId;
 
@@ -215,7 +231,7 @@ export function EntityForm<M>({
 
         if (onEntitySave)
             onEntitySave({
-                schema,
+                schema: schema as EntitySchema<M>,
                 path,
                 entityId,
                 values,
@@ -247,20 +263,15 @@ export function EntityForm<M>({
     ]);
 
 
-    const entityId = status === "existing" ? entity?.id : undefined;
-
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
                                                                         name,
                                                                         value,
                                                                         property
                                                                     }) => dataSource.checkUniqueField(path, name, value, property, entityId), [path,entityId ]);
 
-    const validationSchema = useMemo( () => getYupEntitySchema(
+    const validationSchema = useMemo(() => getYupEntitySchema(
         schema.properties,
-        internalValue as Partial<EntityValues<M>> ?? {},
-        path,
-        uniqueFieldValidator,
-        entityId), []);
+        uniqueFieldValidator), []);
 
     function buildButtons(isSubmitting: boolean, modified: boolean) {
         const disabled = isSubmitting || (!modified && status === "existing");
@@ -331,17 +342,24 @@ export function EntityForm<M>({
                         }
                     });
                 }
+
+                const resolvedSchema: ResolvedEntitySchema<M> = resolveSchema({
+                    schemaOrResolver,
+                    path,
+                    entityId,
+                    values
+                });
+
                 const context: FormContext<M> = {
-                    schema: schema,
+                    schema: resolvedSchema,
                     entityId: entityId,
                     values
                 };
 
-                const schemaProperties: Properties<M> = computeSchemaProperties(schema, path, entityId, values as EntityValues<M>);
                 const formFields = (
                     <Grid container spacing={4}>
 
-                        {Object.entries<Property>(schemaProperties as Record<string, Property<any>>)
+                        {Object.entries<Property>(resolvedSchema.properties)
                             .filter(([key, property]) => !isHidden(property))
                             .map(([key, property]) => {
 
@@ -369,7 +387,7 @@ export function EntityForm<M>({
                                     <Grid item
                                           xs={12}
                                           id={`form_field_${key}`}
-                                          key={`field_${schema.name}_${key}`}>
+                                          key={`field_${resolvedSchema.name}_${key}`}>
                                         {buildPropertyField(cmsFormFieldProps)}
                                     </Grid>
                                 );
@@ -383,7 +401,7 @@ export function EntityForm<M>({
                                className={classes.container}
                                ref={formRef}>
 
-                        <CustomIdField schema={schema as EntitySchema}
+                        <CustomIdField schema={resolvedSchema as EntitySchema}
                                        status={status}
                                        onChange={setCustomId}
                                        error={customIdError}

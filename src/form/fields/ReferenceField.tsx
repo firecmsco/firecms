@@ -37,6 +37,7 @@ import {
     useSideEntityController
 } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";
+import { useBuildSchemaResolver } from "../../hooks/useBuildSchemaResolver";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -130,10 +131,13 @@ export function ReferenceField<M extends { [Key: string]: any }>({
 
     const collectionConfig = schemaRegistryController.getCollectionConfig(property.path);
     if (!collectionConfig) {
-        console.error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
+        throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
     }
 
     const schema = collectionConfig?.schema;
+    if (!schema) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
+    }
     const path = property.path;
 
     const validValue = value && value instanceof EntityReference;
@@ -172,7 +176,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
             sideEntityController.open({
                 entityId: entity.id,
                 path,
-                overrideSchemaResolver: false
+                overrideSchemaRegistry: false
             });
     };
 

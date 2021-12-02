@@ -1,5 +1,5 @@
 import { EntityCollection } from "./collections";
-import { SchemaConfig } from "./schema_resolver";
+import { SchemaConfig } from "./schema_override";
 
 /**
  * This controller is in charge of resolving the entity schemas from a given
@@ -15,13 +15,14 @@ export interface SchemaRegistryController {
      * Is the registry ready to be used
      */
     initialised: boolean;
+
     /**
-     * Get props for path
+     * Get the schema configuration for a given path
      */
     getSchemaConfig: (path: string, entityId?: string) => SchemaConfig | undefined;
 
     /**
-     * Get props for path
+     * Get the entity collection for a given path
      */
     getCollectionConfig: (path: string, entityId?: string) => EntityCollection | undefined;
 
@@ -32,7 +33,7 @@ export interface SchemaRegistryController {
     setOverride: (
         entityPath: string,
         schemaConfig: Partial<SchemaConfig> | null,
-        overrideSchemaResolver?: boolean
+        overrideSchemaRegistry?: boolean
     ) => string | undefined;
 
     /**

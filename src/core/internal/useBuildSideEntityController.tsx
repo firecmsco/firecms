@@ -94,7 +94,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                       copy,
                       width,
                       ...schemaProps
-                  }: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaResolver?: boolean }) => {
+                  }: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaRegistry?: boolean }) => {
 
         if (copy && !entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
@@ -107,13 +107,13 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 || schemaProps.permissions !== undefined
                 || schemaProps.subcollections !== undefined)) {
             const permissions = schemaProps.permissions;
-            const schema = schemaProps.schema;
+            const schemaOrResolver = schemaProps.schema;
             const subcollections = schemaProps.subcollections;
-            const overrideSchemaResolver = schemaProps.overrideSchemaResolver;
+            const overrideSchemaRegistry = schemaProps.overrideSchemaRegistry;
             schemaRegistryController.setOverride(
                 sidePanelKey,
-                { permissions, schema, subcollections },
-                overrideSchemaResolver
+                { permissions, schema: schemaOrResolver, subcollections },
+                overrideSchemaRegistry
             );
         }
 

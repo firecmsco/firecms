@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { CollectionSize, Entity, EntityCollection } from "../../models";
+import {
+    CollectionSize,
+    Entity,
+    EntityCollection,
+    EntitySchemaResolver
+} from "../../models";
 import {
     Button,
     Dialog,
@@ -13,6 +18,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { CollectionTable } from "./CollectionTable";
 import { CollectionRowActions } from "./CollectionTable/internal/CollectionRowActions";
 import { useDataSource } from "../../hooks";
+import { useBuildSchemaResolver } from "../../hooks/useBuildSchemaResolver";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -105,14 +111,18 @@ export function ReferenceDialog(
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
 
+    const schemaResolver: EntitySchemaResolver = useBuildSchemaResolver({path, schema});
+
     useEffect(() => {
         if (selectedEntityIds) {
             Promise.all(
-                selectedEntityIds.map((entityId) => dataSource.fetchEntity({
-                    path,
-                    entityId,
-                    schema
-                })))
+                selectedEntityIds.map((entityId) => {
+                    return dataSource.fetchEntity({
+                        path,
+                        entityId,
+                        schema:schemaResolver
+                    });
+                }))
                 .then((entities) => {
                     setSelectedEntities(entities);
                 });
@@ -137,6 +147,7 @@ export function ReferenceDialog(
             onMultipleEntitiesSelected([]);
         }
     };
+
 
     const toggleEntitySelection = (entity: Entity<any>) => {
         let newValue;
@@ -197,6 +208,7 @@ export function ReferenceDialog(
                 {selectedEntities &&
                 <CollectionTable path={path}
                                  collection={collection}
+                                 schemaResolver={schemaResolver}
                                  inlineEditing={false}
                                  toolbarActionsBuilder={toolbarActionsBuilder}
                                  onEntityClick={onEntityClick}

@@ -1,4 +1,10 @@
-import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
+import {
+    Entity,
+    EntitySchema,
+    EntitySchemaResolver,
+    EntityStatus,
+    EntityValues
+} from "./entities";
 import { FilterValues } from "./collections";
 import { Property } from "./properties";
 
@@ -6,9 +12,9 @@ import { Property } from "./properties";
  * @category Datasource
  */
 export interface FetchEntityProps<M> {
-    path: string,
-    entityId: string,
-    schema: EntitySchema<M>
+    path: string;
+    entityId: string;
+    schema: EntitySchema<M> | EntitySchemaResolver<M>;
 }
 
 /**
@@ -24,7 +30,7 @@ export type ListenEntityProps<M> = FetchEntityProps<M> & {
  */
 export interface FetchCollectionProps<M> {
     path: string,
-    schema: EntitySchema<M>,
+    schema: EntitySchema<M> | EntitySchemaResolver<M>;
     filter?: FilterValues<M>,
     limit?: number,
     startAfter?: any[],
@@ -51,7 +57,7 @@ export interface SaveEntityProps<M> {
     entityId: string | undefined;
     values: Partial<EntityValues<M>>;
     previousValues?: Partial<EntityValues<M>>;
-    schema: EntitySchema<M>;
+    schema: EntitySchema<M> | EntitySchemaResolver<M>;
     status: EntityStatus;
 }
 
@@ -60,7 +66,6 @@ export interface SaveEntityProps<M> {
  */
 export interface DeleteEntityProps<M> {
     entity: Entity<M>;
-    schema: EntitySchema<M>;
 }
 
 /**
@@ -101,7 +106,7 @@ export interface DataSource {
      * `fetchCollection` will be used instead, with no real time updates.
      * @param path
      * @param schema
-     * @param onSnapshot
+     * @param onUpdate
      * @param onError
      * @param filter
      * @param limit
@@ -145,7 +150,7 @@ export interface DataSource {
      * @param path
      * @param entityId
      * @param schema
-     * @param onSnapshot
+     * @param onUpdate
      * @param onError
      * @return Function to cancel subscription
      */
@@ -176,14 +181,12 @@ export interface DataSource {
     /**
      * Delete an entity
      * @param entity
-     * @param schema
-     * @param path
+     * @param schemaResolver
      * @return was the whole deletion flow successful
      */
     deleteEntity<M>(
         {
-            entity,
-            schema
+            entity
         }: DeleteEntityProps<M>
     ): Promise<void>;
 

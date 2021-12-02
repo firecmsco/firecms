@@ -1,14 +1,12 @@
 import {
     Entity,
     EntityReference,
-    EntitySchema,
     ExportConfig,
     Properties,
-    Property
+    Property,
+    ResolvedEntitySchema
 } from "../../models";
-import {buildPropertyFrom} from "./property_builder";
-import {computeSchemaProperties} from "../utils";
-import {getValueInPath} from "./objects";
+import { getValueInPath } from "./objects";
 
 interface Header {
     key: string;
@@ -17,10 +15,10 @@ interface Header {
 
 export function downloadCSV<M>(data: Entity<M>[],
                                additionalData: Record<string, any>[] | undefined,
-                               schema: EntitySchema<M>,
+                               schema: ResolvedEntitySchema<M>,
                                path: string,
                                exportConfig: ExportConfig | undefined) {
-    const properties = computeSchemaProperties(schema, path);
+    const properties = schema.properties;
     const headers = getExportHeaders(properties, path, exportConfig);
     const exportableData = getExportableData(data, additionalData, properties, headers);
     const headersData = entryToCSVRow(headers.map(h => h.label));
@@ -50,10 +48,7 @@ function getExportHeaders<M extends { [Key: string]: any }, UserType>(properties
     const headers = [
         {label: "id", key: "id"},
         ...Object.entries(properties)
-            .map(([childKey, propertyOrBuilder]) => {
-                const property = buildPropertyFrom(propertyOrBuilder, {}, path, undefined);
-                return getHeaders(property, childKey, "");
-            })
+            .map(([childKey, property]) => getHeaders(property, childKey, ""))
             .flat()
     ];
 

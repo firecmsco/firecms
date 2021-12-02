@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { SchemaConfig, SideEntityPanelProps } from "../models";
+import {
+    EntitySchemaResolver,
+    SchemaConfig,
+    SideEntityPanelProps
+} from "../models";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { EntityView } from "./internal/EntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
@@ -9,6 +13,7 @@ import {
     UnsavedChangesDialog,
     useNavigationUnsavedChangesDialog
 } from "./internal/useUnsavedChangesDialog";
+import { resolveSchema } from "./utils";
 
 /**
  * This is the component in charge of rendering the side dialogs used
@@ -53,7 +58,6 @@ function SideEntityDialog({
             <div style={{ width: CONTAINER_WIDTH }}/>
         </SideDialogDrawer>;
     }
-
     // have the original values of the form changed?
     const [modifiedValues, setModifiedValues] = useState(false);
     // was the closing of the dialog requested by the drawer
@@ -84,6 +88,12 @@ function SideEntityDialog({
         throw Error("ERROR: You are trying to open an entity with no schema defined.");
     }
 
+    const schema = resolveSchema({
+        schemaOrResolver: schemaProps.schema,
+        path : panel.path,
+        entityId:panel.entityId,
+    });
+
     return (
         <>
 
@@ -111,7 +121,7 @@ function SideEntityDialog({
                 open={navigationWasBlocked || drawerCloseRequested}
                 handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
                 handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
-                schemaName={schemaProps.schema.name}/>
+                schemaName={schema.name}/>
 
         </>
     );

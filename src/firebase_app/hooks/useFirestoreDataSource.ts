@@ -4,6 +4,7 @@ import {
     Entity,
     EntityReference,
     EntitySchema,
+    EntitySchemaResolver,
     EntityValues,
     FetchCollectionProps,
     FetchEntityProps,
@@ -13,11 +14,12 @@ import {
     ListenEntityProps,
     Properties,
     Property,
+    ResolvedEntitySchema,
     SaveEntityProps,
     WhereFilterOp
 } from "../../models";
 import {
-    computeSchemaProperties,
+    computeProperties, resolveSchema,
     sanitizeData,
     traverseValues,
     updateAutoValues
@@ -87,12 +89,14 @@ export function useFirestoreDataSource({
     (
         doc: DocumentSnapshot,
         path: string,
-        schema?: EntitySchema<M>
+        schema: EntitySchema<M> | EntitySchemaResolver<M>
     ): Entity<M> {
 
+        const resolvedSchema = resolveSchema({schemaOrResolver: schema,  entityId: doc.id, path});
+        const values = firestoreToCMSModel(doc.data(), resolvedSchema, path);
         const data = doc.data() ?
-            schema ?
-                sanitizeData(firestoreToCMSModel(doc.data(), schema, path) as EntityValues<M>, schema, path)
+            resolvedSchema.properties ?
+                sanitizeData(values as EntityValues<M>, resolvedSchema.properties, path)
                 : doc.data()
             : undefined;
         return {
@@ -124,9 +128,9 @@ export function useFirestoreDataSource({
      * @param path
      * @category Firestore
      */
-    function firestoreToCMSModel(data: any, schema: EntitySchema, path: string): any {
+    function firestoreToCMSModel<M>(data: any, schema: ResolvedEntitySchema<M>, path: string): any {
         return traverseValues(data,
-            computeSchemaProperties(schema, path),
+            schema.properties,
             (value, property) => {
                 if (value === null)
                     return null;
@@ -190,13 +194,17 @@ export function useFirestoreDataSource({
         return query(collectionReference, ...queryParams);
     }
 
-    function getAndBuildEntity<M>(path: string, entityId: string, schema: EntitySchema<M>) {
+    function getAndBuildEntity<M>(path: string,
+                                  entityId: string,
+                                  schema: EntitySchema<M> | EntitySchemaResolver<M>) {
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
         return getDoc(doc(firestore, path, entityId))
             .then((docSnapshot) => createEntityFromSchema(docSnapshot, path, schema));
     }
 
-    async function performTextSearch<M>(path: string, searchString: string, schema: EntitySchema<M>): Promise<Entity<M>[]> {
+    async function performTextSearch<M>(path: string,
+                                        searchString: string,
+                                        schema: EntitySchema<M> | EntitySchemaResolver<M>): Promise<Entity<M>[]> {
         if (!textSearchController)
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
         const ids = await textSearchController({ path, searchString });
@@ -324,7 +332,6 @@ export function useFirestoreDataSource({
                                                           schema
                                                       }: FetchEntityProps<M>
         ): Promise<Entity<M>> {
-            // console.debug("Fetch entity", path, entityId);
             return getAndBuildEntity(path, entityId, schema);
         },
 
@@ -350,8 +357,10 @@ export function useFirestoreDataSource({
             // console.debug("Listening entity", path, entityId);
             return onSnapshot(
                 doc(firestore, path, entityId),
-                {next: (docSnapshot) => onUpdate(createEntityFromSchema(docSnapshot, path, schema)),
-                error: onError}
+                {
+                    next: (docSnapshot) => onUpdate(createEntityFromSchema(docSnapshot, path, schema)),
+                    error: onError
+                }
             );
         },
 
@@ -376,7 +385,8 @@ export function useFirestoreDataSource({
             }: SaveEntityProps<M>): Promise<Entity<M>> {
 
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
-            const properties: Properties<M> = computeSchemaProperties(schema, path, entityId);
+            const resolvedSchema = resolveSchema({ schemaOrResolver: schema, path, entityId, values: values as any });
+            const properties: Properties<M> = resolvedSchema.properties;
             const collectionReference: CollectionReference = collection(firestore, path);
 
             const updatedFirestoreValues: EntityValues<M> = updateAutoValues(
@@ -400,7 +410,7 @@ export function useFirestoreDataSource({
             return setDoc(documentReference, updatedFirestoreValues, { merge: true }).then(() => ({
                 id: documentReference.id,
                 path: documentReference.path,
-                values: firestoreToCMSModel(updatedFirestoreValues, schema, path) as EntityValues<M>
+                values: firestoreToCMSModel(updatedFirestoreValues, resolvedSchema, path) as EntityValues<M>
             }));
         },
 
@@ -412,8 +422,7 @@ export function useFirestoreDataSource({
          */
         async deleteEntity<M extends { [Key: string]: any }>(
             {
-                entity,
-                schema
+                entity
             }: DeleteEntityProps<M>
         ): Promise<void> {
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");

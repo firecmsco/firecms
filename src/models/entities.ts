@@ -1,4 +1,4 @@
-import { EnumValues, PropertiesOrBuilder } from "./properties";
+import { EnumValues, Properties, PropertiesOrBuilder } from "./properties";
 
 /**
  * Specification for defining an entity
@@ -42,6 +42,29 @@ export interface EntitySchema<M extends { [Key: string]: any } = any> {
     views?: EntityCustomView<M>[];
 
 }
+
+/**
+ * @category Models
+ */
+export type EntitySchemaResolverProps<M = any> = {
+    entityId?: string | undefined,
+    values?: Partial<EntityValues<M>>,
+};
+
+/**
+ * Use to resolve the schema properties for specific path, entity id or values.
+ * @category Models
+ */
+export type EntitySchemaResolver<M = any> = ({ entityId, values }: EntitySchemaResolverProps<M>) => ResolvedEntitySchema<M>;
+
+/**
+ * This is the same entity schema you define, only all the property builders
+ * are resolved to regular `Property` objects.
+ * @category Models
+ */
+export type ResolvedEntitySchema<M> =
+    Omit<EntitySchema<M>, "properties">
+    & { "properties": Properties }
 
 /**
  * New or existing status
@@ -147,7 +170,7 @@ export interface EntityCustomViewParams<M extends { [Key: string]: any } = any> 
     /**
      * Schema used by this entity
      */
-    schema: EntitySchema<M>;
+    schema: ResolvedEntitySchema<M>;
 
     /**
      * Entity that this view refers to. It can be undefined if the entity is new

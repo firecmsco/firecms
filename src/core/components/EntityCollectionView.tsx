@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Box,
     Button,
@@ -16,6 +16,8 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
+    EntitySchemaResolver,
+    PartialEntityCollection,
     SelectionController
 } from "../../models";
 import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
@@ -31,12 +33,9 @@ import {
     useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
-import {
-    PartialEntityCollection,
-    getCollectionConfig,
-    saveCollectionConfig
-} from "../util/storage";
+import { getCollectionConfig, saveCollectionConfig } from "../util/storage";
 import { mergeDeep } from "../util/objects";
+import { useBuildSchemaResolver } from "../../hooks/useBuildSchemaResolver";
 
 /**
  * @category Components
@@ -122,6 +121,11 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
     const collection: EntityCollection = useMemo(() => mergeDeep(baseCollection, extraConfiguration), [baseCollection, extraConfiguration]);
 
+    const schemaResolver: EntitySchemaResolver<M> = useBuildSchemaResolver<M>({
+        path,
+        schema: collection.schema
+    });
+
     const exportable = collection.exportable === undefined || collection.exportable;
 
     const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
@@ -149,7 +153,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             schema: collection.schema,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
-            overrideSchemaResolver: false
+            overrideSchemaRegistry: false
         });
     }, [path, collection]);
 
@@ -161,7 +165,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             schema: collection.schema,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
-            overrideSchemaResolver: false
+            overrideSchemaRegistry: false
         });
     }, [path, collection]);
 
@@ -181,19 +185,19 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         return collection.inlineEditing === undefined || collection.inlineEditing;
     }, [collection]);
 
-
     const onColumnResize = useCallback(({ width, key }: OnColumnResizeParams) => {
         const property: Partial<AnyProperty> = { columnWidth: width };
-        const newCollection: PartialEntityCollection<M> = mergeDeep(extraConfiguration, { schema: { properties: { [key as keyof M]: property } } });
+        const updatedFields = { schema: { properties: { [key as keyof M]: property } } };
+        const newCollection: PartialEntityCollection<M> = mergeDeep(extraConfiguration, updatedFields);
         setExtraConfiguration(newCollection);
         saveCollectionConfig(path, newCollection);
-    }, [path]);
+    }, [path, extraConfiguration]);
 
     const onSizeChanged = useCallback((size: CollectionSize) => {
         const newCollection: PartialEntityCollection<M> = mergeDeep(extraConfiguration, { defaultSize: size });
         setExtraConfiguration(newCollection);
         saveCollectionConfig(path, newCollection);
-    }, [path]);
+    }, [path, extraConfiguration]);
 
     const open = anchorEl != null;
     const title = useMemo(() => (
@@ -285,7 +289,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             schema: collection.schema,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
-            overrideSchemaResolver: false
+            overrideSchemaRegistry: false
         });
 
         const onEditClicked = (entity: Entity<M>) => sideEntityController.open({
@@ -299,7 +303,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             schema: collection.schema,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
-            overrideSchemaResolver: false
+            overrideSchemaRegistry: false
         });
 
         return (
@@ -315,9 +319,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             />
         );
 
-    },[path]);
+    },[path, selectedEntities, largeLayout]);
 
-    const toolbarActionsBuilder = useCallback((_: { size: CollectionSize, data: Entity<any>[] }) => {
+    const toolbarActionsBuilder = (_: { size: CollectionSize, data: Entity<any>[] }) => {
 
         const addButton = canCreate(collection.permissions, authController, path, context) && onNewClick && (largeLayout ?
             <Button
@@ -376,6 +380,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
         const exportButton = exportable &&
             <ExportButton schema={collection.schema}
+                          schemaResolver={schemaResolver}
                           exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
                           path={path}/>;
 
@@ -387,7 +392,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 {addButton}
             </>
         );
-    },[path, collection]);
+    };
 
     return (
         <>
@@ -396,6 +401,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 title={title}
                 path={path}
                 collection={collection}
+                schemaResolver={schemaResolver}
                 onSizeChanged={onSizeChanged}
                 inlineEditing={checkInlineEditing}
                 onEntityClick={onEntityClick}
@@ -408,6 +414,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 path={path}
                                 schema={collection.schema}
+                                schemaResolver={schemaResolver}
                                 callbacks={collection.callbacks}
                                 open={!!deleteEntityClicked}
                                 onEntityDelete={internalOnEntityDelete}

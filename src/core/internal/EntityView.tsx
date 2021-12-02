@@ -1,7 +1,15 @@
-import React, {lazy, Suspense, useCallback, useEffect, useState} from "react";
+import React, {
+    lazy,
+    Suspense,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState
+} from "react";
 import {
     Box,
-    CircularProgress, Divider,
+    CircularProgress,
+    Divider,
     IconButton,
     Tab,
     Tabs,
@@ -18,17 +26,16 @@ import {
     EntityCallbacks,
     EntityCollection,
     EntitySchema,
+    EntitySchemaResolver,
     EntityStatus,
     EntityValues,
     PermissionsBuilder
 } from "../../models";
-import {
-    CircularProgressCenter
-} from "../components";
-import {removeInitialAndTrailingSlashes} from "../util/navigation_utils";
+import { CircularProgressCenter } from "../components";
+import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 
-import {CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH} from "./common";
-import {ErrorBoundary} from "./ErrorBoundary";
+import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
+import { ErrorBoundary } from "./ErrorBoundary";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -38,16 +45,16 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "../../hooks";
-import {canEdit} from "../util/permissions";
+import { canEdit } from "../util/permissions";
+import { resolveSchema } from "../utils";
 
-
-const EntityCollectionView = lazy(() => import( "../components/EntityCollectionView"));
-const EntityForm = lazy(() => import( "../../form/EntityForm"));
-const EntityPreview = lazy(() => import( "../components/EntityPreview"));
+const EntityCollectionView = lazy(() => import( "../components/EntityCollectionView")) as any;
+const EntityForm = lazy(() => import( "../../form/EntityForm")) as any;
+const EntityPreview = lazy(() => import( "../components/EntityPreview")) as any;
 
 const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: Theme) =>
     createStyles({
-        container: ({containerWidth}) => ({
+        container: ({ containerWidth }) => ({
             display: "flex",
             flexDirection: "column",
             width: containerWidth,
@@ -116,9 +123,9 @@ const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: The
 );
 
 
-export interface EntityViewProps<M extends { [Key: string]: any }, UserType> {
+export interface EntityViewProps<M, UserType> {
     path: string;
-    schema: EntitySchema;
+    schema: EntitySchema<M> | EntitySchemaResolver<M>;
     entityId?: string;
     copy?: boolean;
     selectedSubpath?: string;
@@ -137,11 +144,12 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                            selectedSubpath,
                                                                            copy,
                                                                            permissions,
-                                                                           schema,
+                                                                           schema: schemaOrResolver,
                                                                            subcollections,
                                                                            onModifiedValues,
                                                                            width
                                                                        }: EntityViewProps<M, UserType>) {
+
 
     const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
     const classes = useStylesSide({containerWidth: resolvedWidth ?? CONTAINER_WIDTH});
@@ -158,6 +166,13 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const [tabsPosition, setTabsPosition] = React.useState(-1);
 
     const [modifiedValues, setModifiedValues] = useState<EntityValues<any> | undefined>();
+
+    const schema = useMemo(() => resolveSchema({
+        schemaOrResolver,
+        path,
+        entityId,
+        values: modifiedValues
+    }), [schemaOrResolver, path, entityId, modifiedValues]);
 
     const customViews = schema.views;
     const customViewsCount = customViews?.length ?? 0;
@@ -314,7 +329,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 <EntityForm
                     status={status}
                     path={path}
-                    schema={schema}
+                    schemaOrResolver={schema}
                     onEntitySave={onEntitySave as any}
                     onDiscard={onDiscard}
                     onValuesChanged={setModifiedValues}
@@ -324,7 +339,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     ) : (
         <Suspense fallback={<CircularProgressCenter/>}>
             <EntityPreview
-                entity={entity as any}
+                entity={entity}
+                path={path}
                 schema={schema}/>
         </Suspense>
     );
@@ -406,7 +422,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 path,
                 entityId,
                 selectedSubpath: getSelectedSubpath(value),
-                overrideSchemaResolver: false
+                overrideSchemaRegistry: false
             });
         }
     }, []);

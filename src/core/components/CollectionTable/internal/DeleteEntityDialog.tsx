@@ -1,4 +1,9 @@
-import { Entity, EntityCallbacks, EntitySchema } from "../../../../models";
+import {
+    Entity,
+    EntityCallbacks,
+    EntitySchema,
+    EntitySchemaResolver
+} from "../../../../models";
 import React, { useState } from "react";
 import {
     Button,
@@ -20,6 +25,7 @@ export interface DeleteEntityDialogProps<M extends { [Key: string]: any }, UserT
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
     path: string,
     schema: EntitySchema<M>,
+    schemaResolver: EntitySchemaResolver<M>;
     open: boolean;
     onClose: () => void;
     callbacks?: EntityCallbacks<M>,
@@ -30,16 +36,16 @@ export interface DeleteEntityDialogProps<M extends { [Key: string]: any }, UserT
 }
 
 export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
-                                                                         entityOrEntitiesToDelete,
-                                                                         schema,
-                                                                         onClose,
-                                                                         open,
-                                                                         callbacks,
-                                                                         onEntityDelete,
-                                                                         onMultipleEntitiesDelete,
-                                                                         path,
-                                                                         ...other
-                                                                     }
+                                                                                   entityOrEntitiesToDelete,
+                                                                                   schemaResolver,
+                                                                                   onClose,
+                                                                                   open,
+                                                                                   callbacks,
+                                                                                   onEntityDelete,
+                                                                                   onMultipleEntitiesDelete,
+                                                                                   path,
+                                                                                   ...other
+                                                                               }
                                                                          : DeleteEntityDialogProps<M, UserType>) {
 
     const dataSource = useDataSource();
@@ -49,6 +55,8 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
     const [entityOrEntities, setUsedEntityOrEntities] = React.useState<Entity<M> | Entity<M>[]>();
     const [multipleEntities, setMultipleEntities] = React.useState<boolean>();
     const context = useFireCMSContext();
+
+    const schema = schemaResolver({});
 
     React.useEffect(() => {
         if (entityOrEntitiesToDelete) {
@@ -160,10 +168,23 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
         }
     };
 
-    const content = entityOrEntities && (multipleEntities ?
-        <div>Multiple entities</div> :
-        <EntityPreview entity={entityOrEntities as Entity<M>}
-                       schema={schema}/>);
+
+    let content: JSX.Element;
+    if (entityOrEntities && multipleEntities) {
+        content = <div>Multiple entities</div>;
+    } else {
+        const entity = entityOrEntities as Entity<M> | undefined;
+        const resolvedSchema = schemaResolver({
+            entityId: entity?.id,
+            values: entity?.values
+        })
+        content = entity ?
+            <EntityPreview
+                entity={entity}
+                schema={resolvedSchema}
+                path={path}/>
+            : <></>;
+    }
 
     const dialogTitle = multipleEntities ? `${schema.name}: Confirm multiple delete?`
         : `Would you like to delete this ${schema.name}?`;

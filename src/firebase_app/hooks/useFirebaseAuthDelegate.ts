@@ -11,6 +11,8 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
+    GithubAuthProvider,
+    TwitterAuthProvider,
     User as FirebaseUser
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
@@ -20,13 +22,10 @@ import {
     FirebaseSignInOption,
     FirebaseSignInProvider
 } from "../models/auth";
-import firebase from "firebase/compat";
 import {
     createUserWithEmailAndPassword,
     signInAnonymously
 } from "@firebase/auth";
-import GithubAuthProvider = firebase.auth.GithubAuthProvider;
-import TwitterAuthProvider = firebase.auth.TwitterAuthProvider;
 
 interface FirebaseAuthHandlerProps {
     firebaseApp?: FirebaseApp;

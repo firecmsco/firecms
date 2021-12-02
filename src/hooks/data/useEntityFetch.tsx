@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Entity, EntitySchema } from "../../models";
+import { Entity, EntitySchema, EntitySchemaResolver } from "../../models";
 import { useDataSource } from "./useDataSource";
 
 /**
@@ -8,7 +8,7 @@ import { useDataSource } from "./useDataSource";
 export interface EntityFetchProps<M extends { [Key: string]: any }> {
     path?: string;
     entityId?: string;
-    schema?: EntitySchema<M>;
+    schema?: EntitySchema<M> | EntitySchemaResolver<M>;
     useCache?: boolean;
 }
 
@@ -22,16 +22,16 @@ export interface EntityFetchResult<M extends { [Key: string]: any }> {
 }
 
 const CACHE = {};
-
 /**
  * This hook is used to fetch an entity.
  * It gives real time updates if the datasource supports it.
  * @param path
  * @param schema
  * @param entityId
- * @param listen
+ * @param useCache
  * @category Hooks and utilities
  */
+
 export function useEntityFetch<M extends { [Key: string]: any }>(
     {
         path,
@@ -84,7 +84,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
                 dataSource.fetchEntity<M>({
                     path,
                     entityId,
-                    schema
+                    schema,
                 })
                     .then(onEntityUpdate)
                     .catch(onError);
@@ -98,7 +98,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
             return () => {
             };
         }
-    }, [entityId, schema, path]);
+    }, [entityId, path]);
 
     return {
         entity,

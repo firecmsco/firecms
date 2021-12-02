@@ -6,32 +6,32 @@ import React, {
     useState
 } from "react";
 
-import {Button, IconButton, Portal, Theme, Typography} from "@mui/material";
+import { Button, IconButton, Portal, Theme, Typography } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import {
     Entity,
-    EntitySchema,
     EntityValues,
     FormContext,
-    PropertiesOrBuilder,
-    Property
+    Properties,
+    Property,
+    ResolvedEntitySchema
 } from "../../../../../models";
-import {Form, Formik, FormikProps} from "formik";
-import {useDraggable} from "./useDraggable";
+import { Form, Formik, FormikProps } from "formik";
+import { useDraggable } from "./useDraggable";
 import {
     CustomFieldValidator,
     getYupEntitySchema
 } from "../../../../../form/validation";
-import {useWindowSize} from "./useWindowSize";
-import {isReadOnly} from "../../../../utils";
-import {buildPropertyField} from "../../../../../form";
+import { useWindowSize } from "./useWindowSize";
+import { isReadOnly } from "../../../../utils";
+import { buildPropertyField } from "../../../../../form";
 import clsx from "clsx";
-import {ElementResizeListener} from "./ElementResizeListener";
-import {OnCellValueChangeParams} from "../../column_builder";
-import {ErrorView} from "../../../ErrorView";
+import { ElementResizeListener } from "./ElementResizeListener";
+import { OnCellValueChangeParams } from "../../column_builder";
+import { ErrorView } from "../../../ErrorView";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     form: {
@@ -71,7 +71,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
 interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     entity?: Entity<M>;
     customFieldValidator?: CustomFieldValidator;
-    schema: EntitySchema<M>;
+    schema: ResolvedEntitySchema<M>;
     path: string;
     tableKey: string;
     name?: keyof M;
@@ -81,7 +81,6 @@ interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     setFormPopupOpen: (value: boolean) => void;
     columnIndex?: number;
     setPreventOutsideClick: (value: any) => void;
-    usedPropertyBuilder: boolean;
 
     /**
      * Callback when the value of a cell has been edited
@@ -103,7 +102,6 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                                      formPopupOpen,
                                                                      setFormPopupOpen,
                                                                      columnIndex,
-                                                                     usedPropertyBuilder,
                                                                      onCellValueChange
                                                                  }: PopupFormFieldProps<M>) {
 
@@ -150,12 +148,10 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const validationSchema = useMemo(() => getYupEntitySchema(
         name ?
-            {[name]: schema.properties[name]} as PropertiesOrBuilder<M>
-            : {} as PropertiesOrBuilder<M>,
-        entity?.values ?? {},
-        path,
-        customFieldValidator,
-        entity?.id), [name, schema, path, entity]);
+            { [name]: schema.properties[name] } as Properties<M>
+            : {} as Properties<M>
+        ,
+        customFieldValidator), [name, schema]);
 
     function getInitialLocation() {
         if (!cellRect) throw Error("getInitialLocation error");
@@ -255,7 +251,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 tableMode: true,
                 partOfArray: false,
                 autoFocus: formPopupOpen,
-                dependsOnOtherProperties: usedPropertyBuilder
+                dependsOnOtherProperties: false
             })}
 
             <Button
