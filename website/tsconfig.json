@@ -20,9 +20,19 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "jsx": "react-jsx"
+        "jsx": "react-jsx",
+
+        "sourceMap": true,
+        "declaration": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "jsxImportSource": "@emotion/react"
     },
     "include": [
         "src"
     ]
 }
+
+

@@ -18,13 +18,13 @@ Example `of` array property:
 import { buildProperty } from "@camberi/firecms";
 
 const productReferences = buildProperty({
-    title: "Products",
-    dataType: "array",
-    of: {
-        dataType: "reference",
-            path: "products",
-            previewProperties: ["name", "main_image"]
-    }
+  title: "Products",
+  dataType: "array",
+  of: {
+    dataType: "reference",
+    path: "products",
+    previewProperties: ["name", "main_image"]
+  }
 });
 ```
 
@@ -49,32 +49,27 @@ Example of `oneOf` field:
 import { buildProperty } from "@camberi/firecms";
 
 const contentProperty = buildProperty({
-    title: "Content",
-    description: "Example of a complex array with multiple properties as children",
-    validation: { required: true },
-    dataType: "array",
-    oneOf: {
-        title: "Content",
-        description: "Example of a complex array with multiple properties as children",
-        dataType: "array",
-        oneOf: {
-            typeField: "type",
-            valueField: "value",
-            properties: {
-                title: {
-                    title: "Title",
-                    dataType: "string"
-                },
-                text: {
-                    dataType: "string",
-                    title: "Text",
-                    config: {
-                        markdown: true
-                    }
-                }
-            }
+  title: "Content",
+  description: "Example of a complex array with multiple properties as children",
+  validation: { required: true },
+  dataType: "array",
+  oneOf: {
+    typeField: "type",
+    valueField: "value",
+    properties: {
+      title: {
+        title: "Title",
+        dataType: "string"
+      },
+      text: {
+        dataType: "string",
+        title: "Text",
+        config: {
+          markdown: true
         }
+      }
     }
+  }
 });
 ```
 
