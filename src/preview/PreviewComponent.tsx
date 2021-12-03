@@ -1,12 +1,21 @@
 import React, { createElement } from "react";
-import { ArrayProperty, CMSType, EntityReference } from "../models";
+import {
+    ArrayProperty,
+    BooleanProperty,
+    CMSType,
+    EntityReference,
+    MapProperty,
+    NumberProperty,
+    ReferenceProperty,
+    StringProperty,
+    TimestampProperty
+} from "../models";
 
 import {
     ArrayOfMapsPreview,
     ArrayOfReferencesPreview,
     ArrayOfStorageComponentsPreview,
     ArrayOfStringsPreview,
-    ArrayOneOfPreview,
     ArrayPreview,
     ArrayPropertyEnumPreview,
     BooleanPreview,
@@ -17,7 +26,8 @@ import {
     StorageThumbnail,
     StringPreview,
     TimestampPreview,
-    UrlComponentPreview
+    UrlComponentPreview,
+    ArrayOneOfPreview
 } from "./internal";
 import { ErrorView } from "../core/components";
 
@@ -56,20 +66,21 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
     } else if (value === null) {
         content = <EmptyValue/>;
     } else if (property.dataType === "string") {
+        const stringProperty = property as StringProperty;
         if (typeof value === "string") {
-            if (property.config?.url) {
+            if (stringProperty.config?.url) {
                 content = <UrlComponentPreview {...fieldProps}
-                                               property={property}
+                                               property={property as StringProperty}
                                                value={value}/>;
-            } else if (property.config?.storageMeta) {
+            } else if (stringProperty.config?.storageMeta) {
                 content = <StorageThumbnail {...fieldProps}
-                                            property={property}
+                                            property={property as StringProperty}
                                             value={value}/>;
-            } else if (property.config?.markdown) {
+            } else if (stringProperty.config?.markdown) {
                 content = <Markdown source={value}/>;
             } else {
                 content = <StringPreview {...fieldProps}
-                                         property={property}
+                                         property={property as StringProperty}
                                          value={value}/>;
             }
         } else {
@@ -77,41 +88,42 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
         }
     } else if (property.dataType === "array") {
         if (value instanceof Array) {
-            if (!property.of && !property.oneOf) {
+            const arrayProperty = property as ArrayProperty;
+            if (!arrayProperty.of && !arrayProperty.oneOf) {
                 throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
             }
 
-            if (property.of) {
-                if (property.of.dataType === "map") {
+            if (arrayProperty.of) {
+                if (arrayProperty.of.dataType === "map") {
                     content =
                         <ArrayOfMapsPreview name={name}
                                             property={property as ArrayProperty}
                                             value={value as object[]}
                                             size={size}
                         />;
-                } else if (property.of.dataType === "reference") {
+                } else if (arrayProperty.of.dataType === "reference") {
                     content = <ArrayOfReferencesPreview {...fieldProps}
                                                         value={value}
-                                                        property={property}/>;
-                } else if (property.of.dataType === "string") {
-                    if (property.of.config?.enumValues) {
+                                                        property={property as ArrayProperty}/>;
+                } else if (arrayProperty.of.dataType === "string") {
+                    if (arrayProperty.of.config?.enumValues) {
                         content = <ArrayPropertyEnumPreview
                             {...fieldProps}
                             value={value as string[]}
                             property={property as ArrayProperty}/>;
-                    } else if (property.of.config?.storageMeta) {
+                    } else if (arrayProperty.of.config?.storageMeta) {
                         content = <ArrayOfStorageComponentsPreview
                             {...fieldProps}
                             value={value}
-                            property={property}/>;
+                            property={property as ArrayProperty}/>;
                     } else {
                         content = <ArrayOfStringsPreview
                             {...fieldProps}
                             value={value as string[]}
                             property={property as ArrayProperty}/>;
                     }
-                } else if (property.of.dataType === "number") {
-                    if (property.of.config?.enumValues) {
+                } else if (arrayProperty.of.dataType === "number") {
+                    if (arrayProperty.of.config?.enumValues) {
                         content = <ArrayPropertyEnumPreview
                             {...fieldProps}
                             value={value as string[]}
@@ -120,12 +132,12 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
                 } else {
                     content = <ArrayPreview {...fieldProps}
                                             value={value}
-                                            property={property}/>;
+                                            property={property as ArrayProperty}/>;
                 }
-            } else if (property.oneOf) {
+            } else if (arrayProperty.oneOf) {
                 content = <ArrayOneOfPreview {...fieldProps}
                                              value={value}
-                                             property={property}/>;
+                                             property={property as ArrayProperty}/>;
             }
         } else {
             content = buildWrongValueType(name, property.dataType, value);
@@ -134,7 +146,7 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
         if (typeof value === "object") {
             content =
                 <MapPreview {...fieldProps}
-                            property={property}/>;
+                            property={property as MapProperty}/>;
         } else {
             content = buildWrongValueType(name, property.dataType, value);
         }
@@ -142,7 +154,7 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
         if (value instanceof Date) {
             content = <TimestampPreview {...fieldProps}
                                         value={value}
-                                        property={property}/>;
+                                        property={property as TimestampProperty}/>;
         } else {
             content = buildWrongValueType(name, property.dataType, value);
         }
@@ -151,7 +163,7 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
             content = <ReferencePreview
                 {...fieldProps}
                 value={value as EntityReference}
-                property={property}
+                property={property as ReferenceProperty}
             />;
         } else {
             content = buildWrongValueType(name, property.dataType, value);
@@ -160,7 +172,7 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
         if (typeof value === "boolean") {
             content = <BooleanPreview {...fieldProps}
                                       value={value}
-                                      property={property}/>;
+                                      property={property as BooleanProperty}/>;
         } else {
             content = buildWrongValueType(name, property.dataType, value);
         }
@@ -168,7 +180,7 @@ export function PreviewComponentInternal<T extends CMSType>(props: PreviewCompon
         if (typeof value === "number") {
             content = <NumberPreview {...fieldProps}
                                      value={value}
-                                     property={property}/>;
+                                     property={property as NumberProperty}/>;
         } else {
             content = buildWrongValueType(name, property.dataType, value);
         }

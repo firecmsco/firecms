@@ -154,8 +154,8 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
     let fullHeight = false;
 
     if (!readOnly && !customField && (!customPreview || selected)) {
-        const isAStorageProperty = (property.dataType === "string" && property.config?.storageMeta) ||
-            (property.dataType === "array" && property.of?.dataType === "string" && property.of?.config?.storageMeta);
+        const isAStorageProperty = (property.dataType === "string" && (property as StringProperty).config?.storageMeta) ||
+            (property.dataType === "array" && (property as ArrayProperty).of?.dataType === "string" && ((property as ArrayProperty).of as StringProperty)?.config?.storageMeta);
         if (isAStorageProperty) {
             innerComponent = <TableStorageUpload error={error}
                                                  disabled={disabled}
