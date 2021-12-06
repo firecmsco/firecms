@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "1.0.0-beta5",
+    "version": "1.0.0-beta6",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
     "license": "MIT",
