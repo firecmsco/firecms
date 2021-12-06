@@ -19,7 +19,7 @@ import {
     WhereFilterOp
 } from "../../models";
 import {
-    computeProperties, resolveSchema,
+    computeSchema,
     sanitizeData,
     traverseValues,
     updateAutoValues
@@ -56,7 +56,7 @@ import { useEffect, useRef } from "react";
  */
 export interface FirestoreDataSourceProps {
     firebaseApp?: FirebaseApp,
-    textSearchController?: FirestoreTextSearchController
+    textSearchController?: FirestoreTextSearchController,
 }
 
 /**
@@ -67,7 +67,7 @@ export interface FirestoreDataSourceProps {
  */
 export function useFirestoreDataSource({
                                            firebaseApp,
-                                           textSearchController
+                                           textSearchController,
                                        }: FirestoreDataSourceProps): DataSource {
 
     const firestoreRef = useRef<Firestore>();
@@ -78,21 +78,26 @@ export function useFirestoreDataSource({
         firestoreRef.current = getFirestore(firebaseApp);
     }, [firebaseApp]);
 
+
     /**
      *
      * @param doc
      * @param path
-     * @param schema
+     * @param schemaOrResolver
      * @category Firestore
      */
     function createEntityFromSchema<M extends { [Key: string]: any }>
     (
         doc: DocumentSnapshot,
         path: string,
-        schema: EntitySchema<M> | EntitySchemaResolver<M>
+        schemaOrResolver: EntitySchema<M> | EntitySchemaResolver<M>
     ): Entity<M> {
 
-        const resolvedSchema = resolveSchema({schemaOrResolver: schema,  entityId: doc.id, path});
+        const resolvedSchema = computeSchema({
+            schemaOrResolver,
+            entityId: doc.id,
+            path
+        });
         const values = firestoreToCMSModel(doc.data(), resolvedSchema, path);
         const data = doc.data() ?
             resolvedSchema.properties ?
@@ -385,7 +390,11 @@ export function useFirestoreDataSource({
             }: SaveEntityProps<M>): Promise<Entity<M>> {
 
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
-            const resolvedSchema = resolveSchema({ schemaOrResolver: schema, path, entityId, values: values as any });
+            const resolvedSchema = computeSchema({
+                schemaOrResolver: schema,
+                entityId,
+                path
+            });
             const properties: Properties<M> = resolvedSchema.properties;
             const collectionReference: CollectionReference = collection(firestore, path);
 
@@ -468,3 +477,4 @@ export function useFirestoreDataSource({
     };
 
 }
+

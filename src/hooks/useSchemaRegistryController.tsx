@@ -1,8 +1,8 @@
-import { AuthController, SideEntityController } from "../models";
+import { AuthController, SchemaRegistryController } from "../models";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 /**
- * Hook to retrieve the side entity controller.
+ * Hook to retrieve the Schema registry controller.
  *
  * Consider that in order to use this hook you need to have a parent
  * `FireCMS`
@@ -10,7 +10,7 @@ import { useFireCMSContext } from "./useFireCMSContext";
  * @see AuthController
  * @category Hooks and utilities
  */
-export function useSideEntityController(): SideEntityController {
+export function useSchemaRegistryController(): SchemaRegistryController {
     const context = useFireCMSContext();
-    return context.sideEntityController;
+    return context.schemaRegistryController;
 }

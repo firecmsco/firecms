@@ -7,20 +7,30 @@ import {
     Navigation,
     NavigationBuilder,
     NavigationContext,
+    PartialEntityCollection,
+    PartialSchema,
     StorageSource,
     User
 } from "../../models";
-import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
+import {
+    getCollectionFromCollections,
+    removeInitialAndTrailingSlashes
+} from "../util/navigation_utils";
+import {
+    getStorageCollectionConfig,
+    saveStorageCollectionConfig
+} from "../util/storage";
+import { mergeDeep } from "../util/objects";
 
 export function useBuildNavigationContext<UserType>({
-                                              basePath,
-                                              baseCollectionPath,
-                                              authController,
-                                              navigationOrBuilder,
-                                              dateTimeFormat,
-                                              locale,
-                                              dataSource,
-                                              storageSource
+                                                        basePath,
+                                                        baseCollectionPath,
+                                                        authController,
+                                                        navigationOrBuilder,
+                                                        dateTimeFormat,
+                                                        locale,
+                                                        dataSource,
+                                                        storageSource
                                           }: {
     basePath: string,
     baseCollectionPath: string,
@@ -107,6 +117,34 @@ export function useBuildNavigationContext<UserType>({
         return cleanBasePath ? `/${cleanBasePath}` : "/";
     }
 
+    const onCollectionModifiedForUser = <M extends any>(path: string, partialCollection: PartialEntityCollection<M>) => {
+        saveStorageCollectionConfig(path, partialCollection);
+    }
+
+    /**
+     * Find the corresponding view at any depth for a given path.
+     * @param path
+     */
+    function getCollection<M>(path: string): EntityCollection<M> | undefined {
+
+        const collections = navigation?.collections;
+        if (!collections)
+            return undefined;
+
+        const collection = getCollectionFromCollections<M>(removeInitialAndTrailingSlashes(path), collections);
+
+        const dynamicCollectionConfig = { ...getStorageCollectionConfig(path) };
+        delete dynamicCollectionConfig["schema"];
+
+        return mergeDeep(collection, dynamicCollectionConfig);
+    }
+
+    const getSchemaOverride = <M extends any>(path: string): PartialSchema<M> | undefined => {
+        let storageCollectionConfig = getStorageCollectionConfig<M>(path);
+        if (!storageCollectionConfig) return undefined;
+        return storageCollectionConfig.schema;
+    }
+
     return {
         navigation,
         loading: navigationLoading,
@@ -117,6 +155,9 @@ export function useBuildNavigationContext<UserType>({
         buildCMSUrl,
         buildHomeUrl,
         basePath,
-        baseCollectionPath
+        baseCollectionPath,
+        onCollectionModifiedForUser,
+        getCollection,
+        getSchemaOverride
     };
 }

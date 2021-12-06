@@ -28,7 +28,7 @@ The props provided by this context are:
 
 * `close()` Close the last panel
 * `sidePanels` List of side entity panels currently open
-* `open (props: SideEntityPanelProps & Partial<SchemaConfig>)`
+* `open (props: SideEntityPanelProps)`
   Open a new entity sideDialog. By default, the schema and configuration of the
   view is fetched from the collections you have specified in the navigation. At
   least you need to pass the path of the entity you would like to

@@ -7,7 +7,7 @@ import {
     SaveEntityProps
 } from "../../models";
 import { useDataSource } from "./useDataSource";
-import { resolveSchema } from "../../core/utils";
+import { computeSchema } from "../../core/utils";
 
 /**
  * @category Hooks and utilities
@@ -72,7 +72,7 @@ export async function saveEntityWithCallbacks<M, UserType>({
 
     if (callbacks?.onPreSave) {
         try {
-            const resolvedSchema = resolveSchema({
+            const resolvedSchema = computeSchema({
                 values: previousValues as EntityValues<M>,
                 entityId,
                 schemaOrResolver: schema,
@@ -107,7 +107,7 @@ export async function saveEntityWithCallbacks<M, UserType>({
     }).then((entity) => {
         try {
             if (callbacks?.onSaveSuccess) {
-                const resolvedSchema = resolveSchema({
+                const resolvedSchema = computeSchema({
                     values: updatedValues as EntityValues<M>,
                     entityId,
                     schemaOrResolver: schema,
@@ -132,7 +132,7 @@ export async function saveEntityWithCallbacks<M, UserType>({
     })
         .catch((e) => {
             if (callbacks?.onSaveFailure) {
-                const resolvedSchema = resolveSchema({
+                const resolvedSchema = computeSchema({
                     values: updatedValues as EntityValues<M>,
                     entityId,
                     schemaOrResolver: schema,

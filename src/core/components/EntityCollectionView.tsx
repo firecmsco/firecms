@@ -16,8 +16,6 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
-    EntitySchemaResolver,
-    PartialEntityCollection,
     SelectionController
 } from "../../models";
 import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
@@ -33,9 +31,8 @@ import {
     useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
-import { getCollectionConfig, saveCollectionConfig } from "../util/storage";
-import { mergeDeep } from "../util/objects";
-import { useBuildSchemaResolver } from "../../hooks/useBuildSchemaResolver";
+import { useSchemaRegistryController } from "../../hooks/useSchemaRegistryController";
+import { useCollectionPersist } from "../internal/useCollectionPersist";
 
 /**
  * @category Components
@@ -93,7 +90,7 @@ export function useSelectionController<M = any>(): SelectionController {
  * exclusively with config options.
  *
  * If you need a lower level implementation with more granular options, you
- * can try {@link CollectionTable}.
+ * can use {@link CollectionTable}.
  *
  * If you need a table that is not bound to the datasource or entities and
  * properties at all, you can check {@link Table}
@@ -105,26 +102,31 @@ export function useSelectionController<M = any>(): SelectionController {
  */
 export function EntityCollectionView<M extends { [Key: string]: any }>({
                                                                            path,
-                                                                           collection: baseCollection
+                                                                           collection: baseCollection,
                                                                        }: EntityCollectionViewProps<M>
 ) {
 
     const sideEntityController = useSideEntityController();
     const context = useFireCMSContext();
     const authController = useAuthController();
+    const schemaRegistry = useSchemaRegistryController();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
-    const [extraConfiguration, setExtraConfiguration] = useState<PartialEntityCollection<M>>(getCollectionConfig(path));
+    const {
+        collection: persistedCollection,
+        onCollectionModifiedForUser
+    } = useCollectionPersist({ path });
 
-    const collection: EntityCollection = useMemo(() => mergeDeep(baseCollection, extraConfiguration), [baseCollection, extraConfiguration]);
+    const collection = persistedCollection ?? baseCollection;
 
-    const schemaResolver: EntitySchemaResolver<M> = useBuildSchemaResolver<M>({
-        path,
-        schema: collection.schema
-    });
+    const schemaConfig = schemaRegistry.getSchemaConfig(path);
+    if (!schemaConfig) {
+        throw Error(`Couldn't find the corresponding schemaConfig for the path: ${path}`);
+    }
+    const { schemaResolver } = schemaConfig;
 
     const exportable = collection.exportable === undefined || collection.exportable;
 
@@ -155,7 +157,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             callbacks: collection.callbacks,
             overrideSchemaRegistry: false
         });
-    }, [path, collection]);
+    }, [path, collection, sideEntityController]);
 
     const onNewClick = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
@@ -167,7 +169,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             callbacks: collection.callbacks,
             overrideSchemaRegistry: false
         });
-    }, [path, collection]);
+    }, [path, collection, sideEntityController]);
 
     const internalOnEntityDelete = useCallback( (path: string, entity: Entity<M>) => {
         setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
@@ -185,19 +187,20 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         return collection.inlineEditing === undefined || collection.inlineEditing;
     }, [collection]);
 
-    const onColumnResize = useCallback(({ width, key }: OnColumnResizeParams) => {
+    const onColumnResize = useCallback(({
+                                            width,
+                                            key
+                                        }: OnColumnResizeParams) => {
         const property: Partial<AnyProperty> = { columnWidth: width };
         const updatedFields = { schema: { properties: { [key as keyof M]: property } } };
-        const newCollection: PartialEntityCollection<M> = mergeDeep(extraConfiguration, updatedFields);
-        setExtraConfiguration(newCollection);
-        saveCollectionConfig(path, newCollection);
-    }, [path, extraConfiguration]);
+        if (onCollectionModifiedForUser)
+            onCollectionModifiedForUser(updatedFields)
+    }, [path, collection]);
 
     const onSizeChanged = useCallback((size: CollectionSize) => {
-        const newCollection: PartialEntityCollection<M> = mergeDeep(extraConfiguration, { defaultSize: size });
-        setExtraConfiguration(newCollection);
-        saveCollectionConfig(path, newCollection);
-    }, [path, extraConfiguration]);
+        if (onCollectionModifiedForUser)
+            onCollectionModifiedForUser({ defaultSize: size })
+    }, [path, collection]);
 
     const open = anchorEl != null;
     const title = useMemo(() => (
@@ -266,7 +269,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         </div>
     ), [path, collection]);
 
-    const tableRowActionsBuilder = useCallback(({
+    const tableRowActionsBuilder = ({
                                         entity,
                                         size
                                     }: { entity: Entity<any>, size: CollectionSize }) => {
@@ -319,7 +322,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             />
         );
 
-    },[path, selectedEntities, largeLayout]);
+    };
 
     const toolbarActionsBuilder = (_: { size: CollectionSize, data: Entity<any>[] }) => {
 

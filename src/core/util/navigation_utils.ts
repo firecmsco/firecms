@@ -23,15 +23,24 @@ export function addInitialSlash(s: string) {
     else return `/${s}`;
 }
 
+export function getLastSegment(path: string) {
+    const cleanPath = removeInitialAndTrailingSlashes(path);
+    if (cleanPath.includes("/")) {
+        let segments = cleanPath.split("/");
+        return segments[segments.length - 1];
+    }
+    return cleanPath;
+}
+
 
 /**
  * Find the corresponding view at any depth for a given path.
  * @param path
- * @param collectionViews
+ * @param collections
  */
-export function getCollectionViewFromPath(path: string, collectionViews?: EntityCollection[]): EntityCollection | undefined {
+export function getCollectionFromCollections<M>(path: string, collections?: EntityCollection[]): EntityCollection<M> | undefined {
 
-    if (!collectionViews)
+    if (!collections)
         return undefined;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -39,11 +48,11 @@ export function getCollectionViewFromPath(path: string, collectionViews?: Entity
         throw Error(`Collection paths must have an odd number of segments: ${path}`);
     }
 
-    return getCollectionViewFromPathInternal(removeInitialAndTrailingSlashes(path), collectionViews);
+    return getCollectionFromCollectionsInternal(removeInitialAndTrailingSlashes(path), collections);
 
 }
 
-function getCollectionViewFromPathInternal<M extends { [Key: string]: any }>(path: string, collectionViews: EntityCollection[]): EntityCollection | undefined {
+function getCollectionFromCollectionsInternal<M extends { [Key: string]: any }>(path: string, collectionViews: EntityCollection[]): EntityCollection | undefined {
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
@@ -60,7 +69,7 @@ function getCollectionViewFromPathInternal<M extends { [Key: string]: any }>(pat
             } else if (navigationEntry.subcollections) {
                 const newPath = path.replace(subpathCombination, "").split("/").slice(2).join("/");
                 if (newPath.length > 0)
-                    result = getCollectionViewFromPathInternal(newPath, navigationEntry.subcollections);
+                    result = getCollectionFromCollectionsInternal(newPath, navigationEntry.subcollections);
             }
         }
         if (result) break;

@@ -55,12 +55,11 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     const [onHover, setOnHover] = useState(false);
     const [open, setOpen] = useState<boolean>(false);
 
-    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
-    const collectionConfig = schemaRegistryController.getCollectionConfig(path);
-    if (!collectionConfig) {
-        console.error(`Couldn't find the corresponding collection view for the path: ${path}`);
+    const schemaRegistry = useFireCMSContext().schemaRegistryController;
+    const collectionResolver = schemaRegistry.getCollectionResolver(path);
+    if (!collectionResolver) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
-
     const handleOpen = (event: React.MouseEvent) => {
         if (disabled)
             return;
@@ -129,7 +128,7 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
             return <ErrorView error={"Data is not an array of references"}/>;
     }
 
-    if (!collectionConfig)
+    if (!collectionResolver)
         return <ErrorView error={"The specified collection does not exist"}/>;
 
     return (
@@ -160,7 +159,7 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
             && <ReferenceDialog open={open}
                                 multiselect={multiselect}
                                 path={path}
-                                collection={collectionConfig}
+                                collectionResolver={collectionResolver}
                                 onClose={handleClose}
                                 onMultipleEntitiesSelected={onMultipleEntitiesSelected}
                                 onSingleEntitySelected={onSingleValueSet}

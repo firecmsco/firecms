@@ -11,5 +11,5 @@ export type PartialSchema<M> = Omit<Partial<EntitySchema<M>>, "properties"> &
 
 export type PartialEntityCollection<M> =
     Omit<Partial<EntityCollection<M>>, "schema"> & {
-    schema: PartialSchema<M>
+    schema?: PartialSchema<M>
 };

@@ -1,12 +1,19 @@
 import React, { useMemo } from "react";
 import { Box, Button, FormControl, FormHelperText, Paper } from "@mui/material";
-import { Entity, EntityReference, FieldProps, Property } from "../../models";
+import {
+    Entity,
+    EntityCollectionResolver,
+    EntityReference,
+    FieldProps,
+    Property
+} from "../../models";
 import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { ErrorView, ReferenceDialog } from "../../core";
 import { formStyles } from "../styles";
-import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
+import { useClearRestoreValue } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";
+import { useSchemaRegistryController } from "../../hooks/useSchemaRegistryController";
 
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -47,13 +54,13 @@ export function ArrayOfReferencesField({
         setValue
     });
 
-    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
-    const collectionConfig = useMemo(() => {
-        return schemaRegistryController.getCollectionConfig(ofProperty.path);
+    const schemaRegistry = useSchemaRegistryController();
+    const collectionResolver: EntityCollectionResolver | undefined = useMemo(() => {
+        return schemaRegistry.getCollectionResolver(ofProperty.path);
     }, [ofProperty.path]);
 
-    if (!collectionConfig) {
-        console.error(`Couldn't find the corresponding collection view for the path: ${ofProperty.path}`);
+    if (!collectionResolver) {
+        throw Error(`Couldn't find the corresponding collection for the path: ${ofProperty.path}`);
     }
 
     const onEntryClick = () => {
@@ -100,10 +107,10 @@ export function ArrayOfReferencesField({
                 <Paper variant={"outlined"}
                        className={classes.paper}>
 
-                    {!collectionConfig && <ErrorView
+                    {!collectionResolver && <ErrorView
                         error={"The specified collection does not exist. Check console"}/>}
 
-                    {collectionConfig && <>
+                    {collectionResolver && <>
 
                         <ArrayContainer value={value}
                                         name={name}
@@ -133,13 +140,13 @@ export function ArrayOfReferencesField({
 
             </FormControl>
 
-            {collectionConfig && <ReferenceDialog open={open}
-                                                  multiselect={true}
-                                                  collection={collectionConfig}
-                                                  path={ofProperty.path}
-                                                  onClose={onClose}
-                                                  onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                                                  selectedEntityIds={selectedIds}
+            {collectionResolver && <ReferenceDialog open={open}
+                                                    multiselect={true}
+                                                    collectionResolver={collectionResolver}
+                                                    path={ofProperty.path}
+                                                    onClose={onClose}
+                                                    onMultipleEntitiesSelected={onMultipleEntitiesSelected}
+                                                    selectedEntityIds={selectedIds}
             />}
         </>
     );

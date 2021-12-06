@@ -2,9 +2,26 @@
 id: changelog
 title: Changelog
 ---
-## [1.0.0-beta5] - 2021-11-
+## [1.0.0-beta6] - 2021-11-
 
-## Added
+### Added
+- New custom login screen that replaces FirebaseUi. 
+- Replaced `react-csv` with custom CSV implementation
+- The previous changes were blocking SSR and build tools such as Vite, but more
+testing is needed.
+- New type added `EntitySchemaResolver`, used mostly internally for resolving
+entity schemas (that means computing the property builders and transforming them
+to a `ResolvedEntitySchema`)
+
+### Changed
+
+- Fix for collections not refreshing correctly
+- [BREAKING] `schemaResolver` at the `FireCMS` level has been renamed to 
+ `schemaOverrideHandler`.
+ 
+## [1.0.0-beta5] - 2021-11-22
+
+### Added
 - `snackbarController` added to `FireCMSContext` so it can be used in callbacks.
 - `width` parameter added to `SideEntityController`'s `open` function, so you
   can select the width of the side view.

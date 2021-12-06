@@ -5,12 +5,13 @@ import makeStyles from "@mui/styles/makeStyles";
 import {
     CMSFormFieldProps,
     Entity,
-    EntitySchema, EntitySchemaResolver,
+    EntitySchema,
+    EntitySchemaResolver,
     EntityStatus,
     EntityValues,
     FormContext,
-    Properties,
-    Property, ResolvedEntitySchema
+    Property,
+    ResolvedEntitySchema
 } from "../models";
 import { Form, Formik, FormikHelpers } from "formik";
 import { buildPropertyField } from "./form_factory";
@@ -18,9 +19,10 @@ import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
 import { ErrorFocus } from "./components/ErrorFocus";
 import {
+    computeSchema,
     initWithProperties,
     isHidden,
-    isReadOnly, resolveSchema
+    isReadOnly
 } from "../core/utils";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
@@ -120,8 +122,7 @@ export interface EntityFormProps<M> {
  * This is the form used internally by the CMS
  * @param status
  * @param path
- * @param schema
- * @param schemaResolver
+ * @param schemaOrResolver
  * @param entity
  * @param onEntitySave
  * @param onDiscard
@@ -150,7 +151,7 @@ export function EntityForm<M>({
      * compare them with underlying changes in the datasource
      */
     const entityId = status === "existing" ? entity?.id : undefined;
-    const initialResolvedSchema: ResolvedEntitySchema<M> = resolveSchema({
+    const initialResolvedSchema: ResolvedEntitySchema<M> = computeSchema({
         schemaOrResolver,
         path,
         entityId,
@@ -178,7 +179,7 @@ export function EntityForm<M>({
     const initialValues = initialValuesRef.current;
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
 
-    const schema: ResolvedEntitySchema<M> = resolveSchema({
+    const schema: ResolvedEntitySchema<M> = computeSchema({
         schemaOrResolver,
         path,
         entityId,
@@ -273,37 +274,6 @@ export function EntityForm<M>({
         schema.properties,
         uniqueFieldValidator), []);
 
-    function buildButtons(isSubmitting: boolean, modified: boolean) {
-        const disabled = isSubmitting || (!modified && status === "existing");
-        return (
-            <Box textAlign="right">
-
-                {status === "existing" &&
-                <Button
-                    variant="text"
-                    color="primary"
-                    disabled={disabled}
-                    className={classes.button}
-                    type="reset"
-                >
-                    Discard
-                </Button>}
-
-                <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    disabled={disabled}
-                    className={classes.button}
-                >
-                    {status === "existing" && "Save"}
-                    {status === "copy" && "Create copy"}
-                    {status === "new" && "Create"}
-                </Button>
-
-            </Box>
-        );
-    }
 
     return (
         <Formik
@@ -343,7 +313,7 @@ export function EntityForm<M>({
                     });
                 }
 
-                const resolvedSchema: ResolvedEntitySchema<M> = resolveSchema({
+                const resolvedSchema: ResolvedEntitySchema<M> = computeSchema({
                     schemaOrResolver,
                     path,
                     entityId,
@@ -424,7 +394,7 @@ export function EntityForm<M>({
                                     </Typography>
                                 </Box>}
 
-                                {buildButtons(isSubmitting, modified)}
+                                {buildButtons(classes, isSubmitting, modified, status)}
 
                             </div>
 
@@ -439,5 +409,38 @@ export function EntityForm<M>({
         </Formik>
     );
 }
+
+function buildButtons(classes: any, isSubmitting: boolean, modified: boolean, status: EntityStatus) {
+    const disabled = isSubmitting || (!modified && status === "existing");
+    return (
+        <Box textAlign="right">
+
+            {status === "existing" &&
+            <Button
+                variant="text"
+                color="primary"
+                disabled={disabled}
+                className={classes.button}
+                type="reset"
+            >
+                Discard
+            </Button>}
+
+            <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={disabled}
+                className={classes.button}
+            >
+                {status === "existing" && "Save"}
+                {status === "copy" && "Create copy"}
+                {status === "new" && "Create"}
+            </Button>
+
+        </Box>
+    );
+}
+
 
 export default EntityForm;

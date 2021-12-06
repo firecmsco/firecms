@@ -1,8 +1,7 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     EntityCollection,
     NavigationContext,
-    SchemaConfig,
     SchemaRegistryController,
     SideEntityController,
     SideEntityPanelProps
@@ -12,48 +11,36 @@ import {
     NavigationViewInternal
 } from "../util/navigation_from_path";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getSidePanelKey } from "../contexts/utils";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
-
 
 const NEW_URL_HASH = "new";
 
-type ExtendedPanelProps = SideEntityPanelProps & {
-    /**
-     * If a custom schema or config is provided, it gets mapped with a key in the registry
-     */
-    sidePanelKey?: string;
-};
-
-
-export const useBuildSideEntityController = (navigationContext: NavigationContext, schemaRegistryController: SchemaRegistryController): SideEntityController => {
+export const useBuildSideEntityController = (navigationContext: NavigationContext, schemaRegistry: SchemaRegistryController): SideEntityController => {
 
     const location = useLocation();
     const navigate = useNavigate();
     const initialised = useRef<boolean>(false);
-    const [sidePanels, setSidePanels] = useState<ExtendedPanelProps[]>([]);
+    const [sidePanels, setSidePanels] = useState<SideEntityPanelProps[]>([]);
 
     const collections = navigationContext.navigation?.collections;
 
     const baseLocation = location.state && location.state["base_location"] ? location.state["base_location"] : location;
 
-    const updatePanels = useCallback((newPanels: ExtendedPanelProps[]) => {
+    const updatePanels = useCallback((newPanels: SideEntityPanelProps[]) => {
         setSidePanels(newPanels);
-        const customSchemaKeys = newPanels
-            .map((e) => e.sidePanelKey)
-            .filter((k) => !!k) as string[];
-        schemaRegistryController.removeAllOverridesExcept(customSchemaKeys);
-    },[location]);
+        schemaRegistry.removeAllOverridesExcept(newPanels);
+    }, []);
 
     useEffect(() => {
-        if (schemaRegistryController.initialised) {
+        if (schemaRegistry.initialised) {
             if (location?.state && location.state["panels"]) {
-                updatePanels(location.state["panels"] as ExtendedPanelProps[]);
+                const statePanel = location.state["panels"] as SideEntityPanelProps[];
+                updatePanels(statePanel);
             } else {
                 updatePanels([]);
             }
         }
-    }, [location?.state, schemaRegistryController.initialised]);
+    }, [location?.state, schemaRegistry.initialised]);
 
     // only on initialisation
     useEffect(() => {
@@ -66,7 +53,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             }
             initialised.current = true;
         }
-    }, [location, collections]);
+    }, [location, collections, sidePanels]);
 
     const close = useCallback(() => {
 
@@ -77,11 +64,11 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
         const locationPanels = location?.state && location.state["panels"];
         if (locationPanels && locationPanels.length > 0) {
             const updatedPanels = [...locationPanels.slice(0, -1)];
-            setSidePanels(updatedPanels);
+            // setSidePanels(updatedPanels);
             navigate(-1);
         } else {
             const newPath = navigationContext.buildCollectionPath(lastSidePanel.path);
-            setSidePanels([]);
+            // setSidePanels([]);
             navigate(newPath, { replace: true });
         }
 
@@ -94,13 +81,11 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                       copy,
                       width,
                       ...schemaProps
-                  }: SideEntityPanelProps & Partial<SchemaConfig> & { overrideSchemaRegistry?: boolean }) => {
+                  }: SideEntityPanelProps ) => {
 
         if (copy && !entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
-
-        const sidePanelKey = getSidePanelKey(path, entityId);
 
         if (schemaProps
             && (schemaProps.schema !== undefined
@@ -110,10 +95,17 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             const schemaOrResolver = schemaProps.schema;
             const subcollections = schemaProps.subcollections;
             const overrideSchemaRegistry = schemaProps.overrideSchemaRegistry;
-            schemaRegistryController.setOverride(
-                sidePanelKey,
-                { permissions, schema: schemaOrResolver, subcollections },
-                overrideSchemaRegistry
+            schemaRegistry.setOverride(
+                {
+                    path,
+                    entityId,
+                    schemaConfig: {
+                        permissions,
+                        schema: schemaOrResolver,
+                        subcollections
+                    },
+                    overrideSchemaRegistry
+                }
             );
         }
 
@@ -130,9 +122,8 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             && lastSidePanel.path == path
             && lastSidePanel?.entityId === entityId) {
 
-            const updatedPanel: ExtendedPanelProps = {
+            const updatedPanel: SideEntityPanelProps = {
                 ...lastSidePanel,
-                sidePanelKey,
                 selectedSubpath
             };
             const updatedPanels = [...sidePanels.slice(0, -1), updatedPanel];
@@ -149,12 +140,11 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             );
 
         } else {
-            const newPanel: ExtendedPanelProps = {
+            const newPanel: SideEntityPanelProps = {
                 path,
                 entityId,
                 copy: copy !== undefined && copy,
                 width,
-                sidePanelKey,
                 selectedSubpath
             };
             const updatedPanels = [...sidePanels, newPanel];
@@ -169,7 +159,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 }
             );
         }
-    },[sidePanels, location]);
+    }, [sidePanels, location]);
 
     return {
         sidePanels,
@@ -178,14 +168,14 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
     };
 };
 
-function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): ExtendedPanelProps[] {
+function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): SideEntityPanelProps[] {
 
     const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPathInternal({
         path,
         collections
     });
 
-    let sidePanels: ExtendedPanelProps[] = [];
+    let sidePanels: SideEntityPanelProps[] = [];
     let lastCollectionPath = "";
     for (let i = 0; i < navigationViewsForPath.length; i++) {
         const navigationEntry = navigationViewsForPath[i];
@@ -207,13 +197,13 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
                 }
             } else if (navigationEntry.type === "custom_view") {
                 if (previousEntry.type === "entity") {
-                    const lastSidePanel: ExtendedPanelProps = sidePanels[sidePanels.length - 1];
+                    const lastSidePanel: SideEntityPanelProps = sidePanels[sidePanels.length - 1];
                     if (lastSidePanel)
                         lastSidePanel.selectedSubpath = navigationEntry.view.path;
                 }
             } else if (navigationEntry.type === "collection") {
                 if (previousEntry.type === "entity") {
-                    const lastSidePanel: ExtendedPanelProps = sidePanels[sidePanels.length - 1];
+                    const lastSidePanel: SideEntityPanelProps = sidePanels[sidePanels.length - 1];
                     if (lastSidePanel)
                         lastSidePanel.selectedSubpath = navigationEntry.collection.path;
                 }

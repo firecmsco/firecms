@@ -1,15 +1,17 @@
 import {
     Entity,
-    EntityReference, EntitySchema, EntitySchemaResolver,
+    EntityReference,
+    EntitySchema,
+    EntitySchemaResolver,
     EntityStatus,
     EntityValues,
     GeoPoint,
     Properties,
     PropertiesOrBuilder,
-    Property, ResolvedEntitySchema
+    Property,
+    ResolvedEntitySchema
 } from "../models";
 import { buildPropertyFrom } from "./util/property_builder";
-import { buildSchemaResolver } from "../hooks/useBuildSchemaResolver";
 
 export function isReadOnly(property: Property<any>): boolean {
     if (property.readOnly)
@@ -23,6 +25,35 @@ export function isReadOnly(property: Property<any>): boolean {
 
 export function isHidden(property: Property<any>): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
+}
+
+
+/**
+ *
+ * @param schema
+ * @param values
+ * @param path
+ * @param entityId
+ * @ignore
+ */
+export function computeSchema<M extends { [Key: string]: any }>(
+    { schemaOrResolver, path, entityId, values }: {
+        schemaOrResolver: EntitySchema<M> | EntitySchemaResolver<M>,
+        path: string,
+        entityId?: string | undefined,
+        values?: Partial<EntityValues<M>>,
+    }): ResolvedEntitySchema<M> {
+    if (typeof schemaOrResolver === "function") {
+        return schemaOrResolver({ entityId, values });
+    } else {
+        const properties = computeProperties({
+            propertiesOrBuilder: schemaOrResolver.properties,
+            path,
+            entityId,
+            values
+        });
+        return { ...schemaOrResolver, properties };
+    }
 }
 
 /**
@@ -206,29 +237,3 @@ export function traverseValue(inputValue: any,
     return value;
 }
 
-/**
- * Use this function to resolve an `EntitySchema` or a `EntitySchemaResolver`
- * into a resolved one
- * @param schema
- * @param entityId
- * @param values
- * @param path
- */
-export function resolveSchema<M>({
-                              schemaOrResolver,
-                              entityId,
-                              values,
-                              path
-                          }: {
-    schemaOrResolver: EntitySchema<M> | EntitySchemaResolver<M>,
-    path: string
-    entityId?: string,
-    values?: EntityValues<M>,
-}): ResolvedEntitySchema<M> {
-    if (typeof schemaOrResolver === "function") {
-        return schemaOrResolver({ entityId, values });
-    } else {
-        const schemaResolver = buildSchemaResolver({ schema: schemaOrResolver, path });
-        return schemaResolver({ entityId, values });
-    }
-}

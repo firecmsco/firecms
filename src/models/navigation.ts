@@ -4,6 +4,7 @@ import { User } from "./user";
 import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
+import { PartialEntityCollection, PartialSchema } from "./overrides";
 
 
 /**
@@ -95,6 +96,15 @@ export type NavigationContext = {
     buildCMSUrl: (path: string) => string;
 
     buildHomeUrl: () => string;
+
+    getCollection: <M>(path: string) => EntityCollection<M> | undefined;
+    
+    getSchemaOverride: <M>(path: string) => PartialSchema<M> | undefined;
+
+    /**
+     * Use this callback when a collection has been modified so it is persisted.
+     */
+    onCollectionModifiedForUser: <M>(path: string, partialCollection: PartialEntityCollection<M>) => void;
 
     /**
      * Default path under the navigation routes of the CMS will be created

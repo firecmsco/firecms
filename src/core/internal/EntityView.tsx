@@ -29,7 +29,8 @@ import {
     EntitySchemaResolver,
     EntityStatus,
     EntityValues,
-    PermissionsBuilder
+    PermissionsBuilder,
+    ResolvedEntitySchema
 } from "../../models";
 import { CircularProgressCenter } from "../components";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
@@ -46,7 +47,7 @@ import {
     useSnackbarController
 } from "../../hooks";
 import { canEdit } from "../util/permissions";
-import { resolveSchema } from "../utils";
+import { computeSchema } from "../utils";
 
 const EntityCollectionView = lazy(() => import( "../components/EntityCollectionView")) as any;
 const EntityForm = lazy(() => import( "../../form/EntityForm")) as any;
@@ -150,7 +151,6 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                            width
                                                                        }: EntityViewProps<M, UserType>) {
 
-
     const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
     const classes = useStylesSide({containerWidth: resolvedWidth ?? CONTAINER_WIDTH});
 
@@ -167,7 +167,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     const [modifiedValues, setModifiedValues] = useState<EntityValues<any> | undefined>();
 
-    const schema = useMemo(() => resolveSchema({
+    const schema:ResolvedEntitySchema<M> = useMemo(() => computeSchema({
         schemaOrResolver,
         path,
         entityId,
@@ -202,7 +202,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     } = useEntityFetch({
         path,
         entityId: currentEntityId,
-        schema,
+        schema: schema as EntitySchema<M>,
         useCache: false
     });
 
@@ -370,7 +370,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     const subCollectionsViews = subcollections && subcollections.map(
         (subcollection, colIndex) => {
-            const path = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
+            const absolutePath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
 
             return (
                 <Box
@@ -379,11 +379,11 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     role="tabpanel"
                     flexGrow={1}
                     hidden={tabsPosition !== colIndex + customViewsCount}>
-                    {entity && path ?
+                    {entity && absolutePath ?
                         <Suspense fallback={<CircularProgressCenter/>}>
-                            <EntityCollectionView path={path}
-                                                  collection={subcollection}
-                            />
+                            <EntityCollectionView
+                                path={absolutePath}
+                                collection={subcollection}/>
                         </Suspense>
                         :
                         <Box m={3}

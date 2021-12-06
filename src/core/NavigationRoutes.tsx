@@ -68,22 +68,19 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
     const collectionRoutes = [...navigation.collections]
         // we reorder collections so that nested paths are included first
         .sort((a, b) => b.path.length - a.path.length)
-        .map(entityCollection => {
-                const urlPath = navigationContext.buildCollectionPath(entityCollection.path);
-                return (
-                    <Route path={urlPath + "/*"}
-                           key={`navigation_${entityCollection.path}`}
-                           element={
-                               <BreadcrumbUpdater
-                                   path={urlPath}
-                                   title={entityCollection.name}>
-                                   <EntityCollectionView
-                                       key={`collection_table_${entityCollection.path}`}
-                                       path={entityCollection.path}
-                                       collection={entityCollection}/>
-                               </BreadcrumbUpdater>
-                           }/>
-                );
+        .map((collection) => {
+                const urlPath = navigationContext.buildCollectionPath(collection.path);
+                return <Route path={urlPath + "/*"}
+                              key={`navigation_${collection.path}`}
+                              element={
+                                  <BreadcrumbUpdater
+                                      path={urlPath}
+                                      title={collection.name}>
+                                      <EntityCollectionView
+                                          path={collection.path}
+                                          collection={collection}/>
+                                  </BreadcrumbUpdater>
+                              }/>;
             }
         );
 

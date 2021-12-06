@@ -4,6 +4,7 @@ import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { AuthController } from "./auth";
+import { SchemaConfig } from "./schema_override";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -157,6 +158,11 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     selectionController?: SelectionController<M>;
 
 }
+
+/**
+ * @category Models
+ */
+export type EntityCollectionResolver<M = any> = EntityCollection<M> & SchemaConfig<M>;
 
 /**
  * Parameter passed to the `extraActions` builder in the collection configuration

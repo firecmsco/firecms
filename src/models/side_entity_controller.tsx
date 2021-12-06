@@ -1,11 +1,13 @@
-import { SchemaConfig } from "./schema_override";
-import { EntitySchema } from "./entities";
+import { EntityCollection, PermissionsBuilder } from "./collections";
+import { EntitySchema, EntitySchemaResolver } from "./entities";
+import { EntityCallbacks } from "./entity_callbacks";
+import { User } from "./user";
 
 /**
  * Props used to open a side dialog
  * @category Hooks and utilities
  */
-export interface SideEntityPanelProps {
+export interface SideEntityPanelProps<M = any, UserType = User> {
 
     /**
      * Absolute path of the entity
@@ -34,6 +36,31 @@ export interface SideEntityPanelProps {
      */
     width?: number | string;
 
+    /**
+     * Can the elements in this collection be added and edited.
+     */
+    permissions?: PermissionsBuilder<M, UserType>;
+
+    /**
+     * Schema representing the entities of this view
+     */
+    schema?: EntitySchema<M> | EntitySchemaResolver<M>;
+
+    /**
+     * You can add subcollections to your entity in the same way you define the root
+     * collections.
+     */
+    subcollections?: EntityCollection[];
+
+    /**
+     * This interface defines all the callbacks that can be used when an entity
+     * is being created, updated or deleted.
+     * Useful for adding your own logic or blocking the execution of the operation
+     */
+    callbacks?: EntityCallbacks<M>;
+
+
+    overrideSchemaRegistry?: boolean
 }
 
 /**
@@ -62,7 +89,5 @@ export interface SideEntityController {
      * to override the FireCMS level `SchemaRegistryController`.
      * @param props
      */
-    open: (props: SideEntityPanelProps
-        & Partial<SchemaConfig>
-        & { overrideSchemaRegistry?: boolean }) => void;
+    open: (props: SideEntityPanelProps ) => void;
 }

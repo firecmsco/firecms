@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    CollectionSize,
-    Entity,
-    EntityCollection,
-    EntitySchemaResolver
-} from "../../models";
+import { CollectionSize, Entity, EntityCollectionResolver } from "../../models";
 import {
     Button,
     Dialog,
@@ -18,7 +13,6 @@ import makeStyles from "@mui/styles/makeStyles";
 import { CollectionTable } from "./CollectionTable";
 import { CollectionRowActions } from "./CollectionTable/internal/CollectionRowActions";
 import { useDataSource } from "../../hooks";
-import { useBuildSchemaResolver } from "../../hooks/useBuildSchemaResolver";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -50,7 +44,7 @@ export interface ReferenceDialogProps {
     /**
      * Entity collection config
      */
-    collection: EntityCollection;
+    collectionResolver: EntityCollectionResolver;
 
     /**
      * Absolute path of the collection
@@ -99,7 +93,7 @@ export function ReferenceDialog(
         onClose,
         open,
         multiselect,
-        collection,
+        collectionResolver,
         path,
         selectedEntityIds
     }: ReferenceDialogProps) {
@@ -107,11 +101,11 @@ export function ReferenceDialog(
     const classes = useStyles();
     const dataSource = useDataSource();
 
-    const schema = collection.schema;
+    const collection = collectionResolver;
+    const schema = collectionResolver.schema;
+    const schemaResolver = collectionResolver.schemaResolver;
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
-
-    const schemaResolver: EntitySchemaResolver = useBuildSchemaResolver({path, schema});
 
     useEffect(() => {
         if (selectedEntityIds) {

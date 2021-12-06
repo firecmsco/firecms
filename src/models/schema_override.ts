@@ -17,7 +17,7 @@ export interface SchemaConfig<M = any, UserType = User> {
     /**
      * Schema representing the entities of this view
      */
-    schema: EntitySchema<M> | EntitySchemaResolver<M>;
+    schemaResolver: EntitySchemaResolver<M>;
 
     /**
      * You can add subcollections to your entity in the same way you define the root
@@ -41,4 +41,34 @@ export interface SchemaConfig<M = any, UserType = User> {
 export type SchemaOverrideHandler = (props: {
     entityId?: string,
     path: string
-}) => SchemaConfig | undefined;
+}) => SchemaConfigOverride | undefined;
+
+/**
+ * You can add these additional props to override properties in a SchemaResolver
+ * @category Models
+ */
+export type SchemaConfigOverride<M = any, UserType = User> = {
+
+    /**
+     * Can the elements in this collection be added and edited.
+     */
+    permissions?: PermissionsBuilder<M, UserType>;
+
+    /**
+     * Schema representing the entities of this view
+     */
+    schema?: EntitySchema | EntitySchemaResolver;
+
+    /**
+     * You can add subcollections to your entity in the same way you define the root
+     * collections.
+     */
+    subcollections?: EntityCollection[];
+
+    /**
+     * This interface defines all the callbacks that can be used when an entity
+     * is being created, updated or deleted.
+     * Useful for adding your own logic or blocking the execution of the operation
+     */
+    callbacks?: EntityCallbacks<M>;
+};

@@ -1,30 +1,40 @@
 import React, { useRef } from "react";
 import {
     EntityCollection,
+    EntityCollectionResolver,
+    EntitySchema,
+    EntitySchemaResolver,
+    EntitySchemaResolverProps,
     NavigationContext,
+    PartialEntityCollection,
+    PartialProperties,
     SchemaConfig,
-    SchemaOverrideHandler
+    SchemaConfigOverride,
+    SchemaOverrideHandler,
+    SchemaRegistryController
 } from "../../models";
-import {
-    getCollectionViewFromPath,
-    removeInitialAndTrailingSlashes
-} from "../util/navigation_utils";
-import { getSidePanelKey } from "./utils";
+import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
+import { computeProperties } from "../utils";
+import { getValueInPath, mergeDeep } from "../util/objects";
 
 
-export function useBuildSchemaRegistryController(navigationContext: NavigationContext, schemaOverrideHandler: SchemaOverrideHandler | undefined) {
+export function useBuildSchemaRegistryController(
+    navigationContext: NavigationContext,
+    schemaOverrideHandler: SchemaOverrideHandler | undefined
+): SchemaRegistryController {
 
-    const collections = navigationContext.navigation?.collections;
-    const initialised = collections !== undefined;
-    const viewsRef = useRef<Record<string, Partial<SchemaConfig & { overrideSchemaRegistry?: boolean }>>>({});
+    const initialised = navigationContext.navigation?.collections !== undefined;
+    
+    const schemaConfigRecord = useRef<Record<string, Partial<SchemaConfig> & { overrideSchemaRegistry?: boolean }>>({});
 
-    const getSchemaConfig = (path: string, entityId?: string): SchemaConfig => {
+    const getSchemaConfig = <M extends any>(path: string, entityId?: string): SchemaConfig<M> => {
 
         const sidePanelKey = getSidePanelKey(path, entityId);
 
         let result: Partial<SchemaConfig> = {};
-        const overriddenProps = viewsRef.current[sidePanelKey];
-        const resolvedProps: SchemaConfig | undefined = schemaOverrideHandler && schemaOverrideHandler({
+
+        const overriddenProps = schemaConfigRecord.current[sidePanelKey];
+        const resolvedProps: SchemaConfigOverride | undefined = schemaOverrideHandler && schemaOverrideHandler({
             entityId,
             path: removeInitialAndTrailingSlashes(path)
         });
@@ -34,12 +44,12 @@ export function useBuildSchemaRegistryController(navigationContext: NavigationCo
 
         if (overriddenProps) {
             // override schema resolver default to true
-            const shouldOverrideResolver = overriddenProps.overrideSchemaRegistry === undefined || overriddenProps.overrideSchemaRegistry;
-            if (shouldOverrideResolver)
+            const shouldOverrideRegistry = overriddenProps.overrideSchemaRegistry === undefined || overriddenProps.overrideSchemaRegistry;
+            if (shouldOverrideRegistry)
                 result = {
                     ...overriddenProps,
                     permissions: result.permissions || overriddenProps.permissions,
-                    schema: result.schema || overriddenProps.schema,
+                    schemaResolver: result.schemaResolver || overriddenProps.schemaResolver,
                     subcollections: result.subcollections || overriddenProps.subcollections,
                     callbacks: result.callbacks || overriddenProps.callbacks
                 };
@@ -47,14 +57,14 @@ export function useBuildSchemaRegistryController(navigationContext: NavigationCo
                 result = {
                     ...result,
                     permissions: overriddenProps.permissions ?? result.permissions,
-                    schema: overriddenProps.schema ?? result.schema,
+                    schemaResolver: overriddenProps.schemaResolver ?? result.schemaResolver,
                     subcollections: overriddenProps.subcollections ?? result.subcollections,
                     callbacks: overriddenProps.callbacks ?? result.callbacks
                 };
 
         }
 
-        const entityCollection: EntityCollection | undefined = getCollectionViewFromPath(path, collections);
+        const entityCollection: EntityCollection | undefined = navigationContext.getCollection(path);
         if (entityCollection) {
             const schema = entityCollection.schema;
             const subcollections = entityCollection.subcollections;
@@ -62,57 +72,123 @@ export function useBuildSchemaRegistryController(navigationContext: NavigationCo
             const permissions = entityCollection.permissions;
             result = {
                 ...result,
-                schema: result.schema ?? schema,
+                schemaResolver: result.schemaResolver ?? buildSchemaResolver({
+                    schema,
+                    path
+                }),
                 subcollections: result.subcollections ?? subcollections,
                 callbacks: result.callbacks ?? callbacks,
                 permissions: result.permissions ?? permissions
             };
         }
 
-        if (!result.schema)
+        if (!result.schemaResolver)
             throw Error(`Not able to resolve schema for ${sidePanelKey}`);
 
         return result as SchemaConfig;
 
     };
 
-    const getCollectionConfig = (path: string, entityId?: string) => {
-        return getCollectionViewFromPath(path, collections);
+    const getCollectionResolver = <M extends any>(path: string): EntityCollectionResolver<M> => {
+        const collection = navigationContext.getCollection<M>(path);
+
+        if (!collection) {
+            throw Error(`No collection found for path ${path}`);
+        }
+
+        const schemaConfig = getSchemaConfig<M>(path);
+        if (!schemaConfig) {
+            throw Error(`No schema config found for path ${path}`);
+        }
+
+        return { ...collection, ...schemaConfig };
     };
 
-    const setOverride = (
-        entityPath: string,
-        schemaConfig: Partial<SchemaConfig> | null,
-        overrideSchemaRegistry?: boolean
+    const setOverride = ({
+                             path,
+                             entityId,
+                             schemaConfig,
+                             overrideSchemaRegistry
+                         }: {
+                             path: string,
+                             entityId?: string,
+                             schemaConfig?: SchemaConfigOverride
+                             overrideSchemaRegistry?: boolean
+                         }
     ) => {
+
+        const key = getSidePanelKey(path, entityId);
         if (!schemaConfig) {
-            delete viewsRef.current[entityPath];
+            delete schemaConfigRecord.current[key];
             return undefined;
         } else {
-            viewsRef.current[entityPath] = {
+
+            schemaConfigRecord.current[key] = {
                 ...schemaConfig,
                 overrideSchemaRegistry
             };
-            return entityPath;
+            return key;
         }
     };
 
-    const removeAllOverridesExcept = (
-        keys: string[]
-    ) => {
-        Object.keys(viewsRef.current).forEach((currentKey) => {
+    const onCollectionModifiedForUser = <M extends any>(path: string, partialCollection: PartialEntityCollection<M>) => {
+        navigationContext.onCollectionModifiedForUser(path, partialCollection);
+    }
+
+    const removeAllOverridesExcept = (entityRefs: {
+        path: string, entityId?: string
+    }[]) => {
+        const keys = entityRefs.map(({
+                                         path,
+                                         entityId
+                                     }) => getSidePanelKey(path, entityId));
+        Object.keys(schemaConfigRecord.current).forEach((currentKey) => {
             if (!keys.includes(currentKey))
-                delete viewsRef.current[currentKey];
+                delete schemaConfigRecord.current[currentKey];
         });
     };
+
+    function buildSchemaResolver<M>({
+                                        schema,
+                                        path
+                                    }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver {
+
+        return ({
+                    entityId,
+                    values,
+                }: EntitySchemaResolverProps) => {
+
+            const schemaOverride = navigationContext.getSchemaOverride(path);
+            const storedProperties: PartialProperties<M> | undefined = getValueInPath(schemaOverride, "properties");
+
+            const properties = computeProperties({
+                propertiesOrBuilder: schema.properties,
+                path,
+                entityId,
+                values: values ?? schema.defaultValues
+            });
+
+            return {
+                ...schema,
+                properties: mergeDeep(properties, storedProperties)
+            };
+        };
+    }
 
     return {
         initialised,
         getSchemaConfig,
-        getCollectionConfig,
+        getCollectionResolver,
         setOverride,
-        removeAllOverridesExcept
+        removeAllOverridesExcept,
+        onCollectionModifiedForUser
     };
 }
 
 
+export function getSidePanelKey(path: string, entityId?: string) {
+    if (entityId)
+        return `${removeInitialAndTrailingSlashes(path)}/${removeInitialAndTrailingSlashes(entityId)}`;
+    else
+        return removeInitialAndTrailingSlashes(path);
+}

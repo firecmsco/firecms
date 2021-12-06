@@ -7,12 +7,13 @@ import {
 import React, { useState } from "react";
 import {
     Button,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle
 } from "@mui/material";
-import { CircularProgressCenter, EntityPreview } from "../../index";
+import { EntityPreview } from "../../index";
 import {
     deleteEntityWithCallbacks,
     useDataSource,
@@ -205,18 +206,23 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
                 {content}
             </DialogContent>}
 
-            {loading && <CircularProgressCenter/>}
-
-            {!loading &&
             <DialogActions>
-                <Button autoFocus onClick={handleCancel}
+
+                {loading && <CircularProgress size={16} thickness={8}/>}
+
+                <Button onClick={handleCancel}
+                        disabled={loading}
                         color="primary">
                     Cancel
                 </Button>
-                <Button onClick={handleOk} color="primary">
+                <Button
+                    autoFocus
+                    disabled={loading}
+                    onClick={handleOk}
+                    color="primary">
                     Ok
                 </Button>
-            </DialogActions>}
+            </DialogActions>
 
         </Dialog>
     );

@@ -69,13 +69,13 @@ export function resolveNavigationFrom<M, UserType>({
 
     const dataSource = context.dataSource;
     const navigation = context.navigationContext.navigation;
-    const schemaRegistryController = context.schemaRegistryController;
+    const schemaRegistry = context.schemaRegistryController;
 
     if (!navigation) {
         throw Error("Calling getNavigationFrom, but main navigation has not yet been initialised");
     }
 
-    if (!schemaRegistryController) {
+    if (!schemaRegistry) {
         throw Error("Calling getNavigationFrom, but main schemaRegistryController has not yet been initialised");
     }
 
@@ -88,14 +88,15 @@ export function resolveNavigationFrom<M, UserType>({
         if (entry.type === "collection") {
             return Promise.resolve(entry);
         } else if (entry.type === "entity") {
-            const schemaConfig = schemaRegistryController.getSchemaConfig(entry.path, entry.entityId);
-            if (!schemaConfig?.schema) {
+            const schemaConfig = schemaRegistry.getSchemaConfig(entry.path, entry.entityId);
+            if (!schemaConfig?.schemaResolver) {
                 throw Error(`No schema defined in the navigation for the entity with path ${entry.path}`);
             }
+
             return dataSource.fetchEntity({
                 path: entry.path,
                 entityId: entry.entityId,
-                schema: schemaConfig?.schema
+                schema: schemaConfig?.schemaResolver
             })
                 .then((entity) => {
                     return { ...entry, entity };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import {
     Box,
@@ -21,8 +21,9 @@ import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import {
     AnyProperty,
     Entity,
+    EntityCollectionResolver,
     EntityReference,
-    EntitySchema,
+    EntitySchemaResolver,
     FieldProps
 } from "../../models";
 import { FieldDescription } from "../../form";
@@ -33,11 +34,10 @@ import { LabelWithIcon } from "../components";
 import {
     useClearRestoreValue,
     useEntityFetch,
-    useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";
-import { useBuildSchemaResolver } from "../../hooks/useBuildSchemaResolver";
+import { useSchemaRegistryController } from "../../hooks/useSchemaRegistryController";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -127,17 +127,16 @@ export function ReferenceField<M extends { [Key: string]: any }>({
     const [open, setOpen] = React.useState(autoFocus);
     const sideEntityController = useSideEntityController();
 
-    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
+    const schemaRegistry = useSchemaRegistryController();
+    const collectionResolver: EntityCollectionResolver | undefined = useMemo(() => {
+        return schemaRegistry.getCollectionResolver(property.path);
+    }, [property.path]);
 
-    const collectionConfig = schemaRegistryController.getCollectionConfig(property.path);
-    if (!collectionConfig) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
+    if (!collectionResolver) {
+        throw Error(`Couldn't find the corresponding collection for the path: ${property.path}`);
     }
 
-    const schema = collectionConfig?.schema;
-    if (!schema) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
-    }
+    const schemaResolver = collectionResolver.schemaResolver;
     const path = property.path;
 
     const validValue = value && value instanceof EntityReference;
@@ -149,7 +148,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
     } = useEntityFetch({
         path: validValue ? value.path : undefined,
         entityId: validValue ? value.id : undefined,
-        schema,
+        schema: schemaResolver,
         useCache: true
     });
 
@@ -184,12 +183,12 @@ export function ReferenceField<M extends { [Key: string]: any }>({
         setOpen(false);
     };
 
-    function buildEntityView(schema?: EntitySchema) {
+    function buildEntityView(schemaResolver?: EntitySchemaResolver) {
 
         const missingEntity = entity && !entity.values;
 
         let body: JSX.Element;
-        if (!schema) {
+        if (!schemaResolver) {
             body = (
                 <ErrorView
                     error={"The specified collection does not exist. Check console"}/>
@@ -211,6 +210,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
         } else {
             if (validValue) {
 
+                const schema = schemaResolver({});
                 const allProperties = Object.keys(schema.properties);
                 let listProperties = property.previewProperties?.filter(p => allProperties.includes(p as string));
                 if (!listProperties || !listProperties.length) {
@@ -336,14 +336,14 @@ export function ReferenceField<M extends { [Key: string]: any }>({
             <Box
                 className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
 
-                {buildEntityView(schema)}
+                {schemaResolver && buildEntityView(schemaResolver)}
 
-                {collectionConfig && <ReferenceDialog open={open}
-                                                      collection={collectionConfig}
-                                                      multiselect={false}
-                                                      path={path}
-                                                      onClose={onClose}
-                                                      onSingleEntitySelected={handleEntityClick}
+                {collectionResolver && <ReferenceDialog open={open}
+                                                        collectionResolver={collectionResolver}
+                                                        multiselect={false}
+                                                        path={path}
+                                                        onClose={onClose}
+                                                        onSingleEntitySelected={handleEntityClick}
                 />}
 
 

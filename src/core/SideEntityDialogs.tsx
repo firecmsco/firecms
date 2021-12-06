@@ -1,19 +1,16 @@
 import React, { useState } from "react";
-import {
-    EntitySchemaResolver,
-    SchemaConfig,
-    SideEntityPanelProps
-} from "../models";
+import { SchemaConfig, SideEntityPanelProps } from "../models";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { EntityView } from "./internal/EntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
-import { useFireCMSContext, useSideEntityController } from "../hooks";
+import { useSideEntityController } from "../hooks";
 import { ErrorBoundary } from "./internal/ErrorBoundary";
 import {
     UnsavedChangesDialog,
     useNavigationUnsavedChangesDialog
 } from "./internal/useUnsavedChangesDialog";
-import { resolveSchema } from "./utils";
+import { useSchemaRegistryController } from "../hooks/useSchemaRegistryController";
+import { computeSchema } from "./utils";
 
 /**
  * This is the component in charge of rendering the side dialogs used
@@ -82,14 +79,14 @@ function SideEntityDialog({
     };
 
     const sideEntityController = useSideEntityController();
-    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
-    const schemaProps: SchemaConfig | undefined = schemaRegistryController.getSchemaConfig(panel.path, panel.entityId);
+    const schemaRegistry = useSchemaRegistryController();
+    const schemaProps: SchemaConfig | undefined = schemaRegistry.getSchemaConfig(panel.path, panel.entityId);
     if (!schemaProps) {
         throw Error("ERROR: You are trying to open an entity with no schema defined.");
     }
 
-    const schema = resolveSchema({
-        schemaOrResolver: schemaProps.schema,
+    const schema = computeSchema({
+        schemaOrResolver: schemaProps.schemaResolver,
         path : panel.path,
         entityId:panel.entityId,
     });
@@ -112,6 +109,7 @@ function SideEntityDialog({
                     <EntityView
                         {...schemaProps}
                         {...panel}
+                        schema={schemaProps.schemaResolver}
                         onModifiedValues={setModifiedValues}
                     />
                 </ErrorBoundary>

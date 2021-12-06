@@ -7,7 +7,7 @@ export function isObject(item: any) {
 }
 
 export function mergeDeep<T>(target: T, source: any): T {
-    let output = Object.assign({}, target);
+    const output:T = Object.assign({}, target);
     if (isObject(target) && isObject(source)) {
         Object.keys(source).forEach(key => {
             if (isObject(source[key])) {
@@ -23,7 +23,7 @@ export function mergeDeep<T>(target: T, source: any): T {
     return output;
 }
 
-export function getValueInPath(o: object, path: string): any {
+export function getValueInPath(o: object | undefined, path: string): any {
     if (typeof o === "object") {
         if (path in o) {
             return o[path];

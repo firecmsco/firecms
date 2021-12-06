@@ -452,4 +452,3 @@ export const testCallbacks: EntityCallbacks = {
         });
     }
 };
-

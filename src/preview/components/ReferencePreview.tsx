@@ -16,17 +16,19 @@ import makeStyles from "@mui/styles/makeStyles";
 import { AnyProperty, EntityReference } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { PreviewComponentProps, PreviewSize } from "../internal";
+import {
+    PreviewComponent,
+    PreviewComponentProps,
+    PreviewSize
+} from "../internal";
 
 import { SkeletonComponent } from "./SkeletonComponent";
-import { PreviewComponent } from "../internal";
 import { ErrorView } from "../../core";
 import {
     useEntityFetch,
     useFireCMSContext,
     useSideEntityController
 } from "../../hooks";
-import { useBuildSchemaResolver } from "../../hooks/useBuildSchemaResolver";
 
 export type ReferencePreviewProps =
     PreviewComponentProps<EntityReference>
@@ -103,15 +105,15 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     const reference: EntityReference = value;
     const previewProperties = property.previewProperties;
 
-    const schemaRegistryController = useFireCMSContext().schemaRegistryController;
+    const schemaRegistry = useFireCMSContext().schemaRegistryController;
     const sideEntityController = useSideEntityController();
 
-    const collectionConfig = schemaRegistryController.getCollectionConfig(property.path);
-    if (!collectionConfig) {
+    const collectionResolver = schemaRegistry.getCollectionResolver<M>(property.path);
+    if (!collectionResolver) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
     }
 
-    const schema = collectionConfig.schema;
+    const schema = collectionResolver.schema;
 
     const {
         entity,
@@ -120,7 +122,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     } = useEntityFetch({
         path: reference.path,
         entityId: reference.id,
-        schema,
+        schema: collectionResolver.schemaResolver,
         useCache: true
     });
 
