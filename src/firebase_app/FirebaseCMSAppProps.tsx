@@ -48,9 +48,10 @@ export interface FirebaseCMSAppProps {
 
     /**
      * List of sign in options that will be displayed in the login
-     * view if `authentication` is enabled. You can pass google providers strings,
-     * such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or full configuration
-     * objects such as specified in https://firebase.google.com/docs/auth/web/firebaseui
+     * view if `authentication` is enabled. You can pass Firebase providers strings,
+     * such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or include addtional
+     * config such as scopes or custom parameters
+     * {@see FirebaseSignInOption}
      * Defaults to Google sign in only.
      */
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;

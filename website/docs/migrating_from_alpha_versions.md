@@ -27,8 +27,6 @@ yarn add @camberi/firecms firebase@^9.0.0 @mui/material@^5.1.0 @mui/icons-materi
 
 > You may want to remove previous dependencies to @material-ui
 
-Unfortunately we still need to rely on FirebaseUI, which still uses the compat
-version of Firebase JS SDK 9, so tree shaking has no effect.
 
 ## Separation of concerns
 
