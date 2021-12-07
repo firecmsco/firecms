@@ -96,7 +96,7 @@ export function useSelectionController<M = any>(): SelectionController {
  * properties at all, you can check {@link Table}
  *
  * @param path
- * @param collectionConfig
+ * @param collection
  * @constructor
  * @category Components
  */

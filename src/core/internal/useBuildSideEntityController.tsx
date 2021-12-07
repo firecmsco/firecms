@@ -45,9 +45,9 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
     // only on initialisation
     useEffect(() => {
         if (collections && !initialised.current) {
-            if (navigationContext.isCollectionPath(location.pathname)) {
+            if (navigationContext.isUrlCollectionPath(location.pathname)) {
                 const newFlag = location.hash === `#${NEW_URL_HASH}`;
-                const entityOrCollectionPath = navigationContext.getEntityOrCollectionPath(location.pathname);
+                const entityOrCollectionPath = navigationContext.urlPathToDataPath(location.pathname);
                 const sidePanels = buildSidePanelsFromUrl(entityOrCollectionPath, collections, newFlag);
                 updatePanels(sidePanels);
             }
@@ -67,7 +67,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             // setSidePanels(updatedPanels);
             navigate(-1);
         } else {
-            const newPath = navigationContext.buildCollectionPath(lastSidePanel.path);
+            const newPath = navigationContext.buildUrlCollectionPath(lastSidePanel.path);
             // setSidePanels([]);
             navigate(newPath, { replace: true });
         }
@@ -101,7 +101,8 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                     entityId,
                     schemaConfig: {
                         permissions,
-                        schema: schemaOrResolver,
+                        schema: typeof schemaOrResolver !== "function" ? schemaOrResolver : undefined,
+                        schemaResolver: typeof schemaOrResolver === "function" ? schemaOrResolver : undefined,
                         subcollections
                     },
                     overrideSchemaRegistry
@@ -111,8 +112,8 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
 
         const cleanPath = removeInitialAndTrailingSlashes(path);
         const newPath = entityId
-            ? navigationContext.buildCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath ? selectedSubpath : ""}`)
-            : navigationContext.buildCollectionPath(`${cleanPath}#${NEW_URL_HASH}`);
+            ? navigationContext.buildUrlCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath ? selectedSubpath : ""}`)
+            : navigationContext.buildUrlCollectionPath(`${cleanPath}#${NEW_URL_HASH}`);
 
         const lastSidePanel = sidePanels.length > 0 ? sidePanels[sidePanels.length - 1] : undefined;
 
@@ -129,7 +130,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             const updatedPanels = [...sidePanels.slice(0, -1), updatedPanel];
             updatePanels(updatedPanels);
             navigate(
-                navigationContext.buildCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath ? selectedSubpath : ""}`),
+                navigationContext.buildUrlCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath ? selectedSubpath : ""}`),
                 {
                     replace: true,
                     state: {

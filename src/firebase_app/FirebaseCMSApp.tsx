@@ -47,7 +47,7 @@ export function FirebaseCMSApp({
                                    logo,
                                    toolbarExtraWidget,
                                    authentication,
-                                   schemaResolver,
+                                   schemaOverrideHandler,
                                    navigation,
                                    textSearchController,
                                    allowSkipLogin,
@@ -104,7 +104,7 @@ export function FirebaseCMSApp({
             <FireCMS navigation={navigation}
                      authDelegate={authDelegate}
                      authentication={authentication}
-                     schemaOverrideHandler={schemaResolver}
+                     schemaOverrideHandler={schemaOverrideHandler}
                      dateTimeFormat={dateTimeFormat}
                      dataSource={dataSource}
                      storageSource={storageSource}

@@ -69,7 +69,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
         // we reorder collections so that nested paths are included first
         .sort((a, b) => b.path.length - a.path.length)
         .map((collection) => {
-                const urlPath = navigationContext.buildCollectionPath(collection.path);
+                const urlPath = navigationContext.buildUrlCollectionPath(collection.path);
                 return <Route path={urlPath + "/*"}
                               key={`navigation_${collection.path}`}
                               element={

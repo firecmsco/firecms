@@ -1,5 +1,4 @@
 import { EntityCollectionResolver } from "./collections";
-import { SchemaConfig, SchemaConfigOverride } from "./schema_override";
 import { PartialEntityCollection } from "./overrides";
 
 /**
@@ -24,7 +23,7 @@ export interface SchemaRegistryController {
     setOverride: <M>(props: {
                          path: string,
                          entityId?: string,
-                         schemaConfig?: SchemaConfigOverride
+                         schemaConfig?: Partial<EntityCollectionResolver>
                          overrideSchemaRegistry?: boolean
                      }
     ) => string | undefined;
@@ -32,7 +31,7 @@ export interface SchemaRegistryController {
     /**
      * Get the schema configuration for a given path
      */
-    getSchemaConfig: (path: string, entityId?: string) => SchemaConfig | undefined;
+    getSchemaConfig: (path: string, entityId?: string) => EntityCollectionResolver | undefined;
 
     /**
      * Get the entity collection for a given path

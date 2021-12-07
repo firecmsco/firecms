@@ -8,8 +8,6 @@ import {
     NavigationContext,
     PartialEntityCollection,
     PartialProperties,
-    SchemaConfig,
-    SchemaConfigOverride,
     SchemaOverrideHandler,
     SchemaRegistryController
 } from "../../models";
@@ -25,16 +23,16 @@ export function useBuildSchemaRegistryController(
 
     const initialised = navigationContext.navigation?.collections !== undefined;
     
-    const schemaConfigRecord = useRef<Record<string, Partial<SchemaConfig> & { overrideSchemaRegistry?: boolean }>>({});
+    const schemaConfigRecord = useRef<Record<string, Partial<EntityCollectionResolver> & { overrideSchemaRegistry?: boolean }>>({});
 
-    const getSchemaConfig = <M extends any>(path: string, entityId?: string): SchemaConfig<M> => {
+    const getSchemaConfig = <M extends any>(path: string, entityId?: string): EntityCollectionResolver<M> => {
 
         const sidePanelKey = getSidePanelKey(path, entityId);
 
-        let result: Partial<SchemaConfig> = {};
+        let result: Partial<EntityCollectionResolver> = {};
 
         const overriddenProps = schemaConfigRecord.current[sidePanelKey];
-        const resolvedProps: SchemaConfigOverride | undefined = schemaOverrideHandler && schemaOverrideHandler({
+        const resolvedProps: Partial<EntityCollectionResolver> | undefined = schemaOverrideHandler && schemaOverrideHandler({
             entityId,
             path: removeInitialAndTrailingSlashes(path)
         });
@@ -82,10 +80,16 @@ export function useBuildSchemaRegistryController(
             };
         }
 
-        if (!result.schemaResolver)
-            throw Error(`Not able to resolve schema for ${sidePanelKey}`);
+        if (!result.schemaResolver) {
+            if (!result.schema)
+                throw Error(`Not able to resolve schema for ${sidePanelKey}`);
+            result.schemaResolver = buildSchemaResolver({
+                schema: result.schema,
+                path
+            });
+        }
 
-        return result as SchemaConfig;
+        return result as EntityCollectionResolver<M>;
 
     };
 
@@ -112,7 +116,7 @@ export function useBuildSchemaRegistryController(
                          }: {
                              path: string,
                              entityId?: string,
-                             schemaConfig?: SchemaConfigOverride
+                             schemaConfig?: Partial<EntityCollectionResolver>
                              overrideSchemaRegistry?: boolean
                          }
     ) => {

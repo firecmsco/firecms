@@ -93,29 +93,28 @@ export function useBuildNavigationContext<UserType>({
     const cleanBasePath = removeInitialAndTrailingSlashes(basePath);
     const cleanBaseCollectionPath = removeInitialAndTrailingSlashes(baseCollectionPath);
 
+    const homeUrl = cleanBasePath ? `/${cleanBasePath}` : "/";
+
     const fullCollectionPath = cleanBasePath ? `/${cleanBasePath}/${cleanBaseCollectionPath}` : `/${cleanBaseCollectionPath}`;
 
-    function isCollectionPath(path: string): boolean {
+    function isUrlCollectionPath(path: string): boolean {
         return removeInitialAndTrailingSlashes(path + "/").startsWith(removeInitialAndTrailingSlashes(fullCollectionPath) + "/");
     }
 
-    function getEntityOrCollectionPath(path: string): string {
+    function urlPathToDataPath(path: string): string {
         if (path.startsWith(fullCollectionPath))
             return path.replace(fullCollectionPath, "");
         throw Error("Expected path starting with " + fullCollectionPath);
     }
 
-    function buildCollectionPath(path: string): string {
+    function buildUrlCollectionPath(path: string): string {
         return `${baseCollectionPath}/${removeInitialAndTrailingSlashes(path)}`;
     }
 
-    function buildCMSUrl(path: string): string {
+    function buildCMSUrlPath(path: string): string {
         return cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(path)}` : `/${path}`;
     }
 
-    function buildHomeUrl(): string {
-        return cleanBasePath ? `/${cleanBasePath}` : "/";
-    }
 
     const onCollectionModifiedForUser = <M extends any>(path: string, partialCollection: PartialEntityCollection<M>) => {
         saveStorageCollectionConfig(path, partialCollection);
@@ -136,7 +135,7 @@ export function useBuildNavigationContext<UserType>({
         const dynamicCollectionConfig = { ...getStorageCollectionConfig(path) };
         delete dynamicCollectionConfig["schema"];
 
-        return mergeDeep(collection, dynamicCollectionConfig);
+        return collection ? mergeDeep(collection, dynamicCollectionConfig) : undefined;
     }
 
     const getSchemaOverride = <M extends any>(path: string): PartialSchema<M> | undefined => {
@@ -149,11 +148,11 @@ export function useBuildNavigationContext<UserType>({
         navigation,
         loading: navigationLoading,
         navigationLoadingError,
-        isCollectionPath,
-        getEntityOrCollectionPath,
-        buildCollectionPath,
-        buildCMSUrl,
-        buildHomeUrl,
+        isUrlCollectionPath,
+        urlPathToDataPath,
+        buildUrlCollectionPath,
+        buildCMSUrlPath,
+        homeUrl,
         basePath,
         baseCollectionPath,
         onCollectionModifiedForUser,

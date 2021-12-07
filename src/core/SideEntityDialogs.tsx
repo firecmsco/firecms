@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SchemaConfig, SideEntityPanelProps } from "../models";
+import { EntityCollectionResolver, SideEntityPanelProps } from "../models";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { EntityView } from "./internal/EntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
@@ -80,7 +80,7 @@ function SideEntityDialog({
 
     const sideEntityController = useSideEntityController();
     const schemaRegistry = useSchemaRegistryController();
-    const schemaProps: SchemaConfig | undefined = schemaRegistry.getSchemaConfig(panel.path, panel.entityId);
+    const schemaProps: EntityCollectionResolver | undefined = schemaRegistry.getSchemaConfig(panel.path, panel.entityId);
     if (!schemaProps) {
         throw Error("ERROR: You are trying to open an entity with no schema defined.");
     }

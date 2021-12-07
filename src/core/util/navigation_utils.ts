@@ -115,7 +115,7 @@ export function computeTopNavigation(
 
     const navigationEntries: TopNavigationEntry[] = [
         ...navigation.collections.map(collection => ({
-            url: navigationContext.buildCollectionPath(collection.path),
+            url: navigationContext.buildUrlCollectionPath(collection.path),
             name: collection.name,
             description: collection.description,
             group: collection.group
@@ -123,7 +123,7 @@ export function computeTopNavigation(
         ...(navigation.views ?? []).map(view =>
             includeHiddenViews || !view.hideFromNavigation ?
                 ({
-                    url: navigationContext.buildCMSUrl(Array.isArray(view.path) ? view.path[0] : view.path),
+                    url: navigationContext.buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
                     name: view.name,
                     description: view.description,
                     group: view.group
@@ -135,6 +135,9 @@ export function computeTopNavigation(
     const groups: string[] = Array.from(new Set(
         Object.values(navigationEntries).map(e => e.group).filter(Boolean) as string[]
     ).values());
+
+    console.log("computeTopNavigation", navigationEntries);
+
 
     return { navigationEntries, groups };
 }

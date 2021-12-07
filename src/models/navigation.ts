@@ -1,5 +1,5 @@
 import { AuthController } from "./auth";
-import { EntityCollection } from "./collections";
+import { EntityCollection, EntityCollectionResolver } from "./collections";
 import { User } from "./user";
 import { Locale } from "./locales";
 import { DataSource } from "./datasource";
@@ -87,16 +87,6 @@ export type NavigationContext = {
 
     navigationLoadingError?: any;
 
-    isCollectionPath: (path: string) => boolean;
-
-    getEntityOrCollectionPath: (cmsPath: string) => string;
-
-    buildCollectionPath: (path: string) => string;
-
-    buildCMSUrl: (path: string) => string;
-
-    buildHomeUrl: () => string;
-
     getCollection: <M>(path: string) => EntityCollection<M> | undefined;
     
     getSchemaOverride: <M>(path: string) => PartialSchema<M> | undefined;
@@ -115,6 +105,40 @@ export type NavigationContext = {
      * Default path under the collection routes of the CMS will be created
      */
     baseCollectionPath: string;
+
+    /**
+     * Convert a URL path to a collection or entity path
+     * `/c/products` => `products`
+     * `/my_cms/c/products/B34SAP8Z` => `products/B34SAP8Z`
+     * `/my_cms/my_view` => `my_view`
+     * @param cmsPath
+     */
+    urlPathToDataPath: (cmsPath: string) => string;
+
+    /**
+     * Convert a collection or entity path to a URL path
+     * @param path
+     */
+    buildCMSUrlPath: (path: string) => string;
+
+    /**
+     * Base url path for the home screen
+     */
+    homeUrl: string;
+
+    /**
+     * Check if a url path belongs to a collection
+     * @param path
+     */
+    isUrlCollectionPath: (urlPath: string) => boolean;
+    
+    /**
+     * Build a URL collection path from a data path
+     * `products` => `/c/products`
+     * `products/B34SAP8Z` => `/c/products/B34SAP8Z`
+     * @param path
+     */
+    buildUrlCollectionPath: (path: string) => string;
 
 }
 

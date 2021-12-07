@@ -20,7 +20,7 @@ entity schema are not included in the main navigation defined in `FireCMS`.
 
 :::tip
 If you want to override the entity schema of some entity or path, at the app
-level, you can pass a `SchemaResolver` to your `FireCMS` instance to set
+level, you can pass a `SchemaOverrideHandler` to your `FireCMS` instance to set
 an override.
 :::
 
@@ -35,7 +35,7 @@ The props provided by this context are:
   edit. You can set an entityId if you would like to edit and existing one
   (or a new one with that id). If you wish, you can also override
   the `SchemaConfig` (such as schema or subcollections) and choose to
-  override the `FireCMS` level `SchemaResolver`.
+  override the `FireCMS` level `SchemaOverrideHandler`.
 
 Example:
 
@@ -75,20 +75,20 @@ export function ExampleCMSView() {
 ```
 
 
-### Schema resolver
+### Schema override handler
 
 You may want to override the schema definition for particular entities in. In
 that case you can define a schema resolver in the FireCMS level.
 
-In order to do that, you can specify a `SchemaResolver` that is in charge of
+In order to do that, you can specify a `SchemaOverrideHandler` that is in charge of
 resolving the `path` and `entityId` and returning a `SchemaConfig`, where you
 can specify a custom `schema` (including callbacks and custom views),
 `permissions` and `subcollections`
 
 ```tsx
-import { buildSchema, SchemaResolver } from "@camberi/firecms";
+import { buildSchema, SchemaOverrideHandler } from "@camberi/firecms";
 
-const customSchemaResolver: SchemaResolver = ({
+const customSchemaOverrideHandler: SchemaOverrideHandler = ({
                                                   entityId,
                                                   path
                                               }: {
@@ -118,4 +118,4 @@ const customSchemaResolver: SchemaResolver = ({
 };
 ```
 
-Then you can pass `schemaResolver` to your `FirebaseCMSApp` or `FireCMS`
+Then you can pass your `SchemaOverrideHandler` to your `FirebaseCMSApp` or `FireCMS`

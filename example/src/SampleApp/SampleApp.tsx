@@ -34,7 +34,7 @@ import {
     sampleAdditionalExportColumn
 } from "./schemas/blog_schema";
 import { testCallbacks, testEntitySchema } from "./schemas/test_schema";
-import { customSchemaResolver } from "./schemas/custom_schema_resolver";
+import { customSchemaOverrideHandler } from "./schemas/custom_schema_resolver";
 
 import "typeface-rubik";
 import "typeface-space-mono";
@@ -206,7 +206,7 @@ function SampleApp() {
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}
-        schemaResolver={customSchemaResolver}
+        schemaResolver={customSchemaOverrideHandler}
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}

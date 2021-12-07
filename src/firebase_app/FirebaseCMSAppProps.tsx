@@ -115,7 +115,7 @@ export interface FirebaseCMSAppProps {
      *
      * You can also override schemas in place, when using `useSideEntityController`
      */
-    schemaResolver?: SchemaOverrideHandler;
+    schemaOverrideHandler?: SchemaOverrideHandler;
 
     /**
      * Use this controller to return text search results as document ids, that

@@ -6,7 +6,7 @@ import { buildSchema, SchemaOverrideHandler } from "@camberi/firecms";
  * @param entityId
  * @param path
  */
-export const customSchemaResolver: SchemaOverrideHandler = ({
+export const customSchemaOverrideHandler: SchemaOverrideHandler = ({
                                                   entityId,
                                                   path
                                               }: {

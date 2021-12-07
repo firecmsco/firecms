@@ -88,15 +88,15 @@ export function resolveNavigationFrom<M, UserType>({
         if (entry.type === "collection") {
             return Promise.resolve(entry);
         } else if (entry.type === "entity") {
-            const schemaConfig = schemaRegistry.getSchemaConfig(entry.path, entry.entityId);
-            if (!schemaConfig?.schemaResolver) {
+            const entityCollectionResolver = schemaRegistry.getSchemaConfig(entry.path, entry.entityId);
+            if (!entityCollectionResolver?.schemaResolver) {
                 throw Error(`No schema defined in the navigation for the entity with path ${entry.path}`);
             }
 
             return dataSource.fetchEntity({
                 path: entry.path,
                 entityId: entry.entityId,
-                schema: schemaConfig?.schemaResolver
+                schema: entityCollectionResolver?.schemaResolver
             })
                 .then((entity) => {
                     return { ...entry, entity };
