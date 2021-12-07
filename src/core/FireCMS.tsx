@@ -26,8 +26,6 @@ import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { ModeProvider, ModeStateContext } from "./contexts/ModeState";
 import { useBuildSideEntityController } from "./internal/useBuildSideEntityController";
 import { useBuildNavigationContext } from "./internal/useBuildNavigationContext";
-
-import { useBuildSchemaRegistryController } from "./contexts/useBuildSchemaRegistryController";
 import { useBuildAuthController } from "./internal/useBuildAuthController";
 
 const DEFAULT_COLLECTION_PATH = `/c`;
@@ -180,11 +178,11 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         dateTimeFormat,
         locale,
         dataSource,
-        storageSource
+        storageSource,
+        schemaOverrideHandler
     });
 
-    const schemaRegistryController = useBuildSchemaRegistryController(navigationContext, schemaOverrideHandler);
-    const sideEntityController = useBuildSideEntityController(navigationContext, schemaRegistryController);
+    const sideEntityController = useBuildSideEntityController(navigationContext);
 
     const loading = authController.authLoading || authController.initialLoading || navigationContext.loading;
 
@@ -212,7 +210,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                             navigationContext,
                             dataSource,
                             storageSource,
-                            schemaRegistryController,
                             snackbarController
                         };
 

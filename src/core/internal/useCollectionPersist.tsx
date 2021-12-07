@@ -1,14 +1,14 @@
 import { useMemo, useState } from "react";
 import { EntityCollection, PartialEntityCollection } from "../../models";
 import { mergeDeep } from "../util/objects";
-import { useSchemaRegistryController } from "../../hooks/useSchemaRegistryController";
+import { useNavigation } from "../../hooks";
 
 export function useCollectionPersist<M>({
                                                path,
                                            }: { path: string }) {
 
-    const schemaRegistry = useSchemaRegistryController();
-    const collectionResolver = schemaRegistry.getCollectionResolver(path);
+    const navigationContext = useNavigation();
+    const collectionResolver = navigationContext.getCollectionResolver(path);
     if (!collectionResolver) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
@@ -18,7 +18,7 @@ export function useCollectionPersist<M>({
 
     const onCollectionModifiedForUser = (partialCollection: PartialEntityCollection<M>) => {
         const newCollection: PartialEntityCollection<M> = mergeDeep(modifiedCollection, partialCollection);
-        schemaRegistry.onCollectionModifiedForUser(path, newCollection);
+        navigationContext.onCollectionModifiedForUser(path, newCollection);
         setModifiedCollection(newCollection);
     }
 

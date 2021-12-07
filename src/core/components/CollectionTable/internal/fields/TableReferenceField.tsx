@@ -14,7 +14,7 @@ import { ReferenceDialog } from "../../../ReferenceDialog";
 import { getPreviewSizeFrom } from "../../../../../preview/util";
 import { useInputStyles } from "./styles";
 import { getReferenceFrom } from "../../../../utils";
-import { useFireCMSContext } from "../../../../../hooks";
+import { useFireCMSContext, useNavigation } from "../../../../../hooks";
 
 
 export function TableReferenceField<M extends { [Key: string]: any }>(props: {
@@ -55,8 +55,8 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     const [onHover, setOnHover] = useState(false);
     const [open, setOpen] = useState<boolean>(false);
 
-    const schemaRegistry = useFireCMSContext().schemaRegistryController;
-    const collectionResolver = schemaRegistry.getCollectionResolver(path);
+    const navigationContext = useNavigation();
+    const collectionResolver = navigationContext.getCollectionResolver(path);
     if (!collectionResolver) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }

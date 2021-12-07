@@ -12,7 +12,6 @@ export * from "./fields";
 export * from "./datasource";
 export * from "./entity_link_builder";
 export * from "./side_entity_controller";
-export * from "./schema_registry_controller";
 export * from "./firecms_context";
 export * from "./entity_callbacks";
 export * from "./overrides";

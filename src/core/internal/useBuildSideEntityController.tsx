@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     EntityCollection,
     NavigationContext,
-    SchemaRegistryController,
     SideEntityController,
     SideEntityPanelProps
 } from "../../models";
@@ -15,7 +14,7 @@ import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 
 const NEW_URL_HASH = "new";
 
-export const useBuildSideEntityController = (navigationContext: NavigationContext, schemaRegistry: SchemaRegistryController): SideEntityController => {
+export const useBuildSideEntityController = (navigationContext: NavigationContext): SideEntityController => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -28,11 +27,11 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
 
     const updatePanels = useCallback((newPanels: SideEntityPanelProps[]) => {
         setSidePanels(newPanels);
-        schemaRegistry.removeAllOverridesExcept(newPanels);
+        navigationContext.removeAllOverridesExcept(newPanels);
     }, []);
 
     useEffect(() => {
-        if (schemaRegistry.initialised) {
+        if (navigationContext.initialised) {
             if (location?.state && location.state["panels"]) {
                 const statePanel = location.state["panels"] as SideEntityPanelProps[];
                 updatePanels(statePanel);
@@ -40,7 +39,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 updatePanels([]);
             }
         }
-    }, [location?.state, schemaRegistry.initialised]);
+    }, [location?.state, navigationContext.initialised]);
 
     // only on initialisation
     useEffect(() => {
@@ -95,7 +94,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             const schemaOrResolver = schemaProps.schema;
             const subcollections = schemaProps.subcollections;
             const overrideSchemaRegistry = schemaProps.overrideSchemaRegistry;
-            schemaRegistry.setOverride(
+            navigationContext.setOverride(
                 {
                     path,
                     entityId,

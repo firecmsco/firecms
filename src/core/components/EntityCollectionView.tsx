@@ -28,10 +28,9 @@ import { canCreate, canDelete, canEdit } from "../util/permissions";
 import { Markdown } from "../../preview";
 import {
     useAuthController,
-    useFireCMSContext,
+    useFireCMSContext, useNavigation,
     useSideEntityController
 } from "../../hooks";
-import { useSchemaRegistryController } from "../../hooks/useSchemaRegistryController";
 import { useCollectionPersist } from "../internal/useCollectionPersist";
 
 /**
@@ -109,7 +108,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
     const sideEntityController = useSideEntityController();
     const context = useFireCMSContext();
     const authController = useAuthController();
-    const schemaRegistry = useSchemaRegistryController();
+    const navigationContext = useNavigation();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
@@ -122,7 +121,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
     const collection = persistedCollection ?? baseCollection;
 
-    const schemaConfig = schemaRegistry.getSchemaConfig(path);
+    const schemaConfig = navigationContext.getCollectionResolver<M>(path);
     if (!schemaConfig) {
         throw Error(`Couldn't find the corresponding schemaConfig for the path: ${path}`);
     }

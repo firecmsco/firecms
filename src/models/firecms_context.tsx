@@ -1,7 +1,6 @@
 import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
-import { SchemaRegistryController } from "./schema_registry_controller";
 import { NavigationContext } from "./navigation";
 import { SideEntityController } from "./side_entity_controller";
 import { AuthController } from "./auth";
@@ -38,14 +37,6 @@ export interface FireCMSContext<UserType extends User = User> {
      * Used storage implementation
      */
     storageSource: StorageSource;
-
-    /**
-     * This controller is in charge of resolving the entity schemas from a given
-     * path. It takes into account the `navigation` prop set in the main level of the
-     * CMSApp as well as the `schemaResolver` in case you want to override schemas
-     * to specific entities.
-     */
-    schemaRegistryController: SchemaRegistryController;
 
     /**
      * Context that includes the resolved navigation and utility methods and

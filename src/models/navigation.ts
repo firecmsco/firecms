@@ -87,14 +87,40 @@ export type NavigationContext = {
 
     navigationLoadingError?: any;
 
-    getCollection: <M>(path: string) => EntityCollection<M> | undefined;
-    
-    getSchemaOverride: <M>(path: string) => PartialSchema<M> | undefined;
+    /**
+     * Is the registry ready to be used
+     */
+    initialised: boolean;
+
+    /**
+     * Set props for path
+     * @return used key
+     */
+    setOverride: <M>(props: {
+                         path: string,
+                         entityId?: string,
+                         schemaConfig?: Partial<EntityCollectionResolver>
+                         overrideSchemaRegistry?: boolean
+                     }
+    ) => string | undefined;
+
+    /**
+     * Get the schema configuration for a given path
+     */
+    getCollectionResolver: <M>(path: string, entityId?: string) => EntityCollectionResolver<M> | undefined;
+
+    /**
+     * Remove all keys not used
+     * @param used keys
+     */
+    removeAllOverridesExcept: (entityRefs: {
+        path: string, entityId?: string
+    }[]) => void;
 
     /**
      * Use this callback when a collection has been modified so it is persisted.
      */
-    onCollectionModifiedForUser: <M>(path: string, partialCollection: PartialEntityCollection<M>) => void;
+    onCollectionModifiedForUser: <M>(path:string, partialCollection: PartialEntityCollection<M>) => void;
 
     /**
      * Default path under the navigation routes of the CMS will be created

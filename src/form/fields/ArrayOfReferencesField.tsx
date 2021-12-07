@@ -11,9 +11,8 @@ import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { ErrorView, ReferenceDialog } from "../../core";
 import { formStyles } from "../styles";
-import { useClearRestoreValue } from "../../hooks";
+import { useClearRestoreValue, useNavigation } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";
-import { useSchemaRegistryController } from "../../hooks/useSchemaRegistryController";
 
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -54,9 +53,9 @@ export function ArrayOfReferencesField({
         setValue
     });
 
-    const schemaRegistry = useSchemaRegistryController();
+    const navigationContext = useNavigation();
     const collectionResolver: EntityCollectionResolver | undefined = useMemo(() => {
-        return schemaRegistry.getCollectionResolver(ofProperty.path);
+        return navigationContext.getCollectionResolver(ofProperty.path);
     }, [ofProperty.path]);
 
     if (!collectionResolver) {

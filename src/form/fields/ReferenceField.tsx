@@ -33,11 +33,10 @@ import { PreviewComponent, SkeletonComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
     useClearRestoreValue,
-    useEntityFetch,
+    useEntityFetch, useNavigation,
     useSideEntityController
 } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";
-import { useSchemaRegistryController } from "../../hooks/useSchemaRegistryController";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -127,9 +126,9 @@ export function ReferenceField<M extends { [Key: string]: any }>({
     const [open, setOpen] = React.useState(autoFocus);
     const sideEntityController = useSideEntityController();
 
-    const schemaRegistry = useSchemaRegistryController();
+    const navigationContext = useNavigation();
     const collectionResolver: EntityCollectionResolver | undefined = useMemo(() => {
-        return schemaRegistry.getCollectionResolver(property.path);
+        return navigationContext.getCollectionResolver(property.path);
     }, [property.path]);
 
     if (!collectionResolver) {

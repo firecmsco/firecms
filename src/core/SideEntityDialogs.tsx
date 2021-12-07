@@ -3,13 +3,12 @@ import { EntityCollectionResolver, SideEntityPanelProps } from "../models";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { EntityView } from "./internal/EntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
-import { useSideEntityController } from "../hooks";
+import { useNavigation, useSideEntityController } from "../hooks";
 import { ErrorBoundary } from "./internal/ErrorBoundary";
 import {
     UnsavedChangesDialog,
     useNavigationUnsavedChangesDialog
 } from "./internal/useUnsavedChangesDialog";
-import { useSchemaRegistryController } from "../hooks/useSchemaRegistryController";
 import { computeSchema } from "./utils";
 
 /**
@@ -79,8 +78,8 @@ function SideEntityDialog({
     };
 
     const sideEntityController = useSideEntityController();
-    const schemaRegistry = useSchemaRegistryController();
-    const schemaProps: EntityCollectionResolver | undefined = schemaRegistry.getSchemaConfig(panel.path, panel.entityId);
+    const navigationContext = useNavigation();
+    const schemaProps: EntityCollectionResolver | undefined = navigationContext.getCollectionResolver(panel.path, panel.entityId);
     if (!schemaProps) {
         throw Error("ERROR: You are trying to open an entity with no schema defined.");
     }

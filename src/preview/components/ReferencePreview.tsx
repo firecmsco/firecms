@@ -26,7 +26,7 @@ import { SkeletonComponent } from "./SkeletonComponent";
 import { ErrorView } from "../../core";
 import {
     useEntityFetch,
-    useFireCMSContext,
+    useFireCMSContext, useNavigation,
     useSideEntityController
 } from "../../hooks";
 
@@ -105,10 +105,10 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     const reference: EntityReference = value;
     const previewProperties = property.previewProperties;
 
-    const schemaRegistry = useFireCMSContext().schemaRegistryController;
+    const navigationContext = useNavigation();
     const sideEntityController = useSideEntityController();
 
-    const collectionResolver = schemaRegistry.getCollectionResolver<M>(property.path);
+    const collectionResolver = navigationContext.getCollectionResolver<M>(property.path);
     if (!collectionResolver) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
     }
