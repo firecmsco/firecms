@@ -118,6 +118,66 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         layers.push({
             is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(0, 1, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.7, .9, .8),
+            coef: new THREE.Vector3(1, 0, 0),
+            constant: new THREE.Vector3(0, -.8, 1)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(0, 0, 1),
+            cos: new THREE.Vector3(0, 1, 1),
+            time_dilation: new THREE.Vector3(.7, .4, .5),
+            coef: new THREE.Vector3(.3, -.5, 1),
+            constant: new THREE.Vector3(0, -.4, .5)
+        });
+
+
+        layers.push({
+            is_active: 1,
+            color: magenta,
+            sin: new THREE.Vector3(0, 1, 0),
+            cos: new THREE.Vector3(1, 0, 1),
+            time_dilation: new THREE.Vector3(.4, .6, 1.1),
+            coef: new THREE.Vector3(.1, .8, .5),
+            constant: new THREE.Vector3(0, -.5, .7)
+        });
+        layers.push({
+            is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(1, .9, 1),
+            coef: new THREE.Vector3(1, 0, 0),
+            constant: new THREE.Vector3(0, -1, -.7)
+        });
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.9, .8, .7),
+            coef: new THREE.Vector3(.5, 0, .4),
+            constant: new THREE.Vector3(0, -.9, .3)
+        });
+
+
+        layers.push({
+            is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(0, 1, 0),
+            cos: new THREE.Vector3(1, 0, 1),
+            time_dilation: new THREE.Vector3(.4, .9, .3),
+            coef: new THREE.Vector3(.3, 1, -.3),
+            constant: new THREE.Vector3(.3, -1.1, .5)
+        });
+
+        layers.push({
+            is_active: 1,
             color: magenta,
             sin: new THREE.Vector3(0, 1, 0),
             cos: new THREE.Vector3(1, 0, 0),
@@ -213,66 +273,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
             coef: new THREE.Vector3(1, 0, 0),
             constant: new THREE.Vector3(0, -1, 1)
         });
-        // layers.push({
-        //     is_active: 1,
-        //     color: cyan,
-        //     sin: new THREE.Vector3(0, 1, 0),
-        //     cos: new THREE.Vector3(0, 0, 0),
-        //     time_dilation: new THREE.Vector3(.7, .9, .8),
-        //     coef: new THREE.Vector3(1, 0, 0),
-        //     constant: new THREE.Vector3(0, -.8, 1)
-        // });
-        //
-        // layers.push({
-        //     is_active: 1,
-        //     color: blue,
-        //     sin: new THREE.Vector3(0, 0, 1),
-        //     cos: new THREE.Vector3(0, 1, 1),
-        //     time_dilation: new THREE.Vector3(.7, .4, .5),
-        //     coef: new THREE.Vector3(.3, -.5, 1),
-        //     constant: new THREE.Vector3(0, -.4, .5)
-        // });
-        //
-        //
-        // layers.push({
-        //     is_active: 1,
-        //     color: magenta,
-        //     sin: new THREE.Vector3(0, 1, 0),
-        //     cos: new THREE.Vector3(1, 0, 1),
-        //     time_dilation: new THREE.Vector3(.4, .6, 1.1),
-        //     coef: new THREE.Vector3(.1, .8, .5),
-        //     constant: new THREE.Vector3(0, -.5, .7)
-        // });
-        // layers.push({
-        //     is_active: 1,
-        //     color: cyan,
-        //     sin: new THREE.Vector3(1, 0, 0),
-        //     cos: new THREE.Vector3(0, 0, 0),
-        //     time_dilation: new THREE.Vector3(1, .9, 1),
-        //     coef: new THREE.Vector3(1, 0, 0),
-        //     constant: new THREE.Vector3(0, -1, -.7)
-        // });
-        // layers.push({
-        //     is_active: 1,
-        //     color: blue,
-        //     sin: new THREE.Vector3(1, 0, 0),
-        //     cos: new THREE.Vector3(0, 0, 0),
-        //     time_dilation: new THREE.Vector3(.9, .8, .7),
-        //     coef: new THREE.Vector3(.5, 0, .4),
-        //     constant: new THREE.Vector3(0, -.9, .3)
-        // });
-        //
-        //
-        // layers.push({
-        //     is_active: 1,
-        //     color: cyan,
-        //     sin: new THREE.Vector3(0, 1, 0),
-        //     cos: new THREE.Vector3(1, 0, 1),
-        //     time_dilation: new THREE.Vector3(.4, .9, .3),
-        //     coef: new THREE.Vector3(.3, 1, -.3),
-        //     constant: new THREE.Vector3(.3, -1.1, .5)
-        // });
-        //
+
         // layers.push({
         //     is_active: 1,
         //     color: blue,
@@ -423,10 +424,72 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
             coef: new THREE.Vector3(1, 1, 0),
             constant: new THREE.Vector3(0, .8, 1)
         });
+
+
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(1, 0, 0),
+            cos: new THREE.Vector3(0, 1, 0),
+            time_dilation: new THREE.Vector3(.7, .9, 1),
+            coef: new THREE.Vector3(-.3, 1, .3),
+            constant: new THREE.Vector3(0, -.2, .3)
+        });
+
+
+        layers.push({
+            is_active: 1,
+            color: magenta,
+            sin: new THREE.Vector3(1, 1, 0),
+            cos: new THREE.Vector3(0, 0, 1),
+            time_dilation: new THREE.Vector3(.4, .8, 1),
+            coef: new THREE.Vector3(.3, -1, -.5),
+            constant: new THREE.Vector3(0.2, .7, -.5)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(0, 0, 1),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(1, 1, .9),
+            coef: new THREE.Vector3(-1, 1, .6),
+            constant: new THREE.Vector3(0, -.3, .1)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: blue,
+            sin: new THREE.Vector3(1, 1, 0),
+            cos: new THREE.Vector3(0, 0, 1),
+            time_dilation: new THREE.Vector3(.9, .8, 1),
+            coef: new THREE.Vector3(.4, -.8, .9),
+            constant: new THREE.Vector3(.4, .8, 1)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: yellow,
+            sin: new THREE.Vector3(1, 1, 1),
+            cos: new THREE.Vector3(0, 0, 0),
+            time_dilation: new THREE.Vector3(.8, .8, .8),
+            coef: new THREE.Vector3(.5, -.7, .3),
+            constant: new THREE.Vector3(.1, -.5, .7)
+        });
+
+        layers.push({
+            is_active: 1,
+            color: cyan,
+            sin: new THREE.Vector3(0, 1, 0),
+            cos: new THREE.Vector3(1, 0, 0),
+            time_dilation: new THREE.Vector3(.7, 1.0, .8),
+            coef: new THREE.Vector3(1, 1, 0),
+            constant: new THREE.Vector3(.3, .8, .5)
+        });
         return layers;
     }
 
-    function buildMaterial(width: number, height: number, radius: number, displacement: number, layers:any[]) {
+    function buildMaterial(width: number, height: number, radius: number, displacement: number, layers:any[], spread:number) {
 
         const uniforms = {
             u_time: { value: 0 },
@@ -436,7 +499,8 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
             u_displacement_ratio: { value: displacement },
             u_base_color: { value: red },
             u_layers: { value: layers },
-            u_layers_count: { value: layers.length }
+            u_layers_count: { value: layers.length },
+            u_spread: { value: spread }
         };
 
         const material = new THREE.ShaderMaterial({
@@ -449,9 +513,9 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         return material;
     }
 
-    function createShape(width: number, height: number, radius:number, displacement: number, positionX, positionY) {
+    function createShape(width: number, height: number, radius:number, displacement: number, positionX, positionY, spread) {
         const layers = buildSmallLayers(cyan, yellow, blue, magenta, red);
-        const material = buildMaterial(width, height, radius, displacement, layers);
+        const material = buildMaterial(width, height, radius, displacement, layers, spread);
         const geometry = buildNightGeometry(radius, radius * 2);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.initialPositionY = positionY;
@@ -480,7 +544,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
 
         const layers = buildMainLayers(cyan, yellow, blue, magenta, red);
-        const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, layers);
+        const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, layers, 6.0);
 
         const geometry = buildNightGeometry(SPHERE_RADIUS, 18);
         const mesh = new THREE.Mesh(geometry, material);
@@ -489,23 +553,23 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         scene.add(mesh);
         meshes.push(mesh);
 
-        const mesh2 = createShape(width, height, 2, 1/4, 3, -10);
+        const mesh2 = createShape(width, height, 2, 1/4, 3, -10, 1.0);
         scene.add(mesh2);
         meshes.push(mesh2);
 
-        const mesh3 = createShape(width, height, 1, 1/1.5, -2, -15);
+        const mesh3 = createShape(width, height, 1, 1/1.5, -2, -15, 1.0);
         scene.add(mesh3);
         meshes.push(mesh3);
 
-        const mesh4 = createShape(width, height, 1.5, 1/1.5, -1, -25);
+        const mesh4 = createShape(width, height, 1.5, 1/1.5, -1, -25, 1.0);
         scene.add(mesh4);
         meshes.push(mesh4);
 
-        const mesh5 = createShape(width, height, 1, 1/1.5, -6.5, -35);
+        const mesh5 = createShape(width, height, 1, 1/1.5, -6.5, -35, 1.0);
         scene.add(mesh5);
         meshes.push(mesh5);
 
-        const mesh6 = createShape(width, height, 2.5, 1/1.5, 6.5, -45);
+        const mesh6 = createShape(width, height, 2.5, 1/1.5, 6.5, -45, 1.0);
         scene.add(mesh6);
         meshes.push(mesh6);
 
@@ -605,11 +669,9 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         <canvas
             style={{
                 height: "100vh",
-                maxHeight: "1000px",
                 width: "100vw",
                 position: "fixed",
                 top: `0px`,
-                // top: `-${scroll / 2}px`,
                 transform: `translateY(60px)`,
                 zIndex: -10
             }}
@@ -636,11 +698,12 @@ function buildVertexShader() {
     uniform float u_time;
 
     uniform int u_layers_count;
-    uniform Layer u_layers[10];
+    uniform Layer u_layers[16];
     uniform vec2 u_resolution;
     uniform vec3 u_base_color;
     uniform float u_sphere_radius;
     uniform float u_displacement_ratio;
+    uniform float u_spread;
 
     varying vec2 vUv;
     varying vec3 vNormal;
@@ -891,7 +954,7 @@ function buildVertexShader() {
                         smoothstep( 0.0, .9,
                             1.05 -
                             distance(st, normalize(vec3(x, y, z) ) ) )
-                    , 2.0);
+                    , u_spread);
                 color = blendNormal(color, nColor, amount);
             // }
         }

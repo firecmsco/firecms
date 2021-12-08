@@ -22,7 +22,7 @@ function HeroHome({}) {
     const video = <div
         data-aos="fade-up"
         data-aos-delay="400"
-        className="max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4">
+        className="lg:max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4">
         <video
             className={"rounded-xl shadow-md border-gray-200"}
             width="100%" loop autoPlay muted>
@@ -50,9 +50,13 @@ function HeroHome({}) {
                     data-aos="zoom-y-out"
                     data-aos-delay="150"
                     style={{
-                        mixBlendMode: "color-dodge"
+                        // mixBlendMode: "color-dodge",
+                        // @ts-ignore
+                        "-webkit-background-clip": "text",
+                        backgroundClip: "text",
+                        backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #3857B3)"
                     }}
-                    className="block text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-3 block text-purple-600 text-8xl md:text-9xl">CMS</span>
+                    className="text-8xl font-extrabold text-8xl md:text-9xl text-transparent bg-clip-text">CMS</span>
             </h1>
 
             <div className="mt-8 mb-16 flex justify-center xl:justify-end"
