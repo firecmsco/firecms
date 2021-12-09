@@ -27,6 +27,7 @@ import { ModeProvider, ModeStateContext } from "./contexts/ModeState";
 import { useBuildSideEntityController } from "./internal/useBuildSideEntityController";
 import { useBuildNavigationContext } from "./internal/useBuildNavigationContext";
 import { useBuildAuthController } from "./internal/useBuildAuthController";
+import { useBuildStorageConfigurationPersistence } from "./util/storage";
 
 const DEFAULT_COLLECTION_PATH = `/c`;
 
@@ -170,6 +171,8 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         storageSource
     });
 
+    const userConfigPersistence = useBuildStorageConfigurationPersistence();
+
     const navigationContext = useBuildNavigationContext({
         basePath: usedBasePath,
         baseCollectionPath: usedBasedCollectionPath,
@@ -179,7 +182,8 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         locale,
         dataSource,
         storageSource,
-        schemaOverrideHandler
+        schemaOverrideHandler,
+        userConfigPersistence,
     });
 
     const sideEntityController = useBuildSideEntityController(navigationContext);

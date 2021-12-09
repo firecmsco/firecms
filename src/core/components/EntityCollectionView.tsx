@@ -16,6 +16,7 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
+    PartialEntityCollection,
     SelectionController
 } from "../../models";
 import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
@@ -28,10 +29,10 @@ import { canCreate, canDelete, canEdit } from "../util/permissions";
 import { Markdown } from "../../preview";
 import {
     useAuthController,
-    useFireCMSContext, useNavigation,
+    useFireCMSContext,
+    useNavigation,
     useSideEntityController
 } from "../../hooks";
-import { useCollectionPersist } from "../internal/useCollectionPersist";
 
 /**
  * @category Components
@@ -114,18 +115,18 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
-    const {
-        collection: persistedCollection,
-        onCollectionModifiedForUser
-    } = useCollectionPersist({ path });
-
-    const collection = persistedCollection ?? baseCollection;
-
-    const schemaConfig = navigationContext.getCollectionResolver<M>(path);
-    if (!schemaConfig) {
-        throw Error(`Couldn't find the corresponding schemaConfig for the path: ${path}`);
+    const collectionResolver = navigationContext.getCollectionResolver<M>(path);
+    if (!collectionResolver) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
-    const { schemaResolver } = schemaConfig;
+
+    const onCollectionModifiedForUser = (partialCollection: PartialEntityCollection<any>) => {
+        navigationContext.onCollectionModifiedForUser(path, partialCollection);
+    }
+
+    const collection: EntityCollection<M> = collectionResolver ?? baseCollection;
+
+    const { schemaResolver } = collectionResolver;
 
     const exportable = collection.exportable === undefined || collection.exportable;
 
@@ -191,7 +192,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                                             key
                                         }: OnColumnResizeParams) => {
         const property: Partial<AnyProperty> = { columnWidth: width };
-        const updatedFields = { schema: { properties: { [key as keyof M]: property } } };
+        const updatedFields: PartialEntityCollection<any> = { schema: { properties: { [key as keyof M]: property } } };
         if (onCollectionModifiedForUser)
             onCollectionModifiedForUser(updatedFields)
     }, [path, collection]);

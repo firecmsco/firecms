@@ -4,7 +4,7 @@ import { User } from "./user";
 import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
-import { PartialEntityCollection, PartialSchema } from "./overrides";
+import { PartialEntityCollection } from "./config_persistence";
 
 
 /**
@@ -105,9 +105,13 @@ export type NavigationContext = {
     ) => string | undefined;
 
     /**
-     * Get the schema configuration for a given path
+     * Get the schema configuration for a given path.
+     * If you use this method you can use a baseCollection that will be used
+     * to resolve the initial properties of the collection, before applying
+     * the collection configuration changes that are persisted.
+     * If you don't specify it, the collection is fetched from the local navigation.
      */
-    getCollectionResolver: <M>(path: string, entityId?: string) => EntityCollectionResolver<M> | undefined;
+    getCollectionResolver: <M>(path: string, entityId?: string, baseCollection?:EntityCollection<M>) => EntityCollectionResolver<M> | undefined;
 
     /**
      * Remove all keys not used

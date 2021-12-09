@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
     AuthController,
+    ConfigurationPersistence,
     DataSource,
     EntityCollection,
     EntityCollectionResolver,
@@ -12,8 +13,8 @@ import {
     NavigationBuilder,
     NavigationContext,
     PartialEntityCollection,
+    PartialEntitySchema,
     PartialProperties,
-    PartialSchema,
     SchemaOverrideHandler,
     StorageSource,
     User
@@ -22,10 +23,6 @@ import {
     getCollectionFromCollections,
     removeInitialAndTrailingSlashes
 } from "../util/navigation_utils";
-import {
-    getStorageCollectionConfig,
-    saveStorageCollectionConfig
-} from "../util/storage";
 import { getValueInPath, mergeDeep } from "../util/objects";
 import { computeProperties } from "../utils";
 
@@ -38,17 +35,19 @@ export function useBuildNavigationContext<UserType>({
                                                         dateTimeFormat,
                                                         locale,
                                                         dataSource,
-                                                        storageSource
-                                          }: {
+                                                        storageSource,
+                                                        userConfigPersistence
+                                                    }: {
     basePath: string,
     baseCollectionPath: string,
     authController: AuthController<UserType>;
-    navigationOrBuilder: Navigation | NavigationBuilder<UserType>  | EntityCollection[];
+    navigationOrBuilder: Navigation | NavigationBuilder<UserType> | EntityCollection[];
     schemaOverrideHandler: SchemaOverrideHandler | undefined;
     dateTimeFormat?: string;
     locale?: Locale;
     dataSource: DataSource;
     storageSource: StorageSource;
+    userConfigPersistence?: ConfigurationPersistence;
 }): NavigationContext {
 
     const [navigation, setNavigation] = useState<Navigation | undefined>(undefined);
@@ -86,12 +85,16 @@ export function useBuildNavigationContext<UserType>({
     }, [authController.user, authController.canAccessMainView, navigationOrBuilder]);
 
 
-    const getCollectionResolver = <M extends any>(path: string, entityId?: string): EntityCollectionResolver<M> => {
+    const getCollectionResolver = <M extends { [Key: string]: any }>(path: string, entityId?: string, collection?:EntityCollection<M>): EntityCollectionResolver<M> => {
 
-        const collection = getCollection<M>(path);
-        // if (!collection) {
-        //     throw Error(`No collection found for path ${path}`);
-        // }
+        const collections = navigation?.collections;
+
+        const baseCollection = collection ?? (collections && getCollectionFromCollections<M>(removeInitialAndTrailingSlashes(path), collections));
+
+        const collectionOverride = getCollectionOverride(path);
+
+        const resolvedCollection = baseCollection ? mergeDeep(baseCollection, collectionOverride) : undefined;
+
         const sidePanelKey = getSidePanelKey(path, entityId);
 
         let result: Partial<EntityCollectionResolver> = {};
@@ -127,12 +130,11 @@ export function useBuildNavigationContext<UserType>({
 
         }
 
-        const entityCollection: EntityCollection | undefined = getCollection(path);
-        if (entityCollection) {
-            const schema = entityCollection.schema;
-            const subcollections = entityCollection.subcollections;
-            const callbacks = entityCollection.callbacks;
-            const permissions = entityCollection.permissions;
+        if (resolvedCollection) {
+            const schema = resolvedCollection.schema;
+            const subcollections = resolvedCollection.subcollections;
+            const callbacks = resolvedCollection.callbacks;
+            const permissions = resolvedCollection.permissions;
             result = {
                 ...result,
                 schemaResolver: result.schemaResolver ?? buildSchemaResolver({
@@ -154,7 +156,7 @@ export function useBuildNavigationContext<UserType>({
             });
         }
 
-        return { ...collection, ...(result as EntityCollectionResolver<M>) };
+        return { ...resolvedCollection, ...(result as EntityCollectionResolver<M>) };
 
     };
 
@@ -208,8 +210,7 @@ export function useBuildNavigationContext<UserType>({
                     values,
                 }: EntitySchemaResolverProps) => {
 
-            const collectionOverride = getCollectionOverride<M>(path);
-            const schemaOverride = collectionOverride?.schema;
+            const schemaOverride = getSchemaOverride<M>(path);
             const storedProperties: PartialProperties<M> | undefined = getValueInPath(schemaOverride, "properties");
 
             const properties = computeProperties({
@@ -267,31 +268,26 @@ export function useBuildNavigationContext<UserType>({
         return cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(path)}` : `/${path}`;
     }
 
-
     const onCollectionModifiedForUser = <M extends any>(path: string, partialCollection: PartialEntityCollection<M>) => {
-        saveStorageCollectionConfig(path, partialCollection);
-    }
-
-    /**
-     * Find the corresponding view at any depth for a given path.
-     * @param path
-     */
-    function getCollection<M>(path: string): EntityCollection<M> | undefined {
-
-        const collections = navigation?.collections;
-        if (!collections)
-            return undefined;
-
-        const collection = getCollectionFromCollections<M>(removeInitialAndTrailingSlashes(path), collections);
-
-        const dynamicCollectionConfig = { ...getCollectionOverride(path) };
-        delete dynamicCollectionConfig["schema"];
-
-        return collection ? mergeDeep(collection, dynamicCollectionConfig) : undefined;
+        if (userConfigPersistence) {
+            const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
+            userConfigPersistence.onCollectionModified(path, mergeDeep(currentStoredConfig, partialCollection));
+        }
     }
 
     const getCollectionOverride = <M extends any>(path: string): PartialEntityCollection<M> | undefined => {
-        return getStorageCollectionConfig<M>(path);
+        if (!userConfigPersistence)
+            return undefined
+        const dynamicCollectionConfig = { ...userConfigPersistence.getCollectionConfig<M>(path) };
+        delete dynamicCollectionConfig["schema"];
+        return dynamicCollectionConfig;
+    }
+
+    const getSchemaOverride = <M extends any>(path: string): PartialEntitySchema<M> | undefined => {
+        if (!userConfigPersistence)
+            return undefined
+        const collectionOverride = userConfigPersistence.getCollectionConfig<M>(path);
+        return collectionOverride?.schema;
     }
 
     return {
