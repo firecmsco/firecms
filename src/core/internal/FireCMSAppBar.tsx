@@ -11,8 +11,6 @@ import {
     IconButton,
     Link,
     Slide,
-    Slider,
-    styled,
     Theme,
     Toolbar,
     Typography

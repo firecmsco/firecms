@@ -1,4 +1,4 @@
-import { EntitySchema, EntityValues, ResolvedEntitySchema } from "./entities";
+import { EntityValues, ResolvedEntitySchema } from "./entities";
 import {
     ArrayProperty,
     BooleanProperty,

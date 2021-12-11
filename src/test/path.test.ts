@@ -1,4 +1,4 @@
-import {getValueInPath} from "../core/util/objects";
+import { getValueInPath } from "../core/util/objects";
 
 const obj = {
     "id": "022QFOrveCab2YUT88iw",

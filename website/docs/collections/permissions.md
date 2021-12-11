@@ -77,7 +77,8 @@ import { Authenticator } from "@camberi/firecms";
 
 const myAuthenticator: Authenticator<FirebaseUser> = async ({
                                                                 user,
-                                                                authController
+                                                                authController,
+                                                                dataSource
                                                             }) => {
     // This is an example of retrieving async data related to the user
     // and storing it in the user extra field

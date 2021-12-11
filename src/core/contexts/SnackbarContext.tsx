@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import { Snackbar, Alert } from "@mui/material";
-import {
-    SnackbarController,
-    SnackbarMessageType
-} from "../../hooks";
+import { Alert, Snackbar } from "@mui/material";
+import { SnackbarController, SnackbarMessageType } from "../../hooks";
 
 const DEFAULT_STATE = {
     isOpen: false,

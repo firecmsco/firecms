@@ -401,6 +401,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         <>
 
             <CollectionTable
+                key={`collection_table_${path}`}
                 title={title}
                 path={path}
                 collection={collection}

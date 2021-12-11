@@ -4,8 +4,6 @@ import { Drawer as MuiDrawer, Theme } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { FireCMSAppBar } from "./internal/FireCMSAppBar";
-import * as locales from "date-fns/locale";
-import { useFireCMSContext } from "../hooks";
 
 
 /**

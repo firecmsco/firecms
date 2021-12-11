@@ -33,7 +33,8 @@ import { PreviewComponent, SkeletonComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
     useClearRestoreValue,
-    useEntityFetch, useNavigation,
+    useEntityFetch,
+    useNavigation,
     useSideEntityController
 } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";

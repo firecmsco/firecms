@@ -14,7 +14,7 @@ import { ReferenceDialog } from "../../../ReferenceDialog";
 import { getPreviewSizeFrom } from "../../../../../preview/util";
 import { useInputStyles } from "./styles";
 import { getReferenceFrom } from "../../../../utils";
-import { useFireCMSContext, useNavigation } from "../../../../../hooks";
+import { useNavigation } from "../../../../../hooks";
 
 
 export function TableReferenceField<M extends { [Key: string]: any }>(props: {

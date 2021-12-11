@@ -3,8 +3,9 @@ import {
     DeleteEntityProps,
     Entity,
     EntityCallbacks,
-    EntityOnDeleteProps, EntitySchema,
-    FireCMSContext, ResolvedEntitySchema
+    EntityOnDeleteProps,
+    FireCMSContext,
+    ResolvedEntitySchema
 } from "../../models";
 
 /**

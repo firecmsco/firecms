@@ -1,5 +1,5 @@
 import { useInputStyles } from "./styles";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextareaAutosize } from "@mui/material";
 import clsx from "clsx";
 

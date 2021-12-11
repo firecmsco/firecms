@@ -82,11 +82,11 @@ const TableCellInternal = <T, M>({
         }
     }, [openPopup, ref?.current]);
 
-    const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const onClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
         if (event.detail == 3) {
             doOpenPopup();
         }
-    };
+    }, [openPopup, ref]);
 
     const onFocus = useCallback((event: React.SyntheticEvent<HTMLDivElement>) => {
         onSelect();

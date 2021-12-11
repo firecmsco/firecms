@@ -2,7 +2,6 @@ import {
     ArrayProperty,
     BooleanProperty,
     CMSType,
-    EntityValues,
     GeopointProperty,
     MapProperty,
     NumberProperty,

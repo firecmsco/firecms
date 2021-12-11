@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 
 import clsx from "clsx";
 import {
@@ -40,6 +40,12 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
         backgroundColor: onHover ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
         transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
     }),
+    headerInternal: ({ align }) => ({
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: align === "right" ? "flex-end" : (align === "center" ? "center" : "flex-start"),
+    }),
     headerTitle: ({ align }) => ({
         overflow: "hidden",
         flexShrink: 1
@@ -58,20 +64,23 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
     }
 }));
 
+export const TableHeader = React.memo<TableHeaderProps<any>>(TableHeaderInternal) as React.FunctionComponent<TableHeaderProps<any>>;
 
-export function TableHeader<M extends { [Key: string]: any }>({
-                                                                  sort,
-                                                                  onColumnSort,
-                                                                  onFilterUpdate,
-                                                                  filter,
-                                                                  column
-                                                              }: {
+type TableHeaderProps<M extends { [Key: string]: any }> = {
     column: TableColumn<M>;
     onColumnSort: (key: Extract<keyof M, string>) => void;
     onFilterUpdate: (filterForProperty?: [TableWhereFilterOp, any]) => void;
     filter?: [TableWhereFilterOp, any];
     sort: TableSort;
-}) {
+};
+
+function TableHeaderInternal<M extends { [Key: string]: any }>({
+                                                                   sort,
+                                                                   onColumnSort,
+                                                                   onFilterUpdate,
+                                                                   filter,
+                                                                   column
+                                                               }: TableHeaderProps<M>) {
 
     const [onHover, setOnHover] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
@@ -81,20 +90,18 @@ export function TableHeader<M extends { [Key: string]: any }>({
 
     const [open, setOpen] = React.useState(false);
 
-    const handleSettingsClick = (event: any) => {
+    const handleSettingsClick = useCallback((event: any) => {
         setOpen(true);
-    };
+    }, []);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setOpen(false);
-    };
+    }, []);
 
-    const id = open ? `popover_${column.key}` : undefined;
-
-    const update = (filterForProperty?: [TableWhereFilterOp, any]) => {
+    const update = useCallback((filterForProperty?: [TableWhereFilterOp, any]) => {
         onFilterUpdate(filterForProperty);
         setOpen(false);
-    };
+    }, []);
 
     return (
         <ErrorBoundary>
@@ -109,18 +116,14 @@ export function TableHeader<M extends { [Key: string]: any }>({
                 container>
 
                 <Grid item xs={true} className={classes.headerTitle}>
-                    <Box
-                        display={"flex"}
-                        flexDirection={"row"}
-                        alignItems={"center"}
-                        justifyContent={column.align === "right" ? "flex-end" : (column.align === "center" ? "center" : "flex-start")}>
-                        <Box className={classes.headerIcon}>
+                    <div className={classes.headerInternal}>
+                        <div className={classes.headerIcon}>
                             {column.icon && column.icon(onHover || open)}
-                        </Box>
-                        <Box className={classes.headerTitleInternal}>
+                        </div>
+                        <div className={classes.headerTitleInternal}>
                             {column.label}
-                        </Box>
-                    </Box>
+                        </div>
+                    </div>
                 </Grid>
 
                 {column.sortable && (sort || onHover || open) &&
@@ -164,7 +167,7 @@ export function TableHeader<M extends { [Key: string]: any }>({
             </Grid>
 
             {column.sortable && <Popover
-                id={id}
+                id={open ? `popover_${column.key}` : undefined}
                 open={open}
                 elevation={2}
                 anchorEl={ref.current}

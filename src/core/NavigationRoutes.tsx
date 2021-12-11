@@ -5,6 +5,7 @@ import { CMSView, Navigation } from "../models";
 import { EntityCollectionView, FireCMSHomePage } from "./components";
 import { useNavigation } from "../hooks";
 import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
+import { NotFoundPage } from "./components/NotFoundPage";
 
 /**
  * @category Components
@@ -95,6 +96,11 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                    </BreadcrumbUpdater>
                }/>;
 
+    const notFoundRoute = <Route path={"*"}
+                                 element={
+                                     <NotFoundPage/>
+                                 }/>;
+
     return (
         <Routes location={baseLocation}>
 
@@ -103,6 +109,8 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
             {customRoutes}
 
             {homeRoute}
+
+            {notFoundRoute}
 
         </Routes>
     );

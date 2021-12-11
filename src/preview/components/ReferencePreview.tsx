@@ -26,9 +26,10 @@ import { SkeletonComponent } from "./SkeletonComponent";
 import { ErrorView } from "../../core";
 import {
     useEntityFetch,
-    useFireCMSContext, useNavigation,
+    useNavigation,
     useSideEntityController
 } from "../../hooks";
+import { useMemo } from "react";
 
 export type ReferencePreviewProps =
     PreviewComponentProps<EntityReference>
@@ -37,9 +38,7 @@ export type ReferencePreviewProps =
 /**
  * @category Preview components
  */
-export function ReferencePreview(props: ReferencePreviewProps) {
-    return <MemoReferencePreview {...props} />;
-}
+export const ReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewComponent) as React.FunctionComponent<ReferencePreviewProps>;
 
 const useReferenceStyles = makeStyles<Theme, { size: PreviewSize, onHover?: boolean }>((theme: Theme) =>
     createStyles({
@@ -126,15 +125,18 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         useCache: true
     });
 
-    let listProperties = previewProperties;
-    if (!listProperties || !listProperties.length) {
-        listProperties = Object.keys(schema.properties);
-    }
+    const listProperties = useMemo(() => {
+        let res = previewProperties;
+        if (!res || !res.length) {
+            res = Object.keys(schema.properties);
+        }
 
-    if (size === "small" || size === "regular")
-        listProperties = listProperties.slice(0, 3);
-    else if (size === "tiny")
-        listProperties = listProperties.slice(0, 1);
+        if (size === "small" || size === "regular")
+            res = res.slice(0, 3);
+        else if (size === "tiny")
+            res = res.slice(0, 1);
+        return res;
+    }, [previewProperties, schema.properties]);
 
     let body: JSX.Element;
 
@@ -226,6 +228,3 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     );
 
 }
-
-const MemoReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewComponent) as React.FunctionComponent<ReferencePreviewProps>;
-

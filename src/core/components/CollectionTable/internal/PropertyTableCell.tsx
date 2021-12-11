@@ -94,9 +94,9 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     let disabled = Boolean(property.disabled);
 
-    const onBlur = () => {
+    const onBlur = useCallback(() => {
         setFocused(false);
-    };
+    },[]);
 
     useEffect(
         () => {

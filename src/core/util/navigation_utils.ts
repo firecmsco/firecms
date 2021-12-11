@@ -101,13 +101,15 @@ export interface TopNavigationEntry {
     group?: string;
 }
 
+export type TopNavigationResult = {
+    navigationEntries: TopNavigationEntry[],
+    groups: string[]
+};
+
 export function computeTopNavigation(
     navigationContext: NavigationContext,
     includeHiddenViews: boolean
-): {
-    navigationEntries: TopNavigationEntry[],
-    groups: string[]
-} {
+): TopNavigationResult {
 
     const navigation = navigationContext.navigation;
     if (!navigation)

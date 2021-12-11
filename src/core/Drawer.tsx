@@ -1,20 +1,20 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import {
     Box,
     Divider,
     Link,
     List,
     ListItem,
-    ListItemText,
     Theme,
     Typography
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import { Link as ReactLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
     computeTopNavigation,
-    TopNavigationEntry
+    TopNavigationEntry,
+    TopNavigationResult
 } from "./util/navigation_utils";
 import { useNavigation } from "../hooks";
 import { FireCMSLogo } from "./components/FireCMSLogo";
@@ -56,23 +56,33 @@ export function Drawer({
     const {
         navigationEntries,
         groups
-    } = computeTopNavigation(navigationContext, true);
+    }: TopNavigationResult = useMemo(() => computeTopNavigation(navigationContext, true), [navigationContext]);
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
-    function createNavigationListItem(index: number, group: string, entry: TopNavigationEntry) {
-        return <ListItem
+    const createNavigationListItem = useCallback((index: number, group: string, entry: TopNavigationEntry) =>
+        <ListItem
+            // @ts-ignore
             button
             key={`navigation_${index}`}
-            component={ReactLink}
+            component={NavLink}
+            onClick={closeDrawer}
+            // @ts-ignore
+            style={({ isActive }) => ({
+                fontWeight: isActive ? '600' : '500',
+                background: isActive ? 'rgba(128,128,128,0.1)' : 'inherit',
+            })}
             to={entry.url}
         >
-            <ListItemText
-                primary={entry.name.toUpperCase()}
-                primaryTypographyProps={{ variant: "subtitle2" }}
-                onClick={closeDrawer}/>
-        </ListItem>;
-    }
+            <Typography
+                variant={"subtitle2"}
+                sx={{
+                    fontWeight: 'inherit',
+                    py: .5
+                }}>
+                {entry.name.toUpperCase()}
+            </Typography>
+        </ListItem>, []);
 
     let logoComponent;
     if (logo) {
@@ -91,8 +101,9 @@ export function Drawer({
             key={`breadcrumb-home`}
             color="inherit"
             onClick={closeDrawer}
-            component={ReactLink}
-            to={"/"}>
+            component={NavLink}
+
+            to={navigationContext.homeUrl}>
             {logoComponent}
         </Link>
 

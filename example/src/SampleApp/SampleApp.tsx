@@ -206,7 +206,7 @@ function SampleApp() {
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}
-        schemaResolver={customSchemaOverrideHandler}
+        schemaOverrideHandler={customSchemaOverrideHandler}
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}
