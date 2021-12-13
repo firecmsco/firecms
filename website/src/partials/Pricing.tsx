@@ -14,7 +14,7 @@ function Pricing() {
     const { isDarkTheme } = useThemeContext();
 
     const community = <div
-        className="bg-white dark:bg-opacity-5 m-4 md:m-10 lg:col-span-1 rounded-lg border-b-4 overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 transform ">
+        className="bg-white dark:bg-gray-900 m-4 md:m-10 lg:col-span-1 rounded-lg border-b-4 overflow-hidden shadow-2xl hover:shadow-3xl transition duration-500 transform ">
         <div
             className="p-4 bg-green-500 text-center ">
             <h3 className="h5 mb-0 text-white ">
@@ -53,7 +53,7 @@ function Pricing() {
 
 
     const advanced = <div
-        className="bg-white dark:bg-opacity-5 m-4 md:m-10 lg:col-span-1 rounded-lg border-b-4 overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 transform">
+        className="bg-white dark:bg-gray-900 m-4 md:m-10 lg:col-span-1 rounded-lg border-b-4 overflow-hidden shadow-2xl hover:shadow-3xl transition duration-500 transform ">
         <div
             className="p-4 bg-blue-600 text-center ">
             <h3 className="h5 mb-0 text-white ">

@@ -553,23 +553,23 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         scene.add(mesh);
         meshes.push(mesh);
 
-        const mesh2 = createShape(width, height, 2, 1/4, 3, -10, 1.0);
+        const mesh2 = createShape(width, height, 2, 1/2, 3, -10, 1.0);
         scene.add(mesh2);
         meshes.push(mesh2);
 
-        const mesh3 = createShape(width, height, 1, 1/1.5, -2, -15, 1.0);
+        const mesh3 = createShape(width, height, 1, 1/2.5, -2, -15, 1.0);
         scene.add(mesh3);
         meshes.push(mesh3);
 
-        const mesh4 = createShape(width, height, 1.5, 1/1.5, -1, -25, 1.0);
+        const mesh4 = createShape(width, height, 1.5, 1/2, -1, -25, 1.0);
         scene.add(mesh4);
         meshes.push(mesh4);
 
-        const mesh5 = createShape(width, height, 1, 1/1.5, -6.5, -35, 1.0);
+        const mesh5 = createShape(width, height, 1, 1/2.5, -6.5, -35, 1.0);
         scene.add(mesh5);
         meshes.push(mesh5);
 
-        const mesh6 = createShape(width, height, 2.5, 1/1.5, 6.5, -45, 1.0);
+        const mesh6 = createShape(width, height, 2.5, 1/2.5, 6.5, -45, 1.0);
         scene.add(mesh6);
         meshes.push(mesh6);
 

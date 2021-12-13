@@ -35,8 +35,8 @@ List of properties rendered as this reference preview.
 ---
 
 The widget that gets created is
-- [`ReferenceField`](api/functions/referencefield.md) Field that opens a
+- [`ReferenceField`](api/functions/referencefield) Field that opens a
 reference selection dialog
 
 Links:
-- [API](api/interfaces/referenceproperty.md)
+- [API](api/interfaces/referenceproperty)

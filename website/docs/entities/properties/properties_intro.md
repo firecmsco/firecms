@@ -31,7 +31,7 @@ Each property in the CMS has its own API, but they all share some common props:
 * `disabled` Is this a read only property. Note that you can also pass an object
   with the disabled configuration (including custom messages, clear value on
   disabled or hide the field completely)
-  [PropertyDisabledConfig](../../api/interfaces/propertydisabledconfig.md)
+  [PropertyDisabledConfig](../../api/interfaces/propertydisabledconfig)
 
 * `config`
 

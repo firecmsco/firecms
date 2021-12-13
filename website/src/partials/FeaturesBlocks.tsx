@@ -207,7 +207,7 @@ function FeaturesBlocks() {
                             data-aos="fade-up"
                             data-aos-delay="100">
                             <div
-                                className="relative flex flex-col items-center p-6 rounded shadow-lg bg-white bg-gray-50 dark:bg-gray-800">
+                                className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded shadow-2xl">
                                 {iconStars}
                                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                     Schema validation
@@ -224,7 +224,7 @@ function FeaturesBlocks() {
                             data-aos="fade-up"
                             data-aos-delay="150">
                             <div
-                                className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg bg-gray-50 dark:bg-gray-800">
+                                className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded shadow-2xl">
                                 {iconTalking}
                                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                     Reference support
@@ -240,7 +240,7 @@ function FeaturesBlocks() {
                             data-aos="fade-up"
                             data-aos-delay="200">
                             <div
-                                className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg bg-gray-50 dark:bg-gray-800">
+                                className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded shadow-2xl">
                                 {iconDoor}
                                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                     Role system
@@ -257,7 +257,7 @@ function FeaturesBlocks() {
                             data-aos="fade-up"
                             data-aos-delay="100">
                             <div
-                                className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg bg-gray-50 dark:bg-gray-800">
+                                className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded shadow-2xl">
                                 {iconCards}
                                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                     Customization
@@ -274,7 +274,7 @@ function FeaturesBlocks() {
                             data-aos="fade-up"
                             data-aos-delay="150">
                             <div
-                                className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg bg-gray-50 dark:bg-gray-800">
+                                className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded shadow-2xl">
                                 {iconArrows}
                                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                                     Subcollection support
@@ -290,7 +290,7 @@ function FeaturesBlocks() {
                             data-aos="fade-up"
                             data-aos-delay="200">
                             <div
-                                className="relative flex flex-col items-center p-6 bg-white rounded shadow-lg bg-gray-50 dark:bg-gray-800">
+                                className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded shadow-2xl">
 
                                 {iconRadar}
 

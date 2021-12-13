@@ -22,14 +22,14 @@ use them in your app and combine them with your code
 
 Some top-level components that you will find useful (same ones as used
 by `FirebaseCMSApp`):
-- [`FireCMS`](api/functions/firecms.md)
-- [`Scaffold`](api/functions/scaffold.md)
-- [`NavigationRoutes`](api/functions/navigationroutes.md)
-- [`SideEntityDialogs`](api/functions/sideentitydialogs.md)
-- [`useInitialiseFirebase`](api/functions/useinitialisefirebase.md)
-- [`useFirebaseAuthDelegate`](api/functions/usefirebaseauthdelegate.md)
-- [`useFirebaseStorageSource`](api/functions/usefirebasestoragesource.md)
-- [`useFirestoreDataSource`](api/functions/usefirestoredatasource.md)
+- [`FireCMS`](api/functions/firecms)
+- [`Scaffold`](api/functions/scaffold)
+- [`NavigationRoutes`](api/functions/navigationroutes)
+- [`SideEntityDialogs`](api/functions/sideentitydialogs)
+- [`useInitialiseFirebase`](api/functions/useinitialisefirebase)
+- [`useFirebaseAuthDelegate`](api/functions/usefirebaseauthdelegate)
+- [`useFirebaseStorageSource`](api/functions/usefirebasestoragesource)
+- [`useFirestoreDataSource`](api/functions/usefirestoredatasource)
 
 You will also be responsible to initialise your MUI5 theme and your react-router
 `Router`

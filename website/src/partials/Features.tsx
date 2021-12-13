@@ -82,7 +82,7 @@ function Features() {
 
                                 <div className={"p-4"}>
                                     <video
-                                        className={"rounded-xl shadow-md border-gray-200"}
+                                        className={"rounded-xl shadow-2xl border-gray-200"}
                                         width="100%" loop autoPlay muted>
                                         <source src={cmsPreviewVideo}
                                                 type="video/mp4"/>
@@ -110,6 +110,7 @@ function Features() {
                                 className="custom-code-block relative flex-col font-mono">
 
                                 <SyntaxHighlighter
+                                    className={"shadow-2xl"}
                                     language={"typescript"}
                                     showLineNumbers={false}
                                     style={isDarkTheme ? vs2015 : atomOneLight}
@@ -221,6 +222,7 @@ function Features() {
                                 <div
                                     className="custom-code-block relative flex-col font-mono">
                                     <SyntaxHighlighter
+                                        className={"shadow-2xl"}
                                         language={"typescript"}
                                         showLineNumbers={false}
                                         style={isDarkTheme ? vs2015 : atomOneLight}
@@ -271,7 +273,7 @@ const productCallbacks = buildEntityCallbacks({
                         >
                             <div className={"p-4"}>
                                 <video
-                                    className={"rounded-xl shadow-md border-gray-200"}
+                                    className={"rounded-xl shadow-2xl border-gray-200"}
                                     width="100%" loop autoPlay muted>
                                     <source src={customFieldVideo}
                                             type="video/mp4"/>

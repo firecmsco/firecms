@@ -15,7 +15,7 @@ the main menu, or as subcollections inside other collections, following the
 Firestore data schema.
 
 Check the full API reference
-in [Entity collections](../api/interfaces/entitycollection.md)
+in [Entity collections](../api/interfaces/entitycollection)
 
 * `name` The plural name of the view. E.g. 'products'.
 
@@ -70,7 +70,7 @@ in [Entity collections](../api/interfaces/entitycollection.md)
 
 * `permissions` You can specify an object with boolean permissions with the
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions
-  the user can perform. You can also pass a [`PermissionsBuilder`](../api/types/permissionsbuilder.md)
+  the user can perform. You can also pass a [`PermissionsBuilder`](../api/types/permissionsbuilder)
   to customize the permissions based on user or entity.
 
 * `inlineEditing` Can the elements in this collection be edited inline in the
@@ -78,7 +78,7 @@ in [Entity collections](../api/interfaces/entitycollection.md)
   , entities can still be edited in the side panel.
 
 * `exportable` Should the data in this collection view include an export button.
-  You can also set an [`ExportConfig`](../api/interfaces/exportconfig.md)
+  You can also set an [`ExportConfig`](../api/interfaces/exportconfig)
   configuration object to customize the export and add additional values.
   Defaults to `true`
 

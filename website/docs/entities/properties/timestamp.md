@@ -27,7 +27,7 @@ or update.
 ---
 
 The widget that gets created is
-- [`DateTimeField`](api/functions/datetimefield.md) Field that allows selecting a date
+- [`DateTimeField`](api/functions/datetimefield) Field that allows selecting a date
 
 Links:
-- [API](api/interfaces/timestampproperty.md)
+- [API](api/interfaces/timestampproperty)

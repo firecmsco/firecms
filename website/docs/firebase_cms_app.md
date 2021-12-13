@@ -47,7 +47,7 @@ whatever way it makes sense.
 :::
 
 :::note
-Find all the available props for `FirebaseCMSApp` [here](./api/functions/firebasecmsapp.md)
+Find all the available props for `FirebaseCMSApp` [here](./api/functions/firebasecmsapp)
 :::
 
 You need to define a `FirestoreTextSearchController` and pass it to your

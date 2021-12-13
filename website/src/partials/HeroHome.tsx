@@ -22,9 +22,9 @@ function HeroHome({}) {
     const video = <div
         data-aos="fade-up"
         data-aos-delay="400"
-        className="lg:max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4">
+        className="xl:max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4">
         <video
-            className={"rounded-xl shadow-md border-gray-200"}
+            className={"rounded-xl border-gray-200 shadow-3xl"}
             width="100%" loop autoPlay muted>
             <source src={darkModeVideo} type="video/mp4"/>
         </video>
@@ -54,7 +54,7 @@ function HeroHome({}) {
                         // @ts-ignore
                         "-webkit-background-clip": "text",
                         backgroundClip: "text",
-                        backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #3857B3)"
+                        backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
                     }}
                     className="text-8xl font-extrabold text-8xl md:text-9xl text-transparent bg-clip-text">CMS</span>
             </h1>
@@ -67,6 +67,7 @@ function HeroHome({}) {
         </div>
 
     </div>;
+
     return (
         <section className="relative" style={{
             isolation: "isolate"

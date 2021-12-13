@@ -6,7 +6,7 @@ sidebar_label: Custom fields
 
 If you need a custom field for your property you can do it by passing a React
 component to the `Field` prop of a property `config`. The React component must
-accept the props of type [`FieldProps`](../api/interfaces/fieldprops.md).
+accept the props of type [`FieldProps`](../api/interfaces/fieldprops).
 The bare minimum you need to implement
 is a field that displays the received `value` and uses the `setValue` callback.
 
@@ -16,7 +16,7 @@ the `customProps` prop.
 If you are developing a custom field and need to access the values of the
 entity, you can use the `context` field in FieldProps.
 
-You can check all the props [`FieldProps`](../api/interfaces/fieldprops.md)
+You can check all the props [`FieldProps`](../api/interfaces/fieldprops)
 
 ## Example
 
