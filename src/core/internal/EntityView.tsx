@@ -202,7 +202,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     } = useEntityFetch({
         path,
         entityId: currentEntityId,
-        schema: schema as EntitySchema<M>,
+        schema: schema as EntitySchema,
         useCache: false
     });
 
@@ -327,6 +327,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const body = !readOnly ? (
             <Suspense fallback={<CircularProgressCenter/>}>
                 <EntityForm
+                    key={`form_${path}_${entity?.id ?? "new"}`}
                     status={status}
                     path={path}
                     schemaOrResolver={schema}

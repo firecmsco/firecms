@@ -84,7 +84,7 @@ const SwitchFieldComponent = React.forwardRef(function({
                                                            touched,
                                                            property,
                                                            includeDescription,
-                                                           dependsOnOtherProperties
+                                                           shouldAlwaysRerender
                                                        }: SwitchFieldProps, ref) {
 
     const classes = useStyles();

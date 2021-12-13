@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import {
     ArrayProperty,
-    EntityCollection,
+    EntityCollection, Properties,
     Property,
     ResolvedEntitySchema
 } from "../../../../models";
@@ -107,7 +107,7 @@ export function useColumnIds<M>(entityCollection: EntityCollection<M>, resolvedS
 
     return useMemo(() => {
 
-        const properties = resolvedSchema.properties;
+        const properties:Properties<any> = resolvedSchema.properties;
 
         const hiddenColumnIds: string[] = Object.entries(properties)
             .filter(([_, property]) => {

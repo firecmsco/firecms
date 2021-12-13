@@ -83,21 +83,16 @@ export function useFirestoreDataSource({
      *
      * @param doc
      * @param path
-     * @param schemaOrResolver
+     * @param resolvedSchema
      * @category Firestore
      */
     function createEntityFromSchema<M extends { [Key: string]: any }>
     (
         doc: DocumentSnapshot,
         path: string,
-        schemaOrResolver: EntitySchema<M> | EntitySchemaResolver<M>
+        resolvedSchema: ResolvedEntitySchema<M>
     ): Entity<M> {
 
-        const resolvedSchema = computeSchema({
-            schemaOrResolver,
-            entityId: doc.id,
-            path
-        });
         const values = firestoreToCMSModel(doc.data(), resolvedSchema, path);
         const data = doc.data() ?
             resolvedSchema.properties ?
@@ -203,8 +198,16 @@ export function useFirestoreDataSource({
                                   entityId: string,
                                   schema: EntitySchema<M> | EntitySchemaResolver<M>) {
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+
         return getDoc(doc(firestore, path, entityId))
-            .then((docSnapshot) => createEntityFromSchema(docSnapshot, path, schema));
+            .then((docSnapshot) => {
+                const resolvedSchema = computeSchema({
+                    schemaOrResolver:schema,
+                    entityId: docSnapshot.id,
+                    path
+                });
+                return createEntityFromSchema(docSnapshot, path, resolvedSchema);
+            });
     }
 
     async function performTextSearch<M>(path: string,
@@ -263,9 +266,14 @@ export function useFirestoreDataSource({
 
             console.debug("Fetching collection", path, limit, filter, startAfter, orderBy, order);
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
+
+            const resolvedSchema = computeSchema({
+                schemaOrResolver:schema,
+                path
+            });
             return getDocs(query)
                 .then((snapshot) =>
-                    snapshot.docs.map((doc) => createEntityFromSchema(doc, path, schema)));
+                    snapshot.docs.map((doc) => createEntityFromSchema(doc, path, resolvedSchema)));
         },
 
 
@@ -313,10 +321,15 @@ export function useFirestoreDataSource({
                 };
             }
 
+            const resolvedSchema = computeSchema({
+                schemaOrResolver:schema,
+                path
+            });
+
             return onSnapshot(query,
                 {
                     next: (snapshot) => {
-                        onUpdate(snapshot.docs.map((doc) => createEntityFromSchema(doc, path, schema)));
+                        onUpdate(snapshot.docs.map((doc) => createEntityFromSchema(doc, path, resolvedSchema)));
                     },
                     error: onError
                 }
@@ -363,7 +376,14 @@ export function useFirestoreDataSource({
             return onSnapshot(
                 doc(firestore, path, entityId),
                 {
-                    next: (docSnapshot) => onUpdate(createEntityFromSchema(docSnapshot, path, schema)),
+                    next: (docSnapshot) => {
+                        const resolvedSchema = computeSchema({
+                            schemaOrResolver:schema,
+                            entityId: docSnapshot.id,
+                            path
+                        });
+                        onUpdate(createEntityFromSchema(docSnapshot, path, resolvedSchema));
+                    },
                     error: onError
                 }
             );

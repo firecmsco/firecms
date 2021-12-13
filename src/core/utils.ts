@@ -38,7 +38,7 @@ export function isHidden(property: Property<any>): boolean {
  */
 export function computeSchema<M extends { [Key: string]: any }>(
     { schemaOrResolver, path, entityId, values }: {
-        schemaOrResolver: EntitySchema<M> | EntitySchemaResolver<M>,
+        schemaOrResolver: EntitySchema<M> | ResolvedEntitySchema<M> | EntitySchemaResolver<M>,
         path: string,
         entityId?: string | undefined,
         values?: Partial<EntityValues<M>>,
@@ -46,13 +46,23 @@ export function computeSchema<M extends { [Key: string]: any }>(
     if (typeof schemaOrResolver === "function") {
         return schemaOrResolver({ entityId, values });
     } else {
+
+        if ("originalSchema" in schemaOrResolver) { // already resolved
+            return schemaOrResolver;
+        }
+
         const properties = computeProperties({
             propertiesOrBuilder: schemaOrResolver.properties,
             path,
             entityId,
             values
         });
-        return { ...schemaOrResolver, properties };
+
+        return {
+            ...schemaOrResolver,
+            properties,
+            originalSchema: schemaOrResolver
+        };
     }
 }
 

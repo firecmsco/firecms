@@ -112,10 +112,11 @@ export interface FieldProps<T extends CMSType, CustomProps = any, M extends { [K
     disabled: boolean;
 
     /**
-     * Flag to indicate if this field was built from a property that gets
-     * rendered conditionally
+     * Flag to indicate if this field should rerender on any state change.
+     * This is important for fields that are built from a {@link PropertyBuilder}
+     * where the fields might change based on the values of the form.
      */
-    dependsOnOtherProperties: boolean;
+    shouldAlwaysRerender: boolean;
 
 }
 
@@ -210,5 +211,5 @@ export interface CMSFormFieldProps<M extends { [Key: string]: any } = any> {
      * Set this value to `true` if you are developing a custom field which
      * value gets updated dynamically based on others.
      */
-    dependsOnOtherProperties?: boolean;
+    shouldAlwaysRerender?: boolean;
 }

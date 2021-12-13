@@ -16,7 +16,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import {
     AnyProperty,
     Entity,
-    FireCMSContext,
+    FireCMSContext, Properties,
     Property,
     ResolvedEntitySchema
 } from "../../models";
@@ -73,7 +73,7 @@ export function EntityPreview<M>(
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 
-    const properties:Record<string, Property> = schema.properties;
+    const properties:Properties = schema.properties;
 
     return (
         <TableContainer>

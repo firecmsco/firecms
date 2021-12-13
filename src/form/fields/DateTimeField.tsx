@@ -30,7 +30,7 @@ export function DateTimeField({
                                   touched,
                                   property,
                                   includeDescription,
-                                  dependsOnOtherProperties
+                                  shouldAlwaysRerender
                               }: DateTimeFieldProps) {
 
 

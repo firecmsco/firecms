@@ -112,7 +112,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                                                                      property,
                                                                      includeDescription,
                                                                      context,
-                                                                     dependsOnOtherProperties
+                                                                     shouldAlwaysRerender
                                                                  }: FieldProps<EntityReference>) {
 
 

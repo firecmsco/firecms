@@ -57,7 +57,7 @@ import deepEqual from "deep-equal";
  * @param tableMode
  * @param partOfArray
  * @param autoFocus
- * @param dependsOnOtherProperties
+ * @param shouldAlwaysRerender
  * @category Form custom fields
  */
 export function buildPropertyField<T extends CMSType = any, M = any>
@@ -71,7 +71,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
      tableMode,
      partOfArray,
      autoFocus,
-     dependsOnOtherProperties
+     shouldAlwaysRerender
  }: CMSFormFieldProps<M>): ReactElement<CMSFormFieldProps<M>> {
 
     let component: ComponentType<FieldProps<T, any, M>> | undefined;
@@ -137,16 +137,15 @@ export function buildPropertyField<T extends CMSType = any, M = any>
             tableMode,
             partOfArray,
             autoFocus,
-            dependsOnOtherProperties
+            shouldAlwaysRerender
         };
 
         // we use the standard Field for user defined fields, since it rebuilds
         // when there are changes in other values, in contrast to FastField
-        const FieldComponent = dependsOnOtherProperties || property.config?.Field ? Field : FastField;
+        const FieldComponent = shouldAlwaysRerender || property.config?.Field ? Field : FastField;
 
         return (
             <FieldComponent
-                key={`form_field_${name}`}
                 required={property.validation?.required}
                 name={`${name}`}
             >
@@ -180,7 +179,7 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
          autoFocus,
          context,
          disabled,
-         dependsOnOtherProperties
+         shouldAlwaysRerender
      },
      fieldProps
 
@@ -249,7 +248,7 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
         autoFocus: autoFocus ?? false,
         customProps: customFieldProps,
         context,
-        dependsOnOtherProperties: dependsOnOtherProperties ?? true
+        shouldAlwaysRerender: shouldAlwaysRerender ?? true
     };
 
     return (

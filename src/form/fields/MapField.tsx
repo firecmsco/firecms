@@ -126,7 +126,7 @@ export function MapField<T extends object>({
                                                 tableMode,
                                                 partOfArray: false,
                                                 autoFocus: false,
-                                                dependsOnOtherProperties: false
+                                                shouldAlwaysRerender: false
                                             })
                                         }
                                     </Grid>

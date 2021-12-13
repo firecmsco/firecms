@@ -39,7 +39,7 @@ export function Select<T extends EnumType>({
                                                touched,
                                                property,
                                                includeDescription,
-                                               dependsOnOtherProperties
+                                               shouldAlwaysRerender
                                            }: SelectProps<T>) {
 
     const classes = formStyles();

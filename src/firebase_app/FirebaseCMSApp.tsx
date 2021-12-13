@@ -96,7 +96,10 @@ export function FirebaseCMSApp({
     }
 
     if (firebaseConfigLoading || !firebaseApp) {
-        return <CircularProgressCenter/>;
+    return <>
+        <CssBaseline/>
+        <CircularProgressCenter/>
+    </>;
     }
 
     return (

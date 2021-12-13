@@ -39,7 +39,7 @@ export function TextField<T extends string | number>({
                                                          property,
                                                          includeDescription,
                                                          allowInfinity,
-                                                         dependsOnOtherProperties
+                                                         shouldAlwaysRerender
                                                      }: TextFieldProps<T>) {
 
     const classes = formStyles();

@@ -192,7 +192,7 @@ export type PropertyBuilderProps<T, M extends { [Key: string]: any }> =
 /**
  * @category Entity properties
  */
-export type PropertyBuilder<T extends CMSType, M> = ({
+export type PropertyBuilder<T extends CMSType = CMSType, M = any> = ({
                                                          values,
                                                          path,
                                                          entityId
@@ -201,7 +201,7 @@ export type PropertyBuilder<T extends CMSType, M> = ({
 /**
  * @category Entity properties
  */
-export type PropertyOrBuilder<T extends CMSType, M> =
+export type PropertyOrBuilder<T extends CMSType = CMSType, M = any> =
     Property<T>
     | PropertyBuilder<T, M>;
 

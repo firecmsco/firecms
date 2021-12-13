@@ -61,7 +61,7 @@ export function MarkdownField({
                                   tableMode,
                                   includeDescription,
                                   context,
-                                  dependsOnOtherProperties
+                                  shouldAlwaysRerender
                               }: MarkDownFieldProps) {
 
     const classes = useStyles();

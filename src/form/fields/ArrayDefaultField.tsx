@@ -28,7 +28,7 @@ export function ArrayDefaultField<T extends Array<any>>({
                                                             underlyingValueHasChanged,
                                                             context,
                                                             disabled,
-                                                            dependsOnOtherProperties
+                                                            shouldAlwaysRerender
                                                         }: FieldProps<T>) {
 
     if (!property.of)
@@ -56,7 +56,7 @@ export function ArrayDefaultField<T extends Array<any>>({
             tableMode: false,
             partOfArray: true,
             autoFocus: internalId === lastAddedId,
-            dependsOnOtherProperties: false
+            shouldAlwaysRerender: false
         });
 
     };

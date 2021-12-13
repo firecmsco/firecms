@@ -138,8 +138,5 @@ export function computeTopNavigation(
         Object.values(navigationEntries).map(e => e.group).filter(Boolean) as string[]
     ).values());
 
-    console.log("computeTopNavigation", navigationEntries);
-
-
     return { navigationEntries, groups };
 }

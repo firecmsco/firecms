@@ -203,7 +203,7 @@ export function useBuildNavigationContext<UserType>({
     function buildSchemaResolver<M>({
                                         schema,
                                         path
-                                    }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver {
+                                    }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> {
 
         return ({
                     entityId,
@@ -222,7 +222,8 @@ export function useBuildNavigationContext<UserType>({
 
             return {
                 ...schema,
-                properties: mergeDeep(properties, storedProperties)
+                properties: mergeDeep(properties, storedProperties),
+                originalSchema: schema
             };
         };
     }

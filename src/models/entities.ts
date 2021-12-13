@@ -55,7 +55,10 @@ export type EntitySchemaResolverProps<M = any> = {
  * Use to resolve the schema properties for specific path, entity id or values.
  * @category Models
  */
-export type EntitySchemaResolver<M = any> = ({ entityId, values }: EntitySchemaResolverProps<M>) => ResolvedEntitySchema<M>;
+export type EntitySchemaResolver<M = any> = ({
+                                                 entityId,
+                                                 values
+                                             }: EntitySchemaResolverProps<M>) => ResolvedEntitySchema<M>;
 
 /**
  * This is the same entity schema you define, only all the property builders
@@ -63,8 +66,11 @@ export type EntitySchemaResolver<M = any> = ({ entityId, values }: EntitySchemaR
  * @category Models
  */
 export type ResolvedEntitySchema<M> =
-    Omit<EntitySchema<M>, "properties">
-    & { "properties": Properties }
+    Omit<EntitySchema<M>, "properties"> &
+    {
+        properties: Properties<M>,
+        originalSchema: EntitySchema<M>
+    }
 
 /**
  * New or existing status

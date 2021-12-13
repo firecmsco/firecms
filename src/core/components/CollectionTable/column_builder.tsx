@@ -6,7 +6,8 @@ import {
     EntitySchemaResolver,
     EnumValues,
     FireCMSContext,
-    Property
+    Property,
+    PropertyOrBuilder
 } from "../../../models";
 import { buildPropertyFrom } from "../../util/property_builder";
 import React, { useCallback, useEffect, useMemo } from "react";
@@ -122,7 +123,7 @@ type SelectedCellProps<M> =
         cellRect: DOMRect;
         width: number,
         height: number,
-        property: Property,
+        schemaResolver: EntitySchemaResolver<M>,
         entity: Entity<any>
     };
 
@@ -254,6 +255,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                 values: entity.values
             });
             const property = resolvedSchema.properties[name] as Property<any>;
+            const propertyOrBuilder = resolvedSchema.originalSchema.properties[name] as Property<any>;
 
             const inlineEditingEnabled = checkInlineEditing(inlineEditing, entity);
 
@@ -287,7 +289,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                             entity,
                             cellRect,
                             key: name,
-                            property
+                            schemaResolver
                         });
                     }
                     updatePopup(true);
@@ -305,7 +307,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                             entity,
                             cellRect,
                             key: name,
-                            property
+                            schemaResolver
                         });
                     }
                 };
@@ -456,11 +458,10 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
             cellRect={popupCell?.cellRect}
             columnIndex={popupCell?.columnIndex}
             name={popupCell?.key}
-            property={popupCell?.property}
+            schemaResolver={popupCell?.schemaResolver}
             entity={popupCell?.entity}
             tableKey={tableKey}
             customFieldValidator={customFieldValidator}
-            schema={resolvedSchema}
             path={path}
             formPopupOpen={formPopupOpen}
             onCellValueChange={onCellValueChange}

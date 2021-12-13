@@ -13,11 +13,11 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 import {
     Entity,
+    EntitySchemaResolver,
     EntityValues,
     FormContext,
     Properties,
-    Property,
-    ResolvedEntitySchema
+    Property
 } from "../../../../../models";
 import { Form, Formik, FormikProps } from "formik";
 import { useDraggable } from "./useDraggable";
@@ -26,7 +26,7 @@ import {
     getYupEntitySchema
 } from "../../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
-import { isReadOnly } from "../../../../utils";
+import { computeSchema, isReadOnly } from "../../../../utils";
 import { buildPropertyField } from "../../../../../form";
 import clsx from "clsx";
 import { ElementResizeListener } from "./ElementResizeListener";
@@ -71,11 +71,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
 interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     entity?: Entity<M>;
     customFieldValidator?: CustomFieldValidator;
-    schema: ResolvedEntitySchema<M>;
     path: string;
     tableKey: string;
     name?: keyof M;
-    property?: Property;
+    schemaResolver?: EntitySchemaResolver<M>;
     cellRect?: DOMRect;
     formPopupOpen: boolean;
     setFormPopupOpen: (value: boolean) => void;
@@ -94,8 +93,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                                      entity,
                                                                      customFieldValidator,
                                                                      name,
-                                                                     property,
-                                                                     schema,
+                                                                     schemaResolver,
                                                                      path,
                                                                      cellRect,
                                                                      setPreventOutsideClick,
@@ -107,6 +105,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
+    const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
     // const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
 
     const classes = useStyles();
@@ -129,7 +128,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             if (!cellRect) return;
             updatePopupLocation(getInitialLocation());
         },
-        [property]
+        [schemaResolver]
     );
 
     useLayoutEffect(
@@ -146,12 +145,19 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         [formPopupOpen]
     );
 
-    const validationSchema = useMemo(() => getYupEntitySchema(
-        name ?
-            { [name]: schema.properties[name] } as Properties<M>
-            : {} as Properties<M>
-        ,
-        customFieldValidator), [name, schema]);
+    const validationSchema = useMemo(() => {
+        if (!schemaResolver) return;
+        const schema = computeSchema({
+            schemaOrResolver: schemaResolver,
+            path,
+            values: internalValue
+        });
+        return getYupEntitySchema(
+            name ?
+                { [name]: schema.properties[name] } as Properties<M>
+                : {} as Properties<M>,
+            customFieldValidator);
+    }, [name, internalValue]);
 
     function getInitialLocation() {
         if (!cellRect) throw Error("getInitialLocation error");
@@ -225,16 +231,31 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                             isSubmitting
                         }: FormikProps<EntityValues<M>>) => {
 
-        if(!entity)
-            return <ErrorView error={"PopupFormField missconfiguration"}/>;
+        if (!entity)
+            return <ErrorView error={"PopupFormField misconfiguration"}/>;
+
+        useEffect(() => {
+            setInternalValue(values);
+        }, [values]);
+
+        if (!schemaResolver)
+            return <></>;
 
         const disabled = isSubmitting;
 
+        const schema = computeSchema({
+            schemaOrResolver: schemaResolver,
+            path,
+            values
+        });
+
         const context: FormContext<M> = {
-            schema: schema,
+            schema,
             entityId: entity.id,
             values
         };
+
+        const property: Property<any> | undefined = schema.properties[name];
 
         return <Form
             className={classes.form}
@@ -251,7 +272,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 tableMode: true,
                 partOfArray: false,
                 autoFocus: formPopupOpen,
-                dependsOnOtherProperties: false
+                shouldAlwaysRerender: true
             })}
 
             <Button
@@ -265,7 +286,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             </Button>
 
         </Form>;
-    }, [entity, schema, property]);
+    }, [entity, schemaResolver]);
 
     if (!entity)
         return <></>;

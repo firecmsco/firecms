@@ -12,6 +12,7 @@ export function CircularProgressCenter(props: CircularProgressProps) {
         <Box
             display="flex"
             width={"100%"}
+            maxHeight={"100%"}
             height={"100vh"}>
             <Box m="auto">
                 <CircularProgress {...props}/>

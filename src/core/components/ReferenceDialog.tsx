@@ -108,21 +108,26 @@ export function ReferenceDialog(
     const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
 
     useEffect(() => {
+        let unmounted = false;
         if (selectedEntityIds) {
             Promise.all(
                 selectedEntityIds.map((entityId) => {
                     return dataSource.fetchEntity({
                         path,
                         entityId,
-                        schema:schemaResolver
+                        schema: schemaResolver
                     });
                 }))
                 .then((entities) => {
-                    setSelectedEntities(entities);
+                    if (!unmounted)
+                        setSelectedEntities(entities);
                 });
         } else {
             setSelectedEntities([]);
         }
+        return () => {
+            unmounted = true;
+        };
     }, [selectedEntityIds]);
 
 

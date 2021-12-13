@@ -39,7 +39,7 @@ export function ArrayOneOfField<T extends Array<any>>({
                                                           underlyingValueHasChanged,
                                                           context,
                                                           disabled,
-                                                          dependsOnOtherProperties
+                                                          shouldAlwaysRerender
                                                       }: FieldProps<T>) {
 
     if (!property.oneOf)
