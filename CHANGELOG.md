@@ -1,3 +1,15 @@
+## [1.0.0-beta8] - 2021-12-13
+
+### Added
+
+- Fix for side dialog not opening when creating a new entity
+- Performance tweaks
+
+### Changed
+
+- `useSchemaRegistry` has been removed and all it's functionality has been
+  merged into `useNavigationContext`
+
 ## [1.0.0-beta7] - 2021-12-11
 
 ### Added
@@ -10,7 +22,7 @@
 
 - Fix for missing `index.js` export in version beta6
 - Internal rework for persisting user configuration, like collection sizes or
-column widths.
+  column widths.
 
 ## [1.0.0-beta6] - 2021-12-06
 
