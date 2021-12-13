@@ -2,26 +2,54 @@
 id: changelog
 title: Changelog
 ---
-## [1.0.0-beta6] - 2021-11-
+## [1.0.0-beta8] - 2021-12-13
 
 ### Added
-- New custom login screen that replaces FirebaseUi. 
+
+- Fix for side dialog not opening when creating a new entity
+- Performance tweaks
+
+### Changed
+
+- `useSchemaRegistry` has been removed and all it's functionality has been
+  merged into `useNavigationContext`
+
+## [1.0.0-beta7] - 2021-12-11
+
+### Added
+
+- Not found page when reaching a non-existing route.
+- Indicator for selected page in navigation drawer
+- Some performance enhancements
+
+### Changed
+
+- Fix for missing `index.js` export in version beta6
+- Internal rework for persisting user configuration, like collection sizes or
+  column widths.
+
+## [1.0.0-beta6] - 2021-12-06
+
+### Added
+
+- New custom login screen that replaces FirebaseUi.
 - Replaced `react-csv` with custom CSV implementation
 - The previous changes were blocking SSR and build tools such as Vite, but more
-testing is needed.
+  testing is needed.
 - New type added `EntitySchemaResolver`, used mostly internally for resolving
-entity schemas (that means computing the property builders and transforming them
-to a `ResolvedEntitySchema`)
+  entity schemas (that means computing the property builders and transforming
+  them to a `ResolvedEntitySchema`)
 
 ### Changed
 
 - Fix for collections not refreshing correctly
-- [BREAKING] `schemaResolver` at the `FireCMS` level has been renamed to 
- `schemaOverrideHandler`.
- 
+- [BREAKING] `schemaResolver` at the `FireCMS` level has been renamed to
+  `schemaOverrideHandler`.
+
 ## [1.0.0-beta5] - 2021-11-22
 
 ### Added
+
 - `snackbarController` added to `FireCMSContext` so it can be used in callbacks.
 - `width` parameter added to `SideEntityController`'s `open` function, so you
   can select the width of the side view.
