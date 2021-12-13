@@ -182,13 +182,13 @@ const property = buildProperty({
 ---
 
 Based on your configuration the form field widgets that are created are:
-- [`TextField`](api/functions/textfield) generic text field
-- [`StorageUploadField`](api/functions/storageuploadfield) the property has a
+- [`TextField`](../../api/functions/textfield) generic text field
+- [`StorageUploadField`](../../api/functions/storageuploadfield) the property has a
   storage configuration.
-- [`MarkdownField.`](api/functions/markdownfield) the property has a
+- [`MarkdownField.`](../../api/functions/markdownfield) the property has a
   markdown configuration.
-- [`Select`](api/functions/select) if `enumValues` are set in the string config, this field renders a select
+- [`Select`](../../api/functions/select) if `enumValues` are set in the string config, this field renders a select
   where each option is a colored chip.
 
 Links:
-- [API](api/interfaces/stringproperty)
+- [API](../../api/interfaces/stringproperty)

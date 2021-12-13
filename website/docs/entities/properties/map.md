@@ -49,8 +49,8 @@ List of properties rendered as this map preview. Defaults to first 3.
 ---
 
 The widget that gets created is
-- [`MapField`](api/functions/mapfield) Field that renders the children
+- [`MapField`](../../api/functions/mapfield) Field that renders the children
 property fields
 
 Links:
-- [API](api/interfaces/mapproperty)
+- [API](../../api/interfaces/mapproperty)
