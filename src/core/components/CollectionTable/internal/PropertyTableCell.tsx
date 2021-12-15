@@ -337,6 +337,16 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
 
 };
 
-export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any> & CellStyleProps>(PropertyTableCellInternal) as React.FunctionComponent<PropertyTableCellProps<any, any> & CellStyleProps>;
+export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any> & CellStyleProps>(PropertyTableCellInternal, areEqual) as React.FunctionComponent<PropertyTableCellProps<any, any> & CellStyleProps>;
 
+function areEqual(prevProps: PropertyTableCellProps<any, any> & CellStyleProps, nextProps: PropertyTableCellProps<any, any> & CellStyleProps) {
+    return prevProps.selected === nextProps.selected
+        && prevProps.focused === nextProps.selected
+        && prevProps.height === nextProps.height
+        && prevProps.size === nextProps.size
+        && prevProps.align === nextProps.align
+        && prevProps.width === nextProps.width
+        && deepEqual(prevProps.value, nextProps.value)
+        ;
+}
 

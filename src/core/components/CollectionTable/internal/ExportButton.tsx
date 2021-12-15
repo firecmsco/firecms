@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
     Alert,
     Button,
@@ -56,18 +56,18 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
     const [open, setOpen] = React.useState(false);
 
-    function doDownload<M>(data: Entity<M>[] | undefined,
-                           additionalData: Record<string, any>[] | undefined,
-                           schema: EntitySchema<M>,
-                           schemaResolver: EntitySchemaResolver<M>,
-                           path: string,
-                           exportConfig: ExportConfig | undefined) {
+    const doDownload = useCallback((data: Entity<M>[] | undefined,
+                                    additionalData: Record<string, any>[] | undefined,
+                                    schema: EntitySchema<M>,
+                                    schemaResolver: EntitySchemaResolver<M>,
+                                    path: string,
+                                    exportConfig: ExportConfig | undefined) => {
         if (!data)
             throw Error("Trying to perform export without loading data first");
 
         const resolvedSchema = schemaResolver({});
         downloadCSV(data, additionalData, resolvedSchema, path, exportConfig);
-    }
+    }, []);
 
     useEffect(() => {
 
@@ -131,25 +131,24 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
     }, [path, fetchLargeDataAccepted, schema, open]);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = useCallback(() => {
         setOpen(true);
-    };
+    }, [setOpen]);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setOpen(false);
-    };
-
+    }, [setOpen]);
 
     const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
 
-    function onOkClicked() {
-         if (needsToAcceptFetchAllData) {
-             setFetchLargeDataAccepted(true);
-         } else {
-             doDownload(dataRef.current, additionalDataRef.current, schema, schemaResolver, path, exportConfig);
-             handleClose();
-         }
-    }
+    const onOkClicked = useCallback(() => {
+        if (needsToAcceptFetchAllData) {
+            setFetchLargeDataAccepted(true);
+        } else {
+            doDownload(dataRef.current, additionalDataRef.current, schema, schemaResolver, path, exportConfig);
+            handleClose();
+        }
+    }, [needsToAcceptFetchAllData, dataRef.current, additionalDataRef.current, schema, schemaResolver, path, exportConfig]);
 
     return <>
 

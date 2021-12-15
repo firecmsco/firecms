@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 interface ArrayEntryProps {
     id: any
     name: string,
+    disabled: boolean,
     moveItem: (dragIndex: number, hoverIndex: number) => void,
     type: string
     index: number,
@@ -45,6 +46,7 @@ export function ArrayEntry({
                                name,
                                moveItem,
                                type,
+                               disabled,
                                index,
                                remove,
                                children
@@ -135,15 +137,15 @@ export function ArrayEntry({
                      display="flex"
                      flexDirection="column"
                      alignItems="center">
-                    <div className={classes.handle} ref={ref}>
+                    {!disabled && <div className={classes.handle} ref={ref}>
                         <DragHandleIcon fontSize={"small"}/>
-                    </div>
-                    <IconButton
+                    </div>}
+                    {!disabled && <IconButton
                         size="small"
                         aria-label="remove"
                         onClick={() => remove(index)}>
                         <ClearIcon fontSize={"small"}/>
-                    </IconButton>
+                    </IconButton>}
                 </Box>
             </Box>
         </div>

@@ -53,6 +53,7 @@ function SampleApp() {
     const productsCollection = buildCollection<Product>({
         path: "products",
         schema: productSchema,
+        // inlineEditing: false,
         callbacks: productCallbacks,
         name: "Products",
         group: "Main",

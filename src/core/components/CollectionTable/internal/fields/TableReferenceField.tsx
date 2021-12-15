@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Button } from "@mui/material";
 import { ReferencePreview } from "../../../../../preview";
 import { ErrorView } from "../../../index";
@@ -60,7 +60,7 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
     if (!collectionResolver) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
-    const handleOpen = (event: React.MouseEvent) => {
+    const handleOpen = useCallback((event: React.MouseEvent) => {
         if (disabled)
             return;
         if (event.detail <= 1) {
@@ -68,22 +68,22 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
             setPreventOutsideClick(true);
             setOpen(true);
         }
-    };
+    },[setPreventOutsideClick, setOpen]);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setPreventOutsideClick(false);
         setOpen(false);
-    };
+    },[setPreventOutsideClick, setOpen]);
 
-    const onSingleValueSet = (entity: Entity<any>) => {
+    const onSingleValueSet = useCallback((entity: Entity<any>) => {
         updateValue(entity ? getReferenceFrom(entity) : null);
         setPreventOutsideClick(false);
         setOpen(false);
-    };
+    },[updateValue, setPreventOutsideClick, setOpen]);
 
-    const onMultipleEntitiesSelected = (entities: Entity<any>[]) => {
+    const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
         updateValue(entities.map((e) => getReferenceFrom(e)));
-    };
+    },[updateValue]);
 
     const selectedIds = internalValue ?
         (Array.isArray(internalValue) ?

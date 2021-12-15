@@ -186,8 +186,6 @@ export function EntityForm<M>({
         values: internalValue
     }), [schemaOrResolver, path, entityId, internalValue]);
 
-    console.log("schema in form", schema);
-
     const mustSetCustomId: boolean = (status === "new" || status === "copy") && !!schema.customId;
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {

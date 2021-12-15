@@ -4,7 +4,7 @@ import {
     EntitySchema,
     EntitySchemaResolver
 } from "../../../../models";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
     Button,
     CircularProgress,
@@ -69,15 +69,15 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
         }
     }, [entityOrEntitiesToDelete]);
 
-    const handleCancel = () => {
+    const handleCancel = useCallback(() => {
         onClose();
-    };
+    }, []);
 
-    const onDeleteSuccess = (entity: Entity<any>) => {
+    const onDeleteSuccess = useCallback((entity: Entity<any>) => {
         console.debug("Deleted", entity);
-    };
+    }, []);
 
-    const onDeleteFailure = (entity: Entity<any>, e: Error) => {
+    const onDeleteFailure = useCallback((entity: Entity<any>, e: Error) => {
         snackbarContext.open({
             type: "error",
             title: `${schema.name}: Error deleting`,
@@ -86,28 +86,28 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
 
         console.error("Error deleting entity");
         console.error(e);
-    };
+    }, []);
 
-    const onPreDeleteHookError = (entity: Entity<any>, e: Error) => {
+    const onPreDeleteHookError = useCallback((entity: Entity<any>, e: Error) => {
         snackbarContext.open({
             type: "error",
             title: `${schema.name}: Error before deleting`,
             message: e?.message
         });
         console.error(e);
-    };
+    }, []);
 
-    const onDeleteSuccessHookError = (entity: Entity<any>, e: Error) => {
+    const onDeleteSuccessHookError = useCallback((entity: Entity<any>, e: Error) => {
         snackbarContext.open({
             type: "error",
             title: `${schema.name}: Error after deleting (entity is deleted)`,
             message: e?.message
         });
         console.error(e);
-    };
+    }, []);
 
-    function performDelete(entity: Entity<M>): Promise<boolean> {
-        return deleteEntityWithCallbacks({
+    const performDelete = useCallback((entity: Entity<M>): Promise<boolean> =>
+        deleteEntityWithCallbacks({
             dataSource,
             entity,
             schema,
@@ -117,10 +117,12 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
             onPreDeleteHookError,
             onDeleteSuccessHookError,
             context
-        });
-    }
+        }), [onDeleteSuccess,
+        onDeleteFailure,
+        onPreDeleteHookError,
+        onDeleteSuccessHookError,]);
 
-    const handleOk = async () => {
+    const handleOk = useCallback(async () => {
         if (entityOrEntities) {
 
             setLoading(true);
@@ -167,7 +169,11 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
                 });
             }
         }
-    };
+    }, [entityOrEntities,
+        onDeleteSuccess,
+        onDeleteFailure,
+        onPreDeleteHookError,
+        onDeleteSuccessHookError,]);
 
 
     let content: JSX.Element;

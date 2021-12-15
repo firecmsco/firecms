@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useInputStyles } from "./styles";
 import { Box, TextField as MuiTextField, Typography } from "@mui/material";
 import { TimestampProperty } from "../../../../../models";
@@ -26,13 +26,13 @@ export function TableDateField(props: {
         property
     } = props;
 
-    const handleOpen = () => {
+    const handleOpen = useCallback(() => {
         setPreventOutsideClick(true);
-    };
+    },[]);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setPreventOutsideClick(false);
-    };
+    },[]);
 
     const classes = useInputStyles();
 

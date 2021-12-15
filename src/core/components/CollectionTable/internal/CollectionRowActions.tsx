@@ -1,7 +1,7 @@
 import { CollectionSize, Entity } from "../../../../models";
 import { useTableStyles } from "../../Table/styles";
 
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, useCallback } from "react";
 import {
     Checkbox,
     IconButton,
@@ -58,14 +58,14 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
 
     const [anchorEl, setAnchorEl] = React.useState<any | null>(null);
 
-    const openMenu = (event: React.MouseEvent) => {
+    const openMenu = useCallback((event: React.MouseEvent) => {
         setAnchorEl(event.currentTarget);
         event.stopPropagation();
-    };
+    }, [setAnchorEl]);
 
-    const closeMenu = () => {
+    const closeMenu = useCallback(() => {
         setAnchorEl(null);
-    };
+    }, [setAnchorEl]);
 
     const onCheckboxChange = (event: React.ChangeEvent) => {
         if (toggleEntitySelection)
@@ -73,19 +73,19 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
         event.stopPropagation();
     };
 
-    const onDeleteClick = (event: MouseEvent) => {
+    const onDeleteClick = useCallback((event: MouseEvent) => {
         event.stopPropagation();
         if (onDeleteClicked)
             onDeleteClicked(entity);
         setAnchorEl(null);
-    };
+    }, [entity, onDeleteClicked, setAnchorEl]);
 
-    const onCopyClick = (event: MouseEvent) => {
+    const onCopyClick = useCallback((event: MouseEvent) => {
         event.stopPropagation();
         if (onCopyClicked)
             onCopyClicked(entity);
         setAnchorEl(null);
-    };
+    }, [entity, onCopyClicked, setAnchorEl]);
 
     return (
         <div className={classes.cellButtonsWrap}>

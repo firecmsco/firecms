@@ -121,6 +121,7 @@ export function ArrayContainer<T>({
                                 key={`array_field_${name}_${internalId}}`}
                                 name={name}
                                 id={internalId}
+                                disabled={disabled}
                                 type={"array_card_" + name}
                                 moveItem={moveItem}
                                 index={index}
@@ -130,7 +131,7 @@ export function ArrayContainer<T>({
                             </ArrayEntry>);
                     })}
 
-                    {includeAddButton && <Box p={1}
+                    {includeAddButton && !disabled && <Box p={1}
                                               justifyContent="center"
                                               textAlign={"left"}>
                         <Button variant="outlined"
