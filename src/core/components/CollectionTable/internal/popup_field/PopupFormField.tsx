@@ -76,8 +76,8 @@ interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     name?: keyof M;
     schemaResolver?: EntitySchemaResolver<M>;
     cellRect?: DOMRect;
-    formPopupOpen: boolean;
-    setFormPopupOpen: (value: boolean) => void;
+    open: boolean;
+    onClose: () => void;
     columnIndex?: number;
     setPreventOutsideClick: (value: any) => void;
 
@@ -97,8 +97,8 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                                      path,
                                                                      cellRect,
                                                                      setPreventOutsideClick,
-                                                                     formPopupOpen,
-                                                                     setFormPopupOpen,
+                                                                     open,
+                                                                     onClose,
                                                                      columnIndex,
                                                                      onCellValueChange
                                                                  }: PopupFormFieldProps<M>) {
@@ -106,15 +106,16 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
-    // const [draggableBoundingRect, setDraggableBoundingRect] = useState<DOMRect>();
 
     const classes = useStyles();
     const windowSize = useWindowSize();
 
     const ref = React.useRef<HTMLDivElement>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
+    const initialPositionSet = React.useRef<boolean>(false);
 
     const draggableBoundingRect = ref.current?.getBoundingClientRect();
+
     useDraggable({
         containerRef,
         ref,
@@ -125,10 +126,18 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     useEffect(
         () => {
-            if (!cellRect) return;
+            initialPositionSet.current = false;
+        },
+        [name, entity]
+    );
+
+    useEffect(
+        () => {
+            if (!cellRect || !draggableBoundingRect || initialPositionSet.current) return;
+            initialPositionSet.current = true;
             updatePopupLocation(getInitialLocation());
         },
-        [schemaResolver]
+        [cellRect, draggableBoundingRect, initialPositionSet.current]
     );
 
     useLayoutEffect(
@@ -140,9 +149,9 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     useEffect(
         () => {
-            setPreventOutsideClick(formPopupOpen);
+            setPreventOutsideClick(open);
         },
-        [formPopupOpen]
+        [open]
     );
 
     const validationSchema = useMemo(() => {
@@ -162,7 +171,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     function getInitialLocation() {
         if (!cellRect) throw Error("getInitialLocation error");
 
-        return {
+        let location = {
             x: cellRect.left < windowSize.width - cellRect.right
                 ? cellRect.x + cellRect.width / 2
                 : cellRect.x - cellRect.width / 2,
@@ -170,25 +179,24 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 ? cellRect.y + cellRect.height / 2
                 : cellRect.y - cellRect.height / 2
         };
+        return location;
     }
 
-
     const normalizePosition =  useCallback(({
-                                   x,
-                                   y
-                               }: { x: number, y: number }) => {
-        if (!ref.current?.getBoundingClientRect())
+                                                x,
+                                                y
+                                            }: { x: number, y: number }) => {
+        if (!draggableBoundingRect)
             throw Error("normalizePosition called before draggableBoundingRect is set");
 
         return {
-            x: Math.max(0, Math.min(x, windowSize.width - ref.current?.getBoundingClientRect().width)),
-            y: Math.max(0, Math.min(y, windowSize.height - ref.current?.getBoundingClientRect().height))
+            x: Math.max(0, Math.min(x, windowSize.width - draggableBoundingRect.width)),
+            y: Math.max(0, Math.min(y, windowSize.height - draggableBoundingRect.height))
         };
-    },[ref.current, windowSize]);
+    }, [draggableBoundingRect, windowSize]);
 
     const updatePopupLocation = (position?: { x: number, y: number }) => {
         if (!cellRect || !draggableBoundingRect) return;
-
         const newPosition = normalizePosition(position ?? getInitialLocation());
         if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
             setPopupLocation(newPosition);
@@ -271,7 +279,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 context,
                 tableMode: true,
                 partOfArray: false,
-                autoFocus: formPopupOpen,
+                autoFocus: open,
                 shouldAlwaysRerender: true
             })}
 
@@ -305,7 +313,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 validate={(values) => console.debug("Validating", values)}
                 onSubmit={(values, actions) => {
                     saveValue(values)
-                        .then(() => setFormPopupOpen(false))
+                        .then(() => onClose())
                         .finally(() => actions.setSubmitting(false));
                 }}
             >
@@ -325,7 +333,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         <div
             key={`draggable_${name}_${entity.id}`}
             className={clsx(classes.popup,
-                {[classes.hidden]: !formPopupOpen}
+                { [classes.hidden]: !open }
             )}
             ref={containerRef}>
 
@@ -346,7 +354,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                     }}
                     onClick={(event) => {
                         event.stopPropagation();
-                        setFormPopupOpen(false);
+                        onClose();
                     }}>
                     <ClearIcon style={{color: "white"}}
                                fontSize={"small"}/>
