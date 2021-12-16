@@ -82,6 +82,13 @@ export const testEntitySchema = buildSchema({
                 properties: properties
             });
         },
+
+        product: {
+            title: "Product",
+            dataType: "reference",
+            path: "products",
+            previewProperties: ["name", "main_image"]
+        },
         // gallery: {
         //     title: 'Gallery',
         //     dataType: 'array',
@@ -222,12 +229,6 @@ export const testEntitySchema = buildSchema({
         //         required: true,
         //         unique: true
         //     }
-        // },
-        // product: {
-        //     title: "Product",
-        //     dataType: "reference",
-        //     path: "products",
-        //     previewProperties: ["name", "main_image"]
         // },
         // disabled_product: {
         //     title: "Disabled product",

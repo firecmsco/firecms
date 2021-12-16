@@ -16,6 +16,7 @@ import {
     ArrayOfReferencesPreview,
     ArrayOfStorageComponentsPreview,
     ArrayOfStringsPreview,
+    ArrayOneOfPreview,
     ArrayPreview,
     ArrayPropertyEnumPreview,
     BooleanPreview,
@@ -26,21 +27,14 @@ import {
     StorageThumbnail,
     StringPreview,
     TimestampPreview,
-    UrlComponentPreview,
-    ArrayOneOfPreview
+    UrlComponentPreview
 } from "./internal";
 import { ErrorView } from "../core/components";
 
 import { PreviewComponentProps } from "./PreviewComponentProps";
 
 import { Markdown } from "./components/Markdown";
-
-/**
- * @category Preview components
- */
-export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps<T>) {
-    return <MemoPreviewComponent {...props} />;
-}
+import deepEqual from "deep-equal";
 
 export function PreviewComponentInternal<T extends CMSType>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
@@ -198,5 +192,17 @@ function buildWrongValueType(name: string | undefined, dataType: string, value: 
     );
 }
 
-const MemoPreviewComponent = React.memo<PreviewComponentProps<any>>(PreviewComponentInternal) as React.FunctionComponent<PreviewComponentProps<any>>;
 
+/**
+ * @category Preview components
+ */
+export const PreviewComponent = React.memo<PreviewComponentProps<any>>(PreviewComponentInternal, areEqual) as React.FunctionComponent<PreviewComponentProps<any>>;
+
+function areEqual(prevProps: PreviewComponentProps<any>, nextProps: PreviewComponentProps<any>) {
+    return prevProps.name === nextProps.name
+        && prevProps.size === nextProps.size
+        && prevProps.height === nextProps.height
+        && prevProps.width === nextProps.width
+        && deepEqual(prevProps.value, nextProps.value)
+        ;
+}

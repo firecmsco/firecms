@@ -1,4 +1,4 @@
-import { getCollectionFromCollections } from "../core/util/navigation_utils";
+import { getCollectionByPath } from "../core/util/navigation_utils";
 import { siteConfig } from "./test_site_config";
 import { EntityCollection } from "../models";
 import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";
@@ -6,37 +6,37 @@ import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_fr
 const collectionViews = siteConfig.navigation as EntityCollection[];
 it("collection view matches ok", () => {
 
-    const collectionViewFromPath = getCollectionFromCollections("products", collectionViews);
+    const collectionViewFromPath = getCollectionByPath("products", collectionViews);
     expect(
         collectionViewFromPath && collectionViewFromPath.path
     ).toEqual("products");
 
-    const collectionViewFromPath1 = getCollectionFromCollections("products/pid/locales", collectionViews);
+    const collectionViewFromPath1 = getCollectionByPath("products/pid/locales", collectionViews);
     expect(
         collectionViewFromPath1 && collectionViewFromPath1.path
     ).toEqual("locales");
 
-    const collectionViewFromPath2 = getCollectionFromCollections("sites/es/products", collectionViews);
+    const collectionViewFromPath2 = getCollectionByPath("sites/es/products", collectionViews);
     expect(
         collectionViewFromPath2 && collectionViewFromPath2.path
     ).toEqual("sites/es/products");
 
-    const collectionViewFromPath3 = getCollectionFromCollections("sites/es/products/pid/locales", collectionViews);
+    const collectionViewFromPath3 = getCollectionByPath("sites/es/products/pid/locales", collectionViews);
     expect(
         collectionViewFromPath3 && collectionViewFromPath3.path
     ).toEqual("locales");
 
     expect(
-        () => getCollectionFromCollections("products/pid", collectionViews)
+        () => getCollectionByPath("products/pid", collectionViews)
     ).toThrow(
         "Collection paths must have an odd number of segments: products/pid"
     );
 
     expect(
-        getCollectionFromCollections("products", [])
+        getCollectionByPath("products", [])
     ).toEqual(undefined);
 
-    const collectionViewFromPath10 = getCollectionFromCollections("products/id/subcollection_inline", collectionViews);
+    const collectionViewFromPath10 = getCollectionByPath("products/id/subcollection_inline", collectionViews);
     expect(
         collectionViewFromPath10 && collectionViewFromPath10.path
     ).toEqual("products/id/subcollection_inline");

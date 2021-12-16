@@ -56,7 +56,7 @@ export function useSelectionController<M = any>(): SelectionController {
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
 
-    const toggleEntitySelection = (entity: Entity<M>) => {
+    const toggleEntitySelection = useCallback((entity: Entity<M>) => {
         let newValue;
         if (selectedEntities.map(e => e.id).includes(entity.id)) {
             newValue = selectedEntities.filter((item: Entity<M>) => item.id !== entity.id);
@@ -64,9 +64,9 @@ export function useSelectionController<M = any>(): SelectionController {
             newValue = [...selectedEntities, entity];
         }
         setSelectedEntities(newValue);
-    };
+    }, [selectedEntities]);
 
-    const isEntitySelected = (entity: Entity<M>) => selectedEntities.map(e => e.id).includes(entity.id);
+    const isEntitySelected = useCallback((entity: Entity<M>) => selectedEntities.map(e => e.id).includes(entity.id), [selectedEntities]);
 
     return {
         selectedEntities,
@@ -269,10 +269,10 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         </div>
     ), [path, collection]);
 
-    const tableRowActionsBuilder = ({
-                                        entity,
-                                        size
-                                    }: { entity: Entity<any>, size: CollectionSize }) => {
+    const tableRowActionsBuilder = useCallback(({
+                                                    entity,
+                                                    size
+                                                }: { entity: Entity<any>, size: CollectionSize }) => {
 
         const isSelected = isEntitySelected(entity);
 
@@ -322,9 +322,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             />
         );
 
-    };
+    }, [selectionController, sideEntityController, collection.permissions, authController, path,]);
 
-    const toolbarActionsBuilder = (_: { size: CollectionSize, data: Entity<any>[] }) => {
+    const toolbarActionsBuilder = useCallback((_: { size: CollectionSize, data: Entity<any>[] }) => {
 
         const addButton = canCreate(collection.permissions, authController, path, context) && onNewClick && (largeLayout ?
             <Button
@@ -395,7 +395,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 {addButton}
             </>
         );
-    };
+    }, [selectionController, path, collection, largeLayout]);
 
     return (
         <>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     AuthController,
     ConfigurationPersistence,
@@ -20,7 +20,7 @@ import {
     User
 } from "../../models";
 import {
-    getCollectionFromCollections,
+    getCollectionByPath,
     removeInitialAndTrailingSlashes
 } from "../util/navigation_utils";
 import { getValueInPath, mergeDeep } from "../util/objects";
@@ -77,19 +77,51 @@ export function useBuildNavigationContext<UserType>({
             locale,
             dataSource,
             storageSource
-        })
-            .then((result: Navigation) => {
-                setNavigation(result);
-                setNavigationLoading(false);
-            }).catch(setNavigationLoadingError);
+        }).then((result: Navigation) => {
+            setNavigation(result);
+            setNavigationLoading(false);
+        }).catch(setNavigationLoadingError);
     }, [authController.user, authController.canAccessMainView, navigationOrBuilder]);
 
 
-    const getCollectionResolver = <M extends { [Key: string]: any }>(path: string, entityId?: string, collection?:EntityCollection<M>): EntityCollectionResolver<M> => {
+    const getSchemaOverride = useCallback(<M extends any>(path: string): PartialEntitySchema<M> | undefined => {
+        if (!userConfigPersistence)
+            return undefined
+        const collectionOverride = userConfigPersistence.getCollectionConfig<M>(path);
+        return collectionOverride?.schema;
+    }, [userConfigPersistence]);
+
+    const buildSchemaResolver = useCallback(<M extends { [Key: string]: any } = any>({
+                                                                                         schema,
+                                                                                         path
+                                                                                     }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> => ({
+                                                                                                                                                                    entityId,
+                                                                                                                                                                    values,
+                                                                                                                                                                }: EntitySchemaResolverProps<M>) => {
+
+        const schemaOverride = getSchemaOverride<M>(path);
+        const storedProperties: PartialProperties<M> | undefined = getValueInPath(schemaOverride, "properties");
+
+        const properties = computeProperties({
+            propertiesOrBuilder: schema.properties,
+            path,
+            entityId,
+            values: values ?? schema.defaultValues
+        });
+
+        return {
+            ...schema,
+            properties: mergeDeep(properties, storedProperties),
+            originalSchema: schema
+        };
+    }, [getSchemaOverride]);
+
+
+    const getCollectionResolver = useCallback(<M extends { [Key: string]: any }>(path: string, entityId?: string, collection?: EntityCollection<M>): EntityCollectionResolver<M> => {
 
         const collections = navigation?.collections;
 
-        const baseCollection = collection ?? (collections && getCollectionFromCollections<M>(removeInitialAndTrailingSlashes(path), collections));
+        const baseCollection = collection ?? (collections && getCollectionByPath<M>(removeInitialAndTrailingSlashes(path), collections));
 
         const collectionOverride = getCollectionOverride(path);
 
@@ -158,19 +190,26 @@ export function useBuildNavigationContext<UserType>({
 
         return { ...resolvedCollection, ...(result as EntityCollectionResolver<M>) };
 
-    };
+    }, [
+        navigation,
+        basePath,
+        baseCollectionPath,
+        schemaOverrideHandler,
+        schemaConfigRecord.current,
+        buildSchemaResolver
+    ]);
 
-    const setOverride = ({
-                             path,
-                             entityId,
-                             schemaConfig,
-                             overrideSchemaRegistry
-                         }: {
-                             path: string,
-                             entityId?: string,
-                             schemaConfig?: Partial<EntityCollectionResolver>
-                             overrideSchemaRegistry?: boolean
-                         }
+    const setOverride = useCallback(({
+                                         path,
+                                         entityId,
+                                         schemaConfig,
+                                         overrideSchemaRegistry
+                                     }: {
+                                         path: string,
+                                         entityId?: string,
+                                         schemaConfig?: Partial<EntityCollectionResolver>
+                                         overrideSchemaRegistry?: boolean
+                                     }
     ) => {
 
         const key = getSidePanelKey(path, entityId);
@@ -185,9 +224,9 @@ export function useBuildNavigationContext<UserType>({
             };
             return key;
         }
-    };
+    }, [schemaConfigRecord.current]);
 
-    const removeAllOverridesExcept = (entityRefs: {
+    const removeAllOverridesExcept = useCallback((entityRefs: {
         path: string, entityId?: string
     }[]) => {
         const keys = entityRefs.map(({
@@ -198,98 +237,38 @@ export function useBuildNavigationContext<UserType>({
             if (!keys.includes(currentKey))
                 delete schemaConfigRecord.current[currentKey];
         });
-    };
+    }, [schemaConfigRecord.current]);
 
-    function buildSchemaResolver<M>({
-                                        schema,
-                                        path
-                                    }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> {
+    const isUrlCollectionPath = useCallback(
+        (path: string): boolean => removeInitialAndTrailingSlashes(path + "/").startsWith(removeInitialAndTrailingSlashes(fullCollectionPath) + "/"),
+        [fullCollectionPath]);
 
-        return ({
-                    entityId,
-                    values,
-                }: EntitySchemaResolverProps) => {
-
-            const schemaOverride = getSchemaOverride<M>(path);
-            const storedProperties: PartialProperties<M> | undefined = getValueInPath(schemaOverride, "properties");
-
-            const properties = computeProperties({
-                propertiesOrBuilder: schema.properties,
-                path,
-                entityId,
-                values: values ?? schema.defaultValues
-            });
-
-            return {
-                ...schema,
-                properties: mergeDeep(properties, storedProperties),
-                originalSchema: schema
-            };
-        };
-    }
-
-    async function getNavigation<UserType>({ navigationOrCollections, user, authController, dateTimeFormat, locale, dataSource, storageSource }:
-                                     {
-                                         navigationOrCollections: Navigation | NavigationBuilder<UserType>  | EntityCollection[],
-                                         user: User | null,
-                                         authController: AuthController<UserType>,
-                                         dateTimeFormat?: string,
-                                         locale?: Locale,
-                                         dataSource: DataSource,
-                                         storageSource: StorageSource
-                                     }
-    ): Promise<Navigation> {
-
-        if (Array.isArray(navigationOrCollections)) {
-            return {
-                collections: navigationOrCollections
-            };
-        } else if (typeof navigationOrCollections === "function") {
-            return navigationOrCollections({ user, authController, dateTimeFormat,locale, dataSource, storageSource });
-        } else {
-            return navigationOrCollections;
-        }
-    }
-
-    function isUrlCollectionPath(path: string): boolean {
-        return removeInitialAndTrailingSlashes(path + "/").startsWith(removeInitialAndTrailingSlashes(fullCollectionPath) + "/");
-    }
-
-    function urlPathToDataPath(path: string): string {
+    const urlPathToDataPath = useCallback((path: string): string => {
         if (path.startsWith(fullCollectionPath))
             return path.replace(fullCollectionPath, "");
         throw Error("Expected path starting with " + fullCollectionPath);
-    }
+    }, [fullCollectionPath]);
 
-    function buildUrlCollectionPath(path: string): string {
-        return `${baseCollectionPath}/${removeInitialAndTrailingSlashes(path)}`;
-    }
+    const buildUrlCollectionPath = useCallback((path: string): string => `${baseCollectionPath}/${removeInitialAndTrailingSlashes(path)}`,
+        [baseCollectionPath]);
 
-    function buildCMSUrlPath(path: string): string {
-        return cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(path)}` : `/${path}`;
-    }
+    const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(path)}` : `/${path}`,
+        [cleanBasePath]);
 
-    const onCollectionModifiedForUser = <M extends any>(path: string, partialCollection: PartialEntityCollection<M>) => {
+    const onCollectionModifiedForUser = useCallback(<M extends any>(path: string, partialCollection: PartialEntityCollection<M>) => {
         if (userConfigPersistence) {
             const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
             userConfigPersistence.onCollectionModified(path, mergeDeep(currentStoredConfig, partialCollection));
         }
-    }
+    }, [userConfigPersistence]);
 
-    const getCollectionOverride = <M extends any>(path: string): PartialEntityCollection<M> | undefined => {
+    const getCollectionOverride = useCallback(<M extends any>(path: string): PartialEntityCollection<M> | undefined => {
         if (!userConfigPersistence)
             return undefined
         const dynamicCollectionConfig = { ...userConfigPersistence.getCollectionConfig<M>(path) };
         delete dynamicCollectionConfig["schema"];
         return dynamicCollectionConfig;
-    }
-
-    const getSchemaOverride = <M extends any>(path: string): PartialEntitySchema<M> | undefined => {
-        if (!userConfigPersistence)
-            return undefined
-        const collectionOverride = userConfigPersistence.getCollectionConfig<M>(path);
-        return collectionOverride?.schema;
-    }
+    }, [userConfigPersistence]);
 
     return {
         navigation,
@@ -309,6 +288,44 @@ export function useBuildNavigationContext<UserType>({
         buildCMSUrlPath,
     };
 }
+
+const getNavigation = async <UserType extends any>({
+                                                       navigationOrCollections,
+                                                       user,
+                                                       authController,
+                                                       dateTimeFormat,
+                                                       locale,
+                                                       dataSource,
+                                                       storageSource
+                                                   }:
+                                                       {
+                                                           navigationOrCollections: Navigation | NavigationBuilder<UserType> | EntityCollection[],
+                                                           user: User | null,
+                                                           authController: AuthController<UserType>,
+                                                           dateTimeFormat?: string,
+                                                           locale?: Locale,
+                                                           dataSource: DataSource,
+                                                           storageSource: StorageSource
+                                                       }
+): Promise<Navigation> => {
+
+    if (Array.isArray(navigationOrCollections)) {
+        return {
+            collections: navigationOrCollections
+        };
+    } else if (typeof navigationOrCollections === "function") {
+        return navigationOrCollections({
+            user,
+            authController,
+            dateTimeFormat,
+            locale,
+            dataSource,
+            storageSource
+        });
+    } else {
+        return navigationOrCollections;
+    }
+};
 
 
 export function getSidePanelKey(path: string, entityId?: string) {

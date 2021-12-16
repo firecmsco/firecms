@@ -35,10 +35,6 @@ export type ReferencePreviewProps =
     PreviewComponentProps<EntityReference>
     & { onHover?: boolean };
 
-/**
- * @category Preview components
- */
-export const ReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewComponent) as React.FunctionComponent<ReferencePreviewProps>;
 
 const useReferenceStyles = makeStyles<Theme, { size: PreviewSize, onHover?: boolean }>((theme: Theme) =>
     createStyles({
@@ -89,6 +85,23 @@ const useReferenceStyles = makeStyles<Theme, { size: PreviewSize, onHover?: bool
             cursor: ({ onHover }) => onHover ? "pointer" : undefined
         }
     }));
+
+
+/**
+ * @category Preview components
+ */
+export const ReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewComponent, areEqual) as React.FunctionComponent<ReferencePreviewProps>;
+
+function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewProps) {
+    return prevProps.name === nextProps.name
+        && prevProps.size === nextProps.size
+        && prevProps.height === nextProps.height
+        && prevProps.width === nextProps.width
+        && prevProps.onHover === nextProps.onHover
+        && prevProps.value?.id === nextProps.value?.id
+        && prevProps.value?.path === nextProps.value?.path
+        ;
+}
 
 function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     {

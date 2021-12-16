@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import BaseTable, { Column, ColumnShape } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
 import { Box, Paper, Typography } from "@mui/material";
@@ -61,7 +61,17 @@ export function Table<T>({
 
     const tableRef = useRef<BaseTable>(null);
 
+    // these refs are a workaround to prevent the scroll jump caused by Firestore
+    // firing listeners with incomplete data
+    const scrollRef = useRef<number>(0);
+    const endReachedTimestampRef = useRef<number>(0);
+
     const classes = useTableStyles();
+    useEffect(() => {
+        if (tableRef.current && data) {
+            tableRef.current.scrollToTop(scrollRef.current);
+        }
+    }, [data?.length]);
 
     const onColumnSort = (key: string) => {
 
@@ -96,11 +106,31 @@ export function Table<T>({
 
     const scrollToTop = () => {
         if (tableRef.current) {
+            scrollRef.current = 0;
             tableRef.current.scrollToTop(0);
         }
     };
 
-    const clickRow = (props: { rowData: T; rowIndex: number; rowKey: string ; event: React.SyntheticEvent }) => {
+    const onScroll = ({ scrollTop, scrollUpdateWasRequested }: {
+        scrollLeft: number;
+        scrollTop: number;
+        horizontalScrollDirection: 'forward' | 'backward';
+        verticalScrollDirection: 'forward' | 'backward';
+        scrollUpdateWasRequested: boolean;
+    }) => {
+        const prudentTime = Date.now() - endReachedTimestampRef.current > 3000;
+        if (!scrollUpdateWasRequested && prudentTime) {
+            scrollRef.current = scrollTop;
+        }
+    };
+
+    const onEndReachedInternal = () => {
+        endReachedTimestampRef.current = Date.now();
+        if (onEndReached)
+            onEndReached();
+    };
+
+    const clickRow = (props: { rowData: T; rowIndex: number; rowKey: string; event: React.SyntheticEvent }) => {
         if (!onRowClick)
             return;
         onRowClick(props);
@@ -211,10 +241,10 @@ export function Table<T>({
         );
     }
 
-    const onBaseTableColumnResize = ({
-                                         column,
-                                         width
-                                     }: { column: ColumnShape; width: number }) => {
+    const onBaseTableColumnResize = useCallback(({
+                                                     column,
+                                                     width
+                                                 }: { column: ColumnShape; width: number }) => {
         if (onColumnResize) {
             onColumnResize({
                 width,
@@ -222,7 +252,7 @@ export function Table<T>({
                 column: column as TableColumn<any>
             });
         }
-    };
+    }, [onColumnResize]);
 
     return (
 
@@ -232,6 +262,7 @@ export function Table<T>({
                 bounds
                 onResize={setTableSize}>
                 {({ measureRef }) => {
+
                     return (
                         <div ref={measureRef}
                              className={classes.tableContainer}
@@ -249,9 +280,10 @@ export function Table<T>({
                                 ignoreFunctionInColumnCompare={false}
                                 rowHeight={getRowHeight(size)}
                                 ref={tableRef}
+                                onScroll={onScroll}
                                 overscanRowCount={2}
                                 onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
-                                onEndReached={onEndReached}
+                                onEndReached={onEndReachedInternal}
                                 rowEventHandlers={
                                     { onClick: clickRow as any }
                                 }

@@ -38,7 +38,7 @@ export function getLastSegment(path: string) {
  * @param path
  * @param collections
  */
-export function getCollectionFromCollections<M>(path: string, collections?: EntityCollection[]): EntityCollection<M> | undefined {
+export function getCollectionByPath<M>(path: string, collections?: EntityCollection[]): EntityCollection<M> | undefined {
 
     if (!collections)
         return undefined;

@@ -68,7 +68,17 @@ export const useStyles = makeStyles<Theme>(theme => createStyles({
  * @see Table
  * @category Components
  */
-export const CollectionTable = React.memo<CollectionTableProps<any, any>>(CollectionTableInternal) as React.FunctionComponent<CollectionTableProps<any, any>>;
+export const CollectionTable = React.memo<CollectionTableProps<any, any>>(CollectionTableInternal, areEqual) as React.FunctionComponent<CollectionTableProps<any, any>>;
+
+function areEqual(prevProps: CollectionTableProps<any, any>, nextProps: CollectionTableProps<any, any>) {
+    return prevProps.path === nextProps.path
+        && prevProps.collection === nextProps.collection
+        && prevProps.title === nextProps.title
+        && prevProps.toolbarActionsBuilder === nextProps.toolbarActionsBuilder
+        && prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder
+        && prevProps.inlineEditing === nextProps.inlineEditing
+        ;
+}
 
 
 export function CollectionTableInternal<M extends { [Key: string]: any },
@@ -88,7 +98,6 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
      onSizeChanged,
      hoverRow = true
  }: CollectionTableProps<M, AdditionalKey>) {
-
 
     const context = useFireCMSContext();
     const dataSource = useDataSource();
