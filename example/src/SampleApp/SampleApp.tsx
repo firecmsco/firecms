@@ -84,7 +84,8 @@ function SampleApp() {
             {
                 id: "sample_additional",
                 title: "Sample additional",
-                builder: () => "Content of a generated column"
+                builder: ({entity}) => `Generated column: ${entity.values.first_name}`,
+                dependencies: ["first_name"]
             }
         ],
         properties: ["first_name", "last_name", "email", "liked_products", "picture", "phone", "sample_additional"]
@@ -112,6 +113,17 @@ function SampleApp() {
         schema: testEntitySchema,
         callbacks: testCallbacks,
         name: "Test entity",
+        additionalColumns: [
+            {
+                id: "full_name",
+                title: "Full Name",
+                builder: ({entity}) => {
+                    let values = entity.values;
+                    return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";
+                },
+                dependencies: ["name"]
+            }
+            ],
         subcollections: [{
             path: "test_subcollection",
             schema: testEntitySchema,

@@ -191,6 +191,8 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                                             width,
                                             key
                                         }: OnColumnResizeParams) => {
+        // Only for property columns
+        if (!collection.schema.properties[key]) return;
         const property: Partial<AnyProperty> = { columnWidth: width };
         const updatedFields: PartialEntityCollection<any> = { schema: { properties: { [key as keyof M]: property } } };
         if (onCollectionModifiedForUser)

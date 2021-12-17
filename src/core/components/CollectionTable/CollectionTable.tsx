@@ -130,6 +130,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                 id: getSubcollectionColumnId(subcollection),
                 title: subcollection.name,
                 width: 200,
+                dependencies: [],
                 builder: ({entity}) => (
                     <Button color={"primary"}
                             onClick={(event) => {

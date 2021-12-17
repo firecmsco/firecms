@@ -310,6 +310,15 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
         context: FireCMSContext<UserType>;
     }) => React.ReactNode;
 
+    /**
+     * If this column needs to update dynamically based on other properties,
+     * you can define an array of keys as strings with the
+     * `dependencies` prop.
+     * e.g. ["name", "surname"]
+     * If you don't specify this prop, the generated column will not rerender
+     * on entity property updates.
+     */
+    dependencies?: Extract<keyof M, string>[];
 }
 
 /**

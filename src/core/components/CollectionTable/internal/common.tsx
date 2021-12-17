@@ -96,18 +96,18 @@ export function getPropertyColumnWidth(property: Property): number {
 
 
 export function getSubcollectionColumnId(collection: EntityCollection) {
-    return `subcollection_${collection.path}`;
+    return `subcollection:${collection.path}`;
 }
 
-export function useColumnIds<M>(entityCollection: EntityCollection<M>, resolvedSchema:ResolvedEntitySchema<M>, includeSubcollections: boolean): string[] {
-    const initialDisplayedProperties = entityCollection.properties;
-    const excludedProperties = entityCollection.excludedProperties;
-    const additionalColumns = entityCollection.additionalColumns ?? [];
-    const subCollections: EntityCollection[] = entityCollection.subcollections ?? [];
+export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:ResolvedEntitySchema<M>, includeSubcollections: boolean): string[] {
+    const initialDisplayedProperties = collection.properties;
+    const excludedProperties = collection.excludedProperties;
+    const additionalColumns = collection.additionalColumns ?? [];
+    const subCollections: EntityCollection[] = collection.subcollections ?? [];
 
     return useMemo(() => {
 
-        const properties:Properties<any> = resolvedSchema.properties;
+        const properties:Properties = resolvedSchema.properties;
 
         const hiddenColumnIds: string[] = Object.entries(properties)
             .filter(([_, property]) => {
@@ -115,11 +115,11 @@ export function useColumnIds<M>(entityCollection: EntityCollection<M>, resolvedS
             })
             .map(([propertyKey, _]) => propertyKey);
 
-        const subcollectionIds = subCollections.map((collection) => getSubcollectionColumnId(collection));
         const columnIds: string[] = [
-            ...Object.keys(entityCollection.schema.properties) as string[],
+            ...Object.keys(collection.schema.properties) as string[],
             ...additionalColumns.map((column) => column.id)
         ];
+
         let result: string[];
         if (initialDisplayedProperties) {
             result = initialDisplayedProperties
@@ -132,8 +132,15 @@ export function useColumnIds<M>(entityCollection: EntityCollection<M>, resolvedS
         } else {
             result = columnIds.filter((columnId) => !hiddenColumnIds.includes(columnId));
         }
-        if (includeSubcollections)
-            result.push(...subcollectionIds);
+
+        if (includeSubcollections) {
+            const subCollectionIds = subCollections
+                .map((collection) => getSubcollectionColumnId(collection))
+                .filter((subColId) => excludedProperties ? !excludedProperties?.includes(subColId) : true);
+            result.push(...subCollectionIds.filter((subColId) => !result.includes(subColId)));
+        }
+
         return result;
+
     }, [initialDisplayedProperties, excludedProperties, additionalColumns, subCollections]);
 }

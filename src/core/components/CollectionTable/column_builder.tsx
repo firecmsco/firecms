@@ -6,7 +6,8 @@ import {
     EntitySchemaResolver,
     EnumValues,
     FireCMSContext,
-    Property
+    Property,
+    ResolvedEntitySchema
 } from "../../../models";
 import { buildPropertyFrom } from "../../util/property_builder";
 import React, { useCallback, useEffect, useMemo } from "react";
@@ -182,10 +183,10 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
         setPreventOutsideClick(false);
     }, []);
 
-    const onPopupClose = () => {
+    const onPopupClose = useCallback(() => {
         setPopupCell(undefined);
         setFocused(true);
-    };
+    }, []);
 
     const buildFilterEnumValues = useCallback((values: EnumValues): TableEnumValues => enumToObjectEntries(values)
         .filter(([enumKey, labelOrConfig]) => !isEnumValueDisabled(labelOrConfig))
@@ -226,10 +227,10 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
     }, []);
 
-    const resolvedSchema = computeSchema({
+    const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
         schemaOrResolver: schemaResolver,
         path
-    });
+    }), [schemaResolver, path]);
 
     const propertyCellRenderer = ({
                                       column,
@@ -248,7 +249,6 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
             values: entity.values
         });
         const property = resolvedSchema.properties[name] as Property<any>;
-        const propertyOrBuilder = resolvedSchema.originalSchema.properties[name] as Property<any>;
 
         const inlineEditingEnabled = checkInlineEditing(inlineEditing, entity);
 
@@ -364,8 +364,16 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
         const entity: Entity<M> = rowData;
 
+        const additionalColumn = additionalColumnsMap[column.dataKey as AdditionalKey];
+        const value = additionalColumn.dependencies ?
+            Object.entries(entity.values)
+                .filter(([key, value]) => additionalColumn.dependencies!.includes(key as any))
+                .reduce((a, b) => ({ ...a, ...b }), {})
+            : undefined;
+
         return (
             <TableCell
+                value={value}
                 focused={false}
                 selected={false}
                 disabled={true}
@@ -376,7 +384,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                 disabledTooltip={"Additional columns can't be edited directly"}
             >
                 <ErrorBoundary>
-                    {(additionalColumnsMap[column.dataKey as AdditionalKey]).builder({
+                    {additionalColumn.builder({
                         entity,
                         context
                     })}

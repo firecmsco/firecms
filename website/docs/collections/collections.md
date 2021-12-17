@@ -4,13 +4,15 @@ title: Collections
 sidebar_label: Collections
 ---
 
-In FireCMS, collections represent groups of entities. Collections need to be
+In FireCMS, **collections** represent groups of entities. Collections need to be
 associated with an entity schema. You can find collections
 at the **top level** of the navigation tree (the entries displayed in the home
 page and the navigation drawer), or as **subcollections**
 
 Once you have defined at least one entity schema, you can include it in a
-**collection**. You can find collection views as the first level of navigation in
+**collection**. 
+
+You can find collection views as the first level of navigation in
 the main menu, or as subcollections inside other collections, following the
 Firestore data schema.
 
@@ -100,7 +102,7 @@ const productsCollection = buildCollection<Product>({
     group: "Main",
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
-    additionalColumns: [productAdditionalColumn],
+    // additionalColumns: [productAdditionalColumn], // Example below
     filterCombinations: [{ price: "desc", available: "desc" }],
     permissions: ({ user, authController }) => ({
         edit: true,
@@ -121,25 +123,79 @@ receives the corresponding entity.
 
 In the builder you can return any React Component.
 
-If you would like to do some async computation, such as fetching a different
-entity, you can use the utility component `AsyncPreviewComponent` to show a
-loading indicator.
+:::important
+If your additional column depends on the value of another property of the entity
+you can define the `dependencies` prop as an array of property keys so that
+the data is always updated.
+This will trigger a rerender whenever there is a change in any of the specified
+property values.
+:::
+
+#### Example
 
 ```tsx
-import { buildCollection, AdditionalColumnDelegate, AsyncPreviewComponent } from "@camberi/firecms";
+import {
+    buildSchema,
+    buildCollection,
+    AdditionalColumnDelegate
+} from "@camberi/firecms";
+
+type User = { name:string}
+
+export const fullNameAdditionalColumn: AdditionalColumnDelegate<User> = {
+        id: "full_name",
+        title: "Full Name",
+        builder: ({ entity }) => {
+            let values = entity.values;
+            return typeof values.name === "string" ? values.name.toUpperCase() : "No name provided";
+        },
+        dependencies: ["name"]
+    };
+
+const usersCollection = buildCollection<User>({
+    path: "users",
+    schema: buildSchema<User>({
+        name: "User",
+        properties: {
+            name: { dataType: "string", title: "Name" }
+        }
+    }),
+    name: "Users",
+    additionalColumns: [
+        fullNameAdditionalColumn
+    ]
+});
+```
+
+#### Advanced example
+
+```tsx
+import {
+  buildCollection,
+  AdditionalColumnDelegate,
+  AsyncPreviewComponent
+} from "@camberi/firecms";
 
 export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
-    id: "spanish_title",
-    title: "Spanish title",
-    builder: (entity: Entity<Product>) =>
-        <AsyncPreviewComponent builder={
-            entity.reference.collection("locales")
-                .doc("es")
-                .get()
-                .then((snapshot: any) => snapshot.get("name") as string)
-        }/>
+  id: "spanish_title",
+  title: "Spanish title",
+  builder: ({ entity, context }) =>
+          <AsyncPreviewComponent builder={
+            context.dataSource.fetchEntity({
+              path: entity.path,
+              entityId: entity.id,
+              schema: localeSchema
+            }).then((entity) => entity.values.name)
+          }/>
 };
 ```
+
+:::tip
+`AsyncPreviewComponent` is a utility component provided by FireCMS that
+allows you to render the result of an async computation (such as fetching data
+from a subcollection, like in this case). It will display a skeleton loading
+indicator in the meantime.
+:::
 
 ### Subcollections
 

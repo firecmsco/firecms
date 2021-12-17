@@ -48,6 +48,10 @@ export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
     properties: {
+        name: {
+            title: "Name",
+            dataType: "string"
+        },
         source: ({ values }) => {
 
             const properties = buildProperties<any>({

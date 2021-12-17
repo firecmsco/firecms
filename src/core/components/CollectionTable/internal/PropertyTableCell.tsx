@@ -328,6 +328,7 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
             allowScroll={allowScroll}
             showExpandIcon={showExpandIcon}
             openPopup={!disabled ? openPopup : undefined}
+            value={internalValue}
         >
 
             {innerComponent}

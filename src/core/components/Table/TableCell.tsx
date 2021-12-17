@@ -6,10 +6,15 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import clsx from "clsx";
 import { CellStyleProps, useCellStyles } from "./styles";
 import { getRowHeight } from "./common";
+import deepEqual from "deep-equal";
 
 
 interface TableCellProps<T, M> {
     children: React.ReactNode;
+    /**
+     * The value is used only to check changes and force rerenders
+     */
+    value?: any;
     disabled: boolean;
     saved?: boolean;
     error?: Error;
@@ -139,6 +144,9 @@ const TableCellInternal = <T, M>({
             onMouseEnter={() => setOnHover(true)}
             onMouseMove={() => setOnHover(true)}
             onMouseLeave={() => setOnHover(false)}
+            // style={{
+            //     background: "#" + Math.floor(Math.random() * 16777215).toString(16)
+            // }}
             className={clsx(
                 cellClasses.tableCell,
                 {
@@ -229,6 +237,7 @@ function areEqual(prevProps: TableCellProps<any, any> & CellStyleProps, nextProp
         && prevProps.showExpandIcon === nextProps.showExpandIcon
         && prevProps.removePadding === nextProps.removePadding
         && prevProps.fullHeight === nextProps.fullHeight
+        && deepEqual(prevProps.value, nextProps.value)
         ;
 }
 

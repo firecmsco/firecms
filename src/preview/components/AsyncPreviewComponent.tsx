@@ -42,14 +42,10 @@ function AsyncPreviewComponentInternal<M extends { [Key: string]: any }>(
 
 }
 
-const MemoAsyncPreviewComponent = React.memo(AsyncPreviewComponentInternal) as React.FunctionComponent<AsyncPreviewComponentProps<EntitySchema>>;
-
 /**
  * Utility component used to render the result of an async execution.
  * It shows a loading indicator while at it.
  *
  * @category Preview components
  */
-export function AsyncPreviewComponent(props: AsyncPreviewComponentProps<EntitySchema>) {
-    return <MemoAsyncPreviewComponent {...props} />;
-}
+export const AsyncPreviewComponent = React.memo(AsyncPreviewComponentInternal) as React.FunctionComponent<AsyncPreviewComponentProps<EntitySchema>>;
