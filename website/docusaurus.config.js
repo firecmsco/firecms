@@ -31,9 +31,9 @@ module.exports = {
     ],
     themeConfig: {
         announcementBar: {
-            id: 'new_version',
+            id: 'new_version_beta9',
             content:
-                'Version 1.0.0-beta8 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/migrating_from_alpha_versions">migration guide</a>',
+                'Version 1.0.0-beta9 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/migrating_from_alpha_versions">migration guide</a>',
             backgroundColor: '#FF5B79',
             textColor: 'black',
             isCloseable: true,
