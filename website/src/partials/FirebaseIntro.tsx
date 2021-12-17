@@ -7,9 +7,8 @@ import featuresElement from "@site/static/img/features-element.png";
 // @ts-ignore
 import ReactLogo from "@site/static/img/reactjs-icon.svg";
 // @ts-ignore
-import FireCMSLogo from "@site/static/img/firecms_logo.svg";
-// @ts-ignore
 import FirebaseLogo from "@site/static/img/firebase.svg";
+import { FireCMSLogo } from "./FireCMSLogo";
 
 function FirebaseIntro() {
     return (
@@ -36,12 +35,7 @@ function FirebaseIntro() {
                                 height: 150,
                                 maxWidth: "30%"
                             }}/>
-                        <FireCMSLogo
-                            style={{
-                                width: 140,
-                                height: 140,
-                                maxWidth: "35%"
-                            }}/>
+                        <FireCMSLogo/>
                     </div>
                 </div>
 
@@ -88,5 +82,6 @@ function FirebaseIntro() {
         </section>
     );
 }
+
 
 export default FirebaseIntro;

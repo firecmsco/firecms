@@ -6,6 +6,21 @@ title: Changelog
 
 ### Added
 
+- Optional `dependencies` prop in `AdditionalColumnDelegate` so that additional
+  columns are always up-to-date when they depend on another entity property.
+  Just pass an array of property keys
+
+### Changed
+
+- Many performance enhancements, related to avoiding re-renders, especially in
+  the entity collection view table cells.
+- Fix for popup form field in the collection view, not displaying the correct
+  field in some occasions.
+
+## [1.0.0-beta8] - 2021-12-13
+
+### Added
+
 - Fix for side dialog not opening when creating a new entity
 - Performance tweaks
 
