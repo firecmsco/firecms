@@ -102,7 +102,8 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                         permissions,
                         schema: typeof schemaOrResolver !== "function" ? schemaOrResolver : undefined,
                         schemaResolver: typeof schemaOrResolver === "function" ? schemaOrResolver : undefined,
-                        subcollections
+                        subcollections,
+                        callbacks: schemaProps.callbacks,
                     },
                     overrideSchemaRegistry
                 }
