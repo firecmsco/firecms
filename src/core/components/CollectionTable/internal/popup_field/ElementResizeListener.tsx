@@ -39,7 +39,8 @@ export const ElementResizeListener: React.FC<Props> = ({ onResize }) => {
     return (
         <object
             onLoad={onLoad}
-            ref={objectRef} tabIndex={-1}
+            ref={objectRef}
+            tabIndex={-1}
             type={"text/html"}
             data={"about:blank"}
             title={""}

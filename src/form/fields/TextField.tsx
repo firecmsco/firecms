@@ -42,8 +42,6 @@ export function TextField<T extends string | number>({
                                                          shouldAlwaysRerender
                                                      }: TextFieldProps<T>) {
 
-    const classes = formStyles();
-
     let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
     if (property.dataType === "string") {
@@ -85,7 +83,9 @@ export function TextField<T extends string | number>({
 
     const filledInput = (
         <FilledInput
-            className={classes.input}
+            sx={{
+                minHeight: "64px"
+            }}
             autoFocus={autoFocus}
             type={inputType}
             multiline={isMultiline}
@@ -108,13 +108,18 @@ export function TextField<T extends string | number>({
                 required={property.validation?.required}
                 error={showError}
                 disabled={valueIsInfinity}
+                sx={{
+                    '& .MuiInputLabel-formControl': {
+                        mt: 1 / 2,
+                        ml: 1 / 2,
+                    },
+                    '& .MuiInputLabel-shrink': {
+                        mt: -1/4
+                    },
+                }}
                 fullWidth>
 
-                <InputLabel
-                    classes={{
-                        root: classes.inputLabel,
-                        shrink: classes.shrinkInputLabel
-                    }}>
+                <InputLabel>
                     <LabelWithIcon property={property}/>
                 </InputLabel>
 

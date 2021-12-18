@@ -1,4 +1,4 @@
-import { Property } from "../../models";
+import { ArrayProperty, FieldProps, Property } from "../../models";
 import ShortTextIcon from "@mui/icons-material/ShortText";
 import SubjectIcon from "@mui/icons-material/Subject";
 import AttachmentIcon from "@mui/icons-material/Attachment";
@@ -15,6 +15,14 @@ import PhotoIcon from "@mui/icons-material/Photo";
 import HttpIcon from "@mui/icons-material/Http";
 import FlagIcon from "@mui/icons-material/Flag";
 import AdjustIcon from "@mui/icons-material/Adjust";
+import {
+    ArrayDefaultField,
+    ArrayEnumSelect, ArrayOfReferencesField, ArrayOneOfField,
+    MarkdownField,
+    Select,
+    StorageUploadField,
+    TextField
+} from "../../form";
 
 export function getIdIcon(
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
@@ -63,4 +71,51 @@ export function getIconForProperty(
     } else {
         return <Crop75Icon color={color} fontSize={fontSize}/>;
     }
+}
+
+export function getWidgetNameForProperty(    property: Property): string {
+    if (property.dataType === "string") {
+        if (property.config?.multiline ) {
+            return "Multiline text";
+        } else  if (property.config?.markdown ) {
+            return "Markdown text";
+        } else if (property.config?.storageMeta) {
+            if (property.config.storageMeta.mediaType === "image")
+                return "Image upload";
+            return "File upload";
+        } else if (property.config?.url) {
+            return "Url";
+        } else if (property.config?.enumValues) {
+            return "Single select";
+        } else {
+            return "Text";
+        }
+    } else if (property.dataType === "number") {
+        return "Number";
+    } else if (property.dataType === "geopoint") {
+        return "Geopoint";
+    } else if (property.dataType === "map") {
+        if (property.properties)
+            return "Group";
+    } else if (property.dataType === "array") {
+        const of = (property as ArrayProperty).of;
+        if (of) {
+            if ((of.dataType === "string" || of.dataType === "number") && of.config?.enumValues) {
+                return "Multi select";
+            } else if (of.dataType === "string" && of.config?.storageMeta) {
+                return "Multi file upload";
+            } else if (of.dataType === "reference") {
+                return "Multiple references";
+            } else {
+                return "Repeat/list";
+            }
+        }
+    } else if (property.dataType === "boolean") {
+        return "Switch";
+    } else if (property.dataType === "timestamp") {
+        return "Date/time";
+    } else if (property.dataType === "reference") {
+        return "Reference";
+    }
+    throw Error("Unsupported widget mapping");
 }

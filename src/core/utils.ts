@@ -29,12 +29,14 @@ export function isHidden(property: Property<any>): boolean {
 
 
 /**
- *
+ * This utility function computes an {@link EntitySchema} or a {@link EntitySchemaResolver}
+ * into a {@link ResolvedEntitySchema}, which has no property builders but has all
+ * the properties resolved.
  * @param schema
  * @param values
  * @param path
  * @param entityId
- * @ignore
+ * @category Hooks and utilities
  */
 export function computeSchema<M extends { [Key: string]: any }>(
     { schemaOrResolver, path, entityId, values }: {

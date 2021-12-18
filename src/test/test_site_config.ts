@@ -253,29 +253,31 @@ const productCallbacks: EntityCallbacks<InferSchemaType<typeof productSchema>> =
 
 export const siteConfig: FirebaseCMSAppProps = {
     name: "Test site",
-    navigation: [
-        buildCollection({
-            path: "products",
-            schema: productSchema,
+    navigation: {
+        collections: [
+            buildCollection({
+                path: "products",
+                schema: productSchema,
+                callbacks: productCallbacks,
+                name: "Products",
+                subcollections: subcollections
+            }),
+            buildCollection({
+                path: "sites/es/products",
+                schema: productSchema,
             callbacks: productCallbacks,
-            name: "Products",
-            subcollections: subcollections
-        }),
-        buildCollection({
-            path: "sites/es/products",
-            schema: productSchema,
-            callbacks: productCallbacks,
-            name: "Products",
-            subcollections: subcollections
-        }),
-        buildCollection({
-            path: "products/id/subcollection_inline",
-            schema: productSchema,
-            callbacks: productCallbacks,
-            name: "Products",
-            subcollections: subcollections
-        })
-    ]
+                name: "Products",
+                subcollections: subcollections
+            }),
+            buildCollection({
+                path: "products/id/subcollection_inline",
+                schema: productSchema,
+                callbacks: productCallbacks,
+                name: "Products",
+                subcollections: subcollections
+            })
+        ]
+    }
 };
 
 export const usersSchema = buildSchema({

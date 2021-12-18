@@ -1,23 +1,22 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     AuthController,
-    ConfigurationPersistence,
     DataSource,
     EntityCollection,
     EntityCollectionResolver,
     EntitySchema,
     EntitySchemaResolver,
     EntitySchemaResolverProps,
+    LocalConfigurationPersistence,
     Locale,
+    LocalEntityCollection,
+    LocalEntitySchema,
     Navigation,
     NavigationBuilder,
     NavigationContext,
-    PartialEntityCollection,
-    PartialEntitySchema,
-    PartialProperties,
+    ResolvedNavigation,
     SchemaOverrideHandler,
-    StorageSource,
-    User
+    StorageSource
 } from "../../models";
 import {
     getCollectionByPath,
@@ -25,6 +24,7 @@ import {
 } from "../util/navigation_utils";
 import { getValueInPath, mergeDeep } from "../util/objects";
 import { computeProperties } from "../utils";
+import { ConfigurationPersistence } from "../../models/config_persistence";
 
 export function useBuildNavigationContext<UserType>({
                                                         basePath,
@@ -36,21 +36,23 @@ export function useBuildNavigationContext<UserType>({
                                                         locale,
                                                         dataSource,
                                                         storageSource,
+                                                        configPersistence,
                                                         userConfigPersistence
                                                     }: {
     basePath: string,
     baseCollectionPath: string,
     authController: AuthController<UserType>;
-    navigationOrBuilder: Navigation | NavigationBuilder<UserType> | EntityCollection[];
+    navigationOrBuilder?: Navigation | NavigationBuilder<UserType>;
     schemaOverrideHandler: SchemaOverrideHandler | undefined;
     dateTimeFormat?: string;
     locale?: Locale;
     dataSource: DataSource;
     storageSource: StorageSource;
-    userConfigPersistence?: ConfigurationPersistence;
+    configPersistence?: ConfigurationPersistence;
+    userConfigPersistence?: LocalConfigurationPersistence;
 }): NavigationContext {
 
-    const [navigation, setNavigation] = useState<Navigation | undefined>(undefined);
+    const [navigation, setNavigation] = useState<ResolvedNavigation | undefined>(undefined);
     const [navigationLoading, setNavigationLoading] = useState<boolean>(false);
     const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
 
@@ -70,51 +72,59 @@ export function useBuildNavigationContext<UserType>({
         }
         setNavigationLoading(true);
         getNavigation({
-            navigationOrCollections: navigationOrBuilder,
-            user: authController.user,
+            navigationOrBuilder,
+            configPersistence,
             authController,
             dateTimeFormat,
             locale,
             dataSource,
             storageSource
-        }).then((result: Navigation) => {
+        }).then((result: ResolvedNavigation) => {
             setNavigation(result);
             setNavigationLoading(false);
         }).catch(setNavigationLoadingError);
-    }, [authController.user, authController.canAccessMainView, navigationOrBuilder]);
+    }, [
+        authController.user,
+        authController.canAccessMainView,
+        navigationOrBuilder,
+        configPersistence?.collections
+    ]);
 
 
-    const getSchemaOverride = useCallback(<M extends any>(path: string): PartialEntitySchema<M> | undefined => {
+    const getSchemaOverride = useCallback(<M extends any>(path: string): LocalEntitySchema<M> | undefined => {
         if (!userConfigPersistence)
             return undefined
         const collectionOverride = userConfigPersistence.getCollectionConfig<M>(path);
         return collectionOverride?.schema;
     }, [userConfigPersistence]);
 
-    const buildSchemaResolver = useCallback(<M extends { [Key: string]: any } = any>({
-                                                                                         schema,
-                                                                                         path
-                                                                                     }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> => ({
-                                                                                                                                                                    entityId,
-                                                                                                                                                                    values,
-                                                                                                                                                                }: EntitySchemaResolverProps<M>) => {
 
-        const schemaOverride = getSchemaOverride<M>(path);
-        const storedProperties: PartialProperties<M> | undefined = getValueInPath(schemaOverride, "properties");
+    const buildSchemaResolver = useCallback(<M extends { [Key: string]: any } = any>
+    ({
+         schema,
+         path
+     }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> =>
+        ({
+             entityId,
+             values,
+         }: EntitySchemaResolverProps<M>) => {
 
-        const properties = computeProperties({
-            propertiesOrBuilder: schema.properties,
-            path,
-            entityId,
-            values: values ?? schema.defaultValues
-        });
+            const schemaOverride = getSchemaOverride<M>(path);
+            const storedProperties = getValueInPath(schemaOverride, "properties");
 
-        return {
-            ...schema,
-            properties: mergeDeep(properties, storedProperties),
-            originalSchema: schema
-        };
-    }, [getSchemaOverride]);
+            const properties = computeProperties({
+                propertiesOrBuilder: schema.properties,
+                path,
+                entityId,
+                values: values ?? schema.defaultValues
+            });
+
+            return {
+                ...schema,
+                properties: mergeDeep(properties, storedProperties),
+                originalSchema: schema
+            };
+        }, [getSchemaOverride]);
 
 
     const getCollectionResolver = useCallback(<M extends { [Key: string]: any }>(path: string, entityId?: string, collection?: EntityCollection<M>): EntityCollectionResolver<M> => {
@@ -249,20 +259,31 @@ export function useBuildNavigationContext<UserType>({
         throw Error("Expected path starting with " + fullCollectionPath);
     }, [fullCollectionPath]);
 
+    const buildUrlEditCollectionPath = useCallback(({
+                                                        path,
+                                                        group
+                                                    }: { path?: string, group?: string }): string => {
+            if (path)
+                return `${baseCollectionPath}/edit/${removeInitialAndTrailingSlashes(path)}`;
+            else
+                return `new${group ? `?group=${group}` : ""}`;
+        }, //
+        [baseCollectionPath]);
+
     const buildUrlCollectionPath = useCallback((path: string): string => `${baseCollectionPath}/${removeInitialAndTrailingSlashes(path)}`,
         [baseCollectionPath]);
 
     const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(path)}` : `/${path}`,
         [cleanBasePath]);
 
-    const onCollectionModifiedForUser = useCallback(<M extends any>(path: string, partialCollection: PartialEntityCollection<M>) => {
+    const onCollectionModifiedForUser = useCallback(<M extends any>(path: string, partialCollection: LocalEntityCollection<M>) => {
         if (userConfigPersistence) {
             const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
             userConfigPersistence.onCollectionModified(path, mergeDeep(currentStoredConfig, partialCollection));
         }
     }, [userConfigPersistence]);
 
-    const getCollectionOverride = useCallback(<M extends any>(path: string): PartialEntityCollection<M> | undefined => {
+    const getCollectionOverride = useCallback(<M extends any>(path: string): LocalEntityCollection<M> | undefined => {
         if (!userConfigPersistence)
             return undefined
         const dynamicCollectionConfig = { ...userConfigPersistence.getCollectionConfig<M>(path) };
@@ -285,13 +306,15 @@ export function useBuildNavigationContext<UserType>({
         isUrlCollectionPath,
         urlPathToDataPath,
         buildUrlCollectionPath,
+        buildUrlEditCollectionPath,
         buildCMSUrlPath,
     };
 }
 
+
 const getNavigation = async <UserType extends any>({
-                                                       navigationOrCollections,
-                                                       user,
+                                                       navigationOrBuilder,
+                                                       configPersistence,
                                                        authController,
                                                        dateTimeFormat,
                                                        locale,
@@ -299,23 +322,24 @@ const getNavigation = async <UserType extends any>({
                                                        storageSource
                                                    }:
                                                        {
-                                                           navigationOrCollections: Navigation | NavigationBuilder<UserType> | EntityCollection[],
-                                                           user: User | null,
+                                                           navigationOrBuilder?: Navigation | NavigationBuilder<UserType>,
+                                                           configPersistence?: ConfigurationPersistence,
                                                            authController: AuthController<UserType>,
                                                            dateTimeFormat?: string,
                                                            locale?: Locale,
                                                            dataSource: DataSource,
                                                            storageSource: StorageSource
                                                        }
-): Promise<Navigation> => {
+): Promise<ResolvedNavigation> => {
 
-    if (Array.isArray(navigationOrCollections)) {
-        return {
-            collections: navigationOrCollections
-        };
-    } else if (typeof navigationOrCollections === "function") {
-        return navigationOrCollections({
-            user,
+    if (!navigationOrBuilder && !configPersistence) {
+        throw Error("You need to specify a navigation configuration or a `ConfigurationPersistence`");
+    }
+
+    let navigation: ResolvedNavigation | undefined;
+    if (typeof navigationOrBuilder === "function") {
+        navigation = await navigationOrBuilder({
+            user: authController.user,
             authController,
             dateTimeFormat,
             locale,
@@ -323,8 +347,24 @@ const getNavigation = async <UserType extends any>({
             storageSource
         });
     } else {
-        return navigationOrCollections;
+        navigation = navigationOrBuilder;
     }
+
+    const fetchedCollections = configPersistence?.collections;
+    if (fetchedCollections) {
+        if (navigation) {
+            // navigation.collections = populatedCollections.filter((col) => !navigation?.collections.map(c => c.path).includes(col.path));
+            navigation.storedCollections = fetchedCollections.filter((col) => !navigation?.collections?.map(c => c.path).includes(col.path));
+        } else {
+            navigation = { storedCollections: fetchedCollections };
+        }
+    }
+
+    if (!navigation) {
+        throw Error("You need to specify a navigation configuration or a `ConfigurationPersistence`");
+    }
+
+    return navigation;
 };
 
 

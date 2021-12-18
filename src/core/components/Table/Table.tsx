@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import BaseTable, { Column, ColumnShape } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import clsx from "clsx";
 
@@ -195,28 +195,28 @@ export function Table<T>({
 
     function buildErrorView<M extends { [Key: string]: any }>() {
         return (
+            <Box
+                sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    mx: 3,
+                    justifyContent: "center"
+                }}>
 
-            <Paper className={classes.root}>
-                <Box display="flex"
-                     flexDirection={"column"}
-                     justifyContent="center"
-                     margin={6}>
+                <Typography variant={"h6"}>
+                    {"Error fetching data from the data source"}
+                </Typography>
 
-                    <Typography variant={"h6"}>
-                        {"Error fetching data from the data source"}
-                    </Typography>
+                {error?.name && <Typography>
+                    {error?.name}
+                </Typography>}
 
-                    {error?.name && <Typography>
-                        {error?.name}
-                    </Typography>}
-
-                    {error?.message && <Typography>
+                {error?.message && <Typography>
                         {error?.message}
                     </Typography>}
 
                 </Box>
-
-            </Paper>
         );
     }
 

@@ -4,7 +4,9 @@ import { User } from "./user";
 import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
-import { PartialEntityCollection } from "./config_persistence";
+import { LocalEntityCollection } from "./local_config_persistence";
+import { FirestoreConfigurationPersistence } from "../firebase_app/hooks/useFirestoreConfigurationPersistence";
+import { StoredEntityCollection } from "./config_persistence";
 
 
 /**
@@ -64,7 +66,7 @@ export interface Navigation {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections: EntityCollection[];
+    collections?: EntityCollection[];
 
     /**
      * Custom additional views created by the developer, added to the main
@@ -75,13 +77,20 @@ export interface Navigation {
 }
 
 /**
+ * @category Models
+ */
+export type ResolvedNavigation = Navigation & {
+    storedCollections?: StoredEntityCollection[];
+}
+
+/**
  * Context that includes the resolved navigation and utility methods and
  * attributes.
  * @category Models
  */
 export type NavigationContext = {
 
-    navigation?: Navigation;
+    navigation?: ResolvedNavigation;
 
     loading: boolean;
 
@@ -124,7 +133,7 @@ export type NavigationContext = {
     /**
      * Use this callback when a collection has been modified so it is persisted.
      */
-    onCollectionModifiedForUser: <M>(path:string, partialCollection: PartialEntityCollection<M>) => void;
+    onCollectionModifiedForUser: <M>(path:string, partialCollection: LocalEntityCollection<M>) => void;
 
     /**
      * Default path under the navigation routes of the CMS will be created
@@ -151,6 +160,8 @@ export type NavigationContext = {
      */
     buildCMSUrlPath: (path: string) => string;
 
+    buildUrlEditCollectionPath: (props: { path?: string, group?: string }) => string;
+
     /**
      * Base url path for the home screen
      */
@@ -161,7 +172,7 @@ export type NavigationContext = {
      * @param path
      */
     isUrlCollectionPath: (urlPath: string) => boolean;
-    
+
     /**
      * Build a URL collection path from a data path
      * `products` => `/c/products`
@@ -169,6 +180,7 @@ export type NavigationContext = {
      * @param path
      */
     buildUrlCollectionPath: (path: string) => string;
+
 
 }
 

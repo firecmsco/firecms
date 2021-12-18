@@ -97,6 +97,8 @@ export function getCollectionPathsCombinations(subpaths: string[]): string[] {
 export interface TopNavigationEntry {
     url: string;
     name: string;
+    type: "collection" | "stored_collection" | "view";
+    editUrl?: string;
     description?: string;
     group?: string;
 }
@@ -116,17 +118,27 @@ export function computeTopNavigation(
         throw Error("You can only use `computeTopNavigation` with an initialised navigationContext");
 
     const navigationEntries: TopNavigationEntry[] = [
-        ...navigation.collections.map(collection => ({
+        ...(navigation.collections ?? []).map(collection => ({
             url: navigationContext.buildUrlCollectionPath(collection.path),
             name: collection.name,
+            type: "collection",
             description: collection.description,
             group: collection.group
-        })),
+        } as TopNavigationEntry)),
+        ...(navigation.storedCollections ?? []).map(collection => ({
+            url: navigationContext.buildUrlCollectionPath(collection.path),
+            name: collection.name,
+            type: "stored_collection",
+            editUrl: navigationContext.buildUrlEditCollectionPath({path: collection.path}),
+            description: collection.description,
+            group: collection.group
+        } as TopNavigationEntry)),
         ...(navigation.views ?? []).map(view =>
             includeHiddenViews || !view.hideFromNavigation ?
                 ({
                     url: navigationContext.buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
                     name: view.name,
+                    type: "view",
                     description: view.description,
                     group: view.group
                 })

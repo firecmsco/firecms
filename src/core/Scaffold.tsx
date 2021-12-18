@@ -1,9 +1,10 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useEffect } from "react";
 
 import { Drawer as MuiDrawer, Theme } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { FireCMSAppBar } from "./internal/FireCMSAppBar";
+import { useLocation } from "react-router-dom";
 
 
 /**
@@ -78,6 +79,7 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
     const classes = useStyles();
 
     const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const containerRef = useRestoreScroll();
 
     const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
     const closeDrawer = () => setDrawerOpen(false);
@@ -109,7 +111,8 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
                                handleDrawerToggle={handleDrawerToggle}
                                toolbarExtraWidget={toolbarExtraWidget}/>
                 <main
-                    className={classes.content}>
+                    className={classes.content}
+                    ref={containerRef}>
                     {children}
                 </main>
             </div>
@@ -118,5 +121,40 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
     );
 
 
+}
+
+function useRestoreScroll() {
+
+    const scrollsMap = React.useRef<Record<string, number>>({});
+
+    const location = useLocation();
+
+    const containerRef = React.createRef<HTMLDivElement>();
+
+    const handleScroll = () => {
+        if (!containerRef.current || !location.key) return;
+        scrollsMap.current[location.key] = containerRef.current.scrollTop;
+    };
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+        containerRef.current.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            if (containerRef.current)
+                containerRef.current.removeEventListener('scroll', handleScroll);
+        };
+    }, [containerRef, location]);
+
+    useEffect(() => {
+        if (!containerRef.current || !scrollsMap.current || !scrollsMap.current[location.key]) return;
+        containerRef.current.scrollTo(
+            {
+                top: scrollsMap.current[location.key],
+                behavior: "auto"
+            });
+    }, [location]);
+
+    return containerRef;
 }
 

@@ -16,7 +16,7 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
-    PartialEntityCollection,
+    LocalEntityCollection,
     SelectionController
 } from "../../models";
 import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
@@ -120,7 +120,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
 
-    const onCollectionModifiedForUser = (partialCollection: PartialEntityCollection<any>) => {
+    const onCollectionModifiedForUser = (partialCollection: LocalEntityCollection<any>) => {
         navigationContext.onCollectionModifiedForUser(path, partialCollection);
     }
 
@@ -194,7 +194,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         // Only for property columns
         if (!collection.schema.properties[key]) return;
         const property: Partial<AnyProperty> = { columnWidth: width };
-        const updatedFields: PartialEntityCollection<any> = { schema: { properties: { [key as keyof M]: property } } };
+        const updatedFields: LocalEntityCollection<any> = { schema: { properties: { [key as keyof M]: property } } };
         if (onCollectionModifiedForUser)
             onCollectionModifiedForUser(updatedFields)
     }, [path, collection]);

@@ -35,7 +35,7 @@ export interface FirebaseCMSAppProps {
      * In you need to customize the navigation based on the logged user you
      * can use a `NavigationBuilder`
      */
-    navigation: Navigation | NavigationBuilder<FirebaseUser> | EntityCollection[];
+    navigation: Navigation | NavigationBuilder<FirebaseUser>;
 
     /**
      * Do the users need to log in to access the CMS.

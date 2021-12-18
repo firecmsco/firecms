@@ -14,5 +14,6 @@ export * from "./entity_link_builder";
 export * from "./side_entity_controller";
 export * from "./firecms_context";
 export * from "./entity_callbacks";
-export * from "./config_persistence";
+export * from "./local_config_persistence";
+export * from "./local_config_persistence";
 

@@ -1,9 +1,9 @@
 import { getCollectionByPath } from "../core/util/navigation_utils";
 import { siteConfig } from "./test_site_config";
-import { EntityCollection } from "../models";
+import { EntityCollection, Navigation } from "../models";
 import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";
 
-const collectionViews = siteConfig.navigation as EntityCollection[];
+const collectionViews = (siteConfig.navigation as Navigation).collections as EntityCollection[];
 it("collection view matches ok", () => {
 
     const collectionViewFromPath = getCollectionByPath("products", collectionViews);

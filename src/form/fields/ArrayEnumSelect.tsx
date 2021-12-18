@@ -39,7 +39,6 @@ export function ArrayEnumSelect({
                                     autoFocus
                                 }: FieldProps<EnumType[]>) {
 
-    const classes = formStyles();
 
     if (!property.of) {
         throw Error("Using wrong component ArrayEnumSelect");
@@ -63,24 +62,28 @@ export function ArrayEnumSelect({
     const validValue = !!value && Array.isArray(value);
     return (
         <FormControl
-            variant="filled"
             fullWidth
             required={property.validation?.required}
             error={showError}
+            sx={{
+                '& .MuiInputLabel-root': {
+                    mt: 1 / 2,
+                    ml: 1 / 2,
+                },
+                '& .MuiInputLabel-shrink': {
+                    mt: 2
+                },
+            }}
         >
 
-            <InputLabel id={`${name}-multiselect-label`}
-                        classes={{
-                            root: classes.inputLabel,
-                            shrink: classes.shrinkInputLabel
-                        }}>
+            <InputLabel id={`${name}-multiselect-label`}>
                 <LabelWithIcon property={property}/>
             </InputLabel>
 
             <MuiSelect
                 multiple
-                classes={{
-                    select: classes.input
+                sx={{
+                    minHeight: "64px"
                 }}
                 variant={"filled"}
                 labelId={`${name}-multiselect-label`}

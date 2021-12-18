@@ -42,7 +42,10 @@ export function ReadOnlyField<M extends { [Key: string]: any }>({
             </FormHelperText>}
 
             <Paper
-                className={`${classes.paper} ${classes.largePadding} ${classes.input}`}
+                className={`${classes.paper} ${classes.largePadding}`}
+                sx={{
+                    minHeight: "64px"
+                }}
                 variant={"outlined"}>
 
                 <ErrorBoundary>

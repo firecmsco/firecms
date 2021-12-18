@@ -6,6 +6,9 @@ import { EntityCollectionView, FireCMSHomePage } from "./components";
 import { useNavigation } from "../hooks";
 import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
 import { NotFoundPage } from "./components/NotFoundPage";
+import { computeTopNavigation } from "./util/navigation_utils";
+import { CollectionEditor } from "./components/SchemaEditor/CollectionEditor";
+import { EntityCollectionRoute } from "./components/EntityCollectionRoute";
 
 /**
  * @category Components
@@ -16,6 +19,7 @@ export type NavigationRoutesProps = {
      */
     HomePage?: React.ComponentType;
 };
+
 
 /**
  * This component is in charge of taking a {@link Navigation} and rendering
@@ -31,11 +35,14 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
     const location = useLocation();
     const navigationContext = useNavigation();
     const navigation = navigationContext.navigation;
+    const { groups } = computeTopNavigation(navigationContext, true);
 
     if (!navigation)
         return <></>;
 
     const state = location.state as any;
+    const allGroups: Array<string | undefined> = [...groups, undefined];
+
     /**
      * The location can be overridden if `base_location` is set in the
      * state field of the current location. This can happen if you open
@@ -43,22 +50,22 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
      */
     const baseLocation = state && state["base_location"] ? state["base_location"] : location;
 
+    const buildCMSViewRoute = (path: string, cmsView: CMSView) => {
+        return <Route
+            key={"navigation_view_" + path}
+            path={path}
+            element={
+                <BreadcrumbUpdater
+                    path={path}
+                    key={`navigation_${path}`}
+                    title={cmsView.name}>
+                    {cmsView.view}
+                </BreadcrumbUpdater>}
+        />;
+    };
+
     const customRoutes: JSX.Element[] = [];
     if (navigation.views) {
-        const buildCMSViewRoute = (path: string, cmsView: CMSView) => {
-            return <Route
-                key={"navigation_view_" + path}
-                path={path}
-                element={
-                    <BreadcrumbUpdater
-                        path={path}
-                        key={`navigation_${path}`}
-                        title={cmsView.name}>
-                        {cmsView.view}
-                    </BreadcrumbUpdater>}
-            />;
-        };
-
         navigation.views.forEach((cmsView) => {
             if (Array.isArray(cmsView.path))
                 customRoutes.push(...cmsView.path.map(path => buildCMSViewRoute(path, cmsView)));
@@ -67,9 +74,11 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
         });
     }
 
-    const collectionRoutes = [...navigation.collections]
-        // we reorder collections so that nested paths are included first
-        .sort((a, b) => b.path.length - a.path.length)
+    // we reorder collections so that nested paths are included first
+    const sortedCollections = [...(navigation.collections ?? [])]
+        .sort((a, b) => b.path.length - a.path.length);
+
+    const collectionRoutes = sortedCollections
         .map((collection) => {
                 const urlPath = navigationContext.buildUrlCollectionPath(collection.path);
                 return <Route path={urlPath + "/*"}
@@ -86,16 +95,68 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
             }
         );
 
-    const homeRoute =
-        <Route path={"/"}
+
+    const sortedStoredCollections = [...(navigation.storedCollections ?? [])]
+        .sort((a, b) => b.path.length - a.path.length);
+
+    const storedCollectionRoutes = sortedStoredCollections
+        .map((collection) => {
+                const urlPath = navigationContext.buildUrlCollectionPath(collection.path);
+                return <Route path={urlPath + "/*"}
+                              key={`navigation_${collection.path}`}
+                              element={
+                                  <BreadcrumbUpdater
+                                      path={urlPath}
+                                      title={collection.name}>
+                                      <EntityCollectionRoute
+                                          path={collection.path}
+                                          collection={collection}/>
+                                  </BreadcrumbUpdater>
+                              }/>;
+            }
+        );
+
+    const collectionEditRoutes = (navigation.storedCollections ?? [])
+        .map((collection) => {
+                const urlPath = navigationContext.buildUrlEditCollectionPath({
+                    path: collection.path
+                });
+                return <Route path={urlPath + "/*"}
+                              key={`navigation_${collection.path}`}
+                              element={
+                                  <BreadcrumbUpdater
+                                      path={urlPath}
+                                      title={collection.name}>
+                                      <CollectionEditor path={collection.path}/>
+                                  </BreadcrumbUpdater>
+                              }/>;
+            }
+        );
+
+    const newCollectionPath = navigationContext.buildUrlEditCollectionPath({});
+    const addNewCollectionRoute = (
+        <Route path={newCollectionPath + "/*"}
+               key={`navigation_new`}
                element={
                    <BreadcrumbUpdater
-                       path={"/"}
+                       path={newCollectionPath}
+                       title={`New collection`}>
+                       <CollectionEditor/>
+                   </BreadcrumbUpdater>
+               }/>
+    );
+
+    const homeRoute = (
+        <Route path={navigationContext.homeUrl}
+               element={
+                   <BreadcrumbUpdater
+                       path={navigationContext.homeUrl}
                        key={`navigation_home`}
                        title={"Home"}>
                        {HomePage ? <HomePage/> : <FireCMSHomePage/>}
                    </BreadcrumbUpdater>
-               }/>;
+               }/>
+    );
 
     const notFoundRoute = <Route path={"*"}
                                  element={
@@ -105,7 +166,10 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
     return (
         <Routes location={baseLocation}>
 
+            {collectionEditRoutes}
             {collectionRoutes}
+
+            {addNewCollectionRoute}
 
             {customRoutes}
 

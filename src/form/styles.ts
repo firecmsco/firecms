@@ -17,14 +17,6 @@ export const formStyles = makeStyles((theme: Theme) => createStyles({
             padding: theme.spacing(3)
         }
     },
-    inputLabel: {
-        marginTop: theme.spacing(1 / 2),
-        marginLeft: theme.spacing(1 / 2)
-    },
-    shrinkInputLabel: {
-        marginTop: "-2px",
-        marginLeft: theme.spacing(1 / 2)
-    },
     buttons: {
         display: "flex",
         justifyContent: "flex-end"
@@ -34,9 +26,6 @@ export const formStyles = makeStyles((theme: Theme) => createStyles({
     },
     form: {
         marginTop: theme.spacing(2)
-    },
-    input: {
-        minHeight: "64px"
     },
     select: {
         paddingTop: theme.spacing(1 / 2)

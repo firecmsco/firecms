@@ -20,6 +20,7 @@ import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthDelegate } from "./models/auth";
+import { useFirestoreConfigurationPersistence } from "./hooks/useFirestoreConfigurationPersistence";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -81,6 +82,7 @@ export function FirebaseCMSApp({
         textSearchController
     });
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
+    const configPersistence = useFirestoreConfigurationPersistence({ firebaseApp: firebaseApp });
 
     if (configError) {
         return <div> {configError} </div>;
@@ -111,6 +113,7 @@ export function FirebaseCMSApp({
                      dateTimeFormat={dateTimeFormat}
                      dataSource={dataSource}
                      storageSource={storageSource}
+                     configPersistence={configPersistence}
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                      locale={locale}
                      basePath={basePath}

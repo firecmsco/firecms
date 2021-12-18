@@ -42,7 +42,6 @@ export function Select<T extends EnumType>({
                                                shouldAlwaysRerender
                                            }: SelectProps<T>) {
 
-    const classes = formStyles();
     const enumValues = property.config?.enumValues as EnumValues;
 
     useClearRestoreValue({
@@ -53,24 +52,28 @@ export function Select<T extends EnumType>({
 
     return (
         <FormControl
-            variant="filled"
             fullWidth
             required={property.validation?.required}
             error={showError}
             disabled={disabled}
+            sx={{
+                '& .MuiInputLabel-root': {
+                    mt: 1 / 2,
+                    ml: 1 / 2,
+                },
+                '& .MuiInputLabel-shrink': {
+                    mt: 2
+                },
+            }}
         >
 
-            <InputLabel id={`${name}-select-label`}
-                        classes={{
-                            root: classes.inputLabel,
-                            shrink: classes.shrinkInputLabel
-                        }}>
+            <InputLabel id={`${name}-select-label`}>
                 <LabelWithIcon property={property}/>
             </InputLabel>
 
             <MuiSelect
-                classes={{
-                    select: classes.input
+                sx={{
+                    minHeight: "64px"
                 }}
                 variant={"filled"}
                 labelId={`${name}-select-label`}

@@ -113,6 +113,7 @@ function SampleApp() {
         schema: testEntitySchema,
         callbacks: testCallbacks,
         name: "Test entity",
+        properties: ["full_name", "subcollection:test_subcollection","source"],
         additionalColumns: [
             {
                 id: "full_name",
@@ -196,7 +197,7 @@ function SampleApp() {
         };
 
         if (process.env.NODE_ENV !== "production") {
-            navigation.collections.push(buildCollection(testCollection));
+            navigation.collections!.push(buildCollection(testCollection));
         }
 
         return navigation;

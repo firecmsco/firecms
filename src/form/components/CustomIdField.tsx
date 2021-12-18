@@ -53,7 +53,9 @@ export function CustomIdField<M, UserType>
 
     const appConfig: FireCMSContext<UserType> | undefined = useFireCMSContext();
     const inputProps = {
-        className: classes.input,
+        sx: {
+            minHeight: "64px"
+        },
         endAdornment: entity ? (
             <InputAdornment position="end">
 

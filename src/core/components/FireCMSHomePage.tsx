@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     CardActionArea,
@@ -7,37 +7,26 @@ import {
     Container,
     Divider,
     Grid,
+    IconButton,
     Paper,
-    Theme,
     Typography
 } from "@mui/material";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
+
 import { Link as ReactLink } from "react-router-dom";
 
 import {
     computeTopNavigation,
-    TopNavigationEntry
+    TopNavigationEntry, TopNavigationResult
 } from "../util/navigation_utils";
 import { Markdown } from "../../preview";
 import { useNavigation } from "../../hooks";
+import { useConfigurationPersistence } from "../../hooks/useConfigurationPersistence";
 
-export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        card: {
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            minHeight: 248
-        },
-        flexGrow: {
-            flexGrow: 1
-        }
-    })
-);
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -48,19 +37,27 @@ export const useStyles = makeStyles((theme: Theme) =>
  */
 export function FireCMSHomePage() {
 
-    const classes = useStyles();
     const navigationContext = useNavigation();
+    const configurationPersistence = useConfigurationPersistence();
+    const configurationPersistenceEnabled = Boolean(configurationPersistence);
+
     if (!navigationContext.navigation)
         return <></>;
+
+    const [navigationResult, setNavigationResult] = useState<TopNavigationResult>(computeTopNavigation(navigationContext, true));
+
+    useEffect(() => {
+        setNavigationResult( computeTopNavigation(navigationContext, true))
+    }, [navigationContext.navigation])
 
     const {
         navigationEntries,
         groups
-    } = computeTopNavigation(navigationContext, true);
+    } = navigationResult;
 
-    const allGroups: Array<string | null> = [...groups];
-    if (navigationEntries.filter(e => !e.group).length > 0) {
-        allGroups.push(null);
+    const allGroups: Array<string | undefined> = [...groups];
+    if (configurationPersistenceEnabled || navigationEntries.filter(e => !e.group).length > 0) {
+        allGroups.push(undefined);
     }
 
     function buildNavigationCard(entry: TopNavigationEntry) {
@@ -72,11 +69,18 @@ export function FireCMSHomePage() {
                 <Paper variant={"outlined"}>
 
                     <CardActionArea
-                        className={classes.card}
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                            minHeight: 248
+                        }}
                         component={ReactLink}
                         to={entry.url}>
                         <CardContent
-                            className={classes.flexGrow}>
+                            sx={{
+                                flexGrow: 1
+                            }}>
 
                             <PlaylistPlayIcon color={"disabled"}/>
                             <Typography gutterBottom variant="h5"
@@ -92,6 +96,12 @@ export function FireCMSHomePage() {
                         </CardContent>
 
                         <CardActions style={{ alignSelf: "flex-end" }}>
+                            {configurationPersistenceEnabled && entry.editUrl &&
+                            <IconButton
+                                component={ReactLink}
+                                to={entry.editUrl}>
+                                <EditIcon color="primary"/>
+                            </IconButton>}
                             <Box p={1}>
                                 <ArrowForwardIcon color="primary"/>
                             </Box>
@@ -103,28 +113,55 @@ export function FireCMSHomePage() {
         );
     }
 
+    function buildAddCollectionNavigationCard(group?: string) {
+        return (
+            <Grid item xs={12}
+                  sm={6}
+                  md={4}
+                  key={`nav_${group}_"add`}>
+                <Paper variant={"outlined"} sx={{height:"100%", minHeight: 124}}>
+                    <CardActionArea
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-start"
+                        }}
+                        component={ReactLink}
+                        to={navigationContext.buildUrlEditCollectionPath({ group })}
+                        state={{ group: group }}>
+
+                        <CardContent
+                            sx={{
+                                flexGrow: 1
+                            }}>
+                            <AddIcon color="primary"/>
+                        </CardContent>
+
+                    </CardActionArea>
+                </Paper>
+            </Grid>
+        );
+    }
+
     return (
         <Container>
             {allGroups.map((group, index) => (
                 <Box mt={6} mb={6} key={`group_${index}`}>
-                    {allGroups.length > 0 && <>
-                        <Typography color={"textSecondary"}
-                                    className={"weight-500"}>
-                            {group?.toUpperCase() ?? "Collections".toUpperCase()}
-                        </Typography>
-                        <Divider/>
-                    </>}
+
+                    <Typography color={"textSecondary"}
+                                className={"weight-500"}>
+                        {group?.toUpperCase() ?? "Collections".toUpperCase()}
+                    </Typography>
+
+                    <Divider/>
 
                     <Box mt={2}>
                         <Grid container spacing={2}>
-                            {group && navigationEntries
+                            {navigationEntries
                                 .filter((entry) => entry.group === group)
                                 .map((entry) => buildNavigationCard(entry))
                             }
-                            {!group && navigationEntries
-                                .filter((entry) => !entry.group)
-                                .map((entry) => buildNavigationCard(entry))
-                            }
+                            {buildAddCollectionNavigationCard(group)}
                         </Grid>
                     </Box>
                 </Box>

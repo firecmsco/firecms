@@ -34,7 +34,6 @@ export function DateTimeField({
                               }: DateTimeFieldProps) {
 
 
-    const classes = formStyles();
     const internalValue = value || null;
 
     useClearRestoreValue({
@@ -48,7 +47,6 @@ export function DateTimeField({
 
             <DateTimePicker
                 clearable
-                className={classes.input}
                 autoFocus={autoFocus}
                 value={internalValue}
                 label={
@@ -57,9 +55,11 @@ export function DateTimeField({
                 renderInput={(props) => (
                     <MuiTextField {...props}
                                   fullWidth
+                                  sx={{
+                                      minHeight: "64px"
+                                  }}
                                   InputProps={{
                                       ...props.InputProps,
-                                      className: classes.input
                                   }}
                                   error={showError}
                         // format={dateFormat}

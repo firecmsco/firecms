@@ -26,6 +26,7 @@ import { useBuildSideEntityController } from "./internal/useBuildSideEntityContr
 import { useBuildNavigationContext } from "./internal/useBuildNavigationContext";
 import { useBuildAuthController } from "./internal/useBuildAuthController";
 import { useBuildStorageConfigurationPersistence } from "./util/storage";
+import { ConfigurationPersistence } from "../models/config_persistence";
 
 const DEFAULT_COLLECTION_PATH = `/c`;
 
@@ -64,7 +65,7 @@ export interface FireCMSProps<UserType> {
      * In you need to customize the navigation based on the logged user you
      * can use a `NavigationBuilder`
      */
-    navigation: Navigation | NavigationBuilder<UserType> | EntityCollection[];
+    navigation: Navigation | NavigationBuilder<UserType> ;
 
     /**
      * Do the users need to log in to access the CMS.
@@ -129,6 +130,11 @@ export interface FireCMSProps<UserType> {
      */
     baseCollectionPath?: string;
 
+    /**
+     * Use this controller to access the configuration that is stored extenally,
+     * and not defined in code
+     */
+    configPersistence?: ConfigurationPersistence;
 }
 
 
@@ -153,7 +159,8 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         storageSource,
         dataSource,
         basePath,
-        baseCollectionPath
+        baseCollectionPath,
+        configPersistence
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -181,6 +188,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         dataSource,
         storageSource,
         schemaOverrideHandler,
+        configPersistence,
         userConfigPersistence,
     });
 
@@ -212,7 +220,8 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                             navigationContext,
                             dataSource,
                             storageSource,
-                            snackbarController
+                            snackbarController,
+                            configurationPersistence: configPersistence
                         };
 
                         return (

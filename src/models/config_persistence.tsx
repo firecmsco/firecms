@@ -1,39 +1,40 @@
-import { AnyProperty } from "./properties";
+import { Properties } from "./properties";
 import { EntitySchema } from "./entities";
 import { EntityCollection } from "./collections";
 
 /**
- * Use to resolve the schema properties for specific path, entity id or values.
  * @category Models
  */
-export type PartialProperties<M> = Record<keyof M, Partial<AnyProperty>>;
-
-/**
- * Use to resolve the schema properties for specific path, entity id or values.
- * @category Models
- */
-export type PartialEntitySchema<M> =
-    Omit<Partial<EntitySchema<M>>, "properties"> &
+export type StoredEntitySchema<M = any> =
+    Omit<EntitySchema<M>, "properties" | "views"> &
     {
-        properties: PartialProperties<M>
+        properties: Properties<M>
     };
 
 /**
- * Use to resolve the schema properties for specific path, entity id or values.
  * @category Models
  */
-export type PartialEntityCollection<M> =
-    Omit<Partial<EntityCollection<M>>, "schema"> &
+export type StoredEntityCollection<M = any> =
+    Omit<EntityCollection<M>, "schema" | "extraActions" | "selectionController" | "callbacks">
+    &
     {
-        schema?: PartialEntitySchema<M>
+        schemaId?: string
     };
 
 /**
- * This interface is in charge of defining the controller that persists
- * modifications to a collection or schema, and retrieves them back from
- * a data source, such as local storage or Firestore.
+ * Use this controller to access the configuration that is stored extenally,
+ * and not defined in code
  */
 export interface ConfigurationPersistence {
-    onCollectionModified: <M extends any>(path: string, partialCollection: PartialEntityCollection<M>) => void;
-    getCollectionConfig: <M>(path: string) => PartialEntityCollection<M>;
+
+    collections: StoredEntityCollection[] | undefined;
+
+    getCollection: <M>(path: string) => Promise<StoredEntityCollection<M>>;
+
+    saveCollection: <M>(path: string, collection: StoredEntityCollection<M>) => Promise<void>;
+
+    getSchema: <M>(schemaId: string) => Promise<StoredEntitySchema<M>>;
+
+    saveSchema: <M>(schemaId: string, schema: StoredEntitySchema<M>) => Promise<void>;
+
 }

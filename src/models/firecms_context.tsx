@@ -7,6 +7,8 @@ import { AuthController } from "./auth";
 import { EntityLinkBuilder } from "./entity_link_builder";
 import { User } from "./user";
 import { SnackbarController } from "../hooks";
+import { useFirestoreConfigurationPersistence } from "../firebase_app/hooks/useFirestoreConfigurationPersistence";
+import { ConfigurationPersistence } from "./config_persistence";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -65,5 +67,11 @@ export interface FireCMSContext<UserType extends User = User> {
      * Use this controller to display snackbars
      */
     snackbarController: SnackbarController;
+
+    /**
+     * Use this controller to access the configuration that is stored extenally,
+     * and not defined in code
+     */
+    configurationPersistence?: ConfigurationPersistence;
 
 }
