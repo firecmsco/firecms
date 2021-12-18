@@ -35,7 +35,7 @@ function HeroHome({}) {
 
         <div className="text-center xl:text-right">
             <h1
-                className="block text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter"
+                className="block text-5xl md:text-6xl font-extrabold tracking-tight leading-none"
             >
                 <span
                     data-aos="zoom-y-out"
