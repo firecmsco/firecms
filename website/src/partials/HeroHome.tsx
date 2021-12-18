@@ -51,8 +51,7 @@ function HeroHome({}) {
                     data-aos-delay="150"
                     style={{
                         // mixBlendMode: "color-dodge",
-                        // @ts-ignore
-                        "-webkit-background-clip": "text",
+                        WebkitBackgroundClip: "text",
                         backgroundClip: "text",
                         backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
                     }}

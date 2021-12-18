@@ -146,9 +146,6 @@ module.exports = {
         },
         prism: {
             theme: require('prism-react-renderer/themes/vsDark')
-        },
-        gtag: {
-            trackingID: 'G-D4DQQCW88S'
         }
     },
     presets: [
@@ -168,6 +165,9 @@ module.exports = {
                     customCss: [
                         require.resolve('./src/css/custom.css'),
                     ]
+                },
+                gtag: {
+                    trackingID: 'G-D4DQQCW88S'
                 }
             }
         ]
