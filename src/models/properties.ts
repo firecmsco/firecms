@@ -177,7 +177,7 @@ export interface EnumValueConfig {
  * @category Entity properties
  */
 export type Properties<M extends { [Key: string]: any } = any> = {
-    [k in keyof M]: Property<M[k]>;
+    [k in keyof M]: Property<M[keyof M]>;
 };
 
 /**
@@ -338,6 +338,13 @@ export interface MapProperty<T extends { [Key: string]: any } = any> extends Bas
      * Record of properties included in this map.
      */
     properties?: Properties<Partial<T>>; // TODO: this should be Properties<T> but it breaks if building properties without `buildProperties`
+
+    /**
+     * Order in which the properties are displayed.
+     * If you are specifying your schema as code, the order is the same as the
+     * one you define in `properties`
+     */
+    propertiesOrder?: (keyof T)[];
 
     /**
      * Rules for validating this property

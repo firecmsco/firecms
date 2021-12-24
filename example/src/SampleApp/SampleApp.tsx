@@ -46,13 +46,13 @@ function SampleApp() {
         buildCollection({
             name: "Locales",
             path: "locales",
-            schema: localeSchema,
+            schemaId: "locale",
             defaultSize: "m"
         });
 
     const productsCollection = buildCollection<Product>({
         path: "products",
-        schema: productSchema,
+        schemaId: "product",
         // inlineEditing: false,
         callbacks: productCallbacks,
         name: "Products",
@@ -75,7 +75,7 @@ function SampleApp() {
 
     const usersCollection = buildCollection({
         path: "users",
-        schema: usersSchema,
+        schemaId: "user",
         name: "Users",
         group: "Main",
         description: "Registered users",
@@ -93,7 +93,7 @@ function SampleApp() {
 
     const blogCollection = buildCollection({
         path: "blog",
-        schema: blogSchema,
+        schemaId: "blog_entry",
         name: "Blog",
         group: "Content",
         exportable: {
@@ -110,7 +110,7 @@ function SampleApp() {
 
     const testCollection = buildCollection({
         path: "test_entity",
-        schema: testEntitySchema,
+        schemaId: "test",
         callbacks: testCallbacks,
         name: "Test entity",
         properties: ["full_name", "subcollection:test_subcollection","source"],
@@ -127,7 +127,7 @@ function SampleApp() {
             ],
         subcollections: [{
             path: "test_subcollection",
-            schema: testEntitySchema,
+            schemaId: "test",
             name: "Test entity"
         }]
     });
@@ -220,6 +220,7 @@ function SampleApp() {
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}
+        schemas={[productSchema, usersSchema, blogSchema, localeSchema]}
         schemaOverrideHandler={customSchemaOverrideHandler}
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}

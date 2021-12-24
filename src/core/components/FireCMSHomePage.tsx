@@ -12,16 +12,17 @@ import {
     Typography
 } from "@mui/material";
 
-import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import { Link as ReactLink } from "react-router-dom";
 
 import {
     computeTopNavigation,
-    TopNavigationEntry, TopNavigationResult
+    TopNavigationEntry,
+    TopNavigationResult
 } from "../util/navigation_utils";
 import { Markdown } from "../../preview";
 import { useNavigation } from "../../hooks";
@@ -79,10 +80,27 @@ export function FireCMSHomePage() {
                         to={entry.url}>
                         <CardContent
                             sx={{
-                                flexGrow: 1
+                                flexGrow: 1,
+                                width: "100%"
                             }}>
 
-                            <PlaylistPlayIcon color={"disabled"}/>
+                            <Box sx={{
+                                height: 40,
+                                display: "flex",
+                                alignItems: "center",
+                                width: "100%",
+                                justifyContent: "space-between"
+                            }}>
+                                <PlaylistPlayIcon color={"disabled"}/>
+
+                                {configurationPersistenceEnabled && entry.editUrl &&
+                                <IconButton
+                                    component={ReactLink}
+                                    to={entry.editUrl}>
+                                    <SettingsIcon color="primary"/>
+                                </IconButton>}
+                            </Box>
+
                             <Typography gutterBottom variant="h5"
                                         component="h2">
                                 {entry.name}
@@ -96,12 +114,7 @@ export function FireCMSHomePage() {
                         </CardContent>
 
                         <CardActions style={{ alignSelf: "flex-end" }}>
-                            {configurationPersistenceEnabled && entry.editUrl &&
-                            <IconButton
-                                component={ReactLink}
-                                to={entry.editUrl}>
-                                <EditIcon color="primary"/>
-                            </IconButton>}
+
                             <Box p={1}>
                                 <ArrowForwardIcon color="primary"/>
                             </Box>
@@ -132,6 +145,7 @@ export function FireCMSHomePage() {
 
                         <CardContent
                             sx={{
+                                height: "100%",
                                 flexGrow: 1
                             }}>
                             <AddIcon color="primary"/>
@@ -158,7 +172,7 @@ export function FireCMSHomePage() {
                     <Box mt={2}>
                         <Grid container spacing={2}>
                             {navigationEntries
-                                .filter((entry) => entry.group === group)
+                                .filter((entry) => entry.group === group || (!entry.group && group === undefined)) // so we don't miss empty groups
                                 .map((entry) => buildNavigationCard(entry))
                             }
                             {buildAddCollectionNavigationCard(group)}

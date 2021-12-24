@@ -49,6 +49,7 @@ type Product = {
 }
 
 const productSchema = buildSchema<Product>({
+    id: "product",
     name: "Product",
     properties: {
         name: {
@@ -169,6 +170,7 @@ const productSchema = buildSchema<Product>({
 });
 
 const localeSchema = buildSchema({
+    id: "locale",
     customId: locales,
     name: "Locale",
     properties: {
@@ -208,7 +210,7 @@ export default function App() {
             collections: [
                 buildCollection({
                     path: "products",
-                    schema: productSchema,
+                    schemaId: "product",
                     name: "Products",
                     permissions: ({ authController }) => ({
                         edit: true,
@@ -220,7 +222,7 @@ export default function App() {
                         buildCollection({
                             name: "Locales",
                             path: "locales",
-                            schema: localeSchema
+                            schemaId: "locale"
                         })
                     ]
                 })

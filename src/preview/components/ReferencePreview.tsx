@@ -125,7 +125,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
     }
 
-    const schema = collectionResolver.schema;
+    const schema = collectionResolver.schemaResolver({});
 
     const {
         entity,
@@ -214,7 +214,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                                     entityId: entity.id,
                                     path: entity.path,
                                     schema: schema,
-                                    overrideSchemaRegistry: false
+                                    updateUrl: true
                                 });
                             }}>
                             <KeyboardTabIcon fontSize={"small"}/>

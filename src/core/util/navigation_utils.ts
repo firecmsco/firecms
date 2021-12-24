@@ -122,16 +122,16 @@ export function computeTopNavigation(
             url: navigationContext.buildUrlCollectionPath(collection.path),
             name: collection.name,
             type: "collection",
-            description: collection.description,
-            group: collection.group
+            description: collection.description?.trim(),
+            group: collection.group?.trim()
         } as TopNavigationEntry)),
         ...(navigation.storedCollections ?? []).map(collection => ({
             url: navigationContext.buildUrlCollectionPath(collection.path),
             name: collection.name,
             type: "stored_collection",
             editUrl: navigationContext.buildUrlEditCollectionPath({path: collection.path}),
-            description: collection.description,
-            group: collection.group
+            description: collection.description?.trim(),
+            group: collection.group?.trim()
         } as TopNavigationEntry)),
         ...(navigation.views ?? []).map(view =>
             includeHiddenViews || !view.hideFromNavigation ?

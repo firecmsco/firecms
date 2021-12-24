@@ -25,7 +25,6 @@ import {
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }, UserType> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
     path: string,
-    schema: EntitySchema<M>,
     schemaResolver: EntitySchemaResolver<M>;
     open: boolean;
     onClose: () => void;

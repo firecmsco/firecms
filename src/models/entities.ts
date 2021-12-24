@@ -6,6 +6,8 @@ import { EnumValues, Properties, PropertiesOrBuilder } from "./properties";
  */
 export interface EntitySchema<M extends { [Key: string]: any } = any> {
 
+    id:string;
+
     /**
      * Singular name of the entity as displayed in an Add button . E.g. Product
      */
@@ -29,6 +31,13 @@ export interface EntitySchema<M extends { [Key: string]: any } = any> {
      * Set of properties that compose an entity
      */
     properties: PropertiesOrBuilder<M>;
+
+    /**
+     * Order in which the properties are displayed.
+     * If you are specifying your schema as code, the order is the same as the
+     * one you define in `properties`
+     */
+    propertiesOrder?: (keyof M)[];
 
     /**
      * When creating a new entity, set some values as already initialized

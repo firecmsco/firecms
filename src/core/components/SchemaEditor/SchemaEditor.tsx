@@ -1,15 +1,22 @@
 import * as React from 'react';
+import deepEqual from "deep-equal";
 import {
-    Timeline,
     TimelineConnector,
     TimelineContent,
     TimelineDot,
-    TimelineItem,
-    TimelineOppositeContent,
     TimelineSeparator
 } from "@mui/lab";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
-import { Box, Paper, Typography } from "@mui/material";
+import {
+    Box,
+    FilledInput,
+    FormControl,
+    FormHelperText,
+    Grid,
+    InputLabel,
+    Paper,
+    Typography
+} from "@mui/material";
 import {
     getIconForProperty,
     getWidgetNameForProperty
@@ -21,160 +28,340 @@ import {
     Droppable
 } from "react-beautiful-dnd";
 
-import { Property } from "../../../models";
-import { StoredEntitySchema } from "../../../models/config_persistence";
+import {
+    EntitySchema,
+    PropertiesOrBuilder,
+    Property,
+    PropertyOrBuilder
+} from "../../../models";
+import { Form, Formik, useFormikContext } from 'formik';
+import { getValueInPath } from "../../util/objects";
+
+const PARENT_DROPPABLE_ID = "parent_cerc34D##DEW$AG";
 
 export type SchemaEditorProps<M> = {
-    schema: StoredEntitySchema<any>;
-    onSchemaModified: (schemaId: string, schema: StoredEntitySchema<M>) => void;
+    schema: EntitySchema;
+    onSchemaModified: (schema: EntitySchema<M>) => void;
 };
 
-export function SchemaEditor<M>({
-                                     schema,
-                                     onSchemaModified
-                                 }: SchemaEditorProps<M>) {
+function buildDraggable(name: any, index: number, property: PropertyOrBuilder, isLast: boolean, level: number) {
 
-    const [propertiesEntries, setPropertiesEntries] = React.useState<[key: string, property: Property][]>(Object.entries(schema.properties));
+    let droppable: any = null;
 
-
-    const onDragEnd = (result: any) => {
-        // dropped outside the list
-        if (!result.destination) {
-            return;
-        }
-
-        const items = reorder(
-            propertiesEntries,
-            result.source.index,
-            result.destination.index
-        );
-
-        setPropertiesEntries(items);
-
+    if (typeof property === "object" && property.dataType === "map" && property.properties) {
+        droppable = <Droppable
+            type={`property:${name}`}
+            droppableId={name}>
+            {(provided, snapshot) => {
+                let properties = property.properties as PropertiesOrBuilder<any>;
+                return (
+                    <Box
+                        sx={{ minHeight: 64 }}
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}>
+                        {Object.entries(properties).map(([childName, childProperty], index) => buildDraggable(
+                            `${name}.${childName}`,
+                            index,
+                            childProperty,
+                            index === Object.entries(properties).length - 1,
+                            level + 1))}
+                        {provided.placeholder}
+                    </Box>
+                );
+            }}
+        </Droppable>
     }
 
+    return <Draggable key={name}
+                      draggableId={name}
+                      index={index}>
+        {(provided, snapshot) => (
+            <SchemaEntry
+                name={name}
+                propertyOrBuilder={property}
+                provided={provided}
+                isDragging={snapshot.isDragging}
+                isLast={isLast}>
+                {droppable}
+            </SchemaEntry>
+        )}
+    </Draggable>;
+}
+
+export function SchemaEditor<M>({
+                                    schema,
+                                    onSchemaModified
+                                }: SchemaEditorProps<M>) {
+
+
+    console.log("SchemaEditor", schema);
+
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                    <Timeline
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        position="right">
-                        {propertiesEntries.map(([key, property], index) => (
-                            <Draggable key={key} draggableId={key}
-                                       index={index}>
-                                {(provided, snapshot) => (
-                                    <SchemaEntry
-                                        name={key}
-                                        property={property}
-                                        provided={provided}
-                                        isDragging={snapshot.isDragging}/>
-                                )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                    </Timeline>
-                )}
-            </Droppable>
-        </DragDropContext>
+        <Formik
+            initialValues={{
+                ...schema
+            }}
+            onSubmit={(newSchema: EntitySchema) => {
+                console.log("submit", newSchema);
+                onSchemaModified(newSchema);
+            }}
+        >
+            {({ values, setValues, setFieldValue, handleChange }) => {
+
+                React.useEffect(() => {
+                    setValues({
+                        ...schema
+                    });
+                }, [schema]);
+
+                const onDragEnd = (result: any) => {
+                    console.log(result);
+
+
+                    // dropped outside the list
+                    if (!result.destination) {
+                        return;
+                    }
+
+
+                    const addItem = <T extends any>(list: T[], index: number, item: T): T[] => {
+                        const result = Array.from(list);
+                        result.splice(index, 0, item);
+                        return result;
+                    };
+
+                    const remove = <T extends any>(list: T[], index: number): [T[], T] => {
+                        const result = Array.from(list);
+                        const [removed] = result.splice(index, 1);
+                        return [result, removed];
+                    };
+
+                    const reorder = <T extends any>(list: T[], startIndex: number, endIndex: number): T[] => {
+                        const result = Array.from(list);
+                        const [removed] = result.splice(startIndex, 1);
+                        result.splice(endIndex, 0, removed);
+                        return result;
+                    };
+
+                    const sourceItems = Object.entries(result.source.droppableId === PARENT_DROPPABLE_ID ? values.properties : getValueInPath(values.properties, result.source.droppableId));
+                    const [entriesPre, removed] = remove(sourceItems, result.source.index);
+
+                    const destinationItems = Object.entries(result.destination.droppableId === PARENT_DROPPABLE_ID ? values.properties : getValueInPath(values.properties, result.destination.droppableId));
+                    const entries = addItem(result.source.droppableId === result.destination.droppableId ? entriesPre : destinationItems, result.destination.index, removed);
+                    // const entries = reorder(
+                    //     Object.entries(values.properties),
+                    //     result.source.index,
+                    //     result.destination.index
+                    // );
+
+                    setFieldValue("properties", entries.map(([key, property]) => ({ [key]: property })).reduce((a, b) => ({ ...a, ...b }), {}))
+                    setFieldValue("propertiesOrder", entries.map(([key]) => key as keyof M));
+
+                }
+
+
+                const formControlSX = {
+                    '& .MuiInputLabel-root': {
+                        mt: 1 / 2,
+                        ml: 1 / 2,
+                    },
+                    '& .MuiInputLabel-shrink': {
+                        mt: -1 / 4
+                    },
+                };
+
+                return (
+                    <Form>
+                        <FormControl fullWidth
+                                     variant="filled"
+                                     sx={formControlSX}>
+                            <InputLabel
+                                htmlFor="name">Name</InputLabel>
+                            <FilledInput
+                                id="name"
+                                aria-describedby="name-helper"
+                                onChange={handleChange}
+                                value={values.name}
+                                sx={{ minHeight: "64px" }}
+                            />
+                            <FormHelperText
+                                id="name-helper">
+                                Plural name (e.g. Products)
+                            </FormHelperText>
+                        </FormControl>
+
+                        <Typography>Properties</Typography>
+                        <Paper elevation={0} variant={"outlined"} sx={{ p: 3 }}>
+                            <Grid container>
+                                <Grid item xs={12} sm={6}>
+                                    <DragDropContext
+                                        onDragEnd={onDragEnd}>
+                                        <Droppable
+                                            // type={"property:base"}
+                                            droppableId={PARENT_DROPPABLE_ID}>
+                                            {(provided, snapshot) => (
+                                                <Box
+                                                    {...provided.droppableProps}
+                                                    ref={provided.innerRef}>
+                                                    {Object.entries(values.properties).map(([name, property], index) => buildDraggable(name,
+                                                        index,
+                                                        property,
+                                                        index === Object.keys(values.properties).length - 1,
+                                                        0))}
+                                                    {provided.placeholder}
+                                                </Box>
+                                            )}
+                                        </Droppable>
+                                    </DragDropContext>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    Property edit view here
+                                </Grid>
+                            </Grid>
+                        </Paper>
+
+                        <SubmitListener/>
+                    </Form>
+                );
+            }}
+        </Formik>
+    );
+}
+
+function PropertyEditView({
+                              name,
+                              property
+                          }: { name: string, property: Property }) {
+    return (
+        <Box sx={{ width: '100%' }}>
+
+            <Box sx={{
+                display: 'flex',
+                flexDirection: "row",
+                alignItems: "baseline"
+            }}>
+                <Typography variant="subtitle1"
+                            component="span"
+                            sx={{ flexGrow: 1, pr: 2 }}>
+                    {property.title}
+                </Typography>
+                <Typography variant="body2"
+                            component="span"
+                            color="text.disabled">
+                    {name}
+                </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', flexDirection: "row" }}>
+                <Typography sx={{ flexGrow: 1, pr: 2 }}
+                            variant="body2"
+                            component="span"
+                            color="text.secondary">
+                    {getWidgetNameForProperty(property)}
+                </Typography>
+                <Typography variant="body2"
+                            component="span"
+                            color="text.disabled">
+                    {property.dataType}
+                </Typography>
+            </Box>
+        </Box>
     );
 }
 
 export function SchemaEntry({
+                                children,
                                 name,
-                                property,
-                                provided, isDragging
-                            }: { name: string, property: Property, provided: DraggableProvided, isDragging: boolean }) {
+                                propertyOrBuilder,
+                                provided,
+                                isDragging,
+                                isLast
+                            }: {
+
+    children?: React.ReactNode;
+    name: string,
+    propertyOrBuilder: PropertyOrBuilder,
+    provided: DraggableProvided,
+    isDragging: boolean,
+    isLast: boolean
+}) {
 
     return (
-        <TimelineItem sx={{ width: "100%" }}
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          ...provided.draggableProps.style
-                      }}>
-            <TimelineOppositeContent
-                sx={{
-                    m: '8 0',
-                    py: 3,
-                    px: 2,
-                    maxWidth: '160px',
-                    flexGrow: 1,
-                    flexShrink: 1,
-                    transition: "opacity 0.3s ease-in-out",
-                    opacity: isDragging ? 0 : 1
-                }}
-                variant="body2"
-                color="text.secondary"
-            >
-                <Typography variant="body2"
-                            color="text.secondary">
-                    {name}
-                </Typography>
-            </TimelineOppositeContent>
+        <Box sx={{
+            display: "flex",
+            flexDirection: "row",
+            width: "100%"
+        }}
+             ref={provided.innerRef}
+             {...provided.draggableProps}
+             style={{
+                 ...provided.draggableProps.style
+             }}>
 
-            <TimelineSeparator
-                sx={{
-                    pt: 1,
-                    opacity: isDragging ? 0 : 1,
-                    transition: "opacity 0.3s ease-in-out",
-                }}>
+            <TimelineSeparator>
                 <TimelineDot color="secondary">
-                    {getIconForProperty(property)}
+                    {getIconForProperty(propertyOrBuilder)}
                 </TimelineDot>
-                <TimelineConnector/>
+                <TimelineConnector
+                    sx={{
+                        pt: 1,
+                        opacity: isDragging || isLast ? 0 : 1,
+                        transition: "opacity 0.3s ease-in-out",
+                    }}/>
             </TimelineSeparator>
 
             <TimelineContent sx={{ px: 3, flexGrow: 4 }}>
                 <Box sx={{
-                    maxWidth: "500px",
+                    maxWidth: "360px",
                     display: "flex",
                     flexDirection: "row"
                 }}>
-                    <Paper sx={{
-                        p: 2,
-                        mr: 2,
-                        flexGrow: 1,
-                        border: isDragging ? "2px solid #999" : undefined,
-                    }}
+                    <Paper variant={"outlined"}
+                           sx={{
+                               p: 2,
+                               mr: 2,
+                               flexGrow: 1,
+                               border: isDragging ? "2px solid #999" : undefined,
+                           }}
                            elevation={0}>
-                        <Box sx={{ width: '100%' }}>
-                            <Typography variant="subtitle1" component="span">
-                                {property.title}
-                            </Typography>
-                            <Box sx={{ display: 'flex', flexDirection: "row" }}>
-                                <Typography sx={{ flexGrow: 1 }}
-                                            variant="body2"
-                                            color="text.secondary">
-                                    {getWidgetNameForProperty(property)}
-                                </Typography>
-                                <Typography variant="body2"
-                                            color="text.secondary">
-                                    {property.dataType}
-                                </Typography>
-                            </Box>
-                        </Box>
+                        {typeof propertyOrBuilder === "object" &&
+                        <PropertyEditView name={name}
+                                          property={propertyOrBuilder}/>}
                     </Paper>
-                    <div
-                        {...provided.dragHandleProps}>
+                    <div                        {...provided.dragHandleProps}>
                         <DragHandleIcon fontSize={"small"}/>
                     </div>
                 </Box>
+                {children}
             </TimelineContent>
-        </TimelineItem>
+        </Box>
     );
 
 }
-// a little function to help us with reordering the result
 
 
+export const SubmitListener: React.FC = () => {
+    const formik = useFormikContext()
+    const [lastValues, updateState] = React.useState(formik.values);
 
-const reorder = <T extends any>(list: T[], startIndex: number, endIndex: number): T[] => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
-};
+    React.useEffect(() => {
+        const valuesEqualLastValues = deepEqual(lastValues, formik.values)
+        const valuesEqualInitialValues = deepEqual(formik.values, formik.initialValues)
+
+        if (!valuesEqualLastValues) {
+            updateState(formik.values)
+        }
+
+        const doSubmit = () => {
+            if (!valuesEqualLastValues && !valuesEqualInitialValues && formik.isValid) {
+                formik.submitForm();
+            }
+        }
+
+        const handler = setTimeout(doSubmit, 300);
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [formik.values, formik.isValid])
+
+    return null
+}

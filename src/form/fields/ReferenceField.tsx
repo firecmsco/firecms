@@ -175,7 +175,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
             sideEntityController.open({
                 entityId: entity.id,
                 path,
-                overrideSchemaRegistry: false
+                updateUrl: true
             });
     };
 

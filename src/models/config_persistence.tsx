@@ -1,25 +1,6 @@
-import { Properties } from "./properties";
 import { EntitySchema } from "./entities";
 import { EntityCollection } from "./collections";
 
-/**
- * @category Models
- */
-export type StoredEntitySchema<M = any> =
-    Omit<EntitySchema<M>, "properties" | "views"> &
-    {
-        properties: Properties<M>
-    };
-
-/**
- * @category Models
- */
-export type StoredEntityCollection<M = any> =
-    Omit<EntityCollection<M>, "schema" | "extraActions" | "selectionController" | "callbacks">
-    &
-    {
-        schemaId?: string
-    };
 
 /**
  * Use this controller to access the configuration that is stored extenally,
@@ -27,14 +8,18 @@ export type StoredEntityCollection<M = any> =
  */
 export interface ConfigurationPersistence {
 
-    collections: StoredEntityCollection[] | undefined;
+    loading: boolean;
 
-    getCollection: <M>(path: string) => Promise<StoredEntityCollection<M>>;
+    collections: EntityCollection[] | undefined;
+    
+    schemas: EntitySchema[] | undefined;
 
-    saveCollection: <M>(path: string, collection: StoredEntityCollection<M>) => Promise<void>;
+    getCollection: <M>(path: string) => Promise<EntityCollection<M>>;
 
-    getSchema: <M>(schemaId: string) => Promise<StoredEntitySchema<M>>;
+    saveCollection: <M>(path: string, collection: EntityCollection<M>) => Promise<void>;
 
-    saveSchema: <M>(schemaId: string, schema: StoredEntitySchema<M>) => Promise<void>;
+    getSchema: <M>(schemaId: string) => Promise<EntitySchema<M>>;
+
+    saveSchema: <M>(schema: EntitySchema<M>) => Promise<void>;
 
 }

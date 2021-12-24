@@ -1,7 +1,7 @@
 import React from "react";
 import {
     Authenticator,
-    EntityCollection,
+    EntitySchema,
     Locale,
     Navigation,
     NavigationBuilder,
@@ -36,6 +36,11 @@ export interface FirebaseCMSAppProps {
      * can use a `NavigationBuilder`
      */
     navigation: Navigation | NavigationBuilder<FirebaseUser>;
+
+    /**
+     *
+     */
+    schemas?: EntitySchema[];
 
     /**
      * Do the users need to log in to access the CMS.

@@ -23,7 +23,6 @@ import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
 
 interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
-    schema: EntitySchema<M>;
     schemaResolver: EntitySchemaResolver<M>;
     path: string;
     exportConfig?: ExportConfig<UserType>;
@@ -32,7 +31,6 @@ interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
 export function ExportButton<M extends { [Key: string]: any }, UserType>({
-                                                                             schema,
                                                                              schemaResolver,
                                                                              path,
                                                                              exportConfig
@@ -58,7 +56,6 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
     const doDownload = useCallback((data: Entity<M>[] | undefined,
                                     additionalData: Record<string, any>[] | undefined,
-                                    schema: EntitySchema<M>,
                                     schemaResolver: EntitySchemaResolver<M>,
                                     path: string,
                                     exportConfig: ExportConfig | undefined) => {
@@ -89,7 +86,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             setDataLoadingError(undefined);
 
             if (pendingDownload) {
-                doDownload(entities, additionalColumnsData, schema, schemaResolver, path, exportConfig);
+                doDownload(entities, additionalColumnsData, schemaResolver, path, exportConfig);
                 handleClose();
             }
         };
@@ -123,13 +120,13 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
         dataSource.fetchCollection<M>({
             path,
-            schema:schemaResolver,
+            schema: schemaResolver,
             limit: fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT
         })
             .then(updateEntities)
             .catch(onFetchError);
 
-    }, [path, fetchLargeDataAccepted, schema, open]);
+    }, [path, fetchLargeDataAccepted, schemaResolver, open]);
 
     const handleClickOpen = useCallback(() => {
         setOpen(true);
@@ -145,10 +142,10 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
         if (needsToAcceptFetchAllData) {
             setFetchLargeDataAccepted(true);
         } else {
-            doDownload(dataRef.current, additionalDataRef.current, schema, schemaResolver, path, exportConfig);
+            doDownload(dataRef.current, additionalDataRef.current, schemaResolver, path, exportConfig);
             handleClose();
         }
-    }, [needsToAcceptFetchAllData, dataRef.current, additionalDataRef.current, schema, schemaResolver, path, exportConfig]);
+    }, [needsToAcceptFetchAllData, dataRef.current, additionalDataRef.current, schemaResolver, path, exportConfig]);
 
     return <>
 

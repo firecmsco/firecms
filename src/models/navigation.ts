@@ -4,9 +4,11 @@ import { User } from "./user";
 import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
-import { LocalEntityCollection } from "./local_config_persistence";
-import { FirestoreConfigurationPersistence } from "../firebase_app/hooks/useFirestoreConfigurationPersistence";
-import { StoredEntityCollection } from "./config_persistence";
+import {
+    LocalEntityCollection,
+    LocalEntitySchema
+} from "./local_config_persistence";
+import { EntitySchema } from "./entities";
 
 
 /**
@@ -80,7 +82,7 @@ export interface Navigation {
  * @category Models
  */
 export type ResolvedNavigation = Navigation & {
-    storedCollections?: StoredEntityCollection[];
+    storedCollections?: EntityCollection[];
 }
 
 /**
@@ -92,6 +94,8 @@ export type NavigationContext = {
 
     navigation?: ResolvedNavigation;
 
+    schemas: EntitySchema[];
+
     loading: boolean;
 
     navigationLoadingError?: any;
@@ -102,18 +106,6 @@ export type NavigationContext = {
     initialised: boolean;
 
     /**
-     * Set props for path
-     * @return used key
-     */
-    setOverride: <M>(props: {
-                         path: string,
-                         entityId?: string,
-                         schemaConfig?: Partial<EntityCollectionResolver>
-                         overrideSchemaRegistry?: boolean
-                     }
-    ) => string | undefined;
-
-    /**
      * Get the schema configuration for a given path.
      * If you use this method you can use a baseCollection that will be used
      * to resolve the initial properties of the collection, before applying
@@ -121,19 +113,6 @@ export type NavigationContext = {
      * If you don't specify it, the collection is fetched from the local navigation.
      */
     getCollectionResolver: <M>(path: string, entityId?: string, baseCollection?:EntityCollection<M>) => EntityCollectionResolver<M> | undefined;
-
-    /**
-     * Remove all keys not used
-     * @param used keys
-     */
-    removeAllOverridesExcept: (entityRefs: {
-        path: string, entityId?: string
-    }[]) => void;
-
-    /**
-     * Use this callback when a collection has been modified so it is persisted.
-     */
-    onCollectionModifiedForUser: <M>(path:string, partialCollection: LocalEntityCollection<M>) => void;
 
     /**
      * Default path under the navigation routes of the CMS will be created
@@ -159,6 +138,8 @@ export type NavigationContext = {
      * @param path
      */
     buildCMSUrlPath: (path: string) => string;
+
+    buildUrlEditSchemaPath: (props: { id?: string}) => string;
 
     buildUrlEditCollectionPath: (props: { path?: string, group?: string }) => string;
 

@@ -116,7 +116,7 @@ export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:
             .map(([propertyKey, _]) => propertyKey);
 
         const columnIds: string[] = [
-            ...Object.keys(collection.schema.properties) as string[],
+            ...Object.keys(resolvedSchema.properties) as string[],
             ...additionalColumns.map((column) => column.id)
         ];
 

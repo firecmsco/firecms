@@ -50,6 +50,7 @@ export function FirebaseCMSApp({
                                    authentication,
                                    schemaOverrideHandler,
                                    navigation,
+                                   schemas,
                                    textSearchController,
                                    allowSkipLogin,
                                    signInOptions = DEFAULT_SIGN_IN_OPTIONS,
@@ -98,24 +99,26 @@ export function FirebaseCMSApp({
     }
 
     if (firebaseConfigLoading || !firebaseApp) {
-    return <>
-        <CssBaseline/>
-        <CircularProgressCenter/>
-    </>;
+        return <>
+            <CssBaseline/>
+            <CircularProgressCenter/>
+        </>;
     }
 
     return (
         <BrowserRouter basename={basePath}>
-            <FireCMS navigation={navigation}
-                     authDelegate={authDelegate}
-                     authentication={authentication}
-                     schemaOverrideHandler={schemaOverrideHandler}
-                     dateTimeFormat={dateTimeFormat}
-                     dataSource={dataSource}
-                     storageSource={storageSource}
-                     configPersistence={configPersistence}
-                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                     locale={locale}
+            <FireCMS
+                navigation={navigation}
+                authDelegate={authDelegate}
+                schemas={schemas}
+                authentication={authentication}
+                schemaOverrideHandler={schemaOverrideHandler}
+                dateTimeFormat={dateTimeFormat}
+                dataSource={dataSource}
+                storageSource={storageSource}
+                configPersistence={configPersistence}
+                entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                locale={locale}
                      basePath={basePath}
                      baseCollectionPath={baseCollectionPath}>
                 {({ context, mode, loading }) => {

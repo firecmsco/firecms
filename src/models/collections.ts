@@ -36,7 +36,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     /**
      * Schema representing the entities of this view
      */
-    schema: EntitySchema<M>;
+    schemaId: string;
 
     /**
      * Properties displayed in this collection. If this prop is not set

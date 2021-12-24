@@ -16,7 +16,6 @@ import {
     isEnumValueDisabled
 } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
-import { formStyles } from "../styles";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 

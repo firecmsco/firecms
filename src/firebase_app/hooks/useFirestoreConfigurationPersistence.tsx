@@ -2,19 +2,22 @@ import { FirebaseApp } from "firebase/app";
 import {
     collection,
     doc,
+    DocumentSnapshot,
     Firestore,
     getDoc,
-    getDocs,
     getFirestore,
     onSnapshot,
     setDoc
 } from "firebase/firestore";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
+import { ConfigurationPersistence } from "../../models/config_persistence";
 import {
-    ConfigurationPersistence,
-    StoredEntityCollection,
-    StoredEntitySchema
-} from "../../models/config_persistence";
+    EntityCollection,
+    EntitySchema,
+    MapProperty,
+    Properties,
+    Property
+} from "../../models";
 
 
 /**
@@ -30,6 +33,34 @@ export interface FirestoreConfigurationPersistence {
 
 const DEFAULT_CONFIG_PATH = "__FIRECMS";
 
+function sortProperties<T>(properties: Properties<T>, propertiesOrder?: (keyof T)[]): Properties<T> {
+    return (propertiesOrder ?? Object.keys(properties))
+        .map((key) => {
+            const property = properties[key] as Property;
+            if (property?.dataType === "map") {
+                return ({
+                    [key]: {
+                        ...property,
+                        properties: sortProperties(property.properties ?? {}, property.propertiesOrder)
+                    }
+                });
+            } else {
+                return ({ [key]: property });
+            }
+        })
+        .reduce((a: object, b: object) => ({ ...a, ...b })) as Properties<T>;
+}
+
+const docToSchema = (doc: DocumentSnapshot) => {
+    const data = doc.data();
+    if (!data)
+        throw Error("Entity schema has not been persisted correctly");
+    const propertiesOrder = data["propertiesOrder"];
+    const properties = data["properties"] as Properties ?? {};
+    const sortedProperties = sortProperties(properties, propertiesOrder);
+    return { ...data, properties: sortedProperties } as EntitySchema;
+}
+
 export function useFirestoreConfigurationPersistence({
                                                          firebaseApp,
                                                          configPath = DEFAULT_CONFIG_PATH
@@ -38,7 +69,11 @@ export function useFirestoreConfigurationPersistence({
     const firestoreRef = useRef<Firestore>();
     const firestore = firestoreRef.current;
 
-    const [collections, setCollections] = React.useState<StoredEntityCollection[] | undefined>();
+    const [collectionsLoading, setCollectionsLoading] = React.useState<boolean>(true);
+    const [schemasLoading, setSchemasLoading] = React.useState<boolean>(true);
+    const [collections, setCollections] = React.useState<EntityCollection[] | undefined>();
+    const [schemas, setSchemas] = React.useState<EntitySchema[] | undefined>();
+
     const [error, setError] = React.useState<Error | undefined>();
 
     useEffect(() => {
@@ -54,41 +89,68 @@ export function useFirestoreConfigurationPersistence({
             {
                 next: (snapshot) => {
                     setError(undefined);
-                    const newCollections = snapshot.docs.map((doc) => doc.data() as StoredEntityCollection);
+                    const newCollections = snapshot.docs.map((doc) => doc.data() as EntityCollection);
                     setCollections(newCollections);
+                    setCollectionsLoading(false);
                 },
-                error: setError
+                error: (e) => {
+                    setCollectionsLoading(false);
+                    setError(e);
+                }
+            }
+        );
+    }, [firestore]); 
+    
+    useEffect(() => {
+        if (!firestore) return;
+
+        return onSnapshot(collection(firestore, configPath, "config", "schemas"),
+            {
+                next: (snapshot) => {
+                    setError(undefined);
+                    const newSchemas = snapshot.docs.map(docToSchema);
+                    setSchemas(newSchemas);
+                    setSchemasLoading(false);
+                },
+                error: (e) => {
+                    setSchemasLoading(false);
+                    setError(e);
+                }
             }
         );
     }, [firestore]);
 
-    const getCollection = <M extends any>(path: string): Promise<StoredEntityCollection<M>> => {
+    const getCollection = useCallback(<M extends { [Key: string]: any }>(path: string): Promise<EntityCollection<M>> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const ref = doc(firestore, configPath, "config", "collections", path);
-        return getDoc(ref).then((doc) => doc.data() as StoredEntityCollection<M>);
-    };
+        return getDoc(ref).then((doc) => doc.data() as EntityCollection<M>);
+    }, [firestore]);
 
-    const saveCollection = <M extends any>(path: string, collectionData: StoredEntityCollection<M>): Promise<void> => {
+    const saveCollection = useCallback(<M extends { [Key: string]: any }>(path: string, collectionData: EntityCollection<M>): Promise<void> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.log("config", "collections", path);
         const ref = doc(firestore, configPath, "config", "collections", path);
         return setDoc(ref, collectionData, { merge: true });
-    };
+    }, [firestore]);
 
-    const getSchema = <M extends any>(schemaId: string): Promise<StoredEntitySchema<M>> => {
+    const getSchema = useCallback(<M extends { [Key: string]: any }>(schemaId: string): Promise<EntitySchema<M>> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const ref = doc(firestore, configPath, "config", "schemas", schemaId);
-        return getDoc(ref).then((doc) => doc.data() as StoredEntitySchema<M>);
-    };
+        return getDoc(ref).then(docToSchema);
+    }, [firestore]);
 
-    const saveSchema = <M extends any>(schemaId: string, schema: StoredEntitySchema<M>): Promise<void> => {
+    const saveSchema = useCallback(<M extends { [Key: string]: any }>(schema: EntitySchema<M>): Promise<void> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const ref = doc(firestore, configPath, "config", "collections", schemaId);
-        return setDoc(ref, schema, { merge: true });
-    };
+        console.log("saveSchema", schema);
+        const ref = doc(firestore, configPath, "config", "schemas", schema.id);
+        return setDoc(ref, {
+            ...schema
+        }, { merge: true });
+    }, [firestore]);
 
     return {
+        loading: collectionsLoading || schemasLoading,
         collections,
+        schemas,
         getCollection,
         saveCollection,
         getSchema,

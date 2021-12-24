@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Button, Container, Grid, Theme, Typography } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import {
     CMSFormFieldProps,
     Entity,
@@ -9,7 +7,8 @@ import {
     EntitySchemaResolver,
     EntityStatus,
     EntityValues,
-    FormContext, Properties,
+    FormContext,
+    Properties,
     Property,
     ResolvedEntitySchema
 } from "../models";
@@ -26,38 +25,6 @@ import {
 } from "../core/utils";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
-
-export const useStyles = makeStyles((theme: Theme) => createStyles({
-    stickyButtons: {
-        marginTop: theme.spacing(2),
-        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
-        backdropFilter: "blur(4px)",
-        borderTop: theme.palette.divider,
-        position: "sticky",
-        bottom: 0,
-        zIndex: 200
-    },
-    container: {
-        padding: theme.spacing(4),
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-        [theme.breakpoints.down("lg")]: {
-            paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(2),
-            paddingTop: theme.spacing(3),
-            paddingBottom: theme.spacing(3)
-        },
-        [theme.breakpoints.down("md")]: {
-            padding: theme.spacing(2)
-        }
-    },
-    button: {
-        margin: theme.spacing(1)
-    },
-    form: {
-        marginTop: theme.spacing(2)
-    }
-}));
 
 /**
  *
@@ -142,7 +109,6 @@ export function EntityForm<M>({
                                   onValuesChanged
                               }: EntityFormProps<M>) {
 
-    const classes = useStyles();
     const dataSource = useDataSource();
 
     /**
@@ -361,7 +327,20 @@ export function EntityForm<M>({
 
                 return (
                     <Container maxWidth={"sm"}
-                               className={classes.container}
+                               sx={(theme) => ({
+                                   padding: theme.spacing(4),
+                                   marginTop: theme.spacing(2),
+                                   marginBottom: theme.spacing(2),
+                                   [theme.breakpoints.down("lg")]: {
+                                       paddingLeft: theme.spacing(2),
+                                       paddingRight: theme.spacing(2),
+                                       paddingTop: theme.spacing(3),
+                                       paddingBottom: theme.spacing(3)
+                                   },
+                                   [theme.breakpoints.down("md")]: {
+                                       padding: theme.spacing(2)
+                                   }
+                               })}
                                ref={formRef}>
 
                         <CustomIdField schema={schema as EntitySchema}
@@ -370,29 +349,41 @@ export function EntityForm<M>({
                                        error={customIdError}
                                        entity={entity}/>
 
-                        <Form className={classes.form}
-                              onSubmit={handleSubmit}
-                              noValidate>
+                        <Box
+                            sx={{
+                                marginTop: 1
+                            }}>
+                            <Form onSubmit={handleSubmit}
+                                  noValidate>
 
-                            <Box pt={3}>
-                                {formFields}
-                            </Box>
+                                <Box pt={3}>
+                                    {formFields}
+                                </Box>
 
-                            <div className={classes.stickyButtons}>
+                                <Box sx={(theme) => ({
+                                    marginTop: theme.spacing(2),
+                                    background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
+                                    backdropFilter: "blur(4px)",
+                                    borderTop: `1px solid ${theme.palette.divider}`,
+                                    position: "sticky",
+                                    bottom: 0,
+                                    zIndex: 200
+                                })}
+                                >
 
-                                {savingError &&
-                                <Box textAlign="right">
-                                    <Typography color={"error"}>
-                                        {savingError.message}
-                                    </Typography>
-                                </Box>}
+                                    {savingError &&
+                                    <Box textAlign="right">
+                                        <Typography color={"error"}>
+                                            {savingError.message}
+                                        </Typography>
+                                    </Box>}
 
-                                {buildButtons(classes, isSubmitting, modified, status)}
+                                    {buildButtons(isSubmitting, modified, status)}
 
-                            </div>
+                                </Box>
 
-                        </Form>
-
+                            </Form>
+                        </Box>
 
                         <ErrorFocus containerRef={formRef}/>
 
@@ -403,7 +394,7 @@ export function EntityForm<M>({
     );
 }
 
-function buildButtons(classes: any, isSubmitting: boolean, modified: boolean, status: EntityStatus) {
+function buildButtons(isSubmitting: boolean, modified: boolean, status: EntityStatus) {
     const disabled = isSubmitting || (!modified && status === "existing");
     return (
         <Box textAlign="right">
@@ -413,8 +404,10 @@ function buildButtons(classes: any, isSubmitting: boolean, modified: boolean, st
                 variant="text"
                 color="primary"
                 disabled={disabled}
-                className={classes.button}
                 type="reset"
+                sx={{
+                    margin: 1
+                }}
             >
                 Discard
             </Button>}
@@ -424,7 +417,9 @@ function buildButtons(classes: any, isSubmitting: boolean, modified: boolean, st
                 color="primary"
                 type="submit"
                 disabled={disabled}
-                className={classes.button}
+                sx={{
+                    margin: 1
+                }}
             >
                 {status === "existing" && "Save"}
                 {status === "copy" && "Create copy"}

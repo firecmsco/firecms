@@ -9,8 +9,8 @@ import {
     AuthDelegate,
     Authenticator,
     DataSource,
-    EntityCollection,
     EntityLinkBuilder,
+    EntitySchema,
     FireCMSContext,
     Locale,
     Navigation,
@@ -66,6 +66,11 @@ export interface FireCMSProps<UserType> {
      * can use a `NavigationBuilder`
      */
     navigation: Navigation | NavigationBuilder<UserType> ;
+
+    /**
+     *
+     */
+    schemas?: EntitySchema[];
 
     /**
      * Do the users need to log in to access the CMS.
@@ -152,6 +157,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         navigation: navigationOrBuilder,
         entityLinkBuilder,
         authentication,
+        schemas,
         dateTimeFormat,
         locale,
         authDelegate,
@@ -181,6 +187,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
     const navigationContext = useBuildNavigationContext({
         basePath: usedBasePath,
         baseCollectionPath: usedBasedCollectionPath,
+        schemas,
         authController,
         navigationOrBuilder,
         dateTimeFormat,
@@ -221,7 +228,8 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                             dataSource,
                             storageSource,
                             snackbarController,
-                            configurationPersistence: configPersistence
+                            configPersistence,
+                            userConfigPersistence
                         };
 
                         return (

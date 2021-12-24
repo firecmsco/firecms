@@ -28,6 +28,14 @@ export function isHidden(property: Property<any>): boolean {
 }
 
 
+export function findSchema(schemaId: string, schemas: EntitySchema[]): EntitySchema {
+    const schema = schemas.find((s) => s.id === schemaId);
+    if (!schema)
+        throw Error("Not able to find schema with id: " + schemaId);
+    return schema;
+}
+
+
 /**
  * This utility function computes an {@link EntitySchema} or a {@link EntitySchemaResolver}
  * into a {@link ResolvedEntitySchema}, which has no property builders but has all

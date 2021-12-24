@@ -1,6 +1,7 @@
 import { buildSchema } from "@camberi/firecms";
 
 export const usersSchema = buildSchema({
+    id: "user",
     name: "User",
     properties: {
         first_name: {

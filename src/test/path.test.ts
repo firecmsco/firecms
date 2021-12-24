@@ -35,7 +35,7 @@ const obj = {
     "email": "jesus.riley@example.com"
 };
 
-it("Test path acccess in object", () => {
+it("Test path access in object", () => {
     expect(getValueInPath(obj, "email")).toEqual("jesus.riley@example.com");
     expect(getValueInPath(obj, "picture.medium")).toEqual("https://randomuser.me/api/portraits/med/men/17.jpg");
     expect(getValueInPath(obj, "location.timezone.offset")).toEqual("+4:00");

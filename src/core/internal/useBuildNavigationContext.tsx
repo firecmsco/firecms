@@ -7,7 +7,6 @@ import {
     EntitySchema,
     EntitySchemaResolver,
     EntitySchemaResolverProps,
-    LocalConfigurationPersistence,
     Locale,
     LocalEntityCollection,
     LocalEntitySchema,
@@ -16,14 +15,15 @@ import {
     NavigationContext,
     ResolvedNavigation,
     SchemaOverrideHandler,
-    StorageSource
+    StorageSource,
+    UserConfigurationPersistence
 } from "../../models";
 import {
     getCollectionByPath,
     removeInitialAndTrailingSlashes
 } from "../util/navigation_utils";
 import { getValueInPath, mergeDeep } from "../util/objects";
-import { computeProperties } from "../utils";
+import { computeProperties, findSchema } from "../utils";
 import { ConfigurationPersistence } from "../../models/config_persistence";
 
 export function useBuildNavigationContext<UserType>({
@@ -31,6 +31,7 @@ export function useBuildNavigationContext<UserType>({
                                                         baseCollectionPath,
                                                         authController,
                                                         navigationOrBuilder,
+                                                        schemas: baseSchemas = [],
                                                         schemaOverrideHandler,
                                                         dateTimeFormat,
                                                         locale,
@@ -42,6 +43,7 @@ export function useBuildNavigationContext<UserType>({
     basePath: string,
     baseCollectionPath: string,
     authController: AuthController<UserType>;
+    schemas?: EntitySchema[];
     navigationOrBuilder?: Navigation | NavigationBuilder<UserType>;
     schemaOverrideHandler: SchemaOverrideHandler | undefined;
     dateTimeFormat?: string;
@@ -49,11 +51,13 @@ export function useBuildNavigationContext<UserType>({
     dataSource: DataSource;
     storageSource: StorageSource;
     configPersistence?: ConfigurationPersistence;
-    userConfigPersistence?: LocalConfigurationPersistence;
+    userConfigPersistence?: UserConfigurationPersistence;
 }): NavigationContext {
 
     const [navigation, setNavigation] = useState<ResolvedNavigation | undefined>(undefined);
-    const [navigationLoading, setNavigationLoading] = useState<boolean>(false);
+    const [schemas, setSchemas] = useState<EntitySchema[]>(baseSchemas);
+    const [navigationLoading, setNavigationLoading] = useState<boolean>(true);
+    const [persistenceLoading, setPersistenceLoading] = useState<boolean>(true);
     const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
 
     const schemaConfigRecord = useRef<Record<string, Partial<EntityCollectionResolver> & { overrideSchemaRegistry?: boolean }>>({});
@@ -66,36 +70,83 @@ export function useBuildNavigationContext<UserType>({
 
     const initialised = navigation?.collections !== undefined;
 
+    const [resolvedUserNavigation, setResolvedUserNavigation] = useState<ResolvedNavigation | undefined>();
+
     useEffect(() => {
         if (!authController.canAccessMainView) {
             return;
         }
         setNavigationLoading(true);
-        getNavigation({
+        resolveNavigation({
             navigationOrBuilder,
-            configPersistence,
             authController,
             dateTimeFormat,
             locale,
             dataSource,
             storageSource
-        }).then((result: ResolvedNavigation) => {
-            setNavigation(result);
+        }).then((res) => {
             setNavigationLoading(false);
-        }).catch(setNavigationLoadingError);
+            setResolvedUserNavigation(res);
+        }).catch(e => {
+            setNavigationLoading(false);
+            setNavigationLoadingError(e);
+        });
     }, [
         authController.user,
         authController.canAccessMainView,
-        navigationOrBuilder,
+        navigationOrBuilder
+    ]);
+
+    useEffect(() => {
+        if (!configPersistence || (!configPersistence.collections && configPersistence.loading)) {
+            return;
+        }
+
+        if (!navigation) {
+            setPersistenceLoading(true);
+        }
+
+        getNavigation({
+            navigation: resolvedUserNavigation,
+            configPersistence
+        }).then((result: ResolvedNavigation) => {
+            setNavigation(result);
+            setPersistenceLoading(false);
+        }).catch(e => {
+            setPersistenceLoading(false);
+            setNavigationLoadingError(e);
+        });
+    }, [
+        resolvedUserNavigation,
         configPersistence?.collections
     ]);
 
+    useEffect(() => {
+        if (!configPersistence?.schemas)
+            return;
 
-    const getSchemaOverride = useCallback(<M extends any>(path: string): LocalEntitySchema<M> | undefined => {
+        const baseSchemasMerged = baseSchemas.map((baseSchema) => {
+            const modifiedSchema = configPersistence.schemas?.find((schema) => schema.id === baseSchema.id);
+            if (!modifiedSchema) {
+                return baseSchema;
+            } else {
+                return mergeDeep(modifiedSchema, baseSchema);
+            }
+        });
+
+        const mergedIds = baseSchemasMerged.map(s => s.id);
+        setSchemas([
+            ...configPersistence.schemas.filter((schema) => !mergedIds.includes(schema.id)),
+            ...baseSchemasMerged,
+        ]);
+    }, [
+        configPersistence?.schemas
+    ]);
+
+    const getUserSchemaOverride = useCallback(<M extends any>(path: string): LocalEntitySchema<M> | undefined => {
         if (!userConfigPersistence)
             return undefined
-        const collectionOverride = userConfigPersistence.getCollectionConfig<M>(path);
-        return collectionOverride?.schema;
+        return userConfigPersistence.getSchemaConfig<M>(path);
     }, [userConfigPersistence]);
 
 
@@ -109,7 +160,7 @@ export function useBuildNavigationContext<UserType>({
              values,
          }: EntitySchemaResolverProps<M>) => {
 
-            const schemaOverride = getSchemaOverride<M>(path);
+            const schemaOverride = getUserSchemaOverride<M>(path);
             const storedProperties = getValueInPath(schemaOverride, "properties");
 
             const properties = computeProperties({
@@ -124,12 +175,19 @@ export function useBuildNavigationContext<UserType>({
                 properties: mergeDeep(properties, storedProperties),
                 originalSchema: schema
             };
-        }, [getSchemaOverride]);
+        }, [getUserSchemaOverride]);
 
 
-    const getCollectionResolver = useCallback(<M extends { [Key: string]: any }>(path: string, entityId?: string, collection?: EntityCollection<M>): EntityCollectionResolver<M> => {
+    const getCollectionResolver = useCallback(<M extends { [Key: string]: any }>(
+        path: string,
+        entityId?: string,
+        collection?: EntityCollection<M>
+    ): EntityCollectionResolver<M> => {
 
-        const collections = navigation?.collections;
+        const collections = [
+            ...(navigation?.collections ?? []),
+            ...(navigation?.storedCollections ?? [])
+        ];
 
         const baseCollection = collection ?? (collections && getCollectionByPath<M>(removeInitialAndTrailingSlashes(path), collections));
 
@@ -173,7 +231,7 @@ export function useBuildNavigationContext<UserType>({
         }
 
         if (resolvedCollection) {
-            const schema = resolvedCollection.schema;
+            const schema = findSchema(resolvedCollection.schemaId, schemas);
             const subcollections = resolvedCollection.subcollections;
             const callbacks = resolvedCollection.callbacks;
             const permissions = resolvedCollection.permissions;
@@ -190,10 +248,10 @@ export function useBuildNavigationContext<UserType>({
         }
 
         if (!result.schemaResolver) {
-            if (!result.schema)
+            if (!result.schemaId)
                 throw Error(`Not able to resolve schema for ${sidePanelKey}`);
             result.schemaResolver = buildSchemaResolver({
-                schema: result.schema,
+                schema: findSchema(result.schemaId, schemas),
                 path
             });
         }
@@ -203,51 +261,12 @@ export function useBuildNavigationContext<UserType>({
     }, [
         navigation,
         basePath,
+        schemas,
         baseCollectionPath,
         schemaOverrideHandler,
         schemaConfigRecord.current,
         buildSchemaResolver
     ]);
-
-    const setOverride = useCallback(({
-                                         path,
-                                         entityId,
-                                         schemaConfig,
-                                         overrideSchemaRegistry
-                                     }: {
-                                         path: string,
-                                         entityId?: string,
-                                         schemaConfig?: Partial<EntityCollectionResolver>
-                                         overrideSchemaRegistry?: boolean
-                                     }
-    ) => {
-
-        const key = getSidePanelKey(path, entityId);
-        if (!schemaConfig) {
-            delete schemaConfigRecord.current[key];
-            return undefined;
-        } else {
-
-            schemaConfigRecord.current[key] = {
-                ...schemaConfig,
-                overrideSchemaRegistry
-            };
-            return key;
-        }
-    }, [schemaConfigRecord.current]);
-
-    const removeAllOverridesExcept = useCallback((entityRefs: {
-        path: string, entityId?: string
-    }[]) => {
-        const keys = entityRefs.map(({
-                                         path,
-                                         entityId
-                                     }) => getSidePanelKey(path, entityId));
-        Object.keys(schemaConfigRecord.current).forEach((currentKey) => {
-            if (!keys.includes(currentKey))
-                delete schemaConfigRecord.current[currentKey];
-        });
-    }, [schemaConfigRecord.current]);
 
     const isUrlCollectionPath = useCallback(
         (path: string): boolean => removeInitialAndTrailingSlashes(path + "/").startsWith(removeInitialAndTrailingSlashes(fullCollectionPath) + "/"),
@@ -260,13 +279,22 @@ export function useBuildNavigationContext<UserType>({
     }, [fullCollectionPath]);
 
     const buildUrlEditCollectionPath = useCallback(({
-                                                        path,
-                                                        group
-                                                    }: { path?: string, group?: string }): string => {
+                                                        path
+                                                    }: { path?: string }): string => {
             if (path)
                 return `${baseCollectionPath}/edit/${removeInitialAndTrailingSlashes(path)}`;
             else
-                return `new${group ? `?group=${group}` : ""}`;
+                return `newcollection`;
+        }, //
+        [baseCollectionPath]);
+
+    const buildUrlEditSchemaPath = useCallback(({
+                                                    id
+                                                }: { id?: string }): string => {
+            if (id)
+                return `s/edit/${removeInitialAndTrailingSlashes(id)}`;
+            else
+                return `newschema`;
         }, //
         [baseCollectionPath]);
 
@@ -276,69 +304,53 @@ export function useBuildNavigationContext<UserType>({
     const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(path)}` : `/${path}`,
         [cleanBasePath]);
 
-    const onCollectionModifiedForUser = useCallback(<M extends any>(path: string, partialCollection: LocalEntityCollection<M>) => {
-        if (userConfigPersistence) {
-            const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
-            userConfigPersistence.onCollectionModified(path, mergeDeep(currentStoredConfig, partialCollection));
-        }
-    }, [userConfigPersistence]);
 
     const getCollectionOverride = useCallback(<M extends any>(path: string): LocalEntityCollection<M> | undefined => {
         if (!userConfigPersistence)
             return undefined
-        const dynamicCollectionConfig = { ...userConfigPersistence.getCollectionConfig<M>(path) };
-        delete dynamicCollectionConfig["schema"];
-        return dynamicCollectionConfig;
+        return userConfigPersistence.getCollectionConfig<M>(path);
     }, [userConfigPersistence]);
 
     return {
         navigation,
-        loading: navigationLoading,
+        loading: navigationLoading || persistenceLoading,
         navigationLoadingError,
+        schemas,
         homeUrl,
         basePath,
         baseCollectionPath,
-        onCollectionModifiedForUser,
         initialised,
         getCollectionResolver,
-        setOverride,
-        removeAllOverridesExcept,
         isUrlCollectionPath,
         urlPathToDataPath,
         buildUrlCollectionPath,
         buildUrlEditCollectionPath,
+        buildUrlEditSchemaPath,
         buildCMSUrlPath,
     };
 }
 
 
-const getNavigation = async <UserType extends any>({
-                                                       navigationOrBuilder,
-                                                       configPersistence,
-                                                       authController,
-                                                       dateTimeFormat,
-                                                       locale,
-                                                       dataSource,
-                                                       storageSource
-                                                   }:
-                                                       {
-                                                           navigationOrBuilder?: Navigation | NavigationBuilder<UserType>,
-                                                           configPersistence?: ConfigurationPersistence,
-                                                           authController: AuthController<UserType>,
-                                                           dateTimeFormat?: string,
-                                                           locale?: Locale,
-                                                           dataSource: DataSource,
-                                                           storageSource: StorageSource
-                                                       }
-): Promise<ResolvedNavigation> => {
-
-    if (!navigationOrBuilder && !configPersistence) {
-        throw Error("You need to specify a navigation configuration or a `ConfigurationPersistence`");
-    }
-
-    let navigation: ResolvedNavigation | undefined;
+async function resolveNavigation<UserType = any>({
+                                                     navigationOrBuilder,
+                                                     configPersistence,
+                                                     authController,
+                                                     dateTimeFormat,
+                                                     locale,
+                                                     dataSource,
+                                                     storageSource
+                                                 }:
+                                                     {
+                                                         navigationOrBuilder?: Navigation | NavigationBuilder<UserType>,
+                                                         configPersistence?: ConfigurationPersistence,
+                                                         authController: AuthController<UserType>,
+                                                         dateTimeFormat?: string,
+                                                         locale?: Locale,
+                                                         dataSource: DataSource,
+                                                         storageSource: StorageSource
+                                                     }): Promise<ResolvedNavigation | undefined> {
     if (typeof navigationOrBuilder === "function") {
-        navigation = await navigationOrBuilder({
+        return navigationOrBuilder({
             user: authController.user,
             authController,
             dateTimeFormat,
@@ -347,7 +359,22 @@ const getNavigation = async <UserType extends any>({
             storageSource
         });
     } else {
-        navigation = navigationOrBuilder;
+        return navigationOrBuilder;
+    }
+}
+
+const getNavigation = async <UserType extends any>({
+                                                       navigation,
+                                                       configPersistence
+                                                   }:
+                                                       {
+                                                           navigation?: ResolvedNavigation,
+                                                           configPersistence?: ConfigurationPersistence
+                                                       }
+): Promise<ResolvedNavigation> => {
+
+    if (!navigation && !configPersistence) {
+        throw Error("You need to specify a navigation configuration or a `ConfigurationPersistence`");
     }
 
     const fetchedCollections = configPersistence?.collections;

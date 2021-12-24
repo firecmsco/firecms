@@ -1,8 +1,9 @@
-import { EntityCollection, EntityCustomView } from "../../models";
+import { EntityCollection, EntityCustomView, EntitySchema } from "../../models";
 import {
     getCollectionPathsCombinations,
     removeInitialAndTrailingSlashes
 } from "./navigation_utils";
+import { findSchema } from "../utils";
 
 export type NavigationViewInternal<M> =
     | NavigationViewEntityInternal<M>
@@ -31,6 +32,7 @@ interface NavigationViewEntityCustomInternal<M> {
 export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: any }>(props: {
     path: string,
     collections: EntityCollection[],
+    schemas: EntitySchema[] | undefined,
     customViews?: EntityCustomView<M>[],
     currentFullPath?: string
 }): NavigationViewInternal<M> [] {
@@ -38,6 +40,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     const {
         path,
         collections,
+        schemas = [],
         currentFullPath
     } = props;
 
@@ -73,7 +76,8 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                 });
                 if (nextSegments.length > 1) {
                     const newPath = nextSegments.slice(1).join("/");
-                    const customViews = collection.schema.views;
+                    const schema = findSchema(collection.schemaId, schemas);
+                    const customViews = schema.views;
                     const customView = customViews && customViews.find((entry) => entry.path === newPath);
                     if (customView) {
                         const path = currentFullPath && currentFullPath.length > 0
@@ -89,6 +93,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                             path: newPath,
                             customViews: customViews,
                             collections: collection.subcollections,
+                            schemas,
                             currentFullPath: fullPath
                         }));
                     }
@@ -100,3 +105,4 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     }
     return result;
 }
+

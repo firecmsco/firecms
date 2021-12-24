@@ -414,7 +414,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 path,
                 entityId,
                 selectedSubpath: getSelectedSubpath(value),
-                overrideSchemaRegistry: false
+                updateUrl: true
             });
         }
     }, []);

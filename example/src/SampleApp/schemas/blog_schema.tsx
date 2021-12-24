@@ -7,6 +7,7 @@ import { BlogEntryPreview } from "../custom_schema_view/BlogEntryPreview";
  * but it is inferred correctly since we are using `buildProperty` in each property
  */
 export const blogSchema = buildSchema({
+    id: "blog_entry",
     name: "Blog entry",
     views: [{
         path: "preview",

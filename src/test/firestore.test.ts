@@ -11,6 +11,7 @@ const firestoreDatasource = useFirestoreDataSource({ firebaseApp });
 it("timestamp conversion", () => {
 
     const schema: EntitySchema = {
+        id:"test",
         name: "Test entity",
         properties: {
             created_at: {
@@ -29,6 +30,7 @@ it("timestamp conversion", () => {
 it("timestamp array conversion", () => {
 
     const schema: EntitySchema = {
+        id:"test",
         name: "Test entity",
         properties: {
             my_array: {

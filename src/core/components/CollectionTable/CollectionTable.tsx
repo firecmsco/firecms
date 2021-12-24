@@ -143,7 +143,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                                     schema: schemaResolver,
                                     subcollections: collection.subcollections,
                                     callbacks: collection.callbacks,
-                                    overrideSchemaRegistry: false
+                                    updateUrl: true
                                 });
                             }}>
                         {subcollection.name}

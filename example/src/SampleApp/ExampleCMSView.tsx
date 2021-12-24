@@ -34,6 +34,7 @@ export function ExampleCMSView({
     const authController = useAuthController();
 
     const customProductSchema = buildSchema({
+        id: "custom_product",
         name: "Custom product",
         properties: {
             name: {

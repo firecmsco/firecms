@@ -1,6 +1,6 @@
 import {
-    LocalConfigurationPersistence,
-    LocalEntityCollection,
+    UserConfigurationPersistence,
+    LocalEntityCollection, LocalEntitySchema,
     ResolvedEntitySchema
 } from "../../models";
 
@@ -16,7 +16,7 @@ function stripCollectionPath(path: string): string {
         .reduce((a, b) => `${a}/${b}`);
 }
 
-export function useBuildStorageConfigurationPersistence(): LocalConfigurationPersistence {
+export function useBuildStorageConfigurationPersistence(): UserConfigurationPersistence {
 
     function saveStorageCollectionConfig<M>(path: string, data: LocalEntityCollection<M>) {
         const storageKey = `collection_config_${stripCollectionPath(path)}`;
@@ -29,7 +29,12 @@ export function useBuildStorageConfigurationPersistence(): LocalConfigurationPer
         return item ? JSON.parse(item) : {};
     }
 
-    function getSchema<M>(schemaId: string): ResolvedEntitySchema<M> {
+    function saveStorageSchemaConfig<M>(path: string, data: LocalEntitySchema<M>) {
+        const storageKey = `schema_config_${stripCollectionPath(path)}`;
+        localStorage.setItem(storageKey, JSON.stringify(data));
+    }
+
+    function getSchema<M>(schemaId: string): LocalEntitySchema<M> {
         const storageKey = `schema_config_${schemaId}`;
         const item = localStorage.getItem(storageKey);
         return item ? JSON.parse(item) : {};
@@ -37,7 +42,9 @@ export function useBuildStorageConfigurationPersistence(): LocalConfigurationPer
 
     return {
         onCollectionModified: saveStorageCollectionConfig,
-        getCollectionConfig: getStorageCollectionConfig
+        getCollectionConfig: getStorageCollectionConfig,
+        onPartialSchemaModified: saveStorageSchemaConfig,
+        getSchemaConfig: getSchema
     }
 }
 

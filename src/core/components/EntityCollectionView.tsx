@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+
+import { Link as ReactLink } from "react-router-dom";
 import {
     Box,
     Button,
@@ -9,7 +11,7 @@ import {
     useMediaQuery,
     useTheme
 } from "@mui/material";
-import { Add, Delete } from "@mui/icons-material";
+import { Add, Delete, Settings } from "@mui/icons-material";
 
 import {
     AnyProperty,
@@ -17,6 +19,7 @@ import {
     Entity,
     EntityCollection,
     LocalEntityCollection,
+    LocalEntitySchema,
     SelectionController
 } from "../../models";
 import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
@@ -33,6 +36,8 @@ import {
     useNavigation,
     useSideEntityController
 } from "../../hooks";
+import { mergeDeep } from "../util/objects";
+import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 
 /**
  * @category Components
@@ -48,6 +53,11 @@ export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
      * Entity collection props
      */
     collection: EntityCollection<M>;
+
+    /**
+     * Include an icon to be able to edit this collection
+     */
+    editable?: boolean;
 
 }
 
@@ -103,6 +113,7 @@ export function useSelectionController<M = any>(): SelectionController {
 export function EntityCollectionView<M extends { [Key: string]: any }>({
                                                                            path,
                                                                            collection: baseCollection,
+                                                                           editable
                                                                        }: EntityCollectionViewProps<M>
 ) {
 
@@ -110,6 +121,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
     const context = useFireCMSContext();
     const authController = useAuthController();
     const navigationContext = useNavigation();
+    const userConfigPersistence = useUserConfigurationPersistence();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
@@ -120,13 +132,10 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
 
-    const onCollectionModifiedForUser = (partialCollection: LocalEntityCollection<any>) => {
-        navigationContext.onCollectionModifiedForUser(path, partialCollection);
-    }
-
     const collection: EntityCollection<M> = collectionResolver ?? baseCollection;
 
     const { schemaResolver } = collectionResolver;
+    const schema = schemaResolver({});
 
     const exportable = collection.exportable === undefined || collection.exportable;
 
@@ -152,10 +161,10 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             entityId: entity.id,
             path,
             permissions: collection.permissions,
-            schema: collection.schema,
+            schema: schema,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
-            overrideSchemaRegistry: false
+            updateUrl: true
         });
     }, [path, collection, sideEntityController]);
 
@@ -164,10 +173,10 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         return sideEntityController.open({
             path,
             permissions: collection.permissions,
-            schema: collection.schema,
+            schema: schema,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
-            overrideSchemaRegistry: false
+            updateUrl: true
         });
     }, [path, collection, sideEntityController]);
 
@@ -187,21 +196,34 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         return collection.inlineEditing === undefined || collection.inlineEditing;
     }, [collection]);
 
+    const onCollectionModifiedForUser = useCallback(<M extends any>(path: string, partialCollection: LocalEntityCollection<M>) => {
+        if (userConfigPersistence) {
+            const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
+            userConfigPersistence.onCollectionModified(path, mergeDeep(currentStoredConfig, partialCollection));
+        }
+    }, [userConfigPersistence]);
+
+    const onSchemaModifiedForUser = useCallback(<M extends any>(path: string, partialSchema: LocalEntitySchema<M>) => {
+        if (userConfigPersistence) {
+            const currentStoredConfig = userConfigPersistence.getSchemaConfig(path);
+            userConfigPersistence.onPartialSchemaModified(path, mergeDeep(currentStoredConfig, partialSchema));
+        }
+    }, [userConfigPersistence]);
+
     const onColumnResize = useCallback(({
                                             width,
                                             key
                                         }: OnColumnResizeParams) => {
         // Only for property columns
-        if (!collection.schema.properties[key]) return;
+        if (!schema.properties[key]) return;
         const property: Partial<AnyProperty> = { columnWidth: width };
-        const updatedFields: LocalEntityCollection<any> = { schema: { properties: { [key as keyof M]: property } } };
-        if (onCollectionModifiedForUser)
-            onCollectionModifiedForUser(updatedFields)
+        const localSchema: LocalEntitySchema<any> = { properties: { [key as keyof M]: property } };
+        onSchemaModifiedForUser(path, localSchema);
     }, [path, collection]);
 
     const onSizeChanged = useCallback((size: CollectionSize) => {
-        if (onCollectionModifiedForUser)
-            onCollectionModifiedForUser({ defaultSize: size })
+        if (userConfigPersistence)
+            onCollectionModifiedForUser(path, { defaultSize: size })
     }, [path, collection]);
 
     const open = anchorEl != null;
@@ -291,10 +313,10 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: collection.schema,
+            schema: schema,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
-            overrideSchemaRegistry: false
+            updateUrl: true
         });
 
         const onEditClicked = (entity: Entity<M>) => sideEntityController.open({
@@ -305,10 +327,10 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: collection.schema,
+            schema: schema,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
-            overrideSchemaRegistry: false
+            updateUrl: true
         });
 
         return (
@@ -335,7 +357,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 size="large"
                 variant="contained"
                 color="primary">
-                Add {collection.schema.name}
+                Add {schema.name}
             </Button>
             : <Button
                 onClick={onNewClick}
@@ -384,16 +406,23 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         }) : undefined;
 
         const exportButton = exportable &&
-            <ExportButton schema={collection.schema}
-                          schemaResolver={schemaResolver}
+            <ExportButton schemaResolver={schemaResolver}
                           exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
                           path={path}/>;
+
+        const editButton = editable &&
+            <IconButton
+                component={ReactLink}
+                to={navigationContext.buildUrlEditCollectionPath({ path })}>
+                <Settings color="primary"/>
+            </IconButton>;
 
         return (
             <>
                 {extraActions}
                 {multipleDeleteButton}
                 {exportButton}
+                {editButton}
                 {addButton}
             </>
         );
@@ -419,7 +448,6 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 path={path}
-                                schema={collection.schema}
                                 schemaResolver={schemaResolver}
                                 callbacks={collection.callbacks}
                                 open={!!deleteEntityClicked}

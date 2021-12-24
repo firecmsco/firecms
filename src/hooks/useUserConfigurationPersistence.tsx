@@ -1,5 +1,6 @@
 import { useFireCMSContext } from "./useFireCMSContext";
 import { ConfigurationPersistence } from "../models/config_persistence";
+import { UserConfigurationPersistence } from "../models";
 
 
 /**
@@ -8,7 +9,7 @@ import { ConfigurationPersistence } from "../models/config_persistence";
  *
  * @category Hooks and utilities
  */
-export function useConfigurationPersistence(): ConfigurationPersistence | undefined {
+export function useUserConfigurationPersistence(): UserConfigurationPersistence | undefined {
     const context = useFireCMSContext();
-    return context.configPersistence;
+    return context.userConfigPersistence;
 }

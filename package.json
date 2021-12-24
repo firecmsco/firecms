@@ -63,8 +63,8 @@
         "firebase": "^9.0.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
-        "react-router": "^6.0.0",
-        "react-router-dom": "^6.0.0",
+        "react-router": "^6.2.0",
+        "react-router-dom": "^6.2.0",
         "react-scripts": "^4.0.3"
     },
     "eslintConfig": {
@@ -103,8 +103,8 @@
         "npm-run-all": "^4.1.5",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
-        "react-router": "^6.0.0",
-        "react-router-dom": "^6.0.0",
+        "react-router": "^6.2.1",
+        "react-router-dom": "^6.2.1",
         "react-scripts": "^4.0.3",
         "tsd": "0.19.0",
         "typescript": "^4.5.2"

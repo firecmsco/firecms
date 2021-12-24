@@ -396,11 +396,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
     const allColumns: TableColumn<M>[] = (Object.keys(resolvedSchema.properties) as (keyof M)[])
         .map((key) => {
-            const property: Property<any> = buildPropertyFrom<any, M>({
-                propertyOrBuilder: resolvedSchema.properties[key],
-                values: resolvedSchema.defaultValues ?? {},
-                path: path,
-            });
+            const property: Property<any> = resolvedSchema.properties[key];
             return ({
                 key: key as string,
                 property,

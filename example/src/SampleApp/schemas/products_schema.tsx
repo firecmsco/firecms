@@ -70,6 +70,7 @@ const sampleView: EntityCustomView = {
 
 
 export const productSchema = buildSchema<Product>({
+    id: "product",
     name: "Product",
     views: [
         sampleView
@@ -292,6 +293,7 @@ export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
 
 
 export const localeSchema = buildSchema<Locale>({
+    id: "locale",
     customId: locales,
     name: "Locale",
     properties: {

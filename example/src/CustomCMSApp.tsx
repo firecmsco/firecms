@@ -8,12 +8,12 @@ import "typeface-rubik";
 import "typeface-space-mono";
 
 import {
-    FirebaseAuthDelegate,
     Authenticator,
     buildCollection,
     buildSchema,
     CircularProgressCenter,
     createCMSDefaultTheme,
+    FirebaseAuthDelegate,
     FirebaseLoginView,
     FireCMS,
     NavigationBuilder,
@@ -34,6 +34,7 @@ const DEFAULT_SIGN_IN_OPTIONS = [
 ];
 
 const productSchema = buildSchema({
+    id: "product",
     name: "Product",
     properties: {
         name: {
@@ -81,7 +82,7 @@ export function CustomCMSApp() {
         collections: [
             buildCollection({
                 path: "products",
-                schema: productSchema,
+                schemaId: "product",
                 name: "Products",
                 permissions: ({ user }) => ({
                     edit: true,

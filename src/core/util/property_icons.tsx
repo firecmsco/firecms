@@ -1,4 +1,4 @@
-import { ArrayProperty, FieldProps, Property } from "../../models";
+import { ArrayProperty, Property, PropertyOrBuilder } from "../../models";
 import ShortTextIcon from "@mui/icons-material/ShortText";
 import SubjectIcon from "@mui/icons-material/Subject";
 import AttachmentIcon from "@mui/icons-material/Attachment";
@@ -15,14 +15,7 @@ import PhotoIcon from "@mui/icons-material/Photo";
 import HttpIcon from "@mui/icons-material/Http";
 import FlagIcon from "@mui/icons-material/Flag";
 import AdjustIcon from "@mui/icons-material/Adjust";
-import {
-    ArrayDefaultField,
-    ArrayEnumSelect, ArrayOfReferencesField, ArrayOneOfField,
-    MarkdownField,
-    Select,
-    StorageUploadField,
-    TextField
-} from "../../form";
+import FunctionsIcon from '@mui/icons-material/Functions';
 
 export function getIdIcon(
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
@@ -31,9 +24,12 @@ export function getIdIcon(
 }
 
 export function getIconForProperty(
-    property: Property,
+    property: PropertyOrBuilder,
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
     fontSize: "inherit" | "medium" | "large" | "small" | undefined = "inherit"): React.ReactNode {
+    if (typeof property === "function") {
+        return <FunctionsIcon color={color} fontSize={fontSize}/>;
+    }
     if (property.dataType === "string") {
         if (property.config?.multiline || property.config?.markdown) {
             return <SubjectIcon color={color} fontSize={fontSize}/>;

@@ -3,7 +3,6 @@ import { EntityCollection } from "../../models";
 import EntityCollectionView from "./EntityCollectionView";
 import { CircularProgressCenter } from "./CircularProgressCenter";
 import { useConfigurationPersistence } from "../../hooks/useConfigurationPersistence";
-import { StoredEntityCollection } from "../../models/config_persistence";
 import { CollectionEditor } from "./SchemaEditor/CollectionEditor";
 import { ErrorView } from "./ErrorView";
 
@@ -12,7 +11,7 @@ import { ErrorView } from "./ErrorView";
  */
 export interface EntityCollectionRouteProps<M extends { [Key: string]: any }> {
     path: string;
-    collection?: StoredEntityCollection<M>;
+    collection?: EntityCollection<M>;
 }
 
 /**
@@ -25,7 +24,7 @@ export function EntityCollectionRoute<M extends { [Key: string]: any }>({
 ) {
     const [collection, setCollection] = useState<EntityCollection<M> | undefined>();
 
-    const [storedCollection, setStoredCollection] = useState<StoredEntityCollection<M> | undefined>(baseCollection);
+    const [storedCollection, setStoredCollection] = useState<EntityCollection<M> | undefined>(baseCollection);
     const [loading, setLoading] = useState(false);
 
     const configPersistence = useConfigurationPersistence();
@@ -36,26 +35,27 @@ export function EntityCollectionRoute<M extends { [Key: string]: any }>({
 
     useEffect(() => {
         if (!baseCollection) return;
-        setLoading(true);
-        if (baseCollection.schemaId) {
-            configPersistence.getSchema<M>(baseCollection.schemaId)
-                .then((schema) => setCollection({ ...baseCollection, schema }));
-        } else {
             setStoredCollection(baseCollection);
-        }
-        setLoading(false);
     }, [path, configPersistence])
 
     if (collection)
-        return <EntityCollectionView path={path} collection={collection}/>;
+        return <EntityCollectionView path={path}
+                                     collection={collection}
+                                     editable={false}/>;
 
-    else if (storedCollection)
-        return <CollectionEditor path={path}/>;
-
-    else if (loading)
+    else if (storedCollection) {
+        if (storedCollection.schemaId)
+            return <EntityCollectionView
+                editable={true}
+                path={path}
+                collection={storedCollection}/>;
+        else
+            return <CollectionEditor path={path}/>;
+    } else if (loading)
         return <CircularProgressCenter/>;
 
-    else return <ErrorView error={"Internal error: EntityCollectionRoute misconfigured"}/>;
+    else return <ErrorView
+            error={"Internal error: EntityCollectionRoute misconfigured"}/>;
 
 }
 

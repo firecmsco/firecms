@@ -35,3 +35,17 @@ export function getValueInPath(o: object | undefined, path: string): any {
     }
     return undefined;
 }
+
+export function removeFunctions(o: object | undefined): any {
+    if (typeof o === "object") {
+        return Object.entries(o)
+            .filter(([_, value]) => typeof value !== "function")
+            .map(([key, value]) => {
+                if (typeof value === "object")
+                    return { [key]: removeFunctions(value) };
+                else return { [key]: value };
+            })
+            .reduce((a, b) => ({ ...a, ...b }));
+    }
+    return undefined;
+}

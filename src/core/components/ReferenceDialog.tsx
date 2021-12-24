@@ -102,8 +102,8 @@ export function ReferenceDialog(
     const dataSource = useDataSource();
 
     const collection = collectionResolver;
-    const schema = collectionResolver.schema;
     const schemaResolver = collectionResolver.schemaResolver;
+    const schema = schemaResolver({});
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
 

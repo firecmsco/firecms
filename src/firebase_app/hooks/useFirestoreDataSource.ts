@@ -204,7 +204,7 @@ export function useFirestoreDataSource({
                 const resolvedSchema = computeSchema({
                     schemaOrResolver:schema,
                     entityId: docSnapshot.id,
-                    path
+                    path,
                 });
                 return createEntityFromSchema(docSnapshot, path, resolvedSchema);
             });

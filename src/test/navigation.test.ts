@@ -4,6 +4,7 @@ import { EntityCollection, Navigation } from "../models";
 import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";
 
 const collectionViews = (siteConfig.navigation as Navigation).collections as EntityCollection[];
+const schemas = siteConfig.schemas;
 it("collection view matches ok", () => {
 
     const collectionViewFromPath = getCollectionByPath("products", collectionViews);
@@ -47,7 +48,8 @@ it("build entity collection array", () => {
 
     const collections = getNavigationEntriesFromPathInternal({
         path: "products/pid",
-        collections: collectionViews
+        collections: collectionViews,
+        schemas:schemas
     });
     console.log(collections);
     // expect(
@@ -59,7 +61,8 @@ it("Custom view internal", () => {
 
     const navigationEntries = getNavigationEntriesFromPathInternal({
         path: "products/pid/custom_view",
-        collections: collectionViews
+        collections: collectionViews,
+        schemas:schemas
     });
     console.log(navigationEntries);
     expect(navigationEntries.length).toEqual(3);
@@ -69,7 +72,8 @@ it("build entity collection array 2", () => {
 
     const navigationEntries = getNavigationEntriesFromPathInternal({
         path: "products/pid/locales/yep",
-        collections: collectionViews
+        collections: collectionViews,
+        schemas: schemas
     });
     console.log(navigationEntries);
     expect(navigationEntries.length).toEqual(4);

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-    EntityCollection,
+    EntityCollection, EntitySchema,
     NavigationContext,
     SideEntityController,
     SideEntityPanelProps
@@ -22,25 +22,22 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
     const [sidePanels, setSidePanels] = useState<SideEntityPanelProps[]>([]);
 
     const collections = navigationContext.navigation?.collections;
+    const schemas = navigationContext.schemas;
 
     const state = location.state as any;
     const baseLocation = state && state["base_location"] ? state["base_location"] : location;
 
-    const updatePanels = useCallback((newPanels: SideEntityPanelProps[]) => {
-        setSidePanels(newPanels);
-        navigationContext.removeAllOverridesExcept(newPanels);
-    }, []);
-
-    useEffect(() => {
-        if (navigationContext.initialised) {
-            if (location?.state && state["panels"]) {
-                const statePanel = state["panels"] as SideEntityPanelProps[];
-                updatePanels(statePanel);
-            } else {
-                updatePanels([]);
-            }
-        }
-    }, [location?.state, navigationContext.initialised]);
+    // // update panels based on URL
+    // useEffect(() => {
+    //     if (navigationContext.initialised) {
+    //         if (location?.state && state["panels"]) {
+    //             const statePanel = state["panels"] as SideEntityPanelProps[];
+    //             setSidePanels(statePanel);
+    //         } else {
+    //             setSidePanels([]);
+    //         }
+    //     }
+    // }, [location?.state, navigationContext.initialised]);
 
     // only on initialisation
     useEffect(() => {
@@ -48,8 +45,8 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             if (navigationContext.isUrlCollectionPath(location.pathname)) {
                 const newFlag = location.hash === `#${NEW_URL_HASH}`;
                 const entityOrCollectionPath = navigationContext.urlPathToDataPath(location.pathname);
-                const sidePanels = buildSidePanelsFromUrl(entityOrCollectionPath, collections, newFlag);
-                updatePanels(sidePanels);
+                const sidePanels = buildSidePanelsFromUrl(entityOrCollectionPath, collections, schemas, newFlag);
+                setSidePanels(sidePanels);
             }
             initialised.current = true;
         }
@@ -64,11 +61,11 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
         const locationPanels = location?.state && state["panels"];
         if (locationPanels && locationPanels.length > 0) {
             const updatedPanels = [...locationPanels.slice(0, -1)];
-            // setSidePanels(updatedPanels);
+            setSidePanels(updatedPanels);
             navigate(-1);
         } else {
             const newPath = navigationContext.buildUrlCollectionPath(lastSidePanel.path);
-            // setSidePanels([]);
+            setSidePanels([]);
             navigate(newPath, { replace: true });
         }
 
@@ -87,29 +84,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        if (schemaProps
-            && (schemaProps.schema !== undefined
-                || schemaProps.permissions !== undefined
-                || schemaProps.subcollections !== undefined)) {
-            const permissions = schemaProps.permissions;
-            const schemaOrResolver = schemaProps.schema;
-            const subcollections = schemaProps.subcollections;
-            const overrideSchemaRegistry = schemaProps.overrideSchemaRegistry;
-            navigationContext.setOverride(
-                {
-                    path,
-                    entityId,
-                    schemaConfig: {
-                        permissions,
-                        schema: typeof schemaOrResolver !== "function" ? schemaOrResolver : undefined,
-                        schemaResolver: typeof schemaOrResolver === "function" ? schemaOrResolver : undefined,
-                        subcollections,
-                        callbacks: schemaProps.callbacks,
-                    },
-                    overrideSchemaRegistry
-                }
-            );
-        }
+        const updateUrl = schemaProps.updateUrl === undefined ? false: schemaProps.updateUrl;
 
         const cleanPath = removeInitialAndTrailingSlashes(path);
         const newPath = entityId
@@ -129,14 +104,14 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 selectedSubpath
             };
             const updatedPanels = [...sidePanels.slice(0, -1), updatedPanel];
-            updatePanels(updatedPanels);
+            setSidePanels(updatedPanels);
             navigate(
                 navigationContext.buildUrlCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath ? selectedSubpath : ""}`),
                 {
                     replace: true,
                     state: {
                         base_location: baseLocation,
-                        panels: updatedPanels
+                        // panels: updatedPanels
                     }
                 }
             );
@@ -147,16 +122,17 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 entityId,
                 copy: copy !== undefined && copy,
                 width,
-                selectedSubpath
+                selectedSubpath,
+                ...schemaProps
             };
             const updatedPanels = [...sidePanels, newPanel];
-            updatePanels(updatedPanels);
+            setSidePanels(updatedPanels);
             navigate(
                 newPath,
                 {
                     state: {
                         base_location: baseLocation,
-                        panels: updatedPanels
+                        // panels: updatedPanels
                     }
                 }
             );
@@ -170,11 +146,12 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
     };
 };
 
-function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): SideEntityPanelProps[] {
+function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], schemas: EntitySchema[], newFlag: boolean): SideEntityPanelProps[] {
 
     const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPathInternal({
         path,
-        collections
+        collections,
+        schemas
     });
 
     let sidePanels: SideEntityPanelProps[] = [];

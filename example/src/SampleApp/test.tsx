@@ -14,7 +14,7 @@ type Product = {
 }
 
 const productSchema = buildSchema<Product>({
-
+    id: "product",
     name: "Product",
     properties: {
         name: {
@@ -71,6 +71,6 @@ const productCallbacks = buildEntityCallbacks<Product>({
 const productsCollection = buildCollection<Product>({
     name: "Products",
     path: "products",
-    schema: productSchema,
+    schemaId: "product",
     callbacks: productCallbacks
 });

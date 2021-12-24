@@ -16,6 +16,7 @@ export const customSchemaOverrideHandler: SchemaOverrideHandler = ({
 
     if (entityId === "B0017TNJWY" && path === "products") {
         const customProductSchema = buildSchema({
+            id: "custom_product",
             name: "Custom product",
             properties: {
                 name: {

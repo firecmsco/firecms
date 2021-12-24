@@ -15,8 +15,8 @@ import {
     NumberProperty,
     Properties,
     PropertiesOrBuilder,
+    Property,
     PropertyBuilder,
-    PropertyOrBuilder,
     ReferenceProperty,
     StringProperty,
     TimestampProperty,
@@ -67,7 +67,7 @@ export function buildSchema<M extends { [Key: string]: any }>(
  * @param property
  * @category Builder
  */
-export function buildProperty<T extends CMSType, P extends PropertyOrBuilder<T, any> = PropertyOrBuilder<T, any>>(
+export function buildProperty<T extends CMSType, P extends Property<T> = Property<T>>(
     property: P
 ): P extends StringProperty ? StringProperty :
     P extends NumberProperty ? NumberProperty :

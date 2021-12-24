@@ -10,7 +10,9 @@ const locales: EnumValues = {
     "es-419": "Spanish (South America)"
 };
 
+
 export const productSchema = buildSchema({
+    id: "product",
     name: "Product",
     views: [
         {
@@ -51,7 +53,7 @@ export const productSchema = buildSchema({
             title: "Available",
             columnWidth: 100
         }),
-        price: buildProperty(({ values }) => ({
+        price: ({ values }) => ({
             dataType: "number",
             title: "Price",
             validation: {
@@ -67,7 +69,7 @@ export const productSchema = buildSchema({
                 // Preview: PriceTextPreview
             },
             description: "Price with range validation"
-        })),
+        }),
         currency: buildProperty({
             dataType: "string",
             title: "Currency",
@@ -190,38 +192,40 @@ export const productSchema = buildSchema({
 });
 
 
+const localeSchema = {
+    id: "locale",
+    customId: locales,
+    name: "Locale",
+    properties: {
+        title: {
+            title: "Title",
+            validation: { required: true },
+            dataType: "string"
+        },
+        selectable: {
+            title: "Selectable",
+            description: "Is this locale selectable",
+            dataType: "boolean"
+        },
+        video: {
+            title: "Video",
+            dataType: "string",
+            validation: { required: false },
+            config: {
+                storageMeta: {
+                    mediaType: "video",
+                    storagePath: "videos",
+                    acceptedFiles: ["video/*"]
+                }
+            }
+        }
+    }
+};
 const subcollections = [
     buildCollection({
         name: "Locales",
         path: "locales",
-        schema: {
-            customId: locales,
-            name: "Locale",
-            properties: {
-                title: {
-                    title: "Title",
-                    validation: { required: true },
-                    dataType: "string"
-                },
-                selectable: {
-                    title: "Selectable",
-                    description: "Is this locale selectable",
-                    dataType: "boolean"
-                },
-                video: {
-                    title: "Video",
-                    dataType: "string",
-                    validation: { required: false },
-                    config: {
-                        storageMeta: {
-                            mediaType: "video",
-                            storagePath: "videos",
-                            acceptedFiles: ["video/*"]
-                        }
-                    }
-                }
-            }
-        }
+        schemaId: "locale"
     })
 ];
 
@@ -257,30 +261,32 @@ export const siteConfig: FirebaseCMSAppProps = {
         collections: [
             buildCollection({
                 path: "products",
-                schema: productSchema,
+                schemaId: "product",
                 callbacks: productCallbacks,
                 name: "Products",
                 subcollections: subcollections
             }),
             buildCollection({
                 path: "sites/es/products",
-                schema: productSchema,
-            callbacks: productCallbacks,
+                schemaId: "product",
+                callbacks: productCallbacks,
                 name: "Products",
                 subcollections: subcollections
             }),
             buildCollection({
                 path: "products/id/subcollection_inline",
-                schema: productSchema,
+                schemaId: "product",
                 callbacks: productCallbacks,
                 name: "Products",
                 subcollections: subcollections
             })
         ]
-    }
+    },
+    schemas: [productSchema]
 };
 
 export const usersSchema = buildSchema({
+    id: "users",
     name: "User",
     properties: {
         first_name: {
@@ -338,33 +344,6 @@ export const usersSchema = buildSchema({
             },
             previewProperties: ["large"]
         }
-    }
-});
-
-export const exerciseJointMovementSchema = buildSchema({
-    name: "Joint movement",
-    properties: {
-        joint: buildProperty({
-            title: "Joint",
-            dataType: "reference",
-            path: "medico/v2.0.0/joints"
-        }),
-        movement: buildProperty(({values}) => {
-            return {
-                title: "Movement",
-                dataType: "reference",
-                disabled: !values.joint,
-                path: values.joint ? values.joint.path + "/" + values.joint.id  + "/movements": ""
-            }
-        }),
-        maximal_performed_extent: {
-            title: "Maximal performed extent",
-            dataType: "number"
-        },
-        enforced: {
-            title: "Enforced",
-            dataType: "boolean",
-        },
     }
 });
 

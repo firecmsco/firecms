@@ -6,9 +6,9 @@ import { EntityCollectionView, FireCMSHomePage } from "./components";
 import { useNavigation } from "../hooks";
 import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
 import { NotFoundPage } from "./components/NotFoundPage";
-import { computeTopNavigation } from "./util/navigation_utils";
 import { CollectionEditor } from "./components/SchemaEditor/CollectionEditor";
 import { EntityCollectionRoute } from "./components/EntityCollectionRoute";
+import { SchemaEditorPersistence } from "./components/SchemaEditor/SchemaEditorPersistence";
 
 /**
  * @category Components
@@ -35,14 +35,11 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
     const location = useLocation();
     const navigationContext = useNavigation();
     const navigation = navigationContext.navigation;
-    const { groups } = computeTopNavigation(navigationContext, true);
 
     if (!navigation)
         return <></>;
 
     const state = location.state as any;
-    const allGroups: Array<string | undefined> = [...groups, undefined];
-
     /**
      * The location can be overridden if `base_location` is set in the
      * state field of the current location. This can happen if you open
@@ -89,7 +86,8 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                       title={collection.name}>
                                       <EntityCollectionView
                                           path={collection.path}
-                                          collection={collection}/>
+                                          collection={collection}
+                                          editable={false}/>
                                   </BreadcrumbUpdater>
                               }/>;
             }
@@ -133,6 +131,23 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
             }
         );
 
+    const schemasEditRoutes = (navigationContext.schemas ?? [])
+        .map((schema) => {
+                const urlPath = navigationContext.buildUrlEditSchemaPath({
+                    id: schema.id
+                });
+                return <Route path={urlPath + "/*"}
+                              key={`navigation_${schema.id}`}
+                              element={
+                                  <BreadcrumbUpdater
+                                      path={urlPath}
+                                      title={"Schema editor"}>
+                                      <SchemaEditorPersistence schemaId={schema.id}/>
+                                  </BreadcrumbUpdater>
+                              }/>;
+            }
+        );
+
     const newCollectionPath = navigationContext.buildUrlEditCollectionPath({});
     const addNewCollectionRoute = (
         <Route path={newCollectionPath + "/*"}
@@ -167,7 +182,12 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
         <Routes location={baseLocation}>
 
             {collectionEditRoutes}
+
+            {schemasEditRoutes}
+
             {collectionRoutes}
+
+            {storedCollectionRoutes}
 
             {addNewCollectionRoute}
 

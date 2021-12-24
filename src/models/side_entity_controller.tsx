@@ -59,8 +59,13 @@ export interface SideEntityPanelProps<M = any, UserType = User> {
      */
     callbacks?: EntityCallbacks<M>;
 
-
-    overrideSchemaRegistry?: boolean
+    /**
+     * Should update the URL when opening the dialog.
+     * Consider that if the schema that you provide is not defined in the base
+     * config of your `FireCMS` component, you will not be able to recreate
+     * the state if copying the URL to a different window.
+     */
+    updateUrl?: boolean;
 }
 
 /**
