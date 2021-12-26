@@ -2,6 +2,8 @@ import React from "react";
 import { User } from "./user";
 
 
+export interface AuthControllerExtra {}
+
 /**
  * Controller for retrieving the logged user or performing auth related operations
  * @category Hooks and utilities
@@ -53,7 +55,7 @@ export interface AuthController<UserType extends User = User> {
      * e.g: Additional user data fetched from a Firestore document, or custom
      * claims
      */
-    extra?: any;
+    extra?: AuthControllerExtra;
 
     /**
      * You can use this method to store any extra data you would like to

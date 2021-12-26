@@ -13,7 +13,7 @@ import { StorageSource } from "./storage";
  *
  * @category Models
  */
-export type User = {
+export interface User {
     /**
      * The user's unique ID, scoped to the project.
      */
@@ -43,7 +43,7 @@ export type User = {
      */
     readonly metadata: any;
 
-} & Record<string, any>; // we allow for any other property so Users can be extended to user needs
+}
 
 
 /**
