@@ -63,7 +63,7 @@ export interface AuthController<UserType extends User = User> {
      * e.g: Additional user data fetched from a Firestore document, or custom
      * claims
      */
-    setExtra: (extra: any) => void;
+    setExtra: (extra: AuthControllerExtra) => void;
 
     /**
      * Delegate in charge of connecting to a backend and performing the auth
