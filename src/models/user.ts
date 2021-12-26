@@ -43,7 +43,7 @@ export type User = {
      */
     readonly metadata: any;
 
-} & any; // we allow for any other property so Users can be extended to user needs
+} & Record<string, any>; // we allow for any other property so Users can be extended to user needs
 
 
 /**
