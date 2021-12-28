@@ -129,30 +129,33 @@ export function useFirestoreDataSource({
      * @category Firestore
      */
     function firestoreToCMSModel<M>(data: any, schema: ResolvedEntitySchema<M>, path: string): any {
-        return traverseValues(data,
-            schema.properties,
-            (value, property) => {
-                if (value === null)
-                    return null;
-
-                if (serverTimestamp().isEqual(value)) {
-                    return null;
+        const traverse = (input: any): any => {
+            if (input == null) return input;
+            if (serverTimestamp().isEqual(input)) {
+                return null;
+            }
+            if (input instanceof Timestamp) {
+                return input.toDate();
+            }
+            if (input instanceof GeoPoint) {
+                return new GeoPoint(input.latitude, input.longitude);
+            }
+            if (input instanceof DocumentReference) {
+                return new EntityReference(input.id, getCMSPathFromFirestorePath(input.path));
+            }
+            if (Array.isArray(input)) {
+                return input.map(traverse);
+            }
+            if (typeof input === "object") {
+                const result = {}
+                for (const key of Object.keys(input)) {
+                    result[key] = traverse(input[key]);
                 }
-
-                if (value instanceof Timestamp && property.dataType === "timestamp") {
-                    return value.toDate();
-                }
-
-                if (value instanceof GeoPoint && property.dataType === "geopoint") {
-                    return new GeoPoint(value.latitude, value.longitude);
-                }
-
-                if (value instanceof DocumentReference && property.dataType === "reference") {
-                    return new EntityReference(value.id, getCMSPathFromFirestorePath(value.path));
-                }
-
-                return value;
-            });
+                return result;
+            }
+            return input;
+        }
+        return traverse(data)
     }
 
     function buildQuery<M>(path: string, filter: FilterValues<M> | undefined, orderBy: string | undefined, order: "desc" | "asc" | undefined, startAfter: any[] | undefined, limit: number | undefined) {
