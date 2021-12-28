@@ -35,12 +35,13 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
     if (!navigation)
         return <></>;
 
+    const state = location.state as any;
     /**
      * The location can be overridden if `base_location` is set in the
      * state field of the current location. This can happen if you open
      * a side entity, like `products`, from a different one, like `users`
      */
-    const baseLocation = location.state && location.state["base_location"] ? location.state["base_location"] : location;
+    const baseLocation = state && state["base_location"] ? state["base_location"] : location;
 
     const customRoutes: JSX.Element[] = [];
     if (navigation.views) {
