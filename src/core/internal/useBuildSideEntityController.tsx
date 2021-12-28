@@ -23,7 +23,8 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
 
     const collections = navigationContext.navigation?.collections;
 
-    const baseLocation = location.state && location.state["base_location"] ? location.state["base_location"] : location;
+    const state = location.state as any;
+    const baseLocation = state && state["base_location"] ? state["base_location"] : location;
 
     const updatePanels = useCallback((newPanels: SideEntityPanelProps[]) => {
         setSidePanels(newPanels);
@@ -32,8 +33,8 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
 
     useEffect(() => {
         if (navigationContext.initialised) {
-            if (location?.state && location.state["panels"]) {
-                const statePanel = location.state["panels"] as SideEntityPanelProps[];
+            if (location?.state && state["panels"]) {
+                const statePanel = state["panels"] as SideEntityPanelProps[];
                 updatePanels(statePanel);
             } else {
                 updatePanels([]);
@@ -60,7 +61,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             return;
 
         const lastSidePanel = sidePanels[sidePanels.length - 1];
-        const locationPanels = location?.state && location.state["panels"];
+        const locationPanels = location?.state && state["panels"];
         if (locationPanels && locationPanels.length > 0) {
             const updatedPanels = [...locationPanels.slice(0, -1)];
             // setSidePanels(updatedPanels);
