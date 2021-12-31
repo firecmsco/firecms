@@ -212,13 +212,13 @@ export const testEntitySchema = buildSchema({
         //         }
         //     }
         // },
-        // string_array: {
-        //     title: "String array",
-        //     dataType: "array",
-        //     of: {
-        //         dataType: "string"
-        //     }
-        // },
+        string_array: {
+            title: "String array",
+            dataType: "array",
+            of: {
+                dataType: "string"
+            }
+        },
         // required_string: {
         //     title: "Required String",
         //     dataType: "string",

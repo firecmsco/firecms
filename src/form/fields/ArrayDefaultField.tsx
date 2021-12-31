@@ -37,15 +37,13 @@ export function ArrayDefaultField<T extends Array<any>>({
     const ofProperty: Property<CMSType[]> = property.of as Property<CMSType[]>;
     const classes = formStyles();
 
-    const [lastAddedId, setLastAddedId] = useState<number | undefined>();
-
     useClearRestoreValue({
         property,
         value,
         setValue
     });
 
-    const buildEntry = (index: number, internalId: number) => {
+    const buildEntry = (index: number) => {
         return buildPropertyField({
             name: `${name}[${index}]`,
             disabled,
@@ -55,7 +53,7 @@ export function ArrayDefaultField<T extends Array<any>>({
             context,
             tableMode: false,
             partOfArray: true,
-            autoFocus: internalId === lastAddedId,
+            autoFocus: true,
             shouldAlwaysRerender: false
         });
 
@@ -75,7 +73,6 @@ export function ArrayDefaultField<T extends Array<any>>({
                 <ArrayContainer value={value}
                                 name={name}
                                 buildEntry={buildEntry}
-                                onInternalIdAdded={setLastAddedId}
                                 disabled={isSubmitting || Boolean(property.disabled)}
                                 includeAddButton={!property.disabled}/>
 
