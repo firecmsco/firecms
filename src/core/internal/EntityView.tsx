@@ -111,15 +111,6 @@ const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: The
             fontSize: "0.875rem",
             minWidth: "140px"
         },
-        header: {
-            paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(2),
-            paddingTop: theme.spacing(2),
-            display: "flex",
-            alignItems: "center",
-            backgroundColor: theme.palette.background.paper
-        }
-
     })
 );
 
@@ -429,7 +420,15 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }, []);
 
     const header = (
-        <div className={classes.header}>
+        <Box sx={{
+            paddingLeft: 2,
+            paddingRight: 2,
+            paddingTop: 2,
+            display: "flex",
+            alignItems: "center",
+            backgroundColor: theme.palette.mode === "light" ? theme.palette.background.default : theme.palette.background.paper,
+        }}
+        >
 
             <IconButton onClick={(e) => sideEntityController.close()}
                         size="large">
@@ -493,7 +492,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 )}
 
             </Tabs>
-        </div>
+        </Box>
 
     );
 

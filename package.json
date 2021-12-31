@@ -35,6 +35,7 @@
     },
     "dependencies": {
         "@date-io/date-fns": "^2.11.0",
+        "@types/react-beautiful-dnd": "^13.1.2",
         "@uiw/react-md-editor": "^3.8.2",
         "date-fns": "^2.21.3",
         "deep-equal": "^2.0.5",
@@ -42,8 +43,7 @@
         "history": "^5",
         "object-hash": "^2.2.0",
         "react-base-table": "^1.12.0",
-        "react-dnd": "^14.0.2",
-        "react-dnd-html5-backend": "^14.0.0",
+        "react-beautiful-dnd": "^13.1.0",
         "react-dropzone": "^11.4.2",
         "react-measure": "^2.5.2",
         "react-transition-group": "^4.4.1",

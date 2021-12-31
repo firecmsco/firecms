@@ -1,7 +1,5 @@
 import React from "react";
 
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateFnsUtils from "@date-io/date-fns";
@@ -224,7 +222,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                                         dateAdapter={AdapterDateFns}
                                         utils={DateFnsUtils}
                                         locale={dateUtilsLocale}>
-                                        <DndProvider backend={HTML5Backend}>
                                             <ModeStateContext.Consumer>
                                                 {({ mode }) => {
                                                     return children({
@@ -234,7 +231,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                                                     });
                                                 }}
                                             </ModeStateContext.Consumer>
-                                        </DndProvider>
                                     </LocalizationProvider>
                                 </BreadcrumbsProvider>
                             </FireCMSContextProvider>

@@ -1,17 +1,18 @@
 import { FieldArray } from "formik";
-import { Box, Button } from "@mui/material";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Box, Button, IconButton } from "@mui/material";
+import React from "react";
 import hash from "object-hash";
 
-import { ArrayEntry } from "./ArrayEntry";
-import { GeoPoint } from "../../models";
+import ClearIcon from "@mui/icons-material/Clear";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
 
 interface ArrayContainerProps<T> {
     value: T[];
     name: string;
-    buildEntry: (index: number, internalId: number) => React.ReactNode;
+    buildEntry: (index: number, hash: any) => React.ReactNode;
     disabled: boolean;
-    onInternalIdAdded?: (id: number) => void;
     includeAddButton?: boolean;
 }
 
@@ -23,125 +24,121 @@ export function ArrayContainer<T>({
                                       value,
                                       disabled,
                                       buildEntry,
-                                      onInternalIdAdded,
                                       includeAddButton
                                   }: ArrayContainerProps<T>) {
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
-
-    const internalIdsMap: Record<string, number> = useMemo(() =>
-            hasValue ?
-                value.map(v => {
-                    if (!v) return {};
-                    return ({
-                        [getHashValue(v)]: getRandomId()
-                    });
-                }).reduce((a, b) => ({ ...a, ...b }), {})
-                : {},
-        [value, hasValue]);
-    const internalIdsRef = useRef<Record<string, number>>(internalIdsMap);
-
-    const [internalIds, setInternalIds] = useState<number[]>(
-        hasValue
-            ? Object.values(internalIdsRef.current)
-            : []);
-
-    function getHashValue<T>(v: T) {
-        if (!v) return null;
-        if (typeof v === "object") {
-            if ("id" in v)
-                return (v as any)["id"];
-            else if (v instanceof Date)
-                return v.toLocaleString();
-            else if (v instanceof GeoPoint)
-                return hash(v);
-        }
-        return hash(v, { ignoreUnknown: true });
-    }
-
-    useEffect(() => {
-        if (hasValue && value && value.length != internalIds.length) {
-            const newInternalIds = value.map(v => {
-                const hashValue = getHashValue(v);
-                if (hashValue in internalIdsRef.current) {
-                    return internalIdsRef.current[hashValue];
-                } else {
-                    const newInternalId = getRandomId();
-                    internalIdsRef.current[hashValue] = newInternalId;
-                    return newInternalId;
-                }
-            });
-            setInternalIds(newInternalIds);
-        }
-    }, [hasValue, value]);
-
-    function getRandomId() {
-        return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
-    }
 
     return <FieldArray
         name={name}
         validateOnChange={true}
         render={arrayHelpers => {
 
-            const moveItem = (dragIndex: number, hoverIndex: number) => {
-                const newIds = [...internalIds];
-                const temp = newIds[dragIndex];
-                newIds[dragIndex] = newIds[hoverIndex];
-                newIds[hoverIndex] = temp;
-                setInternalIds(newIds);
-                arrayHelpers.move(dragIndex, hoverIndex);
-            };
-
             const insertInEnd = () => {
                 if (disabled) return;
-                const id = getRandomId();
-                const newIds: number[] = [...internalIds, id];
-                if (onInternalIdAdded)
-                    onInternalIdAdded(id);
-                setInternalIds(newIds);
                 arrayHelpers.push(null);
             };
 
             const remove = (index: number) => {
-                const newValue = [...internalIds];
-                newValue.splice(index, 1);
-                setInternalIds(newValue);
                 arrayHelpers.remove(index);
             };
 
+            const onDragEnd = (result: any) => {
+                // dropped outside the list
+                if (!result.destination) {
+                    return;
+                }
+
+                arrayHelpers.move(result.source.index, result.destination.index);
+
+                // const items = reorder(
+                //     this.state.items,
+                //     result.source.index,
+                //     result.destination.index
+                // );
+                //
+                // this.setState({
+                //     items
+                // });
+            }
+
             return (
-                <>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId={`droppable_${name}`}>
+                        {(provided, snapshot) => (
+                            <div
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}>
+                                {hasValue && value.map((value: any, index: number) => {
+                                    const hashValue = hash(value);
+                                    return (
+                                        <Draggable
+                                            key={`array_field_${name}_${hashValue}}`}
+                                            draggableId={`array_field_${name}_${hashValue}}`}
+                                            index={index}>
+                                            {(provided, snapshot) => (
 
-                    {hasValue && internalIds.map((internalId: number, index: number) => {
+                                                <Box
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    style={
+                                                        provided.draggableProps.style
+                                                    }
+                                                    sx={{
+                                                        marginBottom: 1,
+                                                        borderRadius: "4px",
+                                                        opacity: 1,
+                                                    }}
+                                                >
+                                                    <Box key={`field_${index}`}
+                                                         display="flex">
+                                                        <Box flexGrow={1}
+                                                             width={"100%"}
+                                                             key={`field_${name}_entryValue`}>
+                                                            {buildEntry(index, hashValue)}
+                                                        </Box>
+                                                        <Box width={"36px"}
+                                                             display="flex"
+                                                             flexDirection="column"
+                                                             alignItems="center">
+                                                            {!disabled &&
+                                                            <div
+                                                                {...provided.dragHandleProps}>
+                                                                <DragHandleIcon
+                                                                    fontSize={"small"}
+                                                                    sx={{ cursor: "move" }}/>
+                                                            </div>}
+                                                            {!disabled &&
+                                                            <IconButton
+                                                                size="small"
+                                                                aria-label="remove"
+                                                                onClick={() => remove(index)}>
+                                                                <ClearIcon
+                                                                    fontSize={"small"}/>
+                                                            </IconButton>}
+                                                        </Box>
+                                                    </Box>
+                                                </Box>
+                                            )}
+                                        </Draggable>);
+                                })}
 
-                        const formField = buildEntry(index, internalId);
-                        return (
-                            <ArrayEntry
-                                key={`array_field_${name}_${internalId}}`}
-                                name={name}
-                                id={internalId}
-                                disabled={disabled}
-                                type={"array_card_" + name}
-                                moveItem={moveItem}
-                                index={index}
-                                remove={remove}
-                            >
-                                {formField}
-                            </ArrayEntry>);
-                    })}
+                                {provided.placeholder}
 
-                    {includeAddButton && !disabled && <Box p={1}
-                                              justifyContent="center"
-                                              textAlign={"left"}>
-                        <Button variant="outlined"
-                                color="primary"
-                                disabled={disabled}
-                                onClick={insertInEnd}>
-                            Add
-                        </Button>
-                    </Box>}
-                </>
+                                {includeAddButton && !disabled && <Box p={1}
+                                                                       justifyContent="center"
+                                                                       textAlign={"left"}>
+                                    <Button variant="outlined"
+                                            color="primary"
+                                            disabled={disabled}
+                                            onClick={insertInEnd}>
+                                        Add
+                                    </Button>
+                                </Box>}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
             );
         }}
     />;

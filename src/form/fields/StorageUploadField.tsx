@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useEffect } from "react";
 
+
 import {
     Box,
     FormControl,
@@ -30,18 +31,19 @@ import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 import clsx from "clsx";
-import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
 import {
     useClearRestoreValue,
     useSnackbarController,
     useStorageSource
 } from "../../hooks";
 import { isReadOnly } from "../../core/utils";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 export const useStyles = makeStyles((theme: Theme) => ({
     dropZone: {
         position: "relative",
         paddingTop: "2px",
+        border: "2px solid transparent",
         minHeight: "254px",
         outline: 0,
         borderTopLeftRadius: "2px",
@@ -89,18 +91,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
         minWidth: 118,
         minHeight: 118,
         boxSizing: "border-box"
-    },
-    arrayEntry: {
-        border: "1px dashed transparent",
-        borderRadius: "4px"
-    },
-    arrayEntryHovered: {
-        opacity: 0.5,
-        border: "1px dashed gray",
-        boxSizing: "border-box"
-    },
-    arrayEntryDragging: {
-        cursor: "move"
     },
     thumbnailCloseIcon: {
         position: "absolute",
@@ -200,39 +190,36 @@ export function StorageUploadField({
 
     return (
 
-        <FormControl fullWidth
-                     required={property.validation?.required}
-                     error={showError}>
+            <FormControl fullWidth
+                         required={property.validation?.required}
+                         error={showError}>
 
-            {!tableMode &&
-            <FormHelperText filled
-                            required={property.validation?.required}>
-                <LabelWithIcon property={property}/>
-            </FormHelperText>}
+                {!tableMode &&
+                <FormHelperText filled
+                                required={property.validation?.required}>
+                    <LabelWithIcon property={property}/>
+                </FormHelperText>}
 
-            <StorageUpload
-                value={internalValue}
-                name={name}
-                disabled={disabled}
-                autoFocus={autoFocus}
-                property={property}
-                onChange={(newValue) => {
-                    setValue(
-                        newValue
-                    );
-                }}
-                fileNameBuilder={fileNameBuilder}
-                storagePathBuilder={storagePathBuilder}
-                storageMeta={storageMeta}
-                multipleFilesSupported={multipleFilesSupported}
-                small={false}/>
+                <StorageUpload
+                    value={internalValue}
+                    name={name}
+                    disabled={disabled}
+                    autoFocus={autoFocus}
+                    property={property}
+                    onChange={(newValue) => {
+                        setValue(newValue);
+                    }}
+                    fileNameBuilder={fileNameBuilder}
+                    storagePathBuilder={storagePathBuilder}
+                    storageMeta={storageMeta}
+                    multipleFilesSupported={multipleFilesSupported}/>
 
-            {includeDescription &&
-            <FieldDescription property={property as any}/>}
+                {includeDescription &&
+                <FieldDescription property={property as any}/>}
 
-            {showError && <FormHelperText>{error}</FormHelperText>}
+                {showError && <FormHelperText>{error}</FormHelperText>}
 
-        </FormControl>
+            </FormControl>
     );
 }
 
@@ -260,7 +247,6 @@ interface StorageUploadProps {
     multipleFilesSupported: boolean;
     autoFocus: boolean;
     disabled: boolean;
-    small: boolean;
     storageMeta: StorageMeta;
     fileNameBuilder: (file: File) => string;
     storagePathBuilder: (file: File) => string;
@@ -272,7 +258,6 @@ export function StorageUpload({
                                   value,
                                   onChange,
                                   multipleFilesSupported,
-                                  small,
                                   disabled,
                                   autoFocus,
                                   storageMeta,
@@ -335,6 +320,16 @@ export function StorageUpload({
             .map(e => e.storagePathOrDownloadUrl as string);
         onChange(fieldValue);
     };
+
+    const onDragEnd = (result: any) => {
+        // dropped outside the list
+        if (!result.destination) {
+            return;
+        }
+
+        moveItem(result.source.index, result.destination.index);
+
+    }
 
     function removeDuplicates(items: StorageFieldItem[]) {
         return items.filter(
@@ -420,207 +415,145 @@ export function StorageUpload({
         }
     };
 
-    const {
-        getRootProps,
-        getInputProps,
-        isDragActive,
-        isDragAccept,
-        isDragReject
-    } = useDropzone({
-            accept: storageMeta.acceptedFiles,
-            disabled: disabled,
-            onDrop: onExternalDrop
-        }
-    );
 
-    const { ...rootProps } = getRootProps();
+
 
     const helpText = multipleFilesSupported ?
         "Drag 'n' drop some files here, or click to select files" :
         "Drag 'n' drop a file here, or click to select one";
 
     return (
-        <div {...rootProps}
-             className={clsx(classes.dropZone, {
-                 [classes.nonActiveDrop]: !isDragActive,
-                 [classes.activeDrop]: isDragActive,
-                 [classes.rejectDrop]: isDragReject,
-                 [classes.acceptDrop]: isDragAccept,
-                 [classes.disabled]: disabled
-             })}
-        >
+        <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId={`droppable_${name}`} direction="horizontal">
+                {(provided, snapshot) => {
 
-            <input autoFocus={autoFocus} {...getInputProps()} />
-
-            <Box display="flex"
-                 flexDirection="row"
-                 flexWrap="wrap"
-                 alignItems="center"
-                 justifyContent="center"
-                 minHeight={250}>
-
-                {internalValue.map((entry, index) => {
-                    let child;
-                    if (entry.storagePathOrDownloadUrl) {
-                        const renderProperty = multipleFilesSupported
-                            ? (property as ArrayProperty<string[]>).of as StringProperty
-                            : property as StringProperty;
-                        child = (
-                            <StorageItemPreview
-                                name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
-                                property={renderProperty}
-                                disabled={disabled}
-                                value={entry.storagePathOrDownloadUrl}
-                                onClear={onClear}
-                                size={entry.size}/>
-                        );
-                    } else if (entry.file) {
-                        child = (
-                            <StorageUploadProgress
-                                entry={entry}
-                                metadata={metadata}
-                                storagePath={storagePathBuilder(entry.file)}
-                                onFileUploadComplete={onFileUploadComplete}
-                                size={size}
-                            />
-                        );
-                    }
+                    const {
+                        getRootProps,
+                        getInputProps,
+                        isDragActive,
+                        isDragAccept,
+                        isDragReject
+                    } = useDropzone({
+                            accept: storageMeta.acceptedFiles,
+                            disabled: disabled || snapshot.isDraggingOver,
+                            noDragEventsBubbling: true,
+                            onDrop: onExternalDrop
+                        }
+                    );
 
                     return (
-                        <StorageEntry
-                            key={`storage_entry_${name}_${index}`}
-                            entry={entry}
-                            index={index}
-                            dragType={"storage_card_" + name}
-                            moveItem={moveItem}
-                            onHover={setHoveredIndex}
-                            hovered={hoveredIndex === index}>
-                            {child}
-                        </StorageEntry>
+                        <Box
+                            {...getRootProps()}
+                            className={clsx(classes.dropZone, {
+                                [classes.nonActiveDrop]: !isDragActive,
+                                [classes.activeDrop]: isDragActive,
+                                [classes.rejectDrop]: isDragReject,
+                                [classes.acceptDrop]: isDragAccept,
+                                [classes.disabled]: disabled
+                            })}
+                            sx={{
+                                display: multipleFilesSupported ? undefined : "flex",
+                                alignItems: "center",
+                            }}
+                        >
+                            <Box
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    overflow: multipleFilesSupported ? 'auto' : undefined,
+                                    minHeight: multipleFilesSupported ? 180 : 250,
+                                    p: 1,
+                                    "&::-webkit-scrollbar": {
+                                        display: "none"
+                                    }
+                                }}
+                            >
+
+                                <input
+                                    autoFocus={autoFocus}
+                                    {...getInputProps()} />
+
+                                {internalValue.map((entry, index) => {
+                                    let child: any;
+                                    if (entry.storagePathOrDownloadUrl) {
+                                        const renderProperty = multipleFilesSupported
+                                            ? (property as ArrayProperty<string[]>).of as StringProperty
+                                            : property as StringProperty;
+                                        child = (
+                                            <StorageItemPreview
+                                                name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
+                                                property={renderProperty}
+                                                disabled={disabled}
+                                                value={entry.storagePathOrDownloadUrl}
+                                                onClear={onClear}
+                                                size={entry.size}/>
+                                        );
+                                    } else if (entry.file) {
+                                        child = (
+                                            <StorageUploadProgress
+                                                entry={entry}
+                                                metadata={metadata}
+                                                storagePath={storagePathBuilder(entry.file)}
+                                                onFileUploadComplete={onFileUploadComplete}
+                                                size={size}
+                                            />
+                                        );
+                                    }
+
+                                    return (
+                                        <Draggable
+                                            key={`array_field_${name}_${entry.id}}`}
+                                            draggableId={`array_field_${name}_${entry.id}}`}
+                                            index={index}>
+                                            {(provided, snapshot) => (
+                                                <Box
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    style={
+                                                        provided.draggableProps.style
+                                                    }
+                                                    sx={{
+                                                        borderRadius: "4px"
+                                                    }}
+                                                >
+                                                    {child}
+                                                </Box>
+                                            )}
+                                        </Draggable>
+                                    );
+                                })
+                                }
+
+                                {provided.placeholder}
+
+
+                            </Box>
+
+                            <Box
+                                sx={{
+                                    flexGrow: 1,
+                                    minHeight: 38,
+                                    boxSizing: "border-box",
+                                    m: 2
+                                }}>
+                                <Typography color={"textSecondary"}
+                                            variant={"body2"}
+                                            align={"center"}>
+                                    {helpText}
+                                </Typography>
+                            </Box>
+
+                        </Box>
                     );
-                })
-                }
-
-                <Box
-                    flexGrow={1}
-                    m={2}
-                    maxWidth={small ? 100 : 200}>
-                    <Typography color={"textSecondary"}
-                                variant={"body2"}
-                                align={"center"}>
-                        {helpText}
-                    </Typography>
-                </Box>
-
-            </Box>
-
-        </div>
+                }}
+            </Droppable>
+        </DragDropContext>
     );
 
 }
-
-export function StorageEntry({
-                                 children,
-                                 entry,
-                                 index,
-                                 moveItem,
-                                 dragType,
-                                 hovered,
-                                 onHover
-                             }: {
-    entry: StorageFieldItem,
-    children: React.ReactNode;
-    index: number,
-    dragType: string,
-    moveItem: (dragIndex: number, hoverIndex: number) => void,
-    hovered: boolean;
-    onHover: (index?: number) => void;
-}) {
-
-    const classes = useStyles();
-    const ref = React.useRef<HTMLDivElement>(null);
-
-    const [, drop] = useDrop({
-        accept: dragType,
-        hover(item: {
-                  id: number
-                  index: number,
-                  type: string
-              },
-              monitor: DropTargetMonitor) {
-
-            if (!ref.current) {
-                return;
-            }
-            const dragIndex = item.index;
-            const hoverIndex = index;
-
-            // Don't replace items with themselves
-            if (dragIndex === hoverIndex) {
-                return;
-            }
-
-            if (!ref.current) {
-                onHover(undefined);
-                return;
-            }
-
-            const hoverBoundingRect = ref.current.getBoundingClientRect();
-            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
-
-            // Determine mouse position
-            const clientOffset = monitor.getClientOffset();
-            const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-            const hoverClientX = (clientOffset as XYCoord).x - hoverBoundingRect.left;
-
-            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY - 50 && hoverClientX < hoverMiddleX - 50) {
-                onHover(undefined);
-                return;
-            }
-
-            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY + 50 && hoverClientX > hoverMiddleX - 50) {
-                onHover(undefined);
-                return;
-            }
-
-            onHover(hoverIndex);
-
-            // Time to actually perform the action
-            moveItem(dragIndex, hoverIndex);
-
-            // Note: we're mutating the monitor item here!
-            // Generally it's better to avoid mutations,
-            // but it's good here for the sake of performance
-            // to avoid expensive index searches.
-            item.index = hoverIndex;
-        },
-        drop() {
-            onHover(undefined);
-        }
-    });
-
-    const [{ isDragging }, drag, preview] = useDrag({
-        type: dragType,
-        item: { id: entry.id, index },
-        collect: (monitor: any) => ({
-            isDragging: monitor.isDragging()
-        })
-    });
-
-    drag(drop(ref));
-
-    return <div ref={ref}
-                className={clsx({
-                    [classes.arrayEntryDragging]: isDragging,
-                    [classes.arrayEntryHovered]: hovered,
-                    [classes.arrayEntry]: !hovered
-                })}>
-        {children}
-    </div>;
-
-}
-
 
 interface StorageUploadItemProps {
     storagePath: string;
