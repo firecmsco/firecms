@@ -1,0 +1,42 @@
+import {
+    EntitySchema,
+    PropertiesOrBuilder,
+    Property
+} from "../../models";
+import { mergeDeep } from "./objects";
+
+export function mergeSchemas(target: EntitySchema, source: EntitySchema): EntitySchema {
+    const mergedSchema = mergeDeep(target, source);
+    return {
+        ...mergedSchema,
+        properties: sortProperties(mergedSchema.properties, mergedSchema.propertiesOrder)
+    }
+}
+
+export function sortProperties<T>(properties: PropertiesOrBuilder<T>, propertiesOrder?: (keyof T)[]): PropertiesOrBuilder<T> {
+    try {
+        return (propertiesOrder ?? Object.keys(properties))
+            .map((key) => {
+                if (properties[key as keyof T]) {
+                    const property = properties[key] as Property;
+                    if (typeof property === "object" && property?.dataType === "map") {
+                        return ({
+                            [key]: {
+                                ...property,
+                                properties: sortProperties(property.properties ?? {}, property.propertiesOrder)
+                            }
+                        });
+                    } else {
+                        return ({ [key]: property });
+                    }
+                } else {
+                    return undefined;
+                }
+            })
+            .filter((a) => a !== undefined)
+            .reduce((a: any, b: any) => ({ ...a, ...b })) as PropertiesOrBuilder<T>;
+    } catch (e) {
+        console.error("Error sorting properties", e);
+        return properties;
+    }
+}

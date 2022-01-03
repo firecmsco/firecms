@@ -1,4 +1,4 @@
-import {  removeFunctions } from "../core/util/objects";
+import { removeFunctions } from "../core/util/objects";
 
 const obj = {
     "id": "022QFOrveCab2YUT88iw",
@@ -27,4 +27,22 @@ it("Test remove functions in object", () => {
             }
         }
     );
+});
+
+const obj2 = {
+    "id": "022QFOrveCab2YUT88iw",
+    "first_name": () => "Jesus",
+    "location": {
+        "postcode": ["23423"]
+    }
+};
+
+it("Test remove functions in object", () => {
+    expect(removeFunctions(obj2)).toEqual(
+        {
+            "id": "022QFOrveCab2YUT88iw",
+            "location": {
+                "postcode": ["23423"]
+            }
+        });
 });

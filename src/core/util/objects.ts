@@ -41,11 +41,13 @@ export function removeFunctions(o: object | undefined): any {
         return Object.entries(o)
             .filter(([_, value]) => typeof value !== "function")
             .map(([key, value]) => {
-                if (typeof value === "object")
+                if (Array.isArray(value)) {
+                    return { [key]: value.map(v => removeFunctions(v)) };
+                } else if (typeof value === "object") {
                     return { [key]: removeFunctions(value) };
-                else return { [key]: value };
+                } else return { [key]: value };
             })
             .reduce((a, b) => ({ ...a, ...b }));
     }
-    return undefined;
+    return o;
 }

@@ -14,16 +14,16 @@ import { ConfigurationPersistence } from "../../models/config_persistence";
 import {
     EntityCollection,
     EntitySchema,
-    MapProperty,
     Properties,
     Property
 } from "../../models";
+import { sortProperties } from "../../core/util/schemas";
 
 
 /**
  * @category Firebase
  */
-export interface FirestoreConfigurationPersistence {
+export interface FirestoreConfigurationPersistenceProps {
     firebaseApp?: FirebaseApp;
     /**
      * Firestore collection where the configuration is saved.
@@ -32,24 +32,6 @@ export interface FirestoreConfigurationPersistence {
 }
 
 const DEFAULT_CONFIG_PATH = "__FIRECMS";
-
-function sortProperties<T>(properties: Properties<T>, propertiesOrder?: (keyof T)[]): Properties<T> {
-    return (propertiesOrder ?? Object.keys(properties))
-        .map((key) => {
-            const property = properties[key] as Property;
-            if (property?.dataType === "map") {
-                return ({
-                    [key]: {
-                        ...property,
-                        properties: sortProperties(property.properties ?? {}, property.propertiesOrder)
-                    }
-                });
-            } else {
-                return ({ [key]: property });
-            }
-        })
-        .reduce((a: object, b: object) => ({ ...a, ...b })) as Properties<T>;
-}
 
 const docToSchema = (doc: DocumentSnapshot) => {
     const data = doc.data();
@@ -64,7 +46,7 @@ const docToSchema = (doc: DocumentSnapshot) => {
 export function useFirestoreConfigurationPersistence({
                                                          firebaseApp,
                                                          configPath = DEFAULT_CONFIG_PATH
-                                                     }: FirestoreConfigurationPersistence): ConfigurationPersistence {
+                                                     }: FirestoreConfigurationPersistenceProps): ConfigurationPersistence {
 
     const firestoreRef = useRef<Firestore>();
     const firestore = firestoreRef.current;

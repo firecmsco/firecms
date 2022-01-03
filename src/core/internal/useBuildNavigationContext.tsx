@@ -25,6 +25,22 @@ import {
 import { getValueInPath, mergeDeep } from "../util/objects";
 import { computeProperties, findSchema } from "../utils";
 import { ConfigurationPersistence } from "../../models/config_persistence";
+import { mergeSchemas } from "../util/schemas";
+
+type BuildNavigationContextProps<UserType> = {
+    basePath: string,
+    baseCollectionPath: string,
+    authController: AuthController<UserType>;
+    schemas?: EntitySchema[];
+    navigationOrBuilder?: Navigation | NavigationBuilder<UserType>;
+    schemaOverrideHandler: SchemaOverrideHandler | undefined;
+    dateTimeFormat?: string;
+    locale?: Locale;
+    dataSource: DataSource;
+    storageSource: StorageSource;
+    configPersistence?: ConfigurationPersistence;
+    userConfigPersistence?: UserConfigurationPersistence;
+};
 
 export function useBuildNavigationContext<UserType>({
                                                         basePath,
@@ -39,20 +55,7 @@ export function useBuildNavigationContext<UserType>({
                                                         storageSource,
                                                         configPersistence,
                                                         userConfigPersistence
-                                                    }: {
-    basePath: string,
-    baseCollectionPath: string,
-    authController: AuthController<UserType>;
-    schemas?: EntitySchema[];
-    navigationOrBuilder?: Navigation | NavigationBuilder<UserType>;
-    schemaOverrideHandler: SchemaOverrideHandler | undefined;
-    dateTimeFormat?: string;
-    locale?: Locale;
-    dataSource: DataSource;
-    storageSource: StorageSource;
-    configPersistence?: ConfigurationPersistence;
-    userConfigPersistence?: UserConfigurationPersistence;
-}): NavigationContext {
+                                                    }: BuildNavigationContextProps<UserType>): NavigationContext {
 
     const [navigation, setNavigation] = useState<ResolvedNavigation | undefined>(undefined);
     const [schemas, setSchemas] = useState<EntitySchema[]>(baseSchemas);
@@ -60,7 +63,6 @@ export function useBuildNavigationContext<UserType>({
     const [persistenceLoading, setPersistenceLoading] = useState<boolean>(true);
     const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
 
-    const schemaConfigRecord = useRef<Record<string, Partial<EntityCollectionResolver> & { overrideSchemaRegistry?: boolean }>>({});
     const cleanBasePath = removeInitialAndTrailingSlashes(basePath);
     const cleanBaseCollectionPath = removeInitialAndTrailingSlashes(baseCollectionPath);
 
@@ -130,7 +132,7 @@ export function useBuildNavigationContext<UserType>({
             if (!modifiedSchema) {
                 return baseSchema;
             } else {
-                return mergeDeep(modifiedSchema, baseSchema);
+                return mergeSchemas(baseSchema, modifiedSchema);
             }
         });
 
@@ -199,7 +201,6 @@ export function useBuildNavigationContext<UserType>({
 
         let result: Partial<EntityCollectionResolver> = {};
 
-        const overriddenProps = schemaConfigRecord.current[sidePanelKey];
         const resolvedProps: Partial<EntityCollectionResolver> | undefined = schemaOverrideHandler && schemaOverrideHandler({
             entityId,
             path: removeInitialAndTrailingSlashes(path)
@@ -207,28 +208,6 @@ export function useBuildNavigationContext<UserType>({
 
         if (resolvedProps)
             result = resolvedProps;
-
-        if (overriddenProps) {
-            // override schema resolver default to true
-            const shouldOverrideRegistry = overriddenProps.overrideSchemaRegistry === undefined || overriddenProps.overrideSchemaRegistry;
-            if (shouldOverrideRegistry)
-                result = {
-                    ...overriddenProps,
-                    permissions: result.permissions || overriddenProps.permissions,
-                    schemaResolver: result.schemaResolver || overriddenProps.schemaResolver,
-                    subcollections: result.subcollections || overriddenProps.subcollections,
-                    callbacks: result.callbacks || overriddenProps.callbacks
-                };
-            else
-                result = {
-                    ...result,
-                    permissions: overriddenProps.permissions ?? result.permissions,
-                    schemaResolver: overriddenProps.schemaResolver ?? result.schemaResolver,
-                    subcollections: overriddenProps.subcollections ?? result.subcollections,
-                    callbacks: overriddenProps.callbacks ?? result.callbacks
-                };
-
-        }
 
         if (resolvedCollection) {
             const schema = findSchema(resolvedCollection.schemaId, schemas);
@@ -264,7 +243,6 @@ export function useBuildNavigationContext<UserType>({
         schemas,
         baseCollectionPath,
         schemaOverrideHandler,
-        schemaConfigRecord.current,
         buildSchemaResolver
     ]);
 

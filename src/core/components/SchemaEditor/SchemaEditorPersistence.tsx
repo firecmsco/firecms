@@ -40,17 +40,22 @@ export function SchemaEditorPersistence({
         return <CircularProgressCenter/>;
     }
 
+    const persistSchema = <M extends { [Key: string]: any }>(schema: EntitySchema<M>) => {
+        const properties = removeFunctions(schema.properties);
+        const newSchema = {
+            ...schema,
+            properties: properties,
+        };
+        delete newSchema.views;
+        return configurationPersistence.saveSchema(newSchema);
+    };
+
     return <>
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2}}>
             <SchemaEditor schema={schema}
                           onSchemaModified={(schema) => {
                               setSchema(schema);
-                              const newSchema = {
-                                  ...schema,
-                                  properties: removeFunctions(schema.properties),
-                              };
-                              delete newSchema.views;
-                              configurationPersistence.saveSchema(newSchema);
+                              persistSchema(schema);
                           }}/>
         </Box>
 
