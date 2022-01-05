@@ -1,9 +1,13 @@
-import { EntityCollection, EntityCustomView, EntitySchema } from "../../models";
+import {
+    EntityCollection,
+    EntityCustomView,
+    EntitySchema,
+    SchemaRegistry
+} from "../../models";
 import {
     getCollectionPathsCombinations,
     removeInitialAndTrailingSlashes
 } from "./navigation_utils";
-import { findSchema } from "../utils";
 
 export type NavigationViewInternal<M> =
     | NavigationViewEntityInternal<M>
@@ -34,14 +38,16 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     collections: EntityCollection[],
     schemas: EntitySchema[] | undefined,
     customViews?: EntityCustomView<M>[],
-    currentFullPath?: string
+    currentFullPath?: string,
+    findSchema:  (id: string) => EntitySchema;
 }): NavigationViewInternal<M> [] {
 
     const {
         path,
         collections,
         schemas = [],
-        currentFullPath
+        currentFullPath,
+        findSchema
     } = props;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -76,7 +82,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                 });
                 if (nextSegments.length > 1) {
                     const newPath = nextSegments.slice(1).join("/");
-                    const schema = findSchema(collection.schemaId, schemas);
+                    const schema = findSchema(collection.schemaId);
                     const customViews = schema.views;
                     const customView = customViews && customViews.find((entry) => entry.path === newPath);
                     if (customView) {
@@ -94,7 +100,8 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                             customViews: customViews,
                             collections: collection.subcollections,
                             schemas,
-                            currentFullPath: fullPath
+                            currentFullPath: fullPath,
+                            findSchema
                         }));
                     }
                 }

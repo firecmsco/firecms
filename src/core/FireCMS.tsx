@@ -27,6 +27,7 @@ import { useBuildNavigationContext } from "./internal/useBuildNavigationContext"
 import { useBuildAuthController } from "./internal/useBuildAuthController";
 import { useBuildStorageConfigurationPersistence } from "./util/storage";
 import { ConfigurationPersistence } from "../models/config_persistence";
+import { useBuildSchemaRegistry } from "./internal/useBuildSchemaRegistry";
 
 const DEFAULT_COLLECTION_PATH = `/c`;
 
@@ -184,10 +185,14 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
 
     const userConfigPersistence = useBuildStorageConfigurationPersistence();
 
+    const schemaRegistry = useBuildSchemaRegistry({
+        schemas, configPersistence, userConfigPersistence
+    });
+
     const navigationContext = useBuildNavigationContext({
         basePath: usedBasePath,
         baseCollectionPath: usedBasedCollectionPath,
-        schemas,
+        schemaRegistry,
         authController,
         navigationOrBuilder,
         dateTimeFormat,
@@ -199,7 +204,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         userConfigPersistence,
     });
 
-    const sideEntityController = useBuildSideEntityController(navigationContext);
+    const sideEntityController = useBuildSideEntityController(navigationContext, schemaRegistry);
 
     const loading = authController.authLoading || authController.initialLoading || navigationContext.loading;
 
@@ -225,6 +230,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                             dateTimeFormat,
                             locale,
                             navigationContext,
+                            schemaRegistry,
                             dataSource,
                             storageSource,
                             snackbarController,

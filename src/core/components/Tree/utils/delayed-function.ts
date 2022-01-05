@@ -1,9 +1,15 @@
 export default class DelayedFunction {
-  constructor(delay) {
+  delay: number;
+
+  timeoutId: number | undefined;
+
+  fn?: Function;
+
+  constructor(delay: number) {
     this.delay = delay;
   }
 
-  start(fn) {
+  start(fn: Function) {
     this.stop();
     this.timeoutId = window.setTimeout(fn, this.delay);
   }
@@ -14,5 +20,4 @@ export default class DelayedFunction {
       this.timeoutId = undefined;
     }
   }
-
 }

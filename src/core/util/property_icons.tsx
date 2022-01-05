@@ -29,8 +29,7 @@ export function getIconForProperty(
     fontSize: "inherit" | "medium" | "large" | "small" | undefined = "inherit"): React.ReactNode {
     if (typeof property === "function") {
         return <FunctionsIcon color={color} fontSize={fontSize}/>;
-    }
-    if (property.dataType === "string") {
+    } else if (property.dataType === "string") {
         if (property.config?.multiline || property.config?.markdown) {
             return <SubjectIcon color={color} fontSize={fontSize}/>;
         } else if (property.config?.storageMeta) {
@@ -69,11 +68,48 @@ export function getIconForProperty(
     }
 }
 
-export function getWidgetNameForProperty(    property: Property): string {
+export function getColorForProperty(property: PropertyOrBuilder): string {
+    if (typeof property === "function") {
+        return "#666";
+    } else if (property.dataType === "string") {
+        if (property.config?.storageMeta) {
+            return "#f92d9a";
+        } else if (property.config?.url) {
+            return "#2d7ff9";
+        } else if (property.config?.enumValues) {
+            return "#532cff";
+        } else {
+            return "#2d7ff9";
+        }
+    } else if (property.dataType === "number") {
+        if (property.config?.enumValues) {
+            return "#532cff";
+        }
+        return "#bec920";
+    } else if (property.dataType === "geopoint") {
+        return "#20c933";
+    } else if (property.dataType === "map") {
+        return "#20d9d2";
+    } else if (property.dataType === "array") {
+        if (property.of)
+            return getColorForProperty(property.of);
+        return "#666";
+    } else if (property.dataType === "boolean") {
+        return "#ff9408";
+    } else if (property.dataType === "timestamp") {
+        return "#8b46ff";
+    } else if (property.dataType === "reference") {
+        return "#f82b60";
+    } else {
+        return "#2d7ff9";
+    }
+}
+
+export function getWidgetNameForProperty(property: Property): string {
     if (property.dataType === "string") {
-        if (property.config?.multiline ) {
+        if (property.config?.multiline) {
             return "Multiline text";
-        } else  if (property.config?.markdown ) {
+        } else if (property.config?.markdown) {
             return "Markdown text";
         } else if (property.config?.storageMeta) {
             if (property.config.storageMeta.mediaType === "image")

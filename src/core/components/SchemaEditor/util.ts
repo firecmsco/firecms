@@ -22,13 +22,15 @@ export function propertiesToTree<M>(properties: PropertiesOrBuilder<M>): TreeDat
     const items = treeItems
         .map((item) => ({ [item.id]: item }))
         .reduce((a, b) => ({ ...a, ...b }), {});
+
+    const rootChildren = treeItems.filter((item) => item.data.isInRoot).map(item => item.id);
     return {
         rootId: "root",
         items: {
             "root": {
                 id: "root",
                 isExpanded: true,
-                children: treeItems.filter((item) => item.data.isInRoot).map(item => item.id)
+                children: rootChildren
             },
             ...items
         }
@@ -50,7 +52,7 @@ function getTreeItems(properties: PropertiesOrBuilder<any>, namespace?: string):
                 data: { isInRoot: !namespace, id: key, property },
                 children: children.map((c) => c.id)
             }), ...children];
-        }).reduce((a, b) => [...a, ...b]);
+        }).reduce((a, b) => [...a, ...b], []);
 }
 
 export function treeToProperties<M>(treeData: TreeData): [PropertiesOrBuilder<M>, (keyof M)[]] {
@@ -65,7 +67,7 @@ export function treeToProperties<M>(treeData: TreeData): [PropertiesOrBuilder<M>
             if (property.dataType === "map") {
                 property.properties = item.children
                     .map((cid) => ({ [items[cid].data.id]: items[cid].data.property }))
-                    .reduce((a, b) => ({ ...a, ...b }));
+                    .reduce((a, b) => ({ ...a, ...b }), {});
                 property.propertiesOrder = item.children.map((cid) => items[cid].data.id);
             }
             return [id, item];
@@ -74,7 +76,7 @@ export function treeToProperties<M>(treeData: TreeData): [PropertiesOrBuilder<M>
     const res = Object.entries(items)
         .filter(([id, _]) => root.children.includes(id))
         .map(([id, item]) => ({ [item.data.id]: item.data.property }))
-        .reduce((a, b) => ({ ...a, ...b })) as PropertiesOrBuilder<M>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesOrBuilder<M>;
 
     const rootIds = root.children.map((id) => items[id].data.id) as (keyof M)[];
     return [res, rootIds];

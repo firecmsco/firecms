@@ -1,20 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     AuthController,
     DataSource,
     EntityCollection,
     EntityCollectionResolver,
-    EntitySchema,
-    EntitySchemaResolver,
-    EntitySchemaResolverProps,
     Locale,
     LocalEntityCollection,
-    LocalEntitySchema,
     Navigation,
     NavigationBuilder,
     NavigationContext,
     ResolvedNavigation,
     SchemaOverrideHandler,
+    SchemaRegistry,
     StorageSource,
     UserConfigurationPersistence
 } from "../../models";
@@ -22,16 +19,14 @@ import {
     getCollectionByPath,
     removeInitialAndTrailingSlashes
 } from "../util/navigation_utils";
-import { getValueInPath, mergeDeep } from "../util/objects";
-import { computeProperties, findSchema } from "../utils";
+import { mergeDeep } from "../util/objects";
 import { ConfigurationPersistence } from "../../models/config_persistence";
-import { mergeSchemas } from "../util/schemas";
 
 type BuildNavigationContextProps<UserType> = {
     basePath: string,
     baseCollectionPath: string,
     authController: AuthController<UserType>;
-    schemas?: EntitySchema[];
+    schemaRegistry: SchemaRegistry;
     navigationOrBuilder?: Navigation | NavigationBuilder<UserType>;
     schemaOverrideHandler: SchemaOverrideHandler | undefined;
     dateTimeFormat?: string;
@@ -47,7 +42,7 @@ export function useBuildNavigationContext<UserType>({
                                                         baseCollectionPath,
                                                         authController,
                                                         navigationOrBuilder,
-                                                        schemas: baseSchemas = [],
+                                                        schemaRegistry,
                                                         schemaOverrideHandler,
                                                         dateTimeFormat,
                                                         locale,
@@ -58,7 +53,6 @@ export function useBuildNavigationContext<UserType>({
                                                     }: BuildNavigationContextProps<UserType>): NavigationContext {
 
     const [navigation, setNavigation] = useState<ResolvedNavigation | undefined>(undefined);
-    const [schemas, setSchemas] = useState<EntitySchema[]>(baseSchemas);
     const [navigationLoading, setNavigationLoading] = useState<boolean>(true);
     const [persistenceLoading, setPersistenceLoading] = useState<boolean>(true);
     const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
@@ -123,63 +117,6 @@ export function useBuildNavigationContext<UserType>({
         configPersistence?.collections
     ]);
 
-    useEffect(() => {
-        if (!configPersistence?.schemas)
-            return;
-
-        const baseSchemasMerged = baseSchemas.map((baseSchema) => {
-            const modifiedSchema = configPersistence.schemas?.find((schema) => schema.id === baseSchema.id);
-            if (!modifiedSchema) {
-                return baseSchema;
-            } else {
-                return mergeSchemas(baseSchema, modifiedSchema);
-            }
-        });
-
-        const mergedIds = baseSchemasMerged.map(s => s.id);
-        setSchemas([
-            ...configPersistence.schemas.filter((schema) => !mergedIds.includes(schema.id)),
-            ...baseSchemasMerged,
-        ]);
-    }, [
-        configPersistence?.schemas
-    ]);
-
-    const getUserSchemaOverride = useCallback(<M extends any>(path: string): LocalEntitySchema<M> | undefined => {
-        if (!userConfigPersistence)
-            return undefined
-        return userConfigPersistence.getSchemaConfig<M>(path);
-    }, [userConfigPersistence]);
-
-
-    const buildSchemaResolver = useCallback(<M extends { [Key: string]: any } = any>
-    ({
-         schema,
-         path
-     }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> =>
-        ({
-             entityId,
-             values,
-         }: EntitySchemaResolverProps<M>) => {
-
-            const schemaOverride = getUserSchemaOverride<M>(path);
-            const storedProperties = getValueInPath(schemaOverride, "properties");
-
-            const properties = computeProperties({
-                propertiesOrBuilder: schema.properties,
-                path,
-                entityId,
-                values: values ?? schema.defaultValues
-            });
-
-            return {
-                ...schema,
-                properties: mergeDeep(properties, storedProperties),
-                originalSchema: schema
-            };
-        }, [getUserSchemaOverride]);
-
-
     const getCollectionResolver = useCallback(<M extends { [Key: string]: any }>(
         path: string,
         entityId?: string,
@@ -210,13 +147,13 @@ export function useBuildNavigationContext<UserType>({
             result = resolvedProps;
 
         if (resolvedCollection) {
-            const schema = findSchema(resolvedCollection.schemaId, schemas);
+            const schema = schemaRegistry.findSchema(resolvedCollection.schemaId);
             const subcollections = resolvedCollection.subcollections;
             const callbacks = resolvedCollection.callbacks;
             const permissions = resolvedCollection.permissions;
             result = {
                 ...result,
-                schemaResolver: result.schemaResolver ?? buildSchemaResolver({
+                schemaResolver: result.schemaResolver ?? schemaRegistry.buildSchemaResolver({
                     schema,
                     path
                 }),
@@ -229,8 +166,11 @@ export function useBuildNavigationContext<UserType>({
         if (!result.schemaResolver) {
             if (!result.schemaId)
                 throw Error(`Not able to resolve schema for ${sidePanelKey}`);
-            result.schemaResolver = buildSchemaResolver({
-                schema: findSchema(result.schemaId, schemas),
+            const foundSchema = schemaRegistry.findSchema(result.schemaId);
+            if (!foundSchema)
+                throw Error(`Not able to resolve schema for ${sidePanelKey}`);
+            result.schemaResolver = schemaRegistry.buildSchemaResolver({
+                schema: foundSchema,
                 path
             });
         }
@@ -240,10 +180,9 @@ export function useBuildNavigationContext<UserType>({
     }, [
         navigation,
         basePath,
-        schemas,
+        schemaRegistry,
         baseCollectionPath,
-        schemaOverrideHandler,
-        buildSchemaResolver
+        schemaOverrideHandler
     ]);
 
     const isUrlCollectionPath = useCallback(
@@ -293,7 +232,6 @@ export function useBuildNavigationContext<UserType>({
         navigation,
         loading: navigationLoading || persistenceLoading,
         navigationLoadingError,
-        schemas,
         homeUrl,
         basePath,
         baseCollectionPath,

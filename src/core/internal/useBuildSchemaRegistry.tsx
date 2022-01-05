@@ -1,53 +1,42 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-    AuthController,
-    DataSource,
-    EntityCollection,
-    EntityCollectionResolver,
     EntitySchema,
     EntitySchemaResolver,
     EntitySchemaResolverProps,
-    Locale,
-    LocalEntityCollection,
     LocalEntitySchema,
-    Navigation,
-    NavigationBuilder,
-    NavigationContext,
-    ResolvedNavigation,
-    SchemaOverrideHandler, SchemaRegistry,
-    StorageSource,
+    SchemaRegistry,
     UserConfigurationPersistence
 } from "../../models";
-import {
-    getCollectionByPath,
-    removeInitialAndTrailingSlashes
-} from "../util/navigation_utils";
 import { getValueInPath, mergeDeep } from "../util/objects";
-import { computeProperties, findSchema } from "../utils";
+import { computeProperties } from "../utils";
 import { ConfigurationPersistence } from "../../models/config_persistence";
 import { mergeSchemas } from "../util/schemas";
 
 type BuildSchemaRegistryProps<UserType> = {
-    authController: AuthController<UserType>;
     schemas?: EntitySchema[];
-    schemaOverrideHandler: SchemaOverrideHandler | undefined;
     configPersistence?: ConfigurationPersistence;
     userConfigPersistence?: UserConfigurationPersistence;
 };
 
 export function useBuildSchemaRegistry<UserType>({
-                                                        schemas: baseSchemas = [],
-                                                        configPersistence,
-                                                        userConfigPersistence
-                                                    }: BuildSchemaRegistryProps<UserType>): SchemaRegistry {
+                                                     schemas: baseSchemas = [],
+                                                     configPersistence,
+                                                     userConfigPersistence
+                                                 }: BuildSchemaRegistryProps<UserType>): SchemaRegistry {
+
+    const [initialised, setInitialised] = useState(false);
 
     const [schemas, setSchemas] = useState<EntitySchema[]>(baseSchemas);
-    const [persistenceLoading, setPersistenceLoading] = useState<boolean>(true);
-
 
     useEffect(() => {
-        if (!configPersistence?.schemas)
+        if (!configPersistence) {
+            setInitialised(true);
             return;
+        }
+
+        if (!configPersistence?.schemas) {
+            return;
+        }
 
         const baseSchemasMerged = baseSchemas.map((baseSchema) => {
             const modifiedSchema = configPersistence.schemas?.find((schema) => schema.id === baseSchema.id);
@@ -63,6 +52,7 @@ export function useBuildSchemaRegistry<UserType>({
             ...configPersistence.schemas.filter((schema) => !mergedIds.includes(schema.id)),
             ...baseSchemasMerged,
         ]);
+        setInitialised(true);
     }, [
         configPersistence?.schemas
     ]);
@@ -73,6 +63,13 @@ export function useBuildSchemaRegistry<UserType>({
         return userConfigPersistence.getSchemaConfig<M>(path);
     }, [userConfigPersistence]);
 
+
+    const findSchema = useCallback((schemaId: string): EntitySchema => {
+        const schema = schemas.find((s) => s.id === schemaId);
+        if (!schema)
+            throw Error("Not able to find schema with id: " + schemaId);
+        return schema;
+    }, [schemas]);
 
     const buildSchemaResolver = useCallback(<M extends { [Key: string]: any } = any>
     ({
@@ -103,8 +100,9 @@ export function useBuildSchemaRegistry<UserType>({
 
 
     return {
-        loading: persistenceLoading,
+        initialised,
         schemas,
+        findSchema,
         buildSchemaResolver,
     };
 }

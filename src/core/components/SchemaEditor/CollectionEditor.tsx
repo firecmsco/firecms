@@ -26,12 +26,12 @@ import { EntityCollection } from "../../../models";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { ErrorView } from "../ErrorView";
 import { useNavigation, useSnackbarController } from "../../../hooks";
-import { findSchema } from "../../utils";
 import { SchemaEditorPersistence } from "./SchemaEditorPersistence";
 import {
     computeTopNavigation,
     TopNavigationResult
 } from "../../util/navigation_utils";
+import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 
 /**
  * @category Components
@@ -59,9 +59,10 @@ export function CollectionEditor<M>({
     const location = useLocation();
     const group = (location.state as any)?.group;
     const navigationContext = useNavigation();
+    const schemaRegistry = useSchemaRegistry();
     const snackbarController = useSnackbarController();
 
-    const schemas = navigationContext.schemas;
+    const schemas = schemaRegistry.schemas;
 
     const [selectedSchemaId, setSelectedSchemaId] = useState<string | undefined>();
 
@@ -154,7 +155,7 @@ export function CollectionEditor<M>({
                             mt: -1 / 4
                         },
                     };
-                    let selectedSchema = values.schemaId ? findSchema(values.schemaId, schemas) : undefined;
+                    const selectedSchema = values.schemaId ? schemaRegistry.findSchema(values.schemaId) : undefined;
                     return <Container maxWidth={"sm"}>
                         <form onSubmit={handleSubmit}>
                             <Box

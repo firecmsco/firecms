@@ -9,6 +9,7 @@ import { NotFoundPage } from "./components/NotFoundPage";
 import { CollectionEditor } from "./components/SchemaEditor/CollectionEditor";
 import { EntityCollectionRoute } from "./components/EntityCollectionRoute";
 import { SchemaEditorPersistence } from "./components/SchemaEditor/SchemaEditorPersistence";
+import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
 
 /**
  * @category Components
@@ -34,6 +35,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
     const location = useLocation();
     const navigationContext = useNavigation();
+    const schemaRegistry = useSchemaRegistry();
     const navigation = navigationContext.navigation;
 
     if (!navigation)
@@ -131,7 +133,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
             }
         );
 
-    const schemasEditRoutes = (navigationContext.schemas ?? [])
+    const schemasEditRoutes = (schemaRegistry.schemas ?? [])
         .map((schema) => {
                 const urlPath = navigationContext.buildUrlEditSchemaPath({
                     id: schema.id

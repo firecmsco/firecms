@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { SchemaEditor } from "./SchemaEditor";
 import { CircularProgressCenter } from "../CircularProgressCenter";
-import { EntitySchema, ErrorView, useNavigation } from '../../..';
+import { EntitySchema, ErrorView } from '../../..';
 import { useConfigurationPersistence } from "../../../hooks/useConfigurationPersistence";
-import { findSchema } from "../../utils";
 import Box from '@mui/material/Box';
 import { removeFunctions } from "../../util/objects";
+import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 
 export type SchemaEditorProps = {
     schemaId: string;
@@ -16,7 +16,8 @@ export function SchemaEditorPersistence({
                                             schemaId,
                                         }: SchemaEditorProps) {
 
-    const navigationContext = useNavigation();
+    const schemaRegistry = useSchemaRegistry();
+
     const configurationPersistence = useConfigurationPersistence();
     if (!configurationPersistence)
         throw Error("Can't use the schema editor without specifying a `ConfigurationPersistence`");
@@ -26,17 +27,18 @@ export function SchemaEditorPersistence({
 
     React.useEffect(() => {
         try {
-            setSchema(findSchema(schemaId, navigationContext.schemas));
+            if (schemaRegistry.initialised)
+                setSchema(schemaRegistry.findSchema(schemaId));
         } catch (e) {
             setError(error);
         }
-    }, [schemaId, navigationContext.schemas]);
+    }, [schemaId, schemaRegistry]);
 
     if (error) {
         return <ErrorView error={`Error fetching schema ${schemaId}`}/>;
     }
 
-    if (!schema) {
+    if (!schemaRegistry.initialised || !schema) {
         return <CircularProgressCenter/>;
     }
 

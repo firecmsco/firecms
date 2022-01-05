@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Tree, {
     moveItemOnTree,
     RenderItemParams,
+    TreeData,
     TreeDestinationPosition,
     TreeSourcePosition,
 } from '../Tree';
@@ -11,6 +12,7 @@ import deepEqual from "deep-equal";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import {
     Box,
+    Container,
     FilledInput,
     FormControl,
     FormHelperText,
@@ -20,6 +22,7 @@ import {
     Typography
 } from "@mui/material";
 import {
+    getColorForProperty,
     getIconForProperty,
     getWidgetNameForProperty
 } from "../../util/property_icons";
@@ -27,6 +30,7 @@ import {
 import { EntitySchema, Property, PropertyOrBuilder } from "../../../models";
 import { Form, Formik, useFormikContext } from 'formik';
 import { propertiesToTree, treeToProperties } from './util';
+import { sortProperties } from "../../util/schemas";
 
 export type SchemaEditorProps<M> = {
     schema: EntitySchema<M>;
@@ -39,10 +43,13 @@ export function SchemaEditor<M>({
                                     onSchemaModified
                                 }: SchemaEditorProps<M>) {
 
-    // console.log("SchemaEditor", schema);
+    const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
+    const [selectedProperty, setSelectedProperty] = useState<Property | undefined>();
 
-    const tree = propertiesToTree(schema.properties);
-    // const [tree, setTree] = useState(schemaToTree(schema));
+    const onPropertyClick = useCallback((property: Property, propertyId: string) => {
+        setSelectedPropertyId(propertyId);
+        setSelectedProperty(property)
+    }, []);
 
     const renderItem = ({
                             item,
@@ -57,9 +64,11 @@ export function SchemaEditor<M>({
                 name={item.id as string}
                 propertyOrBuilder={property}
                 provided={provided}
-                isDragging={snapshot.isDragging}/>
+                onClick={() => onPropertyClick(property, item.id as string)}
+                selected={snapshot.isDragging || selectedPropertyId === item.id}/>
         )
     };
+
 
     // const onExpand = (itemId: ItemId) => {
     //     setTree(mutateTree(tree, itemId, { isExpanded: true }))
@@ -70,95 +79,122 @@ export function SchemaEditor<M>({
     // };
 
     return (
-        <Formik
-            initialValues={{
-                ...schema
-            }}
-            onSubmit={(newSchema: EntitySchema) => {
-                console.log("submit", newSchema);
-                // if (!deepEqual(schema, newSchema))
+        <Container maxWidth={"md"}>
+            <Formik
+                initialValues={{
+                    ...schema
+                }}
+                onSubmit={(newSchema: EntitySchema) => {
+                    console.log("submit", newSchema);
                     onSchemaModified(newSchema);
-            }}
-        >
-            {({ values, setValues, setFieldValue, handleChange }) => {
+                }}
+            >
+                {({ values, setValues, setFieldValue, handleChange }) => {
 
-                React.useEffect(() => {
-                    setValues({
-                        ...schema
-                    });
-                }, [schema]);
+                    React.useEffect(() => {
+                        setValues({
+                            ...schema
+                        });
+                    }, [schema]);
 
-                const onDragEnd = (
-                    source: TreeSourcePosition,
-                    destination?: TreeDestinationPosition,
-                ) => {
+                    const tree = useMemo(() => {
+                        const sortedProperties = sortProperties(values.properties, values.propertiesOrder);
+                        return propertiesToTree(sortedProperties);
+                    }, [values.properties, values.propertiesOrder]);
 
-                    if (!destination) {
-                        return;
-                    }
+                    const onDragEnd = (
+                        source: TreeSourcePosition,
+                        destination?: TreeDestinationPosition,
+                    ) => {
 
-                    const newTree = moveItemOnTree(tree, source, destination);
-                    // setTree(newTree);
-                    const [properties, propertiesOrder] = treeToProperties<M>(newTree);
-                    console.log(newTree, properties);
+                        if (!destination) {
+                            return;
+                        }
 
-                    setFieldValue("properties", properties);
-                    setFieldValue("propertiesOrder", propertiesOrder);
-                };
+                        if (!isValidDrag(tree, source, destination)) {
+                            return;
+                        }
 
-                const formControlSX = {
-                    '& .MuiInputLabel-root': {
-                        mt: 1 / 2,
-                        ml: 1 / 2,
-                    },
-                    '& .MuiInputLabel-shrink': {
-                        mt: -1 / 4
-                    },
-                };
+                        const newTree = moveItemOnTree(tree, source, destination);
+                        const [properties, propertiesOrder] = treeToProperties<M>(newTree);
 
-                return (
-                    <Form>
-                        <FormControl fullWidth
-                                     variant="filled"
-                                     sx={formControlSX}>
-                            <InputLabel
-                                htmlFor="name">Name</InputLabel>
-                            <FilledInput
-                                id="name"
-                                aria-describedby="name-helper"
-                                onChange={handleChange}
-                                value={values.name}
-                                sx={{ minHeight: "64px" }}
-                            />
-                            <FormHelperText
-                                id="name-helper">
-                                Plural name (e.g. Products)
-                            </FormHelperText>
-                        </FormControl>
+                        setFieldValue("propertiesOrder", propertiesOrder);
+                        setFieldValue("properties", properties);
+                    };
 
-                        <Typography>Properties</Typography>
-                        <Paper elevation={0} variant={"outlined"} sx={{ p: 3 }}>
-                            <Grid container>
-                                <Grid item xs={12} sm={6}>
-                                    <Tree
-                                        tree={propertiesToTree(values.properties)}
-                                        renderItem={renderItem}
-                                        onDragEnd={onDragEnd}
-                                        isDragEnabled
-                                        isNestingEnabled
-                                    />
+
+                    const formControlSX = {
+                        '& .MuiInputLabel-root': {
+                            mt: 1 / 2,
+                            ml: 1 / 2,
+                        },
+                        '& .MuiInputLabel-shrink': {
+                            mt: -1 / 4
+                        },
+                    };
+
+                    return (
+                        <Form>
+                            <FormControl fullWidth
+                                         variant="filled"
+                                         sx={formControlSX}>
+                                <InputLabel
+                                    htmlFor="name">Name</InputLabel>
+                                <FilledInput
+                                    id="name"
+                                    aria-describedby="name-helper"
+                                    onChange={handleChange}
+                                    value={values.name}
+                                    sx={{ minHeight: "64px" }}
+                                />
+                                <FormHelperText
+                                    id="name-helper">
+                                    Plural name (e.g. Products)
+                                </FormHelperText>
+                            </FormControl>
+
+                            <Typography sx={{ mt: 2 }} variant={"subtitle2"}>
+                                Properties
+                            </Typography>
+                            <Paper elevation={0}
+                                   variant={"outlined"}
+                                   sx={{ p: 3 }}>
+                                <Grid container>
+                                    <Grid item xs={12} sm={6}>
+                                        <Tree
+                                            key={`tree_${selectedPropertyId}`}
+                                            tree={tree}
+                                            renderItem={renderItem}
+                                            onDragEnd={onDragEnd}
+                                            isDragEnabled
+                                            isNestingEnabled
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Paper variant={"outlined"}
+                                               sx={(theme) => ({
+                                                   p: 3,
+                                                   position: "sticky",
+                                                   top: theme.spacing(3)
+                                               })}
+                                               elevation={0}>
+                                            {selectedProperty && <Box>
+                                                {selectedProperty.title}
+                                            </Box>}
+                                            {!selectedProperty && <Box>
+                                                Select a property to edit it
+                                            </Box>}
+                                        </Paper>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    Property edit view here
-                                </Grid>
-                            </Grid>
-                        </Paper>
+                            </Paper>
 
-                        <SubmitListener/>
-                    </Form>
-                );
-            }}
-        </Formik>
+                            <SubmitListener/>
+                        </Form>
+                    );
+                }}
+            </Formik>
+        </Container>
     );
 }
 
@@ -167,58 +203,80 @@ export function SchemaEntry({
                                 name,
                                 propertyOrBuilder,
                                 provided,
-                                isDragging
+                                selected,
+                                onClick
                             }: {
-    name: string,
-    propertyOrBuilder: PropertyOrBuilder,
-    provided: TreeDraggableProvided,
-    isDragging: boolean
+    name: string;
+    propertyOrBuilder: PropertyOrBuilder;
+    provided: TreeDraggableProvided;
+    selected: boolean;
+    onClick: () => void;
 }) {
 
     return (
         <Box sx={{
             display: "flex",
             flexDirection: "row",
-            width: "100%"
+            width: "100%",
+            py: 1,
+            cursor: "pointer"
         }}
+             onClick={onClick}
              ref={provided.innerRef}
              {...provided.draggableProps}
              style={{
                  ...provided.draggableProps.style
              }}>
 
-            {getIconForProperty(propertyOrBuilder)}
-
-                <Box sx={{
-                    px: 3,
-                    maxWidth: "360px",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "row"
-                }}>
-                    <Paper variant={"outlined"}
-                           sx={{
-                               p: 2,
-                               mr: 2,
-                               flexGrow: 1,
-                               border: isDragging ? "2px solid #999" : undefined,
-                           }}
-                           elevation={0}>
+            <Box sx={{
+                background: getColorForProperty(propertyOrBuilder),
+                height: "32px",
+                mt: .5,
+                padding: .5,
+                borderRadius: "50%",
+                boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                color: "white"
+            }}>
+                {getIconForProperty(propertyOrBuilder, "inherit", "medium")}
+            </Box>
+            <Box sx={{
+                px: 3,
+                // maxWidth: "360px",
+                width: "100%",
+                display: "flex",
+                flexDirection: "row"
+            }}>
+                <Paper variant={"outlined"}
+                       sx={{
+                           mr: 2,
+                           flexGrow: 1,
+                           border: selected ? "1px solid #999" : undefined,
+                       }}
+                       elevation={0}>
+                    <Box sx={{
+                        borderRadius: "2px",
+                        border: selected ? "1px solid #999" : "1px solid transparent",
+                        p: 2,
+                    }}>
                         {typeof propertyOrBuilder === "object" &&
-                        <PropertyEditView name={name}
-                                          property={propertyOrBuilder}/>}
-                    </Paper>
-                    <div                        {...provided.dragHandleProps}>
-                        <DragHandleIcon fontSize={"small"}/>
-                    </div>
-                </Box>
+                        <PropertyPreview name={name}
+                                         property={propertyOrBuilder}/>}
+                        {typeof propertyOrBuilder !== "object" &&
+                        <PropertyBuilderPreview name={name}/>}
+                    </Box>
+                </Paper>
+                <div                        {...provided.dragHandleProps}>
+                    <DragHandleIcon fontSize={"small"}/>
+                </div>
+            </Box>
         </Box>
     );
 
 }
 
 
-export const SubmitListener: React.FC = () => {
+export function SubmitListener() {
+
     const formik = useFormikContext()
     const [lastValues, setLastValues] = React.useState(formik.values);
 
@@ -245,29 +303,18 @@ export const SubmitListener: React.FC = () => {
     return null;
 }
 
-function PropertyEditView({
-                              name,
-                              property
-                          }: { name: string, property: Property }) {
+function PropertyPreview({
+                             name,
+                             property
+                         }: { name: string, property: Property }) {
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%', display: "flex", flexDirection: "column" }}>
 
-            <Box sx={{
-                display: 'flex',
-                flexDirection: "row",
-                alignItems: "baseline"
-            }}>
-                <Typography variant="subtitle1"
-                            component="span"
-                            sx={{ flexGrow: 1, pr: 2 }}>
-                    {property.title}
-                </Typography>
-                <Typography variant="body2"
-                            component="span"
-                            color="text.disabled">
-                    {name}
-                </Typography>
-            </Box>
+            <Typography variant="subtitle1"
+                        component="span"
+                        sx={{ flexGrow: 1, pr: 2 }}>
+                {property.title}
+            </Typography>
             <Box sx={{ display: 'flex', flexDirection: "row" }}>
                 <Typography sx={{ flexGrow: 1, pr: 2 }}
                             variant="body2"
@@ -283,5 +330,37 @@ function PropertyEditView({
             </Box>
         </Box>
     );
+}
+
+function PropertyBuilderPreview({
+                                    name,
+                                }: { name: string }) {
+    return (
+        <Box sx={{ width: '100%' }}>
+            <Typography variant="body2"
+                        component="span"
+                        color="text.disabled">
+                {name}
+            </Typography>
+            <Typography sx={{ flexGrow: 1, pr: 2 }}
+                        variant="body2"
+                        component="span"
+                        color="text.secondary">
+                This property is defined using a builder, in code
+            </Typography>
+        </Box>
+    );
+}
+
+function isValidDrag(tree: TreeData, source: TreeSourcePosition, destination: TreeDestinationPosition) {
+    const draggedPropertyId = tree.items[source.parentId].children[source.index];
+    const draggedProperty = tree.items[draggedPropertyId].data.property;
+    if (destination.index === undefined)
+        return false;
+    if (destination.parentId === tree.rootId)
+        return true;
+    const destinationPropertyId = tree.items[destination.parentId].id;
+    const destinationProperty: Property = tree.items[destinationPropertyId].data.property;
+    return typeof destinationProperty === "object" && destinationProperty.dataType === "map";
 }
 

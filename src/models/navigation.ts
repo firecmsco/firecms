@@ -94,8 +94,6 @@ export type NavigationContext = {
 
     navigation?: ResolvedNavigation;
 
-    schemas: EntitySchema[];
-
     loading: boolean;
 
     navigationLoadingError?: any;
