@@ -1,7 +1,6 @@
 import * as React from "react";
-import { useEffect } from "react";
 
-
+import deepEqual from "deep-equal";
 import {
     Box,
     FormControl,
@@ -25,7 +24,6 @@ import {
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@mui/icons-material/Clear";
 import { PreviewComponent, PreviewSize } from "../../preview";
-import deepEqual from "deep-equal";
 import { FieldDescription } from "../../form";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
@@ -128,9 +126,9 @@ export function StorageUploadField({
     const multipleFilesSupported = property.dataType === "array";
     const disabled = isReadOnly(property) || !!property.disabled || isSubmitting;
 
-    const internalValue = multipleFilesSupported ?
-        (Array.isArray(value) ? value : []) :
-        value;
+    const internalValue = multipleFilesSupported
+        ? (Array.isArray(value) ? value : [])
+        : value;
 
     useClearRestoreValue<string | string[]>({
         property,
@@ -138,10 +136,12 @@ export function StorageUploadField({
         setValue
     });
 
-    const storageMeta: StorageMeta | undefined = property.dataType === "string" ? property.config?.storageMeta :
-        property.dataType === "array" &&
-        (property.of as Property).dataType === "string" ? (property.of as StringProperty).config?.storageMeta :
-            undefined;
+    const storageMeta: StorageMeta | undefined = property.dataType === "string"
+? property.config?.storageMeta
+        : property.dataType === "array" &&
+        (property.of as Property).dataType === "string"
+? (property.of as StringProperty).config?.storageMeta
+            : undefined;
 
     if (!storageMeta)
         throw Error("Storage meta must be specified");
@@ -252,6 +252,166 @@ interface StorageUploadProps {
     storagePathBuilder: (file: File) => string;
 }
 
+function FileDropComponent({
+                               storageMeta,
+                               disabled,
+                               isDraggingOver,
+                               onExternalDrop,
+                               multipleFilesSupported,
+                               provided,
+                               autoFocus,
+                               internalValue,
+                               property,
+                               onClear,
+                               metadata,
+                               storagePathBuilder,
+                               onFileUploadComplete,
+                               size,
+                               name,
+                               helpText
+                           }: {
+    storageMeta: StorageMeta,
+    disabled: boolean,
+    isDraggingOver: boolean,
+    provided: any,
+    onExternalDrop: (acceptedFiles: File[]) => void,
+    multipleFilesSupported: boolean,
+    autoFocus: boolean,
+    internalValue: StorageFieldItem[],
+    property: StringProperty | ArrayProperty<string[]>,
+    onClear: (clearedStoragePathOrDownloadUrl: string) => void,
+    metadata: any,
+    storagePathBuilder: (file: File) => string,
+    onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, metadata?: any) => Promise<void>,
+    size: PreviewSize,
+    name: string,
+    helpText: string
+}) {
+
+    const classes = useStyles();
+    const {
+        getRootProps,
+        getInputProps,
+        isDragActive,
+        isDragAccept,
+        isDragReject
+    } = useDropzone({
+            accept: storageMeta.acceptedFiles,
+            disabled: disabled || isDraggingOver,
+            noDragEventsBubbling: true,
+            onDrop: onExternalDrop
+        }
+    );
+
+    return (
+        <Box
+            {...getRootProps()}
+            className={clsx(classes.dropZone, {
+                [classes.nonActiveDrop]: !isDragActive,
+                [classes.activeDrop]: isDragActive,
+                [classes.rejectDrop]: isDragReject,
+                [classes.acceptDrop]: isDragAccept,
+                [classes.disabled]: disabled
+            })}
+            sx={{
+                display: multipleFilesSupported ? undefined : "flex",
+                alignItems: "center"
+            }}
+        >
+            <Box
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    overflow: multipleFilesSupported ? "auto" : undefined,
+                    minHeight: multipleFilesSupported ? 180 : 250,
+                    p: 1,
+                    "&::-webkit-scrollbar": {
+                        display: "none"
+                    }
+                }}
+            >
+
+                <input
+                    autoFocus={autoFocus}
+                    {...getInputProps()} />
+
+                {internalValue.map((entry, index) => {
+                    let child: any;
+                    if (entry.storagePathOrDownloadUrl) {
+                        const renderProperty = multipleFilesSupported
+                            ? (property as ArrayProperty<string[]>).of as StringProperty
+                            : property as StringProperty;
+                        child = (
+                            <StorageItemPreview
+                                name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
+                                property={renderProperty}
+                                disabled={disabled}
+                                value={entry.storagePathOrDownloadUrl}
+                                onClear={onClear}
+                                size={entry.size}/>
+                        );
+                    } else if (entry.file) {
+                        child = (
+                            <StorageUploadProgress
+                                entry={entry}
+                                metadata={metadata}
+                                storagePath={storagePathBuilder(entry.file)}
+                                onFileUploadComplete={onFileUploadComplete}
+                                size={size}
+                            />
+                        );
+                    }
+
+                    return (
+                        <Draggable
+                            key={`array_field_${name}_${entry.id}}`}
+                            draggableId={`array_field_${name}_${entry.id}}`}
+                            index={index}>
+                            {(provided, snapshot) => (
+                                <Box
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={
+                                        provided.draggableProps.style
+                                    }
+                                    sx={{
+                                        borderRadius: "4px"
+                                    }}
+                                >
+                                    {child}
+                                </Box>
+                            )}
+                        </Draggable>
+                    );
+                })
+                }
+
+                {provided.placeholder}
+
+
+            </Box>
+
+            <Box
+                sx={{
+                    flexGrow: 1,
+                    minHeight: 38,
+                    boxSizing: "border-box",
+                    m: 2
+                }}>
+                <Typography color={"textSecondary"}
+                            variant={"body2"}
+                            align={"center"}>
+                    {helpText}
+                </Typography>
+            </Box>
+
+        </Box>
+    );
+}
+
 export function StorageUpload({
                                   property,
                                   name,
@@ -285,8 +445,8 @@ export function StorageUpload({
     const size = multipleFilesSupported ? "small" : "regular";
 
     const internalInitialValue: StorageFieldItem[] =
-        (multipleFilesSupported ?
-            value as string[]
+        (multipleFilesSupported
+            ? value as string[]
             : [value as string]).map(entry => (
             {
                 id: getRandomId(),
@@ -334,8 +494,8 @@ export function StorageUpload({
     function removeDuplicates(items: StorageFieldItem[]) {
         return items.filter(
             (v, i) => {
-                return ((items.map((v) => v.storagePathOrDownloadUrl).indexOf(v.storagePathOrDownloadUrl) === i) || !v.storagePathOrDownloadUrl)
-                    && ((items.map((v) => v.file).indexOf(v.file) === i) || !v.file);
+                return ((items.map((v) => v.storagePathOrDownloadUrl).indexOf(v.storagePathOrDownloadUrl) === i) || !v.storagePathOrDownloadUrl) &&
+                    ((items.map((v) => v.file).indexOf(v.file) === i) || !v.file);
             }
         );
     }
@@ -418,142 +578,36 @@ export function StorageUpload({
 
 
 
-    const helpText = multipleFilesSupported ?
-        "Drag 'n' drop some files here, or click to select files" :
-        "Drag 'n' drop a file here, or click to select one";
+    const helpText = multipleFilesSupported
+        ? "Drag 'n' drop some files here, or click to select files"
+        : "Drag 'n' drop a file here, or click to select one";
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId={`droppable_${name}`} direction="horizontal">
                 {(provided, snapshot) => {
-
-                    const {
-                        getRootProps,
-                        getInputProps,
-                        isDragActive,
-                        isDragAccept,
-                        isDragReject
-                    } = useDropzone({
-                            accept: storageMeta.acceptedFiles,
-                            disabled: disabled || snapshot.isDraggingOver,
-                            noDragEventsBubbling: true,
-                            onDrop: onExternalDrop
-                        }
-                    );
-
-                    return (
-                        <Box
-                            {...getRootProps()}
-                            className={clsx(classes.dropZone, {
-                                [classes.nonActiveDrop]: !isDragActive,
-                                [classes.activeDrop]: isDragActive,
-                                [classes.rejectDrop]: isDragReject,
-                                [classes.acceptDrop]: isDragAccept,
-                                [classes.disabled]: disabled
-                            })}
-                            sx={{
-                                display: multipleFilesSupported ? undefined : "flex",
-                                alignItems: "center",
-                            }}
-                        >
-                            <Box
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    overflow: multipleFilesSupported ? 'auto' : undefined,
-                                    minHeight: multipleFilesSupported ? 180 : 250,
-                                    p: 1,
-                                    "&::-webkit-scrollbar": {
-                                        display: "none"
-                                    }
-                                }}
-                            >
-
-                                <input
-                                    autoFocus={autoFocus}
-                                    {...getInputProps()} />
-
-                                {internalValue.map((entry, index) => {
-                                    let child: any;
-                                    if (entry.storagePathOrDownloadUrl) {
-                                        const renderProperty = multipleFilesSupported
-                                            ? (property as ArrayProperty<string[]>).of as StringProperty
-                                            : property as StringProperty;
-                                        child = (
-                                            <StorageItemPreview
-                                                name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
-                                                property={renderProperty}
-                                                disabled={disabled}
-                                                value={entry.storagePathOrDownloadUrl}
-                                                onClear={onClear}
-                                                size={entry.size}/>
-                                        );
-                                    } else if (entry.file) {
-                                        child = (
-                                            <StorageUploadProgress
-                                                entry={entry}
-                                                metadata={metadata}
-                                                storagePath={storagePathBuilder(entry.file)}
-                                                onFileUploadComplete={onFileUploadComplete}
-                                                size={size}
-                                            />
-                                        );
-                                    }
-
-                                    return (
-                                        <Draggable
-                                            key={`array_field_${name}_${entry.id}}`}
-                                            draggableId={`array_field_${name}_${entry.id}}`}
-                                            index={index}>
-                                            {(provided, snapshot) => (
-                                                <Box
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    style={
-                                                        provided.draggableProps.style
-                                                    }
-                                                    sx={{
-                                                        borderRadius: "4px"
-                                                    }}
-                                                >
-                                                    {child}
-                                                </Box>
-                                            )}
-                                        </Draggable>
-                                    );
-                                })
-                                }
-
-                                {provided.placeholder}
-
-
-                            </Box>
-
-                            <Box
-                                sx={{
-                                    flexGrow: 1,
-                                    minHeight: 38,
-                                    boxSizing: "border-box",
-                                    m: 2
-                                }}>
-                                <Typography color={"textSecondary"}
-                                            variant={"body2"}
-                                            align={"center"}>
-                                    {helpText}
-                                </Typography>
-                            </Box>
-
-                        </Box>
-                    );
+                    return <FileDropComponent storageMeta={storageMeta}
+                                              disabled={disabled}
+                                              isDraggingOver={snapshot.isDraggingOver}
+                                              provided={provided}
+                                              onExternalDrop={onExternalDrop}
+                                              multipleFilesSupported={multipleFilesSupported}
+                                              autoFocus={autoFocus}
+                                              internalValue={internalValue}
+                                              property={property}
+                                              onClear={onClear}
+                                              metadata={metadata}
+                                              storagePathBuilder={storagePathBuilder}
+                                              onFileUploadComplete={onFileUploadComplete}
+                                              size={size}
+                                              name={name} helpText={helpText}/>
                 }}
             </Droppable>
         </DragDropContext>
     );
 
 }
+
 
 interface StorageUploadItemProps {
     storagePath: string;
@@ -583,7 +637,7 @@ export function StorageUploadProgress({
     const [loading, setLoading] = React.useState<boolean>(false);
     const mounted = React.useRef(false);
 
-    useEffect(() => {
+    React.useEffect(() => {
         mounted.current = true;
         if (entry.file)
             upload(entry.file, entry.fileName);

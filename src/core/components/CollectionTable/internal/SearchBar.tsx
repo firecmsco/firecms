@@ -17,9 +17,9 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: "center",
             height: 40,
             borderRadius: theme.shape.borderRadius,
-            backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.05) : darken(theme.palette.background.default, .2),
+            backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.05) : darken(theme.palette.background.default, 0.2),
             "&:hover": {
-                backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.10) : darken(theme.palette.background.default, .3)
+                backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.10) : darken(theme.palette.background.default, 0.3)
             },
             marginLeft: theme.spacing(1),
             [theme.breakpoints.up("sm")]: {
@@ -115,13 +115,13 @@ export function SearchBar({ onTextSearch }: SearchBarProps) {
                             [classes.inputActive]: active
                         })
                     }}
-                    endAdornment={searchText ?
-                        <IconButton
+                    endAdornment={searchText
+                        ? <IconButton
                             size={"small"}
                             onClick={clearText}>
                             <ClearIcon fontSize={"small"}/>
-                        </IconButton> :
-                        <div style={{ width: 26 }}/>
+                        </IconButton>
+                        : <div style={{ width: 26 }}/>
                     }
                     inputProps={{ "aria-label": "search" }}
                 />

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Box, IconButton, Skeleton, Theme, Typography } from "@mui/material";
 
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import makeStyles from "@mui/styles/makeStyles";
 
 import {
@@ -30,13 +30,13 @@ export const useStyles = makeStyles<Theme, {hasValue:boolean}>((theme: Theme) =>
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-        justifyContent: ({hasValue}) => hasValue ? "start" : "center",
+        justifyContent: ({ hasValue }) => hasValue ? "start" : "center",
         alignItems: "center"
     },
     activeDrop: {
         borderRadius: "2px",
         border: "2px solid",
-        borderColor: "transparent",
+        borderColor: "transparent"
     },
     acceptDrop: {
         transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
@@ -104,10 +104,12 @@ export function TableStorageUpload(props: {
 
     const multipleFilesSupported = property.dataType === "array";
 
-    const storageMeta: StorageMeta | undefined = property.dataType === "string" ? property.config?.storageMeta :
-        property.dataType === "array" &&
-        (property.of as Property).dataType === "string" ? (property.of as StringProperty).config?.storageMeta :
-            undefined;
+    const storageMeta: StorageMeta | undefined = property.dataType === "string"
+? property.config?.storageMeta
+        : property.dataType === "array" &&
+        (property.of as Property).dataType === "string"
+? (property.of as StringProperty).config?.storageMeta
+            : undefined;
 
     if (!storageMeta)
         throw Error("Storage meta must be specified");
@@ -241,9 +243,10 @@ function StorageUpload({
     const classes = useStyles({ hasValue });
 
     const internalInitialValue: StorageFieldItem[] =
-        value == null ? [] :
-            (multipleFilesSupported ?
-                value as string[]
+        value == null
+? []
+            : (multipleFilesSupported
+                ? value as string[]
                 : [value as string]).map(entry => (
                 {
                     id: getRandomId(),
@@ -268,8 +271,8 @@ function StorageUpload({
     function removeDuplicates(items: StorageFieldItem[]) {
         return items.filter(
             (v, i) => {
-                return ((items.map((v) => v.storagePathOrDownloadUrl).indexOf(v.storagePathOrDownloadUrl) === i) || !v.storagePathOrDownloadUrl)
-                    && ((items.map((v) => v.file).indexOf(v.file) === i) || !v.file);
+                return ((items.map((v) => v.storagePathOrDownloadUrl).indexOf(v.storagePathOrDownloadUrl) === i) || !v.storagePathOrDownloadUrl) &&
+                    ((items.map((v) => v.file).indexOf(v.file) === i) || !v.file);
             }
         );
     }
@@ -363,9 +366,9 @@ function StorageUpload({
 
     const { ...rootProps } = getRootProps();
 
-    const helpText = multipleFilesSupported ?
-        "Drag 'n' drop some files here, or click here to edit" :
-        "Drag 'n' drop a file here, or click here edit";
+    const helpText = multipleFilesSupported
+        ? "Drag 'n' drop some files here, or click here to edit"
+        : "Drag 'n' drop a file here, or click here edit";
 
     const renderProperty = multipleFilesSupported
         ? (property as ArrayProperty<string[]>).of as StringProperty
@@ -380,7 +383,7 @@ function StorageUpload({
              className={clsx(classes.dropZone, {
                  [classes.activeDrop]: isDragActive,
                  [classes.rejectDrop]: isDragReject,
-                 [classes.acceptDrop]: isDragAccept,
+                 [classes.acceptDrop]: isDragAccept
              })}
         >
 
@@ -445,7 +448,7 @@ function StorageUpload({
                 <EditIcon sx={{
                     width: 16,
                     height: 16,
-                    fill: "#666",
+                    fill: "#666"
                 }
                 }/>
             </IconButton>

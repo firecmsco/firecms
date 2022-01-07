@@ -36,7 +36,10 @@ import { PreviewComponentProps } from "./PreviewComponentProps";
 import { Markdown } from "./components/Markdown";
 import deepEqual from "deep-equal";
 
-export function PreviewComponentInternal<T extends CMSType>(props: PreviewComponentProps<T>) {
+/**
+ * @category Preview components
+ */
+export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
     const {
         property, name, value, size, height, width
@@ -193,16 +196,13 @@ function buildWrongValueType(name: string | undefined, dataType: string, value: 
 }
 
 
-/**
- * @category Preview components
- */
-export const PreviewComponent = React.memo<PreviewComponentProps<any>>(PreviewComponentInternal, areEqual) as React.FunctionComponent<PreviewComponentProps<any>>;
-
-function areEqual(prevProps: PreviewComponentProps<any>, nextProps: PreviewComponentProps<any>) {
-    return prevProps.name === nextProps.name
-        && prevProps.size === nextProps.size
-        && prevProps.height === nextProps.height
-        && prevProps.width === nextProps.width
-        && deepEqual(prevProps.value, nextProps.value)
-        ;
-}
+// export const PreviewComponent = React.memo<PreviewComponentProps<any>>(PreviewComponentInternal, areEqual) as React.FunctionComponent<PreviewComponentProps<any>>;
+//
+// function areEqual(prevProps: PreviewComponentProps<any>, nextProps: PreviewComponentProps<any>) {
+//     return prevProps.name === nextProps.name
+//         && prevProps.size === nextProps.size
+//         && prevProps.height === nextProps.height
+//         && prevProps.width === nextProps.width
+//         && deepEqual(prevProps.value, nextProps.value)
+//         ;
+// }

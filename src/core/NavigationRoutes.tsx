@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
-import { CMSView, Navigation } from "../models";
+import { CMSView } from "../models";
 import { EntityCollectionView, FireCMSHomePage } from "./components";
 import { useNavigation } from "../hooks";
 import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
@@ -41,7 +41,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
      * state field of the current location. This can happen if you open
      * a side entity, like `products`, from a different one, like `users`
      */
-    const baseLocation = state && state["base_location"] ? state["base_location"] : location;
+    const baseLocation = state && state.base_location ? state.base_location : location;
 
     const customRoutes: JSX.Element[] = [];
     if (navigation.views) {
@@ -91,7 +91,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                element={
                    <BreadcrumbUpdater
                        path={"/"}
-                       key={`navigation_home`}
+                       key={"navigation_home"}
                        title={"Home"}>
                        {HomePage ? <HomePage/> : <FireCMSHomePage/>}
                    </BreadcrumbUpdater>

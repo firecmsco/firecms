@@ -92,11 +92,11 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
     const customPreview = Boolean(property.config?.Preview);
     const readOnly = isReadOnly(property);
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
-    let disabled = Boolean(property.disabled);
+    const disabled = Boolean(property.disabled);
 
     const onBlur = useCallback(() => {
         setFocused(false);
-    },[]);
+    }, []);
 
     useEffect(
         () => {
@@ -341,13 +341,13 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any> & CellStyleProps>(PropertyTableCellInternal, areEqual) as React.FunctionComponent<PropertyTableCellProps<any, any> & CellStyleProps>;
 
 function areEqual(prevProps: PropertyTableCellProps<any, any> & CellStyleProps, nextProps: PropertyTableCellProps<any, any> & CellStyleProps) {
-    return prevProps.selected === nextProps.selected
-        && prevProps.focused === nextProps.selected
-        && prevProps.height === nextProps.height
-        && prevProps.size === nextProps.size
-        && prevProps.align === nextProps.align
-        && prevProps.width === nextProps.width
-        && deepEqual(prevProps.value, nextProps.value)
+    return prevProps.selected === nextProps.selected &&
+        prevProps.focused === nextProps.selected &&
+        prevProps.height === nextProps.height &&
+        prevProps.size === nextProps.size &&
+        prevProps.align === nextProps.align &&
+        prevProps.width === nextProps.width &&
+        deepEqual(prevProps.value, nextProps.value)
         ;
 }
 

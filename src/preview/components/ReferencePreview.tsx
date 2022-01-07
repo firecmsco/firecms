@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useMemo } from "react";
 import clsx from "clsx";
 
 import {
@@ -29,7 +30,6 @@ import {
     useNavigation,
     useSideEntityController
 } from "../../hooks";
-import { useMemo } from "react";
 
 export type ReferencePreviewProps =
     PreviewComponentProps<EntityReference>
@@ -93,13 +93,13 @@ const useReferenceStyles = makeStyles<Theme, { size: PreviewSize, onHover?: bool
 export const ReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewComponent, areEqual) as React.FunctionComponent<ReferencePreviewProps>;
 
 function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewProps) {
-    return prevProps.name === nextProps.name
-        && prevProps.size === nextProps.size
-        && prevProps.height === nextProps.height
-        && prevProps.width === nextProps.width
-        && prevProps.onHover === nextProps.onHover
-        && prevProps.value?.id === nextProps.value?.id
-        && prevProps.value?.path === nextProps.value?.path
+    return prevProps.name === nextProps.name &&
+        prevProps.size === nextProps.size &&
+        prevProps.height === nextProps.height &&
+        prevProps.width === nextProps.width &&
+        prevProps.onHover === nextProps.onHover &&
+        prevProps.value?.id === nextProps.value?.id &&
+        prevProps.value?.path === nextProps.value?.path
         ;
 }
 
@@ -172,8 +172,8 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                 <div className={referenceClasses.root}>
 
                     {size !== "tiny" && (
-                        value ?
-                            <div className={referenceClasses.inner}>
+                        value
+                            ? <div className={referenceClasses.inner}>
                                 <Typography variant={"caption"}
                                             className={"mono"}>
                                     {value.id}
@@ -188,13 +188,12 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                         return (
                             <div key={"ref_prev_" + (key as string)}
                                  className={referenceClasses.inner}>
-                                {entity ?
-                                    <PreviewComponent name={key as string}
+                                {entity
+                                    ? <PreviewComponent name={key as string}
                                                       value={entity.values[key as string]}
                                                       property={property as AnyProperty}
                                                       size={"tiny"}/>
-                                    :
-                                    <SkeletonComponent
+                                    : <SkeletonComponent
                                         property={property as AnyProperty}
                                         size={"tiny"}/>
                                 }

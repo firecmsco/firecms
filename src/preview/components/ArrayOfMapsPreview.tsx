@@ -16,6 +16,8 @@ export function ArrayOfMapsPreview<T>({
                                           size
                                       }: PreviewComponentProps<object[]>) {
 
+    const classes = useStyles();
+
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");
 
@@ -28,7 +30,6 @@ export function ArrayOfMapsPreview<T>({
 
     if (!values) return null;
 
-    const classes = useStyles();
 
     let mapProperties = previewProperties;
     if (!mapProperties || !mapProperties.length) {
@@ -44,7 +45,11 @@ export function ArrayOfMapsPreview<T>({
                 values.map((value, index) => {
                     return (
                         <TableRow key={`table_${value}_${index}`}
-                                  className={classes.tableNoBottomBorder}>
+                                  sx={{
+                                      "&:last-child th, &:last-child td": {
+                                          borderBottom: 0
+                                      }
+                                  }}>
                             {mapProperties && mapProperties.map(
                                 (key, index) => (
                                     <TableCell

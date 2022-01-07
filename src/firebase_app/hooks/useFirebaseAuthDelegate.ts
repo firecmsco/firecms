@@ -5,13 +5,13 @@ import {
     FacebookAuthProvider,
     fetchSignInMethodsForEmail,
     getAuth,
+    GithubAuthProvider,
     GoogleAuthProvider,
     OAuthProvider,
     onAuthStateChanged,
     signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
-    GithubAuthProvider,
     TwitterAuthProvider,
     User as FirebaseUser
 } from "firebase/auth";
@@ -116,8 +116,8 @@ export const useFirebaseAuthDelegate = (
     }
 
     const appleLogin = () => {
-        const provider = new OAuthProvider('apple.com');
-        const options = getProviderOptions('apple.com');
+        const provider = new OAuthProvider("apple.com");
+        const options = getProviderOptions("apple.com");
         if (options?.scopes)
             options.scopes.forEach((scope) => provider.addScope(scope));
         if (options?.customParameters)
@@ -128,7 +128,7 @@ export const useFirebaseAuthDelegate = (
 
     const facebookLogin = () => {
         const provider = new FacebookAuthProvider();
-        const options = getProviderOptions('facebook.com');
+        const options = getProviderOptions("facebook.com");
         if (options?.scopes)
             options.scopes.forEach((scope) => provider.addScope(scope));
         if (options?.customParameters)
@@ -139,7 +139,7 @@ export const useFirebaseAuthDelegate = (
 
     const githubLogin = () => {
         const provider = new GithubAuthProvider();
-        const options = getProviderOptions('github.com');
+        const options = getProviderOptions("github.com");
         if (options?.scopes)
             options.scopes.forEach((scope) => provider.addScope(scope));
         if (options?.customParameters)
@@ -149,8 +149,8 @@ export const useFirebaseAuthDelegate = (
     }
 
     const microsoftLogin = () => {
-        const provider = new OAuthProvider('microsoft.com');
-        const options = getProviderOptions('microsoft.com');
+        const provider = new OAuthProvider("microsoft.com");
+        const options = getProviderOptions("microsoft.com");
         if (options?.scopes)
             options.scopes.forEach((scope) => provider.addScope(scope));
         if (options?.customParameters)
@@ -161,7 +161,7 @@ export const useFirebaseAuthDelegate = (
 
     const twitterLogin = () => {
         const provider = new TwitterAuthProvider();
-        const options = getProviderOptions('twitter.com');
+        const options = getProviderOptions("twitter.com");
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
         const auth = getAuth();

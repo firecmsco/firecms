@@ -272,7 +272,7 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
     tableContainer: {
         width: "100%",
         height: "100%",
-        flexGrow: 1,
+        flexGrow: 1
     },
     headerTypography: {
         fontSize: "0.750rem",
@@ -299,7 +299,7 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
     },
     tableRowClickable: {
         "&:hover": {
-            backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, .6) : alpha(theme.palette.background.default, .5)
+            backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.6) : alpha(theme.palette.background.default, 0.5)
         }
     },
     column: {
@@ -312,7 +312,7 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, .8) : alpha(theme.palette.background.default, .8)
+        backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.8) : alpha(theme.palette.background.default, 0.8)
     },
     cellButtons: {
         minWidth: 138

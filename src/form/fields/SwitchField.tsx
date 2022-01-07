@@ -108,7 +108,7 @@ const SwitchFieldComponent = React.forwardRef(function({
                         })}
                     onClick={(e) => setFocus(true)}
                     labelPlacement={"start"}
-                    checked={!!value}
+                    checked={Boolean(value)}
                     inputRef={ref}
                     control={
                         <Switch

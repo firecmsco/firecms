@@ -28,11 +28,11 @@ export function TableDateField(props: {
 
     const handleOpen = useCallback(() => {
         setPreventOutsideClick(true);
-    },[]);
+    }, []);
 
     const handleClose = useCallback(() => {
         setPreventOutsideClick(false);
-    },[]);
+    }, []);
 
     const classes = useInputStyles();
 

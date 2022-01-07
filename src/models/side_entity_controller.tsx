@@ -89,5 +89,5 @@ export interface SideEntityController {
      * to override the FireCMS level `SchemaRegistryController`.
      * @param props
      */
-    open: (props: SideEntityPanelProps ) => void;
+    open: (props: SideEntityPanelProps) => void;
 }

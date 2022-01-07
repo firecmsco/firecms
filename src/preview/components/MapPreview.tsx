@@ -36,6 +36,8 @@ export function MapPreview<T extends {}>({
                                              size
                                          }: PreviewComponentProps<T>) {
 
+    const classes = useStyles();
+
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPreview");
     }
@@ -47,7 +49,6 @@ export function MapPreview<T extends {}>({
 
     if (!value) return null;
 
-    const classes = useStyles();
 
     let mapPropertyKeys: string[];
     if (size === "regular") {

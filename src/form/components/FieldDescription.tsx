@@ -26,7 +26,7 @@ export function FieldDescription<T extends CMSType>({ property }: FieldDescripti
         <Box display="flex">
 
             <Box flexGrow={1}>
-                <FormHelperText>{disabledTooltip ? disabledTooltip : property.description}</FormHelperText>
+                <FormHelperText>{disabledTooltip || property.description}</FormHelperText>
             </Box>
 
             {property.longDescription &&

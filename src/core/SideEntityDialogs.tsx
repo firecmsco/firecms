@@ -47,13 +47,6 @@ function SideEntityDialog({
                               offsetPosition
                           }: { panel?: SideEntityPanelProps, offsetPosition: number }) {
 
-    if (!panel) {
-        return <SideDialogDrawer
-            open={false}
-            offsetPosition={offsetPosition}>
-            <div style={{ width: CONTAINER_WIDTH }}/>
-        </SideDialogDrawer>;
-    }
     // have the original values of the form changed?
     const [modifiedValues, setModifiedValues] = useState(false);
     // was the closing of the dialog requested by the drawer
@@ -79,22 +72,36 @@ function SideEntityDialog({
 
     const sideEntityController = useSideEntityController();
     const navigationContext = useNavigation();
-    const schemaProps: EntityCollectionResolver | undefined = navigationContext.getCollectionResolver(panel.path, panel.entityId);
-    if (!schemaProps) {
+
+
+    const schemaProps: EntityCollectionResolver | undefined = !panel ? undefined : navigationContext.getCollectionResolver(panel.path, panel.entityId);
+    if (panel && !schemaProps) {
         throw Error("ERROR: You are trying to open an entity with no schema defined.");
     }
 
-    const schema = useMemo(() => computeSchema({
-        schemaOrResolver: schemaProps.schemaResolver,
-        path: panel.path,
-        entityId: panel.entityId,
-    }), [panel.path, panel.entityId, schemaProps.schemaResolver]);
+    const schema = useMemo(() => {
+        if (!panel) return undefined;
+        return computeSchema({
+            schemaOrResolver: schemaProps!.schemaResolver,
+            path: panel.path,
+            entityId: panel.entityId
+        });
+    }, [panel, schemaProps]);
+
+
+    if (!panel || !schema) {
+        return <SideDialogDrawer
+            open={false}
+            offsetPosition={offsetPosition}>
+            <div style={{ width: CONTAINER_WIDTH }}/>
+        </SideDialogDrawer>;
+    }
 
     return (
         <>
 
             <SideDialogDrawer
-                open={panel !== undefined}
+                open={Boolean(panel)}
                 onClose={() => {
                     if (modifiedValues) {
                         setDrawerCloseRequested(true);
@@ -108,7 +115,7 @@ function SideEntityDialog({
                     <EntityView
                         {...schemaProps}
                         {...panel}
-                        schema={schemaProps.schemaResolver}
+                        schema={schemaProps!.schemaResolver}
                         onModifiedValues={setModifiedValues}
                     />
                 </ErrorBoundary>

@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import {
     ArrayProperty,
-    EntityCollection, Properties,
+    EntityCollection,
+    Properties,
     Property,
     ResolvedEntitySchema
 } from "../../../../models";

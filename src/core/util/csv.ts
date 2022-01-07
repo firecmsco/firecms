@@ -32,9 +32,9 @@ export function getExportableData(data: any[],
                                   headers: Header[]
 ) {
 
-    const mergedData: any[] = data.map(e => ({id: e.id, ...processCSVValues(e.values as any, properties)}));
+    const mergedData: any[] = data.map(e => ({ id: e.id, ...processCSVValues(e.values as any, properties) }));
     if (additionalData) {
-        additionalData.forEach((additional, index) => mergedData[index] = {...mergedData[index], ...additional});
+        additionalData.forEach((additional, index) => mergedData[index] = { ...mergedData[index], ...additional });
     }
     return mergedData && mergedData.map((entry) => {
         return headers.map((header) => getValueInPath(entry, header.key));
@@ -46,7 +46,7 @@ function getExportHeaders<M extends { [Key: string]: any }, UserType>(properties
                                                                       path: string,
                                                                       exportConfig?: ExportConfig<UserType>): Header[] {
     const headers = [
-        {label: "id", key: "id"},
+        { label: "id", key: "id" },
         ...Object.entries(properties)
             .map(([childKey, property]) => getHeaders(property, childKey, ""))
             .flat()
@@ -69,13 +69,13 @@ function getExportHeaders<M extends { [Key: string]: any }, UserType>(properties
  * @param prefix
  */
 function getHeaders(property: Property, propertyKey: string, prefix: string = ""): Header[] {
-    let currentKey = prefix ? `${prefix}.${propertyKey}` : propertyKey;
+    const currentKey = prefix ? `${prefix}.${propertyKey}` : propertyKey;
     if (property.dataType === "map" && property.properties) {
         return Object.entries(property.properties)
             .map(([childKey, p]) => getHeaders(p, childKey, currentKey))
             .flat();
     } else {
-        return [{label: currentKey, key: currentKey}];
+        return [{ label: currentKey, key: currentKey }];
     }
 }
 
@@ -114,10 +114,10 @@ function processCSVValues<M extends { [Key: string]: any }>
             const inputValue = inputValues && (inputValues as any)[key];
             const updatedValue = processCSVValue(inputValue, property as Property);
             if (updatedValue === undefined) return {};
-            return ({[key]: updatedValue});
+            return ({ [key]: updatedValue });
         })
-        .reduce((a, b) => ({...a, ...b}), {}) as Record<keyof M, any>;
-    return {...inputValues, ...updatedValues};
+        .reduce((a, b) => ({ ...a, ...b }), {}) as Record<keyof M, any>;
+    return { ...inputValues, ...updatedValues };
 }
 
 function entryToCSVRow(entry: any[]) {
@@ -127,15 +127,15 @@ function entryToCSVRow(entry: any[]) {
             const s = String(v);
             return '"' + s.replaceAll('"', '""') + '"';
         })
-        .join(',') + '\r\n';
+        .join(",") + "\r\n";
 }
 
 export function downloadBlob(content: BlobPart[], filename: string, contentType: string) {
-    const blob = new Blob(content, {type: contentType});
+    const blob = new Blob(content, { type: contentType });
     const url = URL.createObjectURL(blob);
-    const pom = document.createElement('a');
+    const pom = document.createElement("a");
     pom.href = url;
-    pom.setAttribute('download', filename);
+    pom.setAttribute("download", filename);
     pom.click();
 }
 

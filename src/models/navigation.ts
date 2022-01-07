@@ -13,8 +13,8 @@ import { PartialEntityCollection } from "./config_persistence";
  * @category Models
  */
 export type NavigationBuilder<UserType extends User = User> =
-    ((props: NavigationBuilderProps<UserType> ) => Promise<Navigation>)
-    | ((props: NavigationBuilderProps<UserType> ) => Navigation);
+    ((props: NavigationBuilderProps<UserType>) => Promise<Navigation>)
+    | ((props: NavigationBuilderProps<UserType>) => Navigation);
 
 /**
  * @category Models
@@ -161,7 +161,7 @@ export type NavigationContext = {
      * @param path
      */
     isUrlCollectionPath: (urlPath: string) => boolean;
-    
+
     /**
      * Build a URL collection path from a data path
      * `products` => `/c/products`

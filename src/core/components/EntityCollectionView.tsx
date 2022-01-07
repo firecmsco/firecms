@@ -102,7 +102,7 @@ export function useSelectionController<M = any>(): SelectionController {
  */
 export function EntityCollectionView<M extends { [Key: string]: any }>({
                                                                            path,
-                                                                           collection: baseCollection,
+                                                                           collection: baseCollection
                                                                        }: EntityCollectionViewProps<M>
 ) {
 
@@ -135,13 +135,13 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
-    const selectionController = collection.selectionController ?? useSelectionController<M>();
+    const usedSelectionController = collection.selectionController ?? useSelectionController<M>();
     const {
         selectedEntities,
         toggleEntitySelection,
         isEntitySelected,
         setSelectedEntities
-    } = selectionController;
+    } = usedSelectionController;
 
     useEffect(() => {
         setDeleteEntityClicked(undefined);
@@ -171,9 +171,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         });
     }, [path, collection, sideEntityController]);
 
-    const internalOnEntityDelete = useCallback( (path: string, entity: Entity<M>) => {
+    const internalOnEntityDelete = useCallback((path: string, entity: Entity<M>) => {
         setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
-    }, [selectedEntities]);
+    }, [selectedEntities, setSelectedEntities]);
 
     const internalOnMultipleEntitiesDelete = useCallback((path: string, entities: Entity<M>[]) => {
         setSelectedEntities([]);
@@ -220,10 +220,12 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                     maxWidth: "160px",
                     cursor: collection.description ? "pointer" : "inherit"
                 }}
-                onClick={collection.description ? (e) => {
+                onClick={collection.description
+? (e) => {
                     setAnchorEl(e.currentTarget);
                     e.stopPropagation();
-                } : undefined}
+                }
+: undefined}
             >
                 {`${collection.name}`}
             </Typography>
@@ -324,12 +326,12 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             />
         );
 
-    }, [selectionController, sideEntityController, collection.permissions, authController, path,]);
+    }, [usedSelectionController, sideEntityController, collection.permissions, authController, path]);
 
     const toolbarActionsBuilder = useCallback((_: { size: CollectionSize, data: Entity<any>[] }) => {
 
-        const addButton = canCreate(collection.permissions, authController, path, context) && onNewClick && (largeLayout ?
-            <Button
+        const addButton = canCreate(collection.permissions, authController, path, context) && onNewClick && (largeLayout
+            ? <Button
                 onClick={onNewClick}
                 startIcon={<Add/>}
                 size="large"
@@ -376,12 +378,14 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 </span>
             </Tooltip>;
 
-        const extraActions = collection.extraActions ? collection.extraActions({
+        const extraActions = collection.extraActions
+? collection.extraActions({
             path,
             collection,
-            selectionController,
+            selectionController: usedSelectionController,
             context
-        }) : undefined;
+        })
+: undefined;
 
         const exportButton = exportable &&
             <ExportButton schema={collection.schema}
@@ -397,7 +401,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 {addButton}
             </>
         );
-    }, [selectionController, path, collection, largeLayout]);
+    }, [usedSelectionController, path, collection, largeLayout]);
 
     return (
         <>

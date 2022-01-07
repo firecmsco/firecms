@@ -20,6 +20,13 @@ import { getRowHeight } from "./common";
 
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
 
+// @types/react/index.d.ts
+declare module "react" {
+    interface Attributes {
+        css?: any;
+    }
+}
+
 /**
  * This is a Table component that allows displaying arbitrary data, not
  * necessarily related to entities or properties. It is the component
@@ -114,8 +121,8 @@ export function Table<T>({
     const onScroll = ({ scrollTop, scrollUpdateWasRequested }: {
         scrollLeft: number;
         scrollTop: number;
-        horizontalScrollDirection: 'forward' | 'backward';
-        verticalScrollDirection: 'forward' | 'backward';
+        horizontalScrollDirection: "forward" | "backward";
+        verticalScrollDirection: "forward" | "backward";
         scrollUpdateWasRequested: boolean;
     }) => {
         const prudentTime = Date.now() - endReachedTimestampRef.current > 3000;
@@ -141,8 +148,8 @@ export function Table<T>({
         const column = columns[columnIndex - 1];
 
         const filterForThisProperty: [TableWhereFilterOp, any] | undefined =
-            column && filter && filter[column.key] ?
-                filter[column.key]
+            column && filter && filter[column.key]
+                ? filter[column.key]
                 : undefined;
 
         const onInternalFilterUpdate = (filterForProperty?: [TableWhereFilterOp, any]) => {
@@ -171,8 +178,8 @@ export function Table<T>({
         return (
 
             <ErrorBoundary>
-                {columnIndex === 0 ?
-                    <div className={classes.header}
+                {columnIndex === 0
+                    ? <div className={classes.header}
                          style={{
                              display: "flex",
                              justifyContent: "center",
@@ -180,8 +187,7 @@ export function Table<T>({
                          }}>
                         Id
                     </div>
-                    :
-                    <TableHeader
+                    : <TableHeader
                         onFilterUpdate={onInternalFilterUpdate}
                         filter={filterForThisProperty}
                         sort={sortByProperty === column.key ? currentSort : undefined}
@@ -294,10 +300,12 @@ export function Table<T>({
                                     cellRenderer={({
                                                        rowData
                                                    }: any) =>
-                                        idColumnBuilder ? idColumnBuilder({
+                                        idColumnBuilder
+? idColumnBuilder({
                                             size,
                                             entry: rowData
-                                        }) : null
+                                        })
+: null
                                     }
                                     align={"center"}
                                     key={"header-id"}

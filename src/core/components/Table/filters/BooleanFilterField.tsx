@@ -29,7 +29,6 @@ export function BooleanFilterField({
                                        value,
                                        setValue
                                    }: BooleanFieldProps) {
-
     const classes = useStyles();
 
     function updateFilter(val?: boolean) {
@@ -57,18 +56,11 @@ export function BooleanFilterField({
                     key={`filter-${name}`}
                     indeterminate={!valueSet}
                     onChange={(evt) => {
-                        if (valueSetToTrue)
-                            updateFilter(false);
-                        else if (!valueSet)
-                            updateFilter(true);
-                        else
-                            updateFilter(undefined);
+                        if (valueSetToTrue) { updateFilter(false); } else if (!valueSet) { updateFilter(true); } else { updateFilter(undefined); }
                     }}
                 />
             }
             label={!valueSet ? "No filter" : (valueSetToTrue ? `${title} is true` : `${title} is false`)}
         />
     );
-
-
 }

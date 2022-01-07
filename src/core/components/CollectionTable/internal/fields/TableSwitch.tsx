@@ -21,7 +21,7 @@ export function TableSwitch(props: {
         <Switch
             inputRef={ref}
             color={"secondary"}
-            checked={!!internalValue}
+            checked={Boolean(internalValue)}
             disabled={disabled}
             onChange={(evt) => {
                 const value = evt.target.checked as boolean;

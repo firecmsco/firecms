@@ -11,14 +11,14 @@ import { useStorageSource } from "../../hooks";
 export const StorageThumbnail = React.memo<PreviewComponentProps<string>>(StorageThumbnailInternal, areEqual) as React.FunctionComponent<PreviewComponentProps<string>>;
 
 function areEqual(prevProps: PreviewComponentProps<string>, nextProps: PreviewComponentProps<string>) {
-    return prevProps.name === nextProps.name
-        && prevProps.size === nextProps.size
-        && prevProps.height === nextProps.height
-        && prevProps.width === nextProps.width
-        && prevProps.value === nextProps.value;
+    return prevProps.name === nextProps.name &&
+        prevProps.size === nextProps.size &&
+        prevProps.height === nextProps.height &&
+        prevProps.width === nextProps.width &&
+        prevProps.value === nextProps.value;
 }
 
-const URL_CACHE = {};
+const URL_CACHE: Record<string, string> = {};
 
 export function StorageThumbnailInternal({
                                              name,
@@ -30,11 +30,12 @@ export function StorageThumbnailInternal({
 
     const storagePathOrDownloadUrl = value;
 
-    if (!storagePathOrDownloadUrl) return null;
-
     const [url, setUrl] = React.useState<string>(URL_CACHE[storagePathOrDownloadUrl]);
 
+
     useEffect(() => {
+        if (!storagePathOrDownloadUrl)
+            return;
         let unmounted = false;
         if (property.config?.storageMeta?.storeUrl) {
             setUrl(storagePathOrDownloadUrl);
@@ -52,10 +53,12 @@ export function StorageThumbnailInternal({
         };
     }, [storagePathOrDownloadUrl]);
 
-    return url ?
-        <UrlComponentPreview name={name}
+    if (!storagePathOrDownloadUrl) return null;
+
+    return url
+        ? <UrlComponentPreview name={name}
                              value={url}
                              property={property}
-                             size={size}/> :
-        renderSkeletonImageThumbnail(size);
+                             size={size}/>
+        : renderSkeletonImageThumbnail(size);
 }

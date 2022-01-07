@@ -50,8 +50,6 @@ export function Drawer({
     const classes = useStyles();
 
     const navigationContext = useNavigation();
-    if (!navigationContext.navigation)
-        return <></>;
 
     const {
         navigationEntries,
@@ -69,20 +67,20 @@ export function Drawer({
             onClick={closeDrawer}
             // @ts-ignore
             style={({ isActive }) => ({
-                fontWeight: isActive ? '600' : '500',
-                background: isActive ? 'rgba(128,128,128,0.1)' : 'inherit',
+                fontWeight: isActive ? "600" : "500",
+                background: isActive ? "rgba(128,128,128,0.1)" : "inherit"
             })}
             to={entry.url}
         >
             <Typography
                 variant={"subtitle2"}
                 sx={{
-                    fontWeight: 'inherit',
-                    py: .5
+                    fontWeight: "inherit",
+                    py: 0.5
                 }}>
                 {entry.name.toUpperCase()}
             </Typography>
-        </ListItem>, []);
+        </ListItem>, [closeDrawer]);
 
     let logoComponent;
     if (logo) {
@@ -98,7 +96,7 @@ export function Drawer({
     return <>
 
         <Link
-            key={`breadcrumb-home`}
+            key={"breadcrumb-home"}
             color="inherit"
             onClick={closeDrawer}
             component={NavLink}
@@ -127,7 +125,7 @@ export function Drawer({
             ))}
 
             {ungroupedNavigationViews.length > 0 &&
-            <Divider key={`divider_ungrouped`}/>}
+            <Divider key={"divider_ungrouped"}/>}
 
             {ungroupedNavigationViews.map((view, index) => createNavigationListItem(index, "none", view))}
 

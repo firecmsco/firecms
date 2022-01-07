@@ -18,7 +18,6 @@ import {
     TableRow
 } from "@mui/material";
 import { PreviewSize } from "../../preview";
-import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
 
 export interface SkeletonComponentProps<T> {
@@ -79,12 +78,11 @@ export function SkeletonComponent<T>({
     } else {
         content = renderSkeletonText();
     }
-    return (content ? content : null);
+    return (content || null);
 }
 
 function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize) {
 
-    const classes = useStyles();
     if (!property.properties)
         return <></>;
 
@@ -118,7 +116,11 @@ function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize
                 mapProperties.map((key, index) => {
                     return (
                         <TableRow key={`table_${property.title}_${index}`}
-                                  className={classes.tableNoBottomBorder}>
+                                  sx={{
+                                      "&:last-child th, &:last-child td": {
+                                          borderBottom: 0
+                                      }
+                                  }}>
                             <TableCell key={`table-cell-title-${key}`}
                                        component="th">
                                 <Skeleton variant="text"/>
@@ -271,11 +273,8 @@ function renderUrlComponent(property: StringProperty, size: PreviewSize = "regul
 
 function renderUrlFile(size: PreviewSize) {
 
-    const classes = useStyles();
-
     return (
         <div
-            className={(classes as any)}
             style={{
                 width: getThumbnailMeasure(size),
                 height: getThumbnailMeasure(size)

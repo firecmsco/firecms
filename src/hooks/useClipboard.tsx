@@ -160,6 +160,6 @@ export const useClipboard = (
         clearClipboard,
         isSupported,
         copy,
-        cut,
+        cut
     };
 };

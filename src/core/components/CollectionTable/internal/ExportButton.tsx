@@ -110,7 +110,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
                             context
                         })
                     };
-                }))).reduce((a, b) => ({...a, ...b}), {});
+                }))).reduce((a, b) => ({ ...a, ...b }), {});
             }));
             return resolvedColumnsValues;
         };
@@ -123,7 +123,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
         dataSource.fetchCollection<M>({
             path,
-            schema:schemaResolver,
+            schema: schemaResolver,
             limit: fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT
         })
             .then(updateEntities)
@@ -172,8 +172,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
                     </div>
                     <br/>
 
-                    {needsToAcceptFetchAllData
-                    &&
+                    {needsToAcceptFetchAllData &&
                     <Alert elevation={1}
                               variant="filled"
                               severity={"warning"}>

@@ -71,7 +71,7 @@ export function useBuildAuthController<UserType>({
         loginSkipped,
         canAccessMainView,
         initialLoading: authDelegate.initialLoading ?? false,
-        authLoading: authLoading ,
+        authLoading: authLoading,
         notAllowedError,
         signOut: authDelegate.signOut,
         extra,

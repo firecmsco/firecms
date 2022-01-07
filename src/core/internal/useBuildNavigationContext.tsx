@@ -96,7 +96,7 @@ export function useBuildNavigationContext<UserType>({
                                                                                          path
                                                                                      }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> => ({
                                                                                                                                                                     entityId,
-                                                                                                                                                                    values,
+                                                                                                                                                                    values
                                                                                                                                                                 }: EntitySchemaResolverProps<M>) => {
 
         const schemaOverride = getSchemaOverride<M>(path);
@@ -266,7 +266,7 @@ export function useBuildNavigationContext<UserType>({
         if (!userConfigPersistence)
             return undefined
         const dynamicCollectionConfig = { ...userConfigPersistence.getCollectionConfig<M>(path) };
-        delete dynamicCollectionConfig["schema"];
+        delete dynamicCollectionConfig.schema;
         return dynamicCollectionConfig;
     }, [userConfigPersistence]);
 
@@ -285,7 +285,7 @@ export function useBuildNavigationContext<UserType>({
         isUrlCollectionPath,
         urlPathToDataPath,
         buildUrlCollectionPath,
-        buildCMSUrlPath,
+        buildCMSUrlPath
     };
 }
 

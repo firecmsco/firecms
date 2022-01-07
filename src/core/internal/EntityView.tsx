@@ -49,9 +49,9 @@ import {
 import { canEdit } from "../util/permissions";
 import { computeSchema } from "../utils";
 
-const EntityCollectionView = lazy(() => import( "../components/EntityCollectionView")) as any;
-const EntityForm = lazy(() => import( "../../form/EntityForm")) as any;
-const EntityPreview = lazy(() => import( "../components/EntityPreview")) as any;
+const EntityCollectionView = lazy(() => import("../components/EntityCollectionView")) as any;
+const EntityForm = lazy(() => import("../../form/EntityForm")) as any;
+const EntityPreview = lazy(() => import("../components/EntityPreview")) as any;
 
 const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: Theme) =>
     createStyles({
@@ -65,7 +65,7 @@ const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: The
             },
             transition: "width 250ms ease-in-out"
         }),
-        containerWide: ({containerWidth}) => ({
+        containerWide: ({ containerWidth }) => ({
             width: `calc(${TAB_WIDTH} + ${containerWidth})`,
             [theme.breakpoints.down("lg")]: {
                 width: CONTAINER_FULL_WIDTH
@@ -81,7 +81,7 @@ const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: The
                 width: CONTAINER_FULL_WIDTH
             }
         },
-        tabsContainer: ({containerWidth}) => ({
+        tabsContainer: ({ containerWidth }) => ({
             flexGrow: 1,
             height: "100%",
             width: `calc(${TAB_WIDTH} + ${containerWidth})`,
@@ -92,7 +92,7 @@ const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: The
             overflow: "auto",
             flexDirection: "row"
         }),
-        form: ({containerWidth}) => ({
+        form: ({ containerWidth }) => ({
             width: containerWidth,
             maxWidth: "100%",
             height: "100%",
@@ -110,7 +110,7 @@ const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: The
         tab: {
             fontSize: "0.875rem",
             minWidth: "140px"
-        },
+        }
     })
 );
 
@@ -143,7 +143,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                        }: EntityViewProps<M, UserType>) {
 
     const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
-    const classes = useStylesSide({containerWidth: resolvedWidth ?? CONTAINER_WIDTH});
+    const classes = useStylesSide({ containerWidth: resolvedWidth ?? CONTAINER_WIDTH });
 
     const dataSource = useDataSource();
     const sideEntityController = useSideEntityController();
@@ -307,7 +307,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }, [
         callbacks,
         dataSource,
-        context,
+        context
     ]);
 
     function onDiscard() {
@@ -315,7 +315,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             sideEntityController.close();
     }
 
-    const body = !readOnly ? (
+    const body = !readOnly
+? (
             <Suspense fallback={<CircularProgressCenter/>}>
                 <EntityForm
                     key={`form_${path}_${entity?.id ?? "new"}`}
@@ -328,7 +329,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     onModified={onModifiedValues}
                     entity={entity}/>
             </Suspense>
-    ) : (
+    )
+: (
         <Suspense fallback={<CircularProgressCenter/>}>
             <EntityPreview
                 entity={entity}
@@ -371,14 +373,13 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     role="tabpanel"
                     flexGrow={1}
                     hidden={tabsPosition !== colIndex + customViewsCount}>
-                    {entity && absolutePath ?
-                        <Suspense fallback={<CircularProgressCenter/>}>
+                    {entity && absolutePath
+                        ? <Suspense fallback={<CircularProgressCenter/>}>
                             <EntityCollectionView
                                 path={absolutePath}
                                 collection={subcollection}/>
                         </Suspense>
-                        :
-                        <Box m={3}
+                        : <Box m={3}
                              display={"flex"}
                              alignItems={"center"}
                              justifyContent={"center"}>
@@ -426,7 +427,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             paddingTop: 2,
             display: "flex",
             alignItems: "center",
-            backgroundColor: theme.palette.mode === "light" ? theme.palette.background.default : theme.palette.background.paper,
+            backgroundColor: theme.palette.mode === "light" ? theme.palette.background.default : theme.palette.background.paper
         }}
         >
 
@@ -497,12 +498,11 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     );
 
     return <div
-        className={clsx(classes.container, {[classes.containerWide]: tabsPosition !== -1})}>
+        className={clsx(classes.container, { [classes.containerWide]: tabsPosition !== -1 })}>
         {
-            dataLoading ?
-                <CircularProgressCenter/>
-                :
-                <>
+            dataLoading
+                ? <CircularProgressCenter/>
+                : <>
 
                     {header}
 

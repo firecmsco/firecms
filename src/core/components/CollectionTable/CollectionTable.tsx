@@ -26,10 +26,10 @@ import {
 } from "../../../hooks";
 import { Table } from "../../index";
 import {
-    buildColumnsFromSchema,
     checkInlineEditing,
     OnCellValueChange,
-    UniqueFieldValidator
+    UniqueFieldValidator,
+    useBuildColumnsFromSchema
 } from "./column_builder";
 
 const DEFAULT_PAGE_SIZE = 50;
@@ -71,12 +71,12 @@ export const useStyles = makeStyles<Theme>(theme => createStyles({
 export const CollectionTable = React.memo<CollectionTableProps<any, any>>(CollectionTableInternal, areEqual) as React.FunctionComponent<CollectionTableProps<any, any>>;
 
 function areEqual(prevProps: CollectionTableProps<any, any>, nextProps: CollectionTableProps<any, any>) {
-    return prevProps.path === nextProps.path
-        && prevProps.collection === nextProps.collection
-        && prevProps.title === nextProps.title
-        && prevProps.toolbarActionsBuilder === nextProps.toolbarActionsBuilder
-        && prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder
-        && prevProps.inlineEditing === nextProps.inlineEditing
+    return prevProps.path === nextProps.path &&
+        prevProps.collection === nextProps.collection &&
+        prevProps.title === nextProps.title &&
+        prevProps.toolbarActionsBuilder === nextProps.toolbarActionsBuilder &&
+        prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder &&
+        prevProps.inlineEditing === nextProps.inlineEditing
         ;
 }
 
@@ -131,7 +131,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                 title: subcollection.name,
                 width: 200,
                 dependencies: [],
-                builder: ({entity}) => (
+                builder: ({ entity }) => (
                     <Button color={"primary"}
                             onClick={(event) => {
                                 event.stopPropagation();
@@ -158,20 +158,20 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
     const displayedProperties = useColumnIds(collection, resolvedSchema, true);
 
     const uniqueFieldValidator: UniqueFieldValidator = useCallback(({
-                                                            name,
-                                                            value,
-                                                            property,
-                                                            entityId
-                                                        }) => dataSource.checkUniqueField(path, name, value, property, entityId),[path]);
+                                                                        name,
+                                                                        value,
+                                                                        property,
+                                                                        entityId
+                                                                    }) => dataSource.checkUniqueField(path, name, value, property, entityId), [path]);
 
 
     const onCellChanged: OnCellValueChange<any, M> = useCallback(({
-                                                          value,
-                                                          name,
-                                                          setSaved,
-                                                          setError,
-                                                          entity
-                                                      }) => {
+                                                                      value,
+                                                                      name,
+                                                                      setSaved,
+                                                                      setError,
+                                                                      entity
+                                                                  }) => {
         const saveProps: SaveEntityProps<M> = {
             path,
             entityId: entity.id,
@@ -190,14 +190,14 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
             dataSource,
             context,
             onSaveSuccess: () => setSaved(true),
-            onSaveFailure: ((e: Error) => {
+            onSaveFailure: (e: Error) => {
                 setError(e);
-            })
+            }
         });
 
     }, [path, collection, schemaResolver]);
 
-    const { columns, popupFormField } = buildColumnsFromSchema({
+    const { columns, popupFormField } = useBuildColumnsFromSchema({
         schemaResolver,
         additionalColumns,
         displayedProperties,
@@ -262,7 +262,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 
     function isFilterCombinationValid<M>(
         filterValues: FilterValues<M>,
-        indexes?: FilterCombination<Extract<keyof M, string>>[],
+        indexes?: FilterCombination<string>[],
         sortBy?: [string, "asc" | "desc"]
     ): boolean {
 

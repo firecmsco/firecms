@@ -347,12 +347,12 @@ export const exerciseJointMovementSchema = buildSchema({
             dataType: "reference",
             path: "medico/v2.0.0/joints"
         }),
-        movement: buildProperty(({values}) => {
+        movement: buildProperty(({ values }) => {
             return {
                 title: "Movement",
                 dataType: "reference",
                 disabled: !values.joint,
-                path: values.joint ? values.joint.path + "/" + values.joint.id  + "/movements": ""
+                path: values.joint ? values.joint.path + "/" + values.joint.id + "/movements" : ""
             }
         }),
         maximal_performed_extent: {
@@ -361,8 +361,8 @@ export const exerciseJointMovementSchema = buildSchema({
         },
         enforced: {
             title: "Enforced",
-            dataType: "boolean",
-        },
+            dataType: "boolean"
+        }
     }
 });
 

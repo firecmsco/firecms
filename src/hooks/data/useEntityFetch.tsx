@@ -21,7 +21,8 @@ export interface EntityFetchResult<M extends { [Key: string]: any }> {
     dataLoadingError?: Error
 }
 
-const CACHE = {};
+const CACHE:Record<string, Entity<any>| undefined> = {};
+
 /**
  * This hook is used to fetch an entity.
  * It gives real time updates if the datasource supports it.
@@ -63,15 +64,13 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
             setDataLoadingError(error);
         };
 
-        if(useCache && CACHE[`${path}/${entityId}`]){
+        if (useCache && CACHE[`${path}/${entityId}`]) {
             setEntity(CACHE[`${path}/${entityId}`]);
             setDataLoading(false);
             setDataLoadingError(undefined);
             return () => {
             };
-        }
-
-        else if (entityId && path && schema) {
+        } else if (entityId && path && schema) {
             if (dataSource.listenEntity) {
                 return dataSource.listenEntity<M>({
                     path,
@@ -84,7 +83,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
                 dataSource.fetchEntity<M>({
                     path,
                     entityId,
-                    schema,
+                    schema
                 })
                     .then(onEntityUpdate)
                     .catch(onError);

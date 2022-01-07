@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import clsx from "clsx";
 import { Backdrop, Modal, Paper, Theme } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";

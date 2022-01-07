@@ -24,7 +24,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
     const collections = navigationContext.navigation?.collections;
 
     const state = location.state as any;
-    const baseLocation = state && state["base_location"] ? state["base_location"] : location;
+    const baseLocation = state && state.base_location ? state.base_location : location;
 
     const updatePanels = useCallback((newPanels: SideEntityPanelProps[]) => {
         setSidePanels(newPanels);
@@ -33,8 +33,8 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
 
     useEffect(() => {
         if (navigationContext.initialised) {
-            if (location?.state && state["panels"]) {
-                const statePanel = state["panels"] as SideEntityPanelProps[];
+            if (location?.state && state.panels) {
+                const statePanel = state.panels as SideEntityPanelProps[];
                 updatePanels(statePanel);
             } else {
                 updatePanels([]);
@@ -61,7 +61,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             return;
 
         const lastSidePanel = sidePanels[sidePanels.length - 1];
-        const locationPanels = location?.state && state["panels"];
+        const locationPanels = location?.state && state.panels;
         if (locationPanels && locationPanels.length > 0) {
             const updatedPanels = [...locationPanels.slice(0, -1)];
             // setSidePanels(updatedPanels);
@@ -81,16 +81,16 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                       copy,
                       width,
                       ...schemaProps
-                  }: SideEntityPanelProps ) => {
+                  }: SideEntityPanelProps) => {
 
         if (copy && !entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        if (schemaProps
-            && (schemaProps.schema !== undefined
-                || schemaProps.permissions !== undefined
-                || schemaProps.subcollections !== undefined)) {
+        if (schemaProps &&
+            (schemaProps.schema !== undefined ||
+                schemaProps.permissions !== undefined ||
+                schemaProps.subcollections !== undefined)) {
             const permissions = schemaProps.permissions;
             const schemaOrResolver = schemaProps.schema;
             const subcollections = schemaProps.subcollections;
@@ -104,7 +104,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                         schema: typeof schemaOrResolver !== "function" ? schemaOrResolver : undefined,
                         schemaResolver: typeof schemaOrResolver === "function" ? schemaOrResolver : undefined,
                         subcollections,
-                        callbacks: schemaProps.callbacks,
+                        callbacks: schemaProps.callbacks
                     },
                     overrideSchemaRegistry
                 }
@@ -113,16 +113,16 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
 
         const cleanPath = removeInitialAndTrailingSlashes(path);
         const newPath = entityId
-            ? navigationContext.buildUrlCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath ? selectedSubpath : ""}`)
+            ? navigationContext.buildUrlCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath || ""}`)
             : navigationContext.buildUrlCollectionPath(`${cleanPath}#${NEW_URL_HASH}`);
 
         const lastSidePanel = sidePanels.length > 0 ? sidePanels[sidePanels.length - 1] : undefined;
 
         // If the side dialog is open currently, we update it
-        if (entityId
-            && lastSidePanel
-            && lastSidePanel.path == path
-            && lastSidePanel?.entityId === entityId) {
+        if (entityId &&
+            lastSidePanel &&
+            lastSidePanel.path == path &&
+            lastSidePanel?.entityId === entityId) {
 
             const updatedPanel: SideEntityPanelProps = {
                 ...lastSidePanel,
@@ -131,7 +131,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             const updatedPanels = [...sidePanels.slice(0, -1), updatedPanel];
             updatePanels(updatedPanels);
             navigate(
-                navigationContext.buildUrlCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath ? selectedSubpath : ""}`),
+                navigationContext.buildUrlCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath || ""}`),
                 {
                     replace: true,
                     state: {
@@ -177,7 +177,7 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
         collections
     });
 
-    let sidePanels: SideEntityPanelProps[] = [];
+    const sidePanels: SideEntityPanelProps[] = [];
     let lastCollectionPath = "";
     for (let i = 0; i < navigationViewsForPath.length; i++) {
         const navigationEntry = navigationViewsForPath[i];

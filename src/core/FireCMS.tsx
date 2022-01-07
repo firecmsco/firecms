@@ -27,7 +27,7 @@ import { useBuildNavigationContext } from "./internal/useBuildNavigationContext"
 import { useBuildAuthController } from "./internal/useBuildAuthController";
 import { useBuildStorageConfigurationPersistence } from "./util/storage";
 
-const DEFAULT_COLLECTION_PATH = `/c`;
+const DEFAULT_COLLECTION_PATH = "/c";
 
 /**
  * @category Core
@@ -181,7 +181,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         dataSource,
         storageSource,
         schemaOverrideHandler,
-        userConfigPersistence,
+        userConfigPersistence
     });
 
     const sideEntityController = useBuildSideEntityController(navigationContext);

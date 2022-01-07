@@ -129,7 +129,7 @@ type SelectedCellProps<M> =
     };
 
 
-export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType>({
+export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserType>({
                                                                                       schemaResolver,
                                                                                       additionalColumns,
                                                                                       displayedProperties,
@@ -152,10 +152,10 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
     const tableKey = React.useRef<string>(Math.random().toString(36));
 
     const additionalColumnsMap: Record<string, AdditionalColumnDelegate<M, string, UserType>> = useMemo(() => {
-        return additionalColumns ?
-            additionalColumns
-                .map((aC) => ({[aC.id]: aC}))
-                .reduce((a, b) => ({...a, ...b}), [])
+        return additionalColumns
+            ? additionalColumns
+                .map((aC) => ({ [aC.id]: aC }))
+                .reduce((a, b) => ({ ...a, ...b }), [])
             : {};
     }, [additionalColumns]);
 
@@ -190,8 +190,8 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
     const buildFilterEnumValues = useCallback((values: EnumValues): TableEnumValues => enumToObjectEntries(values)
         .filter(([enumKey, labelOrConfig]) => !isEnumValueDisabled(labelOrConfig))
-        .map(([enumKey, labelOrConfig]) => ({[enumKey]: buildEnumLabel(labelOrConfig) as string}))
-        .reduce((a, b) => ({...a, ...b}), {}), []);
+        .map(([enumKey, labelOrConfig]) => ({ [enumKey]: buildEnumLabel(labelOrConfig) as string }))
+        .reduce((a, b) => ({ ...a, ...b }), {}), []);
 
     const buildFilterableFromProperty = useCallback((property: Property,
                                                      isArray: boolean = false): TableColumnFilter | undefined => {
@@ -225,7 +225,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
 
         return undefined;
 
-    }, []);
+    }, [buildFilterEnumValues]);
 
     const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
         schemaOrResolver: schemaResolver,
@@ -304,15 +304,16 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                 }
             };
 
-            const selected = selectedCell?.columnIndex === columnIndex
-                && selectedCell?.entity.id === entity.id;
+            const selected = selectedCell?.columnIndex === columnIndex &&
+                selectedCell?.entity.id === entity.id;
 
             const isFocused = selected && focused;
 
             const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
                 ? ({ name, value, property }) => uniqueFieldValidator({
                     name, value, property, entityId: entity.id
-                }) : undefined;
+                })
+: undefined;
 
             const validation = mapPropertyToYup({
                 property,
@@ -327,8 +328,8 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                 })
                 : undefined;
 
-            return entity ?
-                <PropertyTableCell
+            return entity
+                ? <PropertyTableCell
                     key={`table_cell_${name}_${rowIndex}_${columnIndex}`}
                     size={size}
                     align={column.align}
@@ -347,8 +348,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
                     height={column.height}
                     entityId={entity.id}
                     entityValues={entity.values}/>
-                :
-                <SkeletonComponent property={property}
+                : <SkeletonComponent property={property}
                                    size={getPreviewSizeFrom(size)}/>;
         }
 
@@ -365,8 +365,8 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
         const entity: Entity<M> = rowData;
 
         const additionalColumn = additionalColumnsMap[column.dataKey as AdditionalKey];
-        const value = additionalColumn.dependencies ?
-            Object.entries(entity.values)
+        const value = additionalColumn.dependencies
+            ? Object.entries(entity.values)
                 .filter(([key, value]) => additionalColumn.dependencies!.includes(key as any))
                 .reduce((a, b) => ({ ...a, ...b }), {})
             : undefined;
@@ -399,7 +399,7 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
             const property: Property<any> = buildPropertyFrom<any, M>({
                 propertyOrBuilder: resolvedSchema.properties[key],
                 values: resolvedSchema.defaultValues ?? {},
-                path: path,
+                path: path
             });
             return ({
                 key: key as string,
@@ -459,6 +459,6 @@ export function buildColumnsFromSchema<M, AdditionalKey extends string, UserType
         />
     );
 
-    return {columns, popupFormField};
+    return { columns, popupFormField };
 
 }

@@ -38,7 +38,7 @@ export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () =
             }
             case "POP": {
                 setNextLocation(nextLocation);
-                return;
+
             }
         }
     };
@@ -47,8 +47,8 @@ export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () =
         if (!when) return;
         if (nextLocation) return;
         if (!("block" in navigator)) return;
-        let unblock = (navigator as any).block((tx: Transition) => {
-            let autoUnblockingTx = {
+        const unblock = (navigator as any).block((tx: Transition) => {
+            const autoUnblockingTx = {
                 ...tx,
                 retry() {
                     unblock();

@@ -86,9 +86,9 @@ export function ArrayOneOfField<T extends Array<any>>({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-            {showError
-            && typeof error === "string"
-            && <FormHelperText>{error}</FormHelperText>}
+            {showError &&
+            typeof error === "string" &&
+            <FormHelperText>{error}</FormHelperText>}
 
         </FormControl>
     );

@@ -85,7 +85,7 @@ export const googleIcon = (mode: "light" | "dark") => <>
 
 export const appleIcon = (mode: "light" | "dark") => <svg width={32} height={32}
                                                           viewBox="0 0 56 56"
-                                                          style={{ transform: 'scale(2.8)' }}
+                                                          style={{ transform: "scale(2.8)" }}
                                                           version="1.1"
                                                           xmlns="http://www.w3.org/2000/svg">
     <g stroke={mode === "light" ? "#424245" : "white"} strokeWidth="0.5"

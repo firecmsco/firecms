@@ -228,16 +228,16 @@ const TableCellInternal = <T, M>({
 export const TableCell = React.memo<TableCellProps<any, any> & CellStyleProps>(TableCellInternal, areEqual) as React.FunctionComponent<TableCellProps<any, any> & CellStyleProps>;
 
 function areEqual(prevProps: TableCellProps<any, any> & CellStyleProps, nextProps: TableCellProps<any, any> & CellStyleProps) {
-    return prevProps.selected === nextProps.selected
-        && prevProps.focused === nextProps.selected
-        && prevProps.disabled === nextProps.disabled
-        && prevProps.size === nextProps.size
-        && prevProps.align === nextProps.align
-        && prevProps.saved === nextProps.saved
-        && prevProps.showExpandIcon === nextProps.showExpandIcon
-        && prevProps.removePadding === nextProps.removePadding
-        && prevProps.fullHeight === nextProps.fullHeight
-        && deepEqual(prevProps.value, nextProps.value)
+    return prevProps.selected === nextProps.selected &&
+        prevProps.focused === nextProps.selected &&
+        prevProps.disabled === nextProps.disabled &&
+        prevProps.size === nextProps.size &&
+        prevProps.align === nextProps.align &&
+        prevProps.saved === nextProps.saved &&
+        prevProps.showExpandIcon === nextProps.showExpandIcon &&
+        prevProps.removePadding === nextProps.removePadding &&
+        prevProps.fullHeight === nextProps.fullHeight &&
+        deepEqual(prevProps.value, nextProps.value)
         ;
 }
 

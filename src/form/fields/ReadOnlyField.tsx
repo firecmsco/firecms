@@ -16,7 +16,7 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ReadOnlyField<M extends { [Key: string]: any }>({
+export function ReadOnlyField({
                                                                     name,
                                                                     value,
                                                                     setValue,
@@ -54,9 +54,9 @@ export function ReadOnlyField<M extends { [Key: string]: any }>({
 
             </Paper>
 
-            {showError
-            && typeof error === "string"
-            && <FormHelperText>{error}</FormHelperText>}
+            {showError &&
+            typeof error === "string" &&
+            <FormHelperText>{error}</FormHelperText>}
 
             {includeDescription &&
             <FieldDescription property={property}/>}

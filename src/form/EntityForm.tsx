@@ -9,7 +9,8 @@ import {
     EntitySchemaResolver,
     EntityStatus,
     EntityValues,
-    FormContext, Properties,
+    FormContext,
+    Properties,
     Property,
     ResolvedEntitySchema
 } from "../models";
@@ -153,7 +154,7 @@ export function EntityForm<M>({
     const initialResolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
         schemaOrResolver,
         path,
-        entityId,
+        entityId
     }), [schemaOrResolver, path, entityId]);
 
     const baseDataSourceValues: Partial<EntityValues<M>> = useMemo(() => {
@@ -195,11 +196,11 @@ export function EntityForm<M>({
                     const initialValue = (initialValues as any)[key];
                     const latestValue = (baseDataSourceValues as any)[key];
                     if (!deepEqual(initialValue, latestValue)) {
-                        return {[key]: latestValue};
+                        return { [key]: latestValue };
                     }
                     return {};
                 })
-                .reduce((a, b) => ({...a, ...b}), {}) as Partial<EntityValues<M>>;
+                .reduce((a, b) => ({ ...a, ...b }), {}) as Partial<EntityValues<M>>;
         } else {
             return {};
         }
@@ -268,7 +269,7 @@ export function EntityForm<M>({
                                                                         name,
                                                                         value,
                                                                         property
-                                                                    }) => dataSource.checkUniqueField(path, name, value, property, entityId), [path,entityId ]);
+                                                                    }) => dataSource.checkUniqueField(path, name, value, property, entityId), [path, entityId]);
 
     const validationSchema = useMemo(() => getYupEntitySchema(
         schema.properties,
@@ -291,115 +292,175 @@ export function EntityForm<M>({
                   isSubmitting,
                   dirty
               }) => {
-
-                const modified = useMemo(() => !deepEqual(baseDataSourceValues, values), [baseDataSourceValues, values]);
-                useEffect(() => {
-                    if (onModified)
-                        onModified(modified);
-                    setInternalValue(values);
-                    if (onValuesChanged)
-                        onValuesChanged(values);
-                }, [modified, values]);
-
-                if (underlyingChanges && entity) {
-                    // we update the form fields from the Firestore data
-                    // if they were not touched
-                    Object.entries(underlyingChanges).forEach(([key, value]) => {
-                        const formValue = (values as any)[key];
-                        if (!deepEqual(value, formValue) && !(touched as any)[key]) {
-                            console.debug("Updated value from the datasource:", key, value);
-                            setFieldValue(key, value !== undefined ? value : null);
-                        }
-                    });
-                }
-
-                const context: FormContext<M> = {
-                    schema,
-                    entityId,
-                    values
-                };
-
-                const formFields = (
-                    <Grid container spacing={4}>
-
-                        {Object.entries<Property>(schema.properties as Properties)
-                            .filter(([key, property]) => !isHidden(property))
-                            .map(([key, property]) => {
-
-                                const underlyingValueHasChanged: boolean =
-                                    !!underlyingChanges
-                                    && Object.keys(underlyingChanges).includes(key)
-                                    && !!(touched as any)[key];
-
-                                const shouldAlwaysRerender = typeof (schema.originalSchema.properties as any)[key] === "function";
-
-                                const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
-                                const cmsFormFieldProps: CMSFormFieldProps = {
-                                    name: key,
-                                    disabled: disabled,
-                                    property: property,
-                                    includeDescription: true,
-                                    underlyingValueHasChanged: underlyingValueHasChanged,
-                                    context: context,
-                                    tableMode: false,
-                                    partOfArray: false,
-                                    autoFocus: false,
-                                    shouldAlwaysRerender: shouldAlwaysRerender
-                                };
-                                return (
-                                    <Grid item
-                                          xs={12}
-                                          id={`form_field_${key}`}
-                                          key={`field_${schema.name}_${key}`}>
-                                        {buildPropertyField(cmsFormFieldProps)}
-                                    </Grid>
-                                );
-                            })}
-
-                    </Grid>
-                );
-
-                return (
-                    <Container maxWidth={"sm"}
-                               className={classes.container}
-                               ref={formRef}>
-
-                        <CustomIdField schema={schema as EntitySchema}
-                                       status={status}
-                                       onChange={setCustomId}
-                                       error={customIdError}
-                                       entity={entity}/>
-
-                        <Form className={classes.form}
-                              onSubmit={handleSubmit}
-                              noValidate>
-
-                            <Box pt={3}>
-                                {formFields}
-                            </Box>
-
-                            <div className={classes.stickyButtons}>
-
-                                {savingError &&
-                                <Box textAlign="right">
-                                    <Typography color={"error"}>
-                                        {savingError.message}
-                                    </Typography>
-                                </Box>}
-
-                                {buildButtons(classes, isSubmitting, modified, status)}
-
-                            </div>
-
-                        </Form>
-
-
-                        <ErrorFocus containerRef={formRef}/>
-
-                    </Container>
-                );
+                return <FormInternal baseDataSourceValues={baseDataSourceValues}
+                                     values={values} onModified={onModified}
+                                     setInternalValue={setInternalValue}
+                                     onValuesChanged={onValuesChanged}
+                                     underlyingChanges={underlyingChanges}
+                                     entityId={entityId}
+                                     entity={entity}
+                                     touched={touched}
+                                     setFieldValue={setFieldValue}
+                                     schema={schema}
+                                     isSubmitting={isSubmitting}
+                                     classes={classes}
+                                     formRef={formRef}
+                                     status={status}
+                                     setCustomId={setCustomId}
+                                     customIdError={customIdError}
+                                     handleSubmit={handleSubmit}
+                                     savingError={savingError}/>;
             }}
         </Formik>
+    );
+}
+
+function FormInternal<M>({
+                             baseDataSourceValues,
+                             values,
+                             onModified,
+                             setInternalValue,
+                             onValuesChanged,
+                             underlyingChanges,
+                             entity,
+                             touched,
+                             setFieldValue,
+                             schema,
+                             entityId,
+                             isSubmitting,
+                             classes,
+                             formRef,
+                             status,
+                             setCustomId,
+                             customIdError,
+                             handleSubmit,
+                             savingError
+                         }: {
+    baseDataSourceValues: Partial<M>,
+    values: any,
+    onModified: ((modified: boolean) => void) | undefined,
+    setInternalValue: any,
+    onValuesChanged?: (values?: EntityValues<M>) => void,
+    underlyingChanges: Partial<M>,
+    entity: Entity<M> | undefined,
+    touched: any,
+    setFieldValue: any,
+    schema: Omit<EntitySchema<M>, "properties"> & { properties: Properties<M>; originalSchema: EntitySchema<M> },
+    entityId: string | undefined,
+    isSubmitting: any,
+    classes: any,
+    formRef: any,
+    status: "new" | "existing" | "copy",
+    setCustomId: any,
+    customIdError: any,
+    handleSubmit: any,
+    savingError: any
+}) {
+    const modified = useMemo(() => !deepEqual(baseDataSourceValues, values), [baseDataSourceValues, values]);
+    useEffect(() => {
+        if (onModified)
+            onModified(modified);
+        setInternalValue(values);
+        if (onValuesChanged)
+            onValuesChanged(values);
+    }, [modified, values]);
+
+    if (underlyingChanges && entity) {
+        // we update the form fields from the Firestore data
+        // if they were not touched
+        Object.entries(underlyingChanges).forEach(([key, value]) => {
+            const formValue = (values as any)[key];
+            if (!deepEqual(value, formValue) && !(touched as any)[key]) {
+                console.debug("Updated value from the datasource:", key, value);
+                setFieldValue(key, value !== undefined ? value : null);
+            }
+        });
+    }
+
+    const context: FormContext<M> = {
+        schema,
+        entityId,
+        values
+    };
+
+    const formFields = (
+        <Grid container spacing={4}>
+
+            {Object.entries<Property>(schema.properties as Properties)
+                .filter(([key, property]) => !isHidden(property))
+                .map(([key, property]) => {
+
+                    const underlyingValueHasChanged: boolean =
+                        !!underlyingChanges &&
+                        Object.keys(underlyingChanges).includes(key) &&
+                        !!(touched as any)[key];
+
+                    const shouldAlwaysRerender = typeof (schema.originalSchema.properties as any)[key] === "function";
+
+                    const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
+                    const cmsFormFieldProps: CMSFormFieldProps = {
+                        name: key,
+                        disabled: disabled,
+                        property: property,
+                        includeDescription: true,
+                        underlyingValueHasChanged: underlyingValueHasChanged,
+                        context: context,
+                        tableMode: false,
+                        partOfArray: false,
+                        autoFocus: false,
+                        shouldAlwaysRerender: shouldAlwaysRerender
+                    };
+                    return (
+                        <Grid item
+                              xs={12}
+                              id={`form_field_${key}`}
+                              key={`field_${schema.name}_${key}`}>
+                            {buildPropertyField(cmsFormFieldProps)}
+                        </Grid>
+                    );
+                })}
+
+        </Grid>
+    );
+
+    return (
+        <Container maxWidth={"sm"}
+                   className={classes.container}
+                   ref={formRef}>
+
+            <CustomIdField schema={schema as EntitySchema}
+                           status={status}
+                           onChange={setCustomId}
+                           error={customIdError}
+                           entity={entity}/>
+
+            <Form className={classes.form}
+                  onSubmit={handleSubmit}
+                  noValidate>
+
+                <Box pt={3}>
+                    {formFields}
+                </Box>
+
+                <div className={classes.stickyButtons}>
+
+                    {savingError &&
+                    <Box textAlign="right">
+                        <Typography color={"error"}>
+                            {savingError.message}
+                        </Typography>
+                    </Box>}
+
+                    {buildButtons(classes, isSubmitting, modified, status)}
+
+                </div>
+
+            </Form>
+
+
+            <ErrorFocus containerRef={formRef}/>
+
+        </Container>
     );
 }
 

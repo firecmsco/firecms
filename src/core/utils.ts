@@ -17,7 +17,7 @@ export function isReadOnly(property: Property<any>): boolean {
     if (property.readOnly)
         return true;
     if (property.dataType === "timestamp") {
-        if (Boolean(property.autoValue))
+        if (property.autoValue)
             return true;
     }
     return false;
@@ -92,7 +92,7 @@ export function computeProperties<M extends { [Key: string]: any }>(
                 })
             };
         })
-        .reduce((a, b) => ({...a, ...b}), {}) as Properties<M>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<M>;
 }
 
 
@@ -103,9 +103,9 @@ export function initWithProperties<M extends { [Key: string]: any }>
         .map(([key, property]) => {
             const propertyDefaultValue = defaultValues && key in defaultValues ? (defaultValues as any)[key] : undefined;
             const value = initPropertyValue(key, property as Property, propertyDefaultValue);
-            return value === undefined ? {} : {[key]: value};
+            return value === undefined ? {} : { [key]: value };
         })
-        .reduce((a, b) => ({...a, ...b}), {}) as EntityValues<M>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
 }
 
 function initPropertyValue(key: string, property: Property, defaultValue: any) {
@@ -146,10 +146,10 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
         properties,
         (inputValue, property) => {
             if (property.dataType === "timestamp") {
-                if (status == "existing" && property.autoValue === "on_update") {
+                if (status === "existing" && property.autoValue === "on_update") {
                     return timestampNowValue;
-                } else if ((status == "new" || status == "copy")
-                    && (property.autoValue === "on_update" || property.autoValue === "on_create")) {
+                } else if ((status === "new" || status === "copy") &&
+                    (property.autoValue === "on_update" || property.autoValue === "on_create")) {
                     return timestampNowValue;
                 } else {
                     return inputValue;
@@ -183,7 +183,7 @@ export function sanitizeData<M extends { [Key: string]: any }>
     properties: Properties<M>,
     path: string
 ) {
-    let result: any = values;
+    const result: any = values;
     Object.entries(properties)
         .forEach(([key, property]) => {
             if (values && values[key] !== undefined) result[key] = values[key];
@@ -207,10 +207,10 @@ export function traverseValues<M extends { [Key: string]: any }>(
             const inputValue = inputValues && (inputValues as any)[key];
             const updatedValue = traverseValue(inputValue, property as Property, operation);
             if (updatedValue === undefined) return {};
-            return ({[key]: updatedValue});
+            return ({ [key]: updatedValue });
         })
-        .reduce((a, b) => ({...a, ...b}), {}) as EntityValues<M>;
-    return {...inputValues, ...updatedValues};
+        .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
+    return { ...inputValues, ...updatedValues };
 }
 
 export function traverseValue(inputValue: any,

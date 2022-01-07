@@ -38,8 +38,8 @@ export function UrlComponentPreview({
         );
     }
 
-    const mediaType: MediaType = property.config?.url as MediaType
-        || property.config?.storageMeta?.mediaType;
+    const mediaType: MediaType = property.config?.url as MediaType ||
+        property.config?.storageMeta?.mediaType;
     if (mediaType === "image") {
         return <ImagePreview key={`image_preview_${url}_${size}`}
                              url={url}

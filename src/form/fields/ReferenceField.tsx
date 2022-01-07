@@ -130,7 +130,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
     const navigationContext = useNavigation();
     const collectionResolver: EntityCollectionResolver | undefined = useMemo(() => {
         return navigationContext.getCollectionResolver(property.path);
-    }, [property.path]);
+    }, [property.path, navigationContext]);
 
     if (!collectionResolver) {
         throw Error(`Couldn't find the corresponding collection for the path: ${property.path}`);
@@ -233,14 +233,13 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                                     mt={0.5}
                                     mb={0.5}>
                                     <ErrorBoundary>{
-                                        entity ?
-                                            <PreviewComponent
+                                        entity
+                                            ? <PreviewComponent
                                                 name={key as string}
                                                 value={(entity.values as any)[key]}
                                                 property={propertyKey as AnyProperty}
                                                 size={"tiny"}/>
-                                            :
-                                            <SkeletonComponent
+                                            : <SkeletonComponent
                                                 property={propertyKey as AnyProperty}
                                                 size={"tiny"}/>}
                                     </ErrorBoundary>
