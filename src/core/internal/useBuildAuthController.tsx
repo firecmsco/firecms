@@ -73,7 +73,7 @@ export function useBuildAuthController<UserType>({
         } else {
             setUser(delegateUser);
         }
-    }, [authDelegate]);
+    }, [authDelegate.user]);
 
     useEffect(() => {
         checkAuthentication();
