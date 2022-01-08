@@ -128,7 +128,7 @@ export function ReferenceDialog(
         return () => {
             unmounted = true;
         };
-    }, [selectedEntityIds]);
+    }, [dataSource, path, selectedEntityIds]);
 
 
     const onEntityClick = (entity: Entity<any>) => {

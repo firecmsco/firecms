@@ -1,6 +1,7 @@
-import { EntityCollection, PermissionsBuilder } from "./collections";
+import { EntityCollection } from "./collections";
 import { EntitySchema, EntitySchemaResolver } from "./entities";
 import { EntityCallbacks } from "./entity_callbacks";
+import { PermissionsBuilder } from "./permissions";
 import { User } from "./user";
 
 /**

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
     EntityCollection,
     NavigationContext,
@@ -121,7 +121,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
         // If the side dialog is open currently, we update it
         if (entityId &&
             lastSidePanel &&
-            lastSidePanel.path == path &&
+            lastSidePanel.path === path &&
             lastSidePanel?.entityId === entityId) {
 
             const updatedPanel: SideEntityPanelProps = {

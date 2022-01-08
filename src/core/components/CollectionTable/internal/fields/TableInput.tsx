@@ -50,7 +50,7 @@ export function TableInput(props: {
             ref.current.selectionStart = ref.current.value.length;
             ref.current.selectionEnd = ref.current.value.length;
         }
-    }, [focused]);
+    }, [focused, ref]);
 
     return (
         <div style={{ display: "flex" }}>

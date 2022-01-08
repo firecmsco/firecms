@@ -34,7 +34,6 @@ import { ErrorView } from "../core/components";
 import { PreviewComponentProps } from "./PreviewComponentProps";
 
 import { Markdown } from "./components/Markdown";
-import deepEqual from "deep-equal";
 
 /**
  * @category Preview components

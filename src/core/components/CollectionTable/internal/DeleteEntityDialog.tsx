@@ -86,7 +86,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
 
         console.error("Error deleting entity");
         console.error(e);
-    }, []);
+    }, [schema.name]);
 
     const onPreDeleteHookError = useCallback((entity: Entity<any>, e: Error) => {
         snackbarContext.open({
@@ -95,7 +95,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
             message: e?.message
         });
         console.error(e);
-    }, []);
+    }, [schema.name]);
 
     const onDeleteSuccessHookError = useCallback((entity: Entity<any>, e: Error) => {
         snackbarContext.open({
@@ -104,7 +104,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
             message: e?.message
         });
         console.error(e);
-    }, []);
+    }, [schema.name]);
 
     const performDelete = useCallback((entity: Entity<M>): Promise<boolean> =>
         deleteEntityWithCallbacks({
@@ -117,10 +117,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
             onPreDeleteHookError,
             onDeleteSuccessHookError,
             context
-        }), [onDeleteSuccess,
-        onDeleteFailure,
-        onPreDeleteHookError,
-        onDeleteSuccessHookError]);
+        }), [dataSource, schema, callbacks, onDeleteSuccess, onDeleteFailure, onPreDeleteHookError, onDeleteSuccessHookError, context]);
 
     const handleOk = useCallback(async () => {
         if (entityOrEntities) {
@@ -169,11 +166,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                 });
             }
         }
-    }, [entityOrEntities,
-        onDeleteSuccess,
-        onDeleteFailure,
-        onPreDeleteHookError,
-        onDeleteSuccessHookError]);
+    }, [entityOrEntities, multipleEntities, performDelete, onMultipleEntitiesDelete, path, onClose, snackbarContext, schema.name, onEntityDelete]);
 
 
     let content: JSX.Element;

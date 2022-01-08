@@ -167,7 +167,7 @@ export function EntityForm<M>({
             console.error({ status, entity });
             throw new Error("Form has not been initialised with the correct parameters");
         }
-    }, [status, initialResolvedSchema, path, entity]);
+    }, [status, initialResolvedSchema, entity]);
 
     const formRef = React.useRef<HTMLDivElement>(null);
 
@@ -218,14 +218,14 @@ export function EntityForm<M>({
         setSavingError(null);
         setCustomIdError(false);
 
-        let entityId: string | undefined;
+        let savedEntityId: string | undefined;
         if (status === "existing") {
             if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
-            entityId = entity.id;
+            savedEntityId = entity.id;
         } else if (status === "new" || status === "copy") {
             if (schema.customId) {
                 if (!customId) throw Error("Form misconfiguration when saving, customId should be set");
-                entityId = customId;
+                savedEntityId = customId;
             }
         } else {
             throw Error("New FormType added, check EntityForm");
@@ -235,7 +235,7 @@ export function EntityForm<M>({
             onEntitySave({
                 schema: schema as EntitySchema,
                 path,
-                entityId,
+                entityId: savedEntityId,
                 values,
                 previousValues: entity?.values
             })
@@ -251,29 +251,19 @@ export function EntityForm<M>({
                     formikActions.setSubmitting(false);
                 });
 
-    }, [
-        status,
-        path,
-        schema,
-        entity,
-        onEntitySave,
-        onDiscard,
-        onModified,
-        onValuesChanged,
-        mustSetCustomId,
-        customId
-    ]);
+    }, [status, path, schema, entity, onEntitySave, mustSetCustomId, customId]);
 
 
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
                                                                         name,
                                                                         value,
                                                                         property
-                                                                    }) => dataSource.checkUniqueField(path, name, value, property, entityId), [path, entityId]);
+                                                                    }) => dataSource.checkUniqueField(path, name, value, property, entityId),
+        [dataSource, path, entityId]);
 
     const validationSchema = useMemo(() => getYupEntitySchema(
         schema.properties,
-        uniqueFieldValidator), [schema]);
+        uniqueFieldValidator), [schema.properties]);
 
 
     return (
@@ -340,7 +330,7 @@ function FormInternal<M>({
     values: any,
     onModified: ((modified: boolean) => void) | undefined,
     setInternalValue: any,
-    onValuesChanged?: (values?: EntityValues<M>) => void,
+    onValuesChanged?: (changedValues?: EntityValues<M>) => void,
     underlyingChanges: Partial<M>,
     entity: Entity<M> | undefined,
     touched: any,

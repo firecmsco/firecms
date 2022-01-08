@@ -34,7 +34,9 @@ export function getExportableData(data: any[],
 
     const mergedData: any[] = data.map(e => ({ id: e.id, ...processCSVValues(e.values as any, properties) }));
     if (additionalData) {
-        additionalData.forEach((additional, index) => mergedData[index] = { ...mergedData[index], ...additional });
+        additionalData.forEach((additional, index) => {
+            mergedData[index] = { ...mergedData[index], ...additional };
+        });
     }
     return mergedData && mergedData.map((entry) => {
         return headers.map((header) => getValueInPath(entry, header.key));

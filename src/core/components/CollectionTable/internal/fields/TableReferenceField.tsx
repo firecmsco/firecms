@@ -17,7 +17,7 @@ import { getReferenceFrom } from "../../../../utils";
 import { useNavigation } from "../../../../../hooks";
 
 
-export function TableReferenceField<M extends { [Key: string]: any }>(props: {
+export function TableReferenceField(props: {
     name: string;
     disabled: boolean;
     internalValue: EntityReference | EntityReference[] | undefined | null;
@@ -68,7 +68,7 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
             setPreventOutsideClick(true);
             setOpen(true);
         }
-    }, [setPreventOutsideClick, setOpen]);
+    }, [disabled, setPreventOutsideClick]);
 
     const handleClose = useCallback(() => {
         setPreventOutsideClick(false);

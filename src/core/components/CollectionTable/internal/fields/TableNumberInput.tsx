@@ -56,9 +56,9 @@ export function NumberTableInput(props: {
         if (ref.current && focused) {
             ref.current.focus({ preventScroll: true });
         }
-    }, [focused]);
+    }, [focused, ref]);
 
-    const regexp = new RegExp("^\-?[0-9]+[,.]?[0-9]*$");
+    const regexp = /^-?[0-9]+[,.]?[0-9]*$/;
 
     return (
         <Input

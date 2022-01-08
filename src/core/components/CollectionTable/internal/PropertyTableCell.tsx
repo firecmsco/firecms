@@ -29,7 +29,7 @@ import { AnySchema } from "yup";
 import { TableStorageUpload } from "./fields/TableStorageUpload";
 
 
-export interface PropertyTableCellProps<T extends CMSType, M extends { [Key: string]: any }> {
+export interface PropertyTableCellProps<T extends CMSType> {
     name: string;
     selected: boolean;
     value: T;
@@ -57,7 +57,7 @@ export interface OnCellChangeParams<T> {
     setSaved: (saved: boolean) => void
 }
 
-const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]: any }>({
+const PropertyTableCellInternal = <T extends CMSType>({
                                                                                             selected,
                                                                                             focused,
                                                                                             name,
@@ -75,7 +75,7 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
                                                                                             height,
                                                                                             entityId,
                                                                                             entityValues
-                                                                                        }: PropertyTableCellProps<T, M> & CellStyleProps) => {
+                                                                                        }: PropertyTableCellProps<T> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
 
@@ -338,9 +338,9 @@ const PropertyTableCellInternal = <T extends CMSType, M extends { [Key: string]:
 
 };
 
-export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any> & CellStyleProps>(PropertyTableCellInternal, areEqual) as React.FunctionComponent<PropertyTableCellProps<any, any> & CellStyleProps>;
+export const PropertyTableCell = React.memo<PropertyTableCellProps<any> & CellStyleProps>(PropertyTableCellInternal, areEqual) as React.FunctionComponent<PropertyTableCellProps<any> & CellStyleProps>;
 
-function areEqual(prevProps: PropertyTableCellProps<any, any> & CellStyleProps, nextProps: PropertyTableCellProps<any, any> & CellStyleProps) {
+function areEqual(prevProps: PropertyTableCellProps<any> & CellStyleProps, nextProps: PropertyTableCellProps<any> & CellStyleProps) {
     return prevProps.selected === nextProps.selected &&
         prevProps.focused === nextProps.selected &&
         prevProps.height === nextProps.height &&

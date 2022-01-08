@@ -15,7 +15,7 @@ export function TableSwitch(props: {
         if (ref.current && focused) {
             ref.current.focus({ preventScroll: true });
         }
-    }, [focused]);
+    }, [focused, ref]);
 
     return (
         <Switch

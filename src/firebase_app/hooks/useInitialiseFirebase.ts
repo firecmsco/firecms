@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 
 import { FirebaseApp, initializeApp } from "firebase/app";
 
@@ -37,7 +37,7 @@ export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
     const [configError, setConfigError] = React.useState<string>();
     const [firebaseConfigError, setFirebaseConfigError] = React.useState<Error | undefined>();
 
-    function initFirebase(config: Object) {
+    const initFirebase = useCallback((config: Object) => {
         try {
             const initialisedFirebaseApp = initializeApp(config);
             setFirebaseConfigError(undefined);
@@ -49,7 +49,7 @@ export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
             console.error(e);
             setFirebaseConfigError(e);
         }
-    }
+    }, [onFirebaseInit]);
 
     useEffect(() => {
 
@@ -83,7 +83,7 @@ export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
                 "You need to deploy the app to Firebase hosting or specify a Firebase configuration object"
             );
         }
-    }, []);
+    }, [firebaseConfig, initFirebase]);
 
     return {
         firebaseApp,

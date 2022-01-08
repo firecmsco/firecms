@@ -180,6 +180,7 @@ export type TableSort = "asc" | "desc" | undefined;
  * @see Table
  * @category Components
  */
+// eslint-disable-next-line no-unused-vars
 export type TableFilterValues<M> = { [K in keyof M]?: [TableWhereFilterOp, any] };
 
 /**

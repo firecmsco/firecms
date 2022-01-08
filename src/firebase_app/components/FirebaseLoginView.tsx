@@ -272,7 +272,7 @@ function LoginForm({
         if ((loginMode || registrationMode) && passwordRef.current) {
             passwordRef.current.focus()
         }
-    }, [loginMode]);
+    }, [loginMode, registrationMode]);
 
     useEffect(() => {
         if (!document) return;

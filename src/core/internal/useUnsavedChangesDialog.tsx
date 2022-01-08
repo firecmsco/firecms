@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Blocker, Transition } from "history";
 import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -30,7 +30,7 @@ export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () =
         navigate(-1);
     };
 
-    const blocker: Blocker = ({ action, location: nextLocation, retry }) => {
+    const blocker: Blocker = useCallback(({ action, location: nextLocation, retry }) => {
         switch (action) {
             case "REPLACE": {
                 retry();
@@ -41,7 +41,7 @@ export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () =
 
             }
         }
-    };
+    }, []);
 
     React.useEffect(() => {
         if (!when) return;
@@ -59,7 +59,7 @@ export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () =
         });
 
         return unblock;
-    }, [navigator, blocker, when]);
+    }, [navigator, blocker, when, nextLocation]);
 
     return { navigationWasBlocked: Boolean(nextLocation), handleCancel, handleOk };
 }

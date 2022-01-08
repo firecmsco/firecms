@@ -51,7 +51,7 @@ export function StorageThumbnailInternal({
         return () => {
             unmounted = true;
         };
-    }, [storagePathOrDownloadUrl]);
+    }, [property.config?.storageMeta?.storeUrl, storagePathOrDownloadUrl]);
 
     if (!storagePathOrDownloadUrl) return null;
 

@@ -1,9 +1,8 @@
 import { Skeleton } from "@mui/material";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { EntitySchema } from "../../models";
 
-export interface AsyncPreviewComponentProps<M extends { [Key: string]: any }> {
+export interface AsyncPreviewComponentProps {
 
     builder: Promise<React.ReactNode>;
 
@@ -12,7 +11,7 @@ export interface AsyncPreviewComponentProps<M extends { [Key: string]: any }> {
 function AsyncPreviewComponentInternal<M extends { [Key: string]: any }>(
     {
         builder
-    }: AsyncPreviewComponentProps<M>): JSX.Element {
+    }: AsyncPreviewComponentProps): JSX.Element {
 
     const [loading, setLoading] = useState<boolean>(true);
     const [result, setResult] = useState<React.ReactNode>(null);
@@ -48,4 +47,4 @@ function AsyncPreviewComponentInternal<M extends { [Key: string]: any }>(
  *
  * @category Preview components
  */
-export const AsyncPreviewComponent = React.memo(AsyncPreviewComponentInternal) as React.FunctionComponent<AsyncPreviewComponentProps<EntitySchema>>;
+export const AsyncPreviewComponent = React.memo(AsyncPreviewComponentInternal) as React.FunctionComponent<AsyncPreviewComponentProps>;

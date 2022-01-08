@@ -30,8 +30,7 @@ import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
 
-export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | "left" | "center" }>
-(theme => createStyles({
+export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | "left" | "center" }>(theme => createStyles({
     header: ({ onHover }) => ({
         width: "calc(100% + 24px)",
         margin: "0px -12px",

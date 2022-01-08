@@ -50,16 +50,6 @@ export function ArrayContainer<T>({
                 }
 
                 arrayHelpers.move(result.source.index, result.destination.index);
-
-                // const items = reorder(
-                //     this.state.items,
-                //     result.source.index,
-                //     result.destination.index
-                // );
-                //
-                // this.setState({
-                //     items
-                // });
             }
 
             return (
@@ -75,6 +65,7 @@ export function ArrayContainer<T>({
                                         <Draggable
                                             key={`array_field_${name}_${hashValue}}`}
                                             draggableId={`array_field_${name}_${hashValue}}`}
+                                            isDragDisabled={disabled}
                                             index={index}>
                                             {(provided, snapshot) => (
 
@@ -101,13 +92,13 @@ export function ArrayContainer<T>({
                                                              display="flex"
                                                              flexDirection="column"
                                                              alignItems="center">
-                                                            {!disabled &&
                                                             <div
                                                                 {...provided.dragHandleProps}>
                                                                 <DragHandleIcon
                                                                     fontSize={"small"}
-                                                                    sx={{ cursor: "move" }}/>
-                                                            </div>}
+                                                                    color={disabled ? "disabled" : "inherit"}
+                                                                    sx={{ cursor: disabled ? "inherit" : "move" }}/>
+                                                            </div>
                                                             {!disabled &&
                                                             <IconButton
                                                                 size="small"

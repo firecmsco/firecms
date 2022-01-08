@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Box, IconButton, Skeleton, Theme, Typography } from "@mui/material";
 
@@ -244,7 +244,7 @@ function StorageUpload({
 
     const internalInitialValue: StorageFieldItem[] =
         value == null
-? []
+            ? []
             : (multipleFilesSupported
                 ? value as string[]
                 : [value as string]).map(entry => (
@@ -487,16 +487,7 @@ export function StorageUploadProgress({
     const [loading, setLoading] = React.useState<boolean>(false);
     const mounted = React.useRef(false);
 
-    useEffect(() => {
-        mounted.current = true;
-        if (entry.file)
-            upload(entry.file, entry.fileName);
-        return () => {
-            mounted.current = false;
-        };
-    }, []);
-
-    function upload(file: File, fileName?: string) {
+    const upload = useCallback((file: File, fileName?: string) => {
 
         setError(undefined);
         setLoading(true);
@@ -520,7 +511,16 @@ export function StorageUploadProgress({
                     message: e.message
                 });
             });
-    }
+    }, [entry, metadata, onFileUploadComplete, snackbarContext, storage, storagePath]);
+
+    useEffect(() => {
+        mounted.current = true;
+        if (entry.file)
+            upload(entry.file, entry.fileName);
+        return () => {
+            mounted.current = false;
+        };
+    }, [entry.file, entry.fileName, upload]);
 
     const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
 

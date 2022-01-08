@@ -19,7 +19,7 @@ import { computeSchema } from "./utils";
  * {@see useSideEntityController}
  * @category Components
  */
-export function SideEntityDialogs<M extends { [Key: string]: any }>() {
+export function SideEntityDialogs() {
 
     const sideEntityController = useSideEntityController();
 

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import {
     ArrayProperty,
     EntityCollection,
@@ -101,12 +101,12 @@ export function getSubcollectionColumnId(collection: EntityCollection) {
 }
 
 export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:ResolvedEntitySchema<M>, includeSubcollections: boolean): string[] {
-    const initialDisplayedProperties = collection.properties;
-    const excludedProperties = collection.excludedProperties;
-    const additionalColumns = collection.additionalColumns ?? [];
-    const subCollections: EntityCollection[] = collection.subcollections ?? [];
 
     return useMemo(() => {
+        const initialDisplayedProperties = collection.properties;
+        const excludedProperties = collection.excludedProperties;
+        const additionalColumns = collection.additionalColumns ?? [];
+        const subCollections: EntityCollection[] = collection.subcollections ?? [];
 
         const properties:Properties = resolvedSchema.properties;
 
@@ -143,5 +143,5 @@ export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:
 
         return result;
 
-    }, [initialDisplayedProperties, excludedProperties, additionalColumns, subCollections]);
+    }, [collection.properties, collection.excludedProperties, collection.additionalColumns, collection.subcollections, collection.schema.properties, resolvedSchema.properties, includeSubcollections]);
 }

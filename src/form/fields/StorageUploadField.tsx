@@ -36,6 +36,7 @@ import {
 } from "../../hooks";
 import { isReadOnly } from "../../core/utils";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { useCallback } from "react";
 
 export const useStyles = makeStyles((theme: Theme) => ({
     dropZone: {
@@ -258,7 +259,7 @@ function FileDropComponent({
                                isDraggingOver,
                                onExternalDrop,
                                multipleFilesSupported,
-                               provided,
+                               droppableProvided,
                                autoFocus,
                                internalValue,
                                property,
@@ -273,7 +274,7 @@ function FileDropComponent({
     storageMeta: StorageMeta,
     disabled: boolean,
     isDraggingOver: boolean,
-    provided: any,
+    droppableProvided: any,
     onExternalDrop: (acceptedFiles: File[]) => void,
     multipleFilesSupported: boolean,
     autoFocus: boolean,
@@ -282,7 +283,7 @@ function FileDropComponent({
     onClear: (clearedStoragePathOrDownloadUrl: string) => void,
     metadata: any,
     storagePathBuilder: (file: File) => string,
-    onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, metadata?: any) => Promise<void>,
+    onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, fileMetadata?: any) => Promise<void>,
     size: PreviewSize,
     name: string,
     helpText: string
@@ -319,8 +320,8 @@ function FileDropComponent({
             }}
         >
             <Box
-                {...provided.droppableProps}
-                ref={provided.innerRef}
+                {...droppableProvided.droppableProps}
+                ref={droppableProvided.innerRef}
                 sx={{
                     display: "flex",
                     alignItems: "center",
@@ -389,7 +390,7 @@ function FileDropComponent({
                 })
                 }
 
-                {provided.placeholder}
+                {droppableProvided.placeholder}
 
 
             </Box>
@@ -589,7 +590,7 @@ export function StorageUpload({
                     return <FileDropComponent storageMeta={storageMeta}
                                               disabled={disabled}
                                               isDraggingOver={snapshot.isDraggingOver}
-                                              provided={provided}
+                                              droppableProvided={provided}
                                               onExternalDrop={onExternalDrop}
                                               multipleFilesSupported={multipleFilesSupported}
                                               autoFocus={autoFocus}
@@ -637,16 +638,7 @@ export function StorageUploadProgress({
     const [loading, setLoading] = React.useState<boolean>(false);
     const mounted = React.useRef(false);
 
-    React.useEffect(() => {
-        mounted.current = true;
-        if (entry.file)
-            upload(entry.file, entry.fileName);
-        return () => {
-            mounted.current = false;
-        };
-    }, []);
-
-    function upload(file: File, fileName?: string) {
+    const upload = useCallback((file: File, fileName?: string) => {
 
         setError(undefined);
         setLoading(true);
@@ -670,7 +662,16 @@ export function StorageUploadProgress({
                     message: e.message
                 });
             });
-    }
+    }, [entry, metadata, onFileUploadComplete, snackbarContext, storage, storagePath]);
+
+    React.useEffect(() => {
+        mounted.current = true;
+        if (entry.file)
+            upload(entry.file, entry.fileName);
+        return () => {
+            mounted.current = false;
+        };
+    }, [entry.file, entry.fileName, upload]);
 
     return (
 

@@ -83,7 +83,7 @@ function getCollectionFromCollectionsInternal<M extends { [Key: string]: any }>(
  * @param subpaths
  */
 export function getCollectionPathsCombinations(subpaths: string[]): string[] {
-    const entries = subpaths.length > 0 && subpaths.length % 2 == 0 ? subpaths.splice(0, subpaths.length - 1) : subpaths;
+    const entries = subpaths.length > 0 && subpaths.length % 2 === 0 ? subpaths.splice(0, subpaths.length - 1) : subpaths;
 
     const length = entries.length;
     const result: string[] = [];

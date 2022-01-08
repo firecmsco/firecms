@@ -184,11 +184,12 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 window.removeEventListener("beforeunload", beforeunload);
         };
 
-    }, [window]);
+    }, [modifiedValues, window]);
 
     const {
         entity,
         dataLoading,
+        // eslint-disable-next-line no-unused-vars
         dataLoadingError
     } = useEntityFetch({
         path,
@@ -200,7 +201,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     useEffect(() => {
         if (entity)
             setReadOnly(!canEdit(permissions, entity, authController, path, context));
-    }, [entity]);
+    }, [entity, permissions]);
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
@@ -304,16 +305,12 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             onPreSaveHookError,
             onSaveSuccessHookError
         });
-    }, [
-        callbacks,
-        dataSource,
-        context
-    ]);
+    }, [status, callbacks, dataSource, context, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError]);
 
-    function onDiscard() {
+    const onDiscard = useCallback(() => {
         if (tabsPosition === -1)
             sideEntityController.close();
-    }
+    }, [sideEntityController, tabsPosition]);
 
     const body = !readOnly
 ? (
@@ -395,7 +392,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     );
 
     const getSelectedSubpath = useCallback((value: number) => {
-        if (value == -1) return undefined;
+        if (value === -1) return undefined;
 
         if (customViews && value < customViewsCount) {
             return customViews[value].path;
@@ -437,7 +434,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             </IconButton>
 
             <Tabs
-                value={tabsPosition == -1 ? 0 : false}
+                value={tabsPosition === -1 ? 0 : false}
                 indicatorColor="secondary"
                 textColor="inherit"
                 scrollButtons="auto"

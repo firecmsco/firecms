@@ -1,6 +1,5 @@
 import {
     ArrayProperty,
-    EnumType,
     MapProperty,
     Properties,
     Property,
@@ -20,7 +19,7 @@ import {
 import { PreviewSize } from "../../preview";
 import { getThumbnailMeasure } from "../util";
 
-export interface SkeletonComponentProps<T> {
+export interface SkeletonComponentProps {
     property: Property,
     size: PreviewSize
 }
@@ -28,10 +27,10 @@ export interface SkeletonComponentProps<T> {
 /**
  * @category Preview components
  */
-export function SkeletonComponent<T>({
+export function SkeletonComponent({
                                          property,
                                          size
-                                     }: SkeletonComponentProps<T>
+                                     }: SkeletonComponentProps
 ) {
 
     if (!property) {
@@ -155,7 +154,7 @@ function renderArrayOfMaps<M>(properties: Properties<M>, size: PreviewSize, prev
                         return (
                             <TableRow key={`table_${value}_${index}`}>
                                 {tableProperties && tableProperties.map(
-                                    (key, index) => (
+                                    (key) => (
                                         <TableCell
                                             key={`table-cell-${key}`}
                                             component="th"
@@ -187,7 +186,7 @@ function renderArrayOfStrings() {
     );
 }
 
-function renderArrayEnumTableCell<T extends EnumType>() {
+function renderArrayEnumTableCell() {
     return (
         <Grid>
             {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import InputBase from "@mui/material/InputBase";
 import { alpha, darken, Theme } from "@mui/material/styles";
 import createStyles from "@mui/styles/createStyles";
@@ -90,10 +90,10 @@ export function SearchBar({ onTextSearch }: SearchBarProps) {
         [searchText]
     );
 
-    function clearText() {
+    const clearText = useCallback(() => {
         setSearchText("");
         onTextSearch(undefined);
-    }
+    }, []);
 
     return (
         <FormControl>

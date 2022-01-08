@@ -133,14 +133,13 @@ function ArrayOneOfEntry({
     const classes = formStyles();
 
     const type = value && value[typeField];
+    const [typeInternal, setTypeInternal] = useState<string | undefined>(type ?? undefined);
 
     useEffect(() => {
         if (type !== typeInternal) {
             setTypeInternal(type);
         }
     }, [type]);
-
-    const [typeInternal, setTypeInternal] = useState<string | undefined>(type ?? undefined);
 
     const property = typeInternal ? properties[typeInternal] : undefined;
 

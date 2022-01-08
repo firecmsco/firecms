@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
     AuthController,
     ConfigurationPersistence,
@@ -81,7 +81,7 @@ export function useBuildNavigationContext<UserType>({
             setNavigation(result);
             setNavigationLoading(false);
         }).catch(setNavigationLoadingError);
-    }, [authController.user, authController.canAccessMainView, navigationOrBuilder]);
+    }, [authController.user, authController.canAccessMainView, navigationOrBuilder, authController, dateTimeFormat, locale, dataSource, storageSource]);
 
 
     const getSchemaOverride = useCallback(<M extends any>(path: string): PartialEntitySchema<M> | undefined => {
@@ -115,6 +115,14 @@ export function useBuildNavigationContext<UserType>({
             originalSchema: schema
         };
     }, [getSchemaOverride]);
+
+    const getCollectionOverride = useCallback(<M extends any>(path: string): PartialEntityCollection<M> | undefined => {
+        if (!userConfigPersistence)
+            return undefined
+        const dynamicCollectionConfig = { ...userConfigPersistence.getCollectionConfig<M>(path) };
+        delete dynamicCollectionConfig.schema;
+        return dynamicCollectionConfig;
+    }, [userConfigPersistence]);
 
 
     const getCollectionResolver = useCallback(<M extends { [Key: string]: any }>(path: string, entityId?: string, collection?: EntityCollection<M>): EntityCollectionResolver<M> => {
@@ -190,14 +198,7 @@ export function useBuildNavigationContext<UserType>({
 
         return { ...resolvedCollection, ...(result as EntityCollectionResolver<M>) };
 
-    }, [
-        navigation,
-        basePath,
-        baseCollectionPath,
-        schemaOverrideHandler,
-        schemaConfigRecord.current,
-        buildSchemaResolver
-    ]);
+    }, [navigation?.collections, getCollectionOverride, schemaOverrideHandler, buildSchemaResolver]);
 
     const setOverride = useCallback(({
                                          path,
@@ -224,7 +225,7 @@ export function useBuildNavigationContext<UserType>({
             };
             return key;
         }
-    }, [schemaConfigRecord.current]);
+    }, []);
 
     const removeAllOverridesExcept = useCallback((entityRefs: {
         path: string, entityId?: string
@@ -237,7 +238,7 @@ export function useBuildNavigationContext<UserType>({
             if (!keys.includes(currentKey))
                 delete schemaConfigRecord.current[currentKey];
         });
-    }, [schemaConfigRecord.current]);
+    }, []);
 
     const isUrlCollectionPath = useCallback(
         (path: string): boolean => removeInitialAndTrailingSlashes(path + "/").startsWith(removeInitialAndTrailingSlashes(fullCollectionPath) + "/"),
@@ -260,14 +261,6 @@ export function useBuildNavigationContext<UserType>({
             const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
             userConfigPersistence.onCollectionModified(path, mergeDeep(currentStoredConfig, partialCollection));
         }
-    }, [userConfigPersistence]);
-
-    const getCollectionOverride = useCallback(<M extends any>(path: string): PartialEntityCollection<M> | undefined => {
-        if (!userConfigPersistence)
-            return undefined
-        const dynamicCollectionConfig = { ...userConfigPersistence.getCollectionConfig<M>(path) };
-        delete dynamicCollectionConfig.schema;
-        return dynamicCollectionConfig;
     }, [userConfigPersistence]);
 
     return {

@@ -120,9 +120,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
 
-    const onCollectionModifiedForUser = (partialCollection: PartialEntityCollection<any>) => {
+    const onCollectionModifiedForUser = useCallback((partialCollection: PartialEntityCollection<any>) => {
         navigationContext.onCollectionModifiedForUser(path, partialCollection);
-    }
+    }, [path]);
 
     const collection: EntityCollection<M> = collectionResolver ?? baseCollection;
 
@@ -135,7 +135,8 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
-    const usedSelectionController = collection.selectionController ?? useSelectionController<M>();
+    const selectionController = useSelectionController<M>();
+    const usedSelectionController = collection.selectionController ?? selectionController;
     const {
         selectedEntities,
         toggleEntitySelection,
@@ -171,21 +172,21 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         });
     }, [path, collection, sideEntityController]);
 
-    const internalOnEntityDelete = useCallback((path: string, entity: Entity<M>) => {
+    const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {
         setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
     }, [selectedEntities, setSelectedEntities]);
 
-    const internalOnMultipleEntitiesDelete = useCallback((path: string, entities: Entity<M>[]) => {
+    const internalOnMultipleEntitiesDelete = useCallback((_path: string, entities: Entity<M>[]) => {
         setSelectedEntities([]);
         setDeleteEntityClicked(undefined);
-    }, []);
+    }, [setSelectedEntities]);
 
     const checkInlineEditing = useCallback((entity: Entity<any>) => {
         if (!canEdit(collection.permissions, entity, authController, path, context)) {
             return false;
         }
         return collection.inlineEditing === undefined || collection.inlineEditing;
-    }, [collection]);
+    }, [collection.inlineEditing, collection.permissions, path]);
 
     const onColumnResize = useCallback(({
                                             width,
@@ -197,12 +198,12 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         const updatedFields: PartialEntityCollection<any> = { schema: { properties: { [key as keyof M]: property } } };
         if (onCollectionModifiedForUser)
             onCollectionModifiedForUser(updatedFields)
-    }, [path, collection]);
+    }, [collection.schema.properties, onCollectionModifiedForUser]);
 
     const onSizeChanged = useCallback((size: CollectionSize) => {
         if (onCollectionModifiedForUser)
             onCollectionModifiedForUser({ defaultSize: size })
-    }, [path, collection]);
+    }, [onCollectionModifiedForUser]);
 
     const open = anchorEl != null;
     const title = useMemo(() => (
@@ -221,11 +222,11 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                     cursor: collection.description ? "pointer" : "inherit"
                 }}
                 onClick={collection.description
-? (e) => {
-                    setAnchorEl(e.currentTarget);
-                    e.stopPropagation();
-                }
-: undefined}
+                    ? (e) => {
+                        setAnchorEl(e.currentTarget);
+                        e.stopPropagation();
+                    }
+                    : undefined}
             >
                 {`${collection.name}`}
             </Typography>
@@ -271,7 +272,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             }
 
         </div>
-    ), [path, collection]);
+    ), [collection.description, collection.name, path, open, anchorEl]);
 
     const tableRowActionsBuilder = useCallback(({
                                                     entity,
@@ -284,8 +285,8 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         const editEnabled = canEdit(collection.permissions, entity, authController, path, context);
         const deleteEnabled = canDelete(collection.permissions, entity, authController, path, context);
 
-        const onCopyClicked = (entity: Entity<M>) => sideEntityController.open({
-            entityId: entity.id,
+        const onCopyClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
+            entityId: clickedEntity.id,
             path,
             copy: true,
             permissions: {
@@ -299,8 +300,8 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             overrideSchemaRegistry: false
         });
 
-        const onEditClicked = (entity: Entity<M>) => sideEntityController.open({
-            entityId: entity.id,
+        const onEditClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
+            entityId: clickedEntity.id,
             path,
             permissions: {
                 edit: editEnabled,
@@ -379,13 +380,13 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             </Tooltip>;
 
         const extraActions = collection.extraActions
-? collection.extraActions({
-            path,
-            collection,
-            selectionController: usedSelectionController,
-            context
-        })
-: undefined;
+            ? collection.extraActions({
+                path,
+                collection,
+                selectionController: usedSelectionController,
+                context
+            })
+            : undefined;
 
         const exportButton = exportable &&
             <ExportButton schema={collection.schema}

@@ -78,7 +78,7 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
     throw Error("Unsupported data type in yup mapping");
 }
 
-export function getYupEntitySchema<T extends CMSType, M extends { [Key: string]: any }>
+export function getYupEntitySchema<M extends { [Key: string]: any }>
 (properties: Properties<M>,
  customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
     const objectSchema: any = {};
@@ -92,7 +92,7 @@ export function getYupEntitySchema<T extends CMSType, M extends { [Key: string]:
     return yup.object().shape(objectSchema);
 }
 
-export function getYupMapObjectSchema<M extends { [Key: string]: any }>({
+export function getYupMapObjectSchema({
                                                                             property,
                                                                             parentProperty,
                                                                             customFieldValidator,
@@ -245,7 +245,7 @@ function getYupDateSchema({
     return schema;
 }
 
-function getYupReferenceSchema<M extends { [Key: string]: any }>({
+function getYupReferenceSchema({
                                                                      property,
                                                                      parentProperty,
                                                                      customFieldValidator,
@@ -309,7 +309,7 @@ function hasUniqueInArrayModifier(property: Property): boolean | [string, Proper
     return false;
 }
 
-function getYupArraySchema<T>({
+function getYupArraySchema({
                                   property,
                                   parentProperty,
                                   customFieldValidator,
@@ -328,8 +328,9 @@ function getYupArraySchema<T>({
             if (typeof arrayUniqueFields === "boolean") {
                 schema = schema.uniqueInArray(v => v, `${property.title} should have unique values within the array`);
             } else if (Array.isArray(arrayUniqueFields)) {
-                arrayUniqueFields.forEach(([name, childProperty]) =>
-                    schema = schema.uniqueInArray(v => v && v[name], `${property.title} → ${childProperty.title ?? name}: should have unique values within the array`)
+                arrayUniqueFields.forEach(([name, childProperty]) => {
+                        schema = schema.uniqueInArray(v => v && v[name], `${property.title} → ${childProperty.title ?? name}: should have unique values within the array`);
+                    }
                 );
             }
         }

@@ -56,6 +56,14 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
     const [open, setOpen] = React.useState(false);
 
+    const handleClickOpen = useCallback(() => {
+        setOpen(true);
+    }, [setOpen]);
+
+    const handleClose = useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
+
     const doDownload = useCallback((data: Entity<M>[] | undefined,
                                     additionalData: Record<string, any>[] | undefined,
                                     schema: EntitySchema<M>,
@@ -129,15 +137,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             .then(updateEntities)
             .catch(onFetchError);
 
-    }, [path, fetchLargeDataAccepted, schema, open]);
-
-    const handleClickOpen = useCallback(() => {
-        setOpen(true);
-    }, [setOpen]);
-
-    const handleClose = useCallback(() => {
-        setOpen(false);
-    }, [setOpen]);
+    }, [path, fetchLargeDataAccepted, schema, open, dataSource, schemaResolver, doDownload, exportConfig, handleClose, context]);
 
     const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
 
@@ -148,7 +148,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             doDownload(dataRef.current, additionalDataRef.current, schema, schemaResolver, path, exportConfig);
             handleClose();
         }
-    }, [needsToAcceptFetchAllData, dataRef.current, additionalDataRef.current, schema, schemaResolver, path, exportConfig]);
+    }, [needsToAcceptFetchAllData, doDownload, schema, schemaResolver, path, exportConfig, handleClose]);
 
     return <>
 

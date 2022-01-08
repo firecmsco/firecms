@@ -146,7 +146,7 @@ function BreadcrumbUpdater({
                 url: path
             }]
         });
-    }, [path]);
+    }, [path, title]);
 
-    return <> {children}</>;
+    return <>{children}</>;
 }

@@ -75,7 +75,7 @@ export function Table<T>({
 
     const classes = useTableStyles();
     useEffect(() => {
-        if (tableRef.current && data) {
+        if (tableRef.current && data?.length) {
             tableRef.current.scrollToTop(scrollRef.current);
         }
     }, [data?.length]);
@@ -199,7 +199,7 @@ export function Table<T>({
         );
     };
 
-    function buildErrorView<M extends { [Key: string]: any }>() {
+    function buildErrorView() {
         return (
 
             <Paper className={classes.root}>
@@ -226,7 +226,7 @@ export function Table<T>({
         );
     }
 
-    function buildEmptyView<M extends { [Key: string]: any }>() {
+    function buildEmptyView() {
         if (loading)
             return <CircularProgressCenter/>;
         return (
@@ -301,11 +301,11 @@ export function Table<T>({
                                                        rowData
                                                    }: any) =>
                                         idColumnBuilder
-? idColumnBuilder({
-                                            size,
-                                            entry: rowData
-                                        })
-: null
+                                            ? idColumnBuilder({
+                                                size,
+                                                entry: rowData
+                                            })
+                                            : null
                                     }
                                     align={"center"}
                                     key={"header-id"}

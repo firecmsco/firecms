@@ -11,7 +11,7 @@ import {
 /**
  * @category Hooks and utilities
  */
-export type DeleteEntityWithCallbacksProps<M, UserType> =
+export type DeleteEntityWithCallbacksProps<M> =
     DeleteEntityProps<M>
     & {
     callbacks?: EntityCallbacks<M>;
@@ -52,7 +52,7 @@ export async function deleteEntityWithCallbacks<M, UserType>({
                                                                  onPreDeleteHookError,
                                                                  onDeleteSuccessHookError,
                                                                  context
-                                                             }: DeleteEntityWithCallbacksProps<M, UserType> & {
+                                                             }: DeleteEntityWithCallbacksProps<M> & {
                                                                  schema: ResolvedEntitySchema<M>,
                                                                  dataSource: DataSource,
                                                                  context: FireCMSContext<UserType>

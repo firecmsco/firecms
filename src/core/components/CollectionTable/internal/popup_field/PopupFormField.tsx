@@ -133,13 +133,46 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         [name, entity]
     );
 
+    const getInitialLocation = useCallback(() => {
+        if (!cellRect) throw Error("getInitialLocation error");
+
+        return {
+            x: cellRect.left < windowSize.width - cellRect.right
+                ? cellRect.x + cellRect.width / 2
+                : cellRect.x - cellRect.width / 2,
+            y: cellRect.top < windowSize.height - cellRect.bottom
+                ? cellRect.y + cellRect.height / 2
+                : cellRect.y - cellRect.height / 2
+        };
+    }, [cellRect, windowSize.height, windowSize.width]);
+
+    const normalizePosition = useCallback(({
+                                               x,
+                                               y
+                                           }: { x: number, y: number }) => {
+        if (!draggableBoundingRect)
+            throw Error("normalizePosition called before draggableBoundingRect is set");
+
+        return {
+            x: Math.max(0, Math.min(x, windowSize.width - draggableBoundingRect.width)),
+            y: Math.max(0, Math.min(y, windowSize.height - draggableBoundingRect.height))
+        };
+    }, [draggableBoundingRect, windowSize]);
+
+    const updatePopupLocation = useCallback((position?: { x: number, y: number }) => {
+        if (!cellRect || !draggableBoundingRect) return;
+        const newPosition = normalizePosition(position ?? getInitialLocation());
+        if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
+            setPopupLocation(newPosition);
+    }, [cellRect, draggableBoundingRect, getInitialLocation, normalizePosition, popupLocation]);
+
     useEffect(
         () => {
             if (!cellRect || !draggableBoundingRect || initialPositionSet.current) return;
             initialPositionSet.current = true;
             updatePopupLocation(getInitialLocation());
         },
-        [cellRect, draggableBoundingRect, initialPositionSet.current]
+        [cellRect, draggableBoundingRect, getInitialLocation, updatePopupLocation]
     );
 
     useLayoutEffect(
@@ -168,40 +201,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 ? { [name]: schema.properties[name] } as Properties<any>
                 : {} as Properties<any>,
             customFieldValidator);
-    }, [name, internalValue]);
-
-    function getInitialLocation() {
-        if (!cellRect) throw Error("getInitialLocation error");
-
-        return {
-            x: cellRect.left < windowSize.width - cellRect.right
-                ? cellRect.x + cellRect.width / 2
-                : cellRect.x - cellRect.width / 2,
-            y: cellRect.top < windowSize.height - cellRect.bottom
-                ? cellRect.y + cellRect.height / 2
-                : cellRect.y - cellRect.height / 2
-        };
-    }
-
-    const normalizePosition = useCallback(({
-                                               x,
-                                               y
-                                           }: { x: number, y: number }) => {
-        if (!draggableBoundingRect)
-            throw Error("normalizePosition called before draggableBoundingRect is set");
-
-        return {
-            x: Math.max(0, Math.min(x, windowSize.width - draggableBoundingRect.width)),
-            y: Math.max(0, Math.min(y, windowSize.height - draggableBoundingRect.height))
-        };
-    }, [draggableBoundingRect, windowSize]);
-
-    const updatePopupLocation = (position?: { x: number, y: number }) => {
-        if (!cellRect || !draggableBoundingRect) return;
-        const newPosition = normalizePosition(position ?? getInitialLocation());
-        if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
-            setPopupLocation(newPosition);
-    };
+    }, [path, internalValue, name]);
 
     const adaptResize = () => {
         if (!draggableBoundingRect) return;

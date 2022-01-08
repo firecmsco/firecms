@@ -149,7 +149,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         else if (size === "tiny")
             res = res.slice(0, 1);
         return res;
-    }, [previewProperties, schema.properties]);
+    }, [previewProperties, schema.properties, size]);
 
     let body: JSX.Element;
 
@@ -183,7 +183,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
 
 
                     {listProperties && listProperties.map((key) => {
-                        const property = schema.properties[key as string];
+                        const childProperty = schema.properties[key as string];
 
                         return (
                             <div key={"ref_prev_" + (key as string)}
@@ -191,10 +191,10 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                                 {entity
                                     ? <PreviewComponent name={key as string}
                                                       value={entity.values[key as string]}
-                                                      property={property as AnyProperty}
+                                                      property={childProperty as AnyProperty}
                                                       size={"tiny"}/>
                                     : <SkeletonComponent
-                                        property={property as AnyProperty}
+                                        property={childProperty as AnyProperty}
                                         size={"tiny"}/>
                                 }
                             </div>
