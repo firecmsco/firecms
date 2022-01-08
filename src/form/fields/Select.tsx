@@ -81,8 +81,8 @@ export function Select<T extends EnumType>({
                 disabled={disabled}
                 onChange={(evt: any) => {
                     const eventValue = evt.target.value;
-                    const newValue = eventValue ?
-                        (property.dataType === "number" ? parseFloat(eventValue) : eventValue)
+                    const newValue = eventValue
+                        ? (property.dataType === "number" ? parseFloat(eventValue) : eventValue)
                         : null;
 
                     return setValue(newValue);

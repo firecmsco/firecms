@@ -16,8 +16,8 @@ import makeStyles from "@mui/styles/makeStyles";
 import {
     AnyProperty,
     Entity,
-    FireCMSContext, Properties,
-    Property,
+    FireCMSContext,
+    Properties,
     ResolvedEntitySchema
 } from "../../models";
 import { PreviewComponent } from "../../preview/PreviewComponent";

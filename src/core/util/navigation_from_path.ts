@@ -53,7 +53,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
 
-    let result: NavigationViewInternal<M> [] = [];
+    const result: NavigationViewInternal<M> [] = [];
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
 

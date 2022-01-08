@@ -5,6 +5,8 @@ import { createStyles, makeStyles } from "@mui/styles";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { FireCMSAppBar } from "./internal/FireCMSAppBar";
 import { useLocation } from "react-router-dom";
+import { useNavigation } from "../hooks";
+import { CircularProgressCenter } from "./components";
 
 
 /**
@@ -78,13 +80,15 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
 
     const classes = useStyles();
 
+    const navigationContext = useNavigation();
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const containerRef = useRestoreScroll();
 
     const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
     const closeDrawer = () => setDrawerOpen(false);
 
-    const UsedDrawer = Drawer ? Drawer : FireCMSDrawer;
+    const UsedDrawer = Drawer || FireCMSDrawer;
+
     return (
 
         <>
@@ -101,7 +105,8 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
                         keepMounted: true
                     }}
                 >
-                    <UsedDrawer logo={logo} closeDrawer={closeDrawer}/>
+                    {!navigationContext.navigation ? <CircularProgressCenter/> : <UsedDrawer logo={logo} closeDrawer={closeDrawer}/>}
+
                 </MuiDrawer>
             </nav>
 

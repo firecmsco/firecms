@@ -27,7 +27,7 @@ export const ErrorFocus = ({ containerRef }:
                 if (input) input.focus();
             }
         }
-    }, [isSubmitting, isValidating, errors]);
+    }, [isSubmitting, isValidating, errors, containerRef]);
 
     // This component does not render anything by itself.
     return null;

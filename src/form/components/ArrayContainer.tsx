@@ -11,7 +11,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 interface ArrayContainerProps<T> {
     value: T[];
     name: string;
-    buildEntry: (index: number, hash: any) => React.ReactNode;
+    buildEntry: (index: number, hashValue: any) => React.ReactNode;
     disabled: boolean;
     includeAddButton?: boolean;
 }
@@ -50,31 +50,22 @@ export function ArrayContainer<T>({
                 }
 
                 arrayHelpers.move(result.source.index, result.destination.index);
-
-                // const items = reorder(
-                //     this.state.items,
-                //     result.source.index,
-                //     result.destination.index
-                // );
-                //
-                // this.setState({
-                //     items
-                // });
             }
 
             return (
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable droppableId={`droppable_${name}`}>
-                        {(provided, snapshot) => (
+                        {(droppableProvided, droppableSnapshot) => (
                             <div
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}>
-                                {hasValue && value.map((value: any, index: number) => {
-                                    const hashValue = hash(value);
+                                {...droppableProvided.droppableProps}
+                                ref={droppableProvided.innerRef}>
+                                {hasValue && value.map((v: any, index: number) => {
+                                    const hashValue = hash(v);
                                     return (
                                         <Draggable
                                             key={`array_field_${name}_${hashValue}}`}
                                             draggableId={`array_field_${name}_${hashValue}}`}
+                                            isDragDisabled={disabled}
                                             index={index}>
                                             {(provided, snapshot) => (
 
@@ -87,7 +78,7 @@ export function ArrayContainer<T>({
                                                     sx={{
                                                         marginBottom: 1,
                                                         borderRadius: "4px",
-                                                        opacity: 1,
+                                                        opacity: 1
                                                     }}
                                                 >
                                                     <Box key={`field_${index}`}
@@ -101,13 +92,13 @@ export function ArrayContainer<T>({
                                                              display="flex"
                                                              flexDirection="column"
                                                              alignItems="center">
-                                                            {!disabled &&
                                                             <div
                                                                 {...provided.dragHandleProps}>
                                                                 <DragHandleIcon
                                                                     fontSize={"small"}
-                                                                    sx={{ cursor: "move" }}/>
-                                                            </div>}
+                                                                    color={disabled ? "disabled" : "inherit"}
+                                                                    sx={{ cursor: disabled ? "inherit" : "move" }}/>
+                                                            </div>
                                                             {!disabled &&
                                                             <IconButton
                                                                 size="small"
@@ -123,7 +114,7 @@ export function ArrayContainer<T>({
                                         </Draggable>);
                                 })}
 
-                                {provided.placeholder}
+                                {droppableProvided.placeholder}
 
                                 {includeAddButton && !disabled && <Box p={1}
                                                                        justifyContent="center"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Entity, EntitySchemaResolver, FilterValues } from "../../models";
 import { useDataSource } from "./useDataSource";
 
@@ -80,21 +80,21 @@ export function useCollectionFetch<M>(
     const currentSort = sortBy ? sortBy[1] : undefined;
 
     const dataSource = useDataSource();
-    const initialEntities = entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [];
+    const initialEntities = useMemo(() => entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [], [entitiesDisplayedFirst]);
     const [data, setData] = useState<Entity<M>[]>(initialEntities);
 
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
     const [noMoreToLoad, setNoMoreToLoad] = useState<boolean>(false);
 
-    const updateData = (entities: Entity<M>[]) => {
+    const updateData = useCallback((entities: Entity<M>[]) => {
         if (!initialEntities) {
             setData(entities);
         } else {
             const displayedFirstId = new Set(initialEntities.map((e) => e.id));
             setData([...initialEntities, ...entities.filter((e) => !displayedFirstId.has(e.id))]);
         }
-    };
+    }, [initialEntities]);
 
     useEffect(() => {
 

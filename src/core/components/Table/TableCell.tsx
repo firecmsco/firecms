@@ -9,7 +9,7 @@ import { getRowHeight } from "./common";
 import deepEqual from "deep-equal";
 
 
-interface TableCellProps<T, M> {
+interface TableCellProps {
     children: React.ReactNode;
     /**
      * The value is used only to check changes and force rerenders
@@ -29,7 +29,7 @@ interface TableCellProps<T, M> {
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
-const TableCellInternal = <T, M>({
+const TableCellInternal = ({
                                      children,
                                      selected,
                                      focused,
@@ -45,7 +45,7 @@ const TableCellInternal = <T, M>({
                                      fullHeight,
                                      select,
                                      showExpandIcon = true
-                                 }: TableCellProps<T, M> & CellStyleProps) => {
+                                 }: TableCellProps & CellStyleProps) => {
 
     const ref = React.createRef<HTMLDivElement>();
 
@@ -63,7 +63,7 @@ const TableCellInternal = <T, M>({
     }, [focused]);
 
     useEffect(() => {
-        if (internalSaved != saved) {
+        if (internalSaved !== saved) {
             if (saved) {
                 setInternalSaved(true);
             } else {
@@ -88,15 +88,10 @@ const TableCellInternal = <T, M>({
     }, [ref]);
 
     const onClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-        if (event.detail == 3) {
+        if (event.detail === 3) {
             doOpenPopup();
         }
-    }, [ref]);
-
-    const onFocus = useCallback((event: React.SyntheticEvent<HTMLDivElement>) => {
-        onSelect();
-        event.stopPropagation();
-    }, [ref, select, selected, disabled]);
+    }, [doOpenPopup]);
 
     const onSelect = useCallback(() => {
         if (!select) return;
@@ -108,13 +103,18 @@ const TableCellInternal = <T, M>({
         }
     }, [ref, select, selected, disabled]);
 
+    const onFocus = useCallback((event: React.SyntheticEvent<HTMLDivElement>) => {
+        onSelect();
+        event.stopPropagation();
+    }, [onSelect]);
+
     const onMeasure = useCallback((contentRect: ContentRect) => {
         if (contentRect?.bounds) {
             const newOverflowingValue = contentRect.bounds.height > maxHeight;
             if (isOverflowing !== newOverflowingValue)
                 setIsOverflowing(newOverflowingValue);
         }
-    }, [maxHeight]);
+    }, [isOverflowing, maxHeight]);
 
     const cellClasses = useCellStyles({
         size,
@@ -154,7 +154,7 @@ const TableCellInternal = <T, M>({
                     [cellClasses.centered]: disabled || !isOverflowing,
                     [cellClasses.error]: error,
                     [cellClasses.saved]: selected && internalSaved,
-                    [cellClasses.selected]: !error && selected || focused,
+                    [cellClasses.selected]: !error && (selected || focused),
                     [cellClasses.fullHeight]: fullHeight
                 })}>
 
@@ -225,19 +225,19 @@ const TableCellInternal = <T, M>({
     );
 };
 
-export const TableCell = React.memo<TableCellProps<any, any> & CellStyleProps>(TableCellInternal, areEqual) as React.FunctionComponent<TableCellProps<any, any> & CellStyleProps>;
+export const TableCell = React.memo<TableCellProps & CellStyleProps>(TableCellInternal, areEqual) as React.FunctionComponent<TableCellProps & CellStyleProps>;
 
-function areEqual(prevProps: TableCellProps<any, any> & CellStyleProps, nextProps: TableCellProps<any, any> & CellStyleProps) {
-    return prevProps.selected === nextProps.selected
-        && prevProps.focused === nextProps.selected
-        && prevProps.disabled === nextProps.disabled
-        && prevProps.size === nextProps.size
-        && prevProps.align === nextProps.align
-        && prevProps.saved === nextProps.saved
-        && prevProps.showExpandIcon === nextProps.showExpandIcon
-        && prevProps.removePadding === nextProps.removePadding
-        && prevProps.fullHeight === nextProps.fullHeight
-        && deepEqual(prevProps.value, nextProps.value)
+function areEqual(prevProps: TableCellProps & CellStyleProps, nextProps: TableCellProps & CellStyleProps) {
+    return prevProps.selected === nextProps.selected &&
+        prevProps.focused === nextProps.selected &&
+        prevProps.disabled === nextProps.disabled &&
+        prevProps.size === nextProps.size &&
+        prevProps.align === nextProps.align &&
+        prevProps.saved === nextProps.saved &&
+        prevProps.showExpandIcon === nextProps.showExpandIcon &&
+        prevProps.removePadding === nextProps.removePadding &&
+        prevProps.fullHeight === nextProps.fullHeight &&
+        deepEqual(prevProps.value, nextProps.value)
         ;
 }
 

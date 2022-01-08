@@ -3,13 +3,12 @@ import { ArrayProperty, MapProperty } from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { useStyles } from "./styles";
 import { PreviewComponent, PreviewComponentProps } from "../internal";
 
 /**
  * @category Preview components
  */
-export function ArrayOfMapsPreview<T>({
+export function ArrayOfMapsPreview({
                                           name,
                                           value,
                                           property,
@@ -28,7 +27,6 @@ export function ArrayOfMapsPreview<T>({
 
     if (!values) return null;
 
-    const classes = useStyles();
 
     let mapProperties = previewProperties;
     if (!mapProperties || !mapProperties.length) {
@@ -41,12 +39,16 @@ export function ArrayOfMapsPreview<T>({
         <Table size="small">
             <TableBody>
                 {values &&
-                values.map((value, index) => {
+                values.map((v, index) => {
                     return (
-                        <TableRow key={`table_${value}_${index}`}
-                                  className={classes.tableNoBottomBorder}>
+                        <TableRow key={`table_${v}_${index}`}
+                                  sx={{
+                                      "&:last-child th, &:last-child td": {
+                                          borderBottom: 0
+                                      }
+                                  }}>
                             {mapProperties && mapProperties.map(
-                                (key, index) => (
+                                (key) => (
                                     <TableCell
                                         key={`table-cell-${key as string}`}
                                         component="th"
@@ -54,7 +56,7 @@ export function ArrayOfMapsPreview<T>({
                                         <ErrorBoundary>
                                             <PreviewComponent
                                                 name={key as string}
-                                                value={(value as any)[key]}
+                                                value={(v as any)[key]}
                                                 property={properties[key as string]}
                                                 size={"small"}/>
                                         </ErrorBoundary>

@@ -183,7 +183,7 @@ export type Properties<M extends { [Key: string]: any } = any> = {
 /**
  * @category Entity properties
  */
-export type PropertyBuilderProps<T, M extends { [Key: string]: any }> =
+export type PropertyBuilderProps<M extends { [Key: string]: any }> =
     {
         values: Partial<M>;
         path: string;
@@ -196,7 +196,7 @@ export type PropertyBuilder<T extends CMSType = CMSType, M = any> = ({
                                                          values,
                                                          path,
                                                          entityId
-                                                     }: PropertyBuilderProps<T, M>) => Property<T>;
+                                                     }: PropertyBuilderProps<M>) => Property<T>;
 
 /**
  * @category Entity properties

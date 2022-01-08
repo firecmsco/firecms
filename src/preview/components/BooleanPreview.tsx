@@ -12,8 +12,7 @@ export function BooleanPreview({
                                    size
                                }: PreviewComponentProps<boolean>): React.ReactElement {
 
-    return value ?
-        <CheckBox color="secondary"/>
-        :
-        <CheckBoxOutlineBlank color="disabled"/>;
+    return value
+        ? <CheckBox color="secondary"/>
+        : <CheckBoxOutlineBlank color="disabled"/>;
 }

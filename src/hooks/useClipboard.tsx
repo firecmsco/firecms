@@ -90,18 +90,18 @@ export const useClipboard = (
 
     const isSupported = () => navigator.clipboard !== undefined;
 
-    const handleError = (error: string) => {
+    const handleError = useCallback((error: string) => {
         if (onError) onError(error);
         else throw new Error(error);
-    };
+    }, [onError]);
 
-    const handleSuccess = (text: string) => {
+    const handleSuccess = useCallback((text: string) => {
         if (onSuccess) onSuccess(text);
         setIsCoppied(true);
         setClipbaord(text);
-    };
+    }, [onSuccess]);
 
-    const copyToClipboard = (text: string) => {
+    const copyToClipboard = useCallback((text: string) => {
         navigator.clipboard
             .writeText(text)
             .then(() => handleSuccess(text))
@@ -109,7 +109,7 @@ export const useClipboard = (
                 handleError(err);
                 setIsCoppied(false);
             });
-    };
+    }, [handleError, handleSuccess]);
 
     const clearClipboard = () => {
         if (isSupported()) {
@@ -150,7 +150,7 @@ export const useClipboard = (
                 }
             }
         },
-        [ref, onSuccess, onError, disableClipboardAPI]
+        [disableClipboardAPI, copyToClipboard, handleError]
     );
 
     return {
@@ -160,6 +160,6 @@ export const useClipboard = (
         clearClipboard,
         isSupported,
         copy,
-        cut,
+        cut
     };
 };

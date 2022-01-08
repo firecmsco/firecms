@@ -70,6 +70,7 @@ export function useBuildNavigationContext<UserType>({
 
     useEffect(() => {
         if (!authController.canAccessMainView) {
+            setNavigationLoading(false);
             return;
         }
         setNavigationLoading(true);
@@ -242,14 +243,13 @@ export function useBuildNavigationContext<UserType>({
         buildUrlCollectionPath,
         buildUrlEditCollectionPath,
         buildUrlEditSchemaPath,
-        buildCMSUrlPath,
+        buildCMSUrlPath
     };
 }
 
 
 async function resolveNavigation<UserType = any>({
                                                      navigationOrBuilder,
-                                                     configPersistence,
                                                      authController,
                                                      dateTimeFormat,
                                                      locale,
@@ -258,7 +258,6 @@ async function resolveNavigation<UserType = any>({
                                                  }:
                                                      {
                                                          navigationOrBuilder?: Navigation | NavigationBuilder<UserType>,
-                                                         configPersistence?: ConfigurationPersistence,
                                                          authController: AuthController<UserType>,
                                                          dateTimeFormat?: string,
                                                          locale?: Locale,

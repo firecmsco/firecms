@@ -11,6 +11,8 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import ClearIcon from "@mui/icons-material/Clear";
 
+import deepEqual from "deep-equal";
+
 import {
     Entity,
     EntitySchemaResolver,
@@ -121,7 +123,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         ref,
         x: popupLocation?.x,
         y: popupLocation?.y,
-        onMove: (x, y) => onMove({x, y})
+        onMove: (x, y) => onMove({ x, y })
     });
 
     useEffect(
@@ -131,13 +133,46 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         [name, entity]
     );
 
+    const getInitialLocation = useCallback(() => {
+        if (!cellRect) throw Error("getInitialLocation error");
+
+        return {
+            x: cellRect.left < windowSize.width - cellRect.right
+                ? cellRect.x + cellRect.width / 2
+                : cellRect.x - cellRect.width / 2,
+            y: cellRect.top < windowSize.height - cellRect.bottom
+                ? cellRect.y + cellRect.height / 2
+                : cellRect.y - cellRect.height / 2
+        };
+    }, [cellRect, windowSize.height, windowSize.width]);
+
+    const normalizePosition = useCallback(({
+                                               x,
+                                               y
+                                           }: { x: number, y: number }) => {
+        if (!draggableBoundingRect)
+            throw Error("normalizePosition called before draggableBoundingRect is set");
+
+        return {
+            x: Math.max(0, Math.min(x, windowSize.width - draggableBoundingRect.width)),
+            y: Math.max(0, Math.min(y, windowSize.height - draggableBoundingRect.height))
+        };
+    }, [draggableBoundingRect, windowSize]);
+
+    const updatePopupLocation = useCallback((position?: { x: number, y: number }) => {
+        if (!cellRect || !draggableBoundingRect) return;
+        const newPosition = normalizePosition(position ?? getInitialLocation());
+        if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
+            setPopupLocation(newPosition);
+    }, [cellRect, draggableBoundingRect, getInitialLocation, normalizePosition, popupLocation]);
+
     useEffect(
         () => {
             if (!cellRect || !draggableBoundingRect || initialPositionSet.current) return;
             initialPositionSet.current = true;
             updatePopupLocation(getInitialLocation());
         },
-        [cellRect, draggableBoundingRect, initialPositionSet.current]
+        [cellRect, draggableBoundingRect, getInitialLocation, updatePopupLocation]
     );
 
     useLayoutEffect(
@@ -162,45 +197,11 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             values: internalValue
         });
         return getYupEntitySchema(
-            name ?
-                { [name]: schema.properties[name] } as Properties<M>
-                : {} as Properties<M>,
+            name
+                ? { [name]: schema.properties[name] } as Properties<any>
+                : {} as Properties<any>,
             customFieldValidator);
-    }, [name, internalValue]);
-
-    function getInitialLocation() {
-        if (!cellRect) throw Error("getInitialLocation error");
-
-        let location = {
-            x: cellRect.left < windowSize.width - cellRect.right
-                ? cellRect.x + cellRect.width / 2
-                : cellRect.x - cellRect.width / 2,
-            y: cellRect.top < windowSize.height - cellRect.bottom
-                ? cellRect.y + cellRect.height / 2
-                : cellRect.y - cellRect.height / 2
-        };
-        return location;
-    }
-
-    const normalizePosition =  useCallback(({
-                                                x,
-                                                y
-                                            }: { x: number, y: number }) => {
-        if (!draggableBoundingRect)
-            throw Error("normalizePosition called before draggableBoundingRect is set");
-
-        return {
-            x: Math.max(0, Math.min(x, windowSize.width - draggableBoundingRect.width)),
-            y: Math.max(0, Math.min(y, windowSize.height - draggableBoundingRect.height))
-        };
-    }, [draggableBoundingRect, windowSize]);
-
-    const updatePopupLocation = (position?: { x: number, y: number }) => {
-        if (!cellRect || !draggableBoundingRect) return;
-        const newPosition = normalizePosition(position ?? getInitialLocation());
-        if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
-            setPopupLocation(newPosition);
-    };
+    }, [path, internalValue, name]);
 
     const adaptResize = () => {
         if (!draggableBoundingRect) return;
@@ -212,7 +213,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         return updatePopupLocation(position);
     };
 
-    const saveValue = async (values: object) => {
+    const saveValue = async (values: M) => {
         setSavingError(null);
         if (entity && onCellValueChange && name) {
             return onCellValueChange({
@@ -226,75 +227,6 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         }
         return Promise.resolve();
     };
-
-    const renderForm = useCallback(({
-                            handleChange,
-                            values,
-                            errors,
-                            touched,
-                            dirty,
-                            setFieldValue,
-                            setFieldTouched,
-                            handleSubmit,
-                            isSubmitting
-                        }: FormikProps<EntityValues<M>>) => {
-
-        if (!entity)
-            return <ErrorView error={"PopupFormField misconfiguration"}/>;
-
-        useEffect(() => {
-            setInternalValue(values);
-        }, [values]);
-
-        if (!schemaResolver)
-            return <></>;
-
-        const disabled = isSubmitting;
-
-        const schema = computeSchema({
-            schemaOrResolver: schemaResolver,
-            path,
-            values
-        });
-
-        const context: FormContext<M> = {
-            schema,
-            entityId: entity.id,
-            values
-        };
-
-        const property: Property<any> | undefined = schema.properties[name];
-
-        return <Form
-            className={classes.form}
-            onSubmit={handleSubmit}
-            noValidate>
-
-            {name && property && buildPropertyField<any, M>({
-                name: name as string,
-                disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
-                property,
-                includeDescription: false,
-                underlyingValueHasChanged: false,
-                context,
-                tableMode: true,
-                partOfArray: false,
-                autoFocus: open,
-                shouldAlwaysRerender: true
-            })}
-
-            <Button
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={disabled}
-            >
-                Save
-            </Button>
-
-        </Form>;
-    }, [entity, schemaResolver]);
 
     if (!entity)
         return <></>;
@@ -317,7 +249,75 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         .finally(() => actions.setSubmitting(false));
                 }}
             >
-                {renderForm}
+                {({
+                      handleChange,
+                      values,
+                      errors,
+                      touched,
+                      dirty,
+                      setFieldValue,
+                      setFieldTouched,
+                      handleSubmit,
+                      isSubmitting
+                  }: FormikProps<EntityValues<M>>) => {
+
+                    if (!deepEqual(values, internalValue)) {
+                        setInternalValue(values);
+                    }
+
+                    if (!entity)
+                        return <ErrorView
+                            error={"PopupFormField misconfiguration"}/>;
+
+                    if (!schemaResolver)
+                        return <></>;
+
+                    const disabled = isSubmitting;
+
+                    const schema = computeSchema({
+                        schemaOrResolver: schemaResolver,
+                        path,
+                        values
+                    });
+
+                    const context: FormContext<M> = {
+                        schema,
+                        entityId: entity.id,
+                        values
+                    };
+
+                    const property: Property<any> | undefined = schema.properties[name];
+
+                    return <Form
+                        className={classes.form}
+                        onSubmit={handleSubmit}
+                        noValidate>
+
+                        {name && property && buildPropertyField<any, M>({
+                            name: name as string,
+                            disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
+                            property,
+                            includeDescription: false,
+                            underlyingValueHasChanged: false,
+                            context,
+                            tableMode: true,
+                            partOfArray: false,
+                            autoFocus: open,
+                            shouldAlwaysRerender: true
+                        })}
+
+                        <Button
+                            className={classes.button}
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            disabled={disabled}
+                        >
+                            Save
+                        </Button>
+
+                    </Form>;
+                }}
             </Formik>
 
             {savingError &&
@@ -356,7 +356,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         event.stopPropagation();
                         onClose();
                     }}>
-                    <ClearIcon style={{color: "white"}}
+                    <ClearIcon style={{ color: "white" }}
                                fontSize={"small"}/>
                 </IconButton>
             </div>

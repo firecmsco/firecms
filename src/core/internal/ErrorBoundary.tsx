@@ -10,10 +10,12 @@ export class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
         this.state = { hasError: false };
     }
 
+    // eslint-disable-next-line node/handle-callback-err
     static getDerivedStateFromError(error: Error) {
         return { hasError: true };
     }
 
+    // eslint-disable-next-line node/handle-callback-err
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         // logErrorToMyService(error, errorInfo);
     }

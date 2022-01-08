@@ -32,9 +32,9 @@ import {
     twitterIcon
 } from "./social_icons";
 import { ErrorView } from "../../core";
-import EmailIcon from '@mui/icons-material/Email';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import EmailIcon from "@mui/icons-material/Email";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -147,7 +147,7 @@ export function FirebaseLoginView({
             mountOnEnter
             unmountOnExit>
             <Box sx={{
-                display: 'flex',
+                display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
@@ -155,7 +155,7 @@ export function FirebaseLoginView({
                 p: 2
             }}>
                 <Box sx={{
-                    display: 'flex',
+                    display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     width: "100%",
@@ -223,15 +223,15 @@ function LoginButton({
                     variant="outlined"
                     onClick={onClick}>
                 <Box sx={{
-                    p: '1',
-                    display: 'flex',
+                    p: "1",
+                    display: "flex",
                     width: "240px",
                     height: "32px",
                     alignItems: "center",
                     justifyItems: "center"
                 }}>
                     <Box sx={{
-                        display: 'flex',
+                        display: "flex",
                         flexDirection: "column",
                         width: "32px",
                         alignItems: "center",
@@ -263,16 +263,16 @@ function LoginForm({
     const [password, setPassword] = useState<string>();
 
     const shouldShowEmail = availableProviders === undefined;
-    const loginMode = availableProviders && availableProviders.includes('password');
-    const otherProvidersMode = availableProviders && !availableProviders.includes('password') && availableProviders.length > 0;
-    const registrationMode = availableProviders && !availableProviders.includes('password');
+    const loginMode = availableProviders && availableProviders.includes("password");
+    const otherProvidersMode = availableProviders && !availableProviders.includes("password") && availableProviders.length > 0;
+    const registrationMode = availableProviders && !availableProviders.includes("password");
 
     useEffect(() => {
         console.log("loginMode", loginMode);
         if ((loginMode || registrationMode) && passwordRef.current) {
             passwordRef.current.focus()
         }
-    }, [loginMode]);
+    }, [loginMode, registrationMode]);
 
     useEffect(() => {
         if (!document) return;
@@ -324,7 +324,8 @@ function LoginForm({
         }
     }
 
-    const label = registrationMode ? "No user found with that email. Pick a password to create a new account"
+    const label = registrationMode
+? "No user found with that email. Pick a password to create a new account"
         : (loginMode ? "Please enter your password" : "Please enter your email");
     const button = registrationMode ? "Create account" : (loginMode ? "Login" : "Ok");
 

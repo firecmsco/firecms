@@ -3,7 +3,7 @@ import { Entity, EntitySchema, EntitySchemaResolver } from "./entities";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
-import { AuthController } from "./auth";
+import { PermissionsBuilder } from "./permissions";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -159,123 +159,10 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
 }
 
 /**
- * @category Models
- */
-export type EntityCollectionResolver<M = any> = EntityCollection<M> & {
-    schemaResolver: EntitySchemaResolver<M>
-};
-
-/**
- * Parameter passed to the `extraActions` builder in the collection configuration
- *
- * @category Models
- */
-export interface ExtraActionsParams<M extends { [Key: string]: any } = any, UserType = User> {
-    /**
-     * Collection path of this entity
-     */
-    path: string;
-
-    /**
-     * The collection configuration
-     */
-    collection: EntityCollection<M>;
-
-    /**
-     * Use this controller to get the selected entities and to update the
-     * selected entities state
-     */
-    selectionController: SelectionController<M>;
-
-    /**
-     * Context of the app status
-     */
-    context: FireCMSContext<UserType>;
-}
-
-/**
- * Use this controller to retrieve the selected entities or modify them in
- * an {@link EntityCollection}
- * If you want to pass a `SelectionController` to
- * @category Models
- */
-export type SelectionController<M = any> = {
-    selectedEntities: Entity<M>[];
-    setSelectedEntities: (selectedEntities: Entity<M>[]) => void;
-    isEntitySelected: (entity: Entity<M>) => boolean;
-    toggleEntitySelection: (entity: Entity<M>) => void;
-}
-
-
-/**
  * Sizes in which a collection can be rendered
  * @category Models
  */
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
-
-
-/**
- * Define the operations that can be performed in an entity.
- * @category Models
- */
-export interface Permissions {
-    /**
-     * Can the user add new entities. Defaults to `true`
-     */
-    create?: boolean;
-    /**
-     * Can the elements in this collection be edited. Defaults to `true`
-     */
-    edit?: boolean;
-    /**
-     * Can the user delete entities. Defaults to `true`
-     */
-    delete?: boolean;
-
-}
-
-/**
- * Builder used to assign `create`, `edit` and `delete` permissions to entities,
- * based on the logged user, entity or collection path
- * @category Models
- */
-export type PermissionsBuilder<M extends { [Key: string]: any }, UserType = User> =
-    Permissions
-    | (({
-            entity,
-            path,
-            user,
-            authController,
-            context
-        }: PermissionsBuilderProps<M, UserType>) => Permissions);
-
-/**
- * Props passed to a {@link PermissionsBuilder}
- * @category Models
- */
-export interface PermissionsBuilderProps<M extends { [Key: string]: any }, UserType = User> {
-    /**
-     * Entity being edited, might be null if it is new
-     */
-    entity: Entity<M> | null;
-    /**
-     * Collection path of this entity
-     */
-    path: string;
-    /**
-     * Logged in user
-     */
-    user: UserType | null;
-    /**
-     * Auth controller
-     */
-    authController: AuthController<UserType>;
-    /**
-     * Context of the app status
-     */
-    context: FireCMSContext<UserType>;
-}
-
 
 /**
  * Use this interface for adding additional columns to entity collection views.
@@ -322,11 +209,53 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
 }
 
 /**
- * Used to define filters applied in collections
  * @category Models
  */
-export type FilterValues<M> = { [K in keyof M]?: [WhereFilterOp, any] };
+export type EntityCollectionResolver<M = any> = EntityCollection<M> & {
+    schemaResolver: EntitySchemaResolver<M>
+};
 
+/**
+ * Parameter passed to the `extraActions` builder in the collection configuration
+ *
+ * @category Models
+ */
+export interface ExtraActionsParams<M extends { [Key: string]: any } = any, UserType = User> {
+    /**
+     * Collection path of this entity
+     */
+    path: string;
+
+    /**
+     * The collection configuration
+     */
+    collection: EntityCollection<M>;
+
+    /**
+     * Use this controller to get the selected entities and to update the
+     * selected entities state
+     */
+    selectionController: SelectionController<M>;
+
+    /**
+     * Context of the app status
+     */
+    context: FireCMSContext<UserType>;
+}
+
+
+/**
+ * Use this controller to retrieve the selected entities or modify them in
+ * an {@link EntityCollection}
+ * If you want to pass a `SelectionController` to
+ * @category Models
+ */
+export type SelectionController<M = any> = {
+    selectedEntities: Entity<M>[];
+    setSelectedEntities: (selectedEntities: Entity<M>[]) => void;
+    isEntitySelected: (entity: Entity<M>) => boolean;
+    toggleEntitySelection: (entity: Entity<M>) => void;
+}
 
 /**
  * Filter conditions in a `Query.where()` clause are specified using the
@@ -343,6 +272,14 @@ export type WhereFilterOp =
     | "array-contains"
     | "in"
     | "array-contains-any";
+
+
+
+/**
+ * Used to define filters applied in collections
+ * @category Models
+ */
+export type FilterValues<M> = { [K in keyof M]?: [WhereFilterOp, any] };
 
 /**
  * You can use this configuration to add additional columns to the data

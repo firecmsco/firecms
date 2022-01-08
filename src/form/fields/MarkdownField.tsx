@@ -18,16 +18,16 @@ export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             "& .w-md-editor-toolbar li > button": {
-                color: "inherit",
+                color: "inherit"
             },
             "& .w-md-editor-toolbar li.active > button": {
-                color: theme.palette.primary.main,
+                color: theme.palette.primary.main
             },
             "& .w-md-editor-text-pre, & .w-md-editor-text-pre .title, & .w-md-editor-text-pre .bold": {
-                color: "inherit !important",
+                color: "inherit !important"
             },
             "& .wmde-markdown-color code.language-markdown": {
-                color: "inherit",
+                color: "inherit"
             },
             "& .w-md-editor": {
                 color: "inherit",
@@ -106,9 +106,9 @@ export function MarkdownField({
 
             <Box display={"flex"}>
                 <Box flexGrow={1}>
-                    {showError
-                    && typeof error === "string"
-                    && <FormHelperText>{error}</FormHelperText>}
+                    {showError &&
+                    typeof error === "string" &&
+                    <FormHelperText>{error}</FormHelperText>}
                     {includeDescription &&
                     <FieldDescription property={property}/>}
                 </Box>

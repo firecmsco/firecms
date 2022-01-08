@@ -26,7 +26,7 @@ export function addInitialSlash(s: string) {
 export function getLastSegment(path: string) {
     const cleanPath = removeInitialAndTrailingSlashes(path);
     if (cleanPath.includes("/")) {
-        let segments = cleanPath.split("/");
+        const segments = cleanPath.split("/");
         return segments[segments.length - 1];
     }
     return cleanPath;
@@ -57,7 +57,7 @@ function getCollectionFromCollectionsInternal<M extends { [Key: string]: any }>(
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
 
-    let result: EntityCollection | undefined = undefined;
+    let result: EntityCollection | undefined;
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
         const navigationEntry = collectionViews && collectionViews.find((entry) => entry.path === subpathCombination);
@@ -83,7 +83,7 @@ function getCollectionFromCollectionsInternal<M extends { [Key: string]: any }>(
  * @param subpaths
  */
 export function getCollectionPathsCombinations(subpaths: string[]): string[] {
-    const entries = subpaths.length > 0 && subpaths.length % 2 == 0 ? subpaths.splice(0, subpaths.length - 1) : subpaths;
+    const entries = subpaths.length > 0 && subpaths.length % 2 === 0 ? subpaths.splice(0, subpaths.length - 1) : subpaths;
 
     const length = entries.length;
     const result: string[] = [];
@@ -134,8 +134,8 @@ export function computeTopNavigation(
             group: collection.group?.trim()
         } as TopNavigationEntry)),
         ...(navigation.views ?? []).map(view =>
-            includeHiddenViews || !view.hideFromNavigation ?
-                ({
+            includeHiddenViews || !view.hideFromNavigation
+                ? ({
                     url: navigationContext.buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
                     name: view.name,
                     type: "view",

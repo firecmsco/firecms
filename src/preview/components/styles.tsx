@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { Theme } from "@mui/material";
 
 import createStyles from "@mui/styles/createStyles";
@@ -28,11 +26,6 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         arrayItemBig: {
             margin: theme.spacing(1)
-        },
-        tableNoBottomBorder: {
-            "&:last-child th, &:last-child td": {
-                borderBottom: 0
-            }
         },
         link: {
             display: "flex",

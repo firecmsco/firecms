@@ -26,10 +26,10 @@ import {
 } from "../../../hooks";
 import { Table } from "../../index";
 import {
-    buildColumnsFromSchema,
     checkInlineEditing,
     OnCellValueChange,
-    UniqueFieldValidator
+    UniqueFieldValidator,
+    useBuildColumnsFromSchema
 } from "./column_builder";
 
 const DEFAULT_PAGE_SIZE = 50;
@@ -71,12 +71,12 @@ export const useStyles = makeStyles<Theme>(theme => createStyles({
 export const CollectionTable = React.memo<CollectionTableProps<any, any>>(CollectionTableInternal, areEqual) as React.FunctionComponent<CollectionTableProps<any, any>>;
 
 function areEqual(prevProps: CollectionTableProps<any, any>, nextProps: CollectionTableProps<any, any>) {
-    return prevProps.path === nextProps.path
-        && prevProps.collection === nextProps.collection
-        && prevProps.title === nextProps.title
-        && prevProps.toolbarActionsBuilder === nextProps.toolbarActionsBuilder
-        && prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder
-        && prevProps.inlineEditing === nextProps.inlineEditing
+    return prevProps.path === nextProps.path &&
+        prevProps.collection === nextProps.collection &&
+        prevProps.title === nextProps.title &&
+        prevProps.toolbarActionsBuilder === nextProps.toolbarActionsBuilder &&
+        prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder &&
+        prevProps.inlineEditing === nextProps.inlineEditing
         ;
 }
 
@@ -131,7 +131,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                 title: subcollection.name,
                 width: 200,
                 dependencies: [],
-                builder: ({entity}) => (
+                builder: ({ entity }) => (
                     <Button color={"primary"}
                             onClick={(event) => {
                                 event.stopPropagation();
@@ -152,26 +152,28 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
             };
         }) ?? [];
         return [...(collection.additionalColumns ?? []), ...subcollectionColumns];
-    }, [collection]);
+    }, [collection, path]);
 
     const resolvedSchema = schemaResolver({});
     const displayedProperties = useColumnIds(collection, resolvedSchema, true);
 
-    const uniqueFieldValidator: UniqueFieldValidator = useCallback(({
-                                                            name,
-                                                            value,
-                                                            property,
-                                                            entityId
-                                                        }) => dataSource.checkUniqueField(path, name, value, property, entityId),[path]);
+    const uniqueFieldValidator: UniqueFieldValidator = useCallback(
+        ({
+             name,
+             value,
+             property,
+             entityId
+         }) => dataSource.checkUniqueField(path, name, value, property, entityId),
+        [path, dataSource]);
 
 
     const onCellChanged: OnCellValueChange<any, M> = useCallback(({
-                                                          value,
-                                                          name,
-                                                          setSaved,
-                                                          setError,
-                                                          entity
-                                                      }) => {
+                                                                      value,
+                                                                      name,
+                                                                      setSaved,
+                                                                      setError,
+                                                                      entity
+                                                                  }) => {
         const saveProps: SaveEntityProps<M> = {
             path,
             entityId: entity.id,
@@ -190,14 +192,14 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
             dataSource,
             context,
             onSaveSuccess: () => setSaved(true),
-            onSaveFailure: ((e: Error) => {
+            onSaveFailure: (e: Error) => {
                 setError(e);
-            })
+            }
         });
 
     }, [path, collection, schemaResolver]);
 
-    const { columns, popupFormField } = buildColumnsFromSchema({
+    const { columns, popupFormField } = useBuildColumnsFromSchema({
         schemaResolver,
         additionalColumns,
         displayedProperties,
@@ -225,25 +227,25 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         itemCount
     });
 
-    const actions = toolbarActionsBuilder && toolbarActionsBuilder({
+    const actions = useMemo(() => toolbarActionsBuilder && toolbarActionsBuilder({
         size,
         data
-    });
+    }), [toolbarActionsBuilder, size, data]);
 
-    const loadNextPage = () => {
+    const loadNextPage = useCallback(() => {
         if (!paginationEnabled || dataLoading || noMoreToLoad)
             return;
         if (itemCount !== undefined)
             setItemCount(itemCount + pageSize);
-    };
+    }, [dataLoading, itemCount, noMoreToLoad, pageSize, paginationEnabled]);
 
-    const resetPagination = () => {
+    const resetPagination = useCallback(() => {
         setItemCount(pageSize);
-    };
+    }, [pageSize]);
 
-    const clearFilter = () => setFilterValues({});
+    const clearFilter = useCallback(() => setFilterValues({}), []);
 
-    const buildIdColumn = ({ entry, size }: {
+    const buildIdColumn = useCallback(({ entry, size }: {
         entry: Entity<M>,
         size: CollectionSize,
     }) => {
@@ -252,64 +254,27 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         else
             return <CollectionRowActions entity={entry} size={size}/>;
 
-    };
+    }, [tableRowActionsBuilder]);
 
-    const onRowClick = ({ rowData }: { rowData: Entity<M> }) => {
+    const onRowClick = useCallback(({ rowData }: { rowData: Entity<M> }) => {
         if (checkInlineEditing(inlineEditing, rowData))
             return;
         return onEntityClick && onEntityClick(rowData);
-    };
+    }, [onEntityClick]);
 
-    function isFilterCombinationValid<M>(
-        filterValues: FilterValues<M>,
-        indexes?: FilterCombination<Extract<keyof M, string>>[],
-        sortBy?: [string, "asc" | "desc"]
-    ): boolean {
-
-        const sortKey = sortBy ? sortBy[0] : undefined;
-        const sortDirection = sortBy ? sortBy[1] : undefined;
-
-        // Order by clause cannot contain a field with an equality filter available
-        const values: [WhereFilterOp, any][] = Object.values(filterValues) as [WhereFilterOp, any][];
-        if (sortKey && values.map((v) => v[0]).includes("==")) {
-            return false;
-        }
-
-        const filterKeys = Object.keys(filterValues);
-        const filtersCount = filterKeys.length;
-
-        if (filtersCount === 1 && (!sortKey || sortKey === filterKeys[0])) {
-            return true;
-        }
-
-        if (!indexes && filtersCount > 1) {
-            return false;
-        }
-
-        // only one filter set, different to the sort key
-        if (sortKey && filtersCount === 1 && filterKeys[0] !== sortKey) {
-            return false;
-        }
-
-        return !!indexes && indexes
-            .filter((compositeIndex) => !sortKey || sortKey in compositeIndex)
-            .find((compositeIndex) =>
-                Object.entries(filterValues).every(([key, value]) => compositeIndex[key] !== undefined && (!sortDirection || compositeIndex[key] === sortDirection))
-            ) !== undefined;
-    }
-
-    const updateSize = (size: CollectionSize) => {
+    const updateSize = useCallback((size: CollectionSize) => {
         if (onSizeChanged)
             onSizeChanged(size);
         setSize(size);
-    };
+    }, []);
 
+    const onTextSearch = useCallback((newSearchString) => setSearchString(newSearchString), []);
     return (
 
         <Paper className={classes.root}>
 
             <CollectionTableToolbar filterIsSet={filterIsSet}
-                                    onTextSearch={textSearchEnabled ? setSearchString : undefined}
+                                    onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                                     clearFilter={clearFilter}
                                     actions={actions}
                                     size={size}
@@ -346,3 +311,40 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 
 }
 
+function isFilterCombinationValid<M>(
+    filterValues: FilterValues<M>,
+    indexes?: FilterCombination<string>[],
+    sortBy?: [string, "asc" | "desc"]
+): boolean {
+
+    const sortKey = sortBy ? sortBy[0] : undefined;
+    const sortDirection = sortBy ? sortBy[1] : undefined;
+
+    // Order by clause cannot contain a field with an equality filter available
+    const values: [WhereFilterOp, any][] = Object.values(filterValues) as [WhereFilterOp, any][];
+    if (sortKey && values.map((v) => v[0]).includes("==")) {
+        return false;
+    }
+
+    const filterKeys = Object.keys(filterValues);
+    const filtersCount = filterKeys.length;
+
+    if (filtersCount === 1 && (!sortKey || sortKey === filterKeys[0])) {
+        return true;
+    }
+
+    if (!indexes && filtersCount > 1) {
+        return false;
+    }
+
+    // only one filter set, different to the sort key
+    if (sortKey && filtersCount === 1 && filterKeys[0] !== sortKey) {
+        return false;
+    }
+
+    return !!indexes && indexes
+        .filter((compositeIndex) => !sortKey || sortKey in compositeIndex)
+        .find((compositeIndex) =>
+            Object.entries(filterValues).every(([key, value]) => compositeIndex[key] !== undefined && (!sortDirection || compositeIndex[key] === sortDirection))
+        ) !== undefined;
+}

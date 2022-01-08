@@ -1,6 +1,7 @@
-import { EntityCollection, PermissionsBuilder } from "./collections";
+import { EntityCollection } from "./collections";
 import { EntitySchema, EntitySchemaResolver } from "./entities";
 import { EntityCallbacks } from "./entity_callbacks";
+import { PermissionsBuilder } from "./permissions";
 import { User } from "./user";
 
 /**
@@ -94,5 +95,5 @@ export interface SideEntityController {
      * to override the FireCMS level `SchemaRegistryController`.
      * @param props
      */
-    open: (props: SideEntityPanelProps ) => void;
+    open: (props: SideEntityPanelProps) => void;
 }

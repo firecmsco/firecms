@@ -25,16 +25,16 @@ export const ElementResizeListener: React.FC<Props> = ({ onResize }) => {
         if (obj && obj.contentDocument && obj.contentDocument.defaultView) {
             obj.contentDocument.defaultView.addEventListener("resize", _onResize);
         }
-    }, []);
+    }, [_onResize]);
 
     useEffect(() => {
+        const obj = objectRef.current;
         return () => {
-            const obj = objectRef.current;
             if (obj && obj.contentDocument && obj.contentDocument.defaultView) {
                 obj.contentDocument.defaultView.removeEventListener("resize", _onResize);
             }
         };
-    }, []);
+    }, [_onResize]);
 
     return (
         <object

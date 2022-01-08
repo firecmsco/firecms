@@ -4,7 +4,7 @@ import Tree, {
     RenderItemParams,
     TreeData,
     TreeDestinationPosition,
-    TreeSourcePosition,
+    TreeSourcePosition
 } from '../Tree';
 import { TreeDraggableProvided } from "../Tree/components/TreeItem/TreeItem-types";
 
@@ -56,7 +56,7 @@ export function SchemaEditor<M>({
                             onExpand,
                             onCollapse,
                             provided,
-                            snapshot,
+                            snapshot
                         }: RenderItemParams) => {
         const property = item.data.property as Property;
         return (
@@ -91,12 +91,14 @@ export function SchemaEditor<M>({
             >
                 {({ values, setValues, setFieldValue, handleChange }) => {
 
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
                     React.useEffect(() => {
                         setValues({
                             ...schema
                         });
                     }, [schema]);
 
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
                     const tree = useMemo(() => {
                         const sortedProperties = sortProperties(values.properties, values.propertiesOrder);
                         return propertiesToTree(sortedProperties);
@@ -104,7 +106,7 @@ export function SchemaEditor<M>({
 
                     const onDragEnd = (
                         source: TreeSourcePosition,
-                        destination?: TreeDestinationPosition,
+                        destination?: TreeDestinationPosition
                     ) => {
 
                         if (!destination) {
@@ -126,11 +128,11 @@ export function SchemaEditor<M>({
                     const formControlSX = {
                         '& .MuiInputLabel-root': {
                             mt: 1 / 2,
-                            ml: 1 / 2,
+                            ml: 1 / 2
                         },
                         '& .MuiInputLabel-shrink': {
                             mt: -1 / 4
-                        },
+                        }
                     };
 
                     return (
@@ -231,8 +233,8 @@ export function SchemaEntry({
             <Box sx={{
                 background: getColorForProperty(propertyOrBuilder),
                 height: "32px",
-                mt: .5,
-                padding: .5,
+                mt: 0.5,
+                padding: 0.5,
                 borderRadius: "50%",
                 boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
                 color: "white"
@@ -250,13 +252,13 @@ export function SchemaEntry({
                        sx={{
                            mr: 2,
                            flexGrow: 1,
-                           border: selected ? "1px solid #999" : undefined,
+                           border: selected ? "1px solid #999" : undefined
                        }}
                        elevation={0}>
                     <Box sx={{
                         borderRadius: "2px",
                         border: selected ? "1px solid #999" : "1px solid transparent",
-                        p: 2,
+                        p: 2
                     }}>
                         {typeof propertyOrBuilder === "object" &&
                         <PropertyPreview name={name}
@@ -265,7 +267,7 @@ export function SchemaEntry({
                         <PropertyBuilderPreview name={name}/>}
                     </Box>
                 </Paper>
-                <div                        {...provided.dragHandleProps}>
+                <div {...provided.dragHandleProps}>
                     <DragHandleIcon fontSize={"small"}/>
                 </div>
             </Box>
@@ -333,7 +335,7 @@ function PropertyPreview({
 }
 
 function PropertyBuilderPreview({
-                                    name,
+                                    name
                                 }: { name: string }) {
     return (
         <Box sx={{ width: '100%' }}>

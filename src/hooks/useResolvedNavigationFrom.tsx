@@ -151,7 +151,7 @@ export function useResolvedNavigationFrom<M, UserType>(
         if (navigation) {
             setDataLoading(true);
             setDataLoadingError(undefined);
-            resolveNavigationFrom<M,UserType>({ path, context })
+            resolveNavigationFrom<M, UserType>({ path, context })
                 .then((res) => {
                     setData(res);
                 })

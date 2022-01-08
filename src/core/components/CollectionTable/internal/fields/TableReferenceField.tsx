@@ -17,7 +17,7 @@ import { getReferenceFrom } from "../../../../utils";
 import { useNavigation } from "../../../../../hooks";
 
 
-export function TableReferenceField<M extends { [Key: string]: any }>(props: {
+export function TableReferenceField(props: {
     name: string;
     disabled: boolean;
     internalValue: EntityReference | EntityReference[] | undefined | null;
@@ -68,27 +68,27 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
             setPreventOutsideClick(true);
             setOpen(true);
         }
-    },[setPreventOutsideClick, setOpen]);
+    }, [disabled, setPreventOutsideClick]);
 
     const handleClose = useCallback(() => {
         setPreventOutsideClick(false);
         setOpen(false);
-    },[setPreventOutsideClick, setOpen]);
+    }, [setPreventOutsideClick, setOpen]);
 
     const onSingleValueSet = useCallback((entity: Entity<any>) => {
         updateValue(entity ? getReferenceFrom(entity) : null);
         setPreventOutsideClick(false);
         setOpen(false);
-    },[updateValue, setPreventOutsideClick, setOpen]);
+    }, [updateValue, setPreventOutsideClick, setOpen]);
 
     const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
         updateValue(entities.map((e) => getReferenceFrom(e)));
-    },[updateValue]);
+    }, [updateValue]);
 
-    const selectedIds = internalValue ?
-        (Array.isArray(internalValue) ?
-            internalValue.map((ref) => ref.id) :
-            internalValue.id ? [internalValue.id] : [])
+    const selectedIds = internalValue
+        ? (Array.isArray(internalValue)
+            ? internalValue.map((ref) => ref.id)
+            : internalValue.id ? [internalValue.id] : [])
         : [];
     const valueNotSet = !internalValue || (Array.isArray(internalValue) && internalValue.length === 0);
 
@@ -154,9 +154,9 @@ export function TableReferenceField<M extends { [Key: string]: any }>(props: {
                 Edit {property.title}
             </Button>}
 
-            {!disabled
-            && open
-            && <ReferenceDialog open={open}
+            {!disabled &&
+            open &&
+            <ReferenceDialog open={open}
                                 multiselect={multiselect}
                                 path={path}
                                 collectionResolver={collectionResolver}

@@ -119,7 +119,7 @@ export function EntityForm<M>({
     const initialResolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
         schemaOrResolver,
         path,
-        entityId,
+        entityId
     }), [schemaOrResolver, path, entityId]);
 
     const baseDataSourceValues: Partial<EntityValues<M>> = useMemo(() => {
@@ -132,7 +132,7 @@ export function EntityForm<M>({
             console.error({ status, entity });
             throw new Error("Form has not been initialised with the correct parameters");
         }
-    }, [status, initialResolvedSchema, path, entity]);
+    }, [status, initialResolvedSchema, entity]);
 
     const formRef = React.useRef<HTMLDivElement>(null);
 
@@ -161,11 +161,11 @@ export function EntityForm<M>({
                     const initialValue = (initialValues as any)[key];
                     const latestValue = (baseDataSourceValues as any)[key];
                     if (!deepEqual(initialValue, latestValue)) {
-                        return {[key]: latestValue};
+                        return { [key]: latestValue };
                     }
                     return {};
                 })
-                .reduce((a, b) => ({...a, ...b}), {}) as Partial<EntityValues<M>>;
+                .reduce((a, b) => ({ ...a, ...b }), {}) as Partial<EntityValues<M>>;
         } else {
             return {};
         }
@@ -183,14 +183,14 @@ export function EntityForm<M>({
         setSavingError(null);
         setCustomIdError(false);
 
-        let entityId: string | undefined;
+        let savedEntityId: string | undefined;
         if (status === "existing") {
             if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
-            entityId = entity.id;
+            savedEntityId = entity.id;
         } else if (status === "new" || status === "copy") {
             if (schema.customId) {
                 if (!customId) throw Error("Form misconfiguration when saving, customId should be set");
-                entityId = customId;
+                savedEntityId = customId;
             }
         } else {
             throw Error("New FormType added, check EntityForm");
@@ -200,7 +200,7 @@ export function EntityForm<M>({
             onEntitySave({
                 schema: schema as EntitySchema,
                 path,
-                entityId,
+                entityId: savedEntityId,
                 values,
                 previousValues: entity?.values
             })
@@ -216,29 +216,19 @@ export function EntityForm<M>({
                     formikActions.setSubmitting(false);
                 });
 
-    }, [
-        status,
-        path,
-        schema,
-        entity,
-        onEntitySave,
-        onDiscard,
-        onModified,
-        onValuesChanged,
-        mustSetCustomId,
-        customId
-    ]);
+    }, [status, path, schema, entity, onEntitySave, mustSetCustomId, customId]);
 
 
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
                                                                         name,
                                                                         value,
                                                                         property
-                                                                    }) => dataSource.checkUniqueField(path, name, value, property, entityId), [path,entityId ]);
+                                                                    }) => dataSource.checkUniqueField(path, name, value, property, entityId),
+        [dataSource, path, entityId]);
 
     const validationSchema = useMemo(() => getYupEntitySchema(
         schema.properties,
-        uniqueFieldValidator), [schema]);
+        uniqueFieldValidator), [schema.properties]);
 
 
     return (
@@ -257,77 +247,137 @@ export function EntityForm<M>({
                   isSubmitting,
                   dirty
               }) => {
+                return <FormInternal baseDataSourceValues={baseDataSourceValues}
+                                     values={values} onModified={onModified}
+                                     setInternalValue={setInternalValue}
+                                     onValuesChanged={onValuesChanged}
+                                     underlyingChanges={underlyingChanges}
+                                     entityId={entityId}
+                                     entity={entity}
+                                     touched={touched}
+                                     setFieldValue={setFieldValue}
+                                     schema={schema}
+                                     isSubmitting={isSubmitting}
+                                     formRef={formRef}
+                                     status={status}
+                                     setCustomId={setCustomId}
+                                     customIdError={customIdError}
+                                     handleSubmit={handleSubmit}
+                                     savingError={savingError}/>;
+            }}
+        </Formik>
+    );
+}
 
-                const modified = useMemo(() => !deepEqual(baseDataSourceValues, values), [baseDataSourceValues, values]);
-                useEffect(() => {
-                    if (onModified)
-                        onModified(modified);
-                    setInternalValue(values);
-                    if (onValuesChanged)
-                        onValuesChanged(values);
-                }, [modified, values]);
+function FormInternal<M>({
+                             baseDataSourceValues,
+                             values,
+                             onModified,
+                             setInternalValue,
+                             onValuesChanged,
+                             underlyingChanges,
+                             entity,
+                             touched,
+                             setFieldValue,
+                             schema,
+                             entityId,
+                             isSubmitting,
+                             formRef,
+                             status,
+                             setCustomId,
+                             customIdError,
+                             handleSubmit,
+                             savingError
+                         }: {
+    baseDataSourceValues: Partial<M>,
+    values: any,
+    onModified: ((modified: boolean) => void) | undefined,
+    setInternalValue: any,
+    onValuesChanged?: (changedValues?: EntityValues<M>) => void,
+    underlyingChanges: Partial<M>,
+    entity: Entity<M> | undefined,
+    touched: any,
+    setFieldValue: any,
+    schema: Omit<EntitySchema<M>, "properties"> & { properties: Properties<M>; originalSchema: EntitySchema<M> },
+    entityId: string | undefined,
+    isSubmitting: any,
+    formRef: any,
+    status: "new" | "existing" | "copy",
+    setCustomId: any,
+    customIdError: any,
+    handleSubmit: any,
+    savingError: any
+}) {
+    const modified = useMemo(() => !deepEqual(baseDataSourceValues, values), [baseDataSourceValues, values]);
+    useEffect(() => {
+        if (onModified)
+            onModified(modified);
+        setInternalValue(values);
+        if (onValuesChanged)
+            onValuesChanged(values);
+    }, [modified, values]);
 
-                if (underlyingChanges && entity) {
-                    // we update the form fields from the Firestore data
-                    // if they were not touched
-                    Object.entries(underlyingChanges).forEach(([key, value]) => {
-                        const formValue = (values as any)[key];
-                        if (!deepEqual(value, formValue) && !(touched as any)[key]) {
-                            console.debug("Updated value from the datasource:", key, value);
-                            setFieldValue(key, value !== undefined ? value : null);
-                        }
-                    });
-                }
+    if (underlyingChanges && entity) {
+        // we update the form fields from the Firestore data
+        // if they were not touched
+        Object.entries(underlyingChanges).forEach(([key, value]) => {
+            const formValue = (values as any)[key];
+            if (!deepEqual(value, formValue) && !(touched as any)[key]) {
+                console.debug("Updated value from the datasource:", key, value);
+                setFieldValue(key, value !== undefined ? value : null);
+            }
+        });
+    }
 
-                const context: FormContext<M> = {
-                    schema,
-                    entityId,
-                    values
-                };
+    const context: FormContext<M> = {
+        schema,
+        entityId,
+        values
+    };
 
-                const formFields = (
-                    <Grid container spacing={4}>
+    const formFields = (
+        <Grid container spacing={4}>
 
-                        {Object.entries<Property>(schema.properties as Properties)
-                            .filter(([key, property]) => !isHidden(property))
-                            .map(([key, property]) => {
+            {Object.entries<Property>(schema.properties as Properties)
+                .filter(([key, property]) => !isHidden(property))
+                .map(([key, property]) => {
 
-                                const underlyingValueHasChanged: boolean =
-                                    !!underlyingChanges
-                                    && Object.keys(underlyingChanges).includes(key)
-                                    && !!(touched as any)[key];
+                    const underlyingValueHasChanged: boolean =
+                        !!underlyingChanges &&
+                        Object.keys(underlyingChanges).includes(key) &&
+                        !!(touched as any)[key];
 
-                                const shouldAlwaysRerender = typeof (schema.originalSchema.properties as any)[key] === "function";
+                    const shouldAlwaysRerender = typeof (schema.originalSchema.properties as any)[key] === "function";
 
-                                const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
-                                const cmsFormFieldProps: CMSFormFieldProps = {
-                                    name: key,
-                                    disabled: disabled,
-                                    property: property,
-                                    includeDescription: true,
-                                    underlyingValueHasChanged: underlyingValueHasChanged,
-                                    context: context,
-                                    tableMode: false,
-                                    partOfArray: false,
-                                    autoFocus: false,
-                                    shouldAlwaysRerender: shouldAlwaysRerender
-                                };
-                                return (
-                                    <Grid item
-                                          xs={12}
-                                          id={`form_field_${key}`}
-                                          key={`field_${schema.name}_${key}`}>
-                                        {buildPropertyField(cmsFormFieldProps)}
-                                    </Grid>
-                                );
-                            })}
+                    const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
+                    const cmsFormFieldProps: CMSFormFieldProps = {
+                        name: key,
+                        disabled: disabled,
+                        property: property,
+                        includeDescription: true,
+                        underlyingValueHasChanged: underlyingValueHasChanged,
+                        context: context,
+                        tableMode: false,
+                        partOfArray: false,
+                        autoFocus: false,
+                        shouldAlwaysRerender: shouldAlwaysRerender
+                    };
+                    return (
+                        <Grid item
+                              xs={12}
+                              id={`form_field_${key}`}
+                              key={`field_${schema.name}_${key}`}>
+                            {buildPropertyField(cmsFormFieldProps)}
+                        </Grid>
+                    );
+                })}
 
-                    </Grid>
-                );
+        </Grid>
+    );
 
-                return (
-                    <Container maxWidth={"sm"}
-                               sx={(theme) => ({
+    return (
+        <Container maxWidth={"sm"}
+                   sx={(theme) => ({
                                    padding: theme.spacing(4),
                                    marginTop: theme.spacing(2),
                                    marginBottom: theme.spacing(2),
@@ -341,15 +391,15 @@ export function EntityForm<M>({
                                        padding: theme.spacing(2)
                                    }
                                })}
-                               ref={formRef}>
+                   ref={formRef}>
 
-                        <CustomIdField schema={schema as EntitySchema}
-                                       status={status}
-                                       onChange={setCustomId}
-                                       error={customIdError}
-                                       entity={entity}/>
+            <CustomIdField schema={schema as EntitySchema}
+                           status={status}
+                           onChange={setCustomId}
+                           error={customIdError}
+                           entity={entity}/>
 
-                        <Box
+            <Box
                             sx={{
                                 marginTop: 1
                             }}>
@@ -385,12 +435,9 @@ export function EntityForm<M>({
                             </Form>
                         </Box>
 
-                        <ErrorFocus containerRef={formRef}/>
+            <ErrorFocus containerRef={formRef}/>
 
-                    </Container>
-                );
-            }}
-        </Formik>
+        </Container>
     );
 }
 

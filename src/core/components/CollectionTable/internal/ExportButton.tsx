@@ -54,6 +54,14 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
     const [open, setOpen] = React.useState(false);
 
+    const handleClickOpen = useCallback(() => {
+        setOpen(true);
+    }, [setOpen]);
+
+    const handleClose = useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
+
     const doDownload = useCallback((data: Entity<M>[] | undefined,
                                     additionalData: Record<string, any>[] | undefined,
                                     schemaResolver: EntitySchemaResolver<M>,
@@ -107,7 +115,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
                             context
                         })
                     };
-                }))).reduce((a, b) => ({...a, ...b}), {});
+                }))).reduce((a, b) => ({ ...a, ...b }), {});
             }));
             return resolvedColumnsValues;
         };
@@ -126,15 +134,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             .then(updateEntities)
             .catch(onFetchError);
 
-    }, [path, fetchLargeDataAccepted, schemaResolver, open]);
-
-    const handleClickOpen = useCallback(() => {
-        setOpen(true);
-    }, [setOpen]);
-
-    const handleClose = useCallback(() => {
-        setOpen(false);
-    }, [setOpen]);
+    }, [path, fetchLargeDataAccepted, schemaResolver, open, dataSource, schemaResolver, doDownload, exportConfig, handleClose, context]);
 
     const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
 
@@ -145,7 +145,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             doDownload(dataRef.current, additionalDataRef.current, schemaResolver, path, exportConfig);
             handleClose();
         }
-    }, [needsToAcceptFetchAllData, dataRef.current, additionalDataRef.current, schemaResolver, path, exportConfig]);
+    }, [needsToAcceptFetchAllData, doDownload, schemaResolver, path, exportConfig, handleClose]);
 
     return <>
 
@@ -169,8 +169,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
                     </div>
                     <br/>
 
-                    {needsToAcceptFetchAllData
-                    &&
+                    {needsToAcceptFetchAllData &&
                     <Alert elevation={1}
                               variant="filled"
                               severity={"warning"}>

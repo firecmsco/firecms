@@ -67,7 +67,7 @@ export interface FirestoreDataSourceProps {
  */
 export function useFirestoreDataSource({
                                            firebaseApp,
-                                           textSearchController,
+                                           textSearchController
                                        }: FirestoreDataSourceProps): DataSource {
 
     const firestoreRef = useRef<Firestore>();
@@ -94,9 +94,9 @@ export function useFirestoreDataSource({
     ): Entity<M> {
 
         const values = firestoreToCMSModel(doc.data(), resolvedSchema, path);
-        const data = doc.data() ?
-            resolvedSchema.properties ?
-                sanitizeData(values as EntityValues<M>, resolvedSchema.properties, path)
+        const data = doc.data()
+            ? resolvedSchema.properties
+                ? sanitizeData(values as EntityValues<M>, resolvedSchema.properties, path)
                 : doc.data()
             : undefined;
         return {
@@ -112,7 +112,7 @@ export function useFirestoreDataSource({
      */
     function getCMSPathFromFirestorePath(fsPath: string): string {
         let to = fsPath.lastIndexOf("/");
-        to = to == -1 ? fsPath.length : to;
+        to = to === -1 ? fsPath.length : to;
         return fsPath.substring(0, to);
     }
 
@@ -202,7 +202,7 @@ export function useFirestoreDataSource({
         return getDoc(doc(firestore, path, entityId))
             .then((docSnapshot) => {
                 const resolvedSchema = computeSchema({
-                    schemaOrResolver:schema,
+                    schemaOrResolver: schema,
                     entityId: docSnapshot.id,
                     path,
                 });
@@ -268,7 +268,7 @@ export function useFirestoreDataSource({
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
 
             const resolvedSchema = computeSchema({
-                schemaOrResolver:schema,
+                schemaOrResolver: schema,
                 path
             });
             return getDocs(query)
@@ -322,7 +322,7 @@ export function useFirestoreDataSource({
             }
 
             const resolvedSchema = computeSchema({
-                schemaOrResolver:schema,
+                schemaOrResolver: schema,
                 path
             });
 
@@ -378,7 +378,7 @@ export function useFirestoreDataSource({
                 {
                     next: (docSnapshot) => {
                         const resolvedSchema = computeSchema({
-                            schemaOrResolver:schema,
+                            schemaOrResolver: schema,
                             entityId: docSnapshot.id,
                             path
                         });

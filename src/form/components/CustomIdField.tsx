@@ -44,7 +44,7 @@ export function CustomIdField<M, UserType>
     const hasEnumValues = typeof schema.customId === "object";
 
     const snackbarContext = useSnackbarController();
-    const { ref, copy, cut } = useClipboard({
+    const { copy } = useClipboard({
         onSuccess: (text) => snackbarContext.open({
             type: "success",
             message: `Copied ${text}`
@@ -56,7 +56,8 @@ export function CustomIdField<M, UserType>
         sx: {
             minHeight: "64px"
         },
-        endAdornment: entity ? (
+        endAdornment: entity
+? (
             <InputAdornment position="end">
 
                 <IconButton onClick={(e) => copy(entity.id)}
@@ -86,7 +87,8 @@ export function CustomIdField<M, UserType>
                 </a>}
 
             </InputAdornment>
-        ) : undefined
+        )
+: undefined
     };
 
     const fieldProps: any = {
@@ -105,9 +107,9 @@ export function CustomIdField<M, UserType>
 
             {hasEnumValues && schema.customId &&
             <>
-                <InputLabel id={`id-label`}>{fieldProps.label}</InputLabel>
+                <InputLabel id={"id-label"}>{fieldProps.label}</InputLabel>
                 <MuiSelect
-                    labelId={`id-label`}
+                    labelId={"id-label"}
                     className={classes.select}
                     error={error}
                     {...fieldProps}

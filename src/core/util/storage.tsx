@@ -12,7 +12,7 @@ import {
 function stripCollectionPath(path: string): string {
     return path
         .split("/")
-        .filter((e, i) => i % 2 == 0)
+        .filter((e, i) => i % 2 === 0)
         .reduce((a, b) => `${a}/${b}`);
 }
 

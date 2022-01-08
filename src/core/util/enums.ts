@@ -15,7 +15,7 @@ export function getLabelOrConfigFrom(enumValues: EnumValues, key: string | numbe
 export function getColorSchemaKey(enumValues: EnumValues, key: string | number): ChipColor | undefined {
     const labelOrConfig = getLabelOrConfigFrom(enumValues, key);
     if (typeof labelOrConfig === "object" && "color" in labelOrConfig) {
-        return labelOrConfig["color"];
+        return labelOrConfig.color;
     }
     return undefined;
 }

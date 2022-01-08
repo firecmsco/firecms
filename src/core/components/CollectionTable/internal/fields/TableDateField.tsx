@@ -28,11 +28,11 @@ export function TableDateField(props: {
 
     const handleOpen = useCallback(() => {
         setPreventOutsideClick(true);
-    },[]);
+    }, []);
 
     const handleClose = useCallback(() => {
         setPreventOutsideClick(false);
-    },[]);
+    }, []);
 
     const classes = useInputStyles();
 
@@ -53,16 +53,16 @@ export function TableDateField(props: {
                 <DateTimePicker
                     clearable
                     disabled={disabled}
-                    renderInput={(props) => (
+                    renderInput={(inputProps) => (
                         <MuiTextField
-                            {...props}
+                            {...inputProps}
                             style={{
                                 height: "100%"
                             }}
                             variant={"standard"}
                             error={Boolean(error)}
                             InputProps={{
-                                ...props.InputProps,
+                                ...inputProps.InputProps,
                                 classes: {
                                     input: classes.hidden
                                 },

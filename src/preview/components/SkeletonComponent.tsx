@@ -1,6 +1,5 @@
 import {
     ArrayProperty,
-    EnumType,
     MapProperty,
     Properties,
     Property,
@@ -18,10 +17,9 @@ import {
     TableRow
 } from "@mui/material";
 import { PreviewSize } from "../../preview";
-import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
 
-export interface SkeletonComponentProps<T> {
+export interface SkeletonComponentProps {
     property: Property,
     size: PreviewSize
 }
@@ -29,10 +27,10 @@ export interface SkeletonComponentProps<T> {
 /**
  * @category Preview components
  */
-export function SkeletonComponent<T>({
+export function SkeletonComponent({
                                          property,
                                          size
-                                     }: SkeletonComponentProps<T>
+                                     }: SkeletonComponentProps
 ) {
 
     if (!property) {
@@ -79,12 +77,11 @@ export function SkeletonComponent<T>({
     } else {
         content = renderSkeletonText();
     }
-    return (content ? content : null);
+    return (content || null);
 }
 
 function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize) {
 
-    const classes = useStyles();
     if (!property.properties)
         return <></>;
 
@@ -118,7 +115,11 @@ function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize
                 mapProperties.map((key, index) => {
                     return (
                         <TableRow key={`table_${property.title}_${index}`}
-                                  className={classes.tableNoBottomBorder}>
+                                  sx={{
+                                      "&:last-child th, &:last-child td": {
+                                          borderBottom: 0
+                                      }
+                                  }}>
                             <TableCell key={`table-cell-title-${key}`}
                                        component="th">
                                 <Skeleton variant="text"/>
@@ -153,7 +154,7 @@ function renderArrayOfMaps<M>(properties: Properties<M>, size: PreviewSize, prev
                         return (
                             <TableRow key={`table_${value}_${index}`}>
                                 {tableProperties && tableProperties.map(
-                                    (key, index) => (
+                                    (key) => (
                                         <TableCell
                                             key={`table-cell-${key}`}
                                             component="th"
@@ -185,7 +186,7 @@ function renderArrayOfStrings() {
     );
 }
 
-function renderArrayEnumTableCell<T extends EnumType>() {
+function renderArrayEnumTableCell() {
     return (
         <Grid>
             {
@@ -271,11 +272,8 @@ function renderUrlComponent(property: StringProperty, size: PreviewSize = "regul
 
 function renderUrlFile(size: PreviewSize) {
 
-    const classes = useStyles();
-
     return (
         <div
-            className={(classes as any)}
             style={{
                 width: getThumbnailMeasure(size),
                 height: getThumbnailMeasure(size)

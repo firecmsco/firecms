@@ -17,8 +17,8 @@ import { EntitySchema } from "./entities";
  * @category Models
  */
 export type NavigationBuilder<UserType extends User = User> =
-    ((props: NavigationBuilderProps<UserType> ) => Promise<Navigation>)
-    | ((props: NavigationBuilderProps<UserType> ) => Navigation);
+    ((props: NavigationBuilderProps<UserType>) => Promise<Navigation>)
+    | ((props: NavigationBuilderProps<UserType>) => Navigation);
 
 /**
  * @category Models

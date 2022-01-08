@@ -29,7 +29,7 @@ const operationLabels = {
     "<": "<",
     ">=": ">=",
     "<=": "<=",
-    "in": "in",
+    in: "in",
     "array-contains": "Contains",
     "array-contains-any": "Any"
 };
@@ -45,11 +45,11 @@ export function DateTimeFilterField({
                                         title
                                     }: DateTimeFilterFieldProps) {
 
-    const possibleOperations: (keyof typeof operationLabels) [] = isArray ?
-        ["array-contains"] :
-        ["==", "!=", ">", "<", ">=", "<="];
+    const possibleOperations: (keyof typeof operationLabels) [] = isArray
+        ? ["array-contains"]
+        : ["==", "!=", ">", "<", ">=", "<="];
 
-    const [fieldOperation, fieldValue] = value ? value : [possibleOperations[0], undefined];
+    const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
     const [operation, setOperation] = useState<TableWhereFilterOp>(fieldOperation);
     const [internalValue, setInternalValue] = useState<Date | undefined>(fieldValue);
 

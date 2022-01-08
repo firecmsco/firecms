@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
     AuthController,
     AuthDelegate,
@@ -30,7 +30,25 @@ export function useBuildAuthController<UserType>({
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
     const [extra, setExtra] = useState<any>();
 
-    async function checkAuthentication() {
+    const loginSkipped = authDelegate.loginSkipped;
+
+    const authenticationEnabled = authentication === undefined || !!authentication;
+    const canAccessMainView = (!authenticationEnabled || Boolean(user) || Boolean(loginSkipped)) && !notAllowedError;
+
+    const authController: AuthController<UserType> = useMemo(() => ({
+        user,
+        loginSkipped,
+        canAccessMainView,
+        initialLoading: authDelegate.initialLoading ?? false,
+        authLoading: authLoading,
+        notAllowedError,
+        signOut: authDelegate.signOut,
+        extra,
+        setExtra,
+        authDelegate
+    }), [authDelegate, authLoading, canAccessMainView, extra, loginSkipped, notAllowedError, user]);
+
+    const checkAuthentication = useCallback(async () => {
         const delegateUser = authDelegate.user;
         if (authentication instanceof Function && delegateUser) {
             setAuthLoading(true);
@@ -55,28 +73,12 @@ export function useBuildAuthController<UserType>({
         } else {
             setUser(delegateUser);
         }
-    }
+    }, [authDelegate.user]);
 
     useEffect(() => {
         checkAuthentication();
-    }, [authDelegate.user]);
+    }, [authDelegate.user, checkAuthentication]);
 
-    const loginSkipped = authDelegate.loginSkipped;
 
-    const authenticationEnabled = authentication === undefined || !!authentication;
-    const canAccessMainView = (!authenticationEnabled || Boolean(user) || Boolean(loginSkipped)) && !notAllowedError;
-
-    const authController: AuthController<UserType> = {
-        user,
-        loginSkipped,
-        canAccessMainView,
-        initialLoading: authDelegate.initialLoading ?? false,
-        authLoading: authLoading ,
-        notAllowedError,
-        signOut: authDelegate.signOut,
-        extra,
-        setExtra,
-        authDelegate
-    };
     return authController;
 }

@@ -32,11 +32,17 @@ npx create-react-app my-cms --template typescript
 ```
 
 - Go into the new directory:
-yarn start
+
 ```
 cd my-cms
 ```
 
+:::caution
+The latest version of `react-scripts` (5) seems to cause 
+A memory leak while starting the project.
+For now, you can set the `react-scripts` dependency to `^4.0.3` which seems
+to solve the issue, while we find a permanent solution.
+:::
 
 - Install FireCMS and it's peer dependencies:
 

@@ -418,15 +418,16 @@ export const testEntitySchema = buildSchema({
             },
             dataType: "number"
         },
-        pdf: {
+        pdf: buildProperty({
             title: "Pdf",
             dataType: "string",
             config: {
                 storageMeta: {
-                    storagePath: "test"
+                    storagePath: "test",
+                    acceptedFiles: ['application/pdf'],
                 }
             }
-        }
+        })
     },
     defaultValues: {
         // empty_string: "",

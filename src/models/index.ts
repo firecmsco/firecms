@@ -2,6 +2,7 @@ export * from "./auth";
 export * from "./entities";
 export * from "./properties";
 export * from "./collections";
+export * from "./permissions";
 export * from "./navigation";
 export * from "./locales";
 export * from "./user";

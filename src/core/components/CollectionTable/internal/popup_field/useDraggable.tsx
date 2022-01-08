@@ -57,12 +57,13 @@ export function useDraggable({
     };
 
     useEffect(() => {
-        if (ref.current)
-            ref.current.addEventListener("mousedown", onMouseDown);
+        const current = ref.current;
+        if (current)
+            current.addEventListener("mousedown", onMouseDown);
         update();
         return () => {
-            if (ref.current)
-                ref.current.removeEventListener("mousedown", onMouseDown);
+            if (current)
+                current.removeEventListener("mousedown", onMouseDown);
         };
     });
 

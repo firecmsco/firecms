@@ -1,5 +1,3 @@
-import { InitialiseFirebaseResult } from "./hooks/useInitialiseFirebase";
-
 export {
     useFirebaseAuthDelegate
 } from "./hooks/useFirebaseAuthDelegate";

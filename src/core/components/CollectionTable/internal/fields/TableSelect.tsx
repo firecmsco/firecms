@@ -59,7 +59,7 @@ export function TableSelect(props: {
         if (ref.current && focused) {
             ref.current?.focus({ preventScroll: true });
         }
-    }, [focused, ref.current]);
+    }, [focused, ref]);
 
     return (
         <Select

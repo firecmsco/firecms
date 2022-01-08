@@ -75,8 +75,8 @@ export function FireCMSAppBar({
     const authController = useAuthController();
     const { mode, toggleMode } = useModeState();
 
-    const initial = authController.user?.displayName ?
-        authController.user.displayName[0].toUpperCase()
+    const initial = authController.user?.displayName
+        ? authController.user.displayName[0].toUpperCase()
         : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
 
     return (
@@ -101,7 +101,7 @@ export function FireCMSAppBar({
                         <Box mr={3}>
                             <Link
                                 underline={"none"}
-                                key={`breadcrumb-home`}
+                                key={"breadcrumb-home"}
                                 color="inherit"
                                 component={ReactLink}
                                 to={"/"}>
@@ -152,18 +152,17 @@ export function FireCMSAppBar({
                             edge="start"
                             onClick={() => toggleMode()}
                             size="large">
-                            {mode === "dark" ?
-                                <Brightness3Icon/> :
-                                <Brightness5Icon/>}
+                            {mode === "dark"
+                                ? <Brightness3Icon/>
+                                : <Brightness5Icon/>}
                         </IconButton>
                     </Box>
 
                     <Box p={1} mr={1}>
-                        {authController.user && authController.user.photoURL ?
-                            <Avatar
+                        {authController.user && authController.user.photoURL
+                            ? <Avatar
                                 src={authController.user.photoURL}/>
-                            :
-                            <Avatar>{initial}</Avatar>
+                            : <Avatar>{initial}</Avatar>
                         }
                     </Box>
 

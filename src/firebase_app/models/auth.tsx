@@ -8,15 +8,15 @@ import { AuthDelegate } from "../../models";
  */
 export type FirebaseSignInProvider =
 // | 'email'
-    | 'password'
+    | "password"
     // | 'phone'
-    | 'anonymous'
-    | 'google.com'
-    | 'facebook.com'
-    | 'github.com'
-    | 'twitter.com'
-    | 'microsoft.com'
-    | 'apple.com';
+    | "anonymous"
+    | "google.com"
+    | "facebook.com"
+    | "github.com"
+    | "twitter.com"
+    | "microsoft.com"
+    | "apple.com";
 
 
 /**

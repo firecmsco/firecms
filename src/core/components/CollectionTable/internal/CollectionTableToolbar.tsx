@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
         toolbar: {
             minHeight: 56,
             [theme.breakpoints.down("xl")]: {
-                paddingLeft: theme.spacing(.5),
-                paddingRight: theme.spacing(.5)
+                paddingLeft: theme.spacing(0.5),
+                paddingRight: theme.spacing(0.5)
             },
             paddingLeft: theme.spacing(1),
             paddingRight: theme.spacing(1),
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: "center",
             "& > *": {
                 [theme.breakpoints.down("md")]: {
-                    marginRight: theme.spacing(.5)
+                    marginRight: theme.spacing(0.5)
                 },
                 marginRight: theme.spacing(1)
             }
@@ -63,7 +63,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
         input: {
             borderRadius: 4,
             position: "relative",
-            backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.05) : darken(theme.palette.background.default, .2),
+            backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.05) : darken(theme.palette.background.default, 0.2),
             fontSize: 14,
             fontWeight: theme.typography.fontWeightMedium,
             padding: "10px 26px 10px 12px",
@@ -79,10 +79,10 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
             paddingTop: theme.spacing(1),
             paddingBottom: theme.spacing(1),
             "&:hover": {
-                backgroundColor: darken(theme.palette.background.default, .1)
+                backgroundColor: darken(theme.palette.background.default, 0.1)
             },
             "&:focus": {
-                backgroundColor: darken(theme.palette.background.default, .2),
+                backgroundColor: darken(theme.palette.background.default, 0.2),
                 "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
                     color: theme.palette.text.primary
                 }
@@ -91,7 +91,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface CollectionTableToolbarProps<M extends { [Key: string]: any }> {
+interface CollectionTableToolbarProps {
     size: CollectionSize;
     filterIsSet: boolean;
     actions?: React.ReactNode;
@@ -103,7 +103,7 @@ interface CollectionTableToolbarProps<M extends { [Key: string]: any }> {
     clearFilter(): void;
 }
 
-export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: CollectionTableToolbarProps<M>) {
+export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: CollectionTableToolbarProps) {
     const classes = useStyles();
     const sizeClasses = useSizeSelectStyles();
 

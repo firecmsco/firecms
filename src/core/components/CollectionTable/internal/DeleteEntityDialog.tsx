@@ -22,7 +22,7 @@ import {
 } from "../../../../hooks";
 
 
-export interface DeleteEntityDialogProps<M extends { [Key: string]: any }, UserType> {
+export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
     path: string,
     schemaResolver: EntitySchemaResolver<M>;
@@ -35,7 +35,7 @@ export interface DeleteEntityDialogProps<M extends { [Key: string]: any }, UserT
     onMultipleEntitiesDelete?(path: string, entities: Entity<M>[]): void;
 }
 
-export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
+export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                                                                                    entityOrEntitiesToDelete,
                                                                                    schemaResolver,
                                                                                    onClose,
@@ -46,7 +46,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
                                                                                    path,
                                                                                    ...other
                                                                                }
-                                                                         : DeleteEntityDialogProps<M, UserType>) {
+                                                                         : DeleteEntityDialogProps<M>) {
 
     const dataSource = useDataSource();
     const snackbarContext = useSnackbarController();
@@ -70,7 +70,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
 
     const handleCancel = useCallback(() => {
         onClose();
-    }, []);
+    }, [onClose]);
 
     const onDeleteSuccess = useCallback((entity: Entity<any>) => {
         console.debug("Deleted", entity);
@@ -85,7 +85,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
 
         console.error("Error deleting entity");
         console.error(e);
-    }, []);
+    }, [schema.name]);
 
     const onPreDeleteHookError = useCallback((entity: Entity<any>, e: Error) => {
         snackbarContext.open({
@@ -94,7 +94,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
             message: e?.message
         });
         console.error(e);
-    }, []);
+    }, [schema.name]);
 
     const onDeleteSuccessHookError = useCallback((entity: Entity<any>, e: Error) => {
         snackbarContext.open({
@@ -103,7 +103,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
             message: e?.message
         });
         console.error(e);
-    }, []);
+    }, [schema.name]);
 
     const performDelete = useCallback((entity: Entity<M>): Promise<boolean> =>
         deleteEntityWithCallbacks({
@@ -116,10 +116,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
             onPreDeleteHookError,
             onDeleteSuccessHookError,
             context
-        }), [onDeleteSuccess,
-        onDeleteFailure,
-        onPreDeleteHookError,
-        onDeleteSuccessHookError,]);
+        }), [dataSource, schema, callbacks, onDeleteSuccess, onDeleteFailure, onPreDeleteHookError, onDeleteSuccessHookError, context]);
 
     const handleOk = useCallback(async () => {
         if (entityOrEntities) {
@@ -168,11 +165,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
                 });
             }
         }
-    }, [entityOrEntities,
-        onDeleteSuccess,
-        onDeleteFailure,
-        onPreDeleteHookError,
-        onDeleteSuccessHookError,]);
+    }, [entityOrEntities, multipleEntities, performDelete, onMultipleEntitiesDelete, path, onClose, snackbarContext, schema.name, onEntityDelete]);
 
 
     let content: JSX.Element;
@@ -184,15 +177,16 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }, UserType>({
             entityId: entity?.id,
             values: entity?.values
         })
-        content = entity ?
-            <EntityPreview
+        content = entity
+            ? <EntityPreview
                 entity={entity}
                 schema={resolvedSchema}
                 path={path}/>
             : <></>;
     }
 
-    const dialogTitle = multipleEntities ? `${schema.name}: Confirm multiple delete?`
+    const dialogTitle = multipleEntities
+? `${schema.name}: Confirm multiple delete?`
         : `Would you like to delete this ${schema.name}?`;
 
     return (

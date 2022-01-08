@@ -29,7 +29,7 @@ const operationLabels = {
     "<": "<",
     ">=": ">=",
     "<=": "<=",
-    "in": "in",
+    in: "in",
     "array-contains": "Contains",
     "array-contains-any": "Any"
 };
@@ -46,16 +46,16 @@ export function StringNumberFilterField({
                                             title
                                         }: StringNumberFilterFieldProps) {
 
-    const possibleOperations: (keyof typeof operationLabels) [] = isArray ?
-        ["array-contains"] :
-        ["==", "!=", ">", "<", ">=", "<="];
+    const possibleOperations: (keyof typeof operationLabels) [] = isArray
+        ? ["array-contains"]
+        : ["==", "!=", ">", "<", ">=", "<="];
 
     if (enumValues)
-        isArray ?
-            possibleOperations.push("array-contains-any") :
-            possibleOperations.push("in");
+        isArray
+            ? possibleOperations.push("array-contains-any")
+            : possibleOperations.push("in");
 
-    const [fieldOperation, fieldValue] = value ? value : [possibleOperations[0], undefined];
+    const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
     const [operation, setOperation] = useState<TableWhereFilterOp>(fieldOperation);
     const [internalValue, setInternalValue] = useState<string | number | string[] | number[] | undefined>(fieldValue);
 
@@ -118,8 +118,8 @@ export function StringNumberFilterField({
                         type={dataType === "number" ? "number" : undefined}
                         value={internalValue !== undefined ? internalValue : ""}
                         onChange={(evt) => {
-                            const val = dataType === "number" ?
-                                parseFloat(evt.target.value)
+                            const val = dataType === "number"
+                                ? parseFloat(evt.target.value)
                                 : evt.target.value;
                             updateFilter(operation, val);
                         }}
@@ -132,7 +132,8 @@ export function StringNumberFilterField({
                         multiple={multiple}
                         value={internalValue !== undefined ? internalValue : isArray ? [] : ""}
                         onChange={(evt: any) => updateFilter(operation, dataType === "number" ? parseInt(evt.target.value) : evt.target.value)}
-                        renderValue={multiple ? (selected: any) =>
+                        renderValue={multiple
+? (selected: any) =>
                             (
                                 <div>
                                     {selected.map((enumKey: any) => {
@@ -143,7 +144,8 @@ export function StringNumberFilterField({
                                             small={true}/>;
                                     })}
                                 </div>
-                            ) : undefined}>
+                            )
+: undefined}>
                         {Object.entries(enumValues).map(([enumKey, labelOrConfig]) => {
                             return (
                                 <MenuItem

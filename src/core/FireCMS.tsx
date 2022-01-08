@@ -29,7 +29,7 @@ import { useBuildStorageConfigurationPersistence } from "./util/storage";
 import { ConfigurationPersistence } from "../models/config_persistence";
 import { useBuildSchemaRegistry } from "./internal/useBuildSchemaRegistry";
 
-const DEFAULT_COLLECTION_PATH = `/c`;
+const DEFAULT_COLLECTION_PATH = "/c";
 
 /**
  * @category Core
@@ -201,13 +201,14 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         storageSource,
         schemaOverrideHandler,
         configPersistence,
-        userConfigPersistence,
+        userConfigPersistence
     });
 
     const sideEntityController = useBuildSideEntityController(navigationContext, schemaRegistry);
 
     const loading = authController.authLoading || authController.initialLoading || navigationContext.loading;
 
+    console.log("loading", authController.authLoading, authController.initialLoading, navigationContext.loading);
     if (navigationContext.navigationLoadingError) {
         return (
             <div>

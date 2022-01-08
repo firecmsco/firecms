@@ -15,13 +15,13 @@ export function TableSwitch(props: {
         if (ref.current && focused) {
             ref.current.focus({ preventScroll: true });
         }
-    }, [focused]);
+    }, [focused, ref]);
 
     return (
         <Switch
             inputRef={ref}
             color={"secondary"}
-            checked={!!internalValue}
+            checked={Boolean(internalValue)}
             disabled={disabled}
             onChange={(evt) => {
                 const value = evt.target.checked as boolean;

@@ -196,13 +196,11 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
     const error = getIn(fieldProps.form.errors, name);
     const touched = getIn(fieldProps.form.touched, name);
 
-    const showError: boolean = error
-        && (fieldProps.form.submitCount > 0 || property.validation?.unique)
-        && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
+    const showError: boolean = error &&
+        (fieldProps.form.submitCount > 0 || property.validation?.unique) &&
+        (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
 
     const isSubmitting = fieldProps.form.isSubmitting;
-
-    const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
 
     const [internalValue, setInternalValue] = useState<T | null>(value);
     useEffect(

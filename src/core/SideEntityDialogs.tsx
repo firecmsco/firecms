@@ -1,10 +1,5 @@
 import React, { useMemo, useState } from "react";
-import {
-    EntityCollectionResolver,
-    EntitySchema,
-    EntitySchemaResolver,
-    SideEntityPanelProps
-} from "../models";
+import { EntityCollectionResolver, SideEntityPanelProps } from "../models";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { EntityView } from "./internal/EntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
@@ -24,7 +19,7 @@ import { computeSchema } from "./utils";
  * {@see useSideEntityController}
  * @category Components
  */
-export function SideEntityDialogs<M extends { [Key: string]: any }>() {
+export function SideEntityDialogs() {
 
     const sideEntityController = useSideEntityController();
 
@@ -52,19 +47,6 @@ function SideEntityDialog({
                               offsetPosition
                           }: { props?: SideEntityPanelProps, offsetPosition: number }) {
 
-    if (!props) {
-        return <SideDialogDrawer
-            open={false}
-            offsetPosition={offsetPosition}>
-            <div style={{ width: CONTAINER_WIDTH }}/>
-        </SideDialogDrawer>;
-    }
-
-    const {
-        path,
-        entityId,
-    } = props;
-
     // have the original values of the form changed?
     const [modifiedValues, setModifiedValues] = useState(false);
     // was the closing of the dialog requested by the drawer
@@ -91,29 +73,35 @@ function SideEntityDialog({
     const sideEntityController = useSideEntityController();
     const navigationContext = useNavigation();
 
-    let viewProps = { ...props };
-    let schema = viewProps.schema;
-    if (!schema) {
-        const schemaProps: EntityCollectionResolver | undefined = navigationContext.getCollectionResolver(path, entityId);
-        viewProps = { ...schemaProps, ...viewProps };
-        schema = schemaProps?.schemaResolver;
-    }
 
-    if (!schema) {
+    const schemaProps: EntityCollectionResolver | undefined = !props ? undefined : navigationContext.getCollectionResolver(props.path, props.entityId);
+    if (props && !schemaProps) {
         throw Error("ERROR: You are trying to open an entity with no schema defined.");
     }
 
-    const computedSchema = useMemo(() => computeSchema({
-        schemaOrResolver: schema as EntitySchema | EntitySchemaResolver,
-        path: path,
-        entityId: entityId,
-    }), [path, entityId, schema]);
+    const schema = useMemo(() => {
+        if (!props) return undefined;
+        return computeSchema({
+            schemaOrResolver: schemaProps!.schemaResolver,
+            path: props.path,
+            entityId: props.entityId
+        });
+    }, [props, schemaProps]);
+
+
+    if (!props || !schema) {
+        return <SideDialogDrawer
+            open={false}
+            offsetPosition={offsetPosition}>
+            <div style={{ width: CONTAINER_WIDTH }}/>
+        </SideDialogDrawer>;
+    }
 
     return (
         <>
 
             <SideDialogDrawer
-                open={props !== undefined}
+                open={Boolean(props)}
                 onClose={() => {
                     if (modifiedValues) {
                         setDrawerCloseRequested(true);
@@ -123,12 +111,13 @@ function SideEntityDialog({
                 }}
                 offsetPosition={offsetPosition}
             >
-                 <ErrorBoundary>
-                     <EntityView
-                         {...viewProps}
-                         schema={schema}
-                         onModifiedValues={setModifiedValues}
-                     />
+                <ErrorBoundary>
+                    <EntityView
+                        {...schemaProps}
+                        {...props}
+                        schema={schemaProps!.schemaResolver}
+                        onModifiedValues={setModifiedValues}
+                    />
                 </ErrorBoundary>
             </SideDialogDrawer>
 
@@ -136,7 +125,7 @@ function SideEntityDialog({
                 open={navigationWasBlocked || drawerCloseRequested}
                 handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
                 handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
-                schemaName={computedSchema.name}/>
+                schemaName={schema.name}/>
 
         </>
     );

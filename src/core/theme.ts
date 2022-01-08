@@ -21,17 +21,17 @@ export const createCMSDefaultTheme = (
                 default: mode === "dark" ? "#242424" : "#f9f8f8"
             },
             primary: {
-                main: primaryColor ? primaryColor : "#0070f4"
+                main: primaryColor || "#0070f4"
             },
             secondary: {
-                main: secondaryColor ? secondaryColor : pink["400"]
+                main: secondaryColor || pink["400"]
             },
             error: {
                 main: red.A400
             }
         },
         typography: {
-            "fontFamily": fontFamily ? fontFamily : `"Rubik", "Roboto", "Helvetica", "Arial", sans-serif`,
+            fontFamily: fontFamily || "\"Rubik\", \"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
             fontWeightMedium: 500,
             h6: {
                 fontWeight: 500,

@@ -44,10 +44,10 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
                                                                                size: CollectionSize,
                                                                                isSelected?: boolean,
                                                                                selectionEnabled?: boolean,
-                                                                               toggleEntitySelection?: (entity: Entity<M>) => void
-                                                                               onEditClicked?: (entity: Entity<M>) => void,
-                                                                               onCopyClicked?: (entity: Entity<M>) => void,
-                                                                               onDeleteClicked?: (entity: Entity<M>) => void,
+                                                                               toggleEntitySelection?: (selectedEntity: Entity<M>) => void
+                                                                               onEditClicked?: (selectedEntity: Entity<M>) => void,
+                                                                               onCopyClicked?: (selectedEntity: Entity<M>) => void,
+                                                                               onDeleteClicked?: (selectedEntity: Entity<M>) => void,
                                                                            }) {
 
     const editEnabled = Boolean(onEditClicked);
@@ -149,13 +149,12 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
             {size !== "xs" && (
                 <div className={classes.cellButtonsId}>
 
-                    {entity ?
-                        <Typography
+                    {entity
+                        ? <Typography
                             className={"mono"}
                             variant={"caption"}
                             color={"textSecondary"}> {entity.id} </Typography>
-                        :
-                        <Skeleton variant="text"/>
+                        : <Skeleton variant="text"/>
                     }
                 </div>
             )}

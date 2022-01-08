@@ -1,5 +1,5 @@
 export function hashString(str: string): number {
-    let hash = 0, i, chr;
+    let hash = 0; let i; let chr;
     for (i = 0; i < str.length; i++) {
         chr = str.charCodeAt(i);
         hash = ((hash << 5) - hash) + chr;

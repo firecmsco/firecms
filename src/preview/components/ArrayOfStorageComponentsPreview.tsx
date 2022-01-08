@@ -1,9 +1,12 @@
 import React from "react";
 
-import { PreviewComponentProps, PreviewSize } from "../internal";
+import {
+    PreviewComponent,
+    PreviewComponentProps,
+    PreviewSize
+} from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { useStyles } from "./styles";
-import { PreviewComponent } from "../internal";
 import { Property } from "../../models";
 
 /**

@@ -79,7 +79,10 @@ export function CustomChip({
                                small
                            }: EnumChipProps) {
 
-    const schema = useMemo(() => colorSchemaKey ? getColorSchemeForKey(colorSchemaKey) : getColorSchemeForSeed(colorSeed), [colorSeed]);
+    const schema = useMemo(() =>
+        colorSchemaKey
+            ? getColorSchemeForKey(colorSchemaKey)
+            : getColorSchemeForSeed(colorSeed), [colorSeed, colorSchemaKey]);
     const classes = useStyles({ schema, error });
 
     return (

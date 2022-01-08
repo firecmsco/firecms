@@ -6,6 +6,7 @@ import { useFirestoreDataSource } from "../firebase_app";
 import { EntitySchema } from "../models";
 
 const firebaseApp = initializeApp({});
+// eslint-disable-next-line react-hooks/rules-of-hooks
 const firestoreDatasource = useFirestoreDataSource({ firebaseApp });
 
 it("timestamp conversion", () => {
