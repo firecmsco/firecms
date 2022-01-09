@@ -39,9 +39,7 @@ export const usersSchema = buildSchema({
                 large: {
                     title: "Large",
                     dataType: "string",
-                    config: {
-                        url: "image"
-                    },
+                    url: "image",
                     validation: {
                         url: true
                     }
@@ -49,9 +47,7 @@ export const usersSchema = buildSchema({
                 thumbnail: {
                     title: "Thumbnail",
                     dataType: "string",
-                    config: {
-                        url: "image"
-                    },
+                    url: "image",
                     validation: {
                         url: true
                     }
@@ -59,5 +55,13 @@ export const usersSchema = buildSchema({
             },
             previewProperties: ["large"]
         }
-    }
+    },
+    additionalColumns: [
+        {
+            id: "sample_additional",
+            title: "Sample additional",
+            builder: ({ entity }) => `Generated column: ${entity.values.first_name}`,
+            dependencies: ["first_name"]
+        }
+    ]
 });

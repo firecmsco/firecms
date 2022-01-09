@@ -18,7 +18,7 @@ export const createCMSDefaultTheme = (
         palette: {
             mode: mode,
             background: {
-                default: mode === "dark" ? "#242424" : "#f9f8f8"
+                default: mode === "dark" ? "#242424" : "#f6f7f9"
             },
             primary: {
                 main: primaryColor || "#0070f4"

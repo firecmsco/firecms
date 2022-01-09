@@ -31,7 +31,7 @@ export function CustomIdField<M, UserType>
 ({ schema, status, onChange, error, entity }: {
     schema: EntitySchema<M>,
     status: EntityStatus,
-    onChange: Function,
+    onChange: (id:string) => void,
     error: boolean,
     entity: Entity<M> | undefined
 }) {

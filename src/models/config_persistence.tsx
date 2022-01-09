@@ -11,7 +11,7 @@ export interface ConfigurationPersistence {
     loading: boolean;
 
     collections: EntityCollection[] | undefined;
-    
+
     schemas: EntitySchema[] | undefined;
 
     getCollection: <M>(path: string) => Promise<EntityCollection<M>>;

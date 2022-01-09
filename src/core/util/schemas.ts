@@ -3,7 +3,18 @@ import {
     PropertiesOrBuilder,
     Property
 } from "../../models";
-import { mergeDeep } from "./objects";
+import { mergeDeep, removeFunctions } from "./objects";
+
+export function prepareSchemaForPersistence<M>(schema: EntitySchema<M>) {
+    const properties = removeFunctions(schema.properties);
+    const newSchema = {
+        ...schema,
+        properties: properties
+    };
+    delete newSchema.views;
+    delete newSchema.additionalColumns;
+    return newSchema;
+}
 
 export function mergeSchemas(target: EntitySchema, source: EntitySchema): EntitySchema {
     const mergedSchema = mergeDeep(target, source);

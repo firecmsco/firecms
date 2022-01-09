@@ -3,8 +3,6 @@ import {
     Box,
     Button,
     Container,
-    Dialog,
-    DialogTitle,
     FilledInput,
     FormControl,
     FormHelperText,
@@ -14,10 +12,10 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from "@mui/icons-material/Settings";
+import AddIcon from '@mui/icons-material/Add';
 
-
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import { Formik } from "formik";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -26,12 +24,13 @@ import { EntityCollection } from "../../../models";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { ErrorView } from "../ErrorView";
 import { useNavigation, useSnackbarController } from "../../../hooks";
-import { SchemaEditorPersistence } from "./SchemaEditorPersistence";
+import { SchemaEditorDialog, } from "./SchemaEditorPersistence";
 import {
     computeTopNavigation,
     TopNavigationResult
 } from "../../util/navigation_utils";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
+import { SubmitListener } from "./SchemaEditor";
 
 /**
  * @category Components
@@ -43,17 +42,16 @@ export interface CollectionEditorProps<M> {
      */
     path?: string;
 
-
 }
 
 const CollectionSchema = Yup.object().shape({
-    name: Yup.string().required('Required'),
-    path: Yup.string().required('Required'),
-    schemaId: Yup.string().required('Required'),
+    name: Yup.string().required("Required"),
+    path: Yup.string().required("Required"),
+    schemaId: Yup.string().required("Required")
 });
 
 export function CollectionEditor<M>({
-                                        path,
+                                        path
                                     }: CollectionEditorProps<M>) {
 
     const location = useLocation();
@@ -64,6 +62,7 @@ export function CollectionEditor<M>({
 
     const schemas = schemaRegistry.schemas;
 
+    const [schemaDialogOpen, setSchemaDialogOpen] = useState<boolean>(false);
     const [selectedSchemaId, setSelectedSchemaId] = useState<string | undefined>();
 
     const configurationPersistence = useConfigurationPersistence();
@@ -99,7 +98,7 @@ export function CollectionEditor<M>({
     if (path && !collection)
         return <CircularProgressCenter/>;
 
-    const isNewCollection = !Boolean(collection);
+    const isNewCollection = !collection;
 
     const initialValues = collection ?? {
         name: "",
@@ -110,9 +109,9 @@ export function CollectionEditor<M>({
 
     const onSubmit = (values: EntityCollection) => {
         const cleanValues = {
-            ...values,
-            group: values.group ?? undefined
+            ...values
         };
+        console.log("onSubmit", cleanValues);
         configurationPersistence
             .saveCollection(values.path, cleanValues)
             .then(() => snackbarController.open({
@@ -139,6 +138,7 @@ export function CollectionEditor<M>({
                 {({
                       values,
                       touched,
+                      errors,
                       setFieldValue,
                       handleChange,
                       handleSubmit,
@@ -146,17 +146,19 @@ export function CollectionEditor<M>({
                       dirty
                   }) => {
 
+                    console.log("errors", touched, errors);
+
                     const formControlSX = {
-                        '& .MuiInputLabel-root': {
+                        "& .MuiInputLabel-root": {
                             mt: 1 / 2,
-                            ml: 1 / 2,
+                            ml: 1 / 2
                         },
-                        '& .MuiInputLabel-shrink': {
+                        "& .MuiInputLabel-shrink": {
                             mt: -1 / 4
-                        },
+                        }
                     };
                     const selectedSchema = values.schemaId ? schemaRegistry.findSchema(values.schemaId) : undefined;
-                    return <Container maxWidth={"sm"}>
+                    return <Container maxWidth={"md"}>
                         <form onSubmit={handleSubmit}>
                             <Box
                                 sx={{
@@ -164,8 +166,9 @@ export function CollectionEditor<M>({
                                     flexDirection: "column",
                                     p: 3
                                 }}>
-                                <Typography variant={"h6"}>
-                                    {path ? "Edit collection" : "New collection"}
+
+                                <Typography variant={"h4"} sx={{ py: 3 }}>
+                                    {isNewCollection ? "New collection" : `${values.name} collection`}
                                 </Typography>
 
                                 <Paper elevation={0} sx={{
@@ -177,6 +180,26 @@ export function CollectionEditor<M>({
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
                                             <FormControl fullWidth
+                                                         variant="filled"
+                                                         error={touched.path && Boolean(errors.path)}
+                                                         sx={formControlSX}>
+                                                <InputLabel
+                                                    htmlFor="path">{"Path"}</InputLabel>
+                                                <FilledInput id={"path"}
+                                                             aria-describedby={`${"path"}-helper`}
+                                                             onChange={handleChange}
+                                                             value={values.path}
+                                                             disabled={!isNewCollection}
+                                                             sx={{ minHeight: "64px" }}/>
+                                                <FormHelperText
+                                                    id="path-helper">
+                                                    {touched.path && Boolean(errors.path) ? errors.path : "Path that this collection is stored in"}
+                                                </FormHelperText>
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <FormControl fullWidth
+                                                         error={touched.name && Boolean(errors.name)}
                                                          variant="filled"
                                                          sx={formControlSX}>
                                                 <InputLabel
@@ -190,32 +213,34 @@ export function CollectionEditor<M>({
                                                 />
                                                 <FormHelperText
                                                     id="name-helper">
-                                                    Plural name (e.g. Products)
+                                                    {touched.name && Boolean(errors.name) ? errors.name : "Plural name (e.g. Products)"}
                                                 </FormHelperText>
                                             </FormControl>
                                         </Grid>
-
-                                        <Grid item xs={12}>
+                                        <Grid item xs={12} sm={6}>
                                             <FormControl fullWidth
+                                                         error={touched.description && Boolean(errors.description)}
                                                          variant="filled"
                                                          sx={formControlSX}>
                                                 <InputLabel
-                                                    htmlFor="path">{"Path"}</InputLabel>
-                                                <FilledInput id={"path"}
-                                                             aria-describedby={`${"path"}-helper`}
-                                                             onChange={handleChange}
-                                                             value={values.path}
-                                                             disabled={!isNewCollection}
-                                                             sx={{ minHeight: "64px" }}/>
+                                                    htmlFor="description">Description</InputLabel>
+                                                <FilledInput
+                                                    id="description"
+                                                    aria-describedby="description-helper"
+                                                    onChange={handleChange}
+                                                    value={values.description}
+                                                    sx={{ minHeight: "64px" }}
+                                                />
                                                 <FormHelperText
-                                                    id="path-helper">
-                                                    {"Path that this collection is stored in"}
+                                                    id="description-helper">
+                                                    {touched.description && Boolean(errors.description) ? errors.description : "Description of the collection"}
                                                 </FormHelperText>
                                             </FormControl>
                                         </Grid>
 
-                                        <Grid item xs={12}>
+                                        <Grid item xs={12} sm={6}>
                                             <FormControl fullWidth
+                                                         error={touched.group && Boolean(errors.group)}
                                                          variant="filled"
                                                          sx={formControlSX}>
                                                 <Autocomplete
@@ -236,7 +261,7 @@ export function CollectionEditor<M>({
                                                     renderInput={(params) => (
                                                         <TextField {...params}
                                                                    name={"group"}
-                                                                   aria-describedby={`group-helper`}
+                                                                   aria-describedby={"group-helper"}
                                                                    variant={"filled"}
                                                                    label="Group"
                                                                    sx={{ minHeight: "64px" }}/>
@@ -244,12 +269,17 @@ export function CollectionEditor<M>({
                                                 />
                                                 <FormHelperText
                                                     id="group-helper">
-                                                    {"Group of the collection"}
+                                                    {touched.group && Boolean(errors.group) ? errors.group : "Group of the collection"}
                                                 </FormHelperText>
                                             </FormControl>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <Paper elevation={0} variant={"outlined"} sx={{ p: 2 }}>
+                                            <Paper elevation={0}
+                                                   variant={"outlined"}
+                                                   sx={{
+                                                       p: 2,
+                                                       flexDirection: "column"
+                                                   }}>
                                                 <FormControl fullWidth
                                                              variant="filled"
                                                              sx={formControlSX}>
@@ -286,88 +316,49 @@ export function CollectionEditor<M>({
                                                     onClick={(event) => {
                                                         event.stopPropagation();
                                                         setSelectedSchemaId(values.schemaId);
+                                                        setSchemaDialogOpen(true);
                                                     }}
-                                                    endIcon={<SettingsIcon/>}>
+                                                    startIcon={<SettingsIcon/>}>
                                                     Edit {selectedSchema?.name} schema
+                                                </Button>
+
+                                                <Button
+                                                    disabled={!values.schemaId}
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        setSelectedSchemaId(undefined);
+                                                        setSchemaDialogOpen(true);
+                                                    }}
+                                                    startIcon={<AddIcon/>}>
+                                                    Create new schema
                                                 </Button>
                                             </Paper>
                                         </Grid>
                                     </Grid>
                                 </Paper>
 
-                                <Button type="submit">Save</Button>
+                                {isNewCollection
+                                    ? <Button type="submit">Save</Button>
+                                    : <SubmitListener/>}
+
                             </Box>
                         </form>
+
+                        <SchemaEditorDialog open={schemaDialogOpen}
+                                            handleClose={(schema) => {
+                                                if (schema)
+                                                    setFieldValue("schemaId", schema.id);
+                                                setSelectedSchemaId(undefined);
+                                                setSchemaDialogOpen(false);
+                                            }}
+                                            schemaId={selectedSchemaId}/>
+
                     </Container>;
                 }
                 }
             </Formik>
 
-            {selectedSchemaId &&
-            <SchemaEditorDialog open={Boolean(selectedSchemaId)}
-                                handleOk={() => {
-                                    setSelectedSchemaId(undefined)
-                                }}
-                                schemaId={selectedSchemaId}/>}
         </>
 
     );
 }
-
-
-export interface SchemaEditorDialogProps {
-    open: boolean;
-    handleOk: () => void;
-    schemaId: string;
-}
-
-
-export function SchemaEditorDialog({
-                                       open,
-                                       handleOk,
-                                       schemaId
-                                   }: SchemaEditorDialogProps) {
-
-    return (
-        <Dialog
-            open={open}
-            maxWidth={"lg"}
-            fullWidth
-            onClose={handleOk}
-            sx={{
-                height: "100vh"
-            }}
-        >
-            <DialogTitle id="alert-dialog-title">
-                {"Schema"}
-            </DialogTitle>
-            <SchemaEditorPersistence schemaId={schemaId}/>
-
-            <Box sx={(theme) => ({
-                marginTop: theme.spacing(2),
-                background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
-                backdropFilter: "blur(4px)",
-                borderTop: `1px solid ${theme.palette.divider}`,
-                py: 1,
-                px: 2,
-                position: "sticky",
-                bottom: 0,
-                zIndex: 200,
-                textAlign: "right"
-            })}
-            >
-
-                <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    onClick={handleOk}
-                >
-                    Ok
-                </Button>
-
-            </Box>
-        </Dialog>
-    );
-}
-

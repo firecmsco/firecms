@@ -45,9 +45,9 @@ export function TextField<T extends string | number>({
     let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
     if (property.dataType === "string") {
-        const url = (property as StringProperty).config?.url;
+        const url = (property as StringProperty).url;
         mediaType = typeof url === "string" ? url : undefined;
-        multiline = (property as StringProperty).config?.multiline;
+        multiline = (property as StringProperty).multiline;
     }
 
     useClearRestoreValue({
@@ -111,11 +111,11 @@ export function TextField<T extends string | number>({
                 sx={{
                     '& .MuiInputLabel-formControl': {
                         mt: 1 / 2,
-                        ml: 1 / 2,
+                        ml: 1 / 2
                     },
                     '& .MuiInputLabel-shrink': {
-                        mt: -1/4
-                    },
+                        mt: -1 / 4
+                    }
                 }}
                 fullWidth>
 

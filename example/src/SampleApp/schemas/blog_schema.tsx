@@ -9,6 +9,7 @@ import { BlogEntryPreview } from "../custom_schema_view/BlogEntryPreview";
 export const blogSchema = buildSchema({
     id: "blog_entry",
     name: "Blog entry",
+    defaultSize: "l",
     views: [{
         path: "preview",
         name: "Preview",
@@ -45,27 +46,23 @@ export const blogSchema = buildSchema({
                     images: {
                         title: "Images",
                         dataType: "array",
-                        of: {
+                        of: buildProperty<string>({
                             dataType: "string",
-                            config: {
-                                storageMeta: {
-                                    mediaType: "image",
-                                    storagePath: "images",
-                                    acceptedFiles: ["image/*"],
-                                    metadata: {
-                                        cacheControl: "max-age=1000000"
-                                    }
+                            storageMeta: {
+                                mediaType: "image",
+                                storagePath: "images",
+                                acceptedFiles: ["image/*"],
+                                metadata: {
+                                    cacheControl: "max-age=1000000"
                                 }
                             }
-                        },
+                        }),
                         description: "This fields allows uploading multiple images at once and reordering"
                     },
                     text: {
                         dataType: "string",
                         title: "Text",
-                        config: {
-                            markdown: true
-                        }
+                        markdown: true
                     },
                     products: {
                         title: "Products",
@@ -83,11 +80,9 @@ export const blogSchema = buildSchema({
             title: "Gold text",
             description: "This field is using a custom component defined by the developer",
             dataType: "string",
-            config: {
-                Field: CustomColorTextField,
-                customProps: {
-                    color: "gold"
-                }
+            Field: CustomColorTextField,
+            customProps: {
+                color: "gold"
             }
         }),
         publish_date: buildProperty({
@@ -103,11 +98,9 @@ export const blogSchema = buildSchema({
             validation: { required: true },
             dataType: "string",
             columnWidth: 140,
-            config: {
-                enumValues: {
-                    published: "Published",
-                    draft: "Draft"
-                }
+            enumValues: {
+                published: "Published",
+                draft: "Draft"
             }
         }),
         tags: buildProperty({
@@ -116,11 +109,12 @@ export const blogSchema = buildSchema({
             dataType: "array",
             of: {
                 dataType: "string",
-                config: {
-                    previewAsTag: true
-                }
+                previewAsTag: true
             }
         })
+    },
+    initialFilter: {
+        "status": ["==", "published"]
     },
     defaultValues: {
         status: "draft",

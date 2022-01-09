@@ -31,7 +31,7 @@ export type ListenEntityProps<M> = FetchEntityProps<M> & {
 export interface FetchCollectionProps<M> {
     path: string,
     schema: EntitySchema<M> | EntitySchemaResolver<M>;
-    filter?: FilterValues<M>,
+    filter?: FilterValues<Extract<keyof M, string>>,
     limit?: number,
     startAfter?: any[],
     orderBy?: string,

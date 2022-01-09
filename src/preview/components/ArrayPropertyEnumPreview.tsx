@@ -16,12 +16,12 @@ export function ArrayPropertyEnumPreview({
         throw Error("Picked wrong preview component ArrayEnumPreview");
 
     const ofProperty = property.of as StringProperty | NumberProperty;
-    if (!ofProperty.config?.enumValues)
+    if (!ofProperty.enumValues)
         throw Error("Picked wrong preview component ArrayEnumPreview");
 
     if (!value) return null;
 
-    const enumValues = ofProperty.config?.enumValues;
+    const enumValues = ofProperty.enumValues;
 
     return <ArrayEnumPreview name={name}
                              value={value}

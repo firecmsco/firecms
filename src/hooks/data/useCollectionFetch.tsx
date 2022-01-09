@@ -31,7 +31,7 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
     /**
      * Filter the fetched data by the property
      */
-    filterValues?: FilterValues<M>;
+    filterValues?: FilterValues<Extract<keyof M, string>>;
 
     /**
      * Sort the results by

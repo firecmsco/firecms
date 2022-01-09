@@ -48,7 +48,7 @@ export function ArrayEnumSelect({
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
-    const enumValues = property.of.config?.enumValues;
+    const enumValues = property.of.enumValues;
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");

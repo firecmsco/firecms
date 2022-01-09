@@ -14,14 +14,14 @@ export function StringPreview({
                                   size
                               }: PreviewComponentProps<string>): React.ReactElement {
 
-    if (property.config?.enumValues) {
+    if (property.enumValues) {
         const enumKey = value;
-        const enumValues = property.config.enumValues;
+        const enumValues = property.enumValues;
         return <EnumValuesChip
             enumKey={enumKey}
             enumValues={enumValues}
             small={size !== "regular"}/>;
-    } else if (property.config?.previewAsTag) {
+    } else if (property.previewAsTag) {
         return (
             <ErrorBoundary>
                 <CustomChip

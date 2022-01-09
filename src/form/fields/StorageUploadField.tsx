@@ -138,10 +138,10 @@ export function StorageUploadField({
     });
 
     const storageMeta: StorageMeta | undefined = property.dataType === "string"
-? property.config?.storageMeta
+        ? property.storageMeta
         : property.dataType === "array" &&
         (property.of as Property).dataType === "string"
-? (property.of as StringProperty).config?.storageMeta
+            ? (property.of as StringProperty).storageMeta
             : undefined;
 
     if (!storageMeta)
@@ -494,9 +494,9 @@ export function StorageUpload({
 
     function removeDuplicates(items: StorageFieldItem[]) {
         return items.filter(
-            (v, i) => {
-                return ((items.map((v) => v.storagePathOrDownloadUrl).indexOf(v.storagePathOrDownloadUrl) === i) || !v.storagePathOrDownloadUrl) &&
-                    ((items.map((v) => v.file).indexOf(v.file) === i) || !v.file);
+            (item, i) => {
+                return ((items.map((v) => v.storagePathOrDownloadUrl).indexOf(item.storagePathOrDownloadUrl) === i) || !item.storagePathOrDownloadUrl) &&
+                    ((items.map((v) => v.file).indexOf(item.file) === i) || !item.file);
             }
         );
     }

@@ -67,7 +67,7 @@ export type MediaType =
  * Interface including all common properties of a CMS property
  * @category Entity properties
  */
-interface BaseProperty {
+export interface BaseProperty<T extends CMSType, CustomProps = any> {
 
     /**
      * Datatype of the property
@@ -96,6 +96,11 @@ interface BaseProperty {
     columnWidth?: number;
 
     /**
+     * Do not show this property in the collection view
+     */
+    hideFromCollection?: boolean;
+
+    /**
      * Is this a read only property. When set to true, it gets rendered as a
      * preview.
      */
@@ -113,6 +118,27 @@ interface BaseProperty {
      */
     validation?: PropertyValidationSchema;
 
+    /**
+     * If you need to render a custom field, you can create a component that
+     * takes `FieldProps` as props. You receive the value, a function to
+     * update the value and additional utility props such as if there is an error.
+     * You can customize it by passing custom props that are received
+     * in the component.
+     */
+    Field?: React.ComponentType<FieldProps<T, CustomProps>>;
+
+    /**
+     * Configure how a property is displayed as a preview, e.g. in the collection
+     * view. You can customize it by passing custom props that are received
+     * in the component.
+     */
+    Preview?: React.ComponentType<PreviewComponentProps<T, CustomProps>>;
+
+    /**
+     * Additional props that are passed to the components defined in `field`
+     * or in `preview`.
+     */
+    customProps?: CustomProps;
 }
 
 /**
@@ -216,14 +242,16 @@ export type PropertiesOrBuilder<M extends { [Key: string]: any }> =
 /**
  * @category Entity properties
  */
-export interface NumberProperty extends BaseProperty {
+export interface NumberProperty extends BaseProperty<number> {
 
     dataType: "number";
 
     /**
-     * Configure how this field is displayed
+     * You can use the enum values providing a map of possible
+     * exclusive values the property can take, mapped to the label that it is
+     * displayed in the dropdown.
      */
-    config?: NumberFieldConfig;
+    enumValues?: EnumValues;
 
     /**
      * Rules for validating this property
@@ -235,7 +263,7 @@ export interface NumberProperty extends BaseProperty {
 /**
  * @category Entity properties
  */
-export interface BooleanProperty extends BaseProperty {
+export interface BooleanProperty extends BaseProperty<boolean> {
 
     dataType: "boolean";
 
@@ -253,14 +281,52 @@ export interface BooleanProperty extends BaseProperty {
 /**
  * @category Entity properties
  */
-export interface StringProperty extends BaseProperty {
+export interface StringProperty extends BaseProperty<string> {
 
     dataType: "string";
 
+
     /**
-     * Configure how this field is displayed
+     * Is this string property long enough so it should be displayed in
+     * a multiple line field. Defaults to false. If set to true,
+     * the number of lines adapts to the content
      */
-    config?: StringFieldConfig;
+    multiline?: boolean;
+
+    /**
+     * Should this string property be displayed as a markdown field. If true,
+     * the field is rendered as a text editors that supports markdown highlight
+     * syntax. It also includes a preview of the result.
+     */
+    markdown?: boolean;
+
+    /**
+     * You can use the enum values providing a map of possible
+     * exclusive values the property can take, mapped to the label that it is
+     * displayed in the dropdown. You can use a simple object with the format
+     * `value` => `label`, or with the format `value` => `EnumValueConfig` if you
+     * need extra customization, (like disabling specific options or assigning
+     * colors). If you need to ensure the order of the elements, you can pass
+     * a `Map` instead of a plain object.
+     */
+    enumValues?: EnumValues;
+
+    /**
+     * You can specify a `StorageMeta` configuration. It is used to
+     * indicate that this string refers to a path in Google Cloud Storage.
+     */
+    storageMeta?: StorageMeta;
+
+    /**
+     * If the value of this property is a URL, you can set this flag to true
+     * to add a link, or one of the supported media types to render a preview
+     */
+    url?: boolean | MediaType;
+
+    /**
+     * Should this string be rendered as a tag instead of just text.
+     */
+    previewAsTag?: boolean;
 
     /**
      * Rules for validating this property
@@ -271,7 +337,7 @@ export interface StringProperty extends BaseProperty {
 /**
  * @category Entity properties
  */
-export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> extends BaseProperty {
+export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> extends BaseProperty<T> {
 
     dataType: "array";
 
@@ -303,7 +369,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
          * Record of properties, where the key is the `type` and the value
          * is the corresponding property
          */
-        properties: Record<string, Property>;
+        properties: Record<string, AnyProperty>;
         /**
          * Name of the field to use as the discriminator for type
          * Defaults to `type`
@@ -321,16 +387,12 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      */
     validation?: ArrayPropertyValidationSchema,
 
-    /**
-     * Configure how this property field is displayed
-     */
-    config?: FieldConfig<T>;
 }
 
 /**
  * @category Entity properties
  */
-export interface MapProperty<T extends { [Key: string]: any } = any> extends BaseProperty {
+export interface MapProperty<T extends { [Key: string]: any } = any> extends BaseProperty<T> {
 
     dataType: "map";
 
@@ -357,15 +419,20 @@ export interface MapProperty<T extends { [Key: string]: any } = any> extends Bas
     previewProperties?: Extract<keyof T, string>[];
 
     /**
-     * Configure how this property field is displayed
+     * Allow the user to add only some of the keys in this map.
+     * By default all properties of the map have the corresponding field in
+     * the form view. Setting this flag to true allows to pick only some.
+     * Useful for map that can have a lot of subproperties that may not be
+     * needed
      */
-    config?: MapFieldConfig<T>;
+    pickOnlySomeKeys?: boolean;
 }
 
 /**
  * @category Entity properties
  */
-export interface TimestampProperty extends BaseProperty {
+export interface TimestampProperty extends BaseProperty<Date> {
+
     dataType: "timestamp";
 
     /**
@@ -391,7 +458,8 @@ export interface TimestampProperty extends BaseProperty {
  * @category Entity properties
  */
 // TODO: currently this is the only unsupported field
-export interface GeopointProperty extends BaseProperty {
+export interface GeopointProperty extends BaseProperty<GeoPoint> {
+
     dataType: "geopoint";
 
     /**
@@ -408,8 +476,7 @@ export interface GeopointProperty extends BaseProperty {
 /**
  * @category Entity properties
  */
-export interface ReferenceProperty<M extends { [Key: string]: any } = any>
-    extends BaseProperty {
+export interface ReferenceProperty extends BaseProperty<EntityReference> {
 
     dataType: "reference";
 
@@ -426,12 +493,8 @@ export interface ReferenceProperty<M extends { [Key: string]: any } = any>
      * reference. If not specified the first 3 are used. Only the first 3
      * specified values are considered.
      */
-    previewProperties?: (keyof M)[];
+    previewProperties?: string[];
 
-    /**
-     * Configure how this property field is displayed
-     */
-    config?: FieldConfig<EntityReference>;
 }
 
 /**
@@ -519,79 +582,9 @@ export interface ArrayPropertyValidationSchema extends PropertyValidationSchema 
  */
 export interface FieldConfig<T extends CMSType, CustomProps = any> {
 
-    /**
-     * If you need to render a custom field, you can create a component that
-     * takes `FieldProps` as props. You receive the value, a function to
-     * update the value and additional utility props such as if there is an error.
-     * You can customize it by passing custom props that are received
-     * in the component.
-     */
-    Field?: React.ComponentType<FieldProps<T, CustomProps>>;
-
-    /**
-     * Configure how a property is displayed as a preview, e.g. in the collection
-     * view. You can customize it by passing custom props that are received
-     * in the component.
-     */
-    Preview?: React.ComponentType<PreviewComponentProps<T, CustomProps>>;
-
-    /**
-     * Additional props that are passed to the components defined in `field`
-     * or in `preview`.
-     */
-    customProps?: CustomProps;
-}
-
-/**
- * Possible configuration fields for a string property. Note that setting one
- * config disables the others.
- * @category Entity properties
- */
-export interface StringFieldConfig extends FieldConfig<string> {
-
-    /**
-     * Is this string property long enough so it should be displayed in
-     * a multiple line field. Defaults to false. If set to true,
-     * the number of lines adapts to the content
-     */
-    multiline?: boolean;
-
-    /**
-     * Should this string property be displayed as a markdown field. If true,
-     * the field is rendered as a text editors that supports markdown highlight
-     * syntax. It also includes a preview of the result.
-     */
-    markdown?: boolean;
-
-    /**
-     * You can use the enum values providing a map of possible
-     * exclusive values the property can take, mapped to the label that it is
-     * displayed in the dropdown. You can use a simple object with the format
-     * `value` => `label`, or with the format `value` => `EnumValueConfig` if you
-     * need extra customization, (like disabling specific options or assigning
-     * colors). If you need to ensure the order of the elements, you can pass
-     * a `Map` instead of a plain object.
-     */
-    enumValues?: EnumValues;
-
-    /**
-     * You can specify a `StorageMeta` configuration. It is used to
-     * indicate that this string refers to a path in Google Cloud Storage.
-     */
-    storageMeta?: StorageMeta;
-
-    /**
-     * If the value of this property is a URL, you can set this flag to true
-     * to add a link, or one of the supported media types to render a preview
-     */
-    url?: boolean | MediaType;
-
-    /**
-     * Should this string be rendered as a tag instead of just text.
-     */
-    previewAsTag?: boolean;
 
 }
+
 
 /**
  * Additional configuration related to Storage related fields
@@ -677,23 +670,6 @@ export interface UploadedFileContext {
     storageMeta: StorageMeta;
 }
 
-/**
- * Possible configuration fields for a string property. Note that setting one
- * config disables the others.
- * @category Entity properties
- */
-export interface MapFieldConfig<T extends {}> extends FieldConfig<T> {
-
-    /**
-     * Allow the user to add only some of the keys in this map.
-     * By default all properties of the map have the corresponding field in
-     * the form view. Setting this flag to true allows to pick only some.
-     * Useful for map that can have a lot of subproperties that may not be
-     * needed
-     */
-    pickOnlySomeKeys?: boolean;
-
-}
 
 /**
  * MIME types for storage fields
@@ -708,17 +684,3 @@ export type StorageFileTypes =
     | "text/*"
     | "font/*"
     | string;
-
-/**
- * @category Entity properties
- */
-export interface NumberFieldConfig extends FieldConfig<number> {
-
-    /**
-     * You can use the enum values providing a map of possible
-     * exclusive values the property can take, mapped to the label that it is
-     * displayed in the dropdown.
-     */
-    enumValues?: EnumValues;
-
-}

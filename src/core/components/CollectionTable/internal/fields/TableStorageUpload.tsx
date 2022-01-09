@@ -105,10 +105,10 @@ export function TableStorageUpload(props: {
     const multipleFilesSupported = property.dataType === "array";
 
     const storageMeta: StorageMeta | undefined = property.dataType === "string"
-? property.config?.storageMeta
+? property.storageMeta
         : property.dataType === "array" &&
         (property.of as Property).dataType === "string"
-? (property.of as StringProperty).config?.storageMeta
+? (property.of as StringProperty).storageMeta
             : undefined;
 
     if (!storageMeta)

@@ -74,19 +74,24 @@ function SideEntityDialog({
     const navigationContext = useNavigation();
 
 
-    const schemaProps: EntityCollectionResolver | undefined = !props ? undefined : navigationContext.getCollectionResolver(props.path, props.entityId);
-    if (props && !schemaProps) {
-        throw Error("ERROR: You are trying to open an entity with no schema defined.");
-    }
+
 
     const schema = useMemo(() => {
         if (!props) return undefined;
+        let usedSchema = props.schema;
+        if (!usedSchema) {
+            const schemaProps: EntityCollectionResolver | undefined = !props ? undefined : navigationContext.getCollectionResolver(props.path, props.entityId);
+            if (!schemaProps) {
+                throw Error("ERROR: You are trying to open an entity with no schema defined.");
+            }
+            usedSchema = schemaProps.schemaResolver;
+        }
         return computeSchema({
-            schemaOrResolver: schemaProps!.schemaResolver,
+            schemaOrResolver: usedSchema,
             path: props.path,
             entityId: props.entityId
         });
-    }, [props, schemaProps]);
+    }, [props]);
 
 
     if (!props || !schema) {
@@ -113,9 +118,8 @@ function SideEntityDialog({
             >
                 <ErrorBoundary>
                     <EntityView
-                        {...schemaProps}
                         {...props}
-                        schema={schemaProps!.schemaResolver}
+                        schema={schema}
                         onModifiedValues={setModifiedValues}
                     />
                 </ErrorBoundary>

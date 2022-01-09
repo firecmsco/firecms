@@ -88,8 +88,8 @@ const PropertyTableCellInternal = <T extends CMSType>({
     const [error, setError] = useState<Error | undefined>();
     const [saved, setSaved] = useState<boolean>(false);
 
-    const customField = Boolean(property.config?.Field);
-    const customPreview = Boolean(property.config?.Preview);
+    const customField = Boolean(property.Field);
+    const customPreview = Boolean(property.Preview);
     const readOnly = isReadOnly(property);
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     const disabled = Boolean(property.disabled);
@@ -154,8 +154,8 @@ const PropertyTableCellInternal = <T extends CMSType>({
     let fullHeight = false;
 
     if (!readOnly && !customField && (!customPreview || selected)) {
-        const isAStorageProperty = (property.dataType === "string" && (property as StringProperty).config?.storageMeta) ||
-            (property.dataType === "array" && (property as ArrayProperty).of?.dataType === "string" && ((property as ArrayProperty).of as StringProperty)?.config?.storageMeta);
+        const isAStorageProperty = (property.dataType === "string" && (property as StringProperty).storageMeta) ||
+            (property.dataType === "array" && (property as ArrayProperty).of?.dataType === "string" && ((property as ArrayProperty).of as StringProperty)?.storageMeta);
         if (isAStorageProperty) {
             innerComponent = <TableStorageUpload error={error}
                                                  disabled={disabled}
@@ -175,14 +175,14 @@ const PropertyTableCellInternal = <T extends CMSType>({
             removePadding = true;
         } else if (selected && property.dataType === "number") {
             const numberProperty = property as NumberProperty;
-            if (numberProperty.config?.enumValues) {
+            if (numberProperty.enumValues) {
                 innerComponent = <TableSelect name={name as string}
                                               multiple={false}
                                               disabled={disabled}
                                               focused={focused}
                                               valueType={"number"}
                                               small={getPreviewSizeFrom(size) !== "regular"}
-                                              enumValues={numberProperty.config.enumValues}
+                                              enumValues={numberProperty.enumValues}
                                               error={error}
                                               onBlur={onBlur}
                                               internalValue={internalValue as string | number}
@@ -203,22 +203,22 @@ const PropertyTableCellInternal = <T extends CMSType>({
             }
         } else if (selected && property.dataType === "string") {
             const stringProperty = property as StringProperty;
-            if (stringProperty.config?.enumValues) {
+            if (stringProperty.enumValues) {
                 innerComponent = <TableSelect name={name as string}
                                               multiple={false}
                                               focused={focused}
                                               disabled={disabled}
                                               valueType={"string"}
                                               small={getPreviewSizeFrom(size) !== "regular"}
-                                              enumValues={stringProperty.config.enumValues}
+                                              enumValues={stringProperty.enumValues}
                                               error={error}
                                               onBlur={onBlur}
                                               internalValue={internalValue as string | number}
                                               updateValue={updateValue}
                                               setPreventOutsideClick={setPreventOutsideClick}
                 />;
-            } else if (!stringProperty.config?.storageMeta && !stringProperty.config?.markdown) {
-                const multiline = !!stringProperty.config?.multiline;
+            } else if (!stringProperty.storageMeta && !stringProperty.markdown) {
+                const multiline = !!stringProperty.multiline;
                 innerComponent = <TableInput error={error}
                                              disabled={disabled}
                                              multiline={multiline}
@@ -260,14 +260,14 @@ const PropertyTableCellInternal = <T extends CMSType>({
             const arrayProperty = (property as ArrayProperty);
             if (arrayProperty.of) {
                 if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
-                    if (selected && arrayProperty.of.config?.enumValues) {
+                    if (selected && arrayProperty.of.enumValues) {
                         innerComponent = <TableSelect name={name as string}
                                                       multiple={true}
                                                       disabled={disabled}
                                                       focused={focused}
                                                       small={getPreviewSizeFrom(size) !== "regular"}
                                                       valueType={arrayProperty.of.dataType}
-                                                      enumValues={arrayProperty.of.config.enumValues}
+                                                      enumValues={arrayProperty.of.enumValues}
                                                       error={error}
                                                       onBlur={onBlur}
                                                       internalValue={internalValue as string | number}

@@ -19,9 +19,7 @@ export const productSchema: EntitySchema = {
         name: {
             dataType: "string",
             title: "Name",
-            config: {
-                multiline: true
-            },
+            multiline: true,
             validation: { required: true }
         },
         publisher: {
@@ -43,14 +41,12 @@ export const productSchema: EntitySchema = {
         main_image: {
             dataType: "string",
             title: "Image",
-            config: {
-                storageMeta: {
-                    mediaType: "image",
-                    storagePath: "images",
-                    acceptedFiles: ["image/*"],
-                    metadata: {
-                        cacheControl: "max-age=1000000"
-                    }
+            storageMeta: {
+                mediaType: "image",
+                storagePath: "images",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
                 }
             },
             description: "Upload field for images",

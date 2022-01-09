@@ -198,7 +198,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
         if (property.dataType === "number" || property.dataType === "string") {
             const title = property.title;
-            const enumValues = property.config?.enumValues;
+            const enumValues = property.enumValues;
             return {
                 dataType: property.dataType,
                 isArray,

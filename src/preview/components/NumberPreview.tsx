@@ -13,9 +13,9 @@ export function NumberPreview({
                                   size
                               }: PreviewComponentProps<number>): React.ReactElement {
 
-    if (property.config?.enumValues) {
+    if (property.enumValues) {
         const enumKey = value;
-        const enumValues = property.config.enumValues;
+        const enumValues = property.enumValues;
         return <EnumValuesChip
             enumKey={enumKey}
             enumValues={enumValues}

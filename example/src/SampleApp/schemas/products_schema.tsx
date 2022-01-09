@@ -69,13 +69,27 @@ const sampleView: EntityCustomView = {
 };
 
 
+const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
+    id: "spanish_title",
+    title: "Spanish title",
+    builder: ({ entity, context }) =>
+        <AsyncPreviewComponent builder={
+            context.dataSource.fetchEntity({
+                path: entity.path,
+                entityId: entity.id,
+                schema: localeSchema
+            }).then((entity) => entity.values.name)
+        }/>
+};
+
 export const productSchema = buildSchema<Product>({
     id: "product",
     name: "Product",
     views: [
         sampleView
     ],
-
+    additionalColumns: [productAdditionalColumn],
+    filterCombinations: [{ category: "desc", available: "desc" }],
     properties: {
         name: {
             dataType: "string",
@@ -87,14 +101,12 @@ export const productSchema = buildSchema<Product>({
         main_image: {
             dataType: "string",
             title: "Image",
-            config: {
-                storageMeta: {
-                    mediaType: "image",
-                    storagePath: "images",
-                    acceptedFiles: ["image/*"],
-                    metadata: {
-                        cacheControl: "max-age=1000000"
-                    }
+            storageMeta: {
+                mediaType: "image",
+                storagePath: "images",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
                 }
             },
             description: "Upload field for images",
@@ -105,9 +117,7 @@ export const productSchema = buildSchema<Product>({
         category: {
             dataType: "string",
             title: "Category",
-            config: {
-                enumValues: categories
-            }
+            enumValues: categories
         },
         available: {
             dataType: "boolean",
@@ -127,19 +137,15 @@ export const productSchema = buildSchema<Product>({
                 clearOnDisabled: true,
                 disabledMessage: "You can only set the price on available items"
             },
-            config: {
-                Preview: PriceTextPreview
-            },
+            Preview: PriceTextPreview,
             description: "Price with range validation"
         }),
         currency: {
             dataType: "string",
             title: "Currency",
-            config: {
-                enumValues: {
-                    EUR: "Euros",
-                    DOL: "Dollars"
-                }
+            enumValues: {
+                EUR: "Euros",
+                DOL: "Dollars"
             },
             validation: {
                 required: true
@@ -162,30 +168,24 @@ export const productSchema = buildSchema<Product>({
             dataType: "string",
             title: "Description",
             description: "Example of a markdown field",
-            config: {
-                markdown: true
-            }
+            markdown: true
         },
         amazon_link: {
             dataType: "string",
             title: "Amazon link",
-            config: {
-                url: true
-            }
+            url: true
         },
         images: {
             dataType: "array",
             title: "Images",
             of: {
                 dataType: "string",
-                config: {
-                    storageMeta: {
-                        mediaType: "image",
-                        storagePath: "images",
-                        acceptedFiles: ["image/*"],
-                        metadata: {
-                            cacheControl: "max-age=1000000"
-                        }
+                storageMeta: {
+                    mediaType: "image",
+                    storagePath: "images",
+                    acceptedFiles: ["image/*"],
+                    metadata: {
+                        cacheControl: "max-age=1000000"
                     }
                 }
             },
@@ -224,9 +224,7 @@ export const productSchema = buildSchema<Product>({
             readOnly: true,
             of: {
                 dataType: "string",
-                config: {
-                    enumValues: locales
-                }
+                enumValues: locales
             }
         },
         uppercase_name: {
@@ -241,12 +239,6 @@ export const productSchema = buildSchema<Product>({
             autoValue: "on_create"
         }
 
-    },
-    defaultValues: {
-        currency: "EUR",
-        publisher: {
-            name: "Default publisher"
-        }
     }
 
 });
@@ -278,19 +270,6 @@ export const productCallbacks: EntityCallbacks = {
     }
 };
 
-export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
-    id: "spanish_title",
-    title: "Spanish title",
-    builder: ({ entity, context }) =>
-        <AsyncPreviewComponent builder={
-            context.dataSource.fetchEntity({
-                path: entity.path,
-                entityId: entity.id,
-                schema: localeSchema
-            }).then((entity) => entity.values.name)
-        }/>
-};
-
 
 export const localeSchema = buildSchema<Locale>({
     id: "locale",
@@ -306,9 +285,7 @@ export const localeSchema = buildSchema<Locale>({
             title: "Description",
             validation: { required: true },
             dataType: "string",
-            config: {
-                multiline: true
-            }
+            multiline: true
         },
         selectable: {
             title: "Selectable",
@@ -320,14 +297,12 @@ export const localeSchema = buildSchema<Locale>({
             title: "Video",
             dataType: "string",
             validation: { required: false },
-            config: {
-                storageMeta: {
-                    mediaType: "video",
-                    storagePath: "videos",
-                    acceptedFiles: ["video/*"],
-                    fileName: (context) => {
-                        return context.file.name;
-                    }
+            storageMeta: {
+                mediaType: "video",
+                storagePath: "videos",
+                acceptedFiles: ["video/*"],
+                fileName: (context) => {
+                    return context.file.name;
                 }
             },
             columnWidth: 400

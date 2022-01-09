@@ -27,7 +27,7 @@ export function propertiesToTree<M>(properties: PropertiesOrBuilder<M>): TreeDat
     return {
         rootId: "root",
         items: {
-            "root": {
+            root: {
                 id: "root",
                 isExpanded: true,
                 children: rootChildren

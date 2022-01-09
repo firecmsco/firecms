@@ -165,7 +165,7 @@ export function Table<T>({
             const newSortBy: [string, "asc" | "desc"] | undefined = sortByProperty && currentSort ? [sortByProperty, currentSort] : undefined;
             const isNewFilterCombinationValid = !checkFilterCombination || checkFilterCombination(newFilterValue, newSortBy);
             if (!isNewFilterCombinationValid) {
-                newFilterValue = filterForProperty ? { [column.key]: filterForProperty } as TableFilterValues<T> : {};
+                newFilterValue = filterForProperty ? { [column.key]: filterForProperty } as TableFilterValues<Extract<keyof T, string>> : {};
             }
 
             if (onFilterUpdate) onFilterUpdate(newFilterValue);

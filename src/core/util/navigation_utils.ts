@@ -16,7 +16,6 @@ export function removeTrailingSlash(s: string) {
     else return s;
 }
 
-
 export function addInitialSlash(s: string) {
     if (s.startsWith("/"))
         return s;
@@ -31,7 +30,6 @@ export function getLastSegment(path: string) {
     }
     return cleanPath;
 }
-
 
 /**
  * Find the corresponding view at any depth for a given path.
@@ -129,7 +127,7 @@ export function computeTopNavigation(
             url: navigationContext.buildUrlCollectionPath(collection.path),
             name: collection.name,
             type: "stored_collection",
-            editUrl: navigationContext.buildUrlEditCollectionPath({path: collection.path}),
+            editUrl: navigationContext.buildUrlEditCollectionPath({ path: collection.path }),
             description: collection.description?.trim(),
             group: collection.group?.trim()
         } as TopNavigationEntry)),

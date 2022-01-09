@@ -310,7 +310,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const onDiscard = useCallback(() => {
         if (tabsPosition === -1)
             sideEntityController.close();
-    }, [sideEntityController, tabsPosition]);
+    }, [tabsPosition]);
 
     const body = !readOnly
 ? (

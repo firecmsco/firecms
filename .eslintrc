@@ -3,7 +3,10 @@
     "extends": [
         "standard",
         "standard-react",
-        "plugin:react-hooks/recommended"
+        "eslint:recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
     "env": {
         "node": true
@@ -38,7 +41,13 @@
         "brace-style": "off",
         "curly": "off",
         "semi": 0,
-        "no-multiple-empty-lines": 0,
+        "key-spacing": "warn",
+        "no-trailing-spaces": "warn",
+        "comma-dangle": "warn",
+        "no-multi-spaces": "warn",
+        "comma-spacing": "warn",
+        "keyword-spacing": "warn",
+        "no-multiple-empty-lines": "warn",
         "indent": [0, 4],
         "quotes": [1, "double", { "avoidEscape": true }],
         "react-hooks/rules-of-hooks": "error",

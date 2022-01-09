@@ -12,6 +12,7 @@ import {
 } from "../util/navigation_from_path";
 import { useLocation, useNavigate } from "react-router-dom";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
+import { getSidePanelKey } from "./useBuildNavigationContext";
 
 const NEW_URL_HASH = "new";
 
@@ -26,18 +27,6 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
 
     const state = location.state as any;
     const baseLocation = state && state.base_location ? state.base_location : location;
-
-    // update panels based on URL
-    useEffect(() => {
-        if (navigationContext.initialised) {
-            if (location?.state && state.panels) {
-                const statePanel = state.panels as SideEntityPanelProps[];
-                setSidePanels(statePanel);
-            } else {
-                setSidePanels([]);
-            }
-        }
-    }, [location?.state, navigationContext.initialised]);
 
     // only on initialisation
     useEffect(() => {
@@ -60,13 +49,15 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
         const lastSidePanel = sidePanels[sidePanels.length - 1];
         const locationPanels = location?.state && state.panels;
         if (locationPanels && locationPanels.length > 0) {
-            const updatedPanels = [...locationPanels.slice(0, -1)];
+            const updatedPanels = [...sidePanels.slice(0, -1)];
             setSidePanels(updatedPanels);
-            navigate(-1);
+            if (lastSidePanel.updateUrl)
+                navigate(-1);
         } else {
             const newPath = navigationContext.buildUrlCollectionPath(lastSidePanel.path);
             setSidePanels([]);
-            navigate(newPath, { replace: true });
+            if (lastSidePanel.updateUrl)
+                navigate(newPath, { replace: true });
         }
 
     }, [sidePanels, location]);
@@ -105,16 +96,19 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             };
             const updatedPanels = [...sidePanels.slice(0, -1), updatedPanel];
             setSidePanels(updatedPanels);
-            navigate(
-                navigationContext.buildUrlCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath || ""}`),
-                {
-                    replace: true,
-                    state: {
-                        base_location: baseLocation
-                        // panels: updatedPanels
+            const panelKeys = updatedPanels.map((panel) => getSidePanelKey(panel.path, panel.entityId));
+            if (updateUrl) {
+                navigate(
+                    navigationContext.buildUrlCollectionPath(`${cleanPath}/${entityId}/${selectedSubpath || ""}`),
+                    {
+                        replace: true,
+                        state: {
+                            base_location: baseLocation,
+                            panels: panelKeys
+                        }
                     }
-                }
-            );
+                );
+            }
 
         } else {
             const newPanel: SideEntityPanelProps = {
@@ -127,15 +121,18 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             };
             const updatedPanels = [...sidePanels, newPanel];
             setSidePanels(updatedPanels);
-            navigate(
-                newPath,
-                {
-                    state: {
-                        base_location: baseLocation,
-                        // panels: updatedPanels
+            const panelKeys = updatedPanels.map((panel) => getSidePanelKey(panel.path, panel.entityId));
+            if (updateUrl) {
+                navigate(
+                    newPath,
+                    {
+                        state: {
+                            base_location: baseLocation,
+                            panels: panelKeys
+                        }
                     }
-                }
-            );
+                );
+            }
         }
     }, [sidePanels, location]);
 

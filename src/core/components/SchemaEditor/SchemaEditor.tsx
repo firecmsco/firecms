@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import * as Yup from "yup";
 import Tree, {
     moveItemOnTree,
     RenderItemParams,
@@ -12,7 +13,6 @@ import deepEqual from "deep-equal";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import {
     Box,
-    Container,
     FilledInput,
     FormControl,
     FormHelperText,
@@ -33,12 +33,18 @@ import { propertiesToTree, treeToProperties } from './util';
 import { sortProperties } from "../../util/schemas";
 
 export type SchemaEditorProps<M> = {
-    schema: EntitySchema<M>;
+    isNewSchema: boolean;
+    schema?: EntitySchema<M>;
     onSchemaModified: (schema: EntitySchema<M>) => void;
 };
 
+const YupSchema = Yup.object().shape({
+    id: Yup.string().required("Required"),
+    name: Yup.string().required("Required")
+});
 
 export function SchemaEditor<M>({
+                                    isNewSchema,
                                     schema,
                                     onSchemaModified
                                 }: SchemaEditorProps<M>) {
@@ -69,137 +75,164 @@ export function SchemaEditor<M>({
         )
     };
 
-
-    // const onExpand = (itemId: ItemId) => {
-    //     setTree(mutateTree(tree, itemId, { isExpanded: true }))
-    // };
-    //
-    // const onCollapse = (itemId: ItemId) => {
-    //     setTree(mutateTree(tree, itemId, { isExpanded: false }))
-    // };
-
     return (
-        <Container maxWidth={"md"}>
-            <Formik
-                initialValues={{
-                    ...schema
-                }}
-                onSubmit={(newSchema: EntitySchema) => {
-                    console.log("submit", newSchema);
-                    onSchemaModified(newSchema);
-                }}
-            >
-                {({ values, setValues, setFieldValue, handleChange }) => {
+        <Formik
+            initialValues={schema ?? {
+                id: "",
+                name: "",
+                properties: {}
+            } as EntitySchema}
+            validationSchema={YupSchema}
+            onSubmit={(newSchema: EntitySchema) => {
+                console.log("submit", newSchema);
+                onSchemaModified(newSchema);
+            }}
+        >
+            {({ values, setValues, setFieldValue, handleChange }) => {
 
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    React.useEffect(() => {
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                React.useEffect(() => {
+                    if (schema)
                         setValues({
                             ...schema
                         });
-                    }, [schema]);
+                }, [schema]);
 
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    const tree = useMemo(() => {
-                        const sortedProperties = sortProperties(values.properties, values.propertiesOrder);
-                        return propertiesToTree(sortedProperties);
-                    }, [values.properties, values.propertiesOrder]);
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                const tree = useMemo(() => {
+                    const sortedProperties = sortProperties(values.properties, values.propertiesOrder);
+                    return propertiesToTree(sortedProperties);
+                }, [values.properties, values.propertiesOrder]);
 
-                    const onDragEnd = (
-                        source: TreeSourcePosition,
-                        destination?: TreeDestinationPosition
-                    ) => {
+                const onDragEnd = (
+                    source: TreeSourcePosition,
+                    destination?: TreeDestinationPosition
+                ) => {
 
-                        if (!destination) {
-                            return;
-                        }
+                    if (!destination) {
+                        return;
+                    }
 
-                        if (!isValidDrag(tree, source, destination)) {
-                            return;
-                        }
+                    if (!isValidDrag(tree, source, destination)) {
+                        return;
+                    }
 
-                        const newTree = moveItemOnTree(tree, source, destination);
-                        const [properties, propertiesOrder] = treeToProperties<M>(newTree);
+                    const newTree = moveItemOnTree(tree, source, destination);
+                    const [properties, propertiesOrder] = treeToProperties<M>(newTree);
 
-                        setFieldValue("propertiesOrder", propertiesOrder);
-                        setFieldValue("properties", properties);
-                    };
+                    setFieldValue("propertiesOrder", propertiesOrder);
+                    setFieldValue("properties", properties);
+                };
 
+                const formControlSX = {
+                    '& .MuiInputLabel-root': {
+                        mt: 1 / 2,
+                        ml: 1 / 2
+                    },
+                    '& .MuiInputLabel-shrink': {
+                        mt: -1 / 4
+                    }
+                };
 
-                    const formControlSX = {
-                        '& .MuiInputLabel-root': {
-                            mt: 1 / 2,
-                            ml: 1 / 2
-                        },
-                        '& .MuiInputLabel-shrink': {
-                            mt: -1 / 4
-                        }
-                    };
+                return (
+                    <Form>
 
-                    return (
-                        <Form>
-                            <FormControl fullWidth
-                                         variant="filled"
-                                         sx={formControlSX}>
-                                <InputLabel
-                                    htmlFor="name">Name</InputLabel>
-                                <FilledInput
-                                    id="name"
-                                    aria-describedby="name-helper"
-                                    onChange={handleChange}
-                                    value={values.name}
-                                    sx={{ minHeight: "64px" }}
-                                />
-                                <FormHelperText
-                                    id="name-helper">
-                                    Plural name (e.g. Products)
-                                </FormHelperText>
-                            </FormControl>
+                        <Typography variant={"h4"} sx={{ py: 3 }}>
+                            {values.name ? `${values.name} schema` : "Schema"}
+                        </Typography>
 
-                            <Typography sx={{ mt: 2 }} variant={"subtitle2"}>
-                                Properties
-                            </Typography>
-                            <Paper elevation={0}
-                                   variant={"outlined"}
-                                   sx={{ p: 3 }}>
-                                <Grid container>
-                                    <Grid item xs={12} sm={6}>
-                                        <Tree
-                                            key={`tree_${selectedPropertyId}`}
-                                            tree={tree}
-                                            renderItem={renderItem}
-                                            onDragEnd={onDragEnd}
-                                            isDragEnabled
-                                            isNestingEnabled
-                                        />
+                        <Grid container spacing={2}>
+
+                            <Grid item xs={12}>
+                                <FormControl fullWidth
+                                             disabled={!isNewSchema}
+                                             variant="filled"
+                                             sx={formControlSX}>
+                                    <InputLabel
+                                        htmlFor="id">Id</InputLabel>
+                                    <FilledInput
+                                        id="id"
+                                        aria-describedby="id-helper"
+                                        onChange={handleChange}
+                                        value={values.id}
+                                        sx={{ minHeight: "64px" }}
+                                    />
+                                    <FormHelperText
+                                        id="id-helper">
+                                        Id of this schema (e.g "product")
+                                    </FormHelperText>
+                                </FormControl>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <FormControl fullWidth
+                                             variant="filled"
+                                             sx={formControlSX}>
+                                    <InputLabel
+                                        htmlFor="name">Name</InputLabel>
+                                    <FilledInput
+                                        id="name"
+                                        aria-describedby="name-helper"
+                                        onChange={handleChange}
+                                        value={values.name}
+                                        sx={{ minHeight: "64px" }}
+                                    />
+                                    <FormHelperText
+                                        id="name-helper">
+                                        Plural name (e.g. Products)
+                                    </FormHelperText>
+                                </FormControl>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <Typography sx={{ mt: 2 }}
+                                            variant={"subtitle2"}>
+                                    Properties
+                                </Typography>
+                                <Paper elevation={0}
+                                       variant={"outlined"}
+                                       sx={{ p: 3 }}>
+                                    <Grid container>
+                                        <Grid item xs={12} sm={6}>
+                                            <Tree
+                                                key={`tree_${selectedPropertyId}`}
+                                                tree={tree}
+                                                renderItem={renderItem}
+                                                onDragEnd={onDragEnd}
+                                                isDragEnabled
+                                                isNestingEnabled
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <Paper variant={"outlined"}
+                                                   sx={(theme) => ({
+                                                       p: 3,
+                                                       position: "sticky",
+                                                       top: theme.spacing(3)
+                                                   })}
+                                                   elevation={0}>
+                                                {selectedProperty && <Box>
+                                                    {selectedProperty.title}
+                                                </Box>}
+                                                {!selectedProperty && <Box>
+                                                    Select a property to
+                                                    edit it
+                                                </Box>}
+                                            </Paper>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Paper variant={"outlined"}
-                                               sx={(theme) => ({
-                                                   p: 3,
-                                                   position: "sticky",
-                                                   top: theme.spacing(3)
-                                               })}
-                                               elevation={0}>
-                                            {selectedProperty && <Box>
-                                                {selectedProperty.title}
-                                            </Box>}
-                                            {!selectedProperty && <Box>
-                                                Select a property to edit it
-                                            </Box>}
-                                        </Paper>
-                                    </Grid>
-                                </Grid>
-                            </Paper>
+                                </Paper>
+                            </Grid>
+                        </Grid>
 
-                            <SubmitListener/>
-                        </Form>
+                        {!isNewSchema && <SubmitListener/>}
+
+                    </Form>
                     );
                 }}
             </Formik>
-        </Container>
     );
 }
-
 
 export function SchemaEntry({
                                 name,
@@ -365,4 +398,3 @@ function isValidDrag(tree: TreeData, source: TreeSourcePosition, destination: Tr
     const destinationProperty: Property = tree.items[destinationPropertyId].data.property;
     return typeof destinationProperty === "object" && destinationProperty.dataType === "map";
 }
-

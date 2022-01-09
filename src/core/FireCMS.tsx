@@ -208,7 +208,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
 
     const loading = authController.authLoading || authController.initialLoading || navigationContext.loading;
 
-    console.log("loading", authController.authLoading, authController.initialLoading, navigationContext.loading);
     if (navigationContext.navigationLoadingError) {
         return (
             <div>

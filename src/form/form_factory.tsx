@@ -77,14 +77,14 @@ export function buildPropertyField<T extends CMSType = any, M = any>
     let component: ComponentType<FieldProps<T, any, M>> | undefined;
     if (isReadOnly(property)) {
         component = ReadOnlyField;
-    } else if (property.config?.Field) {
-        component = property.config?.Field as ComponentType<FieldProps<T>>;
+    } else if (property.Field) {
+        component = property.Field as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
         if (of) {
-            if ((of.dataType === "string" || of.dataType === "number") && of.config?.enumValues) {
+            if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
                 component = ArrayEnumSelect as ComponentType<FieldProps<T>>;
-            } else if (of.dataType === "string" && of.config?.storageMeta) {
+            } else if (of.dataType === "string" && of.storageMeta) {
                 component = StorageUploadField as ComponentType<FieldProps<T>>;
             } else if (of.dataType === "reference") {
                 component = ArrayOfReferencesField as ComponentType<FieldProps<T>>;
@@ -108,17 +108,17 @@ export function buildPropertyField<T extends CMSType = any, M = any>
     } else if (property.dataType === "boolean") {
         component = SwitchField as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "number") {
-        if (property.config?.enumValues) {
+        if (property.enumValues) {
             component = Select as ComponentType<FieldProps<T>>;
         } else {
             component = TextField as ComponentType<FieldProps<T>>;
         }
     } else if (property.dataType === "string") {
-        if (property.config?.storageMeta) {
+        if (property.storageMeta) {
             component = StorageUploadField as ComponentType<FieldProps<T>>;
-        } else if (property.config?.markdown) {
+        } else if (property.markdown) {
             component = MarkdownField as ComponentType<FieldProps<T>>;
-        } else if (property.config?.enumValues) {
+        } else if (property.enumValues) {
             component = Select as ComponentType<FieldProps<T>>;
         } else {
             component = TextField as ComponentType<FieldProps<T>>;
@@ -142,7 +142,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
 
         // we use the standard Field for user defined fields, since it rebuilds
         // when there are changes in other values, in contrast to FastField
-        const FieldComponent = shouldAlwaysRerender || property.config?.Field ? Field : FastField;
+        const FieldComponent = shouldAlwaysRerender || property.Field ? Field : FastField;
 
         return (
             <FieldComponent
@@ -190,7 +190,7 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
          fieldProps: FormikFieldProps<T>
      }) {
 
-    const customFieldProps: any = property.config?.customProps;
+    const customFieldProps: any = property.customProps;
     const value = fieldProps.field.value;
     const initialValue = fieldProps.meta.initialValue;
     const error = getIn(fieldProps.form.errors, name);

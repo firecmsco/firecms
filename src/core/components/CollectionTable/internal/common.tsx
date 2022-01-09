@@ -15,7 +15,7 @@ export function getCellAlignment(property: Property): "right" | "left" | "center
     if (property.dataType === "boolean") {
         return "center";
     } else if (property.dataType === "number") {
-        if (property.config?.enumValues)
+        if (property.enumValues)
             return "left";
         return "right";
     } else if (property.dataType === "timestamp") {
@@ -51,19 +51,19 @@ export function getPropertyColumnWidth(property: Property): number {
     }
 
     if (property.dataType === "string") {
-        if (property.config?.url) {
-            if (property.config?.url === "video" || property.config?.storageMeta?.mediaType === "video")
+        if (property.url) {
+            if (property.url === "video" || property.storageMeta?.mediaType === "video")
                 return 340;
-            else if (property.config?.url === "audio" || property.config?.storageMeta?.mediaType === "audio")
+            else if (property.url === "audio" || property.storageMeta?.mediaType === "audio")
                 return 300;
             return 240;
-        } else if (property.config?.storageMeta) {
+        } else if (property.storageMeta) {
             return 220;
-        } else if (property.config?.enumValues) {
+        } else if (property.enumValues) {
             return 200;
-        } else if (property.config?.multiline) {
+        } else if (property.multiline) {
             return 300;
-        } else if (property.config?.markdown) {
+        } else if (property.markdown) {
             return 300;
         } else if (property.validation?.email) {
             return 200;
@@ -78,7 +78,7 @@ export function getPropertyColumnWidth(property: Property): number {
             return 300;
         }
     } else if (property.dataType === "number") {
-        if (property.config?.enumValues) {
+        if (property.enumValues) {
             return 200;
         }
         return 140;
@@ -103,12 +103,13 @@ export function getSubcollectionColumnId(collection: EntityCollection) {
 export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:ResolvedEntitySchema<M>, includeSubcollections: boolean): string[] {
 
     return useMemo(() => {
-        const initialDisplayedProperties = collection.properties;
-        const excludedProperties = collection.excludedProperties;
-        const additionalColumns = collection.additionalColumns ?? [];
+        const displayedProperties = Object.entries<Property>(resolvedSchema.properties as Record<keyof M, Property>)
+            .filter(([_, property]) => !property.hideFromCollection)
+            .map(([key, _]) => key);
+        const additionalColumns = resolvedSchema.additionalColumns ?? [];
         const subCollections: EntityCollection[] = collection.subcollections ?? [];
 
-        const properties:Properties = resolvedSchema.properties;
+        const properties: Properties = resolvedSchema.properties;
 
         const hiddenColumnIds: string[] = Object.entries(properties)
             .filter(([_, property]) => {
@@ -122,26 +123,22 @@ export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:
         ];
 
         let result: string[];
-        if (initialDisplayedProperties) {
-            result = initialDisplayedProperties
+        if (displayedProperties) {
+            result = displayedProperties
                 .map((p) => {
                     return columnIds.find(id => id === p);
                 }).filter(c => !!c) as string[];
-        } else if (excludedProperties) {
-            result = columnIds
-                .filter(id => !(excludedProperties as string[]).includes(id));
         } else {
             result = columnIds.filter((columnId) => !hiddenColumnIds.includes(columnId));
         }
 
         if (includeSubcollections) {
             const subCollectionIds = subCollections
-                .map((collection) => getSubcollectionColumnId(collection))
-                .filter((subColId) => excludedProperties ? !excludedProperties?.includes(subColId) : true);
+                .map((collection) => getSubcollectionColumnId(collection));
             result.push(...subCollectionIds.filter((subColId) => !result.includes(subColId)));
         }
 
         return result;
 
-    }, [collection.properties, collection.excludedProperties, collection.additionalColumns, collection.subcollections, collection.schemaId, resolvedSchema.properties, includeSubcollections]);
+    }, [resolvedSchema.additionalColumns, collection.subcollections, collection.schemaId, resolvedSchema.properties, includeSubcollections]);
 }

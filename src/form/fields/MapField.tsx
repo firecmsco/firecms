@@ -41,7 +41,7 @@ export function MapField<T extends object>({
 
     const classes = formStyles();
 
-    const pickOnlySomeKeys = property.config?.pickOnlySomeKeys || false;
+    const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
 
     if (!property.properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);

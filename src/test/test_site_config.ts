@@ -1,4 +1,4 @@
-import { EnumValues, InferSchemaType } from "../models";
+import { EnumValues, InferSchemaType, StringProperty } from "../models";
 import { FirebaseCMSAppProps } from "../firebase_app";
 import { buildCollection, buildProperty, buildSchema } from "../core";
 import { EntityCallbacks } from "../models/entity_callbacks";
@@ -10,7 +10,37 @@ const locales: EnumValues = {
     "es-419": "Spanish (South America)"
 };
 
+const testProperty = buildProperty({
+    dataType: "boolean",
+    title: "Available",
+    columnWidth: 100
+});
 
+const testProperty2:StringProperty = buildProperty<string>({
+    dataType: "string",
+    title: "Currency",
+    enumValues: {
+        EUR: "Euros",
+        DOL: "Dollars"
+    },
+    validation: {
+        required: true
+    }
+});
+const testProperty3:StringProperty = buildProperty({
+    dataType: "string",
+    config: {
+        storageMeta: {
+            mediaType: "image",
+            storagePath: "images",
+            acceptedFiles: ["image/*"],
+            metadata: {
+                cacheControl: "max-age=1000000"
+            }
+        }
+    }
+});
+console.log(testProperty, testProperty2, testProperty3);
 export const productSchema = buildSchema({
     id: "product",
     name: "Product",
@@ -25,22 +55,18 @@ export const productSchema = buildSchema({
         name: buildProperty({
             dataType: "string",
             title: "Name",
-            config: {
-                multiline: true
-            },
+            multiline: true,
             validation: { required: true }
         }),
         main_image: buildProperty({
             dataType: "string",
             title: "Image",
-            config: {
-                storageMeta: {
-                    mediaType: "image",
-                    storagePath: "images",
-                    acceptedFiles: ["image/*"],
-                    metadata: {
-                        cacheControl: "max-age=1000000"
-                    }
+            storageMeta: {
+                mediaType: "image",
+                storagePath: "images",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
                 }
             },
             description: "Upload field for images",
@@ -324,9 +350,7 @@ export const usersSchema = buildSchema({
                 large: {
                     title: "Large",
                     dataType: "string",
-                    config: {
-                        url: "image"
-                    },
+                    url: "image",
                     validation: {
                         url: true
                     }
@@ -334,9 +358,7 @@ export const usersSchema = buildSchema({
                 thumbnail: {
                     title: "Thumbnail",
                     dataType: "string",
-                    config: {
-                        url: "image"
-                    },
+                    url: "image",
                     validation: {
                         url: true
                     }

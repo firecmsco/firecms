@@ -41,7 +41,7 @@ export function Select<T extends EnumType>({
                                                shouldAlwaysRerender
                                            }: SelectProps<T>) {
 
-    const enumValues = property.config?.enumValues as EnumValues;
+    const enumValues = property.enumValues as EnumValues;
 
     useClearRestoreValue({
         property,

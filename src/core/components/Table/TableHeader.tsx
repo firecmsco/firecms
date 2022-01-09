@@ -218,44 +218,6 @@ function FilterForm<M>({
 
     const filterIsSet = !!filter;
 
-    function createFilterField(id: string,
-                               filterConfig: TableColumnFilter,
-                               filterValue: [TableWhereFilterOp, any] | undefined,
-                               setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void,
-                               isArray: boolean = false
-    ): JSX.Element {
-
-        if (filterConfig.dataType === "number" || filterConfig.dataType === "string") {
-            const dataType = filterConfig.dataType;
-            const title = filterConfig.title;
-            const enumValues = filterConfig.enumValues;
-            return <StringNumberFilterField value={filterValue}
-                                            setValue={setFilterValue}
-                                            name={id as string}
-                                            dataType={dataType}
-                                            isArray={isArray}
-                                            enumValues={enumValues}
-                                            title={title}/>;
-        } else if (filterConfig.dataType === "boolean") {
-            const title = filterConfig.title;
-            return <BooleanFilterField value={filterValue}
-                                       setValue={setFilterValue}
-                                       name={id as string}
-                                       title={title}/>;
-        } else if (filterConfig.dataType === "timestamp") {
-            const title = filterConfig.title;
-            return <DateTimeFilterField value={filterValue}
-                                        setValue={setFilterValue}
-                                        name={id as string}
-                                        isArray={isArray}
-                                        title={title}/>;
-        }
-
-        return (
-            <div>{`Currently the field ${filterConfig.dataType} is not supported`}</div>
-        );
-    }
-
 
     return (
         <>
@@ -291,3 +253,40 @@ function FilterForm<M>({
 
 }
 
+function createFilterField(id: string,
+                           filterConfig: TableColumnFilter,
+                           filterValue: [TableWhereFilterOp, any] | undefined,
+                           setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void,
+                           isArray = false
+): JSX.Element {
+
+    if (filterConfig.dataType === "number" || filterConfig.dataType === "string") {
+        const dataType = filterConfig.dataType;
+        const title = filterConfig.title;
+        const enumValues = filterConfig.enumValues;
+        return <StringNumberFilterField value={filterValue}
+                                        setValue={setFilterValue}
+                                        name={id as string}
+                                        dataType={dataType}
+                                        isArray={isArray}
+                                        enumValues={enumValues}
+                                        title={title}/>;
+    } else if (filterConfig.dataType === "boolean") {
+        const title = filterConfig.title;
+        return <BooleanFilterField value={filterValue}
+                                   setValue={setFilterValue}
+                                   name={id as string}
+                                   title={title}/>;
+    } else if (filterConfig.dataType === "timestamp") {
+        const title = filterConfig.title;
+        return <DateTimeFilterField value={filterValue}
+                                    setValue={setFilterValue}
+                                    name={id as string}
+                                    isArray={isArray}
+                                    title={title}/>;
+    }
+
+    return (
+        <div>{`Currently the field ${filterConfig.dataType} is not supported`}</div>
+    );
+}

@@ -47,7 +47,7 @@ export function removeFunctions(o: object | undefined): any {
                     return { [key]: removeFunctions(value) };
                 } else return { [key]: value };
             })
-            .reduce((a, b) => ({ ...a, ...b }));
+            .reduce((a, b) => ({ ...a, ...b }), {});
     }
     return o;
 }

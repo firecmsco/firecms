@@ -58,11 +58,9 @@ export const testEntitySchema = buildSchema({
             const properties = buildProperties<any>({
                 type: {
                     dataType: "string",
-                    config: {
-                        enumValues: {
-                            "facebook": "FacebookId",
-                            "apple": "Apple"
-                        }
+                    enumValues: {
+                        "facebook": "FacebookId",
+                        "apple": "Apple"
                     }
                 }
             });
@@ -99,14 +97,12 @@ export const testEntitySchema = buildSchema({
             dataType: 'array',
             of: {
                 dataType: 'string',
-                config: {
-                    storageMeta: {
-                        mediaType: 'image',
-                        storagePath: 'images',
-                        acceptedFiles: ['image/*'],
-                        metadata: {
-                            cacheControl: 'max-age=1000000',
-                        },
+                storageMeta: {
+                    mediaType: 'image',
+                    storagePath: 'images',
+                    acceptedFiles: ['image/*'],
+                    metadata: {
+                        cacheControl: 'max-age=1000000',
                     },
                 },
             },
@@ -116,9 +112,7 @@ export const testEntitySchema = buildSchema({
             dataType: "array",
             of: {
                 dataType: "string",
-                config: {
-                    enumValues: locales
-                }
+                enumValues: locales
             }
         },
         title: ({ values, entityId }) => {
@@ -143,23 +137,19 @@ export const testEntitySchema = buildSchema({
             validation: { required: true },
             of: {
                 dataType: "number",
-                config: {
-                    enumValues: {
-                        0: "start",
-                        1: "standard",
-                        2: "premium"
-                    }
+                enumValues: {
+                    0: "start",
+                    1: "standard",
+                    2: "premium"
                 }
             }
         },
         simple_enum: {
             dataType: "string",
             title: "Simple enum",
-            config: {
-                enumValues: {
-                    "facebook": "FacebookId",
-                    "apple": "Apple"
-                }
+            enumValues: {
+                "facebook": "FacebookId",
+                "apple": "Apple"
             }
         },
         validated_custom: {
@@ -174,9 +164,7 @@ export const testEntitySchema = buildSchema({
                     }
                 }
             },
-            config: {
-                Field: CustomField
-            }
+            Field: CustomField
         },
         test_date: {
             title: "Test date",
@@ -198,9 +186,7 @@ export const testEntitySchema = buildSchema({
                     text: {
                         dataType: "string",
                         title: "Text",
-                        config: {
-                            markdown: true
-                        }
+                        markdown: true
                     },
                     products: {
                         dataType: "array",
@@ -254,28 +240,24 @@ export const testEntitySchema = buildSchema({
         mark: {
             title: "Mark",
             dataType: "string",
-            config: {
-                markdown: true
-            }
+            markdown: true
         },
         shaped_array: {
             title: "My shaped array",
             dataType: "array",
-            config: {
-                Field: CustomShapedArrayField,
-                Preview: CustomShapedArrayPreview,
-                customProps: {
-                    properties: [
-                        buildProperty({
-                            dataType: "string",
-                            title: "Name"
-                        }),
-                        buildProperty({
-                            dataType: "number",
-                            title: "Age"
-                        })
-                    ]
-                }
+            Field: CustomShapedArrayField,
+            Preview: CustomShapedArrayPreview,
+            customProps: {
+                properties: [
+                    buildProperty({
+                        dataType: "string",
+                        title: "Name"
+                    }),
+                    buildProperty({
+                        dataType: "number",
+                        title: "Age"
+                    })
+                ]
             }
         },
         actions: {
@@ -300,11 +282,9 @@ export const testEntitySchema = buildSchema({
                         description: "Action type that determines the user flow",
                         validation: { required: true, uniqueInArray: true },
                         dataType: "string",
-                        config: {
-                            enumValues: {
-                                complete: "Complete",
-                                continue: "Continue"
-                            }
+                        enumValues: {
+                            complete: "Complete",
+                            continue: "Continue"
                         }
                     },
                     hidden_field: {
@@ -315,9 +295,7 @@ export const testEntitySchema = buildSchema({
                         }
                     }
                 },
-                config: {
-                    pickOnlySomeKeys: true
-                }
+                pickOnlySomeKeys: true
             }
         },
         imageUrls: {
@@ -325,16 +303,14 @@ export const testEntitySchema = buildSchema({
             dataType: "array",
             of: {
                 dataType: "string",
-                config: {
-                    storageMeta: {
-                        mediaType: "image",
-                        storagePath: (context) => {
-                            return "images";
-                        },
-                        acceptedFiles: ["image/*"],
-                        fileName: (context) => {
-                            return context.file.name;
-                        }
+                storageMeta: {
+                    mediaType: "image",
+                    storagePath: (context) => {
+                        return "images";
+                    },
+                    acceptedFiles: ["image/*"],
+                    fileName: (context) => {
+                        return context.file.name;
                     }
                 }
             }
@@ -342,9 +318,7 @@ export const testEntitySchema = buildSchema({
         status: {
             title: "Status",
             dataType: "number",
-            config: {
-                enumValues: relaxedStatus
-            }
+            enumValues: relaxedStatus
         },
         tags: {
             title: "Tags",
@@ -365,24 +339,20 @@ export const testEntitySchema = buildSchema({
             dataType: "array",
             of: {
                 dataType: "string",
-                config: {
-                    storageMeta: {
-                        mediaType: "image",
-                        storagePath: "images",
-                        acceptedFiles: ["image/*"]
-                    }
+                storageMeta: {
+                    mediaType: "image",
+                    storagePath: "images",
+                    acceptedFiles: ["image/*"]
                 }
             }
         },
         image: {
             title: "Image",
             dataType: "string",
-            config: {
-                storageMeta: {
-                    mediaType: "image",
-                    storagePath: "test",
-                    acceptedFiles: ["image/*"]
-                }
+            storageMeta: {
+                mediaType: "image",
+                storagePath: "test",
+                acceptedFiles: ["image/*"]
             }
         },
         created_at: {
@@ -398,9 +368,7 @@ export const testEntitySchema = buildSchema({
         description: {
             title: "Description",
             dataType: "string",
-            config: {
-                multiline: true
-            }
+            multiline: true
         },
         search_adjacent: {
             title: "Search adjacent",
@@ -429,6 +397,17 @@ export const testEntitySchema = buildSchema({
             }
         })
     },
+    additionalColumns: [
+        {
+            id: "full_name",
+            title: "Full Name",
+            builder: ({entity}) => {
+                let values = entity.values;
+                return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";
+            },
+            dependencies: ["name"]
+        }
+    ],
     defaultValues: {
         // empty_string: "",
         title: null

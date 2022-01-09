@@ -24,7 +24,7 @@ export function UrlComponentPreview({
 
     if (!value) return <div/>;
     const url = value;
-    if (typeof property.config?.url === "boolean" && property.config.url) {
+    if (typeof property.url === "boolean" && property.url) {
         return (
             <Link className={classes.link}
                   href={url}
@@ -38,8 +38,8 @@ export function UrlComponentPreview({
         );
     }
 
-    const mediaType: MediaType = property.config?.url as MediaType ||
-        property.config?.storageMeta?.mediaType;
+    const mediaType: MediaType = property.url as MediaType ||
+        property.storageMeta?.mediaType;
     if (mediaType === "image") {
         return <ImagePreview key={`image_preview_${url}_${size}`}
                              url={url}

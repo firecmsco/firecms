@@ -40,9 +40,9 @@ export function SkeletonComponent({
     let content: JSX.Element | any;
     if (property.dataType === "string") {
         const stringProperty = property as StringProperty;
-        if (stringProperty.config?.url) {
+        if (stringProperty.url) {
             content = renderUrlComponent(stringProperty, size);
-        } else if (stringProperty.config?.storageMeta) {
+        } else if (stringProperty.storageMeta) {
             content = renderSkeletonImageThumbnail(size);
         } else {
             content = renderSkeletonText();
@@ -54,9 +54,9 @@ export function SkeletonComponent({
             if (arrayProperty.of.dataType === "map" && arrayProperty.of.properties) {
                 content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewProperties);
             } else if (arrayProperty.of.dataType === "string") {
-                if (arrayProperty.of.config?.enumValues) {
+                if (arrayProperty.of.enumValues) {
                     content = renderArrayEnumTableCell();
-                } else if (arrayProperty.of.config?.storageMeta) {
+                } else if (arrayProperty.of.storageMeta) {
                     content = renderGenericArrayCell(arrayProperty.of);
                 } else {
                     content = renderArrayOfStrings();
@@ -249,7 +249,7 @@ function renderReference() {
 
 function renderUrlComponent(property: StringProperty, size: PreviewSize = "regular") {
 
-    if (typeof property.config?.url === "boolean" && property.config.url) {
+    if (typeof property.url === "boolean" && property.url) {
         return <div style={{
             display: "flex"
         }}>
@@ -258,7 +258,7 @@ function renderUrlComponent(property: StringProperty, size: PreviewSize = "regul
         </div>;
     }
 
-    const mediaType = property.config?.url || property.config?.storageMeta?.mediaType;
+    const mediaType = property.url || property.storageMeta?.mediaType;
     if (mediaType === "image") {
         return renderSkeletonImageThumbnail(size);
     } else if (mediaType === "audio") {

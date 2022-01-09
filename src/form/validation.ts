@@ -1,7 +1,7 @@
 import {
     ArrayProperty,
     BooleanProperty,
-    CMSType,
+    CMSType, EntityReference, GeoPoint,
     GeopointProperty,
     MapProperty,
     NumberProperty,
@@ -47,8 +47,8 @@ export type CustomFieldValidator = (props: {
     parentProperty?: MapProperty | ArrayProperty
 }) => Promise<boolean>;
 
-interface PropertyContext<PT extends Property> {
-    property: PT,
+interface PropertyContext<M> {
+    property: Property<M>,
     parentProperty?: MapProperty | ArrayProperty,
     customFieldValidator?: CustomFieldValidator,
     name?: any
@@ -97,7 +97,7 @@ export function getYupMapObjectSchema({
                                                                             parentProperty,
                                                                             customFieldValidator,
                                                                             name
-                                                                        }: PropertyContext<MapProperty>): ObjectSchema<any> {
+                                                                        }: PropertyContext<object>): ObjectSchema<any> {
     const objectSchema: any = {};
     if (property.properties)
         Object.entries(property.properties).forEach(([childName, childProperty]: [string, Property]) => {
@@ -116,14 +116,14 @@ function getYupStringSchema({
                                 parentProperty,
                                 customFieldValidator,
                                 name
-                            }: PropertyContext<StringProperty>): StringSchema {
+                            }: PropertyContext<string>): StringSchema {
     let schema: StringSchema<any> = yup.string();
     const validation = property.validation;
-    if (property.config?.enumValues) {
+    if (property.enumValues) {
         if (validation?.required)
             schema = schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required");
         schema = schema.oneOf(
-            enumToObjectEntries(property.config?.enumValues)
+            enumToObjectEntries(property.enumValues)
                 .map(([key, _]) => key)
         );
     }
@@ -159,7 +159,7 @@ function getYupNumberSchema({
                                 parentProperty,
                                 customFieldValidator,
                                 name
-                            }: PropertyContext<NumberProperty>): NumberSchema {
+                            }: PropertyContext<number>): NumberSchema {
     const validation = property.validation;
     let schema: NumberSchema<any> = yup.number().typeError("Must be a number");
     if (validation) {
@@ -193,7 +193,7 @@ function getYupGeoPointSchema({
                                   parentProperty,
                                   customFieldValidator,
                                   name
-                              }: PropertyContext<GeopointProperty>): AnySchema {
+                              }: PropertyContext<GeoPoint>): AnySchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation?.unique && customFieldValidator && name)
@@ -218,7 +218,7 @@ function getYupDateSchema({
                               parentProperty,
                               customFieldValidator,
                               name
-                          }: PropertyContext<TimestampProperty>): AnySchema | DateSchema {
+                          }: PropertyContext<Date>): AnySchema | DateSchema {
     if (property.autoValue) {
         return yup.object().nullable(true);
     }
@@ -250,7 +250,7 @@ function getYupReferenceSchema({
                                                                      parentProperty,
                                                                      customFieldValidator,
                                                                      name
-                                                                 }: PropertyContext<ReferenceProperty>): AnySchema {
+                                                                 }: PropertyContext<EntityReference>): AnySchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {
@@ -277,7 +277,7 @@ function getYupBooleanSchema({
                                  parentProperty,
                                  customFieldValidator,
                                  name
-                             }: PropertyContext<BooleanProperty>): BooleanSchema {
+                             }: PropertyContext<boolean>): BooleanSchema {
     let schema: BooleanSchema<any> = yup.boolean();
     const validation = property.validation;
     if (validation) {
@@ -314,7 +314,7 @@ function getYupArraySchema({
                                   parentProperty,
                                   customFieldValidator,
                                   name
-                              }: PropertyContext<ArrayProperty>): ArraySchema<any> {
+                              }: PropertyContext<any[]>): ArraySchema<any> {
 
     let schema: ArraySchema<any> = yup.array();
 

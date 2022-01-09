@@ -106,18 +106,20 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const [size, setSize] = React.useState<CollectionSize>(collection.defaultSize ?? "m");
+    const resolvedSchema = schemaResolver({});
+    const [size, setSize] = React.useState<CollectionSize>(resolvedSchema.defaultSize ?? "m");
 
-    const initialFilter = collection.initialFilter;
-    const initialSort = collection.initialSort;
-    const filterCombinations = collection.filterCombinations;
+    const initialFilter = resolvedSchema.initialFilter;
+    const initialSort = resolvedSchema.initialSort;
+    const filterCombinations = resolvedSchema.filterCombinations;
+
     const textSearchEnabled = collection.textSearchEnabled;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
     const pageSize = typeof collection.pagination === "number" ? collection.pagination : DEFAULT_PAGE_SIZE;
 
     const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
 
-    const [filterValues, setFilterValues] = React.useState<FilterValues<M> | undefined>(initialFilter || {});
+    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(initialFilter || undefined);
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSort);
 
     const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
@@ -151,10 +153,9 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                 )
             };
         }) ?? [];
-        return [...(collection.additionalColumns ?? []), ...subcollectionColumns];
-    }, [collection, path]);
+        return [...(resolvedSchema.additionalColumns ?? []), ...subcollectionColumns];
+    }, [resolvedSchema, collection, path]);
 
-    const resolvedSchema = schemaResolver({});
     const displayedProperties = useColumnIds(collection, resolvedSchema, true);
 
     const uniqueFieldValidator: UniqueFieldValidator = useCallback(
@@ -243,7 +244,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         setItemCount(pageSize);
     }, [pageSize]);
 
-    const clearFilter = useCallback(() => setFilterValues({}), []);
+    const clearFilter = useCallback(() => setFilterValues(undefined), []);
 
     const buildIdColumn = useCallback(({ entry, size }: {
         entry: Entity<M>,
@@ -312,7 +313,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 }
 
 function isFilterCombinationValid<M>(
-    filterValues: FilterValues<M>,
+    filterValues: FilterValues<Extract<keyof M, string>>,
     indexes?: FilterCombination<string>[],
     sortBy?: [string, "asc" | "desc"]
 ): boolean {

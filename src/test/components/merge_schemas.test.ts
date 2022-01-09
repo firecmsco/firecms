@@ -27,12 +27,10 @@ export const baseProductSchema: EntitySchema = {
         name: {
             dataType: "string",
             title: "Name",
-            config: {
-                multiline: true
-            },
+            multiline: true,
             validation: { required: true }
         },
-        price: priceBuilder,
+        price: priceBuilder
     }
 };
 export const persistedProductSchema: EntitySchema = {
@@ -42,9 +40,7 @@ export const persistedProductSchema: EntitySchema = {
         name: {
             dataType: "string",
             title: "Name",
-            config: {
-                multiline: true
-            },
+            multiline: true,
             validation: { required: true }
         },
         publisher: {
@@ -62,7 +58,7 @@ export const persistedProductSchema: EntitySchema = {
                 },
             },
             propertiesOrder: ["name", "external_id"]
-        },
+        }
     },
     propertiesOrder: ["name", "publisher", "price"]
 };
@@ -79,9 +75,7 @@ it("Merge schemas", () => {
                 name: {
                     dataType: "string",
                     title: "Name",
-                    config: {
-                        multiline: true
-                    },
+                    multiline: true,
                     validation: { required: true }
                 },
                 publisher: {

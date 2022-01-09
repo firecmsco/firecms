@@ -30,15 +30,15 @@ export function getIconForProperty(
     if (typeof property === "function") {
         return <FunctionsIcon color={color} fontSize={fontSize}/>;
     } else if (property.dataType === "string") {
-        if (property.config?.multiline || property.config?.markdown) {
+        if (property.multiline || property.markdown) {
             return <SubjectIcon color={color} fontSize={fontSize}/>;
-        } else if (property.config?.storageMeta) {
-            if (property.config.storageMeta.mediaType === "image")
+        } else if (property.storageMeta) {
+            if (property.storageMeta.mediaType === "image")
                 return <PhotoIcon color={color} fontSize={fontSize}/>;
             return <AttachmentIcon color={color} fontSize={fontSize}/>;
-        } else if (property.config?.url) {
+        } else if (property.url) {
             return <HttpIcon color={color} fontSize={fontSize}/>;
-        } else if (property.config?.enumValues) {
+        } else if (property.enumValues) {
             return <ListIcon color={color} fontSize={fontSize}/>;
         } else {
             return <ShortTextIcon color={color} fontSize={fontSize}/>;
@@ -72,17 +72,17 @@ export function getColorForProperty(property: PropertyOrBuilder): string {
     if (typeof property === "function") {
         return "#666";
     } else if (property.dataType === "string") {
-        if (property.config?.storageMeta) {
+        if (property.storageMeta) {
             return "#f92d9a";
-        } else if (property.config?.url) {
+        } else if (property.url) {
             return "#2d7ff9";
-        } else if (property.config?.enumValues) {
+        } else if (property.enumValues) {
             return "#532cff";
         } else {
             return "#2d7ff9";
         }
     } else if (property.dataType === "number") {
-        if (property.config?.enumValues) {
+        if (property.enumValues) {
             return "#532cff";
         }
         return "#bec920";
@@ -107,17 +107,17 @@ export function getColorForProperty(property: PropertyOrBuilder): string {
 
 export function getWidgetNameForProperty(property: Property): string {
     if (property.dataType === "string") {
-        if (property.config?.multiline) {
+        if (property.multiline) {
             return "Multiline text";
-        } else if (property.config?.markdown) {
+        } else if (property.markdown) {
             return "Markdown text";
-        } else if (property.config?.storageMeta) {
-            if (property.config.storageMeta.mediaType === "image")
+        } else if (property.storageMeta) {
+            if (property.storageMeta.mediaType === "image")
                 return "Image upload";
             return "File upload";
-        } else if (property.config?.url) {
+        } else if (property.url) {
             return "Url";
-        } else if (property.config?.enumValues) {
+        } else if (property.enumValues) {
             return "Single select";
         } else {
             return "Text";
@@ -132,9 +132,9 @@ export function getWidgetNameForProperty(property: Property): string {
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
         if (of) {
-            if ((of.dataType === "string" || of.dataType === "number") && of.config?.enumValues) {
+            if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
                 return "Multi select";
-            } else if (of.dataType === "string" && of.config?.storageMeta) {
+            } else if (of.dataType === "string" && of.storageMeta) {
                 return "Multi file upload";
             } else if (of.dataType === "reference") {
                 return "Multiple references";

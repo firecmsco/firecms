@@ -1,3 +1,43 @@
+## [2.0.0-alpha1] - 2021-12-13
+
+- Collections no use `schemaId` instead of point to a schema
+- Removed `properties` from collection. The same functionality is achieved 
+with the prop `hideFromCollection` at the property level
+- `AdditionalColumnDelegate` has been moved to the `EntitySchema`
+- All the configuration options that were located under the `config` prop of
+`properties` have been moved to the property level:
+```typescript jsx
+buildProperty<string>({
+    dataType: "string",
+    title: "Currency",
+    config:{
+      enumValues: {
+        EUR: "Euros",
+        DOL: "Dollars"
+      }
+    },
+    validation: {
+        required: true
+    }
+});
+```
+now becomes:
+```typescript jsx
+buildProperty<string>({
+    dataType: "string",
+    title: "Currency",
+    enumValues: {
+        EUR: "Euros",
+        DOL: "Dollars"
+    },
+    validation: {
+        required: true
+    }
+});
+```
+
+
+
 ## [1.0.0-beta8] - 2021-12-13
 
 ### Added

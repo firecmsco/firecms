@@ -37,8 +37,8 @@ const docToSchema = (doc: DocumentSnapshot) => {
     const data = doc.data();
     if (!data)
         throw Error("Entity schema has not been persisted correctly");
-    const propertiesOrder = data["propertiesOrder"];
-    const properties = data["properties"] as Properties ?? {};
+    const propertiesOrder = data.propertiesOrder;
+    const properties = data.properties as Properties ?? {};
     const sortedProperties = sortProperties(properties, propertiesOrder);
     return { ...data, properties: sortedProperties } as EntitySchema;
 }
@@ -63,7 +63,6 @@ export function useFirestoreConfigurationPersistence({
         firestoreRef.current = getFirestore(firebaseApp);
     }, [firebaseApp]);
 
-
     useEffect(() => {
         if (!firestore) return;
 
@@ -81,8 +80,8 @@ export function useFirestoreConfigurationPersistence({
                 }
             }
         );
-    }, [firestore]); 
-    
+    }, [firestore]);
+
     useEffect(() => {
         if (!firestore) return;
 

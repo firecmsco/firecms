@@ -22,7 +22,6 @@ import logo from "./images/demo_logo.png";
 import { textSearchController } from "./text_search";
 import {
     localeSchema,
-    productAdditionalColumn,
     productCallbacks,
     productExtraActionBuilder,
     productSchema
@@ -46,8 +45,7 @@ function SampleApp() {
         buildCollection({
             name: "Locales",
             path: "locales",
-            schemaId: "locale",
-            defaultSize: "m"
+            schemaId: "locale"
         });
 
     const productsCollection = buildCollection<Product>({
@@ -59,8 +57,6 @@ function SampleApp() {
         group: "Main",
         description: "List of the products currently sold in our shop",
         textSearchEnabled: true,
-        additionalColumns: [productAdditionalColumn],
-        filterCombinations: [{ category: "desc", available: "desc" }],
         permissions: ({ authController }) => ({
             edit: true,
             create: true,
@@ -69,8 +65,7 @@ function SampleApp() {
             delete: authController.extra?.roles.includes("admin")
         }),
         extraActions: productExtraActionBuilder,
-        subcollections: [localeCollection],
-        excludedProperties: ["images"]
+        subcollections: [localeCollection]
     });
 
     const usersCollection = buildCollection({
@@ -80,15 +75,6 @@ function SampleApp() {
         group: "Main",
         description: "Registered users",
         textSearchEnabled: true,
-        additionalColumns: [
-            {
-                id: "sample_additional",
-                title: "Sample additional",
-                builder: ({entity}) => `Generated column: ${entity.values.first_name}`,
-                dependencies: ["first_name"]
-            }
-        ],
-        properties: ["first_name", "last_name", "email", "liked_products", "picture", "phone", "sample_additional"]
     });
 
     const blogCollection = buildCollection({
@@ -99,13 +85,9 @@ function SampleApp() {
         exportable: {
             additionalColumns: [sampleAdditionalExportColumn]
         },
-        defaultSize: "l",
-        properties: ["name", "header_image", "status", "content", "reviewed", "gold_text"],
         description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
         textSearchEnabled: true,
-        initialFilter: {
-            "status": ["==", "published"]
-        }
+
     });
 
     const testCollection = buildCollection({
@@ -113,18 +95,6 @@ function SampleApp() {
         schemaId: "test",
         callbacks: testCallbacks,
         name: "Test entity",
-        properties: ["full_name", "subcollection:test_subcollection","source"],
-        additionalColumns: [
-            {
-                id: "full_name",
-                title: "Full Name",
-                builder: ({entity}) => {
-                    let values = entity.values;
-                    return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";
-                },
-                dependencies: ["name"]
-            }
-            ],
         subcollections: [{
             path: "test_subcollection",
             schemaId: "test",

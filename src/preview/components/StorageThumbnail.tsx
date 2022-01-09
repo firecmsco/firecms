@@ -36,7 +36,7 @@ export function StorageThumbnailInternal({
         if (!storagePathOrDownloadUrl)
             return;
         let unmounted = false;
-        if (property.config?.storageMeta?.storeUrl) {
+        if (property.storageMeta?.storeUrl) {
             setUrl(storagePathOrDownloadUrl);
             URL_CACHE[storagePathOrDownloadUrl] = storagePathOrDownloadUrl;
         } else if (storagePathOrDownloadUrl)
@@ -50,7 +50,7 @@ export function StorageThumbnailInternal({
         return () => {
             unmounted = true;
         };
-    }, [property.config?.storageMeta?.storeUrl, storagePathOrDownloadUrl]);
+    }, [property.storageMeta?.storeUrl, storagePathOrDownloadUrl]);
 
     if (!storagePathOrDownloadUrl) return null;
 

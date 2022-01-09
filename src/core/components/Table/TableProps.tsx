@@ -1,4 +1,5 @@
 import React from "react";
+import { WhereFilterOp } from "../../../models";
 
 /**
  * @see Table
@@ -37,7 +38,7 @@ export interface TableProps<T> {
      * @param filterValues
      * @param sortBy
      */
-    checkFilterCombination?: (filterValues: TableFilterValues<T>,
+    checkFilterCombination?: (filterValues: TableFilterValues<Extract<keyof T, string>>,
                               sortBy?: [string, "asc" | "desc"]) => boolean;
 
     /**
@@ -80,7 +81,7 @@ export interface TableProps<T> {
      * Callback used when filters are updated
      * @param filter
      */
-    onFilterUpdate?: (filter?: TableFilterValues<any>) => void;
+    onFilterUpdate?: (filter?: TableFilterValues<any> | undefined) => void;
 
     /**
      * Default sort applied to this collection
@@ -180,8 +181,7 @@ export type TableSort = "asc" | "desc" | undefined;
  * @see Table
  * @category Components
  */
-// eslint-disable-next-line no-unused-vars
-export type TableFilterValues<M> = { [K in keyof M]?: [TableWhereFilterOp, any] };
+export type TableFilterValues<Key extends string> = Partial<Record<Key, [WhereFilterOp, any]>>;
 
 /**
  * Filter conditions in a `Query.where()` clause are specified using the

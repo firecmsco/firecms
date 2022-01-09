@@ -23,7 +23,6 @@ import {
     User
 } from "../models";
 
-
 /**
  * Identity function we use to defeat the type system of Typescript and build
  * navigation objects with all its properties
@@ -42,7 +41,7 @@ export function buildNavigation<UserType>(
  * @param collectionView
  * @category Builder
  */
-export function buildCollection<M extends { [Key: string]: any },
+export function buildCollection<M extends { [Key: string]: any } = any,
     AdditionalKey extends string = string>(
     collectionView: EntityCollection<M, AdditionalKey>
 ): EntityCollection<M, AdditionalKey> {
@@ -55,7 +54,7 @@ export function buildCollection<M extends { [Key: string]: any },
  * @param schema
  * @category Builder
  */
-export function buildSchema<M extends { [Key: string]: any }>(
+export function buildSchema<M extends { [Key: string]: any } = any>(
     schema: EntitySchema<M>
 ): EntitySchema<M> {
     return schema;
@@ -67,7 +66,7 @@ export function buildSchema<M extends { [Key: string]: any }>(
  * @param property
  * @category Builder
  */
-export function buildProperty<T extends CMSType, P extends Property<T> = Property<T>>(
+export function buildProperty<T extends CMSType = CMSType, P extends Property<T> = Property<T>>(
     property: P
 ): P extends StringProperty ? StringProperty :
     P extends NumberProperty ? NumberProperty :
@@ -76,9 +75,20 @@ export function buildProperty<T extends CMSType, P extends Property<T> = Propert
                 P extends GeopointProperty ? GeopointProperty :
                     P extends ReferenceProperty ? ReferenceProperty :
                         P extends ArrayProperty ? ArrayProperty :
-                            P extends MapProperty ? MapProperty :
-                                P extends PropertyBuilder<T, any> ? PropertyBuilder<T, any> : any {
+                            P extends MapProperty ? MapProperty : never {
     return property as any;
+}
+
+/**
+ * Identity function we use to defeat the type system of Typescript and preserve
+ * the property keys.
+ * @param propertyBuilder
+ * @category Builder
+ */
+export function buildPropertyBuilder<T extends CMSType = CMSType, M = any>(
+    propertyBuilder: PropertyBuilder<T, M>
+): PropertyBuilder<T, M> {
+    return propertyBuilder;
 }
 
 /**
@@ -87,7 +97,7 @@ export function buildProperty<T extends CMSType, P extends Property<T> = Propert
  * @param properties
  * @category Builder
  */
-export function buildProperties<M>(
+export function buildProperties<M = any>(
     properties: Properties<M>
 ): Properties<M> {
     return properties;
@@ -99,7 +109,7 @@ export function buildProperties<M>(
  * @param propertiesOrBuilder
  * @category Builder
  */
-export function buildPropertiesOrBuilder<M>(
+export function buildPropertiesOrBuilder<M = any>(
     propertiesOrBuilder: PropertiesOrBuilder<M>
 ): PropertiesOrBuilder<M> {
     return propertiesOrBuilder;
@@ -135,7 +145,7 @@ export function buildEnumValueConfig(
  * @param callbacks
  * @category Builder
  */
-export function buildEntityCallbacks<M>(
+export function buildEntityCallbacks<M = any>(
     callbacks: EntityCallbacks<M>
 ): EntityCallbacks<M> {
     return callbacks;
@@ -147,7 +157,7 @@ export function buildEntityCallbacks<M>(
  * @param additionalColumnDelegate
  * @category Builder
  */
-export function buildAdditionalColumnDelegate<M extends { [Key: string]: any }, AdditionalKey extends string = string, UserType = User>(
+export function buildAdditionalColumnDelegate<M extends { [Key: string]: any } = any, AdditionalKey extends string = string, UserType = User>(
     additionalColumnDelegate: AdditionalColumnDelegate<M, AdditionalKey, UserType>
 ): AdditionalColumnDelegate<M, AdditionalKey, UserType> {
     return additionalColumnDelegate;

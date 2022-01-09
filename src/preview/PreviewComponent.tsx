@@ -48,8 +48,8 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
 
     if (value === undefined) {
         content = <EmptyValue/>;
-    } else if (property.config?.Preview) {
-        content = createElement(property.config.Preview as React.ComponentType<PreviewComponentProps>,
+    } else if (property.Preview) {
+        content = createElement(property.Preview as React.ComponentType<PreviewComponentProps>,
             {
                 name,
                 value,
@@ -57,22 +57,22 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                 size,
                 height,
                 width,
-                customProps: property.config.customProps
+                customProps: property.customProps
             });
     } else if (value === null) {
         content = <EmptyValue/>;
     } else if (property.dataType === "string") {
         const stringProperty = property as StringProperty;
         if (typeof value === "string") {
-            if (stringProperty.config?.url) {
+            if (stringProperty.url) {
                 content = <UrlComponentPreview {...fieldProps}
                                                property={property as StringProperty}
                                                value={value}/>;
-            } else if (stringProperty.config?.storageMeta) {
+            } else if (stringProperty.storageMeta) {
                 content = <StorageThumbnail {...fieldProps}
                                             property={property as StringProperty}
                                             value={value}/>;
-            } else if (stringProperty.config?.markdown) {
+            } else if (stringProperty.markdown) {
                 content = <Markdown source={value}/>;
             } else {
                 content = <StringPreview {...fieldProps}
@@ -102,12 +102,12 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                                                         value={value}
                                                         property={property as ArrayProperty}/>;
                 } else if (arrayProperty.of.dataType === "string") {
-                    if (arrayProperty.of.config?.enumValues) {
+                    if (arrayProperty.of.enumValues) {
                         content = <ArrayPropertyEnumPreview
                             {...fieldProps}
                             value={value as string[]}
                             property={property as ArrayProperty}/>;
-                    } else if (arrayProperty.of.config?.storageMeta) {
+                    } else if (arrayProperty.of.storageMeta) {
                         content = <ArrayOfStorageComponentsPreview
                             {...fieldProps}
                             value={value}
@@ -119,7 +119,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                             property={property as ArrayProperty}/>;
                     }
                 } else if (arrayProperty.of.dataType === "number") {
-                    if (arrayProperty.of.config?.enumValues) {
+                    if (arrayProperty.of.enumValues) {
                         content = <ArrayPropertyEnumPreview
                             {...fieldProps}
                             value={value as string[]}

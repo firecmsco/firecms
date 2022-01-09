@@ -1,12 +1,17 @@
 import { EnumValues, Properties, PropertiesOrBuilder } from "./properties";
+import { User } from "./user";
+import { FireCMSContext } from "./firecms_context";
+import { FilterCombination, FilterValues } from "./collections";
 
 /**
  * Specification for defining an entity
  * @category Models
  */
-export interface EntitySchema<M extends { [Key: string]: any } = any> {
+export interface EntitySchema<M extends { [Key: string]: any } = any,
+    AdditionalKey extends string = string,
+    UserType = User> {
 
-    id:string;
+    id: string;
 
     /**
      * Singular name of the entity as displayed in an Add button . E.g. Product
@@ -26,6 +31,16 @@ export interface EntitySchema<M extends { [Key: string]: any } = any> {
      * to pick from only those
      */
     customId?: boolean | EnumValues;
+    /**
+     * Initial filters applied to this collection.
+     * Defaults to none.
+     */
+    initialFilter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining schemas by code
+
+    /**
+     * Default sort applied to this collection
+     */
+    initialSort?: [Extract<keyof M, string>, "asc" | "desc"];
 
     /**
      * Set of properties that compose an entity
@@ -50,6 +65,85 @@ export interface EntitySchema<M extends { [Key: string]: any } = any> {
      */
     views?: EntityCustomView<M>[];
 
+    /**
+     * You can add additional columns to the collection view by implementing
+     * an additional column delegate.
+     */
+    additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey, UserType>[];
+
+    /**
+     * Default size of the rendered collection
+     */
+    defaultSize?: CollectionSize;
+
+    /**
+     * Can the elements in this collection be edited inline in the collection
+     * view. If this flag is set to false but `permissions.edit` is `true`, entities
+     * can still be edited in the side panel
+     */
+    inlineEditing?: boolean;
+
+    /**
+     * If you need to filter/sort by multiple properties in this
+     * collection, you can define the supported filter combinations here.
+     * In the case of Firestore, you need to create special indexes in the console to
+     * support filtering/sorting by more than one property. You can then
+     * specify here the indexes created.
+     */
+    filterCombinations?: FilterCombination<Extract<keyof M, string>>[];
+
+}
+
+/**
+ * Sizes in which a collection can be rendered
+ * @category Models
+ */
+export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
+
+/**
+ * Use this interface for adding additional columns to entity collection views.
+ * If you need to do some async loading you can use AsyncPreviewComponent
+ * @category Models
+ */
+export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any,
+    AdditionalKey extends string = string,
+    UserType = User> {
+
+    /**
+     * Id of this column. You can use this id in the `properties` field of the
+     * collection in any order you want
+     */
+    id: AdditionalKey;
+
+    /**
+     * Header of this column
+     */
+    title: string;
+
+    /**
+     * Width of the generated column in pixels
+     */
+    width?: number;
+
+    hideFromCollection?: boolean;
+
+    /**
+     * Builder for the content of the cell for this column
+     */
+    builder: ({ entity, context }: {
+        entity: Entity<M>,
+        context: FireCMSContext<UserType>;
+    }) => React.ReactNode;
+
+    /**
+     * If this column needs to update dynamically based on other properties,
+     * you can define an array of keys as strings with the
+     * `dependencies` prop.
+     * e.g. ["name", "surname"]
+     * If you don't specify this prop, the generated column will not rerender
+     * on entity property updates.
+     */
+    dependencies?: Extract<keyof M, string>[];
 }
 
 /**
@@ -62,6 +156,7 @@ export type EntitySchemaResolverProps<M = any> = {
 
 /**
  * Use to resolve the schema properties for specific path, entity id or values.
+ *
  * @category Models
  */
 export type EntitySchemaResolver<M = any> = ({

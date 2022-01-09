@@ -153,11 +153,11 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
     const newCollectionPath = navigationContext.buildUrlEditCollectionPath({});
     const addNewCollectionRoute = (
         <Route path={newCollectionPath + "/*"}
-               key={`navigation_new`}
+               key={"navigation_new"}
                element={
                    <BreadcrumbUpdater
                        path={newCollectionPath}
-                       title={`New collection`}>
+                       title={"New collection"}>
                        <CollectionEditor/>
                    </BreadcrumbUpdater>
                }/>

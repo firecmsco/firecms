@@ -19,7 +19,7 @@ import {
     Entity,
     EntityCollection,
     LocalEntityCollection,
-    LocalEntitySchema,
+    LocalEntitySchema, Property,
     SelectionController
 } from "../../models";
 import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
@@ -140,7 +140,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
     const exportable = collection.exportable === undefined || collection.exportable;
 
     const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
-    const hoverRow = collection.inlineEditing !== undefined && !collection.inlineEditing;
+    const hoverRow = schema.inlineEditing !== undefined && !schema.inlineEditing;
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
@@ -167,7 +167,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             callbacks: collection.callbacks,
             updateUrl: true
         });
-    }, [path, collection, sideEntityController]);
+    }, [path, collection]);
 
     const onNewClick = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
@@ -179,7 +179,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             callbacks: collection.callbacks,
             updateUrl: true
         });
-    }, [path, collection, sideEntityController]);
+    }, [path, collection]);
 
     const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {
         setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
@@ -194,8 +194,8 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         if (!canEdit(collection.permissions, entity, authController, path, context)) {
             return false;
         }
-        return collection.inlineEditing === undefined || collection.inlineEditing;
-    }, [collection.inlineEditing, collection.permissions, path]);
+        return schema.inlineEditing === undefined || schema.inlineEditing;
+    }, [schema.inlineEditing, collection.permissions, path]);
 
     const onCollectionModifiedForUser = useCallback(<M extends any>(path: string, partialCollection: LocalEntityCollection<M>) => {
         if (userConfigPersistence) {
@@ -218,14 +218,14 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         // Only for property columns
         if (!schema.properties[key]) return;
         const property: Partial<AnyProperty> = { columnWidth: width };
-        const localSchema: LocalEntitySchema<any> = { properties: { [key as keyof M]: property } };
+        const localSchema: LocalEntitySchema<any> = { properties: { [key as keyof M]: property } as Record<string, Property> };
         onSchemaModifiedForUser(path, localSchema);
     }, [schema.properties, onCollectionModifiedForUser]);
 
     const onSizeChanged = useCallback((size: CollectionSize) => {
         if (userConfigPersistence)
-            onCollectionModifiedForUser(path, { defaultSize: size })
-    }, [onCollectionModifiedForUser]);
+            onSchemaModifiedForUser(path, { defaultSize: size })
+    }, [onSchemaModifiedForUser]);
 
     const open = anchorEl != null;
     const title = useMemo(() => (
@@ -316,7 +316,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: schema,
+            schema: schemaResolver,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
             updateUrl: true
@@ -330,7 +330,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: schema,
+            schema: schemaResolver,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
             updateUrl: true
@@ -349,7 +349,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             />
         );
 
-    }, [usedSelectionController, sideEntityController, collection.permissions, authController, path]);
+    }, [usedSelectionController, collection.permissions, schemaResolver, authController, path]);
 
     const toolbarActionsBuilder = useCallback((_: { size: CollectionSize, data: Entity<any>[] }) => {
 

@@ -155,7 +155,7 @@ export function useFirestoreDataSource({
             });
     }
 
-    function buildQuery<M>(path: string, filter: FilterValues<M> | undefined, orderBy: string | undefined, order: "desc" | "asc" | undefined, startAfter: any[] | undefined, limit: number | undefined) {
+    function buildQuery<M>(path: string, filter: FilterValues<Extract<keyof M, string>> | undefined, orderBy: string | undefined, order: "desc" | "asc" | undefined, startAfter: any[] | undefined, limit: number | undefined) {
 
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
 
@@ -204,7 +204,7 @@ export function useFirestoreDataSource({
                 const resolvedSchema = computeSchema({
                     schemaOrResolver: schema,
                     entityId: docSnapshot.id,
-                    path,
+                    path
                 });
                 return createEntityFromSchema(docSnapshot, path, resolvedSchema);
             });

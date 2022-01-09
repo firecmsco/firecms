@@ -1,16 +1,12 @@
 import { AnyProperty } from "./properties";
-import { EntitySchema } from "./entities";
+import { EntitySchema, ResolvedEntitySchema } from "./entities";
 import { EntityCollection } from "./collections";
 
 /**
  * Use to resolve the schema properties for specific path, entity id or values.
  * @category Models
  */
-export type LocalEntitySchema<M> =
-    Omit<Partial<EntitySchema<M>>, "properties"> &
-    {
-        properties: Record<keyof M, Partial<AnyProperty>>
-    };
+export type LocalEntitySchema<M> = Partial<ResolvedEntitySchema<M>>;
 
 /**
  * Use to resolve the schema properties for specific path, entity id or values.
