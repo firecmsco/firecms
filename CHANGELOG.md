@@ -1,4 +1,16 @@
-## [1.0.0-beta8] - 2021-12-13
+## [1.0.0-beta10] - 2022-01-11
+
+### Changed
+
+- Drag and drop implementation replaced for `react-beautiful-dnd`, for simpler 
+code and better performance.
+- Fix callbacks to open side panel, (by Kyle Fang)
+- Fix for latest version of `react-router` types
+- General dependencies update
+- Many internal React eslint warning fixes
+
+
+## [1.0.0-beta9] - 2021-12-17
 
 ### Added
 
