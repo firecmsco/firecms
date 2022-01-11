@@ -1,11 +1,11 @@
 ## [2.0.0-alpha1] - 2021-12-13
 
 - Collections no use `schemaId` instead of point to a schema
-- Removed `properties` from collection. The same functionality is achieved 
-with the prop `hideFromCollection` at the property level
+- Removed `properties` from collection. The same functionality is achieved
+  with the prop `hideFromCollection` at the property level
 - `AdditionalColumnDelegate` has been moved to the `EntitySchema`
 - All the configuration options that were located under the `config` prop of
-`properties` have been moved to the property level:
+  `properties` have been moved to the property level:
 ```typescript jsx
 buildProperty<string>({
     dataType: "string",
@@ -38,7 +38,19 @@ buildProperty<string>({
 
 
 
-## [1.0.0-beta8] - 2021-12-13
+## [1.0.0-beta10] - 2022-01-11
+
+### Changed
+
+- Drag and drop implementation replaced for `react-beautiful-dnd`, for simpler 
+code and better performance.
+- Fix callbacks to open side panel, (by Kyle Fang)
+- Fix for latest version of `react-router` types
+- General dependencies update
+- Many internal React eslint warning fixes
+
+
+## [1.0.0-beta9] - 2021-12-17
 
 ### Added
 

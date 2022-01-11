@@ -190,7 +190,7 @@ function SampleApp() {
         allowSkipLogin={true}
         logo={logo}
         navigation={navigation}
-        schemas={[productSchema, usersSchema, blogSchema, localeSchema]}
+        schemas={[productSchema, usersSchema, blogSchema, localeSchema, testEntitySchema]}
         schemaOverrideHandler={customSchemaOverrideHandler}
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}

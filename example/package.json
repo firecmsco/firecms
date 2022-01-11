@@ -46,6 +46,7 @@
     "devDependencies": {
         "@types/react": "link:../node_modules/@types/react",
         "@types/react-dom": "link:../node_modules/@types/react-dom",
-        "typescript": "link:../node_modules/typescript"
+        "typescript": "link:../node_modules/typescript",
+        "eslint-config-react-app": "link:../node_modules/eslint-config-react-app"
     }
 }
