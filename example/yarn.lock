@@ -2729,7 +2729,7 @@
     rehype-slug "5.0.1"
     remark-gfm "3.0.1"
 
-"@uiw/react-md-editor@^3.8.2":
+"@uiw/react-md-editor@^3.9.3":
   version "3.9.3"
   resolved "https://registry.yarnpkg.com/@uiw/react-md-editor/-/react-md-editor-3.9.3.tgz#41c740024fbe3af30496889b1b9d93150f62bd4b"
   integrity sha512-Us0A4TS8yhWy7tuuxfj0cyfEjAcjvA9+gS/7812teI3WDWsGXHg202Znp9G9mY04cYqrA9W7+8Slijn7BdiOqA==
