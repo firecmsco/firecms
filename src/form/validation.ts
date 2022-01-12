@@ -1,7 +1,6 @@
 import {
     ArrayProperty,
     BooleanProperty,
-    CMSType,
     GeopointProperty,
     MapProperty,
     NumberProperty,
@@ -54,9 +53,27 @@ interface PropertyContext<PT extends Property> {
     name?: any
 }
 
+export function getYupEntitySchema<M>(properties: Properties<M>,
+                                      customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
+    const objectSchema: any = {};
+    Object.entries(properties).forEach(([name, property]) => {
+        objectSchema[name] = mapPropertyToYup({
+            property,
+            customFieldValidator,
+            name
+        });
+    });
+    return yup.object().shape(objectSchema);
+}
+
 export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySchema<unknown> {
 
     const property = propertyContext.property;
+    if (typeof property === "function") {
+        console.log("Error in property", propertyContext);
+        throw Error("PropertyBuilders can only be defined as the root properties in entity schemas, not in child properties");
+    }
+
     if (property.dataType === "string") {
         return getYupStringSchema(propertyContext);
     } else if (property.dataType === "number") {
@@ -76,20 +93,6 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
     }
     console.error("Unsupported data type in yup mapping", property)
     throw Error("Unsupported data type in yup mapping");
-}
-
-export function getYupEntitySchema<M extends { [Key: string]: any }>
-(properties: Properties<M>,
- customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
-    const objectSchema: any = {};
-    Object.entries(properties).forEach(([name, property]) => {
-        objectSchema[name] = mapPropertyToYup({
-            property,
-            customFieldValidator,
-            name
-        });
-    });
-    return yup.object().shape(objectSchema);
 }
 
 export function getYupMapObjectSchema({
