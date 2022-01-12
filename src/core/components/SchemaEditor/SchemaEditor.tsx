@@ -9,15 +9,23 @@ import Tree, {
 } from '../Tree';
 import { TreeDraggableProvided } from "../Tree/components/TreeItem/TreeItem-types";
 
+import {
+    Field,
+    FieldProps as FormikFieldProps,
+    Form,
+    Formik,
+    useFormikContext
+} from "formik";
+
 import deepEqual from "deep-equal";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import {
     Box,
-    FilledInput,
     FormControl,
     FormHelperText,
     Grid,
     InputLabel,
+    OutlinedInput,
     Paper,
     Typography
 } from "@mui/material";
@@ -27,8 +35,12 @@ import {
     getWidgetNameForProperty
 } from "../../util/property_icons";
 
-import { EntitySchema, Property, PropertyOrBuilder } from "../../../models";
-import { Form, Formik, useFormikContext } from 'formik';
+import {
+    EntitySchema,
+    FieldProps,
+    Property,
+    PropertyOrBuilder
+} from "../../../models";
 import { propertiesToTree, treeToProperties } from './util';
 import { sortProperties } from "../../util/schemas";
 
@@ -124,16 +136,6 @@ export function SchemaEditor<M>({
                     setFieldValue("properties", properties);
                 };
 
-                const formControlSX = {
-                    '& .MuiInputLabel-root': {
-                        mt: 1 / 2,
-                        ml: 1 / 2
-                    },
-                    '& .MuiInputLabel-shrink': {
-                        mt: -1 / 4
-                    }
-                };
-
                 return (
                     <Form>
 
@@ -146,16 +148,14 @@ export function SchemaEditor<M>({
                             <Grid item xs={12}>
                                 <FormControl fullWidth
                                              disabled={!isNewSchema}
-                                             variant="filled"
-                                             sx={formControlSX}>
+                                             variant="outlined">
                                     <InputLabel
                                         htmlFor="id">Id</InputLabel>
-                                    <FilledInput
+                                    <OutlinedInput
                                         id="id"
                                         aria-describedby="id-helper"
                                         onChange={handleChange}
                                         value={values.id}
-                                        sx={{ minHeight: "64px" }}
                                     />
                                     <FormHelperText
                                         id="id-helper">
@@ -166,16 +166,14 @@ export function SchemaEditor<M>({
 
                             <Grid item xs={12}>
                                 <FormControl fullWidth
-                                             variant="filled"
-                                             sx={formControlSX}>
+                                             variant="outlined">
                                     <InputLabel
                                         htmlFor="name">Name</InputLabel>
-                                    <FilledInput
+                                    <OutlinedInput
                                         id="name"
                                         aria-describedby="name-helper"
                                         onChange={handleChange}
                                         value={values.name}
-                                        sx={{ minHeight: "64px" }}
                                     />
                                     <FormHelperText
                                         id="name-helper">
@@ -386,6 +384,22 @@ function PropertyBuilderPreview({
         </Box>
     );
 }
+
+// function StringPropertyField({name} : {name:string}){
+//     return (
+//         <Field
+//             required={true}
+//             name={`${name}`}
+//         >
+//             {(fieldProps: FormikFieldProps) => {
+//                 return <FieldInternal
+//                     component={component as ComponentType>}
+//                     componentProps={componentProps}
+//                     fieldProps={fieldProps}/>;
+//             }}
+//         </Field>
+//     );
+// }
 
 function isValidDrag(tree: TreeData, source: TreeSourcePosition, destination: TreeDestinationPosition) {
     const draggedPropertyId = tree.items[source.parentId].children[source.index];

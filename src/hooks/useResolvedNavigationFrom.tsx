@@ -85,29 +85,32 @@ export function resolveNavigationFrom<M, UserType>({
         findSchema: context.schemaRegistry.findSchema
     });
 
-    const resultPromises: Promise<ResolvedNavigationEntry<any>>[] = navigationEntries.map((entry) => {
-        if (entry.type === "collection") {
-            return Promise.resolve(entry);
-        } else if (entry.type === "entity") {
-            const entityCollectionResolver = navigationContext.getCollectionResolver(entry.path, entry.entityId);
-            if (!entityCollectionResolver?.schemaResolver) {
-                throw Error(`No schema defined in the navigation for the entity with path ${entry.path}`);
-            }
+    const resultPromises: Promise<ResolvedNavigationEntry<any>>[] = navigationEntries
+        .map((entry) => {
+            if (entry.type === "collection") {
+                return Promise.resolve(entry);
+            } else if (entry.type === "entity") {
+                const entityCollectionResolver = navigationContext.getCollectionResolver(entry.path, entry.entityId);
+                if (!entityCollectionResolver?.schemaResolver) {
+                    throw Error(`No schema defined in the navigation for the entity with path ${entry.path}`);
+                }
 
-            return dataSource.fetchEntity({
-                path: entry.path,
-                entityId: entry.entityId,
-                schema: entityCollectionResolver?.schemaResolver
-            })
-                .then((entity) => {
-                    return { ...entry, entity };
-                });
-        } else if (entry.type === "custom_view") {
-            return Promise.resolve(entry);
-        } else {
-            throw Error("Unmapped element in useEntitiesFromPath");
-        }
-    });
+                return dataSource.fetchEntity({
+                    path: entry.path,
+                    entityId: entry.entityId,
+                    schema: entityCollectionResolver?.schemaResolver
+                })
+                    .then((entity) => {
+                        if (!entity) return undefined;
+                        return { ...entry, entity };
+                    });
+            } else if (entry.type === "custom_view") {
+                return Promise.resolve(entry);
+            } else {
+                throw Error("Unmapped element in useEntitiesFromPath");
+            }
+        })
+        .filter(v => Boolean(v)) as Promise<ResolvedNavigationEntry<any>>[];
 
     return Promise.all(resultPromises);
 }

@@ -71,7 +71,7 @@ export interface FirebaseCMSAppProps {
      * Firebase configuration of the project. If you afe deploying the app to
      * Firebase hosting, you don't need to specify this value
      */
-    firebaseConfig?: Object;
+    firebaseConfig?: Record<string, unknown>;
 
     /**
      * Optional callback after Firebase has been initialised. Useful for

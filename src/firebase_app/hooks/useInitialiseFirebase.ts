@@ -29,7 +29,7 @@ export interface InitialiseFirebaseResult {
  */
 export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
     onFirebaseInit?: ((config: object) => void) | undefined,
-    firebaseConfig: Object | undefined
+    firebaseConfig: Record<string, unknown> | undefined
 }): InitialiseFirebaseResult {
 
     const [firebaseApp, setFirebaseApp] = React.useState<FirebaseApp | undefined>();
@@ -37,7 +37,7 @@ export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
     const [configError, setConfigError] = React.useState<string>();
     const [firebaseConfigError, setFirebaseConfigError] = React.useState<Error | undefined>();
 
-    const initFirebase = useCallback((config: Object) => {
+    const initFirebase = useCallback((config: Record<string, unknown>) => {
         try {
             const initialisedFirebaseApp = initializeApp(config);
             setFirebaseConfigError(undefined);

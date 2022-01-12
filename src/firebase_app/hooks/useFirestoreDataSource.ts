@@ -196,11 +196,14 @@ export function useFirestoreDataSource({
 
     function getAndBuildEntity<M>(path: string,
                                   entityId: string,
-                                  schema: EntitySchema<M> | EntitySchemaResolver<M>) {
+                                  schema: EntitySchema<M> | EntitySchemaResolver<M>): Promise<Entity<M> | undefined> {
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
 
         return getDoc(doc(firestore, path, entityId))
             .then((docSnapshot) => {
+                if (!docSnapshot.exists()) {
+                    return undefined;
+                }
                 const resolvedSchema = computeSchema({
                     schemaOrResolver: schema,
                     entityId: docSnapshot.id,
@@ -218,18 +221,18 @@ export function useFirestoreDataSource({
         const ids = await textSearchController({ path, searchString });
         if (!ids)
             throw Error("The current path is not supported by the specified FirestoreTextSearchController");
-        const promises: Promise<Entity<M> | null>[] = ids
+        const promises: Promise<Entity<M> | undefined>[] = ids
             .map(async (entityId) => {
                     try {
                         return await getAndBuildEntity(path, entityId, schema);
                     } catch (e) {
                         console.error(e);
-                        return null;
+                        return undefined;
                     }
                 }
             );
         return Promise.all(promises)
-            .then((res) => res.filter((e) => e !== null && e.values) as Entity<M>[]);
+            .then((res) => res.filter((e) => e !== undefined && e.values) as Entity<M>[]);
     }
 
     return {
@@ -317,6 +320,7 @@ export function useFirestoreDataSource({
                     .catch((e) => {
                         if (onError) onError(e);
                     });
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
                 return () => {
                 };
             }
@@ -336,7 +340,6 @@ export function useFirestoreDataSource({
             );
         },
 
-
         /**
          * Retrieve an entity given a path and a schema
          * @param path
@@ -349,7 +352,7 @@ export function useFirestoreDataSource({
                                                           entityId,
                                                           schema
                                                       }: FetchEntityProps<M>
-        ): Promise<Entity<M>> {
+        ): Promise<Entity<M> | undefined> {
             return getAndBuildEntity(path, entityId, schema);
         },
 

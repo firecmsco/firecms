@@ -120,7 +120,7 @@ export function ReferenceDialog(
                 }))
                 .then((entities) => {
                     if (!unmounted)
-                        setSelectedEntities(entities);
+                        setSelectedEntities(entities.filter(e => e !== undefined) as Entity<any>[]);
                 });
         } else {
             setSelectedEntities([]);

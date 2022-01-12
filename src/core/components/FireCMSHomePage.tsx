@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Box,
     CardActionArea,
@@ -42,14 +42,14 @@ export function FireCMSHomePage() {
     const configurationPersistence = useConfigurationPersistence();
     const configurationPersistenceEnabled = Boolean(configurationPersistence);
 
-    if (!navigationContext.navigation)
-        return <></>;
-
     const [navigationResult, setNavigationResult] = useState<TopNavigationResult>(computeTopNavigation(navigationContext, true));
 
     useEffect(() => {
-        setNavigationResult( computeTopNavigation(navigationContext, true))
+        setNavigationResult(computeTopNavigation(navigationContext, true))
     }, [navigationContext.navigation])
+
+    if (!navigationContext.navigation)
+        return <></>;
 
     const {
         navigationEntries,
@@ -132,7 +132,8 @@ export function FireCMSHomePage() {
                   sm={6}
                   md={4}
                   key={`nav_${group}_"add`}>
-                <Paper variant={"outlined"} sx={{height:"100%", minHeight: 124}}>
+                <Paper variant={"outlined"}
+                       sx={{ height: "100%", minHeight: 124 }}>
                     <CardActionArea
                         sx={{
                             display: "flex",

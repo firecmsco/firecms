@@ -143,7 +143,7 @@ export interface DataSource {
                        entityId,
                        schema
                    }: FetchEntityProps<M>
-    ): Promise<Entity<M>>;
+    ): Promise<Entity<M> | undefined>;
 
     /**
      * Get realtime updates on one entity.

@@ -45,7 +45,7 @@ export function sortProperties<T>(properties: PropertiesOrBuilder<T>, properties
                 }
             })
             .filter((a) => a !== undefined)
-            .reduce((a: any, b: any) => ({ ...a, ...b })) as PropertiesOrBuilder<T>;
+            .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as PropertiesOrBuilder<T>;
     } catch (e) {
         console.error("Error sorting properties", e);
         return properties;

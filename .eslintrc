@@ -48,6 +48,7 @@
         "comma-spacing": "warn",
         "keyword-spacing": "warn",
         "no-multiple-empty-lines": "warn",
+        "object-curly-spacing": "warn",
         "indent": [0, 4],
         "quotes": [1, "double", { "avoidEscape": true }],
         "react-hooks/rules-of-hooks": "error",

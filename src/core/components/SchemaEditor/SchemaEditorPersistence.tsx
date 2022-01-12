@@ -136,7 +136,7 @@ export function SchemaEditorPersistence({
 
 export interface SchemaEditorDialogProps {
     open: boolean;
-    handleClose: (schema: EntitySchema) => void;
+    handleClose: (schema?: EntitySchema) => void;
     schemaId?: string;
 }
 
@@ -151,7 +151,7 @@ export function SchemaEditorDialog({
             open={open}
             maxWidth={"lg"}
             fullWidth
-            onClose={handleClose}
+            onClose={() => handleClose(undefined)}
             sx={{
                 height: "100vh"
             }}

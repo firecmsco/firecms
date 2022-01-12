@@ -68,6 +68,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
             setEntity(CACHE[`${path}/${entityId}`]);
             setDataLoading(false);
             setDataLoadingError(undefined);
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             return () => {
             };
         } else if (entityId && path && schema) {
