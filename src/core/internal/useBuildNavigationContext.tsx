@@ -103,16 +103,17 @@ export function useBuildNavigationContext<UserType>({
             setPersistenceLoading(true);
         }
 
-        getNavigation({
-            navigation: resolvedUserNavigation,
-            configPersistence
-        }).then((result: ResolvedNavigation) => {
+        try {
+            const result: ResolvedNavigation = getNavigation({
+                navigation: resolvedUserNavigation,
+                configPersistence
+            })
             setNavigation(result);
             setPersistenceLoading(false);
-        }).catch(e => {
+        } catch (e) {
             setPersistenceLoading(false);
-            setNavigationLoadingError(e);
-        });
+            setNavigationLoadingError(e as Error);
+        }
     }, [
         resolvedUserNavigation,
         configPersistence?.collections
@@ -154,10 +155,11 @@ export function useBuildNavigationContext<UserType>({
             const permissions = resolvedCollection.permissions;
             result = {
                 ...result,
-                schemaResolver: result.schemaResolver ?? schemaRegistry.buildSchemaResolver({
+                schemaResolver: schema
+                    ? result.schemaResolver ?? schemaRegistry.buildSchemaResolver({
                     schema,
                     path
-                }),
+                }) : undefined,
                 subcollections: result.subcollections ?? subcollections,
                 callbacks: result.callbacks ?? callbacks,
                 permissions: result.permissions ?? permissions
@@ -165,15 +167,19 @@ export function useBuildNavigationContext<UserType>({
         }
 
         if (!result.schemaResolver) {
-            if (!result.schemaId)
-                throw Error(`Not able to resolve schema for ${sidePanelKey}`);
-            const foundSchema = schemaRegistry.findSchema(result.schemaId);
-            if (!foundSchema)
-                throw Error(`Not able to resolve schema for ${sidePanelKey}`);
-            result.schemaResolver = schemaRegistry.buildSchemaResolver({
-                schema: foundSchema,
-                path
-            });
+            if (!result.schemaId) {
+                console.error(`Not able to resolve schema for path ${sidePanelKey}`)
+            } else {
+                const foundSchema = schemaRegistry.findSchema(result.schemaId);
+                if (!foundSchema) {
+                    console.error(`Not able to resolve schema ${result.schemaId}`)
+                } else {
+                    result.schemaResolver = schemaRegistry.buildSchemaResolver({
+                        schema: foundSchema,
+                        path
+                    });
+                }
+            }
         }
 
         return { ...resolvedCollection, ...(result as EntityCollectionResolver<M>) };
@@ -223,7 +229,7 @@ export function useBuildNavigationContext<UserType>({
         [cleanBasePath]);
 
 
-    const getCollectionOverride = useCallback(<M extends any>(path: string): LocalEntityCollection<M> | undefined => {
+    const getCollectionOverride = useCallback(<M, >(path: string): LocalEntityCollection<M> | undefined => {
         if (!userConfigPersistence)
             return undefined
         return userConfigPersistence.getCollectionConfig<M>(path);
@@ -278,15 +284,15 @@ async function resolveNavigation<UserType = any>({
     }
 }
 
-const getNavigation = async <UserType extends any>({
-                                                       navigation,
-                                                       configPersistence
-                                                   }:
-                                                       {
-                                                           navigation?: ResolvedNavigation,
-                                                           configPersistence?: ConfigurationPersistence
-                                                       }
-): Promise<ResolvedNavigation> => {
+const getNavigation = ({
+                           navigation,
+                           configPersistence
+                       }:
+                           {
+                               navigation?: ResolvedNavigation,
+                               configPersistence?: ConfigurationPersistence
+                           }
+): ResolvedNavigation => {
 
     if (!navigation && !configPersistence) {
         throw Error("You need to specify a navigation configuration or a `ConfigurationPersistence`");

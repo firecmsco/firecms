@@ -50,35 +50,31 @@ export function useBuildSchemaRegistry<UserType>({
         const mergedIds = baseSchemasMerged.map(s => s.id);
         setSchemas([
             ...configPersistence.schemas.filter((schema) => !mergedIds.includes(schema.id)),
-            ...baseSchemasMerged,
+            ...baseSchemasMerged
         ]);
         setInitialised(true);
     }, [
         configPersistence?.schemas
     ]);
 
-    const getUserSchemaOverride = useCallback(<M extends any>(path: string): LocalEntitySchema<M> | undefined => {
+    const getUserSchemaOverride = useCallback(<M, >(path: string): LocalEntitySchema<M> | undefined => {
         if (!userConfigPersistence)
             return undefined
         return userConfigPersistence.getSchemaConfig<M>(path);
     }, [userConfigPersistence]);
 
-
-    const findSchema = useCallback((schemaId: string): EntitySchema => {
-        const schema = schemas.find((s) => s.id === schemaId);
-        if (!schema)
-            throw Error("Not able to find schema with id: " + schemaId);
-        return schema;
+    const findSchema = useCallback((schemaId: string): EntitySchema | undefined => {
+        return schemas.find((s) => s.id === schemaId);
     }, [schemas]);
 
-    const buildSchemaResolver = useCallback(<M extends { [Key: string]: any } = any>
+    const buildSchemaResolver = useCallback(<M, >
     ({
          schema,
          path
      }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> =>
         ({
              entityId,
-             values,
+             values
          }: EntitySchemaResolverProps<M>) => {
 
             const schemaOverride = getUserSchemaOverride<M>(path);
@@ -98,12 +94,10 @@ export function useBuildSchemaRegistry<UserType>({
             };
         }, [getUserSchemaOverride]);
 
-
     return {
         initialised,
         schemas,
         findSchema,
-        buildSchemaResolver,
+        buildSchemaResolver
     };
 }
-

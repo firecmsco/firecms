@@ -1,9 +1,4 @@
-import {
-    EntityCollection,
-    EntityCustomView,
-    EntitySchema,
-    SchemaRegistry
-} from "../../models";
+import { EntityCollection, EntityCustomView, EntitySchema } from "../../models";
 import {
     getCollectionPathsCombinations,
     removeInitialAndTrailingSlashes
@@ -39,7 +34,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     schemas: EntitySchema[] | undefined,
     customViews?: EntityCustomView<M>[],
     currentFullPath?: string,
-    findSchema:  (id: string) => EntitySchema;
+    findSchema: (id: string) => EntitySchema | undefined;
 }): NavigationViewInternal<M> [] {
 
     const {
@@ -83,6 +78,9 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                 if (nextSegments.length > 1) {
                     const newPath = nextSegments.slice(1).join("/");
                     const schema = findSchema(collection.schemaId);
+                    if(!schema) {
+                        throw Error("Schema not found resolving path. Schema: " + collection.schemaId);
+                    }
                     const customViews = schema.views;
                     const customView = customViews && customViews.find((entry) => entry.path === newPath);
                     if (customView) {

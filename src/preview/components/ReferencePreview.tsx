@@ -125,8 +125,6 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
     }
 
-    const schema = collectionResolver.schemaResolver({});
-
     const {
         entity,
         dataLoading,
@@ -138,7 +136,10 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         useCache: true
     });
 
+    const schema = collectionResolver.schemaResolver ? collectionResolver.schemaResolver({}) : undefined;
+
     const listProperties = useMemo(() => {
+        if (!schema) return [];
         let res = previewProperties;
         if (!res || !res.length) {
             res = Object.keys(schema.properties);
@@ -149,12 +150,17 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         else if (size === "tiny")
             res = res.slice(0, 1);
         return res;
-    }, [previewProperties, schema.properties, size]);
+    }, [previewProperties, schema?.properties, size]);
 
     let body: JSX.Element;
 
     function buildError(error: string, tooltip?: string) {
         return <ErrorView error={error} tooltip={tooltip}/>;
+    }
+
+    if (!schema) {
+        return <ErrorView
+            error={"Could not find schema with id " + collectionResolver.schemaId}/>
     }
 
     if (!value) {

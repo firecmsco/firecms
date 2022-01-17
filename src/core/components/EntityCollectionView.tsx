@@ -18,6 +18,7 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
+    EntitySchemaResolver,
     LocalEntityCollection,
     LocalEntitySchema,
     SelectionController
@@ -39,6 +40,7 @@ import {
 import { mergeDeep } from "../util/objects";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { SchemaEditorDialog } from "./SchemaEditor/SchemaEditorPersistence";
+import { ErrorView } from "./ErrorView";
 
 /**
  * @category Components
@@ -110,11 +112,40 @@ export function useSelectionController<M = any>(): SelectionController {
  * @constructor
  * @category Components
  */
-export function EntityCollectionView<M extends { [Key: string]: any }>({
-                                                                           path,
-                                                                           collection: baseCollection,
-                                                                           editable
-                                                                       }: EntityCollectionViewProps<M>
+
+export function EntityCollectionView<M extends { [Key: string]: unknown }>({
+                                                                               path,
+                                                                               collection: baseCollection,
+                                                                               editable
+                                                                           }: EntityCollectionViewProps<M>) {
+
+    const navigationContext = useNavigation();
+    const collectionResolver = navigationContext.getCollectionResolver<M>(path);
+    if (!collectionResolver) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
+    }
+
+    const collection: EntityCollection<M> = collectionResolver ?? baseCollection;
+    const { schemaResolver } = collectionResolver;
+
+    if (!schemaResolver) {
+        return <ErrorView
+            error={"Unable to find schema with id " + collection.schemaId}/>;
+    }
+
+    return <EntityCollectionViewInternal path={path}
+                                         collection={collection}
+                                         schemaResolver={schemaResolver}
+                                         editable={editable}/>;
+
+}
+
+export function EntityCollectionViewInternal<M extends { [Key: string]: unknown }>({
+                                                                                       path,
+                                                                                       collection,
+                                                                                       editable,
+                                                                                       schemaResolver
+                                                                                   }: EntityCollectionViewProps<M> & { schemaResolver: EntitySchemaResolver<M> }
 ) {
 
     const sideEntityController = useSideEntityController();
@@ -127,14 +158,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
-    const collectionResolver = navigationContext.getCollectionResolver<M>(path);
-    if (!collectionResolver) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
-    }
 
-    const collection: EntityCollection<M> = collectionResolver ?? baseCollection;
-
-    const { schemaResolver } = collectionResolver;
     const schema = schemaResolver({});
 
     const schemaEditable = schema.editable ?? true;

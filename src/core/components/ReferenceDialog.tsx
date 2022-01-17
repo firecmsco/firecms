@@ -13,6 +13,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { CollectionTable } from "./CollectionTable";
 import { CollectionRowActions } from "./CollectionTable/internal/CollectionRowActions";
 import { useDataSource } from "../../hooks";
+import { ErrorView } from "./ErrorView";
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -103,13 +104,12 @@ export function ReferenceDialog(
 
     const collection = collectionResolver;
     const schemaResolver = collectionResolver.schemaResolver;
-    const schema = schemaResolver({});
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
 
     useEffect(() => {
         let unmounted = false;
-        if (selectedEntityIds) {
+        if (selectedEntityIds && schemaResolver) {
             Promise.all(
                 selectedEntityIds.map((entityId) => {
                     return dataSource.fetchEntity({
@@ -185,6 +185,14 @@ export function ReferenceDialog(
             Clear
         </Button>
     );
+
+
+    const schema = schemaResolver ? schemaResolver({}) : undefined;
+
+    if (!schema || !schemaResolver) {
+        return <ErrorView
+            error={"Could not find schema with id " + collectionResolver.schemaId}/>
+    }
 
     const title = (
         <Typography variant={"h6"}>

@@ -109,7 +109,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any, UserTy
  * @category Models
  */
 export type EntityCollectionResolver<M = any> = EntityCollection<M> & {
-    schemaResolver: EntitySchemaResolver<M>
+    schemaResolver: EntitySchemaResolver<M> | undefined
 };
 
 /**

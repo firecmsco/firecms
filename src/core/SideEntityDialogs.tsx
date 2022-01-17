@@ -74,18 +74,22 @@ function SideEntityDialog({
     const navigationContext = useNavigation();
 
 
-
-
     const schema = useMemo(() => {
         if (!props) return undefined;
         let usedSchema = props.schema;
         if (!usedSchema) {
-            const schemaProps: EntityCollectionResolver | undefined = !props ? undefined : navigationContext.getCollectionResolver(props.path, props.entityId);
-            if (!schemaProps) {
+            const collection: EntityCollectionResolver | undefined = !props ? undefined : navigationContext.getCollectionResolver(props.path, props.entityId);
+            if (!collection) {
+                console.error("ERROR: No collection found in path ", props.path, "Entity id: ", props.entityId);
+                throw Error("ERROR: No collection found in path " + props.path);
+            }
+            usedSchema = collection.schemaResolver;
+            if (!usedSchema) {
+                throw Error("ERROR: Schema not found with id:" + collection.schemaId);
                 throw Error("ERROR: You are trying to open an entity with no schema defined.");
             }
-            usedSchema = schemaProps.schemaResolver;
         }
+
         return computeSchema({
             schemaOrResolver: usedSchema,
             path: props.path,
