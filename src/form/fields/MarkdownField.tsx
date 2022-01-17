@@ -5,14 +5,11 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import MDEditor from "@uiw/react-md-editor";
 
-import { FieldProps } from "../../models";
 import { FieldDescription } from "../../form";
 import { LabelWithIcon } from "../components";
 
 import { useClearRestoreValue } from "../../hooks";
-
-interface MarkDownFieldProps extends FieldProps<string> {
-}
+import { FieldProps } from "../../models";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -62,7 +59,7 @@ export function MarkdownField({
                                   includeDescription,
                                   context,
                                   shouldAlwaysRerender
-                              }: MarkDownFieldProps) {
+                              }: FieldProps<string>) {
 
     const classes = useStyles();
 

@@ -154,8 +154,8 @@ const PropertyTableCellInternal = <T extends CMSType>({
     let fullHeight = false;
 
     if (!readOnly && !customField && (!customPreview || selected)) {
-        const isAStorageProperty = (property.dataType === "string" && (property as StringProperty).storageMeta) ||
-            (property.dataType === "array" && (property as ArrayProperty).of?.dataType === "string" && ((property as ArrayProperty).of as StringProperty)?.storageMeta);
+        const isAStorageProperty = (property.dataType === "string" && (property as StringProperty).storage) ||
+            (property.dataType === "array" && (property as ArrayProperty).of?.dataType === "string" && ((property as ArrayProperty).of as StringProperty)?.storage);
         if (isAStorageProperty) {
             innerComponent = <TableStorageUpload error={error}
                                                  disabled={disabled}
@@ -217,7 +217,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                               updateValue={updateValue}
                                               setPreventOutsideClick={setPreventOutsideClick}
                 />;
-            } else if (!stringProperty.storageMeta && !stringProperty.markdown) {
+            } else if (!stringProperty.storage && !stringProperty.markdown) {
                 const multiline = !!stringProperty.multiline;
                 innerComponent = <TableInput error={error}
                                              disabled={disabled}

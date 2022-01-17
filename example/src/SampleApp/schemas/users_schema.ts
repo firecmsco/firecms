@@ -15,9 +15,7 @@ export const usersSchema = buildSchema({
         email: {
             title: "Email",
             dataType: "string",
-            validation: {
-                email: true
-            }
+            email: true
         },
         phone: {
             title: "Phone",
@@ -40,17 +38,11 @@ export const usersSchema = buildSchema({
                     title: "Large",
                     dataType: "string",
                     url: "image",
-                    validation: {
-                        url: true
-                    }
                 },
                 thumbnail: {
                     title: "Thumbnail",
                     dataType: "string",
                     url: "image",
-                    validation: {
-                        url: true
-                    }
                 }
             },
             previewProperties: ["large"]

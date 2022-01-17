@@ -1,4 +1,13 @@
-import { useFirestoreDataSource, DataSource,FetchCollectionProps, FetchEntityProps, Entity, SaveEntityProps, DeleteEntityProps, Property } from "@camberi/firecms";
+import {
+    DataSource,
+    DeleteEntityProps,
+    Entity,
+    FetchCollectionProps,
+    FetchEntityProps,
+    Property,
+    SaveEntityProps,
+    useFirestoreDataSource
+} from "@camberi/firecms";
 import { FirebaseApp } from "firebase/app";
 
 type CustomDataSourceProps = { firebaseApp?: FirebaseApp; };
@@ -13,7 +22,7 @@ export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps):Data
             }
             return firestoreDataSource.fetchCollection(props);
         },
-        fetchEntity<M>(props: FetchEntityProps<M>): Promise<Entity<M>>{
+        fetchEntity<M>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined>{
             if(props.path === "your_path_custom"){
                 // make your custom http call and return your Entities
             }

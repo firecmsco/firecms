@@ -68,7 +68,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                 content = <UrlComponentPreview {...fieldProps}
                                                property={property as StringProperty}
                                                value={value}/>;
-            } else if (stringProperty.storageMeta) {
+            } else if (stringProperty.storage) {
                 content = <StorageThumbnail {...fieldProps}
                                             property={property as StringProperty}
                                             value={value}/>;
@@ -107,7 +107,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                             {...fieldProps}
                             value={value as string[]}
                             property={property as ArrayProperty}/>;
-                    } else if (arrayProperty.of.storageMeta) {
+                    } else if (arrayProperty.of.storage) {
                         content = <ArrayOfStorageComponentsPreview
                             {...fieldProps}
                             value={value}

@@ -97,7 +97,7 @@ export const testEntitySchema = buildSchema({
             dataType: 'array',
             of: {
                 dataType: 'string',
-                storageMeta: {
+                storage: {
                     mediaType: 'image',
                     storagePath: 'images',
                     acceptedFiles: ['image/*'],
@@ -303,7 +303,7 @@ export const testEntitySchema = buildSchema({
             dataType: "array",
             of: {
                 dataType: "string",
-                storageMeta: {
+                storage: {
                     mediaType: "image",
                     storagePath: (context) => {
                         return "images";
@@ -339,7 +339,7 @@ export const testEntitySchema = buildSchema({
             dataType: "array",
             of: {
                 dataType: "string",
-                storageMeta: {
+                storage: {
                     mediaType: "image",
                     storagePath: "images",
                     acceptedFiles: ["image/*"]
@@ -349,7 +349,7 @@ export const testEntitySchema = buildSchema({
         image: {
             title: "Image",
             dataType: "string",
-            storageMeta: {
+            storage: {
                 mediaType: "image",
                 storagePath: "test",
                 acceptedFiles: ["image/*"]
@@ -390,7 +390,7 @@ export const testEntitySchema = buildSchema({
             title: "Pdf",
             dataType: "string",
             config: {
-                storageMeta: {
+                storage: {
                     storagePath: "test",
                     acceptedFiles: ['application/pdf'],
                 }

@@ -21,7 +21,7 @@ const nameProperty = buildProperty({
 
 ## `config`
 
-### `storageMeta`
+### `storage`
 You can specify a `StorageMeta` configuration. It is used to
 indicate that this string refers to a path in Google Cloud Storage.
 * `mediaType` Media type of this reference, used for displaying the
@@ -45,7 +45,7 @@ import { buildProperty } from "./builders";
 const imageProperty = buildProperty({
     dataType: "string",
     config: {
-        storageMeta: {
+        storage: {
             mediaType: "image",
             storagePath: (context) => {
                 return "images";

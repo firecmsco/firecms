@@ -10,7 +10,7 @@ import {
     ArrayProperty,
     EntityValues,
     Property,
-    StorageMeta,
+    StorageConfig,
     StringProperty
 } from "../../../../../models";
 import { useDropzone } from "react-dropzone";
@@ -104,24 +104,24 @@ export function TableStorageUpload(props: {
 
     const multipleFilesSupported = property.dataType === "array";
 
-    const storageMeta: StorageMeta | undefined = property.dataType === "string"
-? property.storageMeta
+    const storage: StorageConfig | undefined = property.dataType === "string"
+        ? property.storage
         : property.dataType === "array" &&
         (property.of as Property).dataType === "string"
-? (property.of as StringProperty).storageMeta
+            ? (property.of as StringProperty).storage
             : undefined;
 
-    if (!storageMeta)
+    if (!storage)
         throw Error("Storage meta must be specified");
 
     const fileNameBuilder = (file: File) => {
-        if (storageMeta.fileName) {
-            const fileName = storageMeta.fileName({
+        if (storage.fileName) {
+            const fileName = storage.fileName({
                 entityId,
                 values: entityValues,
                 property,
                 file,
-                storageMeta,
+                storage,
                 name
             });
 
@@ -134,16 +134,16 @@ export function TableStorageUpload(props: {
     };
 
     const storagePathBuilder = (file: File) => {
-        if (typeof storageMeta.storagePath === "string")
-            return storageMeta.storagePath;
+        if (typeof storage.storagePath === "string")
+            return storage.storagePath;
 
-        if (typeof storageMeta.storagePath === "function") {
-            const storagePath = storageMeta.storagePath({
+        if (typeof storage.storagePath === "function") {
+            const storagePath = storage.storagePath({
                 entityId: entityId,
                 values: entityValues,
                 property,
                 file,
-                storageMeta,
+                storage,
                 name
             });
 
@@ -172,7 +172,7 @@ export function TableStorageUpload(props: {
             }}
             fileNameBuilder={fileNameBuilder}
             storagePathBuilder={storagePathBuilder}
-            storageMeta={storageMeta}
+            storage={storage}
             multipleFilesSupported={multipleFilesSupported}
             previewSize={previewSize}/>
 
@@ -203,7 +203,7 @@ interface StorageUploadProps {
     autoFocus: boolean;
     disabled: boolean;
     previewSize: PreviewSize;
-    storageMeta: StorageMeta;
+    storage: StorageConfig;
     fileNameBuilder: (file: File) => string;
     storagePathBuilder: (file: File) => string;
 }
@@ -217,12 +217,12 @@ function StorageUpload({
                            previewSize: previewSizeInput,
                            disabled,
                            autoFocus,
-                           storageMeta,
+                           storage,
                            fileNameBuilder,
-                                  storagePathBuilder
-                              }: StorageUploadProps) {
+                           storagePathBuilder
+                       }: StorageUploadProps) {
 
-    const storage = useStorageSource();
+    const storageSource = useStorageSource();
     const [onHover, setOnHover] = useState(false);
 
     const previewSize = multipleFilesSupported && previewSizeInput === "regular" ? "small" : previewSizeInput;
@@ -237,7 +237,7 @@ function StorageUpload({
         }
     }
 
-    const metadata: any | undefined = storageMeta?.metadata;
+    const metadata: any | undefined = storage?.metadata;
     const hasValue = Boolean(value);
 
     const classes = useStyles({ hasValue });
@@ -310,11 +310,11 @@ function StorageUpload({
                                         metadata?: any) => {
 
         let uploadPathOrDownloadUrl = uploadedPath;
-        if (storageMeta.storeUrl) {
-            uploadPathOrDownloadUrl = await storage.getDownloadURL(uploadedPath);
+        if (storage.storeUrl) {
+            uploadPathOrDownloadUrl = await storageSource.getDownloadURL(uploadedPath);
         }
-        if (storageMeta.postProcess) {
-            uploadPathOrDownloadUrl = await storageMeta.postProcess(uploadPathOrDownloadUrl);
+        if (storage.postProcess) {
+            uploadPathOrDownloadUrl = await storage.postProcess(uploadPathOrDownloadUrl);
         }
 
         let newValue: StorageFieldItem[];
@@ -356,7 +356,7 @@ function StorageUpload({
         isDragAccept,
         isDragReject
     } = useDropzone({
-            accept: storageMeta.acceptedFiles,
+            accept: storage.acceptedFiles,
             disabled: disabled,
             noClick: true,
             noKeyboard: true,

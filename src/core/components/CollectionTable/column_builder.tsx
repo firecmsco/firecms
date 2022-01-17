@@ -26,7 +26,7 @@ import { ErrorBoundary } from "../../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter, TableEnumValues } from "../../index";
-import { getIconForProperty } from "../../util/property_icons";
+import { getIconForProperty } from "../../util/property_utils";
 import {
     buildEnumLabel,
     enumToObjectEntries,

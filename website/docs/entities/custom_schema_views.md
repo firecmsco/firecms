@@ -41,7 +41,7 @@ const blogSchema = buildSchema({
             title: "Header image",
             dataType: "string",
             config: {
-                storageMeta: {
+                storage: {
                     mediaType: "image",
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
@@ -65,7 +65,7 @@ const blogSchema = buildSchema({
                         of: {
                             dataType: "string",
                             config: {
-                                storageMeta: {
+                                storage: {
                                     mediaType: "image",
                                     storagePath: "images",
                                     acceptedFiles: ["image/*"]

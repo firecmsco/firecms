@@ -84,7 +84,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
         if (of) {
             if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
                 component = ArrayEnumSelect as ComponentType<FieldProps<T>>;
-            } else if (of.dataType === "string" && of.storageMeta) {
+            } else if (of.dataType === "string" && of.storage) {
                 component = StorageUploadField as ComponentType<FieldProps<T>>;
             } else if (of.dataType === "reference") {
                 component = ArrayOfReferencesField as ComponentType<FieldProps<T>>;
@@ -114,10 +114,12 @@ export function buildPropertyField<T extends CMSType = any, M = any>
             component = TextField as ComponentType<FieldProps<T>>;
         }
     } else if (property.dataType === "string") {
-        if (property.storageMeta) {
+        if (property.storage) {
             component = StorageUploadField as ComponentType<FieldProps<T>>;
         } else if (property.markdown) {
             component = MarkdownField as ComponentType<FieldProps<T>>;
+        } else if (property.email || property.url || property.multiline) {
+            component = TextField as ComponentType<FieldProps<T>>;
         } else if (property.enumValues) {
             component = Select as ComponentType<FieldProps<T>>;
         } else {

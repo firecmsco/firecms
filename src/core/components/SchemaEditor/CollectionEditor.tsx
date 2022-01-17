@@ -6,6 +6,7 @@ import {
     FormControl,
     FormHelperText,
     Grid,
+    InputAdornment,
     InputLabel,
     OutlinedInput,
     Paper,
@@ -14,9 +15,15 @@ import {
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
+import SaveIcon from "@mui/icons-material/Save";
+import CompareArrowsOutlinedIcon
+    from "@mui/icons-material/CompareArrowsOutlined";
+import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import SchemaOutlinedIcon from "@mui/icons-material/SchemaOutlined";
 
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { Formik, FormikHelpers } from "formik";
 import { useEffect, useMemo, useState } from "react";
 import { Link as ReactLink, useLocation } from "react-router-dom";
 import { useConfigurationPersistence } from "../../../hooks/useConfigurationPersistence";
@@ -30,7 +37,6 @@ import {
     TopNavigationResult
 } from "../../util/navigation_utils";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
-import { SubmitListener } from "./SchemaEditor";
 
 /**
  * @category Components
@@ -51,7 +57,7 @@ const CollectionSchema = Yup.object().shape({
 });
 
 export function CollectionEditor<M>({
-                                        path
+                                        path: pathProp
                                     }: CollectionEditorProps<M>) {
 
     const location = useLocation();
@@ -62,6 +68,7 @@ export function CollectionEditor<M>({
 
     const schemas = schemaRegistry.schemas;
 
+    const [path, setPath] = useState(pathProp);
     const [schemaDialogOpen, setSchemaDialogOpen] = useState<boolean>(false);
     const [selectedSchemaId, setSelectedSchemaId] = useState<string | undefined>();
 
@@ -107,17 +114,18 @@ export function CollectionEditor<M>({
         group
     };
 
-    const onSubmit = (values: EntityCollection) => {
-        const cleanValues = {
-            ...values
-        };
-        console.log("onSubmit", cleanValues);
-        configurationPersistence
-            .saveCollection(values.path, cleanValues)
-            .then(() => snackbarController.open({
-                type: "success",
-                message: "Collection updated"
-            }))
+    const onSubmit = (values: EntityCollection, formikHelpers: FormikHelpers<EntityCollection>) => {
+        console.log("onSubmit", values);
+        return configurationPersistence
+            .saveCollection(values.path, values)
+            .then(() => {
+                setPath(values.path);
+                formikHelpers.resetForm({ values });
+                return snackbarController.open({
+                    type: "success",
+                    message: "Collection updated"
+                });
+            })
             .catch((e) => {
                 console.error(e);
                 snackbarController.open({
@@ -151,7 +159,8 @@ export function CollectionEditor<M>({
                     const selectedSchema = values.schemaId ? schemaRegistry.findSchema(values.schemaId) : undefined;
                     return (
                         <Container maxWidth={"md"}>
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit}
+                                  noValidate>
                                 <Box
                                     sx={{
                                         display: "flex",
@@ -169,12 +178,20 @@ export function CollectionEditor<M>({
                                         <Typography variant={"h4"}>
                                             {isNewCollection ? "New collection" : `${values.name} collection`}
                                         </Typography>
-                                        {path && <Button
-                                            variant="contained"
-                                            component={ReactLink}
-                                            to={navigationContext.buildUrlCollectionPath(path)}>
-                                            Go to collection
-                                        </Button>}
+                                        <Box>
+                                            {path && <Button
+                                                component={ReactLink}
+                                                to={navigationContext.buildUrlCollectionPath(path)}
+                                                sx={{
+                                                    mx: 1
+                                                }}>
+                                                Go to collection
+                                            </Button>}
+                                            <Button startIcon={<SaveIcon/>}
+                                                    disabled={!dirty}
+                                                    variant="contained"
+                                                    type="submit">Save</Button>
+                                        </Box>
                                     </Box>
 
                                     <Paper elevation={0} sx={{
@@ -186,7 +203,8 @@ export function CollectionEditor<M>({
                                         <Grid container spacing={2}>
                                             <Grid item xs={12}>
                                                 <FormControl fullWidth
-                                                             variant="outlined"
+                                                             required
+                                                             disabled={isSubmitting}
                                                              error={touched.path && Boolean(errors.path)}>
                                                     <InputLabel
                                                         htmlFor="path">{"Path"}</InputLabel>
@@ -194,164 +212,210 @@ export function CollectionEditor<M>({
                                                                    aria-describedby={`${"path"}-helper`}
                                                                    onChange={handleChange}
                                                                    value={values.path}
+                                                                   label={"Path"}
+                                                                   startAdornment={
+                                                                       <InputAdornment
+                                                                           position="start">
+                                                                           <CompareArrowsOutlinedIcon/>
+                                                                       </InputAdornment>}
                                                                    disabled={!isNewCollection}/>
                                                     <FormHelperText
                                                         id="path-helper">
                                                         {touched.path && Boolean(errors.path) ? errors.path : "Path that this collection is stored in"}
                                                     </FormHelperText>
                                                 </FormControl>
-                                        </Grid>
-                                        <Grid item xs={12} sm={8}>
-                                            <FormControl fullWidth
-                                                         error={touched.name && Boolean(errors.name)}
-                                                         // variant="outlined"
-                                            >
-                                                <InputLabel
-                                                    htmlFor="name">Name</InputLabel>
-                                                <OutlinedInput
-                                                    id="name"
-                                                    aria-describedby="name-helper"
-                                                    onChange={handleChange}
-                                                    value={values.name}
-                                                />
-                                                <FormHelperText
-                                                    id="name-helper">
-                                                    {touched.name && Boolean(errors.name) ? errors.name : "Plural name of the collection (e.g. Products)"}
-                                                </FormHelperText>
-                                            </FormControl>
-                                        </Grid>
+                                            </Grid>
 
-                                        <Grid item xs={12} sm={4}>
-                                            <FormControl fullWidth
-                                                         error={touched.group && Boolean(errors.group)}
-                                                         variant="outlined"
-                                            >
-                                                <Autocomplete
-                                                    id={"group"}
-                                                    value={values.group}
-                                                    fullWidth
-                                                    freeSolo
-                                                    options={groups}
-                                                    onChange={(event, group) => {
-                                                        setFieldValue("group", group);
-                                                    }}
-                                                    getOptionLabel={(option) => option}
-                                                    renderOption={(props, group, { selected }) => (
-                                                        <li {...props}>
-                                                            {group}
-                                                        </li>
-                                                    )}
-                                                    renderInput={(params) => (
-                                                        <TextField {...params}
-                                                                   name={"group"}
-                                                                   aria-describedby={"group-helper"}
-                                                                   variant={"outlined"}
-                                                                   label="Group"/>
-                                                    )}
-                                                />
-                                                <FormHelperText
-                                                    id="group-helper">
-                                                    {touched.group && Boolean(errors.group) ? errors.group : "Group of the collection"}
-                                                </FormHelperText>
-                                            </FormControl>
-                                        </Grid>
-
-                                        <Grid item xs={12}>
-                                            <FormControl fullWidth
-                                                         error={touched.description && Boolean(errors.description)}
-                                                         variant="outlined"
-                                            >
-                                                <InputLabel
-                                                    htmlFor="description">Description</InputLabel>
-                                                <OutlinedInput
-                                                    id="description"
-                                                    aria-describedby="description-helper"
-                                                    onChange={handleChange}
-                                                    value={values.description}
-                                                />
-                                                <FormHelperText
-                                                    id="description-helper">
-                                                    {touched.description && Boolean(errors.description) ? errors.description : "Description of the collection"}
-                                                </FormHelperText>
-                                            </FormControl>
-                                        </Grid>
-
-                                        <Grid item xs={12}>
-                                            <Typography sx={{ mt: 2 }}
-                                                        variant={"subtitle2"}>
-                                                Schema
-                                            </Typography>
-                                            <Paper elevation={0}
-                                                   variant={"outlined"}
-                                                   sx={{
-                                                       p: 2,
-                                                       flexDirection: "column"
-                                                   }}>
+                                            <Grid item xs={12} sm={8}>
                                                 <FormControl fullWidth
-                                                             variant="outlined"
+                                                             required
+                                                             disabled={isSubmitting}
+                                                             error={touched.name && Boolean(errors.name)}>
+                                                    <InputLabel
+                                                        htmlFor="name">Name</InputLabel>
+                                                    <OutlinedInput
+                                                        id="name"
+                                                        value={values.name}
+                                                        onChange={handleChange}
+                                                        aria-describedby="name-helper-text"
+                                                        label="Name"
+                                                        startAdornment={
+                                                            <InputAdornment
+                                                                position="start">
+                                                                <BadgeOutlinedIcon/>
+                                                            </InputAdornment>}
+                                                    />
+                                                    <FormHelperText
+                                                        id="name-helper-text">
+                                                        {touched.name && Boolean(errors.name) ? errors.name : "Plural name of the collection (e.g. Products)"}
+                                                    </FormHelperText>
+                                                </FormControl>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={4}>
+                                                <FormControl fullWidth
+                                                             error={touched.group && Boolean(errors.group)}
                                                 >
                                                     <Autocomplete
-                                                        id={"schemaId"}
-                                                        value={selectedSchema}
+                                                        id={"group"}
+                                                        value={values.group}
                                                         fullWidth
-                                                        disableClearable
-                                                        options={schemas}
-                                                        onChange={(event, schema) => {
-                                                            setFieldValue("schemaId", schema ? schema.id : null);
+                                                        freeSolo
+                                                        options={groups}
+                                                        onChange={(event, group) => {
+                                                            setFieldValue("group", group);
                                                         }}
-
-                                                        getOptionLabel={(option) => option.name}
-                                                        renderOption={(props, schema, { selected }) => (
+                                                        getOptionLabel={(option) => option}
+                                                        renderOption={(props, group, { selected }) => (
                                                             <li {...props}>
-                                                                {schema.name}
+                                                                {group}
                                                             </li>
                                                         )}
                                                         renderInput={(params) => (
                                                             <TextField {...params}
-                                                                       name={"schemaId"}
+                                                                       disabled={isSubmitting}
+                                                                       name={"group"}
+                                                                       aria-describedby={"group-helper"}
                                                                        variant={"outlined"}
-                                                                       label="Schema"/>
+                                                                       label="Group"/>
                                                         )}
                                                     />
-
+                                                    <FormHelperText
+                                                        id="group-helper">
+                                                        {touched.group && Boolean(errors.group) ? errors.group : "Group of the collection"}
+                                                    </FormHelperText>
                                                 </FormControl>
-                                                <Box sx={{
-                                                    mt: 1,
-                                                    display: "flex",
-                                                    flexDirection: "row",
-                                                    justifyContent: "space-between"
-                                                }}>
-                                                    <Button
-                                                        variant="contained"
-                                                        onClick={(event) => {
-                                                            event.stopPropagation();
-                                                            setSelectedSchemaId(undefined);
-                                                            setSchemaDialogOpen(true);
-                                                        }}
-                                                        startIcon={<AddIcon/>}>
-                                                        Create new schema
-                                                    </Button>
+                                            </Grid>
 
-                                                    <Button
-                                                        disabled={!values.schemaId}
-                                                        onClick={(event) => {
-                                                            event.stopPropagation();
-                                                            setSelectedSchemaId(values.schemaId);
-                                                            setSchemaDialogOpen(true);
-                                                        }}
-                                                        startIcon={
-                                                            <SettingsIcon/>}>
-                                                        Edit {selectedSchema?.name}
-                                                    </Button>
-                                                </Box>
-                                            </Paper>
-                                        </Grid>
+                                            <Grid item xs={12}>
+                                                <FormControl fullWidth
+                                                             disabled={isSubmitting}
+                                                             error={touched.description && Boolean(errors.description)}>
+                                                    <InputLabel
+                                                        htmlFor="description">Description</InputLabel>
+                                                    <OutlinedInput
+                                                        id="description"
+                                                        value={values.description}
+                                                        onChange={handleChange}
+                                                        startAdornment={
+                                                            <InputAdornment
+                                                                position="start">
+                                                                <DescriptionOutlinedIcon/>
+                                                            </InputAdornment>}
+                                                        aria-describedby="description-helper-text"
+                                                        label="Description"
+                                                    />
+                                                    <FormHelperText
+                                                        id="description-helper-text">
+                                                        {touched.description && Boolean(errors.description) ? errors.description : "Description of the collection, you can use markdown"}
+                                                    </FormHelperText>
+                                                </FormControl>
+                                            </Grid>
+
+                                            <Grid item xs={12}>
+                                                <Typography sx={{ mt: 1 }}
+                                                            variant={"subtitle2"}>
+                                                    Schema
+                                                </Typography>
+                                                <Paper elevation={0}
+                                                       variant={"outlined"}
+                                                       sx={{
+                                                           p: 2,
+                                                           flexDirection: "column"
+                                                       }}>
+                                                    <FormControl fullWidth
+                                                                 required
+                                                                 disabled={isSubmitting}
+                                                                 error={touched.schemaId && Boolean(errors.schemaId)}>
+                                                        <Autocomplete
+                                                            id={"schemaId"}
+                                                            value={selectedSchema}
+                                                            fullWidth
+                                                            disableClearable
+                                                            options={schemas}
+                                                            onChange={(event, schema) => {
+                                                                setFieldValue("schemaId", schema ? schema.id : null);
+                                                            }}
+                                                            getOptionLabel={(option) => option.name}
+                                                            renderOption={(props, schema, { selected }) => (
+                                                                <li {...props}>
+                                                                    {schema.name}
+                                                                </li>
+                                                            )}
+                                                            renderInput={(params) => (
+                                                                <TextField {...params}
+                                                                           required
+                                                                           disabled={isSubmitting}
+                                                                           InputProps={{
+                                                                               ...params.InputProps,
+                                                                               startAdornment:
+                                                                                   <InputAdornment
+                                                                                       position="start">
+                                                                                       <SchemaOutlinedIcon/>
+                                                                                   </InputAdornment>
+                                                                           }}
+                                                                           name={"schemaId"}
+                                                                           variant={"outlined"}
+                                                                           label="Schema"/>
+                                                            )}
+                                                        />
+
+                                                    </FormControl>
+                                                    <Box sx={{
+                                                        mt: 1,
+                                                        display: "flex",
+                                                        flexDirection: "row",
+                                                        justifyContent: "space-between"
+                                                    }}>
+                                                        <Button
+                                                            variant={values.schemaId ? "text" : "contained"}
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                                setSelectedSchemaId(undefined);
+                                                                setSchemaDialogOpen(true);
+                                                            }}
+                                                            startIcon={
+                                                                <AddIcon/>}>
+                                                            Create new schema
+                                                        </Button>
+
+                                                        <Button
+                                                            variant={"outlined"}
+                                                            disabled={!values.schemaId}
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                                setSelectedSchemaId(values.schemaId);
+                                                                setSchemaDialogOpen(true);
+                                                            }}
+                                                            startIcon={
+                                                                <SettingsIcon/>}>
+                                                            Edit {selectedSchema?.name}
+                                                        </Button>
+                                                    </Box>
+
+                                                    <Typography sx={{ mt: 2 }} variant={"body2"}>
+                                                        Each collection is bound to one schema, where the properties of the stored values are stored.
+                                                    </Typography>
+                                                    <Typography sx={{ mb: 2 }} variant={"body2"}>
+                                                        You can only pick a schema on the collection creation, but you can modify the schema afterwards
+                                                    </Typography>
+                                                </Paper>
+                                            </Grid>
                                         </Grid>
                                     </Paper>
 
-                                    {isNewCollection
-                                        ? <Button type="submit">Save</Button>
-                                        : <SubmitListener/>}
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            justifyContent: "end",
+                                            py: 1
+                                        }}>
+                                        <Button startIcon={<SaveIcon/>}
+                                                disabled={!dirty}
+                                                variant="contained"
+                                                type="submit">Save</Button>
+                                    </Box>
 
                                 </Box>
                             </form>

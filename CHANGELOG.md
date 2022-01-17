@@ -36,6 +36,9 @@ buildProperty<string>({
 });
 ```
 
+- Validation: The `email`validation prop in string properties is now placed 
+at the property level (not under `validation`)
+- `storageMeta`prop in string properties is now called `storage`
 
 
 ## [1.0.0-beta10] - 2022-01-11

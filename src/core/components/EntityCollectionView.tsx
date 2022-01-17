@@ -19,7 +19,7 @@ import {
     Entity,
     EntityCollection,
     LocalEntityCollection,
-    LocalEntitySchema, Property,
+    LocalEntitySchema,
     SelectionController
 } from "../../models";
 import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
@@ -38,6 +38,7 @@ import {
 } from "../../hooks";
 import { mergeDeep } from "../util/objects";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
+import { SchemaEditorDialog } from "./SchemaEditor/SchemaEditorPersistence";
 
 /**
  * @category Components
@@ -60,7 +61,6 @@ export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
     editable?: boolean;
 
 }
-
 
 export function useSelectionController<M = any>(): SelectionController {
 
@@ -137,12 +137,15 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
     const { schemaResolver } = collectionResolver;
     const schema = schemaResolver({});
 
+    const schemaEditable = schema.editable ?? true;
+
     const exportable = collection.exportable === undefined || collection.exportable;
 
     const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
     const hoverRow = schema.inlineEditing !== undefined && !schema.inlineEditing;
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const [schemaDialogOpen, setSchemaDialogOpen] = useState<boolean>(false);
 
     const selectionController = useSelectionController<M>();
     const usedSelectionController = collection.selectionController ?? selectionController;
@@ -197,14 +200,14 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         return schema.inlineEditing === undefined || schema.inlineEditing;
     }, [schema.inlineEditing, collection.permissions, path]);
 
-    const onCollectionModifiedForUser = useCallback(<M extends any>(path: string, partialCollection: LocalEntityCollection<M>) => {
+    const onCollectionModifiedForUser = useCallback((path: string, partialCollection: LocalEntityCollection<M>) => {
         if (userConfigPersistence) {
             const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
             userConfigPersistence.onCollectionModified(path, mergeDeep(currentStoredConfig, partialCollection));
         }
     }, [userConfigPersistence]);
 
-    const onSchemaModifiedForUser = useCallback(<M extends any>(path: string, partialSchema: LocalEntitySchema<M>) => {
+    const onSchemaModifiedForUser = useCallback((path: string, partialSchema: LocalEntitySchema<M>) => {
         if (userConfigPersistence) {
             const currentStoredConfig = userConfigPersistence.getSchemaConfig(path);
             userConfigPersistence.onPartialSchemaModified(path, mergeDeep(currentStoredConfig, partialSchema));
@@ -218,7 +221,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         // Only for property columns
         if (!schema.properties[key]) return;
         const property: Partial<AnyProperty> = { columnWidth: width };
-        const localSchema: LocalEntitySchema<any> = { properties: { [key as keyof M]: property } as Record<string, Property> };
+        const localSchema = { properties: { [key as keyof M]: property } } as LocalEntitySchema<M>;
         onSchemaModifiedForUser(path, localSchema);
     }, [schema.properties, onCollectionModifiedForUser]);
 
@@ -415,18 +418,24 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                           exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
                           path={path}/>;
 
-        const editButton = editable &&
+        const collectionEditButton = editable &&
             <IconButton
                 component={ReactLink}
                 to={navigationContext.buildUrlEditCollectionPath({ path })}>
-                <Settings color="primary"/>
+                <Settings/>
             </IconButton>;
+
+        const editButton = schemaEditable && <IconButton
+            onClick={() => setSchemaDialogOpen(true)}>
+            <Settings color="primary"/>
+        </IconButton>;
 
         return (
             <>
                 {extraActions}
                 {multipleDeleteButton}
                 {exportButton}
+                {collectionEditButton}
                 {editButton}
                 {addButton}
             </>
@@ -451,6 +460,12 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 hoverRow={hoverRow}
             />
 
+            <SchemaEditorDialog open={schemaDialogOpen}
+                                handleClose={(schema) => {
+                                    setSchemaDialogOpen(false);
+                                }}
+                                schemaId={schema.id}/>
+
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 path={path}
                                 schemaResolver={schemaResolver}
@@ -464,4 +479,3 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 }
 
 export default EntityCollectionView;
-

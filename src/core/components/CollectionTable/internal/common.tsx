@@ -52,12 +52,12 @@ export function getPropertyColumnWidth(property: Property): number {
 
     if (property.dataType === "string") {
         if (property.url) {
-            if (property.url === "video" || property.storageMeta?.mediaType === "video")
+            if (property.url === "video" || property.storage?.mediaType === "video")
                 return 340;
-            else if (property.url === "audio" || property.storageMeta?.mediaType === "audio")
+            else if (property.url === "audio" || property.storage?.mediaType === "audio")
                 return 300;
             return 240;
-        } else if (property.storageMeta) {
+        } else if (property.storage) {
             return 220;
         } else if (property.enumValues) {
             return 200;
@@ -65,7 +65,7 @@ export function getPropertyColumnWidth(property: Property): number {
             return 300;
         } else if (property.markdown) {
             return 300;
-        } else if (property.validation?.email) {
+        } else if (property.email) {
             return 200;
         } else {
             return 200;

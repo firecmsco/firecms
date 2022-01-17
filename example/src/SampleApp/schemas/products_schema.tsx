@@ -78,7 +78,7 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
                 path: entity.path,
                 entityId: entity.id,
                 schema: localeSchema
-            }).then((entity) => entity.values.name)
+            }).then((entity) => entity?.values.name)
         }/>
 };
 
@@ -101,7 +101,7 @@ export const productSchema = buildSchema<Product>({
         main_image: {
             dataType: "string",
             title: "Image",
-            storageMeta: {
+            storage: {
                 mediaType: "image",
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
@@ -180,7 +180,7 @@ export const productSchema = buildSchema<Product>({
             title: "Images",
             of: {
                 dataType: "string",
-                storageMeta: {
+                storage: {
                     mediaType: "image",
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
@@ -297,7 +297,7 @@ export const localeSchema = buildSchema<Locale>({
             title: "Video",
             dataType: "string",
             validation: { required: false },
-            storageMeta: {
+            storage: {
                 mediaType: "video",
                 storagePath: "videos",
                 acceptedFiles: ["video/*"],

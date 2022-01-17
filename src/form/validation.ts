@@ -143,11 +143,11 @@ function getYupStringSchema({
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} must be min ${validation.min} characters long`);
         if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.title} must be max ${validation.max} characters long`);
         if (validation.matches) schema = schema.matches(validation.matches);
-        if (validation.email) schema = schema.email(`${property.title} must be an email`);
-        if (validation.url) schema = schema.url(`${property.title} must be a url`);
         if (validation.trim) schema = schema.trim();
         if (validation.lowercase) schema = schema.lowercase();
         if (validation.uppercase) schema = schema.uppercase();
+        if (property.email) schema = schema.email(`${property.title} must be an email`);
+        if (property.url) schema = schema.url(`${property.title} must be a url`);
     } else {
         schema = schema.notRequired().nullable(true);
     }

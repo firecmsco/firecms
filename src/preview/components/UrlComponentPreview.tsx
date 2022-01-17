@@ -39,7 +39,7 @@ export function UrlComponentPreview({
     }
 
     const mediaType: MediaType = property.url as MediaType ||
-        property.storageMeta?.mediaType;
+        property.storage?.mediaType;
     if (mediaType === "image") {
         return <ImagePreview key={`image_preview_${url}_${size}`}
                              url={url}

@@ -272,10 +272,6 @@ export interface BooleanProperty extends BaseProperty<boolean> {
      */
     validation?: PropertyValidationSchema,
 
-    /**
-     * Configure how this property field is displayed
-     */
-    config?: FieldConfig<boolean>;
 }
 
 /**
@@ -284,7 +280,6 @@ export interface BooleanProperty extends BaseProperty<boolean> {
 export interface StringProperty extends BaseProperty<string> {
 
     dataType: "string";
-
 
     /**
      * Is this string property long enough so it should be displayed in
@@ -312,16 +307,21 @@ export interface StringProperty extends BaseProperty<string> {
     enumValues?: EnumValues;
 
     /**
-     * You can specify a `StorageMeta` configuration. It is used to
+     * You can specify a `Storage` configuration. It is used to
      * indicate that this string refers to a path in Google Cloud Storage.
      */
-    storageMeta?: StorageMeta;
+    storage?: StorageConfig;
 
     /**
      * If the value of this property is a URL, you can set this flag to true
      * to add a link, or one of the supported media types to render a preview
      */
     url?: boolean | MediaType;
+
+    /**
+     * Does this field include an email
+     */
+    email?: boolean;
 
     /**
      * Should this string be rendered as a tag instead of just text.
@@ -448,10 +448,6 @@ export interface TimestampProperty extends BaseProperty<Date> {
      */
     autoValue?: "on_create" | "on_update"
 
-    /**
-     * Configure how this property field is displayed
-     */
-    config?: FieldConfig<Date>;
 }
 
 /**
@@ -467,10 +463,6 @@ export interface GeopointProperty extends BaseProperty<GeoPoint> {
      */
     validation?: PropertyValidationSchema,
 
-    /**
-     * Configure how this property field is displayed
-     */
-    config?: FieldConfig<GeoPoint>;
 }
 
 /**
@@ -551,8 +543,6 @@ export interface StringPropertyValidationSchema extends PropertyValidationSchema
     min?: number;
     max?: number;
     matches?: RegExp;
-    email?: boolean;
-    url?: boolean;
     trim?: boolean;
     lowercase?: boolean;
     uppercase?: boolean;
@@ -577,20 +567,10 @@ export interface ArrayPropertyValidationSchema extends PropertyValidationSchema 
 }
 
 /**
- * Configure how a field is displayed
- * @category Entity properties
- */
-export interface FieldConfig<T extends CMSType, CustomProps = any> {
-
-
-}
-
-
-/**
  * Additional configuration related to Storage related fields
  * @category Entity properties
  */
-export interface StorageMeta {
+export interface StorageConfig {
 
     /**
      * Media type of this reference, used for displaying the preview
@@ -667,7 +647,7 @@ export interface UploadedFileContext {
     /**
      * Storage meta specified by the developer
      */
-    storageMeta: StorageMeta;
+    storage: StorageConfig;
 }
 
 

@@ -45,9 +45,9 @@ export function TextField<T extends string | number>({
     let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
     if (property.dataType === "string") {
-        const url = (property as StringProperty).url;
+        const url = property.url;
         mediaType = typeof url === "string" ? url : undefined;
-        multiline = (property as StringProperty).multiline;
+        multiline = property.multiline;
     }
 
     useClearRestoreValue({
@@ -56,7 +56,7 @@ export function TextField<T extends string | number>({
         setValue
     });
 
-    const isMultiline = !!multiline;
+    const isMultiline = Boolean(multiline);
 
     const internalValue = value ?? (property.dataType === "string" ? "" : value === 0 ? 0 : "");
 
@@ -81,25 +81,6 @@ export function TextField<T extends string | number>({
         }
     };
 
-    const filledInput = (
-        <FilledInput
-            sx={{
-                minHeight: "64px"
-            }}
-            autoFocus={autoFocus}
-            type={inputType}
-            multiline={isMultiline}
-            inputProps={{
-                rows: 4
-            }}
-            value={valueIsInfinity ? "Infinity" : (value ?? "")}
-            disabled={disabled}
-            onChange={(evt) => {
-                updateValue(evt.target.value as T);
-            }}
-        />
-    );
-
     return (
         <>
 
@@ -123,7 +104,22 @@ export function TextField<T extends string | number>({
                     <LabelWithIcon property={property}/>
                 </InputLabel>
 
-                {filledInput}
+                <FilledInput
+                    sx={{
+                        minHeight: "64px"
+                    }}
+                    autoFocus={autoFocus}
+                    type={inputType}
+                    multiline={isMultiline}
+                    inputProps={{
+                        rows: 4
+                    }}
+                    value={valueIsInfinity ? "Infinity" : (value ?? "")}
+                    disabled={disabled}
+                    onChange={(evt) => {
+                        updateValue(evt.target.value as T);
+                    }}
+                />
 
                 <Box display={"flex"}>
 

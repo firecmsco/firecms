@@ -399,41 +399,41 @@ function FormInternal<M>({
                            error={customIdError}
                            entity={entity}/>
 
-            <Box
-                            sx={{
-                                marginTop: 1
-                            }}>
-                            <Form onSubmit={handleSubmit}
-                                  noValidate>
+                <Box
+                    sx={{
+                        marginTop: 1
+                    }}>
+                    <Form onSubmit={handleSubmit}
+                          noValidate>
 
-                                <Box pt={3}>
-                                    {formFields}
-                                </Box>
-
-                                <Box sx={(theme) => ({
-                                    marginTop: theme.spacing(2),
-                                    background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
-                                    backdropFilter: "blur(4px)",
-                                    borderTop: `1px solid ${theme.palette.divider}`,
-                                    position: "sticky",
-                                    bottom: 0,
-                                    zIndex: 200
-                                })}
-                                >
-
-                                    {savingError &&
-                                    <Box textAlign="right">
-                                        <Typography color={"error"}>
-                                            {savingError.message}
-                                        </Typography>
-                                    </Box>}
-
-                                    {buildButtons(isSubmitting, modified, status)}
-
-                                </Box>
-
-                            </Form>
+                        <Box pt={3}>
+                            {formFields}
                         </Box>
+
+                        <Box sx={(theme) => ({
+                            marginTop: theme.spacing(2),
+                            background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
+                            backdropFilter: "blur(4px)",
+                            borderTop: `1px solid ${theme.palette.divider}`,
+                            position: "sticky",
+                            bottom: 0,
+                            zIndex: 200
+                        })}
+                        >
+
+                            {savingError &&
+                            <Box textAlign="right">
+                                <Typography color={"error"}>
+                                    {savingError.message}
+                                </Typography>
+                            </Box>}
+
+                            {buildButtons(isSubmitting, modified, status)}
+
+                        </Box>
+
+                    </Form>
+                </Box>
 
             <ErrorFocus containerRef={formRef}/>
 

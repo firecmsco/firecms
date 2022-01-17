@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from "react";
 import * as Yup from "yup";
 import Tree, {
     moveItemOnTree,
@@ -6,21 +6,18 @@ import Tree, {
     TreeData,
     TreeDestinationPosition,
     TreeSourcePosition
-} from '../Tree';
+} from "../Tree";
 import { TreeDraggableProvided } from "../Tree/components/TreeItem/TreeItem-types";
 
-import {
-    Field,
-    FieldProps as FormikFieldProps,
-    Form,
-    Formik,
-    useFormikContext
-} from "formik";
+import { Form, Formik, useFormikContext } from "formik";
 
 import deepEqual from "deep-equal";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import {
     Box,
+    Button,
+    CircularProgress,
+    Container,
     FormControl,
     FormHelperText,
     Grid,
@@ -30,24 +27,20 @@ import {
     Typography
 } from "@mui/material";
 import {
-    getColorForProperty,
     getIconForProperty,
     getWidgetNameForProperty
-} from "../../util/property_icons";
+} from "../../util/property_utils";
 
-import {
-    EntitySchema,
-    FieldProps,
-    Property,
-    PropertyOrBuilder
-} from "../../../models";
-import { propertiesToTree, treeToProperties } from './util';
+import { EntitySchema, Property, PropertyOrBuilder } from "../../../models";
+import { propertiesToTree, treeToProperties } from "./util";
 import { sortProperties } from "../../util/schemas";
+import { getWidget } from "../../util/widgets";
+import { PropertyEditView } from "./PropertyEditView";
 
 export type SchemaEditorProps<M> = {
-    isNewSchema: boolean;
-    schema?: EntitySchema<M>;
-    onSchemaModified: (schema: EntitySchema<M>) => void;
+    initialSchema?: EntitySchema<M>;
+    loading: boolean;
+    onSave: (schema: EntitySchema<M>) => void;
 };
 
 const YupSchema = Yup.object().shape({
@@ -56,11 +49,12 @@ const YupSchema = Yup.object().shape({
 });
 
 export function SchemaEditor<M>({
-                                    isNewSchema,
-                                    schema,
-                                    onSchemaModified
+                                    loading,
+                                    initialSchema,
+                                    onSave
                                 }: SchemaEditorProps<M>) {
 
+    const isNewSchema = !initialSchema;
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
     const [selectedProperty, setSelectedProperty] = useState<Property | undefined>();
 
@@ -89,7 +83,7 @@ export function SchemaEditor<M>({
 
     return (
         <Formik
-            initialValues={schema ?? {
+            initialValues={initialSchema ?? {
                 id: "",
                 name: "",
                 properties: {}
@@ -97,18 +91,17 @@ export function SchemaEditor<M>({
             validationSchema={YupSchema}
             onSubmit={(newSchema: EntitySchema) => {
                 console.log("submit", newSchema);
-                onSchemaModified(newSchema);
+                return onSave(newSchema);
             }}
         >
-            {({ values, setValues, setFieldValue, handleChange }) => {
-
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                React.useEffect(() => {
-                    if (schema)
-                        setValues({
-                            ...schema
-                        });
-                }, [schema]);
+            {({
+                  values,
+                  setFieldValue,
+                  handleChange,
+                  touched,
+                  errors,
+                  isSubmitting
+              }) => {
 
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 const tree = useMemo(() => {
@@ -138,97 +131,148 @@ export function SchemaEditor<M>({
 
                 return (
                     <Form>
+                        <Box sx={{ p: 2 }}>
+                            <Container maxWidth={"md"}>
 
-                        <Typography variant={"h4"} sx={{ py: 3 }}>
-                            {values.name ? `${values.name} schema` : "Schema"}
-                        </Typography>
-
-                        <Grid container spacing={2}>
-
-                            <Grid item xs={12}>
-                                <FormControl fullWidth
-                                             disabled={!isNewSchema}
-                                             variant="outlined">
-                                    <InputLabel
-                                        htmlFor="id">Id</InputLabel>
-                                    <OutlinedInput
-                                        id="id"
-                                        aria-describedby="id-helper"
-                                        onChange={handleChange}
-                                        value={values.id}
-                                    />
-                                    <FormHelperText
-                                        id="id-helper">
-                                        Id of this schema (e.g "product")
-                                    </FormHelperText>
-                                </FormControl>
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                <FormControl fullWidth
-                                             variant="outlined">
-                                    <InputLabel
-                                        htmlFor="name">Name</InputLabel>
-                                    <OutlinedInput
-                                        id="name"
-                                        aria-describedby="name-helper"
-                                        onChange={handleChange}
-                                        value={values.name}
-                                    />
-                                    <FormHelperText
-                                        id="name-helper">
-                                        Plural name (e.g. Products)
-                                    </FormHelperText>
-                                </FormControl>
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                <Typography sx={{ mt: 2 }}
-                                            variant={"subtitle2"}>
-                                    Properties
+                                <Typography variant={"h4"}
+                                            sx={{ py: 3 }}>
+                                    {values.name ? `${values.name} schema` : "Schema"}
                                 </Typography>
-                                <Paper elevation={0}
-                                       variant={"outlined"}
-                                       sx={{ p: 3 }}>
-                                    <Grid container>
-                                        <Grid item xs={12} sm={6}>
-                                            <Tree
-                                                key={`tree_${selectedPropertyId}`}
-                                                tree={tree}
-                                                renderItem={renderItem}
-                                                onDragEnd={onDragEnd}
-                                                isDragEnabled
-                                                isNestingEnabled
+
+                                <Grid container spacing={2}>
+
+                                    <Grid item xs={12}>
+                                        <FormControl fullWidth
+                                                     required
+                                                     disabled={!isNewSchema}
+                                                     error={touched.id && Boolean(errors.id)}>
+                                            <InputLabel
+                                                htmlFor="id">Id</InputLabel>
+                                            <OutlinedInput
+                                                id="id"
+                                                value={values.id}
+                                                onChange={handleChange}
+                                                aria-describedby="id-helper-text"
+                                                label="Id"
                                             />
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <Paper variant={"outlined"}
-                                                   sx={(theme) => ({
-                                                       p: 3,
-                                                       position: "sticky",
-                                                       top: theme.spacing(3)
-                                                   })}
-                                                   elevation={0}>
-                                                {selectedProperty && <Box>
-                                                    {selectedProperty.title}
-                                                </Box>}
-                                                {!selectedProperty && <Box>
-                                                    Select a property to
-                                                    edit it
-                                                </Box>}
-                                            </Paper>
-                                        </Grid>
+                                            <FormHelperText
+                                                id="id-helper-text">
+                                                {touched.id && Boolean(errors.id) ? errors.id : "Id of this schema (e.g 'product')"}
+                                            </FormHelperText>
+                                        </FormControl>
                                     </Grid>
-                                </Paper>
-                            </Grid>
-                        </Grid>
 
-                        {!isNewSchema && <SubmitListener/>}
+                                    <Grid item xs={12}>
+                                        <FormControl fullWidth
+                                                     required
+                                                     error={touched.name && Boolean(errors.name)}>
+                                            <InputLabel
+                                                htmlFor="name">Name</InputLabel>
+                                            <OutlinedInput
+                                                id="name"
+                                                value={values.name}
+                                                onChange={handleChange}
+                                                aria-describedby="name-helper-text"
+                                                label="Name"
+                                            />
+                                            <FormHelperText
+                                                id="name-helper-text">
+                                                {touched.name && Boolean(errors.name) ? errors.name : "Singular name of this schema (e.g. Product)"}
+                                            </FormHelperText>
+                                        </FormControl>
+                                    </Grid>
 
+                                    <Grid item xs={12}>
+                                        <Typography sx={{ my: 1 }}
+                                                    variant={"subtitle2"}>
+                                            Properties
+                                        </Typography>
+                                        <Paper elevation={0}
+                                               variant={"outlined"}
+                                               sx={{ p: 3 }}>
+                                            <Grid container>
+                                                <Grid item xs={12}
+                                                      sm={5}>
+                                                    <Tree
+                                                        key={`tree_${selectedPropertyId}`}
+                                                        tree={tree}
+                                                        renderItem={renderItem}
+                                                        onDragEnd={onDragEnd}
+                                                        isDragEnabled
+                                                        isNestingEnabled
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12}
+                                                      sm={7}
+                                                      sx={(theme) => ({
+                                                          borderLeft: `1px solid ${theme.palette.divider}`,
+                                                          pl: 1
+                                                      })}>
+                                                    <Box sx={{
+                                                        p: 2,
+                                                        position: "sticky",
+                                                        top: 3
+                                                    }}>
+                                                        {selectedProperty && selectedPropertyId &&
+                                                        <PropertyEditView
+                                                            propertyKey={selectedPropertyId}
+                                                            property={selectedProperty}/>}
+                                                        {!selectedProperty &&
+                                                        <Box>
+                                                            Select a
+                                                            property to
+                                                            edit it
+                                                        </Box>}
+
+                                                    </Box>
+                                                </Grid>
+                                            </Grid>
+                                        </Paper>
+                                    </Grid>
+                                </Grid>
+
+                                {/*<SubmitListener/>*/}
+
+                            </Container>
+                        </Box>
+
+                        <Box sx={(theme) => ({
+                            background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
+                            backdropFilter: "blur(4px)",
+                            borderTop: `1px solid ${theme.palette.divider}`,
+                            py: 1,
+                            px: 2,
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "end",
+                            position: "sticky",
+                            bottom: 0,
+                            zIndex: 200,
+                            textAlign: "right"
+                        })}
+                        >
+
+                            {loading && <Box sx={{ px: 3 }}>
+                                <CircularProgress size={16}
+                                                  thickness={8}/>
+                            </Box>}
+
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={isSubmitting || loading}
+                            >
+                                {isNewSchema ? "Create" : "Save"}
+                            </Button>
+
+                        </Box>
                     </Form>
                     );
                 }}
             </Formik>
+
     );
 }
 
@@ -246,6 +290,7 @@ export function SchemaEntry({
     onClick: () => void;
 }) {
 
+    const widget = typeof propertyOrBuilder !== "function" ? getWidget(propertyOrBuilder) : undefined;
     return (
         <Box sx={{
             display: "flex",
@@ -262,7 +307,7 @@ export function SchemaEntry({
              }}>
 
             <Box sx={{
-                background: getColorForProperty(propertyOrBuilder),
+                background: widget?.color ?? "#666",
                 height: "32px",
                 mt: 0.5,
                 padding: 0.5,
@@ -273,40 +318,40 @@ export function SchemaEntry({
                 {getIconForProperty(propertyOrBuilder, "inherit", "medium")}
             </Box>
             <Box sx={{
-                px: 3,
+                pl: 3,
+                pr: 1,
                 // maxWidth: "360px",
                 width: "100%",
                 display: "flex",
                 flexDirection: "row"
             }}>
                 <Paper variant={"outlined"}
-                       sx={{
+                       sx={(theme) => ({
+                           position: "relative",
                            mr: 2,
                            flexGrow: 1,
-                           border: selected ? "1px solid #999" : undefined
-                       }}
+                           p: 2,
+                           border: selected ? `1px solid ${theme.palette.text.primary}` : undefined
+                       })}
                        elevation={0}>
-                    <Box sx={{
-                        borderRadius: "2px",
-                        border: selected ? "1px solid #999" : "1px solid transparent",
-                        p: 2
-                    }}>
-                        {typeof propertyOrBuilder === "object" &&
-                        <PropertyPreview name={name}
-                                         property={propertyOrBuilder}/>}
-                        {typeof propertyOrBuilder !== "object" &&
-                        <PropertyBuilderPreview name={name}/>}
+
+                    {typeof propertyOrBuilder === "object" &&
+                    <PropertyPreview name={name}
+                                     property={propertyOrBuilder}/>}
+
+                    {typeof propertyOrBuilder !== "object" &&
+                    <PropertyBuilderPreview name={name}/>}
+
+                    <Box {...provided.dragHandleProps}
+                         sx={{ position: "absolute", p: 2, top: 0, right: 0 }}>
+                        <DragHandleIcon fontSize={"small"}/>
                     </Box>
                 </Paper>
-                <div {...provided.dragHandleProps}>
-                    <DragHandleIcon fontSize={"small"}/>
-                </div>
             </Box>
         </Box>
     );
 
 }
-
 
 export function SubmitListener() {
 
@@ -341,14 +386,14 @@ function PropertyPreview({
                              property
                          }: { name: string, property: Property }) {
     return (
-        <Box sx={{ width: '100%', display: "flex", flexDirection: "column" }}>
+        <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 
             <Typography variant="subtitle1"
                         component="span"
                         sx={{ flexGrow: 1, pr: 2 }}>
                 {property.title}
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: "row" }}>
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
                 <Typography sx={{ flexGrow: 1, pr: 2 }}
                             variant="body2"
                             component="span"
@@ -369,7 +414,7 @@ function PropertyBuilderPreview({
                                     name
                                 }: { name: string }) {
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
             <Typography variant="body2"
                         component="span"
                         color="text.disabled">
@@ -384,22 +429,6 @@ function PropertyBuilderPreview({
         </Box>
     );
 }
-
-// function StringPropertyField({name} : {name:string}){
-//     return (
-//         <Field
-//             required={true}
-//             name={`${name}`}
-//         >
-//             {(fieldProps: FormikFieldProps) => {
-//                 return <FieldInternal
-//                     component={component as ComponentType>}
-//                     componentProps={componentProps}
-//                     fieldProps={fieldProps}/>;
-//             }}
-//         </Field>
-//     );
-// }
 
 function isValidDrag(tree: TreeData, source: TreeSourcePosition, destination: TreeDestinationPosition) {
     const draggedPropertyId = tree.items[source.parentId].children[source.index];

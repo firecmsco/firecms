@@ -41,7 +41,7 @@ export const productSchema: EntitySchema = {
         main_image: {
             dataType: "string",
             title: "Image",
-            storageMeta: {
+            storage: {
                 mediaType: "image",
                 storagePath: "images",
                 acceptedFiles: ["image/*"],

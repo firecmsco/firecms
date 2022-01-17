@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-    Box,
-    Button,
-    CircularProgress,
-    Container,
-    Dialog
-} from "@mui/material";
+import { Dialog } from "@mui/material";
 
 import { SchemaEditor } from "./SchemaEditor";
 import { CircularProgressCenter } from "../CircularProgressCenter";
@@ -32,8 +26,8 @@ export function SchemaEditorPersistence({
         throw Error("Can't use the schema editor without specifying a `ConfigurationPersistence`");
 
     const [schema, setSchema] = React.useState<EntitySchema | undefined>();
-    const [error, setError] = React.useState<Error>();
-    const [persisting, setPersisting] = React.useState<boolean>();
+    const [error, setError] = React.useState<Error | undefined>();
+    const [saving, setSaving] = React.useState<boolean>();
 
     const snackbarContext = useSnackbarController();
 
@@ -59,10 +53,22 @@ export function SchemaEditorPersistence({
         return <CircularProgressCenter/>;
     }
 
-    const persistSchema = <M extends { [Key: string]: any }>(schema: EntitySchema<M>) => {
-        setPersisting(true)
+    const saveSchema = <M, >(schema: EntitySchema<M>) => {
+        console.log("save", schema);
+        setSaving(true)
         const newSchema = prepareSchemaForPersistence(schema);
         return configurationPersistence.saveSchema(newSchema)
+            .then(() => {
+                console.log("save then", schema);
+                setError(undefined);
+                snackbarContext.open({
+                    type: "success",
+                    message: "Schema updated"
+                });
+                if (handleClose) {
+                    handleClose(schema);
+                }
+            })
             .catch((e) => {
                 setError(e);
                 console.error(e);
@@ -72,65 +78,14 @@ export function SchemaEditorPersistence({
                     message: "Details in the console"
                 });
             })
-            .finally(() => setPersisting(false));
+            .finally(() => setSaving(false));
     };
 
-    return <>
+    console.log("schema", schema);
 
-        <Box sx={{ p: 2 }}>
-            <Container maxWidth={"md"}>
-                <SchemaEditor isNewSchema={isNewSchema}
-                              schema={schema}
-                              onSchemaModified={(schema) => {
-                                  setSchema(schema);
-                                  if (!isNewSchema)
-                                      persistSchema(schema).then();
-                              }}/>
-            </Container>
-        </Box>
-
-        <Box sx={(theme) => ({
-            background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
-            backdropFilter: "blur(4px)",
-            borderTop: `1px solid ${theme.palette.divider}`,
-            py: 1,
-            px: 2,
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "end",
-            position: "sticky",
-            bottom: 0,
-            zIndex: 200,
-            textAlign: "right"
-        })}
-        >
-
-            {persisting && <Box sx={{ px: 3 }}>
-                <CircularProgress size={16}
-                                  thickness={8}/>
-            </Box>}
-
-            <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={!schema}
-                onClick={() => {
-                    if (!schema)
-                        throw Error("Configuration error in schema editor persistence");
-                    if (isNewSchema) {
-                        persistSchema(schema).then(() => handleClose ? handleClose(schema) : undefined);
-                    } else if (handleClose) {
-                        handleClose(schema);
-                    }
-                }}
-            >
-                {isNewSchema ? "Create" : "Ok"}
-            </Button>
-
-        </Box>
-    </>;
+    return <SchemaEditor initialSchema={schema}
+                         loading={saving ?? false}
+                         onSave={saveSchema}/>;
 
 }
 

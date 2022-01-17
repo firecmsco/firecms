@@ -22,7 +22,7 @@ import {
 } from "../../models";
 import { PreviewComponent } from "../../preview/PreviewComponent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { getIconForProperty, getIdIcon } from "../util/property_icons";
+import { getIconForProperty, getIdIcon } from "../util/property_utils";
 import { ErrorBoundary } from "../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
 

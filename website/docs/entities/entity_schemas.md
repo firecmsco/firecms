@@ -64,7 +64,7 @@ export const productSchema = buildSchema<Product>({
             dataType: "string",
             title: "Image",
             config: {
-                storageMeta: {
+                storage: {
                     mediaType: "image",
                     storagePath: "images",
                     acceptedFiles: ["image/*"],

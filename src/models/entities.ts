@@ -31,6 +31,15 @@ export interface EntitySchema<M extends { [Key: string]: any } = any,
      * to pick from only those
      */
     customId?: boolean | EnumValues;
+
+    /**
+     * Can this entity schema be edited with the inline editor.
+     * It has only effect if a {@link ConfigurationPersistence} is provided
+     * to the {@link FireCMS} component.
+     * It defaults to `true`
+     */
+    editable?: boolean;
+
     /**
      * Initial filters applied to this collection.
      * Defaults to none.
@@ -294,4 +303,3 @@ export interface EntityCustomViewParams<M extends { [Key: string]: any } = any> 
      */
     modifiedValues?: EntityValues<M>;
 }
-

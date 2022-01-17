@@ -105,7 +105,7 @@ const productSchema = buildSchema<Product>({
             title: "Image",
             dataType: "string",
             config: {
-                storageMeta: {
+                storage: {
                     mediaType: "image",
                     storagePath: "images",
                     acceptedFiles: ["image/*"]
@@ -184,7 +184,7 @@ const localeSchema = buildSchema({
             title: "Video",
             dataType: "string",
             validation: { required: false },
-            storageMeta: {
+            storage: {
                 mediaType: "video",
                 storagePath: "videos",
                 acceptedFiles: ["video/*"]
@@ -245,6 +245,7 @@ export default function App() {
 
     return <FirebaseCMSApp
         name={"My Online Shop"}
+        schemas={[productSchema, localeSchema]}
         authentication={myAuthenticator}
         navigation={navigation}
         firebaseConfig={firebaseConfig}

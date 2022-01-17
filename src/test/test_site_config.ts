@@ -1,7 +1,11 @@
-import { EnumValues, InferSchemaType, StringProperty } from "../models";
+import {
+    EntityCallbacks,
+    EnumValues,
+    InferSchemaType,
+    StringProperty
+} from "../models";
 import { FirebaseCMSAppProps } from "../firebase_app";
 import { buildCollection, buildProperty, buildSchema } from "../core";
-import { EntityCallbacks } from "../models/entity_callbacks";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -27,10 +31,11 @@ const testProperty2:StringProperty = buildProperty<string>({
         required: true
     }
 });
+
 const testProperty3:StringProperty = buildProperty({
     dataType: "string",
     config: {
-        storageMeta: {
+        storage: {
             mediaType: "image",
             storagePath: "images",
             acceptedFiles: ["image/*"],
@@ -40,7 +45,9 @@ const testProperty3:StringProperty = buildProperty({
         }
     }
 });
+
 console.log(testProperty, testProperty2, testProperty3);
+
 export const productSchema = buildSchema({
     id: "product",
     name: "Product",
@@ -61,7 +68,7 @@ export const productSchema = buildSchema({
         main_image: buildProperty({
             dataType: "string",
             title: "Image",
-            storageMeta: {
+            storage: {
                 mediaType: "image",
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
@@ -91,19 +98,14 @@ export const productSchema = buildSchema({
                 clearOnDisabled: true,
                 disabledMessage: "You can only set the price on available items"
             },
-            config: {
-                // Preview: PriceTextPreview
-            },
             description: "Price with range validation"
         }),
         currency: buildProperty({
             dataType: "string",
             title: "Currency",
-            config: {
-                enumValues: {
-                    EUR: "Euros",
-                    DOL: "Dollars"
-                }
+            enumValues: {
+                EUR: "Euros",
+                DOL: "Dollars"
             },
             validation: {
                 required: true
@@ -126,33 +128,24 @@ export const productSchema = buildSchema({
             dataType: "string",
             title: "Description",
             description: "Example of a markdown field",
-            config: {
-                markdown: true
-            }
+            markdown: true
         }),
         amazon_link: buildProperty({
             dataType: "string",
             title: "Amazon link",
-            validation: {
-                url: true
-            },
-            config: {
-                url: true
-            }
+            url: true
         }),
         images: buildProperty({
             dataType: "array",
             title: "Images",
             of: {
                 dataType: "string",
-                config: {
-                    storageMeta: {
-                        mediaType: "image",
-                        storagePath: "images",
-                        acceptedFiles: ["image/*"],
-                        metadata: {
-                            cacheControl: "max-age=1000000"
-                        }
+                storage: {
+                    mediaType: "image",
+                    storagePath: "images",
+                    acceptedFiles: ["image/*"],
+                    metadata: {
+                        cacheControl: "max-age=1000000"
                     }
                 }
             },
@@ -191,9 +184,7 @@ export const productSchema = buildSchema({
             readOnly: true,
             of: {
                 dataType: "string",
-                config: {
-                    enumValues: locales
-                }
+                enumValues: locales
             }
         }),
         uppercase_name: buildProperty({
@@ -237,12 +228,10 @@ const localeSchema = {
             title: "Video",
             dataType: "string",
             validation: { required: false },
-            config: {
-                storageMeta: {
-                    mediaType: "video",
-                    storagePath: "videos",
-                    acceptedFiles: ["video/*"]
-                }
+            storage: {
+                mediaType: "video",
+                storagePath: "videos",
+                acceptedFiles: ["video/*"]
             }
         }
     }
@@ -326,9 +315,7 @@ export const usersSchema = buildSchema({
         email: {
             title: "Email",
             dataType: "string",
-            validation: {
-                email: true
-            }
+            email: true
         },
         phone: {
             title: "Phone",
@@ -350,18 +337,12 @@ export const usersSchema = buildSchema({
                 large: {
                     title: "Large",
                     dataType: "string",
-                    url: "image",
-                    validation: {
-                        url: true
-                    }
+                    url: "image"
                 },
                 thumbnail: {
                     title: "Thumbnail",
                     dataType: "string",
                     url: "image",
-                    validation: {
-                        url: true
-                    }
                 }
             },
             previewProperties: ["large"]

@@ -19,7 +19,7 @@ import {
     ArrayProperty,
     FieldProps,
     Property,
-    StorageMeta,
+    StorageConfig,
     StringProperty
 } from "../../models";
 import { useDropzone } from "react-dropzone";
@@ -137,24 +137,24 @@ export function StorageUploadField({
         setValue
     });
 
-    const storageMeta: StorageMeta | undefined = property.dataType === "string"
-        ? property.storageMeta
+    const storage: StorageConfig | undefined = property.dataType === "string"
+        ? property.storage
         : property.dataType === "array" &&
         (property.of as Property).dataType === "string"
-            ? (property.of as StringProperty).storageMeta
+            ? (property.of as StringProperty).storage
             : undefined;
 
-    if (!storageMeta)
+    if (!storage)
         throw Error("Storage meta must be specified");
 
     const fileNameBuilder = (file: File) => {
-        if (storageMeta.fileName) {
-            const fileName = storageMeta.fileName({
+        if (storage.fileName) {
+            const fileName = storage.fileName({
                 entityId: context.entityId,
                 values: context.values,
                 property,
                 file,
-                storageMeta,
+                storage,
                 name
             });
 
@@ -167,16 +167,16 @@ export function StorageUploadField({
     };
 
     const storagePathBuilder = (file: File) => {
-        if (typeof storageMeta.storagePath === "string")
-            return storageMeta.storagePath;
+        if (typeof storage.storagePath === "string")
+            return storage.storagePath;
 
-        if (typeof storageMeta.storagePath === "function") {
-            const storagePath = storageMeta.storagePath({
+        if (typeof storage.storagePath === "function") {
+            const storagePath = storage.storagePath({
                 entityId: context.entityId,
                 values: context.values,
                 property,
                 file,
-                storageMeta,
+                storage,
                 name
             });
 
@@ -212,7 +212,7 @@ export function StorageUploadField({
                     }}
                     fileNameBuilder={fileNameBuilder}
                     storagePathBuilder={storagePathBuilder}
-                    storageMeta={storageMeta}
+                    storage={storage}
                     multipleFilesSupported={multipleFilesSupported}/>
 
                 {includeDescription &&
@@ -248,13 +248,13 @@ interface StorageUploadProps {
     multipleFilesSupported: boolean;
     autoFocus: boolean;
     disabled: boolean;
-    storageMeta: StorageMeta;
+    storage: StorageConfig;
     fileNameBuilder: (file: File) => string;
     storagePathBuilder: (file: File) => string;
 }
 
 function FileDropComponent({
-                               storageMeta,
+                               storage,
                                disabled,
                                isDraggingOver,
                                onExternalDrop,
@@ -271,7 +271,7 @@ function FileDropComponent({
                                name,
                                helpText
                            }: {
-    storageMeta: StorageMeta,
+    storage: StorageConfig,
     disabled: boolean,
     isDraggingOver: boolean,
     droppableProvided: any,
@@ -297,7 +297,7 @@ function FileDropComponent({
         isDragAccept,
         isDragReject
     } = useDropzone({
-            accept: storageMeta.acceptedFiles,
+            accept: storage.acceptedFiles,
             disabled: disabled || isDraggingOver,
             noDragEventsBubbling: true,
             onDrop: onExternalDrop
@@ -421,12 +421,12 @@ export function StorageUpload({
                                   multipleFilesSupported,
                                   disabled,
                                   autoFocus,
-                                  storageMeta,
+                                  storage,
                                   fileNameBuilder,
                                   storagePathBuilder
                               }: StorageUploadProps) {
 
-    const storage = useStorageSource();
+    const storageSource = useStorageSource();
 
     if (multipleFilesSupported) {
         const arrayProperty = property as ArrayProperty<string[]>;
@@ -439,9 +439,7 @@ export function StorageUpload({
         }
     }
 
-    const metadata: any | undefined = storageMeta?.metadata;
-
-    const classes = useStyles();
+    const metadata: any | undefined = storage?.metadata;
 
     const size = multipleFilesSupported ? "small" : "regular";
 
@@ -538,11 +536,11 @@ export function StorageUpload({
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
         let uploadPathOrDownloadUrl = uploadedPath;
-        if (storageMeta.storeUrl) {
-            uploadPathOrDownloadUrl = await storage.getDownloadURL(uploadedPath);
+        if (storage.storeUrl) {
+            uploadPathOrDownloadUrl = await storageSource.getDownloadURL(uploadedPath);
         }
-        if (storageMeta.postProcess) {
-            uploadPathOrDownloadUrl = await storageMeta.postProcess(uploadPathOrDownloadUrl);
+        if (storage.postProcess) {
+            uploadPathOrDownloadUrl = await storage.postProcess(uploadPathOrDownloadUrl);
         }
 
         let newValue: StorageFieldItem[];
@@ -587,7 +585,7 @@ export function StorageUpload({
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId={`droppable_${name}`} direction="horizontal">
                 {(provided, snapshot) => {
-                    return <FileDropComponent storageMeta={storageMeta}
+                    return <FileDropComponent storage={storage}
                                               disabled={disabled}
                                               isDraggingOver={snapshot.isDraggingOver}
                                               droppableProvided={provided}

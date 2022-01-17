@@ -42,7 +42,7 @@ export function SkeletonComponent({
         const stringProperty = property as StringProperty;
         if (stringProperty.url) {
             content = renderUrlComponent(stringProperty, size);
-        } else if (stringProperty.storageMeta) {
+        } else if (stringProperty.storage) {
             content = renderSkeletonImageThumbnail(size);
         } else {
             content = renderSkeletonText();
@@ -56,7 +56,7 @@ export function SkeletonComponent({
             } else if (arrayProperty.of.dataType === "string") {
                 if (arrayProperty.of.enumValues) {
                     content = renderArrayEnumTableCell();
-                } else if (arrayProperty.of.storageMeta) {
+                } else if (arrayProperty.of.storage) {
                     content = renderGenericArrayCell(arrayProperty.of);
                 } else {
                     content = renderArrayOfStrings();
@@ -258,7 +258,7 @@ function renderUrlComponent(property: StringProperty, size: PreviewSize = "regul
         </div>;
     }
 
-    const mediaType = property.url || property.storageMeta?.mediaType;
+    const mediaType = property.url || property.storage?.mediaType;
     if (mediaType === "image") {
         return renderSkeletonImageThumbnail(size);
     } else if (mediaType === "audio") {
