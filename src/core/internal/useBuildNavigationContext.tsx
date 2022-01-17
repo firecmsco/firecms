@@ -155,11 +155,12 @@ export function useBuildNavigationContext<UserType>({
             const permissions = resolvedCollection.permissions;
             result = {
                 ...result,
-                schemaResolver: schema
-                    ? result.schemaResolver ?? schemaRegistry.buildSchemaResolver({
-                    schema,
-                    path
-                }) : undefined,
+                schemaResolver: result.schemaResolver ?? (schema
+                    ? schemaRegistry.buildSchemaResolver({
+                        schema,
+                        path
+                    })
+                    : undefined),
                 subcollections: result.subcollections ?? subcollections,
                 callbacks: result.callbacks ?? callbacks,
                 permissions: result.permissions ?? permissions
@@ -208,7 +209,7 @@ export function useBuildNavigationContext<UserType>({
             if (path)
                 return `${baseCollectionPath}/edit/${removeInitialAndTrailingSlashes(path)}`;
             else
-                return `newcollection`;
+                return "newcollection";
         }, //
         [baseCollectionPath]);
 
@@ -218,7 +219,7 @@ export function useBuildNavigationContext<UserType>({
             if (id)
                 return `s/edit/${removeInitialAndTrailingSlashes(id)}`;
             else
-                return `newschema`;
+                return "newschema";
         }, //
         [baseCollectionPath]);
 
@@ -227,7 +228,6 @@ export function useBuildNavigationContext<UserType>({
 
     const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(path)}` : `/${path}`,
         [cleanBasePath]);
-
 
     const getCollectionOverride = useCallback(<M, >(path: string): LocalEntityCollection<M> | undefined => {
         if (!userConfigPersistence)
@@ -252,7 +252,6 @@ export function useBuildNavigationContext<UserType>({
         buildCMSUrlPath
     };
 }
-
 
 async function resolveNavigation<UserType = any>({
                                                      navigationOrBuilder,
@@ -314,7 +313,6 @@ const getNavigation = ({
 
     return navigation;
 };
-
 
 export function getSidePanelKey(path: string, entityId?: string) {
     if (entityId)

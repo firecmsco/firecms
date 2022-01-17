@@ -18,6 +18,11 @@ import {
     Button,
     CircularProgress,
     Container,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     FormControl,
     FormHelperText,
     Grid,
@@ -104,10 +109,22 @@ export function SchemaEditor<M>({
               }) => {
 
                 // eslint-disable-next-line react-hooks/rules-of-hooks
+                const [pendingMove, setPendingMove] = useState<[TreeSourcePosition, TreeDestinationPosition] | undefined>();
+
+                // eslint-disable-next-line react-hooks/rules-of-hooks
                 const tree = useMemo(() => {
                     const sortedProperties = sortProperties(values.properties, values.propertiesOrder);
                     return propertiesToTree(sortedProperties);
                 }, [values.properties, values.propertiesOrder]);
+
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                const doPropertyMove = useCallback((source: TreeSourcePosition, destination: TreeDestinationPosition) => {
+                    const newTree = moveItemOnTree(tree, source, destination);
+                    const [properties, propertiesOrder] = treeToProperties<M>(newTree);
+
+                    setFieldValue("propertiesOrder", propertiesOrder);
+                    setFieldValue("properties", properties);
+                }, []);
 
                 const onDragEnd = (
                     source: TreeSourcePosition,
@@ -122,11 +139,12 @@ export function SchemaEditor<M>({
                         return;
                     }
 
-                    const newTree = moveItemOnTree(tree, source, destination);
-                    const [properties, propertiesOrder] = treeToProperties<M>(newTree);
+                    if (source.parentId !== destination.parentId) {
+                        setPendingMove([source, destination]);
+                    } else {
+                        doPropertyMove(source, destination);
+                    }
 
-                    setFieldValue("propertiesOrder", propertiesOrder);
-                    setFieldValue("properties", properties);
                 };
 
                 return (
@@ -215,6 +233,7 @@ export function SchemaEditor<M>({
                                                     }}>
                                                         {selectedProperty && selectedPropertyId &&
                                                         <PropertyEditView
+                                                            key={`edit_view_${selectedPropertyId}`}
                                                             propertyKey={selectedPropertyId}
                                                             property={selectedProperty}/>}
                                                         {!selectedProperty &&
@@ -268,6 +287,36 @@ export function SchemaEditor<M>({
                             </Button>
 
                         </Box>
+
+                        <Dialog
+                            open={Boolean(pendingMove)}
+                            onClose={() => setPendingMove(undefined)}
+                        >
+                            <DialogTitle>
+                                {"Are you sure?"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    You are moving one property from one context to another.
+                                </DialogContentText>
+                                <DialogContentText>
+                                    This will <b>not transfer the data</b>, only modify the schema.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    onClick={() => setPendingMove(undefined)}
+                                    autoFocus>Cancel</Button>
+                                <Button onClick={() => {
+                                    setPendingMove(undefined);
+                                    if (pendingMove)
+                                        doPropertyMove(pendingMove[0], pendingMove[1]);
+                                }}>
+                                    Proceed
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+
                     </Form>
                     );
                 }}
