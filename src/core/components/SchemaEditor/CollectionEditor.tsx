@@ -31,7 +31,7 @@ import { EntityCollection } from "../../../models";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { ErrorView } from "../ErrorView";
 import { useNavigation, useSnackbarController } from "../../../hooks";
-import { SchemaEditorDialog } from "./SchemaEditorPersistence";
+import { SchemaEditorDialog } from "./SchemaEditorDialog";
 import {
     computeTopNavigation,
     TopNavigationResult

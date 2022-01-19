@@ -334,15 +334,15 @@ export const usersSchema = buildSchema({
             title: "Picture",
             dataType: "map",
             properties: {
-                large: {
-                    title: "Large",
-                    dataType: "string",
-                    url: "image"
-                },
                 thumbnail: {
                     title: "Thumbnail",
                     dataType: "string",
                     url: "image",
+                },
+                large: {
+                    title: "Large",
+                    dataType: "string",
+                    url: "image"
                 }
             },
             previewProperties: ["large"]

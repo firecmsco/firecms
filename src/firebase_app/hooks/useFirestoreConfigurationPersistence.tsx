@@ -1,6 +1,7 @@
 import { FirebaseApp } from "firebase/app";
 import {
     collection,
+    deleteField,
     doc,
     DocumentSnapshot,
     Firestore,
@@ -11,14 +12,8 @@ import {
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef } from "react";
 import { ConfigurationPersistence } from "../../models/config_persistence";
-import {
-    EntityCollection,
-    EntitySchema,
-    Properties,
-    Property
-} from "../../models";
+import { EntityCollection, EntitySchema, Properties } from "../../models";
 import { sortProperties } from "../../core/util/schemas";
-
 
 /**
  * @category Firebase
@@ -123,9 +118,11 @@ export function useFirestoreConfigurationPersistence({
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.log("saveSchema", schema);
         const ref = doc(firestore, configPath, "config", "schemas", schema.id);
-        return setDoc(ref, {
-            ...schema
-        }, { merge: true });
+        try {
+            return setDoc(ref, setUndefinedToDelete(schema as unknown as Record<string, unknown>), { merge: true });
+        } catch (e) {
+            return Promise.reject(e);
+        }
     }, [firestore]);
 
     return {
@@ -137,4 +134,25 @@ export function useFirestoreConfigurationPersistence({
         getSchema,
         saveSchema
     }
+}
+
+export function setUndefinedToDelete(data: Record<string, unknown>): Record<string, unknown> {
+    if (typeof data === "object") {
+        return Object.entries(data)
+            .map(([key, value]) => {
+                if (Array.isArray(value)) {
+                    return { [key]: value.map(v => setUndefinedToDelete(v)) };
+                } else if (typeof value === "object") {
+                    return { [key]: setUndefinedToDelete(value as Record<string, unknown>) };
+                } else {
+                    if (value === undefined) {
+                        return { [key]: deleteField() }
+                    } else {
+                        return { [key]: value };
+                    }
+                }
+            })
+            .reduce((a, b) => ({ ...a, ...b }), {});
+    }
+    return data;
 }

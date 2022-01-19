@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState
+} from "react";
 import * as Yup from "yup";
 import Tree, {
     moveItemOnTree,
@@ -8,8 +14,9 @@ import Tree, {
     TreeSourcePosition
 } from "../Tree";
 import { TreeDraggableProvided } from "../Tree/components/TreeItem/TreeItem-types";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { Form, Formik, useFormikContext } from "formik";
+import { Formik, FormikProps, useFormikContext } from "formik";
 
 import deepEqual from "deep-equal";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
@@ -29,7 +36,9 @@ import {
     InputLabel,
     OutlinedInput,
     Paper,
-    Typography
+    Typography,
+    useMediaQuery,
+    useTheme
 } from "@mui/material";
 import {
     getIconForProperty,
@@ -38,14 +47,22 @@ import {
 
 import { EntitySchema, Property, PropertyOrBuilder } from "../../../models";
 import { propertiesToTree, treeToProperties } from "./util";
-import { sortProperties } from "../../util/schemas";
+import {
+    prepareSchemaForPersistence,
+    sortProperties
+} from "../../util/schemas";
 import { getWidget } from "../../util/widgets";
-import { PropertyEditView } from "./PropertyEditView";
+import { NewPropertyDialog, PropertyForm } from "./PropertyEditView";
+import { useSnackbarController } from "../../../hooks";
+import { useConfigurationPersistence } from "../../../hooks/useConfigurationPersistence";
+import { ErrorView } from "../ErrorView";
+import { CircularProgressCenter } from "../CircularProgressCenter";
+import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 
 export type SchemaEditorProps<M> = {
-    initialSchema?: EntitySchema<M>;
-    loading: boolean;
-    onSave: (schema: EntitySchema<M>) => void;
+    schemaId?: string;
+    handleClose?: (schema: EntitySchema<M>) => void;
+    updateDirtyStatus?: (dirty: boolean) => void;
 };
 
 const YupSchema = Yup.object().shape({
@@ -54,27 +71,150 @@ const YupSchema = Yup.object().shape({
 });
 
 export function SchemaEditor<M>({
-                                    loading,
-                                    initialSchema,
-                                    onSave
+                                    schemaId,
+                                    handleClose,
+                                    updateDirtyStatus
                                 }: SchemaEditorProps<M>) {
 
-    const isNewSchema = !initialSchema;
+    const isNewSchema = !schemaId;
+    const schemaRegistry = useSchemaRegistry();
+    const configurationPersistence = useConfigurationPersistence();
+    const snackbarContext = useSnackbarController();
+
+    if (!configurationPersistence)
+        throw Error("Can't use the schema editor without specifying a `ConfigurationPersistence`");
+
+    const [schema, setSchema] = React.useState<EntitySchema | undefined>();
+    const [error, setError] = React.useState<Error | undefined>();
+
+    useEffect(() => {
+        try {
+            if (schemaRegistry.initialised) {
+                if (schemaId) {
+                    setSchema(schemaRegistry.findSchema(schemaId));
+                } else {
+                    setSchema(undefined);
+                }
+            }
+        } catch (e) {
+            console.error(e);
+            setError(error);
+        }
+    }, [schemaId, schemaRegistry]);
+
+    if (error) {
+        return <ErrorView error={`Error fetching schema ${schemaId}`}/>;
+    }
+
+    if (!schemaRegistry.initialised || !(isNewSchema || schema)) {
+        return <CircularProgressCenter/>;
+    }
+
+    const saveSchema = (schema: EntitySchema<M>): Promise<boolean> => {
+        const newSchema = prepareSchemaForPersistence(schema);
+        return configurationPersistence.saveSchema(newSchema)
+            .then(() => {
+                setError(undefined);
+                snackbarContext.open({
+                    type: "success",
+                    message: "Schema updated"
+                });
+                if (handleClose) {
+                    handleClose(schema);
+                }
+                return true;
+            })
+            .catch((e) => {
+                console.error(e);
+                snackbarContext.open({
+                    type: "error",
+                    title: "Error persisting schema",
+                    message: "Details in the console"
+                });
+                return false;
+            });
+    };
+
+    return (
+        <Formik
+            initialValues={schema ?? {
+                id: "",
+                name: "",
+                properties: {}
+            } as EntitySchema}
+            validationSchema={YupSchema}
+            onSubmit={(newSchema: EntitySchema, formikHelpers) => {
+                console.log("submit", newSchema);
+                return saveSchema(newSchema).then(() => formikHelpers.resetForm({ values: newSchema }));
+            }}
+        >
+            {(formikProps) => {
+                return (
+                    <SchemaEditorForm {...formikProps}
+                                      updateDirtyStatus={updateDirtyStatus}
+                                      isNewSchema={isNewSchema}/>
+                );
+            }}
+
+        </Formik>
+
+    );
+}
+
+function SchemaEditorForm<M>({
+                                 values,
+                                 setFieldValue,
+                                 handleChange,
+                                 touched,
+                                 errors,
+                                 dirty,
+                                 isSubmitting,
+                                 isNewSchema,
+                                 handleSubmit,
+                                 updateDirtyStatus
+                             }: FormikProps<EntitySchema<M>> & {
+    isNewSchema: boolean,
+    updateDirtyStatus?: (dirty: boolean) => void;
+}) {
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const navigationStack = useRef(0);
+
+    const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
-    const [selectedProperty, setSelectedProperty] = useState<Property | undefined>();
+    const selectedProperty = selectedPropertyId ? values.properties[selectedPropertyId] : undefined;
+    const [pendingMove, setPendingMove] = useState<[TreeSourcePosition, TreeDestinationPosition] | undefined>();
+
+    const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (updateDirtyStatus)
+            updateDirtyStatus(dirty);
+    }, [updateDirtyStatus,dirty]);
+
+    useEffect(() => {
+        const newSelectedPropertyId = location.hash ? location.hash.substring(1) : undefined;
+        setSelectedPropertyId(newSelectedPropertyId);
+    }, [location]);
 
     const onPropertyClick = useCallback((property: Property, propertyId: string) => {
         setSelectedPropertyId(propertyId);
-        setSelectedProperty(property)
-    }, []);
+        const replace = Boolean(location.hash);
+        if (!replace) navigationStack.current++;
+        navigate(`${location.pathname}#${propertyId}`, { replace: replace });
+    }, [location]);
 
-    const renderItem = ({
-                            item,
-                            onExpand,
-                            onCollapse,
-                            provided,
-                            snapshot
-                        }: RenderItemParams) => {
+    const renderItem = useCallback(({
+                                        item,
+                                        onExpand,
+                                        onCollapse,
+                                        provided,
+                                        snapshot
+                                    }: RenderItemParams) => {
         const property = item.data.property as Property;
         return (
             <SchemaEntry
@@ -84,245 +224,280 @@ export function SchemaEditor<M>({
                 onClick={() => onPropertyClick(property, item.id as string)}
                 selected={snapshot.isDragging || selectedPropertyId === item.id}/>
         )
+    }, [selectedPropertyId]);
+
+    const tree = useMemo(() => {
+        const sortedProperties = sortProperties(values.properties, values.propertiesOrder);
+        return propertiesToTree(sortedProperties);
+    }, [values.properties, values.propertiesOrder]);
+
+    const doPropertyMove = useCallback((source: TreeSourcePosition, destination: TreeDestinationPosition) => {
+        const newTree = moveItemOnTree(tree, source, destination);
+        const [properties, propertiesOrder] = treeToProperties<M>(newTree);
+
+        setFieldValue("propertiesOrder", propertiesOrder);
+        setFieldValue("properties", properties);
+    }, [tree]);
+
+    const onPropertyCreated = useCallback((id: string, property: Property) => {
+        setFieldValue("properties", { ...values.properties, [id]: property });
+        setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? []), id]);
+    }, []);
+
+    const onDragEnd = (
+        source: TreeSourcePosition,
+        destination?: TreeDestinationPosition
+    ) => {
+
+        if (!destination) {
+            return;
+        }
+
+        if (!isValidDrag(tree, source, destination)) {
+            return;
+        }
+
+        if (source.parentId !== destination.parentId) {
+            setPendingMove([source, destination]);
+        } else {
+            doPropertyMove(source, destination);
+        }
+
     };
 
+    const propertyEditForm = <Box sx={{
+        position: "sticky",
+        top: 3
+    }}>
+
+        {selectedProperty && selectedPropertyId &&
+        <PropertyForm
+            autoSubmit={true}
+            key={`edit_view_${selectedPropertyId}`}
+            propertyKey={selectedPropertyId}
+            property={selectedProperty}
+            onPropertyChanged={(id, property) => {
+                const propertyPath = selectedPropertyId ? "properties." + selectedPropertyId.replace(".", ".properties.") : undefined;
+                if (propertyPath)
+                    setFieldValue(propertyPath, property);
+            }
+            }/>}
+
+        {!selectedProperty &&
+        <Box>
+            Select a
+            property to
+            edit it
+        </Box>}
+
+    </Box>;
+
     return (
-        <Formik
-            initialValues={initialSchema ?? {
-                id: "",
-                name: "",
-                properties: {}
-            } as EntitySchema}
-            validationSchema={YupSchema}
-            onSubmit={(newSchema: EntitySchema) => {
-                console.log("submit", newSchema);
-                return onSave(newSchema);
-            }}
-        >
-            {({
-                  values,
-                  setFieldValue,
-                  handleChange,
-                  touched,
-                  errors,
-                  isSubmitting
-              }) => {
+        <>
+            <Box sx={{ p: 2 }}>
+                <Container maxWidth={"md"}>
 
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const [pendingMove, setPendingMove] = useState<[TreeSourcePosition, TreeDestinationPosition] | undefined>();
+                    <Typography variant={"h4"}
+                                sx={{ py: 3 }}>
+                        {values.name ? `${values.name} schema` : "Schema"}
+                    </Typography>
 
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const tree = useMemo(() => {
-                    const sortedProperties = sortProperties(values.properties, values.propertiesOrder);
-                    return propertiesToTree(sortedProperties);
-                }, [values.properties, values.propertiesOrder]);
+                    <Grid container spacing={2}>
 
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const doPropertyMove = useCallback((source: TreeSourcePosition, destination: TreeDestinationPosition) => {
-                    const newTree = moveItemOnTree(tree, source, destination);
-                    const [properties, propertiesOrder] = treeToProperties<M>(newTree);
+                        <Grid item xs={12}>
+                            <FormControl fullWidth
+                                         required
+                                         disabled={!isNewSchema}
+                                         error={touched.id && Boolean(errors.id)}>
+                                <InputLabel
+                                    htmlFor="id">Id</InputLabel>
+                                <OutlinedInput
+                                    id="id"
+                                    value={values.id}
+                                    onChange={handleChange}
+                                    aria-describedby="id-helper-text"
+                                    label="Id"
+                                />
+                                <FormHelperText
+                                    id="id-helper-text">
+                                    {touched.id && Boolean(errors.id) ? errors.id : "Id of this schema (e.g 'product')"}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
 
-                    setFieldValue("propertiesOrder", propertiesOrder);
-                    setFieldValue("properties", properties);
-                }, []);
+                        <Grid item xs={12}>
+                            <FormControl fullWidth
+                                         required
+                                         error={touched.name && Boolean(errors.name)}>
+                                <InputLabel
+                                    htmlFor="name">Name</InputLabel>
+                                <OutlinedInput
+                                    id="name"
+                                    value={values.name}
+                                    onChange={handleChange}
+                                    aria-describedby="name-helper-text"
+                                    label="Name"
+                                />
+                                <FormHelperText
+                                    id="name-helper-text">
+                                    {touched.name && Boolean(errors.name) ? errors.name : "Singular name of this schema (e.g. Product)"}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
 
-                const onDragEnd = (
-                    source: TreeSourcePosition,
-                    destination?: TreeDestinationPosition
-                ) => {
-
-                    if (!destination) {
-                        return;
-                    }
-
-                    if (!isValidDrag(tree, source, destination)) {
-                        return;
-                    }
-
-                    if (source.parentId !== destination.parentId) {
-                        setPendingMove([source, destination]);
-                    } else {
-                        doPropertyMove(source, destination);
-                    }
-
-                };
-
-                return (
-                    <Form>
-                        <Box sx={{ p: 2 }}>
-                            <Container maxWidth={"md"}>
-
-                                <Typography variant={"h4"}
-                                            sx={{ py: 3 }}>
-                                    {values.name ? `${values.name} schema` : "Schema"}
+                        <Grid item xs={12}>
+                            <Box sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                alignItems: "end",
+                                my: 1
+                            }}>
+                                <Typography
+                                    variant={"subtitle2"}>
+                                    Properties
                                 </Typography>
-
-                                <Grid container spacing={2}>
-
-                                    <Grid item xs={12}>
-                                        <FormControl fullWidth
-                                                     required
-                                                     disabled={!isNewSchema}
-                                                     error={touched.id && Boolean(errors.id)}>
-                                            <InputLabel
-                                                htmlFor="id">Id</InputLabel>
-                                            <OutlinedInput
-                                                id="id"
-                                                value={values.id}
-                                                onChange={handleChange}
-                                                aria-describedby="id-helper-text"
-                                                label="Id"
-                                            />
-                                            <FormHelperText
-                                                id="id-helper-text">
-                                                {touched.id && Boolean(errors.id) ? errors.id : "Id of this schema (e.g 'product')"}
-                                            </FormHelperText>
-                                        </FormControl>
-                                    </Grid>
-
-                                    <Grid item xs={12}>
-                                        <FormControl fullWidth
-                                                     required
-                                                     error={touched.name && Boolean(errors.name)}>
-                                            <InputLabel
-                                                htmlFor="name">Name</InputLabel>
-                                            <OutlinedInput
-                                                id="name"
-                                                value={values.name}
-                                                onChange={handleChange}
-                                                aria-describedby="name-helper-text"
-                                                label="Name"
-                                            />
-                                            <FormHelperText
-                                                id="name-helper-text">
-                                                {touched.name && Boolean(errors.name) ? errors.name : "Singular name of this schema (e.g. Product)"}
-                                            </FormHelperText>
-                                        </FormControl>
-                                    </Grid>
-
-                                    <Grid item xs={12}>
-                                        <Typography sx={{ my: 1 }}
-                                                    variant={"subtitle2"}>
-                                            Properties
-                                        </Typography>
-                                        <Paper elevation={0}
-                                               variant={"outlined"}
-                                               sx={{ p: 3 }}>
-                                            <Grid container>
-                                                <Grid item xs={12}
-                                                      sm={5}>
-                                                    <Tree
-                                                        key={`tree_${selectedPropertyId}`}
-                                                        tree={tree}
-                                                        renderItem={renderItem}
-                                                        onDragEnd={onDragEnd}
-                                                        isDragEnabled
-                                                        isNestingEnabled
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12}
-                                                      sm={7}
-                                                      sx={(theme) => ({
-                                                          borderLeft: `1px solid ${theme.palette.divider}`,
-                                                          pl: 1
-                                                      })}>
-                                                    <Box sx={{
-                                                        p: 2,
-                                                        position: "sticky",
-                                                        top: 3
-                                                    }}>
-                                                        {selectedProperty && selectedPropertyId &&
-                                                        <PropertyEditView
-                                                            key={`edit_view_${selectedPropertyId}`}
-                                                            propertyKey={selectedPropertyId}
-                                                            property={selectedProperty}/>}
-                                                        {!selectedProperty &&
-                                                        <Box>
-                                                            Select a
-                                                            property to
-                                                            edit it
-                                                        </Box>}
-
-                                                    </Box>
-                                                </Grid>
-                                            </Grid>
-                                        </Paper>
-                                    </Grid>
-                                </Grid>
-
-                                {/*<SubmitListener/>*/}
-
-                            </Container>
-                        </Box>
-
-                        <Box sx={(theme) => ({
-                            background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
-                            backdropFilter: "blur(4px)",
-                            borderTop: `1px solid ${theme.palette.divider}`,
-                            py: 1,
-                            px: 2,
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "end",
-                            position: "sticky",
-                            bottom: 0,
-                            zIndex: 200,
-                            textAlign: "right"
-                        })}
-                        >
-
-                            {loading && <Box sx={{ px: 3 }}>
-                                <CircularProgress size={16}
-                                                  thickness={8}/>
-                            </Box>}
-
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                type="submit"
-                                disabled={isSubmitting || loading}
-                            >
-                                {isNewSchema ? "Create" : "Save"}
-                            </Button>
-
-                        </Box>
-
-                        <Dialog
-                            open={Boolean(pendingMove)}
-                            onClose={() => setPendingMove(undefined)}
-                        >
-                            <DialogTitle>
-                                {"Are you sure?"}
-                            </DialogTitle>
-                            <DialogContent>
-                                <DialogContentText>
-                                    You are moving one property from one context to another.
-                                </DialogContentText>
-                                <DialogContentText>
-                                    This will <b>not transfer the data</b>, only modify the schema.
-                                </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
                                 <Button
-                                    onClick={() => setPendingMove(undefined)}
-                                    autoFocus>Cancel</Button>
-                                <Button onClick={() => {
-                                    setPendingMove(undefined);
-                                    if (pendingMove)
-                                        doPropertyMove(pendingMove[0], pendingMove[1]);
-                                }}>
-                                    Proceed
+                                    color="primary"
+                                    onClick={() => setNewPropertyDialogOpen(true)}
+                                >
+                                    Add property
                                 </Button>
-                            </DialogActions>
-                        </Dialog>
+                            </Box>
+                            <Paper elevation={0}
+                                   variant={"outlined"}
+                                   sx={{ p: 3 }}>
+                                <Grid container>
+                                    <Grid item xs={12}
+                                          md={5}>
+                                        <Tree
+                                            key={`tree_${selectedPropertyId}`}
+                                            tree={tree}
+                                            renderItem={renderItem}
+                                            onDragEnd={onDragEnd}
+                                            isDragEnabled
+                                            isNestingEnabled
+                                        />
+                                    </Grid>
+                                    {largeLayout && <Grid item xs={12}
+                                                          md={7}
+                                                          sx={(theme) => ({
+                                                              borderLeft: `1px solid ${theme.palette.divider}`,
+                                                              pl: 2
+                                                          })}>
+                                        {propertyEditForm}
+                                    </Grid>}
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                    </Grid>
 
-                    </Form>
-                    );
-                }}
-            </Formik>
+                    {/*<SubmitListener/>*/}
 
+                </Container>
+            </Box>
+
+            <Box sx={(theme) => ({
+                background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
+                backdropFilter: "blur(4px)",
+                borderTop: `1px solid ${theme.palette.divider}`,
+                py: 1,
+                px: 2,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "end",
+                position: "sticky",
+                bottom: 0,
+                zIndex: 200,
+                textAlign: "right"
+            })}
+            >
+
+                {isSubmitting && <Box sx={{ px: 3 }}>
+                    <CircularProgress size={16}
+                                      thickness={8}/>
+                </Box>}
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={isSubmitting || !dirty}
+                    onClick={() => handleSubmit()}
+                >
+                    {isNewSchema ? "Create schema" : "Save schema"}
+                </Button>
+
+            </Box>
+
+            <PendingMoveDialog open={Boolean(pendingMove)}
+                               onAccept={() => {
+                                   setPendingMove(undefined);
+                                   if (pendingMove)
+                                       doPropertyMove(pendingMove[0], pendingMove[1]);
+                               }}
+                               onCancel={() => setPendingMove(undefined)}/>
+
+            {!largeLayout && <Dialog
+                open={Boolean(selectedPropertyId)}>
+                <DialogContent>
+                    {propertyEditForm}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => {
+                        setSelectedPropertyId(undefined);
+                        if (navigationStack.current) {
+                            navigationStack.current--;
+                            navigate(-1);
+                        } else {
+                            navigate(`${location.pathname}`, { replace: true });
+                        }
+                    }}>
+                        Ok
+                    </Button>
+                </DialogActions>
+            </Dialog>}
+
+            <NewPropertyDialog open={newPropertyDialogOpen}
+                               onCancel={() => setNewPropertyDialogOpen(false)}
+                               onPropertyCreated={onPropertyCreated}/>
+
+        </>
     );
+}
+
+function PendingMoveDialog({
+                               open,
+                               onAccept,
+                               onCancel
+                           }: { open: boolean, onAccept: () => void, onCancel: () => void }) {
+    return <Dialog
+        open={open}
+        onClose={onCancel}
+    >
+        <DialogTitle>
+            {"Are you sure?"}
+        </DialogTitle>
+        <DialogContent>
+            <DialogContentText>
+                You are moving one property from one context to
+                another.
+            </DialogContentText>
+            <DialogContentText>
+                This will <b>not transfer the data</b>, only modify
+                the schema.
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button
+                onClick={onCancel}
+                autoFocus>Cancel</Button>
+            <Button onClick={onAccept}>
+                Proceed
+            </Button>
+        </DialogActions>
+    </Dialog>;
 }
 
 export function SchemaEntry({
@@ -369,7 +544,6 @@ export function SchemaEntry({
             <Box sx={{
                 pl: 3,
                 pr: 1,
-                // maxWidth: "360px",
                 width: "100%",
                 display: "flex",
                 flexDirection: "row"
@@ -384,12 +558,10 @@ export function SchemaEntry({
                        })}
                        elevation={0}>
 
-                    {typeof propertyOrBuilder === "object" &&
-                    <PropertyPreview name={name}
-                                     property={propertyOrBuilder}/>}
-
-                    {typeof propertyOrBuilder !== "object" &&
-                    <PropertyBuilderPreview name={name}/>}
+                    {typeof propertyOrBuilder === "object"
+                        ? <PropertyPreview name={name}
+                                           property={propertyOrBuilder}/>
+                        : <PropertyBuilderPreview name={name}/>}
 
                     <Box {...provided.dragHandleProps}
                          sx={{ position: "absolute", p: 2, top: 0, right: 0 }}>

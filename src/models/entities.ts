@@ -152,7 +152,7 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
      * If you don't specify this prop, the generated column will not rerender
      * on entity property updates.
      */
-    dependencies?: Extract<keyof M, string>[];
+    dependencies?: Partial<Extract<keyof M, string>>[];
 }
 
 /**

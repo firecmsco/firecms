@@ -2,14 +2,18 @@ import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../models";
-import { EntityCollectionView, FireCMSHomePage } from "./components";
+import {
+    EntityCollectionView,
+    FireCMSHomePage,
+    SchemaEditor
+} from "./components";
 import { useNavigation } from "../hooks";
 import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
 import { NotFoundPage } from "./components/NotFoundPage";
 import { CollectionEditor } from "./components/SchemaEditor/CollectionEditor";
 import { EntityCollectionRoute } from "./components/EntityCollectionRoute";
-import { SchemaEditorPersistence } from "./components/SchemaEditor/SchemaEditorPersistence";
 import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
+import { Box } from "@mui/material";
 
 /**
  * @category Components
@@ -20,7 +24,6 @@ export type NavigationRoutesProps = {
      */
     HomePage?: React.ComponentType;
 };
-
 
 /**
  * This component is in charge of taking a {@link Navigation} and rendering
@@ -144,7 +147,11 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                   <BreadcrumbUpdater
                                       path={urlPath}
                                       title={"Schema editor"}>
-                                      <SchemaEditorPersistence schemaId={schema.id}/>
+                                      <Box sx={(theme) => ({
+                                          backgroundColor: theme.palette.background.paper,
+                                      })}>
+                                          <SchemaEditor schemaId={schema.id}/>
+                                      </Box>
                                   </BreadcrumbUpdater>
                               }/>;
             }

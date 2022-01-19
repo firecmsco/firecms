@@ -12,7 +12,7 @@ import {
     Property,
     ResolvedEntitySchema
 } from "../models";
-import { Form, Formik, FormikHelpers } from "formik";
+import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { buildPropertyField } from "./form_factory";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import deepEqual from "deep-equal";
@@ -138,7 +138,7 @@ export function EntityForm<M>({
 
     const [customId, setCustomId] = React.useState<string | undefined>(undefined);
     const [customIdError, setCustomIdError] = React.useState<boolean>(false);
-    const [savingError, setSavingError] = React.useState<any>();
+    const [savingError, setSavingError] = React.useState<Error | undefined>();
 
     const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
     const initialValues = initialValuesRef.current;
@@ -180,7 +180,7 @@ export function EntityForm<M>({
             return;
         }
 
-        setSavingError(null);
+        setSavingError(undefined);
         setCustomIdError(false);
 
         let savedEntityId: string | undefined;
@@ -239,32 +239,22 @@ export function EntityForm<M>({
             validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}
         >
-            {({
-                  values,
-                  touched,
-                  setFieldValue,
-                  handleSubmit,
-                  isSubmitting,
-                  dirty
-              }) => {
-                return <FormInternal baseDataSourceValues={baseDataSourceValues}
-                                     values={values} onModified={onModified}
-                                     setInternalValue={setInternalValue}
-                                     onValuesChanged={onValuesChanged}
-                                     underlyingChanges={underlyingChanges}
-                                     entityId={entityId}
-                                     entity={entity}
-                                     touched={touched}
-                                     setFieldValue={setFieldValue}
-                                     schema={schema}
-                                     isSubmitting={isSubmitting}
-                                     formRef={formRef}
-                                     status={status}
-                                     setCustomId={setCustomId}
-                                     customIdError={customIdError}
-                                     handleSubmit={handleSubmit}
-                                     savingError={savingError}/>;
-            }}
+            {(props) =>
+                <FormInternal
+                    {...props}
+                    baseDataSourceValues={baseDataSourceValues}
+                    onModified={onModified}
+                    setInternalValue={setInternalValue}
+                    onValuesChanged={onValuesChanged}
+                    underlyingChanges={underlyingChanges}
+                    entityId={entityId}
+                    entity={entity}
+                    schema={schema}
+                    formRef={formRef}
+                    status={status}
+                    setCustomId={setCustomId}
+                    customIdError={customIdError}
+                    savingError={savingError}/>}
         </Formik>
     );
 }
@@ -288,25 +278,20 @@ function FormInternal<M>({
                              customIdError,
                              handleSubmit,
                              savingError
-                         }: {
+                         }: FormikProps<M> & {
     baseDataSourceValues: Partial<M>,
-    values: any,
     onModified: ((modified: boolean) => void) | undefined,
     setInternalValue: any,
     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
     underlyingChanges: Partial<M>,
     entity: Entity<M> | undefined,
-    touched: any,
-    setFieldValue: any,
     schema: Omit<EntitySchema<M>, "properties"> & { properties: Properties<M>; originalSchema: EntitySchema<M> },
     entityId: string | undefined,
-    isSubmitting: any,
     formRef: any,
     status: "new" | "existing" | "copy",
-    setCustomId: any,
-    customIdError: any,
-    handleSubmit: any,
-    savingError: any
+    setCustomId: (id:string) => void,
+    customIdError: boolean,
+    savingError?: Error
 }) {
     const modified = useMemo(() => !deepEqual(baseDataSourceValues, values), [baseDataSourceValues, values]);
     useEffect(() => {
@@ -476,6 +461,5 @@ function buildButtons(isSubmitting: boolean, modified: boolean, status: EntitySt
         </Box>
     );
 }
-
 
 export default EntityForm;

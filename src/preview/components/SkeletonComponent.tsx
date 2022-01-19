@@ -90,7 +90,7 @@ function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize
         mapProperties = Object.keys(property.properties);
     } else {
         if (property.previewProperties)
-            mapProperties = property.previewProperties as string[];
+            mapProperties = property.previewProperties as unknown as string[];
         else
             mapProperties = Object.keys(property.properties).slice(0, 3);
     }

@@ -200,7 +200,6 @@ export function getReferenceFrom(entity: Entity<any>): EntityReference {
     return new EntityReference(entity.id, entity.path);
 }
 
-
 export function traverseValues<M extends { [Key: string]: any }>(
     inputValues: Partial<EntityValues<M>>,
     properties: Properties<M>,

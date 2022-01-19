@@ -39,7 +39,7 @@ import {
 } from "../../hooks";
 import { mergeDeep } from "../util/objects";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
-import { SchemaEditorDialog } from "./SchemaEditor/SchemaEditorPersistence";
+import { SchemaEditorDialog } from "./SchemaEditor/SchemaEditorDialog";
 import { ErrorView } from "./ErrorView";
 
 /**

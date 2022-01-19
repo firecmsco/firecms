@@ -416,7 +416,7 @@ export interface MapProperty<T extends { [Key: string]: any } = any> extends Bas
     /**
      * Properties that are displayed when as a preview
      */
-    previewProperties?: Extract<keyof T, string>[];
+    previewProperties?: Partial<Extract<keyof T, string>>[];
 
     /**
      * Allow the user to add only some of the keys in this map.
@@ -583,7 +583,8 @@ export interface StorageConfig {
     storagePath: string | ((context: UploadedFileContext) => string);
 
     /**
-     * File MIME types that can be uploaded to this reference
+     * File MIME types that can be uploaded to this reference. Don't specify for
+     * all
      */
     acceptedFiles?: StorageFileTypes[];
 
@@ -592,7 +593,7 @@ export interface StorageConfig {
      * For the default Firebase implementation, the values passed here are of type
      * `firebase.storage.UploadMetadata`
      */
-    metadata?: any,
+    metadata?: Record<string, unknown>,
 
     /**
      * You can use this callback to customize the uploaded filename

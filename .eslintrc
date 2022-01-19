@@ -51,6 +51,7 @@
         "object-curly-spacing": "warn",
         "multiline-ternary": "warn",
         "space-before-blocks": "warn",
+        "eol-last": "warn",
         "spaced-comment": "off",
         "indent": [0, 4],
         "quotes": [1, "double", { "avoidEscape": true }],

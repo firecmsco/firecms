@@ -1,16 +1,21 @@
 import React from "react";
 import ShortTextIcon from "@mui/icons-material/ShortText";
 import SubjectIcon from "@mui/icons-material/Subject";
-import AttachmentIcon from "@mui/icons-material/Attachment";
+import AddLinkIcon from "@mui/icons-material/AddLink";
 import ListIcon from "@mui/icons-material/List";
 import ScheduleIcon from "@mui/icons-material/Schedule";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import LinkIcon from "@mui/icons-material/Link";
-import EqualizerIcon from "@mui/icons-material/Equalizer";
 import HttpIcon from "@mui/icons-material/Http";
 import FlagIcon from "@mui/icons-material/Flag";
-import EmailIcon from '@mui/icons-material/Email';
+import NumbersIcon from "@mui/icons-material/Numbers";
+import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
+import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
+import EmailIcon from "@mui/icons-material/Email";
+import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
 
 import { ArrayProperty, DataType, Property } from "../../models";
 import { SvgIconProps } from "@mui/material";
@@ -58,7 +63,7 @@ export const WIDGETS: Record<WidgetId, Widget> = {
     markdown: {
         name: "Markdown",
         dataType: "string",
-        icon: SubjectIcon,
+        icon: FormatQuoteIcon,
         color: "#2d7ff9"
     },
     url: {
@@ -82,43 +87,43 @@ export const WIDGETS: Record<WidgetId, Widget> = {
     multi_select: {
         name: "Multi select",
         dataType: "array",
-        icon: ListIcon,
+        icon: ListAltIcon,
         color: "#4223c9"
     },
     number_input: {
         name: "Number input",
         dataType: "number",
-        icon: EqualizerIcon,
+        icon: NumbersIcon,
         color: "#bec920"
     },
     number_select: {
         name: "Number select",
         dataType: "number",
-        icon: ListIcon,
+        icon: FormatListNumberedIcon,
         color: "#a4ad26"
     },
     multi_number_select: {
         name: "Multiple number select",
         dataType: "number",
-        icon: ListIcon,
+        icon: FormatListNumberedIcon,
         color: "#a4ad26"
     },
     file_upload: {
         name: "File upload",
         dataType: "string",
-        icon: AttachmentIcon,
+        icon: UploadFileIcon,
         color: "#f92d9a"
     },
     multi_file_upload: {
         name: "Multiple file upload",
         dataType: "array",
-        icon: AttachmentIcon,
+        icon: DriveFolderUploadIcon,
         color: "#c91777"
     },
     group: {
         name: "Group",
         dataType: "map",
-        icon: ViewListIcon,
+        icon: BallotOutlinedIcon,
         color: "#20d9d2"
     },
     reference: {
@@ -130,7 +135,7 @@ export const WIDGETS: Record<WidgetId, Widget> = {
     multi_references: {
         name: "Multiple references",
         dataType: "array",
-        icon: LinkIcon,
+        icon: AddLinkIcon,
         color: "#ff0042"
     },
     switch: {
@@ -148,7 +153,7 @@ export const WIDGETS: Record<WidgetId, Widget> = {
     repeat: {
         name: "Repeat/list",
         dataType: "array",
-        icon: ListAltIcon,
+        icon: ViewListIcon,
         color: "#666"
     }
 };
