@@ -9,7 +9,7 @@ import {
     Select as MuiSelect
 } from "@mui/material";
 import { EnumType, FieldProps } from "../../models";
-import { FieldDescription } from "../../form";
+import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import {

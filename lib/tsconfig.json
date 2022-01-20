@@ -2,7 +2,7 @@
     "compilerOptions": {
         "outDir": "dist",
         "module": "esnext",
-        "target": "es5",
+        "target": "esnext",
         "lib": [
             "dom",
             "dom.iterable",
@@ -26,19 +26,17 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "noEmit": true,
-        "jsxImportSource": "@emotion/react"
+        "emitDeclarationOnly": true,
+        "jsxImportSource": "@emotion/react",
+        "useDefineForClassFields": true
     },
     "include": [
-      "lib/src",
-      "./lib/src/**/*.ts",
-        "node_modules/microbundle/index.d.ts"
+      "src",
+      "./src/**/*.ts"
     ],
     "exclude": [
         "node_modules",
         "dist",
-        "example",
-        "example_backend",
         "test"
     ]
 }

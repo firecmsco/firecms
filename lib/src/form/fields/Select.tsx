@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 
 import { EnumType, EnumValues, FieldProps } from "../../models";
-import { FieldDescription } from "../../form";
+import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import {

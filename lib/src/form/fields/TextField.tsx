@@ -12,7 +12,7 @@ import {
 
 import { FieldProps, MediaType, StringProperty } from "../../models";
 import { PreviewComponent } from "../../preview";
-import { FieldDescription } from "../../form";
+import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";

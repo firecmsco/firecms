@@ -25,7 +25,7 @@ import {
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@mui/icons-material/Clear";
 import { PreviewComponent, PreviewSize } from "../../preview";
-import { FieldDescription } from "../../form";
+import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 

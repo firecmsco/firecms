@@ -16,7 +16,7 @@ import {
     TableCell,
     TableRow
 } from "@mui/material";
-import { PreviewSize } from "../../preview";
+import { PreviewSize } from "../index";
 import { getThumbnailMeasure } from "../util";
 
 export interface SkeletonComponentProps {

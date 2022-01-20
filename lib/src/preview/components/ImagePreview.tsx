@@ -5,7 +5,7 @@ import { createStyles, makeStyles } from "@mui/styles";
 import { IconButton, Theme } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-import { PreviewSize } from "../../preview";
+import { PreviewSize } from "../index";
 import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
 

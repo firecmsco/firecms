@@ -5,7 +5,7 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import MDEditor from "@uiw/react-md-editor";
 
-import { FieldDescription } from "../../form";
+import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 
 import { useClearRestoreValue } from "../../hooks";

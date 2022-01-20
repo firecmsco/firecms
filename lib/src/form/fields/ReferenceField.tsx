@@ -26,7 +26,7 @@ import {
     EntitySchemaResolver,
     FieldProps
 } from "../../models";
-import { FieldDescription } from "../../form";
+import { FieldDescription } from "../index";
 import { ErrorView, ReferenceDialog } from "../../core";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { PreviewComponent, SkeletonComponent } from "../../preview";

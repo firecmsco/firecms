@@ -4,7 +4,7 @@ import { FormControl, FormHelperText, Paper } from "@mui/material";
 import { FieldProps } from "../../models";
 import { formStyles } from "../styles";
 import { PreviewComponent } from "../../preview";
-import { FieldDescription } from "../../form";
+import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
