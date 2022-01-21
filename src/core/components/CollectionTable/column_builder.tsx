@@ -9,7 +9,6 @@ import {
     Property,
     ResolvedEntitySchema
 } from "../../../models";
-import { buildPropertyFrom } from "../../util/property_builder";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { TableCell } from "../Table/TableCell";
 import { PreviewComponent, SkeletonComponent } from "../../../preview";
@@ -396,11 +395,8 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     const allColumns: TableColumn<M>[] = (Object.keys(resolvedSchema.properties) as (keyof M)[])
         .map((key) => {
-            const property: Property<any> = buildPropertyFrom<any, M>({
-                propertyOrBuilder: resolvedSchema.properties[key],
-                values: resolvedSchema.defaultValues ?? {},
-                path: path
-            });
+            const property: Property<any> = resolvedSchema.properties[key];
+
             return ({
                 key: key as string,
                 property,

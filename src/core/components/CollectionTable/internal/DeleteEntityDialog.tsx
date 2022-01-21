@@ -4,7 +4,7 @@ import {
     EntitySchema,
     EntitySchemaResolver
 } from "../../../../models";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
     Button,
     CircularProgress,
@@ -57,7 +57,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
     const [multipleEntities, setMultipleEntities] = React.useState<boolean>();
     const context = useFireCMSContext();
 
-    const schema = schemaResolver({});
+    const schema = useMemo(() => schemaResolver({}), []);
 
     React.useEffect(() => {
         if (entityOrEntitiesToDelete) {
@@ -187,7 +187,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
     }
 
     const dialogTitle = multipleEntities
-? `${schema.name}: Confirm multiple delete?`
+        ? `${schema.name}: Confirm multiple delete?`
         : `Would you like to delete this ${schema.name}?`;
 
     return (

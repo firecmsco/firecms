@@ -154,7 +154,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         return [...(collection.additionalColumns ?? []), ...subcollectionColumns];
     }, [collection, path]);
 
-    const resolvedSchema = schemaResolver({});
+    const resolvedSchema = useMemo(() => schemaResolver({}), []);
     const displayedProperties = useColumnIds(collection, resolvedSchema, true);
 
     const uniqueFieldValidator: UniqueFieldValidator = useCallback(

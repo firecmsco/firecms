@@ -94,20 +94,23 @@ export function useBuildNavigationContext<UserType>({
     const buildSchemaResolver = useCallback(<M extends { [Key: string]: any } = any>({
                                                                                          schema,
                                                                                          path
-                                                                                     }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> => ({
-                                                                                                                                                                    entityId,
-                                                                                                                                                                    values
-                                                                                                                                                                }: EntitySchemaResolverProps<M>) => {
+                                                                                     }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> =>
+        ({
+             entityId,
+             values,
+             previousValues
+         }: EntitySchemaResolverProps<M>) => {
 
-        const schemaOverride = getSchemaOverride<M>(path);
-        const storedProperties: PartialProperties<M> | undefined = getValueInPath(schemaOverride, "properties");
+            const schemaOverride = getSchemaOverride<M>(path);
+            const storedProperties: PartialProperties<M> | undefined = getValueInPath(schemaOverride, "properties");
 
-        const properties = computeProperties({
-            propertiesOrBuilder: schema.properties,
-            path,
-            entityId,
-            values: values ?? schema.defaultValues
-        });
+            const properties = computeProperties({
+                propertiesOrBuilder: schema.properties,
+                path,
+                entityId,
+                values: values ?? schema.defaultValues,
+                previousValues
+            });
 
         return {
             ...schema,

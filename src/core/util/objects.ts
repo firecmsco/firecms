@@ -1,3 +1,6 @@
+import hash from "object-hash";
+import { GeoPoint } from "../../models";
+
 export const pick: <T>(obj: T, ...args: any[]) => T = (obj: any, ...args: any[]) => ({
     ...args.reduce((res, key) => ({ ...res, [key]: obj[key] }), {})
 });
@@ -34,4 +37,17 @@ export function getValueInPath(o: object | undefined, path: string): any {
         }
     }
     return undefined;
+}
+
+export function getHashValue<T>(v: T) {
+    if (!v) return null;
+    if (typeof v === "object") {
+        if ("id" in v)
+            return (v as any).id;
+        else if (v instanceof Date)
+            return v.toLocaleString();
+        else if (v instanceof GeoPoint)
+            return hash(v);
+    }
+    return hash(v, { ignoreUnknown: true });
 }

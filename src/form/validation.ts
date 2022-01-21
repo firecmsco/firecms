@@ -1,7 +1,6 @@
 import {
     ArrayProperty,
     BooleanProperty,
-    CMSType,
     GeopointProperty,
     MapProperty,
     NumberProperty,
@@ -54,9 +53,27 @@ interface PropertyContext<PT extends Property> {
     name?: any
 }
 
+export function getYupEntitySchema<M>(properties: Properties<M>,
+                                      customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
+    const objectSchema: any = {};
+    Object.entries(properties).forEach(([name, property]) => {
+        objectSchema[name] = mapPropertyToYup({
+            property,
+            customFieldValidator,
+            name
+        });
+    });
+    return yup.object().shape(objectSchema);
+}
+
 export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySchema<unknown> {
 
     const property = propertyContext.property;
+    if (typeof property === "function") {
+        console.log("Error in property", propertyContext);
+        throw Error("PropertyBuilders can only be defined as the root properties in entity schemas, not in child properties");
+    }
+
     if (property.dataType === "string") {
         return getYupStringSchema(propertyContext);
     } else if (property.dataType === "number") {
@@ -76,20 +93,6 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
     }
     console.error("Unsupported data type in yup mapping", property)
     throw Error("Unsupported data type in yup mapping");
-}
-
-export function getYupEntitySchema<M extends { [Key: string]: any }>
-(properties: Properties<M>,
- customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
-    const objectSchema: any = {};
-    Object.entries(properties).forEach(([name, property]) => {
-        objectSchema[name] = mapPropertyToYup({
-            property,
-            customFieldValidator,
-            name
-        });
-    });
-    return yup.object().shape(objectSchema);
 }
 
 export function getYupMapObjectSchema({
@@ -142,7 +145,7 @@ function getYupStringSchema({
                     }));
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} must be min ${validation.min} characters long`);
         if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.title} must be max ${validation.max} characters long`);
-        if (validation.matches) schema = schema.matches(validation.matches);
+        if (validation.matches) schema = schema.matches(validation.matches, validation.matchesMessage);
         if (validation.email) schema = schema.email(`${property.title} must be an email`);
         if (validation.url) schema = schema.url(`${property.title} must be a url`);
         if (validation.trim) schema = schema.trim();

@@ -53,6 +53,8 @@ export function ArrayOneOfField<T extends Array<any>>({
         setValue
     });
 
+    const [lastAddedId, setLastAddedId] = useState<number | undefined>();
+
     const buildEntry = (index: number, internalId: number) => {
         return <ArrayOneOfEntry
             key={`array_one_of_${index}`}
@@ -62,6 +64,7 @@ export function ArrayOneOfField<T extends Array<any>>({
             typeField={property.oneOf!.typeField ?? "type"}
             valueField={property.oneOf!.valueField ?? "value"}
             properties={property.oneOf!.properties}
+            autoFocus={internalId === lastAddedId}
             context={context}/>;
     };
 
@@ -79,6 +82,7 @@ export function ArrayOneOfField<T extends Array<any>>({
                 <ArrayContainer value={value}
                                 name={name}
                                 buildEntry={buildEntry}
+                                onInternalIdAdded={setLastAddedId}
                                 disabled={isSubmitting || Boolean(property.disabled)}
                                 includeAddButton={!property.disabled}/>
             </Paper>
@@ -108,6 +112,8 @@ interface ArrayOneOfEntryProps {
      * Defaults to `value`
      */
     valueField: string;
+
+    autoFocus: boolean;
     /**
      * Record of properties, where the key is the `type` and the value
      * is the corresponding property
@@ -127,6 +133,7 @@ function ArrayOneOfEntry({
                              typeField,
                              valueField,
                              properties,
+                             autoFocus,
                              context
                          }: ArrayOneOfEntryProps) {
 
@@ -149,19 +156,19 @@ function ArrayOneOfEntry({
     const valueFieldName = `${name}[${valueField}]`;
 
     return (
-        <Paper className={classes.paper} elevation={1}>
+        <Paper className={classes.paper} elevation={0}>
 
-            <FormControl fullWidth>
-                <InputLabel id={`${name}_${index}_select_label`}>
-                    <span>Type</span>
-                </InputLabel>
-
-                <FastField
-                    required={true}
-                    name={typeFieldName}
-                >
-                    {(fieldProps: FormikFieldProps) =>
-                        (
+            <FastField
+                required={true}
+                name={typeFieldName}
+            >
+                {(fieldProps: FormikFieldProps) =>
+                    (
+                        <FormControl fullWidth>
+                            <InputLabel
+                                id={`${name}_${index}_select_label`}>
+                                <span>Type</span>
+                            </InputLabel>
                             <Select
                                 fullWidth
                                 className={classes.oneOfInput}
@@ -194,10 +201,10 @@ function ArrayOneOfEntry({
                                         );
                                     })}
                             </Select>
-                        )
-                    }
-                </FastField>
-            </FormControl>
+                        </FormControl>
+                    )
+                }
+            </FastField>
 
             {property && (
                 <FormControl fullWidth
@@ -205,7 +212,8 @@ function ArrayOneOfEntry({
                     {buildPropertyField({
                         name: valueFieldName,
                         property: property,
-                        context: context
+                        context: context,
+                        autoFocus: autoFocus
                     })}
                 </FormControl>
             )}

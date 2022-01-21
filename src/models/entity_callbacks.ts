@@ -82,7 +82,7 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
     values: Partial<EntityValues<M>>;
 
     /**
-     * Values being saved
+     * Previous values
      */
     previousValues?: Partial<EntityValues<M>>;
 
