@@ -52,8 +52,8 @@ export const testEntitySchema = buildSchema({
             title: "Name",
             dataType: "string"
         },
-        source: ({ values }) => {
-
+        source: ({ values, previousValues }) => {
+            console.trace("builder", values, previousValues);
             const properties = buildProperties<any>({
                 type: {
                     dataType: "string",

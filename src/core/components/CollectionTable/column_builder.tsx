@@ -2,7 +2,7 @@ import { getCellAlignment, getPropertyColumnWidth } from "./internal/common";
 import {
     AdditionalColumnDelegate,
     CollectionSize,
-    Entity,
+    Entity, EntitySchema,
     EntitySchemaResolver,
     EnumValues,
     FireCMSContext,

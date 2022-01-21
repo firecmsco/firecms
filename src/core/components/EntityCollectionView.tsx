@@ -422,15 +422,15 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 hoverRow={hoverRow}
             />
 
-            <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
-                                path={path}
-                                schema={collection.schema}
-                                schemaResolver={schemaResolver}
-                                callbacks={collection.callbacks}
-                                open={!!deleteEntityClicked}
-                                onEntityDelete={internalOnEntityDelete}
-                                onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
-                                onClose={() => setDeleteEntityClicked(undefined)}/>
+            {deleteEntityClicked && <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
+                                 path={path}
+                                 schema={collection.schema}
+                                 schemaResolver={schemaResolver}
+                                 callbacks={collection.callbacks}
+                                 open={!!deleteEntityClicked}
+                                 onEntityDelete={internalOnEntityDelete}
+                                 onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
+                                 onClose={() => setDeleteEntityClicked(undefined)}/>}
         </>
     );
 }

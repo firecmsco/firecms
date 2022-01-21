@@ -37,25 +37,24 @@ export function isHidden(property: Property<any>): boolean {
  * @ignore
  */
 export function computeSchema<M extends { [Key: string]: any }>(
-    { schemaOrResolver, path, entityId, values }: {
+    { schemaOrResolver, path, entityId, values, previousValues }: {
         schemaOrResolver: EntitySchema<M> | ResolvedEntitySchema<M> | EntitySchemaResolver<M>,
         path: string,
         entityId?: string | undefined,
         values?: Partial<EntityValues<M>>,
+        previousValues?: Partial<EntityValues<M>>,
     }): ResolvedEntitySchema<M> {
-    if (typeof schemaOrResolver === "function") {
-        return schemaOrResolver({ entityId, values });
-    } else {
 
-        if ("originalSchema" in schemaOrResolver) { // already resolved
-            return schemaOrResolver;
-        }
+    if (typeof schemaOrResolver === "function") {
+        return schemaOrResolver({ entityId, values, previousValues });
+    } else {
 
         const properties = computeProperties({
             propertiesOrBuilder: schemaOrResolver.properties,
             path,
             entityId,
-            values
+            values,
+            previousValues
         });
 
         return {
@@ -70,16 +69,18 @@ export function computeSchema<M extends { [Key: string]: any }>(
  *
  * @param propertiesOrBuilder
  * @param values
+ * @param previousValues
  * @param path
  * @param entityId
  * @ignore
  */
 export function computeProperties<M extends { [Key: string]: any }>(
-    { propertiesOrBuilder, path, entityId, values }: {
+    { propertiesOrBuilder, path, entityId, values, previousValues }: {
         propertiesOrBuilder: PropertiesOrBuilder<M>,
         path: string,
         entityId?: string | undefined,
         values?: Partial<EntityValues<M>>,
+        previousValues?: Partial<EntityValues<M>>,
     }): Properties<M> {
     return Object.entries(propertiesOrBuilder)
         .map(([key, propertyOrBuilder]) => {
@@ -87,6 +88,7 @@ export function computeProperties<M extends { [Key: string]: any }>(
                 [key]: buildPropertyFrom({
                     propertyOrBuilder,
                     values: values ?? {},
+                    previousValues: previousValues ?? values ?? {},
                     path,
                     entityId
                 })
