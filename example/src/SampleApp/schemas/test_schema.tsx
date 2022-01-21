@@ -49,8 +49,11 @@ export const testEntitySchema = buildSchema({
     name: "Test entity",
     properties: {
         name: {
-            title: "Name",
-            dataType: "string"
+            title: "Name starts with number",
+            dataType: "string",
+            validation:{
+                matches: /\d.*/
+            }
         },
         source: ({ values, previousValues }) => {
             console.trace("builder", values, previousValues);

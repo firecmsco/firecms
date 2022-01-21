@@ -483,6 +483,10 @@ export interface StringPropertyValidationSchema extends PropertyValidationSchema
     min?: number;
     max?: number;
     matches?: RegExp;
+    /**
+     * Message displayed when the input does not satisfy the regex in `matches`
+     */
+    matchesMessage?: string;
     email?: boolean;
     url?: boolean;
     trim?: boolean;
