@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import BaseTable, { Column, ColumnShape } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import clsx from "clsx";
 
@@ -201,8 +201,6 @@ export function Table<T>({
 
     function buildErrorView() {
         return (
-
-            <Paper className={classes.root}>
                 <Box display="flex"
                      flexDirection={"column"}
                      justifyContent="center"
@@ -222,7 +220,6 @@ export function Table<T>({
 
                 </Box>
 
-            </Paper>
         );
     }
 
