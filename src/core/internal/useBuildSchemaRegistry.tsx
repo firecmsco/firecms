@@ -74,7 +74,8 @@ export function useBuildSchemaRegistry<UserType>({
      }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> =>
         ({
              entityId,
-             values
+             values,
+             previousValues
          }: EntitySchemaResolverProps<M>) => {
 
             const schemaOverride = getUserSchemaOverride<M>(path);
@@ -84,7 +85,8 @@ export function useBuildSchemaRegistry<UserType>({
                 propertiesOrBuilder: schema.properties,
                 path,
                 entityId,
-                values: values ?? schema.defaultValues
+                values: values ?? schema.defaultValues,
+                previousValues: previousValues ?? values ?? schema.defaultValues
             });
 
             return {
