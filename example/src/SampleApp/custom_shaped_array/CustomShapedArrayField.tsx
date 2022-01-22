@@ -34,11 +34,13 @@ export default function CustomShapedArrayField({
             <Paper variant={"outlined"}>
                 <Box m={2}>
                     {properties.map((property, index) =>
-                        buildPropertyField({
-                            name: `${name}[${index}]`,
-                            property,
-                            context
-                        })
+                        <div key={`array_${index}`}>
+                            {buildPropertyField({
+                                name: `${name}[${index}]`,
+                                property,
+                                context
+                            })}
+                        </div>
                     )}
                 </Box>
             </Paper>

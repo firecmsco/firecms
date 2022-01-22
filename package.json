@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "1.0.0-beta10",
+    "version": "1.0.0-beta11",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
     "license": "MIT",
@@ -10,7 +10,7 @@
     "module": "dist/index.modern.js",
     "source": "src/index.ts",
     "engines": {
-        "node": ">=12"
+        "node": ">=14"
     },
     "keywords": [
         "firebase",

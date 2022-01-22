@@ -1,18 +1,20 @@
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FieldArray } from "formik";
+
 import { Box, Button, IconButton } from "@mui/material";
-import React from "react";
-import hash from "object-hash";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { getHashValue } from "../../core/util/objects";
 
 
 interface ArrayContainerProps<T> {
     value: T[];
     name: string;
-    buildEntry: (index: number, hashValue: any) => React.ReactNode;
+    buildEntry: (index: number, internalId: number) => React.ReactNode;
     disabled: boolean;
+    onInternalIdAdded?: (id: number) => void;
     includeAddButton?: boolean;
 }
 
@@ -24,10 +26,46 @@ export function ArrayContainer<T>({
                                       value,
                                       disabled,
                                       buildEntry,
+                                      onInternalIdAdded,
                                       includeAddButton
                                   }: ArrayContainerProps<T>) {
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
+
+    const internalIdsMap: Record<string, number> = useMemo(() =>
+            hasValue
+                ? value.map(v => {
+                    if (!v) return {};
+                    return ({
+                        [getHashValue(v)]: getRandomId()
+                    });
+                }).reduce((a, b) => ({ ...a, ...b }), {})
+                : {},
+        [value, hasValue]);
+    const internalIdsRef = useRef<Record<string, number>>(internalIdsMap);
+
+    const [internalIds, setInternalIds] = useState<number[]>(
+        hasValue
+            ? Object.values(internalIdsRef.current)
+            : []);
+
+    useEffect(() => {
+        if (hasValue && value && value.length !== internalIds.length) {
+            console.log("new internal ids")
+            const newInternalIds = value.map(v => {
+                const hashValue = getHashValue(v);
+                if (hashValue in internalIdsRef.current) {
+                    return internalIdsRef.current[hashValue];
+                } else {
+                    const newInternalId = getRandomId();
+                    internalIdsRef.current[hashValue] = newInternalId;
+                    return newInternalId;
+                }
+            });
+            setInternalIds(newInternalIds);
+        }
+    }, [hasValue, value]);
+
 
     return <FieldArray
         name={name}
@@ -36,10 +74,18 @@ export function ArrayContainer<T>({
 
             const insertInEnd = () => {
                 if (disabled) return;
+                const id = getRandomId();
+                const newIds: number[] = [...internalIds, id];
+                if (onInternalIdAdded)
+                    onInternalIdAdded(id);
+                setInternalIds(newIds);
                 arrayHelpers.push(null);
             };
 
             const remove = (index: number) => {
+                const newValue = [...internalIds];
+                newValue.splice(index, 1);
+                setInternalIds(newValue);
                 arrayHelpers.remove(index);
             };
 
@@ -48,8 +94,16 @@ export function ArrayContainer<T>({
                 if (!result.destination) {
                     return;
                 }
+                const sourceIndex = result.source.index;
+                const destinationIndex = result.destination.index;
 
-                arrayHelpers.move(result.source.index, result.destination.index);
+                const newIds = [...internalIds];
+                const temp = newIds[sourceIndex];
+                newIds[sourceIndex] = newIds[destinationIndex];
+                newIds[destinationIndex] = temp;
+                setInternalIds(newIds);
+
+                arrayHelpers.move(sourceIndex, destinationIndex);
             }
 
             return (
@@ -59,12 +113,11 @@ export function ArrayContainer<T>({
                             <div
                                 {...droppableProvided.droppableProps}
                                 ref={droppableProvided.innerRef}>
-                                {hasValue && value.map((v: any, index: number) => {
-                                    const hashValue = hash(v);
+                                {hasValue && internalIds.map((internalId: number, index: number) => {
                                     return (
                                         <Draggable
-                                            key={`array_field_${name}_${hashValue}}`}
-                                            draggableId={`array_field_${name}_${hashValue}}`}
+                                            key={`array_field_${name}_${internalId}}`}
+                                            draggableId={`array_field_${name}_${internalId}}`}
                                             isDragDisabled={disabled}
                                             index={index}>
                                             {(provided, snapshot) => (
@@ -86,7 +139,7 @@ export function ArrayContainer<T>({
                                                         <Box flexGrow={1}
                                                              width={"100%"}
                                                              key={`field_${name}_entryValue`}>
-                                                            {buildEntry(index, hashValue)}
+                                                            {buildEntry(index, internalId)}
                                                         </Box>
                                                         <Box width={"36px"}
                                                              display="flex"
@@ -136,3 +189,6 @@ export function ArrayContainer<T>({
 }
 
 
+function getRandomId() {
+    return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
+}

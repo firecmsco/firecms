@@ -1,3 +1,16 @@
+## [1.0.0-beta11] - 2022-01-22
+
+### Changed
+
+- Fix for array components losing focus
+- Added custom `regexMessage` for displaying when there is a string `regex` 
+validation error.
+- Property builders now include the `previousValues` prop, in case you need to 
+compare the updates with the original values (only in the form view and the
+popup view in the collection).
+- Changed page not found error message.
+
+ 
 ## [1.0.0-beta10] - 2022-01-11
 
 ### Changed
