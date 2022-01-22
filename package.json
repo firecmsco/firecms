@@ -3,8 +3,5 @@
     "private": true,
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
-    "workspaces": ["lib", "example"],
-    "scripts": {
-        "tsc": "tsc -w"
-    }
+    "workspaces": ["lib", "example"]
 }

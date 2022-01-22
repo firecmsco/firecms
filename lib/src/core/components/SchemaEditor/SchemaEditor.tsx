@@ -18,7 +18,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { Formik, FormikProps, useFormikContext } from "formik";
 
-import deepEqual from "deep-equal";
+import isEqual from "react-fast-compare";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import {
     Box,
@@ -580,8 +580,8 @@ export function SubmitListener() {
     const [lastValues, setLastValues] = React.useState(formik.values);
 
     React.useEffect(() => {
-        const valuesEqualLastValues = deepEqual(lastValues, formik.values)
-        const valuesEqualInitialValues = deepEqual(formik.values, formik.initialValues)
+        const valuesEqualLastValues = isEqual(lastValues, formik.values)
+        const valuesEqualInitialValues = isEqual(formik.values, formik.initialValues)
 
         if (!valuesEqualLastValues) {
             setLastValues(formik.values)

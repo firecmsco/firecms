@@ -27,12 +27,12 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "emitDeclarationOnly": true,
-        "jsxImportSource": "@emotion/react",
-        "useDefineForClassFields": true
+        "jsxImportSource": "@emotion/react"
     },
     "include": [
-      "src",
-      "./src/**/*.ts"
+        "src",
+        "./src/**/*.ts",
+        "node_modules/microbundle/index.d.ts"
     ],
     "exclude": [
         "node_modules",

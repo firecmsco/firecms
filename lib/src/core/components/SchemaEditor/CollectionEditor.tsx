@@ -16,11 +16,11 @@ import {
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import CompareArrowsOutlinedIcon
     from "@mui/icons-material/CompareArrowsOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import SchemaOutlinedIcon from "@mui/icons-material/SchemaOutlined";
 
 import * as Yup from "yup";
 import { Formik, FormikHelpers } from "formik";
@@ -351,7 +351,7 @@ export function CollectionEditor<M>({
                                                                                startAdornment:
                                                                                    <InputAdornment
                                                                                        position="start">
-                                                                                       <SchemaOutlinedIcon/>
+                                                                                       <AccountTreeIcon/>
                                                                                    </InputAdornment>
                                                                            }}
                                                                            name={"schemaId"}
