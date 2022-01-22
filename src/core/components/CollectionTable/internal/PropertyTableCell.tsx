@@ -22,7 +22,7 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { useClearRestoreValue } from "../../../../hooks";
-import deepEqual from "deep-equal";
+import isEqual from "react-fast-compare";
 import { isReadOnly } from "../../../utils";
 import { TableCell } from "../../Table/TableCell";
 import { AnySchema } from "yup";
@@ -109,7 +109,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
 
     useEffect(
         () => {
-            if (!deepEqual(value, internalValue)) {
+            if (!isEqual(value, internalValue)) {
                 setSaved(false);
                 validation
                     .validate(internalValue)
@@ -347,7 +347,7 @@ function areEqual(prevProps: PropertyTableCellProps<any> & CellStyleProps, nextP
         prevProps.size === nextProps.size &&
         prevProps.align === nextProps.align &&
         prevProps.width === nextProps.width &&
-        deepEqual(prevProps.value, nextProps.value)
+        isEqual(prevProps.value, nextProps.value)
         ;
 }
 

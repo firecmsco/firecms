@@ -31,7 +31,7 @@ import { MarkdownField } from "./fields/MarkdownField";
 
 import { ArrayOfReferencesField } from "./fields/ArrayOfReferencesField";
 import { isReadOnly } from "../core/utils";
-import deepEqual from "deep-equal";
+import isEqual from "react-fast-compare";
 
 
 /**
@@ -218,7 +218,7 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
 
     useEffect(
         () => {
-            if (!deepEqual(value, internalValue)) {
+            if (!isEqual(value, internalValue)) {
                 setInternalValue(value);
             }
         },

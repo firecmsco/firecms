@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "1.0.0-beta11",
+    "version": "1.0.0-beta12",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
     "license": "MIT",
@@ -38,7 +38,6 @@
         "@date-io/date-fns": "^2.11.0",
         "@uiw/react-md-editor": "^3.9.3",
         "date-fns": "^2.21.3",
-        "deep-equal": "^2.0.5",
         "formik": "^2.2.9",
         "history": "^5",
         "object-hash": "^2.2.0",
@@ -81,7 +80,6 @@
         "@mui/lab": "^5.0.0-alpha.48",
         "@mui/material": "^5.0.0",
         "@mui/styles": "^5.0.0",
-        "@types/deep-equal": "^1.0.1",
         "@types/jest": "^27.0.3",
         "@types/object-hash": "^2.1.0",
         "@types/react": "^17.0.5",
