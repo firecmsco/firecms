@@ -484,12 +484,13 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 hoverRow={hoverRow}
             />
 
-            <SchemaEditorDialog open={schemaDialogOpen}
-                                handleClose={(schema) => {
-                                    setSchemaDialogOpen(false);
-                                }}
-                                schemaId={schema.id}/>
+             <SchemaEditorDialog open={schemaDialogOpen}
+                                 handleClose={(schema) => {
+                                     setSchemaDialogOpen(false);
+                                 }}
+                                 schemaId={schema.id}/>
 
+            {deleteEntityClicked &&
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 path={path}
                                 schemaResolver={schemaResolver}
@@ -497,7 +498,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                                 open={!!deleteEntityClicked}
                                 onEntityDelete={internalOnEntityDelete}
                                 onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
-                                onClose={() => setDeleteEntityClicked(undefined)}/>
+                                onClose={() => setDeleteEntityClicked(undefined)}/>}
         </>
     );
 }

@@ -194,7 +194,8 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         const schema = computeSchema({
             schemaOrResolver: schemaResolver,
             path,
-            values: internalValue
+            values: internalValue,
+            previousValues: entity?.values
         });
         return getYupEntitySchema(
             name
@@ -277,7 +278,8 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                     const schema = computeSchema({
                         schemaOrResolver: schemaResolver,
                         path,
-                        values
+                        values,
+                        previousValues: entity?.values
                     });
 
                     const context: FormContext<M> = {

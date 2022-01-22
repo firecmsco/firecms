@@ -25,7 +25,8 @@
     ],
     "scripts": {
         "dev": "vite",
-        "build": "tsc && vite build",
+        "build": "microbundle --no-compress --jsx React.createElement --format modern,cjs",
+        "build:vite": "tsc && vite build",
         "preview": "vite preview",
         "start": "microbundle watch --raw --format modern,cjs --no-compress --jsx React.createElement",
         "prepublishOnly": "run-s build",

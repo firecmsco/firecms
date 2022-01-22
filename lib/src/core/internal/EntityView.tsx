@@ -158,21 +158,31 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     const [modifiedValues, setModifiedValues] = useState<EntityValues<any> | undefined>();
 
-    const schema:ResolvedEntitySchema<M> = useMemo(() => computeSchema({
+    const {
+        entity,
+        dataLoading,
+        // eslint-disable-next-line no-unused-vars
+        dataLoadingError
+    } = useEntityFetch({
+        path,
+        entityId: currentEntityId,
+        schema: schemaOrResolver,
+        useCache: false
+    });
+
+    const resolvedSchema:ResolvedEntitySchema<M> = useMemo(() => computeSchema({
         schemaOrResolver,
         path,
         entityId,
-        values: modifiedValues
+        values: modifiedValues,
+        previousValues: entity?.values
     }), [schemaOrResolver, path, entityId, modifiedValues]);
-
-    const customViews = schema.views;
-    const customViewsCount = customViews?.length ?? 0;
 
     useEffect(() => {
         function beforeunload(e: any) {
             if (modifiedValues) {
                 e.preventDefault();
-                e.returnValue = `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`;
+                e.returnValue = `You have unsaved changes in this ${resolvedSchema.name}. Are you sure you want to leave this page?`;
             }
         }
 
@@ -186,17 +196,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     }, [modifiedValues, window]);
 
-    const {
-        entity,
-        dataLoading,
-        // eslint-disable-next-line no-unused-vars
-        dataLoadingError
-    } = useEntityFetch({
-        path,
-        entityId: currentEntityId,
-        schema: schema as EntitySchema,
-        useCache: false
-    });
+    const customViews = resolvedSchema.views;
+    const customViewsCount = customViews?.length ?? 0;
 
     useEffect(() => {
         if (entity)
@@ -238,7 +239,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const onSaveSuccessHookError = useCallback((e: Error) => {
         snackbarContext.open({
             type: "error",
-            title: `${schema.name}: Error after saving (entity is saved)`,
+            title: `${resolvedSchema.name}: Error after saving (entity is saved)`,
             message: e?.message
         });
         console.error(e);
@@ -250,7 +251,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
         snackbarContext.open({
             type: "success",
-            message: `${schema.name}: Saved correctly`
+            message: `${resolvedSchema.name}: Saved correctly`
         });
 
         setStatus("existing");
@@ -265,7 +266,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
         snackbarContext.open({
             type: "error",
-            title: `${schema.name}: Error saving`,
+            title: `${resolvedSchema.name}: Error saving`,
             message: e?.message
         });
 
@@ -319,7 +320,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     key={`form_${path}_${entity?.id ?? "new"}`}
                     status={status}
                     path={path}
-                    schemaOrResolver={schema}
+                    schemaOrResolver={schemaOrResolver}
                     onEntitySave={onEntitySave as any}
                     onDiscard={onDiscard}
                     onValuesChanged={setModifiedValues}
@@ -332,7 +333,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             <EntityPreview
                 entity={entity}
                 path={path}
-                schema={schema}/>
+                schema={resolvedSchema}/>
         </Suspense>
     );
 
@@ -349,7 +350,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     hidden={tabsPosition !== colIndex}>
                     <ErrorBoundary>
                         {customView.builder({
-                            schema,
+                            schema: resolvedSchema,
                             entity,
                             modifiedValues: modifiedValues ?? entity?.values
                         })}
@@ -440,7 +441,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 scrollButtons="auto"
             >
                 <Tab
-                    label={schema.name}
+                    label={resolvedSchema.name}
                     classes={{
                         root: classes.tab
                     }}

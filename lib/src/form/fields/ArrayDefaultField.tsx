@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { CMSType, FieldProps, Property } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@mui/material";
 import { FieldDescription } from "../index";
@@ -37,13 +37,15 @@ export function ArrayDefaultField<T extends Array<any>>({
     const ofProperty: Property<CMSType[]> = property.of as Property<CMSType[]>;
     const classes = formStyles();
 
+    const [lastAddedId, setLastAddedId] = useState<number | undefined>();
+
     useClearRestoreValue({
         property,
         value,
         setValue
     });
 
-    const buildEntry = (index: number) => {
+    const buildEntry = (index: number, internalId: number) => {
         return buildPropertyField({
             name: `${name}[${index}]`,
             disabled,
@@ -53,7 +55,7 @@ export function ArrayDefaultField<T extends Array<any>>({
             context,
             tableMode: false,
             partOfArray: true,
-            autoFocus: true,
+            autoFocus: internalId === lastAddedId,
             shouldAlwaysRerender: false
         });
 
@@ -73,6 +75,7 @@ export function ArrayDefaultField<T extends Array<any>>({
                 <ArrayContainer value={value}
                                 name={name}
                                 buildEntry={buildEntry}
+                                onInternalIdAdded={setLastAddedId}
                                 disabled={isSubmitting || Boolean(property.disabled)}
                                 includeAddButton={!property.disabled}/>
 

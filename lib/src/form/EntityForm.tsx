@@ -120,7 +120,7 @@ export function EntityForm<M>({
         schemaOrResolver,
         path,
         entityId
-    }), [schemaOrResolver, path, entityId]);
+    }), [path, entityId]);
 
     const baseDataSourceValues: Partial<EntityValues<M>> = useMemo(() => {
         const properties = initialResolvedSchema.properties;
@@ -149,7 +149,8 @@ export function EntityForm<M>({
         schemaOrResolver,
         path,
         entityId,
-        values: internalValue
+        values: internalValue,
+        previousValues: initialValues
     }), [schemaOrResolver, path, entityId, internalValue]);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") && !!schema.customId;
@@ -285,7 +286,7 @@ function FormInternal<M>({
     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
     underlyingChanges: Partial<M>,
     entity: Entity<M> | undefined,
-    schema: Omit<EntitySchema<M>, "properties"> & { properties: Properties<M>; originalSchema: EntitySchema<M> },
+    schema: ResolvedEntitySchema<M>,
     entityId: string | undefined,
     formRef: any,
     status: "new" | "existing" | "copy",

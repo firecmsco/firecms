@@ -223,6 +223,7 @@ export function Table<T>({
                     </Typography>}
 
                 </Box>
+
         );
     }
 
