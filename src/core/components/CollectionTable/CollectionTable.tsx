@@ -106,7 +106,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const resolvedSchema = schemaResolver({});
+    const resolvedSchema = useMemo(() => schemaResolver({}), []);
     const [size, setSize] = React.useState<CollectionSize>(resolvedSchema.defaultSize ?? "m");
 
     const initialFilter = resolvedSchema.initialFilter;

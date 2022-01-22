@@ -161,6 +161,7 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
 export type EntitySchemaResolverProps<M = any> = {
     entityId?: string | undefined,
     values?: Partial<EntityValues<M>>,
+    previousValues?: Partial<EntityValues<M>>,
 };
 
 /**
@@ -170,7 +171,8 @@ export type EntitySchemaResolverProps<M = any> = {
  */
 export type EntitySchemaResolver<M = any> = ({
                                                  entityId,
-                                                 values
+                                                 values,
+                                                 previousValues
                                              }: EntitySchemaResolverProps<M>) => ResolvedEntitySchema<M>;
 
 /**

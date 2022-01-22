@@ -28,8 +28,6 @@ export function isHidden(property: Property<any>): boolean {
 }
 
 
-
-
 /**
  * This utility function computes an {@link EntitySchema} or a {@link EntitySchemaResolver}
  * into a {@link ResolvedEntitySchema}, which has no property builders but has all
@@ -41,31 +39,30 @@ export function isHidden(property: Property<any>): boolean {
  * @category Hooks and utilities
  */
 export function computeSchema<M extends { [Key: string]: any }>(
-    { schemaOrResolver, path, entityId, values }: {
+    { schemaOrResolver, path, entityId, values, previousValues }: {
         schemaOrResolver: EntitySchema<M> | ResolvedEntitySchema<M> | EntitySchemaResolver<M>,
         path: string,
         entityId?: string | undefined,
         values?: Partial<EntityValues<M>>,
+        previousValues?: Partial<EntityValues<M>>,
     }): ResolvedEntitySchema<M> {
+
     if (typeof schemaOrResolver === "function") {
-        return schemaOrResolver({ entityId, values });
+        return schemaOrResolver({ entityId, values, previousValues });
     } else {
 
-        if ("originalSchema" in schemaOrResolver) { // already resolved
-            return schemaOrResolver;
-        }
-
         const properties = computeProperties({
-            propertiesOrBuilder: schemaOrResolver.properties,
+            propertiesOrBuilder: schemaOrResolver.properties as PropertiesOrBuilder<M>,
             path,
             entityId,
-            values
+            values,
+            previousValues
         });
 
         return {
             ...schemaOrResolver,
             properties,
-            originalSchema: schemaOrResolver
+            originalSchema: schemaOrResolver as EntitySchema<M>
         };
     }
 }
@@ -74,16 +71,18 @@ export function computeSchema<M extends { [Key: string]: any }>(
  *
  * @param propertiesOrBuilder
  * @param values
+ * @param previousValues
  * @param path
  * @param entityId
  * @ignore
  */
 export function computeProperties<M extends { [Key: string]: any }>(
-    { propertiesOrBuilder, path, entityId, values }: {
+    { propertiesOrBuilder, path, entityId, values, previousValues }: {
         propertiesOrBuilder: PropertiesOrBuilder<M>,
         path: string,
         entityId?: string | undefined,
         values?: Partial<EntityValues<M>>,
+        previousValues?: Partial<EntityValues<M>>,
     }): Properties<M> {
     return Object.entries(propertiesOrBuilder)
         .map(([key, propertyOrBuilder]) => {
@@ -91,6 +90,7 @@ export function computeProperties<M extends { [Key: string]: any }>(
                 [key]: buildPropertyFrom({
                     propertyOrBuilder,
                     values: values ?? {},
+                    previousValues: previousValues ?? values ?? {},
                     path,
                     entityId
                 })
@@ -172,7 +172,6 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
         }
     );
 }
-
 
 /**
  * Add missing required fields, expected in the schema, to the values of an entity

@@ -9,7 +9,6 @@ import {
     Property,
     ResolvedEntitySchema
 } from "../../../models";
-import { buildPropertyFrom } from "../../util/property_builder";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { TableCell } from "../Table/TableCell";
 import { PreviewComponent, SkeletonComponent } from "../../../preview";
