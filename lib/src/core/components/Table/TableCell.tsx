@@ -6,7 +6,7 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import clsx from "clsx";
 import { CellStyleProps, useCellStyles } from "./styles";
 import { getRowHeight } from "./common";
-import deepEqual from "deep-equal";
+import isEqual from "react-fast-compare";
 
 
 interface TableCellProps {
@@ -237,7 +237,7 @@ function areEqual(prevProps: TableCellProps & CellStyleProps, nextProps: TableCe
         prevProps.showExpandIcon === nextProps.showExpandIcon &&
         prevProps.removePadding === nextProps.removePadding &&
         prevProps.fullHeight === nextProps.fullHeight &&
-        deepEqual(prevProps.value, nextProps.value)
+        isEqual(prevProps.value, nextProps.value)
         ;
 }
 
