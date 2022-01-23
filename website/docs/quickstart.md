@@ -28,7 +28,7 @@ field in the `authController` to check for permissions.
 - Create a new React app including Typescript:
 
 ```
-npx create-react-app my-cms --template typescript
+yarn create react-app my-cms --template typescript
 ```
 
 - Go into the new directory:
@@ -47,7 +47,7 @@ to solve the issue, while we find a permanent solution.
 - Install FireCMS and it's peer dependencies:
 
 ```
-yarn add @camberi/firecms firebase@^9.0.0 @mui/material@^5.1.0 @mui/icons-material@^5.1.0 @mui/lab@^5.0.0-alpha.55 @mui/styles@^5.1.0 @emotion/react @emotion/styled react-router@^6.0.0 react-router-dom@^6.0.0
+yarn add @camberi/firecms firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab @mui/styles@^5 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
 ```
 
 You can replace the content of the file App.tsx with the following sample code.
