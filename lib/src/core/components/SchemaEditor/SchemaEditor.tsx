@@ -201,7 +201,7 @@ function SchemaEditorForm<M>({
         setSelectedPropertyId(newSelectedPropertyId);
     }, [location]);
 
-    const onPropertyClick = useCallback((property: Property, propertyId: string) => {
+    const onPropertyClick = useCallback((property: PropertyOrBuilder, propertyId: string) => {
         setSelectedPropertyId(propertyId);
         const replace = Boolean(location.hash);
         if (!replace) navigationStack.current++;
@@ -215,13 +215,13 @@ function SchemaEditorForm<M>({
                                         provided,
                                         snapshot
                                     }: RenderItemParams) => {
-        const property = item.data.property as Property;
+        const propertyOrBuilder = item.data.property as PropertyOrBuilder;
         return (
             <SchemaEntry
                 name={item.id as string}
-                propertyOrBuilder={property}
+                propertyOrBuilder={propertyOrBuilder}
                 provided={provided}
-                onClick={() => onPropertyClick(property, item.id as string)}
+                onClick={() => onPropertyClick(propertyOrBuilder, item.id as string)}
                 selected={snapshot.isDragging || selectedPropertyId === item.id}/>
         )
     }, [selectedPropertyId]);
@@ -270,7 +270,7 @@ function SchemaEditorForm<M>({
         top: 3
     }}>
 
-        {selectedProperty && selectedPropertyId &&
+        {selectedPropertyId && typeof selectedProperty === "object" &&
         <PropertyForm
             autoSubmit={true}
             key={`edit_view_${selectedPropertyId}`}
@@ -559,8 +559,7 @@ export function SchemaEntry({
                        elevation={0}>
 
                     {typeof propertyOrBuilder === "object"
-                        ? <PropertyPreview name={name}
-                                           property={propertyOrBuilder}/>
+                        ? <PropertyPreview property={propertyOrBuilder}/>
                         : <PropertyBuilderPreview name={name}/>}
 
                     <Box {...provided.dragHandleProps}
@@ -603,9 +602,8 @@ export function SubmitListener() {
 }
 
 function PropertyPreview({
-                             name,
                              property
-                         }: { name: string, property: Property }) {
+                         }: { property: Property }) {
     return (
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 

@@ -143,14 +143,12 @@ function PropertyEditView({
     onPropertyChanged?: (id: string, property: Property) => void;
 } & FormikProps<PropertyWithId>) {
 
-    console.log("PropertyEditView");
     const [selectedWidgetId, setSelectedWidgetId] = useState<WidgetId | undefined>(values ? getWidgetId(values) : undefined);
 
     const selectedWidget = selectedWidgetId ? WIDGETS[selectedWidgetId] : undefined;
     useEffect(() => {
         if (values.id && onPropertyChanged) {
             const { id, ...property } = values;
-            console.log("useEffect", values);
             onPropertyChanged(id, property);
         }
     }, [values]);

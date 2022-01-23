@@ -88,7 +88,7 @@ export function useBuildNavigationContext<UserType>({
             setNavigationLoading(false);
             setNavigationLoadingError(e);
         });
-    }, [authController.user, authController.canAccessMainView, navigationOrBuilder, authController, dateTimeFormat, locale, dataSource, storageSource]);
+    }, [authController.user, authController.canAccessMainView, navigationOrBuilder]);
 
     useEffect(() => {
         if (!configPersistence || (!configPersistence.collections && configPersistence.loading)) {
