@@ -104,12 +104,10 @@ const productSchema = buildSchema<Product>({
         main_image: buildProperty({ // The `buildProperty` method is an utility function used for type checking
             title: "Image",
             dataType: "string",
-            config: {
-                storage: {
-                    mediaType: "image",
-                    storagePath: "images",
-                    acceptedFiles: ["image/*"]
-                }
+            storage: {
+                mediaType: "image",
+                storagePath: "images",
+                acceptedFiles: ["image/*"]
             }
         }),
         tags: {

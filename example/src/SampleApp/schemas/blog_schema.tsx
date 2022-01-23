@@ -24,14 +24,12 @@ export const blogSchema = buildSchema({
         header_image: buildProperty({
             title: "Header image",
             dataType: "string",
-            config: {
-                storage: {
-                    mediaType: "image",
-                    storagePath: "images",
-                    acceptedFiles: ["image/*"],
-                    metadata: {
-                        cacheControl: "max-age=1000000"
-                    }
+            storage: {
+                mediaType: "image",
+                storagePath: "images",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
                 }
             }
         }),

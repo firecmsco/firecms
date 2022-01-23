@@ -31,4 +31,5 @@ export const customSchemaOverrideHandler: SchemaOverrideHandler = ({
         console.log("Used custom schema resolver", path, entityId);
         return { schema: customProductSchema };
     }
+    return undefined;
 };

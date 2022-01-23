@@ -3,6 +3,10 @@ on:
     push:
         branches: [ release ]
 
+defaults:
+    run:
+        working-directory: ./lib
+
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -13,7 +17,7 @@ jobs:
               with:
                   node-version: '14.x'
                   registry-url: 'https://registry.npmjs.org'
-            - run: cd lib && yarn install
+            - run: yarn install
             # Publish to npm
             - run: npm publish --access public
               env:

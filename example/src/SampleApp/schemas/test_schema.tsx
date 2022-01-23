@@ -57,7 +57,6 @@ export const testEntitySchema = buildSchema({
             }
         },
         source: ({ values, previousValues }) => {
-            console.trace("builder", values, previousValues);
             const properties = buildProperties<any>({
                 type: {
                     dataType: "string",
@@ -392,11 +391,9 @@ export const testEntitySchema = buildSchema({
         pdf: buildProperty({
             title: "Pdf",
             dataType: "string",
-            config: {
-                storage: {
-                    storagePath: "test",
-                    acceptedFiles: ['application/pdf'],
-                }
+            storage: {
+                storagePath: "test",
+                acceptedFiles: ['application/pdf'],
             }
         })
     },
