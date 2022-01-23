@@ -11,9 +11,6 @@ export default defineConfig({
       plugins: ["@emotion/babel-plugin"],
     },
   })],
-  define: {
-    'process.env': process.env
-  },
   resolve:{
     alias:{
       '@camberi/firecms' : path.resolve(__dirname, '../lib/src')

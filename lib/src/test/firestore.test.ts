@@ -1,17 +1,13 @@
-import { initializeApp } from "firebase/app";
 import { Timestamp } from "firebase/firestore";
-import { productSchema } from "./test_site_config";
+import { productSchema } from "../test_site_config";
 import { computeProperties, initWithProperties } from "../core/utils";
-import { useFirestoreDataSource } from "../firebase_app";
-import { EntitySchema } from "../models";
+import { EntitySchema, ResolvedEntitySchema } from "../models";
+import { firestoreToCMSModel } from "../firebase_app/hooks/useFirestoreDataSource";
 
-const firebaseApp = initializeApp({});
-// eslint-disable-next-line react-hooks/rules-of-hooks
-const firestoreDatasource = useFirestoreDataSource({ firebaseApp });
 
 it("timestamp conversion", () => {
 
-    const schema: EntitySchema = {
+    const schema: ResolvedEntitySchema<any> = {
         id:"test",
         name: "Test entity",
         properties: {
@@ -19,12 +15,13 @@ it("timestamp conversion", () => {
                 dataType: "timestamp",
                 title: "Created at"
             }
-        }
+        },
+        originalSchema: { name: "Test entity", properties: {} }
     };
 
     const timestamp = Timestamp.now();
     const date = timestamp.toDate();
-    expect((firestoreDatasource as any).firestoreToCMSModel({ created_at: timestamp }, schema, "any")
+    expect(firestoreToCMSModel({ created_at: timestamp }, schema, "any")
     ).toEqual({ created_at: date });
 });
 
@@ -48,8 +45,8 @@ it("timestamp array conversion", () => {
     const date = timestamp.toDate();
 
     expect(
-        (firestoreDatasource as any).firestoreToCMSModel({ my_array: [{ created_at: timestamp }] }, schema, "any")
-    ).toEqual({ myArray: [{ created_at: date }] });
+        firestoreToCMSModel({ my_array: [timestamp] }, schema as ResolvedEntitySchema<any>, "any")
+    ).toEqual({ my_array: [date] });
 
 });
 
@@ -61,7 +58,6 @@ it("Initial values", () => {
         values: productSchema.defaultValues
     });
     const initialisedValues = initWithProperties(properties, productSchema.defaultValues);
-    console.log(initialisedValues);
     expect(
         Object.values(initialisedValues).filter((v) => v === undefined)
     ).toHaveLength(0);

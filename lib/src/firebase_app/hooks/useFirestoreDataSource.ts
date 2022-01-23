@@ -106,55 +106,6 @@ export function useFirestoreDataSource({
         };
     }
 
-    /**
-     * Remove id from Firestore path
-     * @param fsPath
-     */
-    function getCMSPathFromFirestorePath(fsPath: string): string {
-        let to = fsPath.lastIndexOf("/");
-        to = to === -1 ? fsPath.length : to;
-        return fsPath.substring(0, to);
-    }
-
-    /**
-     * Recursive function that converts Firestore data types into CMS or plain
-     * JS types.
-     * FireCMS uses Javascript dates internally instead of Firestore timestamps.
-     * This makes it easier to interact with the rest of the libraries and
-     * bindings.
-     * Also, Firestore references are replaced with {@link EntityReference}
-     * @param data
-     * @param schema
-     * @param path
-     * @category Firestore
-     */
-    function firestoreToCMSModel<M>(data: any, schema: ResolvedEntitySchema<M>, path: string): any {
-        return traverseValues(data,
-            schema.properties,
-            (value, property) => {
-                if (value === null)
-                    return null;
-
-                if (serverTimestamp().isEqual(value)) {
-                    return null;
-                }
-
-                if (value instanceof Timestamp && property.dataType === "timestamp") {
-                    return value.toDate();
-                }
-
-                if (value instanceof GeoPoint && property.dataType === "geopoint") {
-                    return new GeoPoint(value.latitude, value.longitude);
-                }
-
-                if (value instanceof DocumentReference && property.dataType === "reference") {
-                    return new EntityReference(value.id, getCMSPathFromFirestorePath(value.path));
-                }
-
-                return value;
-            });
-    }
-
     function buildQuery<M>(path: string, filter: FilterValues<Extract<keyof M, string>> | undefined, orderBy: string | undefined, order: "desc" | "asc" | undefined, startAfter: any[] | undefined, limit: number | undefined) {
 
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
@@ -501,3 +452,52 @@ export function useFirestoreDataSource({
 
 }
 
+
+/**
+ * Recursive function that converts Firestore data types into CMS or plain
+ * JS types.
+ * FireCMS uses Javascript dates internally instead of Firestore timestamps.
+ * This makes it easier to interact with the rest of the libraries and
+ * bindings.
+ * Also, Firestore references are replaced with {@link EntityReference}
+ * @param data
+ * @param schema
+ * @param path
+ * @category Firestore
+ */
+export function firestoreToCMSModel<M>(data: any, schema: ResolvedEntitySchema<M>, path: string): any {
+    return traverseValues(data,
+        schema.properties,
+        (value, property) => {
+            if (value === null)
+                return null;
+
+            if (serverTimestamp().isEqual(value)) {
+                return null;
+            }
+
+            if (value instanceof Timestamp && property.dataType === "timestamp") {
+                return value.toDate();
+            }
+
+            if (value instanceof GeoPoint && property.dataType === "geopoint") {
+                return new GeoPoint(value.latitude, value.longitude);
+            }
+
+            if (value instanceof DocumentReference && property.dataType === "reference") {
+                return new EntityReference(value.id, getCMSPathFromFirestorePath(value.path));
+            }
+
+            return value;
+        });
+}
+
+/**
+ * Remove id from Firestore path
+ * @param fsPath
+ */
+function getCMSPathFromFirestorePath(fsPath: string): string {
+    let to = fsPath.lastIndexOf("/");
+    to = to === -1 ? fsPath.length : to;
+    return fsPath.substring(0, to);
+}
