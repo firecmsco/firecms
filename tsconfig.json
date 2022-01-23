@@ -28,7 +28,7 @@
         "isolatedModules": true,
         "emitDeclarationOnly": true,
         "jsxImportSource": "@emotion/react",
-        "types": ["vite/client"]
+        "types": ["vite/client", "node", "jest"],
     },
     "include": [
         "src",

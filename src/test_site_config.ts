@@ -1,7 +1,7 @@
-import { EnumValues, InferSchemaType } from "../models";
-import { FirebaseCMSAppProps } from "../firebase_app";
-import { buildCollection, buildProperty, buildSchema } from "../core";
-import { EntityCallbacks } from "../models/entity_callbacks";
+import { EnumValues, InferSchemaType } from "./models";
+import { FirebaseCMSAppProps } from "./firebase_app";
+import { buildCollection, buildProperty, buildSchema } from "./core";
+import { EntityCallbacks } from "./models/entity_callbacks";
 
 const locales: EnumValues = {
     "de-DE": "German",
