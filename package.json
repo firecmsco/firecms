@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "1.0.0",
+    "version": "1.0.0-rc.1",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
     "license": "MIT",
@@ -30,6 +30,7 @@
         "content manager"
     ],
     "scripts": {
+        "dev": "cd example && yarn dev",
         "build": "vite build && tsc",
         "prepublishOnly": "run-s build",
         "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
