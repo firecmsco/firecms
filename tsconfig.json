@@ -27,7 +27,8 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "emitDeclarationOnly": true,
-        "jsxImportSource": "@emotion/react"
+        "jsxImportSource": "@emotion/react",
+        "types": ["vite/client"]
     },
     "include": [
         "src",
