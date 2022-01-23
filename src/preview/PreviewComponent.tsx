@@ -202,6 +202,6 @@ function buildWrongValueType(name: string | undefined, dataType: string, value: 
 //         && prevProps.size === nextProps.size
 //         && prevProps.height === nextProps.height
 //         && prevProps.width === nextProps.width
-//         && deepEqual(prevProps.value, nextProps.value)
+//         && isEqual(prevProps.value, nextProps.value)
 //         ;
 // }

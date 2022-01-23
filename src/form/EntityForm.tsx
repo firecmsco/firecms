@@ -15,7 +15,7 @@ import {
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { buildPropertyField } from "./form_factory";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
-import deepEqual from "deep-equal";
+import isEqual from "react-fast-compare";
 import { ErrorFocus } from "./components/ErrorFocus";
 import {
     computeSchema,
@@ -161,7 +161,7 @@ export function EntityForm<M>({
                 .map((key) => {
                     const initialValue = (initialValues as any)[key];
                     const latestValue = (baseDataSourceValues as any)[key];
-                    if (!deepEqual(initialValue, latestValue)) {
+                    if (!isEqual(initialValue, latestValue)) {
                         return { [key]: latestValue };
                     }
                     return {};
@@ -294,7 +294,7 @@ function FormInternal<M>({
     customIdError: boolean,
     savingError?: Error
 }) {
-    const modified = useMemo(() => !deepEqual(baseDataSourceValues, values), [baseDataSourceValues, values]);
+    const modified = useMemo(() => !isEqual(baseDataSourceValues, values), [baseDataSourceValues, values]);
     useEffect(() => {
         if (onModified)
             onModified(modified);
@@ -308,7 +308,7 @@ function FormInternal<M>({
         // if they were not touched
         Object.entries(underlyingChanges).forEach(([key, value]) => {
             const formValue = (values as any)[key];
-            if (!deepEqual(value, formValue) && !(touched as any)[key]) {
+            if (!isEqual(value, formValue) && !(touched as any)[key]) {
                 console.debug("Updated value from the datasource:", key, value);
                 setFieldValue(key, value !== undefined ? value : null);
             }
