@@ -1,3 +1,10 @@
+## [1.0.0] - 2022-01-23
+
+### Changed
+
+- Fix for "heap limit Allocation failed" error
+
+
 ## [1.0.0-beta11] - 2022-01-22
 
 ### Changed
