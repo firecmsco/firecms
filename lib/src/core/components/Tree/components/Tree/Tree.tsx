@@ -67,7 +67,7 @@ export default class Tree extends Component<Props, State> {
   }
 
   static closeParentIfNeeded(tree: TreeData, draggedItemId?: ItemId): TreeData {
-    if (!!draggedItemId) {
+    if (draggedItemId) {
       // Closing parent internally during dragging, because visually we can only move one item not a subtree
       return mutateTree(tree, draggedItemId, {
         isExpanded: false,
@@ -235,7 +235,7 @@ export default class Tree extends Component<Props, State> {
   };
 
   setItemRef = (itemId: ItemId, el: HTMLElement | null) => {
-    if (!!el) {
+    if (el) {
       this.itemsElement[itemId] = el;
     }
   };

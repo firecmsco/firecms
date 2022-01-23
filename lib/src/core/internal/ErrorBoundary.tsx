@@ -4,7 +4,7 @@ import React, { ErrorInfo } from "react";
 import ErrorIcon from "@mui/icons-material/Error";
 
 
-export class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
+export class ErrorBoundary extends React.Component<Record<string, unknown>, { hasError: boolean }> {
     constructor(props: any) {
         super(props);
         this.state = { hasError: false };

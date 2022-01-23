@@ -1,14 +1,13 @@
 import { Timestamp } from "firebase/firestore";
-import { productSchema } from "../test_site_config";
+import { productSchema } from "./test_site_config";
 import { computeProperties, initWithProperties } from "../core/utils";
 import { EntitySchema, ResolvedEntitySchema } from "../models";
 import { firestoreToCMSModel } from "../firebase_app/hooks/useFirestoreDataSource";
 
-
 it("timestamp conversion", () => {
 
     const schema: ResolvedEntitySchema<any> = {
-        id:"test",
+        id: "test",
         name: "Test entity",
         properties: {
             created_at: {
@@ -16,7 +15,7 @@ it("timestamp conversion", () => {
                 title: "Created at"
             }
         },
-        originalSchema: { name: "Test entity", properties: {} }
+        originalSchema: { id: "test", name: "Test entity", properties: {} }
     };
 
     const timestamp = Timestamp.now();

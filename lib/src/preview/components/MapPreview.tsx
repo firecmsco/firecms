@@ -29,7 +29,7 @@ const useStyles = makeStyles(() =>
 /**
  * @category Preview components
  */
-export function MapPreview<T extends {}>({
+export function MapPreview<T extends Record<string, unknown>>({
                                              name,
                                              value,
                                              property,

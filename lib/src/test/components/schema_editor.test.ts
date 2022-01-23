@@ -3,7 +3,7 @@ import {
     treeToProperties
 } from "../../core/components/SchemaEditor/util";
 import { EntitySchema } from "../../models";
-const util = require('util');
+import util from "util";
 
 export const productSchema: EntitySchema = {
     id: "product",
