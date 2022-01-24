@@ -26,7 +26,6 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "emitDeclarationOnly": true,
         "jsxImportSource": "@emotion/react",
     },
     "include": [
@@ -36,6 +35,6 @@
     "exclude": [
         "node_modules",
         "dist",
-        "test"
+        "src/test"
     ]
 }

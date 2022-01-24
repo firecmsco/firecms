@@ -9,6 +9,6 @@
   ],
   "scripts": {
     "dev": "cd example && yarn dev",
-    "build": "cd lib && vite build && tsc"
+    "build": "cd lib && yarn build"
   }
 }

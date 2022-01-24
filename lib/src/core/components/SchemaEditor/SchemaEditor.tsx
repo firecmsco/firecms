@@ -13,7 +13,9 @@ import Tree, {
     TreeDestinationPosition,
     TreeSourcePosition
 } from "../Tree";
-import { TreeDraggableProvided } from "../Tree/components/TreeItem/TreeItem-types";
+import {
+    TreeDraggableProvided
+} from "../Tree/components/TreeItem/TreeItem-types";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { Formik, FormikProps, useFormikContext } from "formik";
@@ -54,14 +56,16 @@ import {
 import { getWidget } from "../../util/widgets";
 import { NewPropertyDialog, PropertyForm } from "./PropertyEditView";
 import { useSnackbarController } from "../../../hooks";
-import { useConfigurationPersistence } from "../../../hooks/useConfigurationPersistence";
+import {
+    useConfigurationPersistence
+} from "../../../hooks/useConfigurationPersistence";
 import { ErrorView } from "../ErrorView";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 
 export type SchemaEditorProps<M> = {
     schemaId?: string;
-    handleClose?: (schema: EntitySchema<M>) => void;
+    handleClose?: (updatedSchema?: EntitySchema<M>) => void;
     updateDirtyStatus?: (dirty: boolean) => void;
 };
 
@@ -152,7 +156,8 @@ export function SchemaEditor<M>({
                 return (
                     <SchemaEditorForm {...formikProps}
                                       updateDirtyStatus={updateDirtyStatus}
-                                      isNewSchema={isNewSchema}/>
+                                      isNewSchema={isNewSchema}
+                                      onCancel={handleClose ? () => handleClose(undefined) : undefined}/>
                 );
             }}
 
@@ -171,10 +176,12 @@ function SchemaEditorForm<M>({
                                  isSubmitting,
                                  isNewSchema,
                                  handleSubmit,
-                                 updateDirtyStatus
+                                 updateDirtyStatus,
+                                 onCancel,
                              }: FormikProps<EntitySchema<M>> & {
     isNewSchema: boolean,
     updateDirtyStatus?: (dirty: boolean) => void;
+    onCancel?: () => void;
 }) {
 
     const location = useLocation();
@@ -418,6 +425,15 @@ function SchemaEditorForm<M>({
                     <CircularProgress size={16}
                                       thickness={8}/>
                 </Box>}
+
+                <Button
+                    color="primary"
+                    disabled={isSubmitting}
+                    onClick={onCancel}
+                    sx={{ mr: 2 }}
+                >
+                    Cancel
+                </Button>
 
                 <Button
                     variant="contained"
