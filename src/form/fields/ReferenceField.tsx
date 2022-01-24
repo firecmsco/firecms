@@ -116,6 +116,10 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                                                                  }: FieldProps<EntityReference>) {
 
 
+    if (typeof property.path !== "string") {
+        throw Error("Picked the wrong component ReferenceField");
+    }
+
     useClearRestoreValue({
         property,
         value,
@@ -129,7 +133,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
 
     const navigationContext = useNavigation();
     const collectionResolver: EntityCollectionResolver | undefined = useMemo(() => {
-        return navigationContext.getCollectionResolver(property.path);
+        return navigationContext.getCollectionResolver(property.path as string);
     }, [property.path, navigationContext]);
 
     if (!collectionResolver) {

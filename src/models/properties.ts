@@ -413,8 +413,11 @@ export interface ReferenceProperty<M extends { [Key: string]: any } = any>
      * The schema of the entity is inferred based on the root navigation, so
      * the filters and search delegate existing there are applied to this view
      * as well.
+     * You can set this prop to `false` if the path is not yet know, e.g.
+     * you are using a property builder and the path depends on a different
+     * property.
      */
-    path: string;
+    path: string | false;
 
     /**
      * Properties that need to be rendered when displaying a preview of this

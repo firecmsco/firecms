@@ -20,6 +20,9 @@ export function isReadOnly(property: Property<any>): boolean {
         if (property.autoValue)
             return true;
     }
+    if (property.dataType === "reference") {
+        return !property.path;
+    }
     return false;
 }
 

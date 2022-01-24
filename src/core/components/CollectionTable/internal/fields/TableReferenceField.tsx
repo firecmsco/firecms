@@ -49,6 +49,10 @@ export function TableReferenceField(props: {
         throw Error("TableReferenceField misconfiguration");
     }
 
+    if (typeof usedProperty.path !== "string") {
+        throw Error("Picked the wrong component TableReferenceField");
+    }
+
     const classes = useInputStyles();
     const path = usedProperty.path;
 

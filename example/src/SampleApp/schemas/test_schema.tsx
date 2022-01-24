@@ -48,6 +48,19 @@ export const testEntitySchema = buildSchema({
     customId: true,
     name: "Test entity",
     properties: {
+        product: {
+            title: "Product",
+            dataType: "reference",
+            path: "products",
+            previewProperties: ["name", "main_image"]
+        },
+        movement: buildProperty(({values}) => {
+            return {
+                title: "Locale",
+                dataType: "reference",
+                path:  !values.product ? false : values.product.path + "/" + values.product.id + "/locales"
+            };
+        }),
         name: {
             title: "Name starts with number",
             dataType: "string",
@@ -88,13 +101,6 @@ export const testEntitySchema = buildSchema({
                 title: "Source",
                 properties: properties
             });
-        },
-
-        product: {
-            title: "Product",
-            dataType: "reference",
-            path: "products",
-            previewProperties: ["name", "main_image"]
         },
         gallery: {
             title: 'Gallery',

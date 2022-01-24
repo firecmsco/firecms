@@ -247,14 +247,16 @@ const PropertyTableCellInternal = <T extends CMSType>({
             />;
             allowScroll = true;
         } else if (property.dataType === "reference") {
-            innerComponent = <TableReferenceField name={name as string}
-                                                  internalValue={internalValue as EntityReference}
-                                                  updateValue={updateValue}
-                                                  disabled={disabled}
-                                                  size={size}
-                                                  property={property as ReferenceProperty}
-                                                  setPreventOutsideClick={setPreventOutsideClick}
-            />;
+            if (typeof property.path === "string") {
+                innerComponent = <TableReferenceField name={name as string}
+                                                      internalValue={internalValue as EntityReference}
+                                                      updateValue={updateValue}
+                                                      disabled={disabled}
+                                                      size={size}
+                                                      property={property as ReferenceProperty}
+                                                      setPreventOutsideClick={setPreventOutsideClick}
+                />;
+            }
             allowScroll = true;
         } else if (property.dataType === "array") {
             const arrayProperty = (property as ArrayProperty);
@@ -277,14 +279,17 @@ const PropertyTableCellInternal = <T extends CMSType>({
                         allowScroll = true;
                     }
                 } else if (arrayProperty.of.dataType === "reference") {
-                    innerComponent = <TableReferenceField name={name as string}
-                                                          disabled={disabled}
-                                                          internalValue={internalValue as EntityReference[]}
-                                                          updateValue={updateValue}
-                                                          size={size}
-                                                          property={property as ArrayProperty}
-                                                          setPreventOutsideClick={setPreventOutsideClick}
-                    />;
+                    if (typeof arrayProperty.of.path === "string") {
+                        innerComponent =
+                            <TableReferenceField name={name as string}
+                                                 disabled={disabled}
+                                                 internalValue={internalValue as EntityReference[]}
+                                                 updateValue={updateValue}
+                                                 size={size}
+                                                 property={property as ArrayProperty}
+                                                 setPreventOutsideClick={setPreventOutsideClick}
+                            />;
+                    }
                     allowScroll = false;
                 }
             }
@@ -347,6 +352,7 @@ function areEqual(prevProps: PropertyTableCellProps<any> & CellStyleProps, nextP
         prevProps.size === nextProps.size &&
         prevProps.align === nextProps.align &&
         prevProps.width === nextProps.width &&
+        isEqual(prevProps.property, nextProps.property) &&
         isEqual(prevProps.value, nextProps.value)
         ;
 }

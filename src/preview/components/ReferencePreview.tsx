@@ -1,27 +1,20 @@
 import * as React from "react";
 import { useMemo } from "react";
-import clsx from "clsx";
 
 import {
+    Box,
     darken,
     IconButton,
     lighten,
     Paper,
     Skeleton,
-    Theme,
     Tooltip,
     Typography
 } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import { AnyProperty, EntityReference } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import {
-    PreviewComponent,
-    PreviewComponentProps,
-    PreviewSize
-} from "../internal";
+import { PreviewComponent, PreviewComponentProps } from "../internal";
 
 import { SkeletonComponent } from "./SkeletonComponent";
 import { ErrorView } from "../../core";
@@ -34,57 +27,6 @@ import {
 export type ReferencePreviewProps =
     PreviewComponentProps<EntityReference>
     & { onHover?: boolean };
-
-
-const useReferenceStyles = makeStyles<Theme, { size: PreviewSize, onHover?: boolean }>((theme: Theme) =>
-    createStyles({
-        paper: {
-            display: "flex",
-            color: "#838383",
-            backgroundColor: darken(theme.palette.background.default, 0.1),
-            borderRadius: "2px",
-            overflow: "hidden",
-            fontWeight: theme.typography.fontWeightMedium
-        },
-        root: {
-            display: "flex",
-            flexDirection: "column",
-            flexGrow: 1,
-            maxWidth: "calc(100% - 60px)",
-            margin: theme.spacing(1)
-        },
-        regular: {
-            padding: theme.spacing(1),
-            width: "100%"
-        },
-        small: {
-            width: "100%"
-        },
-        tiny: {
-            width: "100%",
-            itemsAlign: "center"
-        },
-        clamp: {
-            lineClamp: 1
-        },
-        marginAuto: {
-            margin: "auto"
-        },
-        inner: {
-            display: ({ size }) => size !== "regular" ? "block" : undefined,
-            whiteSpace: ({ size }) => size !== "regular" ? "nowrap" : undefined,
-            overflow: ({ size }) => size !== "regular" ? "hidden" : undefined,
-            textOverflow: ({ size }) => size !== "regular" ? "ellipsis" : undefined,
-            margin: ({ size }) => size !== "tiny" ? theme.spacing(0.2) : theme.spacing(0)
-        },
-        clickable: {
-            tabindex: 0,
-            backgroundColor: ({ onHover }) => onHover ? (theme.palette.mode === "dark" ? lighten(theme.palette.background.default, 0.1) : darken(theme.palette.background.default, 0.15)) : darken(theme.palette.background.default, 0.1),
-            transition: "background-color 300ms ease, box-shadow 300ms ease",
-            boxShadow: ({ onHover }) => onHover ? "0 0 0 2px rgba(128,128,128,0.05)" : undefined,
-            cursor: ({ onHover }) => onHover ? "pointer" : undefined
-        }
-    }));
 
 
 /**
@@ -112,7 +54,9 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         onHover
     }: ReferencePreviewProps) {
 
-    const referenceClasses = useReferenceStyles({ size, onHover });
+    if (typeof property.path !== "string") {
+        throw Error("Picked the wrong component ReferencePreviewComponent");
+    }
 
     const reference: EntityReference = value;
     const previewProperties = property.previewProperties;
@@ -169,16 +113,27 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
 
         body = (
             <>
-                <div className={referenceClasses.root}>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    flexGrow: 1,
+                    maxWidth: "calc(100% - 60px)",
+                    margin: 1
+                }}>
 
                     {size !== "tiny" && (
                         value
-                            ? <div className={referenceClasses.inner}>
+                            ? <Box sx={{
+                                display: size !== "regular" ? "block" : undefined,
+                                whiteSpace: size !== "regular" ? "nowrap" : undefined,
+                                overflow: size !== "regular" ? "hidden" : undefined,
+                                textOverflow: size !== "regular" ? "ellipsis" : undefined
+                            }}>
                                 <Typography variant={"caption"}
                                             className={"mono"}>
                                     {value.id}
                                 </Typography>
-                            </div>
+                            </Box>
                             : <Skeleton variant="text"/>)}
 
 
@@ -186,13 +141,12 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                         const childProperty = schema.properties[key as string];
 
                         return (
-                            <div key={"ref_prev_" + (key as string)}
-                                 className={referenceClasses.inner}>
+                            <div key={"ref_prev_" + (key as string)}>
                                 {entity
                                     ? <PreviewComponent name={key as string}
-                                                      value={entity.values[key as string]}
-                                                      property={childProperty as AnyProperty}
-                                                      size={"tiny"}/>
+                                                        value={entity.values[key as string]}
+                                                        property={childProperty as AnyProperty}
+                                                        size={"tiny"}/>
                                     : <SkeletonComponent
                                         property={childProperty as AnyProperty}
                                         size={"tiny"}/>
@@ -201,37 +155,56 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                         );
                     })}
 
-                </div>
-                <div className={referenceClasses.marginAuto}>
+                </Box>
+                <Box sx={{
+                    margin: "auto"
+                }}>
                     {entity &&
-                    <Tooltip title={`See details for ${entity.id}`}>
-                        <IconButton
-                            size={size === "tiny" ? "small" : "medium"}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                sideEntityController.open({
-                                    entityId: entity.id,
-                                    path: entity.path,
-                                    schema: schema,
-                                    overrideSchemaRegistry: false
-                                });
-                            }}>
-                            <KeyboardTabIcon fontSize={"small"}/>
-                        </IconButton>
-                    </Tooltip>}
-                </div>
+                        <Tooltip title={`See details for ${entity.id}`}>
+                            <IconButton
+                                size={size === "tiny" ? "small" : "medium"}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    sideEntityController.open({
+                                        entityId: entity.id,
+                                        path: entity.path,
+                                        schema: schema,
+                                        overrideSchemaRegistry: false
+                                    });
+                                }}>
+                                <KeyboardTabIcon fontSize={"small"}/>
+                            </IconButton>
+                        </Tooltip>}
+                </Box>
             </>
         );
     }
 
+
     return (
-        <Paper elevation={0} className={clsx(referenceClasses.paper,
-            {
-                [referenceClasses.regular]: size === "regular",
-                [referenceClasses.small]: size === "small",
-                [referenceClasses.tiny]: size === "tiny",
-                [referenceClasses.clickable]: !!onClick
-            })}
+        <Paper elevation={0} sx={(theme) => {
+            const clickableStyles = onClick
+                ? {
+                    tabindex: 0,
+                    backgroundColor: onHover ? (theme.palette.mode === "dark" ? lighten(theme.palette.background.default, 0.1) : darken(theme.palette.background.default, 0.15)) : darken(theme.palette.background.default, 0.1),
+                    transition: "background-color 300ms ease, box-shadow 300ms ease",
+                    boxShadow: onHover ? "0 0 0 2px rgba(128,128,128,0.05)" : undefined,
+                    cursor: onHover ? "pointer" : undefined
+                }
+                : {};
+            return ({
+                width: "100%",
+                display: "flex",
+                color: "#838383",
+                backgroundColor: darken(theme.palette.background.default, 0.1),
+                borderRadius: "2px",
+                overflow: "hidden",
+                padding: size === "regular" ? 1 : 0,
+                itemsAlign: size === "tiny" ? "center" : undefined,
+                fontWeight: theme.typography.fontWeightMedium,
+                ...clickableStyles
+            });
+        }}
                onClick={onClick}>
 
             {body}

@@ -98,9 +98,13 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                                             size={size}
                         />;
                 } else if (arrayProperty.of.dataType === "reference") {
-                    content = <ArrayOfReferencesPreview {...fieldProps}
-                                                        value={value}
-                                                        property={property as ArrayProperty}/>;
+                    if (typeof arrayProperty.of.path === "string") {
+                        content = <ArrayOfReferencesPreview {...fieldProps}
+                                                            value={value}
+                                                            property={property as ArrayProperty}/>;
+                    } else {
+                        content = <EmptyValue/>;
+                    }
                 } else if (arrayProperty.of.dataType === "string") {
                     if (arrayProperty.of.config?.enumValues) {
                         content = <ArrayPropertyEnumPreview
@@ -155,15 +159,20 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
             content = buildWrongValueType(name, property.dataType, value);
         }
     } else if (property.dataType === "reference") {
-        if (value instanceof EntityReference) {
-            content = <ReferencePreview
-                {...fieldProps}
-                value={value as EntityReference}
-                property={property as ReferenceProperty}
-            />;
+        if (typeof property.path === "string") {
+            if (value instanceof EntityReference) {
+                content = <ReferencePreview
+                    {...fieldProps}
+                    value={value as EntityReference}
+                    property={property as ReferenceProperty}
+                />;
+            } else {
+                content = buildWrongValueType(name, property.dataType, value);
+            }
         } else {
-            content = buildWrongValueType(name, property.dataType, value);
+            content = <EmptyValue/>;
         }
+
     } else if (property.dataType === "boolean") {
         if (typeof value === "boolean") {
             content = <BooleanPreview {...fieldProps}
