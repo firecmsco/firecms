@@ -2,7 +2,39 @@
 id: changelog
 title: Changelog
 ---
-## [1.0.0-beta8] - 2021-12-13
+## [1.0.0] - 2022-01-23
+
+### Changed
+
+- Fix for "heap limit Allocation failed" error
+
+
+## [1.0.0-beta11] - 2022-01-22
+
+### Changed
+
+- Fix for array components losing focus
+- Added custom `regexMessage` for displaying when there is a string `regex` 
+validation error.
+- Property builders now include the `previousValues` prop, in case you need to 
+compare the updates with the original values (only in the form view and the
+popup view in the collection).
+- Changed page not found error message.
+
+ 
+## [1.0.0-beta10] - 2022-01-11
+
+### Changed
+
+- Drag and drop implementation replaced for `react-beautiful-dnd`, for simpler 
+code and better performance.
+- Fix callbacks to open side panel, (by Kyle Fang)
+- Fix for latest version of `react-router` types
+- General dependencies update
+- Many internal React eslint warning fixes
+
+
+## [1.0.0-beta9] - 2021-12-17
 
 ### Added
 

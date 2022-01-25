@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import { productSchema } from "../test_site_config";
+import { productSchema } from "./test_site_config";
 import { computeProperties, initWithProperties } from "../core/utils";
 import { EntitySchema, ResolvedEntitySchema } from "../models";
 import { firestoreToCMSModel } from "../firebase_app/hooks/useFirestoreDataSource";

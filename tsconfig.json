@@ -38,6 +38,6 @@
         "dist",
         "example",
         "example_backend",
-        "test"
+        "src/test"
     ]
 }
