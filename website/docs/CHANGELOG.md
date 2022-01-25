@@ -2,7 +2,7 @@
 id: changelog
 title: Changelog
 ---
-## [1.0.0] - 2022-01-23
+## [1.0.0-rc.1] - 2022-01-23
 
 ### Changed
 

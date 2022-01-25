@@ -7,18 +7,15 @@ import {
 
 let client: SearchClient | undefined = undefined;
 // process is defined for react-scripts builds
-// @ts-ignore
 if (typeof process !== "undefined") {
-// @ts-ignore
     if (process?.env.REACT_APP_ALGOLIA_APP_ID && process?.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
-// @ts-ignore
         client = algoliasearch(process.env.REACT_APP_ALGOLIA_APP_ID, process.env.REACT_APP_ALGOLIA_SEARCH_KEY);
     }
 }
-// process is defined for react-scripts builds
+// import.meta is defined for vite builds
 else if (typeof import.meta !== "undefined") {
     if (import.meta?.env?.VITE_ALGOLIA_APP_ID && import.meta?.env?.VITE_ALGOLIA_SEARCH_KEY) {
-        client = algoliasearch(import.meta.env.VITE_ALGOLIA_APP_ID, import.meta.env.VITE_ALGOLIA_SEARCH_KEY);
+        client = algoliasearch(import.meta.env.VITE_ALGOLIA_APP_ID as string, import.meta.env.VITE_ALGOLIA_SEARCH_KEY as string);
     }
 } else {
     console.error("REACT_APP_ALGOLIA_APP_ID or REACT_APP_ALGOLIA_SEARCH_KEY env variables not specified");

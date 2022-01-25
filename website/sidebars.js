@@ -72,6 +72,14 @@ module.exports = {
                 'deployment',
             ]
         },
+        {
+            type: 'category',
+            label: 'Recipes',
+            items: [
+                // 'recipes/recipes_index',
+                'recipes/building_a_blog',
+            ]
+        },
         'custom_cms_app',
         'migrating_from_alpha_versions',
         'changelog'
