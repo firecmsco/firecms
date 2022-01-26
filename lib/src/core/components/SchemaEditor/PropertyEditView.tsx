@@ -87,7 +87,7 @@ export function PropertyForm({
                                 </Button>}
                                 <Button variant="contained"
                                         color="primary"
-                                        onClick={props.handleSubmit}>
+                                        onClick={() => props.handleSubmit()}>
                                     Ok
                                 </Button>
                             </DialogActions>
@@ -109,8 +109,10 @@ function PropertyEditView({
                               errors,
                               touched,
                               setValues,
+                              setFieldValue,
                               existing,
-                              onPropertyChanged
+                              onPropertyChanged,
+                              submitCount
                           }: {
     existing: boolean;
     onPropertyChanged?: (id: string, property: Property) => void;
@@ -336,13 +338,21 @@ function PropertyEditView({
 
     const Icon = selectedWidget?.icon;
 
+    const attemptedSubmit = Boolean(submitCount);
+
     const title = "title";
-    const titleTouched = getIn(touched, title);
-    const titleError = getIn(errors, title);
+    const titleError = attemptedSubmit && getIn(errors, title);
 
     const id = "id";
-    const idError = getIn(errors, id);
-    const idTouched = getIn(touched, id);
+    const idError = attemptedSubmit && getIn(errors, id);
+
+    useEffect(() => {
+        const idTouched = getIn(touched, id);
+        if (!idTouched && !existing && values.title) {
+            setFieldValue(id, toSnakeCase(values.title))
+        }
+
+    }, [existing, touched, values.title]);
 
     return (
         <Grid container spacing={2} direction={"column"}>
@@ -384,26 +394,28 @@ function PropertyEditView({
             </Grid>
 
             <Grid item>
-                <Field name={id}
-                       as={TextField}
-                       label={"Id"}
-                       disabled={existing}
-                       required
-                       fullWidth
-                       helperText={idError && idTouched && <>{idError}</>}
-                       error={idTouched && Boolean(idError)}/>
-
-            </Grid>
-
-            <Grid item>
                 <Field name={title}
                        as={TextField}
                        validate={validateTitle}
                        label={"Title"}
                        required
                        fullWidth
-                       helperText={titleError && titleTouched && <>{titleError}</>}
-                       error={titleTouched && Boolean(titleError)}/>
+                       helperText={titleError}
+                       error={Boolean(titleError)}/>
+            </Grid>
+
+            <Grid item>
+                <Field name={id}
+                       as={TextField}
+                       label={"Id"}
+                       validate={validateId}
+                       disabled={existing}
+                       required
+                       fullWidth
+                       helperText={idError}
+                       size="small"
+                       error={Boolean(idError)}/>
+
             </Grid>
 
             <Grid item>
@@ -414,6 +426,20 @@ function PropertyEditView({
     );
 }
 
+const idRegEx = /^(?:[a-zA-Z]+_)*[a-zA-Z0-9]+$/;
+
+function validateId(value: string) {
+
+    let error;
+    if (!value) {
+        error = "You must specify an id for the property";
+    }
+    if (!value.match(idRegEx)) {
+        error = "The id can only contain letters, numbers and underscores (_), and not start with a number";
+    }
+    return error;
+}
+
 function validateTitle(value: string) {
     let error;
     if (!value) {
@@ -421,3 +447,11 @@ function validateTitle(value: string) {
     }
     return error;
 }
+
+const toSnakeCase = (str: string) => {
+    const regExpMatchArray = str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g);
+    if (!regExpMatchArray) return "";
+    return regExpMatchArray
+        .map(x => x.toLowerCase())
+        .join('_');
+};
