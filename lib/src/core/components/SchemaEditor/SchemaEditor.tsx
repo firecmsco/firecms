@@ -42,6 +42,7 @@ import {
     useMediaQuery,
     useTheme
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import {
     getIconForProperty,
     getWidgetNameForProperty
@@ -54,7 +55,7 @@ import {
     sortProperties
 } from "../../util/schemas";
 import { getWidget } from "../../util/widgets";
-import { NewPropertyDialog, PropertyForm } from "./PropertyEditView";
+import { PropertyForm } from "./PropertyEditView";
 import { useSnackbarController } from "../../../hooks";
 import {
     useConfigurationPersistence
@@ -177,7 +178,7 @@ function SchemaEditorForm<M>({
                                  isNewSchema,
                                  handleSubmit,
                                  updateDirtyStatus,
-                                 onCancel,
+                                 onCancel
                              }: FormikProps<EntitySchema<M>> & {
     isNewSchema: boolean,
     updateDirtyStatus?: (dirty: boolean) => void;
@@ -201,7 +202,7 @@ function SchemaEditorForm<M>({
     useEffect(() => {
         if (updateDirtyStatus)
             updateDirtyStatus(dirty);
-    }, [updateDirtyStatus,dirty]);
+    }, [updateDirtyStatus, dirty]);
 
     useEffect(() => {
         const newSelectedPropertyId = location.hash ? location.hash.substring(1) : undefined;
@@ -247,9 +248,13 @@ function SchemaEditorForm<M>({
     }, [tree]);
 
     const onPropertyCreated = useCallback((id: string, property: Property) => {
-        setFieldValue("properties", { ...values.properties, [id]: property });
+        setFieldValue("properties", {
+            ...(values.properties ?? {}),
+            [id]: property
+        });
         setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? []), id]);
-    }, []);
+        setNewPropertyDialogOpen(false);
+    }, [values.properties, values.propertiesOrder]);
 
     const onDragEnd = (
         source: TreeSourcePosition,
@@ -272,32 +277,34 @@ function SchemaEditorForm<M>({
 
     };
 
-    const propertyEditForm = <Box sx={{
-        position: "sticky",
-        top: 3
-    }}>
+    const asDialog = !largeLayout;
 
-        {selectedPropertyId && typeof selectedProperty === "object" &&
-        <PropertyForm
-            autoSubmit={true}
-            key={`edit_view_${selectedPropertyId}`}
-            propertyKey={selectedPropertyId}
-            property={selectedProperty}
-            onPropertyChanged={(id, property) => {
-                const propertyPath = selectedPropertyId ? "properties." + selectedPropertyId.replace(".", ".properties.") : undefined;
-                if (propertyPath)
-                    setFieldValue(propertyPath, property);
-            }
-            }/>}
+    const closePropertyDialog = () => {
+        setSelectedPropertyId(undefined);
+        if (navigationStack.current) {
+            navigationStack.current--;
+            navigate(-1);
+        } else {
+            navigate(`${location.pathname}`, { replace: true });
+        }
+    };
 
-        {!selectedProperty &&
-        <Box>
-            Select a
-            property to
-            edit it
-        </Box>}
-
-    </Box>;
+    const propertyEditForm = <PropertyForm
+        asDialog={asDialog}
+        open={Boolean(selectedPropertyId)}
+        key={`edit_view_${selectedPropertyId}`}
+        propertyKey={selectedPropertyId}
+        property={selectedProperty}
+        onPropertyChanged={(id, property) => {
+            const propertyPath = selectedPropertyId ? "properties." + selectedPropertyId.replace(".", ".properties.") : undefined;
+            if (propertyPath)
+                setFieldValue(propertyPath, property);
+        }}
+        onOkClicked={asDialog
+            ? closePropertyDialog
+            : undefined
+        }
+        onCancel={closePropertyDialog}/>;
 
     return (
         <>
@@ -367,6 +374,8 @@ function SchemaEditorForm<M>({
                                 <Button
                                     color="primary"
                                     onClick={() => setNewPropertyDialogOpen(true)}
+                                    startIcon={
+                                        <AddIcon/>}
                                 >
                                     Add property
                                 </Button>
@@ -386,14 +395,33 @@ function SchemaEditorForm<M>({
                                             isNestingEnabled
                                         />
                                     </Grid>
-                                    {largeLayout && <Grid item xs={12}
-                                                          md={7}
-                                                          sx={(theme) => ({
-                                                              borderLeft: `1px solid ${theme.palette.divider}`,
-                                                              pl: 2
-                                                          })}>
-                                        {propertyEditForm}
+
+                                    {!asDialog && <Grid item xs={12}
+                                                        md={7}
+                                                        sx={(theme) => ({
+                                                            borderLeft: `1px solid ${theme.palette.divider}`,
+                                                            pl: 2
+                                                        })}>
+                                        <Box sx={{
+                                            position: "sticky",
+                                            top: 3,
+                                            p: 2
+                                        }}>
+                                            {selectedPropertyId &&
+                                                typeof selectedProperty === "object" &&
+                                                propertyEditForm}
+
+                                            {!selectedProperty &&
+                                                <Box>
+                                                    Select a
+                                                    property to
+                                                    edit it
+                                                </Box>}
+                                        </Box>
                                     </Grid>}
+
+                                    {asDialog && typeof selectedProperty === "object" && propertyEditForm}
+
                                 </Grid>
                             </Paper>
                         </Grid>
@@ -455,29 +483,10 @@ function SchemaEditorForm<M>({
                                }}
                                onCancel={() => setPendingMove(undefined)}/>
 
-            {!largeLayout && <Dialog
-                open={Boolean(selectedPropertyId)}>
-                <DialogContent>
-                    {propertyEditForm}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => {
-                        setSelectedPropertyId(undefined);
-                        if (navigationStack.current) {
-                            navigationStack.current--;
-                            navigate(-1);
-                        } else {
-                            navigate(`${location.pathname}`, { replace: true });
-                        }
-                    }}>
-                        Ok
-                    </Button>
-                </DialogActions>
-            </Dialog>}
-
-            <NewPropertyDialog open={newPropertyDialogOpen}
-                               onCancel={() => setNewPropertyDialogOpen(false)}
-                               onPropertyCreated={onPropertyCreated}/>
+            <PropertyForm asDialog={true}
+                          open={newPropertyDialogOpen}
+                          onCancel={() => setNewPropertyDialogOpen(false)}
+                          onPropertyChanged={onPropertyCreated}/>
 
         </>
     );

@@ -5,6 +5,8 @@ import {
     Box,
     Button,
     Dialog,
+    DialogActions,
+    DialogContent,
     Grid,
     InputAdornment,
     MenuItem,
@@ -20,46 +22,25 @@ import { buildProperty } from "../../builders";
 
 export type PropertyWithId = Property & { id: string };
 
-export function NewPropertyDialog({ open, onPropertyCreated, onCancel }:
-                                      {
-                                          open: boolean;
-                                          onPropertyCreated: (id: string, property: Property) => void;
-                                          onCancel: () => void;
-                                      }) {
-
-    return (
-        <Dialog
-            open={open}
-            maxWidth={"sm"}
-            fullWidth
-            sx={(theme) => ({
-                height: "100vh"
-            })}>
-            <Box
-                sx={(theme) => ({
-                    backgroundColor: theme.palette.background.paper,
-                })}>
-                <PropertyForm autoSubmit={false}
-                              onCancel={onCancel}
-                              onPropertyChanged={onPropertyCreated}/>
-            </Box>
-        </Dialog>
-    )
-}
-
 export function PropertyForm({
+                                 asDialog,
+                                 open,
                                  propertyKey,
                                  property,
-                                 onPropertyChanged,
+                                 onOkClicked,
                                  onCancel,
-                                 autoSubmit
+                                 onPropertyChanged
                              }: {
-    autoSubmit: boolean;
+    asDialog: boolean;
+    open?: boolean;
     propertyKey?: string;
     property?: Property;
-    onCancel?: () => void;
     onPropertyChanged: (id: string, property: Property) => void;
+    onOkClicked?: () => void;
+    onCancel?: () => void;
 }) {
+
+    const newProperty = !property;
 
     return (
         <Formik
@@ -70,59 +51,51 @@ export function PropertyForm({
                     title: ""
                 } as PropertyWithId}
             onSubmit={(newPropertyWithId: PropertyWithId, formikHelpers) => {
+                console.log("onSubmit", newPropertyWithId);
                 const { id, ...property } = newPropertyWithId;
                 onPropertyChanged(id, property);
+                if (onOkClicked) {
+                    console.log("onOkClicked", newPropertyWithId);
+                    onOkClicked();
+                }
             }}
         >
             {(props) => {
 
-                return (
-                    <Form>
-                        <Box sx={{ p: 2 }}>
-                            <PropertyEditView
-                                onPropertyChanged={autoSubmit ? onPropertyChanged : undefined}
-                                existing={Boolean(propertyKey)}
-                                {...props}/>
-                        </Box>
+                const form = <PropertyEditView
+                    onPropertyChanged={newProperty ? undefined : onPropertyChanged}
+                    existing={Boolean(propertyKey)}
+                    {...props}/>;
 
-                        {!autoSubmit &&
-                        <Box sx={(theme) => ({
-                            background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
-                            backdropFilter: "blur(4px)",
-                            borderTop: `1px solid ${theme.palette.divider}`,
-                            py: 1,
-                            px: 2,
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "end",
-                            position: "sticky",
-                            bottom: 0,
-                            zIndex: 200
-                        })}
-                        >
+                let body: JSX.Element;
+                if (asDialog) {
+                    body =
+                        <Dialog
+                            open={open ?? false}
+                            maxWidth={"sm"}
+                            fullWidth
+                            sx={(theme) => ({
+                                height: "100vh"
+                            })}>
 
-                            {onCancel && <Button
-                                variant="text"
-                                color="primary"
-                                onClick={onCancel}
-                            >
-                                Cancel
-                            </Button>}
-
-                            <Button
-                                variant={!props.isValid ? "text" : "contained"}
-                                color="primary"
-                                type="submit"
-                                disabled={!props.dirty}
-                            >
-                                Ok
-                            </Button>
-
-                        </Box>}
-
-                    </Form>
-                )
+                            <DialogContent>
+                                {form}
+                            </DialogContent>
+                            <DialogActions>
+                                {onCancel && <Button onClick={onCancel}>
+                                    Cancel
+                                </Button>}
+                                <Button variant="contained"
+                                        color="primary"
+                                        onClick={props.handleSubmit}>
+                                    Ok
+                                </Button>
+                            </DialogActions>
+                        </Dialog>;
+                } else {
+                    body = form;
+                }
+                return <Form>{body}</Form>
             }}
 
         </Formik>
@@ -147,11 +120,13 @@ function PropertyEditView({
 
     const selectedWidget = selectedWidgetId ? WIDGETS[selectedWidgetId] : undefined;
     useEffect(() => {
-        if (values.id && onPropertyChanged) {
-            const { id, ...property } = values;
-            onPropertyChanged(id, property);
+        if (onPropertyChanged) {
+            if (values.id) {
+                const { id, ...property } = values;
+                onPropertyChanged(id, property);
+            }
         }
-    }, [values]);
+    }, [values, errors]);
 
     useEffect(() => {
         const propertyData = values as any;

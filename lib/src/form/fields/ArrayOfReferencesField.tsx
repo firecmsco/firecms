@@ -55,7 +55,7 @@ export function ArrayOfReferencesField({
 
     const navigationContext = useNavigation();
     const collectionResolver: EntityCollectionResolver | undefined = useMemo(() => {
-        return navigationContext.getCollectionResolver(ofProperty.path);
+        return ofProperty.path ? navigationContext.getCollectionResolver(ofProperty.path) : undefined;
     }, [ofProperty.path]);
 
     if (!collectionResolver) {
@@ -106,6 +106,8 @@ export function ArrayOfReferencesField({
                 <Paper variant={"outlined"}
                        className={classes.paper}>
 
+                    {ofProperty.path}
+
                     {!collectionResolver && <ErrorView
                         error={"The specified collection does not exist. Check console"}/>}
 
@@ -139,7 +141,7 @@ export function ArrayOfReferencesField({
 
             </FormControl>
 
-            {collectionResolver && <ReferenceDialog open={open}
+            {collectionResolver && ofProperty.path && <ReferenceDialog open={open}
                                                     multiselect={true}
                                                     collectionResolver={collectionResolver}
                                                     path={ofProperty.path}

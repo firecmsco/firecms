@@ -1,8 +1,4 @@
-import {
-    EntitySchema,
-    PropertiesOrBuilder,
-    Property
-} from "../../models";
+import { EntitySchema, PropertiesOrBuilder, Property } from "../../models";
 import { mergeDeep, removeFunctions } from "./objects";
 
 export function prepareSchemaForPersistence<M>(schema: EntitySchema<M>) {
@@ -26,7 +22,12 @@ export function mergeSchemas(target: EntitySchema, source: EntitySchema): Entity
 
 export function sortProperties<T>(properties: PropertiesOrBuilder<T>, propertiesOrder?: (keyof T)[]): PropertiesOrBuilder<T> {
     try {
-        return (propertiesOrder ?? Object.keys(properties))
+        const propertiesKeys = Object.keys(properties);
+        const allPropertiesOrder = [
+            ...(propertiesOrder ?? []),
+            ...(!propertiesOrder ? propertiesKeys : propertiesKeys.filter((p) => !propertiesOrder.includes(p as keyof T)))
+        ]
+        return allPropertiesOrder
             .map((key) => {
                 if (properties[key as keyof T]) {
                     const property = properties[key] as Property;

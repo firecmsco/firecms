@@ -1,12 +1,24 @@
 import CustomColorTextField from "../custom_field/CustomColorTextField";
-import { buildSchema, buildProperty, ExportMappingFunction } from "@camberi/firecms";
+import {
+    buildProperty, buildPropertyBuilder,
+    buildSchema,
+    ExportMappingFunction
+} from "@camberi/firecms";
 import { BlogEntryPreview } from "../custom_schema_view/BlogEntryPreview";
 
-/**
- * This is a schema that is generated without passing an explicit type,
- * but it is inferred correctly since we are using `buildProperty` in each property
- */
-export const blogSchema = buildSchema({
+type BlogEntry = {
+    name: string,
+    header_image: string,
+    content: any[],
+    gold_text: string,
+    created_at: Date,
+    publish_date: Date,
+    reviewed: boolean,
+    status: string,
+    tags: string[]
+}
+
+export const blogSchema = buildSchema<BlogEntry>({
     id: "blog_entry",
     name: "Blog entry",
     defaultSize: "l",
@@ -33,6 +45,26 @@ export const blogSchema = buildSchema({
                 }
             }
         }),
+        status: buildPropertyBuilder(({ values }) => ({
+            title: "Status",
+            validation: { required: true },
+            dataType: "string",
+            columnWidth: 140,
+            config: {
+                enumValues: {
+                    published: {
+                        label: "Published",
+                        disabled: !values.header_image,
+                    },
+                    draft: "Draft"
+                }
+            }
+        })),
+        created_at: {
+            title: "Created at",
+            dataType: "timestamp",
+            autoValue: "on_create"
+        },
         content: buildProperty({
             title: "Content",
             description: "Example of a complex array with multiple properties as children",
@@ -40,6 +72,8 @@ export const blogSchema = buildSchema({
             dataType: "array",
             columnWidth: 400,
             oneOf: {
+                typeField: "type",
+                valueField: "value",
                 properties: {
                     images: {
                         title: "Images",
@@ -91,17 +125,7 @@ export const blogSchema = buildSchema({
             title: "Reviewed",
             dataType: "boolean"
         }),
-        status: buildProperty({
-            title: "Status",
-            validation: { required: true },
-            dataType: "string",
-            columnWidth: 140,
-            enumValues: {
-                published: "Published",
-                draft: "Draft"
-            }
-        }),
-        tags: buildProperty({
+        tags: {
             title: "Tags",
             description: "Example of generic array",
             dataType: "array",
@@ -109,7 +133,7 @@ export const blogSchema = buildSchema({
                 dataType: "string",
                 previewAsTag: true
             }
-        })
+        }
     },
     initialFilter: {
         "status": ["==", "published"]

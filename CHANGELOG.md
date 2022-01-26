@@ -41,7 +41,7 @@ at the property level (not under `validation`)
 - `storageMeta`prop in string properties is now called `storage`
 
 
-## [1.0.0] - 2022-01-23
+## [1.0.0-rc.1] - 2022-01-23
 
 ### Changed
 

@@ -26,7 +26,9 @@ import * as Yup from "yup";
 import { Formik, FormikHelpers } from "formik";
 import { useEffect, useMemo, useState } from "react";
 import { Link as ReactLink, useLocation } from "react-router-dom";
-import { useConfigurationPersistence } from "../../../hooks/useConfigurationPersistence";
+import {
+    useConfigurationPersistence
+} from "../../../hooks/useConfigurationPersistence";
 import { EntityCollection } from "../../../models";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { ErrorView } from "../ErrorView";

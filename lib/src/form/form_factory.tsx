@@ -102,7 +102,11 @@ export function buildPropertyField<T extends CMSType = any, M = any>
     } else if (property.dataType === "map") {
         component = MapField as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "reference") {
-        component = ReferenceField as ComponentType<FieldProps<T>>;
+        if (!property.path)
+            component = ReadOnlyField as ComponentType<FieldProps<T>>;
+        else {
+            component = ReferenceField as ComponentType<FieldProps<T>>;
+        }
     } else if (property.dataType === "timestamp") {
         component = DateTimeField as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "boolean") {

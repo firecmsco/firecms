@@ -53,7 +53,12 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
         margin: "0px 4px",
         overflow: "hidden",
         justifyContent: align,
-        flexShrink: 1
+        flexShrink: 1,
+        textOverflow: "ellipsis",
+        display: "-webkit-box",
+        "-webkit-line-clamp": 2,
+        lineClamp: 2,
+        "-webkit-box-orient": "vertical"
     }),
     headerIcon: {
         paddingTop: "4px"

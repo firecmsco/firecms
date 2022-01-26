@@ -26,7 +26,6 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "emitDeclarationOnly": true,
         "jsxImportSource": "@emotion/react",
         "types": ["vite/client", "node", "jest"],
     },
@@ -39,6 +38,6 @@
         "dist",
         "example",
         "example_backend",
-        "test"
+        "src/test"
     ]
 }
