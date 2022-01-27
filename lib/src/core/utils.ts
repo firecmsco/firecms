@@ -5,11 +5,21 @@ import {
     EntitySchemaResolver,
     EntityStatus,
     EntityValues,
+    EnumConfig,
+    EnumValues,
     GeoPoint,
+    NumberProperty,
     Properties,
     PropertiesOrBuilder,
     Property,
-    ResolvedEntitySchema
+    ResolvedArrayProperty,
+    ResolvedEntitySchema,
+    ResolvedNumberProperty,
+    ResolvedProperties,
+    ResolvedProperty,
+    ResolvedStringProperty,
+    SchemaRegistry,
+    StringProperty
 } from "../models";
 import { buildPropertyFrom } from "./util/property_builder";
 
@@ -30,6 +40,29 @@ export function isHidden(property: Property<any>): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
+/**
+ * Get the enum values for a property
+ * @param property
+ * @param schemaRegistry
+ */
+export function getEnumValuesFor(property: StringProperty | NumberProperty, schemaRegistry: SchemaRegistry): EnumValues {
+    if (!property.enumValues) {
+        console.error("Property:", property);
+        throw Error("Trying to get enum values for a property with no `enumValues`");
+    } else if (typeof property.enumValues === "object") {
+        return property.enumValues;
+    } else if (typeof property.enumValues === "string") {
+        const foundEnum = schemaRegistry.findEnum(property.enumValues);
+        if (!foundEnum) {
+            console.error("Property:", property);
+            throw Error("Unable to find enum values `enumValues`");
+        }
+        return foundEnum.enumValues;
+    } else {
+        console.error("Property:", property);
+        throw Error("Unexpected value for `enumValues`");
+    }
+}
 
 /**
  * This utility function computes an {@link EntitySchema} or a {@link EntitySchemaResolver}
@@ -42,32 +75,18 @@ export function isHidden(property: Property<any>): boolean {
  * @category Hooks and utilities
  */
 export function computeSchema<M extends { [Key: string]: any }>(
-    { schemaOrResolver, path, entityId, values, previousValues }: {
-        schemaOrResolver: EntitySchema<M> | ResolvedEntitySchema<M> | EntitySchemaResolver<M>,
-        path: string,
+    {
+        schemaResolver,
+        entityId,
+        values,
+        previousValues
+    }: {
+        schemaResolver: EntitySchemaResolver<M>,
         entityId?: string | undefined,
         values?: Partial<EntityValues<M>>,
         previousValues?: Partial<EntityValues<M>>,
     }): ResolvedEntitySchema<M> {
-
-    if (typeof schemaOrResolver === "function") {
-        return schemaOrResolver({ entityId, values, previousValues });
-    } else {
-
-        const properties = computeProperties({
-            propertiesOrBuilder: schemaOrResolver.properties as PropertiesOrBuilder<M>,
-            path,
-            entityId,
-            values,
-            previousValues
-        });
-
-        return {
-            ...schemaOrResolver,
-            properties,
-            originalSchema: schemaOrResolver as EntitySchema<M>
-        };
-    }
+    return schemaResolver({ entityId, values, previousValues });
 }
 
 /**
@@ -80,32 +99,107 @@ export function computeSchema<M extends { [Key: string]: any }>(
  * @ignore
  */
 export function computeProperties<M extends { [Key: string]: any }>(
-    { propertiesOrBuilder, path, entityId, values, previousValues }: {
+    {
+        propertiesOrBuilder,
+        path,
+        entityId,
+        values,
+        previousValues,
+        enumConfigs
+    }: {
         propertiesOrBuilder: PropertiesOrBuilder<M>,
         path: string,
         entityId?: string | undefined,
         values?: Partial<EntityValues<M>>,
         previousValues?: Partial<EntityValues<M>>,
-    }): Properties<M> {
+        enumConfigs: EnumConfig[]
+    }): ResolvedProperties<M> {
     return Object.entries(propertiesOrBuilder)
         .map(([key, propertyOrBuilder]) => {
             return {
-                [key]: buildPropertyFrom({
-                    propertyOrBuilder,
-                    values: values ?? {},
-                    previousValues: previousValues ?? values ?? {},
-                    path,
-                    entityId
-                })
+                [key]: computeEnum(
+                    buildPropertyFrom({
+                        propertyOrBuilder,
+                        values: values ?? {},
+                        previousValues: previousValues ?? values ?? {},
+                        path,
+                        entityId
+                    }),
+                    enumConfigs)
             };
         })
-        .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<M>;
+        .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
 }
 
+/**
+ * Replace enums declared as aliases for their corresponding enumValues,
+ * defined in the root of the {@link SchemaRegistry}.
+ * @param property
+ * @param enumConfigs
+ */
+export function computeEnum(property: Property, enumConfigs: EnumConfig[]): ResolvedProperty {
+    if (property.dataType === "map" && property.properties) {
+        const properties = computeEnums(property.properties, enumConfigs);
+        return {
+            ...property,
+            properties
+        };
+    } else if (property.dataType === "array" && property.of) {
+        if (property.of) {
+            return {
+                ...property,
+                of: computeEnum(property.of, enumConfigs)
+            } as ResolvedArrayProperty;
+        } else if (property.oneOf) {
+            const properties = computeEnums(property.oneOf.properties, enumConfigs);
+            return {
+                ...property,
+                oneOf: {
+                    ...property.oneOf,
+                    properties
+                }
+            } as ResolvedArrayProperty;
+        }
+    } else if ((property.dataType === "string" || property.dataType === "number") && property.enumValues) {
+        return resolvePropertyEnum(property, enumConfigs);
+    }
+    return property as ResolvedProperty;
+}
 
+/**
+ * Replace enums declared as aliases for their corresponding enumValues,
+ * defined in the root of the {@link SchemaRegistry}.
+ * @param properties
+ * @param enumConfigs
+ */
+export function computeEnums<M>(properties: Properties<M>, enumConfigs: EnumConfig[]): ResolvedProperties<M> {
+    return Object.entries<Property>(properties as Record<string, Property>)
+        .map(([key, property]) => {
+            return ({ [key]: computeEnum(property, enumConfigs) });
+        })
+        .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
+}
+
+/**
+ * Resolve enum aliases for a string or number propery
+ * @param property
+ * @param enumConfigs
+ */
+export function resolvePropertyEnum(property: StringProperty | NumberProperty, enumConfigs: EnumConfig[]): ResolvedStringProperty | ResolvedNumberProperty {
+    if (typeof property.enumValues === "string") {
+        const enumConfig = enumConfigs.find((ec) => ec.id === property.enumValues);
+        if (!enumConfig)
+            throw Error("Not able to find enumConfig with id: " + property.enumValues)
+        return {
+            ...property,
+            enumValues: enumConfig.enumValues
+        }
+    }
+    return property as ResolvedStringProperty | ResolvedNumberProperty;
+}
 
 export function initWithProperties<M extends { [Key: string]: any }>
-(properties: Properties<M>, defaultValues?: Partial<EntityValues<M>>): EntityValues<M> {
+(properties: Properties<M> | ResolvedProperties<M>, defaultValues?: Partial<EntityValues<M>>): EntityValues<M> {
     return Object.entries(properties)
         .map(([key, property]) => {
             const propertyDefaultValue = defaultValues && key in defaultValues ? (defaultValues as any)[key] : undefined;
@@ -142,7 +236,7 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
                                                                    }:
                                                                        {
                                                                            inputValues: Partial<EntityValues<M>>,
-                                                                           properties: Properties<M>,
+                                                                           properties: ResolvedProperties<M>,
                                                                            status: EntityStatus,
                                                                            timestampNowValue: any,
                                                                            referenceConverter?: (value: EntityReference) => any,
@@ -186,7 +280,7 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
 export function sanitizeData<M extends { [Key: string]: any }>
 (
     values: EntityValues<M>,
-    properties: Properties<M>,
+    properties: ResolvedProperties<M>,
     path: string
 ) {
     const result: any = values;
@@ -204,7 +298,7 @@ export function getReferenceFrom(entity: Entity<any>): EntityReference {
 
 export function traverseValues<M extends { [Key: string]: any }>(
     inputValues: Partial<EntityValues<M>>,
-    properties: Properties<M>,
+    properties: ResolvedProperties<M>,
     operation: (value: any, property: Property) => any
 ): EntityValues<M> {
     const updatedValues = Object.entries(properties)
@@ -224,7 +318,7 @@ export function traverseValue(inputValue: any,
 
     let value;
     if (property.dataType === "map" && property.properties) {
-        value = traverseValues(inputValue, property.properties as Properties, operation);
+        value = traverseValues(inputValue, property.properties as ResolvedProperties, operation);
     } else if (property.dataType === "array") {
         if (property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => traverseValue(e, property.of as Property, operation));
@@ -251,4 +345,3 @@ export function traverseValue(inputValue: any,
 
     return value;
 }
-

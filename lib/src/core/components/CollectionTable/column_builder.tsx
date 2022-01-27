@@ -6,8 +6,8 @@ import {
     EntitySchemaResolver,
     EnumValues,
     FireCMSContext,
-    Property,
-    ResolvedEntitySchema
+    ResolvedEntitySchema,
+    ResolvedProperty
 } from "../../../models";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { TableCell } from "../Table/TableCell";
@@ -32,6 +32,7 @@ import {
     isEnumValueDisabled
 } from "../../util/enums";
 import { computeSchema } from "../../utils";
+import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 
 
 export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = {
@@ -85,7 +86,7 @@ export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = 
 /**
  * @category Collection components
  */
-export type UniqueFieldValidator = (props: { name: string, value: any, property: Property, entityId?: string }) => Promise<boolean>;
+export type UniqueFieldValidator = (props: { name: string, value: any, property: ResolvedProperty, entityId?: string }) => Promise<boolean>;
 
 /**
  * Callback when a cell has changed in a table
@@ -141,6 +142,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 ): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
+    const schemaRegistry = useSchemaRegistry();
 
     const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
@@ -192,7 +194,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
         .map(([enumKey, labelOrConfig]) => ({ [enumKey]: buildEnumLabel(labelOrConfig) as string }))
         .reduce((a, b) => ({ ...a, ...b }), {}), []);
 
-    const buildFilterableFromProperty = useCallback((property: Property,
+    const buildFilterableFromProperty = useCallback((property: ResolvedProperty,
                                                      isArray: boolean = false): TableColumnFilter | undefined => {
 
         if (property.dataType === "number" || property.dataType === "string") {
@@ -227,8 +229,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
     }, [buildFilterEnumValues]);
 
     const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
-        schemaOrResolver: schemaResolver,
-        path
+        schemaResolver: schemaResolver
     }), [schemaResolver, path]);
 
     const propertyCellRenderer = ({
@@ -247,7 +248,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
             entityId: entity.id,
             values: entity.values
         });
-        const property = resolvedSchema.properties[name] as Property<any>;
+        const property = resolvedSchema.properties[name] as ResolvedProperty<any>;
 
         const inlineEditingEnabled = checkInlineEditing(inlineEditing, entity);
 
@@ -262,7 +263,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                         width={column.width}
                         height={column.height}
                         name={`preview_${name}_${rowIndex}_${columnIndex}`}
-                        property={property}
+                        property={property as any}
                         value={entity.values[name]}
                         size={getPreviewSizeFrom(size)}
                     />
@@ -395,7 +396,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     const allColumns: TableColumn<M>[] = (Object.keys(resolvedSchema.properties) as (keyof M)[])
         .map((key) => {
-            const property: Property<any> = resolvedSchema.properties[key];
+            const property: ResolvedProperty<any> = resolvedSchema.properties[key];
             return ({
                 key: key as string,
                 property,

@@ -17,3 +17,5 @@ export * from "./components";
 export { createCMSDefaultTheme } from "./theme";
 
 export * from "./builders";
+
+export * from "./useBuildSchemaRegistry";

@@ -1,6 +1,6 @@
 import { PreviewComponentProps, PreviewSize } from "../internal";
 import { useStyles } from "./styles";
-import { ReferenceProperty } from "../../models";
+import { ResolvedReferenceProperty } from "../../models";
 import { ReferencePreview } from "./ReferencePreview";
 
 /**
@@ -29,7 +29,7 @@ export function ArrayOfReferencesPreview({
                         name={`${name}[${index}]`}
                         size={childSize}
                         value={v}
-                        property={property.of as ReferenceProperty}
+                        property={property.of as ResolvedReferenceProperty}
                     />
                 </div>
             )}

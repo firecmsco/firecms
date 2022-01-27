@@ -4,7 +4,9 @@ import {
     ExportConfig,
     Properties,
     Property,
-    ResolvedEntitySchema
+    ResolvedEntitySchema,
+    ResolvedProperties,
+    ResolvedProperty
 } from "../../models";
 import { getValueInPath } from "./objects";
 
@@ -44,7 +46,7 @@ export function getExportableData(data: any[],
 }
 
 
-function getExportHeaders<M extends { [Key: string]: any }, UserType>(properties: Properties<M>,
+function getExportHeaders<M extends { [Key: string]: any }, UserType>(properties: ResolvedProperties<M>,
                                                                       path: string,
                                                                       exportConfig?: ExportConfig<UserType>): Header[] {
     const headers = [
@@ -70,7 +72,7 @@ function getExportHeaders<M extends { [Key: string]: any }, UserType>(properties
  * @param propertyKey
  * @param prefix
  */
-function getHeaders(property: Property, propertyKey: string, prefix: string = ""): Header[] {
+function getHeaders(property: ResolvedProperty, propertyKey: string, prefix: string = ""): Header[] {
     const currentKey = prefix ? `${prefix}.${propertyKey}` : propertyKey;
     if (property.dataType === "map" && property.properties) {
         return Object.entries(property.properties)

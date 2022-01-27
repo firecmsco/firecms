@@ -20,7 +20,11 @@ import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthDelegate } from "./models/auth";
-import { useFirestoreConfigurationPersistence } from "./hooks/useFirestoreConfigurationPersistence";
+import {
+    useFirestoreConfigurationPersistence
+} from "./hooks/useFirestoreConfigurationPersistence";
+import { useBuildSchemaRegistry } from "../core/useBuildSchemaRegistry";
+import { useBuildStorageConfigurationPersistence } from "../core/util/storage";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -51,6 +55,7 @@ export function FirebaseCMSApp({
                                    schemaOverrideHandler,
                                    navigation,
                                    schemas,
+                                   enumConfigs,
                                    textSearchController,
                                    allowSkipLogin,
                                    signInOptions = DEFAULT_SIGN_IN_OPTIONS,
@@ -63,7 +68,7 @@ export function FirebaseCMSApp({
                                    locale,
                                    HomePage,
                                    basePath,
-                                   baseCollectionPath
+                                   baseCollectionPath,
                                }: FirebaseCMSAppProps) {
 
     const {
@@ -78,12 +83,19 @@ export function FirebaseCMSApp({
         signInOptions
     });
 
+    const configPersistence = useFirestoreConfigurationPersistence({ firebaseApp: firebaseApp });
+    const userConfigPersistence = useBuildStorageConfigurationPersistence();
+
+    const schemaRegistry = useBuildSchemaRegistry({
+        schemas, enumConfigs, configPersistence, userConfigPersistence
+    });
+
     const dataSource = useFirestoreDataSource({
         firebaseApp: firebaseApp,
-        textSearchController
+        textSearchController,
+        schemaRegistry
     });
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
-    const configPersistence = useFirestoreConfigurationPersistence({ firebaseApp: firebaseApp });
 
     if (configError) {
         return <div> {configError} </div>;
@@ -111,7 +123,10 @@ export function FirebaseCMSApp({
                 navigation={navigation}
                 authDelegate={authDelegate}
                 schemas={schemas}
+                enumConfigs={enumConfigs}
                 authentication={authentication}
+                schemaRegistry={schemaRegistry}
+                userConfigPersistence={userConfigPersistence}
                 schemaOverrideHandler={schemaOverrideHandler}
                 dateTimeFormat={dateTimeFormat}
                 dataSource={dataSource}
@@ -119,8 +134,8 @@ export function FirebaseCMSApp({
                 configPersistence={configPersistence}
                 entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                 locale={locale}
-                     basePath={basePath}
-                     baseCollectionPath={baseCollectionPath}>
+                basePath={basePath}
+                baseCollectionPath={baseCollectionPath}>
                 {({ context, mode, loading }) => {
 
                     const theme = createCMSDefaultTheme({

@@ -18,8 +18,8 @@ import {
     EntitySchemaResolver,
     EntityValues,
     FormContext,
-    Properties,
-    Property
+    ResolvedProperties,
+    ResolvedProperty
 } from "../../../../../models";
 import { Form, Formik, FormikProps } from "formik";
 import { useDraggable } from "./useDraggable";
@@ -192,15 +192,14 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     const validationSchema = useMemo(() => {
         if (!schemaResolver) return;
         const schema = computeSchema({
-            schemaOrResolver: schemaResolver,
-            path,
+            schemaResolver: schemaResolver,
             values: internalValue,
-            previousValues: entity?.values
+            previousValues: entity?.values,
         });
         return getYupEntitySchema(
             name
-                ? { [name]: schema.properties[name] } as Properties<any>
-                : {} as Properties<any>,
+                ? { [name]: schema.properties[name] } as ResolvedProperties<any>
+                : {} as ResolvedProperties<any>,
             customFieldValidator);
     }, [path, internalValue, name]);
 
@@ -276,10 +275,9 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                     const disabled = isSubmitting;
 
                     const schema = computeSchema({
-                        schemaOrResolver: schemaResolver,
-                        path,
+                        schemaResolver: schemaResolver,
                         values,
-                        previousValues: entity?.values
+                        previousValues: entity?.values,
                     });
 
                     const context: FormContext<M> = {
@@ -288,7 +286,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         values
                     };
 
-                    const property: Property<any> | undefined = schema.properties[name];
+                    const property: ResolvedProperty<any> | undefined = schema.properties[name];
 
                     return <Form
                         className={classes.form}

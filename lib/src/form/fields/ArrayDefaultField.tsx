@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CMSType, FieldProps, Property } from "../../models";
+import { CMSType, FieldProps, ResolvedProperty } from "../../models";
 import { FormControl, FormHelperText, Paper } from "@mui/material";
 import { FieldDescription } from "../index";
 import { ArrayContainer, LabelWithIcon } from "../components";
@@ -34,7 +34,7 @@ export function ArrayDefaultField<T extends Array<any>>({
     if (!property.of)
         throw Error("ArrayDefaultField misconfiguration. Property `of` not set");
 
-    const ofProperty: Property<CMSType[]> = property.of as Property<CMSType[]>;
+    const ofProperty: ResolvedProperty<CMSType[]> = property.of as ResolvedProperty<CMSType[]>;
     const classes = formStyles();
 
     const [lastAddedId, setLastAddedId] = useState<number | undefined>();

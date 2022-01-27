@@ -1,5 +1,5 @@
 import { MouseEventHandler } from "react";
-import { CMSType, Property } from "../models";
+import { CMSType, Property, ResolvedProperty } from "../models";
 
 /**
  * @category Preview components
@@ -23,7 +23,7 @@ export interface PreviewComponentProps<T extends CMSType = CMSType, CustomProps 
     /**
      * Property this display is related to
      */
-    property: Property<T>;
+    property: Property<T> | ResolvedProperty<T>;
 
     /**
      * Click handler

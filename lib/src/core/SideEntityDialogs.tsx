@@ -9,7 +9,7 @@ import {
     UnsavedChangesDialog,
     useNavigationUnsavedChangesDialog
 } from "./internal/useUnsavedChangesDialog";
-import { computeSchema } from "./utils";
+import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
 
 /**
  * This is the component in charge of rendering the side dialogs used
@@ -72,7 +72,7 @@ function SideEntityDialog({
 
     const sideEntityController = useSideEntityController();
     const navigationContext = useNavigation();
-
+    const schemaRegistry = useSchemaRegistry();
 
     const schema = useMemo(() => {
         if (!props) return undefined;
@@ -85,18 +85,12 @@ function SideEntityDialog({
             }
             usedSchema = collection.schemaResolver;
             if (!usedSchema) {
-                throw Error("ERROR: Schema not found with id:" + collection.schemaId);
+                console.error("ERROR: Schema not found with id:" + collection.schemaId);
                 throw Error("ERROR: You are trying to open an entity with no schema defined.");
             }
         }
-
-        return computeSchema({
-            schemaOrResolver: usedSchema,
-            path: props.path,
-            entityId: props.entityId
-        });
-    }, [props]);
-
+        return usedSchema;
+    }, [props, schemaRegistry]);
 
     if (!props || !schema) {
         return <SideDialogDrawer

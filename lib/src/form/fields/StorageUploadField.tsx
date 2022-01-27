@@ -19,6 +19,7 @@ import {
     ArrayProperty,
     FieldProps,
     Property,
+    ResolvedStringProperty,
     StorageConfig,
     StringProperty
 } from "../../models";
@@ -342,8 +343,8 @@ function FileDropComponent({
                     let child: any;
                     if (entry.storagePathOrDownloadUrl) {
                         const renderProperty = multipleFilesSupported
-                            ? (property as ArrayProperty<string[]>).of as StringProperty
-                            : property as StringProperty;
+                            ? (property as ArrayProperty<string[]>).of as ResolvedStringProperty
+                            : property as ResolvedStringProperty;
                         child = (
                             <StorageItemPreview
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
@@ -693,7 +694,7 @@ export function StorageUploadProgress({
 
 interface StorageItemPreviewProps {
     name: string;
-    property: StringProperty;
+    property: ResolvedStringProperty;
     value: string,
     onClear: (value: string) => void;
     size: PreviewSize;

@@ -4,16 +4,20 @@ import {
     Entity,
     FetchCollectionProps,
     FetchEntityProps,
-    Property,
+    ResolvedProperty,
     SaveEntityProps,
+    SchemaRegistry,
     useFirestoreDataSource
 } from "@camberi/firecms";
 import { FirebaseApp } from "firebase/app";
 
-type CustomDataSourceProps = { firebaseApp?: FirebaseApp; };
+type CustomDataSourceProps = { firebaseApp?: FirebaseApp; schemaRegistry: SchemaRegistry };
 
-export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps):DataSource {
-    const firestoreDataSource = useFirestoreDataSource({ firebaseApp });
+export function useCustomDatasource({ firebaseApp, schemaRegistry }: CustomDataSourceProps):DataSource {
+    const firestoreDataSource = useFirestoreDataSource({
+        firebaseApp,
+        schemaRegistry
+    });
 
     return {
         fetchCollection<M>(props: FetchCollectionProps<M>): Promise<Entity<M>[]>{
@@ -37,7 +41,7 @@ export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps):Data
         deleteEntity<M>(props: DeleteEntityProps<M>): Promise<void>{
             return firestoreDataSource.deleteEntity(props);
         },
-        checkUniqueField(path: string, name: string, value: any, property: Property, entityId?: string): Promise<boolean>{
+        checkUniqueField(path: string, name: string, value: any, property: ResolvedProperty, entityId?: string): Promise<boolean>{
             return firestoreDataSource.checkUniqueField(path, name, value, property, entityId);
         }
     }

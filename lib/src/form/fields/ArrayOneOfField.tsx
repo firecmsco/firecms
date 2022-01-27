@@ -15,7 +15,12 @@ import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 import { enumToObjectEntries } from "../../core/util/enums";
-import { EnumValues, FieldProps, FormContext, Property } from "../../models";
+import {
+    EnumValues,
+    FieldProps,
+    FormContext,
+    ResolvedProperty
+} from "../../models";
 
 
 /**
@@ -118,7 +123,7 @@ interface ArrayOneOfEntryProps {
      * Record of properties, where the key is the `type` and the value
      * is the corresponding property
      */
-    properties: Record<string, Property>;
+    properties: Record<string, ResolvedProperty>;
 
     /**
      * Additional values related to the state of the form or the entity

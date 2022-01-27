@@ -20,7 +20,7 @@ export const CustomField = ({
                          includeDescription,
                          context,
                          setValue,
-                     }: FieldProps<object>) => {
+                     }: FieldProps<Record<string, any>>) => {
     useEffect(() => {
         if (!value) setValue({});
     }, [value, setValue]);

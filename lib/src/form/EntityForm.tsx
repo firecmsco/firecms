@@ -8,9 +8,8 @@ import {
     EntityStatus,
     EntityValues,
     FormContext,
-    Properties,
-    Property,
-    ResolvedEntitySchema
+    ResolvedEntitySchema,
+    ResolvedProperty
 } from "../models";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { buildPropertyField } from "./form_factory";
@@ -25,6 +24,7 @@ import {
 } from "../core/utils";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
+import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
 
 /**
  *
@@ -45,7 +45,7 @@ export interface EntityFormProps<M> {
     /**
      * Use to resolve the schema properties for specific path, entity id or values
      */
-    schemaOrResolver: EntitySchema<M> & EntitySchemaResolver<M>;
+    schemaOrResolver: EntitySchema<M> | EntitySchemaResolver<M>;
 
     /**
      * The updated entity is passed from the parent component when the underlying data
@@ -59,7 +59,7 @@ export interface EntityFormProps<M> {
     onEntitySave?(
         props:
             {
-                schema: EntitySchema<M>,
+                schema: ResolvedEntitySchema<M>,
                 path: string,
                 entityId: string | undefined,
                 values: EntityValues<M>,
@@ -110,17 +110,23 @@ export function EntityForm<M>({
                               }: EntityFormProps<M>) {
 
     const dataSource = useDataSource();
+    const schemaRegistry = useSchemaRegistry();
 
     /**
      * Base values are the ones this view is initialized from, we use them to
      * compare them with underlying changes in the datasource
      */
     const entityId = status === "existing" ? entity?.id : undefined;
+    const schemaResolver = useMemo(() => schemaRegistry.buildSchemaResolver({
+        schema: schemaOrResolver,
+        path
+    }), [schemaOrResolver, path]);
+
     const initialResolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
-        schemaOrResolver,
-        path,
-        entityId
-    }), [path, entityId]);
+        schemaResolver: schemaResolver,
+        entityId,
+        values: entity?.values
+    }), [path, entityId, schemaResolver]);
 
     const baseDataSourceValues: Partial<EntityValues<M>> = useMemo(() => {
         const properties = initialResolvedSchema.properties;
@@ -146,12 +152,13 @@ export function EntityForm<M>({
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
 
     const schema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
-        schemaOrResolver,
-        path,
+        schemaResolver: schemaResolver,
         entityId,
         values: internalValue,
         previousValues: initialValues
-    }), [schemaOrResolver, path, entityId, internalValue]);
+    }), [schemaResolver, path, entityId, internalValue]);
+
+    console.log("EF", schema, internalValue);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") && !!schema.customId;
 
@@ -199,7 +206,7 @@ export function EntityForm<M>({
 
         if (onEntitySave)
             onEntitySave({
-                schema: schema as EntitySchema,
+                schema: schema,
                 path,
                 entityId: savedEntityId,
                 values,
@@ -230,7 +237,6 @@ export function EntityForm<M>({
     const validationSchema = useMemo(() => getYupEntitySchema(
         schema.properties,
         uniqueFieldValidator), [schema.properties]);
-
 
     return (
         <Formik
@@ -324,7 +330,7 @@ function FormInternal<M>({
     const formFields = (
         <Grid container spacing={4}>
 
-            {Object.entries<Property>(schema.properties as Properties)
+            {Object.entries<ResolvedProperty>(schema.properties)
                 .filter(([key, property]) => !isHidden(property))
                 .map(([key, property]) => {
 
@@ -338,15 +344,15 @@ function FormInternal<M>({
                     const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
                     const cmsFormFieldProps: CMSFormFieldProps = {
                         name: key,
-                        disabled: disabled,
-                        property: property,
+                        disabled,
+                        property,
                         includeDescription: true,
-                        underlyingValueHasChanged: underlyingValueHasChanged,
-                        context: context,
+                        underlyingValueHasChanged,
+                        context,
                         tableMode: false,
                         partOfArray: false,
                         autoFocus: false,
-                        shouldAlwaysRerender: shouldAlwaysRerender
+                        shouldAlwaysRerender
                     };
                     return (
                         <Grid item

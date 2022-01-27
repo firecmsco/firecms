@@ -1,17 +1,18 @@
 import { useMemo } from "react";
 import {
-    ArrayProperty,
     EntityCollection,
     Properties,
     Property,
-    ResolvedEntitySchema
+    ResolvedArrayProperty,
+    ResolvedEntitySchema,
+    ResolvedProperty
 } from "../../../../models";
 
 
 export type Sort = "asc" | "desc" | undefined;
 
 
-export function getCellAlignment(property: Property): "right" | "left" | "center" {
+export function getCellAlignment(property: ResolvedProperty): "right" | "left" | "center" {
     if (property.dataType === "boolean") {
         return "center";
     } else if (property.dataType === "number") {
@@ -44,7 +45,7 @@ export function isPropertyFilterable(property: Property): boolean {
     }
 }
 
-export function getPropertyColumnWidth(property: Property): number {
+export function getPropertyColumnWidth(property: ResolvedProperty): number {
 
     if (property.columnWidth) {
         return property.columnWidth;
@@ -71,9 +72,9 @@ export function getPropertyColumnWidth(property: Property): number {
             return 200;
         }
     } else if (property.dataType === "array") {
-        const arrayProperty = property as ArrayProperty;
+        const arrayProperty = property as ResolvedArrayProperty;
         if (arrayProperty.of) {
-            return getPropertyColumnWidth(arrayProperty.of as Property);
+            return getPropertyColumnWidth(arrayProperty.of);
         } else {
             return 300;
         }

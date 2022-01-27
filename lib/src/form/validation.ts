@@ -1,10 +1,10 @@
 import {
-    ArrayProperty,
     EntityReference,
     GeoPoint,
-    MapProperty,
-    Properties,
-    Property
+    ResolvedArrayProperty,
+    ResolvedMapProperty,
+    ResolvedProperties,
+    ResolvedProperty
 } from "../models";
 import * as yup from "yup";
 import {
@@ -34,25 +34,24 @@ yup.addMethod(yup.array, "uniqueInArray", function(
     });
 });
 
-
 export type CustomFieldValidator = (props: {
     name: string,
     value: any,
-    property: Property,
-    parentProperty?: MapProperty | ArrayProperty
+    property: ResolvedProperty,
+    parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
 }) => Promise<boolean>;
 
 interface PropertyContext<M> {
-    property: Property<M>,
-    parentProperty?: MapProperty | ArrayProperty,
+    property: ResolvedProperty<M>,
+    parentProperty?: ResolvedMapProperty<any> | ResolvedArrayProperty<any>,
     customFieldValidator?: CustomFieldValidator,
     name?: any
 }
 
-export function getYupEntitySchema<M>(properties: Properties<M>,
+export function getYupEntitySchema<M>(properties: ResolvedProperties<M>,
                                       customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
     const objectSchema: any = {};
-    Object.entries(properties as Record<string, Property>)
+    Object.entries(properties as Record<string, ResolvedProperty>)
         .forEach(([name, property]) => {
             objectSchema[name] = mapPropertyToYup({
                 property,
@@ -100,10 +99,10 @@ export function getYupMapObjectSchema({
                                                                         }: PropertyContext<object>): ObjectSchema<any> {
     const objectSchema: any = {};
     if (property.properties)
-        Object.entries(property.properties).forEach(([childName, childProperty]: [string, Property]) => {
+        Object.entries(property.properties).forEach(([childName, childProperty]: [string, ResolvedProperty]) => {
             objectSchema[childName] = mapPropertyToYup({
                 property: childProperty,
-                parentProperty: property,
+                parentProperty: property as ResolvedMapProperty,
                 customFieldValidator,
                 name: `${name}[${childName}]`
             });
@@ -299,7 +298,7 @@ function getYupBooleanSchema({
     return schema;
 }
 
-function hasUniqueInArrayModifier(property: Property): boolean | [string, Property][] {
+function hasUniqueInArrayModifier(property: ResolvedProperty): boolean | [string, ResolvedProperty][] {
     if (property.validation?.uniqueInArray) {
         return true;
     } else if (property.dataType === "map" && property.properties) {

@@ -14,11 +14,10 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import {
-    AnyProperty,
     Entity,
     FireCMSContext,
-    Properties,
-    ResolvedEntitySchema
+    ResolvedEntitySchema,
+    ResolvedProperties
 } from "../../models";
 import { PreviewComponent } from "../../preview/PreviewComponent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -73,7 +72,7 @@ export function EntityPreview<M>(
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 
-    const properties:Properties = schema.properties;
+    const properties: ResolvedProperties = schema.properties;
 
     return (
         <TableContainer>
@@ -140,7 +139,7 @@ export function EntityPreview<M>(
                                         <PreviewComponent
                                             name={key}
                                             value={value}
-                                            property={property as AnyProperty}
+                                            property={property}
                                             size={"regular"}/>
                                     </ErrorBoundary>
                                 </TableCell>

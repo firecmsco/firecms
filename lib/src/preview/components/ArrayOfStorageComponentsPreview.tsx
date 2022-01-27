@@ -7,7 +7,7 @@ import {
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { useStyles } from "./styles";
-import { Property } from "../../models";
+import { ResolvedProperty } from "../../models";
 
 /**
  * @category Preview components
@@ -34,7 +34,7 @@ export function ArrayOfStorageComponentsPreview({
                     <PreviewComponent
                         name={name}
                         value={v}
-                        property={property.of as Property<string>}
+                        property={property.of as ResolvedProperty<string>}
                         size={childSize}/>
                 </ErrorBoundary>
             </div>

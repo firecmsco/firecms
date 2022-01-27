@@ -6,7 +6,6 @@ import {
 } from "../../models";
 import { mergeDeep } from "./objects";
 
-
 export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: any }>
 ({
      propertyOrBuilder,
@@ -14,17 +13,17 @@ export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: 
      previousValues,
      path,
      entityId,
-     propertyOverride
+     propertyOverride,
  }: {
      propertyOrBuilder: PropertyOrBuilder<T, M>,
      values: Partial<EntityValues<M>>,
      previousValues?: Partial<EntityValues<M>>,
      path: string,
      entityId?: string,
-     propertyOverride?: Partial<Property<T>>
+     propertyOverride?: Partial<Property<T>>,
  }
 ): Property<T> {
-    let result: any;
+    let result: Property<T>;
     if (typeof propertyOrBuilder === "function") {
         result = propertyOrBuilder({ values, previousValues, entityId, path });
         if (!result) {
@@ -32,8 +31,9 @@ export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: 
             throw Error("Not returning property from property builder");
         }
     } else {
-        result = propertyOrBuilder;
+        result = propertyOrBuilder as Property<T>;
     }
+
     if (propertyOverride)
         result = mergeDeep(result, propertyOverride);
 

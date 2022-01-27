@@ -1,9 +1,10 @@
 import React from "react";
-import { Entity, EntitySchemaResolver } from "./entities";
+import { Entity } from "./entities";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { PermissionsBuilder } from "./permissions";
+import { EntitySchemaResolver } from "./resolved_entities";
 
 /**
  * This interface represents a view that includes a collection of entities.

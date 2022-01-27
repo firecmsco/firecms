@@ -1,5 +1,5 @@
 import { PreviewComponentProps } from "../internal";
-import { NumberProperty, StringProperty } from "../../models";
+import { ResolvedNumberProperty, ResolvedStringProperty } from "../../models";
 import { ArrayEnumPreview } from "./ArrayEnumPreview";
 
 /**
@@ -15,16 +15,14 @@ export function ArrayPropertyEnumPreview({
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayEnumPreview");
 
-    const ofProperty = property.of as StringProperty | NumberProperty;
+    const ofProperty = property.of as ResolvedStringProperty | ResolvedNumberProperty;
     if (!ofProperty.enumValues)
         throw Error("Picked wrong preview component ArrayEnumPreview");
 
     if (!value) return null;
 
-    const enumValues = ofProperty.enumValues;
-
     return <ArrayEnumPreview name={name}
                              value={value}
-                             enumValues={enumValues}
+                             enumValues={ofProperty.enumValues}
                              size={size}/>;
 }

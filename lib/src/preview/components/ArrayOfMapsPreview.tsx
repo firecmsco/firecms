@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrayProperty, MapProperty } from "../../models";
+import { ArrayProperty, ResolvedMapProperty } from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
@@ -15,15 +15,17 @@ export function ArrayOfMapsPreview({
                                           size
                                       }: PreviewComponentProps<object[]>) {
 
+    // @ts-ignore
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");
 
-    const properties = ((property as ArrayProperty).of as MapProperty).properties;
+    const mapProperty = (property as ArrayProperty).of as ResolvedMapProperty;
+    const properties = mapProperty.properties;
     if (!properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
     }
     const values = value;
-    const previewProperties = ((property as ArrayProperty).of as MapProperty).previewProperties;
+    const previewProperties = mapProperty.previewProperties;
 
     if (!values) return null;
 

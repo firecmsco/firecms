@@ -1,17 +1,17 @@
 import {
     buildEnumValueConfig,
     buildProperties,
-    buildProperty,
+    buildProperty, buildPropertyBuilder,
     buildSchema,
     EntityCallbacks,
     resolveNavigationFrom
 } from "@camberi/firecms";
-import { locales } from "./products_schema";
 import CustomShapedArrayField
     from "../custom_shaped_array/CustomShapedArrayField";
 import CustomShapedArrayPreview
     from "../custom_shaped_array/CustomShapedArrayPreview";
 import { CustomField } from "../custom_field/SubPropertyField";
+import { locales } from "./enums";
 
 const relaxedStatus = new Map([
     ["-3", buildEnumValueConfig({
@@ -55,10 +55,11 @@ export const testEntitySchema = buildSchema({
             path: "products",
             previewProperties: ["name", "main_image"]
         },
-        movement: buildProperty(({values}) => {
+        movement: buildPropertyBuilder(({values}) => {
             return {
                 title: "Locale",
                 dataType: "reference",
+                // @ts-ignore
                 path:  !values.product ? false : values.product.path + "/" + values.product.id + "/locales"
             };
         }),

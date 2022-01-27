@@ -1,6 +1,5 @@
-import { AnyProperty } from "./properties";
-import { EntitySchema, ResolvedEntitySchema } from "./entities";
 import { EntityCollection } from "./collections";
+import { ResolvedEntitySchema } from "./resolved_entities";
 
 /**
  * Use to resolve the schema properties for specific path, entity id or values.

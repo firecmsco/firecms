@@ -48,6 +48,7 @@ import {
 } from "../../hooks";
 import { canEdit } from "../util/permissions";
 import { computeSchema } from "../utils";
+import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView")) as any;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as any;
@@ -149,6 +150,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const sideEntityController = useSideEntityController();
     const snackbarContext = useSnackbarController();
     const context = useFireCMSContext();
+    const schemaRegistry = useSchemaRegistry();
     const authController = useAuthController<UserType>();
 
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
@@ -157,6 +159,11 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const [tabsPosition, setTabsPosition] = React.useState(-1);
 
     const [modifiedValues, setModifiedValues] = useState<EntityValues<any> | undefined>();
+
+    const schemaResolver = schemaRegistry.buildSchemaResolver({
+        schema: schemaOrResolver,
+        path
+    });
 
     const {
         entity,
@@ -170,13 +177,12 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         useCache: false
     });
 
-    const resolvedSchema:ResolvedEntitySchema<M> = useMemo(() => computeSchema({
-        schemaOrResolver,
-        path,
+    const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
+        schemaResolver: schemaResolver,
         entityId,
         values: modifiedValues,
-        previousValues: entity?.values
-    }), [schemaOrResolver, path, entityId, modifiedValues]);
+        previousValues: entity?.values,
+    }), [schemaResolver, path, entityId, modifiedValues]);
 
     useEffect(() => {
         function beforeunload(e: any) {

@@ -1,8 +1,9 @@
 import { EntityCollection } from "./collections";
-import { EntitySchema, EntitySchemaResolver } from "./entities";
+import { EntitySchema } from "./entities";
 import { EntityCallbacks } from "./entity_callbacks";
 import { PermissionsBuilder } from "./permissions";
 import { User } from "./user";
+import { EntitySchemaResolver } from "./resolved_entities";
 
 /**
  * Props used to open a side dialog

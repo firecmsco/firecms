@@ -1,5 +1,5 @@
 import React from "react";
-import { CMSType, Property } from "../../models";
+import { CMSType, ResolvedProperty } from "../../models";
 
 import {
     Box,
@@ -11,7 +11,7 @@ import {
 import InfoIcon from "@mui/icons-material/InfoOutlined";
 
 interface FieldDescriptionPopoverProps<T extends CMSType> {
-    property: Property<T>,
+    property: ResolvedProperty<T>,
 }
 
 /**

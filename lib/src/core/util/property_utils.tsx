@@ -3,7 +3,7 @@ import AdjustIcon from "@mui/icons-material/Adjust";
 import FunctionsIcon from '@mui/icons-material/Functions';
 import Crop75Icon from "@mui/icons-material/Crop75";
 
-import { Property, PropertyOrBuilder } from "../../models";
+import { Property, PropertyOrBuilder, ResolvedProperty } from "../../models";
 import { getWidget } from "./widgets";
 
 export function getIdIcon(
@@ -13,7 +13,7 @@ export function getIdIcon(
 }
 
 export function getIconForProperty(
-    property: PropertyOrBuilder,
+    property: PropertyOrBuilder | ResolvedProperty,
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
     fontSize: "inherit" | "medium" | "large" | "small" | undefined = "inherit"): React.ReactNode {
 

@@ -4,7 +4,6 @@ import {
     buildSchema,
     EntityCallbacks,
     EntityCustomView,
-    EnumValues,
     ExtraActionsParams
 } from "@camberi/firecms";
 
@@ -12,53 +11,7 @@ import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
 import { SampleExtraActions } from "../collection_actions/SampleExtraActions";
 import { SampleProductsView } from "../custom_schema_view/SampleProductsView";
 import { Locale, Product } from "../types";
-
-export const locales: EnumValues = {
-    "es": "Spanish",
-    "de": "German",
-    "en": "English",
-    "it": "Italian",
-    "fr": {
-        label: "French",
-        disabled: true
-    }
-};
-
-const categories: EnumValues = {
-    art_and_decoration: "Art and decoration",
-    art_design_books: "Art and design books",
-    babys: "Babies and kids",
-    backpacks: "Backpacks and bags",
-    bath: "Bath",
-    bicycle: "Bicycle",
-    books: "Books",
-    cameras: "Cameras",
-    clothing_man: "Clothing man",
-    clothing_woman: "Clothing woman",
-    coffee_and_tea: "Coffee and tea",
-    cookbooks: "Cookbooks",
-    delicatessen: "Delicatessen",
-    desk_accessories: "Desk accessories",
-    exercise_equipment: "Exercise equipment",
-    furniture: "Furniture",
-    gardening: "Gardening",
-    headphones: "Headphones",
-    home_accessories: "Home accessories",
-    home_storage: "Home storage",
-    kitchen: "Kitchen",
-    lighting: "Lighting",
-    music: "Music",
-    outdoors: "Outdoors",
-    personal_care: "Personal care",
-    photography_books: "Photography books",
-    serveware: "Serveware",
-    smart_home: "Smart Home",
-    sneakers: "Sneakers",
-    speakers: "Speakers",
-    sunglasses: "Sunglasses",
-    toys_and_games: "Toys and games",
-    watches: "Watches"
-};
+import { locales } from "./enums";
 
 const sampleView: EntityCustomView = {
     path: "sample_custom_view",
@@ -117,7 +70,7 @@ export const productSchema = buildSchema<Product>({
         category: {
             dataType: "string",
             title: "Category",
-            enumValues: categories
+            enumValues: "categories"
         },
         available: {
             dataType: "boolean",

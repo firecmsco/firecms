@@ -1,12 +1,6 @@
-import {
-    Entity,
-    EntitySchema,
-    EntitySchemaResolver,
-    EntityStatus,
-    EntityValues
-} from "./entities";
+import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
 import { FilterValues } from "./collections";
-import { Property } from "./properties";
+import { EntitySchemaResolver, ResolvedProperty } from "./resolved_entities";
 
 /**
  * @category Datasource
@@ -203,9 +197,8 @@ export interface DataSource {
         path: string,
         name: string,
         value: any,
-        property: Property,
+        property: ResolvedProperty,
         entityId?: string
     ): Promise<boolean>;
-
 
 }

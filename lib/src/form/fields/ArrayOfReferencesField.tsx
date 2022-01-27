@@ -5,7 +5,7 @@ import {
     EntityCollectionResolver,
     EntityReference,
     FieldProps,
-    Property
+    ResolvedProperty
 } from "../../models";
 import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
@@ -38,7 +38,7 @@ export function ArrayOfReferencesField({
 
     const classes = formStyles();
 
-    const ofProperty: Property = property.of as Property;
+    const ofProperty = property.of as ResolvedProperty;
     if (ofProperty.dataType !== "reference") {
         throw Error("ArrayOfReferencesField expected a property containing references");
     }

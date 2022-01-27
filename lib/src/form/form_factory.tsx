@@ -13,7 +13,7 @@ import {
     CMSFormFieldProps,
     CMSType,
     FieldProps,
-    Property
+    ResolvedProperty
 } from "../models";
 
 import { Select } from "./fields/Select";
@@ -171,7 +171,6 @@ export function buildPropertyField<T extends CMSType = any, M = any>
     );
 }
 
-
 function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
 ({
      component,
@@ -244,7 +243,7 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
         showError,
         isSubmitting,
         includeDescription: includeDescription ?? true,
-        property: property as Property<T>,
+        property: property as ResolvedProperty<T>,
         disabled: disabled ?? false,
         underlyingValueHasChanged: underlyingValueHasChanged ?? false,
         tableMode: tableMode ?? false,

@@ -19,12 +19,12 @@ import ClearIcon from "@mui/icons-material/Clear";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 
 import {
-    AnyProperty,
     Entity,
     EntityCollectionResolver,
     EntityReference,
     EntitySchemaResolver,
-    FieldProps
+    FieldProps,
+    ResolvedProperty
 } from "../../models";
 import { FieldDescription } from "../index";
 import { ErrorView, ReferenceDialog } from "../../core";
@@ -241,10 +241,10 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                                             ? <PreviewComponent
                                                 name={key as string}
                                                 value={(entity.values as any)[key]}
-                                                property={propertyKey as AnyProperty}
+                                                property={propertyKey as ResolvedProperty}
                                                 size={"tiny"}/>
                                             : <SkeletonComponent
-                                                property={propertyKey as AnyProperty}
+                                                property={propertyKey as ResolvedProperty}
                                                 size={"tiny"}/>}
                                     </ErrorBoundary>
                                 </Box>

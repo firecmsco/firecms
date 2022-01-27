@@ -1,5 +1,6 @@
 export * from "./auth";
 export * from "./entities";
+export * from "./resolved_entities";
 export * from "./properties";
 export * from "./collections";
 export * from "./permissions";

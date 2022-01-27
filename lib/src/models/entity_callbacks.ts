@@ -1,10 +1,6 @@
-import {
-    Entity,
-    EntityStatus,
-    EntityValues,
-    ResolvedEntitySchema
-} from "./entities";
+import { Entity, EntityStatus, EntityValues, } from "./entities";
 import { FireCMSContext } from "./firecms_context";
+import { ResolvedEntitySchema } from "./resolved_entities";
 
 /**
  * This interface defines all the callbacks that can be used when an entity

@@ -11,23 +11,28 @@ import {
     DataSource,
     EntityLinkBuilder,
     EntitySchema,
+    EnumConfig,
     FireCMSContext,
     Locale,
     Navigation,
     NavigationBuilder,
     SchemaOverrideHandler,
-    StorageSource
+    SchemaRegistry,
+    StorageSource,
+    UserConfigurationPersistence
 } from "../models";
 import { SnackbarContext, SnackbarProvider } from "./contexts/SnackbarContext";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { ModeProvider, ModeStateContext } from "./contexts/ModeState";
-import { useBuildSideEntityController } from "./internal/useBuildSideEntityController";
-import { useBuildNavigationContext } from "./internal/useBuildNavigationContext";
+import {
+    useBuildSideEntityController
+} from "./internal/useBuildSideEntityController";
+import {
+    useBuildNavigationContext
+} from "./internal/useBuildNavigationContext";
 import { useBuildAuthController } from "./internal/useBuildAuthController";
-import { useBuildStorageConfigurationPersistence } from "./util/storage";
 import { ConfigurationPersistence } from "../models/config_persistence";
-import { useBuildSchemaRegistry } from "./internal/useBuildSchemaRegistry";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -62,16 +67,22 @@ export interface FireCMSProps<UserType> {
      * Use this prop to specify the views that will be generated in the CMS.
      * You usually will want to create a `Navigation` object that includes
      * collection views where you specify the path and the schema.
-     * Additionally you can add custom views to the root navigation.
+     * Additionally, you can add custom views to the root navigation.
      * In you need to customize the navigation based on the logged user you
      * can use a `NavigationBuilder`
      */
-    navigation: Navigation | NavigationBuilder<UserType> ;
+    navigation: Navigation | NavigationBuilder<UserType>;
 
     /**
-     *
+     * List of entity schemas available to the CMS
      */
     schemas?: EntitySchema[];
+
+    /**
+     * List of enumeration configurations for easy reuse in the app through
+     * an alias
+     */
+    enumConfigs?: EnumConfig[];
 
     /**
      * Do the users need to log in to access the CMS.
@@ -141,6 +152,14 @@ export interface FireCMSProps<UserType> {
      * and not defined in code
      */
     configPersistence?: ConfigurationPersistence;
+    /**
+     * Use this controller to access the configuration that is stored extenally,
+     * and not defined in code
+     */
+    userConfigPersistence?: UserConfigurationPersistence;
+
+
+    schemaRegistry: SchemaRegistry;
 }
 
 
@@ -158,7 +177,8 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         navigation: navigationOrBuilder,
         entityLinkBuilder,
         authentication,
-        schemas,
+        schemaRegistry,
+        userConfigPersistence,
         dateTimeFormat,
         locale,
         authDelegate,
@@ -181,12 +201,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         locale,
         dataSource,
         storageSource
-    });
-
-    const userConfigPersistence = useBuildStorageConfigurationPersistence();
-
-    const schemaRegistry = useBuildSchemaRegistry({
-        schemas, configPersistence, userConfigPersistence
     });
 
     const navigationContext = useBuildNavigationContext({

@@ -10,7 +10,7 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
 import { PreviewComponent, PreviewComponentProps } from "../internal";
-import { MapProperty } from "../../models";
+import { ResolvedMapProperty } from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 const useStyles = makeStyles(() =>
@@ -42,7 +42,7 @@ export function MapPreview<T extends Record<string, unknown>>({
         throw Error("Picked wrong preview component MapPreview");
     }
 
-    const mapProperty = property as MapProperty;
+    const mapProperty = property as ResolvedMapProperty;
     if (!mapProperty.properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
     }

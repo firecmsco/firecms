@@ -172,6 +172,22 @@ export interface PropertyDisabledConfig {
  */
 export type EnumType = number | string;
 
+export type EnumConfig = {
+
+    /**
+     * ID used to identify this enumeration.
+     * You can use this ID as an alias when configuring properties that use
+     * `enumValues`
+     */
+    id: string;
+
+    /**
+     * Values of this enumeration
+     * @see EnumValues
+     */
+    enumValues: EnumValues;
+}
+
 /**
  * We use this type to define mapping between string or number values in
  * the data source to a label (such in a select dropdown).
@@ -305,8 +321,11 @@ export interface StringProperty extends BaseProperty<string> {
      * need extra customization, (like disabling specific options or assigning
      * colors). If you need to ensure the order of the elements, you can pass
      * a `Map` instead of a plain object.
+     *
+     * You can also assign an alias ID to a {@link EnumConfig} specified in
+     * `enumConfigs` at the FireCMS level
      */
-    enumValues?: EnumValues;
+    enumValues?: EnumValues | string;
 
     /**
      * You can specify a `Storage` configuration. It is used to

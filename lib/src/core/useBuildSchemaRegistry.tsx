@@ -3,23 +3,26 @@ import {
     EntitySchema,
     EntitySchemaResolver,
     EntitySchemaResolverProps,
+    EnumConfig,
     LocalEntitySchema,
     SchemaRegistry,
     UserConfigurationPersistence
-} from "../../models";
-import { getValueInPath, mergeDeep } from "../util/objects";
-import { computeProperties } from "../utils";
-import { ConfigurationPersistence } from "../../models/config_persistence";
-import { mergeSchemas } from "../util/schemas";
+} from "../models";
+import { getValueInPath, mergeDeep } from "./util/objects";
+import { computeProperties } from "./utils";
+import { ConfigurationPersistence } from "../models/config_persistence";
+import { mergeSchemas } from "./util/schemas";
 
 type BuildSchemaRegistryProps<UserType> = {
     schemas?: EntitySchema[];
+    enumConfigs?: EnumConfig[];
     configPersistence?: ConfigurationPersistence;
     userConfigPersistence?: UserConfigurationPersistence;
 };
 
 export function useBuildSchemaRegistry<UserType>({
                                                      schemas: baseSchemas = [],
+                                                     enumConfigs: baseEnumConfigs = [],
                                                      configPersistence,
                                                      userConfigPersistence
                                                  }: BuildSchemaRegistryProps<UserType>): SchemaRegistry {
@@ -27,6 +30,7 @@ export function useBuildSchemaRegistry<UserType>({
     const [initialised, setInitialised] = useState(false);
 
     const [schemas, setSchemas] = useState<EntitySchema[]>(baseSchemas);
+    const [enumConfigs, setEnumConfigs] = useState<EnumConfig[]>(baseEnumConfigs);
 
     useEffect(() => {
         if (!configPersistence) {
@@ -34,9 +38,8 @@ export function useBuildSchemaRegistry<UserType>({
             return;
         }
 
-        if (!configPersistence?.schemas) {
-            return;
-        }
+        const configSchemas = configPersistence?.schemas ?? [];
+        const configEnums = configPersistence?.enumConfigs ?? [];
 
         const baseSchemasMerged = baseSchemas.map((baseSchema) => {
             const modifiedSchema = configPersistence.schemas?.find((schema) => schema.id === baseSchema.id);
@@ -47,14 +50,31 @@ export function useBuildSchemaRegistry<UserType>({
             }
         });
 
-        const mergedIds = baseSchemasMerged.map(s => s.id);
+        const mergedSchemaIds = baseSchemasMerged.map(s => s.id);
         setSchemas([
-            ...configPersistence.schemas.filter((schema) => !mergedIds.includes(schema.id)),
+            ...configSchemas.filter((schema) => !mergedSchemaIds.includes(schema.id)),
             ...baseSchemasMerged
         ]);
+
+        const baseEnumsMerged: EnumConfig[] = baseEnumConfigs.map((baseEnumConfig: EnumConfig) => {
+            const modifiedEnum = configPersistence.enumConfigs?.find((enumConfig) => enumConfig.id === baseEnumConfig.id);
+            if (!modifiedEnum) {
+                return baseEnumConfig;
+            } else {
+                return mergeDeep(baseEnumConfig, modifiedEnum) as EnumConfig;
+            }
+        });
+
+        const mergedEnumIds = baseEnumsMerged.map(s => s.id);
+        setEnumConfigs([
+            ...configEnums.filter((enumConfig) => !mergedEnumIds.includes(enumConfig.id)),
+            ...baseEnumsMerged
+        ]);
+
         setInitialised(true);
     }, [
-        configPersistence?.schemas
+        configPersistence?.schemas,
+        configPersistence?.enumConfigs
     ]);
 
     const getUserSchemaOverride = useCallback(<M, >(path: string): LocalEntitySchema<M> | undefined => {
@@ -67,16 +87,24 @@ export function useBuildSchemaRegistry<UserType>({
         return schemas.find((s) => s.id === schemaId);
     }, [schemas]);
 
+    const findEnum = useCallback((id: string): EnumConfig | undefined => {
+        return enumConfigs.find((s) => s.id === id);
+    }, [enumConfigs]);
+
     const buildSchemaResolver = useCallback(<M, >
     ({
          schema,
          path
-     }: { schema: EntitySchema<M>, path: string }): EntitySchemaResolver<M> =>
-        ({
-             entityId,
-             values,
-             previousValues
-         }: EntitySchemaResolverProps<M>) => {
+     }: { schema: EntitySchema<M> | EntitySchemaResolver<M>, path: string }): EntitySchemaResolver<M> => {
+
+        if (typeof schema === "function")
+            return schema;
+
+        return ({
+                    entityId,
+                    values,
+                    previousValues
+                }: EntitySchemaResolverProps<M>) => {
 
             const schemaOverride = getUserSchemaOverride<M>(path);
             const storedProperties = getValueInPath(schemaOverride, "properties");
@@ -86,7 +114,8 @@ export function useBuildSchemaRegistry<UserType>({
                 path,
                 entityId,
                 values: values ?? schema.defaultValues,
-                previousValues: previousValues ?? values ?? schema.defaultValues
+                previousValues: previousValues ?? values ?? schema.defaultValues,
+                enumConfigs
             });
 
             return {
@@ -94,12 +123,15 @@ export function useBuildSchemaRegistry<UserType>({
                 properties: mergeDeep(properties, storedProperties),
                 originalSchema: schema
             };
-        }, [getUserSchemaOverride]);
+        };
+    }, [getUserSchemaOverride, enumConfigs]);
 
     return {
         initialised,
         schemas,
+        enumConfigs,
         findSchema,
+        findEnum,
         buildSchemaResolver
     };
 }

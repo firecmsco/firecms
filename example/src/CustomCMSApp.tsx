@@ -21,6 +21,7 @@ import {
     NavigationRoutes,
     Scaffold,
     SideEntityDialogs,
+    useBuildSchemaRegistry,
     useFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
@@ -96,6 +97,8 @@ export function CustomCMSApp() {
         return true;
     };
 
+    const schemaRegistry = useBuildSchemaRegistry({});
+
     const {
         firebaseApp,
         firebaseConfigLoading,
@@ -109,9 +112,11 @@ export function CustomCMSApp() {
     });
 
     const dataSource = useFirestoreDataSource({
-        firebaseApp: firebaseApp
+        firebaseApp: firebaseApp,
+        schemaRegistry:schemaRegistry
         // You can add your `FirestoreTextSearchController` here
     });
+
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
     if (configError) {
@@ -137,6 +142,7 @@ export function CustomCMSApp() {
                      schemas={[productSchema]}
                      authDelegate={authDelegate}
                      authentication={myAuthenticator}
+                     schemaRegistry={schemaRegistry}
                      dataSource={dataSource}
                      storageSource={storageSource}
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}

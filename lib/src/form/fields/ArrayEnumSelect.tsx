@@ -17,8 +17,10 @@ import {
     isEnumValueDisabled
 } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
-import { formStyles } from "../styles";
 import { ArrayEnumPreview } from "../../preview";
+import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
+import { getEnumValuesFor } from "../../core/utils";
+
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -39,7 +41,6 @@ export function ArrayEnumSelect({
                                     autoFocus
                                 }: FieldProps<EnumType[]>) {
 
-
     if (!property.of) {
         throw Error("Using wrong component ArrayEnumSelect");
     }
@@ -48,7 +49,9 @@ export function ArrayEnumSelect({
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
-    const enumValues = property.of.enumValues;
+    const schemaRegistry = useSchemaRegistry();
+
+    const enumValues = getEnumValuesFor(property.of, schemaRegistry);
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");

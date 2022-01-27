@@ -1,9 +1,9 @@
 import React from "react";
-import { Property } from "../../models";
+import { Property, ResolvedProperty } from "../../models";
 import { getIconForProperty } from "../../core/util/property_utils";
 
 interface LabelWithIconProps {
-    property: Property<any>,
+    property: Property | ResolvedProperty,
 }
 
 /**

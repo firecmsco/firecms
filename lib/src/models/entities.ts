@@ -1,7 +1,8 @@
-import { EnumValues, Properties, PropertiesOrBuilder } from "./properties";
+import { EnumValues, PropertiesOrBuilder } from "./properties";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { FilterCombination, FilterValues } from "./collections";
+import { ResolvedEntitySchema } from "./resolved_entities";
 
 /**
  * Specification for defining an entity
@@ -11,6 +12,9 @@ export interface EntitySchema<M extends { [Key: string]: any } = any,
     AdditionalKey extends string = string,
     UserType = User> {
 
+    /**
+     * ID used to identify this schema
+     */
     id: string;
 
     /**
@@ -155,37 +159,6 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
     dependencies?: Partial<Extract<keyof M, string>>[];
 }
 
-/**
- * @category Models
- */
-export type EntitySchemaResolverProps<M = any> = {
-    entityId?: string | undefined,
-    values?: Partial<EntityValues<M>>,
-    previousValues?: Partial<EntityValues<M>>,
-};
-
-/**
- * Use to resolve the schema properties for specific path, entity id or values.
- *
- * @category Models
- */
-export type EntitySchemaResolver<M = any> = ({
-                                                 entityId,
-                                                 values,
-                                                 previousValues
-                                             }: EntitySchemaResolverProps<M>) => ResolvedEntitySchema<M>;
-
-/**
- * This is the same entity schema you define, only all the property builders
- * are resolved to regular `Property` objects.
- * @category Models
- */
-export type ResolvedEntitySchema<M> =
-    Omit<EntitySchema<M>, "properties"> &
-    {
-        properties: Properties<M>,
-        originalSchema: EntitySchema<M>
-    }
 
 /**
  * New or existing status

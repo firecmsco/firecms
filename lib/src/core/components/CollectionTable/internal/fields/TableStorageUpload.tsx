@@ -10,6 +10,8 @@ import {
     ArrayProperty,
     EntityValues,
     Property,
+    ResolvedArrayProperty,
+    ResolvedStringProperty,
     StorageConfig,
     StringProperty
 } from "../../../../../models";
@@ -81,7 +83,7 @@ export function TableStorageUpload(props: {
     internalValue: string | string[] | null;
     updateValue: (newValue: (string | string[] | null)) => void;
     focused: boolean;
-    property: StringProperty | ArrayProperty<string[]>;
+    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
     entityId: string;
     previewSize: PreviewSize;
     entityValues: EntityValues<any>;
@@ -197,7 +199,7 @@ interface StorageFieldItem {
 interface StorageUploadProps {
     value: string | string[] | null;
     name: string;
-    property: StringProperty | ArrayProperty<string[]>;
+    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
     onChange: (value: string | string[] | null) => void;
     multipleFilesSupported: boolean;
     autoFocus: boolean;
@@ -371,8 +373,8 @@ function StorageUpload({
         : "Drag 'n' drop a file here, or click here edit";
 
     const renderProperty = multipleFilesSupported
-        ? (property as ArrayProperty<string[]>).of as StringProperty
-        : property as StringProperty;
+        ? (property as ResolvedArrayProperty<string[]>).of as ResolvedStringProperty
+        : property as ResolvedStringProperty;
 
     return (
         <Box {...rootProps}
@@ -545,7 +547,7 @@ export function StorageUploadProgress({
 }
 
 interface StorageItemPreviewProps {
-    property: StringProperty;
+    property: ResolvedStringProperty;
     value: string,
     onClear: (value: string) => void;
     size: PreviewSize;

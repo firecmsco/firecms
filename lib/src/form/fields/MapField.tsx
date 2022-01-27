@@ -1,5 +1,10 @@
 import React from "react";
-import { FieldProps, Properties, Property } from "../../models";
+import {
+    FieldProps,
+    Properties,
+    ResolvedProperties,
+    ResolvedProperty
+} from "../../models";
 import {
     Box,
     FormControl,
@@ -47,11 +52,11 @@ export function MapField<T extends object>({
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
     }
 
-    let mapProperties: Record<string, Property>;
+    let mapProperties: Record<string, ResolvedProperty>;
     if (!pickOnlySomeKeys) {
-        mapProperties = property.properties as Properties;
+        mapProperties = property.properties as ResolvedProperties;
     } else if (value) {
-        mapProperties = pick(property.properties as Properties,
+        mapProperties = pick(property.properties as ResolvedProperties,
             ...Object.keys(value)
                 .filter(key => key in property.properties!)
         );

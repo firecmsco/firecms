@@ -1,14 +1,16 @@
 import React, { createElement } from "react";
 import {
     ArrayProperty,
-    BooleanProperty,
     CMSType,
     EntityReference,
-    MapProperty,
-    NumberProperty,
-    ReferenceProperty,
-    StringProperty,
-    TimestampProperty
+    ResolvedArrayProperty,
+    ResolvedBooleanProperty,
+    ResolvedMapProperty,
+    ResolvedNumberProperty,
+    ResolvedReferenceProperty,
+    ResolvedStringProperty,
+    ResolvedTimestampProperty,
+    StringProperty
 } from "../models";
 
 import {
@@ -66,17 +68,17 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
         if (typeof value === "string") {
             if (stringProperty.url) {
                 content = <UrlComponentPreview {...fieldProps}
-                                               property={property as StringProperty}
+                                               property={property as ResolvedStringProperty}
                                                value={value}/>;
             } else if (stringProperty.storage) {
                 content = <StorageThumbnail {...fieldProps}
-                                            property={property as StringProperty}
+                                            property={property as ResolvedStringProperty}
                                             value={value}/>;
             } else if (stringProperty.markdown) {
                 content = <Markdown source={value}/>;
             } else {
                 content = <StringPreview {...fieldProps}
-                                         property={property as StringProperty}
+                                         property={property as ResolvedStringProperty}
                                          value={value}/>;
             }
         } else {
@@ -93,7 +95,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                 if (arrayProperty.of.dataType === "map") {
                     content =
                         <ArrayOfMapsPreview name={name}
-                                            property={property as ArrayProperty}
+                                            property={property as ResolvedArrayProperty}
                                             value={value as object[]}
                                             size={size}
                         />;
@@ -101,7 +103,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                     if (typeof arrayProperty.of.path === "string") {
                         content = <ArrayOfReferencesPreview {...fieldProps}
                                                             value={value}
-                                                            property={property as ArrayProperty}/>;
+                                                            property={property as ResolvedArrayProperty}/>;
                     } else {
                         content = <EmptyValue/>;
                     }
@@ -110,34 +112,34 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                         content = <ArrayPropertyEnumPreview
                             {...fieldProps}
                             value={value as string[]}
-                            property={property as ArrayProperty}/>;
+                            property={property as ResolvedArrayProperty}/>;
                     } else if (arrayProperty.of.storage) {
                         content = <ArrayOfStorageComponentsPreview
                             {...fieldProps}
                             value={value}
-                            property={property as ArrayProperty}/>;
+                            property={property as ResolvedArrayProperty}/>;
                     } else {
                         content = <ArrayOfStringsPreview
                             {...fieldProps}
                             value={value as string[]}
-                            property={property as ArrayProperty}/>;
+                            property={property as ResolvedArrayProperty}/>;
                     }
                 } else if (arrayProperty.of.dataType === "number") {
                     if (arrayProperty.of.enumValues) {
                         content = <ArrayPropertyEnumPreview
                             {...fieldProps}
                             value={value as string[]}
-                            property={property as ArrayProperty}/>;
+                            property={property as ResolvedArrayProperty}/>;
                     }
                 } else {
                     content = <ArrayPreview {...fieldProps}
                                             value={value}
-                                            property={property as ArrayProperty}/>;
+                                            property={property as ResolvedArrayProperty}/>;
                 }
             } else if (arrayProperty.oneOf) {
                 content = <ArrayOneOfPreview {...fieldProps}
                                              value={value}
-                                             property={property as ArrayProperty}/>;
+                                             property={property as ResolvedArrayProperty}/>;
             }
         } else {
             content = buildWrongValueType(name, property.dataType, value);
@@ -146,7 +148,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
         if (typeof value === "object") {
             content =
                 <MapPreview {...fieldProps}
-                            property={property as MapProperty}/>;
+                            property={property as ResolvedMapProperty}/>;
         } else {
             content = buildWrongValueType(name, property.dataType, value);
         }
@@ -154,7 +156,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
         if (value instanceof Date) {
             content = <TimestampPreview {...fieldProps}
                                         value={value}
-                                        property={property as TimestampProperty}/>;
+                                        property={property as ResolvedTimestampProperty}/>;
         } else {
             content = buildWrongValueType(name, property.dataType, value);
         }
@@ -164,7 +166,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                 content = <ReferencePreview
                     {...fieldProps}
                     value={value as EntityReference}
-                    property={property as ReferenceProperty}
+                    property={property as ResolvedReferenceProperty}
                 />;
             } else {
                 content = buildWrongValueType(name, property.dataType, value);
@@ -177,7 +179,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
         if (typeof value === "boolean") {
             content = <BooleanPreview {...fieldProps}
                                       value={value}
-                                      property={property as BooleanProperty}/>;
+                                      property={property as ResolvedBooleanProperty}/>;
         } else {
             content = buildWrongValueType(name, property.dataType, value);
         }
@@ -185,7 +187,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
         if (typeof value === "number") {
             content = <NumberPreview {...fieldProps}
                                      value={value}
-                                     property={property as NumberProperty}/>;
+                                     property={property as ResolvedNumberProperty}/>;
         } else {
             content = buildWrongValueType(name, property.dataType, value);
         }

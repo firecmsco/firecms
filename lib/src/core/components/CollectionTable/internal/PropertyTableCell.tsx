@@ -3,11 +3,13 @@ import {
     CMSType,
     EntityReference,
     EntityValues,
-    NumberProperty,
-    Property,
-    ReferenceProperty,
-    StringProperty,
-    TimestampProperty
+    ResolvedArrayProperty,
+    ResolvedNumberProperty,
+    ResolvedProperty,
+    ResolvedReferenceProperty,
+    ResolvedStringProperty,
+    ResolvedTimestampProperty,
+    StringProperty
 } from "../../../../models";
 import React, { useCallback, useEffect, useState } from "react";
 import { TableInput } from "./fields/TableInput";
@@ -27,6 +29,7 @@ import { isReadOnly } from "../../../utils";
 import { TableCell } from "../../Table/TableCell";
 import { AnySchema } from "yup";
 import { TableStorageUpload } from "./fields/TableStorageUpload";
+import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
 
 
 export interface PropertyTableCellProps<T extends CMSType> {
@@ -38,7 +41,7 @@ export interface PropertyTableCellProps<T extends CMSType> {
     setPreventOutsideClick: (value: boolean) => void;
     focused: boolean;
     setFocused: (value: boolean) => void;
-    property: Property<T>;
+    property: ResolvedProperty<T>;
     height: number;
     width: number;
     entityId: string;
@@ -78,6 +81,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                                                         }: PropertyTableCellProps<T> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
+    const schemaRegistry = useSchemaRegistry();
 
     useClearRestoreValue<T>({
         property,
@@ -160,7 +164,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
             innerComponent = <TableStorageUpload error={error}
                                                  disabled={disabled}
                                                  focused={focused}
-                                                 property={property as StringProperty | ArrayProperty<string[]>}
+                                                 property={property as ResolvedStringProperty | ResolvedArrayProperty<string[]>}
                                                  entityId={entityId}
                                                  entityValues={entityValues}
                                                  internalValue={internalValue}
@@ -174,7 +178,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
             fullHeight = true;
             removePadding = true;
         } else if (selected && property.dataType === "number") {
-            const numberProperty = property as NumberProperty;
+            const numberProperty = property as ResolvedNumberProperty;
             if (numberProperty.enumValues) {
                 innerComponent = <TableSelect name={name as string}
                                               multiple={false}
@@ -202,7 +206,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                 allowScroll = true;
             }
         } else if (selected && property.dataType === "string") {
-            const stringProperty = property as StringProperty;
+            const stringProperty = property as ResolvedStringProperty;
             if (stringProperty.enumValues) {
                 innerComponent = <TableSelect name={name as string}
                                               multiple={false}
@@ -242,7 +246,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                              focused={focused}
                                              internalValue={internalValue as Date}
                                              updateValue={updateValue}
-                                             property={property as TimestampProperty}
+                                             property={property as ResolvedTimestampProperty}
                                              setPreventOutsideClick={setPreventOutsideClick}
             />;
             allowScroll = true;
@@ -253,13 +257,13 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                       updateValue={updateValue}
                                                       disabled={disabled}
                                                       size={size}
-                                                      property={property as ReferenceProperty}
+                                                      property={property as ResolvedReferenceProperty}
                                                       setPreventOutsideClick={setPreventOutsideClick}
                 />;
             }
             allowScroll = true;
         } else if (property.dataType === "array") {
-            const arrayProperty = (property as ArrayProperty);
+            const arrayProperty = (property as ResolvedArrayProperty);
             if (arrayProperty.of) {
                 if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
                     if (selected && arrayProperty.of.enumValues) {

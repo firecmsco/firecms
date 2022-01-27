@@ -9,7 +9,7 @@ import {
     PreviewSize
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
-import { Property } from "../../models";
+import { ResolvedProperty } from "../../models";
 
 /**
  * @category Preview components
@@ -49,7 +49,7 @@ export function ArrayOneOfPreview({
                             {value && <PreviewComponent
                                 name={name}
                                 value={value[valueField]}
-                                property={properties[value[typeField]] as Property<any>}
+                                property={properties[value[typeField]] as ResolvedProperty<any>}
                                 size={childSize}/>}
                         </ErrorBoundary>
                     </div>

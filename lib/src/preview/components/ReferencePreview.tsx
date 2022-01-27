@@ -11,7 +11,7 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import { AnyProperty, EntityReference } from "../../models";
+import { EntityReference, ResolvedProperty } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { PreviewComponent, PreviewComponentProps } from "../internal";
@@ -151,10 +151,10 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                                 {entity
                                     ? <PreviewComponent name={key as string}
                                                         value={entity.values[key as string]}
-                                                        property={childProperty as AnyProperty}
+                                                        property={childProperty as ResolvedProperty}
                                                         size={"tiny"}/>
                                     : <SkeletonComponent
-                                        property={childProperty as AnyProperty}
+                                        property={childProperty as ResolvedProperty}
                                         size={"tiny"}/>
                                 }
                             </div>

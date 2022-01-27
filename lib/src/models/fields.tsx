@@ -1,16 +1,6 @@
-import { EntityValues, ResolvedEntitySchema } from "./entities";
-import {
-    ArrayProperty,
-    BooleanProperty,
-    CMSType,
-    GeopointProperty,
-    MapProperty,
-    NumberProperty,
-    Property,
-    ReferenceProperty,
-    StringProperty,
-    TimestampProperty
-} from "./properties";
+import { EntityValues } from "./entities";
+import { CMSType, Property } from "./properties";
+import { ResolvedEntitySchema, ResolvedProperty } from "./resolved_entities";
 
 /**
  * When building a custom field you need to create a React component that takes
@@ -68,7 +58,7 @@ export interface FieldProps<T extends CMSType, CustomProps = any, M extends { [K
     /**
      * Property related to this field
      */
-    property: Property<T>;
+    property: ResolvedProperty<T>;
 
     /**
      * Should this field include a description
@@ -158,14 +148,7 @@ export interface CMSFormFieldProps<M extends { [Key: string]: any } = any> {
     /**
      * The CMS property you are binding this field to
      */
-    property: StringProperty |
-        NumberProperty |
-        BooleanProperty |
-        TimestampProperty |
-        GeopointProperty |
-        ReferenceProperty |
-        ArrayProperty |
-        MapProperty;
+    property: Property | ResolvedProperty;
 
     /**
      * The context where this field is being rendered. You get a context as a

@@ -70,13 +70,16 @@ export async function saveEntityWithCallbacks<M, UserType>({
 
     let updatedValues: Partial<EntityValues<M>>;
 
+    const schemaRegistry = context.schemaRegistry;
+
     if (callbacks?.onPreSave) {
         try {
             const resolvedSchema = computeSchema({
                 values: previousValues as EntityValues<M>,
                 entityId,
-                schemaOrResolver: schema,
-                path
+                schemaResolver: schemaRegistry.buildSchemaResolver({
+                    schema, path
+                }),
             });
             updatedValues = await callbacks.onPreSave({
                 schema: resolvedSchema,
@@ -110,8 +113,9 @@ export async function saveEntityWithCallbacks<M, UserType>({
                 const resolvedSchema = computeSchema({
                     values: updatedValues as EntityValues<M>,
                     entityId,
-                    schemaOrResolver: schema,
-                    path
+                    schemaResolver: schemaRegistry.buildSchemaResolver({
+                        schema, path
+                    }),
                 });
                 callbacks.onSaveSuccess({
                     schema: resolvedSchema,
@@ -135,8 +139,9 @@ export async function saveEntityWithCallbacks<M, UserType>({
                 const resolvedSchema = computeSchema({
                     values: updatedValues as EntityValues<M>,
                     entityId,
-                    schemaOrResolver: schema,
-                    path
+                    schemaResolver: schemaRegistry.buildSchemaResolver({
+                        schema, path
+                    })
                 });
                 callbacks.onSaveFailure({
                     schema: resolvedSchema,

@@ -12,10 +12,11 @@ import {
     GeoPoint,
     ListenCollectionProps,
     ListenEntityProps,
-    Properties,
-    Property,
     ResolvedEntitySchema,
+    ResolvedProperties,
+    ResolvedProperty,
     SaveEntityProps,
+    SchemaRegistry,
     WhereFilterOp
 } from "../../models";
 import {
@@ -57,6 +58,7 @@ import { useEffect, useRef } from "react";
 export interface FirestoreDataSourceProps {
     firebaseApp?: FirebaseApp,
     textSearchController?: FirestoreTextSearchController,
+    schemaRegistry: SchemaRegistry;
 }
 
 /**
@@ -67,7 +69,8 @@ export interface FirestoreDataSourceProps {
  */
 export function useFirestoreDataSource({
                                            firebaseApp,
-                                           textSearchController
+                                           textSearchController,
+                                           schemaRegistry
                                        }: FirestoreDataSourceProps): DataSource {
 
     const firestoreRef = useRef<Firestore>();
@@ -156,9 +159,11 @@ export function useFirestoreDataSource({
                     return undefined;
                 }
                 const resolvedSchema = computeSchema({
-                    schemaOrResolver: schema,
-                    entityId: docSnapshot.id,
-                    path
+                    schemaResolver: schemaRegistry.buildSchemaResolver<M>({
+                        schema,
+                        path
+                    }),
+                    entityId: docSnapshot.id
                 });
                 return createEntityFromSchema(docSnapshot, path, resolvedSchema);
             });
@@ -222,8 +227,10 @@ export function useFirestoreDataSource({
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
 
             const resolvedSchema = computeSchema({
-                schemaOrResolver: schema,
-                path
+                schemaResolver: schemaRegistry.buildSchemaResolver<M>({
+                    schema,
+                    path
+                })
             });
             return getDocs(query)
                 .then((snapshot) =>
@@ -277,8 +284,10 @@ export function useFirestoreDataSource({
             }
 
             const resolvedSchema = computeSchema({
-                schemaOrResolver: schema,
-                path
+                schemaResolver: schemaRegistry.buildSchemaResolver<M>({
+                    schema,
+                    path
+                }),
             });
 
             return onSnapshot(query,
@@ -332,9 +341,11 @@ export function useFirestoreDataSource({
                 {
                     next: (docSnapshot) => {
                         const resolvedSchema = computeSchema({
-                            schemaOrResolver: schema,
-                            entityId: docSnapshot.id,
-                            path
+                            schemaResolver: schemaRegistry.buildSchemaResolver<M>({
+                                schema,
+                                path
+                            }),
+                            entityId: docSnapshot.id
                         });
                         onUpdate(createEntityFromSchema(docSnapshot, path, resolvedSchema));
                     },
@@ -365,11 +376,13 @@ export function useFirestoreDataSource({
 
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
             const resolvedSchema = computeSchema({
-                schemaOrResolver: schema,
-                entityId,
-                path
+                schemaResolver: schemaRegistry.buildSchemaResolver<M>({
+                    schema,
+                    path
+                }),
+                entityId
             });
-            const properties: Properties<M> = resolvedSchema.properties;
+            const properties: ResolvedProperties<M> = resolvedSchema.properties;
             const collectionReference: CollectionReference = collection(firestore, path);
 
             const updatedFirestoreValues: EntityValues<M> = updateAutoValues(
@@ -426,7 +439,7 @@ export function useFirestoreDataSource({
             path: string,
             name: string,
             value: any,
-            property: Property,
+            property: ResolvedProperty,
             entityId?: string
         ): Promise<boolean> {
 

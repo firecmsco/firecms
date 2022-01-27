@@ -1,5 +1,5 @@
 import React from "react";
-import { StringProperty } from "../../models";
+import { ResolvedStringProperty } from "../../models";
 import { PreviewComponentProps } from "../internal";
 
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
@@ -24,7 +24,7 @@ export function ArrayOfStringsPreview({
     if (value && !Array.isArray(value)) {
         return <div>{`Unexpected value: ${value}`}</div>;
     }
-    const stringProperty = property.of as StringProperty;
+    const stringProperty = property.of as ResolvedStringProperty;
 
     return (
         <div className={classes.array}>

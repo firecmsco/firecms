@@ -1,9 +1,9 @@
 import {
-    ArrayProperty,
-    MapProperty,
-    Properties,
-    Property,
-    StringProperty
+    ResolvedArrayProperty,
+    ResolvedMapProperty,
+    ResolvedProperties,
+    ResolvedProperty,
+    ResolvedStringProperty
 } from "../../models";
 import React from "react";
 import {
@@ -20,7 +20,7 @@ import { PreviewSize } from "../index";
 import { getThumbnailMeasure } from "../util";
 
 export interface SkeletonComponentProps {
-    property: Property,
+    property: ResolvedProperty,
     size: PreviewSize
 }
 
@@ -39,7 +39,7 @@ export function SkeletonComponent({
 
     let content: JSX.Element | any;
     if (property.dataType === "string") {
-        const stringProperty = property as StringProperty;
+        const stringProperty = property as ResolvedStringProperty;
         if (stringProperty.url) {
             content = renderUrlComponent(stringProperty, size);
         } else if (stringProperty.storage) {
@@ -48,7 +48,7 @@ export function SkeletonComponent({
             content = renderSkeletonText();
         }
     } else if (property.dataType === "array") {
-        const arrayProperty = property as ArrayProperty;
+        const arrayProperty = property as ResolvedArrayProperty;
 
         if (arrayProperty.of) {
             if (arrayProperty.of.dataType === "map" && arrayProperty.of.properties) {
@@ -67,7 +67,7 @@ export function SkeletonComponent({
         }
 
     } else if (property.dataType === "map") {
-        content = renderMap(property as MapProperty, size);
+        content = renderMap(property as ResolvedMapProperty, size);
     } else if (property.dataType === "timestamp") {
         content = renderSkeletonText();
     } else if (property.dataType === "reference") {
@@ -80,7 +80,7 @@ export function SkeletonComponent({
     return (content || null);
 }
 
-function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize) {
+function renderMap<T extends object>(property: ResolvedMapProperty<T>, size: PreviewSize) {
 
     if (!property.properties)
         return <></>;
@@ -138,7 +138,7 @@ function renderMap<T extends object>(property: MapProperty<T>, size: PreviewSize
 
 }
 
-function renderArrayOfMaps<M>(properties: Properties<M>, size: PreviewSize, previewProperties?: string[]) {
+function renderArrayOfMaps<M>(properties: ResolvedProperties<M>, size: PreviewSize, previewProperties?: string[]) {
     let tableProperties = previewProperties;
     if (!tableProperties || !tableProperties.length) {
         tableProperties = Object.keys(properties) as string[];
@@ -200,7 +200,7 @@ function renderArrayEnumTableCell() {
 }
 
 function renderGenericArrayCell(
-    property: Property
+    property: ResolvedProperty
 ) {
     return (
         <Grid>
@@ -247,7 +247,7 @@ function renderReference() {
 }
 
 
-function renderUrlComponent(property: StringProperty, size: PreviewSize = "regular") {
+function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize = "regular") {
 
     if (typeof property.url === "boolean" && property.url) {
         return <div style={{
