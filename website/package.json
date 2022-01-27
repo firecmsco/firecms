@@ -30,7 +30,7 @@
         "react-syntax-highlighter": "^15.4.4",
         "react-transition-group": "^4.4.1",
         "tailwindcss": "^2.2.15",
-        "three": "^0.131.3",
+        "three": "^0.137.0",
         "ts-easing": "^0.2.0"
     },
     "browserslist": {
