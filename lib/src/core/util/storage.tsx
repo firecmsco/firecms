@@ -47,5 +47,3 @@ export function useBuildStorageConfigurationPersistence(): UserConfigurationPers
         getSchemaConfig: getSchema
     }
 }
-
-

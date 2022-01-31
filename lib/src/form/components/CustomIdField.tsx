@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import {
     FormControl,
@@ -18,6 +18,7 @@ import {
     Entity,
     EntitySchema,
     EntityStatus,
+    EnumValues,
     FireCMSContext
 } from "../../models";
 import { formStyles } from "../styles";
@@ -26,22 +27,29 @@ import {
     useFireCMSContext,
     useSnackbarController
 } from "../../hooks";
+import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
+import { resolveEnum } from "../../core/utils";
 
 export function CustomIdField<M, UserType>
 ({ schema, status, onChange, error, entity }: {
     schema: EntitySchema<M>,
     status: EntityStatus,
-    onChange: (id:string) => void,
+    onChange: (id: string) => void,
     error: boolean,
     entity: Entity<M> | undefined
 }) {
 
     const classes = formStyles();
+    const schemaRegistry = useSchemaRegistry();
 
     const disabled = status === "existing" || !schema.customId;
     const idSetAutomatically = status !== "existing" && !schema.customId;
 
-    const hasEnumValues = typeof schema.customId === "object";
+    const enumValues: EnumValues | undefined = useMemo(() => {
+        if (!schema.customId || typeof schema.customId === "boolean")
+            return undefined;
+        return resolveEnum(schema.customId, schemaRegistry.enumConfigs);
+    }, [schemaRegistry.enumConfigs, schema.customId]);
 
     const snackbarContext = useSnackbarController();
     const { copy } = useClipboard({
@@ -105,33 +113,33 @@ export function CustomIdField<M, UserType>
                      {...fieldProps}
                      key={"custom-id-field"}>
 
-            {hasEnumValues && schema.customId &&
-            <>
-                <InputLabel id={"id-label"}>{fieldProps.label}</InputLabel>
-                <MuiSelect
-                    labelId={"id-label"}
-                    className={classes.select}
-                    error={error}
-                    {...fieldProps}
-                    onChange={(event: any) => onChange(event.target.value)}>
-                    {Object.entries(schema.customId).map(([key, label]) =>
-                        <MenuItem
-                            key={`custom-id-item-${key}`}
-                            value={key}>
-                            {`${key} - ${label}`}
-                        </MenuItem>)}
-                </MuiSelect>
-            </>}
+            {enumValues &&
+                <>
+                    <InputLabel id={"id-label"}>{fieldProps.label}</InputLabel>
+                    <MuiSelect
+                        labelId={"id-label"}
+                        className={classes.select}
+                        error={error}
+                        {...fieldProps}
+                        onChange={(event: any) => onChange(event.target.value)}>
+                        {Object.entries(enumValues).map(([key, label]) =>
+                            <MenuItem
+                                key={`custom-id-item-${key}`}
+                                value={key}>
+                                {`${key} - ${label}`}
+                            </MenuItem>)}
+                    </MuiSelect>
+                </>}
 
-            {!hasEnumValues &&
-            <MuiTextField {...fieldProps}
-                          error={error}
-                          InputProps={inputProps}
-                          onChange={(event) => {
-                              let value = event.target.value;
-                              if (value) value = value.trim();
-                              return onChange(value);
-                          }}/>}
+            {!enumValues &&
+                <MuiTextField {...fieldProps}
+                              error={error}
+                              InputProps={inputProps}
+                              onChange={(event) => {
+                                  let value = event.target.value;
+                                  if (value) value = value.trim();
+                                  return onChange(value);
+                              }}/>}
 
             <ErrorMessage name={"id"}
                           component="div">

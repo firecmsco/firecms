@@ -7,7 +7,6 @@ import { AuthController } from "./auth";
 import { EntityLinkBuilder } from "./entity_link_builder";
 import { User } from "./user";
 import { SnackbarController } from "../hooks";
-import { useFirestoreConfigurationPersistence } from "../firebase_app/hooks/useFirestoreConfigurationPersistence";
 import { ConfigurationPersistence } from "./config_persistence";
 import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SchemaRegistry } from "./schema_registry";

@@ -18,7 +18,7 @@ import {
 } from "../Tree/components/TreeItem/TreeItem-types";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { Formik, FormikProps, useFormikContext } from "formik";
+import { Formik, FormikProps, getIn, useFormikContext } from "formik";
 
 import isEqual from "react-fast-compare";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
@@ -63,6 +63,7 @@ import {
 import { ErrorView } from "../ErrorView";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
+import { toSnakeCase } from "../../util/strings";
 
 export type SchemaEditorProps<M> = {
     schemaId?: string;
@@ -149,7 +150,6 @@ export function SchemaEditor<M>({
             } as EntitySchema}
             validationSchema={YupSchema}
             onSubmit={(newSchema: EntitySchema, formikHelpers) => {
-                console.log("submit", newSchema);
                 return saveSchema(newSchema).then(() => formikHelpers.resetForm({ values: newSchema }));
             }}
         >
@@ -191,7 +191,7 @@ function SchemaEditorForm<M>({
     const navigationStack = useRef(0);
 
     const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+    const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
 
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
     const selectedProperty = selectedPropertyId ? values.properties[selectedPropertyId] : undefined;
@@ -208,6 +208,13 @@ function SchemaEditorForm<M>({
         const newSelectedPropertyId = location.hash ? location.hash.substring(1) : undefined;
         setSelectedPropertyId(newSelectedPropertyId);
     }, [location]);
+
+    useEffect(() => {
+        const idTouched = getIn(touched, "id");
+        if (!idTouched && isNewSchema && values.name) {
+            setFieldValue("id", toSnakeCase(values.name))
+        }
+    }, [isNewSchema, touched, values.name]);
 
     const onPropertyClick = useCallback((property: PropertyOrBuilder, propertyId: string) => {
         setSelectedPropertyId(propertyId);
@@ -309,7 +316,7 @@ function SchemaEditorForm<M>({
     return (
         <>
             <Box sx={{ p: 2 }}>
-                <Container maxWidth={"md"}>
+                <Container maxWidth={"lg"}>
 
                     <Typography variant={"h4"}
                                 sx={{ py: 3 }}>
@@ -373,6 +380,7 @@ function SchemaEditorForm<M>({
                                 </Typography>
                                 <Button
                                     color="primary"
+                                    variant={"outlined"}
                                     onClick={() => setNewPropertyDialogOpen(true)}
                                     startIcon={
                                         <AddIcon/>}
@@ -385,10 +393,11 @@ function SchemaEditorForm<M>({
                                    sx={{ p: 3 }}>
                                 <Grid container>
                                     <Grid item xs={12}
-                                          md={5}>
+                                          lg={5}>
                                         <Tree
                                             key={`tree_${selectedPropertyId}`}
                                             tree={tree}
+                                            offsetPerLevel={40}
                                             renderItem={renderItem}
                                             onDragEnd={onDragEnd}
                                             isDragEnabled
@@ -397,7 +406,7 @@ function SchemaEditorForm<M>({
                                     </Grid>
 
                                     {!asDialog && <Grid item xs={12}
-                                                        md={7}
+                                                        lg={7}
                                                         sx={(theme) => ({
                                                             borderLeft: `1px solid ${theme.palette.divider}`,
                                                             pl: 2
@@ -668,7 +677,7 @@ function PropertyBuilderPreview({
                         variant="body2"
                         component="span"
                         color="text.secondary">
-                This property is defined using a builder, in code
+                This property can only be edited in code
             </Typography>
         </Box>
     );
@@ -677,6 +686,8 @@ function PropertyBuilderPreview({
 function isValidDrag(tree: TreeData, source: TreeSourcePosition, destination: TreeDestinationPosition) {
     const draggedPropertyId = tree.items[source.parentId].children[source.index];
     const draggedProperty = tree.items[draggedPropertyId].data.property;
+    if (typeof draggedProperty === "function")
+        return false;
     if (destination.index === undefined)
         return false;
     if (destination.parentId === tree.rootId)

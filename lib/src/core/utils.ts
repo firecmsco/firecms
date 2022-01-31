@@ -1,4 +1,5 @@
 import {
+    CMSType,
     Entity,
     EntityReference,
     EntitySchema,
@@ -11,7 +12,7 @@ import {
     NumberProperty,
     Properties,
     PropertiesOrBuilder,
-    Property,
+    Property, PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedEntitySchema,
     ResolvedNumberProperty,
@@ -21,7 +22,7 @@ import {
     SchemaRegistry,
     StringProperty
 } from "../models";
-import { buildPropertyFrom } from "./util/property_builder";
+import { mergeDeep } from "./util/objects";
 
 export function isReadOnly(property: Property<any>): boolean {
     if (property.readOnly)
@@ -187,15 +188,25 @@ export function computeEnums<M>(properties: Properties<M>, enumConfigs: EnumConf
  */
 export function resolvePropertyEnum(property: StringProperty | NumberProperty, enumConfigs: EnumConfig[]): ResolvedStringProperty | ResolvedNumberProperty {
     if (typeof property.enumValues === "string") {
-        const enumConfig = enumConfigs.find((ec) => ec.id === property.enumValues);
-        if (!enumConfig)
-            throw Error("Not able to find enumConfig with id: " + property.enumValues)
         return {
             ...property,
-            enumValues: enumConfig.enumValues
+            enumValues: resolveEnum(property.enumValues, enumConfigs) ?? {},
         }
     }
     return property as ResolvedStringProperty | ResolvedNumberProperty;
+}
+
+export function resolveEnum(input: EnumValues | string, enumConfigs: EnumConfig[]):EnumValues | undefined{
+    if (typeof input === "string") {
+        const enumConfig = enumConfigs.find((ec) => ec.id === input);
+        if (!enumConfig)
+            throw Error("Not able to find enumConfig with id: " + input)
+        return enumConfig.enumValues;
+    } else if (typeof input === "object")
+        return input as EnumValues;
+    else {
+        return undefined;
+    }
 }
 
 export function initWithProperties<M extends { [Key: string]: any }>
@@ -344,4 +355,39 @@ export function traverseValue(inputValue: any,
     }
 
     return value;
+}
+
+
+export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: any }>
+({
+     propertyOrBuilder,
+     values,
+     previousValues,
+     path,
+     entityId,
+     propertyOverride,
+ }: {
+     propertyOrBuilder: PropertyOrBuilder<T, M>,
+     values: Partial<EntityValues<M>>,
+     previousValues?: Partial<EntityValues<M>>,
+     path: string,
+     entityId?: string,
+     propertyOverride?: Partial<Property<T>>,
+ }
+): Property<T> {
+    let result: Property<T>;
+    if (typeof propertyOrBuilder === "function") {
+        result = propertyOrBuilder({ values, previousValues, entityId, path });
+        if (!result) {
+            console.error("Wrong function", path, entityId, propertyOrBuilder);
+            throw Error("Not returning property from property builder");
+        }
+    } else {
+        result = propertyOrBuilder as Property<T>;
+    }
+
+    if (propertyOverride)
+        result = mergeDeep(result, propertyOverride);
+
+    return result;
 }

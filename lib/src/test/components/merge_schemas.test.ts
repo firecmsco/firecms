@@ -39,7 +39,7 @@ export const persistedProductSchema: EntitySchema = {
     properties: {
         name: {
             dataType: "string",
-            title: "Name",
+            title: "Name updated",
             multiline: true,
             validation: { required: true }
         },
@@ -74,7 +74,7 @@ it("Merge schemas", () => {
             properties: {
                 name: {
                     dataType: "string",
-                    title: "Name",
+                    title: "Name updated",
                     multiline: true,
                     validation: { required: true }
                 },

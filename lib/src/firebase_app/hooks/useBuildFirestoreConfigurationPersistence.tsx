@@ -50,7 +50,7 @@ const docToEnum = (doc: DocumentSnapshot) => {
     return { id: doc.id, ...data } as EnumConfig;
 }
 
-export function useFirestoreConfigurationPersistence({
+export function useBuildFirestoreConfigurationPersistence({
                                                          firebaseApp,
                                                          configPath = DEFAULT_CONFIG_PATH
                                                      }: FirestoreConfigurationPersistenceProps): ConfigurationPersistence {

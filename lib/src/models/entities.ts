@@ -32,9 +32,11 @@ export interface EntitySchema<M extends { [Key: string]: any } = any,
      * datasource.
      * You can set the value to true to allow the users to choose the ID.
      * You can also pass a set of values (as an EnumValues object) to allow them
-     * to pick from only those
+     * to pick from only those.
+     * You can also set a string as an `EnumConfig` alias, if you want to reuse
+     * your EnumValues.
      */
-    customId?: boolean | EnumValues;
+    customId?: boolean | EnumValues | string;
 
     /**
      * Can this entity schema be edited with the inline editor.

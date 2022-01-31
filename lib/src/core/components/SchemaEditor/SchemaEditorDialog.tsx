@@ -24,14 +24,14 @@ export function SchemaEditorDialog({
             maxWidth={"lg"}
             fullWidth
             onClose={dirty ? () => handleClose(undefined) : undefined}
-            sx={(theme) => ({
+            sx={{
                 height: "100vh"
-            })}
+            }}
         >
 
             <Box
                 sx={(theme) => ({
-                    backgroundColor: theme.palette.background.paper,
+                    backgroundColor: theme.palette.background.paper
                 })}>
                 <SchemaEditor schemaId={schemaId}
                               handleClose={handleClose}

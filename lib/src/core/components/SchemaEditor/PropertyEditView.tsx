@@ -19,6 +19,8 @@ import { Property } from "../../../models";
 import { StringPropertyField } from "./properties/StringPropertyField";
 import { getWidgetId, WidgetId, WIDGETS } from "../../util/widgets";
 import { buildProperty } from "../../builders";
+import { EnumPropertyField } from "./properties/EnumPropertyField";
+import { toSnakeCase } from "../../util/strings";
 
 export type PropertyWithId = Property & { id: string };
 
@@ -330,6 +332,9 @@ function PropertyEditView({
         selectedWidgetId === "url" ||
         selectedWidgetId === "email") {
         childComponent = <StringPropertyField widgetId={selectedWidgetId}/>;
+    } else if (selectedWidgetId === "select" ||
+        selectedWidgetId === "number_select") {
+        childComponent = <EnumPropertyField/>;
     } else {
         childComponent = <Box>
             {values?.title}
@@ -447,11 +452,3 @@ function validateTitle(value: string) {
     }
     return error;
 }
-
-const toSnakeCase = (str: string) => {
-    const regExpMatchArray = str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g);
-    if (!regExpMatchArray) return "";
-    return regExpMatchArray
-        .map(x => x.toLowerCase())
-        .join('_');
-};

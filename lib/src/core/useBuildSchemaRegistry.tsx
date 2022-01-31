@@ -21,16 +21,16 @@ type BuildSchemaRegistryProps<UserType> = {
 };
 
 export function useBuildSchemaRegistry<UserType>({
-                                                     schemas: baseSchemas = [],
-                                                     enumConfigs: baseEnumConfigs = [],
+                                                     schemas: codeSchemas = [],
+                                                     enumConfigs: codeEnumConfigs = [],
                                                      configPersistence,
                                                      userConfigPersistence
                                                  }: BuildSchemaRegistryProps<UserType>): SchemaRegistry {
 
     const [initialised, setInitialised] = useState(false);
 
-    const [schemas, setSchemas] = useState<EntitySchema[]>(baseSchemas);
-    const [enumConfigs, setEnumConfigs] = useState<EnumConfig[]>(baseEnumConfigs);
+    const [schemas, setSchemas] = useState<EntitySchema[]>(codeSchemas);
+    const [enumConfigs, setEnumConfigs] = useState<EnumConfig[]>(codeEnumConfigs);
 
     useEffect(() => {
         if (!configPersistence) {
@@ -38,10 +38,15 @@ export function useBuildSchemaRegistry<UserType>({
             return;
         }
 
-        const configSchemas = configPersistence?.schemas ?? [];
-        const configEnums = configPersistence?.enumConfigs ?? [];
+        if (!configPersistence.loading)
+            return;
 
-        const baseSchemasMerged = baseSchemas.map((baseSchema) => {
+// schemas
+        if (!configPersistence?.schemas) return; // still loading
+        const configSchemas = configPersistence?.schemas;
+
+        console.log("configSchemas", configSchemas);
+        const baseSchemasMerged = codeSchemas.map((baseSchema) => {
             const modifiedSchema = configPersistence.schemas?.find((schema) => schema.id === baseSchema.id);
             if (!modifiedSchema) {
                 return baseSchema;
@@ -56,7 +61,10 @@ export function useBuildSchemaRegistry<UserType>({
             ...baseSchemasMerged
         ]);
 
-        const baseEnumsMerged: EnumConfig[] = baseEnumConfigs.map((baseEnumConfig: EnumConfig) => {
+// enum configs
+        if (!configPersistence?.enumConfigs) return; // still loading
+        const configEnums = configPersistence?.enumConfigs;
+        const baseEnumsMerged: EnumConfig[] = codeEnumConfigs.map((baseEnumConfig: EnumConfig) => {
             const modifiedEnum = configPersistence.enumConfigs?.find((enumConfig) => enumConfig.id === baseEnumConfig.id);
             if (!modifiedEnum) {
                 return baseEnumConfig;
@@ -73,9 +81,11 @@ export function useBuildSchemaRegistry<UserType>({
 
         setInitialised(true);
     }, [
+        configPersistence?.loading,
         configPersistence?.schemas,
         configPersistence?.enumConfigs
     ]);
+    console.log("REGISTRY", initialised, schemas);
 
     const getUserSchemaOverride = useCallback(<M, >(path: string): LocalEntitySchema<M> | undefined => {
         if (!userConfigPersistence)

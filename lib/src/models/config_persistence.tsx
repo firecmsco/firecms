@@ -11,7 +11,10 @@ export interface ConfigurationPersistence {
     loading: boolean;
 
     collections?: EntityCollection[];
-
+    /**
+     * Entity schemas
+     * Should be undefined when loading and empty if there are no results
+     */
     schemas?: EntitySchema[];
 
     enumConfigs?: EnumConfig[];
@@ -24,6 +27,6 @@ export interface ConfigurationPersistence {
 
     saveSchema: <M>(schema: EntitySchema<M>) => Promise<void>;
 
-    saveEnum: <M>(schema: EnumConfig) => Promise<void>;
+    saveEnum: (schema: EnumConfig) => Promise<void>;
 
 }

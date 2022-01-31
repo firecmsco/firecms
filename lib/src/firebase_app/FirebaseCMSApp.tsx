@@ -21,8 +21,8 @@ import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthDelegate } from "./models/auth";
 import {
-    useFirestoreConfigurationPersistence
-} from "./hooks/useFirestoreConfigurationPersistence";
+    useBuildFirestoreConfigurationPersistence
+} from "./hooks/useBuildFirestoreConfigurationPersistence";
 import { useBuildSchemaRegistry } from "../core/useBuildSchemaRegistry";
 import { useBuildStorageConfigurationPersistence } from "../core/util/storage";
 
@@ -68,7 +68,7 @@ export function FirebaseCMSApp({
                                    locale,
                                    HomePage,
                                    basePath,
-                                   baseCollectionPath,
+                                   baseCollectionPath
                                }: FirebaseCMSAppProps) {
 
     const {
@@ -83,7 +83,7 @@ export function FirebaseCMSApp({
         signInOptions
     });
 
-    const configPersistence = useFirestoreConfigurationPersistence({ firebaseApp: firebaseApp });
+    const configPersistence = useBuildFirestoreConfigurationPersistence({ firebaseApp: firebaseApp });
     const userConfigPersistence = useBuildStorageConfigurationPersistence();
 
     const schemaRegistry = useBuildSchemaRegistry({
