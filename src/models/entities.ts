@@ -19,12 +19,12 @@ export interface EntitySchema<M extends { [Key: string]: any } = any> {
     /**
      * If this property is not set, the property will be created by the
      * datasource.
-     * You can set the value to 'optional' to force the users to choose the ID.
-     * You can set the value to 'allowed' to allow the users to choose the ID. If the ID is empty, an automatic ID will be set.
+     * You can set the value to 'true' to force the users to choose the ID.
+     * You can set the value to 'optional' to allow the users to choose the ID. If the ID is empty, an automatic ID will be set.
      * You can also pass a set of values (as an EnumValues object) to allow them
      * to pick from only those
      */
-    customId?: 'required' | 'optional' | EnumValues;
+    customId?: boolean | "optional" | EnumValues;
 
     /**
      * Set of properties that compose an entity
