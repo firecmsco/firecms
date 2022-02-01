@@ -1,4 +1,4 @@
-import { EnumValues } from "../../../../../models";
+import { EnumValueConfig, EnumValues } from "../../../../../models";
 import { ArrayEnumPreview } from "../../../../../preview";
 import React, { useEffect, useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
@@ -11,7 +11,7 @@ import { EnumValuesChip } from "../../../../../preview/components/CustomChip";
 
 export function TableSelect(props: {
     name: string;
-    enumValues: EnumValues;
+    enumValues: EnumValueConfig[];
     error: Error | undefined;
     multiple: boolean;
     disabled: boolean;
@@ -109,7 +109,7 @@ export function TableSelect(props: {
                                              size={small ? "small" : "regular"}/>;
                 } else {
                     return <EnumValuesChip
-                        enumKey={enumKey}
+                        enumId={enumKey}
                         enumValues={enumValues}
                         small={small}/>;
                 }
@@ -119,7 +119,7 @@ export function TableSelect(props: {
             {enumToObjectEntries(enumValues).map(([key, labelOrConfig]) => {
 
                 const chip = <EnumValuesChip
-                    enumKey={key}
+                    enumId={key}
                     enumValues={enumValues}
                     small={true}/>;
                 if (multiple) {

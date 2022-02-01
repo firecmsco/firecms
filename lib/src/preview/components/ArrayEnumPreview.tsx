@@ -1,4 +1,4 @@
-import { EnumValues } from "../../models";
+import { EnumValueConfig, EnumValues } from "../../models";
 
 import React from "react";
 
@@ -17,7 +17,7 @@ export function ArrayEnumPreview({
                                  }: {
     value: string[] | number[],
     name: string | undefined,
-    enumValues: EnumValues,
+    enumValues: EnumValueConfig[],
     size: "regular" | "small" | "tiny"
 }) {
 
@@ -32,7 +32,7 @@ export function ArrayEnumPreview({
                              key={`preview_array_ref_${name}_${index}`}>
                             <ErrorBoundary>
                                 <EnumValuesChip
-                                    enumKey={enumKey}
+                                    enumId={enumKey}
                                     enumValues={enumValues}
                                     small={size !== "regular"}/>
                             </ErrorBoundary>

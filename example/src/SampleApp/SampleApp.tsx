@@ -38,7 +38,7 @@ import { customSchemaOverrideHandler } from "./schemas/custom_schema_resolver";
 import "typeface-rubik";
 import "typeface-space-mono";
 import { Locale, Product } from "./types";
-import { categories } from "./schemas/enums";
+import { categories, currencies } from "./schemas/enums";
 
 function SampleApp() {
 
@@ -192,7 +192,7 @@ function SampleApp() {
         logo={logo}
         navigation={navigation}
         schemas={[productSchema, usersSchema, blogSchema, localeSchema, testEntitySchema]}
-        enumConfigs={[{ id: "categories", enumValues: categories }]}
+        enumConfigs={[{ id: "currencies", enumValues: currencies }]}
         schemaOverrideHandler={customSchemaOverrideHandler}
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}

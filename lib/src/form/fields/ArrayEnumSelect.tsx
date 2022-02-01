@@ -19,7 +19,7 @@ import {
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 import { ArrayEnumPreview } from "../../preview";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-import { getEnumValuesFor } from "../../core/utils";
+import { resolveEnum } from "../../core/utils";
 
 
 /**
@@ -51,7 +51,7 @@ export function ArrayEnumSelect({
 
     const schemaRegistry = useSchemaRegistry();
 
-    const enumValues = getEnumValuesFor(property.of, schemaRegistry);
+    const enumValues = resolveEnum(property.of.enumValues, schemaRegistry.enumConfigs);
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");
@@ -121,7 +121,7 @@ export function ArrayEnumSelect({
                                 <Checkbox checked={checked}/>
                                 <ListItemText primary={
                                     <EnumValuesChip
-                                        enumKey={enumKey}
+                                        enumId={enumKey}
                                         enumValues={enumValues}
                                         small={true}/>
                                 }/>

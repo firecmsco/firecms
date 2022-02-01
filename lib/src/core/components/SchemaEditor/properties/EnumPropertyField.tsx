@@ -12,12 +12,17 @@ import {
     TableRow,
     Typography
 } from "@mui/material";
-import { EnumValues, NumberProperty, StringProperty } from "../../../../models";
+import {
+    EnumValueConfig,
+    EnumValues,
+    NumberProperty,
+    StringProperty
+} from "../../../../models";
 import { resolveEnum } from "../../../utils";
 import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
 import { toSnakeCase } from "../../../util/strings";
 
-function EnumEntry({ id }: { id: string }) {
+function EnumEntry({ id }: { id: string | number }) {
 
     const previousId = useRef(id);
 
@@ -28,8 +33,6 @@ function EnumEntry({ id }: { id: string }) {
         setFieldValue,
         touched
     } = useFormikContext<EnumValues>();
-
-    const value = getIn(values, id);
 
     // useEffect(() => {
     //     const idTouched = getIn(touched, id);
@@ -52,7 +55,7 @@ function EnumEntry({ id }: { id: string }) {
             {id}
         </TableCell>
         <TableCell component="th" scope="row">
-            {value}
+            {"?"}
         </TableCell>
     </TableRow>;
 }
@@ -68,10 +71,10 @@ export function EnumPropertyField() {
 
     const schemaRegistry = useSchemaRegistry();
 
-    const enumValues: EnumValues = useMemo(() => {
+    const enumValues: EnumValueConfig[] = useMemo(() => {
         if (!values.enumValues || typeof values.enumValues === "boolean")
-            return {} as EnumValues;
-        return resolveEnum(values.enumValues, schemaRegistry.enumConfigs) ?? {} as EnumValues;
+            return [] as EnumValueConfig[];
+        return resolveEnum(values.enumValues, schemaRegistry.enumConfigs) ?? [] as EnumValueConfig[];
     }, [schemaRegistry.enumConfigs, values.enumValues]);
 
     return (
@@ -85,10 +88,10 @@ export function EnumPropertyField() {
                 <Table>
                     <TableBody>
 
-                        {Object.entries(enumValues).map(([value, label]) => {
+                        {enumValues.map((value) => {
                             return (
-                                <EnumEntry key={value}
-                                           id={value}/>
+                                <EnumEntry key={value.id}
+                                           id={value.id}/>
                             )
                         })}
 

@@ -11,7 +11,7 @@ import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
 import { SampleExtraActions } from "../collection_actions/SampleExtraActions";
 import { SampleProductsView } from "../custom_schema_view/SampleProductsView";
 import { Locale, Product } from "../types";
-import { locales } from "./enums";
+import { categories, locales } from "./enums";
 
 const sampleView: EntityCustomView = {
     path: "sample_custom_view",
@@ -70,7 +70,7 @@ export const productSchema = buildSchema<Product>({
         category: {
             dataType: "string",
             title: "Category",
-            enumValues: "categories"
+            enumValues: categories
         },
         available: {
             dataType: "boolean",
@@ -96,10 +96,7 @@ export const productSchema = buildSchema<Product>({
         currency: {
             dataType: "string",
             title: "Currency",
-            enumValues: {
-                EUR: "Euros",
-                DOL: "Dollars"
-            },
+            enumValues: "currencies",
             validation: {
                 required: true
             }

@@ -25,8 +25,12 @@ import {
 } from "../../models";
 import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
 
-import { CollectionRowActions } from "./CollectionTable/internal/CollectionRowActions";
-import { DeleteEntityDialog } from "./CollectionTable/internal/DeleteEntityDialog";
+import {
+    CollectionRowActions
+} from "./CollectionTable/internal/CollectionRowActions";
+import {
+    DeleteEntityDialog
+} from "./CollectionTable/internal/DeleteEntityDialog";
 import { ExportButton } from "./CollectionTable/internal/ExportButton";
 
 import { canCreate, canDelete, canEdit } from "../util/permissions";
@@ -38,9 +42,12 @@ import {
     useSideEntityController
 } from "../../hooks";
 import { mergeDeep } from "../util/objects";
-import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
+import {
+    useUserConfigurationPersistence
+} from "../../hooks/useUserConfigurationPersistence";
 import { SchemaEditorDialog } from "./SchemaEditor/SchemaEditorDialog";
 import { ErrorView } from "./ErrorView";
+import { ErrorBoundary } from "../internal/ErrorBoundary";
 
 /**
  * @category Components
@@ -133,10 +140,14 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
             error={"Unable to find schema with id " + collection.schemaId}/>;
     }
 
-    return <EntityCollectionViewInternal path={path}
-                                         collection={collection}
-                                         schemaResolver={schemaResolver}
-                                         editable={editable}/>;
+    return (
+        <ErrorBoundary>
+            <EntityCollectionViewInternal path={path}
+                                          collection={collection}
+                                          schemaResolver={schemaResolver}
+                                          editable={editable}/>
+        </ErrorBoundary>
+    );
 
 }
 

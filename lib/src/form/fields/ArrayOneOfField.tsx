@@ -16,7 +16,7 @@ import { buildPropertyField } from "../form_factory";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 import { enumToObjectEntries } from "../../core/util/enums";
 import {
-    EnumValues,
+    EnumValueConfig,
     FieldProps,
     FormContext,
     ResolvedProperty
@@ -155,7 +155,8 @@ function ArrayOneOfEntry({
 
     const property = typeInternal ? properties[typeInternal] : undefined;
 
-    const enumValues: EnumValues = Object.entries(properties).map(([key, property]) => ({ [key]: property.title ?? key })).reduce((a, b) => ({ ...a, ...b }));
+    const enumValues: EnumValueConfig[] = Object.entries(properties)
+        .map(([key, property]) => ({ id: key, label: property.title ?? key }));
 
     const typeFieldName = `${name}[${typeField}]`;
     const valueFieldName = `${name}[${valueField}]`;
@@ -188,7 +189,7 @@ function ArrayOneOfEntry({
                                 }}
                                 renderValue={(enumKey: any) =>
                                     <EnumValuesChip
-                                        enumKey={enumKey}
+                                        enumId={enumKey}
                                         enumValues={enumValues}
                                         small={true}/>
                                 }>
@@ -199,7 +200,7 @@ function ArrayOneOfEntry({
                                                 key={`select_${name}_${index}_${enumKey}`}
                                                 value={enumKey}>
                                                 <EnumValuesChip
-                                                    enumKey={enumKey}
+                                                    enumId={enumKey}
                                                     enumValues={enumValues}
                                                     small={true}/>
                                             </MenuItem>

@@ -133,26 +133,26 @@ export function StringNumberFilterField({
                         value={internalValue !== undefined ? internalValue : isArray ? [] : ""}
                         onChange={(evt: any) => updateFilter(operation, dataType === "number" ? parseInt(evt.target.value) : evt.target.value)}
                         renderValue={multiple
-? (selected: any) =>
-                            (
-                                <div>
-                                    {selected.map((enumKey: any) => {
-                                        return <EnumValuesChip
-                                            key={`select_value_${name}_${enumKey}`}
-                                            enumKey={enumKey}
-                                            enumValues={enumValues}
-                                            small={true}/>;
-                                    })}
-                                </div>
-                            )
-: undefined}>
+                            ? (selected: any) =>
+                                (
+                                    <div>
+                                        {selected.map((enumKey: any) => {
+                                            return <EnumValuesChip
+                                                key={`select_value_${name}_${enumKey}`}
+                                                enumId={enumKey}
+                                                enumValues={enumValues}
+                                                small={true}/>;
+                                        })}
+                                    </div>
+                                )
+                            : undefined}>
                         {Object.entries(enumValues).map(([enumKey, labelOrConfig]) => {
                             return (
                                 <MenuItem
                                     key={`select_${name}_${enumKey}`}
                                     value={enumKey}>
                                     <EnumValuesChip
-                                        enumKey={enumKey}
+                                        enumId={enumKey}
                                         enumValues={enumValues}
                                         small={true}/>
                                 </MenuItem>

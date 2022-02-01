@@ -7,12 +7,14 @@ import {
     EntityStatus,
     EntityValues,
     EnumConfig,
+    EnumValueConfig,
     EnumValues,
     GeoPoint,
     NumberProperty,
     Properties,
     PropertiesOrBuilder,
-    Property, PropertyOrBuilder,
+    Property,
+    PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedEntitySchema,
     ResolvedNumberProperty,
@@ -41,29 +43,6 @@ export function isHidden(property: Property<any>): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-/**
- * Get the enum values for a property
- * @param property
- * @param schemaRegistry
- */
-export function getEnumValuesFor(property: StringProperty | NumberProperty, schemaRegistry: SchemaRegistry): EnumValues {
-    if (!property.enumValues) {
-        console.error("Property:", property);
-        throw Error("Trying to get enum values for a property with no `enumValues`");
-    } else if (typeof property.enumValues === "object") {
-        return property.enumValues;
-    } else if (typeof property.enumValues === "string") {
-        const foundEnum = schemaRegistry.findEnum(property.enumValues);
-        if (!foundEnum) {
-            console.error("Property:", property);
-            throw Error("Unable to find enum values `enumValues`");
-        }
-        return foundEnum.enumValues;
-    } else {
-        console.error("Property:", property);
-        throw Error("Unexpected value for `enumValues`");
-    }
-}
 
 /**
  * This utility function computes an {@link EntitySchema} or a {@link EntitySchemaResolver}
@@ -190,21 +169,24 @@ export function resolvePropertyEnum(property: StringProperty | NumberProperty, e
     if (typeof property.enumValues === "string") {
         return {
             ...property,
-            enumValues: resolveEnum(property.enumValues, enumConfigs) ?? {},
+            enumValues: resolveEnum(property.enumValues, enumConfigs) ?? [],
         }
     }
     return property as ResolvedStringProperty | ResolvedNumberProperty;
 }
 
-export function resolveEnum(input: EnumValues | string, enumConfigs: EnumConfig[]):EnumValues | undefined{
+export function resolveEnum(input: EnumValues | string, enumConfigs: EnumConfig[]): EnumValueConfig[] | undefined {
     if (typeof input === "string") {
         const enumConfig = enumConfigs.find((ec) => ec.id === input);
         if (!enumConfig)
             throw Error("Not able to find enumConfig with id: " + input)
         return enumConfig.enumValues;
-    } else if (typeof input === "object")
-        return input as EnumValues;
-    else {
+    } else if (typeof input === "object") {
+        return Object.entries(input).map(([id, value]) =>
+            (typeof value === "string" ? { id, label: value } : value));
+    } else if (Array.isArray(input)) {
+        return input as EnumValueConfig[];
+    } else {
         return undefined;
     }
 }

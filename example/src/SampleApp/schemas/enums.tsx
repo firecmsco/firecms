@@ -6,10 +6,16 @@ export const locales: EnumValues = {
     "en": "English",
     "it": "Italian",
     "fr": {
+        id: "fr",
         label: "French",
         disabled: true
     }
 };
+
+export const currencies = [
+    { id: "EUR", label: "Euros" },
+    { id: "DOL", label: "Dollars" },
+];
 
 export const categories: EnumValues = {
     art_and_decoration: "Art and decoration",

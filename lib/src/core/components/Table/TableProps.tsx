@@ -1,5 +1,5 @@
 import React from "react";
-import { WhereFilterOp } from "../../../models";
+import { EnumValueConfig, WhereFilterOp } from "../../../models";
 
 /**
  * @see Table
@@ -167,9 +167,7 @@ export type TableSize = "xs" | "s" | "m" | "l" | "xl";
  * @see Table
  * @category Components
  */
-export type TableEnumValues =
-    Record<string | number, string>
-    | Map<string | number, string>;
+export type TableEnumValues = EnumValueConfig[];
 
 /**
  * @see Table

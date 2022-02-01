@@ -21,7 +21,7 @@ export function StringPreview({
         const enumKey = value;
         const resolvedProperty = resolvePropertyEnum(property, schemaRegistry.enumConfigs);
         return <EnumValuesChip
-            enumKey={enumKey}
+            enumId={enumKey}
             enumValues={resolvedProperty.enumValues}
             small={size !== "regular"}/>;
     } else if (property.previewAsTag) {

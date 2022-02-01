@@ -1,9 +1,10 @@
 import {
     buildEnumValueConfig,
     buildProperties,
-    buildProperty, buildPropertyBuilder,
+    buildProperty,
+    buildPropertyBuilder,
     buildSchema,
-    EntityCallbacks,
+    EntityCallbacks, EnumValues,
     resolveNavigationFrom
 } from "@camberi/firecms";
 import CustomShapedArrayField
@@ -13,36 +14,43 @@ import CustomShapedArrayPreview
 import { CustomField } from "../custom_field/SubPropertyField";
 import { locales } from "./enums";
 
-const relaxedStatus = new Map([
-    ["-3", buildEnumValueConfig({
+const relaxedStatus:EnumValues = [
+    {
+        id: "-3",
         label: "Very tense",
         color: "redDarker"
-    })],
-    ["-2", buildEnumValueConfig({
+    },
+    {
+        id: "-2",
         label: "Medium tense",
         color: "redLight"
-    })],
-    ["-1", buildEnumValueConfig({
+    },
+    {
+        id: "-1",
         label: "Lightly tense",
         color: "redLighter"
-    })],
-    ["0", buildEnumValueConfig({
+    },
+    {
+        id: "0",
         label: "Normal",
         color: "grayLight"
-    })],
-    ["1", buildEnumValueConfig({
+    },
+    {
+        id: "1",
         label: "Lightly relaxed",
         color: "blueLighter"
-    })],
-    ["2", buildEnumValueConfig({
+    },
+    {
+        id: "2",
         label: "Medium relaxed",
         color: "blueLight"
-    })],
-    ["3", buildEnumValueConfig({
+    },
+    {
+        id: "3",
         label: "Very relaxed",
         color: "blueDarker"
-    })]
-]);
+    }
+];
 
 export const testEntitySchema = buildSchema({
     id: "test",
@@ -160,6 +168,14 @@ export const testEntitySchema = buildSchema({
                 "facebook": "FacebookId",
                 "apple": "Apple"
             }
+        },
+        simple_enum_2: {
+            dataType: "string",
+            title: "Simple enum 2",
+            enumValues: [
+                { id: "facebook", label: "FacebookId" },
+                { id: "apple", label: "Apple" },
+            ]
         },
         validated_custom: {
             dataType: "map",

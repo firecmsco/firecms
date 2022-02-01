@@ -1,7 +1,7 @@
 import {
     ArrayProperty,
     BooleanProperty,
-    CMSType,
+    CMSType, EnumValueConfig,
     EnumValues,
     GeopointProperty,
     MapProperty,
@@ -71,14 +71,14 @@ export type ResolvedStringProperty =
     Omit<StringProperty, "enumValues" | "dataType"> &
     {
         dataType: "string";
-        enumValues: EnumValues,
+        enumValues: EnumValueConfig[],
     }
 
 export type ResolvedNumberProperty =
     Omit<NumberProperty, "enumValues" | "dataType"> &
     {
         dataType: "number";
-        enumValues: EnumValues,
+        enumValues: EnumValueConfig[],
     }
 export type ResolvedBooleanProperty =
     Omit<BooleanProperty, "dataType"> &

@@ -2,6 +2,8 @@ import React from "react";
 
 import { EnumValuesChip } from "./CustomChip";
 import { PreviewComponentProps } from "../internal";
+import { resolveEnum } from "../../core/utils";
+import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
 /**
  * @category Preview components
@@ -13,11 +15,14 @@ export function NumberPreview({
                                   size
                               }: PreviewComponentProps<number>): React.ReactElement {
 
+
+    const schemaRegistry = useSchemaRegistry();
+
     if (property.enumValues) {
         const enumKey = value;
-        const enumValues = property.enumValues;
+        const enumValues = resolveEnum(property.enumValues, schemaRegistry.enumConfigs);
         return <EnumValuesChip
-            enumKey={enumKey}
+            enumId={enumKey}
             enumValues={enumValues}
             small={size !== "regular"}/>;
     } else {

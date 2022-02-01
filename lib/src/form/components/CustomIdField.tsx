@@ -18,7 +18,7 @@ import {
     Entity,
     EntitySchema,
     EntityStatus,
-    EnumValues,
+    EnumValueConfig,
     FireCMSContext
 } from "../../models";
 import { formStyles } from "../styles";
@@ -45,10 +45,10 @@ export function CustomIdField<M, UserType>
     const disabled = status === "existing" || !schema.customId;
     const idSetAutomatically = status !== "existing" && !schema.customId;
 
-    const enumValues: EnumValues | undefined = useMemo(() => {
+    const enumValues: EnumValueConfig[] = useMemo(() => {
         if (!schema.customId || typeof schema.customId === "boolean")
-            return undefined;
-        return resolveEnum(schema.customId, schemaRegistry.enumConfigs);
+            return [] as EnumValueConfig[];
+        return resolveEnum(schema.customId, schemaRegistry.enumConfigs) ?? [] as EnumValueConfig[];
     }, [schemaRegistry.enumConfigs, schema.customId]);
 
     const snackbarContext = useSnackbarController();
@@ -122,11 +122,11 @@ export function CustomIdField<M, UserType>
                         error={error}
                         {...fieldProps}
                         onChange={(event: any) => onChange(event.target.value)}>
-                        {Object.entries(enumValues).map(([key, label]) =>
+                        {enumValues.map((enumConfig) =>
                             <MenuItem
-                                key={`custom-id-item-${key}`}
-                                value={key}>
-                                {`${key} - ${label}`}
+                                key={`custom-id-item-${enumConfig.id}`}
+                                value={enumConfig.id}>
+                                {`${enumConfig.id} - ${enumConfig.label}`}
                             </MenuItem>)}
                     </MuiSelect>
                 </>}

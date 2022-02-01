@@ -7,15 +7,14 @@ import {
     Select as MuiSelect
 } from "@mui/material";
 
-import { EnumType, EnumValues, FieldProps } from "../../models";
+import { EnumType, FieldProps } from "../../models";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import {
-    enumToObjectEntries,
-    isEnumValueDisabled
-} from "../../core/util/enums";
+import { isEnumValueDisabled } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
+import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
+import { resolveEnum } from "../../core/utils";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -41,7 +40,8 @@ export function Select<T extends EnumType>({
                                                shouldAlwaysRerender
                                            }: SelectProps<T>) {
 
-    const enumValues = property.enumValues as EnumValues;
+    const schemaRegistry = useSchemaRegistry();
+    const enumValues = resolveEnum(property.enumValues, schemaRegistry.enumConfigs);
 
     useClearRestoreValue({
         property,
@@ -89,24 +89,23 @@ export function Select<T extends EnumType>({
                 }}
                 renderValue={(enumKey: any) => {
                     return <EnumValuesChip
-                        enumKey={enumKey}
+                        enumId={enumKey}
                         enumValues={enumValues}
                         small={false}/>;
                 }
                 }>
 
-                {enumToObjectEntries(enumValues)
-                    .map(([enumKey, labelOrConfig]) => {
-                        return (
-                            <MenuItem key={`select_${name}_${enumKey}`}
-                                      value={enumKey}
-                                      disabled={isEnumValueDisabled(labelOrConfig)}>
-                                <EnumValuesChip
-                                    enumKey={enumKey}
-                                    enumValues={enumValues}
-                                    small={true}/>
-                            </MenuItem>
-                        );
+                {enumValues && enumValues.map((enumConfig) => {
+                    return (
+                        <MenuItem key={`select_${name}_${enumConfig.id}`}
+                                  value={enumConfig.id}
+                                  disabled={isEnumValueDisabled(enumConfig)}>
+                            <EnumValuesChip
+                                enumId={enumConfig.id}
+                                enumValues={enumValues}
+                                small={true}/>
+                        </MenuItem>
+                    );
                     })}
             </MuiSelect>
 

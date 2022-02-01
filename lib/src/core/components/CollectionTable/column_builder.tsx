@@ -4,7 +4,6 @@ import {
     CollectionSize,
     Entity,
     EntitySchemaResolver,
-    EnumValues,
     FireCMSContext,
     ResolvedEntitySchema,
     ResolvedProperty
@@ -24,14 +23,9 @@ import {
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
-import { TableColumn, TableColumnFilter, TableEnumValues } from "../../index";
+import { TableColumn, TableColumnFilter } from "../../index";
 import { getIconForProperty } from "../../util/property_utils";
-import {
-    buildEnumLabel,
-    enumToObjectEntries,
-    isEnumValueDisabled
-} from "../../util/enums";
-import { computeSchema } from "../../utils";
+import { computeSchema, resolveEnum } from "../../utils";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 
 
@@ -189,22 +183,18 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
         setFocused(true);
     }, []);
 
-    const buildFilterEnumValues = useCallback((values: EnumValues): TableEnumValues => enumToObjectEntries(values)
-        .filter(([enumKey, labelOrConfig]) => !isEnumValueDisabled(labelOrConfig))
-        .map(([enumKey, labelOrConfig]) => ({ [enumKey]: buildEnumLabel(labelOrConfig) as string }))
-        .reduce((a, b) => ({ ...a, ...b }), {}), []);
 
     const buildFilterableFromProperty = useCallback((property: ResolvedProperty,
                                                      isArray: boolean = false): TableColumnFilter | undefined => {
 
         if (property.dataType === "number" || property.dataType === "string") {
             const title = property.title;
-            const enumValues = property.enumValues;
+            const enumValues = resolveEnum(property.enumValues, schemaRegistry.enumConfigs);
             return {
                 dataType: property.dataType,
                 isArray,
                 title,
-                enumValues: enumValues ? buildFilterEnumValues(enumValues) : undefined
+                enumValues
             };
         } else if (property.dataType === "array" && property.of) {
             return buildFilterableFromProperty(property.of, true);
@@ -226,7 +216,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
         return undefined;
 
-    }, [buildFilterEnumValues]);
+    }, [schemaRegistry.enumConfigs]);
 
     const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
         schemaResolver: schemaResolver

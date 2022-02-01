@@ -7,7 +7,7 @@ import {
     getColorSchemeForKey,
     getColorSchemeForSeed
 } from "../../core/util/chip_utils";
-import { ChipColor, EnumValues } from "../../models";
+import { ChipColor, EnumValueConfig } from "../../models";
 import {
     buildEnumLabel,
     getColorSchemaKey,
@@ -32,8 +32,8 @@ const useStyles = makeStyles<Theme, { schema: ChipColorSchema, error: any }>((th
 
 
 interface EnumValuesChipProps {
-    enumValues: EnumValues;
-    enumKey: any;
+    enumValues: EnumValueConfig[] | undefined;
+    enumId: any;
     small: boolean;
 }
 
@@ -42,16 +42,17 @@ interface EnumValuesChipProps {
  */
 export function EnumValuesChip({
                                    enumValues,
-                                   enumKey,
+                                   enumId,
                                    small
                                }: EnumValuesChipProps) {
-    const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValues, enumKey.toString()) : undefined;
+    if (!enumValues) return null;
+    const enumValue = enumId !== undefined ? getLabelOrConfigFrom(enumValues, enumId.toString()) : undefined;
     const label = buildEnumLabel(enumValue);
-    const colorSchemaKey = getColorSchemaKey(enumValues, enumKey.toString());
+    const colorSchemaKey = getColorSchemaKey(enumValues, enumId.toString());
     return <CustomChip
-        colorSeed={`${enumKey}`}
+        colorSeed={`${enumId}`}
         colorSchemaKey={colorSchemaKey}
-        label={label !== undefined ? label : enumKey}
+        label={label !== undefined ? label : enumId}
         error={!label}
         outlined={false}
         small={small}/>;
