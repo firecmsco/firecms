@@ -136,7 +136,6 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 ): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
-    const schemaRegistry = useSchemaRegistry();
 
     const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
@@ -189,7 +188,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
         if (property.dataType === "number" || property.dataType === "string") {
             const title = property.title;
-            const enumValues = resolveEnum(property.enumValues, schemaRegistry.enumConfigs);
+            const enumValues = property.enumValues;
             return {
                 dataType: property.dataType,
                 isArray,
@@ -216,7 +215,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
         return undefined;
 
-    }, [schemaRegistry.enumConfigs]);
+    }, []);
 
     const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
         schemaResolver: schemaResolver

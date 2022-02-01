@@ -40,8 +40,7 @@ export function Select<T extends EnumType>({
                                                shouldAlwaysRerender
                                            }: SelectProps<T>) {
 
-    const schemaRegistry = useSchemaRegistry();
-    const enumValues = resolveEnum(property.enumValues, schemaRegistry.enumConfigs);
+    const enumValues = property.enumValues;
 
     useClearRestoreValue({
         property,

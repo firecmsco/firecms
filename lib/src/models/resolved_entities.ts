@@ -71,7 +71,7 @@ export type ResolvedStringProperty =
     Omit<StringProperty, "enumValues" | "dataType"> &
     {
         dataType: "string";
-        enumValues: EnumValueConfig[],
+        enumValues: EnumValueConfig[] | undefined,
     }
 
 export type ResolvedNumberProperty =

@@ -26,7 +26,7 @@ import {
 } from "../models";
 import { mergeDeep } from "./util/objects";
 
-export function isReadOnly(property: Property<any>): boolean {
+export function isReadOnly(property: Property | ResolvedProperty): boolean {
     if (property.readOnly)
         return true;
     if (property.dataType === "timestamp") {
@@ -39,7 +39,7 @@ export function isReadOnly(property: Property<any>): boolean {
     return false;
 }
 
-export function isHidden(property: Property<any>): boolean {
+export function isHidden(property: Property | ResolvedProperty): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
@@ -75,6 +75,7 @@ export function computeSchema<M extends { [Key: string]: any }>(
  * @param previousValues
  * @param path
  * @param entityId
+ * @param enumConfigs
  * @ignore
  */
 export function computeProperties<M extends { [Key: string]: any }>(
@@ -104,7 +105,7 @@ export function computeProperties<M extends { [Key: string]: any }>(
             });
             if (property === null) return null;
             return {
-                [key]: computeEnum(
+                [key]: computePropertyEnums(
                     property,
                     enumConfigs)
             };
@@ -119,9 +120,9 @@ export function computeProperties<M extends { [Key: string]: any }>(
  * @param property
  * @param enumConfigs
  */
-export function computeEnum(property: Property, enumConfigs: EnumConfig[]): ResolvedProperty {
+export function computePropertyEnums(property: Property, enumConfigs: EnumConfig[]): ResolvedProperty {
     if (property.dataType === "map" && property.properties) {
-        const properties = computeEnums(property.properties, enumConfigs);
+        const properties = computePropertiesEnums(property.properties, enumConfigs);
         return {
             ...property,
             properties
@@ -130,10 +131,10 @@ export function computeEnum(property: Property, enumConfigs: EnumConfig[]): Reso
         if (property.of) {
             return {
                 ...property,
-                of: computeEnum(property.of, enumConfigs)
+                of: computePropertyEnums(property.of, enumConfigs)
             } as ResolvedArrayProperty;
         } else if (property.oneOf) {
-            const properties = computeEnums(property.oneOf.properties, enumConfigs);
+            const properties = computePropertiesEnums(property.oneOf.properties, enumConfigs);
             return {
                 ...property,
                 oneOf: {
@@ -154,10 +155,10 @@ export function computeEnum(property: Property, enumConfigs: EnumConfig[]): Reso
  * @param properties
  * @param enumConfigs
  */
-export function computeEnums<M>(properties: Properties<M>, enumConfigs: EnumConfig[]): ResolvedProperties<M> {
+export function computePropertiesEnums<M>(properties: Properties<M>, enumConfigs: EnumConfig[]): ResolvedProperties<M> {
     return Object.entries<Property>(properties as Record<string, Property>)
         .map(([key, property]) => {
-            return ({ [key]: computeEnum(property, enumConfigs) });
+            return ({ [key]: computePropertyEnums(property, enumConfigs) });
         })
         .filter((a) => a !== null)
         .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
@@ -181,8 +182,10 @@ export function resolvePropertyEnum(property: StringProperty | NumberProperty, e
 export function resolveEnum(input: EnumValues | string, enumConfigs: EnumConfig[]): EnumValueConfig[] | undefined {
     if (typeof input === "string") {
         const enumConfig = enumConfigs.find((ec) => ec.id === input);
-        if (!enumConfig)
-            throw Error("Not able to find enumConfig with id: " + input)
+        if (!enumConfig) {
+            console.error("Not able to find enumConfig with id: " + input);
+            return undefined;
+        }
         return enumConfig.enumValues;
     } else if (typeof input === "object") {
         return Object.entries(input).map(([id, value]) =>

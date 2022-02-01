@@ -20,6 +20,7 @@ import { EnumValuesChip } from "../../preview/components/CustomChip";
 import { ArrayEnumPreview } from "../../preview";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 import { resolveEnum } from "../../core/utils";
+import { ErrorView } from "../../core";
 
 
 /**
@@ -49,18 +50,21 @@ export function ArrayEnumSelect({
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
-    const schemaRegistry = useSchemaRegistry();
-
-    const enumValues = resolveEnum(property.of.enumValues, schemaRegistry.enumConfigs);
+    const enumValues = property.of.enumValues;
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");
     }
+
     useClearRestoreValue({
         property,
         value,
         setValue
     });
+
+    if (enumValues instanceof Error){
+        return <ErrorView error={enumValues.message}/>;
+    }
 
     const validValue = !!value && Array.isArray(value);
     return (

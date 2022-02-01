@@ -1,6 +1,9 @@
 import { EntitySchema } from "./entities";
 import { EnumConfig } from "./properties";
-import { EntitySchemaResolver } from "./resolved_entities";
+import {
+    EntitySchemaResolver,
+    ResolvedEntitySchema
+} from "./resolved_entities";
 
 /**
  * Used to get the schemas used by the CMS

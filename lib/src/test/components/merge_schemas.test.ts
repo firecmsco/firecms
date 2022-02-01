@@ -1,8 +1,4 @@
-import {
-    EntitySchema,
-    PropertiesOrBuilder,
-    PropertyBuilder
-} from "../../models";
+import { EntitySchema, PropertyBuilder } from "../../models";
 import { mergeSchemas } from "../../core/util/schemas";
 
 const priceBuilder:PropertyBuilder = ({ values }: any) => ({
@@ -30,6 +26,11 @@ export const baseProductSchema: EntitySchema = {
             multiline: true,
             validation: { required: true }
         },
+        currency: {
+            dataType: "string",
+            title: "Currency",
+            enumValues: "currency"
+        },
         price: priceBuilder
     }
 };
@@ -42,6 +43,14 @@ export const persistedProductSchema: EntitySchema = {
             title: "Name updated",
             multiline: true,
             validation: { required: true }
+        },
+        currency: {
+            dataType: "string",
+            title: "Currency",
+            enumValues: [
+                { id: "EUR", label: "Euros" },
+                { id: "DOL", label: "Dollars" },
+            ]
         },
         publisher: {
             title: "Publisher",
@@ -77,6 +86,14 @@ it("Merge schemas", () => {
                     title: "Name updated",
                     multiline: true,
                     validation: { required: true }
+                },
+                currency: {
+                    dataType: "string",
+                    title: "Currency",
+                    enumValues: [
+                        { id: "EUR", label: "Euros" },
+                        { id: "DOL", label: "Dollars" },
+                    ]
                 },
                 publisher: {
                     title: "Publisher",

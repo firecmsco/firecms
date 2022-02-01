@@ -115,7 +115,6 @@ const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: The
     })
 );
 
-
 export interface EntityViewProps<M, UserType> {
     path: string;
     schema: EntitySchema<M> | EntitySchemaResolver<M>;
@@ -183,24 +182,6 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         values: modifiedValues,
         previousValues: entity?.values,
     }), [schemaResolver, path, entityId, modifiedValues]);
-
-    useEffect(() => {
-        function beforeunload(e: any) {
-            if (modifiedValues) {
-                e.preventDefault();
-                e.returnValue = `You have unsaved changes in this ${resolvedSchema.name}. Are you sure you want to leave this page?`;
-            }
-        }
-
-        if (typeof window !== "undefined")
-            window.addEventListener("beforeunload", beforeunload);
-
-        return () => {
-            if (typeof window !== "undefined")
-                window.removeEventListener("beforeunload", beforeunload);
-        };
-
-    }, [modifiedValues, window]);
 
     const customViews = resolvedSchema.views;
     const customViewsCount = customViews?.length ?? 0;

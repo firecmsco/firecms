@@ -4,7 +4,7 @@ import {
     EntitySchemaResolver,
     EntitySchemaResolverProps,
     EnumConfig,
-    LocalEntitySchema,
+    LocalEntitySchema, ResolvedEntitySchema,
     SchemaRegistry,
     UserConfigurationPersistence
 } from "../models";
@@ -45,7 +45,6 @@ export function useBuildSchemaRegistry<UserType>({
         if (!configPersistence?.schemas) return; // still loading
         const configSchemas = configPersistence?.schemas;
 
-        console.log("configSchemas", configSchemas);
         const baseSchemasMerged = codeSchemas.map((baseSchema) => {
             const modifiedSchema = configPersistence.schemas?.find((schema) => schema.id === baseSchema.id);
             if (!modifiedSchema) {
@@ -85,7 +84,6 @@ export function useBuildSchemaRegistry<UserType>({
         configPersistence?.schemas,
         configPersistence?.enumConfigs
     ]);
-    console.log("REGISTRY", initialised, schemas);
 
     const getUserSchemaOverride = useCallback(<M, >(path: string): LocalEntitySchema<M> | undefined => {
         if (!userConfigPersistence)

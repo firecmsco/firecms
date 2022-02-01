@@ -158,8 +158,6 @@ export function EntityForm<M>({
         previousValues: initialValues
     }), [schemaResolver, path, entityId, internalValue]);
 
-    console.log("EF", schema, internalValue);
-
     const mustSetCustomId: boolean = (status === "new" || status === "copy") && (!!schema.customId && schema.customId !== "optional");
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
@@ -339,9 +337,9 @@ function FormInternal<M>({
                     const underlyingValueHasChanged: boolean =
                         !!underlyingChanges &&
                         Object.keys(underlyingChanges).includes(key) &&
-                        !!(touched as any)[key];
+                        !!touched[key];
 
-                    const shouldAlwaysRerender = typeof (schema.originalSchema.properties as any)[key] === "function";
+                    const shouldAlwaysRerender = typeof (schema.originalSchema.properties)[key] === "function";
 
                     const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
                     const cmsFormFieldProps: CMSFormFieldProps = {

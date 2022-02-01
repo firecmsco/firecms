@@ -10,8 +10,9 @@ export function isObject(item: any) {
 }
 
 export function mergeDeep<T>(target: T, source: any): T {
-    const output:T = Object.assign({}, target);
-    if (isObject(target) && isObject(source)) {
+    const targetIsObject = isObject(target);
+    const output:T = targetIsObject ? Object.assign({}, target) : target;
+    if (targetIsObject && isObject(source)) {
         Object.keys(source).forEach(key => {
             if (isObject(source[key])) {
                 if (!(key in target))

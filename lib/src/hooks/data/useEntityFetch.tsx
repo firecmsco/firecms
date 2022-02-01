@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { Entity, EntitySchema, EntitySchemaResolver } from "../../models";
+import {
+    Entity,
+    EntitySchema,
+    EntitySchemaResolver,
+    ResolvedEntitySchema
+} from "../../models";
 import { useDataSource } from "./useDataSource";
 
 /**

@@ -3,7 +3,10 @@ import { EntitySchema } from "./entities";
 import { EntityCallbacks } from "./entity_callbacks";
 import { PermissionsBuilder } from "./permissions";
 import { User } from "./user";
-import { EntitySchemaResolver } from "./resolved_entities";
+import {
+    EntitySchemaResolver,
+    ResolvedEntitySchema
+} from "./resolved_entities";
 
 /**
  * Props used to open a side dialog
@@ -46,7 +49,7 @@ export interface SideEntityPanelProps<M = any, UserType = User> {
     /**
      * Schema representing the entities of this view
      */
-    schema?: EntitySchema<M> | EntitySchemaResolver<M>;
+    schema?: EntitySchema<M> | EntitySchemaResolver<M> | ResolvedEntitySchema<M>;
 
     /**
      * You can add subcollections to your entity in the same way you define the root

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { EntityCollectionResolver, SideEntityPanelProps } from "../models";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { EntityView } from "./internal/EntityView";
@@ -91,6 +91,24 @@ function SideEntityDialog({
         }
         return usedSchema;
     }, [props, schemaRegistry]);
+
+    useEffect(() => {
+        function beforeunload(e: any) {
+            if (modifiedValues && schema) {
+                e.preventDefault();
+                e.returnValue = `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`;
+            }
+        }
+
+        if (typeof window !== "undefined")
+            window.addEventListener("beforeunload", beforeunload);
+
+        return () => {
+            if (typeof window !== "undefined")
+                window.removeEventListener("beforeunload", beforeunload);
+        };
+
+    }, [modifiedValues, schema, window]);
 
     if (!props || !schema) {
         return <SideDialogDrawer

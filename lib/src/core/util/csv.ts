@@ -30,7 +30,7 @@ export function downloadCSV<M>(data: Entity<M>[],
 
 export function getExportableData(data: any[],
                                   additionalData: Record<string, any>[] | undefined,
-                                  properties: Properties,
+                                  properties: ResolvedProperties,
                                   headers: Header[]
 ) {
 
@@ -84,17 +84,17 @@ function getHeaders(property: ResolvedProperty, propertyKey: string, prefix: str
 }
 
 function processCSVValue(inputValue: any,
-                         property: Property): any {
+                         property: ResolvedProperty): any {
 
     let value;
     if (property.dataType === "map" && property.properties) {
-        value = processCSVValues(inputValue, property.properties as Properties);
+        value = processCSVValues(inputValue, property.properties as ResolvedProperties);
     } else if (property.dataType === "array") {
         if (property.of && Array.isArray(inputValue)) {
             if (property.of.dataType === "map") {
                 value = inputValue.map((e) => JSON.stringify(e));
             } else {
-                value = inputValue.map((e) => processCSVValue(e, property.of as Property));
+                value = inputValue.map((e) => processCSVValue(e, property.of as ResolvedProperty));
             }
         } else {
             value = inputValue;
@@ -112,11 +112,11 @@ function processCSVValue(inputValue: any,
 }
 
 function processCSVValues<M extends { [Key: string]: any }>
-(inputValues: Record<keyof M, any>, properties: Properties<M>): Record<keyof M, any> {
+(inputValues: Record<keyof M, any>, properties: ResolvedProperties<M>): Record<keyof M, any> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues as any)[key];
-            const updatedValue = processCSVValue(inputValue, property as Property);
+            const updatedValue = processCSVValue(inputValue, property);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
         })

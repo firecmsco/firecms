@@ -2,6 +2,10 @@ import { FieldProps } from "./fields";
 import { PreviewComponentProps } from "../preview";
 import { ChipColor } from "./colors";
 import { EntityReference, EntityValues, GeoPoint } from "./entities";
+import {
+    ResolvedArrayProperty,
+    ResolvedStringProperty
+} from "./resolved_entities";
 
 /**
  * @category Entity properties
@@ -660,7 +664,7 @@ export interface UploadedFileContext {
     /**
      * Property related to this upload
      */
-    property: StringProperty | ArrayProperty<string[]>;
+    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
 
     /**
      * Entity Id is set if the entity already exists

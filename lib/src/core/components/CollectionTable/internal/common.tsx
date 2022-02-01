@@ -4,7 +4,7 @@ import {
     Properties,
     Property,
     ResolvedArrayProperty,
-    ResolvedEntitySchema,
+    ResolvedEntitySchema, ResolvedProperties,
     ResolvedProperty
 } from "../../../../models";
 
@@ -110,7 +110,7 @@ export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:
         const additionalColumns = resolvedSchema.additionalColumns ?? [];
         const subCollections: EntityCollection[] = collection.subcollections ?? [];
 
-        const properties: Properties = resolvedSchema.properties;
+        const properties: ResolvedProperties = resolvedSchema.properties;
 
         const hiddenColumnIds: string[] = Object.entries(properties)
             .filter(([_, property]) => {

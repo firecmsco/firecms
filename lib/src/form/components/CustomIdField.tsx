@@ -45,10 +45,10 @@ export function CustomIdField<M, UserType>
     const disabled = status === "existing" || !schema.customId;
     const idSetAutomatically = status !== "existing" && !schema.customId;
 
-    const enumValues: EnumValueConfig[] = useMemo(() => {
+    const enumValues: EnumValueConfig[] | undefined = useMemo(() => {
         if (!schema.customId || typeof schema.customId === "boolean")
-            return [] as EnumValueConfig[];
-        return resolveEnum(schema.customId, schemaRegistry.enumConfigs) ?? [] as EnumValueConfig[];
+            return undefined;
+        return resolveEnum(schema.customId, schemaRegistry.enumConfigs);
     }, [schemaRegistry.enumConfigs, schema.customId]);
 
     const snackbarContext = useSnackbarController();
