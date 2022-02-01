@@ -188,7 +188,7 @@ export function EntityForm<M>({
         previousValues: initialValues
     }), [schemaOrResolver, path, entityId, internalValue]);
 
-    const mustSetCustomId: boolean = (status === "new" || status === "copy") && !!schema.customId;
+    const mustSetCustomId: boolean = (status === "new" || status === "copy") && (!!schema.customId && schema.customId !== "optional");
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
         if (initialValues && status === "existing") {
@@ -225,7 +225,9 @@ export function EntityForm<M>({
             savedEntityId = entity.id;
         } else if (status === "new" || status === "copy") {
             if (schema.customId) {
-                if (!customId) throw Error("Form misconfiguration when saving, customId should be set");
+                if (schema.customId !== "optional" && !customId) {
+                    throw Error("Form misconfiguration when saving, customId should be set");
+                }
                 savedEntityId = customId;
             }
         } else {
