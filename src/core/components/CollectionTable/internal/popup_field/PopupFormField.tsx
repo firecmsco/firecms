@@ -198,7 +198,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             previousValues: entity?.values
         });
         return getYupEntitySchema(
-            name
+            name && schema.properties[name]
                 ? { [name]: schema.properties[name] } as Properties<any>
                 : {} as Properties<any>,
             customFieldValidator);

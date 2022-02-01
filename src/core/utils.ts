@@ -87,16 +87,19 @@ export function computeProperties<M extends { [Key: string]: any }>(
     }): Properties<M> {
     return Object.entries(propertiesOrBuilder)
         .map(([key, propertyOrBuilder]) => {
+            const property = buildPropertyFrom({
+                propertyOrBuilder,
+                values: values ?? {},
+                previousValues: previousValues ?? values ?? {},
+                path,
+                entityId
+            });
+            if (property === null) return null;
             return {
-                [key]: buildPropertyFrom({
-                    propertyOrBuilder,
-                    values: values ?? {},
-                    previousValues: previousValues ?? values ?? {},
-                    path,
-                    entityId
-                })
+                [key]: property
             };
         })
+        .filter((a) => a !== null)
         .reduce((a, b) => ({ ...a, ...b }), {}) as Properties<M>;
 }
 

@@ -69,7 +69,6 @@ export const testEntitySchema = buildSchema({
             }
         },
         source: ({ values, previousValues }) => {
-            console.trace("builder", values, previousValues);
             const properties = buildProperties<any>({
                 type: {
                     dataType: "string",
@@ -130,16 +129,20 @@ export const testEntitySchema = buildSchema({
             }
         },
         title: ({ values, entityId }) => {
-            if (values?.available_locales && Array.isArray(values.available_locales) && values.available_locales.includes("de"))
-                return ({
-                    dataType: "string",
-                    title: "Title disabled",
-                    disabled: {
-                        hidden: true,
-                        clearOnDisabled: true,
-                        tooltip: "Disabled because German is selected"
-                    }
-                });
+            if (values?.available_locales && Array.isArray(values.available_locales)) {
+                if (values.available_locales.includes("de"))
+                    return ({
+                        dataType: "string",
+                        title: "Title disabled",
+                        disabled: {
+                            hidden: true,
+                            clearOnDisabled: true,
+                            tooltip: "Disabled because German is selected"
+                        }
+                    });
+                if (values.available_locales.includes("it"))
+                    return null;
+            }
             return ({
                 dataType: "string",
                 title: "Title"
@@ -166,7 +169,7 @@ export const testEntitySchema = buildSchema({
             config: {
                 enumValues: {
                     "facebook": "FacebookId",
-                    "apple": "Apple"
+                    "apple": "Apple",
                 }
             }
         },

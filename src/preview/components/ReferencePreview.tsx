@@ -139,6 +139,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
 
                     {listProperties && listProperties.map((key) => {
                         const childProperty = schema.properties[key as string];
+                        if (!childProperty) return null;
 
                         return (
                             <div key={"ref_prev_" + (key as string)}>

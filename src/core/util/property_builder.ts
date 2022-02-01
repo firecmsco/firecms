@@ -23,13 +23,13 @@ export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: 
      entityId?: string,
      propertyOverride?: Partial<Property<T>>
  }
-): Property<T> {
+): Property<T> | null {
     let result: any;
     if (typeof propertyOrBuilder === "function") {
         result = propertyOrBuilder({ values, previousValues, entityId, path });
         if (!result) {
-            console.error("Wrong function", path, entityId, propertyOrBuilder);
-            throw Error("Not returning property from property builder");
+            console.debug("Property builder not returning `Property` so it is not rendered", path, entityId, propertyOrBuilder);
+            return null;
         }
     } else {
         result = propertyOrBuilder;
