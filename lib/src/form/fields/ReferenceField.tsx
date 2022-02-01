@@ -230,7 +230,8 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                          mr={1}>
 
                         {listProperties && listProperties.map((key, index) => {
-                            const propertyKey = schema.properties[key as string];
+                            const property = schema.properties[key as string];
+                            if (!property) return null;
                             return (
                                 <Box
                                     key={`reference_previews_${key as string}`}
@@ -241,10 +242,10 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                                             ? <PreviewComponent
                                                 name={key as string}
                                                 value={(entity.values as any)[key]}
-                                                property={propertyKey as ResolvedProperty}
+                                                property={property as ResolvedProperty}
                                                 size={"tiny"}/>
                                             : <SkeletonComponent
-                                                property={propertyKey as ResolvedProperty}
+                                                property={property as ResolvedProperty}
                                                 size={"tiny"}/>}
                                     </ErrorBoundary>
                                 </Box>

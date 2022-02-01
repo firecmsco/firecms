@@ -133,16 +133,20 @@ export const testEntitySchema = buildSchema({
             }
         },
         title: ({ values, entityId }) => {
-            if (values?.available_locales && Array.isArray(values.available_locales) && values.available_locales.includes("de"))
-                return ({
-                    dataType: "string",
-                    title: "Title disabled",
-                    disabled: {
-                        hidden: true,
-                        clearOnDisabled: true,
-                        tooltip: "Disabled because German is selected"
-                    }
-                });
+            if (values?.available_locales && Array.isArray(values.available_locales)) {
+                if (values.available_locales.includes("de"))
+                    return ({
+                        dataType: "string",
+                        title: "Title disabled",
+                        disabled: {
+                            hidden: true,
+                            clearOnDisabled: true,
+                            tooltip: "Disabled because German is selected"
+                        }
+                    });
+                if (values.available_locales.includes("it"))
+                    return null;
+            }
             return ({
                 dataType: "string",
                 title: "Title"

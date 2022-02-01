@@ -239,7 +239,7 @@ export type PropertyBuilder<T extends CMSType = CMSType, M = any> = ({
                                                                          previousValues,
                                                                          path,
                                                                          entityId
-                                                                     }: PropertyBuilderProps<M>) => Property<T>;
+                                                                     }: PropertyBuilderProps<M>) => Property<T> | null;
 
 /**
  * @category Entity properties

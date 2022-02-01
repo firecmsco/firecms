@@ -6,7 +6,9 @@ import React, {
     useState
 } from "react";
 
-import { Button, IconButton, Portal, Theme, Typography } from "@mui/material";
+import { Button, IconButton, Theme, Typography } from "@mui/material";
+import { Portal } from "@mui/base";
+
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -197,7 +199,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             previousValues: entity?.values,
         });
         return getYupEntitySchema(
-            name
+            name && schema.properties[name]
                 ? { [name]: schema.properties[name] } as ResolvedProperties<any>
                 : {} as ResolvedProperties<any>,
             customFieldValidator);

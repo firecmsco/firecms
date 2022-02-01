@@ -7,7 +7,7 @@ import { DepthOfFieldEffect, EffectComposer, RenderPass } from "postprocessing";
 
 // @ts-ignore
 import useThemeContext from "@theme/hooks/useThemeContext";
-import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtils";
+import { BufferGeometryUtils } from "./BufferGeometryUtils";
 
 // const CAMERA_FACTOR = 60;
 const CAMERA_FACTOR = 180;

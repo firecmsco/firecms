@@ -43,7 +43,6 @@ export function isHidden(property: Property<any>): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-
 /**
  * This utility function computes an {@link EntitySchema} or a {@link EntitySchemaResolver}
  * into a {@link ResolvedEntitySchema}, which has no property builders but has all
@@ -96,18 +95,21 @@ export function computeProperties<M extends { [Key: string]: any }>(
     }): ResolvedProperties<M> {
     return Object.entries(propertiesOrBuilder)
         .map(([key, propertyOrBuilder]) => {
+            const property = buildPropertyFrom({
+                propertyOrBuilder,
+                values: values ?? {},
+                previousValues: previousValues ?? values ?? {},
+                path,
+                entityId
+            });
+            if (property === null) return null;
             return {
                 [key]: computeEnum(
-                    buildPropertyFrom({
-                        propertyOrBuilder,
-                        values: values ?? {},
-                        previousValues: previousValues ?? values ?? {},
-                        path,
-                        entityId
-                    }),
+                    property,
                     enumConfigs)
             };
         })
+        .filter((a) => a !== null)
         .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
 }
 
@@ -157,6 +159,7 @@ export function computeEnums<M>(properties: Properties<M>, enumConfigs: EnumConf
         .map(([key, property]) => {
             return ({ [key]: computeEnum(property, enumConfigs) });
         })
+        .filter((a) => a !== null)
         .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
 }
 
@@ -356,13 +359,13 @@ export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: 
      entityId?: string,
      propertyOverride?: Partial<Property<T>>,
  }
-): Property<T> {
-    let result: Property<T>;
+): Property<T> | null {
+    let result: Property<T> | null;
     if (typeof propertyOrBuilder === "function") {
         result = propertyOrBuilder({ values, previousValues, entityId, path });
         if (!result) {
-            console.error("Wrong function", path, entityId, propertyOrBuilder);
-            throw Error("Not returning property from property builder");
+            console.debug("Property builder not returning `Property` so it is not rendered", path, entityId, propertyOrBuilder);
+            return null;
         }
     } else {
         result = propertyOrBuilder as Property<T>;

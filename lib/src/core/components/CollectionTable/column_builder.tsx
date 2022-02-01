@@ -239,6 +239,8 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
             values: entity.values
         });
         const property = resolvedSchema.properties[name] as ResolvedProperty<any>;
+        if (!property)
+            return null;
 
         const inlineEditingEnabled = checkInlineEditing(inlineEditing, entity);
 
@@ -386,7 +388,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     const allColumns: TableColumn<M>[] = (Object.keys(resolvedSchema.properties) as (keyof M)[])
         .map((key) => {
-            const property: ResolvedProperty<any> = resolvedSchema.properties[key];
+            const property: ResolvedProperty<any>|undefined = resolvedSchema.properties[key];
             return ({
                 key: key as string,
                 property,
