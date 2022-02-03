@@ -31,6 +31,7 @@ import {
     UniqueFieldValidator,
     useBuildColumnsFromSchema
 } from "./column_builder";
+import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -211,6 +212,8 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         uniqueFieldValidator
     });
 
+    // console.log("columns", columns);
+
     const [searchString, setSearchString] = React.useState<string | undefined>();
 
     const {
@@ -305,7 +308,6 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
             />
 
             {popupFormField}
-
 
         </Paper>
     );

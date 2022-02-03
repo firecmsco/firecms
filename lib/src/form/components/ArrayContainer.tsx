@@ -8,7 +8,6 @@ import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { getHashValue } from "../../core/util/objects";
 
-
 interface ArrayContainerProps<T> {
     value: T[];
     name: string;
@@ -42,6 +41,7 @@ export function ArrayContainer<T>({
                 }).reduce((a, b) => ({ ...a, ...b }), {})
                 : {},
         [value, hasValue]);
+
     const internalIdsRef = useRef<Record<string, number>>(internalIdsMap);
 
     const [internalIds, setInternalIds] = useState<number[]>(
@@ -65,7 +65,6 @@ export function ArrayContainer<T>({
             setInternalIds(newInternalIds);
         }
     }, [hasValue, value]);
-
 
     return <FieldArray
         name={name}
@@ -187,7 +186,6 @@ export function ArrayContainer<T>({
         }}
     />;
 }
-
 
 function getRandomId() {
     return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));

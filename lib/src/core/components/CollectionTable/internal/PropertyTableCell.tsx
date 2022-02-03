@@ -29,7 +29,6 @@ import { isReadOnly } from "../../../utils";
 import { TableCell } from "../../Table/TableCell";
 import { AnySchema } from "yup";
 import { TableStorageUpload } from "./fields/TableStorageUpload";
-import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
 
 
 export interface PropertyTableCellProps<T extends CMSType> {
@@ -81,7 +80,6 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                                                         }: PropertyTableCellProps<T> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
-    const schemaRegistry = useSchemaRegistry();
 
     useClearRestoreValue<T>({
         property,

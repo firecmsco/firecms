@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Field, Form, Formik, FormikProps, getIn } from "formik";
+import { FastField, Form, Formik, FormikProps, getIn } from "formik";
 import {
     Box,
     Button,
@@ -21,6 +21,7 @@ import { getWidgetId, WidgetId, WIDGETS } from "../../util/widgets";
 import { buildProperty } from "../../builders";
 import { EnumPropertyField } from "./properties/EnumPropertyField";
 import { toSnakeCase } from "../../util/strings";
+import { useDebounce } from "../../internal/useDebounce";
 
 export type PropertyWithId = Property & { id: string };
 
@@ -123,14 +124,16 @@ function PropertyEditView({
     const [selectedWidgetId, setSelectedWidgetId] = useState<WidgetId | undefined>(values ? getWidgetId(values) : undefined);
 
     const selectedWidget = selectedWidgetId ? WIDGETS[selectedWidgetId] : undefined;
-    useEffect(() => {
+
+    const doUpdate = React.useCallback(() => {
         if (onPropertyChanged) {
             if (values.id) {
                 const { id, ...property } = values;
                 onPropertyChanged(id, property);
             }
         }
-    }, [values, errors]);
+    }, [values]);
+    useDebounce(values, doUpdate);
 
     useEffect(() => {
         const propertyData = values as any;
@@ -399,27 +402,27 @@ function PropertyEditView({
             </Grid>
 
             <Grid item>
-                <Field name={title}
-                       as={TextField}
-                       validate={validateTitle}
-                       label={"Title"}
-                       required
-                       fullWidth
-                       helperText={titleError}
-                       error={Boolean(titleError)}/>
+                <FastField name={title}
+                           as={TextField}
+                           validate={validateTitle}
+                           label={"Title"}
+                           required
+                           fullWidth
+                           helperText={titleError}
+                           error={Boolean(titleError)}/>
             </Grid>
 
             <Grid item>
-                <Field name={id}
-                       as={TextField}
-                       label={"Id"}
-                       validate={validateId}
-                       disabled={existing}
-                       required
-                       fullWidth
-                       helperText={idError}
-                       size="small"
-                       error={Boolean(idError)}/>
+                <FastField name={id}
+                           as={TextField}
+                           label={"Id"}
+                           validate={validateId}
+                           disabled={existing}
+                           required
+                           fullWidth
+                           helperText={idError}
+                           size="small"
+                           error={Boolean(idError)}/>
 
             </Grid>
 

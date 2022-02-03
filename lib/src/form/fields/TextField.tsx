@@ -10,13 +10,12 @@ import {
     Typography
 } from "@mui/material";
 
-import { FieldProps, MediaType, StringProperty } from "../../models";
+import { FieldProps, MediaType } from "../../models";
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";
-import { formStyles } from "../styles";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean

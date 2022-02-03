@@ -1,17 +1,6 @@
-import React, { useEffect, useMemo, useRef } from "react";
-
-import { getIn, useFormikContext } from "formik";
-import {
-    Button,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableFooter,
-    TableRow,
-    Typography
-} from "@mui/material";
+import React, { useCallback, useMemo } from "react";
+import { FastField, Formik, getIn, useFormikContext } from "formik";
+import { Grid, Paper, TextField, Typography } from "@mui/material";
 import {
     EnumValueConfig,
     EnumValues,
@@ -20,11 +9,65 @@ import {
 } from "../../../../models";
 import { resolveEnum } from "../../../utils";
 import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
-import { toSnakeCase } from "../../../util/strings";
+import { ArrayContainer } from "../../../../form";
+import { useDebounce } from "../../../internal/useDebounce";
+import equal from "react-fast-compare";
 
-function EnumEntry({ id }: { id: string | number }) {
+export function EnumForm({
+                             enumValues,
+                             onValuesChanged
+                         }: {
+    enumValues: EnumValueConfig[];
+    onValuesChanged?: (enumValues: EnumValueConfig[]) => void;
+}) {
 
-    const previousId = useRef(id);
+    console.log("EnumForm");
+    return (
+        <Formik key={`Formik`}
+                initialValues={{ enumValues }}
+                onSubmit={(data: { enumValues: EnumValueConfig[] }, formikHelpers) => {
+                }}
+                render={({ values }) => {
+
+                    // // eslint-disable-next-line react-hooks/rules-of-hooks
+                    // React.useEffect(() => {
+                    //     if (onValuesChanged && values.enumValues) {
+                    //         onValuesChanged(values.enumValues);
+                    //         console.log("onValuesChanged", values.enumValues);
+                    //     }
+                    // }, [values.enumValues]);
+
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    const doUpdate = useCallback(() => {
+                        if (onValuesChanged && values.enumValues) {
+                            onValuesChanged(values.enumValues);
+                            console.log("onValuesChanged", values.enumValues);
+                        }
+                    }, [values.enumValues]);
+// eslint-disable-next-line react-hooks/rules-of-hooks
+                    useDebounce(values.enumValues, doUpdate);
+
+                    const buildEntry = (index: number, internalId: number) => {
+                        return <EnumEntry index={index} key={internalId}/>;
+                    };
+
+                    console.log("values", values.enumValues);
+                    return (
+                        <ArrayContainer
+                            value={values.enumValues}
+                            name={"enumValues"}
+                            buildEntry={buildEntry}
+                            disabled={false}
+                            includeAddButton={true}/>
+                    );
+                }}
+        />
+
+    );
+
+}
+
+function EnumEntry({ index }: { index: number }) {
 
     const {
         values,
@@ -34,30 +77,29 @@ function EnumEntry({ id }: { id: string | number }) {
         touched
     } = useFormikContext<EnumValues>();
 
-    // useEffect(() => {
-    //     const idTouched = getIn(touched, id);
-    //     if (!idTouched && isNewSchema && value) {
-    //         setFieldValue("id", toSnakeCase(value))
-    //     }
-    // }, [value, touched]);
-    //
-    // useEffect(() => {
-    //
-    //     setFieldValue(FIELD_NAME, undefined)
-    //     const idTouched = getIn(touched, "id");
-    //     if (!idTouched && isNewSchema && values.title) {
-    //         setFieldValue("id", toSnakeCase(values.title))
-    //     }
-    // }, [values.id]);
-
-    return <TableRow>
-        <TableCell component="th" scope="row">
-            {id}
-        </TableCell>
-        <TableCell component="th" scope="row">
-            {"?"}
-        </TableCell>
-    </TableRow>;
+    const idError = getIn(errors, "id");
+    return <Grid container spacing={1}>
+        <Grid item xs={7}>
+            <FastField name={`enumValues.${index}.label`}
+                       as={TextField}
+                       label={"Label"}
+                       required
+                       fullWidth
+                       helperText={idError}
+                       size="small"
+                       error={Boolean(idError)}/>
+        </Grid>
+        <Grid item xs={5}>
+            <FastField name={`enumValues.${index}.id`}
+                       as={TextField}
+                       label={"Id"}
+                       required
+                       fullWidth
+                       helperText={idError}
+                       size="small"
+                       error={Boolean(idError)}/>
+        </Grid>
+    </Grid>;
 }
 
 export function EnumPropertyField() {
@@ -66,7 +108,8 @@ export function EnumPropertyField() {
         values,
         handleChange,
         errors,
-        touched
+        touched,
+        setFieldValue
     } = useFormikContext<StringProperty | NumberProperty>();
 
     const schemaRegistry = useSchemaRegistry();
@@ -77,32 +120,32 @@ export function EnumPropertyField() {
         return resolveEnum(values.enumValues, schemaRegistry.enumConfigs) ?? [] as EnumValueConfig[];
     }, [schemaRegistry.enumConfigs, values.enumValues]);
 
+    const [internalValue, setInternalValue] = React.useState<EnumValueConfig[]>(enumValues);
+
+    const doUpdate = React.useCallback(() => {
+        if (!equal(internalValue, enumValues))
+            setFieldValue("enumValues", internalValue);
+    }, [internalValue, enumValues]);
+
+    const onValuesChanged = useCallback((enumValues: EnumValueConfig[]) => {
+        setInternalValue(enumValues);
+    }, []);
+
+    useDebounce(values.enumValues, doUpdate);
+
     return (
         <>
             <Typography variant={"subtitle2"} sx={{ mt: 1 }}>
                 Values
             </Typography>
 
-            <TableContainer component={Paper} variant={"outlined"}
-                            sx={{ p: 2, mt: 1 }}>
-                <Table>
-                    <TableBody>
+            <Paper
+                variant={"outlined"}
+                sx={{ p: 2, mt: 1 }}>
 
-                        {enumValues.map((value) => {
-                            return (
-                                <EnumEntry key={value.id}
-                                           id={value.id}/>
-                            )
-                        })}
-
-                    </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <Button>New</Button>
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-            </TableContainer>
+                <EnumForm enumValues={internalValue}
+                          onValuesChanged={onValuesChanged}/>
+            </Paper>
 
         </>
     );

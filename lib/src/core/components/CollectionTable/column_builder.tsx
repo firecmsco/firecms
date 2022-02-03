@@ -25,8 +25,7 @@ import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../../index";
 import { getIconForProperty } from "../../util/property_utils";
-import { computeSchema, resolveEnum } from "../../utils";
-import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
+import { computeSchema } from "../../utils";
 
 
 export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = {
@@ -122,7 +121,6 @@ type SelectedCellProps<M> =
         entity: Entity<any>
     };
 
-
 export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserType>({
                                                                                       schemaResolver,
                                                                                       additionalColumns,
@@ -182,7 +180,6 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
         setFocused(true);
     }, []);
 
-
     const buildFilterableFromProperty = useCallback((property: ResolvedProperty,
                                                      isArray: boolean = false): TableColumnFilter | undefined => {
 
@@ -227,7 +224,6 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                                       rowData,
                                       rowIndex
                                   }: any) => {
-
 
         const entity: Entity<M> = rowData;
 
@@ -304,7 +300,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                 ? ({ name, value, property }) => uniqueFieldValidator({
                     name, value, property, entityId: entity.id
                 })
-: undefined;
+                : undefined;
 
             const validation = mapPropertyToYup({
                 property,

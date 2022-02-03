@@ -1,33 +1,8 @@
 import React from "react";
 
-import { Field, FieldProps, getIn, useFormikContext } from "formik";
-import {
-    FormControlLabel,
-    Grid,
-    Paper,
-    Switch,
-    TextField,
-    Typography
-} from "@mui/material";
-
-function ValidationSwitch({
-                              field,
-                              form,
-                              label
-                          }: FieldProps & { label: string }) {
-    return <FormControlLabel
-        checked={field.value ?? false}
-        sx={{ ml: 0 }}
-        control={
-            <Switch size="small"
-                    onChange={(e, checked) => form.setFieldValue(field.name, checked)}/>
-        }
-        label={<Typography variant={"body2"}>{label}</Typography>}
-    />
-}
-
-// Regex for validating a regex
-const regexRegex = /\/((?![*+?])(?:[^\r\n[/\\]|\\.|\[(?:[^\r\n\]\\]|\\.)*\])+)\/((?:g(?:im?|mi?)?|i(?:gm?|mg?)?|m(?:gi?|ig?)?)?)/;
+import { FastField, getIn, useFormikContext } from "formik";
+import { Grid, Paper, TextField, Typography } from "@mui/material";
+import { SmallSwitch } from "../custom_form_fields/SmallSwitch";
 
 export function StringPropertyField({
                                         widgetId
@@ -35,7 +10,7 @@ export function StringPropertyField({
     widgetId: "text_field" | "multiline" | "markdown" | "url" | "email";
 }) {
 
-    const { values, handleChange, errors, touched } = useFormikContext();
+    const { values, handleChange } = useFormikContext();
 
     const validationLength = "validation.length";
     const validationMin = "validation.min";
@@ -88,25 +63,22 @@ export function StringPropertyField({
                                    onChange={handleChange}/>
                     </Grid>
                     <Grid item xs={4}>
-                        <Field type="checkbox"
-                               name={validationLowercase}
-                               label={"Lowercase"}
-                               component={ValidationSwitch}>
-                        </Field>
+                        <FastField type="checkbox"
+                                   name={validationLowercase}
+                                   label={"Lowercase"}
+                                   component={SmallSwitch}/>
                     </Grid>
                     <Grid item xs={4}>
-                        <Field type="checkbox"
-                               name={validationUppercase}
-                               label={"Uppercase"}
-                               component={ValidationSwitch}>
-                        </Field>
+                        <FastField type="checkbox"
+                                   name={validationUppercase}
+                                   label={"Uppercase"}
+                                   component={SmallSwitch}/>
                     </Grid>
                     <Grid item xs={4}>
-                        <Field type="checkbox"
-                               name={validationTrim}
-                               label={"Trim"}
-                               component={ValidationSwitch}>
-                        </Field>
+                        <FastField type="checkbox"
+                                   name={validationTrim}
+                                   label={"Trim"}
+                                   component={SmallSwitch}/>
                     </Grid>
                 </Grid>
             </Paper>

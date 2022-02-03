@@ -38,7 +38,7 @@ export function useBuildSchemaRegistry<UserType>({
             return;
         }
 
-        if (!configPersistence.loading)
+        if (configPersistence.loading)
             return;
 
 // schemas
@@ -55,6 +55,7 @@ export function useBuildSchemaRegistry<UserType>({
         });
 
         const mergedSchemaIds = baseSchemasMerged.map(s => s.id);
+
         setSchemas([
             ...configSchemas.filter((schema) => !mergedSchemaIds.includes(schema.id)),
             ...baseSchemasMerged
