@@ -1178,27 +1178,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@camberi/firecms@^1.0.0-rc.1":
-  version "1.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@camberi/firecms/-/firecms-1.0.0-rc.1.tgz#0bab4dfec968b0d9271ef6a8f0e166f0a4845cec"
-  integrity sha512-jV7G3Z7bsMRTj/9Hm80li+D966Fs1Vlgai4WCFd5nIrtZZyBCxCuOnnew4tzeyrq3N3kIpEcBtTMlrq6Not+Cw==
-  dependencies:
-    "@date-io/date-fns" "^2.11.0"
-    "@uiw/react-md-editor" "^3.9.3"
-    date-fns "^2.21.3"
-    formik "^2.2.9"
-    history "^5"
-    object-hash "^2.2.0"
-    react-base-table "^1.12.0"
-    react-beautiful-dnd "^13.1.0"
-    react-dropzone "^11.4.2"
-    react-measure "^2.5.2"
-    react-transition-group "^4.4.1"
-    typeface-roboto "^1.1.13"
-    typeface-rubik "^1.1.13"
-    typeface-space-mono "^1.1.13"
-    yup "^0.32.9"
-
 "@csstools/normalize.css@*":
   version "12.0.0"
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-12.0.0.tgz#a9583a75c3f150667771f30b60d9f059473e62c4"
@@ -5893,7 +5872,7 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-firebase@^9:
+firebase@^9.4.1:
   version "9.6.5"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-9.6.5.tgz#cf664a953e85f8c7013783db9be21f063877ca9b"
   integrity sha512-RtJjR5iWU4B9FyGIQ3uorJwp9vXiu5ozAJZZjd1m2Lh9lWqfTKVQitG6nZOdK/Bcc/p4X3OEzlCcBnbi+XFZBA==
@@ -10413,7 +10392,7 @@ react-refresh@^0.11.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
   integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
 
-react-router-dom@^6:
+react-router-dom@^6.2.1:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.2.1.tgz#32ec81829152fbb8a7b045bf593a22eadf019bec"
   integrity sha512-I6Zax+/TH/cZMDpj3/4Fl2eaNdcvoxxHoH1tYOREsQ22OKDYofGebrNm6CTPUcvLvZm63NL/vzCYdjf9CUhqmA==
@@ -10421,7 +10400,7 @@ react-router-dom@^6:
     history "^5.2.0"
     react-router "6.2.1"
 
-react-router@6.2.1, react-router@^6:
+react-router@6.2.1, react-router@^6.2.1:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.2.1.tgz#be2a97a6006ce1d9123c28934e604faef51448a3"
   integrity sha512-2fG0udBtxou9lXtK97eJeET2ki5//UWfQSl1rlJ7quwe6jrktK9FCCc8dQb5QY6jAv3jua8bBQRhhDOM/kVRsg==

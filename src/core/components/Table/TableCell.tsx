@@ -1,12 +1,102 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { IconButton, Theme, Tooltip } from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
 import Measure, { ContentRect } from "react-measure";
-import { IconButton, Tooltip } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import clsx from "clsx";
-import { CellStyleProps, useCellStyles } from "./styles";
+import { CellStyleProps } from "./styles";
 import { getRowHeight } from "./common";
 import isEqual from "react-fast-compare";
+
+export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: boolean, removePadding?: boolean }>(theme => createStyles({
+        tableCell: {
+            position: "relative",
+            height: "100%",
+            width: "100%",
+            border: "2px solid transparent",
+            borderRadius: 4,
+            overflow: "hidden",
+            contain: "strict",
+            display: "flex",
+            padding: ({ size, removePadding }) => {
+                if (removePadding) return 0;
+                switch (size) {
+                    case "l":
+                    case "xl":
+                        return theme.spacing(2);
+                    case "m":
+                        return theme.spacing(1);
+                    case "s":
+                        return theme.spacing(0.5);
+                    default:
+                        return theme.spacing(0.25);
+                }
+            },
+            "&:hover": {
+                backgroundColor: ({ disabled }: any) => disabled ? undefined : (theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default)
+            },
+            justifyContent: ({ align }) => {
+                switch (align) {
+                    case "right":
+                        return "flex-end";
+                    case "center":
+                        return "center";
+                    case "left":
+                    default:
+                        return "flex-start";
+                }
+            }
+        },
+        fullWidth: {
+            width: "100%"
+        },
+        fullHeight: {
+            height: "100%"
+        },
+        error: {
+            border: `2px solid ${theme.palette.error.light} !important`
+        },
+        selected: {
+            backgroundColor: theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default,
+            border: "2px solid #5E9ED6",
+            transition: "border-color 300ms ease-in-out"
+        },
+        saved: {
+            border: `2px solid ${theme.palette.success.light}`
+        },
+        disabled: {
+            alpha: 0.8
+        },
+        iconsTop: {
+            position: "absolute",
+            top: 2,
+            right: 2
+        },
+        arrow: {
+            color: theme.palette.error.light
+        },
+        tooltip: {
+            margin: "0 8px",
+            backgroundColor: theme.palette.error.light
+        },
+        centered: {
+            alignItems: "center"
+        },
+        faded: {
+            "-webkit-mask-image": "linear-gradient(to bottom, black 60%, transparent 100%)",
+            maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
+            alignItems: "start"
+        },
+        scrollable: {
+            overflow: "auto",
+            alignItems: "start"
+        }
+    })
+);
+
 
 
 interface TableCellProps {

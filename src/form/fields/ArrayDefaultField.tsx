@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { CMSType, FieldProps, Property } from "../../models";
-import { FormControl, FormHelperText, Paper } from "@mui/material";
+import { FormControl, FormHelperText, Paper, Theme } from "@mui/material";
 import { FieldDescription } from "../../form";
 import { ArrayContainer, LabelWithIcon } from "../components";
-import { formStyles } from "../styles";
 import { buildPropertyField } from "../form_factory";
 import { useClearRestoreValue } from "../../hooks";
+
 
 /**
  * Generic array field that allows reordering and renders the child property
@@ -35,7 +35,6 @@ export function ArrayDefaultField<T extends Array<any>>({
         throw Error("ArrayDefaultField misconfiguration. Property `of` not set");
 
     const ofProperty: Property<CMSType[]> = property.of as Property<CMSType[]>;
-    const classes = formStyles();
 
     const [lastAddedId, setLastAddedId] = useState<number | undefined>();
 
@@ -71,7 +70,13 @@ export function ArrayDefaultField<T extends Array<any>>({
             </FormHelperText>}
 
             <Paper variant={"outlined"}
-                   className={classes.paper}>
+                   sx={(theme) => ({
+                       elevation: 0,
+                       padding: theme.spacing(2),
+                       [theme.breakpoints.up("md")]: {
+                           padding: theme.spacing(2)
+                       }
+                   })}>
                 <ArrayContainer value={value}
                                 name={name}
                                 buildEntry={buildEntry}

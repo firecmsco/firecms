@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useCallback } from "react";
 
 import isEqual from "react-fast-compare";
 import {
@@ -36,9 +37,10 @@ import {
 } from "../../hooks";
 import { isReadOnly } from "../../core/utils";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { useCallback } from "react";
 
-export const useStyles = makeStyles((theme: Theme) => ({
+import createStyles from "@mui/styles/createStyles";
+
+const useStyles = makeStyles((theme: Theme) => ({
     dropZone: {
         position: "relative",
         paddingTop: "2px",

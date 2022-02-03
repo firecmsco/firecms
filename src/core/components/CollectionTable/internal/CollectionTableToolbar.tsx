@@ -49,13 +49,8 @@ const useStyles = makeStyles((theme: Theme) =>
                 },
                 marginRight: theme.spacing(1)
             }
-        }
-    })
-);
-
-const useSizeSelectStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
+        },
+        selectRoot: {
             "label + &": {
                 marginTop: theme.spacing(3)
             }
@@ -91,6 +86,7 @@ const useSizeSelectStyles = makeStyles((theme: Theme) =>
     })
 );
 
+
 interface CollectionTableToolbarProps {
     size: CollectionSize;
     filterIsSet: boolean;
@@ -105,7 +101,6 @@ interface CollectionTableToolbarProps {
 
 export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: CollectionTableToolbarProps) {
     const classes = useStyles();
-    const sizeClasses = useSizeSelectStyles();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
@@ -144,15 +139,15 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
                 elevation: 1
             }}
             input={<InputBase classes={{
-                root: sizeClasses.root,
-                input: sizeClasses.input
+                root: classes.selectRoot,
+                input: classes.input
             }}/>}
             renderValue={(value: any) => value.toUpperCase()}
         >
             {["xs", "s", "m", "l", "xl"].map((value) => (
                 <MenuItem
                     classes={{
-                        root: sizeClasses.item
+                        root: classes.item
                     }}
                     key={`size-select-${value}`} value={value}>
                     {value.toUpperCase()}

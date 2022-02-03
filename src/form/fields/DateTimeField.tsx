@@ -8,7 +8,6 @@ import { FieldProps } from "../../models";
 import { FieldDescription } from "../../form";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { formStyles } from "../styles";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -34,7 +33,6 @@ export function DateTimeField({
                               }: DateTimeFieldProps) {
 
 
-    const classes = formStyles();
     const internalValue = value || null;
 
     useClearRestoreValue({
@@ -48,7 +46,6 @@ export function DateTimeField({
 
             <DateTimePicker
                 clearable
-                className={classes.input}
                 autoFocus={autoFocus}
                 value={internalValue}
                 label={
@@ -59,7 +56,9 @@ export function DateTimeField({
                                   fullWidth
                                   InputProps={{
                                       ...props.InputProps,
-                                      className: classes.input
+                                      sx: {
+                                          minHeight: "64px"
+                                      }
                                   }}
                                   error={showError}
                         // format={dateFormat}

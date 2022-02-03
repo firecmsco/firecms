@@ -4,7 +4,8 @@ import {
     FormHelperText,
     InputLabel,
     MenuItem,
-    Select as MuiSelect
+    Select as MuiSelect,
+    Theme
 } from "@mui/material";
 
 import { EnumType, EnumValues, FieldProps } from "../../models";
@@ -16,7 +17,20 @@ import {
     isEnumValueDisabled
 } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
-import { formStyles } from "../styles";
+
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+const formStyles = makeStyles((theme: Theme) => createStyles({
+    inputLabel: {
+        marginTop: theme.spacing(1 / 2),
+        marginLeft: theme.spacing(1 / 2)
+    },
+    shrinkInputLabel: {
+        marginTop: "-2px",
+        marginLeft: theme.spacing(1 / 2)
+    }
+}))
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -69,8 +83,8 @@ export function Select<T extends EnumType>({
             </InputLabel>
 
             <MuiSelect
-                classes={{
-                    select: classes.input
+                sx={{
+                    minHeight: "64px"
                 }}
                 variant={"filled"}
                 labelId={`${name}-select-label`}

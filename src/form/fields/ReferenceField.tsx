@@ -337,7 +337,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
     return (
         <FormControl error={showError} fullWidth>
 
-            <Box
+            <div
                 className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
 
                 {schemaResolver && buildEntityView(schemaResolver)}
@@ -351,7 +351,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                 />}
 
 
-            </Box>
+            </div>
 
             {includeDescription &&
             <FieldDescription property={property}/>}

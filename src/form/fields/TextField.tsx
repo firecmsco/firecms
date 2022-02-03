@@ -7,6 +7,7 @@ import {
     FormHelperText,
     InputLabel,
     Switch,
+    Theme,
     Typography
 } from "@mui/material";
 
@@ -16,7 +17,21 @@ import { FieldDescription } from "../../form";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";
-import { formStyles } from "../styles";
+
+
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+const formStyles = makeStyles((theme: Theme) => createStyles({
+    inputLabel: {
+        marginTop: theme.spacing(1 / 2),
+        marginLeft: theme.spacing(1 / 2)
+    },
+    shrinkInputLabel: {
+        marginTop: "-2px",
+        marginLeft: theme.spacing(1 / 2)
+    }
+}))
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -85,7 +100,9 @@ export function TextField<T extends string | number>({
 
     const filledInput = (
         <FilledInput
-            className={classes.input}
+            sx={{
+                minHeight: "64px"
+            }}
             autoFocus={autoFocus}
             type={inputType}
             multiline={isMultiline}

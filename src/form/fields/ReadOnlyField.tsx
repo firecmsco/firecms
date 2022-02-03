@@ -2,7 +2,7 @@ import React from "react";
 import { FormControl, FormHelperText, Paper } from "@mui/material";
 
 import { FieldProps } from "../../models";
-import { formStyles } from "../styles";
+
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../../form";
 import { LabelWithIcon } from "../components";
@@ -17,7 +17,7 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
  * @category Form fields
  */
 export function ReadOnlyField({
-                                                                    name,
+                                  name,
                                                                     value,
                                                                     setValue,
                                                                     error,
@@ -30,8 +30,6 @@ export function ReadOnlyField({
                                                                     context
                                                                 }: FieldProps<any>) {
 
-    const classes = formStyles();
-
     return (
 
         <FormControl fullWidth error={showError}>
@@ -42,7 +40,14 @@ export function ReadOnlyField({
             </FormHelperText>}
 
             <Paper
-                className={`${classes.paper} ${classes.largePadding} ${classes.input}`}
+                sx={(theme) => ({
+                    minHeight: "64px",
+                    elevation: 0,
+                    padding: theme.spacing(2),
+                    [theme.breakpoints.up("md")]: {
+                        padding: theme.spacing(3)
+                    }
+                })}
                 variant={"outlined"}>
 
                 <ErrorBoundary>

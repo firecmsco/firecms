@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
-import { formStyles } from "../styles";
 import { pick } from "../../core/util/objects";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
@@ -39,7 +38,6 @@ export function MapField<T extends object>({
                                                context
                                            }: FieldProps<T>) {
 
-    const classes = formStyles();
 
     const pickOnlySomeKeys = property.config?.pickOnlySomeKeys || false;
 
@@ -105,27 +103,33 @@ export function MapField<T extends object>({
                 <LabelWithIcon property={property}/>
             </FormHelperText>}
 
-            <Paper elevation={0} variant={"outlined"} className={classes.paper}>
+            <Paper elevation={0} variant={"outlined"} sx={(theme) => ({
+                elevation: 0,
+                padding: theme.spacing(2),
+                [theme.breakpoints.up("md")]: {
+                    padding: theme.spacing(2)
+                }
+            })}>
                 <Grid container spacing={2}>
                     {Object.entries(mapProperties)
                         .filter(([_, property]) => !isHidden(property))
                         .map(([entryKey, childProperty], index) => {
-                                return (
-                                    <Grid item
-                                          sm={12}
-                                          xs={12}
-                                          key={`map-${name}-${index}`}>
-                                        {
-                                            buildPropertyField<any, T>({
-                                                name: `${name}[${entryKey}]`,
-                                                disabled,
-                                                property: childProperty,
-                                                includeDescription,
-                                                underlyingValueHasChanged,
-                                                context,
-                                                tableMode,
-                                                partOfArray: false,
-                                                autoFocus: false,
+                            return (
+                                <Grid item
+                                      sm={12}
+                                      xs={12}
+                                      key={`map-${name}-${index}`}>
+                                    {
+                                        buildPropertyField<any, T>({
+                                            name: `${name}[${entryKey}]`,
+                                            disabled,
+                                            property: childProperty,
+                                            includeDescription,
+                                            underlyingValueHasChanged,
+                                            context,
+                                            tableMode,
+                                            partOfArray: false,
+                                            autoFocus: false,
                                                 shouldAlwaysRerender: false
                                             })
                                         }
