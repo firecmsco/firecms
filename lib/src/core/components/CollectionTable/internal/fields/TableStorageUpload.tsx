@@ -17,7 +17,7 @@ import {
 } from "../../../../../models";
 import { useDropzone } from "react-dropzone";
 import { PreviewComponent, PreviewSize } from "../../../../../preview";
-import isEqual from "react-fast-compare";
+import equal from "react-fast-compare"
 import { ErrorBoundary } from "../../../../internal/ErrorBoundary";
 
 import clsx from "clsx";
@@ -261,7 +261,7 @@ function StorageUpload({
     const initialValue = React.useRef<string | string[] | null>(value);
     const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
 
-    if (!isEqual(initialValue.current, value)) {
+    if (!equal(initialValue.current, value)) {
         initialValue.current = value;
         setInternalValue(internalInitialValue ?? []);
     }

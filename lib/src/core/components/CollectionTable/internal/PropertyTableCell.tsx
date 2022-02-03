@@ -24,7 +24,7 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { useClearRestoreValue } from "../../../../hooks";
-import isEqual from "react-fast-compare";
+import equal from "react-fast-compare"
 import { isReadOnly } from "../../../utils";
 import { TableCell } from "../../Table/TableCell";
 import { AnySchema } from "yup";
@@ -111,7 +111,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
 
     useEffect(
         () => {
-            if (!isEqual(value, internalValue)) {
+            if (!equal(value, internalValue)) {
                 setSaved(false);
                 validation
                     .validate(internalValue)
@@ -354,8 +354,7 @@ function areEqual(prevProps: PropertyTableCellProps<any> & CellStyleProps, nextP
         prevProps.size === nextProps.size &&
         prevProps.align === nextProps.align &&
         prevProps.width === nextProps.width &&
-        isEqual(prevProps.property, nextProps.property) &&
-        isEqual(prevProps.value, nextProps.value)
+        equal(prevProps.property, nextProps.property) &&
+        equal(prevProps.value, nextProps.value)
         ;
 }
-

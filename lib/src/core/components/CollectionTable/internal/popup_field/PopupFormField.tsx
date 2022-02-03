@@ -13,7 +13,7 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import ClearIcon from "@mui/icons-material/Clear";
 
-import isEqual from "react-fast-compare";
+import equal from "react-fast-compare"
 
 import {
     Entity,
@@ -263,7 +263,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                       isSubmitting
                   }: FormikProps<EntityValues<M>>) => {
 
-                    if (!isEqual(values, internalValue)) {
+                    if (!equal(values, internalValue)) {
                         setInternalValue(values);
                     }
 

@@ -31,7 +31,8 @@ import { MarkdownField } from "./fields/MarkdownField";
 
 import { ArrayOfReferencesField } from "./fields/ArrayOfReferencesField";
 import { isReadOnly } from "../core/utils";
-import isEqual from "react-fast-compare";
+import equal from "react-fast-compare"
+import { useDebounce } from "../core/internal/useDebounce";
 
 
 /**
@@ -208,22 +209,16 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
     const isSubmitting = fieldProps.form.isSubmitting;
 
     const [internalValue, setInternalValue] = useState<T | null>(value);
-    useEffect(
-        () => {
-            const handler = setTimeout(() => {
-                fieldProps.form.setFieldValue(name, internalValue);
-            }, 50);
 
-            return () => {
-                clearTimeout(handler);
-            };
-        },
-        [internalValue]
-    );
+    const doUpdate = React.useCallback(() => {
+        fieldProps.form.setFieldValue(name, internalValue);
+    }, [internalValue]);
+
+    useDebounce(internalValue, doUpdate, 34);
 
     useEffect(
         () => {
-            if (!isEqual(value, internalValue)) {
+            if (!equal(value, internalValue)) {
                 setInternalValue(value);
             }
         },

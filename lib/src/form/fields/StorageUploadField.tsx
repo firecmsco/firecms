@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useCallback } from "react";
 
-import isEqual from "react-fast-compare";
+import equal from "react-fast-compare"
 import {
     Box,
     FormControl,
@@ -460,7 +460,7 @@ export function StorageUpload({
     const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
     const [hoveredIndex, setHoveredIndex] = React.useState<number | undefined>(undefined);
 
-    if (!isEqual(initialValue, value)) {
+    if (!equal(initialValue, value)) {
         setInitialValue(value);
         setInternalValue(internalInitialValue);
     }

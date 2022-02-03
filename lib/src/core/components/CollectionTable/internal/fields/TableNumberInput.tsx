@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Input } from "@mui/material";
 import clsx from "clsx";
 import { useInputStyles } from "./styles";
+import { useDebounce } from "../../../../internal/useDebounce";
 
 export function NumberTableInput(props: {
     error: Error | undefined;
@@ -17,29 +18,22 @@ export function NumberTableInput(props: {
     const propStringValue = (value && typeof value === "number") ? value.toString() : "";
     const [internalValue, setInternalValue] = useState<string | null>(propStringValue);
 
-    useEffect(
-        () => {
-            const doUpdate = () => {
-                if (internalValue !== propStringValue) {
-                    if (internalValue !== undefined && internalValue !== null) {
-                        const numberValue = parseFloat(internalValue);
-                        if (isNaN(numberValue))
-                            return;
-                        if (numberValue !== undefined && numberValue !== null)
-                            updateValue(numberValue);
-                    } else {
-                        updateValue(null);
-                    }
-                }
-            };
-            const handler = setTimeout(doUpdate, 300);
+    const doUpdate = React.useCallback(() => {
+        if (internalValue !== propStringValue) {
+            if (internalValue !== undefined && internalValue !== null) {
+                const numberValue = parseFloat(internalValue);
+                if (isNaN(numberValue))
+                    return;
+                if (numberValue !== undefined && numberValue !== null)
+                    updateValue(numberValue);
+            } else {
+                updateValue(null);
+            }
+        }
 
-            return () => {
-                clearTimeout(handler);
-            };
-        },
-        [internalValue]
-    );
+    }, [internalValue, value]);
+
+    useDebounce(internalValue, doUpdate);
 
     useEffect(
         () => {

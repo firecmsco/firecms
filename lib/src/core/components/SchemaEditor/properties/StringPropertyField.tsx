@@ -3,6 +3,7 @@ import React from "react";
 import { FastField, getIn, useFormikContext } from "formik";
 import { Grid, Paper, TextField, Typography } from "@mui/material";
 import { SmallSwitch } from "../custom_form_fields/SmallSwitch";
+import DebouncedTextField from "../custom_form_fields/DebouncedTextField";
 
 export function StringPropertyField({
                                         widgetId
@@ -28,7 +29,7 @@ export function StringPropertyField({
             <Paper variant={"outlined"} sx={{ p: 2, mt: 1 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <TextField value={getIn(values, validationLength)}
+                        <DebouncedTextField value={getIn(values, validationLength)}
                                    label={"Exact length"}
                                    name={validationLength}
                                    type="number"
@@ -37,7 +38,7 @@ export function StringPropertyField({
                                    onChange={handleChange}/>
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField value={getIn(values, validationMin)}
+                        <DebouncedTextField value={getIn(values, validationMin)}
                                    label={"Min length"}
                                    name={validationMin}
                                    type="number"
@@ -46,7 +47,7 @@ export function StringPropertyField({
                                    onChange={handleChange}/>
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField value={getIn(values, validationMax)}
+                        <DebouncedTextField value={getIn(values, validationMax)}
                                    label={"Max length"}
                                    name={validationMax}
                                    type="number"
@@ -55,7 +56,7 @@ export function StringPropertyField({
                                    onChange={handleChange}/>
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField value={getIn(values, validationMatches)}
+                        <DebouncedTextField value={getIn(values, validationMatches)}
                                    label={"Matches regex"}
                                    name={validationMatches}
                                    size="small"

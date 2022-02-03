@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { TextareaAutosize } from "@mui/material";
 import clsx from "clsx";
 
+import { useDebounce } from "../../../../internal/useDebounce";
+
 export function TableInput(props: {
     error: Error | undefined;
     value: string;
@@ -14,24 +16,15 @@ export function TableInput(props: {
     const { disabled, value, multiline, updateValue, focused } = props;
     const [internalValue, setInternalValue] = useState<typeof value>(value);
 
-    useEffect(
-        () => {
-            const doUpdate = () => {
-                const emptyInitialValue = !value || value.length === 0;
-                if (emptyInitialValue && !internalValue)
-                    return;
-                if (internalValue !== value)
-                    updateValue(internalValue);
-            };
-            const handler = setTimeout(doUpdate, 300);
+    const doUpdate = React.useCallback(() => {
+        const emptyInitialValue = !value;
+        if (emptyInitialValue && !internalValue)
+            return;
+        if (internalValue !== value)
+            updateValue(internalValue);
+    }, [internalValue, value]);
 
-            return () => {
-                clearTimeout(handler);
-            };
-
-        },
-        [internalValue]
-    );
+    useDebounce(internalValue, doUpdate);
 
     useEffect(
         () => {

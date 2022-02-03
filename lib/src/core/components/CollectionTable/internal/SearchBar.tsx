@@ -8,6 +8,7 @@ import { FormControl, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import clsx from "clsx";
+import { useDebounce } from "../../../internal/useDebounce";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -73,22 +74,16 @@ export function SearchBar({ onTextSearch }: SearchBarProps) {
     /**
      * Debounce on Search text update
      */
-    useEffect(
-        () => {
-            const handler = setTimeout(() => {
-                if (searchText) {
-                    onTextSearch(searchText);
-                } else {
-                    onTextSearch(undefined);
-                }
-            }, 250);
 
-            return () => {
-                clearTimeout(handler);
-            };
-        },
-        [searchText]
-    );
+    const doSearch = React.useCallback(() => {
+        if (searchText) {
+            onTextSearch(searchText);
+        } else {
+            onTextSearch(undefined);
+        }
+    }, [searchText]);
+
+    useDebounce(searchText, doSearch);
 
     const clearText = useCallback(() => {
         setSearchText("");

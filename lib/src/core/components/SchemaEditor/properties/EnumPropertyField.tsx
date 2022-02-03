@@ -11,7 +11,8 @@ import { resolveEnum } from "../../../utils";
 import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
 import { ArrayContainer } from "../../../../form";
 import { useDebounce } from "../../../internal/useDebounce";
-import equal from "react-fast-compare";
+import equal from "react-fast-compare"
+import DebouncedTextField from "../custom_form_fields/DebouncedTextField";
 
 export function EnumForm({
                              enumValues,
@@ -21,7 +22,6 @@ export function EnumForm({
     onValuesChanged?: (enumValues: EnumValueConfig[]) => void;
 }) {
 
-    console.log("EnumForm");
     return (
         <Formik key={`Formik`}
                 initialValues={{ enumValues }}
@@ -41,7 +41,6 @@ export function EnumForm({
                     const doUpdate = useCallback(() => {
                         if (onValuesChanged && values.enumValues) {
                             onValuesChanged(values.enumValues);
-                            console.log("onValuesChanged", values.enumValues);
                         }
                     }, [values.enumValues]);
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -51,7 +50,6 @@ export function EnumForm({
                         return <EnumEntry index={index} key={internalId}/>;
                     };
 
-                    console.log("values", values.enumValues);
                     return (
                         <ArrayContainer
                             value={values.enumValues}
@@ -81,7 +79,7 @@ function EnumEntry({ index }: { index: number }) {
     return <Grid container spacing={1}>
         <Grid item xs={7}>
             <FastField name={`enumValues.${index}.label`}
-                       as={TextField}
+                       as={DebouncedTextField}
                        label={"Label"}
                        required
                        fullWidth
@@ -91,7 +89,7 @@ function EnumEntry({ index }: { index: number }) {
         </Grid>
         <Grid item xs={5}>
             <FastField name={`enumValues.${index}.id`}
-                       as={TextField}
+                       as={DebouncedTextField}
                        label={"Id"}
                        required
                        fullWidth
@@ -120,18 +118,18 @@ export function EnumPropertyField() {
         return resolveEnum(values.enumValues, schemaRegistry.enumConfigs) ?? [] as EnumValueConfig[];
     }, [schemaRegistry.enumConfigs, values.enumValues]);
 
-    const [internalValue, setInternalValue] = React.useState<EnumValueConfig[]>(enumValues);
-
-    const doUpdate = React.useCallback(() => {
-        if (!equal(internalValue, enumValues))
-            setFieldValue("enumValues", internalValue);
-    }, [internalValue, enumValues]);
+    // const [internalValue, setInternalValue] = React.useState<EnumValueConfig[]>(enumValues);
+    //
+    // const doUpdate = React.useCallback(() => {
+    //     if (!equal(internalValue, enumValues))
+    //         setFieldValue("enumValues", internalValue);
+    // }, [internalValue, enumValues]);
 
     const onValuesChanged = useCallback((enumValues: EnumValueConfig[]) => {
-        setInternalValue(enumValues);
+        setFieldValue("enumValues", enumValues);
     }, []);
 
-    useDebounce(values.enumValues, doUpdate);
+    // useDebounce(values.enumValues, doUpdate);
 
     return (
         <>
@@ -143,7 +141,7 @@ export function EnumPropertyField() {
                 variant={"outlined"}
                 sx={{ p: 2, mt: 1 }}>
 
-                <EnumForm enumValues={internalValue}
+                <EnumForm enumValues={enumValues}
                           onValuesChanged={onValuesChanged}/>
             </Paper>
 
