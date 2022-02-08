@@ -14,7 +14,7 @@ import { MapProperty } from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 const useStyles = makeStyles(() =>
-    createStyles({
+    ({
         tableNoBottomBorder: {
             "&:last-child th, &:last-child td": {
                 borderBottom: 0

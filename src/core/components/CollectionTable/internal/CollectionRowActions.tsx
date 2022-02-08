@@ -18,7 +18,7 @@ import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
-export const useTableStyles = makeStyles<Theme>(theme => createStyles({
+export const useTableStyles = makeStyles<Theme>(theme => ({
     tableContainer: {
         width: "100%",
         height: "100%",

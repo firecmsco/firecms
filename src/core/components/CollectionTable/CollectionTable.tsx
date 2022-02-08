@@ -34,7 +34,7 @@ import {
 
 const DEFAULT_PAGE_SIZE = 50;
 
-export const useStyles = makeStyles<Theme>(theme => createStyles({
+export const useStyles = makeStyles<Theme>(theme => ({
     root: {
         height: "100%",
         width: "100%",

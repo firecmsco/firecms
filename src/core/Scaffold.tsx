@@ -37,7 +37,7 @@ export interface ScaffoldProps {
 }
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         main: {
             display: "flex",
             flexDirection: "column",

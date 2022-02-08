@@ -29,7 +29,7 @@ declare module "react" {
     }
 }
 
-export const useTableStyles = makeStyles<Theme>(theme => createStyles({
+export const useTableStyles = makeStyles<Theme>(theme => ({
     tableContainer: {
         width: "100%",
         height: "100%",

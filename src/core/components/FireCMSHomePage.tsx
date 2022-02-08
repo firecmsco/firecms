@@ -26,7 +26,7 @@ import { Markdown } from "../../preview";
 import { useNavigation } from "../../hooks";
 
 export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         card: {
             display: "flex",
             flexDirection: "column",

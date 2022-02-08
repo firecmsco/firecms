@@ -31,7 +31,7 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
-const formStyles = makeStyles((theme: Theme) => createStyles({
+const formStyles = makeStyles((theme: Theme) => ({
     paper: {
         elevation: 0,
         padding: theme.spacing(2),

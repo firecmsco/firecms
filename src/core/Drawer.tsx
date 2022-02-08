@@ -21,7 +21,7 @@ import { FireCMSLogo } from "./components/FireCMSLogo";
 
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         logo: {
             padding: theme.spacing(3),
             maxWidth: 280

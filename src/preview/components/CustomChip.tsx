@@ -15,7 +15,7 @@ import {
 } from "../../core/util/enums";
 
 const useStyles = makeStyles<Theme, { schema: ChipColorSchema, error: any }>((theme: Theme) =>
-    createStyles({
+    ({
         root: {
             maxWidth: "100%",
             backgroundColor: ({

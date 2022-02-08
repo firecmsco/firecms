@@ -10,7 +10,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import clsx from "clsx";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         search: {
             position: "relative",
             display: "flex",

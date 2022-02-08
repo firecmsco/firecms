@@ -54,7 +54,7 @@ const EntityForm = lazy(() => import("../../form/EntityForm")) as any;
 const EntityPreview = lazy(() => import("../components/EntityPreview")) as any;
 
 const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: Theme) =>
-    createStyles({
+    ({
         container: ({ containerWidth }) => ({
             display: "flex",
             flexDirection: "column",

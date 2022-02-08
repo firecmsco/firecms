@@ -13,7 +13,7 @@ import { EmptyValue, TimestampPreview } from "../../../../../preview";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
-export const useInputStyles = makeStyles<Theme>(theme => createStyles({
+export const useInputStyles = makeStyles<Theme>(theme => ({
         hidden: {
             display: "none"
         }

@@ -27,7 +27,7 @@ import { ErrorBoundary } from "../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
 
 export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         property: {
             display: "flex"
         },

@@ -28,7 +28,7 @@ import { useBreadcrumbsContext } from "../../hooks/useBreadcrumbsContext";
 
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         appbar: {},
         menuButton: {
             marginRight: theme.spacing(2)

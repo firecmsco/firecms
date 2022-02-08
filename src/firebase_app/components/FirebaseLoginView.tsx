@@ -37,7 +37,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         logo: {
             padding: theme.spacing(3),
             width: 260,

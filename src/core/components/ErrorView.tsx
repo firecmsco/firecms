@@ -7,7 +7,7 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
 export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         flexCenter: {
             display: "flex",
             alignItems: "center"

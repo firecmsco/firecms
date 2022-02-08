@@ -15,7 +15,7 @@ interface MarkDownFieldProps extends FieldProps<string> {
 }
 
 export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         root: {
             "& .w-md-editor-toolbar li > button": {
                 color: theme.palette.text.secondary

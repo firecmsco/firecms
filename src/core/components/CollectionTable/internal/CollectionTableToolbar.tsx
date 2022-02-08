@@ -23,7 +23,7 @@ import { SearchBar } from "./SearchBar";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         toolbar: {
             minHeight: 56,
             [theme.breakpoints.down("xl")]: {

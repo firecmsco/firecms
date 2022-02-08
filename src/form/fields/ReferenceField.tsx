@@ -39,7 +39,7 @@ import {
 } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";
 
-export const useStyles = makeStyles((theme: Theme) => createStyles({
+export const useStyles = makeStyles((theme: Theme) => ({
     root: {
         elevation: 0,
         width: "100%",

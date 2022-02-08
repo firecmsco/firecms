@@ -38,7 +38,7 @@ export interface StyleProps {
     offsetPosition: number;
 }
 
-const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => createStyles({
+const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => ({
     /* Styles applied to the root element. */
     root: {},
     /* Styles applied to the `Paper` component. */

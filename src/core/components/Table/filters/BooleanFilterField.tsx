@@ -5,7 +5,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { TableWhereFilterOp } from "../TableProps";
 
 export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         formControl: {
             width: "200px"
         },

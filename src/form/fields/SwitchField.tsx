@@ -17,7 +17,7 @@ import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 
 export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+    ({
         formControl: {
             justifyContent: "space-between",
             margin: 0,

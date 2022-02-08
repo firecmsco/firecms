@@ -28,7 +28,7 @@ import {
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 
-export const useStyles = makeStyles((theme: Theme) => createStyles({
+export const useStyles = makeStyles((theme: Theme) => ({
     stickyButtons: {
         marginTop: theme.spacing(2),
         background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",

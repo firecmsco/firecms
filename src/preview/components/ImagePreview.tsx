@@ -10,7 +10,7 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
 
-const useStyles = makeStyles<Theme, { imageSize: number }>(theme => createStyles({
+const useStyles = makeStyles<Theme, { imageSize: number }>(theme => ({
         image: {
             maxWidth: "100%",
             maxHeight: "100%",

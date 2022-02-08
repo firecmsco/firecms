@@ -7,7 +7,7 @@ import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
 
-export const useInputStyles = makeStyles<Theme>(theme => createStyles({
+export const useInputStyles = makeStyles<Theme>(theme => ({
         input: {
             padding: 0,
             margin: 0,

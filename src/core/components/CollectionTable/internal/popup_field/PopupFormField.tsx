@@ -37,7 +37,7 @@ import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
 
-export const useStyles = makeStyles((theme: Theme) => createStyles({
+export const useStyles = makeStyles((theme: Theme) => ({
     form: {
         display: "flex",
         flexDirection: "column"

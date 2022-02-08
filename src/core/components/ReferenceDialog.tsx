@@ -15,7 +15,7 @@ import { CollectionRowActions } from "./CollectionTable/internal/CollectionRowAc
 import { useDataSource } from "../../hooks";
 
 
-export const useStyles = makeStyles(theme => createStyles({
+export const useStyles = makeStyles(theme => ({
     dialogBody: {
         flexGrow: 1,
         overflow: "auto",

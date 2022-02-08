@@ -24,7 +24,7 @@ import { ArrayEnumPreview } from "../../preview";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
-const formStyles = makeStyles((theme: Theme) => createStyles({
+const formStyles = makeStyles((theme: Theme) => ({
     inputLabel: {
         marginTop: theme.spacing(1 / 2),
         marginLeft: theme.spacing(1 / 2)

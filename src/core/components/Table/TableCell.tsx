@@ -11,7 +11,7 @@ import { CellStyleProps } from "./styles";
 import { getRowHeight } from "./common";
 import isEqual from "react-fast-compare";
 
-export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: boolean, removePadding?: boolean }>(theme => createStyles({
+export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: boolean, removePadding?: boolean }>(theme => ({
         tableCell: {
             position: "relative",
             height: "100%",
