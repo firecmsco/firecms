@@ -137,13 +137,14 @@ export function CustomIdField<M, UserType>
     };
 
     const fieldProps: any = {
-        label: idSetAutomatically ? "Id is set automatically" : "Id",
+        label: idSetAutomatically ? "ID is set automatically" : "ID",
         disabled: disabled,
         name: "id",
         type: null,
         value: entity && status === "existing" ? entity.id : undefined,
         variant: "filled"
     };
+
     return (
         <FormControl fullWidth
                      error={error}
@@ -172,10 +173,11 @@ export function CustomIdField<M, UserType>
             <MuiTextField {...fieldProps}
                           error={error}
                           InputProps={inputProps}
+                          helperText={schema.customId === "optional" ? "Leave this blank to autogenerate an ID" : "ID of the new document"}
                           onChange={(event) => {
                               let value = event.target.value;
                               if (value) value = value.trim();
-                              return onChange(value);
+                              return onChange(value.length ? value : undefined);
                           }}/>}
 
             <ErrorMessage name={"id"}
