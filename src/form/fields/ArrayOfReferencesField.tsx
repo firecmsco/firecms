@@ -117,8 +117,6 @@ export function ArrayOfReferencesField({
                            }
                        })}>
 
-                    {ofProperty.path}
-
                     {!collectionResolver && <ErrorView
                         error={"The specified collection does not exist. Check console"}/>}
 

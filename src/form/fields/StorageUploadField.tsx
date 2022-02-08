@@ -38,8 +38,6 @@ import {
 import { isReadOnly } from "../../core/utils";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-import createStyles from "@mui/styles/createStyles";
-
 const useStyles = makeStyles((theme: Theme) => ({
     dropZone: {
         position: "relative",
@@ -317,7 +315,7 @@ function FileDropComponent({
                 [classes.disabled]: disabled
             })}
             sx={{
-                display: multipleFilesSupported ? undefined : "flex",
+                display: multipleFilesSupported && internalValue.length ? undefined : "flex",
                 alignItems: "center"
             }}
         >
@@ -327,8 +325,8 @@ function FileDropComponent({
                 sx={{
                     display: "flex",
                     alignItems: "center",
-                    overflow: multipleFilesSupported ? "auto" : undefined,
-                    minHeight: multipleFilesSupported ? 180 : 250,
+                    overflow: multipleFilesSupported && internalValue.length ? "auto" : undefined,
+                    minHeight: multipleFilesSupported && internalValue.length ? 180 : 250,
                     p: 1,
                     "&::-webkit-scrollbar": {
                         display: "none"
@@ -404,9 +402,12 @@ function FileDropComponent({
                     boxSizing: "border-box",
                     m: 2
                 }}>
-                <Typography color={"textSecondary"}
+                <Typography align={"center"}
                             variant={"body2"}
-                            align={"center"}>
+                            sx={(theme) => ({
+                                color: "#838383",
+                                fontWeight: theme.typography.fontWeightMedium
+                            })}>
                     {helpText}
                 </Typography>
             </Box>
@@ -442,8 +443,6 @@ export function StorageUpload({
     }
 
     const metadata: any | undefined = storageMeta?.metadata;
-
-    const classes = useStyles();
 
     const size = multipleFilesSupported ? "small" : "regular";
 
@@ -578,9 +577,6 @@ export function StorageUpload({
         }
     };
 
-
-
-
     const helpText = multipleFilesSupported
         ? "Drag 'n' drop some files here, or click to select files"
         : "Drag 'n' drop a file here, or click to select one";
@@ -603,7 +599,8 @@ export function StorageUpload({
                                               storagePathBuilder={storagePathBuilder}
                                               onFileUploadComplete={onFileUploadComplete}
                                               size={size}
-                                              name={name} helpText={helpText}/>
+                                              name={name}
+                                              helpText={helpText}/>
                 }}
             </Droppable>
         </DragDropContext>

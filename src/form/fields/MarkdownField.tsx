@@ -18,7 +18,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             "& .w-md-editor-toolbar li > button": {
-                color: "inherit"
+                color: theme.palette.text.secondary
             },
             "& .w-md-editor-toolbar li.active > button": {
                 color: theme.palette.primary.main

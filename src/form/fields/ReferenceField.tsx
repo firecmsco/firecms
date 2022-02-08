@@ -258,7 +258,12 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                             onClick={disabled ? undefined : handleClickOpen}
                             justifyContent="center"
                             display="flex">
-                    <Box flexGrow={1} textAlign={"center"}>No value set</Box>
+                    <Typography variant={"body2"} sx={(theme) => ({
+                        flexGrow: 1,
+                        textAlign: "center",
+                        color: "#838383",
+                        fontWeight: theme.typography.fontWeightMedium
+                    })}>No value set</Typography>
                     {!disabled && <Button variant="outlined"
                                           color="primary">
                         Set
