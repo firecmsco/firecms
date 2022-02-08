@@ -1,9 +1,24 @@
 import React, { useCallback } from "react";
-import { useInputStyles } from "./styles";
-import { Box, TextField as MuiTextField, Typography } from "@mui/material";
+import {
+    Box,
+    TextField as MuiTextField,
+    Theme,
+    Typography
+} from "@mui/material";
 import { TimestampProperty } from "../../../../../models";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import { EmptyValue, TimestampPreview } from "../../../../../preview";
+
+
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+export const useInputStyles = makeStyles<Theme>(theme => createStyles({
+        hidden: {
+            display: "none"
+        }
+    })
+);
 
 export function TableDateField(props: {
     name: string;

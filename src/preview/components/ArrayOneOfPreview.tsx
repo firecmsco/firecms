@@ -1,8 +1,6 @@
 import React from "react";
 
-import { Divider } from "@mui/material";
-
-import { useStyles } from "./styles";
+import { Divider, Theme } from "@mui/material";
 import {
     PreviewComponent,
     PreviewComponentProps,
@@ -10,6 +8,25 @@ import {
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { Property } from "../../models";
+
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+export const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        array: {
+            display: "flex",
+            flexDirection: "column"
+        },
+        arrayWrap: {
+            display: "flex",
+            flexWrap: "wrap"
+        },
+        arrayItemBig: {
+            margin: theme.spacing(1)
+        }
+    })
+);
 
 /**
  * @category Preview components

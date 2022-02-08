@@ -1,5 +1,5 @@
 import React from "react";
-import { CardMedia, Link } from "@mui/material";
+import { CardMedia, Link, Theme } from "@mui/material";
 
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -7,9 +7,42 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { MediaType } from "../../models";
 import { PreviewComponentProps } from "../internal";
 import { ImagePreview } from "./ImagePreview";
-import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
 
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+export const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        flexCenter: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+        },
+        smallMargin: {
+            margin: theme.spacing(1)
+        },
+        arrayWrap: {
+            display: "flex",
+            flexWrap: "wrap"
+        },
+        array: {
+            display: "flex",
+            flexDirection: "column"
+        },
+        arrayItem: {
+            margin: theme.spacing(0.5)
+        },
+        arrayItemBig: {
+            margin: theme.spacing(1)
+        },
+        link: {
+            display: "flex",
+            wordBreak: "break-word",
+            fontWeight: theme.typography.fontWeightMedium
+        }
+    })
+);
 
 /**
  * @category Preview components

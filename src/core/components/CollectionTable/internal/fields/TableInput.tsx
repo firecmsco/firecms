@@ -1,7 +1,29 @@
-import { useInputStyles } from "./styles";
 import React, { useEffect, useState } from "react";
-import { TextareaAutosize } from "@mui/material";
+import { TextareaAutosize, Theme } from "@mui/material";
 import clsx from "clsx";
+
+
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+
+export const useInputStyles = makeStyles<Theme>(theme => createStyles({
+        input: {
+            padding: 0,
+            margin: 0,
+            width: "100%",
+            color: "unset",
+            fontWeight: "unset",
+            lineHeight: "unset",
+            fontSize: "unset",
+            fontFamily: "unset",
+            background: "unset",
+            border: "unset",
+            resize: "none",
+            outline: "none"
+        }
+    })
+);
 
 export function TableInput(props: {
     error: Error | undefined;

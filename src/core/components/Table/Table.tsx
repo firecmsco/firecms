@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import BaseTable, { Column, ColumnShape } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
-import { Box, Typography } from "@mui/material";
+import { alpha, Box, Theme, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import clsx from "clsx";
 
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
 import { CircularProgressCenter } from "../CircularProgressCenter";
-import { baseTableCss, useTableStyles } from "./styles";
+import { baseTableCss } from "./styles";
 import { TableHeader } from "./TableHeader";
 import {
     TableColumn,
@@ -15,6 +15,8 @@ import {
     TableProps,
     TableWhereFilterOp
 } from "./TableProps";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
 import { getRowHeight } from "./common";
 
@@ -26,6 +28,40 @@ declare module "react" {
         css?: any;
     }
 }
+
+export const useTableStyles = makeStyles<Theme>(theme => createStyles({
+    tableContainer: {
+        width: "100%",
+        height: "100%",
+        flexGrow: 1
+    },
+    header: {
+        width: "calc(100% + 24px)",
+        margin: "0px -12px",
+        padding: "0px 12px",
+        color: theme.palette.text.secondary,
+        backgroundColor: theme.palette.background.default,
+        transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+        height: "100%",
+        fontSize: "0.750rem",
+        textTransform: "uppercase",
+        fontWeight: 600
+    },
+    tableRow: {
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        fontSize: "0.875rem"
+    },
+    tableRowClickable: {
+        "&:hover": {
+            backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.6) : alpha(theme.palette.background.default, 0.5)
+        }
+    },
+    column: {
+        padding: "0px !important"
+    }
+}));
 
 /**
  * This is a Table component that allows displaying arbitrary data, not

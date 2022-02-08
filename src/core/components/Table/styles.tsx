@@ -268,62 +268,6 @@ export const baseTableCss = css`
 `;
 
 
-export const useTableStyles = makeStyles<Theme>(theme => createStyles({
-    tableContainer: {
-        width: "100%",
-        height: "100%",
-        flexGrow: 1
-    },
-    headerTypography: {
-        fontSize: "0.750rem",
-        fontWeight: 600,
-        textTransform: "uppercase"
-    },
-    header: {
-        width: "calc(100% + 24px)",
-        margin: "0px -12px",
-        padding: "0px 12px",
-        color: theme.palette.text.secondary,
-        backgroundColor: theme.palette.background.default,
-        transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-        height: "100%",
-        fontSize: "0.750rem",
-        textTransform: "uppercase",
-        fontWeight: 600
-    },
-    tableRow: {
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        fontSize: "0.875rem"
-    },
-    tableRowClickable: {
-        "&:hover": {
-            backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.6) : alpha(theme.palette.background.default, 0.5)
-        }
-    },
-    column: {
-        padding: "0px !important"
-    },
-    cellButtonsWrap: {
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.8) : alpha(theme.palette.background.default, 0.8)
-    },
-    cellButtons: {
-        minWidth: 138
-    },
-    cellButtonsId: {
-        width: 138,
-        textAlign: "center",
-        textOverflow: "ellipsis",
-        overflow: "hidden"
-    }
-}));
 
 export interface CellStyleProps {
     size: TableSize;

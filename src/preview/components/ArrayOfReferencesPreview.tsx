@@ -1,7 +1,19 @@
 import { PreviewComponentProps, PreviewSize } from "../internal";
-import { useStyles } from "./styles";
 import { ReferenceProperty } from "../../models";
 import { ReferencePreview } from "./ReferencePreview";
+
+import { Theme } from "@mui/material";
+
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+export const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        arrayItem: {
+            margin: theme.spacing(0.5)
+        }
+    })
+);
 
 /**
  * @category Preview components

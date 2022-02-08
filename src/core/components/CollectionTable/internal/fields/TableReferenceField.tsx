@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { ReferencePreview } from "../../../../../preview";
 import { ErrorView } from "../../../index";
 import {
@@ -12,7 +12,6 @@ import {
 import { ReferenceDialog } from "../../../ReferenceDialog";
 
 import { getPreviewSizeFrom } from "../../../../../preview/util";
-import { useInputStyles } from "./styles";
 import { getReferenceFrom } from "../../../../utils";
 import { useNavigation } from "../../../../../hooks";
 
@@ -53,7 +52,6 @@ export function TableReferenceField(props: {
         throw Error("Picked the wrong component TableReferenceField");
     }
 
-    const classes = useInputStyles();
     const path = usedProperty.path;
 
     const [onHover, setOnHover] = useState(false);
@@ -113,7 +111,7 @@ export function TableReferenceField(props: {
         if (Array.isArray(internalValue))
             return <>
                 {internalValue.map((v, index) =>
-                    <div className={classes.arrayItem}
+                    <Box sx={{ m: 0.5 }}
                          key={`preview_array_ref_${name}_${index}`}>
                         <ReferencePreview
                             name={`${name}[${index}]`}
@@ -124,7 +122,7 @@ export function TableReferenceField(props: {
                             property={usedProperty}
 
                         />
-                    </div>
+                    </Box>
                 )
                 }
             </>;

@@ -4,7 +4,26 @@ import { PreviewComponentProps } from "../internal";
 
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { StringPreview } from "./StringPreview";
-import { useStyles } from "./styles";
+import { Theme } from "@mui/material";
+
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+export const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        array: {
+            display: "flex",
+            flexDirection: "column"
+        },
+        arrayWrap: {
+            display: "flex",
+            flexWrap: "wrap"
+        },
+        arrayItem: {
+            margin: theme.spacing(0.5)
+        }
+    })
+);
 
 /**
  * @category Preview components

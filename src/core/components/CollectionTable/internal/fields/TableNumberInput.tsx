@@ -1,7 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Input } from "@mui/material";
+import { Input, Theme } from "@mui/material";
 import clsx from "clsx";
-import { useInputStyles } from "./styles";
+
+
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+
+export const useInputStyles = makeStyles<Theme>(theme => createStyles({
+        input: {
+            padding: 0,
+            margin: 0,
+            width: "100%",
+            color: "unset",
+            fontWeight: "unset",
+            lineHeight: "unset",
+            fontSize: "unset",
+            fontFamily: "unset",
+            background: "unset",
+            border: "unset",
+            resize: "none",
+            outline: "none"
+        },
+        numberInput: {
+            textAlign: "right"
+        }
+    })
+);
 
 export function NumberTableInput(props: {
     error: Error | undefined;

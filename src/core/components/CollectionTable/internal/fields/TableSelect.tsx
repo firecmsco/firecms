@@ -1,13 +1,28 @@
 import { EnumValues } from "../../../../../models";
 import { ArrayEnumPreview } from "../../../../../preview";
 import React, { useEffect, useState } from "react";
-import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
-import { useInputStyles } from "./styles";
+import { Checkbox, ListItemText, MenuItem, Select, Theme } from "@mui/material";
 import {
     enumToObjectEntries,
     isEnumValueDisabled
 } from "../../../../util/enums";
 import { EnumValuesChip } from "../../../../../preview/components/CustomChip";
+
+
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+export const useInputStyles = makeStyles<Theme>(theme => createStyles({
+        select: {
+            height: "100%"
+        },
+        selectRoot: {
+            display: "flex",
+            alignItems: "center",
+            height: "100%"
+        }
+    })
+);
 
 export function TableSelect(props: {
     name: string;

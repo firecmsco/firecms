@@ -1,16 +1,16 @@
 import React, { CSSProperties, useMemo, useState } from "react";
 import clsx from "clsx";
-
-import { createStyles, makeStyles } from "@mui/styles";
 import { IconButton, Theme } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { PreviewSize } from "../../preview";
-import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
 
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
-const useImageStyles = makeStyles<Theme, { imageSize: number }>(theme => createStyles({
+
+const useStyles = makeStyles<Theme, { imageSize: number }>(theme => createStyles({
         image: {
             maxWidth: "100%",
             maxHeight: "100%",
@@ -20,6 +20,9 @@ const useImageStyles = makeStyles<Theme, { imageSize: number }>(theme => createS
             position: "relative",
             maxWidth: "100%",
             maxHeight: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             width: ({ imageSize }) => imageSize,
             height: ({ imageSize }) => imageSize
         },
@@ -57,14 +60,13 @@ export function ImagePreview({ size, url }: ImagePreviewProps) {
     const [onHover, setOnHover] = useState(false);
 
     const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
-    const classes = useStyles();
-    const imageClasses = useImageStyles({ imageSize });
+    const classes = useStyles({ imageSize });
 
     if (size === "tiny") {
         return (
             <img src={url}
                  key={"tiny_image_preview_" + url}
-                 className={imageClasses.imageTiny}/>
+                 className={classes.imageTiny}/>
         );
     }
 
@@ -77,19 +79,19 @@ export function ImagePreview({ size, url }: ImagePreviewProps) {
 
     return (
         <div
-            className={clsx(classes.flexCenter, imageClasses.imageWrap)}
+            className={classes.imageWrap}
             key={"image_preview_" + url}
             onMouseEnter={() => setOnHover(true)}
             onMouseMove={() => setOnHover(true)}
             onMouseLeave={() => setOnHover(false)}>
 
             <img src={url}
-                 className={imageClasses.image}
+                 className={classes.image}
                  style={imageStyle}/>
 
             {onHover && (
                 <a
-                    className={imageClasses.previewIcon}
+                    className={classes.previewIcon}
                     href={url}
                     rel="noopener noreferrer"
                     target="_blank">

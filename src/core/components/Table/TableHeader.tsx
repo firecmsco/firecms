@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 
 import clsx from "clsx";
 import {
+    alpha,
     Badge,
     Box,
     Button,
@@ -18,7 +19,6 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 
-import { useTableStyles } from "./styles";
 import {
     TableColumn,
     TableColumnFilter,
@@ -30,14 +30,18 @@ import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
 
-export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | "left" | "center" }>(theme => createStyles({
+export const useStyles = makeStyles<Theme, { onHover?: boolean, align?: "right" | "left" | "center" }>(theme => createStyles({
     header: ({ onHover }) => ({
         width: "calc(100% + 24px)",
         margin: "0px -12px",
         padding: "0px 12px",
         color: onHover ? theme.palette.text.primary : theme.palette.text.secondary,
         backgroundColor: onHover ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
-        transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
+        transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+        height: "100%",
+        fontSize: "0.750rem",
+        textTransform: "uppercase",
+        fontWeight: 600
     }),
     headerInternal: ({ align }) => ({
         display: "flex",
@@ -60,8 +64,14 @@ export const useStyles = makeStyles<Theme, { onHover: boolean, align: "right" | 
     },
     headerIconButton: {
         backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
+    },
+    headerTypography: {
+        fontSize: "0.750rem",
+        fontWeight: 600,
+        textTransform: "uppercase"
     }
 }));
+
 
 export const TableHeader = React.memo<TableHeaderProps<any>>(TableHeaderInternal) as React.FunctionComponent<TableHeaderProps<any>>;
 
@@ -85,7 +95,6 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
     const ref = useRef<HTMLDivElement>(null);
 
     const classes = useStyles({ onHover, align: column.align });
-    const tableClasses = useTableStyles();
 
     const [open, setOpen] = React.useState(false);
 
@@ -105,7 +114,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
     return (
         <ErrorBoundary>
             <Grid
-                className={clsx(classes.header, tableClasses.header)}
+                className={classes.header}
                 ref={ref}
                 wrap={"nowrap"}
                 alignItems={"center"}
@@ -204,7 +213,7 @@ function FilterForm<M>({
 
 
     const id = column.key;
-    const tableClasses = useTableStyles();
+    const classes = useStyles({});
 
     const [filterInternal, setFilterInternal] = useState<[TableWhereFilterOp, any] | undefined>(filter);
 
@@ -260,7 +269,7 @@ function FilterForm<M>({
     return (
         <>
 
-            <Box p={2} className={tableClasses.headerTypography}>
+            <Box p={2} className={classes.headerTypography}>
                 {column.label ?? id}
             </Box>
 
