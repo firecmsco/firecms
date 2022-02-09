@@ -1,5 +1,7 @@
 import { CollectionSize, Entity } from "../../../../models";
 
+import { styled } from '@mui/material/styles';
+
 import React, { MouseEvent, useCallback } from "react";
 import {
     alpha,
@@ -15,21 +17,38 @@ import {
     Typography
 } from "@mui/material";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'CollectionRowActions';
 
-export const useTableStyles = makeStyles<Theme>(theme => ({
-    tableContainer: {
+const classes = {
+    tableContainer: `${PREFIX}-tableContainer`,
+    headerTypography: `${PREFIX}-headerTypography`,
+    header: `${PREFIX}-header`,
+    tableRow: `${PREFIX}-tableRow`,
+    tableRowClickable: `${PREFIX}-tableRowClickable`,
+    column: `${PREFIX}-column`,
+    cellButtonsWrap: `${PREFIX}-cellButtonsWrap`,
+    cellButtons: `${PREFIX}-cellButtons`,
+    cellButtonsId: `${PREFIX}-cellButtonsId`
+};
+
+const Root = styled('div')((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.tableContainer}`]: {
         width: "100%",
         height: "100%",
         flexGrow: 1
     },
-    headerTypography: {
+
+    [`& .${classes.headerTypography}`]: {
         fontSize: "0.750rem",
         fontWeight: 600,
         textTransform: "uppercase"
     },
-    header: {
+
+    [`& .${classes.header}`]: {
         width: "calc(100% + 24px)",
         margin: "0px -12px",
         padding: "0px 12px",
@@ -41,21 +60,25 @@ export const useTableStyles = makeStyles<Theme>(theme => ({
         textTransform: "uppercase",
         fontWeight: 600
     },
-    tableRow: {
+
+    [`& .${classes.tableRow}`]: {
         cursor: "pointer",
         display: "flex",
         alignItems: "center",
         fontSize: "0.875rem"
     },
-    tableRowClickable: {
+
+    [`& .${classes.tableRowClickable}`]: {
         "&:hover": {
             backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.6) : alpha(theme.palette.background.default, 0.5)
         }
     },
-    column: {
+
+    [`& .${classes.column}`]: {
         padding: "0px !important"
     },
-    cellButtonsWrap: {
+
+    [`&.${classes.cellButtonsWrap}`]: {
         width: "100%",
         height: "100%",
         display: "flex",
@@ -64,10 +87,12 @@ export const useTableStyles = makeStyles<Theme>(theme => ({
         flexDirection: "column",
         backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.8) : alpha(theme.palette.background.default, 0.8)
     },
-    cellButtons: {
+
+    [`& .${classes.cellButtons}`]: {
         minWidth: 138
     },
-    cellButtonsId: {
+
+    [`& .${classes.cellButtonsId}`]: {
         width: 138,
         textAlign: "center",
         textOverflow: "ellipsis",
@@ -115,8 +140,6 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
     const copyEnabled = Boolean(onCopyClicked);
     const deleteEnabled = Boolean(onDeleteClicked);
 
-    const classes = useTableStyles();
-
     const [anchorEl, setAnchorEl] = React.useState<any | null>(null);
 
     const openMenu = useCallback((event: React.MouseEvent) => {
@@ -149,7 +172,7 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
     }, [entity, onCopyClicked, setAnchorEl]);
 
     return (
-        <div className={classes.cellButtonsWrap}>
+        <Root className={classes.cellButtonsWrap}>
 
             {(editEnabled || deleteEnabled || selectionEnabled) &&
             <div className={classes.cellButtons}
@@ -220,7 +243,7 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
                 </div>
             )}
 
-        </div>
+        </Root>
     );
 
 }

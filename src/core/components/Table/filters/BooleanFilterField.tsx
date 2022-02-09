@@ -1,20 +1,31 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { Checkbox, FormControlLabel, Theme } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import { TableWhereFilterOp } from "../TableProps";
 
-export const useStyles = makeStyles((theme: Theme) =>
-    ({
-        formControl: {
-            width: "200px"
-        },
-        label: {
-            width: "100%",
-            height: "100%"
-        }
-    })
-);
+const PREFIX = "BooleanFilterField";
+
+const classes = {
+    formControl: `${PREFIX}-formControl`,
+    label: `${PREFIX}-label`
+};
+
+const Root = styled(
+    "div"
+)((
+    { theme }: {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.formControl}`]: {
+        width: "200px"
+    },
+
+    [`& .${classes.label}`]: {
+        width: "100%",
+        height: "100%"
+    }
+}));
 
 interface BooleanFieldProps {
     name: string,
@@ -29,7 +40,7 @@ export function BooleanFilterField({
                                        value,
                                        setValue
                                    }: BooleanFieldProps) {
-    const classes = useStyles();
+
 
     function updateFilter(val?: boolean) {
         if (val !== undefined) {
@@ -47,20 +58,28 @@ export function BooleanFilterField({
     const valueSet = !!value;
 
     return (
-        <FormControlLabel
-            className={classes.formControl}
-            labelPlacement={"end"}
-            checked={valueSet && valueSetToTrue}
-            control={
-                <Checkbox
-                    key={`filter-${name}`}
-                    indeterminate={!valueSet}
-                    onChange={(evt) => {
-                        if (valueSetToTrue) { updateFilter(false); } else if (!valueSet) { updateFilter(true); } else { updateFilter(undefined); }
-                    }}
-                />
-            }
-            label={!valueSet ? "No filter" : (valueSetToTrue ? `${title} is true` : `${title} is false`)}
-        />
+        <Root>
+            <FormControlLabel
+                className={classes.formControl}
+                labelPlacement={"end"}
+                checked={valueSet && valueSetToTrue}
+                control={
+                    <Checkbox
+                        key={`filter-${name}`}
+                        indeterminate={!valueSet}
+                        onChange={(evt) => {
+                            if (valueSetToTrue) {
+                                updateFilter(false);
+                            } else if (!valueSet) {
+                                updateFilter(true);
+                            } else {
+                                updateFilter(undefined);
+                            }
+                        }}
+                    />
+                }
+                label={!valueSet ? "No filter" : (valueSetToTrue ? `${title} is true` : `${title} is false`)}
+            />
+        </Root>
     );
 }

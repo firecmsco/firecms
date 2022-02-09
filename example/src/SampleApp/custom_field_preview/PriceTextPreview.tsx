@@ -1,30 +1,21 @@
 import React, { ReactElement } from "react";
 import { PreviewComponentProps } from "@camberi/firecms";
+import Box from "@mui/material/Box";
 
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-
-
-export const useStyles = makeStyles(() =>
-    ({
-        light: {
-            fontSize: "small",
-            color: "#838383"
-        },
-    })
-);
 
 export default function PriceTextPreview({
                                                  value, property, size, customProps
                                              }: PreviewComponentProps<number>)
     : ReactElement {
 
-    const classes = useStyles();
-
     return (
-        <div className={value ? undefined : classes.light}>
-            {value ? value : "Not available"}
-        </div>
+        <Box
+            sx={{
+                fontSize: value ? undefined : "small",
+                color: value ? undefined : "#838383"
+            }}>
+            {value ?? "Not available"}
+        </Box>
     );
 
 }

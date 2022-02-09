@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { styled } from '@mui/material/styles';
 import { Box, Button, Container, Grid, Theme, Typography } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import {
     CMSFormFieldProps,
     Entity,
@@ -28,37 +27,6 @@ import {
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 
-export const useStyles = makeStyles((theme: Theme) => ({
-    stickyButtons: {
-        marginTop: theme.spacing(2),
-        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
-        backdropFilter: "blur(4px)",
-        borderTop: theme.palette.divider,
-        position: "sticky",
-        bottom: 0,
-        zIndex: 200
-    },
-    container: {
-        padding: theme.spacing(4),
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-        [theme.breakpoints.down("lg")]: {
-            paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(2),
-            paddingTop: theme.spacing(3),
-            paddingBottom: theme.spacing(3)
-        },
-        [theme.breakpoints.down("md")]: {
-            padding: theme.spacing(2)
-        }
-    },
-    button: {
-        margin: theme.spacing(1)
-    },
-    form: {
-        marginTop: theme.spacing(2)
-    }
-}));
 
 /**
  *
@@ -143,7 +111,7 @@ export function EntityForm<M>({
                                   onValuesChanged
                               }: EntityFormProps<M>) {
 
-    const classes = useStyles();
+
     const dataSource = useDataSource();
 
     /**
@@ -297,7 +265,6 @@ export function EntityForm<M>({
                                      setFieldValue={setFieldValue}
                                      schema={schema}
                                      isSubmitting={isSubmitting}
-                                     classes={classes}
                                      formRef={formRef}
                                      status={status}
                                      setCustomId={setCustomId}
@@ -322,7 +289,6 @@ function FormInternal<M>({
                              schema,
                              entityId,
                              isSubmitting,
-                             classes,
                              formRef,
                              status,
                              setCustomId,
@@ -342,7 +308,6 @@ function FormInternal<M>({
     schema: ResolvedEntitySchema<M>,
     entityId: string | undefined,
     isSubmitting: any,
-    classes: any,
     formRef: any,
     status: "new" | "existing" | "copy",
     setCustomId: any,
@@ -417,9 +382,24 @@ function FormInternal<M>({
         </Grid>
     );
 
+    const disabled = isSubmitting || (!modified && status === "existing");
+
     return (
         <Container maxWidth={"sm"}
-                   className={classes.container}
+                   sx={theme => ({
+                       padding: theme.spacing(4),
+                       marginTop: theme.spacing(2),
+                       marginBottom: theme.spacing(2),
+                       [theme.breakpoints.down("lg")]: {
+                           paddingLeft: theme.spacing(2),
+                           paddingRight: theme.spacing(2),
+                           paddingTop: theme.spacing(3),
+                           paddingBottom: theme.spacing(3)
+                       },
+                       [theme.breakpoints.down("md")]: {
+                           padding: theme.spacing(2)
+                       }
+                   })}
                    ref={formRef}>
 
             <CustomIdField schema={schema as EntitySchema}
@@ -428,65 +408,71 @@ function FormInternal<M>({
                            error={customIdError}
                            entity={entity}/>
 
-            <Form className={classes.form}
-                  onSubmit={handleSubmit}
+            <Form onSubmit={handleSubmit}
                   noValidate>
+                <Box sx={{
+                    marginTop: 2
+                }}>
+                    <Box pt={3}>
+                        {formFields}
+                    </Box>
 
-                <Box pt={3}>
-                    {formFields}
+                    <Box sx={theme => ({
+                        marginTop: theme.spacing(2),
+                        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
+                        backdropFilter: "blur(4px)",
+                        borderTop: theme.palette.divider,
+                        position: "sticky",
+                        bottom: 0,
+                        zIndex: 200
+                    })}>
+
+                        {savingError &&
+                            <Box textAlign="right">
+                                <Typography color={"error"}>
+                                    {savingError.message}
+                                </Typography>
+                            </Box>}
+
+                        <Box textAlign="right">
+
+                            {status === "existing" &&
+                                <Button
+                                    variant="text"
+                                    color="primary"
+                                    disabled={disabled}
+                                    sx={{
+                                        margin: 1
+                                    }}
+                                    type="reset"
+                                >
+                                    Discard
+                                </Button>}
+
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={disabled}
+                                sx={{
+                                    margin: 1
+                                }}
+                            >
+                                {status === "existing" && "Save"}
+                                {status === "copy" && "Create copy"}
+                                {status === "new" && "Create"}
+                            </Button>
+
+                        </Box>
+
+                    </Box>
                 </Box>
-
-                <div className={classes.stickyButtons}>
-
-                    {savingError &&
-                    <Box textAlign="right">
-                        <Typography color={"error"}>
-                            {savingError.message}
-                        </Typography>
-                    </Box>}
-
-                    {buildButtons(classes, isSubmitting, modified, status)}
-
-                </div>
-
             </Form>
 
 
             <ErrorFocus containerRef={formRef}/>
 
         </Container>
-    );
-}
-
-function buildButtons(classes: any, isSubmitting: boolean, modified: boolean, status: EntityStatus) {
-    const disabled = isSubmitting || (!modified && status === "existing");
-    return (
-        <Box textAlign="right">
-
-            {status === "existing" &&
-            <Button
-                variant="text"
-                color="primary"
-                disabled={disabled}
-                className={classes.button}
-                type="reset"
-            >
-                Discard
-            </Button>}
-
-            <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={disabled}
-                className={classes.button}
-            >
-                {status === "existing" && "Save"}
-                {status === "copy" && "Create copy"}
-                {status === "new" && "Create"}
-            </Button>
-
-        </Box>
     );
 }
 

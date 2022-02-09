@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import {
     Checkbox,
     FormControl,
@@ -21,19 +22,29 @@ import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 import { ArrayEnumPreview } from "../../preview";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'ArrayEnumSelect';
 
-const formStyles = makeStyles((theme: Theme) => ({
-    inputLabel: {
+const classes = {
+    inputLabel: `${PREFIX}-inputLabel`,
+    shrinkInputLabel: `${PREFIX}-shrinkInputLabel`
+};
+
+const StyledFormControl = styled(FormControl)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.inputLabel}`]: {
         marginTop: theme.spacing(1 / 2),
         marginLeft: theme.spacing(1 / 2)
     },
-    shrinkInputLabel: {
+
+    [`& .${classes.shrinkInputLabel}`]: {
         marginTop: "-2px",
         marginLeft: theme.spacing(1 / 2)
     }
 }));
+
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -53,8 +64,6 @@ export function ArrayEnumSelect({
                                     includeDescription,
                                     autoFocus
                                 }: FieldProps<EnumType[]>) {
-
-    const classes = formStyles();
 
     if (!property.of) {
         throw Error("Using wrong component ArrayEnumSelect");
@@ -77,7 +86,7 @@ export function ArrayEnumSelect({
 
     const validValue = !!value && Array.isArray(value);
     return (
-        <FormControl
+        <StyledFormControl
             variant="filled"
             fullWidth
             required={property.validation?.required}
@@ -144,6 +153,6 @@ export function ArrayEnumSelect({
 
             {showError && <FormHelperText>{error}</FormHelperText>}
 
-        </FormControl>
+        </StyledFormControl>
     );
 }

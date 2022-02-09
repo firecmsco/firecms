@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import { CardMedia, Link, Theme } from "@mui/material";
 
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
@@ -9,40 +10,59 @@ import { PreviewComponentProps } from "../internal";
 import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'UrlComponentPreview';
 
-export const useStyles = makeStyles((theme: Theme) =>
-    ({
-        flexCenter: {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-        },
-        smallMargin: {
-            margin: theme.spacing(1)
-        },
-        arrayWrap: {
-            display: "flex",
-            flexWrap: "wrap"
-        },
-        array: {
-            display: "flex",
-            flexDirection: "column"
-        },
-        arrayItem: {
-            margin: theme.spacing(0.5)
-        },
-        arrayItemBig: {
-            margin: theme.spacing(1)
-        },
-        link: {
-            display: "flex",
-            wordBreak: "break-word",
-            fontWeight: theme.typography.fontWeightMedium
-        }
-    })
-);
+const classes = {
+    flexCenter: `${PREFIX}-flexCenter`,
+    smallMargin: `${PREFIX}-smallMargin`,
+    arrayWrap: `${PREFIX}-arrayWrap`,
+    array: `${PREFIX}-array`,
+    arrayItem: `${PREFIX}-arrayItem`,
+    arrayItemBig: `${PREFIX}-arrayItemBig`,
+    link: `${PREFIX}-link`
+};
+
+const Root = styled('a')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.flexCenter}`]: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+
+    [`& .${classes.smallMargin}`]: {
+        margin: theme.spacing(1)
+    },
+
+    [`& .${classes.arrayWrap}`]: {
+        display: "flex",
+        flexWrap: "wrap"
+    },
+
+    [`& .${classes.array}`]: {
+        display: "flex",
+        flexDirection: "column"
+    },
+
+    [`& .${classes.arrayItem}`]: {
+        margin: theme.spacing(0.5)
+    },
+
+    [`& .${classes.arrayItemBig}`]: {
+        margin: theme.spacing(1)
+    },
+
+    [`& .${classes.link}`]: {
+        display: "flex",
+        wordBreak: "break-word",
+        fontWeight: theme.typography.fontWeightMedium
+    }
+}));
+
+
 
 /**
  * @category Preview components
@@ -53,7 +73,7 @@ export function UrlComponentPreview({
                                         size
                                     }: PreviewComponentProps<string>): React.ReactElement {
 
-    const classes = useStyles();
+
 
     if (!value) return <div/>;
     const url = value;
@@ -93,19 +113,21 @@ export function UrlComponentPreview({
             image={url}
         />;
     } else {
-        return <a
-            key={`link_preview_${url}_${size}`}
-            href={url}
-            rel="noopener noreferrer"
-            target="_blank"
-            onClick={(e) => e.stopPropagation()}>
-            <div className={classes.flexCenter}
-                 style={{
-                     width: getThumbnailMeasure(size),
-                     height: getThumbnailMeasure(size)
-                 }}>
-                <DescriptionOutlinedIcon/>
-            </div>
-        </a>;
+        return (
+            <Root
+                key={`link_preview_${url}_${size}`}
+                href={url}
+                rel="noopener noreferrer"
+                target="_blank"
+                onClick={(e) => e.stopPropagation()}>
+                <div className={classes.flexCenter}
+                     style={{
+                         width: getThumbnailMeasure(size),
+                         height: getThumbnailMeasure(size)
+                     }}>
+                    <DescriptionOutlinedIcon/>
+                </div>
+            </Root>
+        );
     }
 }

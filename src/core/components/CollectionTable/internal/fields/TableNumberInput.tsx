@@ -1,32 +1,44 @@
 import React, { useEffect, useState } from "react";
+import { styled } from '@mui/material/styles';
 import { Input, Theme } from "@mui/material";
 import clsx from "clsx";
 
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'TableNumberInput';
+
+const classes = {
+    input: `${PREFIX}-input`,
+    numberInput: `${PREFIX}-numberInput`
+};
+
+const StyledInput = styled(
+    Input
+)((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.input}`]: {
+        padding: 0,
+        margin: 0,
+        width: "100%",
+        color: "unset",
+        fontWeight: "unset",
+        lineHeight: "unset",
+        fontSize: "unset",
+        fontFamily: "unset",
+        background: "unset",
+        border: "unset",
+        resize: "none",
+        outline: "none"
+    },
+
+    [`& .${classes.numberInput}`]: {
+        textAlign: "right"
+    }
+}));
 
 
-export const useInputStyles = makeStyles<Theme>(theme => ({
-        input: {
-            padding: 0,
-            margin: 0,
-            width: "100%",
-            color: "unset",
-            fontWeight: "unset",
-            lineHeight: "unset",
-            fontSize: "unset",
-            fontFamily: "unset",
-            background: "unset",
-            border: "unset",
-            resize: "none",
-            outline: "none"
-        },
-        numberInput: {
-            textAlign: "right"
-        }
-    })
-);
 
 export function NumberTableInput(props: {
     error: Error | undefined;
@@ -75,7 +87,6 @@ export function NumberTableInput(props: {
     );
 
     const ref = React.createRef<HTMLInputElement>();
-    const classes = useInputStyles();
 
     useEffect(() => {
         if (ref.current && focused) {
@@ -86,9 +97,9 @@ export function NumberTableInput(props: {
     const regexp = /^-?[0-9]+[,.]?[0-9]*$/;
 
     return (
-        <Input
+        <StyledInput
             inputRef={ref}
-            style={{
+            sx={{
                 width: "100%",
                 fontSize: "unset",
                 fontFamily: "unset",
@@ -97,7 +108,6 @@ export function NumberTableInput(props: {
                 resize: "none",
                 outline: "none",
                 padding: 0
-
             }}
             inputProps={{
                 style: {

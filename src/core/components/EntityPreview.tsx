@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { styled } from '@mui/material/styles';
+
 import {
     Box,
     IconButton,
@@ -11,8 +13,6 @@ import {
     Theme,
     Typography
 } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import {
     AnyProperty,
     Entity,
@@ -26,24 +26,40 @@ import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import { ErrorBoundary } from "../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
 
-export const useStyles = makeStyles((theme: Theme) =>
-    ({
-        property: {
-            display: "flex"
-        },
-        valuePreview: {
-            height: "72px",
-            padding: theme.spacing(2, 3)
-        },
-        iconCell: {
-            paddingTop: theme.spacing(1)
-        },
-        titleCell: {
-            width: "25%",
-            padding: theme.spacing(1)
-        }
-    })
-);
+const PREFIX = 'EntityPreview';
+
+const classes = {
+    property: `${PREFIX}-property`,
+    valuePreview: `${PREFIX}-valuePreview`,
+    iconCell: `${PREFIX}-iconCell`,
+    titleCell: `${PREFIX}-titleCell`
+};
+
+const StyledTableContainer = styled(TableContainer)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.property}`]: {
+        display: "flex"
+    },
+
+    [`& .${classes.valuePreview}`]: {
+        height: "72px",
+        padding: theme.spacing(2, 3)
+    },
+
+    [`& .${classes.iconCell}`]: {
+        paddingTop: theme.spacing(1)
+    },
+
+    [`& .${classes.titleCell}`]: {
+        width: "25%",
+        padding: theme.spacing(1)
+    }
+}));
+
+
 
 /**
  * @category Components
@@ -69,14 +85,14 @@ export function EntityPreview<M>(
         path
     }: EntityPreviewProps<M>) {
 
-    const classes = useStyles();
+
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 
     const properties:Properties = schema.properties;
 
     return (
-        <TableContainer>
+        <StyledTableContainer>
             <Table aria-label="entity table">
                 <TableBody>
                     <TableRow>
@@ -150,7 +166,7 @@ export function EntityPreview<M>(
                     })}
                 </TableBody>
             </Table>
-        </TableContainer>
+        </StyledTableContainer>
     );
 
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import {
     FormControl,
     FormHelperText,
@@ -18,19 +19,28 @@ import {
 } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'Select';
 
-const formStyles = makeStyles((theme: Theme) => ({
-    inputLabel: {
+const classes = {
+    inputLabel: `${PREFIX}-inputLabel`,
+    shrinkInputLabel: `${PREFIX}-shrinkInputLabel`
+};
+
+const StyledFormControl = styled(FormControl)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.inputLabel}`]: {
         marginTop: theme.spacing(1 / 2),
         marginLeft: theme.spacing(1 / 2)
     },
-    shrinkInputLabel: {
+
+    [`& .${classes.shrinkInputLabel}`]: {
         marginTop: "-2px",
         marginLeft: theme.spacing(1 / 2)
     }
-}))
+}));
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -56,7 +66,6 @@ export function Select<T extends EnumType>({
                                                shouldAlwaysRerender
                                            }: SelectProps<T>) {
 
-    const classes = formStyles();
     const enumValues = property.config?.enumValues as EnumValues;
 
     useClearRestoreValue({
@@ -66,7 +75,7 @@ export function Select<T extends EnumType>({
     });
 
     return (
-        <FormControl
+        <StyledFormControl
             variant="filled"
             fullWidth
             required={property.validation?.required}
@@ -127,6 +136,6 @@ export function Select<T extends EnumType>({
 
             {showError && <FormHelperText>{error}</FormHelperText>}
 
-        </FormControl>
+        </StyledFormControl>
     );
 }

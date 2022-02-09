@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from "react";
+import { styled } from '@mui/material/styles';
 import { Button, Paper, Theme, useMediaQuery, useTheme } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import createStyles from "@mui/styles/createStyles";
 
 import {
     AdditionalColumnDelegate,
@@ -32,16 +31,9 @@ import {
     useBuildColumnsFromSchema
 } from "./column_builder";
 
-const DEFAULT_PAGE_SIZE = 50;
+const PREFIX = 'CollectionTable';
 
-export const useStyles = makeStyles<Theme>(theme => ({
-    root: {
-        height: "100%",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column"
-    }
-}));
+const DEFAULT_PAGE_SIZE = 50;
 
 
 /**
@@ -122,7 +114,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 
     const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
 
-    const classes = useStyles();
+
 
     const additionalColumns = useMemo(() => {
         const subcollectionColumns: AdditionalColumnDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
@@ -269,9 +261,15 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
     }, []);
 
     const onTextSearch = useCallback((newSearchString) => setSearchString(newSearchString), []);
+
     return (
 
-        <Paper className={classes.root}>
+        <Paper sx={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column"
+        }}>
 
             <CollectionTableToolbar filterIsSet={filterIsSet}
                                     onTextSearch={textSearchEnabled ? onTextSearch : undefined}

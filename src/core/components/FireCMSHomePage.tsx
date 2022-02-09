@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import {
     Box,
     CardActionArea,
@@ -12,8 +13,6 @@ import {
     Typography
 } from "@mui/material";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import { Link as ReactLink } from "react-router-dom";
@@ -25,19 +24,31 @@ import {
 import { Markdown } from "../../preview";
 import { useNavigation } from "../../hooks";
 
-export const useStyles = makeStyles((theme: Theme) =>
-    ({
-        card: {
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            minHeight: 248
-        },
-        flexGrow: {
-            flexGrow: 1
-        }
-    })
-);
+const PREFIX = 'FireCMSHomePage';
+
+const classes = {
+    card: `${PREFIX}-card`,
+    flexGrow: `${PREFIX}-flexGrow`
+};
+
+const StyledContainer = styled(Container)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.card}`]: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        minHeight: 248
+    },
+
+    [`& .${classes.flexGrow}`]: {
+        flexGrow: 1
+    }
+}));
+
+
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -48,7 +59,7 @@ export const useStyles = makeStyles((theme: Theme) =>
  */
 export function FireCMSHomePage() {
 
-    const classes = useStyles();
+
     const navigationContext = useNavigation();
     if (!navigationContext.navigation)
         return <></>;
@@ -104,7 +115,7 @@ export function FireCMSHomePage() {
     }
 
     return (
-        <Container>
+        <StyledContainer>
             {allGroups.map((group, index) => (
                 <Box mt={6} mb={6} key={`group_${index}`}>
                     {allGroups.length > 0 && <>
@@ -129,7 +140,7 @@ export function FireCMSHomePage() {
                     </Box>
                 </Box>
             ))}
-        </Container>
+        </StyledContainer>
     );
 }
 

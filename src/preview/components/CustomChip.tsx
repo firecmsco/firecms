@@ -1,9 +1,6 @@
-import { Chip, Theme } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+import { Chip, useTheme } from "@mui/material";
 import React, { useMemo } from "react";
 import {
-    ChipColorSchema,
     getColorSchemeForKey,
     getColorSchemeForSeed
 } from "../../core/util/chip_utils";
@@ -13,22 +10,6 @@ import {
     getColorSchemaKey,
     getLabelOrConfigFrom
 } from "../../core/util/enums";
-
-const useStyles = makeStyles<Theme, { schema: ChipColorSchema, error: any }>((theme: Theme) =>
-    ({
-        root: {
-            maxWidth: "100%",
-            backgroundColor: ({
-                                  schema,
-                                  error
-                              }) => error ? "#eee" : schema.color
-        },
-        label: {
-            color: ({ schema, error }) => error ? "red" : schema.text,
-            fontWeight: theme.typography.fontWeightRegular
-        }
-    })
-);
 
 
 interface EnumValuesChipProps {
@@ -79,17 +60,19 @@ export function CustomChip({
                                small
                            }: EnumChipProps) {
 
+    const theme = useTheme();
     const schema = useMemo(() =>
         colorSchemaKey
             ? getColorSchemeForKey(colorSchemaKey)
             : getColorSchemeForSeed(colorSeed), [colorSeed, colorSchemaKey]);
-    const classes = useStyles({ schema, error });
 
     return (
         <Chip
-            classes={{
-                root: classes.root,
-                label: classes.label
+            sx={{
+                maxWidth: "100%",
+                backgroundColor: error ? "#eee" : schema.color,
+                color: error ? "red" : schema.text,
+                fontWeight: theme!.typography.fontWeightRegular
             }}
             size={small ? "small" : "medium"}
             variant={outlined ? "outlined" : "filled"}

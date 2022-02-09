@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { styled } from '@mui/material/styles';
 import {
     Box,
     TextField as MuiTextField,
@@ -10,15 +11,22 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 import { EmptyValue, TimestampPreview } from "../../../../../preview";
 
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'TableDateField';
 
-export const useInputStyles = makeStyles<Theme>(theme => ({
-        hidden: {
-            display: "none"
-        }
-    })
-);
+const classes = {
+    hidden: `${PREFIX}-hidden`
+};
+
+const StyledBox = styled(Box)((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.hidden}`]: {
+        display: "none"
+    }
+}));
+
 
 export function TableDateField(props: {
     name: string;
@@ -49,10 +57,9 @@ export function TableDateField(props: {
         setPreventOutsideClick(false);
     }, []);
 
-    const classes = useInputStyles();
 
     return (
-        <Box display={"flex"} alignItems={"center"}>
+        <StyledBox display={"flex"} alignItems={"center"}>
 
             <Box flexGrow={1}>
                 {internalValue &&
@@ -99,6 +106,6 @@ export function TableDateField(props: {
                     }}
                 />
             </Box>
-        </Box>
+        </StyledBox>
     );
 }

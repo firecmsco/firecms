@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useCallback } from "react";
+import { styled, Theme } from "@mui/material/styles";
 
 import isEqual from "react-fast-compare";
 import {
@@ -9,11 +10,8 @@ import {
     IconButton,
     Paper,
     Skeleton,
-    Theme,
     Typography
 } from "@mui/material";
-
-import makeStyles from "@mui/styles/makeStyles";
 
 import {
     ArrayProperty,
@@ -38,8 +36,26 @@ import {
 import { isReadOnly } from "../../core/utils";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-const useStyles = makeStyles((theme: Theme) => ({
-    dropZone: {
+const PREFIX = "StorageUploadField";
+
+const classes = {
+    dropZone: `${PREFIX}-dropZone`,
+    disabled: `${PREFIX}-disabled`,
+    nonActiveDrop: `${PREFIX}-nonActiveDrop`,
+    activeDrop: `${PREFIX}-activeDrop`,
+    acceptDrop: `${PREFIX}-acceptDrop`,
+    rejectDrop: `${PREFIX}-rejectDrop`,
+    uploadItem: `${PREFIX}-uploadItem`,
+    uploadItemSmall: `${PREFIX}-uploadItemSmall`,
+    thumbnailCloseIcon: `${PREFIX}-thumbnailCloseIcon`
+};
+
+const StyledBox = styled(Box)(({ theme }:
+                                   {
+                                       theme: Theme
+                                   }
+) => ({
+    [`&.${classes.dropZone}`]: {
         position: "relative",
         paddingTop: "2px",
         border: "2px solid transparent",
@@ -55,43 +71,51 @@ const useStyles = makeStyles((theme: Theme) => ({
             borderBottom: `2px solid ${theme.palette.primary.main}`
         }
     },
-    disabled: {
+
+    [`&.${classes.disabled}`]: {
         backgroundColor: "rgba(0, 0, 0, 0.12)",
         color: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)",
         borderBottom: `1px dotted ${theme.palette.grey[400]}`
     },
-    nonActiveDrop: {
+
+    [`&.${classes.nonActiveDrop}`]: {
         "&:hover": {
             backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
         }
     },
-    activeDrop: {
+
+    [`&.${classes.activeDrop}`]: {
         paddingTop: "0px",
         boxSizing: "border-box",
         border: "2px solid"
     },
-    acceptDrop: {
+
+    [`&.${classes.acceptDrop}`]: {
         transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
         background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.09) 10px, rgba(0, 0, 0, 0.12) 10px, rgba(0, 0, 0, 0.12) 20px) !important",
         border: "2px solid",
         borderColor: theme.palette.success.light
     },
-    rejectDrop: {
+
+    [`&.${classes.rejectDrop}`]: {
         border: "2px solid",
         borderColor: theme.palette.error.light
     },
-    uploadItem: {
+
+    [`& .${classes.uploadItem}`]: {
         padding: theme.spacing(1),
         minWidth: 220,
         minHeight: 220
     },
-    uploadItemSmall: {
+
+    [`& .${classes.uploadItemSmall}`]: {
         padding: theme.spacing(1),
         minWidth: 118,
         minHeight: 118,
         boxSizing: "border-box"
     },
-    thumbnailCloseIcon: {
+
+    [`& .${classes.thumbnailCloseIcon}`]: {
         position: "absolute",
         borderRadius: "9999px",
         top: -8,
@@ -289,7 +313,7 @@ function FileDropComponent({
     helpText: string
 }) {
 
-    const classes = useStyles();
+
     const {
         getRootProps,
         getInputProps,
@@ -305,7 +329,7 @@ function FileDropComponent({
     );
 
     return (
-        <Box
+        <StyledBox
             {...getRootProps()}
             className={clsx(classes.dropZone, {
                 [classes.nonActiveDrop]: !isDragActive,
@@ -412,7 +436,7 @@ function FileDropComponent({
                 </Typography>
             </Box>
 
-        </Box>
+        </StyledBox>
     );
 }
 
@@ -630,7 +654,7 @@ export function StorageUploadProgress({
 
     const storage = useStorageSource();
 
-    const classes = useStyles();
+
     const snackbarContext = useSnackbarController();
 
     const [error, setError] = React.useState<string>();
@@ -711,7 +735,7 @@ export function StorageItemPreview({
                                        size
                                    }: StorageItemPreviewProps) {
 
-    const classes = useStyles();
+
     return (
         <Box m={1} position={"relative"}>
 

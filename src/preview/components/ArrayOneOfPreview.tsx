@@ -1,5 +1,7 @@
 import React from "react";
 
+import { styled } from '@mui/material/styles';
+
 import { Divider, Theme } from "@mui/material";
 import {
     PreviewComponent,
@@ -9,24 +11,35 @@ import {
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { Property } from "../../models";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'ArrayOneOfPreview';
 
-export const useStyles = makeStyles((theme: Theme) =>
-    ({
-        array: {
-            display: "flex",
-            flexDirection: "column"
-        },
-        arrayWrap: {
-            display: "flex",
-            flexWrap: "wrap"
-        },
-        arrayItemBig: {
-            margin: theme.spacing(1)
-        }
-    })
-);
+const classes = {
+    array: `${PREFIX}-array`,
+    arrayWrap: `${PREFIX}-arrayWrap`,
+    arrayItemBig: `${PREFIX}-arrayItemBig`
+};
+
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`&.${classes.array}`]: {
+        display: "flex",
+        flexDirection: "column"
+    },
+
+    [`& .${classes.arrayWrap}`]: {
+        display: "flex",
+        flexWrap: "wrap"
+    },
+
+    [`& .${classes.arrayItemBig}`]: {
+        margin: theme.spacing(1)
+    }
+}));
+
+
 
 /**
  * @category Preview components
@@ -45,7 +58,7 @@ export function ArrayOneOfPreview({
         throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
     }
 
-    const classes = useStyles();
+
     const values = value;
 
     if (!values) return null;
@@ -57,7 +70,7 @@ export function ArrayOneOfPreview({
     const properties = property.oneOf.properties;
 
     return (
-        <div className={classes.array}>
+        <Root className={classes.array}>
             {values &&
             values.map((value, index) =>
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
@@ -73,6 +86,6 @@ export function ArrayOneOfPreview({
                     {index < values.length - 1 && <Divider/>}
                 </React.Fragment>
             )}
-        </div>
+        </Root>
     );
 }

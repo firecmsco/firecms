@@ -33,7 +33,7 @@ export interface PropertyTableCellProps<T extends CMSType> {
     name: string;
     selected: boolean;
     value: T;
-    select: (cellRect: DOMRect | undefined) => void;
+    onSelect: (cellRect: DOMRect | undefined) => void;
     openPopup: (cellRect: DOMRect | undefined) => void;
     setPreventOutsideClick: (value: boolean) => void;
     focused: boolean;
@@ -64,7 +64,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                                                             setPreventOutsideClick,
                                                                                             setFocused,
                                                                                             onValueChange,
-                                                                                            select,
+                                                                                            onSelect,
                                                                                             openPopup,
                                                                                             value,
                                                                                             property,
@@ -319,7 +319,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
 
     return (
         <TableCell
-            select={select}
+            onSelect={onSelect}
             selected={selected}
             focused={focused}
             disabled={disabled || readOnly}
@@ -347,7 +347,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any> & CellSt
 
 function areEqual(prevProps: PropertyTableCellProps<any> & CellStyleProps, nextProps: PropertyTableCellProps<any> & CellStyleProps) {
     return prevProps.selected === nextProps.selected &&
-        prevProps.focused === nextProps.selected &&
+        prevProps.focused === nextProps.focused &&
         prevProps.height === nextProps.height &&
         prevProps.size === nextProps.size &&
         prevProps.align === nextProps.align &&

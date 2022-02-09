@@ -1,5 +1,7 @@
 import React from "react";
 
+import { styled } from '@mui/material/styles';
+
 import {
     PreviewComponent,
     PreviewComponentProps,
@@ -10,20 +12,29 @@ import { Property } from "../../models";
 
 import { Theme } from "@mui/material";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'ArrayOfStorageComponentsPreview';
 
-export const useStyles = makeStyles((theme: Theme) =>
-    ({
-        arrayWrap: {
-            display: "flex",
-            flexWrap: "wrap"
-        },
-        arrayItem: {
-            margin: theme.spacing(0.5)
-        }
-    })
-);
+const classes = {
+    arrayWrap: `${PREFIX}-arrayWrap`,
+    arrayItem: `${PREFIX}-arrayItem`
+};
+
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`&.${classes.arrayWrap}`]: {
+        display: "flex",
+        flexWrap: "wrap"
+    },
+
+    [`& .${classes.arrayItem}`]: {
+        margin: theme.spacing(0.5)
+    }
+}));
+
+
 
 /**
  * @category Preview components
@@ -39,21 +50,23 @@ export function ArrayOfStorageComponentsPreview({
         throw Error("Picked wrong preview component ArrayOfStorageComponentsPreview");
 
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
-    const classes = useStyles();
 
-    return <div className={classes.arrayWrap}>
-        {value &&
-        value.map((v, index) =>
-            <div className={classes.arrayItem}
-                 key={`preview_array_storage_${name}_${index}`}>
-                <ErrorBoundary>
-                    <PreviewComponent
-                        name={name}
-                        value={v}
-                        property={property.of as Property<string>}
-                        size={childSize}/>
-                </ErrorBoundary>
-            </div>
-        )}
-    </div>;
+
+    return (
+        <Root className={classes.arrayWrap}>
+            {value &&
+            value.map((v, index) =>
+                <div className={classes.arrayItem}
+                     key={`preview_array_storage_${name}_${index}`}>
+                    <ErrorBoundary>
+                        <PreviewComponent
+                            name={name}
+                            value={v}
+                            property={property.of as Property<string>}
+                            size={childSize}/>
+                    </ErrorBoundary>
+                </div>
+            )}
+        </Root>
+    );
 }

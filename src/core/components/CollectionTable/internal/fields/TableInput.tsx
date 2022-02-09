@@ -3,28 +3,6 @@ import { TextareaAutosize, Theme } from "@mui/material";
 import clsx from "clsx";
 
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
-
-
-export const useInputStyles = makeStyles<Theme>(theme => ({
-        input: {
-            padding: 0,
-            margin: 0,
-            width: "100%",
-            color: "unset",
-            fontWeight: "unset",
-            lineHeight: "unset",
-            fontSize: "unset",
-            fontFamily: "unset",
-            background: "unset",
-            border: "unset",
-            resize: "none",
-            outline: "none"
-        }
-    })
-);
-
 export function TableInput(props: {
     error: Error | undefined;
     value: string;
@@ -33,6 +11,7 @@ export function TableInput(props: {
     disabled: boolean;
     updateValue: (newValue: (string | null)) => void;
 }) {
+
     const { disabled, value, multiline, updateValue, focused } = props;
     const [internalValue, setInternalValue] = useState<typeof value>(value);
 
@@ -63,8 +42,6 @@ export function TableInput(props: {
         [value, focused]
     );
 
-    const classes = useInputStyles();
-
     const ref = React.createRef<HTMLTextAreaElement>();
     useEffect(() => {
         if (ref.current && focused) {
@@ -79,7 +56,20 @@ export function TableInput(props: {
             <TextareaAutosize
                 ref={ref}
                 disabled={disabled}
-                className={clsx(classes.input)}
+                style={{
+                    padding: 0,
+                    margin: 0,
+                    width: "100%",
+                    color: "unset",
+                    fontWeight: "unset",
+                    lineHeight: "unset",
+                    fontSize: "unset",
+                    fontFamily: "unset",
+                    background: "unset",
+                    border: "unset",
+                    resize: "none",
+                    outline: "none"
+                }}
                 value={internalValue ?? ""}
                 onChange={(evt) => {
                     const newValue = evt.target.value as string;

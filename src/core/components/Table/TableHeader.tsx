@@ -1,8 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-
-import clsx from "clsx";
 import {
-    alpha,
     Badge,
     Box,
     Button,
@@ -10,11 +7,8 @@ import {
     Divider,
     Grid,
     IconButton,
-    Popover,
-    Theme
+    Popover
 } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
@@ -29,48 +23,6 @@ import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
-
-export const useStyles = makeStyles<Theme, { onHover?: boolean, align?: "right" | "left" | "center" }>(theme => ({
-    header: ({ onHover }) => ({
-        width: "calc(100% + 24px)",
-        margin: "0px -12px",
-        padding: "0px 12px",
-        color: onHover ? theme.palette.text.primary : theme.palette.text.secondary,
-        backgroundColor: onHover ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
-        transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-        height: "100%",
-        fontSize: "0.750rem",
-        textTransform: "uppercase",
-        fontWeight: 600
-    }),
-    headerInternal: ({ align }) => ({
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: align === "right" ? "flex-end" : (align === "center" ? "center" : "flex-start")
-    }),
-    headerTitle: ({ align }) => ({
-        overflow: "hidden",
-        flexShrink: 1
-    }),
-    headerTitleInternal: ({ align }) => ({
-        margin: "0px 4px",
-        overflow: "hidden",
-        justifyContent: align,
-        flexShrink: 1
-    }),
-    headerIcon: {
-        paddingTop: "4px"
-    },
-    headerIconButton: {
-        backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
-    },
-    headerTypography: {
-        fontSize: "0.750rem",
-        fontWeight: 600,
-        textTransform: "uppercase"
-    }
-}));
 
 
 export const TableHeader = React.memo<TableHeaderProps<any>>(TableHeaderInternal) as React.FunctionComponent<TableHeaderProps<any>>;
@@ -94,8 +46,6 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
     const [onHover, setOnHover] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
-    const classes = useStyles({ onHover, align: column.align });
-
     const [open, setOpen] = React.useState(false);
 
     const handleSettingsClick = useCallback((event: any) => {
@@ -114,7 +64,18 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
     return (
         <ErrorBoundary>
             <Grid
-                className={classes.header}
+                sx={theme => ({
+                    width: "calc(100% + 24px)",
+                    margin: "0px -12px",
+                    padding: "0px 12px",
+                    color: onHover ? theme.palette.text.primary : theme.palette.text.secondary,
+                    backgroundColor: onHover ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
+                    transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+                    height: "100%",
+                    fontSize: "0.750rem",
+                    textTransform: "uppercase",
+                    fontWeight: 600
+                })}
                 ref={ref}
                 wrap={"nowrap"}
                 alignItems={"center"}
@@ -123,15 +84,30 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                 onMouseLeave={() => setOnHover(false)}
                 container>
 
-                <Grid item xs={true} className={classes.headerTitle}>
-                    <div className={classes.headerInternal}>
-                        <div className={classes.headerIcon}>
+                <Grid item xs={true} sx={{
+                    overflow: "hidden",
+                    flexShrink: 1
+                }}>
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: column.align === "right" ? "flex-end" : (column.align === "center" ? "center" : "flex-start")
+                    }}>
+                        <Box sx={{
+                            paddingTop: "4px"
+                        }}>
                             {column.icon && column.icon(onHover || open)}
-                        </div>
-                        <div className={classes.headerTitleInternal}>
+                        </Box>
+                        <Box sx={{
+                            margin: "0px 4px",
+                            overflow: "hidden",
+                            justifyContent: column.align,
+                            flexShrink: 1
+                        }}>
                             {column.label}
-                        </div>
-                    </div>
+                        </Box>
+                    </Box>
                 </Grid>
 
                 {column.sortable && (sort || onHover || open) &&
@@ -142,16 +118,18 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                            invisible={!sort}>
                         <IconButton
                             size={"small"}
-                            className={classes.headerIconButton}
+                            sx={(theme) => ({
+                                backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
+                            })}
                             onClick={() => {
                                 onColumnSort(column.key as Extract<keyof M, string>);
                             }}
                         >
                             {!sort && <ArrowDownwardIcon fontSize={"small"}/>}
                             {sort === "desc" &&
-                            <ArrowUpwardIcon fontSize={"small"}/>}
+                                <ArrowUpwardIcon fontSize={"small"}/>}
                             {sort === "asc" &&
-                            <ArrowDownwardIcon fontSize={"small"}/>}
+                                <ArrowDownwardIcon fontSize={"small"}/>}
                         </IconButton>
                     </Badge>
                 </Grid>
@@ -163,7 +141,9 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                            overlap="circular"
                            invisible={!filter}>
                         <IconButton
-                            className={classes.headerIconButton}
+                            sx={(theme) => ({
+                                backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
+                            })}
                             size={"small"}
                             onClick={handleSettingsClick}>
                             <ArrowDropDownCircleIcon fontSize={"small"}
@@ -191,6 +171,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
             >
                 <FilterForm column={column}
                             filter={filter}
+                            onHover={onHover}
                             onFilterUpdate={update}/>
             </Popover>}
 
@@ -202,18 +183,18 @@ interface FilterFormProps<M> {
     column: TableColumn<M>;
     onFilterUpdate: (filter?: [TableWhereFilterOp, any]) => void;
     filter?: [TableWhereFilterOp, any];
+    onHover: boolean
 }
 
 
 function FilterForm<M>({
                            column,
                            onFilterUpdate,
-                           filter
+                           filter,
+                           onHover
                        }: FilterFormProps<M>) {
 
-
     const id = column.key;
-    const classes = useStyles({});
 
     const [filterInternal, setFilterInternal] = useState<[TableWhereFilterOp, any] | undefined>(filter);
 
@@ -266,19 +247,18 @@ function FilterForm<M>({
     }
 
 
-    return (
-        <>
-
-            <Box p={2} className={classes.headerTypography}>
+    return (<>
+            <Box p={2} sx={{
+                fontSize: "0.750rem",
+                fontWeight: 600,
+                textTransform: "uppercase"
+            }}>
                 {column.label ?? id}
             </Box>
-
             <Divider/>
-
             {column.filter && <Box p={2}>
                 {createFilterField(id, column.filter, filterInternal, setFilterInternal, false)}
             </Box>}
-
             <Box display="flex"
                  justifyContent="flex-end"
                  m={2}>

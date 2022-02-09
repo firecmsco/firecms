@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import {
     Box,
     FilledInput,
@@ -19,19 +20,30 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";
 
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'TextField';
 
-const formStyles = makeStyles((theme: Theme) => ({
-    inputLabel: {
+const classes = {
+    inputLabel: `${PREFIX}-inputLabel`,
+    shrinkInputLabel: `${PREFIX}-shrinkInputLabel`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.inputLabel}`]: {
         marginTop: theme.spacing(1 / 2),
         marginLeft: theme.spacing(1 / 2)
     },
-    shrinkInputLabel: {
+
+    [`& .${classes.shrinkInputLabel}`]: {
         marginTop: "-2px",
         marginLeft: theme.spacing(1 / 2)
     }
-}))
+}));
+
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -56,8 +68,6 @@ export function TextField<T extends string | number>({
                                                          allowInfinity,
                                                          shouldAlwaysRerender
                                                      }: TextFieldProps<T>) {
-
-    const classes = formStyles();
 
     let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
@@ -118,8 +128,7 @@ export function TextField<T extends string | number>({
     );
 
     return (
-        <>
-
+        (<Root>
             <FormControl
                 variant="filled"
                 required={property.validation?.required}
@@ -171,7 +180,6 @@ export function TextField<T extends string | number>({
                 </Box>
 
             </FormControl>
-
             {mediaType && internalValue &&
             <ErrorBoundary>
                 <Box m={1}>
@@ -182,7 +190,7 @@ export function TextField<T extends string | number>({
                 </Box>
             </ErrorBoundary>
             }
-        </>
+        </Root>)
     );
 
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { styled } from '@mui/material/styles';
 import { CollectionSize, Entity, EntityCollectionResolver } from "../../models";
 import {
     Button,
@@ -7,24 +8,37 @@ import {
     Divider,
     Typography
 } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 
 import { CollectionTable } from "./CollectionTable";
 import { CollectionRowActions } from "./CollectionTable/internal/CollectionRowActions";
 import { useDataSource } from "../../hooks";
 
 
-export const useStyles = makeStyles(theme => ({
-    dialogBody: {
+const PREFIX = 'ReferenceDialog';
+
+const classes = {
+    dialogBody: `${PREFIX}-dialogBody`,
+    paper: `${PREFIX}-paper`
+};
+
+const StyledDialog = styled(Dialog)((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.dialogBody}`]: {
         flexGrow: 1,
         overflow: "auto",
         minWidth: "85vw"
     },
-    paper: {
+
+    [`& .${classes.paper}`]: {
         height: "100%"
     }
 }));
+
+
+
 
 /**
  * @category Components
@@ -98,7 +112,7 @@ export function ReferenceDialog(
         selectedEntityIds
     }: ReferenceDialogProps) {
 
-    const classes = useStyles();
+
     const dataSource = useDataSource();
 
     const collection = collectionResolver;
@@ -192,8 +206,7 @@ export function ReferenceDialog(
         </Typography>);
 
     return (
-
-        <Dialog
+        <StyledDialog
             onClose={onClose}
             classes={{
                 paper: classes.paper
@@ -230,8 +243,7 @@ export function ReferenceDialog(
                 </Button>
             </DialogActions>
 
-        </Dialog>
-
+        </StyledDialog>
     );
 
 }

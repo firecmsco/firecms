@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import {
     Table,
     TableBody,
@@ -6,25 +7,30 @@ import {
     TableRow,
     Typography
 } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 
 import { PreviewComponent, PreviewComponentProps } from "../internal";
 import { MapProperty } from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
-const useStyles = makeStyles(() =>
+const PREFIX = 'MapPreview';
+
+const classes = {
+    tableNoBottomBorder: `${PREFIX}-tableNoBottomBorder`,
+    verticalAlignTop: `${PREFIX}-verticalAlignTop`
+};
+
+const StyledTable = styled(Table)(() =>
     ({
-        tableNoBottomBorder: {
-            "&:last-child th, &:last-child td": {
-                borderBottom: 0
-            }
-        },
-        verticalAlignTop: {
-            verticalAlign: "top"
+    [`& .${classes.tableNoBottomBorder}`]: {
+        "&:last-child th, &:last-child td": {
+            borderBottom: 0
         }
-    })
-);
+    },
+
+    [`& .${classes.verticalAlignTop}`]: {
+        verticalAlign: "top"
+    }
+}));
 
 /**
  * @category Preview components
@@ -36,7 +42,7 @@ export function MapPreview<T extends {}>({
                                              size
                                          }: PreviewComponentProps<T>) {
 
-    const classes = useStyles();
+
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPreview");
@@ -79,7 +85,7 @@ export function MapPreview<T extends {}>({
         );
 
     return (
-        <Table size="small" key={`map_preview_${name}`}>
+        <StyledTable size="small" key={`map_preview_${name}`}>
             <TableBody>
                 {mapPropertyKeys &&
                 mapPropertyKeys.map((key, index) => {
@@ -112,7 +118,7 @@ export function MapPreview<T extends {}>({
                     );
                 })}
             </TableBody>
-        </Table>
+        </StyledTable>
     );
 
 }

@@ -1,25 +1,37 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import clsx from "clsx";
 import ErrorIcon from "@mui/icons-material/Error";
 import { Theme, Tooltip } from "@mui/material";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'ErrorView';
 
-export const useStyles = makeStyles((theme: Theme) =>
-    ({
-        flexCenter: {
-            display: "flex",
-            alignItems: "center"
-        },
-        smallMargin: {
-            margin: theme.spacing(1)
-        },
-        text: {
-            paddingLeft: theme.spacing(2)
-        }
-    })
-);
+const classes = {
+    flexCenter: `${PREFIX}-flexCenter`,
+    smallMargin: `${PREFIX}-smallMargin`,
+    text: `${PREFIX}-text`
+};
+
+const StyledTooltip = styled(Tooltip)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.flexCenter}`]: {
+        display: "flex",
+        alignItems: "center"
+    },
+
+    [`& .${classes.smallMargin}`]: {
+        margin: theme.spacing(1)
+    },
+
+    [`& .${classes.text}`]: {
+        paddingLeft: theme.spacing(2)
+    }
+}));
+
+
 
 /**
  * @category Components
@@ -41,7 +53,7 @@ export function ErrorView({
                               error,
                               tooltip
                           }: ErrorViewProps): React.ReactElement {
-    const classes = useStyles();
+
     const body = (
         <div
             className={clsx(classes.flexCenter, classes.smallMargin)}>
@@ -52,9 +64,9 @@ export function ErrorView({
 
     if (tooltip) {
         return (
-            <Tooltip title={tooltip}>
+            <StyledTooltip title={tooltip}>
                 {body}
-            </Tooltip>
+            </StyledTooltip>
         );
     }
     return body;

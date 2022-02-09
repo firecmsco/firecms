@@ -1,5 +1,7 @@
 import React from "react";
 
+import { styled } from '@mui/material/styles';
+
 import {
     FormControl,
     IconButton,
@@ -28,51 +30,77 @@ import {
     useSnackbarController
 } from "../../hooks";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'CustomIdField';
 
-const formStyles = makeStyles((theme: Theme) => ({
-    paper: {
+const classes = {
+    paper: `${PREFIX}-paper`,
+    largePadding: `${PREFIX}-largePadding`,
+    inputLabel: `${PREFIX}-inputLabel`,
+    shrinkInputLabel: `${PREFIX}-shrinkInputLabel`,
+    buttons: `${PREFIX}-buttons`,
+    button: `${PREFIX}-button`,
+    form: `${PREFIX}-form`,
+    input: `${PREFIX}-input`,
+    select: `${PREFIX}-select`,
+    oneOfInput: `${PREFIX}-oneOfInput`
+};
+
+const StyledFormControl = styled(FormControl)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.paper}`]: {
         elevation: 0,
         padding: theme.spacing(2),
         [theme.breakpoints.up("md")]: {
             padding: theme.spacing(2)
         }
     },
-    largePadding: {
+
+    [`& .${classes.largePadding}`]: {
         padding: theme.spacing(2),
         [theme.breakpoints.up("md")]: {
             padding: theme.spacing(3)
         }
     },
-    inputLabel: {
+
+    [`& .${classes.inputLabel}`]: {
         marginTop: theme.spacing(1 / 2),
         marginLeft: theme.spacing(1 / 2)
     },
-    shrinkInputLabel: {
+
+    [`& .${classes.shrinkInputLabel}`]: {
         marginTop: "-2px",
         marginLeft: theme.spacing(1 / 2)
     },
-    buttons: {
+
+    [`& .${classes.buttons}`]: {
         display: "flex",
         justifyContent: "flex-end"
     },
-    button: {
+
+    [`& .${classes.button}`]: {
         margin: theme.spacing(1)
     },
-    form: {
+
+    [`& .${classes.form}`]: {
         marginTop: theme.spacing(2)
     },
-    input: {
+
+    [`& .${classes.input}`]: {
         minHeight: "64px"
     },
-    select: {
+
+    [`& .${classes.select}`]: {
         paddingTop: theme.spacing(1 / 2)
     },
-    oneOfInput: {
+
+    [`& .${classes.oneOfInput}`]: {
         marginBottom: theme.spacing(2)
     }
-}))
+}));
+
 
 export function CustomIdField<M, UserType>
 ({ schema, status, onChange, error, entity }: {
@@ -82,8 +110,6 @@ export function CustomIdField<M, UserType>
     error: boolean,
     entity: Entity<M> | undefined
 }) {
-
-    const classes = formStyles();
 
     const disabled = status === "existing" || !schema.customId;
     const idSetAutomatically = status !== "existing" && !schema.customId;
@@ -146,7 +172,7 @@ export function CustomIdField<M, UserType>
     };
 
     return (
-        <FormControl fullWidth
+        <StyledFormControl fullWidth
                      error={error}
                      {...fieldProps}
                      key={"custom-id-field"}>
@@ -185,7 +211,7 @@ export function CustomIdField<M, UserType>
                 {(_) => "You need to specify an ID"}
             </ErrorMessage>
 
-        </FormControl>
+        </StyledFormControl>
     );
 }
 

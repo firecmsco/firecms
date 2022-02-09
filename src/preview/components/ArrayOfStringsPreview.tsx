@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import { StringProperty } from "../../models";
 import { PreviewComponentProps } from "../internal";
 
@@ -6,24 +7,35 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { StringPreview } from "./StringPreview";
 import { Theme } from "@mui/material";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'ArrayOfStringsPreview';
 
-export const useStyles = makeStyles((theme: Theme) =>
-    ({
-        array: {
-            display: "flex",
-            flexDirection: "column"
-        },
-        arrayWrap: {
-            display: "flex",
-            flexWrap: "wrap"
-        },
-        arrayItem: {
-            margin: theme.spacing(0.5)
-        }
-    })
-);
+const classes = {
+    array: `${PREFIX}-array`,
+    arrayWrap: `${PREFIX}-arrayWrap`,
+    arrayItem: `${PREFIX}-arrayItem`
+};
+
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.array}`]: {
+        display: "flex",
+        flexDirection: "column"
+    },
+
+    [`& .${classes.arrayWrap}`]: {
+        display: "flex",
+        flexWrap: "wrap"
+    },
+
+    [`& .${classes.arrayItem}`]: {
+        margin: theme.spacing(0.5)
+    }
+}));
+
+
 
 /**
  * @category Preview components
@@ -35,13 +47,13 @@ export function ArrayOfStringsPreview({
                                           size
                                       }: PreviewComponentProps<string[]>) {
 
-    const classes = useStyles();
+
 
     if (!property.of || property.dataType !== "array" || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStringsPreview");
 
     if (value && !Array.isArray(value)) {
-        return <div>{`Unexpected value: ${value}`}</div>;
+        return <Root>{`Unexpected value: ${value}`}</Root>;
     }
     const stringProperty = property.of as StringProperty;
 

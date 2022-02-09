@@ -1,19 +1,28 @@
 import { PreviewComponentProps, PreviewSize } from "../internal";
+import { styled } from '@mui/material/styles';
 import { ReferenceProperty } from "../../models";
 import { ReferencePreview } from "./ReferencePreview";
 
 import { Theme } from "@mui/material";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'ArrayOfReferencesPreview';
 
-export const useStyles = makeStyles((theme: Theme) =>
-    ({
-        arrayItem: {
-            margin: theme.spacing(0.5)
-        }
-    })
-);
+const classes = {
+    arrayItem: `${PREFIX}-arrayItem`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.arrayItem}`]: {
+        margin: theme.spacing(0.5)
+    }
+}));
+
+
 
 /**
  * @category Preview components
@@ -28,11 +37,11 @@ export function ArrayOfReferencesPreview({
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "reference")
         throw Error("Picked wrong preview component ArrayOfReferencesPreview");
 
-    const classes = useStyles();
+
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
-        <>
+        (<Root>
             {value &&
             value.map((v, index) =>
                 <div className={classes.arrayItem}
@@ -45,6 +54,6 @@ export function ArrayOfReferencesPreview({
                     />
                 </div>
             )}
-        </>
+        </Root>)
     );
 }

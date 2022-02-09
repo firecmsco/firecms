@@ -1,11 +1,46 @@
 import React, { PropsWithChildren } from "react";
 
+import { styled } from '@mui/material/styles';
+
 import { Drawer as MuiDrawer, Theme } from "@mui/material";
-import { createStyles, makeStyles } from "@mui/styles";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { FireCMSAppBar } from "./internal/FireCMSAppBar";
 import { useNavigation } from "../hooks";
 import { CircularProgressCenter } from "./components";
+
+
+const PREFIX = 'Scaffold';
+
+const classes = {
+    main: `${PREFIX}-main`,
+    content: `${PREFIX}-content`,
+    drawerPaper: `${PREFIX}-drawerPaper`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.main}`]: {
+        display: "flex",
+        flexDirection: "column",
+        width: "100vw",
+        height: "100vh"
+    },
+
+    [`& .${classes.content}`]: {
+        flexGrow: 1,
+        width: "100%",
+        height: "100%",
+        overflow: "auto"
+    },
+
+    [`& .${classes.drawerPaper}`]: {
+        width: 280
+    }
+}));
 
 
 /**
@@ -36,26 +71,6 @@ export interface ScaffoldProps {
 
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    ({
-        main: {
-            display: "flex",
-            flexDirection: "column",
-            width: "100vw",
-            height: "100vh"
-        },
-        content: {
-            flexGrow: 1,
-            width: "100%",
-            height: "100%",
-            overflow: "auto"
-        },
-        drawerPaper: {
-            width: 280
-        }
-    })
-);
-
 /**
  * This view acts as a scaffold for FireCMS.
  *
@@ -77,7 +92,7 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
         Drawer
     } = props;
 
-    const classes = useStyles();
+
 
     const navigationContext = useNavigation();
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -88,8 +103,7 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
     const UsedDrawer = Drawer || FireCMSDrawer;
 
     return (
-
-        <>
+        (<Root>
             <nav>
                 <MuiDrawer
                     variant="temporary"
@@ -107,7 +121,6 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
 
                 </MuiDrawer>
             </nav>
-
             <div className={classes.main}>
 
                 <FireCMSAppBar title={name}
@@ -118,8 +131,7 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
                     {children}
                 </main>
             </div>
-
-        </>
+        </Root>)
     );
 
 

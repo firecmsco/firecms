@@ -24,19 +24,12 @@ This is an example of a custom TextField that takes the background color as a pr
 
 ```tsx
 import React from "react";
-import { TextField, Theme } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
-import { FieldDescription, FieldProps } from "dist/index";
+import { TextField } from "@mui/material";
+import { FieldDescription, FieldProps } from "@camberi/firecms";
 
 interface CustomColorTextFieldProps {
     color: string
 }
-
-const useStyles = makeStyles<Theme, { customColor: string }>(() => ({
-    root: ({ customColor }) => ({
-        backgroundColor: customColor
-    })
-}));
 
 export default function CustomColorTextField({
                                                  property,
@@ -50,13 +43,12 @@ export default function CustomColorTextField({
                                                  ...props
                                              }: FieldProps<string, CustomColorTextFieldProps>) {
 
-    const classes = useStyles({ customColor: customProps.color });
 
     return (
         <>
             <TextField required={property.validation?.required}
-                       classes={{
-                           root: classes.root
+                       sx={{
+                           backgroundColor: customProps.color
                        }}
                        error={!!error}
                        disabled={isSubmitting}

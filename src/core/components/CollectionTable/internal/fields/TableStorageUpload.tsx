@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { styled } from '@mui/material/styles';
 
 import { Box, IconButton, Skeleton, Theme, Typography } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
-import makeStyles from "@mui/styles/makeStyles";
 
 import {
     ArrayProperty,
@@ -22,41 +22,64 @@ import clsx from "clsx";
 import { useSnackbarController, useStorageSource } from "../../../../../hooks";
 import { getThumbnailMeasure } from "../../../../../preview/util";
 
-export const useStyles = makeStyles<Theme, {hasValue:boolean}>((theme: Theme) => ({
-    dropZone: {
+const PREFIX = 'TableStorageUpload';
+
+const classes = {
+    dropZone: `${PREFIX}-dropZone`,
+    activeDrop: `${PREFIX}-activeDrop`,
+    acceptDrop: `${PREFIX}-acceptDrop`,
+    rejectDrop: `${PREFIX}-rejectDrop`,
+    arrayEntry: `${PREFIX}-arrayEntry`,
+    arrayEntryHovered: `${PREFIX}-arrayEntryHovered`,
+    thumbnailCloseIcon: `${PREFIX}-thumbnailCloseIcon`
+};
+
+const StyledBox = styled(Box)((
+    { theme, hasValue }: {
+        hasValue: boolean,
+        theme: Theme
+    }
+) => ({
+    [`&.${classes.dropZone}`]: {
         position: "relative",
         height: "100%",
         outline: 0,
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-        justifyContent: ({ hasValue }) => hasValue ? "start" : "center",
+        justifyContent: hasValue ? "start" : "center",
         alignItems: "center"
     },
-    activeDrop: {
+
+    [`&.${classes.activeDrop}`]: {
         borderRadius: "2px",
         border: "2px solid",
         borderColor: "transparent"
     },
-    acceptDrop: {
+
+    [`&.${classes.acceptDrop}`]: {
         transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
         background: "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important",
         // background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.09) 10px, rgba(0, 0, 0, 0.12) 10px, rgba(0, 0, 0, 0.12) 20px) !important",
         borderColor: theme.palette.success.light
     },
-    rejectDrop: {
+
+    [`&.${classes.rejectDrop}`]: {
         borderColor: theme.palette.error.light
     },
-    arrayEntry: {
+
+    [`& .${classes.arrayEntry}`]: {
         border: "1px dashed transparent",
         borderRadius: "4px"
     },
-    arrayEntryHovered: {
+
+    [`& .${classes.arrayEntryHovered}`]: {
         opacity: 0.5,
         border: "1px dashed gray",
         boxSizing: "border-box"
     },
-    thumbnailCloseIcon: {
+
+    [`& .${classes.thumbnailCloseIcon}`]: {
         position: "absolute",
         borderRadius: "9999px",
         top: -8,
@@ -240,8 +263,6 @@ function StorageUpload({
     const metadata: any | undefined = storageMeta?.metadata;
     const hasValue = Boolean(value);
 
-    const classes = useStyles({ hasValue });
-
     const internalInitialValue: StorageFieldItem[] =
         value == null
             ? []
@@ -375,16 +396,17 @@ function StorageUpload({
         : property as StringProperty;
 
     return (
-        <Box {...rootProps}
-
-             onMouseEnter={() => setOnHover(true)}
-             onMouseMove={() => setOnHover(true)}
-             onMouseLeave={() => setOnHover(false)}
-             className={clsx(classes.dropZone, {
-                 [classes.activeDrop]: isDragActive,
-                 [classes.rejectDrop]: isDragReject,
-                 [classes.acceptDrop]: isDragAccept
-             })}
+        // @ts-ignore
+        <StyledBox {...rootProps}
+                   hasValue={hasValue}
+                   onMouseEnter={() => setOnHover(true)}
+                   onMouseMove={() => setOnHover(true)}
+                   onMouseLeave={() => setOnHover(false)}
+                   className={clsx(classes.dropZone, {
+                       [classes.activeDrop]: isDragActive,
+                       [classes.rejectDrop]: isDragReject,
+                       [classes.acceptDrop]: isDragAccept
+                   })}
         >
 
             <input autoFocus={autoFocus} {...getInputProps()} />
@@ -455,7 +477,7 @@ function StorageUpload({
             }
 
 
-        </Box>
+        </StyledBox>
     );
 
 }

@@ -1,4 +1,5 @@
 import { EnumValues } from "../../../../../models";
+import { styled } from '@mui/material/styles';
 import { ArrayEnumPreview } from "../../../../../preview";
 import React, { useEffect, useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select, Theme } from "@mui/material";
@@ -9,20 +10,29 @@ import {
 import { EnumValuesChip } from "../../../../../preview/components/CustomChip";
 
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+const PREFIX = 'TableSelect';
 
-export const useInputStyles = makeStyles<Theme>(theme => ({
-        select: {
-            height: "100%"
-        },
-        selectRoot: {
-            display: "flex",
-            alignItems: "center",
-            height: "100%"
-        }
-    })
-);
+const classes = {
+    select: `${PREFIX}-select`,
+    selectRoot: `${PREFIX}-selectRoot`
+};
+
+const StyledSelect = styled(Select)((
+    {
+        theme
+    }
+) => ({
+    [`&.${classes.select}`]: {
+        height: "100%"
+    },
+
+    [`& .${classes.selectRoot}`]: {
+        display: "flex",
+        alignItems: "center",
+        height: "100%"
+    }
+}));
+
 
 export function TableSelect(props: {
     name: string;
@@ -64,8 +74,6 @@ export function TableSelect(props: {
         setOpen(false);
     };
 
-    const classes = useInputStyles();
-
     const validValue = (Array.isArray(internalValue) && multiple) ||
         (!Array.isArray(internalValue) && !multiple);
 
@@ -77,7 +85,7 @@ export function TableSelect(props: {
     }, [focused, ref]);
 
     return (
-        <Select
+        <StyledSelect
             variant={"standard"}
             key={`table_select_${name}`}
             inputRef={ref}
@@ -111,7 +119,7 @@ export function TableSelect(props: {
                     if (!evt.target.value)
                         updateValue(null)
                     else
-                        updateValue(evt.target.value);
+                        updateValue(evt.target.value as any);
                 } else {
                     throw Error("Missing mapping in TableSelect");
                 }
@@ -158,6 +166,6 @@ export function TableSelect(props: {
                     );
                 }
             })}
-        </Select>
+        </StyledSelect>
     );
 }
