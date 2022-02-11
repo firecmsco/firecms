@@ -12,26 +12,6 @@ import { PreviewComponent, PreviewComponentProps } from "../internal";
 import { MapProperty } from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
-const PREFIX = 'MapPreview';
-
-const classes = {
-    tableNoBottomBorder: `${PREFIX}-tableNoBottomBorder`,
-    verticalAlignTop: `${PREFIX}-verticalAlignTop`
-};
-
-const StyledTable = styled(Table)(() =>
-    ({
-    [`& .${classes.tableNoBottomBorder}`]: {
-        "&:last-child th, &:last-child td": {
-            borderBottom: 0
-        }
-    },
-
-    [`& .${classes.verticalAlignTop}`]: {
-        verticalAlign: "top"
-    }
-}));
-
 /**
  * @category Preview components
  */
@@ -85,16 +65,22 @@ export function MapPreview<T extends {}>({
         );
 
     return (
-        <StyledTable size="small" key={`map_preview_${name}`}>
+        <Table size="small" key={`map_preview_${name}`}>
             <TableBody>
                 {mapPropertyKeys &&
                 mapPropertyKeys.map((key, index) => {
                     return (
                         <TableRow
                             key={`map_preview_table_${name}_${index}`}
-                            className={classes.tableNoBottomBorder}>
+                            sx={{
+                                "&:last-child th, &:last-child td": {
+                                    borderBottom: 0
+                                }
+                            }}>
                             <TableCell key={`table-cell-title-${name}-${key}`}
-                                       className={classes.verticalAlignTop}
+                                       sx={{
+                                           verticalAlign: "top"
+                                       }}
                                        width="30%"
                                        component="th">
                                 <Typography variant={"caption"}
@@ -104,7 +90,6 @@ export function MapPreview<T extends {}>({
                             </TableCell>
                             <TableCell key={`table-cell-${name}-${key}`}
                                        width="70%"
-                                       className={classes.verticalAlignTop}
                                        component="th">
                                 <ErrorBoundary>
                                     <PreviewComponent
@@ -118,7 +103,7 @@ export function MapPreview<T extends {}>({
                     );
                 })}
             </TableBody>
-        </StyledTable>
+        </Table>
     );
 
 }
