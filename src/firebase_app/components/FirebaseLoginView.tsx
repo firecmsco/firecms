@@ -42,7 +42,6 @@ const classes = {
     logo: `${PREFIX}-logo`
 };
 
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
 const Root = styled('div')((
    { theme } : {
         theme: Theme

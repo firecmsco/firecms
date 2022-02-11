@@ -9,7 +9,6 @@
         "@mui/icons-material": "link:../node_modules/@mui/icons-material",
         "@mui/lab": "link:../node_modules/@mui/lab",
         "@mui/material": "link:../node_modules/@mui/material",
-        "@mui/styles": "link:../node_modules/@mui/styles",
         "algoliasearch": "link:../node_modules/algoliasearch",
         "firebase": "link:../node_modules/firebase",
         "react": "link:../node_modules/react",
@@ -21,9 +20,9 @@
     "scripts": {
         "dev": "vite",
         "build:vite": "vite build && tsc",
+        "build:react": "react-scripts build --profile",
         "preview": "vite preview",
         "start": "react-scripts start",
-        "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "deploy": "vite build && firebase deploy --only hosting"

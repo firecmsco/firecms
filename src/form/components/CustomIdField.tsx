@@ -33,16 +33,8 @@ import {
 const PREFIX = 'CustomIdField';
 
 const classes = {
-    paper: `${PREFIX}-paper`,
-    largePadding: `${PREFIX}-largePadding`,
-    inputLabel: `${PREFIX}-inputLabel`,
-    shrinkInputLabel: `${PREFIX}-shrinkInputLabel`,
-    buttons: `${PREFIX}-buttons`,
-    button: `${PREFIX}-button`,
-    form: `${PREFIX}-form`,
     input: `${PREFIX}-input`,
-    select: `${PREFIX}-select`,
-    oneOfInput: `${PREFIX}-oneOfInput`
+    select: `${PREFIX}-select`
 };
 
 const StyledFormControl = styled(FormControl)((
@@ -50,43 +42,6 @@ const StyledFormControl = styled(FormControl)((
         theme: Theme
     }
 ) => ({
-    [`& .${classes.paper}`]: {
-        elevation: 0,
-        padding: theme.spacing(2),
-        [theme.breakpoints.up("md")]: {
-            padding: theme.spacing(2)
-        }
-    },
-
-    [`& .${classes.largePadding}`]: {
-        padding: theme.spacing(2),
-        [theme.breakpoints.up("md")]: {
-            padding: theme.spacing(3)
-        }
-    },
-
-    [`& .${classes.inputLabel}`]: {
-        marginTop: theme.spacing(1 / 2),
-        marginLeft: theme.spacing(1 / 2)
-    },
-
-    [`& .${classes.shrinkInputLabel}`]: {
-        marginTop: "-2px",
-        marginLeft: theme.spacing(1 / 2)
-    },
-
-    [`& .${classes.buttons}`]: {
-        display: "flex",
-        justifyContent: "flex-end"
-    },
-
-    [`& .${classes.button}`]: {
-        margin: theme.spacing(1)
-    },
-
-    [`& .${classes.form}`]: {
-        marginTop: theme.spacing(2)
-    },
 
     [`& .${classes.input}`]: {
         minHeight: "64px"
@@ -94,10 +49,6 @@ const StyledFormControl = styled(FormControl)((
 
     [`& .${classes.select}`]: {
         paddingTop: theme.spacing(1 / 2)
-    },
-
-    [`& .${classes.oneOfInput}`]: {
-        marginBottom: theme.spacing(2)
     }
 }));
 
