@@ -78,7 +78,7 @@ export function TableDateField(props: {
                     renderInput={(inputProps) => (
                         <MuiTextField
                             {...inputProps}
-                            style={{
+                            sx={{
                                 height: "100%"
                             }}
                             variant={"standard"}

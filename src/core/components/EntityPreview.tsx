@@ -138,7 +138,7 @@ export function EntityPreview<M>(
                                                scope="row"
                                                className={classes.titleCell}>
                                         <Typography
-                                            style={{ paddingLeft: "16px" }}
+                                            sx={{ paddingLeft: 2 }}
                                             variant={"caption"}
                                             color={"textSecondary"}>
                                             {property.title}

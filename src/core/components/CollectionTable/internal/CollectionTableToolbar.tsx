@@ -125,7 +125,7 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
 
             <Tooltip title="Clear filter">
                 <IconButton
-                    style={{ height: "fit-content" }}
+                    sx={{ height: "fit-content" }}
                     aria-label="filter clear"
                     onClick={props.clearFilter}
                     size="large">
@@ -139,7 +139,7 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
         <Select
             variant={"standard"}
             value={props.size}
-            style={{ width: 56 }}
+            sx={{ width: 56 }}
             onChange={(evt: any) => {
                 props.onSizeChanged(evt.target.value);
             }}

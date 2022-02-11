@@ -213,7 +213,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
             <Typography
                 variant="h6"
-                style={{
+                sx={{
                     lineHeight: "1.0",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
@@ -231,7 +231,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 {`${collection.name}`}
             </Typography>
             <Typography
-                style={{
+                sx={{
                     display: "block",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",

@@ -6,9 +6,9 @@ import React, {
     useState
 } from "react";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
-import { Button, IconButton, Theme, Typography } from "@mui/material";
+import { Box, Button, IconButton, Theme, Typography } from "@mui/material";
 import { Portal } from "@mui/base";
 
 import ClearIcon from "@mui/icons-material/Clear";
@@ -37,7 +37,7 @@ import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
 
-const PREFIX = 'PopupFormField';
+const PREFIX = "PopupFormField";
 
 const classes = {
     form: `${PREFIX}-form`,
@@ -47,7 +47,7 @@ const classes = {
     hidden: `${PREFIX}-hidden`
 };
 
-const StyledPortal = styled(Portal)((
+const Root = styled("div")((
    { theme } : {
         theme: Theme
     }
@@ -255,9 +255,9 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         return <></>;
 
     const form = entity && (
-        <div
+        <Box
             key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
-            style={{
+            sx={{
                 width: 520,
                 maxWidth: "100vw",
                 maxHeight: "85vh"
@@ -350,7 +350,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             </Typography>
             }
 
-        </div>
+        </Box>
     );
 
     const draggable = (
@@ -370,7 +370,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
                 <IconButton
                     size={"small"}
-                    style={{
+                    sx={{
                         position: "absolute",
                         top: -14,
                         right: -14,
@@ -380,7 +380,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         event.stopPropagation();
                         onClose();
                     }}>
-                    <ClearIcon style={{ color: "white" }}
+                    <ClearIcon sx={{ color: "white" }}
                                fontSize={"small"}/>
                 </IconButton>
             </div>
@@ -389,9 +389,11 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     );
 
     return (
-        <StyledPortal container={document.body}>
+        <Portal container={document.body}>
+            <Root>
             {draggable}
-        </StyledPortal>
+            </Root>
+        </Portal>
     );
 
 }

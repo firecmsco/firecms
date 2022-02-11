@@ -102,7 +102,7 @@ export function FireCMSHomePage() {
                             </Typography>}
                         </CardContent>
 
-                        <CardActions style={{ alignSelf: "flex-end" }}>
+                        <CardActions sx={{ alignSelf: "flex-end" }}>
                             <Box p={1}>
                                 <ArrowForwardIcon color="primary"/>
                             </Box>
