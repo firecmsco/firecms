@@ -1,3 +1,4 @@
+
 ## [2.0.0-alpha1] - 2021-12-13
 
 - Collections no use `schemaId` instead of point to a schema
@@ -36,10 +37,18 @@ buildProperty<string>({
 });
 ```
 
-- Validation: The `email`validation prop in string properties is now placed 
-at the property level (not under `validation`)
+- Validation: The `email`validation prop in string properties is now placed
+  at the property level (not under `validation`)
 - `storageMeta`prop in string properties is now called `storage`
 
+
+## [1.0.0-rc.2] - 2022-02-08
+
+### Changed
+
+- Fix for Portal import bug related to mui 5.4 version.
+- Allowing `optional` custom ids
+- Small cosmetic updates
 
 ## [1.0.0-rc.1] - 2022-01-23
 

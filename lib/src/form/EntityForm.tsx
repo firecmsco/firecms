@@ -109,6 +109,7 @@ export function EntityForm<M>({
                                   onValuesChanged
                               }: EntityFormProps<M>) {
 
+
     const dataSource = useDataSource();
     const schemaRegistry = useSchemaRegistry();
 
@@ -296,7 +297,7 @@ function FormInternal<M>({
     entityId: string | undefined,
     formRef: any,
     status: "new" | "existing" | "copy",
-    setCustomId: (id:string) => void,
+    setCustomId: (id?: string) => void,
     customIdError: boolean,
     savingError?: Error
 }) {
@@ -367,6 +368,8 @@ function FormInternal<M>({
         </Grid>
     );
 
+    const disabled = isSubmitting || (!modified && status === "existing");
+
     return (
         <Container maxWidth={"sm"}
                    sx={(theme) => ({
@@ -420,8 +423,36 @@ function FormInternal<M>({
                                 </Typography>
                             </Box>}
 
-                            {buildButtons(isSubmitting, modified, status)}
+                            <Box textAlign="right">
 
+                                {status === "existing" &&
+                                    <Button
+                                        variant="text"
+                                        color="primary"
+                                        disabled={disabled}
+                                        type="reset"
+                                        sx={{
+                                            margin: 1
+                                        }}
+                                    >
+                                        Discard
+                                    </Button>}
+
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit"
+                                    disabled={disabled}
+                                    sx={{
+                                        margin: 1
+                                    }}
+                                >
+                                    {status === "existing" && "Save"}
+                                    {status === "copy" && "Create copy"}
+                                    {status === "new" && "Create"}
+                                </Button>
+
+                            </Box>
                         </Box>
 
                     </Form>
@@ -430,42 +461,6 @@ function FormInternal<M>({
             <ErrorFocus containerRef={formRef}/>
 
         </Container>
-    );
-}
-
-function buildButtons(isSubmitting: boolean, modified: boolean, status: EntityStatus) {
-    const disabled = isSubmitting || (!modified && status === "existing");
-    return (
-        <Box textAlign="right">
-
-            {status === "existing" &&
-            <Button
-                variant="text"
-                color="primary"
-                disabled={disabled}
-                type="reset"
-                sx={{
-                    margin: 1
-                }}
-            >
-                Discard
-            </Button>}
-
-            <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={disabled}
-                sx={{
-                    margin: 1
-                }}
-            >
-                {status === "existing" && "Save"}
-                {status === "copy" && "Create copy"}
-                {status === "new" && "Create"}
-            </Button>
-
-        </Box>
     );
 }
 

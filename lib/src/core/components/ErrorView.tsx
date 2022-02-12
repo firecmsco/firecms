@@ -1,6 +1,7 @@
 import React from "react";
 import ErrorIcon from "@mui/icons-material/Error";
 import { Box, Tooltip } from "@mui/material";
+import { ErrorTooltip } from "./ErrorTooltip";
 
 /**
  * @category Components
@@ -22,6 +23,7 @@ export function ErrorView({
                               error,
                               tooltip
                           }: ErrorViewProps): React.ReactElement {
+
     const body = (
         <Box
             sx={{
@@ -38,9 +40,9 @@ export function ErrorView({
 
     if (tooltip) {
         return (
-            <Tooltip title={tooltip}>
+            <ErrorTooltip title={tooltip}>
                 {body}
-            </Tooltip>
+            </ErrorTooltip>
         );
     }
     return body;

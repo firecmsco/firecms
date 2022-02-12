@@ -8,7 +8,6 @@ import { FieldProps } from "../../models";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { formStyles } from "../styles";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -60,6 +59,9 @@ export function DateTimeField({
                                   }}
                                   InputProps={{
                                       ...props.InputProps,
+                                      sx: {
+                                          minHeight: "64px"
+                                      }
                                   }}
                                   error={showError}
                         // format={dateFormat}

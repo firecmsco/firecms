@@ -1,7 +1,27 @@
 import { PreviewComponentProps, PreviewSize } from "../internal";
-import { useStyles } from "./styles";
+import { styled } from '@mui/material/styles';
 import { ResolvedReferenceProperty } from "../../models";
 import { ReferencePreview } from "./ReferencePreview";
+
+import { Theme } from "@mui/material";
+
+const PREFIX = 'ArrayOfReferencesPreview';
+
+const classes = {
+    arrayItem: `${PREFIX}-arrayItem`
+};
+
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.arrayItem}`]: {
+        margin: theme.spacing(0.5)
+    }
+}));
+
+
 
 /**
  * @category Preview components
@@ -16,11 +36,11 @@ export function ArrayOfReferencesPreview({
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "reference")
         throw Error("Picked wrong preview component ArrayOfReferencesPreview");
 
-    const classes = useStyles();
+
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
-        <>
+        (<Root>
             {value &&
             value.map((v, index) =>
                 <div className={classes.arrayItem}
@@ -33,6 +53,6 @@ export function ArrayOfReferencesPreview({
                     />
                 </div>
             )}
-        </>
+        </Root>)
     );
 }

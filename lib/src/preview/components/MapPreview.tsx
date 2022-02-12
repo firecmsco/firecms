@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import {
     Table,
     TableBody,
@@ -6,25 +7,10 @@ import {
     TableRow,
     Typography
 } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 
 import { PreviewComponent, PreviewComponentProps } from "../internal";
 import { ResolvedMapProperty } from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        tableNoBottomBorder: {
-            "&:last-child th, &:last-child td": {
-                borderBottom: 0
-            }
-        },
-        verticalAlignTop: {
-            verticalAlign: "top"
-        }
-    })
-);
 
 /**
  * @category Preview components
@@ -36,7 +22,7 @@ export function MapPreview<T extends Record<string, unknown>>({
                                              size
                                          }: PreviewComponentProps<T>) {
 
-    const classes = useStyles();
+
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPreview");
@@ -86,9 +72,15 @@ export function MapPreview<T extends Record<string, unknown>>({
                     return (
                         <TableRow
                             key={`map_preview_table_${name}_${index}`}
-                            className={classes.tableNoBottomBorder}>
+                            sx={{
+                                "&:last-child th, &:last-child td": {
+                                    borderBottom: 0
+                                }
+                            }}>
                             <TableCell key={`table-cell-title-${name}-${key}`}
-                                       className={classes.verticalAlignTop}
+                                       sx={{
+                                           verticalAlign: "top"
+                                       }}
                                        width="30%"
                                        component="th">
                                 <Typography variant={"caption"}
@@ -98,7 +90,6 @@ export function MapPreview<T extends Record<string, unknown>>({
                             </TableCell>
                             <TableCell key={`table-cell-${name}-${key}`}
                                        width="70%"
-                                       className={classes.verticalAlignTop}
                                        component="th">
                                 <ErrorBoundary>
                                     <PreviewComponent

@@ -1,10 +1,36 @@
 import { EnumValueConfig, EnumValues } from "../../models";
 
+import { styled } from '@mui/material/styles';
+
 import React from "react";
 
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { EnumValuesChip } from "./CustomChip";
-import { useStyles } from "./styles";
+import { Theme } from "@mui/material";
+
+const PREFIX = 'ArrayEnumPreview';
+
+const classes = {
+    arrayWrap: `${PREFIX}-arrayWrap`,
+    arrayItem: `${PREFIX}-arrayItem`
+};
+
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`&.${classes.arrayWrap}`]: {
+        display: "flex",
+        flexWrap: "wrap"
+    },
+
+    [`& .${classes.arrayItem}`]: {
+        margin: theme.spacing(0.5)
+    }
+}));
+
+
 
 /**
  * @category Preview components
@@ -21,10 +47,10 @@ export function ArrayEnumPreview({
     size: "regular" | "small" | "tiny"
 }) {
 
-    const classes = useStyles();
+
 
     return (
-        <div className={classes.arrayWrap}>
+        <Root className={classes.arrayWrap}>
             {value &&
             (value as any[]).map((enumKey, index) => {
                     return (
@@ -40,6 +66,6 @@ export function ArrayEnumPreview({
                     );
                 }
             )}
-        </div>
+        </Root>
     );
 }

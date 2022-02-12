@@ -330,7 +330,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                     value={entity?.values ? entity.values[name] : undefined}
                     property={property}
                     openPopup={openPopup}
-                    select={onSelect}
+                    onSelect={onSelect}
                     width={column.width}
                     height={column.height}
                     entityId={entity.id}

@@ -4,71 +4,21 @@ import {
     FormControlLabel,
     FormHelperText,
     Switch,
-    Theme,
     Typography
 } from "@mui/material";
 import clsx from "clsx";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 
 import { FieldProps } from "../../models";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 
-export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        formControl: {
-            justifyContent: "space-between",
-            margin: 0,
-            width: "100%",
-            minHeight: "64px",
-            paddingLeft: "16px",
-            paddingRight: "24px",
-            color: "rgba(0, 0, 0, 0.87)",
-            boxSizing: "border-box",
-            position: "relative",
-            display: "inline-flex",
-            alignItems: "center",
-            backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
-            borderTopLeftRadius: "4px",
-            borderTopRightRadius: "4px",
-            transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-            "&::before": {
-                borderBottom: theme.palette.mode === "light" ? "1px solid rgba(0, 0, 0, 0.42)" : "1px solid rgba(255, 255, 255, 0.7)",
-                left: 0,
-                bottom: 0,
-                content: "\"\\00a0\"",
-                position: "absolute",
-                right: 0,
-                transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-                pointerEvents: "none"
-            },
-            "&::after": {
-                content: "\"\"",
-                transition: "transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-                left: 0,
-                bottom: 0,
-                position: "absolute",
-                right: 0,
-                transform: "scaleX(0)",
-                borderBottom: `2px solid ${theme.palette.primary.main}`
-            },
-            "&:hover": {
-                backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
-            }
-        },
-        focus: {
-            "&::before": {
-                borderBottom: theme.palette.mode === "light" ? "1px solid rgba(255, 255, 255, 0.7)" : "1px solid rgba(0, 0, 0, 0.87)"
-            },
-            "&::after": {
-                transform: "scaleX(1)",
-                pointerEvents: "none"
-            }
-        }
-    })
-);
+const PREFIX = "SwitchField";
+
+const classes = {
+    formControl: `${PREFIX}-formControl`,
+    focus: `${PREFIX}-focus`
+};
 
 
 type SwitchFieldProps = FieldProps<boolean>;
@@ -87,7 +37,7 @@ const SwitchFieldComponent = React.forwardRef(function({
                                                            shouldAlwaysRerender
                                                        }: SwitchFieldProps, ref) {
 
-    const classes = useStyles();
+
 
     useClearRestoreValue({
         property,
@@ -102,10 +52,57 @@ const SwitchFieldComponent = React.forwardRef(function({
             <FormControl fullWidth>
 
                 <FormControlLabel
-                    className={clsx(classes.formControl,
+                    className={clsx(
                         {
                             [classes.focus]: focus
                         })}
+                    sx={theme => ({
+                        justifyContent: "space-between",
+                        margin: 0,
+                        width: "100%",
+                        minHeight: "64px",
+                        paddingLeft: "16px",
+                        paddingRight: "24px",
+                        color: "rgba(0, 0, 0, 0.87)",
+                        boxSizing: "border-box",
+                        position: "relative",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
+                        borderTopLeftRadius: "4px",
+                        borderTopRightRadius: "4px",
+                        transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+                        "&::before": {
+                            borderBottom: focus
+                                ? (theme.palette.mode === "light"
+                                    ? "1px solid rgba(255, 255, 255, 0.7)"
+                                    : "1px solid rgba(0, 0, 0, 0.87)")
+                                : (theme.palette.mode === "light"
+                                    ? "1px solid rgba(0, 0, 0, 0.42)"
+                                    : "1px solid rgba(255, 255, 255, 0.7)"),
+                            left: 0,
+                            bottom: 0,
+                            content: "\"\\00a0\"",
+                            position: "absolute",
+                            right: 0,
+                            transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+                            pointerEvents: "none"
+                        },
+                        "&::after": {
+                            content: "\"\"",
+                            transition: "transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+                            left: 0,
+                            bottom: 0,
+                            position: "absolute",
+                            right: 0,
+                            transform: focus ? "scaleX(1)" : "scaleX(0)",
+                            borderBottom: `2px solid ${theme.palette.primary.main}`,
+                            pointerEvents: focus ? "none" : undefined
+                        },
+                        "&:hover": {
+                            backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
+                        }
+                    })}
                     onClick={(e) => setFocus(true)}
                     labelPlacement={"start"}
                     checked={Boolean(value)}

@@ -1,9 +1,32 @@
 import React, { useCallback } from "react";
-import { useInputStyles } from "./styles";
-import { Box, TextField as MuiTextField, Typography } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import {
+    Box,
+    TextField as MuiTextField,
+    Theme,
+    Typography
+} from "@mui/material";
 import { TimestampProperty } from "../../../../../models";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import { EmptyValue, TimestampPreview } from "../../../../../preview";
+
+
+const PREFIX = 'TableDateField';
+
+const classes = {
+    hidden: `${PREFIX}-hidden`
+};
+
+const StyledBox = styled(Box)((
+    {
+        theme
+    }
+) => ({
+    [`& .${classes.hidden}`]: {
+        display: "none"
+    }
+}));
+
 
 export function TableDateField(props: {
     name: string;
@@ -34,10 +57,9 @@ export function TableDateField(props: {
         setPreventOutsideClick(false);
     }, []);
 
-    const classes = useInputStyles();
 
     return (
-        <Box display={"flex"} alignItems={"center"}>
+        <StyledBox display={"flex"} alignItems={"center"}>
 
             <Box flexGrow={1}>
                 {internalValue &&
@@ -56,7 +78,7 @@ export function TableDateField(props: {
                     renderInput={(inputProps) => (
                         <MuiTextField
                             {...inputProps}
-                            style={{
+                            sx={{
                                 height: "100%"
                             }}
                             variant={"standard"}
@@ -84,6 +106,6 @@ export function TableDateField(props: {
                     }}
                 />
             </Box>
-        </Box>
+        </StyledBox>
     );
 }

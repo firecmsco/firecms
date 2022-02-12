@@ -1,5 +1,7 @@
 import React, { useMemo } from "react";
 
+import { styled } from '@mui/material/styles';
+
 import {
     FormControl,
     IconButton,
@@ -8,6 +10,7 @@ import {
     MenuItem,
     Select as MuiSelect,
     TextField as MuiTextField,
+    Theme,
     Tooltip
 } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -21,7 +24,7 @@ import {
     EnumValueConfig,
     FireCMSContext
 } from "../../models";
-import { formStyles } from "../styles";
+
 import {
     useClipboard,
     useFireCMSContext,
@@ -30,16 +33,38 @@ import {
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 import { resolveEnum } from "../../core/utils";
 
+const PREFIX = 'CustomIdField';
+
+const classes = {
+    input: `${PREFIX}-input`,
+    select: `${PREFIX}-select`
+};
+
+const StyledFormControl = styled(FormControl)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+
+    [`& .${classes.input}`]: {
+        minHeight: "64px"
+    },
+
+    [`& .${classes.select}`]: {
+        paddingTop: theme.spacing(1 / 2)
+    }
+}));
+
+
 export function CustomIdField<M, UserType>
 ({ schema, status, onChange, error, entity }: {
     schema: EntitySchema<M>,
     status: EntityStatus,
-    onChange: (id: string) => void,
+    onChange: (id?: string) => void,
     error: boolean,
     entity: Entity<M> | undefined
 }) {
 
-    const classes = formStyles();
     const schemaRegistry = useSchemaRegistry();
 
     const disabled = status === "existing" || !schema.customId;
@@ -100,15 +125,16 @@ export function CustomIdField<M, UserType>
     };
 
     const fieldProps: any = {
-        label: idSetAutomatically ? "Id is set automatically" : "Id",
+        label: idSetAutomatically ? "ID is set automatically" : "ID",
         disabled: disabled,
         name: "id",
         type: null,
         value: entity && status === "existing" ? entity.id : undefined,
         variant: "filled"
     };
+
     return (
-        <FormControl fullWidth
+        <StyledFormControl fullWidth
                      error={error}
                      {...fieldProps}
                      key={"custom-id-field"}>
@@ -135,10 +161,10 @@ export function CustomIdField<M, UserType>
                 <MuiTextField {...fieldProps}
                               error={error}
                               InputProps={inputProps}
-                              onChange={(event) => {
+                              helperText={schema.customId === "optional" ? "Leave this blank to autogenerate an ID" : "ID of the new document"}onChange={(event) => {
                                   let value = event.target.value;
                                   if (value) value = value.trim();
-                                  return onChange(value);
+                                  return onChange(value.length ? value : undefined);
                               }}/>}
 
             <ErrorMessage name={"id"}
@@ -146,7 +172,7 @@ export function CustomIdField<M, UserType>
                 {(_) => "You need to specify an ID"}
             </ErrorMessage>
 
-        </FormControl>
+        </StyledFormControl>
     );
 }
 

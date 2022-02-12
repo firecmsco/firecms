@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import { styled } from '@mui/material/styles';
+
 import {
     Box,
     Button,
@@ -12,8 +14,6 @@ import {
     Theme,
     Typography
 } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 
 import { FirebaseApp } from "firebase/app";
 import { FireCMSLogo } from "../../core/components/FireCMSLogo";
@@ -36,15 +36,23 @@ import EmailIcon from "@mui/icons-material/Email";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        logo: {
-            padding: theme.spacing(3),
-            width: 260,
-            height: 260
-        }
-    })
-);
+const PREFIX = 'FirebaseLoginView';
+
+const classes = {
+    logo: `${PREFIX}-logo`
+};
+
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.logo}`]: {
+        padding: theme.spacing(3),
+        width: 260,
+        height: 260
+    }
+}));
 
 /**
  * @category Firebase
@@ -70,7 +78,7 @@ export function FirebaseLoginView({
                                       firebaseApp,
                                       authDelegate
                                   }: FirebaseLoginViewProps) {
-    const classes = useStyles();
+
     const authController = useAuthController();
     const modeState = useModeState();
 
@@ -88,12 +96,11 @@ export function FirebaseLoginView({
         if (authDelegate.authError) {
             if (authDelegate.authError.code === "auth/operation-not-allowed") {
                 errorView =
-                    <>
+                    <Root>
                         <Box p={1}>
                             <ErrorView
                                 error={"You need to enable the corresponding login provider in your Firebase project"}/>
                         </Box>
-
                         {firebaseApp &&
                         <Box p={1}>
                             <a href={`https://console.firebase.google.com/project/${firebaseApp.options.projectId}/authentication/providers`}
@@ -105,7 +112,7 @@ export function FirebaseLoginView({
                                 </Button>
                             </a>
                         </Box>}
-                    </>;
+                    </Root>;
             } else if (!ignoredCodes.includes(authDelegate.authError.code)) {
                 console.error(authDelegate.authError);
                 errorView =

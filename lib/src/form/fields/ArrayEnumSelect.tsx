@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import {
     Checkbox,
     FormControl,
@@ -6,7 +7,8 @@ import {
     InputLabel,
     ListItemText,
     MenuItem,
-    Select as MuiSelect
+    Select as MuiSelect,
+    Theme
 } from "@mui/material";
 import { EnumType, FieldProps } from "../../models";
 import { FieldDescription } from "../index";
@@ -17,10 +19,35 @@ import {
     isEnumValueDisabled
 } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
+
 import { ArrayEnumPreview } from "../../preview";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 import { resolveEnum } from "../../core/utils";
 import { ErrorView } from "../../core";
+
+
+const PREFIX = 'ArrayEnumSelect';
+
+const classes = {
+    inputLabel: `${PREFIX}-inputLabel`,
+    shrinkInputLabel: `${PREFIX}-shrinkInputLabel`
+};
+
+const StyledFormControl = styled(FormControl)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.inputLabel}`]: {
+        marginTop: theme.spacing(1 / 2),
+        marginLeft: theme.spacing(1 / 2)
+    },
+
+    [`& .${classes.shrinkInputLabel}`]: {
+        marginTop: "-2px",
+        marginLeft: theme.spacing(1 / 2)
+    }
+}));
 
 
 /**
@@ -68,7 +95,8 @@ export function ArrayEnumSelect({
 
     const validValue = !!value && Array.isArray(value);
     return (
-        <FormControl
+        <StyledFormControl
+            variant="filled"
             fullWidth
             required={property.validation?.required}
             error={showError}
@@ -139,6 +167,6 @@ export function ArrayEnumSelect({
 
             {showError && <FormHelperText>{error}</FormHelperText>}
 
-        </FormControl>
+        </StyledFormControl>
     );
 }

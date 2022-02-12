@@ -1,5 +1,12 @@
 import React, { useMemo } from "react";
-import { Box, Button, FormControl, FormHelperText, Paper } from "@mui/material";
+import {
+    Box,
+    Button,
+    FormControl,
+    FormHelperText,
+    Paper,
+    Theme
+} from "@mui/material";
 import {
     Entity,
     EntityCollectionResolver,
@@ -10,7 +17,7 @@ import {
 import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { ErrorView, ReferenceDialog } from "../../core";
-import { formStyles } from "../styles";
+
 import { useClearRestoreValue, useNavigation } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";
 
@@ -35,8 +42,6 @@ export function ArrayOfReferencesField({
                                            includeDescription,
                                            setValue
                                        }: ArrayOfReferencesFieldProps) {
-
-    const classes = formStyles();
 
     const ofProperty = property.of as ResolvedProperty;
     if (ofProperty.dataType !== "reference") {
@@ -104,9 +109,13 @@ export function ArrayOfReferencesField({
                 </FormHelperText>}
 
                 <Paper variant={"outlined"}
-                       className={classes.paper}>
-
-                    {ofProperty.path}
+                       sx={(theme) => ({
+                           elevation: 0,
+                           padding: theme.spacing(2),
+                           [theme.breakpoints.up("md")]: {
+                               padding: theme.spacing(2)
+                           }
+                       })}>
 
                     {!collectionResolver && <ErrorView
                         error={"The specified collection does not exist. Check console"}/>}

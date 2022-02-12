@@ -6,11 +6,11 @@ import React, {
     useState
 } from "react";
 
-import { Button, IconButton, Theme, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+import { Box, Button, IconButton, Theme, Typography } from "@mui/material";
 import { Portal } from "@mui/base";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import equal from "react-fast-compare"
@@ -37,18 +37,34 @@ import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
 
-export const useStyles = makeStyles((theme: Theme) => createStyles({
-    form: {
+const PREFIX = "PopupFormField";
+
+const classes = {
+    form: `${PREFIX}-form`,
+    button: `${PREFIX}-button`,
+    popup: `${PREFIX}-popup`,
+    popupInner: `${PREFIX}-popupInner`,
+    hidden: `${PREFIX}-hidden`
+};
+
+const Root = styled("div")((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.form}`]: {
         display: "flex",
         flexDirection: "column"
     },
-    button: {
+
+    [`& .${classes.button}`]: {
         marginTop: theme.spacing(1),
         alignSelf: "flex-end",
         position: "sticky",
         bottom: 0
     },
-    popup: {
+
+    [`& .${classes.popup}`]: {
         display: "inline-block",
         userSelect: "none",
         position: "fixed",
@@ -59,17 +75,21 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         // transition: "transform 250ms ease-out",
         // transform: "scale(1.0)"
     },
-    popupInner: {
+
+    [`& .${classes.popupInner}`]: {
         padding: theme.spacing(2),
         overflow: "auto",
         cursor: "inherit"
     },
-    hidden: {
+
+    [`& .${classes.hidden}`]: {
         visibility: "hidden",
         // transform: "scale(0.7)",
         zIndex: -1
     }
 }));
+
+
 
 
 interface PopupFormFieldProps<M extends { [Key: string]: any }> {
@@ -111,7 +131,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
 
-    const classes = useStyles();
+
     const windowSize = useWindowSize();
 
     const ref = React.useRef<HTMLDivElement>(null);
@@ -234,9 +254,9 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         return <></>;
 
     const form = entity && (
-        <div
+        <Box
             key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
-            style={{
+            sx={{
                 width: 520,
                 maxWidth: "100vw",
                 maxHeight: "85vh"
@@ -328,7 +348,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             </Typography>
             }
 
-        </div>
+        </Box>
     );
 
     const draggable = (
@@ -348,7 +368,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
                 <IconButton
                     size={"small"}
-                    style={{
+                    sx={{
                         position: "absolute",
                         top: -14,
                         right: -14,
@@ -358,7 +378,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         event.stopPropagation();
                         onClose();
                     }}>
-                    <ClearIcon style={{ color: "white" }}
+                    <ClearIcon sx={{ color: "white" }}
                                fontSize={"small"}/>
                 </IconButton>
             </div>
@@ -368,7 +388,9 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     return (
         <Portal container={document.body}>
+            <Root>
             {draggable}
+            </Root>
         </Portal>
     );
 

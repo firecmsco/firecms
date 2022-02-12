@@ -46,13 +46,14 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams) {
                 src={headerUrl}
             />}
 
-            <Container maxWidth={"md"} style={{
-                alignItems: "center",
-                justifyItems: "center",
-                display: "flex",
-                flexDirection: "column"
-            }}>
-                {modifiedValues?.name && <Typography variant={"h2"} style={{
+            <Container maxWidth={"md"}
+                       sx={{
+                           alignItems: "center",
+                           justifyItems: "center",
+                           display: "flex",
+                           flexDirection: "column"
+                       }}>
+                {modifiedValues?.name && <Typography variant={"h2"} sx={{
                     marginTop: "40px",
                     marginBottom: "20px"
                 }}>
@@ -92,7 +93,7 @@ export function Images({ storagePaths }: { storagePaths: string[] }) {
         {storagePaths.map((path, index) =>
             <Box p={2} m={1}
                  key={`images_${index}`}
-                 style={{
+                 sx={{
                      width: 250,
                      height: 250
                  }}>
@@ -172,13 +173,13 @@ export function ProductPreview({ productValues }: { productValues: EntityValues<
     if (!productValues)
         return <></>;
 
-    return <CardActionArea style={{
+    return <CardActionArea sx={{
         width: "400px",
         height: "400px",
         margin: "16px",
         boxShadow: "rgb(0 0 0 / 8%) 0px 8px 12px -4px"
     }}>
-        <CardContent style={{
+        <CardContent sx={{
             height: "100%",
             display: "flex",
             flexDirection: "column"

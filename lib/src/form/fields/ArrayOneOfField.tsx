@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { FastField, FieldProps as FormikFieldProps } from "formik";
 
-import { formStyles } from "../styles";
+
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
@@ -50,8 +50,6 @@ export function ArrayOneOfField<T extends Array<any>>({
     if (!property.oneOf)
         throw Error("ArrayOneOfField misconfiguration. Property `oneOf` not set");
 
-    const classes = formStyles();
-
     useClearRestoreValue({
         property,
         value,
@@ -83,7 +81,13 @@ export function ArrayOneOfField<T extends Array<any>>({
             </FormHelperText>}
 
             <Paper variant={"outlined"}
-                   className={classes.paper}>
+                   sx={(theme) => ({
+                       elevation: 0,
+                       padding: theme.spacing(2),
+                       [theme.breakpoints.up("md")]: {
+                           padding: theme.spacing(2)
+                       }
+                   })}>
                 <ArrayContainer value={value}
                                 name={name}
                                 buildEntry={buildEntry}
@@ -142,7 +146,6 @@ function ArrayOneOfEntry({
                              context
                          }: ArrayOneOfEntryProps) {
 
-    const classes = formStyles();
 
     const type = value && value[typeField];
     const [typeInternal, setTypeInternal] = useState<string | undefined>(type ?? undefined);
@@ -162,7 +165,13 @@ function ArrayOneOfEntry({
     const valueFieldName = `${name}[${valueField}]`;
 
     return (
-        <Paper className={classes.paper} elevation={0}>
+        <Paper sx={(theme) => ({
+            elevation: 0,
+            padding: theme.spacing(2),
+            [theme.breakpoints.up("md")]: {
+                padding: theme.spacing(2)
+            }
+        })} elevation={0}>
 
             <FastField
                 required={true}
@@ -177,7 +186,7 @@ function ArrayOneOfEntry({
                             </InputLabel>
                             <Select
                                 fullWidth
-                                className={classes.oneOfInput}
+                                sx={{ marginBottom: 2 }}
                                 labelId={`${name}_${index}_select_label`}
                                 value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}
                                 onChange={(evt: any) => {

@@ -1,5 +1,6 @@
 /* @jsxImportSource @emotion/react */
 import React from "react";
+import { styled } from '@mui/material/styles';
 import {
     AppBar,
     Avatar,
@@ -15,8 +16,6 @@ import {
     Toolbar,
     Typography
 } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import MenuIcon from "@mui/icons-material/Menu";
 import Brightness5Icon from "@mui/icons-material/Brightness5";
 import Brightness3Icon from "@mui/icons-material/Brightness3";
@@ -27,28 +26,40 @@ import { useAuthController, useModeState } from "../../hooks";
 import { useBreadcrumbsContext } from "../../hooks/useBreadcrumbsContext";
 
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        appbar: {},
-        menuButton: {
-            marginRight: theme.spacing(2)
+const PREFIX = 'FireCMSAppBar';
+
+const classes = {
+    appbar: `${PREFIX}-appbar`,
+    menuButton: `${PREFIX}-menuButton`,
+    breadcrumb: `${PREFIX}-breadcrumb`
+};
+
+const StyledSlide = styled(Slide)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.appbar}`]: {},
+
+    [`& .${classes.menuButton}`]: {
+        marginRight: theme.spacing(2)
+    },
+
+    [`& .${classes.breadcrumb}`]: {
+        backgroundColor: theme.palette.grey[100],
+        height: theme.spacing(3),
+        color: theme.palette.grey[800],
+        fontWeight: theme.typography.fontWeightMedium,
+        "&:hover, &:focus": {
+            cursor: "pointer",
+            backgroundColor: theme.palette.grey[300]
         },
-        breadcrumb: {
-            backgroundColor: theme.palette.grey[100],
-            height: theme.spacing(3),
-            color: theme.palette.grey[800],
-            fontWeight: theme.typography.fontWeightMedium,
-            "&:hover, &:focus": {
-                cursor: "pointer",
-                backgroundColor: theme.palette.grey[300]
-            },
-            "&:active": {
-                boxShadow: theme.shadows[1],
-                backgroundColor: theme.palette.grey[400]
-            }
+        "&:active": {
+            boxShadow: theme.shadows[1],
+            backgroundColor: theme.palette.grey[400]
         }
-    })
-);
+    }
+}));
 
 
 interface CMSAppBarProps {
@@ -67,7 +78,7 @@ export function FireCMSAppBar({
                                   toolbarExtraWidget
                               }: CMSAppBarProps) {
 
-    const classes = useStyles();
+
 
     const breadcrumbsContext = useBreadcrumbsContext();
     const { breadcrumbs } = breadcrumbsContext;
@@ -80,7 +91,7 @@ export function FireCMSAppBar({
         : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
 
     return (
-        <Slide
+        <StyledSlide
             direction="down" in={true} mountOnEnter unmountOnExit>
             <AppBar
                 className={classes.appbar}
@@ -174,6 +185,6 @@ export function FireCMSAppBar({
 
                 </Toolbar>
             </AppBar>
-        </Slide>
+        </StyledSlide>
     );
 }

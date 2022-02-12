@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "@mui/material";
-import clsx from "clsx";
-import { useInputStyles } from "./styles";
 import { useDebounce } from "../../../../internal/useDebounce";
+
 
 export function NumberTableInput(props: {
     error: Error | undefined;
@@ -44,7 +43,6 @@ export function NumberTableInput(props: {
     );
 
     const ref = React.createRef<HTMLInputElement>();
-    const classes = useInputStyles();
 
     useEffect(() => {
         if (ref.current && focused) {
@@ -57,7 +55,7 @@ export function NumberTableInput(props: {
     return (
         <Input
             inputRef={ref}
-            style={{
+            sx={{
                 width: "100%",
                 fontSize: "unset",
                 fontFamily: "unset",
@@ -65,8 +63,12 @@ export function NumberTableInput(props: {
                 border: "unset",
                 resize: "none",
                 outline: "none",
-                padding: 0
-
+                padding: 0,
+                margin: 0,
+                color: "unset",
+                fontWeight: "unset",
+                lineHeight: "unset",
+                textAlign: "right"
             }}
             inputProps={{
                 style: {
@@ -74,7 +76,6 @@ export function NumberTableInput(props: {
                 }
             }}
             disabled={disabled}
-            className={clsx(classes.input, classes.numberInput)}
             disableUnderline
             value={internalValue ?? ""}
             onBlur={onBlur}

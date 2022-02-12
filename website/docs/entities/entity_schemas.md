@@ -25,10 +25,11 @@ Check the full API reference in [Entity schema API](../api/interfaces/entitysche
 
 - `description` Description of this entity.
 
-- `customId` When not specified, Firestore will create a random ID. You can set
-  the value to `true` to allow the users to choose the ID. You can also pass a
-  set of values (as an `EnumValues` object) to allow them to pick from only
-  those.
+- `customId` If this prop is not set, the ID of the document will be created by
+  the datasource. You can set the value to 'true' to force the users to choose
+  the ID. You can set the value to 'optional' to allow the users to choose the
+  ID. If the ID is empty, an automatic ID will be set. You can also pass a set
+  of values (as an `EnumValues` object) to allow users to pick from only those.
 
 - `properties` Object defining the properties for the entity schema.
 

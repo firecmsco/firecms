@@ -40,7 +40,7 @@ cd my-cms
 - Install FireCMS and it's peer dependencies:
 
 ```
-yarn add @camberi/firecms firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab @mui/styles@^5 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
+yarn add @camberi/firecms firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
 ```
 
 You can replace the content of the file App.tsx with the following sample code.

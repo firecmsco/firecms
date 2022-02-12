@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Box, IconButton, Tooltip, useTheme } from "@mui/material";
+
 import Measure, { ContentRect } from "react-measure";
-import { IconButton, Tooltip } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import clsx from "clsx";
-import { CellStyleProps, useCellStyles } from "./styles";
+import { CellStyleProps } from "./styles";
 import { getRowHeight } from "./common";
-import equal from "react-fast-compare"
+import isEqual from "react-fast-compare";
+import { ErrorTooltip } from "../ErrorTooltip";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -20,32 +21,33 @@ interface TableCellProps {
     allowScroll?: boolean;
     disabledTooltip?: string;
     focused?: boolean;
-    selected?: boolean;
     showExpandIcon?: boolean;
     removePadding?: boolean;
     fullHeight?: boolean;
-    select?: (cellRect: DOMRect | undefined) => void;
+    selected?: boolean;
+    onSelect?: (cellRect: DOMRect | undefined) => void;
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
 const TableCellInternal = ({
-                                     children,
-                                     selected,
-                                     focused,
-                                     disabled,
-                                     disabledTooltip,
-                                     size,
-                                     saved,
-                                     error,
-                                     align,
-                                     allowScroll,
-                                     openPopup,
-                                     removePadding,
-                                     fullHeight,
-                                     select,
-                                     showExpandIcon = true
-                                 }: TableCellProps & CellStyleProps) => {
+                               children,
+                               selected,
+                               focused,
+                               disabled,
+                               disabledTooltip,
+                               size,
+                               saved,
+                               error,
+                               align,
+                               allowScroll,
+                               openPopup,
+                               removePadding,
+                               fullHeight,
+                               onSelect,
+                               showExpandIcon = true
+                           }: TableCellProps & CellStyleProps) => {
 
+    const theme = useTheme();
     const ref = React.createRef<HTMLDivElement>();
 
     const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
@@ -80,6 +82,38 @@ const TableCellInternal = ({
         };
     }, [saved]);
 
+    let p = theme.spacing(0);
+    if (!removePadding) {
+        switch (size) {
+            case "l":
+            case "xl":
+                p = theme.spacing(2);
+                break;
+            case "m":
+                p = theme.spacing(1);
+                break;
+            case "s":
+                p = theme.spacing(0.5);
+                break;
+            default:
+                p = theme.spacing(0.25);
+                break;
+        }
+    }
+
+    let justifyContent;
+    switch (align) {
+        case "right":
+            justifyContent = "flex-end";
+            break;
+        case "center":
+            justifyContent = "center";
+            break;
+        case "left":
+        default:
+            justifyContent = "flex-start";
+    }
+
     const doOpenPopup = useCallback(() => {
         if (openPopup) {
             const cellRect = ref && ref?.current?.getBoundingClientRect();
@@ -93,20 +127,20 @@ const TableCellInternal = ({
         }
     }, [doOpenPopup]);
 
-    const onSelect = useCallback(() => {
-        if (!select) return;
+    const onSelectCallback = useCallback(() => {
+        if (!onSelect) return;
         const cellRect = ref && ref?.current?.getBoundingClientRect();
         if (disabled) {
-            select(undefined);
+            onSelect(undefined);
         } else if (!selected && cellRect) {
-            select(cellRect);
+            onSelect(cellRect);
         }
-    }, [ref, select, selected, disabled]);
+    }, [ref, onSelect, selected, disabled]);
 
     const onFocus = useCallback((event: React.SyntheticEvent<HTMLDivElement>) => {
-        onSelect();
+        onSelectCallback();
         event.stopPropagation();
-    }, [onSelect]);
+    }, [onSelectCallback]);
 
     const onMeasure = useCallback((contentRect: ContentRect) => {
         if (contentRect?.bounds) {
@@ -116,27 +150,40 @@ const TableCellInternal = ({
         }
     }, [isOverflowing, maxHeight]);
 
-    const cellClasses = useCellStyles({
-        size,
-        align,
-        disabled,
-        removePadding
-    });
-
     const measuredDiv = <Measure
         bounds
         onResize={onMeasure}
     >
         {({ measureRef }) => (
-            <div ref={measureRef}
-                 className={clsx(cellClasses.fullWidth, { [cellClasses.fullHeight]: fullHeight })}>
+            <Box ref={measureRef}
+                 sx={{
+                     width: "100%",
+                     height: fullHeight ? "100%" : undefined
+                 }}>
                 {children}
-            </div>
+            </Box>
         )}
     </Measure>;
 
+    const isSelected = !error && (selected || focused);
+
+    let border: string;
+    if (isSelected) {
+        if (internalSaved) {
+            border = `2px solid ${theme.palette.success.light}`;
+        } else {
+            border = "2px solid #5E9ED6";
+        }
+    } else if (error) {
+        border = `2px solid ${theme.palette.error.light} !important`
+    } else {
+        border = "2px solid transparent"
+    }
+
+    const scrollable = !disabled && allowScroll && isOverflowing;
+    const faded = !disabled && !allowScroll && isOverflowing;
     return (
-        <div
+        <Box
             tabIndex={selected || disabled ? undefined : 0}
             ref={ref}
             onFocus={onFocus}
@@ -144,92 +191,105 @@ const TableCellInternal = ({
             onMouseEnter={() => setOnHover(true)}
             onMouseMove={() => setOnHover(true)}
             onMouseLeave={() => setOnHover(false)}
-            // style={{
-            //     background: "#" + Math.floor(Math.random() * 16777215).toString(16)
-            // }}
-            className={clsx(
-                cellClasses.tableCell,
-                {
-                    [cellClasses.disabled]: disabled,
-                    [cellClasses.centered]: disabled || !isOverflowing,
-                    [cellClasses.error]: error,
-                    [cellClasses.saved]: selected && internalSaved,
-                    [cellClasses.selected]: !error && (selected || focused),
-                    [cellClasses.fullHeight]: fullHeight
-                })}>
+            sx={{
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                borderRadius: "4px",
+                overflow: "hidden",
+                contain: "strict",
+                display: "flex",
+                alignItems: disabled || !isOverflowing ? "center" : undefined,
+                padding: p,
+                "&:hover": {
+                    backgroundColor: disabled ? undefined : (theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default)
+                },
+                justifyContent: justifyContent,
 
-            <div className={clsx(cellClasses.fullWidth, {
-                [cellClasses.faded]: !disabled && !allowScroll && isOverflowing,
-                [cellClasses.scrollable]: !disabled && allowScroll && isOverflowing,
-                [cellClasses.fullHeight]: fullHeight
-            })}>
+                border: border,
+                alpha: disabled ? 0.8 : undefined,
+
+                backgroundColor: isSelected ? theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default : undefined,
+                transition: "border-color 300ms ease-in-out"
+            }}>
+
+            <Box
+                sx={{
+                    width: "100%",
+                    height: fullHeight ? "100%" : undefined,
+                    overflow: scrollable ? "auto" : undefined,
+                    WebkitMaskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
+                    maskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
+                    alignItems: faded ? "start" : (scrollable ? "start" : undefined)
+                }}>
                 {measuredDiv}
-            </div>
+            </Box>
 
             {disabled && onHover && disabledTooltip &&
-            <div style={{
-                position: "absolute",
-                top: 4,
-                right: 4,
-                fontSize: "14px"
-            }}>
-                <Tooltip title={disabledTooltip}>
-                    <RemoveCircleIcon color={"disabled"}
-                                      fontSize={"inherit"}/>
-                </Tooltip>
-            </div>}
+                <div style={{
+                    position: "absolute",
+                    top: 4,
+                    right: 4,
+                    fontSize: "14px"
+                }}>
+                    <Tooltip title={disabledTooltip}>
+                        <RemoveCircleIcon color={"disabled"}
+                                          fontSize={"inherit"}/>
+                    </Tooltip>
+                </div>}
 
             {(error || showExpandIcon) &&
-            <div className={cellClasses.iconsTop}>
+                <Box sx={{
+                    position: "absolute",
+                    top: "2px",
+                    right: "2px"
+                }}>
 
-                {selected && !disabled && showExpandIcon &&
-                <IconButton
-                    ref={iconRef}
-                    color={"inherit"}
-                    size={"small"}
-                    onClick={doOpenPopup}>
-                    <svg
-                        className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
-                        fill={"#666"}
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24">
-                        <path className="cls-2"
-                              d="M20,5a1,1,0,0,0-1-1L14,4h0a1,1,0,0,0,0,2h2.57L13.29,9.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L18,7.42V10a1,1,0,0,0,1,1h0a1,1,0,0,0,1-1Z"/>
-                        <path className="cls-2"
-                              d="M10.71,13.29a1,1,0,0,0-1.42,0L6,16.57V14a1,1,0,0,0-1-1H5a1,1,0,0,0-1,1l0,5a1,1,0,0,0,1,1h5a1,1,0,0,0,0-2H7.42l3.29-3.29A1,1,0,0,0,10.71,13.29Z"/>
-                    </svg>
-                </IconButton>
-                }
+                    {selected && !disabled && showExpandIcon &&
+                        <IconButton
+                            ref={iconRef}
+                            color={"inherit"}
+                            size={"small"}
+                            onClick={doOpenPopup}>
+                            <svg
+                                className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
+                                fill={"#666"}
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24">
+                                <path className="cls-2"
+                                      d="M20,5a1,1,0,0,0-1-1L14,4h0a1,1,0,0,0,0,2h2.57L13.29,9.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L18,7.42V10a1,1,0,0,0,1,1h0a1,1,0,0,0,1-1Z"/>
+                                <path className="cls-2"
+                                      d="M10.71,13.29a1,1,0,0,0-1.42,0L6,16.57V14a1,1,0,0,0-1-1H5a1,1,0,0,0-1,1l0,5a1,1,0,0,0,1,1h5a1,1,0,0,0,0-2H7.42l3.29-3.29A1,1,0,0,0,10.71,13.29Z"/>
+                            </svg>
+                        </IconButton>
+                    }
 
-                {error && <Tooltip
-                    classes={{
-                        arrow: cellClasses.arrow,
-                        tooltip: cellClasses.tooltip
-                    }}
-                    arrow
-                    placement={"left"}
-                    title={error.message}>
-                    <ErrorOutlineIcon
-                        fontSize={"inherit"}
-                        color={"error"}
-                    />
-                </Tooltip>
-                }
+                    {error && <ErrorTooltip
+                        arrow
+                        placement={"left"}
+                        title={error.message}>
+                        <ErrorOutlineIcon
+                            fontSize={"inherit"}
+                            color={"error"}
+                        />
+                    </ErrorTooltip>
+                    }
 
 
-            </div>
+                </Box>
             }
 
-        </div>
+        </Box>
     );
 };
+
 
 export const TableCell = React.memo<TableCellProps & CellStyleProps>(TableCellInternal, areEqual) as React.FunctionComponent<TableCellProps & CellStyleProps>;
 
 function areEqual(prevProps: TableCellProps & CellStyleProps, nextProps: TableCellProps & CellStyleProps) {
     return prevProps.selected === nextProps.selected &&
-        prevProps.focused === nextProps.selected &&
+        prevProps.focused === nextProps.focused &&
         prevProps.disabled === nextProps.disabled &&
         prevProps.size === nextProps.size &&
         prevProps.align === nextProps.align &&
@@ -237,7 +297,6 @@ function areEqual(prevProps: TableCellProps & CellStyleProps, nextProps: TableCe
         prevProps.showExpandIcon === nextProps.showExpandIcon &&
         prevProps.removePadding === nextProps.removePadding &&
         prevProps.fullHeight === nextProps.fullHeight &&
-        equal(prevProps.value, nextProps.value)
+        isEqual(prevProps.value, nextProps.value)
         ;
 }
-

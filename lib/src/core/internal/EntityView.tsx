@@ -13,14 +13,10 @@ import {
     IconButton,
     Tab,
     Tabs,
-    Theme,
     useMediaQuery,
     useTheme
 } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import CloseIcon from "@mui/icons-material/Close";
-import clsx from "clsx";
 import {
     Entity,
     EntityCallbacks,
@@ -54,66 +50,6 @@ const EntityCollectionView = lazy(() => import("../components/EntityCollectionVi
 const EntityForm = lazy(() => import("../../form/EntityForm")) as any;
 const EntityPreview = lazy(() => import("../components/EntityPreview")) as any;
 
-const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: Theme) =>
-    createStyles({
-        container: ({ containerWidth }) => ({
-            display: "flex",
-            flexDirection: "column",
-            width: containerWidth,
-            height: "100%",
-            [theme.breakpoints.down("sm")]: {
-                width: CONTAINER_FULL_WIDTH
-            },
-            transition: "width 250ms ease-in-out"
-        }),
-        containerWide: ({ containerWidth }) => ({
-            width: `calc(${TAB_WIDTH} + ${containerWidth})`,
-            [theme.breakpoints.down("lg")]: {
-                width: CONTAINER_FULL_WIDTH
-            }
-        }),
-        subcollectionPanel: {
-            width: TAB_WIDTH,
-            height: "100%",
-            overflow: "auto",
-            borderLeft: `1px solid ${theme.palette.divider}`,
-            [theme.breakpoints.down("lg")]: {
-                borderLeft: "inherit",
-                width: CONTAINER_FULL_WIDTH
-            }
-        },
-        tabsContainer: ({ containerWidth }) => ({
-            flexGrow: 1,
-            height: "100%",
-            width: `calc(${TAB_WIDTH} + ${containerWidth})`,
-            [theme.breakpoints.down("lg")]: {
-                width: CONTAINER_FULL_WIDTH
-            },
-            display: "flex",
-            overflow: "auto",
-            flexDirection: "row"
-        }),
-        form: ({ containerWidth }) => ({
-            width: containerWidth,
-            maxWidth: "100%",
-            height: "100%",
-            overflow: "auto",
-            [theme.breakpoints.down("sm")]: {
-                maxWidth: CONTAINER_FULL_WIDTH,
-                width: CONTAINER_FULL_WIDTH
-            }
-        }),
-        tabBar: {
-            paddingLeft: theme.spacing(1),
-            paddingRight: theme.spacing(1),
-            paddingTop: theme.spacing(0)
-        },
-        tab: {
-            fontSize: "0.875rem",
-            minWidth: "140px"
-        }
-    })
-);
 
 export interface EntityViewProps<M, UserType> {
     path: string;
@@ -143,7 +79,6 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                        }: EntityViewProps<M, UserType>) {
 
     const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
-    const classes = useStylesSide({ containerWidth: resolvedWidth ?? CONTAINER_WIDTH });
 
     const dataSource = useDataSource();
     const sideEntityController = useSideEntityController();
@@ -328,12 +263,19 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         (customView, colIndex) => {
             return (
                 <Box
-                    className={classes.subcollectionPanel}
+                    sx={{
+                        width: TAB_WIDTH,
+                        height: "100%",
+                        overflow: "auto",
+                        borderLeft: `1px solid ${theme.palette.divider}`,
+                        [theme.breakpoints.down("lg")]: {
+                            borderLeft: "inherit",
+                            width: CONTAINER_FULL_WIDTH
+                        }
+                    }}
                     key={`custom_view_${customView.path}_${colIndex}`}
                     role="tabpanel"
                     flexGrow={1}
-                    height={"100%"}
-                    width={"100%"}
                     hidden={tabsPosition !== colIndex}>
                     <ErrorBoundary>
                         {customView.builder({
@@ -353,7 +295,16 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
             return (
                 <Box
-                    className={classes.subcollectionPanel}
+                    sx={{
+                        width: TAB_WIDTH,
+                        height: "100%",
+                        overflow: "auto",
+                        borderLeft: `1px solid ${theme.palette.divider}`,
+                        [theme.breakpoints.down("lg")]: {
+                            borderLeft: "inherit",
+                            width: CONTAINER_FULL_WIDTH
+                        }
+                    }}
                     key={`subcol_${subcollection.name}_${colIndex}`}
                     role="tabpanel"
                     flexGrow={1}
@@ -429,8 +380,9 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             >
                 <Tab
                     label={resolvedSchema.name}
-                    classes={{
-                        root: classes.tab
+                    sx={{
+                        fontSize: "0.875rem",
+                        minWidth: "140px"
                     }}
                     wrapped={true}
                     onClick={() => {
@@ -450,7 +402,11 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 onChange={(ev, value) => {
                     onSideTabClick(value);
                 }}
-                className={classes.tabBar}
+                sx={{
+                    paddingLeft: theme.spacing(1),
+                    paddingRight: theme.spacing(1),
+                    paddingTop: theme.spacing(0)
+                }}
                 variant="scrollable"
                 scrollButtons="auto"
             >
@@ -458,8 +414,9 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 {customViews && customViews.map(
                     (view) =>
                         <Tab
-                            classes={{
-                                root: classes.tab
+                            sx={{
+                                fontSize: "0.875rem",
+                                minWidth: "140px"
                             }}
                             wrapped={true}
                             key={`entity_detail_custom_tab_${view.name}`}
@@ -469,8 +426,9 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 {subcollections && subcollections.map(
                     (subcollection) =>
                         <Tab
-                            classes={{
-                                root: classes.tab
+                            sx={{
+                                fontSize: "0.875rem",
+                                minWidth: "140px"
                             }}
                             wrapped={true}
                             key={`entity_detail_collection_tab_${subcollection.name}`}
@@ -482,35 +440,69 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     );
 
-    return <div
-        className={clsx(classes.container, { [classes.containerWide]: tabsPosition !== -1 })}>
-        {
-            dataLoading
-                ? <CircularProgressCenter/>
-                : <>
+    const mainViewSelected = tabsPosition === -1;
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                [theme.breakpoints.down("sm")]: {
+                    width: CONTAINER_FULL_WIDTH
+                },
+                transition: "width 250ms ease-in-out",
+                width: !mainViewSelected ? `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})` : resolvedWidth ?? CONTAINER_WIDTH,
+                [theme.breakpoints.down("lg")]: {
+                    width: !mainViewSelected ? CONTAINER_FULL_WIDTH : undefined
+                }
+            }}>
+            {
+                dataLoading
+                    ? <CircularProgressCenter/>
+                    : <>
 
-                    {header}
+                        {header}
 
-                    <Divider/>
+                        <Divider/>
 
-                    <div className={classes.tabsContainer}>
+                        <Box sx={{
+                            flexGrow: 1,
+                            height: "100%",
+                            width: `calc(${TAB_WIDTH} + ${resolvedWidth})`,
+                            [theme.breakpoints.down("lg")]: {
+                                width: CONTAINER_FULL_WIDTH
+                            },
+                            display: "flex",
+                            overflow: "auto",
+                            flexDirection: "row"
+                        }}>
 
-                        <Box
-                            role="tabpanel"
-                            hidden={!largeLayout && tabsPosition !== -1}
-                            className={classes.form}>
-                            {body}
+                            <Box
+                                role="tabpanel"
+                                hidden={!largeLayout && !mainViewSelected}
+                                sx={{
+                                    width: resolvedWidth,
+                                    maxWidth: "100%",
+                                    height: "100%",
+                                    overflow: "auto",
+                                    [theme.breakpoints.down("sm")]: {
+                                        maxWidth: CONTAINER_FULL_WIDTH,
+                                        width: CONTAINER_FULL_WIDTH
+                                    }
+                                }}>
+                                {body}
+                            </Box>
+
+                            {customViewsView}
+
+                            {subCollectionsViews}
+
                         </Box>
 
-                        {customViewsView}
+                    </>
+            }
 
-                        {subCollectionsViews}
-
-                    </div>
-
-                </>
-        }
-
-    </div>;
+        </Box>
+    );
 }
 

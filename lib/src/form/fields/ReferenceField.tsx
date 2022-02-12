@@ -1,5 +1,7 @@
 import React, { useMemo } from "react";
 
+import { styled } from '@mui/material/styles';
+
 import {
     Box,
     Button,
@@ -10,9 +12,6 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 
 import ErrorIcon from "@mui/icons-material/Error";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -39,8 +38,19 @@ import {
 } from "../../hooks";
 import { getReferenceFrom } from "../../core/utils";
 
-export const useStyles = makeStyles((theme: Theme) => createStyles({
-    root: {
+const PREFIX = 'ReferenceField';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    disabled: `${PREFIX}-disabled`
+};
+
+const StyledFormControl = styled(FormControl)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    "&": {
         elevation: 0,
         width: "100%",
         padding: theme.spacing(1),
@@ -77,7 +87,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         color: "#838383",
         fontWeight: theme.typography.fontWeightMedium
     },
-    disabled: {
+
+    [`& .${classes.disabled}`]: {
         backgroundColor: "rgba(0, 0, 0, 0.12)",
         color: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)",
         "&::before": {
@@ -92,6 +103,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         }
     }
 }));
+
+
 
 /**
  * Field that opens a reference selection dialog.
@@ -126,7 +139,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
         setValue
     });
 
-    const classes = useStyles();
+
 
     const [open, setOpen] = React.useState(autoFocus);
     const sideEntityController = useSideEntityController();
@@ -258,7 +271,12 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                             onClick={disabled ? undefined : handleClickOpen}
                             justifyContent="center"
                             display="flex">
-                    <Box flexGrow={1} textAlign={"center"}>No value set</Box>
+                    <Typography variant={"body2"} sx={(theme) => ({
+                        flexGrow: 1,
+                        textAlign: "center",
+                        color: "#838383",
+                        fontWeight: theme.typography.fontWeightMedium
+                    })}>No value set</Typography>
                     {!disabled && <Button variant="outlined"
                                           color="primary">
                         Set
@@ -335,9 +353,9 @@ export function ReferenceField<M extends { [Key: string]: any }>({
     }
 
     return (
-        <FormControl error={showError} fullWidth>
+        <StyledFormControl error={showError} fullWidth>
 
-            <Box
+            <div
                 className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
 
                 {schemaResolver && buildEntityView(schemaResolver)}
@@ -351,14 +369,14 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                 />}
 
 
-            </Box>
+            </div>
 
             {includeDescription &&
             <FieldDescription property={property}/>}
 
             {showError && <FormHelperText>{error}</FormHelperText>}
 
-        </FormControl>
+        </StyledFormControl>
     );
 }
 

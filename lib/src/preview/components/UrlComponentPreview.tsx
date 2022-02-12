@@ -1,5 +1,5 @@
 import React from "react";
-import { CardMedia, Link } from "@mui/material";
+import { Box, CardMedia, Link } from "@mui/material";
 
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -7,9 +7,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { MediaType } from "../../models";
 import { PreviewComponentProps } from "../internal";
 import { ImagePreview } from "./ImagePreview";
-import { useStyles } from "./styles";
 import { getThumbnailMeasure } from "../util";
-
 
 /**
  * @category Preview components
@@ -20,13 +18,17 @@ export function UrlComponentPreview({
                                         size
                                     }: PreviewComponentProps<string>): React.ReactElement {
 
-    const classes = useStyles();
+
 
     if (!value) return <div/>;
     const url = value;
     if (typeof property.url === "boolean" && property.url) {
         return (
-            <Link className={classes.link}
+            <Link sx={(theme) => ({
+                display: "flex",
+                wordBreak: "break-word",
+                fontWeight: theme.typography.fontWeightMedium
+            })}
                   href={url}
                   onMouseDown={(e: React.MouseEvent) => {
                       e.preventDefault();
@@ -54,25 +56,29 @@ export function UrlComponentPreview({
     } else if (mediaType === "video") {
         return <CardMedia
             key={`video_preview_${url}_${size}`}
-            style={{ maxWidth: size === "small" ? 300 : 500 }}
+            sx={{ maxWidth: size === "small" ? 300 : 500 }}
             component="video"
             controls
             image={url}
         />;
     } else {
-        return <a
-            key={`link_preview_${url}_${size}`}
-            href={url}
-            rel="noopener noreferrer"
-            target="_blank"
-            onClick={(e) => e.stopPropagation()}>
-            <div className={classes.flexCenter}
-                 style={{
-                     width: getThumbnailMeasure(size),
-                     height: getThumbnailMeasure(size)
-                 }}>
-                <DescriptionOutlinedIcon/>
-            </div>
-        </a>;
+        return (
+            <a
+                key={`link_preview_${url}_${size}`}
+                href={url}
+                rel="noopener noreferrer"
+                target="_blank"
+                onClick={(e) => e.stopPropagation()}>
+                <Box sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: getThumbnailMeasure(size),
+                    height: getThumbnailMeasure(size)
+                }}>
+                    <DescriptionOutlinedIcon/>
+                </Box>
+            </a>
+        );
     }
 }

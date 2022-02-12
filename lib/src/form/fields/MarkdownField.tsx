@@ -1,42 +1,52 @@
 import React from "react";
 
+import { styled } from '@mui/material/styles';
+
 import { Box, FormControl, FormHelperText, Theme } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import MDEditor from "@uiw/react-md-editor";
 
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
-
-import { useClearRestoreValue } from "../../hooks";
 import { FieldProps } from "../../models";
 
-export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            "& .w-md-editor-toolbar li > button": {
-                color: "inherit"
-            },
-            "& .w-md-editor-toolbar li.active > button": {
-                color: theme.palette.primary.main
-            },
-            "& .w-md-editor-text-pre, & .w-md-editor-text-pre .title, & .w-md-editor-text-pre .bold": {
-                color: "inherit !important"
-            },
-            "& .wmde-markdown-color code.language-markdown": {
-                color: "inherit"
-            },
-            "& .w-md-editor": {
-                color: "inherit",
-                backgroundColor: theme.palette.mode === "light" ? "rgb(240, 240, 240)" : "#323232"
-            },
-            "& .w-md-editor-toolbar": {
-                borderBottom: "inherit",
-                backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.09)"
-            }
+import { useClearRestoreValue } from "../../hooks";
+
+const PREFIX = 'MarkdownField';
+
+const classes = {
+    root: `${PREFIX}-root`
+};
+
+const StyledFormControl = styled(FormControl)((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    "&": {
+        "& .w-md-editor-toolbar li > button": {
+            color: theme.palette.text.secondary
+        },
+        "& .w-md-editor-toolbar li.active > button": {
+            color: theme.palette.primary.main
+        },
+        "& .w-md-editor-text-pre, & .w-md-editor-text-pre .title, & .w-md-editor-text-pre .bold": {
+            color: "inherit !important"
+        },
+        "& .wmde-markdown-color code.language-markdown": {
+            color: "inherit"
+        },
+        "& .w-md-editor": {
+            color: "inherit",
+            backgroundColor: theme.palette.mode === "light" ? "rgb(240, 240, 240)" : "#323232"
+        },
+        "& .w-md-editor-toolbar": {
+            borderBottom: "inherit",
+            backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.09)"
         }
-    })
-);
+    }
+}));
+
+
 
 /**
  * Render a markdown field that allows edition and seeing the preview.
@@ -61,7 +71,7 @@ export function MarkdownField({
                                   shouldAlwaysRerender
                               }: FieldProps<string>) {
 
-    const classes = useStyles();
+
 
     useClearRestoreValue({
         property,
@@ -82,8 +92,7 @@ export function MarkdownField({
     };
 
     return (
-
-        <FormControl
+        <StyledFormControl
             required={property.validation?.required}
             error={showError}
             fullWidth>
@@ -111,7 +120,7 @@ export function MarkdownField({
                 </Box>
             </Box>
 
-        </FormControl>
+        </StyledFormControl>
     );
 
 }

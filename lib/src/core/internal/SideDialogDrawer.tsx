@@ -1,9 +1,17 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import clsx from "clsx";
 import { Backdrop, Modal, Paper, Theme } from "@mui/material";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 import { SlideFade } from "./SlideFadeTransition";
+
+const PREFIX = 'SideDialogDrawer';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    paper: `${PREFIX}-paper`,
+    paperAnchorRight: `${PREFIX}-paperAnchorRight`,
+    modal: `${PREFIX}-modal`
+};
 
 export interface EntityDrawerProps {
 
@@ -38,24 +46,6 @@ export interface StyleProps {
     offsetPosition: number;
 }
 
-const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) => createStyles({
-    /* Styles applied to the root element. */
-    root: {},
-    /* Styles applied to the `Paper` component. */
-    paper: {
-        height: "100%",
-        WebkitOverflowScrolling: "touch", // Add iOS momentum scrolling.
-        position: "fixed",
-        outline: 0
-    },
-    paperAnchorRight: ({ offsetPosition }) => ({
-        left: "auto",
-        right: 0
-    }),
-    /* Styles applied to the `Modal` component. */
-    modal: {}
-}));
-
 
 const defaultTransitionDuration = {
     enter: 225,
@@ -76,7 +66,7 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, EntityDrawerPro
         onExitAnimation
     } = props;
 
-    const classes = useStyles({ offsetPosition });
+
 
     const drawer = (
         <Paper
@@ -86,10 +76,14 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, EntityDrawerPro
                 transition: "transform 1000ms cubic-bezier(0.33, 1, 0.68, 1)",
                 transform: `translateX(-${(offsetPosition) * 240}px)`
             }}
-            className={clsx(
-                classes.paper,
-                classes.paperAnchorRight
-            )}
+            sx={{
+                height: "100%",
+                WebkitOverflowScrolling: "touch", // Add iOS momentum scrolling.
+                position: "fixed",
+                outline: 0,
+                left: "auto",
+                right: 0
+            }}
         >
             {children}
         </Paper>

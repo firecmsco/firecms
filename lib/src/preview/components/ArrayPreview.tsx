@@ -1,8 +1,9 @@
 import React from "react";
 
-import { Divider } from "@mui/material";
+import { styled } from '@mui/material/styles';
 
-import { useStyles } from "./styles";
+import { Divider, Theme } from "@mui/material";
+
 import {
     PreviewComponent,
     PreviewComponentProps,
@@ -10,6 +11,28 @@ import {
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { ResolvedProperty } from "../../models";
+
+const PREFIX = 'ArrayPreview';
+
+const classes = {
+    array: `${PREFIX}-array`,
+    arrayItemBig: `${PREFIX}-arrayItemBig`
+};
+
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`&.${classes.array}`]: {
+        display: "flex",
+        flexDirection: "column"
+    },
+
+    [`& .${classes.arrayItemBig}`]: {
+        margin: theme.spacing(1)
+    }
+}));
 
 /**
  * @category Preview components
@@ -25,7 +48,7 @@ export function ArrayPreview({
         throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
     }
 
-    const classes = useStyles();
+
 
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayPreview");
@@ -37,7 +60,7 @@ export function ArrayPreview({
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
-        <div className={classes.array}>
+        <Root className={classes.array}>
             {values &&
             values.map((value, index) =>
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
@@ -53,6 +76,6 @@ export function ArrayPreview({
                     {index < values.length - 1 && <Divider/>}
                 </React.Fragment>
             )}
-        </div>
+        </Root>
     );
 }

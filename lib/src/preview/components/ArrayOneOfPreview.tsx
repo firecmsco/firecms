@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Divider } from "@mui/material";
+import { styled } from '@mui/material/styles';
 
-import { useStyles } from "./styles";
+import { Divider, Theme } from "@mui/material";
 import {
     PreviewComponent,
     PreviewComponentProps,
@@ -10,6 +10,36 @@ import {
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { ResolvedProperty } from "../../models";
+
+const PREFIX = 'ArrayOneOfPreview';
+
+const classes = {
+    array: `${PREFIX}-array`,
+    arrayWrap: `${PREFIX}-arrayWrap`,
+    arrayItemBig: `${PREFIX}-arrayItemBig`
+};
+
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`&.${classes.array}`]: {
+        display: "flex",
+        flexDirection: "column"
+    },
+
+    [`& .${classes.arrayWrap}`]: {
+        display: "flex",
+        flexWrap: "wrap"
+    },
+
+    [`& .${classes.arrayItemBig}`]: {
+        margin: theme.spacing(1)
+    }
+}));
+
+
 
 /**
  * @category Preview components
@@ -28,7 +58,7 @@ export function ArrayOneOfPreview({
         throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
     }
 
-    const classes = useStyles();
+
     const values = value;
 
     if (!values) return null;
@@ -40,7 +70,7 @@ export function ArrayOneOfPreview({
     const properties = property.oneOf.properties;
 
     return (
-        <div className={classes.array}>
+        <Root className={classes.array}>
             {values &&
             values.map((value, index) =>
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
@@ -56,6 +86,6 @@ export function ArrayOneOfPreview({
                     {index < values.length - 1 && <Divider/>}
                 </React.Fragment>
             )}
-        </div>
+        </Root>
     );
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from '@mui/material/styles';
 import {
     Box,
     FilledInput,
@@ -7,6 +8,7 @@ import {
     FormHelperText,
     InputLabel,
     Switch,
+    Theme,
     Typography
 } from "@mui/material";
 
@@ -16,6 +18,31 @@ import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";
+
+
+const PREFIX = 'TextField';
+
+const classes = {
+    inputLabel: `${PREFIX}-inputLabel`,
+    shrinkInputLabel: `${PREFIX}-shrinkInputLabel`
+};
+
+const Root = styled('div')((
+   { theme } : {
+        theme: Theme
+    }
+) => ({
+    [`& .${classes.inputLabel}`]: {
+        marginTop: theme.spacing(1 / 2),
+        marginLeft: theme.spacing(1 / 2)
+    },
+
+    [`& .${classes.shrinkInputLabel}`]: {
+        marginTop: "-2px",
+        marginLeft: theme.spacing(1 / 2)
+    }
+}));
+
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -154,7 +181,6 @@ export function TextField<T extends string | number>({
                 </Box>
 
             </FormControl>
-
             {mediaType && internalValue &&
             <ErrorBoundary>
                 <Box m={1}>
