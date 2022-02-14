@@ -273,14 +273,12 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
  * Add missing required fields, expected in the schema, to the values of an entity
  * @param values
  * @param properties
- * @param path
  * @category Datasource
  */
 export function sanitizeData<M extends { [Key: string]: any }>
 (
     values: EntityValues<M>,
-    properties: ResolvedProperties<M>,
-    path: string
+    properties: ResolvedProperties<M>
 ) {
     const result: any = values;
     Object.entries(properties)

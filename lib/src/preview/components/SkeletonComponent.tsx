@@ -7,6 +7,7 @@ import {
 } from "../../models";
 import React from "react";
 import {
+    Box,
     Grid,
     List,
     ListItem,
@@ -178,9 +179,7 @@ function renderArrayOfStrings() {
         <Grid>
             {
                 [0, 1].map((value, index) => (
-                    <>
-                        {renderSkeletonText(index)}
-                    </>
+                    renderSkeletonText(index)
                 ))}
         </Grid>
     );
@@ -273,18 +272,18 @@ function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize 
 function renderUrlFile(size: PreviewSize) {
 
     return (
-        <div
-            style={{
+        <Box
+            sx={{
                 width: getThumbnailMeasure(size),
                 height: getThumbnailMeasure(size)
             }}>
             {renderSkeletonIcon()}
-        </div>
+        </Box>
     );
 }
 
 function renderSkeletonText(index?: number) {
-    return <Skeleton variant="text"/>;
+    return <Skeleton variant="text" key={`skeleton_${index}`}/>;
 }
 
 export function renderSkeletonCaptionText(index?: number) {
