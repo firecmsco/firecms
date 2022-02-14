@@ -93,10 +93,10 @@ export function useFirestoreDataSource({
         resolvedSchema: ResolvedEntitySchema<M>
     ): Entity<M> {
 
-        const values = firestoreToCMSModel(doc.data(), resolvedSchema, path);
+        const values = firestoreToCMSModel(doc.data(), resolvedSchema);
         const data = doc.data()
             ? resolvedSchema.properties
-                ? sanitizeData(values as EntityValues<M>, resolvedSchema.properties, path)
+                ? sanitizeData(values as EntityValues<M>, resolvedSchema.properties)
                 : doc.data()
             : undefined;
         return {
@@ -118,7 +118,7 @@ export function useFirestoreDataSource({
                 .filter(([_, entry]) => !!entry)
                 .forEach(([key, filterParameter]) => {
                     const [op, value] = filterParameter as [WhereFilterOp, any];
-                    queryParams.push(whereClause(key, op, value));
+                    queryParams.push(whereClause(key, op, cmsToFirestoreModel(value, firestore)));
                 });
         }
 
@@ -390,7 +390,7 @@ export function useFirestoreDataSource({
             return setDoc(documentReference, updatedFirestoreValues, { merge: true }).then(() => ({
                 id: documentReference.id,
                 path: documentReference.path,
-                values: firestoreToCMSModel(updatedFirestoreValues, resolvedSchema, path) as EntityValues<M>
+                values: firestoreToCMSModel(updatedFirestoreValues, resolvedSchema) as EntityValues<M>
             }));
         },
 
@@ -459,10 +459,9 @@ export function useFirestoreDataSource({
  * Also, Firestore references are replaced with {@link EntityReference}
  * @param data
  * @param schema
- * @param path
  * @category Firestore
  */
-export function firestoreToCMSModel<M>(data: any, schema: ResolvedEntitySchema<M>, path: string): any {
+export function firestoreToCMSModel<M>(data: any, schema: ResolvedEntitySchema<M>): any {
     return traverseValues(data,
         schema.properties,
         (value, property) => {
@@ -487,6 +486,21 @@ export function firestoreToCMSModel<M>(data: any, schema: ResolvedEntitySchema<M
 
             return value;
         });
+}
+
+export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
+    if (Array.isArray(data)) {
+        return data.map(v => cmsToFirestoreModel(v, firestore));
+    } else if (data instanceof EntityReference) {
+        return doc(firestore, data.path, data.id);
+    } else if (data instanceof GeoPoint) {
+        return new FirestoreGeoPoint(data.latitude, data.longitude);
+    } else if (typeof data === "object") {
+        return Object.entries(data)
+            .map(([key, v]) => ({ [key]: cmsToFirestoreModel(v, firestore) }))
+            .reduce((a, b) => ({ ...a, ...b }), {});
+    }
+    return data;
 }
 
 /**

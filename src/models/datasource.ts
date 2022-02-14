@@ -54,8 +54,8 @@ export type ListenCollectionProps<M> =
  */
 export interface SaveEntityProps<M> {
     path: string;
-    entityId: string | undefined;
     values: Partial<EntityValues<M>>;
+    entityId?: string; // can be empty for new entities
     previousValues?: Partial<EntityValues<M>>;
     schema: EntitySchema<M> | EntitySchemaResolver<M>;
     status: EntityStatus;
