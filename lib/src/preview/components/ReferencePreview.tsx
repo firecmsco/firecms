@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMemo } from "react";
+import { MouseEventHandler, useMemo } from "react";
 
 import {
     Box,
@@ -14,7 +14,11 @@ import {
 import { EntityReference, ResolvedProperty } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { PreviewComponent, PreviewComponentProps } from "../internal";
+import {
+    PreviewComponent,
+    PreviewComponentProps,
+    PreviewSize
+} from "../internal";
 
 import { SkeletonComponent } from "./SkeletonComponent";
 import { ErrorView } from "../../core";
@@ -23,11 +27,11 @@ import {
     useNavigation,
     useSideEntityController
 } from "../../hooks";
+import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
 export type ReferencePreviewProps =
     PreviewComponentProps<EntityReference>
     & { onHover?: boolean };
-
 
 /**
  * @category Preview components
@@ -54,19 +58,43 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         onHover
     }: ReferencePreviewProps) {
 
-    if (typeof property.path !== "string") {
-        throw Error("Picked the wrong component ReferencePreviewComponent");
-    }
-
     const reference: EntityReference = value;
     const previewProperties = property.previewProperties;
 
+    if (!property.path) {
+        return <ReferencePreviewWrap onClick={onClick}
+                                     onHover={onHover}
+                                     size={size}>
+            Disabled
+        </ReferencePreviewWrap>
+    }
+
+    return <ReferencePreviewInternal path={property.path}
+                                     reference={reference}
+                                     size={size}
+                                     onHover={onHover}
+                                     onClick={onClick}
+                                     previewProperties={previewProperties}/>
+
+
+}
+
+function ReferencePreviewInternal<M>({ path, reference, previewProperties, size, onHover, onClick }: {
+    path: string
+    reference: EntityReference,
+    previewProperties?: string[];
+    size: PreviewSize;
+    onClick?: MouseEventHandler<any>;
+    onHover?: boolean;
+}) {
+
     const navigationContext = useNavigation();
+    const schemaRegistry = useSchemaRegistry();
     const sideEntityController = useSideEntityController();
 
-    const collectionResolver = navigationContext.getCollectionResolver<M>(property.path);
-    if (!collectionResolver) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${property.path}`);
+    const collection = navigationContext.getCollection<M>(path);
+    if (!collection) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
 
     const {
@@ -76,11 +104,16 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     } = useEntityFetch({
         path: reference.path,
         entityId: reference.id,
-        schema: collectionResolver.schemaResolver,
+        schema: collection.schemaId,
         useCache: true
     });
 
-    const schema = collectionResolver.schemaResolver ? collectionResolver.schemaResolver({}) : undefined;
+    const schema = useMemo(() => schemaRegistry.getResolvedSchema({
+        schema: collection.schemaId,
+        path: path,
+        values: entity?.values
+    }), [collection]);
+
 
     const listProperties = useMemo(() => {
         if (!schema) return [];
@@ -104,19 +137,16 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
 
     if (!schema) {
         return <ErrorView
-            error={"Could not find schema with id " + collectionResolver.schemaId}/>
+            error={"Could not find schema with id " + collection.schemaId}/>
     }
 
-    if (!value) {
+    if (!reference) {
         body = buildError("Reference not set");
-    }
-    // currently not happening since this gets filtered out in PreviewComponent
-    else if (!(value instanceof EntityReference)) {
-        body = buildError("Unexpected value", JSON.stringify(value));
+    } else if (!(reference instanceof EntityReference)) {
+        body = buildError("Unexpected value", JSON.stringify(reference));
     } else if (entity && !entity.values) {
         body = buildError("Reference does not exist", reference.path);
     } else {
-
         body = (
             <>
                 <Box sx={{
@@ -128,7 +158,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                 }}>
 
                     {size !== "tiny" && (
-                        value
+                        reference
                             ? <Box sx={{
                                 display: size !== "regular" ? "block" : undefined,
                                 whiteSpace: size !== "regular" ? "nowrap" : undefined,
@@ -137,11 +167,10 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                             }}>
                                 <Typography variant={"caption"}
                                             className={"mono"}>
-                                    {value.id}
+                                    {reference.id}
                                 </Typography>
                             </Box>
                             : <Skeleton variant="text"/>)}
-
 
                     {listProperties && listProperties.map((key) => {
                         const childProperty = schema.properties[key as string];
@@ -187,36 +216,45 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
         );
     }
 
+    return <ReferencePreviewWrap onClick={onClick}
+                                 onHover={onHover}
+                                 size={size}>
+        {body}
+    </ReferencePreviewWrap>
+}
 
-    return (
-        <Paper elevation={0} sx={(theme) => {
-            const clickableStyles = onClick
-                ? {
-                    tabindex: 0,
-                    backgroundColor: onHover ? (theme.palette.mode === "dark" ? lighten(theme.palette.background.default, 0.1) : darken(theme.palette.background.default, 0.15)) : darken(theme.palette.background.default, 0.1),
-                    transition: "background-color 300ms ease, box-shadow 300ms ease",
-                    boxShadow: onHover ? "0 0 0 2px rgba(128,128,128,0.05)" : undefined,
-                    cursor: onHover ? "pointer" : undefined
-                }
-                : {};
-            return ({
-                width: "100%",
-                display: "flex",
-                color: "#838383",
-                backgroundColor: darken(theme.palette.background.default, 0.1),
-                borderRadius: "2px",
-                overflow: "hidden",
-                padding: size === "regular" ? 1 : 0,
-                itemsAlign: size === "tiny" ? "center" : undefined,
-                fontWeight: theme.typography.fontWeightMedium,
-                ...clickableStyles
-            });
-        }}
-               onClick={onClick}>
+function ReferencePreviewWrap({ children, onHover, size, onClick }: {
+    children: React.ReactNode;
+    onHover?: boolean;
+    size: PreviewSize;
+    onClick?: MouseEventHandler<any>;
+}) {
+    return <Paper elevation={0} sx={(theme) => {
+        const clickableStyles = onClick
+            ? {
+                tabindex: 0,
+                backgroundColor: onHover ? (theme.palette.mode === "dark" ? lighten(theme.palette.background.default, 0.1) : darken(theme.palette.background.default, 0.15)) : darken(theme.palette.background.default, 0.1),
+                transition: "background-color 300ms ease, box-shadow 300ms ease",
+                boxShadow: onHover ? "0 0 0 2px rgba(128,128,128,0.05)" : undefined,
+                cursor: onHover ? "pointer" : undefined
+            }
+            : {};
+        return ({
+            width: "100%",
+            display: "flex",
+            color: "#838383",
+            backgroundColor: darken(theme.palette.background.default, 0.1),
+            borderRadius: "2px",
+            overflow: "hidden",
+            padding: size === "regular" ? 1 : 0,
+            itemsAlign: size === "tiny" ? "center" : undefined,
+            fontWeight: theme.typography.fontWeightMedium,
+            ...clickableStyles
+        });
+    }}
+                  onClick={onClick}>
 
-            {body}
+        {children}
 
-        </Paper>
-    );
-
+    </Paper>
 }

@@ -15,15 +15,14 @@ import {
 import GetAppIcon from "@mui/icons-material/GetApp";
 import {
     Entity,
-    EntitySchema,
-    EntitySchemaResolver,
-    ExportConfig
+    ExportConfig,
+    ResolvedEntitySchema
 } from "../../../../models";
 import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
 
 interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
-    schemaResolver: EntitySchemaResolver<M>;
+    schema: ResolvedEntitySchema<M>;
     path: string;
     exportConfig?: ExportConfig<UserType>;
 }
@@ -31,7 +30,7 @@ interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
 export function ExportButton<M extends { [Key: string]: any }, UserType>({
-                                                                             schemaResolver,
+                                                                             schema,
                                                                              path,
                                                                              exportConfig
                                                                          }: ExportButtonProps<M, UserType>
@@ -64,14 +63,13 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
     const doDownload = useCallback((data: Entity<M>[] | undefined,
                                     additionalData: Record<string, any>[] | undefined,
-                                    schemaResolver: EntitySchemaResolver<M>,
+                                    schema: ResolvedEntitySchema<M>,
                                     path: string,
                                     exportConfig: ExportConfig | undefined) => {
         if (!data)
             throw Error("Trying to perform export without loading data first");
 
-        const resolvedSchema = schemaResolver({});
-        downloadCSV(data, additionalData, resolvedSchema, path, exportConfig);
+        downloadCSV(data, additionalData, schema, path, exportConfig);
     }, []);
 
     useEffect(() => {
@@ -94,7 +92,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             setDataLoadingError(undefined);
 
             if (pendingDownload) {
-                doDownload(entities, additionalColumnsData, schemaResolver, path, exportConfig);
+                doDownload(entities, additionalColumnsData, schema, path, exportConfig);
                 handleClose();
             }
         };
@@ -128,13 +126,13 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
         dataSource.fetchCollection<M>({
             path,
-            schema: schemaResolver,
+            schema,
             limit: fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT
         })
             .then(updateEntities)
             .catch(onFetchError);
 
-    }, [path, fetchLargeDataAccepted, schemaResolver, open, dataSource, schemaResolver, doDownload, exportConfig, handleClose, context]);
+    }, [path, fetchLargeDataAccepted, schema, open, dataSource, doDownload, exportConfig, handleClose, context]);
 
     const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
 
@@ -142,10 +140,10 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
         if (needsToAcceptFetchAllData) {
             setFetchLargeDataAccepted(true);
         } else {
-            doDownload(dataRef.current, additionalDataRef.current, schemaResolver, path, exportConfig);
+            doDownload(dataRef.current, additionalDataRef.current, schema, path, exportConfig);
             handleClose();
         }
-    }, [needsToAcceptFetchAllData, doDownload, schemaResolver, path, exportConfig, handleClose]);
+    }, [needsToAcceptFetchAllData, doDownload, schema, path, exportConfig, handleClose]);
 
     return <>
 

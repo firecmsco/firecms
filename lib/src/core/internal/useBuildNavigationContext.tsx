@@ -3,7 +3,6 @@ import {
     AuthController,
     DataSource,
     EntityCollection,
-    EntityCollectionResolver,
     Locale,
     LocalEntityCollection,
     Navigation,
@@ -115,18 +114,17 @@ export function useBuildNavigationContext<UserType>({
         configPersistence?.collections
     ]);
 
-    const getCollectionResolver = useCallback(<M extends { [Key: string]: any }>(
+    const getCollection = useCallback(<M extends { [Key: string]: any }>(
         path: string,
-        entityId?: string,
-        collection?: EntityCollection<M>
-    ): EntityCollectionResolver<M> => {
+        entityId?: string
+    ): EntityCollection<M> => {
 
         const collections = [
             ...(navigation?.collections ?? []),
             ...(navigation?.storedCollections ?? [])
         ];
 
-        const baseCollection = collection ?? (collections && getCollectionByPath<M>(removeInitialAndTrailingSlashes(path), collections));
+        const baseCollection = getCollectionByPath<M>(removeInitialAndTrailingSlashes(path), collections);
 
         const collectionOverride = getCollectionOverride(path);
 
@@ -134,9 +132,9 @@ export function useBuildNavigationContext<UserType>({
 
         const sidePanelKey = getSidePanelKey(path, entityId);
 
-        let result: Partial<EntityCollectionResolver> = {};
+        let result: Partial<EntityCollection> = {};
 
-        const resolvedProps: Partial<EntityCollectionResolver> | undefined = schemaOverrideHandler && schemaOverrideHandler({
+        const resolvedProps: Partial<EntityCollection> | undefined = schemaOverrideHandler && schemaOverrideHandler({
             entityId,
             path: removeInitialAndTrailingSlashes(path)
         });
@@ -145,41 +143,39 @@ export function useBuildNavigationContext<UserType>({
             result = resolvedProps;
 
         if (resolvedCollection) {
-            const schema = schemaRegistry.findSchema(resolvedCollection.schemaId);
             const subcollections = resolvedCollection.subcollections;
             const callbacks = resolvedCollection.callbacks;
             const permissions = resolvedCollection.permissions;
             result = {
                 ...result,
-                schemaResolver: result.schemaResolver ?? (schema
-                    ? schemaRegistry.buildSchemaResolver({
-                        schema,
-                        path
-                    })
-                    : undefined),
+                schemaId: result.schemaId ?? resolvedCollection.schemaId,
                 subcollections: result.subcollections ?? subcollections,
                 callbacks: result.callbacks ?? callbacks,
                 permissions: result.permissions ?? permissions
             };
         }
 
-        if (!result.schemaResolver) {
-            if (!result.schemaId) {
-                console.error(`Not able to resolve schema for path ${sidePanelKey}`)
-            } else {
-                const foundSchema = schemaRegistry.findSchema(result.schemaId);
-                if (!foundSchema) {
-                    console.error(`Not able to resolve schema ${result.schemaId}`)
-                } else {
-                    result.schemaResolver = schemaRegistry.buildSchemaResolver({
-                        schema: foundSchema,
-                        path
-                    });
-                }
-            }
+        if (!result.schemaId) {
+            console.error(`Not able to resolve schema for path ${sidePanelKey}`)
         }
 
-        return { ...resolvedCollection, ...(result as EntityCollectionResolver<M>) };
+        // if (!result.schemaResolver) {
+        //     if (!result.schemaId) {
+        //         console.error(`Not able to resolve schema for path ${sidePanelKey}`)
+        //     } else {
+        //         const foundSchema = schemaRegistry.findSchema(result.schemaId);
+        //         if (!foundSchema) {
+        //             console.error(`Not able to resolve schema ${result.schemaId}`)
+        //         } else {
+        //             result.schemaResolver = schemaRegistry.buildSchemaResolver({
+        //                 schema: foundSchema,
+        //                 path
+        //             });
+        //         }
+        //     }
+        // }
+
+        return { ...resolvedCollection, ...(result as EntityCollection<M>) };
 
     }, [
         navigation,
@@ -239,7 +235,7 @@ export function useBuildNavigationContext<UserType>({
         basePath,
         baseCollectionPath,
         initialised,
-        getCollectionResolver,
+        getCollection,
         isUrlCollectionPath,
         urlPathToDataPath,
         buildUrlCollectionPath,

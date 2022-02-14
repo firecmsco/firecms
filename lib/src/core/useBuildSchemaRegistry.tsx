@@ -1,15 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
     EntitySchema,
-    EntitySchemaResolver,
-    EntitySchemaResolverProps,
+    EntityValues,
     EnumConfig,
-    LocalEntitySchema, ResolvedEntitySchema,
+    LocalEntitySchema,
+    PropertiesOrBuilder,
+    PropertyOrBuilder,
+    ResolvedEntitySchema,
+    ResolvedProperties,
+    ResolvedProperty,
     SchemaRegistry,
     UserConfigurationPersistence
 } from "../models";
 import { getValueInPath, mergeDeep } from "./util/objects";
-import { computeProperties } from "./utils";
+import { buildPropertyFrom, computePropertyEnums } from "./utils";
 import { ConfigurationPersistence } from "../models/config_persistence";
 import { mergeSchemas } from "./util/schemas";
 
@@ -100,40 +104,101 @@ export function useBuildSchemaRegistry<UserType>({
         return enumConfigs.find((s) => s.id === id);
     }, [enumConfigs]);
 
-    const buildSchemaResolver = useCallback(<M, >
+    const resolveSchema = <M extends { [Key: string]: any } = any, >({
+                                                                         path,
+                                                                         schema,
+                                                                         entityId,
+                                                                         values,
+                                                                         previousValues
+                                                                     }: {
+        path: string,
+        schema: EntitySchema<M> | ResolvedEntitySchema<M>,
+        entityId?: string,
+        values?: Partial<EntityValues<M>>,
+        previousValues?: Partial<EntityValues<M>>,
+    }) => {
+        const schemaOverride = getUserSchemaOverride<M>(path);
+        const storedProperties = getValueInPath(schemaOverride, "properties");
+
+        const properties = resolveProperties<M>({
+            propertiesOrBuilder: schema.properties,
+            path,
+            entityId,
+            values: values ?? schema.defaultValues,
+            previousValues: previousValues ?? values ?? schema.defaultValues,
+            enumConfigs
+        });
+
+        return {
+            ...schema,
+            properties: mergeDeep(properties, storedProperties),
+            originalSchema: schema
+        } as ResolvedEntitySchema<M>;
+    };
+
+    const getResolvedSchema = useCallback(<M extends { [Key: string]: any } = any, >
     ({
-         schema,
-         path
-     }: { schema: EntitySchema<M> | EntitySchemaResolver<M>, path: string }): EntitySchemaResolver<M> => {
+         schema: inputSchema,
+         path,
+         entityId,
+         values,
+         previousValues
+     }: {
+        schema: string | EntitySchema<M> | ResolvedEntitySchema<M>;
+        path: string,
+        entityId?: string,
+        values?: Partial<EntityValues<M>>,
+        previousValues?: Partial<EntityValues<M>>,
+    }): ResolvedEntitySchema<M> => {
 
-        if (typeof schema === "function")
-            return schema;
+        const schema = typeof inputSchema === "string" ? findSchema(inputSchema) : inputSchema;
+        if (!schema)
+            throw Error("Unable to find schema with id " + inputSchema);
 
-        return ({
-                    entityId,
-                    values,
-                    previousValues
-                }: EntitySchemaResolverProps<M>) => {
+        return resolveSchema({
+            path,
+            schema: schema as EntitySchema<M>,
+            entityId,
+            values,
+            previousValues
+        });
 
-            const schemaOverride = getUserSchemaOverride<M>(path);
-            const storedProperties = getValueInPath(schemaOverride, "properties");
+    }, [getUserSchemaOverride, schemas, enumConfigs]);
 
-            const properties = computeProperties({
-                propertiesOrBuilder: schema.properties,
-                path,
-                entityId,
-                values: values ?? schema.defaultValues,
-                previousValues: previousValues ?? values ?? schema.defaultValues,
-                enumConfigs
-            });
+    const getResolvedProperty = useCallback(<M extends { [Key: string]: any } = any, >
+    ({
+         schema: inputSchema,
+         path,
+         entityId,
+         propertyKey,
+         values,
+         previousValues
+     }: {
+        schema: string | EntitySchema<M> | ResolvedEntitySchema<M>;
+        path: string,
+        entityId?: string,
+        propertyKey: string,
+        values?: Partial<EntityValues<M>>,
+        previousValues?: Partial<EntityValues<M>>,
+    }): ResolvedProperty | null => {
 
-            return {
-                ...schema,
-                properties: mergeDeep(properties, storedProperties),
-                originalSchema: schema
-            };
-        };
-    }, [getUserSchemaOverride, enumConfigs]);
+        const schema = typeof inputSchema === "string" ? findSchema(inputSchema) : inputSchema;
+        if (!schema)
+            throw Error("Unable to find schema with id " + inputSchema);
+
+        const propertyOrBuilder = schema.properties[propertyKey];
+
+        return resolveProperty({
+            propertyOrBuilder,
+            path,
+            entityId,
+            values,
+            propertyKey,
+            previousValues,
+            enumConfigs
+        });
+
+    }, [getUserSchemaOverride, schemas, enumConfigs]);
 
     return {
         initialised,
@@ -141,6 +206,82 @@ export function useBuildSchemaRegistry<UserType>({
         enumConfigs,
         findSchema,
         findEnum,
-        buildSchemaResolver
+        getResolvedSchema,
+        getResolvedProperty
     };
+}
+
+function resolveProperty<M>({
+                                propertyOrBuilder,
+                                values,
+                                previousValues,
+                                path,
+                                entityId,
+                                propertyKey,
+                                enumConfigs
+                            }: {
+    propertyOrBuilder: PropertyOrBuilder,
+    values?: Partial<M>,
+    previousValues?: Partial<M>,
+    path: string,
+    entityId: string | undefined,
+    propertyKey: string,
+    enumConfigs: EnumConfig[]
+}): ResolvedProperty | null {
+    const property = buildPropertyFrom({
+        propertyOrBuilder,
+        values: values ?? {},
+        previousValues: previousValues ?? values ?? {},
+        path,
+        entityId
+    });
+    if (property === null) return null;
+    return computePropertyEnums(
+        property,
+        enumConfigs);
+}
+
+/**
+ *
+ * @param propertiesOrBuilder
+ * @param values
+ * @param previousValues
+ * @param path
+ * @param entityId
+ * @param enumConfigs
+ * @ignore
+ */
+function resolveProperties<M extends { [Key: string]: any }>(
+    {
+        propertiesOrBuilder,
+        path,
+        entityId,
+        values,
+        previousValues,
+        enumConfigs
+    }: {
+        propertiesOrBuilder: PropertiesOrBuilder<M> | ResolvedProperties<M>,
+        path: string,
+        entityId?: string | undefined,
+        values?: Partial<EntityValues<M>>,
+        previousValues?: Partial<EntityValues<M>>,
+        enumConfigs: EnumConfig[]
+    }): ResolvedProperties<M> {
+    return Object.entries(propertiesOrBuilder)
+        .map(([key, propertyOrBuilder]) => {
+
+            return {
+                [key]: resolveProperty({
+                    propertyOrBuilder: propertyOrBuilder,
+                    values: values,
+                    previousValues: previousValues,
+                    path: path,
+                    entityId: entityId,
+                    propertyKey: key,
+                    enumConfigs: enumConfigs
+                })
+            };
+        })
+        .filter((a) => a !== null)
+        .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
 }

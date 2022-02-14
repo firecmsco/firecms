@@ -58,8 +58,8 @@ export function TableReferenceField(props: {
     const [open, setOpen] = useState<boolean>(false);
 
     const navigationContext = useNavigation();
-    const collectionResolver = navigationContext.getCollectionResolver(path);
-    if (!collectionResolver) {
+    const collection = navigationContext.getCollection(path);
+    if (!collection) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
     const handleOpen = useCallback((event: React.MouseEvent) => {
@@ -130,7 +130,7 @@ export function TableReferenceField(props: {
             return <ErrorView error={"Data is not an array of references"}/>;
     }
 
-    if (!collectionResolver)
+    if (!collection)
         return <ErrorView error={"The specified collection does not exist"}/>;
 
     return (
@@ -159,13 +159,13 @@ export function TableReferenceField(props: {
             {!disabled &&
             open &&
             <ReferenceDialog open={open}
-                                multiselect={multiselect}
-                                path={path}
-                                collectionResolver={collectionResolver}
-                                onClose={handleClose}
-                                onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                                onSingleEntitySelected={onSingleValueSet}
-                                selectedEntityIds={selectedIds}
+                             multiselect={multiselect}
+                             path={path}
+                             collection={collection}
+                             onClose={handleClose}
+                             onMultipleEntitiesSelected={onMultipleEntitiesSelected}
+                             onSingleEntitySelected={onSingleValueSet}
+                             selectedEntityIds={selectedIds}
             />}
 
 

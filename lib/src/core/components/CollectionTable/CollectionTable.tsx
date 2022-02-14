@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { styled } from '@mui/material/styles';
-import { Button, Paper, Theme, useMediaQuery, useTheme } from "@mui/material";
+import { Button, Paper, useMediaQuery, useTheme } from "@mui/material";
 
 import {
     AdditionalColumnDelegate,
@@ -69,10 +68,8 @@ function areEqual(prevProps: CollectionTableProps<any, any>, nextProps: Collecti
         prevProps.title === nextProps.title &&
         prevProps.toolbarActionsBuilder === nextProps.toolbarActionsBuilder &&
         prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder &&
-        prevProps.inlineEditing === nextProps.inlineEditing
-        ;
+        prevProps.inlineEditing === nextProps.inlineEditing;
 }
-
 
 export function CollectionTableInternal<M extends { [Key: string]: any },
     AdditionalKey extends string = string,
@@ -80,7 +77,6 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 ({
      path,
      collection,
-     schemaResolver,
      inlineEditing,
      toolbarActionsBuilder,
      title,
@@ -94,12 +90,17 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 
     const context = useFireCMSContext();
     const dataSource = useDataSource();
+    const schemaRegistry = useSchemaRegistry();
     const sideEntityController = useSideEntityController();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const resolvedSchema = useMemo(() => schemaResolver({}), []);
+    const schemaId = collection.schemaId;
+    const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
+        schema: schemaId,
+        path
+    });
     const [size, setSize] = React.useState<CollectionSize>(resolvedSchema.defaultSize ?? "m");
 
     const initialFilter = resolvedSchema.initialFilter;
@@ -117,8 +118,6 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 
     const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
 
-
-
     const additionalColumns = useMemo(() => {
         const subcollectionColumns: AdditionalColumnDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
             return {
@@ -135,7 +134,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                                     entityId: entity.id,
                                     selectedSubpath: subcollection.path,
                                     permissions: collection.permissions,
-                                    schema: schemaResolver,
+                                    schema: schemaId,
                                     subcollections: collection.subcollections,
                                     callbacks: collection.callbacks,
                                     updateUrl: true
@@ -147,9 +146,9 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
             };
         }) ?? [];
         return [...(resolvedSchema.additionalColumns ?? []), ...subcollectionColumns];
-    }, [resolvedSchema, collection, path]);
+    }, [resolvedSchema, collection, path, schemaId]);
 
-    const displayedProperties = useColumnIds(collection, resolvedSchema, true);
+    const displayedProperties = useColumnIds<M>(collection, resolvedSchema, true);
 
     const uniqueFieldValidator: UniqueFieldValidator = useCallback(
         ({
@@ -159,7 +158,6 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
              entityId
          }) => dataSource.checkUniqueField(path, name, value, property, entityId),
         [path, dataSource]);
-
 
     const onCellChanged: OnCellValueChange<any, M> = useCallback(({
                                                                       value,
@@ -176,7 +174,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                 [name]: value
             },
             previousValues: entity.values,
-            schema: schemaResolver,
+            schema: schemaId,
             status: "existing"
         };
 
@@ -191,10 +189,10 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
             }
         });
 
-    }, [path, collection, schemaResolver]);
+    }, [path, collection, resolvedSchema]);
 
     const { columns, popupFormField } = useBuildColumnsFromSchema({
-        schemaResolver,
+        schema: schemaId,
         additionalColumns,
         displayedProperties,
         path,
@@ -213,10 +211,10 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         dataLoading,
         noMoreToLoad,
         dataLoadingError
-    } = useCollectionFetch({
+    } = useCollectionFetch<M>({
         entitiesDisplayedFirst,
         path,
-        schemaResolver,
+        schema: schemaId,
         filterValues,
         sortBy,
         searchString,

@@ -18,9 +18,9 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
-    EntitySchemaResolver,
     LocalEntityCollection,
     LocalEntitySchema,
+    ResolvedEntitySchema,
     SelectionController
 } from "../../models";
 import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
@@ -48,6 +48,8 @@ import {
 import { SchemaEditorDialog } from "./SchemaEditor/SchemaEditorDialog";
 import { ErrorView } from "./ErrorView";
 import { ErrorBoundary } from "../internal/ErrorBoundary";
+import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
+
 
 /**
  * @category Components
@@ -127,15 +129,15 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
                                                                            }: EntityCollectionViewProps<M>) {
 
     const navigationContext = useNavigation();
-    const collectionResolver = navigationContext.getCollectionResolver<M>(path);
-    if (!collectionResolver) {
+    const schemaRegistry = useSchemaRegistry();
+    const collectionFromPath = navigationContext.getCollection<M>(path);
+    if (!collectionFromPath) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
 
-    const collection: EntityCollection<M> = collectionResolver ?? baseCollection;
-    const { schemaResolver } = collectionResolver;
-
-    if (!schemaResolver) {
+    const collection: EntityCollection<M> = collectionFromPath ?? baseCollection;
+    const schema = schemaRegistry.getResolvedSchema<M>({ schema: collection.schemaId, path });
+    if (!schema) {
         return <ErrorView
             error={"Unable to find schema with id " + collection.schemaId}/>;
     }
@@ -144,7 +146,7 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
         <ErrorBoundary>
             <EntityCollectionViewInternal path={path}
                                           collection={collection}
-                                          schemaResolver={schemaResolver}
+                                          schema={schema}
                                           editable={editable}/>
         </ErrorBoundary>
     );
@@ -155,8 +157,8 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                                                                                        path,
                                                                                        collection,
                                                                                        editable,
-                                                                                       schemaResolver
-                                                                                   }: EntityCollectionViewProps<M> & { schemaResolver: EntitySchemaResolver<M> }
+                                                                                       schema
+                                                                                   }: EntityCollectionViewProps<M> & { schema: ResolvedEntitySchema<M> }
 ) {
 
     const sideEntityController = useSideEntityController();
@@ -169,8 +171,6 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
-
-    const schema = schemaResolver({});
 
     const schemaEditable = schema.editable ?? true;
 
@@ -205,7 +205,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
             callbacks: collection.callbacks,
             updateUrl: true
         });
-    }, [path, collection]);
+    }, [path, collection, schema]);
 
     const onNewClick = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
@@ -354,7 +354,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: schemaResolver,
+            schema: collection.schemaId,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
             updateUrl: true
@@ -368,7 +368,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: schemaResolver,
+            schema: collection.schemaId,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
             updateUrl: true
@@ -387,7 +387,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
             />
         );
 
-    }, [usedSelectionController, collection.permissions, schemaResolver, authController, path]);
+    }, [usedSelectionController, collection.permissions, schema, authController, path]);
 
     const toolbarActionsBuilder = useCallback((_: { size: CollectionSize, data: Entity<any>[] }) => {
 
@@ -449,7 +449,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
             : undefined;
 
         const exportButton = exportable &&
-            <ExportButton schemaResolver={schemaResolver}
+            <ExportButton schema={schema}
                           exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
                           path={path}/>;
 
@@ -485,7 +485,6 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 title={title}
                 path={path}
                 collection={collection}
-                schemaResolver={schemaResolver}
                 onSizeChanged={onSizeChanged}
                 inlineEditing={checkInlineEditing}
                 onEntityClick={onEntityClick}
@@ -496,7 +495,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
             />
 
              <SchemaEditorDialog open={schemaDialogOpen}
-                                 handleClose={(schema) => {
+                                 handleClose={(_) => {
                                      setSchemaDialogOpen(false);
                                  }}
                                  schemaId={schema.id}/>
@@ -504,7 +503,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
             {deleteEntityClicked &&
             <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
                                 path={path}
-                                schemaResolver={schemaResolver}
+                                schema={collection.schemaId}
                                 callbacks={collection.callbacks}
                                 open={!!deleteEntityClicked}
                                 onEntityDelete={internalOnEntityDelete}

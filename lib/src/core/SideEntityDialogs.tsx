@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { EntityCollectionResolver, SideEntityPanelProps } from "../models";
+import { EntityCollection, SideEntityPanelProps } from "../models";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { EntityView } from "./internal/EntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
@@ -76,14 +76,16 @@ function SideEntityDialog({
 
     const schema = useMemo(() => {
         if (!props) return undefined;
-        let usedSchema = props.schema;
+        let usedSchema = typeof props.schema === "string"
+            ? schemaRegistry.findSchema(props.schema)
+            : props.schema;
         if (!usedSchema) {
-            const collection: EntityCollectionResolver | undefined = !props ? undefined : navigationContext.getCollectionResolver(props.path, props.entityId);
+            const collection: EntityCollection | undefined = !props ? undefined : navigationContext.getCollection(props.path, props.entityId);
             if (!collection) {
                 console.error("ERROR: No collection found in path ", props.path, "Entity id: ", props.entityId);
                 throw Error("ERROR: No collection found in path " + props.path);
             }
-            usedSchema = collection.schemaResolver;
+            usedSchema = schemaRegistry.findSchema(collection.schemaId);
             if (!usedSchema) {
                 console.error("ERROR: Schema not found with id:" + collection.schemaId);
                 throw Error("ERROR: You are trying to open an entity with no schema defined.");
@@ -150,4 +152,3 @@ function SideEntityDialog({
         </>
     );
 }
-

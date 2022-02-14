@@ -11,12 +11,17 @@ export interface ConfigurationPersistence {
     loading: boolean;
 
     collections?: EntityCollection[];
+
     /**
      * Entity schemas
      * Should be undefined when loading and empty if there are no results
      */
     schemas?: EntitySchema[];
 
+    /**
+     * Enumeration configs
+     * Should be undefined when loading and empty if there are no results
+     */
     enumConfigs?: EnumConfig[];
 
     getCollection: <M>(path: string) => Promise<EntityCollection<M>>;

@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-    Entity,
-    EntitySchema,
-    EntitySchemaResolver,
-    ResolvedEntitySchema
-} from "../../models";
+import { Entity, EntitySchema } from "../../models";
 import { useDataSource } from "./useDataSource";
 
 /**
@@ -13,7 +8,7 @@ import { useDataSource } from "./useDataSource";
 export interface EntityFetchProps<M extends { [Key: string]: any }> {
     path?: string;
     entityId?: string;
-    schema?: EntitySchema<M> | EntitySchemaResolver<M>;
+    schema: string | EntitySchema<M>;
     useCache?: boolean;
 }
 

@@ -1,9 +1,6 @@
-import { EntitySchema } from "./entities";
+import { EntitySchema, EntityValues } from "./entities";
 import { EnumConfig } from "./properties";
-import {
-    EntitySchemaResolver,
-    ResolvedEntitySchema
-} from "./resolved_entities";
+import { ResolvedEntitySchema, ResolvedProperty } from "./resolved_entities";
 
 /**
  * Used to get the schemas used by the CMS
@@ -16,8 +13,19 @@ export type SchemaRegistry = {
     enumConfigs: EnumConfig[];
     findSchema: (id: string) => EntitySchema | undefined;
     findEnum: (id: string) => EnumConfig | undefined;
-    buildSchemaResolver: <M>({
-                                 schema,
-                                 path
-                             }: { schema: EntitySchema<M> | EntitySchemaResolver<M>, path: string }) => EntitySchemaResolver<M>;
+    getResolvedSchema: <M extends { [Key: string]: any } = any>(params: {
+        schema: string | EntitySchema<M> | ResolvedEntitySchema<M>;
+        path: string,
+        entityId?: string,
+        values?: Partial<EntityValues<M>>,
+        previousValues?: Partial<EntityValues<M>>,
+    }) => ResolvedEntitySchema<M>;
+    getResolvedProperty: <M extends { [Key: string]: any } = any>(params: {
+        schema: string | EntitySchema<M> | ResolvedEntitySchema<M>;
+        path: string,
+        propertyKey: string,
+        entityId?: string,
+        values?: Partial<EntityValues<M>>,
+        previousValues?: Partial<EntityValues<M>>,
+    }) => ResolvedProperty | null;
 }

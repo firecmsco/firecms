@@ -100,7 +100,7 @@ export function SchemaEditor<M>({
             console.error(e);
             setError(error);
         }
-    }, [schemaId, schemaRegistry]);
+    }, [schema, schemaRegistry]);
 
     if (error) {
         return <ErrorView error={`Error fetching schema ${schemaId}`}/>;

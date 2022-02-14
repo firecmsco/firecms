@@ -1,6 +1,6 @@
 import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
 import { FilterValues } from "./collections";
-import { EntitySchemaResolver, ResolvedProperty } from "./resolved_entities";
+import { ResolvedEntitySchema, ResolvedProperty } from "./resolved_entities";
 
 /**
  * @category Datasource
@@ -8,7 +8,7 @@ import { EntitySchemaResolver, ResolvedProperty } from "./resolved_entities";
 export interface FetchEntityProps<M> {
     path: string;
     entityId: string;
-    schema: EntitySchema<M> | EntitySchemaResolver<M>;
+    schema: string | EntitySchema<M>
 }
 
 /**
@@ -23,14 +23,14 @@ export type ListenEntityProps<M> = FetchEntityProps<M> & {
  * @category Datasource
  */
 export interface FetchCollectionProps<M> {
-    path: string,
-    schema: EntitySchema<M> | EntitySchemaResolver<M>;
+    path: string;
+    schema: string | EntitySchema<M> | ResolvedEntitySchema<M>;
     filter?: FilterValues<Extract<keyof M, string>>,
-    limit?: number,
-    startAfter?: any[],
-    orderBy?: string,
-    searchString?: string,
-    order?: "desc" | "asc"
+    limit?: number;
+    startAfter?: any[];
+    orderBy?: string;
+    searchString?: string;
+    order?: "desc" | "asc";
 }
 
 /**
@@ -39,8 +39,8 @@ export interface FetchCollectionProps<M> {
 export type ListenCollectionProps<M> =
     FetchCollectionProps<M> &
     {
-        onUpdate: (entities: Entity<M>[]) => void,
-        onError?: (error: Error) => void,
+        onUpdate: (entities: Entity<M>[]) => void;
+        onError?: (error: Error) => void;
     };
 
 /**
@@ -51,7 +51,7 @@ export interface SaveEntityProps<M> {
     values: Partial<EntityValues<M>>;
     entityId?: string; // can be empty for new entities
     previousValues?: Partial<EntityValues<M>>;
-    schema: EntitySchema<M> | EntitySchemaResolver<M>;
+    schema: string | EntitySchema<M> | ResolvedEntitySchema<M>;
     status: EntityStatus;
 }
 

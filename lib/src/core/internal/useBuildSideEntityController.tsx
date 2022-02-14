@@ -34,8 +34,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             if (navigationContext.isUrlCollectionPath(location.pathname)) {
                 const newFlag = location.hash === `#${NEW_URL_HASH}`;
                 const entityOrCollectionPath = navigationContext.urlPathToDataPath(location.pathname);
-                const sidePanels = buildSidePanelsFromUrl(entityOrCollectionPath, collections, schemaRegistry, newFlag);
-                setSidePanels(sidePanels);
+                setSidePanels(buildSidePanelsFromUrl(entityOrCollectionPath, collections, schemaRegistry, newFlag));
             }
             initialised.current = true;
         }
@@ -75,7 +74,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        const updateUrl = schemaProps.updateUrl === undefined ? false : schemaProps.updateUrl;
+        const updateUrl = (schemaProps.updateUrl === undefined ? false : schemaProps.updateUrl) && typeof schemaProps.schema === "string";
 
         const cleanPath = removeInitialAndTrailingSlashes(path);
         const newPath = entityId

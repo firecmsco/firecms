@@ -1,18 +1,13 @@
 import { useMemo } from "react";
 import {
     EntityCollection,
-    Properties,
     Property,
     ResolvedArrayProperty,
     ResolvedEntitySchema, ResolvedProperties,
     ResolvedProperty
 } from "../../../../models";
 
-
-export type Sort = "asc" | "desc" | undefined;
-
-
-export function getCellAlignment(property: ResolvedProperty): "right" | "left" | "center" {
+export function getCellAlignment(property: Property | ResolvedProperty): "right" | "left" | "center" {
     if (property.dataType === "boolean") {
         return "center";
     } else if (property.dataType === "number") {

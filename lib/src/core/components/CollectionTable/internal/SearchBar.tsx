@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { styled } from '@mui/material/styles';
+import React, { useCallback, useState } from "react";
+import { alpha, darken, styled, Theme } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
-import { alpha, darken, Theme } from "@mui/material/styles";
 import { FormControl, IconButton } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -9,7 +8,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import clsx from "clsx";
 import { useDebounce } from "../../../internal/useDebounce";
 
-const PREFIX = 'SearchBar';
+const PREFIX = "SearchBar";
 
 const classes = {
     search: `${PREFIX}-search`,
@@ -74,14 +73,11 @@ const StyledFormControl = styled(FormControl)((
     }
 }));
 
-
 interface SearchBarProps {
     onTextSearch: (searchString?: string) => void;
 }
 
 export function SearchBar({ onTextSearch }: SearchBarProps) {
-
-
 
     const [searchText, setSearchText] = useState<string>("");
     const [active, setActive] = useState<boolean>(false);

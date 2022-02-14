@@ -4,7 +4,6 @@ import {
     CMSFormFieldProps,
     Entity,
     EntitySchema,
-    EntitySchemaResolver,
     EntityStatus,
     EntityValues,
     FormContext,
@@ -16,18 +15,12 @@ import { buildPropertyField } from "./form_factory";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
 import { ErrorFocus } from "./components/ErrorFocus";
-import {
-    computeSchema,
-    initWithProperties,
-    isHidden,
-    isReadOnly
-} from "../core/utils";
+import { initWithProperties, isHidden, isReadOnly } from "../core/utils";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
 
 /**
- *
  * @category Components
  */
 export interface EntityFormProps<M> {
@@ -45,7 +38,12 @@ export interface EntityFormProps<M> {
     /**
      * Use to resolve the schema properties for specific path, entity id or values
      */
-    schemaOrResolver: EntitySchema<M> | EntitySchemaResolver<M>;
+    schema: string | EntitySchema<M>
+
+    /**
+     * Use this prop to override the schema in the registry specified by `schemaId`
+     */
+
 
     /**
      * The updated entity is passed from the parent component when the underlying data
@@ -101,7 +99,7 @@ export interface EntityFormProps<M> {
 export function EntityForm<M>({
                                   status,
                                   path,
-                                  schemaOrResolver,
+                                  schema: inputSchema,
                                   entity,
                                   onEntitySave,
                                   onDiscard,
@@ -118,16 +116,11 @@ export function EntityForm<M>({
      * compare them with underlying changes in the datasource
      */
     const entityId = status === "existing" ? entity?.id : undefined;
-    const schemaResolver = useMemo(() => schemaRegistry.buildSchemaResolver({
-        schema: schemaOrResolver,
-        path
-    }), [schemaOrResolver, path]);
-
-    const initialResolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
-        schemaResolver: schemaResolver,
-        entityId,
+    const initialResolvedSchema = useMemo(() => schemaRegistry.getResolvedSchema({
+        schema: inputSchema,
+        path,
         values: entity?.values
-    }), [path, entityId, schemaResolver]);
+    }), [inputSchema, path]);
 
     const baseDataSourceValues: Partial<EntityValues<M>> = useMemo(() => {
         const properties = initialResolvedSchema.properties;
@@ -152,12 +145,13 @@ export function EntityForm<M>({
 
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
 
-    const schema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
-        schemaResolver: schemaResolver,
+    const schema = useMemo(() => schemaRegistry.getResolvedSchema<M>({
+        schema: inputSchema,
+        path,
         entityId,
         values: internalValue,
         previousValues: initialValues
-    }), [schemaResolver, path, entityId, internalValue]);
+    }), [inputSchema, path, entityId, internalValue]);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") && (!!schema.customId && schema.customId !== "optional");
 

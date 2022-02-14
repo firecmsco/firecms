@@ -87,7 +87,10 @@ export function FirebaseCMSApp({
     const userConfigPersistence = useBuildStorageConfigurationPersistence();
 
     const schemaRegistry = useBuildSchemaRegistry({
-        schemas, enumConfigs, configPersistence, userConfigPersistence
+        schemas,
+        enumConfigs,
+        configPersistence,
+        userConfigPersistence
     });
 
     const dataSource = useFirestoreDataSource({
@@ -122,8 +125,6 @@ export function FirebaseCMSApp({
             <FireCMS
                 navigation={navigation}
                 authDelegate={authDelegate}
-                schemas={schemas}
-                enumConfigs={enumConfigs}
                 authentication={authentication}
                 schemaRegistry={schemaRegistry}
                 userConfigPersistence={userConfigPersistence}

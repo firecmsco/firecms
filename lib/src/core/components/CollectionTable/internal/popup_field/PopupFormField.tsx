@@ -17,7 +17,7 @@ import equal from "react-fast-compare"
 
 import {
     Entity,
-    EntitySchemaResolver,
+    EntitySchema,
     EntityValues,
     FormContext,
     ResolvedProperties,
@@ -30,12 +30,13 @@ import {
     getYupEntitySchema
 } from "../../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
-import { computeSchema, isReadOnly } from "../../../../utils";
 import { buildPropertyField } from "../../../../../form";
 import clsx from "clsx";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
+import { isReadOnly } from "../../../../utils";
+import { useSchemaRegistry } from "../../../../../hooks/useSchemaRegistry";
 
 const PREFIX = "PopupFormField";
 
@@ -89,16 +90,13 @@ const Root = styled("div")((
     }
 }));
 
-
-
-
 interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     entity?: Entity<M>;
     customFieldValidator?: CustomFieldValidator;
     path: string;
     tableKey: string;
     name?: keyof M;
-    schemaResolver?: EntitySchemaResolver<M>;
+    schema?: string | EntitySchema<M>;
     cellRect?: DOMRect;
     open: boolean;
     onClose: () => void;
@@ -117,7 +115,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                                      entity,
                                                                      customFieldValidator,
                                                                      name,
-                                                                     schemaResolver,
+                                                                     schema: inputSchema,
                                                                      path,
                                                                      cellRect,
                                                                      setPreventOutsideClick,
@@ -130,7 +128,15 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
-
+    const schemaRegistry = useSchemaRegistry();
+    const schema = inputSchema
+        ? schemaRegistry.getResolvedSchema({
+            schema: inputSchema,
+            path,
+            values: entity?.values,
+            entityId: entity?.id
+        })
+        : undefined;
 
     const windowSize = useWindowSize();
 
@@ -212,18 +218,13 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     );
 
     const validationSchema = useMemo(() => {
-        if (!schemaResolver) return;
-        const schema = computeSchema({
-            schemaResolver: schemaResolver,
-            values: internalValue,
-            previousValues: entity?.values,
-        });
+        if (!schema) return;
         return getYupEntitySchema(
             name && schema.properties[name]
                 ? { [name]: schema.properties[name] } as ResolvedProperties<any>
                 : {} as ResolvedProperties<any>,
             customFieldValidator);
-    }, [path, internalValue, name]);
+    }, [path, internalValue, name, schema]);
 
     const adaptResize = () => {
         if (!draggableBoundingRect) return;
@@ -291,16 +292,10 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         return <ErrorView
                             error={"PopupFormField misconfiguration"}/>;
 
-                    if (!schemaResolver)
+                    if (!schema)
                         return <></>;
 
                     const disabled = isSubmitting;
-
-                    const schema = computeSchema({
-                        schemaResolver: schemaResolver,
-                        values,
-                        previousValues: entity?.values,
-                    });
 
                     const context: FormContext<M> = {
                         schema,
@@ -395,5 +390,3 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     );
 
 }
-
-

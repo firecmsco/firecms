@@ -22,7 +22,6 @@ import {
     EntityCallbacks,
     EntityCollection,
     EntitySchema,
-    EntitySchemaResolver,
     EntityStatus,
     EntityValues,
     PermissionsBuilder,
@@ -43,17 +42,15 @@ import {
     useSnackbarController
 } from "../../hooks";
 import { canEdit } from "../util/permissions";
-import { computeSchema } from "../utils";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView")) as any;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as any;
 const EntityPreview = lazy(() => import("../components/EntityPreview")) as any;
 
-
 export interface EntityViewProps<M, UserType> {
     path: string;
-    schema: EntitySchema<M> | EntitySchemaResolver<M>;
+    schema: string | EntitySchema<M>
     entityId?: string;
     copy?: boolean;
     selectedSubpath?: string;
@@ -64,7 +61,6 @@ export interface EntityViewProps<M, UserType> {
     onModifiedValues: (modified: boolean) => void;
 }
 
-
 export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                            path,
                                                                            entityId,
@@ -72,7 +68,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                            selectedSubpath,
                                                                            copy,
                                                                            permissions,
-                                                                           schema: schemaOrResolver,
+                                                                           schema,
                                                                            subcollections,
                                                                            onModifiedValues,
                                                                            width
@@ -92,31 +88,27 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const [readOnly, setReadOnly] = useState<boolean>(false);
     const [tabsPosition, setTabsPosition] = React.useState(-1);
 
-    const [modifiedValues, setModifiedValues] = useState<EntityValues<any> | undefined>();
-
-    const schemaResolver = schemaRegistry.buildSchemaResolver({
-        schema: schemaOrResolver,
-        path
-    });
+    const [modifiedValues, setModifiedValues] = useState<EntityValues<M> | undefined>();
 
     const {
         entity,
         dataLoading,
         // eslint-disable-next-line no-unused-vars
         dataLoadingError
-    } = useEntityFetch({
+    } = useEntityFetch<M>({
         path,
         entityId: currentEntityId,
-        schema: schemaOrResolver,
+        schema,
         useCache: false
     });
 
-    const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
-        schemaResolver: schemaResolver,
+    const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => schemaRegistry.getResolvedSchema<M>({
+        schema,
+        path,
         entityId,
         values: modifiedValues,
-        previousValues: entity?.values,
-    }), [schemaResolver, path, entityId, modifiedValues]);
+        previousValues: entity?.values
+    }), [schema, schema, path, entityId, modifiedValues]);
 
     const customViews = resolvedSchema.views;
     const customViewsCount = customViews?.length ?? 0;
@@ -147,7 +139,6 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             setTabsPosition(index + customViewsCount);
         }
     }, [selectedSubpath]);
-
 
     const onPreSaveHookError = useCallback((e: Error) => {
         snackbarContext.open({
@@ -242,8 +233,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     key={`form_${path}_${entity?.id ?? "new"}`}
                     status={status}
                     path={path}
-                    schemaOrResolver={schemaOrResolver}
-                    onEntitySave={onEntitySave as any}
+                    schema={schema}
+                    onEntitySave={onEntitySave}
                     onDiscard={onDiscard}
                     onValuesChanged={setModifiedValues}
                     onModified={onModifiedValues}
@@ -469,7 +460,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                             flexGrow: 1,
                             height: "100%",
                             width: `calc(${TAB_WIDTH} + ${resolvedWidth})`,
-                            [theme.breakpoints.down("lg")]: {
+                            [theme.breakpoints.down("sm")]: {
                                 width: CONTAINER_FULL_WIDTH
                             },
                             display: "flex",
@@ -505,4 +496,3 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         </Box>
     );
 }
-

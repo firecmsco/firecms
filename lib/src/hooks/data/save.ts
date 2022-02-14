@@ -7,7 +7,6 @@ import {
     SaveEntityProps
 } from "../../models";
 import { useDataSource } from "./useDataSource";
-import { computeSchema } from "../../core/utils";
 
 /**
  * @category Hooks and utilities
@@ -74,12 +73,11 @@ export async function saveEntityWithCallbacks<M, UserType>({
 
     if (callbacks?.onPreSave) {
         try {
-            const resolvedSchema = computeSchema({
+            const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
+                schema,
+                path,
                 values: previousValues as EntityValues<M>,
-                entityId,
-                schemaResolver: schemaRegistry.buildSchemaResolver({
-                    schema, path
-                }),
+                entityId
             });
             updatedValues = await callbacks.onPreSave({
                 schema: resolvedSchema,
@@ -110,12 +108,11 @@ export async function saveEntityWithCallbacks<M, UserType>({
     }).then((entity) => {
         try {
             if (callbacks?.onSaveSuccess) {
-                const resolvedSchema = computeSchema({
+                const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
+                    schema,
+                    path,
                     values: updatedValues as EntityValues<M>,
-                    entityId,
-                    schemaResolver: schemaRegistry.buildSchemaResolver({
-                        schema, path
-                    }),
+                    entityId
                 });
                 callbacks.onSaveSuccess({
                     schema: resolvedSchema,
@@ -136,12 +133,12 @@ export async function saveEntityWithCallbacks<M, UserType>({
     })
         .catch((e) => {
             if (callbacks?.onSaveFailure) {
-                const resolvedSchema = computeSchema({
+
+                const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
+                    schema,
+                    path,
                     values: updatedValues as EntityValues<M>,
-                    entityId,
-                    schemaResolver: schemaRegistry.buildSchemaResolver({
-                        schema, path
-                    })
+                    entityId
                 });
                 callbacks.onSaveFailure({
                     schema: resolvedSchema,

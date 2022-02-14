@@ -3,7 +3,7 @@ import {
     AdditionalColumnDelegate,
     CollectionSize,
     Entity,
-    EntitySchemaResolver,
+    EntitySchema,
     FireCMSContext,
     ResolvedEntitySchema,
     ResolvedProperty
@@ -25,7 +25,7 @@ import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../../index";
 import { getIconForProperty } from "../../util/property_utils";
-import { computeSchema } from "../../utils";
+import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 
 
 export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = {
@@ -38,7 +38,7 @@ export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = 
     /**
      * Use to resolve the schema properties for specific path, entity id or values
      */
-    schemaResolver: EntitySchemaResolver<M>;
+    schema: string | EntitySchema<M>
 
     /**
      * Properties displayed in this collection. If this property is not set
@@ -117,23 +117,24 @@ type SelectedCellProps<M> =
         cellRect: DOMRect;
         width: number,
         height: number,
-        schemaResolver: EntitySchemaResolver<M>,
-        entity: Entity<any>
+        schema: string | EntitySchema<M>,
+        entity: Entity<M>
     };
 
 export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserType>({
-                                                                                      schemaResolver,
-                                                                                      additionalColumns,
-                                                                                      displayedProperties,
-                                                                                      path,
-                                                                                      inlineEditing,
-                                                                                      size,
-                                                                                      onCellValueChange,
-                                                                                      uniqueFieldValidator
-                                                                                  }: ColumnsFromSchemaProps<M, AdditionalKey, UserType>
+                                                                                         schema: inputSchema,
+                                                                                         additionalColumns,
+                                                                                         displayedProperties,
+                                                                                         path,
+                                                                                         inlineEditing,
+                                                                                         size,
+                                                                                         onCellValueChange,
+                                                                                         uniqueFieldValidator
+                                                                                     }: ColumnsFromSchemaProps<M, AdditionalKey, UserType>
 ): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
+    const schemaRegistry = useSchemaRegistry();
 
     const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
@@ -214,9 +215,10 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     }, []);
 
-    const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
-        schemaResolver: schemaResolver
-    }), [schemaResolver, path]);
+    const baseSchema: ResolvedEntitySchema<M> = schemaRegistry.getResolvedSchema({
+        schema: inputSchema,
+        path
+    });
 
     const propertyCellRenderer = ({
                                       column,
@@ -227,13 +229,19 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
         const entity: Entity<M> = rowData;
 
-        const name = column.dataKey as keyof M;
+        const propertyKey = column.dataKey;
 
-        const resolvedSchema = schemaResolver({
-            entityId: entity.id,
-            values: entity.values
+        const schema = typeof inputSchema === "string" ? schemaRegistry.findSchema(inputSchema) : inputSchema;
+        if (!schema)
+            throw Error("Unable to find schema with id " + inputSchema);
+
+        const property = schemaRegistry.getResolvedProperty({
+            propertyKey,
+            schema,
+            path,
+            values: entity.values,
+            entityId: entity.id
         });
-        const property = resolvedSchema.properties[name] as ResolvedProperty<any>;
         if (!property)
             return null;
 
@@ -242,16 +250,16 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
         if (!inlineEditingEnabled) {
             return (
                 <TableCell
-                    key={`preview_cell_${name}_${rowIndex}_${columnIndex}`}
+                    key={`preview_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
                     size={size}
                     align={column.align}
                     disabled={true}>
                     <PreviewComponent
                         width={column.width}
                         height={column.height}
-                        name={`preview_${name}_${rowIndex}_${columnIndex}`}
+                        name={`preview_${propertyKey}_${rowIndex}_${columnIndex}`}
                         property={property as any}
-                        value={entity.values[name]}
+                        value={entity.values[propertyKey]}
                         size={getPreviewSizeFrom(size)}
                     />
                 </TableCell>
@@ -268,8 +276,8 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                         height: column.height,
                         entity,
                         cellRect,
-                        name,
-                        schemaResolver
+                        name: propertyKey,
+                        schema
                     });
                 }
             };
@@ -285,8 +293,8 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                         height: column.height,
                         entity,
                         cellRect,
-                        name,
-                        schemaResolver
+                        name: propertyKey,
+                        schema
                     });
                 }
             };
@@ -305,7 +313,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
             const validation = mapPropertyToYup({
                 property,
                 customFieldValidator,
-                name: name
+                name: propertyKey
             });
 
             const onValueChange = onCellValueChange
@@ -317,17 +325,17 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
             return entity
                 ? <PropertyTableCell
-                    key={`table_cell_${name}_${rowIndex}_${columnIndex}`}
+                    key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
                     size={size}
                     align={column.align}
-                    name={name as string}
+                    name={propertyKey as string}
                     validation={validation}
                     onValueChange={onValueChange}
                     selected={selected}
                     focused={isFocused}
                     setPreventOutsideClick={setPreventOutsideClick}
                     setFocused={setFocused}
-                    value={entity?.values ? entity.values[name] : undefined}
+                    value={entity?.values ? entity.values[propertyKey] : undefined}
                     property={property}
                     openPopup={openPopup}
                     onSelect={onSelect}
@@ -381,9 +389,9 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     };
 
-    const allColumns: TableColumn<M>[] = (Object.keys(resolvedSchema.properties) as (keyof M)[])
+    const allColumns: TableColumn<M>[] = (Object.keys(baseSchema.properties) as (keyof M)[])
         .map((key) => {
-            const property: ResolvedProperty<any>|undefined = resolvedSchema.properties[key];
+            const property = baseSchema.properties[key];
             return ({
                 key: key as string,
                 property,
@@ -432,7 +440,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
             cellRect={popupCell?.cellRect}
             columnIndex={popupCell?.columnIndex}
             name={popupCell?.name}
-            schemaResolver={popupCell?.schemaResolver}
+            schema={popupCell?.schema}
             entity={popupCell?.entity}
             tableKey={tableKey.current}
             customFieldValidator={customFieldValidator}

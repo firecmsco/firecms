@@ -1,8 +1,8 @@
 import {
     ArrayProperty,
     BooleanProperty,
-    CMSType, EnumValueConfig,
-    EnumValues,
+    CMSType,
+    EnumValueConfig,
     GeopointProperty,
     MapProperty,
     NumberProperty,
@@ -22,21 +22,10 @@ import {
  * @category Models
  */
 export type EntitySchemaResolverProps<M = any> = {
-    entityId?: string | undefined,
+    entityId?: string,
     values?: Partial<EntityValues<M>>,
     previousValues?: Partial<EntityValues<M>>,
 };
-
-/**
- * Use to resolve the schema properties for specific path, entity id or values.
- *
- * @category Models
- */
-export type EntitySchemaResolver<M = any> = ({
-                                                 entityId,
-                                                 values,
-                                                 previousValues
-                                             }: EntitySchemaResolverProps<M>) => ResolvedEntitySchema<M>;
 
 /**
  * This is the same entity schema you define, only all the property builders
@@ -114,8 +103,9 @@ export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMS
     }
 
 export type ResolvedMapProperty<T extends { [Key: string]: any } = any> =
-    Omit<MapProperty, "properties" | "dataType"> &
+    Omit<MapProperty, "properties" | "dataType" | "propertiesOrder"> &
     {
         dataType: "map";
-        properties?: ResolvedProperties<Partial<T>>
+        properties?: ResolvedProperties<Partial<T>>;
+        propertiesOrder?: string[];
     }

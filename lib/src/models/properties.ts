@@ -430,7 +430,7 @@ export interface MapProperty<T extends { [Key: string]: any } = any> extends Bas
      * If you are specifying your schema as code, the order is the same as the
      * one you define in `properties`
      */
-    propertiesOrder?: (keyof T)[];
+    propertiesOrder?: (Extract<keyof T, string>)[];
 
     /**
      * Rules for validating this property

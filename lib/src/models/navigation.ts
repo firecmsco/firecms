@@ -1,14 +1,9 @@
 import { AuthController } from "./auth";
-import { EntityCollection, EntityCollectionResolver } from "./collections";
+import { EntityCollection } from "./collections";
 import { User } from "./user";
 import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
-import {
-    LocalEntityCollection,
-    LocalEntitySchema
-} from "./local_config_persistence";
-import { EntitySchema } from "./entities";
 
 
 /**
@@ -110,7 +105,7 @@ export type NavigationContext = {
      * the collection configuration changes that are persisted.
      * If you don't specify it, the collection is fetched from the local navigation.
      */
-    getCollectionResolver: <M>(path: string, entityId?: string, baseCollection?:EntityCollection<M>) => EntityCollectionResolver<M> | undefined;
+    getCollection: <M>(path: string, entityId?: string) => EntityCollection<M> | undefined;
 
     /**
      * Default path under the navigation routes of the CMS will be created

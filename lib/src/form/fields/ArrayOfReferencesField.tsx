@@ -1,15 +1,8 @@
 import React, { useMemo } from "react";
-import {
-    Box,
-    Button,
-    FormControl,
-    FormHelperText,
-    Paper,
-    Theme
-} from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, Paper } from "@mui/material";
 import {
     Entity,
-    EntityCollectionResolver,
+    EntityCollection,
     EntityReference,
     FieldProps,
     ResolvedProperty
@@ -59,8 +52,8 @@ export function ArrayOfReferencesField({
     });
 
     const navigationContext = useNavigation();
-    const collectionResolver: EntityCollectionResolver | undefined = useMemo(() => {
-        return ofProperty.path ? navigationContext.getCollectionResolver(ofProperty.path) : undefined;
+    const collectionResolver: EntityCollection | undefined = useMemo(() => {
+        return ofProperty.path ? navigationContext.getCollection(ofProperty.path) : undefined;
     }, [ofProperty.path]);
 
     if (!collectionResolver) {
@@ -152,7 +145,7 @@ export function ArrayOfReferencesField({
 
             {collectionResolver && ofProperty.path && <ReferenceDialog open={open}
                                                     multiselect={true}
-                                                    collectionResolver={collectionResolver}
+                                                    collection={collectionResolver}
                                                     path={ofProperty.path}
                                                     onClose={onClose}
                                                     onMultipleEntitiesSelected={onMultipleEntitiesSelected}

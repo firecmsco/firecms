@@ -3,7 +3,6 @@ import {
     Entity,
     EntityReference,
     EntitySchema,
-    EntitySchemaResolver,
     EntityStatus,
     EntityValues,
     EnumConfig,
@@ -43,76 +42,6 @@ export function isHidden(property: Property | ResolvedProperty): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-/**
- * This utility function computes an {@link EntitySchema} or a {@link EntitySchemaResolver}
- * into a {@link ResolvedEntitySchema}, which has no property builders but has all
- * the properties resolved.
- * @param schema
- * @param values
- * @param path
- * @param entityId
- * @category Hooks and utilities
- */
-export function computeSchema<M extends { [Key: string]: any }>(
-    {
-        schemaResolver,
-        entityId,
-        values,
-        previousValues
-    }: {
-        schemaResolver: EntitySchemaResolver<M>,
-        entityId?: string | undefined,
-        values?: Partial<EntityValues<M>>,
-        previousValues?: Partial<EntityValues<M>>,
-    }): ResolvedEntitySchema<M> {
-    return schemaResolver({ entityId, values, previousValues });
-}
-
-/**
- *
- * @param propertiesOrBuilder
- * @param values
- * @param previousValues
- * @param path
- * @param entityId
- * @param enumConfigs
- * @ignore
- */
-export function computeProperties<M extends { [Key: string]: any }>(
-    {
-        propertiesOrBuilder,
-        path,
-        entityId,
-        values,
-        previousValues,
-        enumConfigs
-    }: {
-        propertiesOrBuilder: PropertiesOrBuilder<M>,
-        path: string,
-        entityId?: string | undefined,
-        values?: Partial<EntityValues<M>>,
-        previousValues?: Partial<EntityValues<M>>,
-        enumConfigs: EnumConfig[]
-    }): ResolvedProperties<M> {
-    return Object.entries(propertiesOrBuilder)
-        .map(([key, propertyOrBuilder]) => {
-            const property = buildPropertyFrom({
-                propertyOrBuilder,
-                values: values ?? {},
-                previousValues: previousValues ?? values ?? {},
-                path,
-                entityId
-            });
-            if (property === null) return null;
-            return {
-                [key]: computePropertyEnums(
-                    property,
-                    enumConfigs)
-            };
-        })
-        .filter((a) => a !== null)
-        .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
-}
 
 /**
  * Replace enums declared as aliases for their corresponding enumValues,
@@ -241,7 +170,7 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
                                                                            referenceConverter?: (value: EntityReference) => any,
                                                                            geopointConverter?: (value: GeoPoint) => any
                                                                        }): EntityValues<M> {
-    return traverseValues(
+    return traverseValuesProperties(
         inputValues,
         properties,
         (inputValue, property) => {
@@ -293,7 +222,7 @@ export function getReferenceFrom(entity: Entity<any>): EntityReference {
     return new EntityReference(entity.id, entity.path);
 }
 
-export function traverseValues<M extends { [Key: string]: any }>(
+export function traverseValuesProperties<M extends { [Key: string]: any }>(
     inputValues: Partial<EntityValues<M>>,
     properties: ResolvedProperties<M>,
     operation: (value: any, property: Property) => any
@@ -301,7 +230,7 @@ export function traverseValues<M extends { [Key: string]: any }>(
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues as any)[key];
-            const updatedValue = traverseValue(inputValue, property as Property, operation);
+            const updatedValue = traverseValueProperty(inputValue, property as Property, operation);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
         })
@@ -309,16 +238,16 @@ export function traverseValues<M extends { [Key: string]: any }>(
     return { ...inputValues, ...updatedValues };
 }
 
-export function traverseValue(inputValue: any,
-                              property: Property,
-                              operation: (value: any, property: Property) => any): any {
+export function traverseValueProperty(inputValue: any,
+                                      property: Property,
+                                      operation: (value: any, property: Property) => any): any {
 
     let value;
     if (property.dataType === "map" && property.properties) {
-        value = traverseValues(inputValue, property.properties as ResolvedProperties, operation);
+        value = traverseValuesProperties(inputValue, property.properties as ResolvedProperties, operation);
     } else if (property.dataType === "array") {
         if (property.of && Array.isArray(inputValue)) {
-            value = inputValue.map((e) => traverseValue(e, property.of as Property, operation));
+            value = inputValue.map((e) => traverseValueProperty(e, property.of as Property, operation));
         } else if (property.oneOf && Array.isArray(inputValue)) {
             const typeField = property.oneOf!.typeField ?? "type";
             const valueField = property.oneOf!.valueField ?? "value";
@@ -330,7 +259,7 @@ export function traverseValue(inputValue: any,
                 if (!type || !childProperty) return e;
                 return {
                     [typeField]: type,
-                    [valueField]: traverseValue(e[valueField], childProperty, operation)
+                    [valueField]: traverseValueProperty(e[valueField], childProperty, operation)
                 };
             });
         } else {
@@ -342,7 +271,6 @@ export function traverseValue(inputValue: any,
 
     return value;
 }
-
 
 export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: any }>
 ({

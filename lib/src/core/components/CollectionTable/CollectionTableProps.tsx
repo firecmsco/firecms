@@ -3,10 +3,7 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
-    EntityCollectionResolver,
-    EntitySchemaResolver
 } from "../../../models";
-
 
 /**
  * @category Collection components
@@ -26,12 +23,7 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
     /**
      * Collection
      */
-    collection: EntityCollection<M> | EntityCollectionResolver<M>;
-
-    /**
-     * Use to resolve the schema properties for specific path, entity id or values
-     */
-    schemaResolver: EntitySchemaResolver<M>;
+    collection: EntityCollection<M>;
 
     /**
      * Override the title in the toolbar

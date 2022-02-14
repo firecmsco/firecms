@@ -4,7 +4,6 @@ import {
     Entity,
     EntityReference,
     EntitySchema,
-    EntitySchemaResolver,
     EntityValues,
     FetchCollectionProps,
     FetchEntityProps,
@@ -19,12 +18,7 @@ import {
     SchemaRegistry,
     WhereFilterOp
 } from "../../models";
-import {
-    computeSchema,
-    sanitizeData,
-    traverseValues,
-    updateAutoValues
-} from "../../core/utils";
+import { sanitizeData, updateAutoValues } from "../../core/utils";
 import {
     collection,
     CollectionReference,
@@ -65,6 +59,7 @@ export interface FirestoreDataSourceProps {
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
  * @param textSearchController
+ * @param schemaRegistry
  * @category Firebase
  */
 export function useFirestoreDataSource({
@@ -81,7 +76,6 @@ export function useFirestoreDataSource({
         firestoreRef.current = getFirestore(firebaseApp);
     }, [firebaseApp]);
 
-
     /**
      *
      * @param doc
@@ -96,7 +90,7 @@ export function useFirestoreDataSource({
         resolvedSchema: ResolvedEntitySchema<M>
     ): Entity<M> {
 
-        const values = firestoreToCMSModel(doc.data(), resolvedSchema);
+        const values = firestoreToCMSModel(doc.data());
         const data = doc.data()
             ? resolvedSchema.properties
                 ? sanitizeData(values as EntityValues<M>, resolvedSchema.properties)
@@ -150,7 +144,7 @@ export function useFirestoreDataSource({
 
     function getAndBuildEntity<M>(path: string,
                                   entityId: string,
-                                  schema: EntitySchema<M> | EntitySchemaResolver<M>): Promise<Entity<M> | undefined> {
+                                  schema: string | EntitySchema<M> | ResolvedEntitySchema<M>): Promise<Entity<M> | undefined> {
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
 
         return getDoc(doc(firestore, path, entityId))
@@ -158,12 +152,11 @@ export function useFirestoreDataSource({
                 if (!docSnapshot.exists()) {
                     return undefined;
                 }
-                const resolvedSchema = computeSchema({
-                    schemaResolver: schemaRegistry.buildSchemaResolver<M>({
-                        schema,
-                        path
-                    }),
-                    entityId: docSnapshot.id
+                const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
+                    schema,
+                    path,
+                    entityId: docSnapshot.id,
+                    values: firestoreToCMSModel(docSnapshot.data())
                 });
                 return createEntityFromSchema(docSnapshot, path, resolvedSchema);
             });
@@ -171,7 +164,7 @@ export function useFirestoreDataSource({
 
     async function performTextSearch<M>(path: string,
                                         searchString: string,
-                                        schema: EntitySchema<M> | EntitySchemaResolver<M>): Promise<Entity<M>[]> {
+                                        schema: string | EntitySchema<M> | ResolvedEntitySchema<M>): Promise<Entity<M>[]> {
         if (!textSearchController)
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
         const ids = await textSearchController({ path, searchString });
@@ -226,23 +219,22 @@ export function useFirestoreDataSource({
             console.debug("Fetching collection", path, limit, filter, startAfter, orderBy, order);
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
 
-            const resolvedSchema = computeSchema({
-                schemaResolver: schemaRegistry.buildSchemaResolver<M>({
-                    schema,
-                    path
-                })
-            });
             return getDocs(query)
                 .then((snapshot) =>
-                    snapshot.docs.map((doc) => createEntityFromSchema(doc, path, resolvedSchema)));
+                    snapshot.docs.map((doc) => {
+                        const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
+                            schema,
+                            path,
+                            values: firestoreToCMSModel(doc.data())
+                        });
+                        return createEntityFromSchema(doc, path, resolvedSchema);
+                    }));
         },
-
 
         /**
          * Listen to a entities in a given path
          * @param path
          * @param schema
-         * @param onSnapshot
          * @param onError
          * @param filter
          * @param limit
@@ -273,7 +265,7 @@ export function useFirestoreDataSource({
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
 
             if (searchString) {
-                performTextSearch(path, searchString, schema)
+                performTextSearch<M>(path, searchString, schema)
                     .then(onUpdate)
                     .catch((e) => {
                         if (onError) onError(e);
@@ -283,11 +275,9 @@ export function useFirestoreDataSource({
                 };
             }
 
-            const resolvedSchema = computeSchema({
-                schemaResolver: schemaRegistry.buildSchemaResolver<M>({
-                    schema,
-                    path
-                }),
+            const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
+                schema,
+                path
             });
 
             return onSnapshot(query,
@@ -310,7 +300,7 @@ export function useFirestoreDataSource({
         fetchEntity<M extends { [Key: string]: any }>({
                                                           path,
                                                           entityId,
-                                                          schema
+                                                          schema,
                                                       }: FetchEntityProps<M>
         ): Promise<Entity<M> | undefined> {
             return getAndBuildEntity(path, entityId, schema);
@@ -340,11 +330,9 @@ export function useFirestoreDataSource({
                 doc(firestore, path, entityId),
                 {
                     next: (docSnapshot) => {
-                        const resolvedSchema = computeSchema({
-                            schemaResolver: schemaRegistry.buildSchemaResolver<M>({
-                                schema,
-                                path
-                            }),
+                        const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
+                            schema,
+                            path,
                             entityId: docSnapshot.id
                         });
                         onUpdate(createEntityFromSchema(docSnapshot, path, resolvedSchema));
@@ -361,6 +349,7 @@ export function useFirestoreDataSource({
          * @param path
          * @param entityId
          * @param values
+         * @param schemaId
          * @param schema
          * @param status
          * @category Firestore
@@ -375,13 +364,13 @@ export function useFirestoreDataSource({
             }: SaveEntityProps<M>): Promise<Entity<M>> {
 
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
-            const resolvedSchema = computeSchema({
-                schemaResolver: schemaRegistry.buildSchemaResolver<M>({
-                    schema,
-                    path
-                }),
+
+            const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
+                schema,
+                path,
                 entityId
             });
+
             const properties: ResolvedProperties<M> = resolvedSchema.properties;
             const collectionReference: CollectionReference = collection(firestore, path);
 
@@ -406,7 +395,7 @@ export function useFirestoreDataSource({
             return setDoc(documentReference, updatedFirestoreValues, { merge: true }).then(() => ({
                 id: documentReference.id,
                 path: documentReference.path,
-                values: firestoreToCMSModel(updatedFirestoreValues, resolvedSchema) as EntityValues<M>
+                values: firestoreToCMSModel(updatedFirestoreValues) as EntityValues<M>
             }));
         },
 
@@ -477,32 +466,62 @@ export function useFirestoreDataSource({
  * @param schema
  * @category Firestore
  */
-export function firestoreToCMSModel<M>(data: any, schema: ResolvedEntitySchema<M>): any {
-    return traverseValues(data,
-        schema.properties,
-        (value, property) => {
-            if (value === null)
-                return null;
-
-            if (serverTimestamp().isEqual(value)) {
-                return null;
+// export function firestoreToCMSModel<M>(data: any, schema: ResolvedEntitySchema<M>): any {
+//     return traverseValuesProperties(data,
+//         schema.properties,
+//         (value, property) => {
+//             if (value === null)
+//                 return null;
+//
+//             if (serverTimestamp().isEqual(value)) {
+//                 return null;
+//             }
+//
+//             if (value instanceof Timestamp && property.dataType === "timestamp") {
+//                 return value.toDate();
+//             }
+//
+//             if (value instanceof GeoPoint && property.dataType === "geopoint") {
+//                 return new GeoPoint(value.latitude, value.longitude);
+//             }
+//
+//             if (value instanceof DocumentReference && property.dataType === "reference") {
+//                 return new EntityReference(value.id, getCMSPathFromFirestorePath(value.path));
+//             }
+//
+//             return value;
+//         });
+// }
+export function firestoreToCMSModel<M>(data: any): any {
+    const traverse = (input: any): any => {
+        if (input == null) return input;
+        if (serverTimestamp().isEqual(input)) {
+            return null;
+        }
+        if (input instanceof Timestamp) {
+            return input.toDate();
+        }
+        if (input instanceof GeoPoint) {
+            return new GeoPoint(input.latitude, input.longitude);
+        }
+        if (input instanceof DocumentReference) {
+            return new EntityReference(input.id, getCMSPathFromFirestorePath(input.path));
+        }
+        if (Array.isArray(input)) {
+            return input.map(traverse);
+        }
+        if (typeof input === "object") {
+            const result = {}
+            for (const key of Object.keys(input)) {
+                result[key] = traverse(input[key]);
             }
-
-            if (value instanceof Timestamp && property.dataType === "timestamp") {
-                return value.toDate();
-            }
-
-            if (value instanceof GeoPoint && property.dataType === "geopoint") {
-                return new GeoPoint(value.latitude, value.longitude);
-            }
-
-            if (value instanceof DocumentReference && property.dataType === "reference") {
-                return new EntityReference(value.id, getCMSPathFromFirestorePath(value.path));
-            }
-
-            return value;
-        });
+            return result;
+        }
+        return input;
+    }
+    return traverse(data)
 }
+
 
 export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
     if (Array.isArray(data)) {

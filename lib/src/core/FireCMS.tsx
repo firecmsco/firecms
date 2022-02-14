@@ -74,17 +74,6 @@ export interface FireCMSProps<UserType> {
     navigation: Navigation | NavigationBuilder<UserType>;
 
     /**
-     * List of entity schemas available to the CMS
-     */
-    schemas?: EntitySchema[];
-
-    /**
-     * List of enumeration configurations for easy reuse in the app through
-     * an alias
-     */
-    enumConfigs?: EnumConfig[];
-
-    /**
      * Do the users need to log in to access the CMS.
      * You can specify an Authenticator function to discriminate which users can
      * access the CMS or not.
@@ -158,10 +147,12 @@ export interface FireCMSProps<UserType> {
      */
     userConfigPersistence?: UserConfigurationPersistence;
 
-
+    /**
+     * This component is in charge of handling the {@link EntitySchema} entries
+     * in the CMS.
+     */
     schemaRegistry: SchemaRegistry;
 }
-
 
 /**
  * If you are using independent components of the CMS

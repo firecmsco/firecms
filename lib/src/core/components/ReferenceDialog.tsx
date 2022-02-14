@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { styled } from '@mui/material/styles';
-import { CollectionSize, Entity, EntityCollectionResolver } from "../../models";
+import { styled } from "@mui/material/styles";
+import { CollectionSize, Entity, EntityCollection } from "../../models";
 import {
     Button,
     Dialog,
@@ -10,12 +10,14 @@ import {
 } from "@mui/material";
 
 import { CollectionTable } from "./CollectionTable";
-import { CollectionRowActions } from "./CollectionTable/internal/CollectionRowActions";
+import {
+    CollectionRowActions
+} from "./CollectionTable/internal/CollectionRowActions";
 import { useDataSource } from "../../hooks";
 import { ErrorView } from "./ErrorView";
+import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
-
-const PREFIX = 'ReferenceDialog';
+const PREFIX = "ReferenceDialog";
 
 const classes = {
     dialogBody: `${PREFIX}-dialogBody`,
@@ -38,9 +40,6 @@ const StyledDialog = styled(Dialog)((
     }
 }));
 
-
-
-
 /**
  * @category Components
  */
@@ -59,7 +58,7 @@ export interface ReferenceDialogProps {
     /**
      * Entity collection config
      */
-    collectionResolver: EntityCollectionResolver;
+    collection: EntityCollection;
 
     /**
      * Absolute path of the collection
@@ -108,28 +107,30 @@ export function ReferenceDialog(
         onClose,
         open,
         multiselect,
-        collectionResolver,
+        collection,
         path,
         selectedEntityIds
     }: ReferenceDialogProps) {
 
-
     const dataSource = useDataSource();
+    const schemaRegistry = useSchemaRegistry();
 
-    const collection = collectionResolver;
-    const schemaResolver = collectionResolver.schemaResolver;
+    const schema = schemaRegistry.getResolvedSchema({
+        schema: collection.schemaId,
+        path
+    });
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
 
     useEffect(() => {
         let unmounted = false;
-        if (selectedEntityIds && schemaResolver) {
+        if (selectedEntityIds && schema) {
             Promise.all(
                 selectedEntityIds.map((entityId) => {
                     return dataSource.fetchEntity({
                         path,
                         entityId,
-                        schema: schemaResolver
+                        schema: collection.schemaId
                     });
                 }))
                 .then((entities) => {
@@ -143,7 +144,6 @@ export function ReferenceDialog(
             unmounted = true;
         };
     }, [dataSource, path, selectedEntityIds]);
-
 
     const onEntityClick = (entity: Entity<any>) => {
         if (!multiselect && onSingleEntitySelected) {
@@ -160,7 +160,6 @@ export function ReferenceDialog(
             onMultipleEntitiesSelected([]);
         }
     };
-
 
     const toggleEntitySelection = (entity: Entity<any>) => {
         let newValue;
@@ -200,12 +199,9 @@ export function ReferenceDialog(
         </Button>
     );
 
-
-    const schema = schemaResolver ? schemaResolver({}) : undefined;
-
-    if (!schema || !schemaResolver) {
+    if (!schema) {
         return <ErrorView
-            error={"Could not find schema with id " + collectionResolver.schemaId}/>
+            error={"Could not find schema with id " + collection.schemaId}/>
     }
 
     const title = (
@@ -228,7 +224,6 @@ export function ReferenceDialog(
                 {selectedEntities &&
                 <CollectionTable path={path}
                                  collection={collection}
-                                 schemaResolver={schemaResolver}
                                  inlineEditing={false}
                                  toolbarActionsBuilder={toolbarActionsBuilder}
                                  onEntityClick={onEntityClick}

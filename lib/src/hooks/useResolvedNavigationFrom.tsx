@@ -5,7 +5,9 @@ import {
     FireCMSContext
 } from "../models";
 import { useEffect, useState } from "react";
-import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";
+import {
+    getNavigationEntriesFromPathInternal
+} from "../core/util/navigation_from_path";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 /**
@@ -90,15 +92,14 @@ export function resolveNavigationFrom<M, UserType>({
             if (entry.type === "collection") {
                 return Promise.resolve(entry);
             } else if (entry.type === "entity") {
-                const entityCollectionResolver = navigationContext.getCollectionResolver(entry.path, entry.entityId);
-                if (!entityCollectionResolver?.schemaResolver) {
-                    throw Error(`No schema defined in the navigation for the entity with path ${entry.path}`);
+                const collection = navigationContext.getCollection(entry.path, entry.entityId);
+                if (!collection) {
+                    throw Error(`No collection defined in the navigation for the entity with path ${entry.path}`);
                 }
-
                 return dataSource.fetchEntity({
                     path: entry.path,
                     entityId: entry.entityId,
-                    schema: entityCollectionResolver?.schemaResolver
+                    schema: collection.schemaId
                 })
                     .then((entity) => {
                         if (!entity) return undefined;

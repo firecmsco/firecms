@@ -4,7 +4,6 @@ import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { PermissionsBuilder } from "./permissions";
-import { EntitySchemaResolver } from "./resolved_entities";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -105,13 +104,6 @@ export interface EntityCollection<M extends { [Key: string]: any } = any, UserTy
     selectionController?: SelectionController<M>;
 
 }
-
-/**
- * @category Models
- */
-export type EntityCollectionResolver<M = any> = EntityCollection<M> & {
-    schemaResolver: EntitySchemaResolver<M> | undefined
-};
 
 /**
  * Parameter passed to the `extraActions` builder in the collection configuration
