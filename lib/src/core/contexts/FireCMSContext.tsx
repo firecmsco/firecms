@@ -1,7 +1,6 @@
 import React from "react";
 import { FireCMSContext } from "../../models";
 
-
 export const FireCMSContextInstance = React.createContext<FireCMSContext>({
     sideEntityController: {} as any,
     navigationContext: {} as any,
@@ -11,7 +10,6 @@ export const FireCMSContextInstance = React.createContext<FireCMSContext>({
     authController: {} as any,
     snackbarController: {} as any
 });
-
 
 /**
  *

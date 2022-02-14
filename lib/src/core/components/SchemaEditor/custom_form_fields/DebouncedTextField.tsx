@@ -15,7 +15,7 @@ export default function DebouncedTextField(props: TextFieldProps) {
             props.onChange(previousEventRef.current);
     }, [internalValue, props.value]);
 
-    useDebounce(internalValue, doUpdate, 300);
+    useDebounce(internalValue, doUpdate, 64);
     const internalOnChange = (event: ChangeEvent<any>) => {
         previousEventRef.current = event;
         setInternalValue(event.target.value);

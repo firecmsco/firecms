@@ -13,6 +13,7 @@ interface ArrayContainerProps<T> {
     name: string;
     buildEntry: (index: number, internalId: number) => React.ReactNode;
     disabled: boolean;
+    small?: boolean;
     onInternalIdAdded?: (id: number) => void;
     includeAddButton?: boolean;
 }
@@ -25,12 +26,12 @@ export function ArrayContainer<T>({
                                       value,
                                       disabled,
                                       buildEntry,
+                                      small,
                                       onInternalIdAdded,
                                       includeAddButton
                                   }: ArrayContainerProps<T>) {
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
-
     const internalIdsMap: Record<string, number> = useMemo(() =>
             hasValue
                 ? value.map(v => {
@@ -82,9 +83,9 @@ export function ArrayContainer<T>({
             };
 
             const remove = (index: number) => {
-                const newValue = [...internalIds];
-                newValue.splice(index, 1);
-                setInternalIds(newValue);
+                const newIds = [...internalIds];
+                newIds.splice(index, 1);
+                setInternalIds(newIds);
                 arrayHelpers.remove(index);
             };
 
@@ -133,32 +134,36 @@ export function ArrayContainer<T>({
                                                         opacity: 1
                                                     }}
                                                 >
-                                                    <Box key={`field_${index}`}
+                                                    <Box key={`field_${internalId}`}
                                                          display="flex">
                                                         <Box flexGrow={1}
                                                              width={"100%"}
                                                              key={`field_${name}_entryValue`}>
                                                             {buildEntry(index, internalId)}
                                                         </Box>
-                                                        <Box width={"36px"}
-                                                             display="flex"
-                                                             flexDirection="column"
+                                                        <Box display="flex"
+                                                             flexDirection={small ? "row" : "column"}
                                                              alignItems="center">
-                                                            <div
-                                                                {...provided.dragHandleProps}>
-                                                                <DragHandleIcon
-                                                                    fontSize={"small"}
-                                                                    color={disabled ? "disabled" : "inherit"}
-                                                                    sx={{ cursor: disabled ? "inherit" : "move" }}/>
-                                                            </div>
-                                                            {!disabled &&
                                                             <IconButton
                                                                 size="small"
                                                                 aria-label="remove"
+                                                                disabled={disabled}
                                                                 onClick={() => remove(index)}>
                                                                 <ClearIcon
                                                                     fontSize={"small"}/>
-                                                            </IconButton>}
+                                                            </IconButton>
+
+                                                            <div
+                                                                {...provided.dragHandleProps}>
+                                                                <IconButton
+                                                                    size="small"
+                                                                    disabled={disabled}
+                                                                    sx={{ cursor: disabled ? "inherit" : "move" }}>
+                                                                    <DragHandleIcon
+                                                                        fontSize={"small"}
+                                                                        color={disabled ? "disabled" : "inherit"}/>
+                                                                </IconButton>
+                                                            </div>
                                                         </Box>
                                                     </Box>
                                                 </Box>
@@ -168,9 +173,9 @@ export function ArrayContainer<T>({
 
                                 {droppableProvided.placeholder}
 
-                                {includeAddButton && !disabled && <Box p={1}
-                                                                       justifyContent="center"
-                                                                       textAlign={"left"}>
+                                {includeAddButton && <Box p={1}
+                                                          justifyContent="center"
+                                                          textAlign={"left"}>
                                     <Button variant="outlined"
                                             color="primary"
                                             disabled={disabled}

@@ -54,7 +54,8 @@ it("Initial values", () => {
     const properties = computeProperties({
         propertiesOrBuilder: productSchema.properties,
         path: "test",
-        values: productSchema.defaultValues
+        values: productSchema.defaultValues,
+        enumConfigs: []
     });
     const initialisedValues = initWithProperties(properties, productSchema.defaultValues);
     expect(

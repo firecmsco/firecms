@@ -1,10 +1,4 @@
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import * as Yup from "yup";
 import Tree, {
     moveItemOnTree,
@@ -16,7 +10,6 @@ import Tree, {
 import {
     TreeDraggableProvided
 } from "../Tree/components/TreeItem/TreeItem-types";
-import { useLocation, useNavigate } from "react-router-dom";
 
 import { Formik, FormikProps, getIn, useFormikContext } from "formik";
 
@@ -35,6 +28,7 @@ import {
     FormControl,
     FormHelperText,
     Grid,
+    IconButton,
     InputLabel,
     OutlinedInput,
     Paper,
@@ -185,10 +179,6 @@ function SchemaEditorForm<M>({
     onCancel?: () => void;
 }) {
 
-    const location = useLocation();
-    const navigate = useNavigate();
-
-    const navigationStack = useRef(0);
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
@@ -205,11 +195,6 @@ function SchemaEditorForm<M>({
     }, [updateDirtyStatus, dirty]);
 
     useEffect(() => {
-        const newSelectedPropertyId = location.hash ? location.hash.substring(1) : undefined;
-        setSelectedPropertyId(newSelectedPropertyId);
-    }, [location]);
-
-    useEffect(() => {
         const idTouched = getIn(touched, "id");
         if (!idTouched && isNewSchema && values.name) {
             setFieldValue("id", toSnakeCase(values.name))
@@ -218,10 +203,7 @@ function SchemaEditorForm<M>({
 
     const onPropertyClick = useCallback((property: PropertyOrBuilder, propertyId: string) => {
         setSelectedPropertyId(propertyId);
-        const replace = Boolean(location.hash);
-        if (!replace) navigationStack.current++;
-        navigate(`${location.pathname}#${propertyId}`, { replace: replace });
-    }, [location]);
+    }, []);
 
     const renderItem = useCallback(({
                                         item,
@@ -288,12 +270,6 @@ function SchemaEditorForm<M>({
 
     const closePropertyDialog = () => {
         setSelectedPropertyId(undefined);
-        if (navigationStack.current) {
-            navigationStack.current--;
-            navigate(-1);
-        } else {
-            navigate(`${location.pathname}`, { replace: true });
-        }
     };
 
     const propertyEditForm = <PropertyForm
@@ -310,8 +286,7 @@ function SchemaEditorForm<M>({
         onOkClicked={asDialog
             ? closePropertyDialog
             : undefined
-        }
-        onCancel={closePropertyDialog}/>;
+        }/>;
 
     return (
         <>
@@ -596,10 +571,15 @@ export function SchemaEntry({
                         ? <PropertyPreview property={propertyOrBuilder}/>
                         : <PropertyBuilderPreview name={name}/>}
 
-                    <Box {...provided.dragHandleProps}
-                         sx={{ position: "absolute", p: 2, top: 0, right: 0 }}>
+                    <IconButton  {...provided.dragHandleProps}
+                                 size="small"
+                                 sx={{
+                                     position: "absolute",
+                                     top: 8,
+                                     right: 8
+                                 }}>
                         <DragHandleIcon fontSize={"small"}/>
-                    </Box>
+                    </IconButton>
                 </Paper>
             </Box>
         </Box>

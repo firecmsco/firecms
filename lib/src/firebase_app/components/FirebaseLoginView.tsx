@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { styled } from '@mui/material/styles';
-
 import {
     Box,
     Button,
@@ -11,7 +9,6 @@ import {
     IconButton,
     Slide,
     TextField,
-    Theme,
     Typography
 } from "@mui/material";
 
@@ -35,24 +32,6 @@ import { ErrorView } from "../../core";
 import EmailIcon from "@mui/icons-material/Email";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-
-const PREFIX = 'FirebaseLoginView';
-
-const classes = {
-    logo: `${PREFIX}-logo`
-};
-
-const Root = styled('div')((
-   { theme } : {
-        theme: Theme
-    }
-) => ({
-    [`& .${classes.logo}`]: {
-        padding: theme.spacing(3),
-        width: 260,
-        height: 260
-    }
-}));
 
 /**
  * @category Firebase
@@ -96,23 +75,23 @@ export function FirebaseLoginView({
         if (authDelegate.authError) {
             if (authDelegate.authError.code === "auth/operation-not-allowed") {
                 errorView =
-                    <Root>
+                    <div>
                         <Box p={1}>
                             <ErrorView
                                 error={"You need to enable the corresponding login provider in your Firebase project"}/>
                         </Box>
                         {firebaseApp &&
-                        <Box p={1}>
-                            <a href={`https://console.firebase.google.com/project/${firebaseApp.options.projectId}/authentication/providers`}
-                               rel="noopener noreferrer"
-                               target="_blank">
-                                <Button variant="text"
-                                        color="primary">
-                                    Open Firebase configuration
-                                </Button>
-                            </a>
-                        </Box>}
-                    </Root>;
+                            <Box p={1}>
+                                <a href={`https://console.firebase.google.com/project/${firebaseApp.options.projectId}/authentication/providers`}
+                                   rel="noopener noreferrer"
+                                   target="_blank">
+                                    <Button variant="text"
+                                            color="primary">
+                                        Open Firebase configuration
+                                    </Button>
+                                </a>
+                            </Box>}
+                    </div>;
             } else if (!ignoredCodes.includes(authDelegate.authError.code)) {
                 console.error(authDelegate.authError);
                 errorView =
@@ -126,13 +105,15 @@ export function FirebaseLoginView({
 
     let logoComponent;
     if (logo) {
-        logoComponent = <img className={classes.logo}
-                             src={logo}
+        logoComponent = <img src={logo}
+                             style={{
+                                 height: "100%",
+                                 width: "100%",
+                                 objectFit: "cover"
+                             }}
                              alt={"Logo"}/>;
     } else {
-        logoComponent = <div className={classes.logo}>
-            <FireCMSLogo/>
-        </div>;
+        logoComponent = <FireCMSLogo/>;
     }
 
     let notAllowedMessage: string | undefined;
@@ -145,7 +126,6 @@ export function FirebaseLoginView({
             notAllowedMessage = "It looks like you don't have access to the CMS, based on the specified Authenticator configuration";
         }
     }
-
 
     return (
         <Fade
@@ -169,15 +149,19 @@ export function FirebaseLoginView({
                     maxWidth: 340
                 }}>
 
-                    <Box m={1}>
+                    <Box m={1} sx={{
+                        padding: 1,
+                        width: 260,
+                        height: 260
+                    }}>
                         {logoComponent}
                     </Box>
 
                     {notAllowedMessage &&
-                    <Box p={2}>
-                        <ErrorView
-                            error={notAllowedMessage}/>
-                    </Box>}
+                        <Box p={2}>
+                            <ErrorView
+                                error={notAllowedMessage}/>
+                        </Box>}
 
                     {buildErrorView()}
 

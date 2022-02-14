@@ -1,6 +1,6 @@
 {
     "parserOptions": {
-        "project": ["../../tsconfig.json"]
+        "project": ["../../../tsconfig.json"]
     },
     "env": {
         "jest": true
