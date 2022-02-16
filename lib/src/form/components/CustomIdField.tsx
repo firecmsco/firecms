@@ -31,7 +31,7 @@ import {
     useSnackbarController
 } from "../../hooks";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-import { resolveEnum } from "../../core/utils";
+import { resolveEnumValues } from "../../core/utils";
 
 const PREFIX = 'CustomIdField';
 
@@ -73,7 +73,7 @@ export function CustomIdField<M, UserType>
     const enumValues: EnumValueConfig[] | undefined = useMemo(() => {
         if (!schema.customId || typeof schema.customId === "boolean")
             return undefined;
-        return resolveEnum(schema.customId, schemaRegistry.enumConfigs);
+        return resolveEnumValues(schema.customId, schemaRegistry.enumConfigs);
     }, [schemaRegistry.enumConfigs, schema.customId]);
 
     const snackbarContext = useSnackbarController();

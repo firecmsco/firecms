@@ -21,8 +21,6 @@ import {
 import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 import { ArrayEnumPreview } from "../../preview";
-import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-import { resolveEnum } from "../../core/utils";
 import { ErrorView } from "../../core";
 
 

@@ -2,7 +2,7 @@ import React from "react";
 
 import { EnumValuesChip } from "./CustomChip";
 import { PreviewComponentProps } from "../internal";
-import { resolveEnum } from "../../core/utils";
+import { resolveEnumValues } from "../../core/utils";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
 /**
@@ -20,7 +20,7 @@ export function NumberPreview({
 
     if (property.enumValues) {
         const enumKey = value;
-        const enumValues = resolveEnum(property.enumValues, schemaRegistry.enumConfigs);
+        const enumValues = resolveEnumValues(property.enumValues, schemaRegistry.enumConfigs);
         return <EnumValuesChip
             enumId={enumKey}
             enumValues={enumValues}

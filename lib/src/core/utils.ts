@@ -2,7 +2,6 @@ import {
     CMSType,
     Entity,
     EntityReference,
-    EntitySchema,
     EntityStatus,
     EntityValues,
     EnumConfig,
@@ -11,11 +10,9 @@ import {
     GeoPoint,
     NumberProperty,
     Properties,
-    PropertiesOrBuilder,
     Property,
     PropertyOrBuilder,
     ResolvedArrayProperty,
-    ResolvedEntitySchema,
     ResolvedNumberProperty,
     ResolvedProperties,
     ResolvedProperty,
@@ -99,16 +96,16 @@ export function computePropertiesEnums<M>(properties: Properties<M>, enumConfigs
  * @param enumConfigs
  */
 export function resolvePropertyEnum(property: StringProperty | NumberProperty, enumConfigs: EnumConfig[]): ResolvedStringProperty | ResolvedNumberProperty {
-    if (typeof property.enumValues === "string") {
+    if (typeof property.enumValues === "string" || typeof property.enumValues === "object") {
         return {
             ...property,
-            enumValues: resolveEnum(property.enumValues, enumConfigs) ?? [],
+            enumValues: resolveEnumValues(property.enumValues, enumConfigs)?.filter((value) => value && value.id && value.label) ?? [],
         }
     }
     return property as ResolvedStringProperty | ResolvedNumberProperty;
 }
 
-export function resolveEnum(input: EnumValues | string, enumConfigs: EnumConfig[]): EnumValueConfig[] | undefined {
+export function resolveEnumValues(input: EnumValues | string, enumConfigs: EnumConfig[]): EnumValueConfig[] | undefined {
     if (typeof input === "string") {
         const enumConfig = enumConfigs.find((ec) => ec.id === input);
         if (!enumConfig) {

@@ -13,8 +13,6 @@ import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { isEnumValueDisabled } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview/components/CustomChip";
-import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-import { resolveEnum } from "../../core/utils";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -55,13 +53,13 @@ export function Select<T extends EnumType>({
             error={showError}
             disabled={disabled}
             sx={{
-                '& .MuiInputLabel-root': {
+                "& .MuiInputLabel-root": {
                     mt: 1 / 2,
-                    ml: 1 / 2,
+                    ml: 1 / 2
                 },
-                '& .MuiInputLabel-shrink': {
+                "& .MuiInputLabel-shrink": {
                     mt: 2
-                },
+                }
             }}
         >
 

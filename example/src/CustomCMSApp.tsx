@@ -97,7 +97,7 @@ export function CustomCMSApp() {
         return true;
     };
 
-    const schemaRegistry = useBuildSchemaRegistry({});
+    const schemaRegistry = useBuildSchemaRegistry({ schemas: [productSchema] });
 
     const {
         firebaseApp,
@@ -139,7 +139,6 @@ export function CustomCMSApp() {
     return (
         <Router>
             <FireCMS navigation={navigation}
-                     schemas={[productSchema]}
                      authDelegate={authDelegate}
                      authentication={myAuthenticator}
                      schemaRegistry={schemaRegistry}

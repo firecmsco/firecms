@@ -78,10 +78,11 @@ export function useBuildSchemaRegistry<UserType>({
         });
 
         const mergedEnumIds = baseEnumsMerged.map(s => s.id);
-        setEnumConfigs([
+        const allEnumConfigs = [
             ...configEnums.filter((enumConfig) => !mergedEnumIds.includes(enumConfig.id)),
             ...baseEnumsMerged
-        ]);
+        ];
+        setEnumConfigs(allEnumConfigs);
 
         setInitialised(true);
     }, [

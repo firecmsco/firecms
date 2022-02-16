@@ -1,16 +1,15 @@
 import { EnumValueConfig } from "../../../../../models";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import { ArrayEnumPreview } from "../../../../../preview";
 import React, { useEffect, useState } from "react";
-import { Checkbox, ListItemText, MenuItem, Select, Theme } from "@mui/material";
+import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
 import {
     enumToObjectEntries,
     isEnumValueDisabled
 } from "../../../../util/enums";
 import { EnumValuesChip } from "../../../../../preview/components/CustomChip";
 
-
-const PREFIX = 'TableSelect';
+const PREFIX = "TableSelect";
 
 const classes = {
     select: `${PREFIX}-select`,
@@ -32,7 +31,6 @@ const StyledSelect = styled(Select)((
         height: "100%"
     }
 }));
-
 
 export function TableSelect(props: {
     name: string;
@@ -124,7 +122,7 @@ export function TableSelect(props: {
                     throw Error("Missing mapping in TableSelect");
                 }
             }}
-            renderValue={(enumKey: any) => {
+            renderValue={(enumKey: unknown) => {
                 if (multiple && Array.isArray(enumKey)) {
                     return <ArrayEnumPreview value={enumKey}
                                              name={name}

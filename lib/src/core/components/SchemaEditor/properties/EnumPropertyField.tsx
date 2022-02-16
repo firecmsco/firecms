@@ -17,7 +17,7 @@ import {
     NumberProperty,
     StringProperty
 } from "../../../../models";
-import { resolveEnum } from "../../../utils";
+import { resolveEnumValues } from "../../../utils";
 import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
 import { ArrayContainer } from "../../../../form";
 import DebouncedTextField from "../custom_form_fields/DebouncedTextField";
@@ -187,7 +187,7 @@ export function EnumPropertyField() {
     const enumValues: EnumValueConfig[] = useMemo(() => {
         if (!values.enumValues || typeof values.enumValues === "boolean")
             return [] as EnumValueConfig[];
-        return resolveEnum(values.enumValues, schemaRegistry.enumConfigs) ?? [] as EnumValueConfig[];
+        return resolveEnumValues(values.enumValues, schemaRegistry.enumConfigs) ?? [] as EnumValueConfig[];
     }, [schemaRegistry.enumConfigs, values.enumValues]);
 
     const [internalValue, setInternalValue] = React.useState<EnumValueConfig[]>(enumValues);

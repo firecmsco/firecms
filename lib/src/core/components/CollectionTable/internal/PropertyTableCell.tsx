@@ -30,7 +30,6 @@ import { TableCell } from "../../Table/TableCell";
 import { AnySchema } from "yup";
 import { TableStorageUpload } from "./fields/TableStorageUpload";
 
-
 export interface PropertyTableCellProps<T extends CMSType> {
     name: string;
     selected: boolean;
@@ -60,24 +59,24 @@ export interface OnCellChangeParams<T> {
 }
 
 const PropertyTableCellInternal = <T extends CMSType>({
-                                                                                            selected,
-                                                                                            focused,
-                                                                                            name,
-                                                                                            setPreventOutsideClick,
-                                                                                            setFocused,
-                                                                                            onValueChange,
-                                                                                            onSelect,
-                                                                                            openPopup,
-                                                                                            value,
-                                                                                            property,
-                                                                                            validation,
-                                                                                            size,
-                                                                                            align,
-                                                                                            width,
-                                                                                            height,
-                                                                                            entityId,
-                                                                                            entityValues
-                                                                                        }: PropertyTableCellProps<T> & CellStyleProps) => {
+                                                          selected,
+                                                          focused,
+                                                          name,
+                                                          setPreventOutsideClick,
+                                                          setFocused,
+                                                          onValueChange,
+                                                          onSelect,
+                                                          openPopup,
+                                                          value,
+                                                          property,
+                                                          validation,
+                                                          size,
+                                                          align,
+                                                          width,
+                                                          height,
+                                                          entityId,
+                                                          entityValues
+                                                      }: PropertyTableCellProps<T> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
 

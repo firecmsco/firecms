@@ -27,7 +27,7 @@ export function EnumValuesChip({
                                    small
                                }: EnumValuesChipProps) {
     if (!enumValues) return null;
-    const enumValue = enumId !== undefined ? getLabelOrConfigFrom(enumValues, enumId.toString()) : undefined;
+    const enumValue = enumId !== undefined ? getLabelOrConfigFrom(enumValues, enumId?.toString()) : undefined;
     const label = buildEnumLabel(enumValue);
     const colorSchemaKey = getColorSchemaKey(enumValues, enumId.toString());
     return <CustomChip
