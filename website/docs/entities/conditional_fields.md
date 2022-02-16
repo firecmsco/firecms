@@ -18,7 +18,7 @@ fly, based on other values.
 Example of field that gets enabled or disabled based on other values:
 
 ```tsx
-import { buildSchema, EntityReference, EntitySchema } from "dist/index";
+import { buildSchema, EntityReference, EntitySchema } from "@camberi/firecms";
 
 type Product = {
     name: string;

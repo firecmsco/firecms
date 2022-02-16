@@ -14,7 +14,7 @@ to your schema. Like in this example:
 
 ```tsx
 import React from "react";
-import { EntityCustomView, buildSchema } from "dist/index";
+import { EntityCustomView, buildSchema } from "@camberi/firecms";
 
 const sampleView: EntityCustomView = {
     path: "preview",
