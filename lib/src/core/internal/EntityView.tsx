@@ -448,9 +448,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 }
             }}>
             {
-                dataLoading
-                    ? <CircularProgressCenter/>
-                    : <>
+ <>
 
                         {header}
 
@@ -468,21 +466,23 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                             flexDirection: "row"
                         }}>
 
-                            <Box
-                                role="tabpanel"
-                                hidden={!largeLayout && !mainViewSelected}
-                                sx={{
-                                    width: resolvedWidth,
-                                    maxWidth: "100%",
-                                    height: "100%",
-                                    overflow: "auto",
-                                    [theme.breakpoints.down("sm")]: {
-                                        maxWidth: CONTAINER_FULL_WIDTH,
-                                        width: CONTAINER_FULL_WIDTH
-                                    }
-                                }}>
-                                {body}
-                            </Box>
+                            {dataLoading
+                                ? <CircularProgressCenter/>
+                                : <Box
+                                    role="tabpanel"
+                                    hidden={!largeLayout && !mainViewSelected}
+                                    sx={{
+                                        width: resolvedWidth,
+                                        maxWidth: "100%",
+                                        height: "100%",
+                                        overflow: "auto",
+                                        [theme.breakpoints.down("sm")]: {
+                                            maxWidth: CONTAINER_FULL_WIDTH,
+                                            width: CONTAINER_FULL_WIDTH
+                                        }
+                                    }}>
+                                    {body}
+                                </Box>}
 
                             {customViewsView}
 

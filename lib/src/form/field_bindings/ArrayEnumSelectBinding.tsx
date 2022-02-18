@@ -55,7 +55,7 @@ const StyledFormControl = styled(FormControl)((
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ArrayEnumSelect({
+export function ArrayEnumSelectBinding({
                                     name,
                                     value,
                                     setValue,

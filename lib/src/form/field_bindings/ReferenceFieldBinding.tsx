@@ -114,7 +114,7 @@ const StyledFormControl = styled(FormControl)((
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ReferenceField<M extends { [Key: string]: any }>({
+export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                                                                      name,
                                                                      value,
                                                                      setValue,

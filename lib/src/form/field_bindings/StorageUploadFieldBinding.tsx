@@ -135,7 +135,7 @@ type StorageUploadFieldProps = FieldProps<string | string[]>;
  * and tables to the specified properties.
  * @category Form fields
  */
-export function StorageUploadField({
+export function StorageUploadFieldBinding({
                                        name,
                                        value,
                                        setValue,

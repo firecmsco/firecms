@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { TextField, TextFieldProps } from "@mui/material";
-import { useDebounce } from "../../../internal/useDebounce";
+import { useDebounce } from "../../core/internal/useDebounce";
 
 export default function DebouncedTextField(props: TextFieldProps) {
 

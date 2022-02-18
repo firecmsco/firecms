@@ -18,7 +18,8 @@ export const createCMSDefaultTheme = (
         palette: {
             mode: mode,
             background: {
-                default: mode === "dark" ? "#242424" : "#f6f7f9"
+                default: mode === "dark" ? "#242424" : "#f8f8fa",
+                paper: mode === "dark" ? "#121212" : "#ffffff"
             },
             primary: {
                 main: primaryColor || "#0070f4"
@@ -42,7 +43,7 @@ export const createCMSDefaultTheme = (
             MuiButton: {
                 styleOverrides: {
                     root: {
-                        borderRadius: 4
+                        borderRadius: 8
                     }
                 }
             },
@@ -75,12 +76,19 @@ export const createCMSDefaultTheme = (
                         }
                     }
                 }
+            },
+            MuiDialog: {
+                styleOverrides: {
+                    paper: {
+                        borderRadius: 8
+                    }
+                }
             }
         }
     });
 
     return {
-        ...original
+        ...original,
         // shadows: original.shadows.map((value, index) => {
         //     if (index == 1) return "0 1px 1px 0 rgb(0 0 0 / 16%)";
         //     else return value;

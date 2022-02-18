@@ -15,7 +15,7 @@ import { useClearRestoreValue } from "../../hooks";
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ArrayDefaultField<T extends Array<any>>({
+export function ArrayDefaultFieldBinding<T extends Array<any>>({
                                                             name,
                                                             value,
                                                             error,

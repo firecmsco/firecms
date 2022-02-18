@@ -19,6 +19,7 @@ import { initWithProperties, isHidden, isReadOnly } from "../core/utils";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
+import { CustomDialogActions } from "../core/components/CustomDialogActions";
 
 /**
  * @category Components
@@ -365,96 +366,75 @@ function FormInternal<M>({
     const disabled = isSubmitting || (!modified && status === "existing");
 
     return (
-        <Container maxWidth={"sm"}
-                   sx={(theme) => ({
-                                   padding: theme.spacing(4),
-                                   marginTop: theme.spacing(2),
-                                   marginBottom: theme.spacing(2),
-                                   [theme.breakpoints.down("lg")]: {
-                                       paddingLeft: theme.spacing(2),
-                                       paddingRight: theme.spacing(2),
-                                       paddingTop: theme.spacing(3),
-                                       paddingBottom: theme.spacing(3)
-                                   },
-                                   [theme.breakpoints.down("md")]: {
-                                       padding: theme.spacing(2)
-                                   }
-                               })}
-                   ref={formRef}>
 
-            <CustomIdField schema={schema as EntitySchema}
-                           status={status}
-                           onChange={setCustomId}
-                           error={customIdError}
-                           entity={entity}/>
+        <Form onSubmit={handleSubmit}
+              noValidate>
+            <Container maxWidth={"sm"}
+                       sx={(theme) => ({
+                           padding: theme.spacing(4),
+                           marginTop: theme.spacing(2),
+                           marginBottom: theme.spacing(2),
+                           [theme.breakpoints.down("lg")]: {
+                               paddingLeft: theme.spacing(2),
+                               paddingRight: theme.spacing(2),
+                               paddingTop: theme.spacing(3),
+                               paddingBottom: theme.spacing(3)
+                           },
+                           [theme.breakpoints.down("md")]: {
+                               padding: theme.spacing(2)
+                           }
+                       })}
+                       ref={formRef}>
 
-                <Box
-                    sx={{
-                        marginTop: 1
-                    }}>
-                    <Form onSubmit={handleSubmit}
-                          noValidate>
+                <CustomIdField schema={schema as EntitySchema}
+                               status={status}
+                               onChange={setCustomId}
+                               error={customIdError}
+                               entity={entity}/>
 
-                        <Box pt={3}>
-                            {formFields}
-                        </Box>
+                <Box sx={{
+                    marginTop: 4
+                }}>
 
-                        <Box sx={(theme) => ({
-                            marginTop: theme.spacing(2),
-                            background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
-                            backdropFilter: "blur(4px)",
-                            borderTop: `1px solid ${theme.palette.divider}`,
-                            position: "sticky",
-                            bottom: 0,
-                            zIndex: 200
-                        })}
-                        >
+                    {formFields}
 
-                            {savingError &&
-                            <Box textAlign="right">
-                                <Typography color={"error"}>
-                                    {savingError.message}
-                                </Typography>
-                            </Box>}
-
-                            <Box textAlign="right">
-
-                                {status === "existing" &&
-                                    <Button
-                                        variant="text"
-                                        color="primary"
-                                        disabled={disabled}
-                                        type="reset"
-                                        sx={{
-                                            margin: 1
-                                        }}
-                                    >
-                                        Discard
-                                    </Button>}
-
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    type="submit"
-                                    disabled={disabled}
-                                    sx={{
-                                        margin: 1
-                                    }}
-                                >
-                                    {status === "existing" && "Save"}
-                                    {status === "copy" && "Create copy"}
-                                    {status === "new" && "Create"}
-                                </Button>
-
-                            </Box>
-                        </Box>
-
-                    </Form>
                 </Box>
 
-            <ErrorFocus containerRef={formRef}/>
+                <ErrorFocus containerRef={formRef}/>
 
-        </Container>
+            </Container>
+            <CustomDialogActions>
+
+                {savingError &&
+                    <Box textAlign="right">
+                        <Typography color={"error"}>
+                            {savingError.message}
+                        </Typography>
+                    </Box>}
+
+                {status === "existing" &&
+                    <Button
+                        variant="text"
+                        color="primary"
+                        disabled={disabled}
+                        type="reset"
+                    >
+                        Discard
+                    </Button>}
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={disabled}
+                >
+                    {status === "existing" && "Save"}
+                    {status === "copy" && "Create copy"}
+                    {status === "new" && "Create"}
+                </Button>
+
+            </CustomDialogActions>
+        </Form>
     );
 }
 

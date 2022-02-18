@@ -151,7 +151,7 @@ const SwitchFieldComponent = React.forwardRef(function({
  * and tables to the specified properties.
  * @category Form fields
  */
-export const SwitchField = (props: SwitchFieldProps) => {
+export const SwitchFieldBinding = (props: SwitchFieldProps) => {
     return <SwitchFieldComponent {...props}/>;
 };
 

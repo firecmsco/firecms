@@ -24,7 +24,7 @@ type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ArrayOfReferencesField({
+export function ArrayOfReferencesFieldBinding({
                                            name,
                                            value,
                                            error,

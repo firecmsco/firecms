@@ -31,7 +31,7 @@ import {
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ArrayOneOfField<T extends Array<any>>({
+export function ArrayOneOfFieldBinding<T extends Array<any>>({
                                                           name,
                                                           value,
                                                           error,

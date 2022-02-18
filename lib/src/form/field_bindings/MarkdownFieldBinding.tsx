@@ -55,7 +55,7 @@ const StyledFormControl = styled(FormControl)((
  * and tables to the specified properties.
  * @category Form fields
  */
-export function MarkdownField({
+export function MarkdownFieldBinding({
                                   name,
                                   value,
                                   setValue,

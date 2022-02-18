@@ -642,7 +642,7 @@ export interface StorageConfig {
     storeUrl?: boolean,
 
     /**
-     * Post process the path
+     * Postprocess the path
      */
     postProcess?: (pathOrUrl: string) => Promise<string>
 }

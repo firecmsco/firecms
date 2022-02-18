@@ -16,7 +16,7 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ReadOnlyField({
+export function ReadOnlyFieldBinding({
                                   name,
                                                                     value,
                                                                     setValue,

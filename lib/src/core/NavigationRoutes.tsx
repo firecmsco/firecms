@@ -148,7 +148,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                       path={urlPath}
                                       title={"Schema editor"}>
                                       <Box sx={(theme) => ({
-                                          backgroundColor: theme.palette.background.paper,
+                                          // backgroundColor: theme.palette.background.paper,
                                       })}>
                                           <SchemaEditor schemaId={schema.id}/>
                                       </Box>

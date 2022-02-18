@@ -4,8 +4,8 @@ import {
     Box,
     Button,
     Dialog,
-    DialogActions,
     DialogContent,
+    Grid,
     IconButton,
     Paper,
     Typography
@@ -20,16 +20,86 @@ import {
 import { resolveEnumValues } from "../../../utils";
 import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
 import { ArrayContainer } from "../../../../form";
-import DebouncedTextField from "../custom_form_fields/DebouncedTextField";
+import DebouncedTextField from "../../../../form/components/DebouncedTextField";
 import { useDebounce } from "../../../internal/useDebounce";
 import equal from "react-fast-compare"
+import {
+    StringPropertyValidation
+} from "./validation/StringPropertyValidation";
+import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
+import { CustomDialogActions } from "../../CustomDialogActions";
+
+export function EnumPropertyField({
+                                      multiselect,
+                                      updateIds
+                                  }: { multiselect: boolean, updateIds: boolean }) {
+
+    const {
+        values,
+        handleChange,
+        errors,
+        touched,
+        setFieldValue
+    } = useFormikContext<StringProperty | NumberProperty>();
+
+    const schemaRegistry = useSchemaRegistry();
+    const enumValuesPath = multiselect ? "of.enumValues" : "enumValues";
+
+    const valuesEnumValues = getIn(values, enumValuesPath);
+    const enumValues: EnumValueConfig[] = useMemo(() => {
+        if (!valuesEnumValues || typeof valuesEnumValues === "boolean")
+            return [] as EnumValueConfig[];
+        return resolveEnumValues(valuesEnumValues, schemaRegistry.enumConfigs) ?? [] as EnumValueConfig[];
+    }, [schemaRegistry.enumConfigs, valuesEnumValues]);
+
+    const [internalValue, setInternalValue] = React.useState<EnumValueConfig[]>(enumValues);
+    const doUpdate = React.useCallback(() => {
+        if (!equal(internalValue, enumValues)) {
+            setFieldValue(enumValuesPath, internalValue);
+        }
+    }, [internalValue, enumValues]);
+    useDebounce(internalValue, doUpdate, 64);
+
+    return (
+        <>
+            <Grid item>
+                <Typography variant={"subtitle2"} sx={{ mt: 1 }}>
+                    Values
+                </Typography>
+
+                <Paper
+                    variant={"outlined"}
+                    sx={{ p: 2, mt: 1 }}>
+                    <EnumForm enumValues={enumValues}
+                              updateIds={updateIds}
+                              onValuesChanged={setInternalValue}/>
+                </Paper>
+            </Grid>
+
+            <Grid item>
+                <Typography variant={"subtitle2"} sx={{ mt: 1 }}>
+                    Validation
+                </Typography>
+                <Paper variant={"outlined"} sx={{ p: 2, mt: 1 }}>
+                    {!multiselect &&
+                        <StringPropertyValidation/>}
+                    {multiselect &&
+                        <ArrayPropertyValidation/>}
+                </Paper>
+            </Grid>
+
+        </>
+    );
+}
 
 export function EnumForm({
                              enumValues,
-                             onValuesChanged
+                             onValuesChanged,
+                             updateIds,
                          }: {
     enumValues: EnumValueConfig[];
     onValuesChanged?: (enumValues: EnumValueConfig[]) => void;
+    updateIds: boolean;
 }) {
 
     return (
@@ -38,17 +108,9 @@ export function EnumForm({
                 }}
                 render={({ values }) => {
 
-                    // // eslint-disable-next-line react-hooks/rules-of-hooks
-                    // React.useEffect(() => {
-                    //     if (onValuesChanged && values.enumValues) {
-                    //         onValuesChanged(values.enumValues);
-                    //         console.log("onValuesChanged", values.enumValues);
-                    //     }
-                    // }, [values.enumValues]);
-
                     // eslint-disable-next-line react-hooks/rules-of-hooks
                     const doUpdate = useCallback(() => {
-                        if (onValuesChanged && values.enumValues) {
+                        if (onValuesChanged) {
                             onValuesChanged(values.enumValues);
                         }
                     }, [values.enumValues]);
@@ -57,6 +119,7 @@ export function EnumForm({
 
                     const buildEntry = (index: number, internalId: number) => {
                         return <EnumEntry index={index}
+                                          updateIds={updateIds}
                                           key={`${internalId}`}/>;
                     };
 
@@ -76,7 +139,10 @@ export function EnumForm({
 
 }
 
-function EnumEntry({ index }: { index: number }) {
+function EnumEntry({
+                       index,
+                       updateIds,
+                   }: { index: number, updateIds: boolean }) {
 
     const {
         values,
@@ -87,14 +153,14 @@ function EnumEntry({ index }: { index: number }) {
     } = useFormikContext<EnumValues>();
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
-    const labelValue = getIn(values, `enumValues.${index}.label`);
-    const idValue = getIn(values, `enumValues.${index}.id`);
+    const labelValue = getIn(values, `enum[${index}].label`);
+    const idValue = getIn(values, `enumValues[${index}].id`);
 
     const currentLabelRef = React.useRef(labelValue);
 
     React.useEffect(() => {
-        if (currentLabelRef.current === idValue) {
-            setFieldValue(`enumValues.${index}.id`, labelValue);
+        if (currentLabelRef.current === idValue && updateIds) {
+            setFieldValue(`enumValues[${index}].id`, labelValue);
         }
         currentLabelRef.current = labelValue;
     }, [labelValue]);
@@ -103,8 +169,8 @@ function EnumEntry({ index }: { index: number }) {
     return (
         <Box display={"flex"} width={"100%"} alignItems={"center"}>
             <Box width={"100%"} mx={1}>
-                <FastField name={`enumValues.${index}.label`}
-                           // key={`${idValue}`}
+                <FastField name={`enumValues[${index}].label`}
+                    // key={`${idValue}`}
                            as={DebouncedTextField}
                            required
                            fullWidth
@@ -121,7 +187,8 @@ function EnumEntry({ index }: { index: number }) {
                     <SettingsOutlinedIcon fontSize={"small"}/>
                 </IconButton>
             </Box>
-            <EnumEntryDialog index={index} open={dialogOpen}
+            <EnumEntryDialog index={index}
+                             open={dialogOpen}
                              onClose={() => setDialogOpen(false)}/>
         </Box>);
 }
@@ -129,8 +196,12 @@ function EnumEntry({ index }: { index: number }) {
 function EnumEntryDialog({
                              index,
                              open,
-                             onClose
-                         }: { index: number, open: boolean, onClose: () => void }) {
+                             onClose,
+                         }: {
+    index: number;
+    open: boolean;
+    onClose: () => void;
+}) {
 
     const {
         values,
@@ -149,7 +220,7 @@ function EnumEntryDialog({
     >
 
         <DialogContent>
-            <FastField name={`enumValues.${index}.id`}
+            <FastField name={`enumValues[${index}]id`}
                        as={DebouncedTextField}
                        required
                        fullWidth
@@ -160,60 +231,14 @@ function EnumEntryDialog({
                        error={Boolean(idError)}/>
         </DialogContent>
 
-        <DialogActions>
+        <CustomDialogActions>
             <Button
                 autoFocus
                 onClick={onClose}
                 color="primary">
                 Ok
             </Button>
-        </DialogActions>
+        </CustomDialogActions>
 
     </Dialog>
-}
-
-export function EnumPropertyField() {
-
-    const {
-        values,
-        handleChange,
-        errors,
-        touched,
-        setFieldValue
-    } = useFormikContext<StringProperty | NumberProperty>();
-
-    const schemaRegistry = useSchemaRegistry();
-
-    const enumValues: EnumValueConfig[] = useMemo(() => {
-        if (!values.enumValues || typeof values.enumValues === "boolean")
-            return [] as EnumValueConfig[];
-        return resolveEnumValues(values.enumValues, schemaRegistry.enumConfigs) ?? [] as EnumValueConfig[];
-    }, [schemaRegistry.enumConfigs, values.enumValues]);
-
-    const [internalValue, setInternalValue] = React.useState<EnumValueConfig[]>(enumValues);
-    const doUpdate = React.useCallback(() => {
-        if (!equal(internalValue, enumValues))
-            setFieldValue("enumValues", internalValue);
-    }, [internalValue]);
-    useDebounce(internalValue, doUpdate, 64);
-
-    // const onValuesChanged = useCallback((enumValues: EnumValueConfig[]) => {
-    //     setFieldValue("enumValues", enumValues);
-    // }, []);
-
-    return (
-        <>
-            <Typography variant={"subtitle2"} sx={{ mt: 1 }}>
-                Values
-            </Typography>
-
-            <Paper
-                variant={"outlined"}
-                sx={{ p: 2, mt: 1 }}>
-                <EnumForm enumValues={enumValues}
-                          onValuesChanged={setInternalValue}/>
-            </Paper>
-
-        </>
-    );
 }

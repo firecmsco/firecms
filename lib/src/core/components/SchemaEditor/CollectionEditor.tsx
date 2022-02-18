@@ -160,7 +160,7 @@ export function CollectionEditor<M>({
 
                     const selectedSchema = values.schemaId ? schemaRegistry.findSchema(values.schemaId) : undefined;
                     return (
-                        <Container maxWidth={"md"}>
+                        <Container maxWidth={"lg"}>
                             <form onSubmit={handleSubmit}
                                   noValidate>
                                 <Box

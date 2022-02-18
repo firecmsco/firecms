@@ -21,21 +21,17 @@ import {
     CircularProgress,
     Container,
     Dialog,
-    DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
-    FormControl,
-    FormHelperText,
     Grid,
     IconButton,
-    InputLabel,
-    OutlinedInput,
     Paper,
     Typography,
     useMediaQuery,
     useTheme
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import {
     getIconForProperty,
@@ -58,6 +54,9 @@ import { ErrorView } from "../ErrorView";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 import { toSnakeCase } from "../../util/strings";
+import { getValueInPath } from "../../util/objects";
+import { CustomDialogActions } from "../CustomDialogActions";
+import { SchemaDetailsDialog } from "./SchemaDetailsView";
 
 export type SchemaEditorProps<M> = {
     schemaId?: string;
@@ -179,15 +178,15 @@ function SchemaEditorForm<M>({
     onCancel?: () => void;
 }) {
 
-
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
 
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
-    const selectedProperty = selectedPropertyId ? values.properties[selectedPropertyId] : undefined;
+    const selectedProperty = selectedPropertyId ? getValueInPath(values.properties, selectedPropertyId.replace(".", ".properties.")) : undefined;
     const [pendingMove, setPendingMove] = useState<[TreeSourcePosition, TreeDestinationPosition] | undefined>();
 
     const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
+    const [schemaDetailsDialogOpen, setSchemaDetailsDialogOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (updateDirtyStatus)
@@ -290,159 +289,116 @@ function SchemaEditorForm<M>({
 
     return (
         <>
-            <Box sx={{ p: 2 }}>
+            <Box sx={{
+                p: 3,
+                [theme.breakpoints.down("md")]: {
+                    p: 2
+                },
+                [theme.breakpoints.down("sm")]: {
+                    p: 1
+                }
+            }}>
                 <Container maxWidth={"lg"}>
 
-                    <Typography variant={"h4"}
-                                sx={{ py: 3 }}>
-                        {values.name ? `${values.name} schema` : "Schema"}
-                    </Typography>
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "end",
+                        my: 1
+                    }}>
 
-                    <Grid container spacing={2}>
+                        <Box display={"flex"}
+                             alignItems={"center"}
+                             sx={{ py: 2 }}>
 
-                        <Grid item xs={12}>
-                            <FormControl fullWidth
-                                         required
-                                         disabled={!isNewSchema}
-                                         error={touched.id && Boolean(errors.id)}>
-                                <InputLabel
-                                    htmlFor="id">Id</InputLabel>
-                                <OutlinedInput
-                                    id="id"
-                                    value={values.id}
-                                    onChange={handleChange}
-                                    aria-describedby="id-helper-text"
-                                    label="Id"
-                                />
-                                <FormHelperText
-                                    id="id-helper-text">
-                                    {touched.id && Boolean(errors.id) ? errors.id : "Id of this schema (e.g 'product')"}
-                                </FormHelperText>
-                            </FormControl>
-                        </Grid>
+                            <Typography variant={"h4"}>
+                                {values.name ? `${values.name} schema` : "Schema"}
+                            </Typography>
 
-                        <Grid item xs={12}>
-                            <FormControl fullWidth
-                                         required
-                                         error={touched.name && Boolean(errors.name)}>
-                                <InputLabel
-                                    htmlFor="name">Name</InputLabel>
-                                <OutlinedInput
-                                    id="name"
-                                    value={values.name}
-                                    onChange={handleChange}
-                                    aria-describedby="name-helper-text"
-                                    label="Name"
-                                />
-                                <FormHelperText
-                                    id="name-helper-text">
-                                    {touched.name && Boolean(errors.name) ? errors.name : "Singular name of this schema (e.g. Product)"}
-                                </FormHelperText>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Box sx={{
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                alignItems: "end",
-                                my: 1
-                            }}>
-                                <Typography
-                                    variant={"subtitle2"}>
-                                    Properties
-                                </Typography>
-                                <Button
-                                    color="primary"
-                                    variant={"outlined"}
-                                    onClick={() => setNewPropertyDialogOpen(true)}
-                                    startIcon={
-                                        <AddIcon/>}
-                                >
-                                    Add property
-                                </Button>
+                            <Box sx={{ ml: 1 }}>
+                                <IconButton
+                                    onClick={() => setSchemaDetailsDialogOpen(true)}
+                                    size="large">
+                                    <EditIcon/>
+                                </IconButton>
                             </Box>
-                            <Paper elevation={0}
-                                   variant={"outlined"}
-                                   sx={{ p: 3 }}>
-                                <Grid container>
-                                    <Grid item xs={12}
-                                          lg={5}>
-                                        <Tree
-                                            key={`tree_${selectedPropertyId}`}
-                                            tree={tree}
-                                            offsetPerLevel={40}
-                                            renderItem={renderItem}
-                                            onDragEnd={onDragEnd}
-                                            isDragEnabled
-                                            isNestingEnabled
-                                        />
-                                    </Grid>
+                        </Box>
 
-                                    {!asDialog && <Grid item xs={12}
-                                                        lg={7}
-                                                        sx={(theme) => ({
-                                                            borderLeft: `1px solid ${theme.palette.divider}`,
-                                                            pl: 2
-                                                        })}>
-                                        <Box sx={{
-                                            position: "sticky",
-                                            top: 3,
-                                            p: 2
-                                        }}>
-                                            {selectedPropertyId &&
-                                                typeof selectedProperty === "object" &&
-                                                propertyEditForm}
+                        <Button
+                            color="primary"
+                            variant={"outlined"}
+                            onClick={() => setNewPropertyDialogOpen(true)}
+                            startIcon={
+                                <AddIcon/>}
+                        >
+                            Add property
+                        </Button>
+                    </Box>
+                    <Box
+                        sx={{ py: 2 }}>
+                        <Grid container>
+                            <Grid item xs={12}
+                                  lg={5}>
+                                <Tree
+                                    key={`tree_${selectedPropertyId}`}
+                                    tree={tree}
+                                    offsetPerLevel={40}
+                                    renderItem={renderItem}
+                                    onDragEnd={onDragEnd}
+                                    isDragEnabled
+                                    isNestingEnabled
+                                />
+                            </Grid>
 
-                                            {!selectedProperty &&
-                                                <Box>
-                                                    Select a
-                                                    property to
-                                                    edit it
-                                                </Box>}
-                                        </Box>
-                                    </Grid>}
+                            {!asDialog && <Grid item xs={12}
+                                                lg={7}
+                                                sx={(theme) => ({
+                                                    pl: 2
+                                                })}>
+                                <Box sx={(theme) => ({
+                                    height: "100%",
+                                    borderLeft: `1px solid ${theme.palette.divider}`,
+                                    pl: 2
+                                })}>
+                                    <Paper variant={"outlined"} sx={theme => ({
+                                        position: "sticky",
+                                        top: theme.spacing(2),
+                                        p: 2
+                                    })}>
+                                        {selectedPropertyId &&
+                                            typeof selectedProperty === "object" &&
+                                            propertyEditForm}
 
-                                    {asDialog && typeof selectedProperty === "object" && propertyEditForm}
+                                        {!selectedProperty &&
+                                            <Box>
+                                                Select a
+                                                property to
+                                                edit it
+                                            </Box>}
+                                    </Paper>
+                                </Box>
+                            </Grid>}
 
-                                </Grid>
-                            </Paper>
+                            {asDialog && typeof selectedProperty === "object" && propertyEditForm}
+
                         </Grid>
-                    </Grid>
+                    </Box>
 
                     {/*<SubmitListener/>*/}
 
                 </Container>
             </Box>
 
-            <Box sx={(theme) => ({
-                background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
-                backdropFilter: "blur(4px)",
-                borderTop: `1px solid ${theme.palette.divider}`,
-                py: 1,
-                px: 2,
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "end",
-                position: "sticky",
-                bottom: 0,
-                zIndex: 200,
-                textAlign: "right"
-            })}
-            >
+            <CustomDialogActions>
 
-                {isSubmitting && <Box sx={{ px: 3 }}>
-                    <CircularProgress size={16}
-                                      thickness={8}/>
-                </Box>}
+                {isSubmitting && <CircularProgress size={16}
+                                                   thickness={8}/>}
 
                 <Button
                     color="primary"
                     disabled={isSubmitting}
                     onClick={onCancel}
-                    sx={{ mr: 2 }}
                 >
                     Cancel
                 </Button>
@@ -456,8 +412,7 @@ function SchemaEditorForm<M>({
                 >
                     {isNewSchema ? "Create schema" : "Save schema"}
                 </Button>
-
-            </Box>
+            </CustomDialogActions>
 
             <PendingMoveDialog open={Boolean(pendingMove)}
                                onAccept={() => {
@@ -466,6 +421,10 @@ function SchemaEditorForm<M>({
                                        doPropertyMove(pendingMove[0], pendingMove[1]);
                                }}
                                onCancel={() => setPendingMove(undefined)}/>
+
+            <SchemaDetailsDialog open={schemaDetailsDialogOpen}
+                                 isNewSchema={isNewSchema}
+                                 handleOk={() => setSchemaDetailsDialogOpen(false)}/>
 
             <PropertyForm asDialog={true}
                           open={newPropertyDialogOpen}
@@ -498,14 +457,14 @@ function PendingMoveDialog({
                 the schema.
             </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <CustomDialogActions>
             <Button
                 onClick={onCancel}
                 autoFocus>Cancel</Button>
             <Button onClick={onAccept}>
                 Proceed
             </Button>
-        </DialogActions>
+        </CustomDialogActions>
     </Dialog>;
 }
 
@@ -529,7 +488,7 @@ export function SchemaEntry({
             display: "flex",
             flexDirection: "row",
             width: "100%",
-            py: 1,
+            py: 0.5,
             cursor: "pointer"
         }}
              onClick={onClick}
@@ -552,7 +511,6 @@ export function SchemaEntry({
             </Box>
             <Box sx={{
                 pl: 3,
-                pr: 1,
                 width: "100%",
                 display: "flex",
                 flexDirection: "row"
@@ -560,10 +518,9 @@ export function SchemaEntry({
                 <Paper variant={"outlined"}
                        sx={(theme) => ({
                            position: "relative",
-                           mr: 2,
                            flexGrow: 1,
                            p: 2,
-                           border: selected ? `1px solid ${theme.palette.text.primary}` : undefined
+                           border: selected ? `1px solid ${theme.palette.primary.light}` : undefined
                        })}
                        elevation={0}>
 
@@ -571,13 +528,13 @@ export function SchemaEntry({
                         ? <PropertyPreview property={propertyOrBuilder}/>
                         : <PropertyBuilderPreview name={name}/>}
 
-                    <IconButton  {...provided.dragHandleProps}
-                                 size="small"
-                                 sx={{
-                                     position: "absolute",
-                                     top: 8,
-                                     right: 8
-                                 }}>
+                    <IconButton {...provided.dragHandleProps}
+                                size="small"
+                                sx={{
+                                    position: "absolute",
+                                    top: 8,
+                                    right: 8
+                                }}>
                         <DragHandleIcon fontSize={"small"}/>
                     </IconButton>
                 </Paper>

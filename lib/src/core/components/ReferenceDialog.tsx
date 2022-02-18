@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { CollectionSize, Entity, EntityCollection } from "../../models";
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    Divider,
-    Typography
-} from "@mui/material";
+import { Button, Dialog, Typography } from "@mui/material";
 
 import { CollectionTable } from "./CollectionTable";
 import {
@@ -16,6 +10,7 @@ import {
 import { useDataSource } from "../../hooks";
 import { ErrorView } from "./ErrorView";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
+import { CustomDialogActions } from "./CustomDialogActions";
 
 const PREFIX = "ReferenceDialog";
 
@@ -233,18 +228,16 @@ export function ReferenceDialog(
                 />}
             </div>
 
-            <Divider/>
-
-            <DialogActions>
+            <CustomDialogActions>
                 <Button onClick={(event) => {
                     event.stopPropagation();
                     onClose();
                 }}
                         color="primary"
-                        variant="contained">
+                        variant="text">
                     Close
                 </Button>
-            </DialogActions>
+            </CustomDialogActions>
 
         </StyledDialog>
     );

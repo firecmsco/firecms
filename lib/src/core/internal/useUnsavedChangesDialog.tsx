@@ -3,10 +3,10 @@ import { Blocker, Transition } from "history";
 import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { CustomDialogActions } from "../components/CustomDialogActions";
 
 export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () => void):
     {
@@ -38,7 +38,6 @@ export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () =
             }
             case "POP": {
                 setNextLocation(nextLocation);
-
             }
         }
     }, []);
@@ -85,21 +84,21 @@ export function UnsavedChangesDialog({
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">
+            <DialogTitle >
                 {"Unsaved changes"}
             </DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText >
                     You have unsaved changes in this <b>{schemaName}</b>.
                 </DialogContentText>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText >
                     Are you sure you want to leave this page?
                 </DialogContentText>
             </DialogContent>
-            <DialogActions>
+            <CustomDialogActions>
                 <Button onClick={handleCancel} autoFocus> Cancel </Button>
                 <Button onClick={handleOk}> Ok </Button>
-            </DialogActions>
+            </CustomDialogActions>
         </Dialog>
     );
 }

@@ -20,6 +20,7 @@ import {
 } from "../../../../models";
 import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
+import { CustomDialogActions } from "../../CustomDialogActions";
 
 interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
     schema: ResolvedEntitySchema<M>;
@@ -184,7 +185,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
                 </DialogContentText>
             </DialogContent>
 
-            <DialogActions>
+            <CustomDialogActions>
 
                 {dataLoading && <CircularProgress size={16} thickness={8}/>}
 
@@ -198,7 +199,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
                     Download
                 </Button>
 
-            </DialogActions>
+            </CustomDialogActions>
 
         </Dialog>
 

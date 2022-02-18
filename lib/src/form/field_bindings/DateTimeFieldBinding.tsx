@@ -18,7 +18,7 @@ type DateTimeFieldProps = FieldProps<Date>;
  * and tables to the specified properties.
  * @category Form fields
  */
-export function DateTimeField({
+export function DateTimeFieldBinding({
                                   name,
                                   value,
                                   setValue,

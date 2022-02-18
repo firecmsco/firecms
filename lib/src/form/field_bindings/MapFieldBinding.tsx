@@ -30,7 +30,7 @@ import { isHidden } from "../../core/utils";
  * and tables to the specified properties.
  * @category Form fields
  */
-export function MapField<T extends object>({
+export function MapFieldBinding<T extends object>({
                                                name,
                                                value,
                                                showError,

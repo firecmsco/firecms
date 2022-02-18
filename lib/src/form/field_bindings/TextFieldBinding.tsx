@@ -54,7 +54,7 @@ interface TextFieldProps<T extends string | number> extends FieldProps<T> {
  * and tables to the specified properties.
  * @category Form fields
  */
-export function TextField<T extends string | number>({
+export function TextFieldBinding<T extends string | number>({
                                                          name,
                                                          value,
                                                          setValue,

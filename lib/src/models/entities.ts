@@ -47,7 +47,7 @@ export interface EntitySchema<M extends { [Key: string]: any } = any,
     editable?: boolean;
 
     /**
-     * Initial filters applied to this collection.
+     * Initial filters applied to the collection this schema is related to.
      * Defaults to none.
      */
     initialFilter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining schemas by code

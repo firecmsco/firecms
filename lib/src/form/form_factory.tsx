@@ -16,20 +16,20 @@ import {
     ResolvedProperty
 } from "../models";
 
-import { Select } from "./fields/Select";
-import { ArrayEnumSelect } from "./fields/ArrayEnumSelect";
-import { StorageUploadField } from "./fields/StorageUploadField";
-import { TextField } from "./fields/TextField";
-import { SwitchField } from "./fields/SwitchField";
-import { DateTimeField } from "./fields/DateTimeField";
-import { ReferenceField } from "./fields/ReferenceField";
-import { MapField } from "./fields/MapField";
-import { ArrayDefaultField } from "./fields/ArrayDefaultField";
-import { ArrayOneOfField } from "./fields/ArrayOneOfField";
-import { ReadOnlyField } from "./fields/ReadOnlyField";
-import { MarkdownField } from "./fields/MarkdownField";
+import { SelectBinding } from "./field_bindings/SelectBinding";
+import { ArrayEnumSelectBinding } from "./field_bindings/ArrayEnumSelectBinding";
+import { StorageUploadFieldBinding } from "./field_bindings/StorageUploadFieldBinding";
+import { TextFieldBinding } from "./field_bindings/TextFieldBinding";
+import { SwitchFieldBinding } from "./field_bindings/SwitchFieldBinding";
+import { DateTimeFieldBinding } from "./field_bindings/DateTimeFieldBinding";
+import { ReferenceFieldBinding } from "./field_bindings/ReferenceFieldBinding";
+import { MapFieldBinding } from "./field_bindings/MapFieldBinding";
+import { ArrayDefaultFieldBinding } from "./field_bindings/ArrayDefaultFieldBinding";
+import { ArrayOneOfFieldBinding } from "./field_bindings/ArrayOneOfFieldBinding";
+import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
+import { MarkdownFieldBinding } from "./field_bindings/MarkdownFieldBinding";
+import { ArrayOfReferencesFieldBinding } from "./field_bindings/ArrayOfReferencesFieldBinding";
 
-import { ArrayOfReferencesField } from "./fields/ArrayOfReferencesField";
 import { isReadOnly } from "../core/utils";
 import equal from "react-fast-compare"
 import { useDebounce } from "../core/internal/useDebounce";
@@ -77,58 +77,58 @@ export function buildPropertyField<T extends CMSType = any, M = any>
 
     let component: ComponentType<FieldProps<T, any, M>> | undefined;
     if (isReadOnly(property)) {
-        component = ReadOnlyField;
+        component = ReadOnlyFieldBinding;
     } else if (property.Field) {
         component = property.Field as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
         if (of) {
             if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
-                component = ArrayEnumSelect as ComponentType<FieldProps<T>>;
+                component = ArrayEnumSelectBinding as ComponentType<FieldProps<T>>;
             } else if (of.dataType === "string" && of.storage) {
-                component = StorageUploadField as ComponentType<FieldProps<T>>;
+                component = StorageUploadFieldBinding as ComponentType<FieldProps<T>>;
             } else if (of.dataType === "reference") {
-                component = ArrayOfReferencesField as ComponentType<FieldProps<T>>;
+                component = ArrayOfReferencesFieldBinding as ComponentType<FieldProps<T>>;
             } else {
-                component = ArrayDefaultField as ComponentType<FieldProps<T>>;
+                component = ArrayDefaultFieldBinding as ComponentType<FieldProps<T>>;
             }
         }
         const oneOf = (property as ArrayProperty).oneOf;
         if (oneOf) {
-            component = ArrayOneOfField as ComponentType<FieldProps<T>>;
+            component = ArrayOneOfFieldBinding as ComponentType<FieldProps<T>>;
         }
         if (!of && !oneOf) {
             throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
         }
     } else if (property.dataType === "map") {
-        component = MapField as ComponentType<FieldProps<T>>;
+        component = MapFieldBinding as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "reference") {
         if (!property.path)
-            component = ReadOnlyField as ComponentType<FieldProps<T>>;
+            component = ReadOnlyFieldBinding as ComponentType<FieldProps<T>>;
         else {
-            component = ReferenceField as ComponentType<FieldProps<T>>;
+            component = ReferenceFieldBinding as ComponentType<FieldProps<T>>;
         }
     } else if (property.dataType === "timestamp") {
-        component = DateTimeField as ComponentType<FieldProps<T>>;
+        component = DateTimeFieldBinding as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "boolean") {
-        component = SwitchField as ComponentType<FieldProps<T>>;
+        component = SwitchFieldBinding as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "number") {
         if (property.enumValues) {
-            component = Select as ComponentType<FieldProps<T>>;
+            component = SelectBinding as ComponentType<FieldProps<T>>;
         } else {
-            component = TextField as ComponentType<FieldProps<T>>;
+            component = TextFieldBinding as ComponentType<FieldProps<T>>;
         }
     } else if (property.dataType === "string") {
         if (property.storage) {
-            component = StorageUploadField as ComponentType<FieldProps<T>>;
+            component = StorageUploadFieldBinding as ComponentType<FieldProps<T>>;
         } else if (property.markdown) {
-            component = MarkdownField as ComponentType<FieldProps<T>>;
+            component = MarkdownFieldBinding as ComponentType<FieldProps<T>>;
         } else if (property.email || property.url || property.multiline) {
-            component = TextField as ComponentType<FieldProps<T>>;
+            component = TextFieldBinding as ComponentType<FieldProps<T>>;
         } else if (property.enumValues) {
-            component = Select as ComponentType<FieldProps<T>>;
+            component = SelectBinding as ComponentType<FieldProps<T>>;
         } else {
-            component = TextField as ComponentType<FieldProps<T>>;
+            component = TextFieldBinding as ComponentType<FieldProps<T>>;
         }
     }
 

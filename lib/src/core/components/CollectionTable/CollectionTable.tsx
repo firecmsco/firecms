@@ -31,10 +31,7 @@ import {
 } from "./column_builder";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 
-const PREFIX = 'CollectionTable';
-
 const DEFAULT_PAGE_SIZE = 50;
-
 
 /**
  * This component is in charge of rendering a collection table with a high
@@ -201,8 +198,6 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         onCellValueChange: onCellChanged,
         uniqueFieldValidator
     });
-
-    // console.log("columns", columns);
 
     const [searchString, setSearchString] = React.useState<string | undefined>();
 

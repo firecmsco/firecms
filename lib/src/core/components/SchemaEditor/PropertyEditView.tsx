@@ -22,6 +22,7 @@ import { buildProperty } from "../../builders";
 import { EnumPropertyField } from "./properties/EnumPropertyField";
 import { toSnakeCase } from "../../util/strings";
 import { useDebounce } from "../../internal/useDebounce";
+import { CustomDialogActions } from "../CustomDialogActions";
 
 export type PropertyWithId = Property & { id: string };
 
@@ -58,7 +59,6 @@ export function PropertyForm({
                 const { id, ...property } = newPropertyWithId;
                 onPropertyChanged(id, property);
                 if (onOkClicked) {
-                    console.log("onOkClicked", newPropertyWithId);
                     onOkClicked();
                 }
             }}
@@ -81,10 +81,12 @@ export function PropertyForm({
                                 height: "100vh"
                             })}>
 
-                            <DialogContent>
+                            <DialogContent sx={(theme) => ({
+                                backgroundColor: theme.palette.background.paper
+                            })}>
                                 {form}
                             </DialogContent>
-                            <DialogActions>
+                            <CustomDialogActions>
                                 {onCancel && <Button onClick={onCancel}>
                                     Cancel
                                 </Button>}
@@ -93,7 +95,7 @@ export function PropertyForm({
                                         onClick={() => props.handleSubmit()}>
                                     Ok
                                 </Button>
-                            </DialogActions>
+                            </CustomDialogActions>
                         </Dialog>;
                 } else {
                     body = form;
@@ -337,7 +339,10 @@ function PropertyEditView({
         childComponent = <StringPropertyField widgetId={selectedWidgetId}/>;
     } else if (selectedWidgetId === "select" ||
         selectedWidgetId === "number_select") {
-        childComponent = <EnumPropertyField/>;
+        childComponent = <EnumPropertyField multiselect={false} updateIds={!existing}/>;
+    } else if (selectedWidgetId === "multi_select" ||
+        selectedWidgetId === "multi_number_select") {
+        childComponent = <EnumPropertyField multiselect={true} updateIds={!existing}/>;
     } else {
         childComponent = <Box>
             {values?.title}
@@ -366,42 +371,6 @@ function PropertyEditView({
         <Grid container spacing={2} direction={"column"}>
 
             <Grid item>
-                <Typography
-                    variant={"subtitle2"}>
-                    Property
-                </Typography>
-            </Grid>
-
-            <Grid item>
-                <Select fullWidth
-                        value={selectedWidgetId}
-                        title={"Component"}
-                        startAdornment={
-                            Icon
-                                ? <InputAdornment
-                                    key={"adornment_" + selectedWidgetId}
-                                    position="start">
-                                    <Icon/>
-                                </InputAdornment>
-                                : undefined}
-                        renderValue={(value) => WIDGETS[value].name}
-                        onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
-
-                    {Object.entries(WIDGETS).map(([key, widget]) => {
-                        const Icon = widget.icon;
-                        return (
-                            <MenuItem value={key} key={key}>
-                                <Icon sx={{ mr: 3 }}/>
-                                {widget.name}
-                            </MenuItem>
-                        );
-                    })}
-
-                </Select>
-
-            </Grid>
-
-            <Grid item>
                 <FastField name={title}
                            as={TextField}
                            validate={validateTitle}
@@ -427,8 +396,36 @@ function PropertyEditView({
             </Grid>
 
             <Grid item>
-                {childComponent}
+                <Select fullWidth
+                        value={selectedWidgetId}
+                        title={"Component"}
+                        disabled={existing}
+                        startAdornment={
+                            Icon
+                                ? <InputAdornment
+                                    key={"adornment_" + selectedWidgetId}
+                                    position="start">
+                                    <Icon/>
+                                </InputAdornment>
+                                : undefined}
+                        renderValue={(value) => WIDGETS[value].name}
+                        onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
+
+                    {Object.entries(WIDGETS).map(([key, widget]) => {
+                        const Icon = widget.icon;
+                        return (
+                            <MenuItem value={key} key={key}>
+                                <Icon sx={{ mr: 3 }}/>
+                                {widget.name}
+                            </MenuItem>
+                        );
+                    })}
+
+                </Select>
+
             </Grid>
+
+            {childComponent}
 
         </Grid>
     );

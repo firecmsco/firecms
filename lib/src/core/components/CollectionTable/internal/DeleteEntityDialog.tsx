@@ -16,6 +16,7 @@ import {
     useSnackbarController
 } from "../../../../hooks";
 import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
+import { CustomDialogActions } from "../../CustomDialogActions";
 
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
@@ -207,7 +208,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                 {content}
             </DialogContent>}
 
-            <DialogActions>
+            <CustomDialogActions>
 
                 {loading && <CircularProgress size={16} thickness={8}/>}
 
@@ -223,7 +224,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                     color="primary">
                     Ok
                 </Button>
-            </DialogActions>
+            </CustomDialogActions>
 
         </Dialog>
     );

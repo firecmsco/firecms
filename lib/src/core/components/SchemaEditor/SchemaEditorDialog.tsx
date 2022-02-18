@@ -31,7 +31,7 @@ export function SchemaEditorDialog({
 
             <Box
                 sx={(theme) => ({
-                    backgroundColor: theme.palette.background.paper
+                    backgroundColor: theme.palette.background.default
                 })}>
                 <SchemaEditor schemaId={schemaId}
                               handleClose={handleClose}
