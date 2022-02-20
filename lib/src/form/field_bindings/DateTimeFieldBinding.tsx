@@ -19,7 +19,7 @@ type DateTimeFieldProps = FieldProps<Date>;
  * @category Form fields
  */
 export function DateTimeFieldBinding({
-                                  name,
+                                  key,
                                   value,
                                   setValue,
                                   autoFocus,

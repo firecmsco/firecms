@@ -16,6 +16,7 @@ export function CustomDialogActions({
         position: "sticky",
         bottom: 0,
         textAlign: "right",
+        zIndex: 2,
         "& > *:not(:last-child)": {
             [theme.breakpoints.down("md")]: {
                 mr: theme.spacing(1)

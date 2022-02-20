@@ -4,7 +4,6 @@ import {
     Button,
     CircularProgress,
     Dialog,
-    DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
@@ -15,15 +14,17 @@ import {
 import GetAppIcon from "@mui/icons-material/GetApp";
 import {
     Entity,
+    EntitySchema,
     ExportConfig,
     ResolvedEntitySchema
 } from "../../../../models";
 import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
+import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
 
 interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
-    schema: ResolvedEntitySchema<M>;
+    schema: EntitySchema<M>;
     path: string;
     exportConfig?: ExportConfig<UserType>;
 }
@@ -31,14 +32,20 @@ interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
 export function ExportButton<M extends { [Key: string]: any }, UserType>({
-                                                                             schema,
+                                                                             schema: inputSchema,
                                                                              path,
                                                                              exportConfig
                                                                          }: ExportButtonProps<M, UserType>
 ) {
 
     const dataSource = useDataSource();
+    const schemaRegistry = useSchemaRegistry();
     const context = useFireCMSContext();
+
+    const schema = React.useMemo(() => schemaRegistry.getResolvedSchema({
+        schema: inputSchema,
+        path
+    }), [inputSchema, path]);
 
     const dataRef = useRef<Entity<M>[]>();
     const additionalDataRef = useRef<Record<string, any>[]>();

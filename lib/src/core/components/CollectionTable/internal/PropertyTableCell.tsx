@@ -43,6 +43,7 @@ export interface PropertyTableCellProps<T extends CMSType> {
     height: number;
     width: number;
     entityId: string;
+    path: string;
     entityValues: EntityValues<any>;
     validation: AnySchema;
     onValueChange?: (params: OnCellChangeParams<T>) => void
@@ -75,6 +76,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                           width,
                                                           height,
                                                           entityId,
+                                                          path,
                                                           entityValues
                                                       }: PropertyTableCellProps<T> & CellStyleProps) => {
 
@@ -163,11 +165,12 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                  focused={focused}
                                                  property={property as ResolvedStringProperty | ResolvedArrayProperty<string[]>}
                                                  entityId={entityId}
+                                                 path={path}
                                                  entityValues={entityValues}
                                                  internalValue={internalValue}
                                                  previewSize={getPreviewSizeFrom(size)}
                                                  updateValue={updateValue}
-                                                 name={name as string}
+                                                 propertyId={name as string}
                                                  onBlur={onBlur}
                                                  setPreventOutsideClick={setPreventOutsideClick}
             />;
@@ -190,6 +193,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                               updateValue={updateValue}
                                               setPreventOutsideClick={setPreventOutsideClick}
                 />;
+                fullHeight = true;
             } else {
                 innerComponent = <NumberTableInput
                     align={align}
@@ -218,6 +222,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                               updateValue={updateValue}
                                               setPreventOutsideClick={setPreventOutsideClick}
                 />;
+                fullHeight = true;
             } else if (!stringProperty.storage && !stringProperty.markdown) {
                 const multiline = !!stringProperty.multiline;
                 innerComponent = <TableInput error={error}
@@ -278,6 +283,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                       setPreventOutsideClick={setPreventOutsideClick}
                         />;
                         allowScroll = true;
+                        fullHeight = true;
                     }
                 } else if (arrayProperty.of.dataType === "reference") {
                     if (typeof arrayProperty.of.path === "string") {

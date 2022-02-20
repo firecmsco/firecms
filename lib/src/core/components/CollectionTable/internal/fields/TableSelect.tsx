@@ -12,7 +12,6 @@ import { EnumValuesChip } from "../../../../../preview/components/CustomChip";
 const PREFIX = "TableSelect";
 
 const classes = {
-    select: `${PREFIX}-select`,
     selectRoot: `${PREFIX}-selectRoot`
 };
 
@@ -21,14 +20,12 @@ const StyledSelect = styled(Select)((
         theme
     }
 ) => ({
-    [`&.${classes.select}`]: {
-        height: "100%"
-    },
-
     [`& .${classes.selectRoot}`]: {
         display: "flex",
         alignItems: "center",
-        height: "100%"
+        height: "100%",
+        padding: "0px 0 0px",
+        background: "transparent !important"
     }
 }));
 
@@ -87,7 +84,9 @@ export function TableSelect(props: {
             variant={"standard"}
             key={`table_select_${name}`}
             inputRef={ref}
-            className={classes.select}
+            sx={{
+                height: "100%"
+            }}
             classes={{ select: classes.selectRoot }}
             open={open}
             disabled={disabled}

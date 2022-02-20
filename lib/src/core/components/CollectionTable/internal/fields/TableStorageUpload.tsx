@@ -23,6 +23,7 @@ import { ErrorBoundary } from "../../../../internal/ErrorBoundary";
 import clsx from "clsx";
 import { useSnackbarController, useStorageSource } from "../../../../../hooks";
 import { getThumbnailMeasure } from "../../../../../preview/util";
+import { resolveFilename } from "../../../../util/storage";
 
 const PREFIX = 'TableStorageUpload';
 
@@ -100,7 +101,7 @@ const StyledBox = styled(Box)((
  * @category Form fields
  */
 export function TableStorageUpload(props: {
-    name: string;
+    propertyId: string;
     error: Error | undefined;
     disabled: boolean;
     internalValue: string | string[] | null;
@@ -108,6 +109,7 @@ export function TableStorageUpload(props: {
     focused: boolean;
     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
     entityId: string;
+    path: string;
     previewSize: PreviewSize;
     entityValues: EntityValues<any>;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
@@ -115,12 +117,13 @@ export function TableStorageUpload(props: {
 }) {
 
     const {
-        name,
+        propertyId,
         error,
         internalValue,
         disabled,
         property,
         entityId,
+        path,
         entityValues,
         previewSize,
         updateValue,
@@ -141,15 +144,8 @@ export function TableStorageUpload(props: {
 
     const fileNameBuilder = (file: File) => {
         if (storage.fileName) {
-            const fileName = storage.fileName({
-                entityId,
-                values: entityValues,
-                property,
-                file,
-                storage,
-                name
-            });
 
+            const fileName = resolveFilename(storage.fileName, storage, entityValues, entityId, path, property, file, propertyId);
             if (!fileName || fileName.length === 0) {
                 throw Error("You need to return a valid filename");
             }
@@ -169,7 +165,7 @@ export function TableStorageUpload(props: {
                 property,
                 file,
                 storage,
-                name
+                propertyId: propertyId
             });
 
             if (!storagePath || storagePath.length === 0) {
@@ -186,7 +182,7 @@ export function TableStorageUpload(props: {
 
         <StorageUpload
             value={internalValue}
-            name={name}
+            name={propertyId}
             disabled={disabled}
             autoFocus={false}
             property={property}

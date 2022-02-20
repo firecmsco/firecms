@@ -68,3 +68,12 @@ export function getHashValue<T>(v: T) {
     }
     return hash(v, { ignoreUnknown: true });
 }
+
+export function removeUndefined(obj: object) {
+    const res: object = {};
+    Object.keys(obj).forEach((key) => {
+        if (obj[key] === Object(obj[key])) res[key] = removeUndefined(obj[key]);
+        else if (obj[key] !== undefined) res[key] = obj[key];
+    });
+    return res;
+}

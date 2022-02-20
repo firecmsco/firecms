@@ -36,6 +36,7 @@ import {
 } from "../../hooks";
 import { isReadOnly } from "../../core/utils";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { resolveFilename } from "../../core/util/storage";
 
 const PREFIX = "StorageUploadField";
 
@@ -128,6 +129,7 @@ const StyledBox = styled(Box)(({ theme }:
 
 type StorageUploadFieldProps = FieldProps<string | string[]>;
 
+
 /**
  * Field that allows to upload files to Google Cloud Storage.
  *
@@ -136,7 +138,7 @@ type StorageUploadFieldProps = FieldProps<string | string[]>;
  * @category Form fields
  */
 export function StorageUploadFieldBinding({
-                                       name,
+                                       key,
                                        value,
                                        setValue,
                                        error,
@@ -174,14 +176,14 @@ export function StorageUploadFieldBinding({
 
     const fileNameBuilder = (file: File) => {
         if (storage.fileName) {
-            const fileName = storage.fileName({
-                entityId: context.entityId,
-                values: context.values,
+            const fileName = resolveFilename(storage.fileName,
+                storage,
+                context.values,
+                context.entityId,
+                context.path,
                 property,
                 file,
-                storage,
-                name
-            });
+                key);
 
             if (!fileName || fileName.length === 0) {
                 throw Error("You need to return a valid filename");
@@ -202,11 +204,11 @@ export function StorageUploadFieldBinding({
                 property,
                 file,
                 storage,
-                name
+                propertyId: key
             });
 
             if (!storagePath || storagePath.length === 0) {
-                throw Error("You need to return a valid filename");
+                throw Error("You need to return a valid storage path");
             }
             return storagePath;
         }
@@ -228,7 +230,7 @@ export function StorageUploadFieldBinding({
 
                 <StorageUpload
                     value={internalValue}
-                    name={name}
+                    name={key}
                     disabled={disabled}
                     autoFocus={autoFocus}
                     property={property}

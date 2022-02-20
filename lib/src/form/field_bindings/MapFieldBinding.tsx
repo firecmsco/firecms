@@ -31,7 +31,7 @@ import { isHidden } from "../../core/utils";
  * @category Form fields
  */
 export function MapFieldBinding<T extends object>({
-                                               name,
+                                               key,
                                                value,
                                                showError,
                                                disabled,
@@ -47,7 +47,7 @@ export function MapFieldBinding<T extends object>({
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
 
     if (!property.properties) {
-        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
+        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${key}`);
     }
 
     let mapProperties: Record<string, ResolvedProperty>;
@@ -123,10 +123,10 @@ export function MapFieldBinding<T extends object>({
                                 <Grid item
                                       sm={12}
                                       xs={12}
-                                      key={`map-${name}-${index}`}>
+                                      key={`map-${key}-${index}`}>
                                     {
                                         buildPropertyField<any, T>({
-                                            name: `${name}[${entryKey}]`,
+                                            name: `${key}[${entryKey}]`,
                                             disabled,
                                             property: childProperty,
                                             includeDescription,

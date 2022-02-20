@@ -5,15 +5,14 @@ import {
     Box,
     Button,
     Dialog,
-    DialogActions,
     DialogContent,
     Grid,
     InputAdornment,
     MenuItem,
     Select,
-    TextField,
-    Typography
+    TextField
 } from "@mui/material";
+import equal from "react-fast-compare"
 
 import { Property } from "../../../models";
 import { StringPropertyField } from "./properties/StringPropertyField";
@@ -23,13 +22,14 @@ import { EnumPropertyField } from "./properties/EnumPropertyField";
 import { toSnakeCase } from "../../util/strings";
 import { useDebounce } from "../../internal/useDebounce";
 import { CustomDialogActions } from "../CustomDialogActions";
+import { removeUndefined } from "../../util/objects";
 
 export type PropertyWithId = Property & { id: string };
 
 export function PropertyForm({
                                  asDialog,
                                  open,
-                                 propertyKey,
+                                 propertyId,
                                  property,
                                  onOkClicked,
                                  onCancel,
@@ -37,25 +37,22 @@ export function PropertyForm({
                              }: {
     asDialog: boolean;
     open?: boolean;
-    propertyKey?: string;
+    propertyId?: string;
     property?: Property;
     onPropertyChanged: (id: string, property: Property) => void;
     onOkClicked?: () => void;
     onCancel?: () => void;
 }) {
 
-    const newProperty = !property;
-
     return (
         <Formik
             initialValues={property
-                ? { id: propertyKey, ...property } as PropertyWithId
+                ? { id: propertyId, ...property } as PropertyWithId
                 : {
                     id: "",
                     title: ""
                 } as PropertyWithId}
             onSubmit={(newPropertyWithId: PropertyWithId, formikHelpers) => {
-                console.log("onSubmit", newPropertyWithId);
                 const { id, ...property } = newPropertyWithId;
                 onPropertyChanged(id, property);
                 if (onOkClicked) {
@@ -66,8 +63,8 @@ export function PropertyForm({
             {(props) => {
 
                 const form = <PropertyEditView
-                    onPropertyChanged={newProperty ? undefined : onPropertyChanged}
-                    existing={Boolean(propertyKey)}
+                    onPropertyChanged={asDialog ? undefined : onPropertyChanged}
+                    existing={Boolean(propertyId)}
                     {...props}/>;
 
                 let body: JSX.Element;
@@ -127,9 +124,12 @@ function PropertyEditView({
 
     const selectedWidget = selectedWidgetId ? WIDGETS[selectedWidgetId] : undefined;
 
+    const initialValuesRef = React.useRef(values);
+
     const doUpdate = React.useCallback(() => {
         if (onPropertyChanged) {
-            if (values.id) {
+            if (values.id && !equal(initialValuesRef.current, removeUndefined(values))) {
+                console.log("PropertyEditView", initialValuesRef.current, values);
                 const { id, ...property } = values;
                 onPropertyChanged(id, property);
             }

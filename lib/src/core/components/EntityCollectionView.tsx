@@ -18,6 +18,7 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
+    EntitySchema,
     LocalEntityCollection,
     LocalEntitySchema,
     ResolvedEntitySchema,
@@ -136,7 +137,7 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
     }
 
     const collection: EntityCollection<M> = collectionFromPath ?? baseCollection;
-    const schema = schemaRegistry.getResolvedSchema<M>({ schema: collection.schemaId, path });
+    const schema = schemaRegistry.findSchema(collection.schemaId);
     if (!schema) {
         return <ErrorView
             error={"Unable to find schema with id " + collection.schemaId}/>;
@@ -158,7 +159,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                                                                                        collection,
                                                                                        editable,
                                                                                        schema
-                                                                                   }: EntityCollectionViewProps<M> & { schema: ResolvedEntitySchema<M> }
+                                                                                   }: EntityCollectionViewProps<M> & { schema: EntitySchema<M> }
 ) {
 
     const sideEntityController = useSideEntityController();
@@ -217,7 +218,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
             callbacks: collection.callbacks,
             updateUrl: true
         });
-    }, [path, collection]);
+    }, [path, collection, schema]);
 
     const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {
         setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));

@@ -32,7 +32,7 @@ import {
  * @category Form fields
  */
 export function ArrayOneOfFieldBinding<T extends Array<any>>({
-                                                          name,
+                                                          key,
                                                           value,
                                                           error,
                                                           showError,
@@ -61,7 +61,7 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
     const buildEntry = (index: number, internalId: number) => {
         return <ArrayOneOfEntry
             key={`array_one_of_${index}`}
-            name={`${name}[${index}]`}
+            name={`${key}[${index}]`}
             index={index}
             value={value[index]}
             typeField={property.oneOf!.typeField ?? "type"}
@@ -89,7 +89,7 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
                        }
                    })}>
                 <ArrayContainer value={value}
-                                name={name}
+                                name={key}
                                 buildEntry={buildEntry}
                                 onInternalIdAdded={setLastAddedId}
                                 disabled={isSubmitting || Boolean(property.disabled)}
@@ -188,6 +188,7 @@ function ArrayOneOfEntry({
                                 fullWidth
                                 sx={{ marginBottom: 2 }}
                                 labelId={`${name}_${index}_select_label`}
+                                label={"Type"}
                                 value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}
                                 onChange={(evt: any) => {
                                     const eventValue = evt.target.value;

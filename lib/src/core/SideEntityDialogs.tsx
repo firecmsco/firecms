@@ -74,8 +74,10 @@ function SideEntityDialog({
     const navigationContext = useNavigation();
     const schemaRegistry = useSchemaRegistry();
 
+
     const schema = useMemo(() => {
         if (!props) return undefined;
+        console.log("SideEntityDialog prop", props?.schema);
         let usedSchema = typeof props.schema === "string"
             ? schemaRegistry.findSchema(props.schema)
             : props.schema;
@@ -119,7 +121,7 @@ function SideEntityDialog({
             <div style={{ width: CONTAINER_WIDTH }}/>
         </SideDialogDrawer>;
     }
-
+    console.log("SideEntityDialog", schema);
     return (
         <>
 

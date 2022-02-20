@@ -17,7 +17,7 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
  * @category Form fields
  */
 export function ReadOnlyFieldBinding({
-                                  name,
+                                  key,
                                                                     value,
                                                                     setValue,
                                                                     error,
@@ -51,7 +51,7 @@ export function ReadOnlyFieldBinding({
                 variant={"outlined"}>
 
                 <ErrorBoundary>
-                    <PreviewComponent name={name}
+                    <PreviewComponent name={key}
                                       value={value}
                                       property={property}
                                       size={"regular"}/>

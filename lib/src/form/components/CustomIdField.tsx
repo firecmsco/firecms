@@ -19,9 +19,9 @@ import { ErrorMessage } from "formik";
 
 import {
     Entity,
-    EntitySchema,
     EntityStatus,
     EnumValueConfig,
+    EnumValues,
     FireCMSContext
 } from "../../models";
 
@@ -55,10 +55,16 @@ const StyledFormControl = styled(FormControl)((
     }
 }));
 
-
-export function CustomIdField<M, UserType>
-({ schema, status, onChange, error, entity }: {
-    schema: EntitySchema<M>,
+export function CustomIdField<M, UserType>({
+                                               customId,
+                                               entityId,
+                                               status,
+                                               onChange,
+                                               error,
+                                               entity
+                                           }: {
+    customId?: boolean | EnumValues | string
+    entityId?:  string
     status: EntityStatus,
     onChange: (id?: string) => void,
     error: boolean,
@@ -67,14 +73,14 @@ export function CustomIdField<M, UserType>
 
     const schemaRegistry = useSchemaRegistry();
 
-    const disabled = status === "existing" || !schema.customId;
-    const idSetAutomatically = status !== "existing" && !schema.customId;
+    const disabled = status === "existing" || !customId;
+    const idSetAutomatically = status !== "existing" && !customId;
 
     const enumValues: EnumValueConfig[] | undefined = useMemo(() => {
-        if (!schema.customId || typeof schema.customId === "boolean")
+        if (!customId || typeof customId === "boolean")
             return undefined;
-        return resolveEnumValues(schema.customId, schemaRegistry.enumConfigs);
-    }, [schemaRegistry.enumConfigs, schema.customId]);
+        return resolveEnumValues(customId, schemaRegistry.enumConfigs);
+    }, [schemaRegistry.enumConfigs, customId]);
 
     const snackbarContext = useSnackbarController();
     const { copy } = useClipboard({
@@ -90,38 +96,39 @@ export function CustomIdField<M, UserType>
             minHeight: "64px"
         },
         endAdornment: entity
-? (
-            <InputAdornment position="end">
+            ? (
+                <InputAdornment position="end">
 
-                <IconButton onClick={(e) => copy(entity.id)}
-                            aria-label="copy-id"
-                            size="large">
-                    <Tooltip title={"Copy"}>
-                        <svg
-                            className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
-                            fill={"currentColor"}
-                            width="20" height="20" viewBox="0 0 24 24">
-                            <path
-                                d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                        </svg>
-                    </Tooltip>
-                </IconButton>
-
-                {appConfig?.entityLinkBuilder &&
-                <a href={appConfig.entityLinkBuilder({ entity })}
-                   rel="noopener noreferrer"
-                   target="_blank">
-                    <IconButton onClick={(e) => e.stopPropagation()}
-                                aria-label="go-to-datasource" size="large">
-                        <Tooltip title={"Open in the console"}>
-                            <OpenInNewIcon fontSize={"small"}/>
+                    <IconButton onClick={(e) => copy(entity.id)}
+                                aria-label="copy-id"
+                                size="large">
+                        <Tooltip title={"Copy"}>
+                            <svg
+                                className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
+                                fill={"currentColor"}
+                                width="20" height="20" viewBox="0 0 24 24">
+                                <path
+                                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                            </svg>
                         </Tooltip>
                     </IconButton>
-                </a>}
 
-            </InputAdornment>
-        )
-: undefined
+                    {appConfig?.entityLinkBuilder &&
+                        <a href={appConfig.entityLinkBuilder({ entity })}
+                           rel="noopener noreferrer"
+                           target="_blank">
+                            <IconButton onClick={(e) => e.stopPropagation()}
+                                        aria-label="go-to-datasource"
+                                        size="large">
+                                <Tooltip title={"Open in the console"}>
+                                    <OpenInNewIcon fontSize={"small"}/>
+                                </Tooltip>
+                            </IconButton>
+                        </a>}
+
+                </InputAdornment>
+            )
+            : undefined
     };
 
     const fieldProps: any = {
@@ -129,7 +136,7 @@ export function CustomIdField<M, UserType>
         disabled: disabled,
         name: "id",
         type: null,
-        value: entity && status === "existing" ? entity.id : undefined,
+        value: entity && status === "existing" ? entity.id : entityId,
         variant: "filled"
     };
 
@@ -144,6 +151,7 @@ export function CustomIdField<M, UserType>
                     <InputLabel id={"id-label"}>{fieldProps.label}</InputLabel>
                     <MuiSelect
                         labelId={"id-label"}
+                        fullWidth
                         className={classes.select}
                         error={error}
                         {...fieldProps}
@@ -161,7 +169,8 @@ export function CustomIdField<M, UserType>
                 <MuiTextField {...fieldProps}
                               error={error}
                               InputProps={inputProps}
-                              helperText={schema.customId === "optional" ? "Leave this blank to autogenerate an ID" : "ID of the new document"}onChange={(event) => {
+                              helperText={customId === "optional" ? "Leave this blank to autogenerate an ID" : "ID of the new document"}
+                              onChange={(event) => {
                                   let value = event.target.value;
                                   if (value) value = value.trim();
                                   return onChange(value.length ? value : undefined);

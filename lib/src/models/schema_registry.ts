@@ -23,7 +23,7 @@ export type SchemaRegistry = {
     getResolvedProperty: <M extends { [Key: string]: any } = any>(params: {
         schema: string | EntitySchema<M> | ResolvedEntitySchema<M>;
         path: string,
-        propertyKey: string,
+        propertyId: string,
         entityId?: string,
         values?: Partial<EntityValues<M>>,
         previousValues?: Partial<EntityValues<M>>,

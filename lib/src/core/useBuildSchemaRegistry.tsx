@@ -156,13 +156,14 @@ export function useBuildSchemaRegistry<UserType>({
         if (!schema)
             throw Error("Unable to find schema with id " + inputSchema);
 
-        return resolveSchema({
+        const result = resolveSchema({
             path,
             schema: schema as EntitySchema<M>,
             entityId,
             values,
             previousValues
         });
+        return result;
 
     }, [getUserSchemaOverride, schemas, enumConfigs]);
 
@@ -171,14 +172,14 @@ export function useBuildSchemaRegistry<UserType>({
          schema: inputSchema,
          path,
          entityId,
-         propertyKey,
+         propertyId,
          values,
          previousValues
      }: {
         schema: string | EntitySchema<M> | ResolvedEntitySchema<M>;
         path: string,
         entityId?: string,
-        propertyKey: string,
+        propertyId: string,
         values?: Partial<EntityValues<M>>,
         previousValues?: Partial<EntityValues<M>>,
     }): ResolvedProperty | null => {
@@ -187,14 +188,14 @@ export function useBuildSchemaRegistry<UserType>({
         if (!schema)
             throw Error("Unable to find schema with id " + inputSchema);
 
-        const propertyOrBuilder = schema.properties[propertyKey];
+        const propertyOrBuilder = schema.properties[propertyId];
 
         return resolveProperty({
             propertyOrBuilder,
             path,
             entityId,
             values,
-            propertyKey,
+            propertyId,
             previousValues,
             enumConfigs
         });
@@ -218,7 +219,7 @@ function resolveProperty<M>({
                                 previousValues,
                                 path,
                                 entityId,
-                                propertyKey,
+                                propertyId,
                                 enumConfigs
                             }: {
     propertyOrBuilder: PropertyOrBuilder,
@@ -226,9 +227,10 @@ function resolveProperty<M>({
     previousValues?: Partial<M>,
     path: string,
     entityId: string | undefined,
-    propertyKey: string,
+    propertyId: string,
     enumConfigs: EnumConfig[]
 }): ResolvedProperty | null {
+
     const property = buildPropertyFrom({
         propertyOrBuilder,
         values: values ?? {},
@@ -278,7 +280,7 @@ function resolveProperties<M extends { [Key: string]: any }>(
                     previousValues: previousValues,
                     path: path,
                     entityId: entityId,
-                    propertyKey: key,
+                    propertyId: key,
                     enumConfigs: enumConfigs
                 })
             };

@@ -61,6 +61,26 @@ export function SchemaDetailsView({ isNewSchema }: { isNewSchema: boolean }) {
                 <Grid item xs={12}>
                     <FormControl fullWidth
                                  required
+                                 error={touched.name && Boolean(errors.name)}>
+                        <InputLabel
+                            htmlFor="name">Name</InputLabel>
+                        <OutlinedInput
+                            id="name"
+                            value={values.name}
+                            onChange={handleChange}
+                            aria-describedby="name-helper-text"
+                            label="Name"
+                        />
+                        <FormHelperText
+                            id="name-helper-text">
+                            {touched.name && Boolean(errors.name) ? errors.name : "Singular name of this schema (e.g. Product)"}
+                        </FormHelperText>
+                    </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <FormControl fullWidth
+                                 required
                                  disabled={!isNewSchema}
                                  error={touched.id && Boolean(errors.id)}>
                         <InputLabel
@@ -80,32 +100,18 @@ export function SchemaDetailsView({ isNewSchema }: { isNewSchema: boolean }) {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <FormControl fullWidth
-                                 required
-                                 error={touched.name && Boolean(errors.name)}>
-                        <InputLabel
-                            htmlFor="name">Name</InputLabel>
-                        <OutlinedInput
-                            id="name"
-                            value={values.name}
-                            onChange={handleChange}
-                            aria-describedby="name-helper-text"
-                            label="Name"
-                        />
-                        <FormHelperText
-                            id="name-helper-text">
-                            {touched.name && Boolean(errors.name) ? errors.name : "Singular name of this schema (e.g. Product)"}
-                        </FormHelperText>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
                     <FormControl fullWidth>
-                        <InputLabel>Default row size</InputLabel>
+                        <InputLabel id="size-label">
+                            Default row size
+                        </InputLabel>
                         <Select
+                            labelId="size-label"
                             id="defaultSize"
-                            renderValue={(value: any) => value.toUpperCase()}
+                            name="defaultSize"
+                            label="Default row size"
                             onChange={handleChange}
                             value={values.defaultSize}
+                            renderValue={(value: any) => value.toUpperCase()}
                         >
                             {["xs", "s", "m", "l", "xl"].map((value) => (
                                 <MenuItem

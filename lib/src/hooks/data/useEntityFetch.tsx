@@ -64,7 +64,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
             setDataLoadingError(error);
         };
 
-        if (useCache && CACHE[`${path}/${entityId}`]) {
+        if (entityId && useCache && CACHE[`${path}/${entityId}`]) {
             setEntity(CACHE[`${path}/${entityId}`]);
             setDataLoading(false);
             setDataLoadingError(undefined);
@@ -72,6 +72,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
             return () => {
             };
         } else if (entityId && path && schema) {
+            // console.log("fff", entityId);
             if (dataSource.listenEntity) {
                 return dataSource.listenEntity<M>({
                     path,

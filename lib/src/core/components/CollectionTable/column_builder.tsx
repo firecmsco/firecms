@@ -229,14 +229,14 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
         const entity: Entity<M> = rowData;
 
-        const propertyKey = column.dataKey;
+        const propertyId = column.dataKey;
 
         const schema = typeof inputSchema === "string" ? schemaRegistry.findSchema(inputSchema) : inputSchema;
         if (!schema)
             throw Error("Unable to find schema with id " + inputSchema);
 
         const property = schemaRegistry.getResolvedProperty({
-            propertyKey,
+            propertyId,
             schema,
             path,
             values: entity.values,
@@ -250,16 +250,16 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
         if (!inlineEditingEnabled) {
             return (
                 <TableCell
-                    key={`preview_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
+                    key={`preview_cell_${propertyId}_${rowIndex}_${columnIndex}`}
                     size={size}
                     align={column.align}
                     disabled={true}>
                     <PreviewComponent
                         width={column.width}
                         height={column.height}
-                        name={`preview_${propertyKey}_${rowIndex}_${columnIndex}`}
+                        name={`preview_${propertyId}_${rowIndex}_${columnIndex}`}
                         property={property as any}
-                        value={entity.values[propertyKey]}
+                        value={entity.values[propertyId]}
                         size={getPreviewSizeFrom(size)}
                     />
                 </TableCell>
@@ -276,7 +276,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                         height: column.height,
                         entity,
                         cellRect,
-                        name: propertyKey,
+                        name: propertyId,
                         schema
                     });
                 }
@@ -293,7 +293,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                         height: column.height,
                         entity,
                         cellRect,
-                        name: propertyKey,
+                        name: propertyId,
                         schema
                     });
                 }
@@ -313,7 +313,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
             const validation = mapPropertyToYup({
                 property,
                 customFieldValidator,
-                name: propertyKey
+                name: propertyId
             });
 
             const onValueChange = onCellValueChange
@@ -325,28 +325,28 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
             return entity
                 ? <PropertyTableCell
-                    key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
+                    key={`table_cell_${propertyId}_${rowIndex}_${columnIndex}`}
                     size={size}
                     align={column.align}
-                    name={propertyKey as string}
+                    name={propertyId as string}
                     validation={validation}
                     onValueChange={onValueChange}
                     selected={selected}
                     focused={isFocused}
                     setPreventOutsideClick={setPreventOutsideClick}
                     setFocused={setFocused}
-                    value={entity?.values ? entity.values[propertyKey] : undefined}
+                    value={entity?.values ? entity.values[propertyId] : undefined}
                     property={property}
                     openPopup={openPopup}
                     onSelect={onSelect}
                     width={column.width}
                     height={column.height}
                     entityId={entity.id}
+                    path={entity.path}
                     entityValues={entity.values}/>
                 : <SkeletonComponent property={property}
                                    size={getPreviewSizeFrom(size)}/>;
         }
-
 
     };
 

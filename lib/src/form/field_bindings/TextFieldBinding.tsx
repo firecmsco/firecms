@@ -55,7 +55,7 @@ interface TextFieldProps<T extends string | number> extends FieldProps<T> {
  * @category Form fields
  */
 export function TextFieldBinding<T extends string | number>({
-                                                         name,
+                                                         key,
                                                          value,
                                                          setValue,
                                                          error,
@@ -184,7 +184,7 @@ export function TextFieldBinding<T extends string | number>({
             {mediaType && internalValue &&
             <ErrorBoundary>
                 <Box m={1}>
-                    <PreviewComponent name={name}
+                    <PreviewComponent name={key}
                                       value={internalValue}
                                       property={property}
                                       size={"regular"}/>

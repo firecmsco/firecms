@@ -13,7 +13,7 @@ export interface FieldProps<T extends CMSType, CustomProps = any, M extends { [K
     /**
      * Name of the property
      */
-    name: string;
+    key: string;
 
     /**
      * Current value of this field
@@ -127,9 +127,14 @@ export interface FormContext<M extends { [Key: string]: any }> {
     values: EntityValues<M>;
 
     /**
-     * Entity, it can be null if it's a new entity
+     * Entity id, it can be null if it's a new entity
      */
-    entityId?: string;
+    entityId: string;
+
+    /**
+     * Path this entity is located at
+     */
+    path: string;
 }
 
 /**

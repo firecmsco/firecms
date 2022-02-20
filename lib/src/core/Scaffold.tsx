@@ -1,46 +1,11 @@
 import React, { PropsWithChildren, useEffect } from "react";
 
-import { styled } from '@mui/material/styles';
-
-import { Drawer as MuiDrawer, Theme } from "@mui/material";
+import { Box, Drawer as MuiDrawer } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { FireCMSAppBar } from "./internal/FireCMSAppBar";
 import { useLocation } from "react-router-dom";
 import { useNavigation } from "../hooks";
 import { CircularProgressCenter } from "./components";
-
-
-const PREFIX = 'Scaffold';
-
-const classes = {
-    main: `${PREFIX}-main`,
-    content: `${PREFIX}-content`,
-    drawerPaper: `${PREFIX}-drawerPaper`
-};
-
-const Root = styled('div')((
-   { theme } : {
-        theme: Theme
-    }
-) => ({
-    [`& .${classes.main}`]: {
-        display: "flex",
-        flexDirection: "column",
-        width: "100vw",
-        height: "100vh"
-    },
-
-    [`& .${classes.content}`]: {
-        flexGrow: 1,
-        width: "100%",
-        height: "100%",
-        overflow: "auto"
-    },
-
-    [`& .${classes.drawerPaper}`]: {
-        width: 280
-    }
-}));
 
 
 /**
@@ -104,36 +69,48 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
     const UsedDrawer = Drawer || FireCMSDrawer;
 
     return (
-        (<Root>
+        (<>
             <nav>
                 <MuiDrawer
                     variant="temporary"
                     anchor={"left"}
                     open={drawerOpen}
                     onClose={closeDrawer}
-                    classes={{
-                        paper: classes.drawerPaper
+                    sx={{
+                        width: 280
                     }}
                     ModalProps={{
                         keepMounted: true
                     }}
                 >
-                    {!navigationContext.navigation ? <CircularProgressCenter/> : <UsedDrawer logo={logo} closeDrawer={closeDrawer}/>}
+                    {!navigationContext.navigation
+                        ? <CircularProgressCenter/>
+                        : <UsedDrawer logo={logo} closeDrawer={closeDrawer}/>}
 
                 </MuiDrawer>
             </nav>
-            <div className={classes.main}>
+            <Box sx={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100vw",
+                height: "100vh"
+            }}>
 
                 <FireCMSAppBar title={name}
                                handleDrawerToggle={handleDrawerToggle}
                                toolbarExtraWidget={toolbarExtraWidget}/>
-                <main
-                    className={classes.content}
-                    ref={containerRef}>
+                <Box component={"main"}
+                     sx={{
+                         flexGrow: 1,
+                         width: "100%",
+                         height: "100%",
+                         overflow: "auto"
+                     }}
+                     ref={containerRef}>
                     {children}
-                </main>
-            </div>
-        </Root>)
+                </Box>
+            </Box>
+        </>)
     );
 
 

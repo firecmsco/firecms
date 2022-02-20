@@ -24,7 +24,7 @@ const classes = {
 type SwitchFieldProps = FieldProps<boolean>;
 
 const SwitchFieldComponent = React.forwardRef(function({
-                                                           name,
+                                                           key,
                                                            value,
                                                            setValue,
                                                            error,

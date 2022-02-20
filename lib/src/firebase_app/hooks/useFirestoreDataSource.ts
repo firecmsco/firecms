@@ -449,11 +449,16 @@ export function useFirestoreDataSource({
                     snapshots.docs.filter(doc => doc.id !== entityId).length === 0
                 );
 
+        },
+
+        generateEntityId(path:string): string {
+            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+            return doc(collection(firestore, path)).id;
         }
+
     };
 
 }
-
 
 /**
  * Recursive function that converts Firestore data types into CMS or plain

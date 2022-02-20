@@ -300,7 +300,8 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                     const context: FormContext<M> = {
                         schema,
                         entityId: entity.id,
-                        values
+                        values,
+                        path
                     };
 
                     const property: ResolvedProperty<any> | undefined = schema.properties[name];

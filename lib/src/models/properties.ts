@@ -627,10 +627,20 @@ export interface StorageConfig {
     metadata?: Record<string, unknown>,
 
     /**
-     * You can use this callback to customize the uploaded filename
+     * You can use this prop to customize the uploaded filename.
+     * You can use a function as a callback or a template email where you
+     * specify some placeholders that get replaced with the corresponding values.
+     * - {entityId}
+     * - {propertyId}
+     * - {path}
+     * - {file}
+     * - {file.name}
+     * - {file.ext}
+     *
+     *
      * @param context
      */
-    fileName?: (context: UploadedFileContext) => string;
+    fileName?: string | ((context: UploadedFileContext) => string);
 
     /**
      * When set to true, this flag indicates that the download URL of the file
@@ -659,7 +669,7 @@ export interface UploadedFileContext {
     /**
      * Property field name
      */
-    name: string;
+    propertyId: string;
 
     /**
      * Property related to this upload
@@ -682,7 +692,6 @@ export interface UploadedFileContext {
     storage: StorageConfig;
 }
 
-
 /**
  * MIME types for storage fields
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
@@ -695,4 +704,5 @@ export type StorageFileTypes =
     | "application/*"
     | "text/*"
     | "font/*"
+    | "application/pdf"
     | string;

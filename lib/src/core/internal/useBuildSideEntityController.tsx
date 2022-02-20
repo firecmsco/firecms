@@ -74,7 +74,9 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        const updateUrl = (schemaProps.updateUrl === undefined ? false : schemaProps.updateUrl) && typeof schemaProps.schema === "string";
+        const updateUrl = (schemaProps.updateUrl === undefined ? false : schemaProps.updateUrl)
+            // && typeof schemaProps.schema === "string"
+        ;
 
         const cleanPath = removeInitialAndTrailingSlashes(path);
         const newPath = entityId

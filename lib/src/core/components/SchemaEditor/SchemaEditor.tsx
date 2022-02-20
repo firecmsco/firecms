@@ -147,6 +147,7 @@ export function SchemaEditor<M>({
             }}
         >
             {(formikProps) => {
+                console.log("formikProps", formikProps);
                 return (
                     <SchemaEditorForm {...formikProps}
                                       updateDirtyStatus={updateDirtyStatus}
@@ -275,9 +276,10 @@ function SchemaEditorForm<M>({
         asDialog={asDialog}
         open={Boolean(selectedPropertyId)}
         key={`edit_view_${selectedPropertyId}`}
-        propertyKey={selectedPropertyId}
+        propertyId={selectedPropertyId}
         property={selectedProperty}
         onPropertyChanged={(id, property) => {
+            console.log("onPropertyChanged")
             const propertyPath = selectedPropertyId ? "properties." + selectedPropertyId.replace(".", ".properties.") : undefined;
             if (propertyPath)
                 setFieldValue(propertyPath, property);

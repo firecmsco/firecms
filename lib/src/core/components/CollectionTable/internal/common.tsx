@@ -111,7 +111,7 @@ export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:
             .filter(([_, property]) => {
                 return property.disabled && typeof property.disabled === "object" && property.disabled.hidden;
             })
-            .map(([propertyKey, _]) => propertyKey);
+            .map(([propertyId, _]) => propertyId);
 
         const columnIds: string[] = [
             ...Object.keys(resolvedSchema.properties) as string[],

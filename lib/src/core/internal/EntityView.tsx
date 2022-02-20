@@ -448,49 +448,49 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 }
             }}>
             {
- <>
+                <>
 
-                        {header}
+                    {header}
 
-                        <Divider/>
+                    <Divider/>
 
-                        <Box sx={{
-                            flexGrow: 1,
-                            height: "100%",
-                            width: `calc(${TAB_WIDTH} + ${resolvedWidth})`,
-                            [theme.breakpoints.down("sm")]: {
-                                width: CONTAINER_FULL_WIDTH
-                            },
-                            display: "flex",
-                            overflow: "auto",
-                            flexDirection: "row"
-                        }}>
+                    <Box sx={{
+                        flexGrow: 1,
+                        height: "100%",
+                        width: `calc(${TAB_WIDTH} + ${resolvedWidth})`,
+                        [theme.breakpoints.down("sm")]: {
+                            width: CONTAINER_FULL_WIDTH
+                        },
+                        display: "flex",
+                        overflow: "auto",
+                        flexDirection: "row"
+                    }}>
 
-                            {dataLoading
-                                ? <CircularProgressCenter/>
-                                : <Box
-                                    role="tabpanel"
-                                    hidden={!largeLayout && !mainViewSelected}
-                                    sx={{
-                                        width: resolvedWidth,
-                                        maxWidth: "100%",
-                                        height: "100%",
-                                        overflow: "auto",
-                                        [theme.breakpoints.down("sm")]: {
-                                            maxWidth: CONTAINER_FULL_WIDTH,
-                                            width: CONTAINER_FULL_WIDTH
-                                        }
-                                    }}>
-                                    {body}
-                                </Box>}
+                        {dataLoading
+                            ? <CircularProgressCenter/>
+                            : <Box
+                                role="tabpanel"
+                                hidden={!largeLayout && !mainViewSelected}
+                                sx={{
+                                    width: resolvedWidth ?? "100%",
+                                    maxWidth: "100%",
+                                    height: "100%",
+                                    overflow: "auto",
+                                    [theme.breakpoints.down("sm")]: {
+                                        maxWidth: CONTAINER_FULL_WIDTH,
+                                        width: CONTAINER_FULL_WIDTH
+                                    }
+                                }}>
+                                {body}
+                            </Box>}
 
-                            {customViewsView}
+                        {customViewsView}
 
-                            {subCollectionsViews}
+                        {subCollectionsViews}
 
-                        </Box>
+                    </Box>
 
-                    </>
+                </>
             }
 
         </Box>

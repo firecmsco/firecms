@@ -226,7 +226,7 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
     );
 
     const cmsFieldProps: FieldProps<T> = {
-        name,
+        key: name,
         value: internalValue as T,
         initialValue,
         setValue: (value: T | null) => {

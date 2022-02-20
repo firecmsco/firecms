@@ -69,11 +69,11 @@ function getExportHeaders<M extends { [Key: string]: any }, UserType>(properties
 /**
  * Get headers for property. There could be more than one header per property
  * @param property
- * @param propertyKey
+ * @param propertyId
  * @param prefix
  */
-function getHeaders(property: ResolvedProperty, propertyKey: string, prefix: string = ""): Header[] {
-    const currentKey = prefix ? `${prefix}.${propertyKey}` : propertyKey;
+function getHeaders(property: ResolvedProperty, propertyId: string, prefix: string = ""): Header[] {
+    const currentKey = prefix ? `${prefix}.${propertyId}` : propertyId;
     if (property.dataType === "map" && property.properties) {
         return Object.entries(property.properties)
             .map(([childKey, p]) => getHeaders(p, childKey, currentKey))

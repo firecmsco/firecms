@@ -10,7 +10,7 @@ import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 export default function CustomShapedArrayField({
                                                    property,
-                                                   name,
+                                                   key,
                                                    value,
                                                    setValue,
                                                    customProps,
@@ -29,14 +29,14 @@ export default function CustomShapedArrayField({
     return (
         <FormControl fullWidth error={showError}>
 
-            <FormHelperText>{property.title ?? name}</FormHelperText>
+            <FormHelperText>{property.title ?? key}</FormHelperText>
 
             <Paper variant={"outlined"}>
                 <Box m={2}>
                     {properties.map((property, index) =>
                         <div key={`array_${index}`}>
                             {buildPropertyField({
-                                name: `${name}[${index}]`,
+                                name: `${key}[${index}]`,
                                 property,
                                 context
                             })}

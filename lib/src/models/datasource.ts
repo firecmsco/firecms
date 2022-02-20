@@ -201,4 +201,8 @@ export interface DataSource {
         entityId?: string
     ): Promise<boolean>;
 
+    /**
+     * Generate an id for a new entity
+     */
+    generateEntityId(path: string): string;
 }

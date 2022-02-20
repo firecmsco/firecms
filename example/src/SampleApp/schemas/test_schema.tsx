@@ -54,7 +54,7 @@ const relaxedStatus:EnumValues = [
 
 export const testEntitySchema = buildSchema({
     id: "test",
-    customId: true,
+    customId: false,
     name: "Test entity",
     properties: {
         product: {
@@ -75,7 +75,8 @@ export const testEntitySchema = buildSchema({
             title: "Name starts with number",
             dataType: "string",
             validation:{
-                matches: /\d.*/
+                matches: /\d.*/,
+                matchesMessage: "Must start with a number"
             }
         },
         source: ({ values, previousValues }) => {

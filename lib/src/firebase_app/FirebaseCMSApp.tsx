@@ -10,7 +10,8 @@ import {
     FireCMS,
     NavigationRoutes,
     Scaffold,
-    SideEntityDialogs
+    SideEntityDialogs,
+    useBuildSchemaRegistry
 } from "../core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
@@ -23,8 +24,9 @@ import { FirebaseAuthDelegate } from "./models/auth";
 import {
     useBuildFirestoreConfigurationPersistence
 } from "./hooks/useBuildFirestoreConfigurationPersistence";
-import { useBuildSchemaRegistry } from "../core/useBuildSchemaRegistry";
-import { useBuildStorageConfigurationPersistence } from "../core/util/storage";
+import {
+    useBuildStorageConfigurationPersistence
+} from "../core/internal/useBuildStorageConfigurationPersistence";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
