@@ -1,7 +1,7 @@
 import React from "react";
 
 import { FastField, getIn, useFormikContext } from "formik";
-import { Grid, Paper, TextField, Typography } from "@mui/material";
+import { Grid, Paper, Typography } from "@mui/material";
 import { SmallSwitch } from "../../../../form/components/SmallSwitch";
 import DebouncedTextField from "../../../../form/components/DebouncedTextField";
 

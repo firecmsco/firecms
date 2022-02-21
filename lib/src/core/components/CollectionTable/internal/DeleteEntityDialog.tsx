@@ -221,6 +221,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                     autoFocus
                     disabled={loading}
                     onClick={handleOk}
+                    variant="contained"
                     color="primary">
                     Ok
                 </Button>

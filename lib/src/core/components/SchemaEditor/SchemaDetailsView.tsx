@@ -28,7 +28,9 @@ export function SchemaDetailsDialog({
         >
             <SchemaDetailsView isNewSchema={isNewSchema}/>
             <CustomDialogActions>
-                <Button onClick={handleOk}> Ok </Button>
+                <Button
+                    variant="contained"
+                    onClick={handleOk}> Ok </Button>
             </CustomDialogActions>
         </Dialog>
     );

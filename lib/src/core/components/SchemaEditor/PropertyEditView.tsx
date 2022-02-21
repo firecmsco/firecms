@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { FastField, Form, Formik, FormikProps, getIn } from "formik";
+import { Field, Form, Formik, FormikProps, getIn } from "formik";
+import equal from "react-fast-compare"
 import {
     Box,
     Button,
@@ -12,7 +13,6 @@ import {
     Select,
     TextField
 } from "@mui/material";
-import equal from "react-fast-compare"
 
 import { Property } from "../../../models";
 import { StringPropertyField } from "./properties/StringPropertyField";
@@ -33,15 +33,19 @@ export function PropertyForm({
                                  property,
                                  onOkClicked,
                                  onCancel,
-                                 onPropertyChanged
+                                 onPropertyChanged,
+                                 onError,
+                                 showErrors
                              }: {
     asDialog: boolean;
     open?: boolean;
     propertyId?: string;
     property?: Property;
     onPropertyChanged: (id: string, property: Property) => void;
+    onError?: (id: string, error: boolean) => void;
     onOkClicked?: () => void;
     onCancel?: () => void;
+    showErrors: boolean;
 }) {
 
     return (
@@ -64,6 +68,8 @@ export function PropertyForm({
 
                 const form = <PropertyEditView
                     onPropertyChanged={asDialog ? undefined : onPropertyChanged}
+                    onError={onError}
+                    showErrors={showErrors}
                     existing={Boolean(propertyId)}
                     {...props}/>;
 
@@ -114,10 +120,13 @@ function PropertyEditView({
                               setFieldValue,
                               existing,
                               onPropertyChanged,
-                              submitCount
+                              onError,
+                              showErrors
                           }: {
     existing: boolean;
     onPropertyChanged?: (id: string, property: Property) => void;
+    onError?: (id: string, error: boolean) => void;
+    showErrors: boolean;
 } & FormikProps<PropertyWithId>) {
 
     const [selectedWidgetId, setSelectedWidgetId] = useState<WidgetId | undefined>(values ? getWidgetId(values) : undefined);
@@ -129,13 +138,20 @@ function PropertyEditView({
     const doUpdate = React.useCallback(() => {
         if (onPropertyChanged) {
             if (values.id && !equal(initialValuesRef.current, removeUndefined(values))) {
-                console.log("PropertyEditView", initialValuesRef.current, values);
                 const { id, ...property } = values;
                 onPropertyChanged(id, property);
             }
         }
     }, [values]);
     useDebounce(values, doUpdate);
+
+    useEffect(() => {
+        if (values.id && onError) {
+            const error1 = Boolean(Object.keys(errors).length ?? false);
+            console.log("onError", error1, errors);
+            onError(values.id, error1);
+        }
+    }, [errors]);
 
     useEffect(() => {
         const propertyData = values as any;
@@ -339,10 +355,14 @@ function PropertyEditView({
         childComponent = <StringPropertyField widgetId={selectedWidgetId}/>;
     } else if (selectedWidgetId === "select" ||
         selectedWidgetId === "number_select") {
-        childComponent = <EnumPropertyField multiselect={false} updateIds={!existing}/>;
+        childComponent = <EnumPropertyField
+            multiselect={false}
+            updateIds={!existing}/>;
     } else if (selectedWidgetId === "multi_select" ||
         selectedWidgetId === "multi_number_select") {
-        childComponent = <EnumPropertyField multiselect={true} updateIds={!existing}/>;
+        childComponent = <EnumPropertyField
+            multiselect={true}
+            updateIds={!existing}/>;
     } else {
         childComponent = <Box>
             {values?.title}
@@ -351,13 +371,11 @@ function PropertyEditView({
 
     const Icon = selectedWidget?.icon;
 
-    const attemptedSubmit = Boolean(submitCount);
-
     const title = "title";
-    const titleError = attemptedSubmit && getIn(errors, title);
+    const titleError = showErrors && getIn(errors, title);
 
     const id = "id";
-    const idError = attemptedSubmit && getIn(errors, id);
+    const idError = showErrors && getIn(errors, id);
 
     useEffect(() => {
         const idTouched = getIn(touched, id);
@@ -371,27 +389,27 @@ function PropertyEditView({
         <Grid container spacing={2} direction={"column"}>
 
             <Grid item>
-                <FastField name={title}
-                           as={TextField}
-                           validate={validateTitle}
-                           label={"Title"}
-                           required
-                           fullWidth
-                           helperText={titleError}
-                           error={Boolean(titleError)}/>
+                <Field name={title}
+                       as={TextField}
+                       validate={validateTitle}
+                       label={"Title"}
+                       required
+                       fullWidth
+                       helperText={titleError}
+                       error={Boolean(titleError)}/>
             </Grid>
 
             <Grid item>
-                <FastField name={id}
-                           as={TextField}
-                           label={"Id"}
-                           validate={validateId}
-                           disabled={existing}
-                           required
-                           fullWidth
-                           helperText={idError}
-                           size="small"
-                           error={Boolean(idError)}/>
+                <Field name={id}
+                       as={TextField}
+                       label={"Id"}
+                       validate={validateId}
+                       disabled={existing}
+                       required
+                       fullWidth
+                       helperText={idError}
+                       size="small"
+                       error={Boolean(idError)}/>
 
             </Grid>
 

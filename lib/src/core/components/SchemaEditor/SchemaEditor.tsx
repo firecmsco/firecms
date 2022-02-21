@@ -12,8 +12,9 @@ import {
 } from "../Tree/components/TreeItem/TreeItem-types";
 
 import { Formik, FormikProps, getIn, useFormikContext } from "formik";
+import hash from "object-hash";
+import equal from "react-fast-compare";
 
-import equal from "react-fast-compare"
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import {
     Box,
@@ -54,7 +55,11 @@ import { ErrorView } from "../ErrorView";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 import { toSnakeCase } from "../../util/strings";
-import { getValueInPath } from "../../util/objects";
+import {
+    getValueInPath,
+    isEmptyObject,
+    removeUndefined
+} from "../../util/objects";
 import { CustomDialogActions } from "../CustomDialogActions";
 import { SchemaDetailsDialog } from "./SchemaDetailsView";
 
@@ -86,6 +91,12 @@ export function SchemaEditor<M>({
     const [schema, setSchema] = React.useState<EntitySchema | undefined>();
     const [error, setError] = React.useState<Error | undefined>();
 
+    const onSaveAttemptWithError = useCallback(() =>
+        snackbarContext.open({
+            type: "error",
+            message: "Fix the errors before saving the schema"
+        }), [snackbarContext]);
+
     useEffect(() => {
         try {
             if (schemaRegistry.initialised) {
@@ -101,15 +112,7 @@ export function SchemaEditor<M>({
         }
     }, [schema, schemaRegistry]);
 
-    if (error) {
-        return <ErrorView error={`Error fetching schema ${schemaId}`}/>;
-    }
-
-    if (!schemaRegistry.initialised || !(isNewSchema || schema)) {
-        return <CircularProgressCenter/>;
-    }
-
-    const saveSchema = (schema: EntitySchema<M>): Promise<boolean> => {
+    const saveSchema = useCallback((schema: EntitySchema<M>): Promise<boolean> => {
         const newSchema = prepareSchemaForPersistence(schema);
         return configurationPersistence.saveSchema(newSchema)
             .then(() => {
@@ -132,7 +135,16 @@ export function SchemaEditor<M>({
                 });
                 return false;
             });
-    };
+    }, [configurationPersistence, handleClose, snackbarContext]);
+
+    if (error) {
+        return <ErrorView error={`Error fetching schema ${schemaId}`}/>;
+
+    }
+    if (!schemaRegistry.initialised || !(isNewSchema || schema)) {
+        return <CircularProgressCenter/>;
+
+    }
 
     return (
         <Formik
@@ -142,16 +154,20 @@ export function SchemaEditor<M>({
                 properties: {}
             } as EntitySchema}
             validationSchema={YupSchema}
+            validate={() => console.log("validate")}
             onSubmit={(newSchema: EntitySchema, formikHelpers) => {
-                return saveSchema(newSchema).then(() => formikHelpers.resetForm({ values: newSchema }));
+                return saveSchema(newSchema).then(() => {
+                    formikHelpers.resetForm({ values: newSchema });
+                    // setShowErrors(false);
+                });
             }}
         >
             {(formikProps) => {
-                console.log("formikProps", formikProps);
                 return (
                     <SchemaEditorForm {...formikProps}
                                       updateDirtyStatus={updateDirtyStatus}
                                       isNewSchema={isNewSchema}
+                                      onSaveAttemptWithError={onSaveAttemptWithError}
                                       onCancel={handleClose ? () => handleClose(undefined) : undefined}/>
                 );
             }}
@@ -161,26 +177,37 @@ export function SchemaEditor<M>({
     );
 }
 
+function idToPropertiesPath(id: string): string {
+    return "properties." + id.replace(".", ".properties.");
+}
+
 function SchemaEditorForm<M>({
                                  values,
-                                 setFieldValue,
-                                 handleChange,
-                                 touched,
                                  errors,
+                                 setFieldValue,
+                                 setFieldError,
+                                 setFieldTouched,
+                                 touched,
                                  dirty,
                                  isSubmitting,
                                  isNewSchema,
                                  handleSubmit,
                                  updateDirtyStatus,
-                                 onCancel
+                                 onCancel,
+                                 onSaveAttemptWithError
                              }: FormikProps<EntitySchema<M>> & {
     isNewSchema: boolean,
     updateDirtyStatus?: (dirty: boolean) => void;
+    onSaveAttemptWithError?: () => void;
     onCancel?: () => void;
 }) {
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
+    const asDialog = !largeLayout;
+
+    const cleanedErrors = removeUndefined(errors);
+    const hasError = !isEmptyObject(cleanedErrors);
 
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
     const selectedProperty = selectedPropertyId ? getValueInPath(values.properties, selectedPropertyId.replace(".", ".properties.")) : undefined;
@@ -188,6 +215,8 @@ function SchemaEditorForm<M>({
 
     const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
     const [schemaDetailsDialogOpen, setSchemaDetailsDialogOpen] = useState<boolean>(false);
+
+    const [showErrors, setShowErrors] = useState(false);
 
     useEffect(() => {
         if (updateDirtyStatus)
@@ -213,15 +242,20 @@ function SchemaEditorForm<M>({
                                         snapshot
                                     }: RenderItemParams) => {
         const propertyOrBuilder = item.data.property as PropertyOrBuilder;
+        const propertyKey = item.id as string;
+        const propertyPath = idToPropertiesPath(propertyKey);
+        const hasError = getIn(cleanedErrors, propertyPath);
+        // console.log("renderItem", propertyKey, propertyPath, cleanedErrors, hasError);
         return (
             <SchemaEntry
-                name={item.id as string}
+                propertyKey={propertyKey}
                 propertyOrBuilder={propertyOrBuilder}
                 provided={provided}
-                onClick={() => onPropertyClick(propertyOrBuilder, item.id as string)}
+                hasError={hasError}
+                onClick={() => onPropertyClick(propertyOrBuilder, propertyKey)}
                 selected={snapshot.isDragging || selectedPropertyId === item.id}/>
         )
-    }, [selectedPropertyId]);
+    }, [selectedPropertyId, cleanedErrors]);
 
     const tree = useMemo(() => {
         const sortedProperties = sortProperties(values.properties, values.propertiesOrder);
@@ -231,19 +265,33 @@ function SchemaEditorForm<M>({
     const doPropertyMove = useCallback((source: TreeSourcePosition, destination: TreeDestinationPosition) => {
         const newTree = moveItemOnTree(tree, source, destination);
         const [properties, propertiesOrder] = treeToProperties<M>(newTree);
-
-        setFieldValue("propertiesOrder", propertiesOrder);
-        setFieldValue("properties", properties);
-    }, [tree]);
+        setFieldValue("propertiesOrder", propertiesOrder, false);
+        setFieldValue("properties", properties, false);
+    }, [setFieldValue, tree]);
 
     const onPropertyCreated = useCallback((id: string, property: Property) => {
         setFieldValue("properties", {
             ...(values.properties ?? {}),
             [id]: property
-        });
-        setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? []), id]);
+        }, false);
+        setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? []), id], false);
         setNewPropertyDialogOpen(false);
     }, [values.properties, values.propertiesOrder]);
+
+    const onPropertyChanged = useCallback((id, property) => {
+        const propertyPath = id ? idToPropertiesPath(id) : undefined;
+        if (propertyPath) {
+            setFieldValue(propertyPath, property, false);
+            setFieldTouched(propertyPath, true, false);
+        }
+    }, [setFieldTouched, setFieldValue]);
+
+    const onError = useCallback((id: string, error: boolean) => {
+        const propertyPath = id ? idToPropertiesPath(id) : undefined;
+        if (propertyPath) {
+            setFieldError(propertyPath, error ? "Property error" : undefined);
+        }
+    }, [setFieldError]);
 
     const onDragEnd = (
         source: TreeSourcePosition,
@@ -266,29 +314,37 @@ function SchemaEditorForm<M>({
 
     };
 
-    const asDialog = !largeLayout;
-
     const closePropertyDialog = () => {
         setSelectedPropertyId(undefined);
     };
 
-    const propertyEditForm = <PropertyForm
-        asDialog={asDialog}
-        open={Boolean(selectedPropertyId)}
-        key={`edit_view_${selectedPropertyId}`}
-        propertyId={selectedPropertyId}
-        property={selectedProperty}
-        onPropertyChanged={(id, property) => {
-            console.log("onPropertyChanged")
-            const propertyPath = selectedPropertyId ? "properties." + selectedPropertyId.replace(".", ".properties.") : undefined;
-            if (propertyPath)
-                setFieldValue(propertyPath, property);
-        }}
-        onOkClicked={asDialog
-            ? closePropertyDialog
-            : undefined
-        }/>;
+    const propertyEditForm = selectedPropertyId &&
+        selectedProperty &&
+        typeof selectedProperty === "object" &&
+        <PropertyForm
+            asDialog={asDialog}
+            open={Boolean(selectedPropertyId)}
+            key={`edit_view_${selectedPropertyId}`}
+            propertyId={selectedPropertyId}
+            property={selectedProperty}
+            onPropertyChanged={onPropertyChanged}
+            onError={onError}
+            showErrors={showErrors}
+            onOkClicked={asDialog
+                ? closePropertyDialog
+                : undefined
+            }/>;
 
+    const onSaveClicked = useCallback(() => {
+        setShowErrors(hasError);
+        if (hasError && onSaveAttemptWithError) {
+            onSaveAttemptWithError();
+        } else {
+            return handleSubmit();
+        }
+    }, [hasError]);
+
+    console.log("eee", hasError, cleanedErrors, dirty);
     return (
         <>
             <Box sx={{
@@ -330,9 +386,9 @@ function SchemaEditorForm<M>({
                         <Button
                             color="primary"
                             variant={"outlined"}
+                            size={"large"}
                             onClick={() => setNewPropertyDialogOpen(true)}
-                            startIcon={
-                                <AddIcon/>}
+                            startIcon={<AddIcon/>}
                         >
                             Add property
                         </Button>
@@ -343,7 +399,7 @@ function SchemaEditorForm<M>({
                             <Grid item xs={12}
                                   lg={5}>
                                 <Tree
-                                    key={`tree_${selectedPropertyId}`}
+                                    key={`tree_${selectedPropertyId}_${hash(errors)}`}
                                     tree={tree}
                                     offsetPerLevel={40}
                                     renderItem={renderItem}
@@ -368,9 +424,7 @@ function SchemaEditorForm<M>({
                                         top: theme.spacing(2),
                                         p: 2
                                     })}>
-                                        {selectedPropertyId &&
-                                            typeof selectedProperty === "object" &&
-                                            propertyEditForm}
+                                        {propertyEditForm}
 
                                         {!selectedProperty &&
                                             <Box>
@@ -382,7 +436,7 @@ function SchemaEditorForm<M>({
                                 </Box>
                             </Grid>}
 
-                            {asDialog && typeof selectedProperty === "object" && propertyEditForm}
+                            {asDialog && propertyEditForm}
 
                         </Grid>
                     </Box>
@@ -410,7 +464,7 @@ function SchemaEditorForm<M>({
                     color="primary"
                     type="submit"
                     disabled={isSubmitting || !dirty}
-                    onClick={() => handleSubmit()}
+                    onClick={onSaveClicked}
                 >
                     {isNewSchema ? "Create schema" : "Save schema"}
                 </Button>
@@ -429,6 +483,7 @@ function SchemaEditorForm<M>({
                                  handleOk={() => setSchemaDetailsDialogOpen(false)}/>
 
             <PropertyForm asDialog={true}
+                          showErrors={showErrors}
                           open={newPropertyDialogOpen}
                           onCancel={() => setNewPropertyDialogOpen(false)}
                           onPropertyChanged={onPropertyCreated}/>
@@ -463,7 +518,9 @@ function PendingMoveDialog({
             <Button
                 onClick={onCancel}
                 autoFocus>Cancel</Button>
-            <Button onClick={onAccept}>
+            <Button
+                variant="contained"
+                onClick={onAccept}>
                 Proceed
             </Button>
         </CustomDialogActions>
@@ -471,16 +528,18 @@ function PendingMoveDialog({
 }
 
 export function SchemaEntry({
-                                name,
+                                propertyKey,
                                 propertyOrBuilder,
                                 provided,
                                 selected,
+                                hasError,
                                 onClick
                             }: {
-    name: string;
+    propertyKey: string;
     propertyOrBuilder: PropertyOrBuilder;
     provided: TreeDraggableProvided;
     selected: boolean;
+    hasError: boolean;
     onClick: () => void;
 }) {
 
@@ -490,7 +549,7 @@ export function SchemaEntry({
             display: "flex",
             flexDirection: "row",
             width: "100%",
-            py: 0.5,
+            pb: 1,
             cursor: "pointer"
         }}
              onClick={onClick}
@@ -522,13 +581,15 @@ export function SchemaEntry({
                            position: "relative",
                            flexGrow: 1,
                            p: 2,
-                           border: selected ? `1px solid ${theme.palette.primary.light}` : undefined
+                           border: hasError
+                               ? `1px solid ${theme.palette.error.light}`
+                               : (selected ? `1px solid ${theme.palette.primary.light}` : undefined)
                        })}
                        elevation={0}>
 
                     {typeof propertyOrBuilder === "object"
                         ? <PropertyPreview property={propertyOrBuilder}/>
-                        : <PropertyBuilderPreview name={name}/>}
+                        : <PropertyBuilderPreview name={propertyKey}/>}
 
                     <IconButton {...provided.dragHandleProps}
                                 size="small"
@@ -583,7 +644,7 @@ function PropertyPreview({
             <Typography variant="subtitle1"
                         component="span"
                         sx={{ flexGrow: 1, pr: 2 }}>
-                {property.title}
+                {property.title ? property.title : "\u00a0"}
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "row" }}>
                 <Typography sx={{ flexGrow: 1, pr: 2 }}

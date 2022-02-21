@@ -23,7 +23,7 @@ export function SchemaEditorDialog({
             open={open}
             maxWidth={"lg"}
             fullWidth
-            onClose={dirty ? () => handleClose(undefined) : undefined}
+            onClose={!dirty ? () => handleClose(undefined) : undefined}
             sx={{
                 height: "100vh"
             }}

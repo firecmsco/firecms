@@ -1,11 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 
-import { FastField, Formik, getIn, useFormikContext } from "formik";
-import * as Yup from "yup";
+import { FastField, Field, Formik, getIn, useFormikContext } from "formik";
 import { Box, Button, Dialog, DialogContent, IconButton } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
-import { useDebounce } from "../../internal/useDebounce";
 import DebouncedTextField from "../../../form/components/DebouncedTextField";
 import { EnumValueConfig, EnumValues } from "../../../models";
 import { ArrayContainer } from "../../../form";
@@ -14,60 +12,39 @@ import { CustomDialogActions } from "../CustomDialogActions";
 export function EnumForm({
                              enumValues,
                              onValuesChanged,
+                             onError,
                              updateIds
                          }: {
     enumValues: EnumValueConfig[];
     onValuesChanged?: (enumValues: EnumValueConfig[]) => void;
+    onError?: (error: boolean) => void;
     updateIds: boolean;
 }) {
 
-    const [lastInternalIdAdded, setLastInternalIdAdded] = React.useState<number | undefined>();
-    const schema = Yup.object().shape({
-        enumValues: Yup.array()
-            .of(
-                Yup.object().shape({
-                    label: Yup.string().required("Required"),
-                    id: Yup.string().required("Required")
-                })
-            )
-            .required("Required")
-            .min(1, "Must have at least one entry")
-    });
-
     return (
         <Formik initialValues={{ enumValues }}
-                validationSchema={schema}
+                enableReinitialize={true}
+                validateOnMount={true}
+                validate={() => console.log("enum validate")}
                 onSubmit={(data: { enumValues: EnumValueConfig[] }, formikHelpers) => {
                 }}
-                render={({ values }) => {
-
+                render={({ values, errors }) => {
                     // eslint-disable-next-line react-hooks/rules-of-hooks
-                    const doUpdate = useCallback(() => {
+                    useEffect(() => {
                         if (onValuesChanged) {
                             onValuesChanged(values.enumValues);
                         }
                     }, [values.enumValues]);
-// eslint-disable-next-line react-hooks/rules-of-hooks
-                    useDebounce(values.enumValues, doUpdate, 100);
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    useEffect(() => {
+                        if (onError)
+                            onError(Boolean(errors?.enumValues ?? false));
+                    }, [errors]);
 
-                    const buildEntry = (index: number, internalId: number) => {
-
-                        return <EnumEntry index={index}
-                                          autoFocus={lastInternalIdAdded === internalId}
-                                          updateId={updateIds}
-                                          key={`${internalId}`}/>;
-                    };
-
-                    return (
-                        <ArrayContainer
-                            value={values.enumValues}
-                            name={"enumValues"}
-                            buildEntry={buildEntry}
-                            disabled={false}
-                            onInternalIdAdded={setLastInternalIdAdded}
-                            small={true}
-                            includeAddButton={true}/>
-                    );
+                    return <EnumFormFields enumValuesPath={"enumValues"}
+                                           values={values}
+                                           errors={errors}
+                                           shouldUpdateId={updateIds}/>
                 }}
         />
 
@@ -75,11 +52,51 @@ export function EnumForm({
 
 }
 
+export function EnumFormFields({
+                                   values,
+                                   errors,
+                                   enumValuesPath,
+                                   shouldUpdateId
+                               }: {
+    values: any,
+    errors: any,
+    enumValuesPath: string,
+    shouldUpdateId: boolean,
+}) {
+
+    const [lastInternalIdAdded, setLastInternalIdAdded] = React.useState<number | undefined>();
+
+    const buildEntry = useCallback((index: number, internalId: number) => {
+        return <EnumEntry index={index}
+                          enumValuesPath={enumValuesPath}
+                          autoFocus={lastInternalIdAdded === internalId}
+                          shouldUpdateId={shouldUpdateId}
+                          key={`${internalId}`}/>;
+    }, [enumValuesPath, lastInternalIdAdded, shouldUpdateId]);
+
+    return (
+        <ArrayContainer
+            value={values.enumValues}
+            name={"enumValues"}
+            buildEntry={buildEntry}
+            disabled={false}
+            onInternalIdAdded={setLastInternalIdAdded}
+            small={true}
+            includeAddButton={true}/>
+    );
+}
+
 function EnumEntry({
                        index,
-                       updateId,
+                       shouldUpdateId: updateId,
+                       enumValuesPath,
                        autoFocus
-                   }: { index: number, updateId: boolean, autoFocus: boolean }) {
+                   }: {
+    index: number,
+    enumValuesPath: string,
+    shouldUpdateId: boolean,
+    autoFocus: boolean
+}) {
 
     const {
         values,
@@ -89,21 +106,21 @@ function EnumEntry({
         touched
     } = useFormikContext<EnumValues>();
 
-    const shouldUpdateIdRef = React.useRef(!getIn(values, `enumValues[${index}].id`));
+    const shouldUpdateIdRef = React.useRef(!getIn(values, `${enumValuesPath}[${index}].id`));
     const shouldUpdateId = updateId || shouldUpdateIdRef.current;
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
-    const idValue = getIn(values, `enumValues[${index}].id`);
-    const labelValue = getIn(values, `enumValues[${index}].label`);
+    const idValue = getIn(values, `${enumValuesPath}[${index}].id`);
+    const labelValue = getIn(values, `${enumValuesPath}[${index}].label`);
 
-    const labelError = getIn(errors, `enumValues[${index}].label`);
+    const labelError = getIn(errors, `${enumValuesPath}[${index}].label`);
 
     const currentLabelRef = React.useRef(labelValue);
 
     React.useEffect(() => {
         if (currentLabelRef.current === idValue && shouldUpdateId) {
-            setFieldValue(`enumValues[${index}].id`, labelValue);
+            setFieldValue(`${enumValuesPath}[${index}].id`, labelValue);
         }
         currentLabelRef.current = labelValue;
     }, [labelValue]);
@@ -111,15 +128,15 @@ function EnumEntry({
     return (
         <Box display={"flex"} width={"100%"} alignItems={"center"}>
             <Box width={"100%"} mx={1}>
-                <FastField name={`enumValues[${index}].label`}
-                           as={DebouncedTextField}
-                           required
-                           fullWidth
-                           helperText={labelError}
-                           size="small"
-                           autoFocus={autoFocus}
-                           autoComplete="off"
-                           error={Boolean(labelError)}/>
+                <Field name={`${enumValuesPath}[${index}].label`}
+                       as={DebouncedTextField}
+                       required
+                       fullWidth
+                       size="small"
+                       validate={validateLabel}
+                       autoFocus={autoFocus}
+                       autoComplete="off"
+                       error={Boolean(labelError)}/>
             </Box>
             <Box>
                 <IconButton
@@ -131,6 +148,7 @@ function EnumEntry({
             </Box>
             <EnumEntryDialog index={index}
                              open={dialogOpen}
+                             enumValuesPath={enumValuesPath}
                              onClose={() => setDialogOpen(false)}/>
         </Box>);
 }
@@ -138,10 +156,12 @@ function EnumEntry({
 function EnumEntryDialog({
                              index,
                              open,
-                             onClose
+                             onClose,
+                             enumValuesPath
                          }: {
     index: number;
     open: boolean;
+    enumValuesPath: string;
     onClose: () => void;
 }) {
 
@@ -153,7 +173,7 @@ function EnumEntryDialog({
         touched
     } = useFormikContext<EnumValues>();
 
-    const idError = getIn(errors, `enumValues[${index}].id`);
+    const idError = getIn(errors, `${enumValuesPath}[${index}].id`);
     return <Dialog
         maxWidth="md"
         aria-labelledby="enum-edit-dialog"
@@ -162,10 +182,11 @@ function EnumEntryDialog({
     >
 
         <DialogContent>
-            <FastField name={`enumValues[${index}]id`}
+            <FastField name={`${enumValuesPath}[${index}]id`}
                        as={DebouncedTextField}
                        required
                        fullWidth
+                       validate={validateId}
                        label={"ID"}
                        helperText={idError ?? "Value saved in the data source"}
                        size="small"
@@ -176,6 +197,7 @@ function EnumEntryDialog({
         <CustomDialogActions>
             <Button
                 autoFocus
+                variant="contained"
                 onClick={onClose}
                 color="primary">
                 Ok
@@ -183,4 +205,21 @@ function EnumEntryDialog({
         </CustomDialogActions>
 
     </Dialog>
+}
+
+
+function validateLabel(value: string) {
+    let error;
+    if (!value) {
+        error = "You must specify a label";
+    }
+    return error;
+}
+
+function validateId(value: string) {
+    let error;
+    if (!value) {
+        error = "You must specify an ID";
+    }
+    return error;
 }

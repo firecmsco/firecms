@@ -3,9 +3,12 @@ import { FieldArray } from "formik";
 
 import { Box, Button, IconButton } from "@mui/material";
 
+import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
+
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
 import { getHashValue } from "../../core/util/objects";
 
 interface ArrayContainerProps<T> {
@@ -179,6 +182,7 @@ export function ArrayContainer<T>({
                                     <Button variant="outlined"
                                             color="primary"
                                             disabled={disabled}
+                                            startIcon={<AddIcon/>}
                                             onClick={insertInEnd}>
                                         Add
                                     </Button>

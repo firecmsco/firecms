@@ -72,8 +72,21 @@ export function getHashValue<T>(v: T) {
 export function removeUndefined(obj: object) {
     const res: object = {};
     Object.keys(obj).forEach((key) => {
-        if (obj[key] === Object(obj[key])) res[key] = removeUndefined(obj[key]);
-        else if (obj[key] !== undefined) res[key] = obj[key];
+        if (!isEmptyObject(obj)) {
+            if (obj[key] === Object(obj[key])) {
+                const childRes = removeUndefined(obj[key]);
+                if (!isEmptyObject(childRes))
+                    res[key] = childRes;
+            } else if (obj[key] !== undefined) {
+                res[key] = obj[key];
+            }
+        }
     });
     return res;
+}
+
+export function isEmptyObject(obj: object) {
+    return obj && // 👈 null and undefined check
+        Object.getPrototypeOf(obj) === Object.prototype &&
+        Object.keys(obj).length === 0
 }

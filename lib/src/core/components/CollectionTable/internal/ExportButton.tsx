@@ -201,6 +201,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
                 </Button>
 
                 <Button color="primary"
+                        variant="contained"
                         disabled={dataLoading}
                         onClick={onOkClicked}>
                     Download
