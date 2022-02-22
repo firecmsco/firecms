@@ -28,6 +28,7 @@ export function resolveFilename<M>(input: string | ((context: UploadedFileContex
         let res = input.replace("{entityId}", entityId)
             .replace("{propertyId}", propertyId)
             .replace("{file}", file.name)
+            .replace("{file.type}", file.type)
             .replace("{path}", path);
         if (ext) {
             res = res.replace("{file.ext}", ext);

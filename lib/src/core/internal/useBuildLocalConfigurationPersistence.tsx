@@ -1,11 +1,6 @@
 import {
-    EntityValues,
     LocalEntityCollection,
     LocalEntitySchema,
-    ResolvedArrayProperty,
-    ResolvedStringProperty,
-    StorageConfig,
-    UploadedFileContext,
     UserConfigurationPersistence
 } from "../../models";
 
@@ -21,7 +16,7 @@ function stripCollectionPath(path: string): string {
         .reduce((a, b) => `${a}/${b}`);
 }
 
-export function useBuildStorageConfigurationPersistence(): UserConfigurationPersistence {
+export function useBuildLocalConfigurationPersistence(): UserConfigurationPersistence {
 
     function saveStorageCollectionConfig<M>(path: string, data: LocalEntityCollection<M>) {
         const storageKey = `collection_config_${stripCollectionPath(path)}`;

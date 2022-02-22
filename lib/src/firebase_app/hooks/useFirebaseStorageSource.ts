@@ -2,11 +2,17 @@ import { FirebaseApp } from "firebase/app";
 import {
     FirebaseStorage,
     getDownloadURL,
+    getMetadata,
     getStorage,
     ref,
     uploadBytes
 } from "firebase/storage";
-import { StorageSource, UploadFileProps } from "../../models";
+import {
+    DownloadConfig,
+    DownloadMetadata,
+    StorageSource,
+    UploadFileProps
+} from "../../models";
 import { useEffect, useState } from "react";
 
 /**
@@ -29,7 +35,7 @@ export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceP
         setStorage(getStorage(firebaseApp));
     }, [firebaseApp]);
 
-    const urlsCache: any = {};
+    const urlsCache: Record<string, DownloadConfig> = {};
 
     return {
         uploadFile({ file, fileName, path, metadata }: UploadFileProps)
@@ -42,13 +48,17 @@ export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceP
             }));
         },
 
-        getDownloadURL(storagePath: string): Promise<string> {
+        async getDownloadURL(storagePath: string): Promise<DownloadConfig> {
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             if (urlsCache[storagePath])
                 return urlsCache[storagePath];
-            const downloadURL = getDownloadURL(ref(storage, storagePath));
-            urlsCache[storagePath] = downloadURL;
-            return downloadURL;
+            const fileRef = ref(storage, storagePath);
+            const [url, metadata] = await Promise.all([getDownloadURL(fileRef), getMetadata(fileRef)]);
+            const result:DownloadConfig = {
+                url, metadata: metadata as DownloadMetadata
+            }
+            urlsCache[storagePath] = result;
+            return result;
         }
     };
 }

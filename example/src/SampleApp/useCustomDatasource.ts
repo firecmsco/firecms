@@ -43,6 +43,9 @@ export function useCustomDatasource({ firebaseApp, schemaRegistry }: CustomDataS
         },
         checkUniqueField(path: string, name: string, value: any, property: ResolvedProperty, entityId?: string): Promise<boolean>{
             return firestoreDataSource.checkUniqueField(path, name, value, property, entityId);
+        },
+        generateEntityId(path:string){
+            return firestoreDataSource.generateEntityId(path,);
         }
     }
 }

@@ -46,7 +46,7 @@ export function ArrayOfReferencesPreview({
                 <div className={classes.arrayItem}
                      key={`preview_array_ref_${propertyKey}_${index}`}>
                     <ReferencePreview
-                        name={`${propertyKey}[${index}]`}
+                        propertyKey={`${propertyKey}[${index}]`}
                         size={childSize}
                         value={v}
                         property={property.of as ResolvedReferenceProperty}

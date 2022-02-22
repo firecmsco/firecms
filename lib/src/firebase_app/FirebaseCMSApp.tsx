@@ -25,8 +25,8 @@ import {
     useBuildFirestoreConfigurationPersistence
 } from "./hooks/useBuildFirestoreConfigurationPersistence";
 import {
-    useBuildStorageConfigurationPersistence
-} from "../core/internal/useBuildStorageConfigurationPersistence";
+    useBuildLocalConfigurationPersistence
+} from "../core/internal/useBuildLocalConfigurationPersistence";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -86,7 +86,7 @@ export function FirebaseCMSApp({
     });
 
     const configPersistence = useBuildFirestoreConfigurationPersistence({ firebaseApp: firebaseApp });
-    const userConfigPersistence = useBuildStorageConfigurationPersistence();
+    const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
     const schemaRegistry = useBuildSchemaRegistry({
         schemas,

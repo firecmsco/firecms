@@ -29,7 +29,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams) {
     useEffect(() => {
         if (modifiedValues?.header_image) {
             storage.getDownloadURL(modifiedValues.header_image)
-                .then((res) => setHeaderUrl(res));
+                .then((res) => setHeaderUrl(res.url));
         }
     }, [storage, modifiedValues?.header_image]);
 
@@ -110,7 +110,7 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
     useEffect(() => {
         if (storagePath) {
             storage.getDownloadURL(storagePath)
-                .then((res) => setUrl(res));
+                .then((res) => setUrl(res.url));
         }
     }, [storage, storagePath]);
 

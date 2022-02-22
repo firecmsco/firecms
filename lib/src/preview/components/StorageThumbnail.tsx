@@ -41,10 +41,10 @@ export function StorageThumbnailInternal({
             URL_CACHE[storagePathOrDownloadUrl] = storagePathOrDownloadUrl;
         } else if (storagePathOrDownloadUrl)
             storage.getDownloadURL(storagePathOrDownloadUrl)
-                .then(function (downloadURL) {
+                .then(function (downloadConfig) {
                     if (!unmounted) {
-                        setUrl(downloadURL);
-                        URL_CACHE[storagePathOrDownloadUrl] = downloadURL;
+                        setUrl(downloadConfig.url);
+                        URL_CACHE[storagePathOrDownloadUrl] = downloadConfig.url;
                     }
                 });
         return () => {

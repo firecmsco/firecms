@@ -96,7 +96,7 @@ export function TableReferenceField(props: {
 
     function buildSingleReferenceField() {
         if (internalValue instanceof EntityReference)
-            return <ReferencePreview name={name}
+            return <ReferencePreview propertyKey={name}
                                      onClick={disabled ? undefined : handleOpen}
                                      value={internalValue as EntityReference}
                                      property={usedProperty}
@@ -114,7 +114,7 @@ export function TableReferenceField(props: {
                     <Box sx={{ m: 0.5 }}
                          key={`preview_array_ref_${name}_${index}`}>
                         <ReferencePreview
-                            name={`${name}[${index}]`}
+                            propertyKey={`${name}[${index}]`}
                             onClick={disabled ? undefined : handleOpen}
                             size={"tiny"}
                             onHover={onHover}

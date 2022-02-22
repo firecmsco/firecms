@@ -566,7 +566,7 @@ export function StorageUpload({
 
         let uploadPathOrDownloadUrl = uploadedPath;
         if (storage.storeUrl) {
-            uploadPathOrDownloadUrl = await storageSource.getDownloadURL(uploadedPath);
+            uploadPathOrDownloadUrl = (await storageSource.getDownloadURL(uploadedPath)).url;
         }
         if (storage.postProcess) {
             uploadPathOrDownloadUrl = await storage.postProcess(uploadPathOrDownloadUrl);
