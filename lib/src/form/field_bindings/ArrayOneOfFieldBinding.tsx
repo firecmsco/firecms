@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     FormControl,
     FormHelperText,
@@ -9,11 +9,10 @@ import {
 } from "@mui/material";
 import { FastField, FieldProps as FormikFieldProps } from "formik";
 
-
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
-import { EnumValuesChip } from "../../preview/components/CustomChip";
+import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries } from "../../core/util/enums";
 import {
     EnumValueConfig,
@@ -21,7 +20,6 @@ import {
     FormContext,
     ResolvedProperty
 } from "../../models";
-
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -58,7 +56,7 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
 
     const [lastAddedId, setLastAddedId] = useState<number | undefined>();
 
-    const buildEntry = (index: number, internalId: number) => {
+    const buildEntry = useCallback((index: number, internalId: number) => {
         return <ArrayOneOfEntry
             key={`array_one_of_${index}`}
             name={`${propertyKey}[${index}]`}
@@ -69,7 +67,7 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
             properties={property.oneOf!.properties}
             autoFocus={internalId === lastAddedId}
             context={context}/>;
-    };
+    }, [context, lastAddedId, property.oneOf, propertyKey, value]);
 
     return (
 
@@ -166,11 +164,7 @@ function ArrayOneOfEntry({
 
     return (
         <Paper sx={(theme) => ({
-            elevation: 0,
-            padding: theme.spacing(2),
-            [theme.breakpoints.up("md")]: {
-                padding: theme.spacing(2)
-            }
+            padding: theme.spacing(1)
         })} elevation={0}>
 
             <FastField

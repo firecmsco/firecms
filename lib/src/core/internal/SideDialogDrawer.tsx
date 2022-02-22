@@ -1,17 +1,7 @@
 import React from "react";
-import { styled } from '@mui/material/styles';
 import clsx from "clsx";
 import { Backdrop, Modal, Paper, Theme } from "@mui/material";
 import { SlideFade } from "./SlideFadeTransition";
-
-const PREFIX = 'SideDialogDrawer';
-
-const classes = {
-    root: `${PREFIX}-root`,
-    paper: `${PREFIX}-paper`,
-    paperAnchorRight: `${PREFIX}-paperAnchorRight`,
-    modal: `${PREFIX}-modal`
-};
 
 export interface EntityDrawerProps {
 
@@ -66,17 +56,13 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, EntityDrawerPro
         onExitAnimation
     } = props;
 
-
-
     const drawer = (
         <Paper
             elevation={1}
             square
-            style={{
-                transition: "transform 1000ms cubic-bezier(0.33, 1, 0.68, 1)",
-                transform: `translateX(-${(offsetPosition) * 240}px)`
-            }}
             sx={{
+                transition: "transform 1000ms cubic-bezier(0.33, 1, 0.68, 1)",
+                transform: `translateX(-${(offsetPosition) * 240}px)`,
                 height: "100%",
                 WebkitOverflowScrolling: "touch", // Add iOS momentum scrolling.
                 position: "fixed",
@@ -106,7 +92,6 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, EntityDrawerPro
                 transitionDuration: defaultTransitionDuration
             }}
             BackdropComponent={Backdrop}
-            className={clsx(classes.root, classes.modal)}
             open={open}
             onClose={onClose}
             ref={ref}

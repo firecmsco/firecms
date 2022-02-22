@@ -42,7 +42,10 @@ buildProperty<string>({
 - `storageMeta`prop in string properties is now called `storage`
 - `name` in `FieldProps` which refers to a property key, is now called `propertyKey`
 - `name` in `PreviewComponent` which refers to a property key, is now called `propertyKey`
-- `name` in `CMSFormFieldProps` which refers to a property key, is now called `propertyKey`
+- `name` in `CMSFormFieldProps` which refers to a property key, is now
+  called `propertyKey`
+- Removed `mediaType` in the storage configuration of string properties. It is
+  not inferred automatically.
 
 
 ## [1.0.0-rc.2] - 2022-02-08

@@ -8,11 +8,10 @@ import {
     FormHelperText,
     InputLabel,
     Switch,
-    Theme,
     Typography
 } from "@mui/material";
 
-import { FieldProps, MediaType } from "../../models";
+import { FieldProps } from "../../models";
 import { PreviewComponent } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
@@ -43,11 +42,8 @@ export function TextFieldBinding<T extends string | number>({
                                                          shouldAlwaysRerender
                                                      }: TextFieldProps<T>) {
 
-    let mediaType: MediaType | undefined;
     let multiline: boolean | undefined;
     if (property.dataType === "string") {
-        const url = property.url;
-        mediaType = typeof url === "string" ? url : undefined;
         multiline = property.multiline;
     }
 
@@ -156,16 +152,16 @@ export function TextFieldBinding<T extends string | number>({
                 </Box>
 
             </FormControl>
-            {mediaType && internalValue &&
-            <ErrorBoundary>
-                <Box m={1}>
-                    <PreviewComponent propertyKey={propertyKey}
-                                      value={internalValue}
-                                      property={property}
-                                      size={"regular"}/>
-                </Box>
-            </ErrorBoundary>
-            }
+            {/*{mediaType && internalValue &&*/}
+            {/*<ErrorBoundary>*/}
+            {/*    <Box m={1}>*/}
+            {/*        <PreviewComponent propertyKey={propertyKey}*/}
+            {/*                          value={internalValue}*/}
+            {/*                          property={property}*/}
+            {/*                          size={"regular"}/>*/}
+            {/*    </Box>*/}
+            {/*</ErrorBoundary>*/}
+            {/*}*/}
         </>
     );
 

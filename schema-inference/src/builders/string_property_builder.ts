@@ -1,4 +1,4 @@
-import {MediaType, StringProperty} from "@camberi/firecms";
+import { FileType, StringProperty } from "@camberi/firecms";
 import {PropertyBuilderProps, ValuesCountEntry} from "../models";
 import {findCommonInitialStringInPath, unslugify} from "../util";
 
@@ -44,10 +44,10 @@ export function buildStringProperty({
             const fileType = probableFileType(valuesResult, totalDocsCount);
 
             if (probablyAURL) {
-                config.url = fileType ?? true;
+                config.url = true;
             } else if (fileType) {
                 config.storage = {
-                    mediaType: fileType as MediaType,
+                    acceptedFiles: [fileType as FileType],
                     storagePath: findCommonInitialStringInPath(valuesResult) ?? "/"
                 };
             }
@@ -60,7 +60,8 @@ export function buildStringProperty({
     return stringProperty;
 }
 
-function probableFileType(valuesCount: ValuesCountEntry, totalDocsCount: number): boolean | MediaType {
+// TODO: support returning multiple types
+function probableFileType(valuesCount: ValuesCountEntry, totalDocsCount: number): boolean | FileType {
     const probablyAnImage = valuesCount.values
         .filter((value) => typeof value === "string" &&
             IMAGE_EXTENSIONS.some((extension) => value.toString().endsWith(extension))).length > totalDocsCount / 3 * 2;
@@ -73,9 +74,9 @@ function probableFileType(valuesCount: ValuesCountEntry, totalDocsCount: number)
         .filter((value) => typeof value === "string" &&
             VIDEO_EXTENSIONS.some((extension) => value.toString().endsWith(extension))).length > totalDocsCount / 3 * 2;
 
-    const fileType: boolean | MediaType = probablyAnImage ? "image" :
-        probablyAudio ? "audio" :
-            probablyVideo ? "video" : false;
+    const fileType: boolean | FileType = probablyAnImage ? "image/*" :
+        probablyAudio ? "audio/*" :
+            probablyVideo ? "video/*" : false;
     return fileType;
 }
 

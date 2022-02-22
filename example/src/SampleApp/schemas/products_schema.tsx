@@ -55,7 +55,6 @@ export const productSchema = buildSchema<Product>({
             dataType: "string",
             title: "Image",
             storage: {
-                mediaType: "image",
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
                 metadata: {
@@ -131,7 +130,6 @@ export const productSchema = buildSchema<Product>({
             of: {
                 dataType: "string",
                 storage: {
-                    mediaType: "image",
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
                     metadata: {
@@ -248,7 +246,6 @@ export const localeSchema = buildSchema<Locale>({
             dataType: "string",
             validation: { required: false },
             storage: {
-                mediaType: "video",
                 storagePath: "videos",
                 acceptedFiles: ["video/*"],
                 fileName: (context) => {

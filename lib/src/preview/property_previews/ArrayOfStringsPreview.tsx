@@ -1,13 +1,13 @@
 import React from "react";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import { ResolvedStringProperty } from "../../models";
 import { PreviewComponentProps } from "../internal";
 
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
-import { StringPreview } from "./StringPreview";
+import { StringPropertyPreview } from "./StringPropertyPreview";
 import { Theme } from "@mui/material";
 
-const PREFIX = 'ArrayOfStringsPreview';
+const PREFIX = "ArrayOfStringsPreview";
 
 const classes = {
     array: `${PREFIX}-array`,
@@ -15,7 +15,7 @@ const classes = {
     arrayItem: `${PREFIX}-arrayItem`
 };
 
-const Root = styled('div')((
+const Root = styled("div")((
    { theme } : {
         theme: Theme
     }
@@ -35,8 +35,6 @@ const Root = styled('div')((
     }
 }));
 
-
-
 /**
  * @category Preview components
  */
@@ -46,8 +44,6 @@ export function ArrayOfStringsPreview({
                                           property,
                                           size
                                       }: PreviewComponentProps<string[]>) {
-
-
 
     if (!property.of || property.dataType !== "array" || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStringsPreview");
@@ -64,10 +60,10 @@ export function ArrayOfStringsPreview({
                 <div className={classes.arrayItem}
                      key={`preview_array_strings_${propertyKey}_${index}`}>
                     <ErrorBoundary>
-                        <StringPreview propertyKey={propertyKey}
-                                       property={stringProperty}
-                                       value={v}
-                                       size={size}/>
+                        <StringPropertyPreview propertyKey={propertyKey}
+                                               property={stringProperty}
+                                               value={v}
+                                               size={size}/>
                     </ErrorBoundary>
                 </div>
             )}

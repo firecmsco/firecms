@@ -461,7 +461,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 <Settings/>
             </IconButton>;
 
-        const editButton = schemaEditable && <IconButton
+        const schemaEditButton = schemaEditable && <IconButton
             onClick={() => setSchemaDialogOpen(true)}>
             <Settings color="primary"/>
         </IconButton>;
@@ -472,7 +472,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 {multipleDeleteButton}
                 {exportButton}
                 {collectionEditButton}
-                {editButton}
+                {schemaEditButton}
                 {addButton}
             </>
         );

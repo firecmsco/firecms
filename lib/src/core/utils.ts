@@ -156,16 +156,12 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
                                                                        properties,
                                                                        status,
                                                                        timestampNowValue,
-                                                                       referenceConverter,
-                                                                       geopointConverter
                                                                    }:
                                                                        {
                                                                            inputValues: Partial<EntityValues<M>>,
                                                                            properties: ResolvedProperties<M>,
                                                                            status: EntityStatus,
                                                                            timestampNowValue: any,
-                                                                           referenceConverter?: (value: EntityReference) => any,
-                                                                           geopointConverter?: (value: GeoPoint) => any
                                                                        }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
@@ -179,14 +175,6 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
                     return timestampNowValue;
                 } else {
                     return inputValue;
-                }
-            } else if (referenceConverter && property.dataType === "reference") {
-                if (inputValue instanceof EntityReference) {
-                    return referenceConverter(inputValue);
-                }
-            } else if (geopointConverter && property.dataType === "geopoint") {
-                if (inputValue instanceof GeoPoint) {
-                    return geopointConverter(inputValue);
                 }
             } else {
                 return inputValue;

@@ -42,7 +42,6 @@ export const productSchema: EntitySchema = {
             dataType: "string",
             title: "Image",
             storage: {
-                mediaType: "image",
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
                 metadata: {
@@ -71,9 +70,7 @@ export const productSchema: EntitySchema = {
                 clearOnDisabled: true,
                 disabledMessage: "You can only set the price on available items"
             },
-            config: {
                 // Preview: PriceTextPreview
-            },
             description: "Price with range validation"
         }),
     }

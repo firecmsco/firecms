@@ -1,7 +1,7 @@
 import { PreviewComponentProps, PreviewSize } from "../internal";
 import { styled } from '@mui/material/styles';
 import { ResolvedReferenceProperty } from "../../models";
-import { ReferencePreview } from "./ReferencePreview";
+import { ReferencePropertyPreview } from "./ReferencePropertyPreview";
 
 import { Theme } from "@mui/material";
 
@@ -45,7 +45,7 @@ export function ArrayOfReferencesPreview({
             value.map((v, index) =>
                 <div className={classes.arrayItem}
                      key={`preview_array_ref_${propertyKey}_${index}`}>
-                    <ReferencePreview
+                    <ReferencePropertyPreview
                         propertyKey={`${propertyKey}[${index}]`}
                         size={childSize}
                         value={v}

@@ -46,7 +46,6 @@ export function ImagePreview({ size, url }: ImagePreviewProps) {
             borderRadius: "4px"
         };
 
-
     return (
         <Box
             sx={{

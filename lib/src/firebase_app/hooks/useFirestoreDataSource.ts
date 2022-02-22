@@ -376,12 +376,10 @@ export function useFirestoreDataSource({
 
             const updatedFirestoreValues: EntityValues<M> = updateAutoValues(
                 {
-                    inputValues: values,
+                    inputValues: cmsToFirestoreModel(values, firestore),
                     properties,
                     status,
                     timestampNowValue: serverTimestamp(),
-                    referenceConverter: (value: EntityReference) => doc(firestore, value.path, value.id),
-                    geopointConverter: (value: GeoPoint) => new FirestoreGeoPoint(value.latitude, value.longitude)
                 });
 
             console.debug("Saving entity", path, entityId, updatedFirestoreValues);

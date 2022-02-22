@@ -37,12 +37,12 @@ export const usersSchema = buildSchema({
                 large: {
                     title: "Large",
                     dataType: "string",
-                    url: "image",
+                    url: true,
                 },
                 thumbnail: {
                     title: "Thumbnail",
                     dataType: "string",
-                    url: "image",
+                    url: true,
                 }
             },
             previewProperties: ["large"]

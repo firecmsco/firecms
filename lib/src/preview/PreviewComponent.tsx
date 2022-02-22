@@ -4,7 +4,6 @@ import {
     CMSType,
     EntityReference,
     ResolvedArrayProperty,
-    ResolvedBooleanProperty,
     ResolvedMapProperty,
     ResolvedNumberProperty,
     ResolvedReferenceProperty,
@@ -19,16 +18,16 @@ import {
     ArrayOfStorageComponentsPreview,
     ArrayOfStringsPreview,
     ArrayOneOfPreview,
-    ArrayPreview,
+    ArrayPropertyPreview,
     ArrayPropertyEnumPreview,
     BooleanPreview,
     EmptyValue,
-    MapPreview,
-    NumberPreview,
-    ReferencePreview,
+    MapPropertyPreview,
+    NumberPropertyPreview,
+    ReferencePropertyPreview,
     StorageThumbnail,
-    StringPreview,
-    TimestampPreview,
+    StringPropertyPreview,
+    TimestampPropertyPreview,
     UrlComponentPreview
 } from "./internal";
 import { ErrorView } from "../core/components";
@@ -67,19 +66,19 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
         const stringProperty = property as StringProperty;
         if (typeof value === "string") {
             if (stringProperty.url) {
-                content = <UrlComponentPreview {...fieldProps}
-                                               property={property as ResolvedStringProperty}
-                                               value={value}/>;
+                content =
+                    <UrlComponentPreview size={fieldProps.size} url={value}/>;
             } else if (stringProperty.storage) {
-                content = <StorageThumbnail {...fieldProps}
-                                            property={property as ResolvedStringProperty}
-                                            value={value}/>;
+                content = <StorageThumbnail
+                    storeUrl={property.storage?.storeUrl ?? false}
+                    size={fieldProps.size}
+                    storagePathOrDownloadUrl={value}/>;
             } else if (stringProperty.markdown) {
                 content = <Markdown source={value}/>;
             } else {
-                content = <StringPreview {...fieldProps}
-                                         property={property as ResolvedStringProperty}
-                                         value={value}/>;
+                content = <StringPropertyPreview {...fieldProps}
+                                                 property={property as ResolvedStringProperty}
+                                                 value={value}/>;
             }
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);
@@ -132,9 +131,9 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                             property={property as ResolvedArrayProperty}/>;
                     }
                 } else {
-                    content = <ArrayPreview {...fieldProps}
-                                            value={value}
-                                            property={property as ResolvedArrayProperty}/>;
+                    content = <ArrayPropertyPreview {...fieldProps}
+                                                    value={value}
+                                                    property={property as ResolvedArrayProperty}/>;
                 }
             } else if (arrayProperty.oneOf) {
                 content = <ArrayOneOfPreview {...fieldProps}
@@ -147,23 +146,23 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
     } else if (property.dataType === "map") {
         if (typeof value === "object") {
             content =
-                <MapPreview {...fieldProps}
-                            property={property as ResolvedMapProperty}/>;
+                <MapPropertyPreview {...fieldProps}
+                                    property={property as ResolvedMapProperty}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else if (property.dataType === "timestamp") {
         if (value instanceof Date) {
-            content = <TimestampPreview {...fieldProps}
-                                        value={value}
-                                        property={property as ResolvedTimestampProperty}/>;
+            content = <TimestampPropertyPreview {...fieldProps}
+                                                value={value}
+                                                property={property as ResolvedTimestampProperty}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else if (property.dataType === "reference") {
         if (typeof property.path === "string") {
             if (value instanceof EntityReference) {
-                content = <ReferencePreview
+                content = <ReferencePropertyPreview
                     {...fieldProps}
                     value={value as EntityReference}
                     property={property as ResolvedReferenceProperty}
@@ -177,17 +176,15 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
 
     } else if (property.dataType === "boolean") {
         if (typeof value === "boolean") {
-            content = <BooleanPreview {...fieldProps}
-                                      value={value}
-                                      property={property as ResolvedBooleanProperty}/>;
+            content = <BooleanPreview value={value}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else if (property.dataType === "number") {
         if (typeof value === "number") {
-            content = <NumberPreview {...fieldProps}
-                                     value={value}
-                                     property={property as ResolvedNumberProperty}/>;
+            content = <NumberPropertyPreview {...fieldProps}
+                                             value={value}
+                                             property={property as ResolvedNumberProperty}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);
         }
@@ -205,14 +202,3 @@ function buildWrongValueType(name: string | undefined, dataType: string, value: 
     );
 }
 
-
-// export const PreviewComponent = React.memo<PreviewComponentProps<any>>(PreviewComponentInternal, areEqual) as React.FunctionComponent<PreviewComponentProps<any>>;
-//
-// function areEqual(prevProps: PreviewComponentProps<any>, nextProps: PreviewComponentProps<any>) {
-//     return prevProps.name === nextProps.name
-//         && prevProps.size === nextProps.size
-//         && prevProps.height === nextProps.height
-//         && prevProps.width === nextProps.width
-//         && equal(prevProps.value, nextProps.value)
-//         ;
-// }

@@ -60,14 +60,6 @@ export type DataType =
     | "reference";
 
 /**
- * @category Entity properties
- */
-export type MediaType =
-    | "image"
-    | "video"
-    | "audio";
-
-/**
  * Interface including all common properties of a CMS property
  * @category Entity properties
  */
@@ -340,7 +332,7 @@ export interface StringProperty extends BaseProperty<string> {
      * If the value of this property is a URL, you can set this flag to true
      * to add a link, or one of the supported media types to render a preview
      */
-    url?: boolean | MediaType;
+    url?: boolean;
 
     /**
      * Does this field include an email
@@ -604,11 +596,6 @@ export interface ArrayPropertyValidationSchema extends PropertyValidationSchema 
 export interface StorageConfig {
 
     /**
-     * Media type of this reference, used for displaying the preview
-     */
-    mediaType?: MediaType;
-
-    /**
      * Absolute path in your bucket. You can specify it directly or use a callback
      */
     storagePath: string | ((context: UploadedFileContext) => string);
@@ -617,7 +604,7 @@ export interface StorageConfig {
      * File MIME types that can be uploaded to this reference. Don't specify for
      * all
      */
-    acceptedFiles?: StorageFileTypes[];
+    acceptedFiles?: FileType[];
 
     /**
      * Specific metadata set in your uploaded file.
@@ -697,12 +684,11 @@ export interface UploadedFileContext {
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
  * @category Entity properties
  */
-export type StorageFileTypes =
+export type FileType =
     "image/*"
     | "video/*"
     | "audio/*"
     | "application/*"
     | "text/*"
     | "font/*"
-    | "application/pdf"
     | string;

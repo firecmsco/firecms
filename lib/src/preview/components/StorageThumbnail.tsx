@@ -1,63 +1,76 @@
 import React, { useEffect } from "react";
 
-import { renderSkeletonImageThumbnail } from "./SkeletonComponent";
+import { renderSkeletonImageThumbnail } from "../property_previews/SkeletonComponent";
 import { UrlComponentPreview } from "./UrlComponentPreview";
-import { PreviewComponentProps } from "../internal";
+import { PreviewSize } from "../internal";
 import { useStorageSource } from "../../hooks";
+import { DownloadConfig, FileType } from "../../models";
+
+type StorageThumbnailProps = {
+    storagePathOrDownloadUrl: string;
+    storeUrl: boolean;
+    size: PreviewSize;
+};
 
 /**
  * @category Preview components
  */
-export const StorageThumbnail = React.memo<PreviewComponentProps<string>>(StorageThumbnailInternal, areEqual) as React.FunctionComponent<PreviewComponentProps<string>>;
+export const StorageThumbnail = React.memo<StorageThumbnailProps>(StorageThumbnailInternal, areEqual) as React.FunctionComponent<StorageThumbnailProps>;
 
-function areEqual(prevProps: PreviewComponentProps<string>, nextProps: PreviewComponentProps<string>) {
-    return prevProps.propertyKey === nextProps.propertyKey &&
-        prevProps.size === nextProps.size &&
-        prevProps.height === nextProps.height &&
-        prevProps.width === nextProps.width &&
-        prevProps.value === nextProps.value;
+function areEqual(prevProps: StorageThumbnailProps, nextProps: StorageThumbnailProps) {
+    return prevProps.size === nextProps.size &&
+        prevProps.storagePathOrDownloadUrl === nextProps.storagePathOrDownloadUrl &&
+        prevProps.storeUrl === nextProps.storeUrl;
 }
 
-const URL_CACHE: Record<string, string> = {};
+const URL_CACHE: Record<string, DownloadConfig> = {};
 
 export function StorageThumbnailInternal({
-                                             propertyKey,
-                                             value,
-                                             property,
+                                             storeUrl,
+                                             storagePathOrDownloadUrl,
                                              size
-                                         }: PreviewComponentProps<string>) {
+                                         }: StorageThumbnailProps) {
     const storage = useStorageSource();
 
-    const storagePathOrDownloadUrl = value;
 
-    const [url, setUrl] = React.useState<string>(URL_CACHE[storagePathOrDownloadUrl]);
+    const [downloadConfig, setDownloadConfig] = React.useState<DownloadConfig>(URL_CACHE[storagePathOrDownloadUrl]);
 
     useEffect(() => {
         if (!storagePathOrDownloadUrl)
             return;
         let unmounted = false;
-        if (property.storage?.storeUrl) {
-            setUrl(storagePathOrDownloadUrl);
-            URL_CACHE[storagePathOrDownloadUrl] = storagePathOrDownloadUrl;
+        if (storeUrl) {
+            setDownloadConfig({ url: storagePathOrDownloadUrl });
+            URL_CACHE[storagePathOrDownloadUrl] = { url: storagePathOrDownloadUrl };
         } else if (storagePathOrDownloadUrl)
             storage.getDownloadURL(storagePathOrDownloadUrl)
                 .then(function (downloadConfig) {
                     if (!unmounted) {
-                        setUrl(downloadConfig.url);
-                        URL_CACHE[storagePathOrDownloadUrl] = downloadConfig.url;
+                        setDownloadConfig(downloadConfig);
+                        URL_CACHE[storagePathOrDownloadUrl] = downloadConfig;
                     }
                 });
         return () => {
             unmounted = true;
         };
-    }, [property.storage?.storeUrl, storagePathOrDownloadUrl]);
+    }, [storeUrl, storagePathOrDownloadUrl]);
 
     if (!storagePathOrDownloadUrl) return null;
 
-    return url
-        ? <UrlComponentPreview propertyKey={propertyKey}
-                             value={url}
-                             property={property}
-                             size={size}/>
+    const filetype = downloadConfig?.metadata ? getFiletype(downloadConfig?.metadata.contentType) : undefined;
+    return downloadConfig
+        ? <UrlComponentPreview fileType={filetype}
+                               url={downloadConfig.url}
+                               size={size}/>
         : renderSkeletonImageThumbnail(size);
+}
+
+function getFiletype(input: string): FileType {
+    if (input.startsWith("image")) return "image/*";
+    else if (input.startsWith("video")) return "video/*";
+    else if (input.startsWith("audio")) return "audio/*";
+    else if (input.startsWith("application")) return "application/*";
+    else if (input.startsWith("text")) return "text/*";
+    else if (input.startsWith("font")) return "font/*";
+    else return input;
 }

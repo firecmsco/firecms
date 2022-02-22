@@ -1,6 +1,6 @@
 import React from "react";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 import {
     PreviewComponent,
@@ -12,14 +12,14 @@ import { ResolvedProperty } from "../../models";
 
 import { Theme } from "@mui/material";
 
-const PREFIX = 'ArrayOfStorageComponentsPreview';
+const PREFIX = "ArrayOfStorageComponentsPreview";
 
 const classes = {
     arrayWrap: `${PREFIX}-arrayWrap`,
     arrayItem: `${PREFIX}-arrayItem`
 };
 
-const Root = styled('div')((
+const Root = styled("div")((
    { theme } : {
         theme: Theme
     }
@@ -33,8 +33,6 @@ const Root = styled('div')((
         margin: theme.spacing(0.5)
     }
 }));
-
-
 
 /**
  * @category Preview components
@@ -50,7 +48,6 @@ export function ArrayOfStorageComponentsPreview({
         throw Error("Picked wrong preview component ArrayOfStorageComponentsPreview");
 
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
-
 
     return (
         <Root className={classes.arrayWrap}>

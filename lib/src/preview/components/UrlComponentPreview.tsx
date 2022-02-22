@@ -4,25 +4,21 @@ import { Box, CardMedia, Link } from "@mui/material";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-import { MediaType } from "../../models";
-import { PreviewComponentProps } from "../internal";
+import { PreviewSize } from "../internal";
 import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
+import { FileType } from "../../models";
 
 /**
  * @category Preview components
  */
 export function UrlComponentPreview({
-                                        value,
-                                        property,
+                                        url,
+                                        fileType,
                                         size
-                                    }: PreviewComponentProps<string>): React.ReactElement {
+                                    }: { url: string, fileType?: FileType, size: PreviewSize }): React.ReactElement {
 
-
-
-    if (!value) return <div/>;
-    const url = value;
-    if (typeof property.url === "boolean" && property.url) {
+    if (!fileType) {
         return (
             <Link sx={(theme) => ({
                 display: "flex",
@@ -40,20 +36,18 @@ export function UrlComponentPreview({
         );
     }
 
-    const mediaType: MediaType = property.url as MediaType ||
-        property.storage?.mediaType;
-    if (mediaType === "image") {
+    if (fileType === "image/*") {
         return <ImagePreview key={`image_preview_${url}_${size}`}
                              url={url}
                              size={size}/>;
-    } else if (mediaType === "audio") {
+    } else if (fileType === "audio/*") {
         return <audio controls
                       src={url}
                       key={`audio_preview_${url}_${size}`}>
             Your browser does not support the
             <code>audio</code> element.
         </audio>;
-    } else if (mediaType === "video") {
+    } else if (fileType === "video/*") {
         return <CardMedia
             key={`video_preview_${url}_${size}`}
             sx={{ maxWidth: size === "small" ? 300 : 500 }}

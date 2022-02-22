@@ -3,6 +3,7 @@ import React from "react";
 import { styled } from '@mui/material/styles';
 
 import { Divider, Theme } from "@mui/material";
+
 import {
     PreviewComponent,
     PreviewComponentProps,
@@ -11,11 +12,10 @@ import {
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { ResolvedProperty } from "../../models";
 
-const PREFIX = 'ArrayOneOfPreview';
+const PREFIX = 'ArrayPreview';
 
 const classes = {
     array: `${PREFIX}-array`,
-    arrayWrap: `${PREFIX}-arrayWrap`,
     arrayItemBig: `${PREFIX}-arrayItemBig`
 };
 
@@ -29,45 +29,33 @@ const Root = styled('div')((
         flexDirection: "column"
     },
 
-    [`& .${classes.arrayWrap}`]: {
-        display: "flex",
-        flexWrap: "wrap"
-    },
-
     [`& .${classes.arrayItemBig}`]: {
         margin: theme.spacing(1)
     }
 }));
 
-
-
 /**
  * @category Preview components
  */
-export function ArrayOneOfPreview({
-                                      propertyKey,
-                                      value,
-                                      property,
-                                      size
-                                  }: PreviewComponentProps<any[]>) {
+export function ArrayPropertyPreview({
+                                 propertyKey,
+                                 value,
+                                 property,
+                                 size
+                             }: PreviewComponentProps<any[]>) {
+
+    if (!property.of) {
+        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${propertyKey}`);
+    }
 
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayPreview");
-
-    if (!property.oneOf) {
-        throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
-    }
-
 
     const values = value;
 
     if (!values) return null;
 
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
-
-    const typeField = property.oneOf.typeField ?? "type";
-    const valueField = property.oneOf.valueField ?? "value";
-    const properties = property.oneOf.properties;
 
     return (
         <Root className={classes.array}>
@@ -76,11 +64,11 @@ export function ArrayOneOfPreview({
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
                     <div className={classes.arrayItemBig}>
                         <ErrorBoundary>
-                            {value && <PreviewComponent
+                            <PreviewComponent
                                 propertyKey={propertyKey}
-                                value={value[valueField]}
-                                property={properties[value[typeField]] as ResolvedProperty<any>}
-                                size={childSize}/>}
+                                value={value}
+                                property={property.of as ResolvedProperty<any>}
+                                size={childSize}/>
                         </ErrorBoundary>
                     </div>
                     {index < values.length - 1 && <Divider/>}

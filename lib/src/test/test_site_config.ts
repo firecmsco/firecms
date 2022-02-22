@@ -34,14 +34,11 @@ const testProperty2:StringProperty = buildProperty<string>({
 
 const testProperty3:StringProperty = buildProperty({
     dataType: "string",
-    config: {
-        storage: {
-            mediaType: "image",
-            storagePath: "images",
-            acceptedFiles: ["image/*"],
-            metadata: {
-                cacheControl: "max-age=1000000"
-            }
+    storage: {
+        storagePath: "images",
+        acceptedFiles: ["image/*"],
+        metadata: {
+            cacheControl: "max-age=1000000"
         }
     }
 });
@@ -69,7 +66,6 @@ export const productSchema = buildSchema({
             dataType: "string",
             title: "Image",
             storage: {
-                mediaType: "image",
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
                 metadata: {
@@ -141,7 +137,6 @@ export const productSchema = buildSchema({
             of: {
                 dataType: "string",
                 storage: {
-                    mediaType: "image",
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
                     metadata: {
@@ -229,7 +224,6 @@ const localeSchema = {
             dataType: "string",
             validation: { required: false },
             storage: {
-                mediaType: "video",
                 storagePath: "videos",
                 acceptedFiles: ["video/*"]
             }
@@ -337,12 +331,12 @@ export const usersSchema = buildSchema({
                 thumbnail: {
                     title: "Thumbnail",
                     dataType: "string",
-                    url: "image",
+                    url: true
                 },
                 large: {
                     title: "Large",
                     dataType: "string",
-                    url: "image"
+                    url: true
                 }
             },
             previewProperties: ["large"]

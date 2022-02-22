@@ -1,21 +1,22 @@
 import { EnumValueConfig, EnumValues } from "../../models";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 import React from "react";
 
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { EnumValuesChip } from "./CustomChip";
 import { Theme } from "@mui/material";
+import { PreviewSize } from "../PreviewComponentProps";
 
-const PREFIX = 'ArrayEnumPreview';
+const PREFIX = "ArrayEnumPreview";
 
 const classes = {
     arrayWrap: `${PREFIX}-arrayWrap`,
     arrayItem: `${PREFIX}-arrayItem`
 };
 
-const Root = styled('div')((
+const Root = styled("div")((
    { theme } : {
         theme: Theme
     }
@@ -30,8 +31,6 @@ const Root = styled('div')((
     }
 }));
 
-
-
 /**
  * @category Preview components
  */
@@ -44,10 +43,8 @@ export function ArrayEnumPreview({
     value: string[] | number[],
     name: string | undefined,
     enumValues: EnumValueConfig[],
-    size: "regular" | "small" | "tiny"
+    size: PreviewSize
 }) {
-
-
 
     return (
         <Root className={classes.arrayWrap}>

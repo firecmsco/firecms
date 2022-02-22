@@ -1,6 +1,6 @@
 import React from "react";
 
-import { EnumValuesChip } from "./CustomChip";
+import { EnumValuesChip } from "../components/CustomChip";
 import { PreviewComponentProps } from "../internal";
 import { resolveEnumValues } from "../../core/utils";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
@@ -8,13 +8,11 @@ import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 /**
  * @category Preview components
  */
-export function NumberPreview({
-                                  propertyKey,
+export function NumberPropertyPreview({
                                   value,
                                   property,
                                   size
                               }: PreviewComponentProps<number>): React.ReactElement {
-
 
     const schemaRegistry = useSchemaRegistry();
 

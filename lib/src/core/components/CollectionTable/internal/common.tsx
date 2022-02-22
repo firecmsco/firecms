@@ -48,11 +48,7 @@ export function getPropertyColumnWidth(property: ResolvedProperty): number {
 
     if (property.dataType === "string") {
         if (property.url) {
-            if (property.url === "video" || property.storage?.mediaType === "video")
-                return 340;
-            else if (property.url === "audio" || property.storage?.mediaType === "audio")
-                return 300;
-            return 240;
+            return 280;
         } else if (property.storage) {
             return 220;
         } else if (property.enumValues) {

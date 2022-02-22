@@ -245,10 +245,9 @@ function renderReference() {
     return <Skeleton variant="rectangular" width={200} height={100}/>;
 }
 
-
 function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize = "regular") {
 
-    if (typeof property.url === "boolean" && property.url) {
+    if (typeof property.url === "boolean") {
         return <div style={{
             display: "flex"
         }}>
@@ -257,16 +256,7 @@ function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize 
         </div>;
     }
 
-    const mediaType = property.url || property.storage?.mediaType;
-    if (mediaType === "image") {
-        return renderSkeletonImageThumbnail(size);
-    } else if (mediaType === "audio") {
-        return renderUrlAudioComponent();
-    } else if (mediaType === "video") {
-        return renderUrlVideo(size);
-    } else {
-        return renderUrlFile(size);
-    }
+    return renderUrlFile(size);
 }
 
 function renderUrlFile(size: PreviewSize) {

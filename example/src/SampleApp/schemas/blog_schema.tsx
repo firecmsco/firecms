@@ -37,7 +37,6 @@ export const blogSchema = buildSchema<BlogEntry>({
             title: "Header image",
             dataType: "string",
             storage: {
-                mediaType: "image",
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
                 metadata: {
@@ -50,14 +49,13 @@ export const blogSchema = buildSchema<BlogEntry>({
             validation: { required: true },
             dataType: "string",
             columnWidth: 140,
-            config: {
-                enumValues: {
-                    published: {
-                        label: "Published",
-                        disabled: !values.header_image,
-                    },
-                    draft: "Draft"
-                }
+            enumValues: {
+                published: {
+                    id: "published",
+                    label: "Published",
+                    disabled: !values.header_image,
+                },
+                draft: "Draft"
             }
         })),
         created_at: {
@@ -81,7 +79,6 @@ export const blogSchema = buildSchema<BlogEntry>({
                         of: buildProperty<string>({
                             dataType: "string",
                             storage: {
-                                mediaType: "image",
                                 storagePath: "images",
                                 acceptedFiles: ["image/*"],
                                 metadata: {

@@ -15,7 +15,6 @@ export function ArrayOfMapsPreview({
                                           size
                                       }: PreviewComponentProps<object[]>) {
 
-    // @ts-ignore
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");
 

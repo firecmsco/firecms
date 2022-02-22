@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { TimestampProperty } from "../../../../../models";
 import DateTimePicker from "@mui/lab/DateTimePicker";
-import { EmptyValue, TimestampPreview } from "../../../../../preview";
+import { EmptyValue, TimestampPropertyPreview } from "../../../../../preview";
 
 
 const PREFIX = 'TableDateField';
@@ -64,9 +64,9 @@ export function TableDateField(props: {
             <Box flexGrow={1}>
                 {internalValue &&
                 <Typography variant={"body2"}>
-                    <TimestampPreview value={internalValue}
-                                      property={property}
-                                      size={"regular"}/>
+                    <TimestampPropertyPreview value={internalValue}
+                                              property={property}
+                                              size={"regular"}/>
                 </Typography>}
                 {!internalValue && <EmptyValue/>}
             </Box>

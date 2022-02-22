@@ -105,7 +105,6 @@ const productSchema = buildSchema<Product>({
             title: "Image",
             dataType: "string",
             storage: {
-                mediaType: "image",
                 storagePath: "images",
                 acceptedFiles: ["image/*"]
             }
@@ -183,7 +182,6 @@ const localeSchema = buildSchema({
             dataType: "string",
             validation: { required: false },
             storage: {
-                mediaType: "video",
                 storagePath: "videos",
                 acceptedFiles: ["video/*"]
             }

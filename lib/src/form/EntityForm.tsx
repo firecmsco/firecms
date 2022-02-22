@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import {
     CMSFormFieldProps,
     Entity,
@@ -240,10 +240,26 @@ export function EntityForm<M>({
             {(props) => {
                 return <>
 
-                    <Box sx={{
-                        width: "100%",
-                        p: 2
-                    }}>
+                    <Box
+                        sx={(theme) => ({
+                            width: "100%",
+                            marginTop: theme.spacing(3),
+                            paddingLeft: theme.spacing(4),
+                            paddingRight: theme.spacing(4),
+                            paddingTop: theme.spacing(3),
+                            [theme.breakpoints.down("lg")]: {
+                                marginTop: theme.spacing(2),
+                                paddingLeft: theme.spacing(2),
+                                paddingRight: theme.spacing(2),
+                                paddingTop: theme.spacing(2),
+                            },
+                            [theme.breakpoints.down("md")]: {
+                                marginTop: theme.spacing(1),
+                                paddingLeft: theme.spacing(2),
+                                paddingRight: theme.spacing(2),
+                                paddingTop: theme.spacing(2)
+                            }
+                        })}>
                         <CustomIdField customId={schema.customId}
                                        entityId={entityId}
                                        status={status}
@@ -381,28 +397,30 @@ function FormInternal<M>({
 
         <Form onSubmit={handleSubmit}
               noValidate>
-            <Container maxWidth={"sm"}
-                       sx={(theme) => ({
-                           padding: theme.spacing(4),
-                           marginTop: theme.spacing(2),
-                           marginBottom: theme.spacing(2),
-                           [theme.breakpoints.down("lg")]: {
-                               paddingLeft: theme.spacing(2),
-                               paddingRight: theme.spacing(2),
-                               paddingTop: theme.spacing(3),
-                               paddingBottom: theme.spacing(3)
-                           },
-                           [theme.breakpoints.down("md")]: {
-                               padding: theme.spacing(2)
-                           }
-                       })}
-                       ref={formRef}>
+            <Box
+                sx={(theme) => ({
+                    paddingLeft: theme.spacing(4),
+                    paddingRight: theme.spacing(4),
+                    paddingTop: theme.spacing(3),
+                    paddingBottom: theme.spacing(4),
+                    marginBottom: theme.spacing(2),
+                    [theme.breakpoints.down("lg")]: {
+                        paddingLeft: theme.spacing(2),
+                        paddingRight: theme.spacing(2),
+                        paddingTop: theme.spacing(2),
+                        paddingBottom: theme.spacing(3)
+                    },
+                    [theme.breakpoints.down("md")]: {
+                        padding: theme.spacing(2)
+                    }
+                })}
+                ref={formRef}>
 
                 {formFields}
 
                 <ErrorFocus containerRef={formRef}/>
 
-            </Container>
+            </Box>
             <CustomDialogActions>
 
                 {savingError &&

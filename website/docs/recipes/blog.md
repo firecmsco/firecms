@@ -67,14 +67,11 @@ An image that will be on the top of the blog post:
 buildProperty({
     title: "Header image",
     dataType: "string",
-    config: {
-        storageMeta: {
-            mediaType: "image",
-            storagePath: "images",
-            acceptedFiles: ["image/*"],
-            metadata: {
-                cacheControl: "max-age=1000000"
-            }
+    storage: {
+        storagePath: "images",
+        acceptedFiles: ["image/*"],
+        metadata: {
+            cacheControl: "max-age=1000000"
         }
     }
 })
@@ -118,14 +115,12 @@ buildProperty(({ values }) => ({
     validation: { required: true },
     dataType: "string",
     columnWidth: 140,
-    config: {
-        enumValues: {
-            published: {
-                label: "Published",
-                disabled: !values.header_image,
-            },
-            draft: "Draft"
-        }
+    enumValues: {
+        published: {
+            label: "Published",
+            disabled: !values.header_image,
+        },
+        draft: "Draft"
     }
 }))
 ```
@@ -163,14 +158,11 @@ buildProperty({
                 dataType: "array",
                 of: buildProperty({
                     dataType: "string",
-                    config: {
-                        storageMeta: {
-                            mediaType: "image",
-                            storagePath: "images",
-                            acceptedFiles: ["image/*"],
-                            metadata: {
-                                cacheControl: "max-age=1000000"
-                            }
+                    storage: {
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"],
+                        metadata: {
+                            cacheControl: "max-age=1000000"
                         }
                     }
                 }),
@@ -179,9 +171,7 @@ buildProperty({
             text: buildProperty({
                 dataType: "string",
                 title: "Text",
-                config: {
-                    markdown: true
-                }
+                markdown: true
             }),
             products: buildProperty({
                 title: "Products",
@@ -277,14 +267,12 @@ export const blogSchema = buildSchema({
         header_image: buildProperty({
             title: "Header image",
             dataType: "string",
-            config: {
-                storageMeta: {
-                    mediaType: "image",
-                    storagePath: "images",
-                    acceptedFiles: ["image/*"],
-                    metadata: {
-                        cacheControl: "max-age=1000000"
-                    }
+            storage: {
+                mediaType: "image",
+                storagePath: "images",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
                 }
             }
         }),
@@ -303,14 +291,12 @@ export const blogSchema = buildSchema({
                         dataType: "array",
                         of: buildProperty({
                             dataType: "string",
-                            config: {
-                                storageMeta: {
-                                    mediaType: "image",
-                                    storagePath: "images",
-                                    acceptedFiles: ["image/*"],
-                                    metadata: {
-                                        cacheControl: "max-age=1000000"
-                                    }
+                            storage: {
+                                mediaType: "image",
+                                storagePath: "images",
+                                acceptedFiles: ["image/*"],
+                                metadata: {
+                                    cacheControl: "max-age=1000000"
                                 }
                             }
                         }),
@@ -319,9 +305,7 @@ export const blogSchema = buildSchema({
                     text: buildProperty({
                         dataType: "string",
                         title: "Text",
-                        config: {
-                            markdown: true
-                        }
+                        markdown: true
                     }),
                     products: buildProperty({
                         title: "Products",
@@ -339,14 +323,12 @@ export const blogSchema = buildSchema({
             validation: { required: true },
             dataType: "string",
             columnWidth: 140,
-            config: {
-                enumValues: {
-                    published: {
-                        label: "Published",
-                        disabled: !values.header_image,
-                    },
-                    draft: "Draft"
-                }
+            enumValues: {
+                published: {
+                    label: "Published",
+                    disabled: !values.header_image,
+                },
+                draft: "Draft"
             }
         }))
     },

@@ -16,11 +16,9 @@ import { EntityReference, ResolvedProperty } from "../../models";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import {
     PreviewComponent,
-    PreviewComponentProps,
-    PreviewSize
+    PreviewSize, SkeletonComponent
 } from "../internal";
 
-import { SkeletonComponent } from "./SkeletonComponent";
 import { ErrorView } from "../../core";
 import {
     useEntityFetch,
@@ -28,62 +26,14 @@ import {
     useSideEntityController
 } from "../../hooks";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-
-export type ReferencePreviewProps =
-    PreviewComponentProps<EntityReference>
-    & { onHover?: boolean };
-
 /**
  * @category Preview components
  */
-export const ReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewComponent, areEqual) as React.FunctionComponent<ReferencePreviewProps>;
-
-function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewProps) {
-    return prevProps.propertyKey === nextProps.propertyKey &&
-        prevProps.size === nextProps.size &&
-        prevProps.height === nextProps.height &&
-        prevProps.width === nextProps.width &&
-        prevProps.onHover === nextProps.onHover &&
-        prevProps.value?.id === nextProps.value?.id &&
-        prevProps.value?.path === nextProps.value?.path
-        ;
-}
-
-function ReferencePreviewComponent<M extends { [Key: string]: any }>(
-    {
-        value,
-        property,
-        onClick,
-        size,
-        onHover
-    }: ReferencePreviewProps) {
-
-    const reference: EntityReference = value;
-    const previewProperties = property.previewProperties;
-
-    if (!property.path) {
-        return <ReferencePreviewWrap onClick={onClick}
-                                     onHover={onHover}
-                                     size={size}>
-            Disabled
-        </ReferencePreviewWrap>
-    }
-
-    return <ReferencePreviewInternal path={property.path}
-                                     reference={reference}
-                                     size={size}
-                                     onHover={onHover}
-                                     onClick={onClick}
-                                     previewProperties={previewProperties}/>
-
-
-}
-
-function ReferencePreviewInternal<M>({ path, reference, previewProperties, size, onHover, onClick }: {
+export function ReferencePreview<M>({ path, reference, previewProperties, size, onHover, onClick }: {
     path: string
     reference: EntityReference,
-    previewProperties?: string[];
     size: PreviewSize;
+    previewProperties?: string[];
     onClick?: MouseEventHandler<any>;
     onHover?: boolean;
 }) {
@@ -223,7 +173,7 @@ function ReferencePreviewInternal<M>({ path, reference, previewProperties, size,
     </ReferencePreviewWrap>
 }
 
-function ReferencePreviewWrap({ children, onHover, size, onClick }: {
+export function ReferencePreviewWrap({ children, onHover, size, onClick }: {
     children: React.ReactNode;
     onHover?: boolean;
     size: PreviewSize;

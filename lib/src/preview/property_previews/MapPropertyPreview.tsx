@@ -15,14 +15,12 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 /**
  * @category Preview components
  */
-export function MapPreview<T extends Record<string, unknown>>({
+export function MapPropertyPreview<T extends Record<string, unknown>>({
                                              propertyKey,
                                              value,
                                              property,
                                              size
                                          }: PreviewComponentProps<T>) {
-
-
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPreview");
@@ -34,7 +32,6 @@ export function MapPreview<T extends Record<string, unknown>>({
     }
 
     if (!value) return null;
-
 
     let mapPropertyKeys: string[];
     if (size === "regular") {

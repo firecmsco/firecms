@@ -438,13 +438,13 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",
-                [theme.breakpoints.down("sm")]: {
-                    width: CONTAINER_FULL_WIDTH
-                },
                 transition: "width 250ms ease-in-out",
                 width: !mainViewSelected ? `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})` : resolvedWidth ?? CONTAINER_WIDTH,
                 [theme.breakpoints.down("lg")]: {
                     width: !mainViewSelected ? CONTAINER_FULL_WIDTH : undefined
+                },
+                [theme.breakpoints.down("sm")]: {
+                    width: CONTAINER_FULL_WIDTH
                 }
             }}>
             {
@@ -457,7 +457,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     <Box sx={{
                         flexGrow: 1,
                         height: "100%",
-                        width: `calc(${TAB_WIDTH} + ${resolvedWidth})`,
+                        width: `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})`,
                         [theme.breakpoints.down("sm")]: {
                             width: CONTAINER_FULL_WIDTH
                         },
@@ -466,23 +466,23 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                         flexDirection: "row"
                     }}>
 
-                        {dataLoading
-                            ? <CircularProgressCenter/>
-                            : <Box
-                                role="tabpanel"
-                                hidden={!largeLayout && !mainViewSelected}
-                                sx={{
-                                    width: resolvedWidth ?? "100%",
-                                    maxWidth: "100%",
-                                    height: "100%",
-                                    overflow: "auto",
-                                    [theme.breakpoints.down("sm")]: {
-                                        maxWidth: CONTAINER_FULL_WIDTH,
-                                        width: CONTAINER_FULL_WIDTH
-                                    }
-                                }}>
-                                {body}
-                            </Box>}
+                        <Box
+                            role="tabpanel"
+                            hidden={!largeLayout && !mainViewSelected}
+                            sx={{
+                                width: resolvedWidth ?? CONTAINER_WIDTH,
+                                maxWidth: "100%",
+                                height: "100%",
+                                overflow: "auto",
+                                [theme.breakpoints.down("sm")]: {
+                                    maxWidth: CONTAINER_FULL_WIDTH,
+                                    width: CONTAINER_FULL_WIDTH
+                                }
+                            }}>
+                            {dataLoading
+                                ? <CircularProgressCenter/>
+                                : body}
+                        </Box>
 
                         {customViewsView}
 

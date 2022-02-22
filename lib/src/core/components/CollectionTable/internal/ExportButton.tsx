@@ -156,8 +156,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
     return <>
 
         <Tooltip title={"Export"}>
-            <IconButton color={"primary"} onClick={handleClickOpen}
-                        size="large">
+            <IconButton color={"primary"} onClick={handleClickOpen}>
                 <GetAppIcon/>
             </IconButton>
         </Tooltip>

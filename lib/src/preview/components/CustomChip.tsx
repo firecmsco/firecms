@@ -11,8 +11,7 @@ import {
     getLabelOrConfigFrom
 } from "../../core/util/enums";
 
-
-interface EnumValuesChipProps {
+export interface EnumValuesChipProps {
     enumValues: EnumValueConfig[] | undefined;
     enumId: any;
     small: boolean;

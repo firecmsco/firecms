@@ -2,16 +2,22 @@ import React from "react";
 
 import MarkdownPreview from "@uiw/react-markdown-preview";
 
-interface MarkdownProps {
+export interface MarkdownProps {
     source: string
 }
 
 /**
  * @category Preview components
  */
-export function Markdown({
-                             source
-                         }: MarkdownProps) {
+export const Markdown = React.memo<MarkdownProps>(MarkdownInternal, areEqual) as React.FunctionComponent<MarkdownProps>;
+
+function areEqual(prevProps: MarkdownProps, nextProps: MarkdownProps) {
+    return prevProps.source === nextProps.source;
+}
+
+function MarkdownInternal({
+                              source
+                          }: MarkdownProps) {
     return <MarkdownPreview source={typeof source === "string" ? source : ""}
                             style={{
                                 fontSize: "inherit",
