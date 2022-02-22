@@ -257,7 +257,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                     <PreviewComponent
                         width={column.width}
                         height={column.height}
-                        name={`preview_${propertyId}_${rowIndex}_${columnIndex}`}
+                        propertyKey={`preview_${propertyId}_${rowIndex}_${columnIndex}`}
                         property={property as any}
                         value={entity.values[propertyId]}
                         size={getPreviewSizeFrom(size)}

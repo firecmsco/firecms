@@ -13,7 +13,7 @@ import {
 export const CustomField = ({
                          property,
                          value,
-                         key,
+                         propertyKey,
                          tableMode,
                          error,
                          showError,
@@ -35,7 +35,7 @@ export const CustomField = ({
 
             <Paper elevation={0}>
                 {buildPropertyField({
-                    name: `${key}.sample`,
+                    propertyKey: `${propertyKey}.sample`,
                     property: {
                         title: "Sample",
                         dataType: "string",

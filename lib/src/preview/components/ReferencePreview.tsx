@@ -39,7 +39,7 @@ export type ReferencePreviewProps =
 export const ReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewComponent, areEqual) as React.FunctionComponent<ReferencePreviewProps>;
 
 function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewProps) {
-    return prevProps.name === nextProps.name &&
+    return prevProps.propertyKey === nextProps.propertyKey &&
         prevProps.size === nextProps.size &&
         prevProps.height === nextProps.height &&
         prevProps.width === nextProps.width &&
@@ -179,7 +179,7 @@ function ReferencePreviewInternal<M>({ path, reference, previewProperties, size,
                         return (
                             <div key={"ref_prev_" + (key as string)}>
                                 {entity
-                                    ? <PreviewComponent name={key as string}
+                                    ? <PreviewComponent propertyKey={key as string}
                                                         value={entity.values[key as string]}
                                                         property={childProperty as ResolvedProperty}
                                                         size={"tiny"}/>

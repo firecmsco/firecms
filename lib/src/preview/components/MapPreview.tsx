@@ -16,7 +16,7 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
  * @category Preview components
  */
 export function MapPreview<T extends Record<string, unknown>>({
-                                             name,
+                                             propertyKey,
                                              value,
                                              property,
                                              size
@@ -30,7 +30,7 @@ export function MapPreview<T extends Record<string, unknown>>({
 
     const mapProperty = property as ResolvedMapProperty;
     if (!mapProperty.properties) {
-        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
+        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
     }
 
     if (!value) return null;
@@ -54,7 +54,7 @@ export function MapPreview<T extends Record<string, unknown>>({
                     <div
                         key={"map_preview_" + mapProperty.title + key + index}>
                         <ErrorBoundary>
-                            <PreviewComponent name={key}
+                            <PreviewComponent propertyKey={key}
                                               value={(value as any)[key]}
                                               property={mapProperty.properties![key]}
                                               size={size}/>
@@ -65,19 +65,19 @@ export function MapPreview<T extends Record<string, unknown>>({
         );
 
     return (
-        <Table size="small" key={`map_preview_${name}`}>
+        <Table size="small" key={`map_preview_${propertyKey}`}>
             <TableBody>
                 {mapPropertyKeys &&
                 mapPropertyKeys.map((key, index) => {
                     return (
                         <TableRow
-                            key={`map_preview_table_${name}_${index}`}
+                            key={`map_preview_table_${propertyKey}_${index}`}
                             sx={{
                                 "&:last-child th, &:last-child td": {
                                     borderBottom: 0
                                 }
                             }}>
-                            <TableCell key={`table-cell-title-${name}-${key}`}
+                            <TableCell key={`table-cell-title-${propertyKey}-${key}`}
                                        sx={{
                                            verticalAlign: "top"
                                        }}
@@ -88,12 +88,12 @@ export function MapPreview<T extends Record<string, unknown>>({
                                     {mapProperty.properties![key].title}
                                 </Typography>
                             </TableCell>
-                            <TableCell key={`table-cell-${name}-${key}`}
+                            <TableCell key={`table-cell-${propertyKey}-${key}`}
                                        width="70%"
                                        component="th">
                                 <ErrorBoundary>
                                     <PreviewComponent
-                                        name={key}
+                                        propertyKey={key}
                                         value={(value as any)[key]}
                                         property={mapProperty.properties![key]}
                                         size={"small"}/>

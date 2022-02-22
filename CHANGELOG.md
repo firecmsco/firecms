@@ -40,7 +40,9 @@ buildProperty<string>({
 - Validation: The `email`validation prop in string properties is now placed
   at the property level (not under `validation`)
 - `storageMeta`prop in string properties is now called `storage`
-- `name` in `FieldProps` which refers to a property key, is now called `key`
+- `name` in `FieldProps` which refers to a property key, is now called `propertyKey`
+- `name` in `PreviewComponent` which refers to a property key, is now called `propertyKey`
+- `name` in `CMSFormFieldProps` which refers to a property key, is now called `propertyKey`
 
 
 ## [1.0.0-rc.2] - 2022-02-08

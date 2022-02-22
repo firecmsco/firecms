@@ -19,31 +19,6 @@ import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { useClearRestoreValue } from "../../hooks";
 
-
-const PREFIX = 'TextField';
-
-const classes = {
-    inputLabel: `${PREFIX}-inputLabel`,
-    shrinkInputLabel: `${PREFIX}-shrinkInputLabel`
-};
-
-const Root = styled('div')((
-   { theme } : {
-        theme: Theme
-    }
-) => ({
-    [`& .${classes.inputLabel}`]: {
-        marginTop: theme.spacing(1 / 2),
-        marginLeft: theme.spacing(1 / 2)
-    },
-
-    [`& .${classes.shrinkInputLabel}`]: {
-        marginTop: "-2px",
-        marginLeft: theme.spacing(1 / 2)
-    }
-}));
-
-
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
 }
@@ -55,7 +30,7 @@ interface TextFieldProps<T extends string | number> extends FieldProps<T> {
  * @category Form fields
  */
 export function TextFieldBinding<T extends string | number>({
-                                                         key,
+                                                         propertyKey,
                                                          value,
                                                          setValue,
                                                          error,
@@ -184,7 +159,7 @@ export function TextFieldBinding<T extends string | number>({
             {mediaType && internalValue &&
             <ErrorBoundary>
                 <Box m={1}>
-                    <PreviewComponent name={key}
+                    <PreviewComponent propertyKey={propertyKey}
                                       value={internalValue}
                                       property={property}
                                       size={"regular"}/>

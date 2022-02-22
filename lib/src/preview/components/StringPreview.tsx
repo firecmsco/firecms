@@ -10,7 +10,7 @@ import { resolvePropertyEnum } from "../../core/utils";
  * @category Preview components
  */
 export function StringPreview({
-                                  name,
+                                  propertyKey,
                                   value,
                                   property,
                                   size
@@ -28,7 +28,7 @@ export function StringPreview({
         return (
             <ErrorBoundary>
                 <CustomChip
-                    colorSeed={name ?? ""}
+                    colorSeed={propertyKey ?? ""}
                     label={value}
                     small={size !== "regular"}
                 />

@@ -351,7 +351,7 @@ function FormInternal<M>({
 
                     const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
                     const cmsFormFieldProps: CMSFormFieldProps = {
-                        name: key,
+                        propertyKey: key,
                         disabled,
                         property,
                         includeDescription: true,

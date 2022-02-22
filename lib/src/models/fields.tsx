@@ -13,7 +13,7 @@ export interface FieldProps<T extends CMSType, CustomProps = any, M extends { [K
     /**
      * Name of the property
      */
-    key: string;
+    propertyKey: string;
 
     /**
      * Current value of this field
@@ -148,7 +148,7 @@ export interface CMSFormFieldProps<M extends { [Key: string]: any } = any> {
      * The name of the property, such as `age`. You can use nested and array
      * indexed such as `address.street` or `people[3]`
      */
-    name: string;
+    propertyKey: string;
 
     /**
      * The CMS property you are binding this field to

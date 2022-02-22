@@ -32,7 +32,7 @@ import {
  * @category Form fields
  */
 export function ArrayOneOfFieldBinding<T extends Array<any>>({
-                                                          key,
+                                                          propertyKey,
                                                           value,
                                                           error,
                                                           showError,
@@ -61,7 +61,7 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
     const buildEntry = (index: number, internalId: number) => {
         return <ArrayOneOfEntry
             key={`array_one_of_${index}`}
-            name={`${key}[${index}]`}
+            name={`${propertyKey}[${index}]`}
             index={index}
             value={value[index]}
             typeField={property.oneOf!.typeField ?? "type"}
@@ -89,7 +89,7 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
                        }
                    })}>
                 <ArrayContainer value={value}
-                                name={key}
+                                name={propertyKey}
                                 buildEntry={buildEntry}
                                 onInternalIdAdded={setLastAddedId}
                                 disabled={isSubmitting || Boolean(property.disabled)}
@@ -226,7 +226,7 @@ function ArrayOneOfEntry({
                 <FormControl fullWidth
                              key={`form_control_${name}_${typeInternal}`}>
                     {buildPropertyField({
-                        name: valueFieldName,
+                        propertyKey: valueFieldName,
                         property: property,
                         context: context,
                         autoFocus: autoFocus

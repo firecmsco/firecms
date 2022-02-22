@@ -25,7 +25,7 @@ type SelectProps<T extends EnumType> = FieldProps<T>;
  * @category Form fields
  */
 export function SelectBinding<T extends EnumType>({
-                                               key,
+                                               propertyKey,
                                                value,
                                                setValue,
                                                error,
@@ -63,7 +63,7 @@ export function SelectBinding<T extends EnumType>({
             }}
         >
 
-            <InputLabel id={`${key}-select-label`}>
+            <InputLabel id={`${propertyKey}-select-label`}>
                 <LabelWithIcon property={property}/>
             </InputLabel>
 
@@ -72,7 +72,7 @@ export function SelectBinding<T extends EnumType>({
                     minHeight: "64px"
                 }}
                 variant={"filled"}
-                labelId={`${key}-select-label`}
+                labelId={`${propertyKey}-select-label`}
                 autoFocus={autoFocus}
                 value={value !== undefined ? value : ""}
                 disabled={disabled}
@@ -94,7 +94,7 @@ export function SelectBinding<T extends EnumType>({
 
                 {enumValues && enumValues.map((enumConfig) => {
                     return (
-                        <MenuItem key={`select_${key}_${enumConfig.id}`}
+                        <MenuItem key={`select_${propertyKey}_${enumConfig.id}`}
                                   value={enumConfig.id}
                                   disabled={isEnumValueDisabled(enumConfig)}>
                             <EnumValuesChip

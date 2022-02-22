@@ -40,7 +40,7 @@ const Root = styled('div')((
  * @category Preview components
  */
 export function ArrayOfStorageComponentsPreview({
-                                                    name,
+                                                    propertyKey,
                                                     value,
                                                     property,
                                                     size
@@ -57,10 +57,10 @@ export function ArrayOfStorageComponentsPreview({
             {value &&
             value.map((v, index) =>
                 <div className={classes.arrayItem}
-                     key={`preview_array_storage_${name}_${index}`}>
+                     key={`preview_array_storage_${propertyKey}_${index}`}>
                     <ErrorBoundary>
                         <PreviewComponent
-                            name={name}
+                            propertyKey={propertyKey}
                             value={v}
                             property={property.of as ResolvedProperty<string>}
                             size={childSize}/>

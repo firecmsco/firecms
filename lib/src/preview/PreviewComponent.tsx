@@ -43,7 +43,7 @@ import { Markdown } from "./components/Markdown";
 export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps<T>) {
     let content: JSX.Element | any;
     const {
-        property, name, value, size, height, width
+        property, propertyKey, value, size, height, width
     } = props;
 
     const fieldProps = { ...props };
@@ -53,7 +53,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
     } else if (property.Preview) {
         content = createElement(property.Preview as React.ComponentType<PreviewComponentProps>,
             {
-                name,
+                propertyKey: propertyKey,
                 value,
                 property,
                 size,
@@ -82,19 +82,19 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                                          value={value}/>;
             }
         } else {
-            content = buildWrongValueType(name, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else if (property.dataType === "array") {
         if (value instanceof Array) {
             const arrayProperty = property as ArrayProperty;
             if (!arrayProperty.of && !arrayProperty.oneOf) {
-                throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
+                throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
             }
 
             if (arrayProperty.of) {
                 if (arrayProperty.of.dataType === "map") {
                     content =
-                        <ArrayOfMapsPreview name={name}
+                        <ArrayOfMapsPreview propertyKey={propertyKey}
                                             property={property as ResolvedArrayProperty}
                                             value={value as object[]}
                                             size={size}
@@ -142,7 +142,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                                              property={property as ResolvedArrayProperty}/>;
             }
         } else {
-            content = buildWrongValueType(name, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else if (property.dataType === "map") {
         if (typeof value === "object") {
@@ -150,7 +150,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                 <MapPreview {...fieldProps}
                             property={property as ResolvedMapProperty}/>;
         } else {
-            content = buildWrongValueType(name, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else if (property.dataType === "timestamp") {
         if (value instanceof Date) {
@@ -158,7 +158,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                                         value={value}
                                         property={property as ResolvedTimestampProperty}/>;
         } else {
-            content = buildWrongValueType(name, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else if (property.dataType === "reference") {
         if (typeof property.path === "string") {
@@ -169,7 +169,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                     property={property as ResolvedReferenceProperty}
                 />;
             } else {
-                content = buildWrongValueType(name, property.dataType, value);
+                content = buildWrongValueType(propertyKey, property.dataType, value);
             }
         } else {
             content = <EmptyValue/>;
@@ -181,7 +181,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                                       value={value}
                                       property={property as ResolvedBooleanProperty}/>;
         } else {
-            content = buildWrongValueType(name, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else if (property.dataType === "number") {
         if (typeof value === "number") {
@@ -189,7 +189,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                                      value={value}
                                      property={property as ResolvedNumberProperty}/>;
         } else {
-            content = buildWrongValueType(name, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else {
         content = JSON.stringify(value);

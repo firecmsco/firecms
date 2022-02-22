@@ -13,7 +13,7 @@ export interface PreviewComponentProps<T extends CMSType = CMSType, CustomProps 
     /**
      * Name of the property
      */
-    name?: string;
+    propertyKey?: string;
 
     /**
      * Current value of the property

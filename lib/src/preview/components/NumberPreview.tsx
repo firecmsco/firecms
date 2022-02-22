@@ -9,7 +9,7 @@ import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
  * @category Preview components
  */
 export function NumberPreview({
-                                  name,
+                                  propertyKey,
                                   value,
                                   property,
                                   size

@@ -9,7 +9,7 @@ import { PreviewComponent, PreviewComponentProps } from "../internal";
  * @category Preview components
  */
 export function ArrayOfMapsPreview({
-                                          name,
+                                          propertyKey,
                                           value,
                                           property,
                                           size
@@ -22,7 +22,7 @@ export function ArrayOfMapsPreview({
     const mapProperty = (property as ArrayProperty).of as ResolvedMapProperty;
     const properties = mapProperty.properties;
     if (!properties) {
-        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${name}`);
+        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
     }
     const values = value;
     const previewProperties = mapProperty.previewProperties;
@@ -57,7 +57,7 @@ export function ArrayOfMapsPreview({
                                     >
                                         <ErrorBoundary>
                                             <PreviewComponent
-                                                name={key as string}
+                                                propertyKey={key as string}
                                                 value={(v as any)[key]}
                                                 property={properties[key as string]}
                                                 size={"small"}/>

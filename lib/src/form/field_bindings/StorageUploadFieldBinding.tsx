@@ -138,7 +138,7 @@ type StorageUploadFieldProps = FieldProps<string | string[]>;
  * @category Form fields
  */
 export function StorageUploadFieldBinding({
-                                       key,
+                                       propertyKey,
                                        value,
                                        setValue,
                                        error,
@@ -183,7 +183,7 @@ export function StorageUploadFieldBinding({
                 context.path,
                 property,
                 file,
-                key);
+                propertyKey);
 
             if (!fileName || fileName.length === 0) {
                 throw Error("You need to return a valid filename");
@@ -204,7 +204,7 @@ export function StorageUploadFieldBinding({
                 property,
                 file,
                 storage,
-                propertyId: key
+                propertyId: propertyKey
             });
 
             if (!storagePath || storagePath.length === 0) {
@@ -230,7 +230,7 @@ export function StorageUploadFieldBinding({
 
                 <StorageUpload
                     value={internalValue}
-                    name={key}
+                    name={propertyKey}
                     disabled={disabled}
                     autoFocus={autoFocus}
                     property={property}
@@ -762,7 +762,7 @@ export function StorageItemPreview({
 
                 {value &&
                 <ErrorBoundary>
-                    <PreviewComponent name={name}
+                    <PreviewComponent propertyKey={name}
                                       value={value}
                                       property={property}
                                       size={size}/>

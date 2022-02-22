@@ -16,7 +16,7 @@ import { useClearRestoreValue } from "../../hooks";
  * @category Form fields
  */
 export function ArrayDefaultFieldBinding<T extends Array<any>>({
-                                                            key,
+                                                            propertyKey,
                                                             value,
                                                             error,
                                                             showError,
@@ -46,7 +46,7 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
 
     const buildEntry = (index: number, internalId: number) => {
         return buildPropertyField({
-            name: `${key}[${index}]`,
+            propertyKey: `${propertyKey}[${index}]`,
             disabled,
             property: ofProperty,
             includeDescription,
@@ -78,7 +78,7 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
                        }
                    })}>
                 <ArrayContainer value={value}
-                                name={key}
+                                name={propertyKey}
                                 buildEntry={buildEntry}
                                 onInternalIdAdded={setLastAddedId}
                                 disabled={isSubmitting || Boolean(property.disabled)}

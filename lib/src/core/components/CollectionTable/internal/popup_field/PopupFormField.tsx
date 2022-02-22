@@ -312,7 +312,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         noValidate>
 
                         {name && property && buildPropertyField<any, M>({
-                            name: name as string,
+                            propertyKey: name as string,
                             disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
                             property,
                             includeDescription: false,

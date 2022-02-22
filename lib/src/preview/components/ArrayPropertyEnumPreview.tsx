@@ -6,7 +6,7 @@ import { ArrayEnumPreview } from "./ArrayEnumPreview";
  * @category Preview components
  */
 export function ArrayPropertyEnumPreview({
-                                             name,
+                                             propertyKey,
                                              value,
                                              property,
                                              size
@@ -21,7 +21,7 @@ export function ArrayPropertyEnumPreview({
 
     if (!value) return null;
 
-    return <ArrayEnumPreview name={name}
+    return <ArrayEnumPreview name={propertyKey}
                              value={value}
                              enumValues={ofProperty.enumValues}
                              size={size}/>;

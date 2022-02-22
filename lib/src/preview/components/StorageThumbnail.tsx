@@ -11,7 +11,7 @@ import { useStorageSource } from "../../hooks";
 export const StorageThumbnail = React.memo<PreviewComponentProps<string>>(StorageThumbnailInternal, areEqual) as React.FunctionComponent<PreviewComponentProps<string>>;
 
 function areEqual(prevProps: PreviewComponentProps<string>, nextProps: PreviewComponentProps<string>) {
-    return prevProps.name === nextProps.name &&
+    return prevProps.propertyKey === nextProps.propertyKey &&
         prevProps.size === nextProps.size &&
         prevProps.height === nextProps.height &&
         prevProps.width === nextProps.width &&
@@ -21,7 +21,7 @@ function areEqual(prevProps: PreviewComponentProps<string>, nextProps: PreviewCo
 const URL_CACHE: Record<string, string> = {};
 
 export function StorageThumbnailInternal({
-                                             name,
+                                             propertyKey,
                                              value,
                                              property,
                                              size
@@ -55,7 +55,7 @@ export function StorageThumbnailInternal({
     if (!storagePathOrDownloadUrl) return null;
 
     return url
-        ? <UrlComponentPreview name={name}
+        ? <UrlComponentPreview propertyKey={propertyKey}
                              value={url}
                              property={property}
                              size={size}/>

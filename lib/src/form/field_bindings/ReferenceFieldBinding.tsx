@@ -115,7 +115,7 @@ const StyledFormControl = styled(FormControl)((
  * @category Form fields
  */
 export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
-                                                                     key,
+                                                                     propertyKey,
                                                                      value,
                                                                      setValue,
                                                                      error,
@@ -255,7 +255,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                                     <ErrorBoundary>{
                                         entity
                                             ? <PreviewComponent
-                                                name={key as string}
+                                                propertyKey={key as string}
                                                 value={(entity.values as any)[key]}
                                                 property={property as ResolvedProperty}
                                                 size={"tiny"}/>

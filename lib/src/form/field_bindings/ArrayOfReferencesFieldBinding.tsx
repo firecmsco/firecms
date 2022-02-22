@@ -25,7 +25,7 @@ type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
  * @category Form fields
  */
 export function ArrayOfReferencesFieldBinding({
-                                           key,
+                                           propertyKey,
                                            value,
                                            error,
                                            showError,
@@ -116,7 +116,7 @@ export function ArrayOfReferencesFieldBinding({
                     {collectionResolver && <>
 
                         <ArrayContainer value={value}
-                                        name={key}
+                                        name={propertyKey}
                                         buildEntry={buildEntry}
                                         disabled={isSubmitting}/>
 

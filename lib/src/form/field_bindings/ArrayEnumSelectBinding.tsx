@@ -56,7 +56,7 @@ const StyledFormControl = styled(FormControl)((
  * @category Form fields
  */
 export function ArrayEnumSelectBinding({
-                                    key,
+                                    propertyKey,
                                     value,
                                     setValue,
                                     error,
@@ -109,7 +109,7 @@ export function ArrayEnumSelectBinding({
             }}
         >
 
-            <InputLabel id={`${key}-multiselect-label`}>
+            <InputLabel id={`${propertyKey}-multiselect-label`}>
                 <LabelWithIcon property={property}/>
             </InputLabel>
 
@@ -119,7 +119,7 @@ export function ArrayEnumSelectBinding({
                     minHeight: "64px"
                 }}
                 variant={"filled"}
-                labelId={`${key}-multiselect-label`}
+                labelId={`${propertyKey}-multiselect-label`}
                 value={validValue ? value.map(v => v.toString()) : []}
                 autoFocus={autoFocus}
                 disabled={disabled}
@@ -135,7 +135,7 @@ export function ArrayEnumSelectBinding({
                 }}
                 renderValue={(selected: any) => (
                     <ArrayEnumPreview value={selected}
-                                      name={key}
+                                      name={propertyKey}
                                       enumValues={enumValues}
                                       size={"regular"}/>
                 )}>
@@ -144,7 +144,7 @@ export function ArrayEnumSelectBinding({
                     .map(([enumKey, labelOrConfig]) => {
                         const checked = validValue && value.map(v => v.toString()).includes(enumKey.toString());
                         return (
-                            <MenuItem key={`form-select-${key}-${enumKey}`}
+                            <MenuItem key={`form-select-${propertyKey}-${enumKey}`}
                                       value={enumKey}
                                       disabled={isEnumValueDisabled(labelOrConfig)}
                                       dense={true}>

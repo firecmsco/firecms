@@ -315,7 +315,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                 <PreviewComponent
                     width={width}
                     height={height}
-                    name={name as string}
+                    propertyKey={name as string}
                     value={internalValue}
                     property={property}
                     size={getPreviewSizeFrom(size)}

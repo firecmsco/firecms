@@ -11,7 +11,7 @@ import { useFireCMSContext } from "../../hooks";
  * @category Preview components
  */
 export function TimestampPreview({
-                                     name,
+                                     propertyKey,
                                      value,
                                      property,
                                      size

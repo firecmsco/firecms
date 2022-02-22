@@ -45,7 +45,7 @@ const Root = styled('div')((
  * @category Preview components
  */
 export function ArrayOneOfPreview({
-                                      name,
+                                      propertyKey,
                                       value,
                                       property,
                                       size
@@ -55,7 +55,7 @@ export function ArrayOneOfPreview({
         throw Error("Picked wrong preview component ArrayPreview");
 
     if (!property.oneOf) {
-        throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
+        throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
     }
 
 
@@ -77,7 +77,7 @@ export function ArrayOneOfPreview({
                     <div className={classes.arrayItemBig}>
                         <ErrorBoundary>
                             {value && <PreviewComponent
-                                name={name}
+                                propertyKey={propertyKey}
                                 value={value[valueField]}
                                 property={properties[value[typeField]] as ResolvedProperty<any>}
                                 size={childSize}/>}

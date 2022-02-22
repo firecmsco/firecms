@@ -63,7 +63,7 @@ import { useDebounce } from "../core/internal/useDebounce";
  */
 export function buildPropertyField<T extends CMSType = any, M = any>
 ({
-     name,
+     propertyKey,
      property,
      context,
      includeDescription,
@@ -98,7 +98,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
             component = ArrayOneOfFieldBinding as ComponentType<FieldProps<T>>;
         }
         if (!of && !oneOf) {
-            throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
+            throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
         }
     } else if (property.dataType === "map") {
         component = MapFieldBinding as ComponentType<FieldProps<T>>;
@@ -135,7 +135,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
     if (component) {
 
         const componentProps = {
-            name,
+            propertyKey: propertyKey,
             property,
             includeDescription,
             underlyingValueHasChanged,
@@ -154,7 +154,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
         return (
             <FieldComponent
                 required={property.validation?.required}
-                name={`${name}`}
+                name={`${propertyKey}`}
             >
                 {(fieldProps: FormikFieldProps<T>) => {
                     return <FieldInternal
@@ -176,7 +176,7 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
 ({
      component,
      componentProps: {
-         name,
+         propertyKey,
          property,
          includeDescription,
          underlyingValueHasChanged,
@@ -199,8 +199,8 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
     const customFieldProps: any = property.customProps;
     const value = fieldProps.field.value;
     const initialValue = fieldProps.meta.initialValue;
-    const error = getIn(fieldProps.form.errors, name);
-    const touched = getIn(fieldProps.form.touched, name);
+    const error = getIn(fieldProps.form.errors, propertyKey);
+    const touched = getIn(fieldProps.form.touched, propertyKey);
 
     const showError: boolean = error &&
         (fieldProps.form.submitCount > 0 || property.validation?.unique) &&
@@ -211,7 +211,7 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
     const [internalValue, setInternalValue] = useState<T | null>(value);
 
     const doUpdate = React.useCallback(() => {
-        fieldProps.form.setFieldValue(name, internalValue);
+        fieldProps.form.setFieldValue(propertyKey, internalValue);
     }, [internalValue]);
 
     useDebounce(internalValue, doUpdate, 34);
@@ -226,11 +226,11 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
     );
 
     const cmsFieldProps: FieldProps<T> = {
-        key: name,
+        propertyKey: propertyKey,
         value: internalValue as T,
         initialValue,
         setValue: (value: T | null) => {
-            fieldProps.form.setFieldTouched(name, true, false);
+            fieldProps.form.setFieldTouched(propertyKey, true, false);
             setInternalValue(value);
         },
         error,

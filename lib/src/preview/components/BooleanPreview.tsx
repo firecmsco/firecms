@@ -6,7 +6,7 @@ import { PreviewComponentProps } from "../internal";
  * @category Preview components
  */
 export function BooleanPreview({
-                                   name,
+                                   propertyKey,
                                    value,
                                    property,
                                    size

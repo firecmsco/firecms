@@ -153,7 +153,7 @@ export function EntityPreview<M>(
                                     className={classes.valuePreview}>
                                     <ErrorBoundary>
                                         <PreviewComponent
-                                            name={key}
+                                            propertyKey={key}
                                             value={value}
                                             property={property}
                                             size={"regular"}/>

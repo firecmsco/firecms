@@ -27,7 +27,7 @@ const Root = styled('div')((
  * @category Preview components
  */
 export function ArrayOfReferencesPreview({
-                                             name,
+                                             propertyKey,
                                              value,
                                              property,
                                              size
@@ -44,9 +44,9 @@ export function ArrayOfReferencesPreview({
             {value &&
             value.map((v, index) =>
                 <div className={classes.arrayItem}
-                     key={`preview_array_ref_${name}_${index}`}>
+                     key={`preview_array_ref_${propertyKey}_${index}`}>
                     <ReferencePreview
-                        name={`${name}[${index}]`}
+                        name={`${propertyKey}[${index}]`}
                         size={childSize}
                         value={v}
                         property={property.of as ResolvedReferenceProperty}

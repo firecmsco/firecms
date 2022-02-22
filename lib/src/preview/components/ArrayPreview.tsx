@@ -38,14 +38,14 @@ const Root = styled('div')((
  * @category Preview components
  */
 export function ArrayPreview({
-                                 name,
+                                 propertyKey,
                                  value,
                                  property,
                                  size
                              }: PreviewComponentProps<any[]>) {
 
     if (!property.of) {
-        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${name}`);
+        throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${propertyKey}`);
     }
 
 
@@ -67,7 +67,7 @@ export function ArrayPreview({
                     <div className={classes.arrayItemBig}>
                         <ErrorBoundary>
                             <PreviewComponent
-                                name={name}
+                                propertyKey={propertyKey}
                                 value={value}
                                 property={property.of as ResolvedProperty<any>}
                                 size={childSize}/>

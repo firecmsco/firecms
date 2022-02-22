@@ -41,7 +41,7 @@ const Root = styled('div')((
  * @category Preview components
  */
 export function ArrayOfStringsPreview({
-                                          name,
+                                          propertyKey,
                                           value,
                                           property,
                                           size
@@ -62,9 +62,9 @@ export function ArrayOfStringsPreview({
             {value &&
             value.map((v, index) =>
                 <div className={classes.arrayItem}
-                     key={`preview_array_strings_${name}_${index}`}>
+                     key={`preview_array_strings_${propertyKey}_${index}`}>
                     <ErrorBoundary>
-                        <StringPreview name={name}
+                        <StringPreview propertyKey={propertyKey}
                                        property={stringProperty}
                                        value={v}
                                        size={size}/>
