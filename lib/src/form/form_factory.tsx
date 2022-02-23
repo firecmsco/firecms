@@ -30,7 +30,7 @@ import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 import { MarkdownFieldBinding } from "./field_bindings/MarkdownFieldBinding";
 import { ArrayOfReferencesFieldBinding } from "./field_bindings/ArrayOfReferencesFieldBinding";
 
-import { isReadOnly } from "../core/utils";
+import { isReadOnly } from "../core/util/entities";
 import equal from "react-fast-compare"
 import { useDebounce } from "../core/internal/useDebounce";
 

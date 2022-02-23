@@ -173,7 +173,8 @@ export const productSchema = buildSchema<Product>({
             of: {
                 dataType: "string",
                 enumValues: locales
-            }
+            },
+            defaultValue: ["es"]
         },
         uppercase_name: {
             title: "Uppercase Name",

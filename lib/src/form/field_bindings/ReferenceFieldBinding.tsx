@@ -36,7 +36,7 @@ import {
     useNavigation,
     useSideEntityController
 } from "../../hooks";
-import { getReferenceFrom } from "../../core/utils";
+import { getReferenceFrom } from "../../core/util/entities";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
 const PREFIX = 'ReferenceField';

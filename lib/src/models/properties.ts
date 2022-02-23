@@ -135,6 +135,11 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * or in `preview`.
      */
     customProps?: CustomProps;
+
+    /**
+     * This value will be set by default in new entities
+     */
+    defaultValue?: T;
 }
 
 /**

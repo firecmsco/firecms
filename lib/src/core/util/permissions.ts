@@ -61,4 +61,3 @@ export function canDelete<M extends { [Key: string]: any }, UserType>
  context: FireCMSContext<UserType>): boolean {
     return checkHasPermissionOnEntity(permission, entity, authController, path, context).delete ?? DEFAULT_PERMISSIONS.delete;
 }
-

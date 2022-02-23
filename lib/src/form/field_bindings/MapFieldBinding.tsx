@@ -21,7 +21,7 @@ import { pick } from "../../core/util/objects";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
-import { isHidden } from "../../core/utils";
+import { isHidden } from "../../core/util/entities";
 
 /**
  * Field that renders the children property fields

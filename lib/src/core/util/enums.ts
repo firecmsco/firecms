@@ -36,4 +36,3 @@ export function buildEnumLabel(
         return labelOrConfig;
     }
 }
-

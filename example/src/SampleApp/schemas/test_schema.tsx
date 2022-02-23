@@ -431,11 +431,7 @@ export const testEntitySchema = buildSchema({
             },
             dependencies: ["name"]
         }
-    ],
-    defaultValues: {
-        // empty_string: "",
-        title: null
-    }
+    ]
 });
 
 export const testCallbacks: EntityCallbacks = {

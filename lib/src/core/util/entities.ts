@@ -7,9 +7,9 @@ import {
     EnumConfig,
     EnumValueConfig,
     EnumValues,
-    GeoPoint,
     NumberProperty,
     Properties,
+    PropertiesOrBuilder,
     Property,
     PropertyOrBuilder,
     ResolvedArrayProperty,
@@ -19,8 +19,8 @@ import {
     ResolvedStringProperty,
     SchemaRegistry,
     StringProperty
-} from "../models";
-import { mergeDeep } from "./util/objects";
+} from "../../models";
+import { mergeDeep } from "./objects";
 
 export function isReadOnly(property: Property | ResolvedProperty): boolean {
     if (property.readOnly)
@@ -123,27 +123,24 @@ export function resolveEnumValues(input: EnumValues | string, enumConfigs: EnumC
     }
 }
 
-export function initWithProperties<M extends { [Key: string]: any }>
-(properties: Properties<M> | ResolvedProperties<M>, defaultValues?: Partial<EntityValues<M>>): EntityValues<M> {
+export function getDefaultValuesFor<M extends { [Key: string]: any }>(properties: PropertiesOrBuilder<M> | ResolvedProperties<M>): EntityValues<M> {
     return Object.entries(properties)
         .map(([key, property]) => {
-            const propertyDefaultValue = defaultValues && key in defaultValues ? (defaultValues as any)[key] : undefined;
-            const value = initPropertyValue(key, property as Property, propertyDefaultValue);
+            const value = getDefaultValueFor(property as Property);
             return value === undefined ? {} : { [key]: value };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
 }
 
-function initPropertyValue(key: string, property: Property, defaultValue: any) {
-    let value: any;
+function getDefaultValueFor(property: PropertyOrBuilder) {
+    if (typeof property === "function") return undefined;
     if (property.dataType === "map" && property.properties) {
-        value = initWithProperties(property.properties as Properties, defaultValue);
-    } else if (defaultValue !== undefined) {
-        value = defaultValue;
+        const defaultValuesFor = getDefaultValuesFor(property.properties as Properties);
+        if (Object.keys(defaultValuesFor).length === 0) return undefined;
+        return defaultValuesFor;
     } else {
-        value = undefined;
+        return property.defaultValue;
     }
-    return value;
 }
 
 /**
@@ -234,13 +231,13 @@ export function traverseValueProperty(inputValue: any,
         if (property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => traverseValueProperty(e, property.of as Property, operation));
         } else if (property.oneOf && Array.isArray(inputValue)) {
-            const typeField = property.oneOf!.typeField ?? "type";
-            const valueField = property.oneOf!.valueField ?? "value";
+            const typeField = property.oneOf?.typeField ?? "type";
+            const valueField = property.oneOf?.valueField ?? "value";
             value = inputValue.map((e) => {
                 if (e === null) return null;
                 if (typeof e !== "object") return e;
                 const type = e[typeField];
-                const childProperty = property.oneOf!.properties[type];
+                const childProperty = property.oneOf?.properties[type];
                 if (!type || !childProperty) return e;
                 return {
                     [typeField]: type,

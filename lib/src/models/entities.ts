@@ -70,11 +70,6 @@ export interface EntitySchema<M extends { [Key: string]: any } = any,
     propertiesOrder?: (keyof M)[];
 
     /**
-     * When creating a new entity, set some values as already initialized
-     */
-    defaultValues?: any;
-
-    /**
      * Array of builders for rendering additional panels in an entity view.
      * Useful if you need to render custom views
      */

@@ -12,7 +12,7 @@ import {
 import { ReferenceDialog } from "../../../ReferenceDialog";
 
 import { getPreviewSizeFrom } from "../../../../../preview/util";
-import { getReferenceFrom } from "../../../../utils";
+import { getReferenceFrom } from "../../../../util/entities";
 import { useNavigation } from "../../../../../hooks";
 
 

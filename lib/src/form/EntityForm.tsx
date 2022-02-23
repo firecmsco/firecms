@@ -15,7 +15,7 @@ import { buildPropertyField } from "./form_factory";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
 import { ErrorFocus } from "./components/ErrorFocus";
-import { initWithProperties, isHidden, isReadOnly } from "../core/utils";
+import { getDefaultValuesFor, isHidden, isReadOnly } from "../core/util/entities";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
@@ -124,9 +124,9 @@ export function EntityForm<M>({
     const baseDataSourceValues: Partial<EntityValues<M>> = useMemo(() => {
         const properties = initialResolvedSchema.properties;
         if ((status === "existing" || status === "copy") && entity) {
-            return entity.values ?? initWithProperties(properties, initialResolvedSchema.defaultValues);
+            return entity.values ?? getDefaultValuesFor(properties);
         } else if (status === "new") {
-            return initWithProperties(properties, initialResolvedSchema.defaultValues);
+            return getDefaultValuesFor(properties);
         } else {
             console.error({ status, entity });
             throw new Error("Form has not been initialised with the correct parameters");

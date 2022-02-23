@@ -2,7 +2,7 @@ import React from "react";
 
 import { EnumValuesChip } from "../components/CustomChip";
 import { PreviewComponentProps } from "../internal";
-import { resolveEnumValues } from "../../core/utils";
+import { resolveEnumValues } from "../../core/util/entities";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
 /**

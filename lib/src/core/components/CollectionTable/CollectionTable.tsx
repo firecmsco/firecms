@@ -182,6 +182,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
             context,
             onSaveSuccess: () => setSaved(true),
             onSaveFailure: (e: Error) => {
+                console.error(e);
                 setError(e);
             }
         });

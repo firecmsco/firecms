@@ -2,8 +2,6 @@ import {
     Entity,
     EntityReference,
     ExportConfig,
-    Properties,
-    Property,
     ResolvedEntitySchema,
     ResolvedProperties,
     ResolvedProperty

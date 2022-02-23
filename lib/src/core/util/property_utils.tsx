@@ -1,6 +1,6 @@
 import React from "react";
 import AdjustIcon from "@mui/icons-material/Adjust";
-import FunctionsIcon from '@mui/icons-material/Functions';
+import FunctionsIcon from "@mui/icons-material/Functions";
 import Crop75Icon from "@mui/icons-material/Crop75";
 
 import { Property, PropertyOrBuilder, ResolvedProperty } from "../../models";

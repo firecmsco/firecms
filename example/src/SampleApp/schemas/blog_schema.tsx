@@ -56,7 +56,8 @@ export const blogSchema = buildSchema<BlogEntry>({
                     disabled: !values.header_image,
                 },
                 draft: "Draft"
-            }
+            },
+            defaultValue: "draft"
         })),
         created_at: {
             title: "Created at",
@@ -129,15 +130,12 @@ export const blogSchema = buildSchema<BlogEntry>({
             of: {
                 dataType: "string",
                 previewAsTag: true
-            }
+            },
+            defaultValue: ["default tag"]
         }
     },
     initialFilter: {
         "status": ["==", "published"]
-    },
-    defaultValues: {
-        status: "draft",
-        tags: ["default tag"]
     }
 });
 

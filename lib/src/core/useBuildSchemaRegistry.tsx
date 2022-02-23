@@ -13,7 +13,11 @@ import {
     UserConfigurationPersistence
 } from "../models";
 import { getValueInPath, mergeDeep } from "./util/objects";
-import { buildPropertyFrom, computePropertyEnums } from "./utils";
+import {
+    buildPropertyFrom,
+    computePropertyEnums,
+    getDefaultValuesFor
+} from "./util/entities";
 import { ConfigurationPersistence } from "../models/config_persistence";
 import { mergeSchemas } from "./util/schemas";
 
@@ -121,12 +125,13 @@ export function useBuildSchemaRegistry<UserType>({
         const schemaOverride = getUserSchemaOverride<M>(path);
         const storedProperties = getValueInPath(schemaOverride, "properties");
 
+        const defaultValues = getDefaultValuesFor(schema.properties);
         const properties = resolveProperties<M>({
             propertiesOrBuilder: schema.properties,
             path,
             entityId,
-            values: values ?? schema.defaultValues,
-            previousValues: previousValues ?? values ?? schema.defaultValues,
+            values: values ?? defaultValues,
+            previousValues: previousValues ?? values ?? defaultValues,
             enumConfigs
         });
 

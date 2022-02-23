@@ -18,7 +18,7 @@ import {
     SchemaRegistry,
     WhereFilterOp
 } from "../../models";
-import { sanitizeData, updateAutoValues } from "../../core/utils";
+import { sanitizeData, updateAutoValues } from "../../core/util/entities";
 import {
     collection,
     CollectionReference,
@@ -533,7 +533,9 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
         return doc(firestore, data.path, data.id);
     } else if (data instanceof GeoPoint) {
         return new FirestoreGeoPoint(data.latitude, data.longitude);
-    } else if (typeof data === "object") {
+    } else if (data instanceof Date) {
+        return data;
+    } else if (data && typeof data === "object") {
         return Object.entries(data)
             .map(([key, v]) => ({ [key]: cmsToFirestoreModel(v, firestore) }))
             .reduce((a, b) => ({ ...a, ...b }), {});

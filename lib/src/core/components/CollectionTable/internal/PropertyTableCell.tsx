@@ -25,7 +25,7 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { useClearRestoreValue } from "../../../../hooks";
 import equal from "react-fast-compare"
-import { isReadOnly } from "../../../utils";
+import { isReadOnly } from "../../../util/entities";
 import { TableCell } from "../../Table/TableCell";
 import { AnySchema } from "yup";
 import { TableStorageUpload } from "./fields/TableStorageUpload";

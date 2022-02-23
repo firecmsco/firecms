@@ -12,7 +12,7 @@ import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { ErrorView, ReferenceDialog } from "../../core";
 
 import { useClearRestoreValue, useNavigation } from "../../hooks";
-import { getReferenceFrom } from "../../core/utils";
+import { getReferenceFrom } from "../../core/util/entities";
 
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;

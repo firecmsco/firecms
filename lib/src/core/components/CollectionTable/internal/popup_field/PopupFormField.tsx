@@ -35,7 +35,7 @@ import clsx from "clsx";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
-import { isReadOnly } from "../../../../utils";
+import { isReadOnly } from "../../../../util/entities";
 import { useSchemaRegistry } from "../../../../../hooks/useSchemaRegistry";
 
 const PREFIX = "PopupFormField";

@@ -34,7 +34,7 @@ import {
     useSnackbarController,
     useStorageSource
 } from "../../hooks";
-import { isReadOnly } from "../../core/utils";
+import { isReadOnly } from "../../core/util/entities";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { resolveFilename } from "../../core/util/storage";
 

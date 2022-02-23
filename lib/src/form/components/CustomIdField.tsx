@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 import {
     FormControl,
@@ -31,9 +31,9 @@ import {
     useSnackbarController
 } from "../../hooks";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-import { resolveEnumValues } from "../../core/utils";
+import { resolveEnumValues } from "../../core/util/entities";
 
-const PREFIX = 'CustomIdField';
+const PREFIX = "CustomIdField";
 
 const classes = {
     input: `${PREFIX}-input`,
@@ -64,7 +64,7 @@ export function CustomIdField<M, UserType>({
                                                entity
                                            }: {
     customId?: boolean | EnumValues | string
-    entityId?:  string
+    entityId?: string
     status: EntityStatus,
     onChange: (id?: string) => void,
     error: boolean,
@@ -184,4 +184,3 @@ export function CustomIdField<M, UserType>({
         </StyledFormControl>
     );
 }
-

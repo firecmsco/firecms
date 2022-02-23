@@ -4,7 +4,7 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { CustomChip, EnumValuesChip } from "../components/CustomChip";
 import { PreviewComponentProps } from "../internal";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-import { resolvePropertyEnum } from "../../core/utils";
+import { resolvePropertyEnum } from "../../core/util/entities";
 
 /**
  * @category Preview components

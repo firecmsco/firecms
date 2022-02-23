@@ -1,4 +1,9 @@
-import { EntitySchema, PropertiesOrBuilder, Property } from "../../models";
+import {
+    EntitySchema,
+    EntityValues,
+    PropertiesOrBuilder,
+    Property
+} from "../../models";
 import { mergeDeep, removeFunctions } from "./objects";
 
 export function prepareSchemaForPersistence<M>(schema: EntitySchema<M>) {
