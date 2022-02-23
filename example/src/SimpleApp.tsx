@@ -157,7 +157,7 @@ const productSchema = buildSchema<Product>({
         },
         expires_on: {
             title: "Expires on",
-            dataType: "timestamp"
+            dataType: "date"
         }
     }
 });

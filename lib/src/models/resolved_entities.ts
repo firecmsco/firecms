@@ -8,7 +8,7 @@ import {
     NumberProperty,
     ReferenceProperty,
     StringProperty,
-    TimestampProperty
+    DateProperty
 } from "./properties";
 import {
     EntityReference,
@@ -75,9 +75,9 @@ export type ResolvedBooleanProperty =
         dataType: "boolean",
     }
 export type ResolvedTimestampProperty =
-    Omit<TimestampProperty, "dataType"> &
+    Omit<DateProperty, "dataType"> &
     {
-        dataType: "timestamp",
+        dataType: "date",
     }
 export type ResolvedGeopointProperty =
     Omit<GeopointProperty, "dataType"> &

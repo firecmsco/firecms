@@ -80,7 +80,7 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
         return getYupMapObjectSchema(propertyContext);
     } else if (property.dataType === "array") {
         return getYupArraySchema(propertyContext);
-    } else if (property.dataType === "timestamp") {
+    } else if (property.dataType === "date") {
         return getYupDateSchema(propertyContext);
     } else if (property.dataType === "geopoint") {
         return getYupGeoPointSchema(propertyContext);

@@ -108,7 +108,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
         else {
             component = ReferenceFieldBinding as ComponentType<FieldProps<T>>;
         }
-    } else if (property.dataType === "timestamp") {
+    } else if (property.dataType === "date") {
         component = DateTimeFieldBinding as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "boolean") {
         component = SwitchFieldBinding as ComponentType<FieldProps<T>>;

@@ -480,7 +480,7 @@ export function useFirestoreDataSource({
 //                 return null;
 //             }
 //
-//             if (value instanceof Timestamp && property.dataType === "timestamp") {
+//             if (value instanceof Timestamp && property.dataType === "date") {
 //                 return value.toDate();
 //             }
 //

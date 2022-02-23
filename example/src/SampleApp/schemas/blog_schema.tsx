@@ -61,7 +61,7 @@ export const blogSchema = buildSchema<BlogEntry>({
         })),
         created_at: {
             title: "Created at",
-            dataType: "timestamp",
+            dataType: "date",
             autoValue: "on_create"
         },
         content: buildProperty({
@@ -117,7 +117,7 @@ export const blogSchema = buildSchema<BlogEntry>({
         }),
         publish_date: buildProperty({
             title: "Publish date",
-            dataType: "timestamp"
+            dataType: "date"
         }),
         reviewed: buildProperty({
             title: "Reviewed",

@@ -183,7 +183,7 @@ export const productSchema = buildSchema<Product>({
             description: "This field gets updated with a preSave callback"
         },
         added_on: {
-            dataType: "timestamp",
+            dataType: "date",
             title: "Added on",
             autoValue: "on_create"
         }

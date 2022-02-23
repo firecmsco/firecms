@@ -197,7 +197,7 @@ export const testEntitySchema = buildSchema({
         },
         test_date: {
             title: "Test date",
-            dataType: "timestamp"
+            dataType: "date"
         },
         content: {
             title: "Content",
@@ -359,7 +359,7 @@ export const testEntitySchema = buildSchema({
             dataType: "array",
             title: "Available Dates",
             of: {
-                dataType: "timestamp"
+                dataType: "date"
             }
         },
         images: {
@@ -383,12 +383,12 @@ export const testEntitySchema = buildSchema({
         },
         created_at: {
             title: "Created at",
-            dataType: "timestamp",
+            dataType: "date",
             autoValue: "on_create"
         },
         updated_on: {
             title: "Updated on",
-            dataType: "timestamp",
+            dataType: "date",
             autoValue: "on_update"
         },
         description: {

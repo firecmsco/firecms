@@ -19,7 +19,7 @@ import {
     PropertyBuilder,
     ReferenceProperty,
     StringProperty,
-    TimestampProperty,
+    DateProperty,
     User
 } from "../models";
 
@@ -71,7 +71,7 @@ export function buildProperty<T extends CMSType = CMSType, P extends Property<T>
 ): P extends StringProperty ? StringProperty :
     P extends NumberProperty ? NumberProperty :
         P extends BooleanProperty ? BooleanProperty :
-            P extends TimestampProperty ? TimestampProperty :
+            P extends DateProperty ? DateProperty :
                 P extends GeopointProperty ? GeopointProperty :
                     P extends ReferenceProperty ? ReferenceProperty :
                         P extends ArrayProperty ? ArrayProperty :

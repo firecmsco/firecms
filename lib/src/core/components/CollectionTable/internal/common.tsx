@@ -14,7 +14,7 @@ export function getCellAlignment(property: Property | ResolvedProperty): "right"
         if (property.enumValues)
             return "left";
         return "right";
-    } else if (property.dataType === "timestamp") {
+    } else if (property.dataType === "date") {
         return "right";
     } else {
         return "left";
@@ -28,7 +28,7 @@ export function isPropertyFilterable(property: Property): boolean {
         return true;
     } else if (property.dataType === "string") {
         return true;
-    } else if (property.dataType === "timestamp") {
+    } else if (property.dataType === "date") {
         return true;
     } else if (property.dataType === "array") {
         if (property.of)
@@ -76,7 +76,7 @@ export function getPropertyColumnWidth(property: ResolvedProperty): number {
         return 140;
     } else if (property.dataType === "map") {
         return 360;
-    } else if (property.dataType === "timestamp") {
+    } else if (property.dataType === "date") {
         return 160;
     } else if (property.dataType === "reference") {
         return 220;

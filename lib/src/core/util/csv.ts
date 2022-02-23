@@ -100,7 +100,7 @@ function processCSVValue(inputValue: any,
     } else if (property.dataType === "reference") {
         const ref = inputValue ? inputValue as EntityReference : undefined;
         value = ref ? ref.pathWithId : null;
-    } else if (property.dataType === "timestamp") {
+    } else if (property.dataType === "date") {
         value = inputValue ? inputValue.getTime() : null;
     } else {
         value = inputValue;

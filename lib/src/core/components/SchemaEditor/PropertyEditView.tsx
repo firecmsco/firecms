@@ -328,7 +328,7 @@ function PropertyEditView({
             updatedProperty = ({
                 ...propertyData,
                 ...buildProperty({
-                    dataType: "timestamp"
+                    dataType: "date"
                 })
             });
         } else if (selectedWidgetId === "repeat") {

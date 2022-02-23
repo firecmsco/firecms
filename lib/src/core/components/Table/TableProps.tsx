@@ -121,7 +121,7 @@ export interface TableProps<T> {
  * @category Components
  */
 export type TableColumnFilter = {
-    dataType: "number" | "string" | "boolean" | "timestamp"
+    dataType: "number" | "string" | "boolean" | "date"
     isArray?: boolean;
     title?: string;
     enumValues?: TableEnumValues;

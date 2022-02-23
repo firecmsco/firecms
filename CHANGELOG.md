@@ -46,6 +46,9 @@ buildProperty<string>({
   called `propertyKey`
 - Removed `mediaType` in the storage configuration of string properties. It is
   not inferred automatically.
+- `TimestampProperty` is now renamed to `DateProperty` in order to reflect
+  better the alignment with JS types instead of Firebase ones. The discriminator
+  when declaring date properties now is `date` instead of `timestamp` 
 
 
 ## [1.0.0-rc.2] - 2022-02-08

@@ -25,7 +25,7 @@ import { mergeDeep } from "./objects";
 export function isReadOnly(property: Property | ResolvedProperty): boolean {
     if (property.readOnly)
         return true;
-    if (property.dataType === "timestamp") {
+    if (property.dataType === "date") {
         if (property.autoValue)
             return true;
     }
@@ -164,7 +164,7 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
         inputValues,
         properties,
         (inputValue, property) => {
-            if (property.dataType === "timestamp") {
+            if (property.dataType === "date") {
                 if (status === "existing" && property.autoValue === "on_update") {
                     return timestampNowValue;
                 } else if ((status === "new" || status === "copy") &&

@@ -151,7 +151,7 @@ export const WIDGETS: Record<WidgetId, Widget> = {
     },
     date_time: {
         name: "Date/time",
-        dataType: "timestamp",
+        dataType: "date",
         icon: ScheduleIcon,
         color: "#8b46ff"
     },
@@ -210,7 +210,7 @@ export function getWidgetId(property: Property | ResolvedProperty): WidgetId | u
         }
     } else if (property.dataType === "boolean") {
         return "switch";
-    } else if (property.dataType === "timestamp") {
+    } else if (property.dataType === "date") {
         return "date_time";
     } else if (property.dataType === "reference") {
         return "reference";

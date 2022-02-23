@@ -266,7 +266,7 @@ function createFilterField(id: string,
                                    setValue={setFilterValue}
                                    name={id as string}
                                    title={title}/>;
-    } else if (filterConfig.dataType === "timestamp") {
+    } else if (filterConfig.dataType === "date") {
         const title = filterConfig.title;
         return <DateTimeFilterField value={filterValue}
                                     setValue={setFilterValue}

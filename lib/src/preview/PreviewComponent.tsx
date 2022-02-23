@@ -151,7 +151,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);
         }
-    } else if (property.dataType === "timestamp") {
+    } else if (property.dataType === "date") {
         if (value instanceof Date) {
             content = <TimestampPropertyPreview {...fieldProps}
                                                 value={value}

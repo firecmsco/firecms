@@ -27,7 +27,7 @@ export type AnyProperty =
     StringProperty |
     NumberProperty |
     BooleanProperty |
-    TimestampProperty |
+    DateProperty |
     GeopointProperty |
     ReferenceProperty |
     ArrayProperty |
@@ -40,7 +40,7 @@ export type Property<T extends CMSType = CMSType> =
     T extends string ? StringProperty :
         T extends number ? NumberProperty :
             T extends boolean ? BooleanProperty :
-                T extends Date ? TimestampProperty :
+                T extends Date ? DateProperty :
                     T extends GeoPoint ? GeopointProperty :
                         T extends EntityReference ? ReferenceProperty :
                             T extends Array<CMSType> ? ArrayProperty<T> :
@@ -55,7 +55,7 @@ export type DataType =
     | "boolean"
     | "map"
     | "array"
-    | "timestamp"
+    | "date"
     | "geopoint"
     | "reference";
 
@@ -452,9 +452,9 @@ export interface MapProperty<T extends { [Key: string]: any } = any> extends Bas
 /**
  * @category Entity properties
  */
-export interface TimestampProperty extends BaseProperty<Date> {
+export interface DateProperty extends BaseProperty<Date> {
 
-    dataType: "timestamp";
+    dataType: "date";
 
     /**
      * Rules for validating this property

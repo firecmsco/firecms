@@ -6,7 +6,7 @@ import {
     Theme,
     Typography
 } from "@mui/material";
-import { TimestampProperty } from "../../../../../models";
+import { DateProperty } from "../../../../../models";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import { EmptyValue, TimestampPropertyPreview } from "../../../../../preview";
 
@@ -35,7 +35,7 @@ export function TableDateField(props: {
     updateValue: (newValue: (Date | null)) => void;
     focused: boolean;
     disabled: boolean;
-    property: TimestampProperty;
+    property: DateProperty;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     setPreventOutsideClick: (value: any) => void;
 }) {

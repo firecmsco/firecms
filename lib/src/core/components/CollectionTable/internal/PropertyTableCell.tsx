@@ -241,7 +241,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                           internalValue={internalValue as boolean}
                                           updateValue={updateValue}
             />;
-        } else if (property.dataType === "timestamp") {
+        } else if (property.dataType === "date") {
             innerComponent = <TableDateField name={name as string}
                                              error={error}
                                              disabled={disabled}

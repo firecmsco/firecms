@@ -69,7 +69,7 @@ export function SkeletonComponent({
 
     } else if (property.dataType === "map") {
         content = renderMap(property as ResolvedMapProperty, size);
-    } else if (property.dataType === "timestamp") {
+    } else if (property.dataType === "date") {
         content = renderSkeletonText();
     } else if (property.dataType === "reference") {
         content = renderReference();

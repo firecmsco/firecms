@@ -202,7 +202,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                 isArray,
                 title
             };
-        } else if (property.dataType === "timestamp") {
+        } else if (property.dataType === "date") {
             const title = property.title;
             return {
                 dataType: property.dataType,
