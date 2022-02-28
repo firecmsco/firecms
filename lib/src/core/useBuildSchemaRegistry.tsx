@@ -4,6 +4,7 @@ import {
     EntityValues,
     EnumConfig,
     LocalEntitySchema,
+    Properties,
     PropertiesOrBuilder,
     PropertyOrBuilder,
     ResolvedEntitySchema,
@@ -126,7 +127,7 @@ export function useBuildSchemaRegistry<UserType>({
         const storedProperties = getValueInPath(schemaOverride, "properties");
 
         const defaultValues = getDefaultValuesFor(schema.properties);
-        const properties = resolveProperties<M>({
+        const resolvedProperties = resolveProperties<M>({
             propertiesOrBuilder: schema.properties,
             path,
             entityId,
@@ -135,9 +136,15 @@ export function useBuildSchemaRegistry<UserType>({
             enumConfigs
         });
 
+        const properties: Properties = mergeDeep(resolvedProperties, storedProperties);
+        const cleanedProperties = Object.entries(properties)
+            .filter(([_, property]) => Boolean(property.dataType))
+            .map(([id, property]) => ({ [id]: property }))
+            .reduce((a, b) => ({ ...a, ...b }), {});
+
         return {
             ...schema,
-            properties: mergeDeep(properties, storedProperties),
+            properties: cleanedProperties,
             originalSchema: schema
         } as ResolvedEntitySchema<M>;
     };
@@ -235,18 +242,23 @@ function resolveProperty<M>({
     propertyId: string,
     enumConfigs: EnumConfig[]
 }): ResolvedProperty | null {
-
-    const property = buildPropertyFrom({
-        propertyOrBuilder,
-        values: values ?? {},
-        previousValues: previousValues ?? values ?? {},
-        path,
-        entityId
-    });
-    if (property === null) return null;
-    return computePropertyEnums(
-        property,
-        enumConfigs);
+    try {
+        const property = buildPropertyFrom({
+            propertyOrBuilder,
+            values: values ?? {},
+            previousValues: previousValues ?? values ?? {},
+            path,
+            entityId
+        });
+        if (property === null) return null;
+        return computePropertyEnums(
+            property,
+            enumConfigs);
+    } catch (e) {
+        console.error("Error resolving property " + propertyId);
+        console.error(e);
+        return null;
+    }
 }
 
 /**

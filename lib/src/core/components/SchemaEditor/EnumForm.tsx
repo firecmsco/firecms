@@ -207,7 +207,6 @@ function EnumEntryDialog({
     </Dialog>
 }
 
-
 function validateLabel(value: string) {
     let error;
     if (!value) {

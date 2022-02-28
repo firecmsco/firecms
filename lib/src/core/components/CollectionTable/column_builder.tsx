@@ -148,7 +148,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
         return additionalColumns
             ? additionalColumns
                 .map((aC) => ({ [aC.id]: aC }))
-                .reduce((a, b) => ({ ...a, ...b }), [])
+                .reduce((a, b) => ({ ...a, ...b }), {})
             : {};
     }, [additionalColumns]);
 

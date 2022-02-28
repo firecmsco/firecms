@@ -36,7 +36,7 @@ import {
 } from "../../hooks";
 import { isReadOnly } from "../../core/util/entities";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { resolveFilename } from "../../core/util/storage";
+import { resolveStorageString } from "../../core/util/storage";
 
 const PREFIX = "StorageUploadField";
 
@@ -129,7 +129,6 @@ const StyledBox = styled(Box)(({ theme }:
 
 type StorageUploadFieldProps = FieldProps<string | string[]>;
 
-
 /**
  * Field that allows to upload files to Google Cloud Storage.
  *
@@ -138,18 +137,18 @@ type StorageUploadFieldProps = FieldProps<string | string[]>;
  * @category Form fields
  */
 export function StorageUploadFieldBinding({
-                                       propertyKey,
-                                       value,
-                                       setValue,
-                                       error,
-                                       showError,
-                                       autoFocus,
-                                       tableMode,
-                                       property,
-                                       includeDescription,
-                                       context,
-                                       isSubmitting
-                                   }: StorageUploadFieldProps) {
+                                              propertyKey,
+                                              value,
+                                              setValue,
+                                              error,
+                                              showError,
+                                              autoFocus,
+                                              tableMode,
+                                              property,
+                                              includeDescription,
+                                              context,
+                                              isSubmitting
+                                          }: StorageUploadFieldProps) {
 
     const multipleFilesSupported = property.dataType === "array";
     const disabled = isReadOnly(property) || !!property.disabled || isSubmitting;
@@ -176,7 +175,7 @@ export function StorageUploadFieldBinding({
 
     const fileNameBuilder = (file: File) => {
         if (storage.fileName) {
-            const fileName = resolveFilename(storage.fileName,
+            const fileName = resolveStorageString(storage.fileName,
                 storage,
                 context.values,
                 context.entityId,
@@ -194,26 +193,7 @@ export function StorageUploadFieldBinding({
     };
 
     const storagePathBuilder = (file: File) => {
-        if (typeof storage.storagePath === "string")
-            return storage.storagePath;
-
-        if (typeof storage.storagePath === "function") {
-            const storagePath = storage.storagePath({
-                entityId: context.entityId,
-                values: context.values,
-                property,
-                file,
-                storage,
-                propertyId: propertyKey
-            });
-
-            if (!storagePath || storagePath.length === 0) {
-                throw Error("You need to return a valid storage path");
-            }
-            return storagePath;
-        }
-        console.warn("When using a storage property, if you don't specify the storagePath, the root storage is used");
-        return "/";
+        return resolveStorageString(storage.storagePath, storage, context.values, context.entityId, context.path, property, file, propertyKey) ?? "/";
     };
 
     return (

@@ -601,11 +601,6 @@ export interface ArrayPropertyValidationSchema extends PropertyValidationSchema 
 export interface StorageConfig {
 
     /**
-     * Absolute path in your bucket. You can specify it directly or use a callback
-     */
-    storagePath: string | ((context: UploadedFileContext) => string);
-
-    /**
      * File MIME types that can be uploaded to this reference. Don't specify for
      * all
      */
@@ -620,31 +615,49 @@ export interface StorageConfig {
 
     /**
      * You can use this prop to customize the uploaded filename.
-     * You can use a function as a callback or a template email where you
+     * You can use a function as a callback or a string where you
      * specify some placeholders that get replaced with the corresponding values.
-     * - {entityId}
-     * - {propertyId}
-     * - {path}
-     * - {file}
-     * - {file.name}
-     * - {file.ext}
-     *
+     * - {file} - Full file name
+     * - {file.name} - Name of the file without extension
+     * - {file.ext} - Extension of the file
+     * - {entityId} - ID of the entity
+     * - {propertyId} - ID of this property
+     * - {path} - Path of this entity
      *
      * @param context
      */
     fileName?: string | ((context: UploadedFileContext) => string);
 
     /**
+     * Absolute path in your bucket.
+     *
+     * You can use a function as a callback or a string where you
+     * specify some placeholders that get replaced with the corresponding values.
+     * - {file} - Full file name
+     * - {file.name} - Name of the file without extension
+     * - {file.ext} - Extension of the file
+     * - {entityId} - ID of the entity
+     * - {propertyId} - ID of this property
+     * - {path} - Path of this entity
+     */
+    storagePath: string | ((context: UploadedFileContext) => string);
+
+    /**
      * When set to true, this flag indicates that the download URL of the file
-     * will be saved in the datasource instead of the Cloud storage path.
+     * will be saved in the datasource, instead of the storage path.
+     *
      * Note that the generated URL may use a token that, if disabled, may
      * make the URL unusable and lose the original reference to Cloud Storage,
-     * so it is not encouraged to use this flag. Defaults to false
+     * so it is not encouraged to use this flag.
+     *
+     * Defaults to false.
      */
     storeUrl?: boolean,
 
     /**
-     * Postprocess the path
+     * Postprocess the saved value (storage path or URL)
+     * after it has been resolved.
+     You
      */
     postProcess?: (pathOrUrl: string) => Promise<string>
 }
@@ -696,4 +709,5 @@ export type FileType =
     | "application/*"
     | "text/*"
     | "font/*"
-    | string;
+    | string
+    ;

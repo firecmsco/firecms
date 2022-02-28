@@ -23,7 +23,7 @@ import { ErrorBoundary } from "../../../../internal/ErrorBoundary";
 import clsx from "clsx";
 import { useSnackbarController, useStorageSource } from "../../../../../hooks";
 import { getThumbnailMeasure } from "../../../../../preview/util";
-import { resolveFilename } from "../../../../util/storage";
+import { resolveStorageString } from "../../../../util/storage";
 
 const PREFIX = 'TableStorageUpload';
 
@@ -145,7 +145,7 @@ export function TableStorageUpload(props: {
     const fileNameBuilder = (file: File) => {
         if (storage.fileName) {
 
-            const fileName = resolveFilename(storage.fileName, storage, entityValues, entityId, path, property, file, propertyId);
+            const fileName = resolveStorageString(storage.fileName, storage, entityValues, entityId, path, property, file, propertyId);
             if (!fileName || fileName.length === 0) {
                 throw Error("You need to return a valid filename");
             }
@@ -155,28 +155,8 @@ export function TableStorageUpload(props: {
     };
 
     const storagePathBuilder = (file: File) => {
-        if (typeof storage.storagePath === "string")
-            return storage.storagePath;
-
-        if (typeof storage.storagePath === "function") {
-            const storagePath = storage.storagePath({
-                entityId: entityId,
-                values: entityValues,
-                property,
-                file,
-                storage,
-                propertyId: propertyId
-            });
-
-            if (!storagePath || storagePath.length === 0) {
-                throw Error("You need to return a valid filename");
-            }
-            return storagePath;
-        }
-        console.warn("When using a storage property, if you don't specify the storagePath, the root storage is used");
-        return "/";
+        return resolveStorageString(storage.storagePath, storage, entityValues, entityId, path, property, file, propertyId) ?? "/";
     };
-
 
     return (
 

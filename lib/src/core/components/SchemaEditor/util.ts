@@ -24,7 +24,7 @@ export function propertiesToTree<M>(properties: PropertiesOrBuilder<M>): TreeDat
         .reduce((a, b) => ({ ...a, ...b }), {});
 
     const rootChildren = treeItems.filter((item) => item.data.isInRoot).map(item => item.id);
-    return {
+    const res = {
         rootId: "root",
         items: {
             root: {
@@ -35,10 +35,12 @@ export function propertiesToTree<M>(properties: PropertiesOrBuilder<M>): TreeDat
             ...items
         }
     };
+    console.log("propertiesToTree", properties, res);
+
+    return res;
 }
 
 function getTreeItems(properties: PropertiesOrBuilder<any>, namespace?: string): TreeItem[] {
-
     return Object.entries(properties)
         .map(([key, property]) => {
             let children: TreeItem[] = [];
@@ -49,8 +51,8 @@ function getTreeItems(properties: PropertiesOrBuilder<any>, namespace?: string):
             return [({
                 id: fullId,
                 isExpanded: true,
-                data: { isInRoot: !namespace, id: key, property },
-                children: children.map((c) => c.id)
+                data: { isInRoot: !namespace, id: key, namespace, property },
+                children: children.filter((c) => c.data.namespace === fullId).map((c) => c.id)
             }), ...children];
         }).reduce((a, b) => [...a, ...b], []);
 }
@@ -79,5 +81,16 @@ export function treeToProperties<M>(treeData: TreeData): [PropertiesOrBuilder<M>
         .reduce((a, b) => ({ ...a, ...b }), {}) as PropertiesOrBuilder<M>;
 
     const rootIds = root.children.map((id) => items[id].data.id) as (keyof M)[];
+    console.log("treeToProperties", treeData, res, rootIds);
     return [res, rootIds];
+}
+
+export function idToPropertiesPath(id: string): string {
+    return "properties." + id.replace(".", ".properties.");
+}
+
+export function getFullId(propertyId?: string, propertyNamespace?: string): string | undefined {
+    return propertyNamespace
+        ? (propertyId ? `${propertyNamespace}.${propertyId}` : undefined)
+        : propertyId;
 }

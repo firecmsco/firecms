@@ -12,8 +12,8 @@ export function StringPropertyField({
 
     return (
         <>
-            <Grid item>
-                <Typography variant={"subtitle2"} sx={{ mt: 1 }}>
+            <Grid item sx={{ mt: 1 }}>
+                <Typography variant={"subtitle2"} >
                     Validation
                 </Typography>
                 <Paper variant={"outlined"} sx={{ p: 2, mt: 1 }}>

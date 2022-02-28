@@ -6,14 +6,14 @@ import {
     UploadedFileContext
 } from "../../models";
 
-export function resolveFilename<M>(input: string | ((context: UploadedFileContext) => string),
-                                   storage: StorageConfig,
-                                   values: EntityValues<M>,
-                                   entityId: string,
-                                   path: string,
-                                   property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
-                                   file: File,
-                                   propertyId: string): string {
+export function resolveStorageString<M>(input: string | ((context: UploadedFileContext) => string),
+                                        storage: StorageConfig,
+                                        values: EntityValues<M>,
+                                        entityId: string,
+                                        path: string,
+                                        property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
+                                        file: File,
+                                        propertyId: string): string {
     if (typeof input === "function") {
         return input({
             entityId,

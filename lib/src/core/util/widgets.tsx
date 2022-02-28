@@ -87,7 +87,7 @@ export const WIDGETS: Record<WidgetId, Widget> = {
         name: "Select",
         dataType: "string",
         icon: ListIcon,
-        color: "#532cff"
+        color: "#4223c9"
     },
     multi_select: {
         name: "Multi select",
@@ -105,13 +105,13 @@ export const WIDGETS: Record<WidgetId, Widget> = {
         name: "Number select",
         dataType: "number",
         icon: FormatListNumberedIcon,
-        color: "#a4ad26"
+        color: "#bec920"
     },
     multi_number_select: {
         name: "Multiple number select",
         dataType: "number",
         icon: FormatListNumberedIcon,
-        color: "#a4ad26"
+        color: "#bec920"
     },
     file_upload: {
         name: "File upload",
@@ -123,13 +123,13 @@ export const WIDGETS: Record<WidgetId, Widget> = {
         name: "Multiple file upload",
         dataType: "array",
         icon: DriveFolderUploadIcon,
-        color: "#c91777"
+        color: "#f92d9a"
     },
     group: {
         name: "Group",
         dataType: "map",
         icon: BallotOutlinedIcon,
-        color: "#20d9d2"
+        color: "#ff9408"
     },
     reference: {
         name: "Reference/s",
@@ -147,7 +147,7 @@ export const WIDGETS: Record<WidgetId, Widget> = {
         name: "Switch",
         dataType: "boolean",
         icon: FlagIcon,
-        color: "#ff9408"
+        color: "#20d9d2"
     },
     date_time: {
         name: "Date/time",

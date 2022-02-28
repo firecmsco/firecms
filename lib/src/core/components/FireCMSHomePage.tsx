@@ -12,10 +12,10 @@ import {
     Typography
 } from "@mui/material";
 
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import { Link as ReactLink } from "react-router-dom";
 
@@ -27,7 +27,6 @@ import {
 import { Markdown } from "../../preview";
 import { useNavigation } from "../../hooks";
 import { useConfigurationPersistence } from "../../hooks/useConfigurationPersistence";
-
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -184,4 +183,3 @@ export function FireCMSHomePage() {
         </Container>
     );
 }
-

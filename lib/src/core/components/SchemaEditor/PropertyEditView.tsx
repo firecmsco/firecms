@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Field, Form, Formik, FormikProps, getIn } from "formik";
+import { Field, Formik, FormikProps, getIn } from "formik";
 import equal from "react-fast-compare"
 import {
     Box,
@@ -10,8 +10,7 @@ import {
     Grid,
     InputAdornment,
     MenuItem,
-    Select,
-    TextField
+    Select
 } from "@mui/material";
 
 import { Property } from "../../../models";
@@ -22,7 +21,13 @@ import { EnumPropertyField } from "./properties/EnumPropertyField";
 import { toSnakeCase } from "../../util/strings";
 import { useDebounce } from "../../internal/useDebounce";
 import { CustomDialogActions } from "../CustomDialogActions";
-import { removeUndefined } from "../../util/objects";
+import { mergeDeep, removeUndefined } from "../../util/objects";
+import {
+    FieldUploadPropertyField
+} from "./properties/FieldUploadPropertyField";
+import DebouncedTextField from "../../../form/components/DebouncedTextField";
+import { BooleanPropertyField } from "./properties/BooleanPropertyField";
+import { MapPropertyField } from "./properties/MapPropertyField";
 
 export type PropertyWithId = Property & { id: string };
 
@@ -30,6 +35,7 @@ export function PropertyForm({
                                  asDialog,
                                  open,
                                  propertyId,
+                                 propertyNamespace,
                                  property,
                                  onOkClicked,
                                  onCancel,
@@ -40,8 +46,9 @@ export function PropertyForm({
     asDialog: boolean;
     open?: boolean;
     propertyId?: string;
+    propertyNamespace?: string;
     property?: Property;
-    onPropertyChanged: (id: string, property: Property) => void;
+    onPropertyChanged: (id: string, property: Property, namespace?: string) => void;
     onError?: (id: string, error: boolean) => void;
     onOkClicked?: () => void;
     onCancel?: () => void;
@@ -58,7 +65,7 @@ export function PropertyForm({
                 } as PropertyWithId}
             onSubmit={(newPropertyWithId: PropertyWithId, formikHelpers) => {
                 const { id, ...property } = newPropertyWithId;
-                onPropertyChanged(id, property);
+                onPropertyChanged(id, property, propertyNamespace);
                 if (onOkClicked) {
                     onOkClicked();
                 }
@@ -68,6 +75,7 @@ export function PropertyForm({
 
                 const form = <PropertyEditView
                     onPropertyChanged={asDialog ? undefined : onPropertyChanged}
+                    propertyNamespace={propertyNamespace}
                     onError={onError}
                     showErrors={showErrors}
                     existing={Boolean(propertyId)}
@@ -103,13 +111,204 @@ export function PropertyForm({
                 } else {
                     body = form;
                 }
-                return <Form>{body}</Form>
+                return body;
             }}
 
         </Formik>
 
     );
 
+}
+
+function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | undefined, setValues: any) {
+    let updatedProperty;
+    if (selectedWidgetId === "text_field") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "string",
+                multiline: undefined,
+                markdown: undefined,
+                email: undefined,
+                url: undefined,
+                enumValues: undefined
+            })
+        );
+    } else if (selectedWidgetId === "multiline") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "string",
+                multiline: true,
+                markdown: undefined,
+                email: undefined,
+                url: undefined,
+                enumValues: undefined
+            })
+        );
+    } else if (selectedWidgetId === "markdown") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "string",
+                multiline: undefined,
+                markdown: true,
+                email: undefined,
+                url: undefined
+            })
+        );
+    } else if (selectedWidgetId === "url") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "string",
+                multiline: undefined,
+                markdown: undefined,
+                email: undefined,
+                url: true,
+                enumValues: undefined
+            })
+        );
+    } else if (selectedWidgetId === "email") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "string",
+                multiline: undefined,
+                markdown: undefined,
+                email: true,
+                url: undefined,
+                enumValues: undefined
+            })
+        );
+    } else if (selectedWidgetId === "select") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "string",
+                multiline: undefined,
+                markdown: undefined,
+                email: undefined,
+                url: undefined,
+                enumValues: propertyData.enumValues ?? undefined
+            })
+        );
+    } else if (selectedWidgetId === "multi_select") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "array",
+                of: {
+                    dataType: "string",
+                    enumValues: propertyData.of?.enumValues ?? undefined
+                }
+            })
+        );
+    } else if (selectedWidgetId === "number_input") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "number",
+                enumValues: undefined
+            })
+        );
+    } else if (selectedWidgetId === "number_select") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "number",
+                enumValues: propertyData.enumValues ?? []
+            })
+        );
+    } else if (selectedWidgetId === "multi_number_select") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "array",
+                of: {
+                    dataType: "number",
+                    enumValues: propertyData.of?.enumValues ?? []
+                }
+            })
+        );
+    } else if (selectedWidgetId === "file_upload") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "string",
+                storage: {
+                    storagePath: "/"
+                }
+            })
+        );
+    } else if (selectedWidgetId === "multi_file_upload") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "array",
+                of: {
+                    dataType: "string",
+                    storage: propertyData.of?.storage ?? {
+                        storagePath: "/"
+                    }
+                }
+            })
+        );
+    } else if (selectedWidgetId === "group") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "map",
+                properties: propertyData.properties ?? {}
+            })
+        );
+    } else if (selectedWidgetId === "reference") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            buildProperty({
+                dataType: "reference"
+            })
+        );
+    } else if (selectedWidgetId === "multi_references") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "array",
+                of: {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    dataType: "reference"
+                }
+            })
+        );
+    } else if (selectedWidgetId === "switch") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "boolean"
+            })
+        );
+    } else if (selectedWidgetId === "date_time") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "date"
+            })
+        );
+    } else if (selectedWidgetId === "repeat") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "array"
+            })
+        );
+    }
+
+    if (updatedProperty) {
+        setValues(updatedProperty);
+    }
 }
 
 function PropertyEditView({
@@ -120,11 +319,13 @@ function PropertyEditView({
                               setFieldValue,
                               existing,
                               onPropertyChanged,
+                              propertyNamespace,
                               onError,
                               showErrors
                           }: {
     existing: boolean;
-    onPropertyChanged?: (id: string, property: Property) => void;
+    propertyNamespace?: string;
+    onPropertyChanged?: (id: string, property: Property, propertyNamespace?: string) => void;
     onError?: (id: string, error: boolean) => void;
     showErrors: boolean;
 } & FormikProps<PropertyWithId>) {
@@ -139,211 +340,20 @@ function PropertyEditView({
         if (onPropertyChanged) {
             if (values.id && !equal(initialValuesRef.current, removeUndefined(values))) {
                 const { id, ...property } = values;
-                onPropertyChanged(id, property);
+                onPropertyChanged(id, property, propertyNamespace);
             }
         }
-    }, [values]);
+    }, [values, propertyNamespace]);
     useDebounce(values, doUpdate);
 
     useEffect(() => {
         if (values.id && onError) {
-            const error1 = Boolean(Object.keys(errors).length ?? false);
-            console.log("onError", error1, errors);
-            onError(values.id, error1);
+            onError(values.id, Boolean(Object.keys(errors).length ?? false));
         }
     }, [errors]);
 
     useEffect(() => {
-        const propertyData = values as any;
-        let updatedProperty;
-        if (selectedWidgetId === "text_field") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "string",
-                    multiline: undefined,
-                    markdown: undefined,
-                    email: undefined,
-                    url: undefined,
-                    enumValues: undefined
-                })
-            });
-        } else if (selectedWidgetId === "multiline") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "string",
-                    multiline: true,
-                    markdown: undefined,
-                    email: undefined,
-                    url: undefined,
-                    enumValues: undefined
-                })
-            });
-        } else if (selectedWidgetId === "markdown") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "string",
-                    multiline: undefined,
-                    markdown: true,
-                    email: undefined,
-                    url: undefined
-                })
-            });
-        } else if (selectedWidgetId === "url") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "string",
-                    multiline: undefined,
-                    markdown: undefined,
-                    email: undefined,
-                    url: true,
-                    enumValues: undefined
-                })
-            });
-        } else if (selectedWidgetId === "email") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "string",
-                    multiline: undefined,
-                    markdown: undefined,
-                    email: true,
-                    url: undefined,
-                    enumValues: undefined
-                })
-            });
-        } else if (selectedWidgetId === "select") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "string",
-                    multiline: undefined,
-                    markdown: undefined,
-                    email: undefined,
-                    url: undefined,
-                    enumValues: propertyData.enumValues ?? undefined
-                })
-            });
-        } else if (selectedWidgetId === "multi_select") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "array",
-                    of: {
-                        dataType: "string",
-                        enumValues: propertyData.of?.enumValues ?? undefined
-                    }
-                })
-            });
-        } else if (selectedWidgetId === "number_input") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "number",
-                    enumValues: undefined
-                })
-            });
-        } else if (selectedWidgetId === "number_select") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "number",
-                    enumValues: propertyData.enumValues ?? []
-                })
-            });
-        } else if (selectedWidgetId === "multi_number_select") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "array",
-                    of: {
-                        dataType: "number",
-                        enumValues: propertyData.of?.enumValues ?? []
-                    }
-                })
-            });
-        } else if (selectedWidgetId === "file_upload") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "string",
-                    storage: {
-                        storagePath: "/"
-                    }
-                })
-            });
-        } else if (selectedWidgetId === "multi_file_upload") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "array",
-                    of: {
-                        dataType: "string",
-                        storage: propertyData.of?.storage ?? {
-                            storagePath: "/"
-                        }
-                    }
-                })
-            });
-        } else if (selectedWidgetId === "group") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "map",
-                    properties: propertyData.properties ?? {}
-                })
-            });
-        } else if (selectedWidgetId === "reference") {
-            updatedProperty = ({
-                ...propertyData,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                ...buildProperty({
-                    dataType: "reference"
-                })
-            });
-        } else if (selectedWidgetId === "multi_references") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "array",
-                    of: {
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        dataType: "reference"
-                    }
-                })
-            });
-        } else if (selectedWidgetId === "switch") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "boolean"
-                })
-            });
-        } else if (selectedWidgetId === "date_time") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "date"
-                })
-            });
-        } else if (selectedWidgetId === "repeat") {
-            updatedProperty = ({
-                ...propertyData,
-                ...buildProperty({
-                    dataType: "array"
-                })
-            });
-        }
-
-        if (updatedProperty) {
-            setValues(updatedProperty);
-        }
-
+        updateSelectedWidget(values, selectedWidgetId, setValues);
     }, [selectedWidgetId]);
 
     let childComponent;
@@ -363,6 +373,14 @@ function PropertyEditView({
         childComponent = <EnumPropertyField
             multiselect={true}
             updateIds={!existing}/>;
+    } else if (selectedWidgetId === "file_upload") {
+        childComponent = <FieldUploadPropertyField multiple={false}/>;
+    } else if (selectedWidgetId === "multi_file_upload") {
+        childComponent = <FieldUploadPropertyField multiple={true}/>;
+    } else if (selectedWidgetId === "switch") {
+        childComponent = <BooleanPropertyField/>;
+    } else if (selectedWidgetId === "group") {
+        childComponent = <MapPropertyField/>;
     } else {
         childComponent = <Box>
             {values?.title}
@@ -390,7 +408,7 @@ function PropertyEditView({
 
             <Grid item>
                 <Field name={title}
-                       as={TextField}
+                       as={DebouncedTextField}
                        validate={validateTitle}
                        label={"Title"}
                        required
@@ -401,8 +419,8 @@ function PropertyEditView({
 
             <Grid item>
                 <Field name={id}
-                       as={TextField}
-                       label={"Id"}
+                       as={DebouncedTextField}
+                       label={"ID"}
                        validate={validateId}
                        disabled={existing}
                        required
@@ -418,6 +436,7 @@ function PropertyEditView({
                         value={selectedWidgetId}
                         title={"Component"}
                         disabled={existing}
+                        required
                         startAdornment={
                             Icon
                                 ? <InputAdornment

@@ -1,10 +1,10 @@
 import {
-    buildEnumValueConfig,
     buildProperties,
     buildProperty,
     buildPropertyBuilder,
     buildSchema,
-    EntityCallbacks, EnumValues,
+    EntityCallbacks,
+    EnumValues,
     resolveNavigationFrom
 } from "@camberi/firecms";
 import CustomShapedArrayField

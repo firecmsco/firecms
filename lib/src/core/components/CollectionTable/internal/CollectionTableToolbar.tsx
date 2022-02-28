@@ -108,10 +108,10 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
                 display: "flex",
                 alignItems: "center",
                 "& > *": {
-                    [theme.breakpoints.down("md")]: {
-                        marginRight: theme.spacing(0.5)
-                    },
-                    marginRight: theme.spacing(1)
+                    // [theme.breakpoints.down("md")]: {
+                    //     marginRight: theme.spacing(0.5)
+                    // },
+                    marginRight: theme.spacing(3)
                 }
             }}>
 

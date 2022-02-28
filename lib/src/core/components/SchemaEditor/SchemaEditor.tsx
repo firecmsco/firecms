@@ -11,9 +11,8 @@ import {
     TreeDraggableProvided
 } from "../Tree/components/TreeItem/TreeItem-types";
 
-import { Formik, FormikProps, getIn, useFormikContext } from "formik";
+import { Formik, FormikProps, getIn } from "formik";
 import hash from "object-hash";
-import equal from "react-fast-compare";
 
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import {
@@ -40,7 +39,12 @@ import {
 } from "../../util/property_utils";
 
 import { EntitySchema, Property, PropertyOrBuilder } from "../../../models";
-import { propertiesToTree, treeToProperties } from "./util";
+import {
+    getFullId,
+    idToPropertiesPath,
+    propertiesToTree,
+    treeToProperties
+} from "./util";
 import {
     prepareSchemaForPersistence,
     sortProperties
@@ -55,11 +59,7 @@ import { ErrorView } from "../ErrorView";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 import { toSnakeCase } from "../../util/strings";
-import {
-    getValueInPath,
-    isEmptyObject,
-    removeUndefined
-} from "../../util/objects";
+import { isEmptyObject, removeUndefined } from "../../util/objects";
 import { CustomDialogActions } from "../CustomDialogActions";
 import { SchemaDetailsDialog } from "./SchemaDetailsView";
 
@@ -177,9 +177,6 @@ export function SchemaEditor<M>({
     );
 }
 
-function idToPropertiesPath(id: string): string {
-    return "properties." + id.replace(".", ".properties.");
-}
 
 function SchemaEditorForm<M>({
                                  values,
@@ -210,7 +207,16 @@ function SchemaEditorForm<M>({
     const hasError = !isEmptyObject(cleanedErrors);
 
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
-    const selectedProperty = selectedPropertyId ? getValueInPath(values.properties, selectedPropertyId.replace(".", ".properties.")) : undefined;
+    const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
+    const selectedPropertyFullId = getFullId(selectedPropertyId, selectedPropertyNamespace)
+    const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
+
+    // console.log("selectedPropertyId", selectedPropertyId, selectedPropertyNamespace,);
+    // console.log("selectedPropertyFullId", selectedPropertyFullId);
+    // console.log("values.properties", values.properties);
+    // console.log("selectedPropertiesPath", selectedPropertiesPath);
+    // console.log("selectedProperty", selectedProperty);
+
     const [pendingMove, setPendingMove] = useState<[TreeSourcePosition, TreeDestinationPosition] | undefined>();
 
     const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
@@ -230,8 +236,9 @@ function SchemaEditorForm<M>({
         }
     }, [isNewSchema, touched, values.name]);
 
-    const onPropertyClick = useCallback((property: PropertyOrBuilder, propertyId: string) => {
+    const onPropertyClick = useCallback((property: PropertyOrBuilder, propertyId: string, namespace?: string) => {
         setSelectedPropertyId(propertyId);
+        setSelectedPropertyNamespace(namespace);
     }, []);
 
     const renderItem = useCallback(({
@@ -241,21 +248,23 @@ function SchemaEditorForm<M>({
                                         provided,
                                         snapshot
                                     }: RenderItemParams) => {
+        const propertyFullKey = item.id as string;
+        const propertyId = item.data.id as string;
+        const propertyNamespace = item.data.namespace as string | undefined;
         const propertyOrBuilder = item.data.property as PropertyOrBuilder;
-        const propertyKey = item.id as string;
-        const propertyPath = idToPropertiesPath(propertyKey);
+        const propertyPath = idToPropertiesPath(propertyFullKey);
         const hasError = getIn(cleanedErrors, propertyPath);
-        // console.log("renderItem", propertyKey, propertyPath, cleanedErrors, hasError);
+
         return (
             <SchemaEntry
-                propertyKey={propertyKey}
+                propertyKey={propertyId}
                 propertyOrBuilder={propertyOrBuilder}
                 provided={provided}
                 hasError={hasError}
-                onClick={() => onPropertyClick(propertyOrBuilder, propertyKey)}
-                selected={snapshot.isDragging || selectedPropertyId === item.id}/>
+                onClick={() => onPropertyClick(propertyOrBuilder, propertyId, propertyNamespace)}
+                selected={snapshot.isDragging || selectedPropertyFullId === item.id}/>
         )
-    }, [selectedPropertyId, cleanedErrors]);
+    }, [cleanedErrors, selectedPropertyFullId, onPropertyClick]);
 
     const tree = useMemo(() => {
         const sortedProperties = sortProperties(values.properties, values.propertiesOrder);
@@ -278,8 +287,9 @@ function SchemaEditorForm<M>({
         setNewPropertyDialogOpen(false);
     }, [values.properties, values.propertiesOrder]);
 
-    const onPropertyChanged = useCallback((id, property) => {
-        const propertyPath = id ? idToPropertiesPath(id) : undefined;
+    const onPropertyChanged = useCallback((id, property, namespace) => {
+        const fullId = getFullId(id, namespace);
+        const propertyPath = fullId ? idToPropertiesPath(fullId) : undefined;
         if (propertyPath) {
             setFieldValue(propertyPath, property, false);
             setFieldTouched(propertyPath, true, false);
@@ -318,7 +328,7 @@ function SchemaEditorForm<M>({
         setSelectedPropertyId(undefined);
     };
 
-    const propertyEditForm = selectedPropertyId &&
+    const propertyEditForm = selectedPropertyFullId &&
         selectedProperty &&
         typeof selectedProperty === "object" &&
         <PropertyForm
@@ -326,6 +336,7 @@ function SchemaEditorForm<M>({
             open={Boolean(selectedPropertyId)}
             key={`edit_view_${selectedPropertyId}`}
             propertyId={selectedPropertyId}
+            propertyNamespace={selectedPropertyNamespace}
             property={selectedProperty}
             onPropertyChanged={onPropertyChanged}
             onError={onError}
@@ -344,7 +355,6 @@ function SchemaEditorForm<M>({
         }
     }, [hasError]);
 
-    console.log("eee", hasError, cleanedErrors, dirty);
     return (
         <>
             <Box sx={{
@@ -399,7 +409,7 @@ function SchemaEditorForm<M>({
                             <Grid item xs={12}
                                   lg={5}>
                                 <Tree
-                                    key={`tree_${selectedPropertyId}_${hash(errors)}`}
+                                    key={`tree_${selectedPropertyFullId}_${hash(errors)}`}
                                     tree={tree}
                                     offsetPerLevel={40}
                                     renderItem={renderItem}
@@ -607,34 +617,6 @@ export function SchemaEntry({
 
 }
 
-export function SubmitListener() {
-
-    const formik = useFormikContext()
-    const [lastValues, setLastValues] = React.useState(formik.values);
-
-    React.useEffect(() => {
-        const valuesEqualLastValues = equal(lastValues, formik.values)
-        const valuesEqualInitialValues = equal(formik.values, formik.initialValues)
-
-        if (!valuesEqualLastValues) {
-            setLastValues(formik.values)
-        }
-
-        const doSubmit = () => {
-            if (!valuesEqualLastValues && !valuesEqualInitialValues && formik.isValid) {
-                formik.submitForm();
-            }
-        }
-
-        const handler = setTimeout(doSubmit, 300);
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [formik.values, formik.isValid])
-
-    return null;
-}
-
 function PropertyPreview({
                              property
                          }: { property: Property }) {
@@ -687,8 +669,6 @@ function isValidDrag(tree: TreeData, source: TreeSourcePosition, destination: Tr
     const draggedPropertyId = tree.items[source.parentId].children[source.index];
     const draggedProperty = tree.items[draggedPropertyId].data.property;
     if (typeof draggedProperty === "function")
-        return false;
-    if (destination.index === undefined)
         return false;
     if (destination.parentId === tree.rootId)
         return true;
