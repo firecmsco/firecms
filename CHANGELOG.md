@@ -5,7 +5,7 @@
 - Fixed edge case of references in arrays not being resolved properly with 
   property builders. Thanks, Paul Aranzamendez!
 
-- ## [1.0.0-rc.2] - 2022-02-08
+## [1.0.0-rc.2] - 2022-02-08
 
 ### Changed
 
