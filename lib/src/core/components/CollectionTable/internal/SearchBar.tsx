@@ -105,7 +105,7 @@ export function SearchBar({ onTextSearch }: SearchBarProps) {
         <StyledFormControl>
             <div className={classes.search}>
                 <div className={classes.searchIcon}>
-                    <SearchIcon htmlColor={"#666"}/>
+                    <SearchIcon htmlColor={"#888"}/>
                 </div>
                 <InputBase
                     placeholder="Search"

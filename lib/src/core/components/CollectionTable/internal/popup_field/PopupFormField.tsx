@@ -368,7 +368,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         position: "absolute",
                         top: -14,
                         right: -14,
-                        backgroundColor: "#666"
+                        backgroundColor: "#888"
                     }}
                     onClick={(event) => {
                         event.stopPropagation();

@@ -40,6 +40,18 @@ export function getValueInPath(o: object | undefined, path: string): any {
     return undefined;
 }
 
+export function removeInPath(o: object, path: string): object | undefined {
+    let currentObject = { ...o };
+    const parts = path.split(".");
+    const last = parts.pop();
+    for (const part of parts) {
+        currentObject = currentObject[part]
+    }
+    if (last)
+        delete currentObject[last];
+    return currentObject;
+}
+
 export function removeFunctions(o: object | undefined): any {
     if (typeof o === "object") {
         return Object.entries(o)
@@ -86,7 +98,7 @@ export function removeUndefined(obj: object) {
 }
 
 export function isEmptyObject(obj: object) {
-    return obj && // 👈 null and undefined check
+    return obj &&
         Object.getPrototypeOf(obj) === Object.prototype &&
         Object.keys(obj).length === 0
 }

@@ -7,15 +7,20 @@ import {
     Button,
     Dialog,
     DialogContent,
+    FormControl,
+    FormHelperText,
     Grid,
     InputAdornment,
+    InputLabel,
     MenuItem,
-    Select
+    Select,
+    TextField
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { Property } from "../../../models";
 import { StringPropertyField } from "./properties/StringPropertyField";
-import { getWidgetId, WidgetId, WIDGETS } from "../../util/widgets";
+import { getWidget, getWidgetId, WidgetId, WIDGETS } from "../../util/widgets";
 import { buildProperty } from "../../builders";
 import { EnumPropertyField } from "./properties/EnumPropertyField";
 import { toSnakeCase } from "../../util/strings";
@@ -29,7 +34,7 @@ import DebouncedTextField from "../../../form/components/DebouncedTextField";
 import { BooleanPropertyField } from "./properties/BooleanPropertyField";
 import { MapPropertyField } from "./properties/MapPropertyField";
 
-export type PropertyWithId = Property & { id: string };
+type PropertyWithId = Property & { id: string };
 
 export function PropertyForm({
                                  asDialog,
@@ -40,8 +45,9 @@ export function PropertyForm({
                                  onOkClicked,
                                  onCancel,
                                  onPropertyChanged,
+                                 onDeleteClicked,
                                  onError,
-                                 showErrors
+                                 forceShowErrors
                              }: {
     asDialog: boolean;
     open?: boolean;
@@ -49,36 +55,49 @@ export function PropertyForm({
     propertyNamespace?: string;
     property?: Property;
     onPropertyChanged: (id: string, property: Property, namespace?: string) => void;
+    onDeleteClicked?: (id: string, namespace?: string) => void;
     onError?: (id: string, error: boolean) => void;
     onOkClicked?: () => void;
     onCancel?: () => void;
-    showErrors: boolean;
+    forceShowErrors: boolean;
 }) {
+
+    const existing = Boolean(propertyId);
+    const initialValue: PropertyWithId = {
+        id: "",
+        title: ""
+    } as PropertyWithId;
 
     return (
         <Formik
             initialValues={property
                 ? { id: propertyId, ...property } as PropertyWithId
-                : {
-                    id: "",
-                    title: ""
-                } as PropertyWithId}
+                : initialValue}
             onSubmit={(newPropertyWithId: PropertyWithId, formikHelpers) => {
                 const { id, ...property } = newPropertyWithId;
                 onPropertyChanged(id, property, propertyNamespace);
+                if (!existing)
+                    formikHelpers.resetForm({ values: initialValue });
                 if (onOkClicked) {
                     onOkClicked();
                 }
+            }}
+            validate={(values) => {
+                if (!getWidget(values)) {
+                    return { selectedWidget: "Required" }
+                }
+                return {};
             }}
         >
             {(props) => {
 
                 const form = <PropertyEditView
                     onPropertyChanged={asDialog ? undefined : onPropertyChanged}
+                    onDeleteClicked={existing ? onDeleteClicked : undefined}
                     propertyNamespace={propertyNamespace}
                     onError={onError}
-                    showErrors={showErrors}
-                    existing={Boolean(propertyId)}
+                    showErrors={forceShowErrors || props.submitCount > 0}
+                    existing={existing}
                     {...props}/>;
 
                 let body: JSX.Element;
@@ -319,13 +338,15 @@ function PropertyEditView({
                               setFieldValue,
                               existing,
                               onPropertyChanged,
+                              onDeleteClicked,
                               propertyNamespace,
                               onError,
                               showErrors
                           }: {
     existing: boolean;
     propertyNamespace?: string;
-    onPropertyChanged?: (id: string, property: Property, propertyNamespace?: string) => void;
+    onPropertyChanged?: (id: string, property: Property, namespace?: string) => void;
+    onDeleteClicked?: (id: string, namespace?: string) => void;
     onError?: (id: string, error: boolean) => void;
     showErrors: boolean;
 } & FormikProps<PropertyWithId>) {
@@ -380,11 +401,9 @@ function PropertyEditView({
     } else if (selectedWidgetId === "switch") {
         childComponent = <BooleanPropertyField/>;
     } else if (selectedWidgetId === "group") {
-        childComponent = <MapPropertyField/>;
+        childComponent = <MapPropertyField existing={existing}/>;
     } else {
-        childComponent = <Box>
-            {values?.title}
-        </Box>;
+        childComponent = null;
     }
 
     const Icon = selectedWidget?.icon;
@@ -394,6 +413,8 @@ function PropertyEditView({
 
     const id = "id";
     const idError = showErrors && getIn(errors, id);
+
+    const selectedWidgetError = showErrors && getIn(errors, "selectedWidget");
 
     useEffect(() => {
         const idTouched = getIn(touched, id);
@@ -418,47 +439,65 @@ function PropertyEditView({
             </Grid>
 
             <Grid item>
-                <Field name={id}
-                       as={DebouncedTextField}
-                       label={"ID"}
-                       validate={validateId}
-                       disabled={existing}
-                       required
-                       fullWidth
-                       helperText={idError}
-                       size="small"
-                       error={Boolean(idError)}/>
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                    <Field name={id}
+                           as={TextField}
+                           label={"ID"}
+                           validate={validateId}
+                           disabled={existing}
+                           required
+                           fullWidth
+                           helperText={idError}
+                           size="small"
+                           error={Boolean(idError)}/>
 
+                    {onDeleteClicked && values.id &&
+                        <Button
+                            sx={{
+                                color: "#888",
+                                ml: 2
+                            }}
+                            startIcon={<DeleteIcon/>}
+                            onClick={() => onDeleteClicked(values.id, propertyNamespace)}>
+                            Remove
+                        </Button>}
+                </Box>
             </Grid>
 
             <Grid item>
-                <Select fullWidth
-                        value={selectedWidgetId}
-                        title={"Component"}
-                        disabled={existing}
-                        required
-                        startAdornment={
-                            Icon
-                                ? <InputAdornment
-                                    key={"adornment_" + selectedWidgetId}
-                                    position="start">
-                                    <Icon/>
-                                </InputAdornment>
-                                : undefined}
-                        renderValue={(value) => WIDGETS[value].name}
-                        onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
+                <FormControl fullWidth
+                             error={Boolean(selectedWidgetError)}>
+                    <InputLabel id="component-label">Component</InputLabel>
+                    <Select fullWidth
+                            labelId="component-label"
+                            value={selectedWidgetId}
+                            label={"Component"}
+                            disabled={existing}
+                            required
+                            startAdornment={
+                                Icon
+                                    ? <InputAdornment
+                                        key={"adornment_" + selectedWidgetId}
+                                        position="start">
+                                        <Icon/>
+                                    </InputAdornment>
+                                    : undefined}
+                            renderValue={(value) => WIDGETS[value].name}
+                            onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
 
-                    {Object.entries(WIDGETS).map(([key, widget]) => {
-                        const Icon = widget.icon;
-                        return (
-                            <MenuItem value={key} key={key}>
-                                <Icon sx={{ mr: 3 }}/>
-                                {widget.name}
-                            </MenuItem>
-                        );
-                    })}
-
-                </Select>
+                        {Object.entries(WIDGETS).map(([key, widget]) => {
+                            const Icon = widget.icon;
+                            return (
+                                <MenuItem value={key} key={key}>
+                                    <Icon sx={{ mr: 3 }}/>
+                                    {widget.name}
+                                </MenuItem>
+                            );
+                        })}
+                    </Select>
+                    {selectedWidgetError &&
+                        <FormHelperText>Required</FormHelperText>}
+                </FormControl>
 
             </Grid>
 
@@ -478,6 +517,14 @@ function validateId(value: string) {
     }
     if (!value.match(idRegEx)) {
         error = "The id can only contain letters, numbers and underscores (_), and not start with a number";
+    }
+    return error;
+}
+
+function validateNotEmpty(value: string) {
+    let error;
+    if (!value) {
+        error = "Required";
     }
     return error;
 }

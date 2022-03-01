@@ -13,7 +13,6 @@ import {
 
 import { Formik, FormikProps, getIn } from "formik";
 import hash from "object-hash";
-
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import {
     Box,
@@ -42,6 +41,7 @@ import { EntitySchema, Property, PropertyOrBuilder } from "../../../models";
 import {
     getFullId,
     idToPropertiesPath,
+    namespaceToPropertiesOrderPath,
     propertiesToTree,
     treeToProperties
 } from "./util";
@@ -211,12 +211,6 @@ function SchemaEditorForm<M>({
     const selectedPropertyFullId = getFullId(selectedPropertyId, selectedPropertyNamespace)
     const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
-    // console.log("selectedPropertyId", selectedPropertyId, selectedPropertyNamespace,);
-    // console.log("selectedPropertyFullId", selectedPropertyFullId);
-    // console.log("values.properties", values.properties);
-    // console.log("selectedPropertiesPath", selectedPropertiesPath);
-    // console.log("selectedProperty", selectedProperty);
-
     const [pendingMove, setPendingMove] = useState<[TreeSourcePosition, TreeDestinationPosition] | undefined>();
 
     const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
@@ -240,6 +234,21 @@ function SchemaEditorForm<M>({
         setSelectedPropertyId(propertyId);
         setSelectedPropertyNamespace(namespace);
     }, []);
+
+    const deleteProperty = useCallback((propertyId: string, namespace?: string) => {
+        const fullId = getFullId(propertyId, namespace);
+        if (!fullId)
+            throw Error("Schema editor miss config");
+
+        setFieldValue(idToPropertiesPath(fullId), undefined, false);
+        const propertiesOrderPath = namespaceToPropertiesOrderPath(namespace);
+        const currentPropertiesOrder: string[] = getIn(values, propertiesOrderPath);
+        setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyId), false);
+        setNewPropertyDialogOpen(false);
+
+        setSelectedPropertyId(undefined);
+        setSelectedPropertyNamespace(undefined);
+    }, [setFieldValue, values]);
 
     const renderItem = useCallback(({
                                         item,
@@ -339,8 +348,9 @@ function SchemaEditorForm<M>({
             propertyNamespace={selectedPropertyNamespace}
             property={selectedProperty}
             onPropertyChanged={onPropertyChanged}
+            onDeleteClicked={deleteProperty}
             onError={onError}
-            showErrors={showErrors}
+            forceShowErrors={showErrors}
             onOkClicked={asDialog
                 ? closePropertyDialog
                 : undefined
@@ -385,11 +395,11 @@ function SchemaEditorForm<M>({
                             </Typography>
 
                             <Box sx={{ ml: 1 }}>
-                                <IconButton
+                                <Button
                                     onClick={() => setSchemaDetailsDialogOpen(true)}
                                     size="large">
                                     <EditIcon/>
-                                </IconButton>
+                                </Button>
                             </Box>
                         </Box>
 
@@ -398,8 +408,7 @@ function SchemaEditorForm<M>({
                             variant={"outlined"}
                             size={"large"}
                             onClick={() => setNewPropertyDialogOpen(true)}
-                            startIcon={<AddIcon/>}
-                        >
+                            startIcon={<AddIcon/>}>
                             Add property
                         </Button>
                     </Box>
@@ -493,7 +502,7 @@ function SchemaEditorForm<M>({
                                  handleOk={() => setSchemaDetailsDialogOpen(false)}/>
 
             <PropertyForm asDialog={true}
-                          showErrors={showErrors}
+                          forceShowErrors={showErrors}
                           open={newPropertyDialogOpen}
                           onCancel={() => setNewPropertyDialogOpen(false)}
                           onPropertyChanged={onPropertyCreated}/>
@@ -524,6 +533,41 @@ function PendingMoveDialog({
                 the schema.
             </DialogContentText>
         </DialogContent>
+        <CustomDialogActions>
+            <Button
+                onClick={onCancel}
+                autoFocus>Cancel</Button>
+            <Button
+                variant="contained"
+                onClick={onAccept}>
+                Proceed
+            </Button>
+        </CustomDialogActions>
+    </Dialog>;
+}
+
+function DeleteConfirmationDialog({
+                               open,
+                               onAccept,
+                               onCancel
+                           }: { open: boolean, onAccept: () => void, onCancel: () => void }) {
+    return <Dialog
+        open={open}
+        onClose={onCancel}
+    >
+        <DialogTitle>
+            {"Delete this property?"}
+        </DialogTitle>
+        {/*<DialogContent>*/}
+        {/*    <DialogContentText>*/}
+        {/*        You are moving one property from one context to*/}
+        {/*        another.*/}
+        {/*    </DialogContentText>*/}
+        {/*    <DialogContentText>*/}
+        {/*        This will <b>not transfer the data</b>, only modify*/}
+        {/*        the schema.*/}
+        {/*    </DialogContentText>*/}
+        {/*</DialogContent>*/}
         <CustomDialogActions>
             <Button
                 onClick={onCancel}
@@ -570,7 +614,7 @@ export function SchemaEntry({
              }}>
 
             <Box sx={{
-                background: widget?.color ?? "#666",
+                background: widget?.color ?? "#888",
                 height: "32px",
                 mt: 0.5,
                 padding: 0.5,

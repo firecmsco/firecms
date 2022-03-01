@@ -28,7 +28,7 @@ export function getIconForProperty(
 
 export function getColorForProperty(property: PropertyOrBuilder): string {
     if (typeof property === "function") {
-        return "#666";
+        return "#888";
     } else {
         const widget = getWidget(property);
         return widget?.color ?? "#666";

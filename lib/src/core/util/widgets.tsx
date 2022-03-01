@@ -159,7 +159,7 @@ export const WIDGETS: Record<WidgetId, Widget> = {
         name: "Repeat/list",
         dataType: "array",
         icon: ViewListIcon,
-        color: "#666"
+        color: "#888"
     }
 };
 

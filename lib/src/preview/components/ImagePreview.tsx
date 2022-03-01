@@ -81,7 +81,7 @@ export function ImagePreview({ size, url }: ImagePreviewProps) {
                     <IconButton
                         size={"small"}
                         onClick={(e) => e.stopPropagation()}>
-                        <OpenInNewIcon htmlColor={"#666"} fontSize={"small"}/>
+                        <OpenInNewIcon htmlColor={"#888"} fontSize={"small"}/>
                     </IconButton>
                 </a>
             )}

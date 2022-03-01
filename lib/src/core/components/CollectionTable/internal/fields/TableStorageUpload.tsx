@@ -448,7 +448,7 @@ function StorageUpload({
                 <EditIcon sx={{
                     width: 16,
                     height: 16,
-                    fill: "#666"
+                    fill: "#888"
                 }
                 }/>
             </IconButton>

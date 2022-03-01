@@ -7,6 +7,10 @@ export default function DebouncedTextField(props: TextFieldProps) {
     const previousEventRef = React.useRef<ChangeEvent<any>>();
     const [internalValue, setInternalValue] = React.useState(props.value);
 
+    React.useEffect(() => {
+        setInternalValue(props.value);
+    }, [props.value]);
+
     const doUpdate = React.useCallback(() => {
         const emptyInitialValue = !props.value;
         if (emptyInitialValue && !internalValue)

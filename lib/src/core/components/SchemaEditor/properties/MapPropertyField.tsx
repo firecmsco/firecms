@@ -5,7 +5,7 @@ import { PropertyForm } from "../PropertyEditView";
 import { MapProperty, Property } from "../../../../models";
 import { useFormikContext } from "formik";
 
-export function MapPropertyField({}: {}) {
+export function MapPropertyField({ existing }: { existing: boolean; }) {
 
     const {
         values,
@@ -24,7 +24,7 @@ export function MapPropertyField({}: {}) {
 
     return (
         <>
-            <Grid item sx={{ mt: 1 }}>
+            {existing && <Grid item sx={{ mt: 1 }}>
                 <Button
                     color="primary"
                     variant={"outlined"}
@@ -34,13 +34,14 @@ export function MapPropertyField({}: {}) {
                 >
                     Add property
                 </Button>
-            </Grid>
 
-            <PropertyForm asDialog={true}
-                          showErrors={false}
-                          open={newPropertyDialogOpen}
-                          onCancel={() => setNewPropertyDialogOpen(false)}
-                          onPropertyChanged={onPropertyCreated}/>
+                <PropertyForm asDialog={true}
+                              forceShowErrors={false}
+                              open={newPropertyDialogOpen}
+                              onCancel={() => setNewPropertyDialogOpen(false)}
+                              onPropertyChanged={onPropertyCreated}/>
+            </Grid>}
+
         </>
     );
 }
