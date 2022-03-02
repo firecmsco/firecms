@@ -438,7 +438,7 @@ function PropertyEditView({
                 <Field name={title}
                        as={DebouncedTextField}
                        validate={validateTitle}
-                       label={"Title"}
+                       label={"Property title"}
                        required
                        fullWidth
                        helperText={titleError}

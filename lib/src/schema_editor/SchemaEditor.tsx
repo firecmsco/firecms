@@ -1,19 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import * as Yup from "yup";
-import Tree, {
-    moveItemOnTree,
-    RenderItemParams,
-    TreeData,
-    TreeDestinationPosition,
-    TreeSourcePosition
-} from "../core/components/Tree";
-import {
-    TreeDraggableProvided
-} from "../core/components/Tree/components/TreeItem/TreeItem-types";
 
 import { Formik, FormikProps, getIn } from "formik";
-import hash from "object-hash";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
 import {
     Box,
     Button,
@@ -24,7 +12,6 @@ import {
     DialogContentText,
     DialogTitle,
     Grid,
-    IconButton,
     Paper,
     Typography,
     useMediaQuery,
@@ -32,24 +19,14 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
-import {
-    getIconForProperty,
-    getWidgetNameForProperty
-} from "../core/util/property_utils";
 
-import { EntitySchema, Property, PropertyOrBuilder } from "../models";
+import { EntitySchema, Property } from "../models";
 import {
     getFullId,
     idToPropertiesPath,
-    namespaceToPropertiesOrderPath,
-    propertiesToTree,
-    treeToProperties
+    namespaceToPropertiesOrderPath
 } from "./util";
-import {
-    prepareSchemaForPersistence,
-    sortProperties
-} from "../core/util/schemas";
-import { getWidget } from "../core/util/widgets";
+import { prepareSchemaForPersistence } from "../core/util/schemas";
 import { PropertyForm } from "./PropertyEditView";
 import { useSnackbarController } from "../hooks";
 import {
@@ -61,6 +38,8 @@ import { toSnakeCase } from "../core/util/strings";
 import { isEmptyObject, removeUndefined } from "../core/util/objects";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
 import { SchemaDetailsDialog } from "./SchemaDetailsView";
+import { PropertyTree } from "./PropertyTree";
+import { ErrorBoundary } from "../core/internal/ErrorBoundary";
 
 export type SchemaEditorProps<M> = {
     schemaId?: string;
@@ -150,7 +129,8 @@ export function SchemaEditor<M>({
             initialValues={schema ?? {
                 id: "",
                 name: "",
-                properties: {}
+                properties: {},
+                propertiesOrder: []
             } as EntitySchema}
             validationSchema={YupSchema}
             validate={() => console.log("validate")}
@@ -209,8 +189,6 @@ function SchemaEditorForm<M>({
     const selectedPropertyFullId = getFullId(selectedPropertyId, selectedPropertyNamespace)
     const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
-    const [pendingMove, setPendingMove] = useState<[TreeSourcePosition, TreeDestinationPosition] | undefined>();
-
     const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
     const [schemaDetailsDialogOpen, setSchemaDetailsDialogOpen] = useState<boolean>(false);
 
@@ -228,11 +206,6 @@ function SchemaEditorForm<M>({
         }
     }, [isNewSchema, touched, values.name]);
 
-    const onPropertyClick = useCallback((property: PropertyOrBuilder, propertyId: string, namespace?: string) => {
-        setSelectedPropertyId(propertyId);
-        setSelectedPropertyNamespace(namespace);
-    }, []);
-
     const deleteProperty = useCallback((propertyId: string, namespace?: string) => {
         const fullId = getFullId(propertyId, namespace);
         if (!fullId)
@@ -248,42 +221,10 @@ function SchemaEditorForm<M>({
         setSelectedPropertyNamespace(undefined);
     }, [setFieldValue, values]);
 
-    const renderItem = useCallback(({
-                                        item,
-                                        onExpand,
-                                        onCollapse,
-                                        provided,
-                                        snapshot
-                                    }: RenderItemParams) => {
-        const propertyFullKey = item.id as string;
-        const propertyId = item.data.id as string;
-        const propertyNamespace = item.data.namespace as string | undefined;
-        const propertyOrBuilder = item.data.property as PropertyOrBuilder;
-        const propertyPath = idToPropertiesPath(propertyFullKey);
-        const hasError = getIn(cleanedErrors, propertyPath);
-
-        return (
-            <SchemaEntry
-                propertyKey={propertyId}
-                propertyOrBuilder={propertyOrBuilder}
-                provided={provided}
-                hasError={hasError}
-                onClick={() => onPropertyClick(propertyOrBuilder, propertyId, propertyNamespace)}
-                selected={snapshot.isDragging || selectedPropertyFullId === item.id}/>
-        )
-    }, [cleanedErrors, selectedPropertyFullId, onPropertyClick]);
-
-    const tree = useMemo(() => {
-        const sortedProperties = sortProperties(values.properties, values.propertiesOrder);
-        return propertiesToTree(sortedProperties);
-    }, [values.properties, values.propertiesOrder]);
-
-    const doPropertyMove = useCallback((source: TreeSourcePosition, destination: TreeDestinationPosition) => {
-        const newTree = moveItemOnTree(tree, source, destination);
-        const [properties, propertiesOrder] = treeToProperties<M>(newTree);
+    const doPropertyMove = useCallback((properties, propertiesOrder) => {
         setFieldValue("propertiesOrder", propertiesOrder, false);
         setFieldValue("properties", properties, false);
-    }, [setFieldValue, tree]);
+    }, [setFieldValue]);
 
     const onPropertyCreated = useCallback((id: string, property: Property) => {
         setFieldValue("properties", {
@@ -309,27 +250,6 @@ function SchemaEditorForm<M>({
             setFieldError(propertyPath, error ? "Property error" : undefined);
         }
     }, [setFieldError]);
-
-    const onDragEnd = (
-        source: TreeSourcePosition,
-        destination?: TreeDestinationPosition
-    ) => {
-
-        if (!destination) {
-            return;
-        }
-
-        if (!isValidDrag(tree, source, destination)) {
-            return;
-        }
-
-        if (source.parentId !== destination.parentId) {
-            setPendingMove([source, destination]);
-        } else {
-            doPropertyMove(source, destination);
-        }
-
-    };
 
     const closePropertyDialog = () => {
         setSelectedPropertyId(undefined);
@@ -423,15 +343,17 @@ function SchemaEditorForm<M>({
                         <Grid container>
                             <Grid item xs={12}
                                   lg={5}>
-                                <Tree
-                                    key={`tree_${selectedPropertyFullId}_${hash(errors)}`}
-                                    tree={tree}
-                                    offsetPerLevel={40}
-                                    renderItem={renderItem}
-                                    onDragEnd={onDragEnd}
-                                    isDragEnabled
-                                    isNestingEnabled
-                                />
+                                <ErrorBoundary>
+                                    <PropertyTree
+                                        setSelectedPropertyId={setSelectedPropertyId}
+                                        selectedPropertyId={selectedPropertyId}
+                                        setSelectedPropertyNamespace={setSelectedPropertyNamespace}
+                                        selectedPropertyNamespace={selectedPropertyNamespace}
+                                        properties={values.properties}
+                                        propertiesOrder={values.propertiesOrder ?? Object.keys(values.properties) as (keyof M)[]}
+                                        onPropertyMove={doPropertyMove}
+                                        errors={errors}/>
+                                </ErrorBoundary>
                             </Grid>
 
                             {!asDialog && <Grid item xs={12}
@@ -495,14 +417,6 @@ function SchemaEditorForm<M>({
                 </Button>
             </CustomDialogActions>
 
-            <PendingMoveDialog open={Boolean(pendingMove)}
-                               onAccept={() => {
-                                   setPendingMove(undefined);
-                                   if (pendingMove)
-                                       doPropertyMove(pendingMove[0], pendingMove[1]);
-                               }}
-                               onCancel={() => setPendingMove(undefined)}/>
-
             <SchemaDetailsDialog open={schemaDetailsDialogOpen}
                                  isNewSchema={isNewSchema}
                                  handleOk={() => setSchemaDetailsDialogOpen(false)}/>
@@ -552,142 +466,3 @@ function PendingMoveDialog({
     </Dialog>;
 }
 
-export function SchemaEntry({
-                                propertyKey,
-                                propertyOrBuilder,
-                                provided,
-                                selected,
-                                hasError,
-                                onClick
-                            }: {
-    propertyKey: string;
-    propertyOrBuilder: PropertyOrBuilder;
-    provided: TreeDraggableProvided;
-    selected: boolean;
-    hasError: boolean;
-    onClick: () => void;
-}) {
-
-    const widget = typeof propertyOrBuilder !== "function" ? getWidget(propertyOrBuilder) : undefined;
-    return (
-        <Box sx={{
-            display: "flex",
-            flexDirection: "row",
-            width: "100%",
-            pb: 1,
-            cursor: "pointer"
-        }}
-             onClick={onClick}
-             ref={provided.innerRef}
-             {...provided.draggableProps}
-             style={{
-                 ...provided.draggableProps.style
-             }}>
-
-            <Box sx={{
-                background: widget?.color ?? "#888",
-                height: "32px",
-                mt: 0.5,
-                padding: 0.5,
-                borderRadius: "50%",
-                boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                color: "white"
-            }}>
-                {getIconForProperty(propertyOrBuilder, "inherit", "medium")}
-            </Box>
-            <Box sx={{
-                pl: 3,
-                width: "100%",
-                display: "flex",
-                flexDirection: "row"
-            }}>
-                <Paper variant={"outlined"}
-                       sx={(theme) => ({
-                           position: "relative",
-                           flexGrow: 1,
-                           p: 2,
-                           border: hasError
-                               ? `1px solid ${theme.palette.error.light}`
-                               : (selected ? `1px solid ${theme.palette.primary.light}` : undefined)
-                       })}
-                       elevation={0}>
-
-                    {typeof propertyOrBuilder === "object"
-                        ? <PropertyPreview property={propertyOrBuilder}/>
-                        : <PropertyBuilderPreview name={propertyKey}/>}
-
-                    <IconButton {...provided.dragHandleProps}
-                                size="small"
-                                sx={{
-                                    position: "absolute",
-                                    top: 8,
-                                    right: 8
-                                }}>
-                        <DragHandleIcon fontSize={"small"}/>
-                    </IconButton>
-                </Paper>
-            </Box>
-        </Box>
-    );
-
-}
-
-function PropertyPreview({
-                             property
-                         }: { property: Property }) {
-    return (
-        <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-
-            <Typography variant="subtitle1"
-                        component="span"
-                        sx={{ flexGrow: 1, pr: 2 }}>
-                {property.title ? property.title : "\u00a0"}
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ flexGrow: 1, pr: 2 }}
-                            variant="body2"
-                            component="span"
-                            color="text.secondary">
-                    {getWidgetNameForProperty(property)}
-                </Typography>
-                <Typography variant="body2"
-                            component="span"
-                            color="text.disabled">
-                    {property.dataType}
-                </Typography>
-            </Box>
-        </Box>
-    );
-}
-
-function PropertyBuilderPreview({
-                                    name
-                                }: { name: string }) {
-    return (
-        <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-            <Typography variant="body2"
-                        component="span"
-                        color="text.disabled">
-                {name}
-            </Typography>
-            <Typography sx={{ flexGrow: 1, pr: 2 }}
-                        variant="body2"
-                        component="span"
-                        color="text.secondary">
-                This property can only be edited in code
-            </Typography>
-        </Box>
-    );
-}
-
-function isValidDrag(tree: TreeData, source: TreeSourcePosition, destination: TreeDestinationPosition) {
-    const draggedPropertyId = tree.items[source.parentId].children[source.index];
-    const draggedProperty = tree.items[draggedPropertyId].data.property;
-    if (typeof draggedProperty === "function")
-        return false;
-    if (destination.parentId === tree.rootId)
-        return true;
-    const destinationPropertyId = tree.items[destination.parentId].id;
-    const destinationProperty: Property = tree.items[destinationPropertyId].data.property;
-    return typeof destinationProperty === "object" && destinationProperty.dataType === "map";
-}
