@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import {
     Authenticator,
     EntityCollection,
@@ -140,5 +140,10 @@ export interface FirebaseCMSAppProps {
      * Default path under the collection routes of the CMS will be created
      */
     baseCollectionPath?: string;
+
+    /**
+     * UI that will be displayed if user is found to not exist in firebase
+     */
+     noUserComponent?: ReactNode;
 }
 

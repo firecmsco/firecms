@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 
 import {
     Box,
@@ -55,6 +55,7 @@ export interface FirebaseLoginViewProps {
     signInOptions: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     firebaseApp: FirebaseApp;
     authDelegate: FirebaseAuthDelegate
+    noUserComponent?: ReactNode
 }
 
 /**
@@ -68,7 +69,8 @@ export function FirebaseLoginView({
                                       logo,
                                       signInOptions,
                                       firebaseApp,
-                                      authDelegate
+                                      authDelegate,
+                                      noUserComponent
                                   }: FirebaseLoginViewProps) {
     const classes = useStyles();
     const authController = useAuthController();
@@ -204,7 +206,10 @@ export function FirebaseLoginView({
                     {passwordLoginSelected && <LoginForm
                         authDelegate={authDelegate}
                         onClose={() => setPasswordLoginSelected(false)}
-                        mode={modeState.mode}/>}
+                        mode={modeState.mode}
+                        CustomNoUserFound={noUserComponent}
+                        
+                        />}
 
                 </Box>
             </Box>
@@ -253,8 +258,9 @@ function LoginButton({
 function LoginForm({
                        onClose,
                        authDelegate,
-                       mode
-                   }: { onClose: () => void, authDelegate: FirebaseAuthDelegate, mode: "light" | "dark" }) {
+                       mode,
+                       CustomNoUserFound
+                   }: { onClose: () => void, authDelegate: FirebaseAuthDelegate, mode: "light" | "dark", CustomNoUserFound: ReactNode | undefined }) {
 
     const passwordRef = useRef<HTMLInputElement | null>(null);
 
@@ -289,7 +295,10 @@ function LoginForm({
 
     function handleEnterEmail() {
         if (email) {
-            authDelegate.fetchSignInMethodsForEmail(email).then(setAvailableProviders);
+            authDelegate.fetchSignInMethodsForEmail(email).then((availableProviders)=> {
+                console.log(availableProviders);
+                setAvailableProviders(availableProviders)
+            });
         }
     }
 
@@ -384,7 +393,7 @@ function LoginForm({
                                    type="email"
                                    onChange={(event) => setEmail(event.target.value)}/>
                     </Grid>
-
+                    {CustomNoUserFound}
                     <Grid item xs={12}
                           sx={{ display: loginMode || registrationMode ? "inherit" : "none" }}>
                         <TextField placeholder="Password" fullWidth
