@@ -3,7 +3,7 @@ import { FormControl, FormHelperText, Paper } from "@mui/material";
 
 import { FieldProps } from "../../models";
 
-import { PreviewComponent } from "../../preview";
+import { PropertyPreview } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
@@ -51,10 +51,10 @@ export function ReadOnlyFieldBinding({
                 variant={"outlined"}>
 
                 <ErrorBoundary>
-                    <PreviewComponent propertyKey={propertyKey}
-                                      value={value}
-                                      property={property}
-                                      size={"regular"}/>
+                    <PropertyPreview propertyKey={propertyKey}
+                                     value={value}
+                                     property={property}
+                                     size={"regular"}/>
                 </ErrorBoundary>
 
             </Paper>

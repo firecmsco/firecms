@@ -1,4 +1,4 @@
-import { PreviewComponentProps } from "../internal";
+import { PropertyPreviewProps } from "../internal";
 import { ResolvedNumberProperty, ResolvedStringProperty } from "../../models";
 import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
 
@@ -10,7 +10,7 @@ export function ArrayPropertyEnumPreview({
                                              value,
                                              property,
                                              size
-                                         }: PreviewComponentProps<string[] | number[]>) {
+                                         }: PropertyPreviewProps<string[] | number[]>) {
 
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayEnumPreview");

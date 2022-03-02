@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Box, Dialog } from "@mui/material";
 
 import { SchemaEditor } from "./SchemaEditor";
-import { EntitySchema } from "../../../index";
+import { EntitySchema } from "../index";
 
 export interface SchemaEditorDialogProps {
     open: boolean;

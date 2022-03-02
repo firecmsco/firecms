@@ -36,7 +36,8 @@ buildProperty<string>({
     }
 });
 ```
-
+- `PreviewComponent` has been renamed to `PropertyPreview`
+- `PreviewComponentProps` has been renamed to `PropertyPreviewProps`
 - Validation: The `email`validation prop in string properties is now placed
   at the property level (not under `validation`)
 - `storageMeta`prop in string properties is now called `storage`

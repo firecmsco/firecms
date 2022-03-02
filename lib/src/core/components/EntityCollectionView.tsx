@@ -46,7 +46,7 @@ import { mergeDeep } from "../util/objects";
 import {
     useUserConfigurationPersistence
 } from "../../hooks/useUserConfigurationPersistence";
-import { SchemaEditorDialog } from "./SchemaEditor/SchemaEditorDialog";
+import { SchemaEditorDialog } from "../../schema_editor/SchemaEditorDialog";
 import { ErrorView } from "./ErrorView";
 import { ErrorBoundary } from "../internal/ErrorBoundary";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";

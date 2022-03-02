@@ -2,8 +2,8 @@ import React from "react";
 
 import { FastField, getIn, useFormikContext } from "formik";
 import { Grid } from "@mui/material";
-import DebouncedTextField from "../../../../../form/components/DebouncedTextField";
-import { SmallSwitch } from "../../../../../form/components/SmallSwitch";
+import DebouncedTextField from "../../../form/components/DebouncedTextField";
+import { SmallSwitch } from "../../../form/components/SmallSwitch";
 
 export function GeneralPropertyValidation({}: {
     required?: boolean;

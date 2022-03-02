@@ -7,6 +7,7 @@ import {
     Button,
     Dialog,
     DialogContent,
+    DialogTitle,
     FormControl,
     FormHelperText,
     Grid,
@@ -18,19 +19,24 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { Property } from "../../../models";
+import { Property } from "../models";
 import { StringPropertyField } from "./properties/StringPropertyField";
-import { getWidget, getWidgetId, WidgetId, WIDGETS } from "../../util/widgets";
-import { buildProperty } from "../../builders";
+import {
+    getWidget,
+    getWidgetId,
+    WidgetId,
+    WIDGETS
+} from "../core/util/widgets";
+import { buildProperty } from "../core";
 import { EnumPropertyField } from "./properties/EnumPropertyField";
-import { toSnakeCase } from "../../util/strings";
-import { useDebounce } from "../../internal/useDebounce";
-import { CustomDialogActions } from "../CustomDialogActions";
-import { mergeDeep, removeUndefined } from "../../util/objects";
+import { toSnakeCase } from "../core/util/strings";
+import { useDebounce } from "../core/internal/useDebounce";
+import { CustomDialogActions } from "../core/components/CustomDialogActions";
+import { mergeDeep, removeUndefined } from "../core/util/objects";
 import {
     FieldUploadPropertyField
 } from "./properties/FieldUploadPropertyField";
-import DebouncedTextField from "../../../form/components/DebouncedTextField";
+import DebouncedTextField from "../form/components/DebouncedTextField";
 import { BooleanPropertyField } from "./properties/BooleanPropertyField";
 import { MapPropertyField } from "./properties/MapPropertyField";
 
@@ -45,7 +51,7 @@ export function PropertyForm({
                                  onOkClicked,
                                  onCancel,
                                  onPropertyChanged,
-                                 onDeleteClicked,
+                                 onDelete,
                                  onError,
                                  forceShowErrors
                              }: {
@@ -55,7 +61,7 @@ export function PropertyForm({
     propertyNamespace?: string;
     property?: Property;
     onPropertyChanged: (id: string, property: Property, namespace?: string) => void;
-    onDeleteClicked?: (id: string, namespace?: string) => void;
+    onDelete?: (id: string, namespace?: string) => void;
     onError?: (id: string, error: boolean) => void;
     onOkClicked?: () => void;
     onCancel?: () => void;
@@ -93,7 +99,7 @@ export function PropertyForm({
 
                 const form = <PropertyEditView
                     onPropertyChanged={asDialog ? undefined : onPropertyChanged}
-                    onDeleteClicked={existing ? onDeleteClicked : undefined}
+                    onDelete={existing ? onDelete : undefined}
                     propertyNamespace={propertyNamespace}
                     onError={onError}
                     showErrors={forceShowErrors || props.submitCount > 0}
@@ -209,7 +215,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
                 markdown: undefined,
                 email: undefined,
                 url: undefined,
-                enumValues: propertyData.enumValues ?? undefined
+                enumValues: propertyData.enumValues ?? []
             })
         );
     } else if (selectedWidgetId === "multi_select") {
@@ -219,7 +225,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
                 dataType: "array",
                 of: {
                     dataType: "string",
-                    enumValues: propertyData.of?.enumValues ?? undefined
+                    enumValues: propertyData.of?.enumValues ?? []
                 }
             })
         );
@@ -338,7 +344,7 @@ function PropertyEditView({
                               setFieldValue,
                               existing,
                               onPropertyChanged,
-                              onDeleteClicked,
+                              onDelete,
                               propertyNamespace,
                               onError,
                               showErrors
@@ -346,11 +352,12 @@ function PropertyEditView({
     existing: boolean;
     propertyNamespace?: string;
     onPropertyChanged?: (id: string, property: Property, namespace?: string) => void;
-    onDeleteClicked?: (id: string, namespace?: string) => void;
+    onDelete?: (id: string, namespace?: string) => void;
     onError?: (id: string, error: boolean) => void;
     showErrors: boolean;
 } & FormikProps<PropertyWithId>) {
 
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedWidgetId, setSelectedWidgetId] = useState<WidgetId | undefined>(values ? getWidgetId(values) : undefined);
 
     const selectedWidget = selectedWidgetId ? WIDGETS[selectedWidgetId] : undefined;
@@ -451,14 +458,14 @@ function PropertyEditView({
                            size="small"
                            error={Boolean(idError)}/>
 
-                    {onDeleteClicked && values.id &&
+                    {onDelete && values.id &&
                         <Button
                             sx={{
                                 color: "#888",
                                 ml: 2
                             }}
                             startIcon={<DeleteIcon/>}
-                            onClick={() => onDeleteClicked(values.id, propertyNamespace)}>
+                            onClick={() => setDeleteDialogOpen(true)}>
                             Remove
                         </Button>}
                 </Box>
@@ -503,6 +510,10 @@ function PropertyEditView({
 
             {childComponent}
 
+            {onDelete && <DeleteConfirmationDialog open={deleteDialogOpen}
+                                                   onAccept={() => onDelete(values.id, propertyNamespace)}
+                                                   onCancel={() => setDeleteDialogOpen(false)}/>}
+
         </Grid>
     );
 }
@@ -521,18 +532,45 @@ function validateId(value: string) {
     return error;
 }
 
-function validateNotEmpty(value: string) {
-    let error;
-    if (!value) {
-        error = "Required";
-    }
-    return error;
-}
-
 function validateTitle(value: string) {
     let error;
     if (!value) {
         error = "You must specify a title for the property";
     }
     return error;
+}
+
+function DeleteConfirmationDialog({
+                                      open,
+                                      onAccept,
+                                      onCancel
+                                  }: { open: boolean, onAccept: () => void, onCancel: () => void }) {
+    return <Dialog
+        open={open}
+        onClose={onCancel}
+    >
+        <DialogTitle>
+            {"Delete this property?"}
+        </DialogTitle>
+        {/*<DialogContent>*/}
+        {/*    <DialogContentText>*/}
+        {/*        You are moving one property from one context to*/}
+        {/*        another.*/}
+        {/*    </DialogContentText>*/}
+        {/*    <DialogContentText>*/}
+        {/*        This will <b>not transfer the data</b>, only modify*/}
+        {/*        the schema.*/}
+        {/*    </DialogContentText>*/}
+        {/*</DialogContent>*/}
+        <CustomDialogActions>
+            <Button
+                onClick={onCancel}
+                autoFocus>Cancel</Button>
+            <Button
+                variant="contained"
+                onClick={onAccept}>
+                Ok
+            </Button>
+        </CustomDialogActions>
+    </Dialog>;
 }

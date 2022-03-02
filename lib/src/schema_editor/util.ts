@@ -1,4 +1,4 @@
-import { PropertiesOrBuilder, Property } from "../../../models";
+import { PropertiesOrBuilder, Property } from "../models";
 
 export type ItemId = string | number;
 

@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import {
     Box,
     TextField as MuiTextField,
@@ -8,10 +8,9 @@ import {
 } from "@mui/material";
 import { DateProperty } from "../../../../../models";
 import DateTimePicker from "@mui/lab/DateTimePicker";
-import { EmptyValue, TimestampPropertyPreview } from "../../../../../preview";
+import { EmptyValue, DatePreview } from "../../../../../preview";
 
-
-const PREFIX = 'TableDateField';
+const PREFIX = "TableDateField";
 
 const classes = {
     hidden: `${PREFIX}-hidden`
@@ -27,7 +26,6 @@ const StyledBox = styled(Box)((
     }
 }));
 
-
 export function TableDateField(props: {
     name: string;
     error: Error | undefined;
@@ -35,7 +33,6 @@ export function TableDateField(props: {
     updateValue: (newValue: (Date | null)) => void;
     focused: boolean;
     disabled: boolean;
-    property: DateProperty;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     setPreventOutsideClick: (value: any) => void;
 }) {
@@ -46,7 +43,6 @@ export function TableDateField(props: {
         internalValue,
         setPreventOutsideClick,
         updateValue,
-        property
     } = props;
 
     const handleOpen = useCallback(() => {
@@ -57,16 +53,13 @@ export function TableDateField(props: {
         setPreventOutsideClick(false);
     }, []);
 
-
     return (
         <StyledBox display={"flex"} alignItems={"center"}>
 
             <Box flexGrow={1}>
                 {internalValue &&
                 <Typography variant={"body2"}>
-                    <TimestampPropertyPreview value={internalValue}
-                                              property={property}
-                                              size={"regular"}/>
+                    <DatePreview date={internalValue}/>
                 </Typography>}
                 {!internalValue && <EmptyValue/>}
             </Box>

@@ -74,11 +74,11 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
             sx={{
                 minHeight: 56,
                 [theme.breakpoints.down("xl")]: {
-                    paddingLeft: theme.spacing(0.5),
-                    paddingRight: theme.spacing(0.5)
+                    paddingLeft: theme.spacing(1),
+                    paddingRight: theme.spacing(1)
                 },
-                paddingLeft: theme.spacing(1),
-                paddingRight: theme.spacing(1),
+                paddingLeft: theme.spacing(2),
+                paddingRight: theme.spacing(2),
                 backgroundColor: theme.palette.background.default,
                 borderBottom: `1px solid ${theme.palette.divider}`,
                 display: "flex",

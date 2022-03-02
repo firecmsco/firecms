@@ -22,10 +22,10 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import {
     GeneralPropertyValidation
 } from "./validation/GeneralPropertyValidation";
-import DebouncedTextField from "../../../../form/components/DebouncedTextField";
-import { EnumValues } from "../../../../models";
-import { CustomDialogActions } from "../../CustomDialogActions";
-import { SmallSwitch } from "../../../../form/components/SmallSwitch";
+import DebouncedTextField from "../../form/components/DebouncedTextField";
+import { EnumValues } from "../../models";
+import { CustomDialogActions } from "../../core/components/CustomDialogActions";
+import { SmallSwitch } from "../../form/components/SmallSwitch";
 
 const fileTypes = {
     "image/*": "Images",

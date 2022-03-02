@@ -4,8 +4,8 @@ import { styled } from "@mui/material/styles";
 
 import { Divider, Theme } from "@mui/material";
 import {
-    PreviewComponent,
-    PreviewComponentProps,
+    PropertyPreview,
+    PropertyPreviewProps,
     PreviewSize
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
@@ -47,7 +47,7 @@ export function ArrayOneOfPreview({
                                       value,
                                       property,
                                       size
-                                  }: PreviewComponentProps<any[]>) {
+                                  }: PropertyPreviewProps<any[]>) {
 
     if (property.dataType !== "array")
         throw Error("Picked wrong preview component ArrayPreview");
@@ -73,7 +73,7 @@ export function ArrayOneOfPreview({
                 <React.Fragment key={"preview_array_" + value + "_" + index}>
                     <div className={classes.arrayItemBig}>
                         <ErrorBoundary>
-                            {value && <PreviewComponent
+                            {value && <PropertyPreview
                                 propertyKey={propertyKey}
                                 value={value[valueField]}
                                 property={properties[value[typeField]] as ResolvedProperty<any>}

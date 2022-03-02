@@ -2,7 +2,7 @@ import React from "react";
 import {
     CollectionSize,
     Entity,
-    EntityCollection,
+    EntityCollection
 } from "../../../models";
 
 /**

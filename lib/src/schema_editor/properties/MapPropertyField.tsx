@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Button, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { PropertyForm } from "../PropertyEditView";
-import { MapProperty, Property } from "../../../../models";
+import { MapProperty, Property } from "../../models";
 import { useFormikContext } from "formik";
 
 export function MapPropertyField({ existing }: { existing: boolean; }) {
@@ -18,7 +18,7 @@ export function MapPropertyField({ existing }: { existing: boolean; }) {
             ...(values.properties ?? {}),
             [id]: property
         }, false);
-        setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? []), id], false);
+        setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? Object.keys(values.properties ?? {})), id], false);
         setNewPropertyDialogOpen(false);
     }, [values.properties, values.propertiesOrder]);
 

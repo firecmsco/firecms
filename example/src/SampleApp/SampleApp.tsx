@@ -10,7 +10,8 @@ import {
     FirebaseCMSApp,
     Navigation,
     NavigationBuilder,
-    NavigationBuilderProps
+    NavigationBuilderProps,
+    CollectionTable
 } from "@camberi/firecms";
 
 import { IconButton, Tooltip } from "@mui/material";

@@ -2,7 +2,7 @@ import React from "react";
 
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { CustomChip, EnumValuesChip } from "../components/CustomChip";
-import { PreviewComponentProps } from "../internal";
+import { PropertyPreviewProps } from "../internal";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 import { resolvePropertyEnum } from "../../core/util/entities";
 
@@ -14,7 +14,7 @@ export function StringPropertyPreview({
                                   value,
                                   property,
                                   size
-                              }: PreviewComponentProps<string>): React.ReactElement {
+                              }: PropertyPreviewProps<string>): React.ReactElement {
 
     const schemaRegistry = useSchemaRegistry();
     if (property.enumValues) {

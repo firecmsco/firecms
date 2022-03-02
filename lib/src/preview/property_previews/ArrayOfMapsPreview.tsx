@@ -3,7 +3,7 @@ import { ArrayProperty, ResolvedMapProperty } from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { PreviewComponent, PreviewComponentProps } from "../internal";
+import { PropertyPreview, PropertyPreviewProps } from "../internal";
 
 /**
  * @category Preview components
@@ -13,7 +13,7 @@ export function ArrayOfMapsPreview({
                                           value,
                                           property,
                                           size
-                                      }: PreviewComponentProps<object[]>) {
+                                      }: PropertyPreviewProps<object[]>) {
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");
@@ -55,7 +55,7 @@ export function ArrayOfMapsPreview({
                                         component="th"
                                     >
                                         <ErrorBoundary>
-                                            <PreviewComponent
+                                            <PropertyPreview
                                                 propertyKey={key as string}
                                                 value={(v as any)[key]}
                                                 property={properties[key as string]}

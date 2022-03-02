@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { ResolvedStringProperty } from "../../models";
-import { PreviewComponentProps } from "../internal";
+import { PropertyPreviewProps } from "../internal";
 
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { StringPropertyPreview } from "./StringPropertyPreview";
@@ -43,7 +43,7 @@ export function ArrayOfStringsPreview({
                                           value,
                                           property,
                                           size
-                                      }: PreviewComponentProps<string[]>) {
+                                      }: PropertyPreviewProps<string[]>) {
 
     if (!property.of || property.dataType !== "array" || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStringsPreview");

@@ -3,7 +3,7 @@ import { EntityCollection } from "../../models";
 import EntityCollectionView from "./EntityCollectionView";
 import { CircularProgressCenter } from "./CircularProgressCenter";
 import { useConfigurationPersistence } from "../../hooks/useConfigurationPersistence";
-import { CollectionEditor } from "./SchemaEditor/CollectionEditor";
+import { CollectionEditor } from "../../schema_editor/CollectionEditor";
 import { ErrorView } from "./ErrorView";
 
 /**

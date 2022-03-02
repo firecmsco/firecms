@@ -1,7 +1,7 @@
 import {
     propertiesToTree,
     treeToProperties
-} from "../../core/components/SchemaEditor/util";
+} from "../../schema_editor/util";
 import { EntitySchema } from "../../models";
 import util from "util";
 

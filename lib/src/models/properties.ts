@@ -1,5 +1,5 @@
 import { FieldProps } from "./fields";
-import { PreviewComponentProps } from "../preview";
+import { PropertyPreviewProps } from "../preview";
 import { ChipColor } from "./colors";
 import { EntityReference, EntityValues, GeoPoint } from "./entities";
 import {
@@ -128,7 +128,7 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * view. You can customize it by passing custom props that are received
      * in the component.
      */
-    Preview?: React.ComponentType<PreviewComponentProps<T, CustomProps>>;
+    Preview?: React.ComponentType<PropertyPreviewProps<T, CustomProps>>;
 
     /**
      * Additional props that are passed to the components defined in `field`

@@ -16,7 +16,7 @@ import {
     StringProperty
 } from "../../../../../models";
 import { useDropzone } from "react-dropzone";
-import { PreviewComponent, PreviewSize } from "../../../../../preview";
+import { PropertyPreview, PreviewSize } from "../../../../../preview";
 import equal from "react-fast-compare"
 import { ErrorBoundary } from "../../../../internal/ErrorBoundary";
 
@@ -566,9 +566,9 @@ export function StorageItemPreview({
 
             {value &&
             <ErrorBoundary>
-                <PreviewComponent value={value}
-                                  property={property}
-                                  size={size}/>
+                <PropertyPreview value={value}
+                                 property={property}
+                                 size={size}/>
             </ErrorBoundary>
             }
 

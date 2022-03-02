@@ -14,10 +14,7 @@ import {
 import { EntityReference, ResolvedProperty } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import {
-    PreviewComponent,
-    PreviewSize, SkeletonComponent
-} from "../internal";
+import { PropertyPreview, PreviewSize, SkeletonComponent } from "../internal";
 
 import { ErrorView } from "../../core";
 import {
@@ -26,21 +23,50 @@ import {
     useSideEntityController
 } from "../../hooks";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-/**
- * @category Preview components
- */
-export function ReferencePreview<M>({ path, reference, previewProperties, size, onHover, onClick }: {
-    path: string
+
+export type ReferencePreviewProps = {
+    path: string | false;
     reference: EntityReference,
     size: PreviewSize;
     previewProperties?: string[];
     onClick?: MouseEventHandler<any>;
     onHover?: boolean;
-}) {
+};
+
+/**
+ * @category Preview components
+ */
+export const ReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewInternal, areEqual) as React.FunctionComponent<ReferencePreviewProps>;
+
+function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewProps) {
+    return prevProps.path === nextProps.path &&
+        prevProps.size === nextProps.size &&
+        prevProps.onHover === nextProps.onHover &&
+        prevProps.reference?.id === nextProps.reference?.id &&
+        prevProps.reference?.path === nextProps.reference?.path
+        ;
+}
+
+function ReferencePreviewInternal<M>({
+                                         path,
+                                         reference,
+                                         previewProperties,
+                                         size,
+                                         onHover,
+                                         onClick
+                                     }: ReferencePreviewProps) {
 
     const navigationContext = useNavigation();
     const schemaRegistry = useSchemaRegistry();
     const sideEntityController = useSideEntityController();
+
+    if (!path) {
+        return <ReferencePreviewWrap onClick={onClick}
+                                     onHover={onHover}
+                                     size={size}>
+            Disabled
+        </ReferencePreviewWrap>
+    }
 
     const collection = navigationContext.getCollection<M>(path);
     if (!collection) {
@@ -51,6 +77,7 @@ export function ReferencePreview<M>({ path, reference, previewProperties, size, 
         entity,
         dataLoading,
         dataLoadingError
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     } = useEntityFetch({
         path: reference.path,
         entityId: reference.id,
@@ -58,6 +85,7 @@ export function ReferencePreview<M>({ path, reference, previewProperties, size, 
         useCache: true
     });
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const schema = useMemo(() => schemaRegistry.getResolvedSchema({
         schema: collection.schemaId,
         path: path,
@@ -65,6 +93,7 @@ export function ReferencePreview<M>({ path, reference, previewProperties, size, 
     }), [collection]);
 
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const listProperties = useMemo(() => {
         if (!schema) return [];
         let res = previewProperties;
@@ -129,10 +158,10 @@ export function ReferencePreview<M>({ path, reference, previewProperties, size, 
                         return (
                             <div key={"ref_prev_" + (key as string)}>
                                 {entity
-                                    ? <PreviewComponent propertyKey={key as string}
-                                                        value={entity.values[key as string]}
-                                                        property={childProperty as ResolvedProperty}
-                                                        size={"tiny"}/>
+                                    ? <PropertyPreview propertyKey={key as string}
+                                                       value={entity.values[key as string]}
+                                                       property={childProperty as ResolvedProperty}
+                                                       size={"tiny"}/>
                                     : <SkeletonComponent
                                         property={childProperty as ResolvedProperty}
                                         size={"tiny"}/>
@@ -173,7 +202,7 @@ export function ReferencePreview<M>({ path, reference, previewProperties, size, 
     </ReferencePreviewWrap>
 }
 
-export function ReferencePreviewWrap({ children, onHover, size, onClick }: {
+function ReferencePreviewWrap({ children, onHover, size, onClick }: {
     children: React.ReactNode;
     onHover?: boolean;
     size: PreviewSize;

@@ -23,7 +23,7 @@ import {
 } from "../../models";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@mui/icons-material/Clear";
-import { PreviewComponent, PreviewSize } from "../../preview";
+import { PropertyPreview, PreviewSize } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
@@ -742,10 +742,10 @@ export function StorageItemPreview({
 
                 {value &&
                 <ErrorBoundary>
-                    <PreviewComponent propertyKey={name}
-                                      value={value}
-                                      property={property}
-                                      size={size}/>
+                    <PropertyPreview propertyKey={name}
+                                     value={value}
+                                     property={property}
+                                     size={size}/>
                 </ErrorBoundary>
                 }
 

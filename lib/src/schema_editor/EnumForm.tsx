@@ -4,10 +4,10 @@ import { FastField, Field, Formik, getIn, useFormikContext } from "formik";
 import { Box, Button, Dialog, DialogContent, IconButton } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
-import DebouncedTextField from "../../../form/components/DebouncedTextField";
-import { EnumValueConfig, EnumValues } from "../../../models";
-import { ArrayContainer } from "../../../form";
-import { CustomDialogActions } from "../CustomDialogActions";
+import DebouncedTextField from "../form/components/DebouncedTextField";
+import { EnumValueConfig, EnumValues } from "../models";
+import { ArrayContainer } from "../form";
+import { CustomDialogActions } from "../core/components/CustomDialogActions";
 
 export function EnumForm({
                              enumValues,

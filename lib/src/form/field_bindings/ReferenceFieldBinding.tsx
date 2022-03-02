@@ -28,7 +28,7 @@ import {
 import { FieldDescription } from "../index";
 import { ErrorView, ReferenceDialog } from "../../core";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
-import { PreviewComponent, SkeletonComponent } from "../../preview";
+import { PropertyPreview, SkeletonComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
     useClearRestoreValue,
@@ -254,7 +254,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                                     mb={0.5}>
                                     <ErrorBoundary>{
                                         entity
-                                            ? <PreviewComponent
+                                            ? <PropertyPreview
                                                 propertyKey={key as string}
                                                 value={(entity.values as any)[key]}
                                                 property={property as ResolvedProperty}

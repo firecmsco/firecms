@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 import { FieldProps } from "../../models";
-import { PreviewComponent } from "../../preview";
+import { PropertyPreview } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";

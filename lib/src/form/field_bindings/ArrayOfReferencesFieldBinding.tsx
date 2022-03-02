@@ -7,7 +7,7 @@ import {
     FieldProps,
     ResolvedProperty
 } from "../../models";
-import { ReferencePropertyPreview } from "../../preview";
+import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { ErrorView, ReferenceDialog } from "../../core";
 
@@ -81,16 +81,17 @@ export function ArrayOfReferencesFieldBinding({
                 onMouseEnter={() => setOnHover(true)}
                 onMouseMove={() => setOnHover(true)}
                 onMouseLeave={() => setOnHover(false)}>
-                <ReferencePropertyPreview
-                    value={entryValue}
-                    property={ofProperty}
-                    onHover={onHover}
+                <ReferencePreview
+                    path={ofProperty.path}
+                    previewProperties={ofProperty.previewProperties}
                     size={"regular"}
-                    onClick={onEntryClick}/>
+                    onClick={onEntryClick}
+                    reference={entryValue}
+                    onHover={onHover}
+                />
             </div>
         );
     };
-
 
     return (
         <>

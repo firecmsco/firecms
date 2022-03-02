@@ -6,10 +6,10 @@ import Tree, {
     TreeData,
     TreeDestinationPosition,
     TreeSourcePosition
-} from "../Tree";
+} from "../core/components/Tree";
 import {
     TreeDraggableProvided
-} from "../Tree/components/TreeItem/TreeItem-types";
+} from "../core/components/Tree/components/TreeItem/TreeItem-types";
 
 import { Formik, FormikProps, getIn } from "formik";
 import hash from "object-hash";
@@ -35,9 +35,9 @@ import AddIcon from "@mui/icons-material/Add";
 import {
     getIconForProperty,
     getWidgetNameForProperty
-} from "../../util/property_utils";
+} from "../core/util/property_utils";
 
-import { EntitySchema, Property, PropertyOrBuilder } from "../../../models";
+import { EntitySchema, Property, PropertyOrBuilder } from "../models";
 import {
     getFullId,
     idToPropertiesPath,
@@ -48,19 +48,18 @@ import {
 import {
     prepareSchemaForPersistence,
     sortProperties
-} from "../../util/schemas";
-import { getWidget } from "../../util/widgets";
+} from "../core/util/schemas";
+import { getWidget } from "../core/util/widgets";
 import { PropertyForm } from "./PropertyEditView";
-import { useSnackbarController } from "../../../hooks";
+import { useSnackbarController } from "../hooks";
 import {
     useConfigurationPersistence
-} from "../../../hooks/useConfigurationPersistence";
-import { ErrorView } from "../ErrorView";
-import { CircularProgressCenter } from "../CircularProgressCenter";
-import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
-import { toSnakeCase } from "../../util/strings";
-import { isEmptyObject, removeUndefined } from "../../util/objects";
-import { CustomDialogActions } from "../CustomDialogActions";
+} from "../hooks/useConfigurationPersistence";
+import { CircularProgressCenter, ErrorView } from "../core";
+import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
+import { toSnakeCase } from "../core/util/strings";
+import { isEmptyObject, removeUndefined } from "../core/util/objects";
+import { CustomDialogActions } from "../core/components/CustomDialogActions";
 import { SchemaDetailsDialog } from "./SchemaDetailsView";
 
 export type SchemaEditorProps<M> = {
@@ -177,7 +176,6 @@ export function SchemaEditor<M>({
     );
 }
 
-
 function SchemaEditorForm<M>({
                                  values,
                                  errors,
@@ -292,7 +290,7 @@ function SchemaEditorForm<M>({
             ...(values.properties ?? {}),
             [id]: property
         }, false);
-        setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? []), id], false);
+        setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? Object.keys(values.properties)), id], false);
         setNewPropertyDialogOpen(false);
     }, [values.properties, values.propertiesOrder]);
 
@@ -348,7 +346,7 @@ function SchemaEditorForm<M>({
             propertyNamespace={selectedPropertyNamespace}
             property={selectedProperty}
             onPropertyChanged={onPropertyChanged}
-            onDeleteClicked={deleteProperty}
+            onDelete={deleteProperty}
             onError={onError}
             forceShowErrors={showErrors}
             onOkClicked={asDialog
@@ -366,8 +364,13 @@ function SchemaEditorForm<M>({
     }, [hasError]);
 
     return (
-        <>
+        <Box sx={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column"
+        }}>
             <Box sx={{
+                flexGrow: 1,
                 p: 3,
                 [theme.breakpoints.down("md")]: {
                     p: 2
@@ -381,14 +384,17 @@ function SchemaEditorForm<M>({
                     <Box sx={{
                         display: "flex",
                         flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "end",
-                        my: 1
+                        alignItems: "center",
+                        my: 2
                     }}>
 
                         <Box display={"flex"}
-                             alignItems={"center"}
-                             sx={{ py: 2 }}>
+                             sx={{
+                                 display: "flex",
+                                 flexGrow: 1,
+                                 alignItems: "center",
+                                 mr: 1
+                             }}>
 
                             <Typography variant={"h4"}>
                                 {values.name ? `${values.name} schema` : "Schema"}
@@ -507,7 +513,7 @@ function SchemaEditorForm<M>({
                           onCancel={() => setNewPropertyDialogOpen(false)}
                           onPropertyChanged={onPropertyCreated}/>
 
-        </>
+        </Box>
     );
 }
 
@@ -533,41 +539,6 @@ function PendingMoveDialog({
                 the schema.
             </DialogContentText>
         </DialogContent>
-        <CustomDialogActions>
-            <Button
-                onClick={onCancel}
-                autoFocus>Cancel</Button>
-            <Button
-                variant="contained"
-                onClick={onAccept}>
-                Proceed
-            </Button>
-        </CustomDialogActions>
-    </Dialog>;
-}
-
-function DeleteConfirmationDialog({
-                               open,
-                               onAccept,
-                               onCancel
-                           }: { open: boolean, onAccept: () => void, onCancel: () => void }) {
-    return <Dialog
-        open={open}
-        onClose={onCancel}
-    >
-        <DialogTitle>
-            {"Delete this property?"}
-        </DialogTitle>
-        {/*<DialogContent>*/}
-        {/*    <DialogContentText>*/}
-        {/*        You are moving one property from one context to*/}
-        {/*        another.*/}
-        {/*    </DialogContentText>*/}
-        {/*    <DialogContentText>*/}
-        {/*        This will <b>not transfer the data</b>, only modify*/}
-        {/*        the schema.*/}
-        {/*    </DialogContentText>*/}
-        {/*</DialogContent>*/}
         <CustomDialogActions>
             <Button
                 onClick={onCancel}

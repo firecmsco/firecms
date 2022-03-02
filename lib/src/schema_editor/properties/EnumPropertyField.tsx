@@ -5,9 +5,9 @@ import {
     EnumValueConfig,
     NumberProperty,
     StringProperty
-} from "../../../../models";
-import { resolveEnumValues } from "../../../util/entities";
-import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
+} from "../../models";
+import { resolveEnumValues } from "../../core/util/entities";
+import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 import {
     StringPropertyValidation
 } from "./validation/StringPropertyValidation";

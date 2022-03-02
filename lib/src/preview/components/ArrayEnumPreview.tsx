@@ -7,7 +7,7 @@ import React from "react";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { EnumValuesChip } from "./CustomChip";
 import { Theme } from "@mui/material";
-import { PreviewSize } from "../PreviewComponentProps";
+import { PreviewSize } from "../PropertyPreviewProps";
 
 const PREFIX = "ArrayEnumPreview";
 

@@ -6,10 +6,7 @@ import {
     ResolvedArrayProperty,
     ResolvedMapProperty,
     ResolvedNumberProperty,
-    ResolvedReferenceProperty,
-    ResolvedStringProperty,
-    ResolvedTimestampProperty,
-    StringProperty
+    ResolvedStringProperty
 } from "../models";
 
 import {
@@ -18,28 +15,27 @@ import {
     ArrayOfStorageComponentsPreview,
     ArrayOfStringsPreview,
     ArrayOneOfPreview,
-    ArrayPropertyPreview,
     ArrayPropertyEnumPreview,
+    ArrayPropertyPreview,
     BooleanPreview,
+    DatePreview,
     EmptyValue,
     MapPropertyPreview,
     NumberPropertyPreview,
-    ReferencePropertyPreview,
+    ReferencePreview,
     StorageThumbnail,
+    Markdown,
     StringPropertyPreview,
-    TimestampPropertyPreview,
     UrlComponentPreview
 } from "./internal";
-import { ErrorView } from "../core/components";
+import { ErrorView } from "../core";
 
-import { PreviewComponentProps } from "./PreviewComponentProps";
-
-import { Markdown } from "./components/Markdown";
+import { PropertyPreviewProps } from "./PropertyPreviewProps";
 
 /**
  * @category Preview components
  */
-export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps<T>) {
+export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
     let content: JSX.Element | any;
     const {
         property, propertyKey, value, size, height, width
@@ -50,7 +46,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
     if (value === undefined) {
         content = <EmptyValue/>;
     } else if (property.Preview) {
-        content = createElement(property.Preview as React.ComponentType<PreviewComponentProps>,
+        content = createElement(property.Preview as React.ComponentType<PropertyPreviewProps>,
             {
                 propertyKey: propertyKey,
                 value,
@@ -63,7 +59,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
     } else if (value === null) {
         content = <EmptyValue/>;
     } else if (property.dataType === "string") {
-        const stringProperty = property as StringProperty;
+        const stringProperty = property as ResolvedStringProperty;
         if (typeof value === "string") {
             if (stringProperty.url) {
                 content =
@@ -77,7 +73,7 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
                 content = <Markdown source={value}/>;
             } else {
                 content = <StringPropertyPreview {...fieldProps}
-                                                 property={property as ResolvedStringProperty}
+                                                 property={stringProperty}
                                                  value={value}/>;
             }
         } else {
@@ -153,19 +149,19 @@ export function PreviewComponent<T extends CMSType>(props: PreviewComponentProps
         }
     } else if (property.dataType === "date") {
         if (value instanceof Date) {
-            content = <TimestampPropertyPreview {...fieldProps}
-                                                value={value}
-                                                property={property as ResolvedTimestampProperty}/>;
+            content = <DatePreview date={value}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else if (property.dataType === "reference") {
         if (typeof property.path === "string") {
             if (value instanceof EntityReference) {
-                content = <ReferencePropertyPreview
-                    {...fieldProps}
-                    value={value as EntityReference}
-                    property={property as ResolvedReferenceProperty}
+                content = <ReferencePreview
+                    path={property.path}
+                    previewProperties={property.previewProperties}
+                    size={fieldProps.size}
+                    onClick={fieldProps.onClick}
+                    reference={value as EntityReference}
                 />;
             } else {
                 content = buildWrongValueType(propertyKey, property.dataType, value);

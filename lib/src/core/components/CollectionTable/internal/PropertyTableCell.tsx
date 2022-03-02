@@ -6,9 +6,7 @@ import {
     ResolvedArrayProperty,
     ResolvedNumberProperty,
     ResolvedProperty,
-    ResolvedReferenceProperty,
     ResolvedStringProperty,
-    ResolvedTimestampProperty,
     StringProperty
 } from "../../../../models";
 import React, { useCallback, useEffect, useState } from "react";
@@ -18,7 +16,7 @@ import { NumberTableInput } from "./fields/TableNumberInput";
 import { TableSwitch } from "./fields/TableSwitch";
 import { TableDateField } from "./fields/TableDateField";
 import { ErrorBoundary } from "../../../internal/ErrorBoundary";
-import { PreviewComponent } from "../../../../preview";
+import { PropertyPreview } from "../../../../preview";
 import { CellStyleProps } from "../../Table/styles";
 import { TableReferenceField } from "./fields/TableReferenceField";
 
@@ -248,7 +246,6 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                              focused={focused}
                                              internalValue={internalValue as Date}
                                              updateValue={updateValue}
-                                             property={property as ResolvedTimestampProperty}
                                              setPreventOutsideClick={setPreventOutsideClick}
             />;
             allowScroll = true;
@@ -259,7 +256,10 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                       updateValue={updateValue}
                                                       disabled={disabled}
                                                       size={size}
-                                                      property={property as ResolvedReferenceProperty}
+                                                      path={property.path}
+                                                      multiselect={false}
+                                                      previewProperties={property.previewProperties}
+                                                      title={property.title}
                                                       setPreventOutsideClick={setPreventOutsideClick}
                 />;
             }
@@ -293,7 +293,10 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                  internalValue={internalValue as EntityReference[]}
                                                  updateValue={updateValue}
                                                  size={size}
-                                                 property={property as ArrayProperty}
+                                                 multiselect={true}
+                                                 path={arrayProperty.of.path}
+                                                 previewProperties={arrayProperty.of.previewProperties}
+                                                 title={arrayProperty.of.title}
                                                  setPreventOutsideClick={setPreventOutsideClick}
                             />;
                     }
@@ -312,7 +315,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
         showExpandIcon = selected && !innerComponent && !disabled && !readOnly;
         innerComponent = (
             <ErrorBoundary>
-                <PreviewComponent
+                <PropertyPreview
                     width={width}
                     height={height}
                     propertyKey={name as string}

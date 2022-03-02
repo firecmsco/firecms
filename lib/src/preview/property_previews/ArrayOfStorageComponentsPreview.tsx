@@ -3,8 +3,8 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 
 import {
-    PreviewComponent,
-    PreviewComponentProps,
+    PropertyPreview,
+    PropertyPreviewProps,
     PreviewSize
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
@@ -42,7 +42,7 @@ export function ArrayOfStorageComponentsPreview({
                                                     value,
                                                     property,
                                                     size
-                                                }: PreviewComponentProps<any[]>) {
+                                                }: PropertyPreviewProps<any[]>) {
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStorageComponentsPreview");
@@ -56,7 +56,7 @@ export function ArrayOfStorageComponentsPreview({
                 <div className={classes.arrayItem}
                      key={`preview_array_storage_${propertyKey}_${index}`}>
                     <ErrorBoundary>
-                        <PreviewComponent
+                        <PropertyPreview
                             propertyKey={propertyKey}
                             value={v}
                             property={property.of as ResolvedProperty<string>}

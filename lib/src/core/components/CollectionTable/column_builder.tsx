@@ -10,7 +10,7 @@ import {
 } from "../../../models";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { TableCell } from "../Table/TableCell";
-import { PreviewComponent, SkeletonComponent } from "../../../preview";
+import { PropertyPreview, SkeletonComponent } from "../../../preview";
 import { getPreviewSizeFrom } from "../../../preview/util";
 import {
     CustomFieldValidator,
@@ -254,7 +254,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                     size={size}
                     align={column.align}
                     disabled={true}>
-                    <PreviewComponent
+                    <PropertyPreview
                         width={column.width}
                         height={column.height}
                         propertyKey={`preview_${propertyId}_${rowIndex}_${columnIndex}`}

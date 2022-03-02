@@ -9,7 +9,7 @@ export type PreviewSize = "regular" | "small" | "tiny";
 /**
  * @category Preview components
  */
-export interface PreviewComponentProps<T extends CMSType = CMSType, CustomProps = any> {
+export interface PropertyPreviewProps<T extends CMSType = CMSType, CustomProps = any> {
     /**
      * Name of the property
      */

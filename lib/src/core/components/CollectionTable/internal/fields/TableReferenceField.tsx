@@ -1,28 +1,24 @@
 import React, { useCallback, useState } from "react";
 import { Box, Button } from "@mui/material";
-import { ReferencePropertyPreview } from "../../../../../preview";
+import { ReferencePreview } from "../../../../../preview";
 import { ErrorView } from "../../../index";
-import {
-    ArrayProperty,
-    CollectionSize,
-    Entity,
-    EntityReference,
-    ReferenceProperty
-} from "../../../../../models";
+import { CollectionSize, Entity, EntityReference } from "../../../../../models";
 import { ReferenceDialog } from "../../../ReferenceDialog";
 
 import { getPreviewSizeFrom } from "../../../../../preview/util";
 import { getReferenceFrom } from "../../../../util/entities";
 import { useNavigation } from "../../../../../hooks";
 
-
 export function TableReferenceField(props: {
     name: string;
     disabled: boolean;
     internalValue: EntityReference | EntityReference[] | undefined | null;
     updateValue: (newValue: (EntityReference | EntityReference [] | null)) => void;
-    property: ReferenceProperty | ArrayProperty<EntityReference[]>;
     size: CollectionSize;
+    multiselect: boolean;
+    previewProperties?: string[];
+    title?: string;
+    path: string;
     setPreventOutsideClick: (value: any) => void;
 }) {
 
@@ -30,29 +26,14 @@ export function TableReferenceField(props: {
         name,
         internalValue,
         setPreventOutsideClick,
-        property,
         updateValue,
+        multiselect,
+        path,
         size,
+        previewProperties,
+        title,
         disabled
     } = props;
-
-    let usedProperty: ReferenceProperty;
-    let multiselect;
-    if (property.dataType === "reference") {
-        usedProperty = property;
-        multiselect = false;
-    } else if (property.dataType === "array" && property.of?.dataType === "reference") {
-        usedProperty = property.of;
-        multiselect = true;
-    } else {
-        throw Error("TableReferenceField misconfiguration");
-    }
-
-    if (typeof usedProperty.path !== "string") {
-        throw Error("Picked the wrong component TableReferenceField");
-    }
-
-    const path = usedProperty.path;
 
     const [onHover, setOnHover] = useState(false);
     const [open, setOpen] = useState<boolean>(false);
@@ -96,12 +77,13 @@ export function TableReferenceField(props: {
 
     function buildSingleReferenceField() {
         if (internalValue instanceof EntityReference)
-            return <ReferencePropertyPreview propertyKey={name}
-                                             onClick={disabled ? undefined : handleOpen}
-                                             value={internalValue as EntityReference}
-                                             property={usedProperty}
-                                             onHover={onHover}
-                                             size={getPreviewSizeFrom(size)}
+            return <ReferencePreview
+                onClick={disabled ? undefined : handleOpen}
+                size={getPreviewSizeFrom(size)}
+                reference={internalValue as EntityReference}
+                onHover={onHover}
+                path={path}
+                previewProperties={previewProperties}
             />;
         else
             return <ErrorView error={"Data is not a reference"}/>;
@@ -110,19 +92,20 @@ export function TableReferenceField(props: {
     function buildMultipleReferenceField() {
         if (Array.isArray(internalValue))
             return <>
-                {internalValue.map((v, index) =>
-                    <Box sx={{ m: 0.5 }}
-                         key={`preview_array_ref_${name}_${index}`}>
-                        <ReferencePropertyPreview
-                            propertyKey={`${name}[${index}]`}
-                            onClick={disabled ? undefined : handleOpen}
-                            size={"tiny"}
-                            onHover={onHover}
-                            value={v}
-                            property={usedProperty}
+                {internalValue.map((reference, index) => {
 
-                        />
-                    </Box>
+                        return <Box sx={{ m: 0.5 }}
+                                    key={`preview_array_ref_${name}_${index}`}>
+                            <ReferencePreview
+                                onClick={disabled ? undefined : handleOpen}
+                                size={"tiny"}
+                                reference={reference}
+                                onHover={onHover}
+                                path={path}
+                                previewProperties={previewProperties}
+                            />
+                        </Box>;
+                    }
                 )
                 }
             </>;
@@ -148,13 +131,13 @@ export function TableReferenceField(props: {
             }
 
             {valueNotSet &&
-            <Button
-                onClick={handleOpen}
-                size={"small"}
-                variant="outlined"
-                color="primary">
-                Edit {property.title}
-            </Button>}
+                <Button
+                    onClick={handleOpen}
+                    size={"small"}
+                    variant="outlined"
+                    color="primary">
+                    Edit {title}
+                </Button>}
 
             {!disabled &&
             open &&

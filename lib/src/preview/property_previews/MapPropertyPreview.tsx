@@ -8,7 +8,7 @@ import {
     Typography
 } from "@mui/material";
 
-import { PreviewComponent, PreviewComponentProps } from "../internal";
+import { PropertyPreview, PropertyPreviewProps } from "../internal";
 import { ResolvedMapProperty } from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
@@ -20,7 +20,7 @@ export function MapPropertyPreview<T extends Record<string, unknown>>({
                                              value,
                                              property,
                                              size
-                                         }: PreviewComponentProps<T>) {
+                                         }: PropertyPreviewProps<T>) {
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPreview");
@@ -51,10 +51,10 @@ export function MapPropertyPreview<T extends Record<string, unknown>>({
                     <div
                         key={"map_preview_" + mapProperty.title + key + index}>
                         <ErrorBoundary>
-                            <PreviewComponent propertyKey={key}
-                                              value={(value as any)[key]}
-                                              property={mapProperty.properties![key]}
-                                              size={size}/>
+                            <PropertyPreview propertyKey={key}
+                                             value={(value as any)[key]}
+                                             property={mapProperty.properties![key]}
+                                             size={size}/>
                         </ErrorBoundary>
                     </div>
                 ))}
@@ -89,7 +89,7 @@ export function MapPropertyPreview<T extends Record<string, unknown>>({
                                        width="70%"
                                        component="th">
                                 <ErrorBoundary>
-                                    <PreviewComponent
+                                    <PropertyPreview
                                         propertyKey={key}
                                         value={(value as any)[key]}
                                         property={mapProperty.properties![key]}

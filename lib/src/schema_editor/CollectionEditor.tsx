@@ -28,17 +28,17 @@ import { useEffect, useMemo, useState } from "react";
 import { Link as ReactLink, useLocation } from "react-router-dom";
 import {
     useConfigurationPersistence
-} from "../../../hooks/useConfigurationPersistence";
-import { EntityCollection } from "../../../models";
-import { CircularProgressCenter } from "../CircularProgressCenter";
-import { ErrorView } from "../ErrorView";
-import { useNavigation, useSnackbarController } from "../../../hooks";
+} from "../hooks/useConfigurationPersistence";
+import { EntityCollection } from "../models";
+import { CircularProgressCenter } from "../core/components/CircularProgressCenter";
+import { ErrorView } from "../core/components/ErrorView";
+import { useNavigation, useSnackbarController } from "../hooks";
 import { SchemaEditorDialog } from "./SchemaEditorDialog";
 import {
     computeTopNavigation,
     TopNavigationResult
-} from "../../util/navigation_utils";
-import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
+} from "../core/util/navigation_utils";
+import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
 
 /**
  * @category Components

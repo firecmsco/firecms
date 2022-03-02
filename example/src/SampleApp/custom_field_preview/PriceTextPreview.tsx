@@ -1,11 +1,11 @@
 import React, { ReactElement } from "react";
-import { PreviewComponentProps } from "@camberi/firecms";
+import { PropertyPreviewProps } from "@camberi/firecms";
 import Box from "@mui/material/Box";
 
 
 export default function PriceTextPreview({
                                                  value, property, size, customProps
-                                             }: PreviewComponentProps<number>)
+                                             }: PropertyPreviewProps<number>)
     : ReactElement {
 
     return (

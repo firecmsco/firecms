@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "../hooks";
 import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
 import { NotFoundPage } from "./components/NotFoundPage";
-import { CollectionEditor } from "./components/SchemaEditor/CollectionEditor";
+import { CollectionEditor } from "../schema_editor/CollectionEditor";
 import { EntityCollectionRoute } from "./components/EntityCollectionRoute";
 import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
 import { Box } from "@mui/material";
@@ -147,11 +147,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                   <BreadcrumbUpdater
                                       path={urlPath}
                                       title={"Schema editor"}>
-                                      <Box sx={(theme) => ({
-                                          // backgroundColor: theme.palette.background.paper,
-                                      })}>
-                                          <SchemaEditor schemaId={schema.id}/>
-                                      </Box>
+                                      <SchemaEditor schemaId={schema.id}/>
                                   </BreadcrumbUpdater>
                               }/>;
             }

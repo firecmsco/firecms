@@ -19,7 +19,7 @@ import {
     ResolvedEntitySchema,
     ResolvedProperties
 } from "../../models";
-import { PreviewComponent } from "../../preview/PreviewComponent";
+import { PropertyPreview } from "../../preview/PropertyPreview";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_utils";
 import { ErrorBoundary } from "../internal/ErrorBoundary";
@@ -152,7 +152,7 @@ export function EntityPreview<M>(
                                 <TableCell
                                     className={classes.valuePreview}>
                                     <ErrorBoundary>
-                                        <PreviewComponent
+                                        <PropertyPreview
                                             propertyKey={key}
                                             value={value}
                                             property={property}

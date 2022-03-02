@@ -1,4 +1,3 @@
-import { PreviewComponentProps } from "../internal";
 import React from "react";
 
 import format from "date-fns/format";
@@ -10,14 +9,14 @@ import { useFireCMSContext } from "../../hooks";
 /**
  * @category Preview components
  */
-export function TimestampPropertyPreview({
-                                     value,
-                                 }: PreviewComponentProps<Date>): React.ReactElement {
+export function DatePreview({
+                                date
+                            }: { date: Date }): React.ReactElement {
 
     const appConfig: FireCMSContext<any> | undefined = useFireCMSContext();
     const dateUtilsLocale = appConfig?.locale ? locales[appConfig?.locale] : undefined;
     const dateFormat: string = appConfig?.dateTimeFormat ?? defaultDateFormat;
-    const formattedDate = value ? format(value, dateFormat, { locale: dateUtilsLocale }) : "";
+    const formattedDate = date ? format(date, dateFormat, { locale: dateUtilsLocale }) : "";
 
     return (
         <>

@@ -13,8 +13,8 @@ import {
     Typography
 } from "@mui/material";
 import { useFormikContext } from "formik";
-import { EntitySchema } from "../../../models";
-import { CustomDialogActions } from "../CustomDialogActions";
+import { EntitySchema } from "../models";
+import { CustomDialogActions } from "../core/components/CustomDialogActions";
 
 export function SchemaDetailsDialog({
                                         isNewSchema,
