@@ -61,7 +61,8 @@ export function FirebaseCMSApp({
                                    locale,
                                    HomePage,
                                    basePath,
-                                   baseCollectionPath
+                                   baseCollectionPath,
+                                   noUserComponent
                                }: FirebaseCMSAppProps) {
 
     const {
@@ -134,7 +135,9 @@ export function FirebaseCMSApp({
                                 skipLoginButtonEnabled={allowSkipLogin}
                                 signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
                                 firebaseApp={firebaseApp}
-                                authDelegate={authDelegate}/>
+                                authDelegate={authDelegate}
+                                noUserComponent={noUserComponent}
+                                />
                         );
                     } else {
                         component = (
