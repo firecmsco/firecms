@@ -223,6 +223,12 @@ function SampleApp() {
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}
+        loginViewProps={{
+            noUserComponent: <>An Error has occured. Please contact your admin</>,
+            displaySignupScreen: false,
+        }}
+        
+        
     />;
 }
 

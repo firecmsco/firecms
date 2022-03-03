@@ -142,8 +142,11 @@ export interface FirebaseCMSAppProps {
     baseCollectionPath?: string;
 
     /**
-     * UI that will be displayed if user is found to not exist in firebase
+     * Props allowing for minimal firebase login view modifications
      */
-     noUserComponent?: ReactNode;
+     loginViewProps?: {
+        noUserComponent?: ReactNode;
+        displaySignupScreen?: boolean;
+     }
 }
 
