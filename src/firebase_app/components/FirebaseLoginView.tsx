@@ -55,6 +55,7 @@ export interface FirebaseLoginViewProps {
     signInOptions: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     firebaseApp: FirebaseApp;
     authDelegate: FirebaseAuthDelegate
+    displaySignupScreen?: boolean;
     noUserComponent?: ReactNode
 }
 
@@ -70,7 +71,8 @@ export function FirebaseLoginView({
                                       signInOptions,
                                       firebaseApp,
                                       authDelegate,
-                                      noUserComponent
+                                      noUserComponent,
+                                      displaySignupScreen = true
                                   }: FirebaseLoginViewProps) {
     const classes = useStyles();
     const authController = useAuthController();
@@ -208,7 +210,7 @@ export function FirebaseLoginView({
                         onClose={() => setPasswordLoginSelected(false)}
                         mode={modeState.mode}
                         CustomNoUserFound={noUserComponent}
-                        
+                        displaySignupScreen={displaySignupScreen}
                         />}
 
                 </Box>
@@ -259,8 +261,9 @@ function LoginForm({
                        onClose,
                        authDelegate,
                        mode,
-                       CustomNoUserFound
-                   }: { onClose: () => void, authDelegate: FirebaseAuthDelegate, mode: "light" | "dark", CustomNoUserFound: ReactNode | undefined }) {
+                       CustomNoUserFound,
+                       displaySignupScreen
+                   }: { onClose: () => void, authDelegate: FirebaseAuthDelegate, mode: "light" | "dark", CustomNoUserFound: ReactNode | undefined, displaySignupScreen:boolean }) {
 
     const passwordRef = useRef<HTMLInputElement | null>(null);
 
@@ -380,7 +383,9 @@ function LoginForm({
                         </IconButton>
                     </Grid>
 
-                    <Grid item xs={12} sx={{ p: 1 }}>
+                    <Grid item xs={12} sx={{ p: 1,
+                        display: (registrationMode && !displaySignupScreen) ? "none": "flex",
+                    }}>
                         <Typography align={"center"}
                                     variant={"subtitle2"}>{label}</Typography>
                     </Grid>
@@ -393,9 +398,9 @@ function LoginForm({
                                    type="email"
                                    onChange={(event) => setEmail(event.target.value)}/>
                     </Grid>
-                    {CustomNoUserFound}
+                    {registrationMode && CustomNoUserFound}
                     <Grid item xs={12}
-                          sx={{ display: loginMode || registrationMode ? "inherit" : "none" }}>
+                          sx={{ display: loginMode || (registrationMode && displaySignupScreen) ? "inherit" : "none" }}>
                         <TextField placeholder="Password" fullWidth
                                    value={password}
                                    disabled={authDelegate.authLoading}
@@ -406,7 +411,7 @@ function LoginForm({
 
                     <Grid item xs={12}>
                         <Box sx={{
-                            display: "flex",
+                            display: (registrationMode && !displaySignupScreen) ? "none": "flex",
                             justifyContent: "end",
                             alignItems: "center",
                             width: "100%"
