@@ -40,6 +40,7 @@ import { CustomDialogActions } from "../core/components/CustomDialogActions";
 import { SchemaDetailsDialog } from "./SchemaDetailsView";
 import { PropertyTree } from "./PropertyTree";
 import { ErrorBoundary } from "../core/internal/ErrorBoundary";
+import DragDropWithNestingTree from "./rm_me/tree_test";
 
 export type SchemaEditorProps<M> = {
     schemaId?: string;
@@ -344,6 +345,7 @@ function SchemaEditorForm<M>({
                             <Grid item xs={12}
                                   lg={5}>
                                 <ErrorBoundary>
+                                    {/*<DragDropWithNestingTree/>*/}
                                     <PropertyTree
                                         setSelectedPropertyId={setSelectedPropertyId}
                                         selectedPropertyId={selectedPropertyId}

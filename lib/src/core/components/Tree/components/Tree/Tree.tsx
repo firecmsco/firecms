@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, ReactNode } from "react";
 import {
   Draggable,
   Droppable,
@@ -8,21 +8,21 @@ import {
   DragUpdate,
   DraggableProvided,
   DraggableStateSnapshot,
-  DroppableProvided,
-} from 'react-beautiful-dnd';
-import { getBox } from 'css-box-model';
-import { calculateFinalDropPositions } from './Tree-utils';
-import { Props, State, DragState } from './Tree-types';
-import { noop } from '../../utils/handy';
-import { flattenTree, mutateTree } from '../../utils/tree';
-import { FlattenedItem, ItemId, Path, TreeData } from '../../types';
-import TreeItem from '../TreeItem';
+  DroppableProvided
+} from "react-beautiful-dnd";
+import { getBox } from "css-box-model";
+import { calculateFinalDropPositions } from "./Tree-utils";
+import { Props, State, DragState } from "./Tree-types";
+import { noop } from "../../utils/handy";
+import { flattenTree, mutateTree } from "../../utils/tree";
+import { FlattenedItem, ItemId, Path, TreeData } from "../../types";
+import TreeItem from "../TreeItem";
 import {
   getDestinationPath,
   getItemById,
-  getIndexById,
-} from '../../utils/flat-tree';
-import DelayedFunction from '../../utils/delayed-function';
+  getIndexById
+} from "../../utils/flat-tree";
+import DelayedFunction from "../../utils/delayed-function";
 
 export default class Tree extends Component<Props, State> {
   static defaultProps = {
@@ -34,12 +34,12 @@ export default class Tree extends Component<Props, State> {
     renderItem: noop,
     offsetPerLevel: 35,
     isDragEnabled: false,
-    isNestingEnabled: false,
+    isNestingEnabled: false
   };
 
   state = {
     flattenedTree: [],
-    draggedItemId: undefined,
+    draggedItemId: undefined
   };
 
   // State of dragging.
@@ -62,7 +62,7 @@ export default class Tree extends Component<Props, State> {
 
     return {
       ...state,
-      flattenedTree,
+      flattenedTree
     };
   }
 
@@ -70,7 +70,7 @@ export default class Tree extends Component<Props, State> {
     if (draggedItemId) {
       // Closing parent internally during dragging, because visually we can only move one item not a subtree
       return mutateTree(tree, draggedItemId, {
-        isExpanded: false,
+        isExpanded: false
       });
     }
     return tree;
@@ -81,10 +81,10 @@ export default class Tree extends Component<Props, State> {
     this.dragState = {
       source: result.source,
       destination: result.source,
-      mode: result.mode,
+      mode: result.mode
     };
     this.setState({
-      draggedItemId: result.draggableId,
+      draggedItemId: result.draggableId
     });
     if (onDragStart) {
       onDragStart(result.draggableId);
@@ -103,7 +103,7 @@ export default class Tree extends Component<Props, State> {
       const { draggableId } = update.combine;
       const item: FlattenedItem | undefined = getItemById(
         flattenedTree,
-        draggableId,
+        draggableId
       );
       if (item && this.isExpandable(item)) {
         this.expandTimer.start(() => onExpand(draggableId, item.path));
@@ -112,7 +112,7 @@ export default class Tree extends Component<Props, State> {
     this.dragState = {
       ...this.dragState,
       destination: update.destination,
-      combine: update.combine,
+      combine: update.combine
     };
   };
 
@@ -129,17 +129,17 @@ export default class Tree extends Component<Props, State> {
       ...this.dragState!,
       source: result.source,
       destination: result.destination,
-      combine: result.combine,
+      combine: result.combine
     };
 
     this.setState({
-      draggedItemId: undefined,
+      draggedItemId: undefined
     });
 
     const { sourcePosition, destinationPosition } = calculateFinalDropPositions(
       tree,
       flattenedTree,
-      finalDragState,
+      finalDragState
     );
 
     onDragEnd(sourcePosition, destinationPosition);
@@ -151,14 +151,14 @@ export default class Tree extends Component<Props, State> {
     if (this.dragState) {
       this.dragState = {
         ...this.dragState,
-        horizontalLevel: this.getDroppedLevel(),
+        horizontalLevel: this.getDroppedLevel()
       };
     }
   };
 
   calculateEffectivePath = (
     flatItem: FlattenedItem,
-    snapshot: DraggableStateSnapshot,
+    snapshot: DraggableStateSnapshot
   ): Path => {
     const { flattenedTree, draggedItemId } = this.state;
 
@@ -172,17 +172,17 @@ export default class Tree extends Component<Props, State> {
         destination,
         combine,
         horizontalLevel,
-        mode,
+        mode
       } = this.dragState;
       // We only update the path when it's dragged by keyboard or drop is animated
-      if (mode === 'SNAP' || snapshot.isDropAnimating) {
+      if (mode === "SNAP" || snapshot.isDropAnimating) {
         if (destination) {
           // Between two items
           return getDestinationPath(
             flattenedTree,
             source.index,
             destination.index,
-            horizontalLevel,
+            horizontalLevel
           );
         }
         if (combine) {
@@ -191,7 +191,7 @@ export default class Tree extends Component<Props, State> {
             flattenedTree,
             source.index,
             getIndexById(flattenedTree, combine.draggableId),
-            horizontalLevel,
+            horizontalLevel
           );
         }
       }
@@ -248,8 +248,27 @@ export default class Tree extends Component<Props, State> {
   renderItem = (flatItem: FlattenedItem, index: number): ReactNode => {
     const { isDragEnabled } = this.props;
 
+    // If drag and drop is explicitly disabled for all items, render TreeItem directly with stubbed provided and snapshot
+    if (isDragEnabled === false) {
+      return this.renderTreeItem({
+        flatItem,
+        path: flatItem.path,
+        provided: {
+          draggableProps: {
+            "data-react-beautiful-dnd-draggable": ""
+          } as any,
+          innerRef: () => {},
+          dragHandleProps: null as any
+        },
+        snapshot: {
+          isDragging: false,
+          isDropAnimating: false
+        }
+      });
+    }
+
     const isDragDisabled =
-      typeof isDragEnabled === 'function'
+      typeof isDragEnabled === "function"
         ? !isDragEnabled(flatItem.item)
         : !isDragEnabled;
 
@@ -267,19 +286,37 @@ export default class Tree extends Component<Props, State> {
 
   renderDraggableItem = (flatItem: FlattenedItem) => (
     provided: DraggableProvided,
-    snapshot: DraggableStateSnapshot,
+    snapshot: DraggableStateSnapshot
   ) => {
-    const { renderItem, onExpand, onCollapse, offsetPerLevel } = this.props;
-
     const currentPath: Path = this.calculateEffectivePath(flatItem, snapshot);
     if (snapshot.isDropAnimating) {
       this.onDropAnimating();
     }
+    return this.renderTreeItem({
+      flatItem,
+      path: currentPath,
+      provided,
+      snapshot
+    });
+  };
+
+  renderTreeItem = ({
+    flatItem,
+    path,
+    provided,
+    snapshot
+  }: {
+    flatItem: FlattenedItem;
+    path: Path;
+    provided: DraggableProvided;
+    snapshot: DraggableStateSnapshot;
+  }) => {
+    const { renderItem, onExpand, onCollapse, offsetPerLevel } = this.props;
     return (
       <TreeItem
         key={flatItem.item.id}
         item={flatItem.item}
-        path={currentPath}
+        path={path}
         onExpand={onExpand}
         onCollapse={onCollapse}
         renderItem={renderItem}
@@ -308,12 +345,12 @@ export default class Tree extends Component<Props, State> {
         >
           {(provided: DroppableProvided) => {
             const finalProvided: DroppableProvided = this.patchDroppableProvided(
-              provided,
+              provided
             );
             return (
               <div
                 ref={finalProvided.innerRef}
-                style={{ pointerEvents: 'auto' }}
+                style={{ pointerEvents: "auto" }}
                 onTouchMove={this.onPointerMove}
                 onMouseMove={this.onPointerMove}
                 {...finalProvided.droppableProps}

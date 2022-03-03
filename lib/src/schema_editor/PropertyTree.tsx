@@ -211,59 +211,57 @@ export function SchemaEntry({
 
     const widget = typeof propertyOrBuilder !== "function" ? getWidget(propertyOrBuilder) : undefined;
     return (
-        <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            pb: 1,
-            cursor: "pointer"
-        }}
-             onClick={onClick}
-             ref={provided.innerRef}
-             {...provided.draggableProps}
-             style={{
-                 ...provided.draggableProps.style
-             }}>
+        <Box
+            onClick={onClick}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+
+            // style={{
+            //     ...provided.draggableProps.style
+            // }}
+            sx={{
+                display: "flex",
+                flexDirection: "row",
+                width: "100%",
+                pb: 1,
+                cursor: "pointer"
+            }}>
             <Box sx={{
+                background: widget?.color ?? "#888",
+                height: "32px",
+                mt: 0.5,
+                padding: 0.5,
+                borderRadius: "50%",
+                boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+                color: "white"
+            }}>
+                {getIconForProperty(propertyOrBuilder, "inherit", "medium")}
+            </Box>
+            <Box sx={{
+                pl: 3,
+                width: "100%",
                 display: "flex",
                 flexDirection: "row"
             }}>
-                <Box sx={{
-                    background: widget?.color ?? "#888",
-                    height: "32px",
-                    mt: 0.5,
-                    padding: 0.5,
-                    borderRadius: "50%",
-                    boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                    color: "white"
-                }}>
-                    {getIconForProperty(propertyOrBuilder, "inherit", "medium")}
-                </Box>
-                <Box sx={{
-                    pl: 3,
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "row"
-                }}>
-                    <Paper variant={"outlined"}
-                           sx={(theme) => ({
-                               position: "relative",
-                               flexGrow: 1,
-                               p: 2,
-                               border: hasError
-                                   ? `1px solid ${theme.palette.error.light}`
-                                   : (selected ? `1px solid ${theme.palette.primary.light}` : undefined)
-                           })}
-                           elevation={0}>
+                <Paper variant={"outlined"}
+                       sx={(theme) => ({
+                           position: "relative",
+                           flexGrow: 1,
+                           p: 2,
+                           border: hasError
+                               ? `1px solid ${theme.palette.error.light}`
+                               : (selected ? `1px solid ${theme.palette.primary.light}` : undefined)
+                       })}
+                       elevation={0}>
 
-                        {typeof propertyOrBuilder === "object"
-                            ? <PropertyPreview property={propertyOrBuilder}/>
-                            : <PropertyBuilderPreview name={propertyKey}/>}
+                    {typeof propertyOrBuilder === "object"
+                        ? <PropertyPreview property={propertyOrBuilder}/>
+                        : <PropertyBuilderPreview name={propertyKey}/>}
 
-                        <IconButton {...provided.dragHandleProps}
-                                    size="small"
-                                    sx={{
-                                        position: "absolute",
+                    <IconButton {...provided.dragHandleProps}
+                                size="small"
+                                sx={{
+                                    position: "absolute",
                                         top: 8,
                                         right: 8
                                     }}>
@@ -272,14 +270,6 @@ export function SchemaEntry({
                     </Paper>
                 </Box>
             </Box>
-
-            <Paper sx={{
-                ml: "140px",
-                height: "56px",
-                width: "100%",
-                pr: 2
-            }}>Yo</Paper>
-        </Box>
     );
 
 }
