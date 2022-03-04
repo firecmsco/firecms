@@ -69,6 +69,12 @@ export interface AuthController<UserType extends User = User> {
      */
     authDelegate: AuthDelegate<UserType>;
 
+    /**
+     *  
+     * Clears NotAllowed error in the case that user wants to try using a different user.
+     */
+     clearNotAllowedError: () => void;
+
 }
 
 /**

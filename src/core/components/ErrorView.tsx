@@ -1,7 +1,8 @@
 import React from "react";
 import clsx from "clsx";
 import ErrorIcon from "@mui/icons-material/Error";
-import { Theme, Tooltip } from "@mui/material";
+import Close from "@mui/icons-material/Close";
+import { Box, Theme, Tooltip } from "@mui/material";
 
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
@@ -17,7 +18,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         text: {
             paddingLeft: theme.spacing(2)
-        }
+        },
+        flexEnd: {
+            display:"flex",
+            justifyContent:"flex-end"
+        },
     })
 );
 
@@ -26,7 +31,8 @@ export const useStyles = makeStyles((theme: Theme) =>
  */
 export interface ErrorViewProps {
     error: string,
-    tooltip?: string
+    tooltip?: string,
+    closeFn?: ()=>void;
 }
 
 /**
@@ -39,12 +45,14 @@ export interface ErrorViewProps {
  */
 export function ErrorView({
                               error,
-                              tooltip
+                              tooltip,
+                              closeFn,
                           }: ErrorViewProps): React.ReactElement {
     const classes = useStyles();
     const body = (
         <div
-            className={clsx(classes.flexCenter, classes.smallMargin)}>
+            className={clsx(classes.flexCenter, classes.smallMargin)}
+        >
             <ErrorIcon fontSize={"small"} color={"error"}/>
             <div className={classes.text}>{error}</div>
         </div>
@@ -56,6 +64,22 @@ export function ErrorView({
                 {body}
             </Tooltip>
         );
+    }
+
+    if(closeFn) {
+        return (
+            <Box sx={{border:1, borderColor: 'info.main', borderRadius:1}}>
+                <div>
+                    <div
+                        className={clsx(classes.flexEnd, classes.smallMargin)}
+                        onClick={closeFn}
+                    >
+                        <Close fontSize="small" color="info" />
+                    </div>
+                    {body}
+                </div>
+            </Box>
+        )
     }
     return body;
 }

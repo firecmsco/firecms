@@ -169,6 +169,7 @@ export function FirebaseLoginView({
                     {notAllowedMessage &&
                     <Box p={2}>
                         <ErrorView
+                            closeFn={authController.clearNotAllowedError}
                             error={notAllowedMessage}/>
                     </Box>}
 

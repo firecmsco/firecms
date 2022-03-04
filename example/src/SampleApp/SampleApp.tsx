@@ -164,6 +164,14 @@ function SampleApp() {
                                                                     authController
                                                                 }) => {
 
+
+        
+        // use example for testing close button on ErrorView
+        if(user?.email?.includes('test1@test.com')) {
+            return false
+        }
+        
+
         if(user?.email?.includes("flanders")){
             throw Error("Stupid Flanders!");
         }
