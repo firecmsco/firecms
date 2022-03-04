@@ -34,6 +34,9 @@ export function useBuildAuthController<UserType>({
 
     const authenticationEnabled = authentication === undefined || !!authentication;
     const canAccessMainView = (!authenticationEnabled || Boolean(user) || Boolean(loginSkipped)) && !notAllowedError;
+    const clearNotAllowedError = () => {
+        setNotAllowedError(false);
+    }
 
     const authController: AuthController<UserType> = useMemo(() => ({
         user,
@@ -45,13 +48,17 @@ export function useBuildAuthController<UserType>({
         signOut: authDelegate.signOut,
         extra,
         setExtra,
-        authDelegate
+        authDelegate,
+        clearNotAllowedError
     }), [authDelegate, authLoading, canAccessMainView, extra, loginSkipped, notAllowedError, user]);
+
+   
 
     const checkAuthentication = useCallback(async () => {
         const delegateUser = authDelegate.user;
         if (authentication instanceof Function && delegateUser) {
             setAuthLoading(true);
+            setNotAllowedError(false);
             try {
                 const allowed = await authentication({
                     user: delegateUser,
