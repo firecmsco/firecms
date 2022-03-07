@@ -466,35 +466,8 @@ export function useFirestoreDataSource({
  * bindings.
  * Also, Firestore references are replaced with {@link EntityReference}
  * @param data
- * @param schema
  * @category Firestore
  */
-// export function firestoreToCMSModel<M>(data: any, schema: ResolvedEntitySchema<M>): any {
-//     return traverseValuesProperties(data,
-//         schema.properties,
-//         (value, property) => {
-//             if (value === null)
-//                 return null;
-//
-//             if (serverTimestamp().isEqual(value)) {
-//                 return null;
-//             }
-//
-//             if (value instanceof Timestamp && property.dataType === "date") {
-//                 return value.toDate();
-//             }
-//
-//             if (value instanceof GeoPoint && property.dataType === "geopoint") {
-//                 return new GeoPoint(value.latitude, value.longitude);
-//             }
-//
-//             if (value instanceof DocumentReference && property.dataType === "reference") {
-//                 return new EntityReference(value.id, getCMSPathFromFirestorePath(value.path));
-//             }
-//
-//             return value;
-//         });
-// }
 export function firestoreToCMSModel<M>(data: any): any {
     const traverse = (input: any): any => {
         if (input == null) return input;
@@ -524,7 +497,6 @@ export function firestoreToCMSModel<M>(data: any): any {
     }
     return traverse(data)
 }
-
 
 export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
     if (Array.isArray(data)) {

@@ -93,7 +93,7 @@ the [entity schemas section](../entities/entity_schemas.md)
 ### Sample collection
 
 ```tsx
-import { buildCollection } from "dist/index";
+import { buildCollection } from "@camberi/firecms";
 
 const productsCollection = buildCollection<Product>({
     path: "products",

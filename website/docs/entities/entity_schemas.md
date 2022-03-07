@@ -36,7 +36,7 @@ Check the full API reference in [Entity schema API](../api/interfaces/entitysche
 ### Sample entity schema
 
 ```tsx
-import { buildSchema, EntityReference } from "dist/index";
+import { buildSchema, EntityReference } from "@camberi/firecms";
 
 type Product = {
     name: string;

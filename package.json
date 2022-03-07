@@ -1,15 +1,16 @@
 {
-  "name": "firecms-parent",
-  "private": true,
-  "description": "Awesome Firebase/Firestore-based headless open-source CMS",
-  "author": "camberi",
-  "workspaces": [
-    "lib",
-    "example",
-    "schema-inference"
-  ],
-  "scripts": {
-    "dev": "cd example && yarn dev",
-    "build": "cd lib && yarn build"
-  }
+    "name": "firecms-parent",
+    "private": true,
+    "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+    "author": "camberi",
+    "homepage": "https://firecms.co",
+    "workspaces": [
+        "lib",
+        "example",
+        "schema-inference"
+    ],
+    "scripts": {
+        "dev": "cd example && yarn dev",
+        "build": "cd lib && yarn build"
+    }
 }

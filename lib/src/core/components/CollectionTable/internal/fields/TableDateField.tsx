@@ -1,14 +1,8 @@
 import React, { useCallback } from "react";
 import { styled } from "@mui/material/styles";
-import {
-    Box,
-    TextField as MuiTextField,
-    Theme,
-    Typography
-} from "@mui/material";
+import { Box, TextField as MuiTextField, Theme } from "@mui/material";
 import { DateProperty } from "../../../../../models";
 import DateTimePicker from "@mui/lab/DateTimePicker";
-import { EmptyValue, DatePreview } from "../../../../../preview";
 
 const PREFIX = "TableDateField";
 
@@ -42,7 +36,7 @@ export function TableDateField(props: {
         error,
         internalValue,
         setPreventOutsideClick,
-        updateValue,
+        updateValue
     } = props;
 
     const handleOpen = useCallback(() => {
@@ -54,51 +48,37 @@ export function TableDateField(props: {
     }, []);
 
     return (
-        <StyledBox display={"flex"} alignItems={"center"}>
+        <StyledBox display={"flex"} alignItems={"center"} width={"100%"}>
 
-            <Box flexGrow={1}>
-                {internalValue &&
-                <Typography variant={"body2"}>
-                    <DatePreview date={internalValue}/>
-                </Typography>}
-                {!internalValue && <EmptyValue/>}
-            </Box>
-
-            <Box width={40}>
-                <DateTimePicker
-                    clearable
-                    disabled={disabled}
-                    renderInput={(inputProps) => (
-                        <MuiTextField
-                            {...inputProps}
-                            sx={{
-                                height: "100%"
-                            }}
-                            variant={"standard"}
-                            error={Boolean(error)}
-                            InputProps={{
-                                ...inputProps.InputProps,
-                                classes: {
-                                    input: classes.hidden
-                                },
-                                disableUnderline: true
-                            }}
-                        />
-                    )}
-                    InputAdornmentProps={{
-                        style: {
-                            fontSize: "small",
-                            height: 26
-                        }
-                    }}
-                    onOpen={handleOpen}
-                    onClose={handleClose}
-                    value={internalValue ?? null}
-                    onChange={(dateValue: Date | null) => {
-                        updateValue(dateValue);
-                    }}
-                />
-            </Box>
-        </StyledBox>
+            <DateTimePicker
+                value={internalValue ?? null}
+                clearable
+                disabled={disabled}
+                onChange={(dateValue: Date | null) => {
+                    updateValue(dateValue);
+                }}
+                renderInput={(params) =>
+                    <MuiTextField {...params}
+                                  variant={"standard"}
+                                  error={Boolean(error)}
+                                  style={{
+                                      height: "100%"
+                                  }}
+                                  InputProps={{
+                                      ...params.InputProps,
+                                      style: { fontSize: 14 },
+                                      disableUnderline: true
+                                  }}
+                    />}
+                InputAdornmentProps={{
+                    style: {
+                        fontSize: "small",
+                        height: 26
+                    }
+                }}
+                onOpen={handleOpen}
+                onClose={handleClose}
+            />
+        </Box>
     );
 }

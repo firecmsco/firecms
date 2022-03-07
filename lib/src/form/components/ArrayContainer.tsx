@@ -55,7 +55,6 @@ export function ArrayContainer<T>({
 
     useEffect(() => {
         if (hasValue && value && value.length !== internalIds.length) {
-            console.log("new internal ids")
             const newInternalIds = value.map(v => {
                 const hashValue = getHashValue(v);
                 if (hashValue in internalIdsRef.current) {

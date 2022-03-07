@@ -33,7 +33,7 @@ module.exports = {
         announcementBar: {
             id: 'new_version_rc.2',
             content:
-                'Version 1.0.0-rc.2 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/quickstart">quickstart</a> to get started!',
+                'Version 1.0.0-rc.3 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/quickstart">quickstart</a> to get started!',
             backgroundColor: '#FF5B79',
             textColor: 'black',
             isCloseable: true,

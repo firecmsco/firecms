@@ -245,8 +245,7 @@ function FilterForm<M>({
 function createFilterField(id: string,
                            filterConfig: TableColumnFilter,
                            filterValue: [TableWhereFilterOp, any] | undefined,
-                           setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void,
-                           isArray = false
+                           setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void
 ): JSX.Element {
 
     if (filterConfig.dataType === "number" || filterConfig.dataType === "string") {
@@ -257,7 +256,7 @@ function createFilterField(id: string,
                                         setValue={setFilterValue}
                                         name={id as string}
                                         dataType={dataType}
-                                        isArray={isArray}
+                                        isArray={filterConfig.isArray}
                                         enumValues={enumValues}
                                         title={title}/>;
     } else if (filterConfig.dataType === "boolean") {
@@ -266,12 +265,12 @@ function createFilterField(id: string,
                                    setValue={setFilterValue}
                                    name={id as string}
                                    title={title}/>;
-    } else if (filterConfig.dataType === "date") {
+    } else if (filterConfig.dataType === "timestamp") {
         const title = filterConfig.title;
         return <DateTimeFilterField value={filterValue}
                                     setValue={setFilterValue}
                                     name={id as string}
-                                    isArray={isArray}
+                                    isArray={filterConfig.isArray}
                                     title={title}/>;
     }
 
@@ -279,3 +278,39 @@ function createFilterField(id: string,
         <div>{`Currently the field ${filterConfig.dataType} is not supported`}</div>
     );
 }
+
+
+    return (
+        <>
+
+            <Box p={2} className={classes.headerTypography}>
+                {column.label ?? id}
+            </Box>
+
+            <Divider/>
+
+            {column.filter && <Box p={2}>
+                {createFilterField(id, column.filter, filterInternal, setFilterInternal)}
+            </Box>}
+
+            <Box display="flex"
+                 justifyContent="flex-end"
+                 m={2}>
+                <Box mr={1}>
+                    <Button
+                        disabled={!filterIsSet}
+                        color="primary"
+                        type="reset"
+                        aria-label="filter clear"
+                        onClick={reset}>Clear</Button>
+                </Box>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={submit}>Filter</Button>
+            </Box>
+        </>
+    );
+
+}
+

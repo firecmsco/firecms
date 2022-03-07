@@ -57,11 +57,30 @@ export const testEntitySchema = buildSchema({
     customId: false,
     name: "Test entity",
     properties: {
+        map_array_ref: {
+            title: 'Map',
+            dataType: 'map',
+            properties: {
+                child: {
+                    title: "Products",
+                    dataType: 'array',
+                    of: {
+                        dataType: "reference",
+                        path: "products",
+                        previewProperties: ["name", "main_image"]
+                    },
+                }
+            },
+        },
         product: {
             title: "Product",
             dataType: "reference",
             path: "products",
             previewProperties: ["name", "main_image"]
+        },
+        test_date: {
+            title: "Test date",
+            dataType: "timestamp"
         },
         movement: buildPropertyBuilder(({values}) => {
             return {
@@ -155,7 +174,6 @@ export const testEntitySchema = buildSchema({
         number_enum: {
             dataType: "array",
             title: "Licences",
-            validation: { required: true },
             of: {
                 dataType: "number",
                 enumValues: {
@@ -188,9 +206,6 @@ export const testEntitySchema = buildSchema({
                 sample: {
                     title: "Sample",
                     dataType: "string",
-                    validation: {
-                        required: true
-                    }
                 }
             },
             Field: CustomField
@@ -235,18 +250,10 @@ export const testEntitySchema = buildSchema({
                 dataType: "string"
             }
         },
-        required_string: {
-            title: "Required String",
-            dataType: "string",
-            validation: {
-                required: true
-            }
-        },
         empty_string: {
             title: "Empty String",
             dataType: "string",
             validation: {
-                required: true,
                 unique: true
             }
         },
@@ -299,7 +306,6 @@ export const testEntitySchema = buildSchema({
                     name: {
                         title: "Name",
                         description: "Text that will be shown on the button",
-                        validation: { required: true },
                         dataType: "string"
                     },
                     description: {
@@ -309,7 +315,7 @@ export const testEntitySchema = buildSchema({
                     type: {
                         title: "Type",
                         description: "Action type that determines the user flow",
-                        validation: { required: true, uniqueInArray: true },
+                        validation: {  uniqueInArray: true },
                         dataType: "string",
                         enumValues: {
                             complete: "Complete",

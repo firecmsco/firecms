@@ -23,6 +23,7 @@ You can check all the props [`FieldProps`](../api/interfaces/fieldprops)
 This is an example of a custom TextField that takes the background color as a prop
 
 ```tsx
+
 import React from "react";
 import { TextField } from "@mui/material";
 import { FieldDescription, FieldProps } from "@camberi/firecms";

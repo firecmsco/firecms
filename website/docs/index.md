@@ -15,11 +15,6 @@ for developers.
 It generates **CRUD views** based on your configuration. It is easy to set up
 for the straight forward cases and easy to extend and customise.
 
-The goal of this CMS is to generate collection and form views that bind nicely
-to the collection/document model. We have built in many basic (and not so basic)
-use cases; but FireCMS is built with extensibility in mind, so it is easy to
-create your views or override the existing ones.
-
 FireCMS does **not** enforce any data structure on your side, and works out of
 the box with any project.
 

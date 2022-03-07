@@ -1,4 +1,3 @@
-
 ## [2.0.0-alpha1] - 2021-12-13
 
 - Collections no use `schemaId` instead of point to a schema
@@ -53,6 +52,12 @@ buildProperty<string>({
 - `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where 
   you pass a React Component directly: `Actions`
 
+## [1.0.0-rc.3] - 2022-02-28
+
+### Changed
+
+- Fixed edge case of references in arrays not being resolved properly with
+  property builders. Thanks, Paul Aranzamendez!
 
 ## [1.0.0-rc.2] - 2022-02-08
 
