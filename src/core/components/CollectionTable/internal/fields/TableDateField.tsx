@@ -1,13 +1,7 @@
 import React, { useCallback } from "react";
-import {
-    Box,
-    TextField as MuiTextField,
-    Theme,
-    Typography
-} from "@mui/material";
+import { Box, TextField as MuiTextField, Theme } from "@mui/material";
 import { TimestampProperty } from "../../../../../models";
 import DateTimePicker from "@mui/lab/DateTimePicker";
-import { EmptyValue, TimestampPreview } from "../../../../../preview";
 
 
 import createStyles from "@mui/styles/createStyles";
@@ -27,7 +21,6 @@ export function TableDateField(props: {
     updateValue: (newValue: (Date | null)) => void;
     focused: boolean;
     disabled: boolean;
-    property: TimestampProperty;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     setPreventOutsideClick: (value: any) => void;
 }) {
@@ -37,8 +30,7 @@ export function TableDateField(props: {
         error,
         internalValue,
         setPreventOutsideClick,
-        updateValue,
-        property
+        updateValue
     } = props;
 
     const handleOpen = useCallback(() => {
@@ -49,56 +41,38 @@ export function TableDateField(props: {
         setPreventOutsideClick(false);
     }, []);
 
-    const classes = useInputStyles();
-
     return (
-        <Box display={"flex"} alignItems={"center"}>
+        <Box display={"flex"} alignItems={"center"} width={"100%"}>
 
-            <Box flexGrow={1}>
-                {internalValue &&
-                <Typography variant={"body2"}>
-                    <TimestampPreview value={internalValue}
-                                      property={property}
-                                      size={"regular"}/>
-                </Typography>}
-                {!internalValue && <EmptyValue/>}
-            </Box>
-
-            <Box width={40}>
-                <DateTimePicker
-                    clearable
-                    disabled={disabled}
-                    renderInput={(inputProps) => (
-                        <MuiTextField
-                            {...inputProps}
-                            style={{
-                                height: "100%"
-                            }}
-                            variant={"standard"}
-                            error={Boolean(error)}
-                            InputProps={{
-                                ...inputProps.InputProps,
-                                classes: {
-                                    input: classes.hidden
-                                },
-                                disableUnderline: true
-                            }}
-                        />
-                    )}
-                    InputAdornmentProps={{
-                        style: {
-                            fontSize: "small",
-                            height: 26
-                        }
-                    }}
-                    onOpen={handleOpen}
-                    onClose={handleClose}
-                    value={internalValue ?? null}
-                    onChange={(dateValue: Date | null) => {
-                        updateValue(dateValue);
-                    }}
-                />
-            </Box>
+            <DateTimePicker
+                value={internalValue ?? null}
+                clearable
+                disabled={disabled}
+                onChange={(dateValue: Date | null) => {
+                    updateValue(dateValue);
+                }}
+                renderInput={(params) =>
+                    <MuiTextField {...params}
+                                  variant={"standard"}
+                                  error={Boolean(error)}
+                                  style={{
+                                      height: "100%"
+                                  }}
+                                  InputProps={{
+                                      ...params.InputProps,
+                                      style: { fontSize: 14 },
+                                      disableUnderline: true
+                                  }}
+                    />}
+                InputAdornmentProps={{
+                    style: {
+                        fontSize: "small",
+                        height: 26
+                    }
+                }}
+                onOpen={handleOpen}
+                onClose={handleClose}
+            />
         </Box>
     );
 }

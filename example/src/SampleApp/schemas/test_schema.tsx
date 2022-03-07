@@ -69,6 +69,10 @@ export const testEntitySchema = buildSchema({
             path: "products",
             previewProperties: ["name", "main_image"]
         },
+        test_date: {
+            title: "Test date",
+            dataType: "timestamp"
+        },
         movement: buildProperty(({values}) => {
             return {
                 title: "Locale",
@@ -199,10 +203,6 @@ export const testEntitySchema = buildSchema({
             config: {
                 Field: CustomField
             }
-        },
-        test_date: {
-            title: "Test date",
-            dataType: "timestamp"
         },
         content: {
             title: "Content",
