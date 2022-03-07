@@ -3,6 +3,7 @@
     "version": "1.0.0-rc.3",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
+    "homepage": "https://firecms.co",
     "license": "MIT",
     "repository": "git@github.com:Camberi/firecms.git",
     "main": "./dist/index.umd.js",
