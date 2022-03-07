@@ -230,8 +230,7 @@ function FilterForm<M>({
     function createFilterField(id: string,
                                filterConfig: TableColumnFilter,
                                filterValue: [TableWhereFilterOp, any] | undefined,
-                               setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void,
-                               isArray: boolean = false
+                               setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void
     ): JSX.Element {
 
         if (filterConfig.dataType === "number" || filterConfig.dataType === "string") {
@@ -242,7 +241,7 @@ function FilterForm<M>({
                                             setValue={setFilterValue}
                                             name={id as string}
                                             dataType={dataType}
-                                            isArray={isArray}
+                                            isArray={filterConfig.isArray}
                                             enumValues={enumValues}
                                             title={title}/>;
         } else if (filterConfig.dataType === "boolean") {
@@ -256,7 +255,7 @@ function FilterForm<M>({
             return <DateTimeFilterField value={filterValue}
                                         setValue={setFilterValue}
                                         name={id as string}
-                                        isArray={isArray}
+                                        isArray={filterConfig.isArray}
                                         title={title}/>;
         }
 
@@ -276,7 +275,7 @@ function FilterForm<M>({
             <Divider/>
 
             {column.filter && <Box p={2}>
-                {createFilterField(id, column.filter, filterInternal, setFilterInternal, false)}
+                {createFilterField(id, column.filter, filterInternal, setFilterInternal)}
             </Box>}
 
             <Box display="flex"
