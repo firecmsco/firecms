@@ -421,7 +421,7 @@ function FormInternal<M>({
                 <ErrorFocus containerRef={formRef}/>
 
             </Box>
-            <CustomDialogActions>
+            <CustomDialogActions position={"absolute"}>
 
                 {savingError &&
                     <Box textAlign="right">

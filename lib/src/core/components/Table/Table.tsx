@@ -252,17 +252,13 @@ export function Table<T>({
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    mx: 3,
+                    alignItems: "center",
                     justifyContent: "center"
                 }}>
 
                 <Typography variant={"h6"}>
                     {"Error fetching data from the data source"}
                 </Typography>
-
-                {error?.name && <Typography>
-                    {error?.name}
-                </Typography>}
 
                 {error?.message && <Typography>
                         {error?.message}

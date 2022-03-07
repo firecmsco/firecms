@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { CollectionSize, Entity, EntityCollection } from "../../models";
 import { Button, Dialog, Typography } from "@mui/material";
@@ -148,13 +148,13 @@ export function ReferenceDialog(
         }
     };
 
-    const onClear = () => {
+    const onClear = useCallback(() => {
         if (!multiselect && onSingleEntitySelected) {
             onSingleEntitySelected(null);
         } else if (onMultipleEntitiesSelected) {
             onMultipleEntitiesSelected([]);
         }
-    };
+    }, [multiselect, onMultipleEntitiesSelected, onSingleEntitySelected]);
 
     const toggleEntitySelection = (entity: Entity<any>) => {
         let newValue;
@@ -187,22 +187,10 @@ export function ReferenceDialog(
 
     };
 
-    const toolbarActionsBuilder = () => (
-        <Button onClick={onClear}
-                color="primary">
-            Clear
-        </Button>
-    );
-
     if (!schema) {
         return <ErrorView
             error={"Could not find schema with id " + collection.schemaId}/>
     }
-
-    const title = (
-        <Typography variant={"h6"}>
-            {`Select ${schema.name}`}
-        </Typography>);
 
     return (
         <StyledDialog
@@ -217,25 +205,31 @@ export function ReferenceDialog(
             <div className={classes.dialogBody}>
 
                 {selectedEntities &&
-                <CollectionTable path={path}
-                                 collection={collection}
-                                 inlineEditing={false}
-                                 toolbarActionsBuilder={toolbarActionsBuilder}
-                                 onEntityClick={onEntityClick}
-                                 tableRowActionsBuilder={tableRowActionsBuilder}
-                                 title={title}
-                                 entitiesDisplayedFirst={selectedEntities}
-                />}
+                    <CollectionTable path={path}
+                                     collection={collection}
+                                     onEntityClick={onEntityClick}
+                                     tableRowActionsBuilder={tableRowActionsBuilder}
+                                     Title={<Typography variant={"h6"}>
+                                         {`Select ${schema.name}`}
+                                     </Typography>}
+                                     inlineEditing={false}
+                                     Actions={<Button onClick={onClear}
+                                                      color="primary">
+                                         Clear
+                                     </Button>}
+                                     entitiesDisplayedFirst={selectedEntities}
+                    />}
             </div>
 
             <CustomDialogActions>
-                <Button onClick={(event) => {
-                    event.stopPropagation();
-                    onClose();
-                }}
-                        color="primary"
-                        variant="text">
-                    Close
+                <Button
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        onClose();
+                    }}
+                    color="primary"
+                    variant="outlined">
+                    Done
                 </Button>
             </CustomDialogActions>
 

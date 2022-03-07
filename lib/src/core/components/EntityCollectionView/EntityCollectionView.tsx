@@ -1,17 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-
-import { Link as ReactLink } from "react-router-dom";
 import {
     Box,
-    Button,
-    IconButton,
     Popover,
-    Tooltip,
     Typography,
     useMediaQuery,
     useTheme
 } from "@mui/material";
-import { Add, Delete, Settings } from "@mui/icons-material";
 
 import {
     AnyProperty,
@@ -21,36 +15,39 @@ import {
     EntitySchema,
     LocalEntityCollection,
     LocalEntitySchema,
-    ResolvedEntitySchema,
     SelectionController
-} from "../../models";
-import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
+} from "../../../models";
+import { CollectionTable, OnColumnResizeParams } from "../CollectionTable";
 
 import {
     CollectionRowActions
-} from "./CollectionTable/internal/CollectionRowActions";
+} from "../CollectionTable/internal/CollectionRowActions";
 import {
     DeleteEntityDialog
-} from "./CollectionTable/internal/DeleteEntityDialog";
-import { ExportButton } from "./CollectionTable/internal/ExportButton";
+} from "../CollectionTable/internal/DeleteEntityDialog";
 
-import { canCreate, canDelete, canEdit } from "../util/permissions";
-import { Markdown } from "../../preview";
+import { canCreate, canDelete, canEdit } from "../../util/permissions";
+import { Markdown } from "../../../preview";
 import {
     useAuthController,
     useFireCMSContext,
     useNavigation,
     useSideEntityController
-} from "../../hooks";
-import { mergeDeep } from "../util/objects";
+} from "../../../hooks";
+import { mergeDeep } from "../../util/objects";
 import {
     useUserConfigurationPersistence
-} from "../../hooks/useUserConfigurationPersistence";
-import { SchemaEditorDialog } from "../../schema_editor/SchemaEditorDialog";
-import { ErrorView } from "./ErrorView";
-import { ErrorBoundary } from "../internal/ErrorBoundary";
-import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-
+} from "../../../hooks/useUserConfigurationPersistence";
+import { SchemaEditorDialog } from "../../../schema_editor/SchemaEditorDialog";
+import { ErrorView } from "../ErrorView";
+import { ErrorBoundary } from "../../internal/ErrorBoundary";
+import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
+import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
+import { removeInitialAndTrailingSlashes } from "../../util/navigation_utils";
+import { ConfigEditButtons } from "./ConfigEditButtons";
+import {
+    CollectionEditorDialog
+} from "../../../collection_editor/CollectionEditorDialog";
 
 /**
  * @category Components
@@ -100,8 +97,8 @@ export function useSelectionController<M = any>(): SelectionController {
 
 /**
  * This component is in charge of binding a datasource path with an {@link EntityCollection}
- * where it's configuration is defined. It includes an infinite scrolling table,
- * 'Add' new entities button,
+ * where it's configuration is defined. It includes an infinite scrolling table
+ * and a'Add' new entities button,
  *
  * This component is the default one used for displaying entity collections
  * and is in charge of generating all the specific actions and customization
@@ -119,10 +116,10 @@ export function useSelectionController<M = any>(): SelectionController {
  *
  * @param path
  * @param collection
+ * @param editable
  * @constructor
  * @category Components
  */
-
 export function EntityCollectionView<M extends { [Key: string]: unknown }>({
                                                                                path,
                                                                                collection: baseCollection,
@@ -157,7 +154,7 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
 export function EntityCollectionViewInternal<M extends { [Key: string]: unknown }>({
                                                                                        path,
                                                                                        collection,
-                                                                                       editable,
+                                                                                       editable: collectionEditable = false,
                                                                                        schema
                                                                                    }: EntityCollectionViewProps<M> & { schema: EntitySchema<M> }
 ) {
@@ -182,6 +179,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [schemaDialogOpen, setSchemaDialogOpen] = useState<boolean>(false);
+    const [collectionDialogOpen, setCollectionDialogOpen] = useState<boolean>(false);
 
     const selectionController = useSelectionController<M>();
     const usedSelectionController = collection.selectionController ?? selectionController;
@@ -208,17 +206,19 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
         });
     }, [path, collection, schema]);
 
-    const onNewClick = useCallback((e: React.MouseEvent) => {
-        e.stopPropagation();
-        return sideEntityController.open({
+    const onNewClick = useCallback(() =>
+        sideEntityController.open({
             path,
             permissions: collection.permissions,
             schema: schema,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
             updateUrl: true
-        });
-    }, [path, collection, schema]);
+        }), [path, collection, schema]);
+
+    const onMultipleDeleteClick = useCallback(() => {
+        setDeleteEntityClicked(selectedEntities);
+    }, []);
 
     const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {
         setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
@@ -267,72 +267,82 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
     }, [onSchemaModifiedForUser]);
 
     const open = anchorEl != null;
-    const title = useMemo(() => (
-        <div style={{
-            padding: "4px"
-        }}>
 
-            <Typography
-                variant="h6"
-                sx={{
-                    lineHeight: "1.0",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    maxWidth: "160px",
-                    cursor: collection.description ? "pointer" : "inherit"
-                }}
-                onClick={collection.description
-                    ? (e) => {
-                        setAnchorEl(e.currentTarget);
-                        e.stopPropagation();
-                    }
-                    : undefined}
-            >
-                {`${collection.name}`}
-            </Typography>
-            <Typography
-                sx={{
-                    display: "block",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    maxWidth: "160px",
-                    direction: "rtl",
-                    textAlign: "left"
-                }}
-                variant={"caption"}
-                color={"textSecondary"}>
-                {`/${path}`}
-            </Typography>
-
-            {collection.description &&
-            <Popover
-                id={"info-dialog"}
-                open={open}
-                anchorEl={anchorEl}
-                elevation={1}
-                onClose={() => {
-                    setAnchorEl(null);
-                }}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center"
-                }}
-                transformOrigin={{
-                    vertical: "top",
-                    horizontal: "center"
-                }}
-            >
-
-                <Box m={2}>
-                    <Markdown source={collection.description}/>
-                </Box>
-
-            </Popover>
+    const Title = useMemo(() => (
+        <Box sx={{
+            display: "flex",
+            flexDirection: "row",
+            "& > *:not(:last-child)": {
+                [theme.breakpoints.down("md")]: {
+                    mr: theme.spacing(1)
+                },
+                mr: theme.spacing(2)
             }
+        }}>
+            <Box>
+                <Typography
+                    variant="h6"
+                    sx={{
+                        lineHeight: "1.0",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        maxWidth: "160px",
+                        cursor: collection.description ? "pointer" : "inherit"
+                    }}
+                    onClick={collection.description
+                        ? (e) => {
+                            setAnchorEl(e.currentTarget);
+                            e.stopPropagation();
+                        }
+                        : undefined}
+                >
+                    {`${collection.name}`}
+                </Typography>
+                <Typography
+                    sx={{
+                        display: "block",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        maxWidth: "160px",
+                        direction: "rtl",
+                        textAlign: "left"
+                    }}
+                    variant={"caption"}
+                    color={"textSecondary"}>
+                    {`/${removeInitialAndTrailingSlashes(path)}/`}
+                </Typography>
 
-        </div>
+                {collection.description &&
+                    <Popover
+                        id={"info-dialog"}
+                        open={open}
+                        anchorEl={anchorEl}
+                        elevation={1}
+                        onClose={() => {
+                            setAnchorEl(null);
+                        }}
+                        anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "center"
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "center"
+                        }}
+                    >
+
+                        <Box m={2}>
+                            <Markdown source={collection.description}/>
+                        </Box>
+
+                    </Popover>
+                }
+
+            </Box>
+
+        </Box>
     ), [collection.description, collection.name, path, open, anchorEl]);
 
     const tableRowActionsBuilder = useCallback(({
@@ -390,100 +400,11 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
 
     }, [usedSelectionController, collection.permissions, schema, authController, path]);
 
-    const toolbarActionsBuilder = useCallback((_: { size: CollectionSize, data: Entity<any>[] }) => {
-
-        const addButton = canCreate(collection.permissions, authController, path, context) && onNewClick && (largeLayout
-            ? <Button
-                onClick={onNewClick}
-                startIcon={<Add/>}
-                size="large"
-                variant="contained"
-                color="primary">
-                Add {schema.name}
-            </Button>
-            : <Button
-                onClick={onNewClick}
-                size="medium"
-                variant="contained"
-                color="primary"
-            >
-                <Add/>
-            </Button>);
-
-        const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collection.permissions, entity, authController, path, context));
-        const onMultipleDeleteClick = (event: React.MouseEvent) => {
-            event.stopPropagation();
-            setDeleteEntityClicked(selectedEntities);
-        };
-        const multipleDeleteButton = selectionEnabled &&
-
-            <Tooltip
-                title={multipleDeleteEnabled ? "Multiple delete" : "You have selected one entity you cannot delete"}>
-                <span>
-                    {largeLayout && <Button
-                        disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                        startIcon={<Delete/>}
-                        onClick={onMultipleDeleteClick}
-                        color={"primary"}
-                    >
-                        <p style={{ minWidth: 24 }}>({selectedEntities?.length})</p>
-                    </Button>}
-
-                    {!largeLayout &&
-                    <IconButton
-                        color={"primary"}
-                        disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                        onClick={onMultipleDeleteClick}
-                        size="large">
-                        <Delete/>
-                    </IconButton>}
-                </span>
-            </Tooltip>;
-
-        const extraActions = collection.extraActions
-            ? collection.extraActions({
-                path,
-                collection,
-                selectionController: usedSelectionController,
-                context
-            })
-            : undefined;
-
-        const exportButton = exportable &&
-            <ExportButton schema={schema}
-                          exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
-                          path={path}/>;
-
-        const collectionEditButton = editable &&
-            <IconButton
-                component={ReactLink}
-                to={navigationContext.buildUrlEditCollectionPath({ path })}>
-                <Settings/>
-            </IconButton>;
-
-        const schemaEditButton = schemaEditable && <IconButton
-            onClick={() => setSchemaDialogOpen(true)}>
-            <Settings color="primary"/>
-        </IconButton>;
-
-        return (
-            <>
-                {extraActions}
-                {multipleDeleteButton}
-                {exportButton}
-                {collectionEditButton}
-                {schemaEditButton}
-                {addButton}
-            </>
-        );
-    }, [usedSelectionController, path, collection, largeLayout]);
-
     return (
         <>
 
             <CollectionTable
                 key={`collection_table_${path}`}
-                title={title}
                 path={path}
                 collection={collection}
                 onSizeChanged={onSizeChanged}
@@ -491,25 +412,44 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 onEntityClick={onEntityClick}
                 onColumnResize={onColumnResize}
                 tableRowActionsBuilder={tableRowActionsBuilder}
-                toolbarActionsBuilder={toolbarActionsBuilder}
+                Title={Title}
+                ActionsStart={schemaEditable
+                    ? <ConfigEditButtons
+                        onCollectionEditClicked={collectionEditable ? () => setCollectionDialogOpen(true) : undefined}
+                        onSchemaEditClicked={() => setSchemaDialogOpen(true)}/>
+                    : undefined}
+                Actions={<EntityCollectionViewActions
+                    collection={collection}
+                    exportable={exportable}
+                    onMultipleDeleteClick={onMultipleDeleteClick}
+                    onNewClick={onNewClick} path={path} schema={schema}
+                    selectedEntities={selectedEntities}
+                    selectionController={usedSelectionController}
+                    selectionEnabled={selectionEnabled}/>}
                 hoverRow={hoverRow}
             />
 
-             <SchemaEditorDialog open={schemaDialogOpen}
-                                 handleClose={(_) => {
-                                     setSchemaDialogOpen(false);
-                                 }}
-                                 schemaId={schema.id}/>
+            <SchemaEditorDialog open={schemaDialogOpen}
+                                handleClose={(_) => {
+                                    setSchemaDialogOpen(false);
+                                }}
+                                schemaId={schema.id}/>
+
+            <CollectionEditorDialog open={collectionDialogOpen}
+                                    onCancel={() => setCollectionDialogOpen(false)}
+                                    onSave={() => setCollectionDialogOpen(false)}
+                                    path={path}/>
 
             {deleteEntityClicked &&
-            <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
-                                path={path}
-                                schema={collection.schemaId}
-                                callbacks={collection.callbacks}
-                                open={!!deleteEntityClicked}
-                                onEntityDelete={internalOnEntityDelete}
-                                onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
-                                onClose={() => setDeleteEntityClicked(undefined)}/>}
+                <DeleteEntityDialog
+                    entityOrEntitiesToDelete={deleteEntityClicked}
+                    path={path}
+                    schema={collection.schemaId}
+                    callbacks={collection.callbacks}
+                    open={!!deleteEntityClicked}
+                    onEntityDelete={internalOnEntityDelete}
+                    onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
+                    onClose={() => setDeleteEntityClicked(undefined)}/>}
         </>
     );
 }

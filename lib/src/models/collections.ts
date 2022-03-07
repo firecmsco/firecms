@@ -133,7 +133,6 @@ export interface ExtraActionsParams<M extends { [Key: string]: any } = any, User
     context: FireCMSContext<UserType>;
 }
 
-
 /**
  * Use this controller to retrieve the selected entities or modify them in
  * an {@link EntityCollection}

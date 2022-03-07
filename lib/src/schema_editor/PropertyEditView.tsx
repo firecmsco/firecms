@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Field, Formik, FormikProps, getIn } from "formik";
+import { Field, Form, Formik, FormikProps, getIn } from "formik";
 import equal from "react-fast-compare"
 import {
     Box,
@@ -113,25 +113,26 @@ export function PropertyForm({
                             open={open ?? false}
                             maxWidth={"sm"}
                             fullWidth
-                            sx={(theme) => ({
+                            sx={{
                                 height: "100vh"
-                            })}>
-
-                            <DialogContent sx={(theme) => ({
-                                backgroundColor: theme.palette.background.paper
-                            })}>
-                                {form}
-                            </DialogContent>
-                            <CustomDialogActions>
-                                {onCancel && <Button onClick={onCancel}>
-                                    Cancel
-                                </Button>}
-                                <Button variant="contained"
-                                        color="primary"
-                                        onClick={() => props.handleSubmit()}>
-                                    Ok
-                                </Button>
-                            </CustomDialogActions>
+                            }}>
+                            <Form noValidate>
+                                <DialogContent sx={(theme) => ({
+                                    backgroundColor: theme.palette.background.paper
+                                })}>
+                                    {form}
+                                </DialogContent>
+                                <CustomDialogActions>
+                                    {onCancel && <Button onClick={onCancel}>
+                                        Cancel
+                                    </Button>}
+                                    <Button variant="contained"
+                                            color="primary"
+                                            type="submit">
+                                        Ok
+                                    </Button>
+                                </CustomDialogActions>
+                            </Form>
                         </Dialog>;
                 } else {
                     body = form;

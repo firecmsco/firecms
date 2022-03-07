@@ -1,6 +1,4 @@
-/* @jsxImportSource @emotion/react */
 import React from "react";
-import { styled } from '@mui/material/styles';
 import {
     AppBar,
     Avatar,
@@ -12,7 +10,6 @@ import {
     IconButton,
     Link,
     Slide,
-    Theme,
     Toolbar,
     Typography
 } from "@mui/material";
@@ -25,43 +22,6 @@ import { ErrorBoundary } from "./ErrorBoundary";
 import { useAuthController, useModeState } from "../../hooks";
 import { useBreadcrumbsContext } from "../../hooks/useBreadcrumbsContext";
 
-
-const PREFIX = 'FireCMSAppBar';
-
-const classes = {
-    appbar: `${PREFIX}-appbar`,
-    menuButton: `${PREFIX}-menuButton`,
-    breadcrumb: `${PREFIX}-breadcrumb`
-};
-
-const StyledSlide = styled(Slide)((
-   { theme } : {
-        theme: Theme
-    }
-) => ({
-    [`& .${classes.appbar}`]: {},
-
-    [`& .${classes.menuButton}`]: {
-        marginRight: theme.spacing(2)
-    },
-
-    [`& .${classes.breadcrumb}`]: {
-        backgroundColor: theme.palette.grey[100],
-        height: theme.spacing(3),
-        color: theme.palette.grey[800],
-        fontWeight: theme.typography.fontWeightMedium,
-        "&:hover, &:focus": {
-            cursor: "pointer",
-            backgroundColor: theme.palette.grey[300]
-        },
-        "&:active": {
-            boxShadow: theme.shadows[1],
-            backgroundColor: theme.palette.grey[400]
-        }
-    }
-}));
-
-
 interface CMSAppBarProps {
     title: string;
     handleDrawerToggle: () => void,
@@ -71,14 +31,11 @@ interface CMSAppBarProps {
     toolbarExtraWidget?: React.ReactNode;
 }
 
-
 export function FireCMSAppBar({
                                   title,
                                   handleDrawerToggle,
                                   toolbarExtraWidget
                               }: CMSAppBarProps) {
-
-
 
     const breadcrumbsContext = useBreadcrumbsContext();
     const { breadcrumbs } = breadcrumbsContext;
@@ -91,10 +48,9 @@ export function FireCMSAppBar({
         : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
 
     return (
-        <StyledSlide
+        <Slide
             direction="down" in={true} mountOnEnter unmountOnExit>
             <AppBar
-                className={classes.appbar}
                 position={"relative"}
                 elevation={1}>
                 <Toolbar>
@@ -103,7 +59,7 @@ export function FireCMSAppBar({
                         aria-label="Open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
-                        className={classes.menuButton}
+                        sx={{mr:2}}
                         size="large">
                         <MenuIcon/>
                     </IconButton>
@@ -137,7 +93,20 @@ export function FireCMSAppBar({
                                     component={ReactLink}
                                     to={entry.url}>
                                     <Chip
-                                        classes={{ root: classes.breadcrumb }}
+                                        sx={theme => ({
+                                            backgroundColor: theme.palette.grey[100],
+                                            height: theme.spacing(3),
+                                            color: theme.palette.grey[800],
+                                            fontWeight: theme.typography.fontWeightMedium,
+                                            "&:hover, &:focus": {
+                                                cursor: "pointer",
+                                                backgroundColor: theme.palette.grey[300]
+                                            },
+                                            "&:active": {
+                                                boxShadow: theme.shadows[1],
+                                                backgroundColor: theme.palette.grey[400]
+                                            }
+                                        })}
                                         label={entry.title}
                                     />
                                 </Link>)
@@ -185,6 +154,6 @@ export function FireCMSAppBar({
 
                 </Toolbar>
             </AppBar>
-        </StyledSlide>
+        </Slide>
     );
 }

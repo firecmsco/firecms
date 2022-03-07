@@ -49,6 +49,7 @@ export function PropertyTree<M>({
                                     properties,
                                     propertiesOrder,
                                     errors,
+                                    showErrors,
                                     onPropertyMove,
                                 }: {
     selectedPropertyId?: string;
@@ -58,6 +59,7 @@ export function PropertyTree<M>({
     properties: PropertiesOrBuilder<M>;
     propertiesOrder: (keyof M)[];
     errors: Record<string, any>;
+    showErrors: boolean;
     onPropertyMove: (properties: PropertiesOrBuilder<M>, propertiesOrder: (keyof M)[]) => void;
 }) {
 
@@ -74,8 +76,6 @@ export function PropertyTree<M>({
 
     const renderItem = useCallback(({
                                         item,
-                                        onExpand,
-                                        onCollapse,
                                         provided,
                                         snapshot
                                     }: RenderItemParams) => {
@@ -84,7 +84,7 @@ export function PropertyTree<M>({
         const propertyNamespace = item.data.namespace as string | undefined;
         const propertyOrBuilder = item.data.property as PropertyOrBuilder;
         const propertyPath = idToPropertiesPath(propertyFullKey);
-        const hasError = getIn(cleanedErrors, propertyPath);
+        const hasError = showErrors && getIn(cleanedErrors, propertyPath);
 
         return (
             <SchemaEntry
@@ -94,7 +94,6 @@ export function PropertyTree<M>({
                 hasError={hasError}
                 onClick={() => onPropertyClick(propertyOrBuilder, propertyId, propertyNamespace)}
                 selected={snapshot.isDragging || selectedPropertyFullId === item.id}
-                includeChildrenPlaceHolder={item.children.length > 0 && snapshot.isDragging}
             />
         )
     }, [cleanedErrors, selectedPropertyFullId, onPropertyClick]);
@@ -141,7 +140,7 @@ export function PropertyTree<M>({
                 renderItem={renderItem}
                 onDragEnd={onDragEnd}
                 isDragEnabled
-                isNestingEnabled
+                isNestingEnabled={false}
             />
 
             <PendingMoveDialog open={Boolean(pendingMove)}
@@ -197,7 +196,6 @@ export function SchemaEntry({
                                 provided,
                                 selected,
                                 hasError,
-                                includeChildrenPlaceHolder,
                                 onClick
                             }: {
     propertyKey: string;
@@ -205,7 +203,6 @@ export function SchemaEntry({
     provided: TreeDraggableProvided;
     selected: boolean;
     hasError: boolean;
-    includeChildrenPlaceHolder: boolean;
     onClick: () => void;
 }) {
 
@@ -215,10 +212,6 @@ export function SchemaEntry({
             onClick={onClick}
             ref={provided.innerRef}
             {...provided.draggableProps}
-
-            // style={{
-            //     ...provided.draggableProps.style
-            // }}
             sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -262,14 +255,14 @@ export function SchemaEntry({
                                 size="small"
                                 sx={{
                                     position: "absolute",
-                                        top: 8,
-                                        right: 8
-                                    }}>
-                            <DragHandleIcon fontSize={"small"}/>
-                        </IconButton>
-                    </Paper>
-                </Box>
+                                    top: 8,
+                                    right: 8
+                                }}>
+                        <DragHandleIcon fontSize={"small"}/>
+                    </IconButton>
+                </Paper>
             </Box>
+        </Box>
     );
 
 }

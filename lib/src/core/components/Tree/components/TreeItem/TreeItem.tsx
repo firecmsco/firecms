@@ -1,21 +1,19 @@
-import { Component } from 'react';
+import { Component } from "react";
 import {
   DraggableProvidedDraggableProps,
-  DraggableStateSnapshot,
-} from 'react-beautiful-dnd';
-import { isSamePath } from '../../utils/path';
-import { sameProps } from '../../utils/react';
-import { Props, TreeDraggableProvided } from './TreeItem-types';
+  DraggableStateSnapshot
+} from "react-beautiful-dnd";
+import { isSamePath } from "../../utils/path";
+import { sameProps } from "../../utils/react";
+import { Props, TreeDraggableProvided } from "./TreeItem-types";
 
 export default class TreeItem extends Component<Props> {
   shouldComponentUpdate(nextProps: Props) {
     return (
       !sameProps(this.props, nextProps, [
-        'item',
-        'provided',
-        'snapshot',
-        'onCollapse',
-        'onExpand',
+        "item",
+        "provided",
+        "snapshot"
       ]) ||
       !isSamePath(this.props.path, nextProps.path) ||
       // also rerender tree item even if the item is not draggable, this allows draggable/nondraggable items to behave the same
@@ -25,7 +23,7 @@ export default class TreeItem extends Component<Props> {
 
   patchDraggableProps = (
     draggableProps: DraggableProvidedDraggableProps,
-    snapshot: DraggableStateSnapshot,
+    snapshot: DraggableStateSnapshot
   ): DraggableProvidedDraggableProps => {
     const { path, offsetPerLevel } = this.props;
 
@@ -36,10 +34,10 @@ export default class TreeItem extends Component<Props> {
     if (snapshot.dropAnimation) {
       transitions.push(
         // @ts-ignore
-        `padding-left ${snapshot.dropAnimation.duration}s ${snapshot.dropAnimation.curve}`,
+        `padding-left ${snapshot.dropAnimation.duration}s ${snapshot.dropAnimation.curve}`
       );
     }
-    const transition = transitions.join(', ');
+    const transition = transitions.join(", ");
 
     return {
       ...draggableProps,
@@ -47,8 +45,8 @@ export default class TreeItem extends Component<Props> {
         ...draggableProps.style,
         paddingLeft: (path.length - 1) * offsetPerLevel,
         // @ts-ignore
-        transition,
-      },
+        transition
+      }
     };
   };
 
@@ -61,7 +59,7 @@ export default class TreeItem extends Component<Props> {
       renderItem,
       provided,
       snapshot,
-      itemRef,
+      itemRef
     } = this.props;
 
     const innerRef = (el: HTMLElement | null) => {
@@ -72,10 +70,10 @@ export default class TreeItem extends Component<Props> {
     const finalProvided: TreeDraggableProvided = {
       draggableProps: this.patchDraggableProps(
         provided.draggableProps,
-        snapshot,
+        snapshot
       ),
       dragHandleProps: provided.dragHandleProps as any,
-      innerRef,
+      innerRef
     };
 
     return renderItem({
@@ -84,7 +82,7 @@ export default class TreeItem extends Component<Props> {
       onExpand: (itemId) => onExpand(itemId, path),
       onCollapse: (itemId) => onCollapse(itemId, path),
       provided: finalProvided,
-      snapshot,
+      snapshot
     });
   }
 }

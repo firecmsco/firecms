@@ -17,28 +17,27 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import CompareArrowsOutlinedIcon
-    from "@mui/icons-material/CompareArrowsOutlined";
-import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
 import * as Yup from "yup";
-import { Formik, FormikHelpers } from "formik";
+import { Formik, FormikHelpers, getIn } from "formik";
 import { useEffect, useMemo, useState } from "react";
 import { Link as ReactLink, useLocation } from "react-router-dom";
 import {
     useConfigurationPersistence
 } from "../hooks/useConfigurationPersistence";
 import { EntityCollection } from "../models";
-import { CircularProgressCenter } from "../core/components/CircularProgressCenter";
-import { ErrorView } from "../core/components/ErrorView";
+import { CircularProgressCenter, ErrorView } from "../core";
 import { useNavigation, useSnackbarController } from "../hooks";
-import { SchemaEditorDialog } from "./SchemaEditorDialog";
+import { SchemaEditorDialog } from "../schema_editor/SchemaEditorDialog";
 import {
     computeTopNavigation,
     TopNavigationResult
 } from "../core/util/navigation_utils";
 import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
+import { LoadingButton } from "@mui/lab";
+import { NewSchemaEditorDialog } from "../schema_editor/NewSchemaEditorDialog";
+import { toSnakeCase } from "../core/util/strings";
+import { CustomDialogActions } from "../core/components/CustomDialogActions";
 
 /**
  * @category Components
@@ -50,6 +49,12 @@ export interface CollectionEditorProps<M> {
      */
     path?: string;
 
+    onSave?: (collection: EntityCollection<M>) => void;
+
+    onCancel?: () => void;
+
+    includeCollectionLink?: boolean;
+
 }
 
 const CollectionSchema = Yup.object().shape({
@@ -59,7 +64,10 @@ const CollectionSchema = Yup.object().shape({
 });
 
 export function CollectionEditor<M>({
-                                        path: pathProp
+                                        path: pathProp,
+                                        onSave,
+                                        onCancel,
+                                        includeCollectionLink = true
                                     }: CollectionEditorProps<M>) {
 
     const location = useLocation();
@@ -70,8 +78,11 @@ export function CollectionEditor<M>({
 
     const schemas = schemaRegistry.schemas;
 
+    const exitingCollection = Boolean(pathProp);
+
     const [path, setPath] = useState(pathProp);
     const [schemaDialogOpen, setSchemaDialogOpen] = useState<boolean>(false);
+    const [newSchemaDialogOpen, setNewSchemaDialogOpen] = useState<boolean>(false);
     const [selectedSchemaId, setSelectedSchemaId] = useState<string | undefined>();
 
     const configurationPersistence = useConfigurationPersistence();
@@ -123,6 +134,9 @@ export function CollectionEditor<M>({
             .then(() => {
                 setPath(values.path);
                 formikHelpers.resetForm({ values });
+                if (onSave) {
+                    onSave(values);
+                }
                 return snackbarController.open({
                     type: "success",
                     message: "Collection updated"
@@ -156,31 +170,35 @@ export function CollectionEditor<M>({
                       dirty
                   }) => {
 
-                    console.log("errors", touched, errors);
-
                     const selectedSchema = values.schemaId ? schemaRegistry.findSchema(values.schemaId) : undefined;
+
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    useEffect(() => {
+                        const pathTouched = getIn(touched, "path");
+                        if (!pathTouched && !exitingCollection && values.name) {
+                            setFieldValue("path", toSnakeCase(values.name))
+                        }
+
+                    }, [exitingCollection, touched, values.name]);
+
                     return (
-                        <Container maxWidth={"lg"}>
+                        <>
                             <form onSubmit={handleSubmit}
                                   noValidate>
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        p: 3
-                                    }}>
 
+                                <Container maxWidth={"md"}>
                                     <Box
                                         sx={{
                                             display: "flex",
                                             flexDirection: "row",
                                             justifyContent: "space-between",
-                                            py: 3
+                                            pt: 3,
+                                            pb: 2
                                         }}>
                                         <Typography variant={"h4"}>
                                             {isNewCollection ? "New collection" : `${values.name} collection`}
                                         </Typography>
-                                        <Box>
+                                        {includeCollectionLink && <Box>
                                             {path && <Button
                                                 component={ReactLink}
                                                 to={navigationContext.buildUrlCollectionPath(path)}
@@ -189,46 +207,18 @@ export function CollectionEditor<M>({
                                                 }}>
                                                 Go to collection
                                             </Button>}
-                                            <Button startIcon={<SaveIcon/>}
-                                                    disabled={!dirty}
-                                                    variant="contained"
-                                                    type="submit">Save</Button>
-                                        </Box>
+                                        </Box>}
                                     </Box>
 
                                     <Paper elevation={0} sx={{
                                         display: "flex",
                                         flexDirection: "column",
                                         my: 1,
-                                        p: 2
+                                        p: 3
                                     }}>
                                         <Grid container spacing={2}>
-                                            <Grid item xs={12}>
-                                                <FormControl fullWidth
-                                                             required
-                                                             disabled={isSubmitting}
-                                                             error={touched.path && Boolean(errors.path)}>
-                                                    <InputLabel
-                                                        htmlFor="path">{"Path"}</InputLabel>
-                                                    <OutlinedInput id={"path"}
-                                                                   aria-describedby={`${"path"}-helper`}
-                                                                   onChange={handleChange}
-                                                                   value={values.path}
-                                                                   label={"Path"}
-                                                                   startAdornment={
-                                                                       <InputAdornment
-                                                                           position="start">
-                                                                           <CompareArrowsOutlinedIcon/>
-                                                                       </InputAdornment>}
-                                                                   disabled={!isNewCollection}/>
-                                                    <FormHelperText
-                                                        id="path-helper">
-                                                        {touched.path && Boolean(errors.path) ? errors.path : "Path that this collection is stored in"}
-                                                    </FormHelperText>
-                                                </FormControl>
-                                            </Grid>
 
-                                            <Grid item xs={12} sm={8}>
+                                            <Grid item xs={12}>
                                                 <FormControl fullWidth
                                                              required
                                                              disabled={isSubmitting}
@@ -241,15 +231,30 @@ export function CollectionEditor<M>({
                                                         onChange={handleChange}
                                                         aria-describedby="name-helper-text"
                                                         label="Name"
-                                                        startAdornment={
-                                                            <InputAdornment
-                                                                position="start">
-                                                                <BadgeOutlinedIcon/>
-                                                            </InputAdornment>}
                                                     />
                                                     <FormHelperText
                                                         id="name-helper-text">
                                                         {touched.name && Boolean(errors.name) ? errors.name : "Plural name of the collection (e.g. Products)"}
+                                                    </FormHelperText>
+                                                </FormControl>
+                                            </Grid>
+                                            <Grid item xs={12} sm={8}>
+                                                <FormControl fullWidth
+                                                             required
+                                                             disabled={isSubmitting}
+                                                             error={touched.path && Boolean(errors.path)}>
+                                                    <InputLabel
+                                                        htmlFor="path">{"Path"}</InputLabel>
+                                                    <OutlinedInput
+                                                        id={"path"}
+                                                        aria-describedby={`${"path"}-helper`}
+                                                        onChange={handleChange}
+                                                        value={values.path}
+                                                        label={"Path"}
+                                                        disabled={!isNewCollection}/>
+                                                    <FormHelperText
+                                                        id="path-helper">
+                                                        {touched.path && Boolean(errors.path) ? errors.path : "Path that this collection is stored in"}
                                                     </FormHelperText>
                                                 </FormControl>
                                             </Grid>
@@ -299,11 +304,6 @@ export function CollectionEditor<M>({
                                                         id="description"
                                                         value={values.description}
                                                         onChange={handleChange}
-                                                        startAdornment={
-                                                            <InputAdornment
-                                                                position="start">
-                                                                <DescriptionOutlinedIcon/>
-                                                            </InputAdornment>}
                                                         aria-describedby="description-helper-text"
                                                         label="Description"
                                                     />
@@ -334,6 +334,7 @@ export function CollectionEditor<M>({
                                                             value={selectedSchema}
                                                             fullWidth
                                                             disableClearable
+                                                            disabled={exitingCollection}
                                                             options={schemas}
                                                             onChange={(event, schema) => {
                                                                 setFieldValue("schemaId", schema ? schema.id : null);
@@ -370,18 +371,6 @@ export function CollectionEditor<M>({
                                                         justifyContent: "space-between"
                                                     }}>
                                                         <Button
-                                                            variant={values.schemaId ? "text" : "contained"}
-                                                            onClick={(event) => {
-                                                                event.stopPropagation();
-                                                                setSelectedSchemaId(undefined);
-                                                                setSchemaDialogOpen(true);
-                                                            }}
-                                                            startIcon={
-                                                                <AddIcon/>}>
-                                                            Create new schema
-                                                        </Button>
-
-                                                        <Button
                                                             variant={"outlined"}
                                                             disabled={!values.schemaId}
                                                             onClick={(event) => {
@@ -391,47 +380,91 @@ export function CollectionEditor<M>({
                                                             }}
                                                             startIcon={
                                                                 <SettingsIcon/>}>
-                                                            Edit {selectedSchema?.name}
+                                                            Edit {selectedSchema?.name} schema
                                                         </Button>
+
+                                                        {!exitingCollection &&
+                                                            <Button
+                                                                variant={values.schemaId ? "text" : "contained"}
+                                                                onClick={(event) => {
+                                                                    event.stopPropagation();
+                                                                    setSelectedSchemaId(undefined);
+                                                                    setNewSchemaDialogOpen(true);
+                                                                }}
+                                                                startIcon={
+                                                                    <AddIcon/>}>
+                                                                Create new
+                                                                schema
+                                                            </Button>}
                                                     </Box>
 
-                                                    <Typography sx={{ mt: 2 }} variant={"body2"}>
-                                                        Each collection is bound to one schema, where the properties of the stored values are stored.
+                                                    <Typography
+                                                        sx={{ mt: 2 }}
+                                                        variant={"body2"}>
+                                                        Each collection is
+                                                        bound to one schema,
+                                                        where the properties
+                                                        of the stored values
+                                                        are stored.
                                                     </Typography>
-                                                    <Typography sx={{ mb: 2 }} variant={"body2"}>
-                                                        You can only pick a schema on the collection creation, but you can modify the schema afterwards
+                                                    <Typography
+                                                        sx={{ mb: 2 }}
+                                                        variant={"body2"}>
+                                                        You can only pick a
+                                                        schema on the
+                                                        collection creation,
+                                                        but you can modify
+                                                        the schema
+                                                        afterwards
                                                     </Typography>
                                                 </Paper>
                                             </Grid>
                                         </Grid>
                                     </Paper>
+                                </Container>
+                                <CustomDialogActions>
 
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            justifyContent: "end",
-                                            py: 1
-                                        }}>
-                                        <Button startIcon={<SaveIcon/>}
-                                                disabled={!dirty}
-                                                variant="contained"
-                                                type="submit">Save</Button>
-                                    </Box>
+                                    {onCancel && <Button
+                                        color="primary"
+                                        disabled={isSubmitting}
+                                        onClick={onCancel}
+                                    >
+                                        Cancel
+                                    </Button>}
 
-                                </Box>
+                                    <LoadingButton
+                                        loading={isSubmitting}
+                                        loadingPosition="start"
+                                        disabled={!dirty}
+                                        variant="contained"
+                                        type="submit"
+                                        startIcon={<SaveIcon/>}
+                                    >
+                                        Save
+                                    </LoadingButton>
+                                </CustomDialogActions>
+
                             </form>
 
-                            <SchemaEditorDialog open={schemaDialogOpen}
-                                                handleClose={(schema) => {
-                                                    if (schema)
-                                                        setFieldValue("schemaId", schema.id);
-                                                    setSelectedSchemaId(undefined);
-                                                    setSchemaDialogOpen(false);
-                                                }}
-                                                schemaId={selectedSchemaId}/>
+                            {selectedSchemaId &&
+                                <SchemaEditorDialog open={schemaDialogOpen}
+                                                    handleClose={(schema) => {
+                                                        if (schema)
+                                                            setFieldValue("schemaId", schema.id);
+                                                        setSelectedSchemaId(undefined);
+                                                        setSchemaDialogOpen(false);
+                                                    }}
+                                                    schemaId={selectedSchemaId}/>}
 
-                        </Container>
+                            <NewSchemaEditorDialog open={newSchemaDialogOpen}
+                                                   handleClose={(schema) => {
+                                                       if (schema)
+                                                           setFieldValue("schemaId", schema.id);
+                                                       setSelectedSchemaId(undefined);
+                                                       setNewSchemaDialogOpen(false);
+                                                   }}/>
+
+                        </>
                     );
                 }
                 }

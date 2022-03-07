@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
-    Box,
     Button,
+    Container,
     Dialog,
     FormControl,
     FormHelperText,
@@ -12,31 +12,12 @@ import {
     Select,
     Typography
 } from "@mui/material";
-import { useFormikContext } from "formik";
+import { getIn, useFormikContext } from "formik";
 import { EntitySchema } from "../models";
-import { CustomDialogActions } from "../core/components/CustomDialogActions";
+import { toSnakeCase } from "../core/util/strings";
 
-export function SchemaDetailsDialog({
-                                        isNewSchema,
-                                        open,
-                                        handleOk
-                                    }: { isNewSchema: boolean, open: boolean, handleOk: () => void }) {
-    return (
-        <Dialog
-            open={open}
-            onClose={handleOk}
-        >
-            <SchemaDetailsView isNewSchema={isNewSchema}/>
-            <CustomDialogActions>
-                <Button
-                    variant="contained"
-                    onClick={handleOk}> Ok </Button>
-            </CustomDialogActions>
-        </Dialog>
-    );
-}
 
-export function SchemaDetailsView({ isNewSchema }: { isNewSchema: boolean }) {
+export function SchemaDetailsForm({ isNewSchema }: { isNewSchema: boolean }) {
 
     const {
         values,
@@ -49,15 +30,27 @@ export function SchemaDetailsView({ isNewSchema }: { isNewSchema: boolean }) {
         handleSubmit
     } = useFormikContext<EntitySchema>();
 
+    useEffect(() => {
+        const idTouched = getIn(touched, "id");
+        if (!idTouched && isNewSchema && values.name) {
+            setFieldValue("id", toSnakeCase(values.name))
+        }
+    }, [isNewSchema, touched, values.name]);
+
     return (
-        <Box sx={{
-            p: 2
+
+        <Container maxWidth={"md"} sx={{
+            p: 2,
+            my: 2
         }}>
             <Grid container spacing={2}>
                 <Grid item>
-                    <Typography variant={"h6"}>
+                    {isNewSchema && <Typography variant={"h4"}>
+                        {"New schema"}
+                    </Typography>}
+                    {!isNewSchema && <Typography variant={"h6"}>
                         {"Schema details"}
-                    </Typography>
+                    </Typography>}
                 </Grid>
 
                 <Grid item xs={12}>
@@ -102,6 +95,27 @@ export function SchemaDetailsView({ isNewSchema }: { isNewSchema: boolean }) {
                 </Grid>
 
                 <Grid item xs={12}>
+                    <FormControl fullWidth
+                                 error={touched.description && Boolean(errors.description)}>
+                        <InputLabel
+                            htmlFor="description">Description</InputLabel>
+                        <OutlinedInput
+                            id="description"
+                            value={values.description}
+                            onChange={handleChange}
+                            multiline
+                            rows={2}
+                            aria-describedby="description-helper-text"
+                            label="Description"
+                        />
+                        <FormHelperText
+                            id="description-helper-text">
+                            {touched.description && Boolean(errors.description) ? errors.description : "Description of the schema"}
+                        </FormHelperText>
+                    </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
                     <FormControl fullWidth>
                         <InputLabel id="size-label">
                             Default row size
@@ -126,6 +140,6 @@ export function SchemaDetailsView({ isNewSchema }: { isNewSchema: boolean }) {
                 </Grid>
 
             </Grid>
-        </Box>
+        </Container>
     )
 }

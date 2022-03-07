@@ -15,7 +15,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
-import SettingsIcon from "@mui/icons-material/Settings";
+import EditIcon from "@mui/icons-material/Edit";
 
 import { Link as ReactLink } from "react-router-dom";
 
@@ -26,7 +26,9 @@ import {
 } from "../util/navigation_utils";
 import { Markdown } from "../../preview";
 import { useNavigation } from "../../hooks";
-import { useConfigurationPersistence } from "../../hooks/useConfigurationPersistence";
+import {
+    useConfigurationPersistence
+} from "../../hooks/useConfigurationPersistence";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -96,7 +98,7 @@ export function FireCMSHomePage() {
                                 <IconButton
                                     component={ReactLink}
                                     to={entry.editUrl}>
-                                    <SettingsIcon color="primary"/>
+                                    <EditIcon color="primary"/>
                                 </IconButton>}
                             </Box>
 
@@ -164,7 +166,7 @@ export function FireCMSHomePage() {
 
                     <Typography color={"textSecondary"}
                                 className={"weight-500"}>
-                        {group?.toUpperCase() ?? "Collections".toUpperCase()}
+                        {group?.toUpperCase() ?? "Ungrouped collections".toUpperCase()}
                     </Typography>
 
                     <Divider/>

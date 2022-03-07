@@ -1,9 +1,5 @@
 import React from "react";
-import {
-    CollectionSize,
-    Entity,
-    EntityCollection
-} from "../../../models";
+import { CollectionSize, Entity, EntityCollection } from "../../../models";
 
 /**
  * @category Collection components
@@ -26,11 +22,6 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
     collection: EntityCollection<M>;
 
     /**
-     * Override the title in the toolbar
-     */
-    title?: React.ReactNode;
-
-    /**
      * Can the table be edited inline
      */
     inlineEditing: ((entity: Entity<any>) => boolean) | boolean;
@@ -42,10 +33,21 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
     entitiesDisplayedFirst?: Entity<M>[];
 
     /**
-     * Additional components builder such as buttons in the
-     * collection toolbar
+     * Override the title in the toolbar
      */
-    toolbarActionsBuilder?: (props: { size: CollectionSize, data: Entity<any>[] }) => React.ReactNode;
+    Title?: React.ReactNode;
+
+    /**
+     * Additional component that renders actions such as buttons in the
+     * collection toolbar, displayed on the right side
+     */
+    Actions?: React.ReactNode;
+
+    /**
+     * Additional component that renders actions such as buttons in the
+     * collection toolbar, displayed on the left side
+     */
+    ActionsStart?: React.ReactNode;
 
     /**
      * Builder for creating the buttons in each row
@@ -77,4 +79,3 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
      */
     hoverRow?: boolean;
 }
-

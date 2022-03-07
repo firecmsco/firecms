@@ -1,8 +1,17 @@
-import { Box } from "@mui/material";
+import { Box, Breakpoint, Container } from "@mui/material";
+import React from "react";
 
 export function CustomDialogActions({
-                                 children,
-                             }: { children: React.ReactNode}) {
+                                        children,
+                                        position = "sticky",
+                                        maxWidth
+                                    }: { children: React.ReactNode, position?: "sticky" | "absolute", maxWidth?: Breakpoint }) {
+    const component = maxWidth
+        ? <Container maxWidth={maxWidth}>
+            {children}
+        </Container>
+        : children;
+
     return <Box sx={(theme) => ({
         background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
         backdropFilter: "blur(4px)",
@@ -13,8 +22,10 @@ export function CustomDialogActions({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "end",
-        position: "sticky",
+        position: position,
         bottom: 0,
+        right: 0,
+        left: 0,
         textAlign: "right",
         zIndex: 2,
         "& > *:not(:last-child)": {
@@ -25,8 +36,6 @@ export function CustomDialogActions({
         }
     })}
     >
-
-        {children}
-
+        {component}
     </Box>;
 }

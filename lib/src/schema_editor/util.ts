@@ -1,21 +1,5 @@
+import { TreeData, TreeItem } from "../core/components/Tree";
 import { PropertiesOrBuilder, Property } from "../models";
-
-export type ItemId = string | number;
-
-export interface TreeData {
-    rootId: ItemId;
-    items: Record<ItemId, TreeItem>;
-}
-
-export type TreeItemData = any;
-export type TreeItem = {
-    id: ItemId;
-    children: ItemId[];
-    hasChildren?: boolean;
-    isExpanded?: boolean;
-    isChildrenLoading?: boolean;
-    data?: TreeItemData;
-};
 
 export function propertiesToTree<M>(properties: PropertiesOrBuilder<M>): TreeData {
     const treeItems = getTreeItems(properties);
@@ -35,8 +19,6 @@ export function propertiesToTree<M>(properties: PropertiesOrBuilder<M>): TreeDat
             ...items
         }
     };
-    console.log("propertiesToTree", properties, res);
-
     return res;
 }
 

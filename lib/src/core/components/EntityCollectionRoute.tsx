@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { EntityCollection } from "../../models";
-import EntityCollectionView from "./EntityCollectionView";
+import EntityCollectionView from "./EntityCollectionView/EntityCollectionView";
 import { CircularProgressCenter } from "./CircularProgressCenter";
 import { useConfigurationPersistence } from "../../hooks/useConfigurationPersistence";
-import { CollectionEditor } from "../../schema_editor/CollectionEditor";
+import { CollectionEditor } from "../../collection_editor/CollectionEditor";
 import { ErrorView } from "./ErrorView";
 
 /**

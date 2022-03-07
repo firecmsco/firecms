@@ -62,8 +62,7 @@ export const CollectionTable = React.memo<CollectionTableProps<any, any>>(Collec
 function areEqual(prevProps: CollectionTableProps<any, any>, nextProps: CollectionTableProps<any, any>) {
     return prevProps.path === nextProps.path &&
         prevProps.collection === nextProps.collection &&
-        prevProps.title === nextProps.title &&
-        prevProps.toolbarActionsBuilder === nextProps.toolbarActionsBuilder &&
+        prevProps.Title === nextProps.Title &&
         prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder &&
         prevProps.inlineEditing === nextProps.inlineEditing;
 }
@@ -75,8 +74,9 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
      path,
      collection,
      inlineEditing,
-     toolbarActionsBuilder,
-     title,
+     ActionsStart,
+     Actions,
+     Title,
      tableRowActionsBuilder,
      entitiesDisplayedFirst,
      onEntityClick,
@@ -217,11 +217,6 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         itemCount
     });
 
-    const actions = useMemo(() => toolbarActionsBuilder && toolbarActionsBuilder({
-        size,
-        data
-    }), [toolbarActionsBuilder, size, data]);
-
     const loadNextPage = useCallback(() => {
         if (!paginationEnabled || dataLoading || noMoreToLoad)
             return;
@@ -272,10 +267,11 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
             <CollectionTableToolbar filterIsSet={filterIsSet}
                                     onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                                     clearFilter={clearFilter}
-                                    actions={actions}
                                     size={size}
                                     onSizeChanged={updateSize}
-                                    title={title}
+                                    Title={Title}
+                                    ActionsStart={ActionsStart}
+                                    Actions={Actions}
                                     loading={dataLoading}/>
 
             <Table

@@ -44,7 +44,7 @@ import {
 import { canEdit } from "../util/permissions";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
-const EntityCollectionView = lazy(() => import("../components/EntityCollectionView")) as any;
+const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as any;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as any;
 const EntityPreview = lazy(() => import("../components/EntityPreview")) as any;
 

@@ -159,22 +159,6 @@ export function useBuildNavigationContext<UserType>({
             console.error(`Not able to resolve schema for path ${sidePanelKey}`)
         }
 
-        // if (!result.schemaResolver) {
-        //     if (!result.schemaId) {
-        //         console.error(`Not able to resolve schema for path ${sidePanelKey}`)
-        //     } else {
-        //         const foundSchema = schemaRegistry.findSchema(result.schemaId);
-        //         if (!foundSchema) {
-        //             console.error(`Not able to resolve schema ${result.schemaId}`)
-        //         } else {
-        //             result.schemaResolver = schemaRegistry.buildSchemaResolver({
-        //                 schema: foundSchema,
-        //                 path
-        //             });
-        //         }
-        //     }
-        // }
-
         return { ...resolvedCollection, ...(result as EntityCollection<M>) };
 
     }, [
@@ -199,7 +183,7 @@ export function useBuildNavigationContext<UserType>({
                                                         path
                                                     }: { path?: string }): string => {
             if (path)
-                return `${baseCollectionPath}/edit/${removeInitialAndTrailingSlashes(path)}`;
+                return `${baseCollectionPath}/edit/${removeInitialAndTrailingSlashes(encodeURIComponent(path))}`;
             else
                 return "newcollection";
         }, //
@@ -209,16 +193,16 @@ export function useBuildNavigationContext<UserType>({
                                                     id
                                                 }: { id?: string }): string => {
             if (id)
-                return `s/edit/${removeInitialAndTrailingSlashes(id)}`;
+                return `s/edit/${removeInitialAndTrailingSlashes(encodeURIComponent(id))}`;
             else
                 return "newschema";
         }, //
         [baseCollectionPath]);
 
-    const buildUrlCollectionPath = useCallback((path: string): string => `${baseCollectionPath}/${removeInitialAndTrailingSlashes(path)}`,
+    const buildUrlCollectionPath = useCallback((path: string): string => `${baseCollectionPath}/${removeInitialAndTrailingSlashes(encodeURIComponent(path))}`,
         [baseCollectionPath]);
 
-    const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(path)}` : `/${path}`,
+    const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(encodeURIComponent(path))}` : `/${encodeURIComponent(path)}`,
         [cleanBasePath]);
 
     const getCollectionOverride = useCallback(<M, >(path: string): LocalEntityCollection<M> | undefined => {

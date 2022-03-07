@@ -20,13 +20,13 @@ import {
 interface CollectionTableToolbarProps {
     size: CollectionSize;
     filterIsSet: boolean;
-    actions?: React.ReactNode;
     loading: boolean;
-    title?: React.ReactNode,
+    ActionsStart?: React.ReactNode;
+    Actions?: React.ReactNode;
+    Title?: React.ReactNode,
     onTextSearch?: (searchString?: string) => void;
     onSizeChanged: (size: CollectionSize) => void;
-
-    clearFilter(): void;
+    clearFilter: () => void;
 }
 
 export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: CollectionTableToolbarProps) {
@@ -55,9 +55,7 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
             variant={"standard"}
             value={props.size}
             sx={{ width: 56 }}
-            onChange={(evt: any) => {
-                props.onSizeChanged(evt.target.value);
-            }}
+            onChange={(evt: any) => props.onSizeChanged(evt.target.value)}
             renderValue={(value: any) => value.toUpperCase()}
         >
             {["xs", "s", "m", "l", "xl"].map((value) => (
@@ -73,12 +71,11 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
         <Box
             sx={{
                 minHeight: 56,
-                [theme.breakpoints.down("xl")]: {
-                    paddingLeft: theme.spacing(1),
-                    paddingRight: theme.spacing(1)
+                overflowX: "auto",
+                [theme.breakpoints.down("sm")]: {
+                    px: theme.spacing(1)
                 },
-                paddingLeft: theme.spacing(2),
-                paddingRight: theme.spacing(2),
+                px: theme.spacing(2),
                 backgroundColor: theme.palette.background.default,
                 borderBottom: `1px solid ${theme.palette.divider}`,
                 display: "flex",
@@ -90,15 +87,23 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
         >
 
             <Box display={"flex"}
-                 alignItems="center">
+                 alignItems="center"
+                 sx={{
+                     "& > *": {
+                         [theme.breakpoints.down("md")]: {
+                             marginRight: `${theme.spacing(1)} !important`
+                         },
+                         marginRight: `${theme.spacing(2)} !important`
+                     }
+                 }}>
 
-                {props.title && <Hidden lgDown>
-                    <Box mr={2}>
-                        {props.title}
-                    </Box>
+                {props.Title && <Hidden lgDown>
+                    {props.Title}
                 </Hidden>}
 
                 {sizeSelect}
+
+                {props.ActionsStart}
 
                 {filterView}
 
@@ -126,7 +131,7 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
                         onTextSearch={props.onTextSearch}/>
                 }
 
-                {props.actions}
+                {props.Actions}
 
             </Box>
 

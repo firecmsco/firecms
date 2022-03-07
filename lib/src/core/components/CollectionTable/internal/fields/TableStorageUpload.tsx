@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 import { Box, IconButton, Skeleton, Theme, Typography } from "@mui/material";
 
@@ -25,7 +25,7 @@ import { useSnackbarController, useStorageSource } from "../../../../../hooks";
 import { getThumbnailMeasure } from "../../../../../preview/util";
 import { resolveStorageString } from "../../../../util/storage";
 
-const PREFIX = 'TableStorageUpload';
+const PREFIX = "TableStorageUpload";
 
 const classes = {
     dropZone: `${PREFIX}-dropZone`,
@@ -91,7 +91,6 @@ const StyledBox = styled(Box)((
         backgroundColor: theme.palette.background.paper
     }
 }));
-
 
 /**
  * Field that allows to upload files to Google Cloud Storage.
@@ -454,12 +453,10 @@ function StorageUpload({
             </IconButton>
             }
 
-
         </StyledBox>
     );
 
 }
-
 
 interface StorageUploadItemProps {
     storagePath: string;

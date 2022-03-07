@@ -1,16 +1,18 @@
-import React, { useCallback, useEffect, useState } from "react";
-import * as Yup from "yup";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { Formik, FormikProps, getIn } from "formik";
+import {
+    Form,
+    Formik,
+    FormikHelpers,
+    getIn,
+    setIn,
+    useFormikContext
+} from "formik";
 import {
     Box,
     Button,
-    CircularProgress,
     Container,
     Dialog,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
     Grid,
     Paper,
     Typography,
@@ -19,6 +21,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
+import SaveIcon from "@mui/icons-material/Save";
 
 import { EntitySchema, Property } from "../models";
 import {
@@ -34,47 +37,36 @@ import {
 } from "../hooks/useConfigurationPersistence";
 import { CircularProgressCenter, ErrorView } from "../core";
 import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
-import { toSnakeCase } from "../core/util/strings";
 import { isEmptyObject, removeUndefined } from "../core/util/objects";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
-import { SchemaDetailsDialog } from "./SchemaDetailsView";
 import { PropertyTree } from "./PropertyTree";
 import { ErrorBoundary } from "../core/internal/ErrorBoundary";
-import DragDropWithNestingTree from "./rm_me/tree_test";
+import { LoadingButton } from "@mui/lab";
+import { YupSchema } from "./SchemaYupValidation";
+import { SchemaDetailsForm } from "./SchemaDetailsForm";
 
 export type SchemaEditorProps<M> = {
     schemaId?: string;
     handleClose?: (updatedSchema?: EntitySchema<M>) => void;
-    updateDirtyStatus?: (dirty: boolean) => void;
 };
-
-const YupSchema = Yup.object().shape({
-    id: Yup.string().required("Required"),
-    name: Yup.string().required("Required")
-});
 
 export function SchemaEditor<M>({
                                     schemaId,
                                     handleClose,
-                                    updateDirtyStatus
                                 }: SchemaEditorProps<M>) {
 
-    const isNewSchema = !schemaId;
     const schemaRegistry = useSchemaRegistry();
     const configurationPersistence = useConfigurationPersistence();
     const snackbarContext = useSnackbarController();
+
+    // Use this ref to store which properties have errors
+    const propertyErrorsRef = useRef({});
 
     if (!configurationPersistence)
         throw Error("Can't use the schema editor without specifying a `ConfigurationPersistence`");
 
     const [schema, setSchema] = React.useState<EntitySchema | undefined>();
-    const [error, setError] = React.useState<Error | undefined>();
-
-    const onSaveAttemptWithError = useCallback(() =>
-        snackbarContext.open({
-            type: "error",
-            message: "Fix the errors before saving the schema"
-        }), [snackbarContext]);
+    const [initialError, setInitialError] = React.useState<Error | undefined>();
 
     useEffect(() => {
         try {
@@ -87,7 +79,7 @@ export function SchemaEditor<M>({
             }
         } catch (e) {
             console.error(e);
-            setError(error);
+            setInitialError(initialError);
         }
     }, [schema, schemaRegistry]);
 
@@ -95,7 +87,7 @@ export function SchemaEditor<M>({
         const newSchema = prepareSchemaForPersistence(schema);
         return configurationPersistence.saveSchema(newSchema)
             .then(() => {
-                setError(undefined);
+                setInitialError(undefined);
                 snackbarContext.open({
                     type: "success",
                     message: "Schema updated"
@@ -116,13 +108,12 @@ export function SchemaEditor<M>({
             });
     }, [configurationPersistence, handleClose, snackbarContext]);
 
-    if (error) {
+    if (initialError) {
         return <ErrorView error={`Error fetching schema ${schemaId}`}/>;
-
     }
-    if (!schemaRegistry.initialised || !(isNewSchema || schema)) {
-        return <CircularProgressCenter/>;
 
+    if (!schemaRegistry.initialised || !schema) {
+        return <CircularProgressCenter/>;
     }
 
     return (
@@ -134,21 +125,65 @@ export function SchemaEditor<M>({
                 propertiesOrder: []
             } as EntitySchema}
             validationSchema={YupSchema}
-            validate={() => console.log("validate")}
-            onSubmit={(newSchema: EntitySchema, formikHelpers) => {
-                return saveSchema(newSchema).then(() => {
+            validate={() => propertyErrorsRef.current}
+            onSubmit={(newSchema: EntitySchema, formikHelpers: FormikHelpers<EntitySchema>) => {
+                console.log("onSubmit")
+                saveSchema(newSchema).then(() => {
                     formikHelpers.resetForm({ values: newSchema });
-                    // setShowErrors(false);
                 });
             }}
         >
-            {(formikProps) => {
+            {({ isSubmitting, dirty, errors, submitCount }) => {
+
+                console.log("errors", errors);
+                const cleanedErrors = removeUndefined(errors);
+                const hasError = !isEmptyObject(cleanedErrors);
+                const showErrors = submitCount > 0;
+
+                const onCancel = handleClose ? () => handleClose(undefined) : undefined;
                 return (
-                    <SchemaEditorForm {...formikProps}
-                                      updateDirtyStatus={updateDirtyStatus}
-                                      isNewSchema={isNewSchema}
-                                      onSaveAttemptWithError={onSaveAttemptWithError}
-                                      onCancel={handleClose ? () => handleClose(undefined) : undefined}/>
+                    <Form noValidate>
+                        <Box sx={{
+                            height: "100%",
+                            display: "flex",
+                            flexDirection: "column"
+                        }}>
+                            <Box sx={{
+                                flexGrow: 1
+                            }}>
+                                <SchemaEditorForm showErrors={showErrors}
+                                                  onPropertyError={(propertyPath, error) => {
+                                                      propertyErrorsRef.current = setIn(propertyErrorsRef.current, propertyPath, error);
+                                                      propertyErrorsRef.current = removeUndefined(propertyErrorsRef.current);
+                                                      console.log("propertyErrorsRef.current", propertyErrorsRef.current);
+                                                  }}/>
+                            </Box>
+
+                            <CustomDialogActions>
+
+                                <Button
+                                    color="primary"
+                                    disabled={isSubmitting}
+                                    onClick={onCancel}
+                                >
+                                    Cancel
+                                </Button>
+
+                                <LoadingButton
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit"
+                                    disabled={!dirty}
+                                    loading={isSubmitting}
+                                    loadingPosition="start"
+                                    startIcon={<SaveIcon/>}
+                                >
+                                    Save schema
+                                </LoadingButton>
+
+                            </CustomDialogActions>
+                        </Box>
+                    </Form>
                 );
             }}
 
@@ -157,33 +192,25 @@ export function SchemaEditor<M>({
     );
 }
 
-function SchemaEditorForm<M>({
-                                 values,
-                                 errors,
-                                 setFieldValue,
-                                 setFieldError,
-                                 setFieldTouched,
-                                 touched,
-                                 dirty,
-                                 isSubmitting,
-                                 isNewSchema,
-                                 handleSubmit,
-                                 updateDirtyStatus,
-                                 onCancel,
-                                 onSaveAttemptWithError
-                             }: FormikProps<EntitySchema<M>> & {
-    isNewSchema: boolean,
-    updateDirtyStatus?: (dirty: boolean) => void;
-    onSaveAttemptWithError?: () => void;
-    onCancel?: () => void;
+export function SchemaEditorForm<M>({
+                                        showErrors,
+                                        onPropertyError
+                                    }: {
+    showErrors: boolean;
+    onPropertyError: (propertyKey: string, error: string | undefined) => void;
 }) {
+
+    const {
+        values,
+        setFieldValue,
+        setFieldError,
+        setFieldTouched,
+        errors
+    } = useFormikContext<EntitySchema>();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
     const asDialog = !largeLayout;
-
-    const cleanedErrors = removeUndefined(errors);
-    const hasError = !isEmptyObject(cleanedErrors);
 
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
@@ -192,20 +219,6 @@ function SchemaEditorForm<M>({
 
     const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
     const [schemaDetailsDialogOpen, setSchemaDetailsDialogOpen] = useState<boolean>(false);
-
-    const [showErrors, setShowErrors] = useState(false);
-
-    useEffect(() => {
-        if (updateDirtyStatus)
-            updateDirtyStatus(dirty);
-    }, [updateDirtyStatus, dirty]);
-
-    useEffect(() => {
-        const idTouched = getIn(touched, "id");
-        if (!idTouched && isNewSchema && values.name) {
-            setFieldValue("id", toSnakeCase(values.name))
-        }
-    }, [isNewSchema, touched, values.name]);
 
     const deleteProperty = useCallback((propertyId: string, namespace?: string) => {
         const fullId = getFullId(propertyId, namespace);
@@ -245,9 +258,10 @@ function SchemaEditorForm<M>({
         }
     }, [setFieldTouched, setFieldValue]);
 
-    const onError = useCallback((id: string, error: boolean) => {
+    const onPropertyErrorInternal = useCallback((id: string, error: boolean) => {
         const propertyPath = id ? idToPropertiesPath(id) : undefined;
         if (propertyPath) {
+            onPropertyError(propertyPath, error ? "Property error" : undefined);
             setFieldError(propertyPath, error ? "Property error" : undefined);
         }
     }, [setFieldError]);
@@ -268,29 +282,29 @@ function SchemaEditorForm<M>({
             property={selectedProperty}
             onPropertyChanged={onPropertyChanged}
             onDelete={deleteProperty}
-            onError={onError}
+            onError={onPropertyErrorInternal}
             forceShowErrors={showErrors}
             onOkClicked={asDialog
                 ? closePropertyDialog
                 : undefined
             }/>;
 
-    const onSaveClicked = useCallback(() => {
-        setShowErrors(hasError);
-        if (hasError && onSaveAttemptWithError) {
-            onSaveAttemptWithError();
-        } else {
-            return handleSubmit();
-        }
-    }, [hasError]);
+    const emptySchema = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
+
+    const addPropertyIcon = <Button
+        color="primary"
+        variant={"outlined"}
+        size={"large"}
+        onClick={() => setNewPropertyDialogOpen(true)}
+        startIcon={<AddIcon/>}>
+        Add property
+    </Button>;
 
     return (
         <Box sx={{
-            height: "100%",
-            display: "flex",
-            flexDirection: "column"
+            // height: "100%"
         }}>
-            <Box sx={{
+            <Container fixed maxWidth={"lg"} sx={{
                 flexGrow: 1,
                 p: 3,
                 [theme.breakpoints.down("md")]: {
@@ -300,128 +314,117 @@ function SchemaEditorForm<M>({
                     p: 1
                 }
             }}>
-                <Container maxWidth={"lg"}>
 
-                    <Box sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        my: 2
-                    }}>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    my: 2
+                }}>
 
-                        <Box display={"flex"}
-                             sx={{
-                                 display: "flex",
-                                 flexGrow: 1,
-                                 alignItems: "center",
-                                 mr: 1
-                             }}>
+                    <Box display={"flex"}
+                         sx={{
+                             display: "flex",
+                             flexGrow: 1,
+                             alignItems: "center",
+                             mr: 1
+                         }}>
 
-                            <Typography variant={"h4"}>
-                                {values.name ? `${values.name} schema` : "Schema"}
-                            </Typography>
+                        <Typography variant={"h4"}>
+                            {values.name ? `${values.name} schema` : "Schema"}
+                        </Typography>
 
-                            <Box sx={{ ml: 1 }}>
-                                <Button
-                                    onClick={() => setSchemaDetailsDialogOpen(true)}
-                                    size="large">
-                                    <EditIcon/>
-                                </Button>
-                            </Box>
+                        <Box sx={{ ml: 1 }}>
+                            <Button
+                                onClick={() => setSchemaDetailsDialogOpen(true)}
+                                size="large">
+                                <EditIcon/>
+                            </Button>
                         </Box>
-
-                        <Button
-                            color="primary"
-                            variant={"outlined"}
-                            size={"large"}
-                            onClick={() => setNewPropertyDialogOpen(true)}
-                            startIcon={<AddIcon/>}>
-                            Add property
-                        </Button>
                     </Box>
-                    <Box
-                        sx={{ py: 2 }}>
-                        <Grid container>
-                            <Grid item xs={12}
-                                  lg={5}>
-                                <ErrorBoundary>
-                                    {/*<DragDropWithNestingTree/>*/}
-                                    <PropertyTree
-                                        setSelectedPropertyId={setSelectedPropertyId}
-                                        selectedPropertyId={selectedPropertyId}
-                                        setSelectedPropertyNamespace={setSelectedPropertyNamespace}
-                                        selectedPropertyNamespace={selectedPropertyNamespace}
-                                        properties={values.properties}
-                                        propertiesOrder={values.propertiesOrder ?? Object.keys(values.properties) as (keyof M)[]}
-                                        onPropertyMove={doPropertyMove}
-                                        errors={errors}/>
-                                </ErrorBoundary>
-                            </Grid>
 
-                            {!asDialog && <Grid item xs={12}
-                                                lg={7}
-                                                sx={(theme) => ({
-                                                    pl: 2
-                                                })}>
-                                <Box sx={(theme) => ({
-                                    height: "100%",
-                                    borderLeft: `1px solid ${theme.palette.divider}`,
-                                    pl: 2
-                                })}>
-                                    <Paper variant={"outlined"} sx={theme => ({
-                                        position: "sticky",
-                                        top: theme.spacing(2),
-                                        p: 2
-                                    })}>
-                                        {propertyEditForm}
+                    {!emptySchema && addPropertyIcon}
+                </Box>
 
-                                        {!selectedProperty &&
-                                            <Box>
-                                                Select a
-                                                property to
-                                                edit it
-                                            </Box>}
-                                    </Paper>
-                                </Box>
-                            </Grid>}
+                {emptySchema &&
+                    <Box display="flex"
+                         flexDirection={"column"}
+                         alignItems="center"
+                         justifyContent="center"
+                         width={"100%"}
+                         height={"100%"}
+                         padding={2}>
+                        {addPropertyIcon}
+                    </Box>
+                }
 
-                            {asDialog && propertyEditForm}
-
+                {!emptySchema && <Box
+                    sx={{ py: 2 }}>
+                    <Grid container>
+                        <Grid item xs={12}
+                              lg={5}>
+                            <ErrorBoundary>
+                                {/*<DragDropWithNestingTree/>*/}
+                                <PropertyTree
+                                    setSelectedPropertyId={setSelectedPropertyId}
+                                    selectedPropertyId={selectedPropertyId}
+                                    setSelectedPropertyNamespace={setSelectedPropertyNamespace}
+                                    selectedPropertyNamespace={selectedPropertyNamespace}
+                                    properties={values.properties}
+                                    propertiesOrder={values.propertiesOrder ?? Object.keys(values.properties) as (keyof M)[]}
+                                    onPropertyMove={doPropertyMove}
+                                    showErrors={showErrors}
+                                    errors={errors}/>
+                            </ErrorBoundary>
                         </Grid>
-                    </Box>
 
-                    {/*<SubmitListener/>*/}
+                        {!asDialog && <Grid item xs={12}
+                                            lg={7}
+                                            sx={(theme) => ({
+                                                pl: 2
+                                            })}>
+                            <Box sx={(theme) => ({
+                                height: "100%",
+                                borderLeft: `1px solid ${theme.palette.divider}`,
+                                pl: 2
+                            })}>
+                                <Paper variant={"outlined"} sx={theme => ({
+                                    position: "sticky",
+                                    top: theme.spacing(2),
+                                    p: 2
+                                })}>
+                                    {propertyEditForm}
 
-                </Container>
-            </Box>
+                                    {!selectedProperty &&
+                                        <Box>
+                                            Select a
+                                            property to
+                                            edit it
+                                        </Box>}
+                                </Paper>
+                            </Box>
+                        </Grid>}
 
-            <CustomDialogActions>
+                        {asDialog && propertyEditForm}
 
-                {isSubmitting && <CircularProgress size={16}
-                                                   thickness={8}/>}
+                    </Grid>
+                </Box>}
 
-                <Button
-                    color="primary"
-                    disabled={isSubmitting}
-                    onClick={onCancel}
-                >
-                    Cancel
-                </Button>
+                {/*<SubmitListener/>*/}
 
-                <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    disabled={isSubmitting || !dirty}
-                    onClick={onSaveClicked}
-                >
-                    {isNewSchema ? "Create schema" : "Save schema"}
-                </Button>
-            </CustomDialogActions>
+            </Container>
 
-            <SchemaDetailsDialog open={schemaDetailsDialogOpen}
-                                 isNewSchema={isNewSchema}
-                                 handleOk={() => setSchemaDetailsDialogOpen(false)}/>
+            <Dialog
+                open={schemaDetailsDialogOpen}
+                onClose={() => setSchemaDetailsDialogOpen(false)}
+            >
+                <SchemaDetailsForm isNewSchema={false}/>
+                <CustomDialogActions>
+                    <Button
+                        variant="contained"
+                        onClick={() => setSchemaDetailsDialogOpen(false)}> Ok </Button>
+                </CustomDialogActions>
+            </Dialog>
 
             <PropertyForm asDialog={true}
                           forceShowErrors={showErrors}
@@ -432,39 +435,3 @@ function SchemaEditorForm<M>({
         </Box>
     );
 }
-
-function PendingMoveDialog({
-                               open,
-                               onAccept,
-                               onCancel
-                           }: { open: boolean, onAccept: () => void, onCancel: () => void }) {
-    return <Dialog
-        open={open}
-        onClose={onCancel}
-    >
-        <DialogTitle>
-            {"Are you sure?"}
-        </DialogTitle>
-        <DialogContent>
-            <DialogContentText>
-                You are moving one property from one context to
-                another.
-            </DialogContentText>
-            <DialogContentText>
-                This will <b>not transfer the data</b>, only modify
-                the schema.
-            </DialogContentText>
-        </DialogContent>
-        <CustomDialogActions>
-            <Button
-                onClick={onCancel}
-                autoFocus>Cancel</Button>
-            <Button
-                variant="contained"
-                onClick={onAccept}>
-                Proceed
-            </Button>
-        </CustomDialogActions>
-    </Dialog>;
-}
-
