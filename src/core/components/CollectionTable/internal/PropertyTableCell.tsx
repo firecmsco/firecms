@@ -242,7 +242,6 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                              focused={focused}
                                              internalValue={internalValue as Date}
                                              updateValue={updateValue}
-                                             property={property as TimestampProperty}
                                              setPreventOutsideClick={setPreventOutsideClick}
             />;
             allowScroll = true;
