@@ -62,7 +62,7 @@ export function FirebaseCMSApp({
                                    HomePage,
                                    basePath,
                                    baseCollectionPath,
-                                    loginViewProps
+                                   LoginViewProps
                                }: FirebaseCMSAppProps) {
 
     const {
@@ -136,7 +136,7 @@ export function FirebaseCMSApp({
                                 signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
                                 firebaseApp={firebaseApp}
                                 authDelegate={authDelegate}
-                                {...loginViewProps}
+                                {...LoginViewProps}
                                 />
                         );
                     } else {

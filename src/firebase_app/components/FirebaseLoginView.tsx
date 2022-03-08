@@ -50,13 +50,17 @@ const useStyles = makeStyles((theme: Theme) =>
  * @category Firebase
  */
 export interface FirebaseLoginViewProps {
-    skipLoginButtonEnabled?: boolean,
-    logo?: string,
+    skipLoginButtonEnabled?: boolean;
+    logo?: string;
     signInOptions: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     firebaseApp: FirebaseApp;
-    authDelegate: FirebaseAuthDelegate
-    displaySignupScreen?: boolean;
-    noUserComponent?: ReactNode
+    authDelegate: FirebaseAuthDelegate;
+    /**
+     * Prevent users from creating new users in when the `signInOptions` value
+     * is `password`. This does not apply to the rest of login providers
+     */
+    disableSignupScreen?: boolean;
+    NoUserComponent?: ReactNode;
 }
 
 /**
@@ -71,8 +75,8 @@ export function FirebaseLoginView({
                                       signInOptions,
                                       firebaseApp,
                                       authDelegate,
-                                      noUserComponent,
-                                      displaySignupScreen = true
+                                      NoUserComponent,
+                                      disableSignupScreen = false
                                   }: FirebaseLoginViewProps) {
     const classes = useStyles();
     const authController = useAuthController();
@@ -209,9 +213,9 @@ export function FirebaseLoginView({
                         authDelegate={authDelegate}
                         onClose={() => setPasswordLoginSelected(false)}
                         mode={modeState.mode}
-                        CustomNoUserFound={noUserComponent}
-                        displaySignupScreen={displaySignupScreen}
-                        />}
+                        NoUserComponent={NoUserComponent}
+                        disableSignupScreen={disableSignupScreen}
+                    />}
 
                 </Box>
             </Box>
@@ -261,9 +265,15 @@ function LoginForm({
                        onClose,
                        authDelegate,
                        mode,
-                       CustomNoUserFound,
-                       displaySignupScreen
-                   }: { onClose: () => void, authDelegate: FirebaseAuthDelegate, mode: "light" | "dark", CustomNoUserFound: ReactNode | undefined, displaySignupScreen:boolean }) {
+                       NoUserComponent,
+                       disableSignupScreen
+                   }: {
+    onClose: () => void,
+    authDelegate: FirebaseAuthDelegate,
+    mode: "light" | "dark",
+    NoUserComponent?: ReactNode,
+    disableSignupScreen: boolean
+}) {
 
     const passwordRef = useRef<HTMLInputElement | null>(null);
 
@@ -298,7 +308,7 @@ function LoginForm({
 
     function handleEnterEmail() {
         if (email) {
-            authDelegate.fetchSignInMethodsForEmail(email).then((availableProviders)=> {
+            authDelegate.fetchSignInMethodsForEmail(email).then((availableProviders) => {
                 console.log(availableProviders);
                 setAvailableProviders(availableProviders)
             });
@@ -337,7 +347,7 @@ function LoginForm({
     }
 
     const label = registrationMode
-? "No user found with that email. Pick a password to create a new account"
+        ? "No user found with that email. Pick a password to create a new account"
         : (loginMode ? "Please enter your password" : "Please enter your email");
     const button = registrationMode ? "Create account" : (loginMode ? "Login" : "Ok");
 
@@ -383,8 +393,9 @@ function LoginForm({
                         </IconButton>
                     </Grid>
 
-                    <Grid item xs={12} sx={{ p: 1,
-                        display: (registrationMode && !displaySignupScreen) ? "none": "flex",
+                    <Grid item xs={12} sx={{
+                        p: 1,
+                        display: (registrationMode && disableSignupScreen) ? "none" : "flex"
                     }}>
                         <Typography align={"center"}
                                     variant={"subtitle2"}>{label}</Typography>
@@ -398,9 +409,13 @@ function LoginForm({
                                    type="email"
                                    onChange={(event) => setEmail(event.target.value)}/>
                     </Grid>
-                    {registrationMode && CustomNoUserFound}
+
+                    <Grid item xs={12}>
+                        {registrationMode && NoUserComponent}
+                    </Grid>
+
                     <Grid item xs={12}
-                          sx={{ display: loginMode || (registrationMode && displaySignupScreen) ? "inherit" : "none" }}>
+                          sx={{ display: loginMode || (registrationMode && !disableSignupScreen) ? "inherit" : "none" }}>
                         <TextField placeholder="Password" fullWidth
                                    value={password}
                                    disabled={authDelegate.authLoading}
@@ -411,7 +426,7 @@ function LoginForm({
 
                     <Grid item xs={12}>
                         <Box sx={{
-                            display: (registrationMode && !displaySignupScreen) ? "none": "flex",
+                            display: (registrationMode && disableSignupScreen) ? "none" : "flex",
                             justifyContent: "end",
                             alignItems: "center",
                             width: "100%"
