@@ -150,6 +150,7 @@ function SampleApp() {
         name: "Additional",
         group: "Content",
         description: "This is an example of an additional view that is defined by the user",
+        hideFromNavigation: true,
         view: <ExampleCMSView path={"users"} collection={usersCollection}/>
     }];
 

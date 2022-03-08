@@ -56,7 +56,7 @@ export function FireCMSHomePage() {
     const {
         navigationEntries,
         groups
-    } = computeTopNavigation(navigationContext, true);
+    } = computeTopNavigation(navigationContext, false);
 
     const allGroups: Array<string | null> = [...groups];
     if (navigationEntries.filter(e => !e.group).length > 0) {

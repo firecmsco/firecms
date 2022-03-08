@@ -192,7 +192,7 @@ export interface EntityCustomViewParams<M extends { [Key: string]: any } = any> 
 
     /**
      * Modified values in the form that have not been saved yet.
-     * If the entity is not new and the values are not modified, this values
+     * If the entity is not new and the values are not modified, these values
      * are the same as in `entity`
      */
     modifiedValues?: EntityValues<M>;

@@ -54,7 +54,7 @@ export function Drawer({
     const {
         navigationEntries,
         groups
-    }: TopNavigationResult = useMemo(() => computeTopNavigation(navigationContext, true), [navigationContext]);
+    }: TopNavigationResult = useMemo(() => computeTopNavigation(navigationContext, false), [navigationContext]);
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 

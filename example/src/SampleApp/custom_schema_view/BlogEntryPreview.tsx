@@ -20,7 +20,11 @@ import {
 import { Product } from "../types";
 import { productSchema } from "../schemas/products_schema";
 
-
+/**
+ * This is a sample view used to render the content of a blog entry.
+ * It is bound to the data that is modified in the form.
+ * @constructor
+ */
 export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams) {
 
     const storage = useStorageSource();
@@ -70,7 +74,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams) {
                                 return <Images key={`preview_images_${index}`}
                                                storagePaths={entry.value}/>;
                             if (entry.type === "products")
-                                return <Products
+                                return <ProductGroupPreview
                                     key={`preview_products_${index}`}
                                     references={entry.value}/>;
                             return <ErrorView
@@ -125,7 +129,7 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
         }} src={url}/>);
 }
 
-export function Text({ markdownText }: { markdownText: string }) {
+function Text({ markdownText }: { markdownText: string }) {
 
     if (!markdownText)
         return <></>;
@@ -137,11 +141,15 @@ export function Text({ markdownText }: { markdownText: string }) {
     </Container>;
 }
 
-export function Products({ references }: { references: EntityReference[] }) {
+function ProductGroupPreview({ references }: { references: EntityReference[] }) {
 
     const [products, setProducts] = useState<Entity<Product>[] | undefined>();
     const dataSource = useDataSource();
 
+    /**
+     * Fetch the products determined by the references, using the datasource
+     * and the products schema
+     */
     useEffect(() => {
         if (references) {
             Promise.all(references.map((ref) => dataSource.fetchEntity({
