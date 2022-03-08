@@ -6,8 +6,7 @@ import {
     NumberProperty,
     Property,
     ReferenceProperty,
-    StringProperty,
-    TimestampProperty
+    StringProperty
 } from "../../../../models";
 import React, { useCallback, useEffect, useState } from "react";
 import { TableInput } from "./fields/TableInput";

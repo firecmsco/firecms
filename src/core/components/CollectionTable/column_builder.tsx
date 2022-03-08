@@ -258,6 +258,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                 <TableCell
                     key={`preview_cell_${name}_${rowIndex}_${columnIndex}`}
                     size={size}
+                    value={entity.values[name]}
                     align={column.align}
                     disabled={true}>
                     <PreviewComponent
