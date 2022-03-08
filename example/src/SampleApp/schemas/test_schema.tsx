@@ -80,7 +80,7 @@ export const testEntitySchema = buildSchema({
         },
         test_date: {
             title: "Test date",
-            dataType: "timestamp"
+            dataType: "date"
         },
         movement: buildPropertyBuilder(({values}) => {
             return {
@@ -209,10 +209,6 @@ export const testEntitySchema = buildSchema({
                 }
             },
             Field: CustomField
-        },
-        test_date: {
-            title: "Test date",
-            dataType: "date"
         },
         content: {
             title: "Content",

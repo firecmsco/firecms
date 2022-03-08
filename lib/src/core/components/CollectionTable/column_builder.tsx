@@ -215,12 +215,16 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     }, []);
 
-    const baseSchema: ResolvedEntitySchema<M> = schemaRegistry.getResolvedSchema({
+    const resolvedSchema: ResolvedEntitySchema<M> = schemaRegistry.getResolvedSchema({
         schema: inputSchema,
         path
     });
 
-    const propertyCellRenderer = ({
+    const schema = typeof inputSchema === "string" ? schemaRegistry.findSchema(inputSchema) : inputSchema;
+    if (!schema)
+        throw Error("Unable to find schema with id " + inputSchema);
+
+    const propertyCellRenderer = useCallback(({
                                       column,
                                       columnIndex,
                                       rowData,
@@ -230,10 +234,6 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
         const entity: Entity<M> = rowData;
 
         const propertyId = column.dataKey;
-
-        const schema = typeof inputSchema === "string" ? schemaRegistry.findSchema(inputSchema) : inputSchema;
-        if (!schema)
-            throw Error("Unable to find schema with id " + inputSchema);
 
         const property = schemaRegistry.getResolvedProperty({
             propertyId,
@@ -323,34 +323,37 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                 })
                 : undefined;
 
-            return entity
-                ? <PropertyTableCell
-                    key={`table_cell_${propertyId}_${rowIndex}_${columnIndex}`}
-                    size={size}
-                    align={column.align}
-                    name={propertyId as string}
-                    validation={validation}
-                    onValueChange={onValueChange}
-                    selected={selected}
-                    focused={isFocused}
-                    setPreventOutsideClick={setPreventOutsideClick}
-                    setFocused={setFocused}
-                    value={entity?.values ? entity.values[propertyId] : undefined}
-                    property={property}
-                    openPopup={openPopup}
-                    onSelect={onSelect}
-                    width={column.width}
-                    height={column.height}
-                    entityId={entity.id}
-                    path={entity.path}
-                    entityValues={entity.values}/>
-                : <SkeletonComponent property={property}
-                                   size={getPreviewSizeFrom(size)}/>;
+            return <ErrorBoundary>
+                {entity
+                    ? <PropertyTableCell
+                        key={`table_cell_${propertyId}_${rowIndex}_${columnIndex}`}
+                        size={size}
+                        align={column.align}
+                        name={propertyId as string}
+                        validation={validation}
+                        onValueChange={onValueChange}
+                        selected={selected}
+                        focused={isFocused}
+                        setPreventOutsideClick={setPreventOutsideClick}
+                        setFocused={setFocused}
+                        value={entity?.values ? entity.values[propertyId] : undefined}
+                        property={property}
+                        openPopup={openPopup}
+                        onSelect={onSelect}
+                        width={column.width}
+                        height={column.height}
+                        entityId={entity.id}
+                        path={entity.path}
+                        entityValues={entity.values}/>
+                    : <SkeletonComponent property={property}
+                                         size={getPreviewSizeFrom(size)}/>
+                }
+            </ErrorBoundary>;
         }
 
-    };
+    }, [focused, inlineEditing, onCellValueChange, path, schema, select, selectedCell?.columnIndex, selectedCell?.entity.id, size]);
 
-    const additionalCellRenderer = ({
+    const additionalCellRenderer = useCallback(({
                                         column,
                                         columnIndex,
                                         rowData,
@@ -376,7 +379,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                 align={"left"}
                 allowScroll={false}
                 showExpandIcon={false}
-                disabledTooltip={"Additional columns can't be edited directly"}
+                disabledTooltip={"This column can't be edited directly"}
             >
                 <ErrorBoundary>
                     {additionalColumn.builder({
@@ -387,11 +390,11 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
             </TableCell>
         );
 
-    };
+    }, [additionalColumnsMap, size]);
 
-    const allColumns: TableColumn<M>[] = (Object.keys(baseSchema.properties) as (keyof M)[])
+    const allColumns: TableColumn<M>[] = (Object.keys(resolvedSchema.properties) as (keyof M)[])
         .map((key) => {
-            const property = baseSchema.properties[key];
+            const property = resolvedSchema.properties[key];
             return ({
                 key: key as string,
                 property,

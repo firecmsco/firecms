@@ -5,7 +5,6 @@ import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
 
-
 /**
  * You can use this builder to customize the navigation, based on the logged in
  * user

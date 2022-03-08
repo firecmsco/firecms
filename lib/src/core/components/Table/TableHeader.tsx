@@ -208,7 +208,6 @@ function FilterForm<M>({
 
     const filterIsSet = !!filter;
 
-
     return (<>
             <Box p={2} sx={{
                 fontSize: "0.750rem",
@@ -219,7 +218,7 @@ function FilterForm<M>({
             </Box>
             <Divider/>
             {column.filter && <Box p={2}>
-                {createFilterField(id, column.filter, filterInternal, setFilterInternal, false)}
+                {createFilterField(id, column.filter, filterInternal, setFilterInternal)}
             </Box>}
             <Box display="flex"
                  justifyContent="flex-end"
@@ -265,7 +264,7 @@ function createFilterField(id: string,
                                    setValue={setFilterValue}
                                    name={id as string}
                                    title={title}/>;
-    } else if (filterConfig.dataType === "timestamp") {
+    } else if (filterConfig.dataType === "date") {
         const title = filterConfig.title;
         return <DateTimeFilterField value={filterValue}
                                     setValue={setFilterValue}
@@ -279,38 +278,4 @@ function createFilterField(id: string,
     );
 }
 
-
-    return (
-        <>
-
-            <Box p={2} className={classes.headerTypography}>
-                {column.label ?? id}
-            </Box>
-
-            <Divider/>
-
-            {column.filter && <Box p={2}>
-                {createFilterField(id, column.filter, filterInternal, setFilterInternal)}
-            </Box>}
-
-            <Box display="flex"
-                 justifyContent="flex-end"
-                 m={2}>
-                <Box mr={1}>
-                    <Button
-                        disabled={!filterIsSet}
-                        color="primary"
-                        type="reset"
-                        aria-label="filter clear"
-                        onClick={reset}>Clear</Button>
-                </Box>
-                <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={submit}>Filter</Button>
-            </Box>
-        </>
-    );
-
-}
 

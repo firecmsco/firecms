@@ -478,7 +478,7 @@ export function StorageUploadProgress({
 
     const storage = useStorageSource();
 
-    const snackbarContext = useSnackbarController();
+    const snackbarController = useSnackbarController();
 
     const [error, setError] = React.useState<string>();
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -502,13 +502,13 @@ export function StorageUploadProgress({
                     setError(e.message);
                     setLoading(false);
                 }
-                snackbarContext.open({
+                snackbarController.open({
                     type: "error",
                     title: "Error uploading file",
                     message: e.message
                 });
             });
-    }, [entry, metadata, onFileUploadComplete, snackbarContext, storage, storagePath]);
+    }, [entry, metadata, onFileUploadComplete, snackbarController, storage, storagePath]);
 
     useEffect(() => {
         mounted.current = true;

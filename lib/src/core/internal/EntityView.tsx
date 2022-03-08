@@ -78,7 +78,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     const dataSource = useDataSource();
     const sideEntityController = useSideEntityController();
-    const snackbarContext = useSnackbarController();
+    const snackbarController = useSnackbarController();
     const context = useFireCMSContext();
     const schemaRegistry = useSchemaRegistry();
     const authController = useAuthController<UserType>();
@@ -141,7 +141,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }, [selectedSubpath]);
 
     const onPreSaveHookError = useCallback((e: Error) => {
-        snackbarContext.open({
+        snackbarController.open({
             type: "error",
             title: "Error before saving",
             message: e?.message
@@ -150,7 +150,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }, []);
 
     const onSaveSuccessHookError = useCallback((e: Error) => {
-        snackbarContext.open({
+        snackbarController.open({
             type: "error",
             title: `${resolvedSchema.name}: Error after saving (entity is saved)`,
             message: e?.message
@@ -162,7 +162,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
         setCurrentEntityId(updatedEntity.id);
 
-        snackbarContext.open({
+        snackbarController.open({
             type: "success",
             message: `${resolvedSchema.name}: Saved correctly`
         });
@@ -177,7 +177,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     const onSaveFailure = useCallback((e: Error) => {
 
-        snackbarContext.open({
+        snackbarController.open({
             type: "error",
             title: `${resolvedSchema.name}: Error saving`,
             message: e?.message

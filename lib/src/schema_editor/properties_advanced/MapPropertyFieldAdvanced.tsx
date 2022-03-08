@@ -5,7 +5,7 @@ import { PropertyForm } from "../PropertyEditView";
 import { MapProperty, Property } from "../../models";
 import { useFormikContext } from "formik";
 
-export function MapPropertyField({ existing }: { existing: boolean; }) {
+export function MapPropertyFieldAdvanced({ existing }: { existing: boolean; }) {
 
     const {
         values,
@@ -17,7 +17,7 @@ export function MapPropertyField({ existing }: { existing: boolean; }) {
                                                id,
                                                property
                                            }: { id?: string, property: Property }) => {
-        if(!id)
+        if (!id)
             throw Error();
         setFieldValue("properties", {
             ...(values.properties ?? {}),
@@ -29,7 +29,7 @@ export function MapPropertyField({ existing }: { existing: boolean; }) {
 
     return (
         <>
-            {existing && <Grid item >
+            {existing && <Grid item>
                 <Button
                     color="primary"
                     variant={"outlined"}

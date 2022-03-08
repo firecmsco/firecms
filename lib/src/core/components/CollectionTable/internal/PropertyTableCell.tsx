@@ -314,7 +314,6 @@ const PropertyTableCellInternal = <T extends CMSType>({
         allowScroll = false;
         showExpandIcon = selected && !innerComponent && !disabled && !readOnly;
         innerComponent = (
-            <ErrorBoundary>
                 <PropertyPreview
                     width={width}
                     height={height}
@@ -323,32 +322,33 @@ const PropertyTableCellInternal = <T extends CMSType>({
                     property={property}
                     size={getPreviewSizeFrom(size)}
                 />
-            </ErrorBoundary>
         );
     }
 
     return (
-        <TableCell
-            onSelect={onSelect}
-            selected={selected}
-            focused={focused}
-            disabled={disabled || readOnly}
-            disabledTooltip={disabledTooltip ?? "Disabled"}
-            removePadding={removePadding}
-            fullHeight={fullHeight}
-            size={size}
-            saved={saved}
-            error={error}
-            align={align}
-            allowScroll={allowScroll}
-            showExpandIcon={showExpandIcon}
-            openPopup={!disabled ? openPopup : undefined}
-            value={internalValue}
-        >
+        <ErrorBoundary>
+            <TableCell
+                onSelect={onSelect}
+                selected={selected}
+                focused={focused}
+                disabled={disabled || readOnly}
+                disabledTooltip={disabledTooltip ?? "Disabled"}
+                removePadding={removePadding}
+                fullHeight={fullHeight}
+                size={size}
+                saved={saved}
+                error={error}
+                align={align}
+                allowScroll={allowScroll}
+                showExpandIcon={showExpandIcon}
+                openPopup={!disabled ? openPopup : undefined}
+                value={internalValue}
+            >
 
-            {innerComponent}
+                {innerComponent}
 
-        </TableCell>
+            </TableCell>
+        </ErrorBoundary>
     );
 
 };

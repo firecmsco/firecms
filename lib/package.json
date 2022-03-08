@@ -39,8 +39,6 @@
         "test:watch": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-markdown)/\""
     },
     "dependencies": {
-        "styled-components": "^5.3.3",
-        "@atlaskit/navigation": "^37.0.2",
         "@date-io/date-fns": "^2.11.0",
         "@uiw/react-md-editor": "^3.9.3",
         "date-fns": "^2.21.3",

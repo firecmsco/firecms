@@ -1,18 +1,10 @@
 import React, { useMemo } from "react";
 import { getIn, useFormikContext } from "formik";
 import { Grid, Paper, Typography } from "@mui/material";
-import {
-    EnumValueConfig,
-    NumberProperty,
-    StringProperty
-} from "../../models";
+import { EnumValueConfig, NumberProperty, StringProperty } from "../../models";
 import { resolveEnumValues } from "../../core/util/entities";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-import {
-    StringPropertyValidation
-} from "./validation/StringPropertyValidation";
-import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
-import { EnumFormFields } from "../EnumForm";
+import { EnumForm, EnumFormFields } from "../EnumForm";
 
 export function EnumPropertyField({
                                       multiselect,
@@ -43,29 +35,23 @@ export function EnumPropertyField({
     return (
         <>
             <Grid item>
-                <Typography variant={"subtitle2"} sx={{ mt: 1 }}>
+                <Typography variant={"subtitle2"}>
                     Values
                 </Typography>
 
                 <Paper
                     variant={"outlined"}
                     sx={{ p: 2, mt: 1 }}>
-                    <EnumFormFields enumValuesPath={enumValuesPath}
-                                    values={values}
-                                    errors={errors}
-                                    shouldUpdateId={updateIds}/>
-                </Paper>
-            </Grid>
-
-            <Grid item>
-                <Typography variant={"subtitle2"} sx={{ mt: 1 }}>
-                    Validation
-                </Typography>
-                <Paper variant={"outlined"} sx={{ p: 2, mt: 1 }}>
-                    {!multiselect &&
-                        <StringPropertyValidation/>}
-                    {multiselect &&
-                        <ArrayPropertyValidation/>}
+                    <EnumForm enumValues={enumValues}
+                              updateIds={updateIds}
+                              onValuesChanged={(value) => {
+                                  setFieldValue(enumValuesPath, value);
+                              }}/>
+                    {/*<EnumFormFields enumValuesPath={enumValuesPath}*/}
+                    {/*    // @ts-ignore*/}
+                    {/*                values={values}*/}
+                    {/*                errors={errors}*/}
+                    {/*                shouldUpdateId={updateIds}/>*/}
                 </Paper>
             </Grid>
 

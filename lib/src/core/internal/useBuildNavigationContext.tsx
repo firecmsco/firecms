@@ -183,7 +183,7 @@ export function useBuildNavigationContext<UserType>({
                                                         path
                                                     }: { path?: string }): string => {
             if (path)
-                return `${baseCollectionPath}/edit/${removeInitialAndTrailingSlashes(encodeURIComponent(path))}`;
+                return `${baseCollectionPath}/edit/${encodePath(path)}`;
             else
                 return "newcollection";
         }, //
@@ -193,16 +193,16 @@ export function useBuildNavigationContext<UserType>({
                                                     id
                                                 }: { id?: string }): string => {
             if (id)
-                return `s/edit/${removeInitialAndTrailingSlashes(encodeURIComponent(id))}`;
+                return `s/edit/${encodePath(id)}`;
             else
                 return "newschema";
         }, //
         [baseCollectionPath]);
 
-    const buildUrlCollectionPath = useCallback((path: string): string => `${baseCollectionPath}/${removeInitialAndTrailingSlashes(encodeURIComponent(path))}`,
+    const buildUrlCollectionPath = useCallback((path: string): string => `${baseCollectionPath}/${encodePath(path)}`,
         [baseCollectionPath]);
 
-    const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(encodeURIComponent(path))}` : `/${encodeURIComponent(path)}`,
+    const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${encodePath(path)}` : `/${encodePath(path)}`,
         [cleanBasePath]);
 
     const getCollectionOverride = useCallback(<M, >(path: string): LocalEntityCollection<M> | undefined => {
@@ -295,4 +295,8 @@ export function getSidePanelKey(path: string, entityId?: string) {
         return `${removeInitialAndTrailingSlashes(path)}/${removeInitialAndTrailingSlashes(entityId)}`;
     else
         return removeInitialAndTrailingSlashes(path);
+}
+
+function encodePath(input:string){
+    return encodeURIComponent(removeInitialAndTrailingSlashes(input)).replaceAll("%2F", "/");
 }

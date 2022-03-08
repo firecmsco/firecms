@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Field, Form, Formik, FormikProps, getIn } from "formik";
+import { Form, Formik, FormikProps, getIn } from "formik";
 import equal from "react-fast-compare"
 import {
     Box,
@@ -8,14 +8,15 @@ import {
     Dialog,
     DialogContent,
     DialogTitle,
+    Divider,
     FormControl,
     FormHelperText,
     Grid,
-    InputAdornment,
     InputLabel,
     MenuItem,
     Select,
-    TextField
+    Tab,
+    Tabs
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -36,15 +37,37 @@ import { mergeDeep, removeUndefined } from "../core/util/objects";
 import {
     FieldUploadPropertyField
 } from "./properties/FieldUploadPropertyField";
-import DebouncedTextField from "../form/components/DebouncedTextField";
 import { BooleanPropertyField } from "./properties/BooleanPropertyField";
 import { MapPropertyField } from "./properties/MapPropertyField";
+import { ArrayPropertyField } from "./properties/ArrayPropertyField";
+import { getBadgeForWidget } from "../core/util/property_utils";
+import { BasePropertyField } from "./properties/BasePropertyField";
+import {
+    StringPropertyFieldAdvanced
+} from "./properties_advanced/StringPropertyFieldAdvanced";
+import {
+    EnumPropertyFieldAdvanced
+} from "./properties_advanced/EnumPropertyFieldAdvanced";
+import {
+    FieldUploadPropertyFieldAdvanced
+} from "./properties_advanced/FieldUploadPropertyFieldAdvanced";
+import {
+    BooleanPropertyFieldAdvanced
+} from "./properties_advanced/BooleanPropertyFieldAdvanced";
+import {
+    MapPropertyFieldAdvanced
+} from "./properties_advanced/MapPropertyFieldAdvanced";
+import {
+    ArrayPropertyFieldAdvanced
+} from "./properties_advanced/ArrayPropertyFieldAdvanced";
 
-type PropertyWithId = Property & { id: string };
+export type PropertyWithId = Property & { id?: string };
 
 export function PropertyForm({
                                  asDialog,
                                  open,
+                                 includeIdAndTitle = true,
+                                 existing,
                                  propertyId,
                                  propertyNamespace,
                                  property,
@@ -57,18 +80,19 @@ export function PropertyForm({
                              }: {
     asDialog: boolean;
     open?: boolean;
+    includeIdAndTitle?: boolean;
+    existing: boolean;
     propertyId?: string;
     propertyNamespace?: string;
     property?: Property;
-    onPropertyChanged: (id: string, property: Property, namespace?: string) => void;
-    onDelete?: (id: string, namespace?: string) => void;
+    onPropertyChanged: (params: { id?: string, property: Property, namespace?: string }) => void;
+    onDelete?: (id?: string, namespace?: string) => void;
     onError?: (id: string, error: boolean) => void;
     onOkClicked?: () => void;
     onCancel?: () => void;
     forceShowErrors: boolean;
 }) {
 
-    const existing = Boolean(propertyId);
     const initialValue: PropertyWithId = {
         id: "",
         title: ""
@@ -81,7 +105,11 @@ export function PropertyForm({
                 : initialValue}
             onSubmit={(newPropertyWithId: PropertyWithId, formikHelpers) => {
                 const { id, ...property } = newPropertyWithId;
-                onPropertyChanged(id, property, propertyNamespace);
+                onPropertyChanged({
+                    id,
+                    property,
+                    namespace: propertyNamespace
+                });
                 if (!existing)
                     formikHelpers.resetForm({ values: initialValue });
                 if (onOkClicked) {
@@ -90,6 +118,7 @@ export function PropertyForm({
             }}
             validate={(values) => {
                 if (!getWidget(values)) {
+                    console.log("val error")
                     return { selectedWidget: "Required" }
                 }
                 return {};
@@ -100,6 +129,7 @@ export function PropertyForm({
                 const form = <PropertyEditView
                     onPropertyChanged={asDialog ? undefined : onPropertyChanged}
                     onDelete={existing ? onDelete : undefined}
+                    includeIdAndTitle={includeIdAndTitle}
                     propertyNamespace={propertyNamespace}
                     onError={onError}
                     showErrors={forceShowErrors || props.submitCount > 0}
@@ -135,7 +165,7 @@ export function PropertyForm({
                             </Form>
                         </Dialog>;
                 } else {
-                    body = form;
+                    body = <Box p={1}>{form}</Box>;
                 }
                 return body;
             }}
@@ -344,16 +374,18 @@ function PropertyEditView({
                               setValues,
                               setFieldValue,
                               existing,
+                              includeIdAndTitle,
                               onPropertyChanged,
                               onDelete,
                               propertyNamespace,
                               onError,
                               showErrors
                           }: {
+    includeIdAndTitle?: boolean;
     existing: boolean;
     propertyNamespace?: string;
-    onPropertyChanged?: (id: string, property: Property, namespace?: string) => void;
-    onDelete?: (id: string, namespace?: string) => void;
+    onPropertyChanged?: (params: { id?: string, property: Property, namespace?: string }) => void;
+    onDelete?: (id?: string, namespace?: string) => void;
     onError?: (id: string, error: boolean) => void;
     showErrors: boolean;
 } & FormikProps<PropertyWithId>) {
@@ -367,9 +399,14 @@ function PropertyEditView({
 
     const doUpdate = React.useCallback(() => {
         if (onPropertyChanged) {
-            if (values.id && !equal(initialValuesRef.current, removeUndefined(values))) {
+            if ((!includeIdAndTitle || values.id) &&
+                !equal(initialValuesRef.current, removeUndefined(values))) {
                 const { id, ...property } = values;
-                onPropertyChanged(id, property, propertyNamespace);
+                onPropertyChanged({
+                    id,
+                    property,
+                    namespace: propertyNamespace
+                });
             }
         }
     }, [values, propertyNamespace]);
@@ -386,15 +423,21 @@ function PropertyEditView({
     }, [selectedWidgetId]);
 
     let childComponent;
+    let childComponentAdvanced;
     if (selectedWidgetId === "text_field" ||
         selectedWidgetId === "multiline" ||
         selectedWidgetId === "markdown" ||
         selectedWidgetId === "url" ||
         selectedWidgetId === "email") {
         childComponent = <StringPropertyField widgetId={selectedWidgetId}/>;
+        childComponentAdvanced =
+            <StringPropertyFieldAdvanced widgetId={selectedWidgetId}/>;
     } else if (selectedWidgetId === "select" ||
         selectedWidgetId === "number_select") {
         childComponent = <EnumPropertyField
+            multiselect={false}
+            updateIds={!existing}/>;
+        childComponentAdvanced = <EnumPropertyFieldAdvanced
             multiselect={false}
             updateIds={!existing}/>;
     } else if (selectedWidgetId === "multi_select" ||
@@ -402,19 +445,33 @@ function PropertyEditView({
         childComponent = <EnumPropertyField
             multiselect={true}
             updateIds={!existing}/>;
+        childComponentAdvanced = <EnumPropertyFieldAdvanced
+            multiselect={true}
+            updateIds={!existing}/>;
     } else if (selectedWidgetId === "file_upload") {
         childComponent = <FieldUploadPropertyField multiple={false}/>;
+        childComponentAdvanced =
+            <FieldUploadPropertyFieldAdvanced multiple={false}/>;
     } else if (selectedWidgetId === "multi_file_upload") {
         childComponent = <FieldUploadPropertyField multiple={true}/>;
+        childComponentAdvanced =
+            <FieldUploadPropertyFieldAdvanced multiple={true}/>;
     } else if (selectedWidgetId === "switch") {
         childComponent = <BooleanPropertyField/>;
+        childComponentAdvanced = <BooleanPropertyFieldAdvanced/>;
     } else if (selectedWidgetId === "group") {
         childComponent = <MapPropertyField existing={existing}/>;
+        childComponentAdvanced =
+            <MapPropertyFieldAdvanced existing={existing}/>;
+    } else if (selectedWidgetId === "repeat") {
+        childComponent =
+            <ArrayPropertyField showErrors={showErrors} existing={existing}/>;
+        childComponentAdvanced =
+            <ArrayPropertyFieldAdvanced showErrors={showErrors}
+                                        existing={existing}/>;
     } else {
         childComponent = null;
     }
-
-    const Icon = selectedWidget?.icon;
 
     const title = "title";
     const titleError = showErrors && getIn(errors, title);
@@ -432,113 +489,97 @@ function PropertyEditView({
 
     }, [existing, touched, values.title]);
 
-    return (
-        <Grid container spacing={2} direction={"column"}>
+    const [tabPosition, setTabPosition] = React.useState(0);
 
-            <Grid item>
-                <Field name={title}
-                       as={DebouncedTextField}
-                       validate={validateTitle}
-                       label={"Property title"}
-                       required
-                       fullWidth
-                       helperText={titleError}
-                       error={Boolean(titleError)}/>
-            </Grid>
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setTabPosition(newValue);
+    };
 
-            <Grid item>
-                <Box sx={{ display: "flex", flexDirection: "row" }}>
-                    <Field name={id}
-                           as={TextField}
-                           label={"ID"}
-                           validate={validateId}
-                           disabled={existing}
-                           required
-                           fullWidth
-                           helperText={idError}
-                           size="small"
-                           error={Boolean(idError)}/>
+    return (<>
+            <FormControl fullWidth
+                         error={Boolean(selectedWidgetError)}>
+                <InputLabel id="component-label">Component</InputLabel>
+                <Select fullWidth
+                        labelId="component-label"
+                        value={selectedWidgetId}
+                        label={"Component"}
+                        disabled={existing}
+                        required
+                        startAdornment={<Box mr={2}>
+                            {getBadgeForWidget(selectedWidget)}
+                        </Box>}
+                        renderValue={(value) => WIDGETS[value].name}
+                        onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
 
-                    {onDelete && values.id &&
-                        <Button
-                            sx={{
-                                color: "#888",
-                                ml: 2
-                            }}
-                            startIcon={<DeleteIcon/>}
-                            onClick={() => setDeleteDialogOpen(true)}>
-                            Remove
-                        </Button>}
+                    {Object.entries(WIDGETS).map(([key, widget]) => {
+                        return (
+                            <MenuItem value={key} key={key}>
+                                <Box mr={3}>
+                                    {getBadgeForWidget(widget)}
+                                </Box>
+                                {widget.name}
+                            </MenuItem>
+                        );
+                    })}
+                </Select>
+                {selectedWidgetError &&
+                    <FormHelperText>Required</FormHelperText>}
+            </FormControl>
+
+            <Box sx={{
+                display: "flex",
+                mt: 2,
+                justifyContent: "space-between"
+            }}>
+                <Tabs
+                    value={tabPosition}
+                    onChange={handleTabChange}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    sx={{
+                        // bgcolor: "background.default",
+                    }}
+                >
+                    <Tab label="Basic config"/>
+                    <Tab label="Advanced"/>
+                </Tabs>
+                {onDelete && values.id &&
+                    <Button
+                        sx={{
+                            color: "#888",
+                            ml: 2
+                        }}
+                        startIcon={<DeleteIcon/>}
+                        onClick={() => setDeleteDialogOpen(true)}>
+                        Remove
+                    </Button>}
+            </Box>
+
+            <Divider/>
+
+            <Box mt={2}>
+                <Box hidden={tabPosition !== 0} p={1}>
+                    <Grid container spacing={2} direction={"column"}>
+                        {includeIdAndTitle &&
+                            <BasePropertyField showErrors={showErrors}
+                                               disabledId={existing}/>}
+                        {childComponent}
+                    </Grid>
                 </Box>
-            </Grid>
 
-            <Grid item>
-                <FormControl fullWidth
-                             error={Boolean(selectedWidgetError)}>
-                    <InputLabel id="component-label">Component</InputLabel>
-                    <Select fullWidth
-                            labelId="component-label"
-                            value={selectedWidgetId}
-                            label={"Component"}
-                            disabled={existing}
-                            required
-                            startAdornment={
-                                Icon
-                                    ? <InputAdornment
-                                        key={"adornment_" + selectedWidgetId}
-                                        position="start">
-                                        <Icon/>
-                                    </InputAdornment>
-                                    : undefined}
-                            renderValue={(value) => WIDGETS[value].name}
-                            onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
-
-                        {Object.entries(WIDGETS).map(([key, widget]) => {
-                            const Icon = widget.icon;
-                            return (
-                                <MenuItem value={key} key={key}>
-                                    <Icon sx={{ mr: 3 }}/>
-                                    {widget.name}
-                                </MenuItem>
-                            );
-                        })}
-                    </Select>
-                    {selectedWidgetError &&
-                        <FormHelperText>Required</FormHelperText>}
-                </FormControl>
-
-            </Grid>
-
-            {childComponent}
+                <Box hidden={tabPosition !== 1} p={1}>
+                    <Grid container spacing={2} direction={"column"}>
+                        {childComponentAdvanced}
+                    </Grid>
+                </Box>
+            </Box>
 
             {onDelete && <DeleteConfirmationDialog open={deleteDialogOpen}
                                                    onAccept={() => onDelete(values.id, propertyNamespace)}
                                                    onCancel={() => setDeleteDialogOpen(false)}/>}
 
-        </Grid>
+        </>
     );
-}
-
-const idRegEx = /^(?:[a-zA-Z]+_)*[a-zA-Z0-9]+$/;
-
-function validateId(value: string) {
-
-    let error;
-    if (!value) {
-        error = "You must specify an id for the property";
-    }
-    if (!value.match(idRegEx)) {
-        error = "The id can only contain letters, numbers and underscores (_), and not start with a number";
-    }
-    return error;
-}
-
-function validateTitle(value: string) {
-    let error;
-    if (!value) {
-        error = "You must specify a title for the property";
-    }
-    return error;
 }
 
 function DeleteConfirmationDialog({

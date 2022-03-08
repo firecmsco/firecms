@@ -6,8 +6,8 @@ import ListIcon from "@mui/icons-material/List";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import RepeatIcon from "@mui/icons-material/Repeat";
 import ListAltIcon from "@mui/icons-material/ListAlt";
-import ViewListIcon from "@mui/icons-material/ViewList";
 import LinkIcon from "@mui/icons-material/Link";
 import HttpIcon from "@mui/icons-material/Http";
 import FlagIcon from "@mui/icons-material/Flag";
@@ -158,8 +158,8 @@ export const WIDGETS: Record<WidgetId, Widget> = {
     repeat: {
         name: "Repeat/list",
         dataType: "array",
-        icon: ViewListIcon,
-        color: "#888"
+        icon: RepeatIcon,
+        color: "#ff9408"
     }
 };
 
@@ -195,18 +195,16 @@ export function getWidgetId(property: Property | ResolvedProperty): WidgetId | u
             return "group";
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
-        if (of) {
-            if (of.dataType === "string" && of.enumValues) {
-                return "multi_select";
-            } else if (of.dataType === "number" && of.enumValues) {
-                return "multi_number_select";
-            } else if (of.dataType === "string" && of.storage) {
-                return "multi_file_upload";
-            } else if (of.dataType === "reference") {
-                return "multi_references";
-            } else {
-                return "repeat";
-            }
+        if (of?.dataType === "string" && of.enumValues) {
+            return "multi_select";
+        } else if (of?.dataType === "number" && of.enumValues) {
+            return "multi_number_select";
+        } else if (of?.dataType === "string" && of.storage) {
+            return "multi_file_upload";
+        } else if (of?.dataType === "reference") {
+            return "multi_references";
+        } else {
+            return "repeat";
         }
     } else if (property.dataType === "boolean") {
         return "switch";

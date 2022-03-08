@@ -1,24 +1,7 @@
 import React, { useCallback } from "react";
-import { styled } from "@mui/material/styles";
-import { Box, TextField as MuiTextField, Theme } from "@mui/material";
-import { DateProperty } from "../../../../../models";
+import { TextField as MuiTextField } from "@mui/material";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 
-const PREFIX = "TableDateField";
-
-const classes = {
-    hidden: `${PREFIX}-hidden`
-};
-
-const StyledBox = styled(Box)((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.hidden}`]: {
-        display: "none"
-    }
-}));
 
 export function TableDateField(props: {
     name: string;
@@ -48,8 +31,6 @@ export function TableDateField(props: {
     }, []);
 
     return (
-        <StyledBox display={"flex"} alignItems={"center"} width={"100%"}>
-
             <DateTimePicker
                 value={internalValue ?? null}
                 clearable
@@ -79,6 +60,5 @@ export function TableDateField(props: {
                 onOpen={handleOpen}
                 onClose={handleClose}
             />
-        </Box>
     );
 }

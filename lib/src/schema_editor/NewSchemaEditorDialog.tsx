@@ -29,7 +29,7 @@ export function NewSchemaEditorDialog<M>({
                                          }: NewSchemaEditorDialogProps) {
 
     const configurationPersistence = useConfigurationPersistence();
-    const snackbarContext = useSnackbarController();
+    const snackbarController = useSnackbarController();
 
     if (!configurationPersistence)
         throw Error("Can't use the schema editor without specifying a `ConfigurationPersistence`");
@@ -51,14 +51,14 @@ export function NewSchemaEditorDialog<M>({
             .catch((e) => {
                 setError(e);
                 console.error(e);
-                snackbarContext.open({
+                snackbarController.open({
                     type: "error",
                     title: "Error persisting schema",
                     message: "Details in the console"
                 });
                 return false;
             });
-    }, [configurationPersistence, snackbarContext]);
+    }, [configurationPersistence, snackbarController]);
 
     return (
         <Formik
@@ -92,12 +92,12 @@ export function NewSchemaEditorDialog<M>({
                         fullWidth
                         PaperProps={{
                             sx: (theme) => ({
-                                height: "100vh",
+                                // height: "100vh",
                                 background: theme.palette.background.default
                             })
                         }}
                     >
-                        <Form noValidate style={{ height: "calc(100% - 64px)" }}>
+                        <Form noValidate>
                             {mode === "details" &&
                                 <SchemaDetailsForm isNewSchema={true}/>}
 
@@ -110,7 +110,7 @@ export function NewSchemaEditorDialog<M>({
                                     })
                                 }}/>}
 
-                            <CustomDialogActions position={"absolute"}>
+                            <CustomDialogActions position={"sticky"}>
                                 <Button variant={"text"}
                                         onClick={() => handleClose()}>
                                     Cancel

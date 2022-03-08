@@ -20,14 +20,8 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    IconButton,
-    Paper,
-    Typography
+    IconButton
 } from "@mui/material";
-import {
-    getIconForProperty,
-    getWidgetNameForProperty
-} from "../core/util/property_utils";
 
 import { PropertiesOrBuilder, Property, PropertyOrBuilder } from "../models";
 import {
@@ -37,9 +31,12 @@ import {
     treeToProperties
 } from "./util";
 import { sortProperties } from "../core/util/schemas";
-import { getWidget } from "../core/util/widgets";
 import { removeUndefined } from "../core/util/objects";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
+import {
+    PropertyBuilderPreview,
+    PropertyFieldPreview
+} from "./PropertyFieldPreview";
 
 export function PropertyTree<M>({
                                     selectedPropertyId,
@@ -50,7 +47,7 @@ export function PropertyTree<M>({
                                     propertiesOrder,
                                     errors,
                                     showErrors,
-                                    onPropertyMove,
+                                    onPropertyMove
                                 }: {
     selectedPropertyId?: string;
     setSelectedPropertyId: (propertyId: string) => void;
@@ -206,114 +203,39 @@ export function SchemaEntry({
     onClick: () => void;
 }) {
 
-    const widget = typeof propertyOrBuilder !== "function" ? getWidget(propertyOrBuilder) : undefined;
     return (
         <Box
-            onClick={onClick}
             ref={provided.innerRef}
             {...provided.draggableProps}
             sx={{
-                display: "flex",
-                flexDirection: "row",
-                width: "100%",
-                pb: 1,
-                cursor: "pointer"
-            }}>
-            <Box sx={{
-                background: widget?.color ?? "#888",
-                height: "32px",
-                mt: 0.5,
-                padding: 0.5,
-                borderRadius: "50%",
-                boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-                color: "white"
-            }}>
-                {getIconForProperty(propertyOrBuilder, "inherit", "medium")}
-            </Box>
-            <Box sx={{
-                pl: 3,
-                width: "100%",
-                display: "flex",
-                flexDirection: "row"
-            }}>
-                <Paper variant={"outlined"}
-                       sx={(theme) => ({
-                           position: "relative",
-                           flexGrow: 1,
-                           p: 2,
-                           border: hasError
-                               ? `1px solid ${theme.palette.error.light}`
-                               : (selected ? `1px solid ${theme.palette.primary.light}` : undefined)
-                       })}
-                       elevation={0}>
+                position: "relative",
+            }}
+        >
+            {typeof propertyOrBuilder === "object"
+                ? <PropertyFieldPreview
+                    property={propertyOrBuilder}
+                    onClick={onClick}
+                    includeTitle={true}
+                    selected={selected}
+                    hasError={hasError}/>
+                : <PropertyBuilderPreview name={propertyKey}
+                                          onClick={onClick}
+                                          selected={selected}/>}
 
-                    {typeof propertyOrBuilder === "object"
-                        ? <PropertyPreview property={propertyOrBuilder}/>
-                        : <PropertyBuilderPreview name={propertyKey}/>}
-
-                    <IconButton {...provided.dragHandleProps}
-                                size="small"
-                                sx={{
-                                    position: "absolute",
-                                    top: 8,
-                                    right: 8
-                                }}>
-                        <DragHandleIcon fontSize={"small"}/>
-                    </IconButton>
-                </Paper>
-            </Box>
+            <IconButton {...provided.dragHandleProps}
+                        size="small"
+                        sx={{
+                            position: "absolute",
+                            top: 8,
+                            right: 8
+                        }}>
+                <DragHandleIcon fontSize={"small"}/>
+            </IconButton>
         </Box>
     );
 
 }
 
-function PropertyPreview({
-                             property
-                         }: { property: Property }) {
-    return (
-        <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-
-            <Typography variant="subtitle1"
-                        component="span"
-                        sx={{ flexGrow: 1, pr: 2 }}>
-                {property.title ? property.title : "\u00a0"}
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ flexGrow: 1, pr: 2 }}
-                            variant="body2"
-                            component="span"
-                            color="text.secondary">
-                    {getWidgetNameForProperty(property)}
-                </Typography>
-                <Typography variant="body2"
-                            component="span"
-                            color="text.disabled">
-                    {property.dataType}
-                </Typography>
-            </Box>
-        </Box>
-    );
-}
-
-function PropertyBuilderPreview({
-                                    name
-                                }: { name: string }) {
-    return (
-        <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-            <Typography variant="body2"
-                        component="span"
-                        color="text.disabled">
-                {name}
-            </Typography>
-            <Typography sx={{ flexGrow: 1, pr: 2 }}
-                        variant="body2"
-                        component="span"
-                        color="text.secondary">
-                This property can only be edited in code
-            </Typography>
-        </Box>
-    );
-}
 
 function isValidDrag(tree: TreeData, source: TreeSourcePosition, destination: TreeDestinationPosition) {
     if (source.index === destination.index && source.parentId === destination.parentId)

@@ -6,8 +6,8 @@ import DebouncedTextField from "../../../form/components/DebouncedTextField";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 
 export function ArrayPropertyValidation({
-                                            max,
-                                            min,
+                                            max = true,
+                                            min = true,
                                         }: {
     min?: boolean;
     max?: boolean;

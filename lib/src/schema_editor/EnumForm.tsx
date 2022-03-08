@@ -58,7 +58,7 @@ export function EnumFormFields({
                                    enumValuesPath,
                                    shouldUpdateId
                                }: {
-    values: any,
+    values: { enumValues: EnumValueConfig[] },
     errors: any,
     enumValuesPath: string,
     shouldUpdateId: boolean,
@@ -77,7 +77,7 @@ export function EnumFormFields({
     return (
         <ArrayContainer
             value={values.enumValues}
-            name={"enumValues"}
+            name={enumValuesPath}
             buildEntry={buildEntry}
             disabled={false}
             onInternalIdAdded={setLastInternalIdAdded}

@@ -2,9 +2,9 @@ import React from "react";
 import { Grid, Paper, Typography } from "@mui/material";
 import {
     GeneralPropertyValidation
-} from "../properties_advanced/validation/GeneralPropertyValidation";
+} from "./validation/GeneralPropertyValidation";
 
-export function BooleanPropertyField() {
+export function BooleanPropertyFieldAdvanced() {
 
     return (
         <>

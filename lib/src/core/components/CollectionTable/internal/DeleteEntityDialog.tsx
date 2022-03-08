@@ -47,7 +47,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
 
     const dataSource = useDataSource();
     const schemaRegistry = useSchemaRegistry();
-    const snackbarContext = useSnackbarController();
+    const snackbarController = useSnackbarController();
     const [loading, setLoading] = useState(false);
 
     const [entityOrEntities, setUsedEntityOrEntities] = React.useState<Entity<M> | Entity<M>[]>();
@@ -78,7 +78,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
     }, []);
 
     const onDeleteFailure = useCallback((entity: Entity<any>, e: Error) => {
-        snackbarContext.open({
+        snackbarController.open({
             type: "error",
             title: `${resolvedSchema.name}: Error deleting`,
             message: e?.message
@@ -89,7 +89,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
     }, [resolvedSchema.name]);
 
     const onPreDeleteHookError = useCallback((entity: Entity<any>, e: Error) => {
-        snackbarContext.open({
+        snackbarController.open({
             type: "error",
             title: `${resolvedSchema.name}: Error before deleting`,
             message: e?.message
@@ -98,7 +98,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
     }, [resolvedSchema.name]);
 
     const onDeleteSuccessHookError = useCallback((entity: Entity<any>, e: Error) => {
-        snackbarContext.open({
+        snackbarController.open({
             type: "error",
             title: `${resolvedSchema.name}: Error after deleting (entity is deleted)`,
             message: e?.message
@@ -133,17 +133,17 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                         onMultipleEntitiesDelete(path, entityOrEntities as Entity<M>[]);
 
                     if (results.every(Boolean)) {
-                        snackbarContext.open({
+                        snackbarController.open({
                             type: "success",
                             message: `${resolvedSchema.name}: multiple deleted`
                         });
                     } else if (results.some(Boolean)) {
-                        snackbarContext.open({
+                        snackbarController.open({
                             type: "warning",
                             message: `${resolvedSchema.name}: Some of the entities have been deleted, but not all`
                         });
                     } else {
-                        snackbarContext.open({
+                        snackbarController.open({
                             type: "error",
                             message: `${resolvedSchema.name}: Error deleting entities`
                         });
@@ -157,7 +157,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                     if (success) {
                         if (onEntityDelete && entityOrEntities)
                             onEntityDelete(path, entityOrEntities as Entity<M>);
-                        snackbarContext.open({
+                        snackbarController.open({
                             type: "success",
                             message: `${resolvedSchema.name} deleted`
                         });
@@ -166,7 +166,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                 });
             }
         }
-    }, [entityOrEntities, multipleEntities, performDelete, onMultipleEntitiesDelete, path, onClose, snackbarContext, resolvedSchema.name, onEntityDelete]);
+    }, [entityOrEntities, multipleEntities, performDelete, onMultipleEntitiesDelete, path, onClose, snackbarController, resolvedSchema.name, onEntityDelete]);
 
 
     let content: JSX.Element;

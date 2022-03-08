@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
-import {
+import ShowChartIcon from '@mui/icons-material/ShowChart';import {
     computeTopNavigation,
     TopNavigationEntry,
     TopNavigationResult
@@ -60,13 +60,21 @@ export function Drawer({
                 fontWeight: isActive ? "600" : "500",
                 background: isActive ? "rgba(128,128,128,0.1)" : "inherit"
             })}
+            sx={{
+                alignItems: "center"
+            }}
             to={entry.url}
         >
-            <PlaylistPlayIcon fontSize={"small"} color={"disabled"}/>
+            {entry.type === "view" &&
+                <ShowChartIcon fontSize={"small"} color={"disabled"}/>}
+            {entry.type !== "view" &&
+                <PlaylistPlayIcon fontSize={"small"} color={"disabled"}/>}
+
             <Typography
                 variant={"subtitle2"}
                 sx={{
                     fontWeight: "inherit",
+                    ml: 1,
                     p: 0.5
                 }}>
                 {entry.name.toUpperCase()}
@@ -83,7 +91,7 @@ export function Drawer({
                         color={"textSecondary"}
                         className={"weight-500"}
                         sx={{ flexGrow: 1 }}>
-                {group ? group.toUpperCase() : "Ungrouped collections".toUpperCase()}
+                {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
             </Typography>
             <Tooltip
                 title={group ? `Create new collection in ${group}` : "Create new collection"}>

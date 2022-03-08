@@ -8,10 +8,10 @@ export function SampleProductsView({ entity, modifiedValues }: {
     modifiedValues?: EntityValues<Product>;
 }) {
 
-    const snackbarContext = useSnackbarController();
+    const snackbarController = useSnackbarController();
 
     const onClick = (event: React.MouseEvent) => {
-        snackbarContext.open({
+        snackbarController.open({
             type: "success",
             message: `Custom action for ${modifiedValues?.name}`
         });

@@ -9,19 +9,15 @@ import {
     DialogContent,
     FormControl,
     Grid,
+    IconButton,
     InputLabel,
     ListItemText,
     MenuItem,
-    Paper,
     Select,
     SelectChangeEvent,
     Typography
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-
-import {
-    GeneralPropertyValidation
-} from "./validation/GeneralPropertyValidation";
 import DebouncedTextField from "../../form/components/DebouncedTextField";
 import { EnumValues } from "../../models";
 import { CustomDialogActions } from "../../core/components/CustomDialogActions";
@@ -103,25 +99,12 @@ export function FieldUploadPropertyField({
                         </FormControl>
                     </Box>
                     <Box>
-                        <Button variant="outlined"
-                                sx={{
-                                    height: "100%"
-                                }}
+                        <IconButton
                                 onClick={() => setDialogOpen(true)}>
                             <SettingsIcon/>
-                        </Button>
+                        </IconButton>
                     </Box>
                 </Box>
-            </Grid>
-
-            <Grid item>
-                <Typography variant={"subtitle2"} sx={{ mt: 1 }}>
-                    Validation
-                </Typography>
-                <Paper variant={"outlined"} sx={{ p: 2, mt: 1 }}>
-                    <GeneralPropertyValidation/>
-                </Paper>
-
             </Grid>
 
             <EnumEntryDialog open={dialogOpen}

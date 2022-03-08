@@ -23,7 +23,7 @@ export function SchemaEditorDialog({
             fullWidth
             PaperProps={{
                 sx: (theme) => ({
-                    height: "100vh",
+                    height: "100%",
                     background: theme.palette.background.default
                 })
             }}

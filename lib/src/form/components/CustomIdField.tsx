@@ -82,9 +82,9 @@ export function CustomIdField<M, UserType>({
         return resolveEnumValues(customId, schemaRegistry.enumConfigs);
     }, [schemaRegistry.enumConfigs, customId]);
 
-    const snackbarContext = useSnackbarController();
+    const snackbarController = useSnackbarController();
     const { copy } = useClipboard({
-        onSuccess: (text) => snackbarContext.open({
+        onSuccess: (text) => snackbarController.open({
             type: "success",
             message: `Copied ${text}`
         })

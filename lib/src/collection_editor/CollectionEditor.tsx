@@ -184,19 +184,28 @@ export function CollectionEditor<M>({
                     return (
                         <>
                             <form onSubmit={handleSubmit}
-                                  noValidate>
-
-                                <Container maxWidth={"md"}>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            justifyContent: "space-between",
-                                            pt: 3,
-                                            pb: 2
-                                        }}>
-                                        <Typography variant={"h4"}>
-                                            {isNewCollection ? "New collection" : `${values.name} collection`}
+                                  noValidate
+                                  style={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      position: "relative",
+                                      height: "100%"
+                                  }}>
+                                <Box sx={{
+                                    flexGrow: 1,
+                                    overflow: "scroll"
+                                }}>
+                                    <Container maxWidth={"md"}>
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                justifyContent: "space-between",
+                                                pt: 3,
+                                                pb: 2
+                                            }}>
+                                            <Typography variant={"h4"}>
+                                                {isNewCollection ? "New collection" : `${values.name} collection`}
                                         </Typography>
                                         {includeCollectionLink && <Box>
                                             {path && <Button
@@ -411,7 +420,7 @@ export function CollectionEditor<M>({
                                                         sx={{ mb: 2 }}
                                                         variant={"body2"}>
                                                         You can only pick a
-                                                        schema on the
+                                                        schema upon
                                                         collection creation,
                                                         but you can modify
                                                         the schema
@@ -421,8 +430,11 @@ export function CollectionEditor<M>({
                                             </Grid>
                                         </Grid>
                                     </Paper>
-                                </Container>
-                                <CustomDialogActions>
+
+                                        <Box height={64}/>
+                                    </Container>
+                                </Box>
+                                <CustomDialogActions position={"absolute"}>
 
                                     {onCancel && <Button
                                         color="primary"

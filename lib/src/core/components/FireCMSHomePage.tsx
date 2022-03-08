@@ -15,6 +15,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
 import EditIcon from "@mui/icons-material/Edit";
 
 import { Link as ReactLink } from "react-router-dom";
@@ -92,14 +93,18 @@ export function FireCMSHomePage() {
                                 width: "100%",
                                 justifyContent: "space-between"
                             }}>
-                                <PlaylistPlayIcon color={"disabled"}/>
+
+                                {entry.type === "view" &&
+                                    <ShowChartIcon color={"disabled"}/>}
+                                {entry.type !== "view" &&
+                                    <PlaylistPlayIcon color={"disabled"}/>}
 
                                 {configurationPersistenceEnabled && entry.editUrl &&
-                                <IconButton
-                                    component={ReactLink}
-                                    to={entry.editUrl}>
-                                    <EditIcon color="primary"/>
-                                </IconButton>}
+                                    <IconButton
+                                        component={ReactLink}
+                                        to={entry.editUrl}>
+                                        <EditIcon color="primary"/>
+                                    </IconButton>}
                             </Box>
 
                             <Typography gutterBottom variant="h5"
@@ -166,7 +171,7 @@ export function FireCMSHomePage() {
 
                     <Typography color={"textSecondary"}
                                 className={"weight-500"}>
-                        {group?.toUpperCase() ?? "Ungrouped collections".toUpperCase()}
+                        {group?.toUpperCase() ?? "Ungrouped views".toUpperCase()}
                     </Typography>
 
                     <Divider/>
