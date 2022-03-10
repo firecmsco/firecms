@@ -11,6 +11,7 @@ import {
 import { FirestoreTextSearchController } from "./models/text_search";
 import { User as FirebaseUser } from "firebase/auth";
 import { FirebaseSignInOption, FirebaseSignInProvider } from "./models/auth";
+import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -32,7 +33,7 @@ export interface FirebaseCMSAppProps {
      * Use this prop to specify the views that will be generated in the CMS.
      * You usually will want to create a `Navigation` object that includes
      * collection views where you specify the path and the schema.
-     * Additionally you can add custom views to the root navigation.
+     * Additionally, you can add custom views to the root navigation.
      * In you need to customize the navigation based on the logged user you
      * can use a `NavigationBuilder`
      */
@@ -152,5 +153,12 @@ export interface FirebaseCMSAppProps {
      * Default path under the collection routes of the CMS will be created
      */
     baseCollectionPath?: string;
+
+    /**
+     * Additional props passed to the login view. You can use this props
+     * to disable registration in `password` mode, or to set up an additional
+     * message.
+     */
+    LoginViewProps?: FirebaseLoginViewProps;
 }
 

@@ -6,8 +6,7 @@ import {
     ResolvedArrayProperty,
     ResolvedNumberProperty,
     ResolvedProperty,
-    ResolvedStringProperty,
-    StringProperty
+    ResolvedStringProperty
 } from "../../../../models";
 import React, { useCallback, useEffect, useState } from "react";
 import { TableInput } from "./fields/TableInput";
@@ -155,7 +154,8 @@ const PropertyTableCellInternal = <T extends CMSType>({
     let fullHeight = false;
 
     if (!readOnly && !customField && (!customPreview || selected)) {
-        const isAStorageProperty = (property.dataType === "string" && (property as StringProperty).storage) ||
+        const isAStorageProperty = (property.dataType === "string" && (property as                                                  property={property as ResolvedStringProperty | ResolvedArrayProperty<string[]>}
+    ).storage) ||
             (property.dataType === "array" && (property as ArrayProperty).of?.dataType === "string" && ((property as ArrayProperty).of as StringProperty)?.storage);
         if (isAStorageProperty) {
             innerComponent = <TableStorageUpload error={error}

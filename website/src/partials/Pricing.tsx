@@ -5,13 +5,9 @@ import featuresBg from "@site/static/img/features-bg.png";
 // @ts-ignore
 import featuresElement from "@site/static/img/features-element.png";
 
-
-import useThemeContext from "@theme/hooks/useThemeContext";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 function Pricing() {
-
-    const { isDarkTheme } = useThemeContext();
 
     const community = <div
         className="bg-white dark:bg-gray-900 m-4 md:m-10 lg:col-span-1 rounded-lg border-b-4 overflow-hidden shadow-2xl hover:shadow-3xl transition duration-500 transform ">

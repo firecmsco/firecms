@@ -2,6 +2,22 @@
 id: changelog
 title: Changelog
 ---
+## [1.0.0-rc.3] - 2022-02-28
+
+### Changed
+
+- Fixed edge case of references in arrays not being resolved properly with 
+  property builders. Thanks, Paul Aranzamendez!
+
+## [1.0.0-rc.2] - 2022-02-08
+
+### Changed
+
+- Fix for Portal import bug related to mui 5.4 version.
+- Allowing `optional` custom ids
+- Small cosmetic updates
+
+
 ## [1.0.0-rc.1] - 2022-01-23
 
 ### Changed

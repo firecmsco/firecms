@@ -198,6 +198,10 @@ function SampleApp() {
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}
+        LoginViewProps={{
+            NoUserComponent: <>Sample custom message when no user exists</>,
+            disableSignupScreen: false,
+        }}
     />;
 }
 

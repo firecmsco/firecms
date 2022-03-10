@@ -1,10 +1,7 @@
 import React from "react";
 import useBaseUrl from "@docusaurus/useBaseUrl";
-import useThemeContext from "@theme/hooks/useThemeContext";
 
 function HeroButtons() {
-
-    const { isDarkTheme } = useThemeContext();
 
     return <>
 
