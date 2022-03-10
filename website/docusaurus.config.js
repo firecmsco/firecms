@@ -30,6 +30,7 @@ module.exports = {
         ]
     ],
     themeConfig: {
+        image: 'img/firecms_logo.svg',
         announcementBar: {
             id: 'new_version_rc.2',
             content:

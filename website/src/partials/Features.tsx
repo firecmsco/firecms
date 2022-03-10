@@ -18,7 +18,7 @@ import cmsPreviewVideo from "@site/static/img/editing.mp4";
 // @ts-ignore
 import customFieldVideo from "@site/static/img/custom_fields.mp4";
 
-import useThemeContext from "@theme/hooks/useThemeContext";
+import { useColorMode } from '@docusaurus/theme-common';
 
 import SyntaxHighlighter from "react-syntax-highlighter";
 import {
@@ -28,7 +28,7 @@ import {
 
 function Features() {
 
-    const { isDarkTheme } = useThemeContext();
+    const { isDarkTheme } = useColorMode();
 
     return (
         <section className="relative">

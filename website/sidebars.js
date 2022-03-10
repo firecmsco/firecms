@@ -58,13 +58,6 @@ module.exports = {
         },
         {
             type: 'category',
-            label: 'General configuration',
-            items: [
-
-            ]
-        },
-        {
-            type: 'category',
             label: 'Firebase CMS app',
             items: [
                 'firebase_cms_app',

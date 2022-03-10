@@ -16,10 +16,10 @@
         "node": ">=14"
     },
     "dependencies": {
-        "@docusaurus/core": "^2.0.0-beta.13",
-        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.13",
-        "@docusaurus/plugin-sitemap": "^2.0.0-beta.13",
-        "@docusaurus/preset-classic": "^2.0.0-beta.13",
+        "@docusaurus/core": "^2.0.0-beta.17",
+        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.17",
+        "@docusaurus/plugin-sitemap": "^2.0.0-beta.17",
+        "@docusaurus/preset-classic": "^2.0.0-beta.17",
         "aos": "^2.3.4",
         "autoprefixer": "^10.4.0",
         "clsx": "^1.1.1",
@@ -46,7 +46,7 @@
         ]
     },
     "devDependencies": {
-        "@docusaurus/module-type-aliases": "^2.0.0-beta.13",
+        "@docusaurus/module-type-aliases": "^2.0.0-beta.17",
         "@tsconfig/docusaurus": "^1.0.2",
         "@types/react": "^17.0.2",
         "@types/react-helmet": "^6.1.0",
