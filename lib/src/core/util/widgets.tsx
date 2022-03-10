@@ -57,7 +57,7 @@ export const WIDGETS: Record<WidgetId, Widget> = {
         name: "Text field",
         dataType: "string",
         icon: ShortTextIcon,
-        color: "#2d7ff9"
+        color: "#2d7ff9",
     },
     multiline: {
         name: "Multiline",
@@ -125,12 +125,6 @@ export const WIDGETS: Record<WidgetId, Widget> = {
         icon: DriveFolderUploadIcon,
         color: "#f92d9a"
     },
-    group: {
-        name: "Group",
-        dataType: "map",
-        icon: BallotOutlinedIcon,
-        color: "#ff9408"
-    },
     reference: {
         name: "Reference/s",
         dataType: "reference",
@@ -154,6 +148,12 @@ export const WIDGETS: Record<WidgetId, Widget> = {
         dataType: "date",
         icon: ScheduleIcon,
         color: "#8b46ff"
+    },
+    group: {
+        name: "Group",
+        dataType: "map",
+        icon: BallotOutlinedIcon,
+        color: "#ff9408"
     },
     repeat: {
         name: "Repeat/list",

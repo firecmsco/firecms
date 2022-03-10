@@ -161,4 +161,3 @@ export interface FirebaseCMSAppProps {
      */
     LoginViewProps?: FirebaseLoginViewProps;
 }
-

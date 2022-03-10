@@ -61,6 +61,7 @@ export function SchemaEditor<M>({
 
     // Use this ref to store which properties have errors
     const propertyErrorsRef = useRef({});
+    console.log("propertyErrorsRef", propertyErrorsRef.current);
 
     if (!configurationPersistence)
         throw Error("Can't use the schema editor without specifying a `ConfigurationPersistence`");
@@ -138,6 +139,13 @@ export function SchemaEditor<M>({
                 const showErrors = submitCount > 0;
 
                 const onCancel = handleClose ? () => handleClose(undefined) : undefined;
+
+                const onPropertyError = (propertyId: string, namespace?: string, error?: string) => {
+                    console.log("onPropertyError", idToPropertiesPath(getFullId(propertyId, namespace)), error);
+                    propertyErrorsRef.current = setIn(propertyErrorsRef.current, idToPropertiesPath(getFullId(propertyId, namespace)), error);
+                    propertyErrorsRef.current = removeUndefined(propertyErrorsRef.current);
+                };
+
                 return (
                     <Form noValidate
                           style={{
@@ -153,10 +161,7 @@ export function SchemaEditor<M>({
                             p: 2
                         }}>
                             <SchemaEditorForm showErrors={showErrors}
-                                              onPropertyError={(propertyPath, error) => {
-                                                  propertyErrorsRef.current = setIn(propertyErrorsRef.current, propertyPath, error);
-                                                  propertyErrorsRef.current = removeUndefined(propertyErrorsRef.current);
-                                              }}/>
+                                              onPropertyError={onPropertyError}/>
                             <Box height={64}/>
                         </Box>
                         <CustomDialogActions position={"absolute"}>
@@ -195,7 +200,7 @@ export function SchemaEditorForm<M>({
                                         onPropertyError
                                     }: {
     showErrors: boolean;
-    onPropertyError: (propertyKey: string, error: string | undefined) => void;
+    onPropertyError: (propertyKey: string, namespace: string | undefined, error: string | undefined) => void;
 }) {
 
     const {
@@ -212,14 +217,14 @@ export function SchemaEditorForm<M>({
 
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
-    const selectedPropertyFullId = getFullId(selectedPropertyId, selectedPropertyNamespace)
+    const selectedPropertyFullId = selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
     const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
     const [schemaDetailsDialogOpen, setSchemaDetailsDialogOpen] = useState<boolean>(false);
 
     const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
-        const fullId = getFullId(propertyId, namespace);
+        const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
         if (!fullId)
             throw Error("Schema editor miss config");
 
@@ -233,9 +238,10 @@ export function SchemaEditorForm<M>({
         setSelectedPropertyNamespace(undefined);
     }, [setFieldValue, values]);
 
-    const doPropertyMove = useCallback((properties, propertiesOrder) => {
-        setFieldValue("propertiesOrder", propertiesOrder, false);
-        setFieldValue("properties", properties, false);
+    const doPropertyMove = useCallback((propertiesOrder, namespace) => {
+        console.log("propertiesOrder", propertiesOrder);
+        setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
+        // setFieldValue("properties", properties, false);
     }, [setFieldValue]);
 
     const onPropertyCreated = useCallback(({
@@ -262,11 +268,11 @@ export function SchemaEditorForm<M>({
         }
     }, [setFieldTouched, setFieldValue]);
 
-    const onPropertyErrorInternal = useCallback((id: string, error: boolean) => {
-        const propertyPath = id ? idToPropertiesPath(id) : undefined;
+    const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: boolean) => {
+        const propertyPath = id ? getFullId(id, namespace) : undefined;
         if (propertyPath) {
-            onPropertyError(propertyPath, error ? "Property error" : undefined);
-            setFieldError(propertyPath, error ? "Property error" : undefined);
+            onPropertyError(id, namespace, error ? "Property error" : undefined);
+            setFieldError(idToPropertiesPath(propertyPath), error ? "Property error" : undefined);
         }
     }, [setFieldError]);
 
@@ -356,15 +362,16 @@ export function SchemaEditorForm<M>({
                       lg={5}>
                     <ErrorBoundary>
                         <PropertyTree
-                            setSelectedPropertyId={setSelectedPropertyId}
-                            selectedPropertyId={selectedPropertyId}
-                            setSelectedPropertyNamespace={setSelectedPropertyNamespace}
-                            selectedPropertyNamespace={selectedPropertyNamespace}
+                            onPropertyClick={(propertyKey, namespace) => {
+                                console.log("onPropertyClick", propertyKey, namespace);
+                                setSelectedPropertyId(propertyKey);
+                                setSelectedPropertyNamespace(namespace);
+                            }}
+                            selectedPropertyKey={selectedPropertyId}
                             properties={values.properties}
-                            propertiesOrder={values.propertiesOrder ?? Object.keys(values.properties) as (keyof M)[]}
+                            propertiesOrder={(values.propertiesOrder ?? Object.keys(values.properties)) as string[]}
                             onPropertyMove={doPropertyMove}
-                            showErrors={showErrors}
-                            errors={errors}/>
+                            errors={showErrors ? errors : {}}/>
                     </ErrorBoundary>
                 </Grid>
 

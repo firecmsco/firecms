@@ -154,9 +154,8 @@ const PropertyTableCellInternal = <T extends CMSType>({
     let fullHeight = false;
 
     if (!readOnly && !customField && (!customPreview || selected)) {
-        const isAStorageProperty = (property.dataType === "string" && (property as                                                  property={property as ResolvedStringProperty | ResolvedArrayProperty<string[]>}
-    ).storage) ||
-            (property.dataType === "array" && (property as ArrayProperty).of?.dataType === "string" && ((property as ArrayProperty).of as StringProperty)?.storage);
+        const isAStorageProperty = (property.dataType === "string" && (property as ResolvedStringProperty).storage) ||
+            (property.dataType === "array" && (property as ArrayProperty).of?.dataType === "string" && ((property as ArrayProperty).of as ResolvedStringProperty)?.storage);
         if (isAStorageProperty) {
             innerComponent = <TableStorageUpload error={error}
                                                  disabled={disabled}
@@ -314,14 +313,14 @@ const PropertyTableCellInternal = <T extends CMSType>({
         allowScroll = false;
         showExpandIcon = selected && !innerComponent && !disabled && !readOnly;
         innerComponent = (
-                <PropertyPreview
-                    width={width}
-                    height={height}
-                    propertyKey={name as string}
-                    value={internalValue}
-                    property={property}
-                    size={getPreviewSizeFrom(size)}
-                />
+            <PropertyPreview
+                width={width}
+                height={height}
+                propertyKey={name as string}
+                value={internalValue}
+                property={property}
+                size={getPreviewSizeFrom(size)}
+            />
         );
     }
 

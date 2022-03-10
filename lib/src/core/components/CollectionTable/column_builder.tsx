@@ -112,7 +112,7 @@ export function checkInlineEditing<M>(inlineEditing: ((entity: Entity<any>) => b
 
 type SelectedCellProps<M> =
     {
-        name: keyof M,
+        propertyId: keyof M,
         columnIndex: number,
         cellRect: DOMRect;
         width: number,
@@ -252,7 +252,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                 <TableCell
                     key={`preview_cell_${propertyId}_${rowIndex}_${columnIndex}`}
                     size={size}
-                    value={entity.values[name]}
+                    value={entity.values[propertyId]}
                     align={column.align}
                     disabled={true}>
                     <PropertyPreview
@@ -277,7 +277,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                         height: column.height,
                         entity,
                         cellRect,
-                        name: propertyId,
+                        propertyId,
                         schema
                     });
                 }
@@ -294,7 +294,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                         height: column.height,
                         entity,
                         cellRect,
-                        name: propertyId,
+                        propertyId,
                         schema
                     });
                 }
@@ -443,7 +443,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
             onClose={onPopupClose}
             cellRect={popupCell?.cellRect}
             columnIndex={popupCell?.columnIndex}
-            name={popupCell?.name}
+            propertyId={popupCell?.propertyId}
             schema={popupCell?.schema}
             entity={popupCell?.entity}
             tableKey={tableKey.current}

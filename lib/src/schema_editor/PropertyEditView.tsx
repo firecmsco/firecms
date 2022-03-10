@@ -87,7 +87,7 @@ export function PropertyForm({
     property?: Property;
     onPropertyChanged: (params: { id?: string, property: Property, namespace?: string }) => void;
     onDelete?: (id?: string, namespace?: string) => void;
-    onError?: (id: string, error: boolean) => void;
+    onError?: (id: string, namespace?: string, error?: boolean) => void;
     onOkClicked?: () => void;
     onCancel?: () => void;
     forceShowErrors: boolean;
@@ -134,6 +134,7 @@ export function PropertyForm({
                     onError={onError}
                     showErrors={forceShowErrors || props.submitCount > 0}
                     existing={existing}
+                    inArray={props.values.dataType === "array"}
                     {...props}/>;
 
                 let body: JSX.Element;
@@ -379,20 +380,25 @@ function PropertyEditView({
                               onDelete,
                               propertyNamespace,
                               onError,
-                              showErrors
+                              showErrors,
+                              inArray
                           }: {
     includeIdAndTitle?: boolean;
     existing: boolean;
     propertyNamespace?: string;
     onPropertyChanged?: (params: { id?: string, property: Property, namespace?: string }) => void;
     onDelete?: (id?: string, namespace?: string) => void;
-    onError?: (id: string, error: boolean) => void;
+    onError?: (id: string, namespace?: string, error?: boolean) => void;
     showErrors: boolean;
+    inArray: boolean;
 } & FormikProps<PropertyWithId>) {
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedWidgetId, setSelectedWidgetId] = useState<WidgetId | undefined>(values ? getWidgetId(values) : undefined);
 
+    const displayedWidgets = inArray
+        ? Object.entries(WIDGETS).filter(([_, widget]) => widget.dataType !== "array")
+        : Object.entries(WIDGETS);
     const selectedWidget = selectedWidgetId ? WIDGETS[selectedWidgetId] : undefined;
 
     const initialValuesRef = React.useRef(values);
@@ -414,7 +420,7 @@ function PropertyEditView({
 
     useEffect(() => {
         if (values.id && onError) {
-            onError(values.id, Boolean(Object.keys(errors).length ?? false));
+            onError(values.id, propertyNamespace, Boolean(Object.keys(errors).length ?? false));
         }
     }, [errors]);
 
@@ -511,7 +517,7 @@ function PropertyEditView({
                         renderValue={(value) => WIDGETS[value].name}
                         onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
 
-                    {Object.entries(WIDGETS).map(([key, widget]) => {
+                    {displayedWidgets.map(([key, widget]) => {
                         return (
                             <MenuItem value={key} key={key}>
                                 <Box mr={3}>

@@ -1,208 +1,145 @@
-import React, { useCallback, useMemo, useState } from "react";
-import Tree, {
-    moveItemOnTree,
-    RenderItemParams,
-    TreeData,
-    TreeDestinationPosition,
-    TreeSourcePosition
-} from "../core/components/Tree";
-import {
-    TreeDraggableProvided
-} from "../core/components/Tree/components/TreeItem/TreeItem-types";
-
-import { getIn } from "formik";
-import hash from "object-hash";
+import React from "react";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
-import {
-    Box,
-    Button,
-    Dialog,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    IconButton
-} from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 
-import { PropertiesOrBuilder, Property, PropertyOrBuilder } from "../models";
-import {
-    getFullId,
-    idToPropertiesPath,
-    propertiesToTree,
-    treeToProperties
-} from "./util";
-import { sortProperties } from "../core/util/schemas";
-import { removeUndefined } from "../core/util/objects";
-import { CustomDialogActions } from "../core/components/CustomDialogActions";
+import { PropertiesOrBuilder, PropertyOrBuilder } from "../models";
 import {
     PropertyBuilderPreview,
     PropertyFieldPreview
 } from "./PropertyFieldPreview";
+import {
+    DragDropContext,
+    Draggable,
+    DraggableProvided,
+    Droppable
+} from "react-beautiful-dnd";
+import { getFullId, idToPropertiesPath } from "./util";
+import { getIn } from "formik";
 
 export function PropertyTree<M>({
-                                    selectedPropertyId,
-                                    setSelectedPropertyId,
-                                    selectedPropertyNamespace,
-                                    setSelectedPropertyNamespace,
+                                    namespace,
+                                    selectedPropertyKey,
+                                    onPropertyClick,
                                     properties,
                                     propertiesOrder,
                                     errors,
-                                    showErrors,
                                     onPropertyMove
                                 }: {
-    selectedPropertyId?: string;
-    setSelectedPropertyId: (propertyId: string) => void;
-    selectedPropertyNamespace?: string;
-    setSelectedPropertyNamespace: (propertyNamespace?: string) => void;
+    namespace?: string;
+    selectedPropertyKey?: string;
+    onPropertyClick: (propertyKey: string, namespace?: string) => void;
     properties: PropertiesOrBuilder<M>;
-    propertiesOrder: (keyof M)[];
+    propertiesOrder: string[];
     errors: Record<string, any>;
-    showErrors: boolean;
-    onPropertyMove: (properties: PropertiesOrBuilder<M>, propertiesOrder: (keyof M)[]) => void;
+    onPropertyMove: (propertiesOrder: string[], namespace?: string) => void;
 }) {
 
-    const cleanedErrors = removeUndefined(errors);
-
-    const selectedPropertyFullId = getFullId(selectedPropertyId, selectedPropertyNamespace)
-
-    const [pendingMove, setPendingMove] = useState<[TreeSourcePosition, TreeDestinationPosition] | undefined>();
-
-    const onPropertyClick = useCallback((property: PropertyOrBuilder, propertyId: string, namespace?: string) => {
-        setSelectedPropertyId(propertyId);
-        setSelectedPropertyNamespace(namespace);
-    }, []);
-
-    const renderItem = useCallback(({
-                                        item,
-                                        provided,
-                                        snapshot
-                                    }: RenderItemParams) => {
-        const propertyFullKey = item.id as string;
-        const propertyId = item.data.id as string;
-        const propertyNamespace = item.data.namespace as string | undefined;
-        const propertyOrBuilder = item.data.property as PropertyOrBuilder;
-        const propertyPath = idToPropertiesPath(propertyFullKey);
-        const hasError = showErrors && getIn(cleanedErrors, propertyPath);
-
-        return (
-            <SchemaEntry
-                propertyKey={propertyId}
-                propertyOrBuilder={propertyOrBuilder}
-                provided={provided}
-                hasError={hasError}
-                onClick={() => onPropertyClick(propertyOrBuilder, propertyId, propertyNamespace)}
-                selected={snapshot.isDragging || selectedPropertyFullId === item.id}
-            />
-        )
-    }, [cleanedErrors, selectedPropertyFullId, onPropertyClick]);
-
-    const tree = useMemo(() => {
-        const sortedProperties = sortProperties(properties, propertiesOrder);
-        return propertiesToTree(sortedProperties);
-    }, [properties, propertiesOrder]);
-
-    const doPropertyMove = useCallback((source: TreeSourcePosition, destination: TreeDestinationPosition) => {
-        const newTree = moveItemOnTree(tree, source, destination);
-        const [properties, propertiesOrder] = treeToProperties<M>(newTree);
-        onPropertyMove(properties, propertiesOrder);
-    }, [onPropertyMove, tree]);
-
-    const onDragEnd = (
-        source: TreeSourcePosition,
-        destination?: TreeDestinationPosition
-    ) => {
-
-        if (!destination) {
+    const onDragEnd = (result: any) => {
+        // dropped outside the list
+        if (!result.destination) {
             return;
         }
+        const sourceIndex = result.source.index;
+        const destinationIndex = result.destination.index;
 
-        if (!isValidDrag(tree, source, destination)) {
-            return;
-        }
-
-        if (source.parentId !== destination.parentId) {
-            setPendingMove([source, destination]);
-        } else {
-            doPropertyMove(source, destination);
-        }
-
-    };
+        const newPropertiesOrder: string[] = [...propertiesOrder];
+        const temp = newPropertiesOrder[sourceIndex];
+        newPropertiesOrder[sourceIndex] = newPropertiesOrder[destinationIndex];
+        newPropertiesOrder[destinationIndex] = temp;
+        onPropertyMove(newPropertiesOrder, namespace);
+    }
 
     return (
         <>
 
-            <Tree
-                key={`tree_${selectedPropertyFullId}_${hash(errors)}`}
-                tree={tree}
-                offsetPerLevel={40}
-                renderItem={renderItem}
-                onDragEnd={onDragEnd}
-                isDragEnabled
-                isNestingEnabled={false}
-            />
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId={`droppable_${name}`}>
+                    {(droppableProvided, droppableSnapshot) => (
+                        <div
+                            {...droppableProvided.droppableProps}
+                            ref={droppableProvided.innerRef}>
+                            {propertiesOrder && propertiesOrder.map((propertyKey: string, index: number) => {
+                                return (
+                                    <Draggable
+                                        key={`array_field_${namespace}_${propertyKey}}`}
+                                        draggableId={`array_field_${namespace}_${propertyKey}}`}
+                                        index={index}>
+                                        {(provided, snapshot) => {
+                                            const property = properties[propertyKey] as PropertyOrBuilder;
+                                            return (
+                                                <TreeSchemaEntry
+                                                    propertyKey={propertyKey as string}
+                                                    propertyOrBuilder={property}
+                                                    provided={provided}
+                                                    errors={errors}
+                                                    namespace={namespace}
+                                                    onPropertyMove={onPropertyMove}
+                                                    onPropertyClick={onPropertyClick}
+                                                    selected={snapshot.isDragging || selectedPropertyKey === propertyKey}
+                                                />
+                                            );
+                                        }}
+                                    </Draggable>);
+                            })}
 
-            <PendingMoveDialog open={Boolean(pendingMove)}
-                               onAccept={() => {
-                                   setPendingMove(undefined);
-                                   if (pendingMove)
-                                       doPropertyMove(pendingMove[0], pendingMove[1]);
-                               }}
-                               onCancel={() => setPendingMove(undefined)}/>
+                            {droppableProvided.placeholder}
+
+                            {/*{includeAddButton && <Box p={1}*/}
+                            {/*                          justifyContent="center"*/}
+                            {/*                          textAlign={"left"}>*/}
+                            {/*    <Button variant="outlined"*/}
+                            {/*            color="primary"*/}
+                            {/*            disabled={disabled}*/}
+                            {/*            startIcon={<AddIcon/>}*/}
+                            {/*            onClick={insertInEnd}>*/}
+                            {/*        Add*/}
+                            {/*    </Button>*/}
+                            {/*</Box>}*/}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
 
         </>
     );
 }
 
-function PendingMoveDialog({
-                               open,
-                               onAccept,
-                               onCancel
-                           }: { open: boolean, onAccept: () => void, onCancel: () => void }) {
-    return <Dialog
-        open={open}
-        onClose={onCancel}
-    >
-        <DialogTitle>
-            {"Are you sure?"}
-        </DialogTitle>
-        <DialogContent>
-            <DialogContentText>
-                You are moving one property from one context to
-                another.
-            </DialogContentText>
-            <DialogContentText>
-                This will <b>not transfer the data</b>, only modify
-                the schema.
-            </DialogContentText>
-        </DialogContent>
-        <CustomDialogActions>
-            <Button
-                onClick={onCancel}
-                autoFocus>Cancel</Button>
-            <Button
-                variant="contained"
-                onClick={onAccept}>
-                Proceed
-            </Button>
-        </CustomDialogActions>
-    </Dialog>;
-}
-
-export function SchemaEntry({
+export function TreeSchemaEntry({
                                 propertyKey,
+                                namespace,
                                 propertyOrBuilder,
                                 provided,
                                 selected,
-                                hasError,
-                                onClick
+                                errors,
+                                onPropertyClick,
+                                onPropertyMove
                             }: {
     propertyKey: string;
+    namespace?: string;
     propertyOrBuilder: PropertyOrBuilder;
-    provided: TreeDraggableProvided;
+    provided: DraggableProvided;
     selected: boolean;
-    hasError: boolean;
-    onClick: () => void;
+    errors: Record<string, any>;
+    onPropertyClick: (propertyKey: string, namespace?: string) => void;
+    onPropertyMove: (propertiesOrder: string[], namespace?: string) => void;
 }) {
 
+    const fullId = getFullId(propertyKey, namespace);
+    let subtree;
+    if (typeof propertyOrBuilder === "object") {
+        const property = propertyOrBuilder;
+        if (property.dataType === "map" && property.properties && property.propertiesOrder) {
+            subtree = <PropertyTree
+                namespace={fullId}
+                properties={property.properties}
+                propertiesOrder={property.propertiesOrder}
+                errors={errors}
+                onPropertyClick={onPropertyClick}
+                onPropertyMove={onPropertyMove}/>
+        }
+    }
+
+    const hasError = fullId ? getIn(errors, idToPropertiesPath(fullId)) : false;
     return (
         <Box
             ref={provided.innerRef}
@@ -214,12 +151,12 @@ export function SchemaEntry({
             {typeof propertyOrBuilder === "object"
                 ? <PropertyFieldPreview
                     property={propertyOrBuilder}
-                    onClick={onClick}
+                    onClick={() => onPropertyClick(propertyKey, namespace)}
                     includeTitle={true}
                     selected={selected}
                     hasError={hasError}/>
                 : <PropertyBuilderPreview name={propertyKey}
-                                          onClick={onClick}
+                                          onClick={() => onPropertyClick(propertyKey, namespace)}
                                           selected={selected}/>}
 
             <IconButton {...provided.dragHandleProps}
@@ -231,22 +168,9 @@ export function SchemaEntry({
                         }}>
                 <DragHandleIcon fontSize={"small"}/>
             </IconButton>
+
+            {subtree && <Box ml={3}>{subtree}</Box>}
         </Box>
     );
 
-}
-
-
-function isValidDrag(tree: TreeData, source: TreeSourcePosition, destination: TreeDestinationPosition) {
-    if (source.index === destination.index && source.parentId === destination.parentId)
-        return false;
-    const draggedPropertyId = tree.items[source.parentId].children[source.index];
-    const draggedProperty = tree.items[draggedPropertyId].data.property;
-    if (typeof draggedProperty === "function")
-        return false;
-    if (destination.parentId === tree.rootId)
-        return true;
-    const destinationPropertyId = tree.items[destination.parentId].id;
-    const destinationProperty: Property = tree.items[destinationPropertyId].data.property;
-    return typeof destinationProperty === "object" && destinationProperty.dataType === "map";
 }

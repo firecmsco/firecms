@@ -95,7 +95,7 @@ interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     customFieldValidator?: CustomFieldValidator;
     path: string;
     tableKey: string;
-    name?: keyof M;
+    propertyId?: keyof M;
     schema?: string | EntitySchema<M>;
     cellRect?: DOMRect;
     open: boolean;
@@ -114,7 +114,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                                      tableKey,
                                                                      entity,
                                                                      customFieldValidator,
-                                                                     name,
+                                                                     propertyId,
                                                                      schema: inputSchema,
                                                                      path,
                                                                      cellRect,
@@ -158,7 +158,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         () => {
             initialPositionSet.current = false;
         },
-        [name, entity]
+        [propertyId, entity]
     );
 
     const getInitialLocation = useCallback(() => {
@@ -220,11 +220,11 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     const validationSchema = useMemo(() => {
         if (!schema) return;
         return getYupEntitySchema(
-            name && schema.properties[name]
-                ? { [name]: schema.properties[name] } as ResolvedProperties<any>
+            propertyId && schema.properties[propertyId]
+                ? { [propertyId]: schema.properties[propertyId] } as ResolvedProperties<any>
                 : {} as ResolvedProperties<any>,
             customFieldValidator);
-    }, [path, internalValue, name, schema]);
+    }, [path, internalValue, propertyId, schema]);
 
     const adaptResize = () => {
         if (!draggableBoundingRect) return;
@@ -238,10 +238,10 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const saveValue = async (values: M) => {
         setSavingError(null);
-        if (entity && onCellValueChange && name) {
+        if (entity && onCellValueChange && propertyId) {
             return onCellValueChange({
-                value: values[name as string],
-                name: name as string,
+                value: values[propertyId as string],
+                name: propertyId as string,
                 entity,
                 setError: setSavingError,
                 setSaved: () => {
@@ -304,15 +304,15 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         path
                     };
 
-                    const property: ResolvedProperty<any> | undefined = schema.properties[name];
+                    const property: ResolvedProperty<any> | undefined = schema.properties[propertyId];
 
                     return <Form
                         className={classes.form}
                         onSubmit={handleSubmit}
                         noValidate>
 
-                        {name && property && buildPropertyField<any, M>({
-                            propertyKey: name as string,
+                        {propertyId && property && buildPropertyField<any, M>({
+                            propertyKey: propertyId as string,
                             disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
                             property,
                             includeDescription: false,
@@ -349,7 +349,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const draggable = (
         <div
-            key={`draggable_${name}_${entity.id}`}
+            key={`draggable_${propertyId}_${entity.id}`}
             className={clsx(classes.popup,
                 { [classes.hidden]: !open }
             )}
