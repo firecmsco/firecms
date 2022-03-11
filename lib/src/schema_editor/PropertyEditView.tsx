@@ -37,7 +37,6 @@ import { mergeDeep, removeUndefined } from "../core/util/objects";
 import {
     FieldUploadPropertyField
 } from "./properties/FieldUploadPropertyField";
-import { BooleanPropertyField } from "./properties/BooleanPropertyField";
 import { MapPropertyField } from "./properties/MapPropertyField";
 import { ArrayPropertyField } from "./properties/ArrayPropertyField";
 import { getBadgeForWidget } from "../core/util/property_utils";
@@ -463,10 +462,9 @@ function PropertyEditView({
         childComponentAdvanced =
             <FieldUploadPropertyFieldAdvanced multiple={true}/>;
     } else if (selectedWidgetId === "switch") {
-        childComponent = <BooleanPropertyField/>;
         childComponentAdvanced = <BooleanPropertyFieldAdvanced/>;
     } else if (selectedWidgetId === "group") {
-        childComponent = <MapPropertyField existing={existing}/>;
+        childComponent = existing && <MapPropertyField/>;
         childComponentAdvanced =
             <MapPropertyFieldAdvanced existing={existing}/>;
     } else if (selectedWidgetId === "repeat") {
@@ -502,53 +500,41 @@ function PropertyEditView({
     };
 
     return (<>
-            <FormControl fullWidth
-                         error={Boolean(selectedWidgetError)}>
-                <InputLabel id="component-label">Component</InputLabel>
-                <Select fullWidth
-                        labelId="component-label"
-                        value={selectedWidgetId}
-                        label={"Component"}
-                        disabled={existing}
-                        required
-                        startAdornment={<Box mr={2}>
-                            {getBadgeForWidget(selectedWidget)}
-                        </Box>}
-                        renderValue={(value) => WIDGETS[value].name}
-                        onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
-
-                    {displayedWidgets.map(([key, widget]) => {
-                        return (
-                            <MenuItem value={key} key={key}>
-                                <Box mr={3}>
-                                    {getBadgeForWidget(widget)}
-                                </Box>
-                                {widget.name}
-                            </MenuItem>
-                        );
-                    })}
-                </Select>
-                {selectedWidgetError &&
-                    <FormHelperText>Required</FormHelperText>}
-            </FormControl>
-
             <Box sx={{
                 display: "flex",
                 mt: 2,
                 justifyContent: "space-between"
             }}>
-                <Tabs
-                    value={tabPosition}
-                    onChange={handleTabChange}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    sx={{
-                        // bgcolor: "background.default",
-                    }}
-                >
-                    <Tab label="Basic config"/>
-                    <Tab label="Advanced"/>
-                </Tabs>
+                <FormControl fullWidth
+                             error={Boolean(selectedWidgetError)}>
+                    <InputLabel id="component-label">Component</InputLabel>
+                    <Select fullWidth
+                            labelId="component-label"
+                            value={selectedWidgetId}
+                            label={"Component"}
+                            disabled={existing}
+                            required
+                            startAdornment={<Box mr={2}>
+                                {getBadgeForWidget(selectedWidget)}
+                            </Box>}
+                            renderValue={(value) => WIDGETS[value].name}
+                            onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
+
+                        {displayedWidgets.map(([key, widget]) => {
+                            return (
+                                <MenuItem value={key} key={key}>
+                                    <Box mr={3}>
+                                        {getBadgeForWidget(widget)}
+                                    </Box>
+                                    {widget.name}
+                                </MenuItem>
+                            );
+                        })}
+                    </Select>
+                    {selectedWidgetError &&
+                        <FormHelperText>Required</FormHelperText>}
+                </FormControl>
+
                 {onDelete && values.id &&
                     <Button
                         sx={{
@@ -561,22 +547,41 @@ function PropertyEditView({
                     </Button>}
             </Box>
 
-            <Divider/>
+            <Box mb={2}>
 
-            <Box mt={2}>
-                <Box hidden={tabPosition !== 0} p={1}>
-                    <Grid container spacing={2} direction={"column"}>
-                        {includeIdAndTitle &&
-                            <BasePropertyField showErrors={showErrors}
-                                               disabledId={existing}/>}
-                        {childComponent}
-                    </Grid>
-                </Box>
+                {childComponentAdvanced && <Tabs
+                    value={tabPosition}
+                    onChange={handleTabChange}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    sx={{
+                        mt: 1
+                        // bgcolor: "background.default",
+                    }}
+                >
+                    <Tab label="Basic config"/>
+                    <Tab label="Advanced"/>
+                </Tabs>}
 
-                <Box hidden={tabPosition !== 1} p={1}>
-                    <Grid container spacing={2} direction={"column"}>
-                        {childComponentAdvanced}
-                    </Grid>
+
+                {childComponentAdvanced && <Divider/>}
+
+                <Box mt={2}>
+                    <Box
+                        hidden={tabPosition !== 0 && Boolean(childComponentAdvanced)}>
+                        <Grid container spacing={2} direction={"column"}>
+                            {includeIdAndTitle &&
+                                <BasePropertyField showErrors={showErrors}
+                                                   disabledId={existing}/>}
+                            {childComponent}
+                        </Grid>
+                    </Box>
+
+                    <Box hidden={tabPosition !== 1}>
+                        <Grid container spacing={2} direction={"column"}>
+                            {childComponentAdvanced}
+                        </Grid>
+                    </Box>
                 </Box>
             </Box>
 

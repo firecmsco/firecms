@@ -9,27 +9,30 @@ import { EnumValueConfig, EnumValues } from "../models";
 import { ArrayContainer } from "../form";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
 
-export function EnumForm({
-                             enumValues,
-                             onValuesChanged,
-                             onError,
-                             updateIds
-                         }: {
+type EnumFormProps = {
     enumValues: EnumValueConfig[];
     onValuesChanged?: (enumValues: EnumValueConfig[]) => void;
     onError?: (error: boolean) => void;
     updateIds: boolean;
-}) {
+};
+export const EnumForm = React.memo(
+    function EnumFormInternal({
+                                  enumValues,
+                                  onValuesChanged,
+                                  onError,
+                                  updateIds
+                              }: EnumFormProps) {
+        console.log("EnumForm");
 
-    return (
-        <Formik initialValues={{ enumValues }}
-                enableReinitialize={true}
-                validateOnMount={true}
-                validate={() => console.log("enum validate")}
-                onSubmit={(data: { enumValues: EnumValueConfig[] }, formikHelpers) => {
-                }}
-                render={({ values, errors }) => {
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
+        return (
+            <Formik initialValues={{ enumValues }}
+                    enableReinitialize={true}
+                    validateOnMount={true}
+                    validate={() => console.log("enum validate")}
+                    onSubmit={(data: { enumValues: EnumValueConfig[] }, formikHelpers) => {
+                    }}
+                    render={({ values, errors }) => {
+                        // eslint-disable-next-line react-hooks/rules-of-hooks
                     useEffect(() => {
                         if (onValuesChanged) {
                             onValuesChanged(values.enumValues);
@@ -41,117 +44,139 @@ export function EnumForm({
                             onError(Boolean(errors?.enumValues ?? false));
                     }, [errors]);
 
-                    return <EnumFormFields enumValuesPath={"enumValues"}
-                                           values={values}
-                                           errors={errors}
-                                           shouldUpdateId={updateIds}/>
-                }}
-        />
+                        return <EnumFormFields enumValuesPath={"enumValues"}
+                                               values={values}
+                                               errors={errors}
+                                               shouldUpdateId={updateIds}/>
+                    }}
+            />
 
-    );
+        );
 
-}
+    },
+    function areEqual(prevProps: EnumFormProps, nextProps: EnumFormProps) {
+        return prevProps.enumValues.length === nextProps.enumValues.length;
+    }
+);
 
-export function EnumFormFields({
-                                   values,
-                                   errors,
-                                   enumValuesPath,
-                                   shouldUpdateId
-                               }: {
+type EnumFormFieldsProps = {
     values: { enumValues: EnumValueConfig[] },
     errors: any,
     enumValuesPath: string,
     shouldUpdateId: boolean,
-}) {
+};
 
-    const [lastInternalIdAdded, setLastInternalIdAdded] = React.useState<number | undefined>();
+const EnumFormFields = React.memo(
+    function EnumFormFieldsInternal({
+                                        values,
+                                        errors,
+                                        enumValuesPath,
+                                        shouldUpdateId
+                                    }: EnumFormFieldsProps) {
 
-    const buildEntry = useCallback((index: number, internalId: number) => {
-        return <EnumEntry index={index}
-                          enumValuesPath={enumValuesPath}
-                          autoFocus={lastInternalIdAdded === internalId}
-                          shouldUpdateId={shouldUpdateId}
-                          key={`${internalId}`}/>;
-    }, [enumValuesPath, lastInternalIdAdded, shouldUpdateId]);
+        console.log("EnumFormFields");
+        const [lastInternalIdAdded, setLastInternalIdAdded] = React.useState<number | undefined>();
 
-    return (
-        <ArrayContainer
-            value={values.enumValues}
-            name={enumValuesPath}
-            buildEntry={buildEntry}
-            disabled={false}
-            onInternalIdAdded={setLastInternalIdAdded}
-            small={true}
-            includeAddButton={true}/>
-    );
-}
+        const buildEntry = useCallback((index: number, internalId: number) => {
+            return <EnumEntry index={index}
+                              enumValuesPath={enumValuesPath}
+                              autoFocus={lastInternalIdAdded === internalId}
+                              shouldUpdateId={shouldUpdateId}
+                              key={`${internalId}`}/>;
+        }, [enumValuesPath, lastInternalIdAdded, shouldUpdateId]);
 
-function EnumEntry({
-                       index,
-                       shouldUpdateId: updateId,
-                       enumValuesPath,
-                       autoFocus
-                   }: {
+        return (
+            <ArrayContainer
+                value={values.enumValues}
+                name={enumValuesPath}
+                buildEntry={buildEntry}
+                disabled={false}
+                onInternalIdAdded={setLastInternalIdAdded}
+                small={true}
+                includeAddButton={true}/>
+        );
+    },
+    function areEqual(prevProps: EnumFormFieldsProps, nextProps: EnumFormFieldsProps) {
+        return prevProps.enumValuesPath === nextProps.enumValuesPath &&
+            prevProps.shouldUpdateId === nextProps.shouldUpdateId;
+    });
+
+type EnumEntryProps = {
     index: number,
     enumValuesPath: string,
     shouldUpdateId: boolean,
     autoFocus: boolean
-}) {
+};
+const EnumEntry = React.memo(
+    function EnumEntryInternal({
+                                   index,
+                                   shouldUpdateId: updateId,
+                                   enumValuesPath,
+                                   autoFocus
+                               }: EnumEntryProps) {
 
-    const {
-        values,
-        handleChange,
-        errors,
-        setFieldValue,
-        touched
-    } = useFormikContext<EnumValues>();
+        const {
+            values,
+            handleChange,
+            errors,
+            setFieldValue,
+            touched
+        } = useFormikContext<EnumValues>();
 
-    const shouldUpdateIdRef = React.useRef(!getIn(values, `${enumValuesPath}[${index}].id`));
-    const shouldUpdateId = updateId || shouldUpdateIdRef.current;
+        const shouldUpdateIdRef = React.useRef(!getIn(values, `${enumValuesPath}[${index}].id`));
+        const shouldUpdateId = updateId || shouldUpdateIdRef.current;
 
-    const [dialogOpen, setDialogOpen] = React.useState(false);
+        const [dialogOpen, setDialogOpen] = React.useState(false);
 
-    const idValue = getIn(values, `${enumValuesPath}[${index}].id`);
-    const labelValue = getIn(values, `${enumValuesPath}[${index}].label`);
+        const idValue = getIn(values, `${enumValuesPath}[${index}].id`);
+        const labelValue = getIn(values, `${enumValuesPath}[${index}].label`);
 
-    const labelError = getIn(errors, `${enumValuesPath}[${index}].label`);
+        const labelError = getIn(errors, `${enumValuesPath}[${index}].label`);
 
-    const currentLabelRef = React.useRef(labelValue);
+        const currentLabelRef = React.useRef(labelValue);
 
-    React.useEffect(() => {
-        if (currentLabelRef.current === idValue && shouldUpdateId) {
-            setFieldValue(`${enumValuesPath}[${index}].id`, labelValue);
-        }
-        currentLabelRef.current = labelValue;
-    }, [labelValue]);
+        React.useEffect(() => {
+            if (currentLabelRef.current === idValue && shouldUpdateId) {
+                setFieldValue(`${enumValuesPath}[${index}].id`, labelValue);
+            }
+            currentLabelRef.current = labelValue;
+        }, [labelValue]);
 
-    return (
-        <Box display={"flex"} width={"100%"} alignItems={"center"}>
-            <Box width={"100%"} mx={1}>
-                <Field name={`${enumValuesPath}[${index}].label`}
-                       as={DebouncedTextField}
-                       required
-                       fullWidth
-                       size="small"
-                       validate={validateLabel}
-                       autoFocus={autoFocus}
-                       autoComplete="off"
-                       error={Boolean(labelError)}/>
-            </Box>
-            <Box>
-                <IconButton
-                    size="small"
-                    aria-label="edit"
-                    onClick={() => setDialogOpen(true)}>
-                    <SettingsOutlinedIcon fontSize={"small"}/>
-                </IconButton>
-            </Box>
-            <EnumEntryDialog index={index}
-                             open={dialogOpen}
-                             enumValuesPath={enumValuesPath}
-                             onClose={() => setDialogOpen(false)}/>
-        </Box>);
-}
+        return (
+            <Box display={"flex"} width={"100%"} alignItems={"center"}>
+                <Box width={"100%"} mx={1}>
+                    <Field name={`${enumValuesPath}[${index}].label`}
+                           as={DebouncedTextField}
+                           required
+                           fullWidth
+                           size="small"
+                           validate={validateLabel}
+                           autoFocus={autoFocus}
+                           autoComplete="off"
+                           error={Boolean(labelError)}/>
+                </Box>
+                <Box>
+                    <IconButton
+                        size="small"
+                        aria-label="edit"
+                        onClick={() => setDialogOpen(true)}>
+                        <SettingsOutlinedIcon fontSize={"small"}/>
+                    </IconButton>
+                </Box>
+                <EnumEntryDialog index={index}
+                                 open={dialogOpen}
+                                 enumValuesPath={enumValuesPath}
+                                 onClose={() => setDialogOpen(false)}/>
+            </Box>);
+    },
+    function areEqual(prevProps: EnumEntryProps, nextProps: EnumEntryProps) {
+        return prevProps.index === nextProps.index &&
+            prevProps.enumValuesPath === nextProps.enumValuesPath &&
+            prevProps.shouldUpdateId === nextProps.shouldUpdateId &&
+            prevProps.autoFocus === nextProps.autoFocus;
+    }
+);
+
 
 function EnumEntryDialog({
                              index,

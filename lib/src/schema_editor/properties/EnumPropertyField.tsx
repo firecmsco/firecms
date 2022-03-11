@@ -4,7 +4,7 @@ import { Grid, Paper, Typography } from "@mui/material";
 import { EnumValueConfig, NumberProperty, StringProperty } from "../../models";
 import { resolveEnumValues } from "../../core/util/entities";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
-import { EnumForm, EnumFormFields } from "../EnumForm";
+import { EnumForm } from "../EnumForm";
 
 export function EnumPropertyField({
                                       multiselect,

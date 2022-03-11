@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from "react";
 import { Button, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import { PropertyForm } from "../PropertyEditView";
 import { MapProperty, Property } from "../../models";
 import { useFormikContext } from "formik";
 
-export function MapPropertyField({ existing }: { existing: boolean; }) {
+export function MapPropertyField({}: {}) {
 
     const {
         values,
@@ -17,7 +18,7 @@ export function MapPropertyField({ existing }: { existing: boolean; }) {
                                                id,
                                                property
                                            }: { id?: string, property: Property }) => {
-        if(!id)
+        if (!id)
             throw Error();
         setFieldValue("properties", {
             ...(values.properties ?? {}),
@@ -29,7 +30,20 @@ export function MapPropertyField({ existing }: { existing: boolean; }) {
 
     return (
         <>
-            {existing && <Grid item >
+            <Grid item>
+
+                <Button
+                    color="primary"
+                    variant={"outlined"}
+                    size={"large"}
+                    onClick={() => setNewPropertyDialogOpen(true)}
+                    startIcon={<EditIcon/>}
+                >
+                    Edit {values.title} properties
+                </Button>
+
+            </Grid>
+            <Grid item>
                 <Button
                     color="primary"
                     variant={"outlined"}
@@ -39,15 +53,12 @@ export function MapPropertyField({ existing }: { existing: boolean; }) {
                 >
                     Add property to {values.title}
                 </Button>
-
-                <PropertyForm asDialog={true}
-                              forceShowErrors={false}
-                              open={newPropertyDialogOpen}
-                              onCancel={() => setNewPropertyDialogOpen(false)}
-                              existing={false}
-                              onPropertyChanged={onPropertyCreated}/>
-            </Grid>}
-
-        </>
-    );
+            </Grid>
+            <PropertyForm asDialog={true}
+                          forceShowErrors={false}
+                          open={newPropertyDialogOpen}
+                          onCancel={() => setNewPropertyDialogOpen(false)}
+                          existing={false}
+                          onPropertyChanged={onPropertyCreated}/>
+        </>);
 }

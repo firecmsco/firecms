@@ -1,5 +1,5 @@
 import React from "react";
-import { alpha, Box, Paper, Typography } from "@mui/material";
+import { alpha, Box, Button, Paper, Typography } from "@mui/material";
 import { getBadgeForWidget } from "../core/util/property_utils";
 import FunctionsIcon from "@mui/icons-material/Functions";
 import { Property } from "../models";
@@ -70,13 +70,21 @@ export function PropertyFieldPreview({
                         }
                     </Typography>}
 
-                    <Box sx={{ display: "flex", flexDirection: "row" }}>
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center"
+                    }}>
                         <Typography sx={{ flexGrow: 1, pr: 2 }}
                                     variant={includeTitle ? "body2" : "subtitle1"}
                                     component="span"
                                     color="text.secondary">
                             {widget?.name}
                         </Typography>
+                        {property.dataType === "map" &&
+                            <Button size={"small"}
+                                    variant={"outlined"}
+                                    sx={{ mr: 1 }}>Edit</Button>}
                         <Typography variant="body2"
                                     component="span"
                                     color="text.disabled">

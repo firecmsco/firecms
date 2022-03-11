@@ -21,10 +21,10 @@ import {
     DatePreview,
     EmptyValue,
     MapPropertyPreview,
+    Markdown,
     NumberPropertyPreview,
     ReferencePreview,
     StorageThumbnail,
-    Markdown,
     StringPropertyPreview,
     UrlComponentPreview
 } from "./internal";
@@ -119,13 +119,11 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
                             value={value as string[]}
                             property={property as ResolvedArrayProperty}/>;
                     }
-                } else if (arrayProperty.of.dataType === "number") {
-                    if (arrayProperty.of.enumValues) {
-                        content = <ArrayPropertyEnumPreview
-                            {...fieldProps}
-                            value={value as string[]}
-                            property={property as ResolvedArrayProperty}/>;
-                    }
+                } else if (arrayProperty.of.dataType === "number" && arrayProperty.of.enumValues) {
+                    content = <ArrayPropertyEnumPreview
+                        {...fieldProps}
+                        value={value as string[]}
+                        property={property as ResolvedArrayProperty}/>;
                 } else {
                     content = <ArrayPropertyPreview {...fieldProps}
                                                     value={value}
