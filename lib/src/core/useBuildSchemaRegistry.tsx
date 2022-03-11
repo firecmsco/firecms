@@ -103,7 +103,12 @@ export function useBuildSchemaRegistry<UserType>({
     }, [userConfigPersistence]);
 
     const findSchema = useCallback((schemaId: string): EntitySchema | undefined => {
-        return schemas.find((s) => s.id === schemaId);
+        const schema = schemas.find((s) => s.id === schemaId);
+        if (!schema) return undefined;
+        return {
+            ...schema,
+            propertiesOrder: schema.propertiesOrder ?? Object.keys(schema.properties)
+        };
     }, [schemas]);
 
     const findEnum = useCallback((id: string): EnumConfig | undefined => {

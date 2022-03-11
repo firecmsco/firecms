@@ -49,7 +49,7 @@ export function PropertyFieldPreview({
                            ? `1px solid ${theme.palette.error.light}`
                            : (selected ? `1px solid ${theme.palette.primary.light}` : undefined),
                        "&:hover": {
-                           backgroundColor: alpha(theme.palette.primary.light, 0.05)
+                           backgroundColor: onClick ? alpha(theme.palette.primary.light, 0.05) : undefined
                        }
                    })}
                    elevation={0}>
@@ -81,10 +81,6 @@ export function PropertyFieldPreview({
                                     color="text.secondary">
                             {widget?.name}
                         </Typography>
-                        {property.dataType === "map" &&
-                            <Button size={"small"}
-                                    variant={"outlined"}
-                                    sx={{ mr: 1 }}>Edit</Button>}
                         <Typography variant="body2"
                                     component="span"
                                     color="text.disabled">
@@ -105,7 +101,7 @@ export function PropertyBuilderPreview({
                                        }: {
     name: string,
     selected: boolean,
-    onClick: () => void,
+    onClick?: () => void,
 }) {
 
     return <Box

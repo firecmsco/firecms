@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Grid, Paper, Typography } from "@mui/material";
+import { Button, Grid, Paper, Typography } from "@mui/material";
 import { ArrayProperty, Property } from "../../models";
 import { getIn, useFormikContext } from "formik";
 import { PropertyForm } from "../PropertyEditView";
@@ -34,8 +34,11 @@ export function ArrayPropertyField({
                     Repeat component
                 </Typography>
                 <Paper variant={"outlined"} sx={{ p: 2, mt: 1 }}>
-                    <PropertyFieldPreview property={ofProperty}
-                                          onClick={() => setPropertyDialogOpen(true)}/>
+                    {ofProperty && <PropertyFieldPreview property={ofProperty}
+                                                         onClick={() => setPropertyDialogOpen(true)}/>}
+                    <Button variant={"outlined"}
+                            onClick={() => setPropertyDialogOpen(true)}>Edit
+                        repeat component</Button>
                     <PropertyForm asDialog={true}
                                   open={propertyDialogOpen}
                                   existing={existing}

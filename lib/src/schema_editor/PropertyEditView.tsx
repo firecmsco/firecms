@@ -7,6 +7,7 @@ import {
     Button,
     Dialog,
     DialogContent,
+    DialogContentText,
     DialogTitle,
     Divider,
     FormControl,
@@ -54,9 +55,6 @@ import {
     BooleanPropertyFieldAdvanced
 } from "./properties_advanced/BooleanPropertyFieldAdvanced";
 import {
-    MapPropertyFieldAdvanced
-} from "./properties_advanced/MapPropertyFieldAdvanced";
-import {
     ArrayPropertyFieldAdvanced
 } from "./properties_advanced/ArrayPropertyFieldAdvanced";
 
@@ -99,6 +97,7 @@ export function PropertyForm({
 
     return (
         <Formik
+            key={`property_view_${propertyId}`}
             initialValues={property
                 ? { id: propertyId, ...property } as PropertyWithId
                 : initialValue}
@@ -117,14 +116,12 @@ export function PropertyForm({
             }}
             validate={(values) => {
                 if (!getWidget(values)) {
-                    console.log("val error")
                     return { selectedWidget: "Required" }
                 }
                 return {};
             }}
         >
             {(props) => {
-
                 const form = <PropertyEditView
                     onPropertyChanged={asDialog ? undefined : onPropertyChanged}
                     onDelete={existing ? onDelete : undefined}
@@ -465,8 +462,6 @@ function PropertyEditView({
         childComponentAdvanced = <BooleanPropertyFieldAdvanced/>;
     } else if (selectedWidgetId === "group") {
         childComponent = existing && <MapPropertyField/>;
-        childComponentAdvanced =
-            <MapPropertyFieldAdvanced existing={existing}/>;
     } else if (selectedWidgetId === "repeat") {
         childComponent =
             <ArrayPropertyField showErrors={showErrors} existing={existing}/>;
@@ -547,41 +542,38 @@ function PropertyEditView({
                     </Button>}
             </Box>
 
-            <Box mb={2}>
 
-                {childComponentAdvanced && <Tabs
-                    value={tabPosition}
-                    onChange={handleTabChange}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    sx={{
-                        mt: 1
-                        // bgcolor: "background.default",
-                    }}
-                >
-                    <Tab label="Basic config"/>
-                    <Tab label="Advanced"/>
-                </Tabs>}
+            <Tabs
+                value={tabPosition}
+                onChange={handleTabChange}
+                variant="scrollable"
+                scrollButtons="auto"
+                sx={{
+                    mt: 1
+                    // bgcolor: "background.default",
+                }}
+            >
+                <Tab label="Configuration"/>
+                {childComponentAdvanced && <Tab label="Advanced"/>}
+            </Tabs>
 
+            {childComponentAdvanced && <Divider/>}
 
-                {childComponentAdvanced && <Divider/>}
+            <Box mt={2} mb={2}>
+                <Box
+                    hidden={tabPosition !== 0 && Boolean(childComponentAdvanced)}>
+                    <Grid container spacing={2} direction={"column"}>
+                        {includeIdAndTitle &&
+                            <BasePropertyField showErrors={showErrors}
+                                               disabledId={existing}/>}
+                        {childComponent}
+                    </Grid>
+                </Box>
 
-                <Box mt={2}>
-                    <Box
-                        hidden={tabPosition !== 0 && Boolean(childComponentAdvanced)}>
-                        <Grid container spacing={2} direction={"column"}>
-                            {includeIdAndTitle &&
-                                <BasePropertyField showErrors={showErrors}
-                                                   disabledId={existing}/>}
-                            {childComponent}
-                        </Grid>
-                    </Box>
-
-                    <Box hidden={tabPosition !== 1}>
-                        <Grid container spacing={2} direction={"column"}>
-                            {childComponentAdvanced}
-                        </Grid>
-                    </Box>
+                <Box hidden={tabPosition !== 1}>
+                    <Grid container spacing={2} direction={"column"}>
+                        {childComponentAdvanced}
+                    </Grid>
                 </Box>
             </Box>
 
@@ -605,16 +597,12 @@ function DeleteConfirmationDialog({
         <DialogTitle>
             {"Delete this property?"}
         </DialogTitle>
-        {/*<DialogContent>*/}
-        {/*    <DialogContentText>*/}
-        {/*        You are moving one property from one context to*/}
-        {/*        another.*/}
-        {/*    </DialogContentText>*/}
-        {/*    <DialogContentText>*/}
-        {/*        This will <b>not transfer the data</b>, only modify*/}
-        {/*        the schema.*/}
-        {/*    </DialogContentText>*/}
-        {/*</DialogContent>*/}
+        <DialogContent>
+            <DialogContentText>
+                This will <b>not delete the data</b>, only modify
+                the schema.
+            </DialogContentText>
+        </DialogContent>
         <CustomDialogActions>
             <Button
                 onClick={onCancel}

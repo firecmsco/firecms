@@ -21,18 +21,20 @@ export function PropertyTree<M>({
                                     selectedPropertyKey,
                                     onPropertyClick,
                                     properties,
-                                    propertiesOrder,
+                                    propertiesOrder: propertiesOrderProp,
                                     errors,
                                     onPropertyMove
                                 }: {
     namespace?: string;
     selectedPropertyKey?: string;
-    onPropertyClick: (propertyKey: string, namespace?: string) => void;
+    onPropertyClick?: (propertyKey: string, namespace?: string) => void;
     properties: PropertiesOrBuilder<M>;
-    propertiesOrder: string[];
+    propertiesOrder?: string[];
     errors: Record<string, any>;
     onPropertyMove: (propertiesOrder: string[], namespace?: string) => void;
 }) {
+
+    const propertiesOrder = propertiesOrderProp ?? Object.keys(properties);
 
     const onDragEnd = (result: any) => {
         // dropped outside the list
@@ -67,15 +69,15 @@ export function PropertyTree<M>({
                                         {(provided, snapshot) => {
                                             const property = properties[propertyKey] as PropertyOrBuilder;
                                             return (
-                                                <TreeSchemaEntry
+                                                <PropertyTreeEntry
                                                     propertyKey={propertyKey as string}
                                                     propertyOrBuilder={property}
                                                     provided={provided}
                                                     errors={errors}
                                                     namespace={namespace}
                                                     onPropertyMove={onPropertyMove}
-                                                    onPropertyClick={onPropertyClick}
-                                                    selected={snapshot.isDragging || selectedPropertyKey === propertyKey}
+                                                    onPropertyClick={snapshot.isDragging ? undefined : onPropertyClick}
+                                                    selectedPropertyKey={selectedPropertyKey}
                                                 />
                                             );
                                         }}
@@ -104,23 +106,23 @@ export function PropertyTree<M>({
     );
 }
 
-export function TreeSchemaEntry({
-                                propertyKey,
-                                namespace,
-                                propertyOrBuilder,
-                                provided,
-                                selected,
-                                errors,
-                                onPropertyClick,
-                                onPropertyMove
-                            }: {
+export function PropertyTreeEntry({
+                                      propertyKey,
+                                      namespace,
+                                      propertyOrBuilder,
+                                      provided,
+                                      selectedPropertyKey,
+                                      errors,
+                                      onPropertyClick,
+                                      onPropertyMove
+                                  }: {
     propertyKey: string;
     namespace?: string;
     propertyOrBuilder: PropertyOrBuilder;
+    selectedPropertyKey?: string;
     provided: DraggableProvided;
-    selected: boolean;
     errors: Record<string, any>;
-    onPropertyClick: (propertyKey: string, namespace?: string) => void;
+    onPropertyClick?: (propertyKey: string, namespace?: string) => void;
     onPropertyMove: (propertiesOrder: string[], namespace?: string) => void;
 }) {
 
@@ -128,8 +130,9 @@ export function TreeSchemaEntry({
     let subtree;
     if (typeof propertyOrBuilder === "object") {
         const property = propertyOrBuilder;
-        if (property.dataType === "map" && property.properties && property.propertiesOrder) {
+        if (property.dataType === "map" && property.properties) {
             subtree = <PropertyTree
+                selectedPropertyKey={selectedPropertyKey}
                 namespace={fullId}
                 properties={property.properties}
                 propertiesOrder={property.propertiesOrder}
@@ -140,6 +143,7 @@ export function TreeSchemaEntry({
     }
 
     const hasError = fullId ? getIn(errors, idToPropertiesPath(fullId)) : false;
+    const selected = selectedPropertyKey === fullId;
     return (
         <Box
             ref={provided.innerRef}
@@ -151,12 +155,12 @@ export function TreeSchemaEntry({
             {typeof propertyOrBuilder === "object"
                 ? <PropertyFieldPreview
                     property={propertyOrBuilder}
-                    onClick={() => onPropertyClick(propertyKey, namespace)}
+                    onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
                     includeTitle={true}
                     selected={selected}
                     hasError={hasError}/>
                 : <PropertyBuilderPreview name={propertyKey}
-                                          onClick={() => onPropertyClick(propertyKey, namespace)}
+                                          onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
                                           selected={selected}/>}
 
             <IconButton {...provided.dragHandleProps}

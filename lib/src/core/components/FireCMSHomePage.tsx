@@ -142,6 +142,7 @@ export function FireCMSHomePage() {
                        sx={{ height: "100%", minHeight: 124 }}>
                     <CardActionArea
                         sx={{
+                            height: "100%",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "flex-start"
@@ -152,7 +153,11 @@ export function FireCMSHomePage() {
 
                         <CardContent
                             sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
                                 height: "100%",
+                                width: "100%",
                                 flexGrow: 1
                             }}>
                             <AddIcon color="primary"/>

@@ -61,7 +61,6 @@ export function SchemaEditor<M>({
 
     // Use this ref to store which properties have errors
     const propertyErrorsRef = useRef({});
-    console.log("propertyErrorsRef", propertyErrorsRef.current);
 
     if (!configurationPersistence)
         throw Error("Can't use the schema editor without specifying a `ConfigurationPersistence`");
@@ -82,7 +81,9 @@ export function SchemaEditor<M>({
             console.error(e);
             setInitialError(initialError);
         }
-    }, [schema, schemaRegistry]);
+    }, [schemaId, schemaRegistry]);
+
+    console.log("schema", schema);
 
     const saveSchema = useCallback((schema: EntitySchema<M>): Promise<boolean> => {
         const newSchema = prepareSchemaForPersistence(schema);
@@ -302,7 +303,7 @@ export function SchemaEditorForm<M>({
 
     const emptySchema = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
 
-    const addPropertyIcon = <Button
+    const addPropertyButton = <Button
         color="primary"
         variant={"outlined"}
         size={"large"}
@@ -339,7 +340,7 @@ export function SchemaEditorForm<M>({
             </Box>
         </Box>
 
-        {!emptySchema && addPropertyIcon}
+        {!emptySchema && addPropertyButton}
     </Box>;
 
     let body;
@@ -352,7 +353,7 @@ export function SchemaEditorForm<M>({
                     sx={{ flexGrow: 1 }}
                     padding={2}>
             <Box m={2}>Now you can add your first property</Box>
-            {addPropertyIcon}
+            {addPropertyButton}
         </Box>
     } else {
         body = <Box
@@ -367,7 +368,7 @@ export function SchemaEditorForm<M>({
                                 setSelectedPropertyId(propertyKey);
                                 setSelectedPropertyNamespace(namespace);
                             }}
-                            selectedPropertyKey={selectedPropertyId}
+                            selectedPropertyKey={selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined}
                             properties={values.properties}
                             propertiesOrder={(values.propertiesOrder ?? Object.keys(values.properties)) as string[]}
                             onPropertyMove={doPropertyMove}
@@ -393,10 +394,7 @@ export function SchemaEditorForm<M>({
                             {propertyEditForm}
 
                             {!selectedProperty &&
-                                <Box sx={{
-                                    maxHeight: "80%",
-                                    minHeight: "600px"
-                                }}>
+                                <Box>
                                     Select a property to edit it
                                 </Box>}
                         </Paper>
