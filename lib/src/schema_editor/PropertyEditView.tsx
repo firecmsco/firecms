@@ -22,7 +22,6 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { Property } from "../models";
-import { StringPropertyField } from "./properties/StringPropertyField";
 import {
     getWidget,
     getWidgetId,
@@ -39,7 +38,7 @@ import {
     FieldUploadPropertyField
 } from "./properties/FieldUploadPropertyField";
 import { MapPropertyField } from "./properties/MapPropertyField";
-import { ArrayPropertyField } from "./properties/ArrayPropertyField";
+import { RepeatPropertyField } from "./properties/RepeatPropertyField";
 import { getBadgeForWidget } from "../core/util/property_utils";
 import { BasePropertyField } from "./properties/BasePropertyField";
 import {
@@ -57,6 +56,7 @@ import {
 import {
     ArrayPropertyFieldAdvanced
 } from "./properties_advanced/ArrayPropertyFieldAdvanced";
+import { BlockPropertyField } from "./properties/BlockPropertyField";
 
 export type PropertyWithId = Property & { id?: string };
 
@@ -65,6 +65,7 @@ export function PropertyForm({
                                  open,
                                  includeIdAndTitle = true,
                                  existing,
+                                 inArray,
                                  propertyId,
                                  propertyNamespace,
                                  property,
@@ -79,6 +80,7 @@ export function PropertyForm({
     open?: boolean;
     includeIdAndTitle?: boolean;
     existing: boolean;
+    inArray: boolean;
     propertyId?: string;
     propertyNamespace?: string;
     property?: Property;
@@ -130,7 +132,7 @@ export function PropertyForm({
                     onError={onError}
                     showErrors={forceShowErrors || props.submitCount > 0}
                     existing={existing}
-                    inArray={props.values.dataType === "array"}
+                    inArray={inArray}
                     {...props}/>;
 
                 let body: JSX.Element;
@@ -357,6 +359,16 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
                 dataType: "array"
             })
         );
+    } else if (selectedWidgetId === "block") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            buildProperty({
+                dataType: "array",
+                oneOf: {
+                    properties: {}
+                }
+            })
+        );
     }
 
     if (updatedProperty) {
@@ -431,7 +443,6 @@ function PropertyEditView({
         selectedWidgetId === "markdown" ||
         selectedWidgetId === "url" ||
         selectedWidgetId === "email") {
-        childComponent = <StringPropertyField widgetId={selectedWidgetId}/>;
         childComponentAdvanced =
             <StringPropertyFieldAdvanced widgetId={selectedWidgetId}/>;
     } else if (selectedWidgetId === "select" ||
@@ -462,9 +473,11 @@ function PropertyEditView({
         childComponentAdvanced = <BooleanPropertyFieldAdvanced/>;
     } else if (selectedWidgetId === "group") {
         childComponent = existing && <MapPropertyField/>;
+    } else if (selectedWidgetId === "block") {
+        childComponent = existing && <BlockPropertyField/>;
     } else if (selectedWidgetId === "repeat") {
         childComponent =
-            <ArrayPropertyField showErrors={showErrors} existing={existing}/>;
+            <RepeatPropertyField showErrors={showErrors} existing={existing}/>;
         childComponentAdvanced =
             <ArrayPropertyFieldAdvanced showErrors={showErrors}
                                         existing={existing}/>;
@@ -493,6 +506,9 @@ function PropertyEditView({
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setTabPosition(newValue);
     };
+
+    const hasBasicTab = Boolean(childComponent) || includeIdAndTitle;
+    const hasAdvancedTab = Boolean(childComponentAdvanced);
 
     return (<>
             <Box sx={{
@@ -542,26 +558,26 @@ function PropertyEditView({
                     </Button>}
             </Box>
 
-
             <Tabs
-                value={tabPosition}
+                value={!hasBasicTab || !hasAdvancedTab ? false : tabPosition}
                 onChange={handleTabChange}
                 variant="scrollable"
                 scrollButtons="auto"
                 sx={{
                     mt: 1
-                    // bgcolor: "background.default",
                 }}
             >
-                <Tab label="Configuration"/>
-                {childComponentAdvanced && <Tab label="Advanced"/>}
+                {hasBasicTab && <Tab label="Configuration"
+                                     disabled={!hasAdvancedTab}/>}
+                {hasAdvancedTab && <Tab label="Advanced"
+                                        disabled={!hasBasicTab}/>}
             </Tabs>
 
-            {childComponentAdvanced && <Divider/>}
+            <Divider/>
 
-            <Box mt={2} mb={2}>
+            <Box mt={3} mb={2}>
                 <Box
-                    hidden={tabPosition !== 0 && Boolean(childComponentAdvanced)}>
+                    hidden={tabPosition !== 0 && hasAdvancedTab}>
                     <Grid container spacing={2} direction={"column"}>
                         {includeIdAndTitle &&
                             <BasePropertyField showErrors={showErrors}
@@ -570,7 +586,7 @@ function PropertyEditView({
                     </Grid>
                 </Box>
 
-                <Box hidden={tabPosition !== 1}>
+                <Box hidden={tabPosition !== 1 && hasBasicTab}>
                     <Grid container spacing={2} direction={"column"}>
                         {childComponentAdvanced}
                     </Grid>

@@ -23,10 +23,9 @@ import {
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
-import { TableColumn, TableColumnFilter } from "../../index";
+import { TableColumn, TableColumnFilter } from "../Table";
 import { getIconForProperty } from "../../util/property_utils";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
-
 
 export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = {
 
@@ -98,7 +97,6 @@ export interface OnCellValueChangeParams<T, M extends { [Key: string]: any }> {
     setSaved: (saved: boolean) => void
     setError: (e: Error) => void
 }
-
 
 export function checkInlineEditing<M>(inlineEditing: ((entity: Entity<any>) => boolean) | boolean, entity: Entity<M>) {
     if (typeof inlineEditing === "boolean") {
@@ -439,6 +437,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     const popupFormField = (
         <PopupFormField
+            // key={`popup_form_${popupCell?.columnIndex}_${popupCell?.entity?.id}`}
             open={Boolean(popupCell)}
             onClose={onPopupClose}
             cellRect={popupCell?.cellRect}

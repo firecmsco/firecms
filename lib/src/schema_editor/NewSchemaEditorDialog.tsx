@@ -74,7 +74,6 @@ export function NewSchemaEditorDialog<M>({
                 return undefined;
             }}
             onSubmit={(newSchema: EntitySchema, formikHelpers) => {
-                console.log("nnn", newSchema);
                 return saveSchema(newSchema).then(() => {
                     formikHelpers.resetForm({ values: newSchema });
                     if (mode === "details")

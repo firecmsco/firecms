@@ -13,8 +13,6 @@ import { Portal } from "@mui/base";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
-import equal from "react-fast-compare"
-
 import {
     Entity,
     EntitySchema,
@@ -127,7 +125,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
-    const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
+    // const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
     const schemaRegistry = useSchemaRegistry();
     const schema = inputSchema
         ? schemaRegistry.getResolvedSchema({
@@ -142,6 +140,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const ref = React.useRef<HTMLDivElement>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
+
     const initialPositionSet = React.useRef<boolean>(false);
 
     const draggableBoundingRect = ref.current?.getBoundingClientRect();
@@ -160,6 +159,13 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         },
         [propertyId, entity]
     );
+
+    // useEffect(
+    //     () => {
+    //         setInternalValue(entity?.values);
+    //     },
+    //     [entity?.values]
+    // );
 
     const getInitialLocation = useCallback(() => {
         if (!cellRect) throw Error("getInitialLocation error");
@@ -196,11 +202,18 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     useEffect(
         () => {
+            initialPositionSet.current = false;
+        },
+        [propertyId]
+    );
+
+    useEffect(
+        () => {
             if (!cellRect || !draggableBoundingRect || initialPositionSet.current) return;
             initialPositionSet.current = true;
-            updatePopupLocation(getInitialLocation());
+            updatePopupLocation();
         },
-        [cellRect, draggableBoundingRect, getInitialLocation, updatePopupLocation]
+        [cellRect, draggableBoundingRect, updatePopupLocation, initialPositionSet.current]
     );
 
     useLayoutEffect(
@@ -224,7 +237,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 ? { [propertyId]: schema.properties[propertyId] } as ResolvedProperties<any>
                 : {} as ResolvedProperties<any>,
             customFieldValidator);
-    }, [path, internalValue, propertyId, schema]);
+    }, [path, propertyId, schema]);
 
     const adaptResize = () => {
         if (!draggableBoundingRect) return;
@@ -263,7 +276,8 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 maxHeight: "85vh"
             }}>
             <Formik
-                initialValues={entity.values}
+                // key={`popup_form_${propertyId}_${entity?.id}`}
+                initialValues={(entity?.values ?? {}) as EntityValues<M>}
                 validationSchema={validationSchema}
                 validate={(values) => console.debug("Validating", values)}
                 onSubmit={(values, actions) => {
@@ -284,9 +298,9 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                       isSubmitting
                   }: FormikProps<EntityValues<M>>) => {
 
-                    if (!equal(values, internalValue)) {
-                        setInternalValue(values);
-                    }
+                    // if (!equal(values, internalValue)) {
+                    //     setInternalValue(values);
+                    // }
 
                     if (!entity)
                         return <ErrorView

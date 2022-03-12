@@ -9,12 +9,7 @@ export function BooleanPropertyFieldAdvanced() {
     return (
         <>
             <Grid item >
-                <Typography variant={"subtitle2"} >
-                    Validation
-                </Typography>
-                <Paper variant={"outlined"} sx={{ p: 2, mt: 1 }}>
                     <GeneralPropertyValidation/>
-                </Paper>
             </Grid>
         </>
     );

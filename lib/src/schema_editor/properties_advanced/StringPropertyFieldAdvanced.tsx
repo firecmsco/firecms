@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Paper, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import {
     StringPropertyValidation
 } from "./validation/StringPropertyValidation";
@@ -13,10 +13,6 @@ export function StringPropertyFieldAdvanced({
     return (
         <>
             <Grid item>
-                <Typography variant={"subtitle2"}>
-                    Validation
-                </Typography>
-                <Paper variant={"outlined"} sx={{ p: 2, mt: 1 }}>
                     {widgetId === "text_field" &&
                         <StringPropertyValidation length={true}
                                                   lowercase={true}
@@ -50,7 +46,6 @@ export function StringPropertyFieldAdvanced({
                             max={true}
                             min={true}
                             trim={true}/>}
-                </Paper>
             </Grid>
         </>
     );

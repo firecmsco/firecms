@@ -83,8 +83,6 @@ export function SchemaEditor<M>({
         }
     }, [schemaId, schemaRegistry]);
 
-    console.log("schema", schema);
-
     const saveSchema = useCallback((schema: EntitySchema<M>): Promise<boolean> => {
         const newSchema = prepareSchemaForPersistence(schema);
         return configurationPersistence.saveSchema(newSchema)
@@ -129,7 +127,6 @@ export function SchemaEditor<M>({
             validationSchema={YupSchema}
             validate={() => propertyErrorsRef.current}
             onSubmit={(newSchema: EntitySchema, formikHelpers: FormikHelpers<EntitySchema>) => {
-                console.log("onSubmit")
                 saveSchema(newSchema).then(() => {
                     formikHelpers.resetForm({ values: newSchema });
                 });
@@ -142,7 +139,6 @@ export function SchemaEditor<M>({
                 const onCancel = handleClose ? () => handleClose(undefined) : undefined;
 
                 const onPropertyError = (propertyId: string, namespace?: string, error?: string) => {
-                    console.log("onPropertyError", idToPropertiesPath(getFullId(propertyId, namespace)), error);
                     propertyErrorsRef.current = setIn(propertyErrorsRef.current, idToPropertiesPath(getFullId(propertyId, namespace)), error);
                     propertyErrorsRef.current = removeUndefined(propertyErrorsRef.current);
                 };
@@ -239,10 +235,8 @@ export function SchemaEditorForm<M>({
         setSelectedPropertyNamespace(undefined);
     }, [setFieldValue, values]);
 
-    const doPropertyMove = useCallback((propertiesOrder, namespace) => {
-        console.log("propertiesOrder", propertiesOrder);
+    const onPropertyMove = useCallback((propertiesOrder, namespace) => {
         setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
-        // setFieldValue("properties", properties, false);
     }, [setFieldValue]);
 
     const onPropertyCreated = useCallback(({
@@ -285,6 +279,7 @@ export function SchemaEditorForm<M>({
         selectedProperty &&
         typeof selectedProperty === "object" &&
         <PropertyForm
+            inArray={false}
             asDialog={asDialog}
             open={Boolean(selectedPropertyId)}
             key={`edit_view_${selectedPropertyId}`}
@@ -309,7 +304,7 @@ export function SchemaEditorForm<M>({
         size={"large"}
         onClick={() => setNewPropertyDialogOpen(true)}
         startIcon={<AddIcon/>}>
-        Add property
+        Add new property
     </Button>;
 
     const TitleComponent = <Box sx={{
@@ -364,16 +359,18 @@ export function SchemaEditorForm<M>({
                     <ErrorBoundary>
                         <PropertyTree
                             onPropertyClick={(propertyKey, namespace) => {
-                                console.log("onPropertyClick", propertyKey, namespace);
                                 setSelectedPropertyId(propertyKey);
                                 setSelectedPropertyNamespace(namespace);
                             }}
                             selectedPropertyKey={selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined}
                             properties={values.properties}
                             propertiesOrder={(values.propertiesOrder ?? Object.keys(values.properties)) as string[]}
-                            onPropertyMove={doPropertyMove}
+                            onPropertyMove={onPropertyMove}
                             errors={showErrors ? errors : {}}/>
                     </ErrorBoundary>
+                    <Box display={"flex"} justifyContent={"end"} mt={2}>
+                        {addPropertyButton}
+                    </Box>
                 </Grid>
 
                 {!asDialog && <Grid item xs={12}
@@ -440,12 +437,14 @@ export function SchemaEditorForm<M>({
                 </CustomDialogActions>
             </Dialog>
 
-            <PropertyForm asDialog={true}
-                          existing={false}
-                          forceShowErrors={showErrors}
-                          open={newPropertyDialogOpen}
-                          onCancel={() => setNewPropertyDialogOpen(false)}
-                          onPropertyChanged={onPropertyCreated}/>
+            <PropertyForm
+                inArray={false}
+                asDialog={true}
+                existing={false}
+                forceShowErrors={showErrors}
+                open={newPropertyDialogOpen}
+                onCancel={() => setNewPropertyDialogOpen(false)}
+                onPropertyChanged={onPropertyCreated}/>
 
         </>
     );

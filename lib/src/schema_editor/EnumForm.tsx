@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 
-import { FastField, Field, Formik, getIn, useFormikContext } from "formik";
+import { FastField, Formik, getIn, useFormikContext } from "formik";
 import { Box, Button, Dialog, DialogContent, IconButton } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
@@ -22,34 +22,36 @@ export const EnumForm = React.memo(
                                   onError,
                                   updateIds
                               }: EnumFormProps) {
-        console.log("EnumForm");
 
         return (
             <Formik initialValues={{ enumValues }}
                     enableReinitialize={true}
                     validateOnMount={true}
-                    validate={() => console.log("enum validate")}
+                    // validate={() => console.log("enum validate")}
                     onSubmit={(data: { enumValues: EnumValueConfig[] }, formikHelpers) => {
                     }}
-                    render={({ values, errors }) => {
+            >
+                {
+                    ({ values, errors }) => {
                         // eslint-disable-next-line react-hooks/rules-of-hooks
-                    useEffect(() => {
-                        if (onValuesChanged) {
-                            onValuesChanged(values.enumValues);
-                        }
-                    }, [values.enumValues]);
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    useEffect(() => {
-                        if (onError)
-                            onError(Boolean(errors?.enumValues ?? false));
-                    }, [errors]);
+                        useEffect(() => {
+                            if (onValuesChanged) {
+                                onValuesChanged(values.enumValues);
+                            }
+                        }, [values.enumValues]);
+                        // eslint-disable-next-line react-hooks/rules-of-hooks
+                        useEffect(() => {
+                            if (onError)
+                                onError(Boolean(errors?.enumValues ?? false));
+                        }, [errors]);
 
                         return <EnumFormFields enumValuesPath={"enumValues"}
                                                values={values}
                                                errors={errors}
                                                shouldUpdateId={updateIds}/>
-                    }}
-            />
+                    }
+                }
+            </Formik>
 
         );
 
@@ -74,26 +76,34 @@ const EnumFormFields = React.memo(
                                         shouldUpdateId
                                     }: EnumFormFieldsProps) {
 
-        console.log("EnumFormFields");
         const [lastInternalIdAdded, setLastInternalIdAdded] = React.useState<number | undefined>();
+        const [editDialogIndex, setEditDialogIndex] = React.useState<number | undefined>();
 
         const buildEntry = useCallback((index: number, internalId: number) => {
+            const justAdded = lastInternalIdAdded === internalId;
             return <EnumEntry index={index}
                               enumValuesPath={enumValuesPath}
-                              autoFocus={lastInternalIdAdded === internalId}
-                              shouldUpdateId={shouldUpdateId}
+                              autoFocus={justAdded}
+                              shouldUpdateId={shouldUpdateId || justAdded}
+                              onDialogOpen={() => setEditDialogIndex(index)}
                               key={`${internalId}`}/>;
         }, [enumValuesPath, lastInternalIdAdded, shouldUpdateId]);
 
-        return (
-            <ArrayContainer
-                value={values.enumValues}
-                name={enumValuesPath}
-                buildEntry={buildEntry}
-                disabled={false}
-                onInternalIdAdded={setLastInternalIdAdded}
-                small={true}
-                includeAddButton={true}/>
+        return (<>
+                <ArrayContainer
+                    value={values.enumValues}
+                    name={enumValuesPath}
+                    buildEntry={buildEntry}
+                    disabled={false}
+                    onInternalIdAdded={setLastInternalIdAdded}
+                    small={true}
+                    includeAddButton={true}/>
+
+                <EnumEntryDialog index={editDialogIndex}
+                                 open={editDialogIndex !== undefined}
+                                 enumValuesPath={enumValuesPath}
+                                 onClose={() => setEditDialogIndex(undefined)}/>
+            </>
         );
     },
     function areEqual(prevProps: EnumFormFieldsProps, nextProps: EnumFormFieldsProps) {
@@ -105,14 +115,16 @@ type EnumEntryProps = {
     index: number,
     enumValuesPath: string,
     shouldUpdateId: boolean,
-    autoFocus: boolean
+    autoFocus: boolean,
+    onDialogOpen: () => void;
 };
 const EnumEntry = React.memo(
     function EnumEntryInternal({
                                    index,
                                    shouldUpdateId: updateId,
                                    enumValuesPath,
-                                   autoFocus
+                                   autoFocus,
+                                   onDialogOpen
                                }: EnumEntryProps) {
 
         const {
@@ -126,8 +138,6 @@ const EnumEntry = React.memo(
         const shouldUpdateIdRef = React.useRef(!getIn(values, `${enumValuesPath}[${index}].id`));
         const shouldUpdateId = updateId || shouldUpdateIdRef.current;
 
-        const [dialogOpen, setDialogOpen] = React.useState(false);
-
         const idValue = getIn(values, `${enumValuesPath}[${index}].id`);
         const labelValue = getIn(values, `${enumValuesPath}[${index}].label`);
 
@@ -136,7 +146,7 @@ const EnumEntry = React.memo(
         const currentLabelRef = React.useRef(labelValue);
 
         React.useEffect(() => {
-            if (currentLabelRef.current === idValue && shouldUpdateId) {
+            if ((currentLabelRef.current === idValue || !idValue) && shouldUpdateId) {
                 setFieldValue(`${enumValuesPath}[${index}].id`, labelValue);
             }
             currentLabelRef.current = labelValue;
@@ -145,28 +155,24 @@ const EnumEntry = React.memo(
         return (
             <Box display={"flex"} width={"100%"} alignItems={"center"}>
                 <Box width={"100%"} mx={1}>
-                    <Field name={`${enumValuesPath}[${index}].label`}
-                           as={DebouncedTextField}
-                           required
-                           fullWidth
-                           size="small"
-                           validate={validateLabel}
-                           autoFocus={autoFocus}
-                           autoComplete="off"
-                           error={Boolean(labelError)}/>
+                    <FastField name={`${enumValuesPath}[${index}].label`}
+                               as={DebouncedTextField}
+                               required
+                               fullWidth
+                               size="small"
+                               validate={validateLabel}
+                               autoFocus={autoFocus}
+                               autoComplete="off"
+                               error={Boolean(labelError)}/>
                 </Box>
                 <Box>
                     <IconButton
                         size="small"
                         aria-label="edit"
-                        onClick={() => setDialogOpen(true)}>
+                        onClick={() => onDialogOpen()}>
                         <SettingsOutlinedIcon fontSize={"small"}/>
                     </IconButton>
                 </Box>
-                <EnumEntryDialog index={index}
-                                 open={dialogOpen}
-                                 enumValuesPath={enumValuesPath}
-                                 onClose={() => setDialogOpen(false)}/>
             </Box>);
     },
     function areEqual(prevProps: EnumEntryProps, nextProps: EnumEntryProps) {
@@ -184,7 +190,7 @@ function EnumEntryDialog({
                              onClose,
                              enumValuesPath
                          }: {
-    index: number;
+    index?: number;
     open: boolean;
     enumValuesPath: string;
     onClose: () => void;
@@ -198,7 +204,7 @@ function EnumEntryDialog({
         touched
     } = useFormikContext<EnumValues>();
 
-    const idError = getIn(errors, `${enumValuesPath}[${index}].id`);
+    const idError = index !== undefined ? getIn(errors, `${enumValuesPath}[${index}].id`) : undefined;
     return <Dialog
         maxWidth="md"
         aria-labelledby="enum-edit-dialog"
@@ -207,16 +213,17 @@ function EnumEntryDialog({
     >
 
         <DialogContent>
-            <FastField name={`${enumValuesPath}[${index}]id`}
-                       as={DebouncedTextField}
-                       required
-                       fullWidth
-                       validate={validateId}
-                       label={"ID"}
-                       helperText={idError ?? "Value saved in the data source"}
-                       size="small"
-                       autoComplete="off"
-                       error={Boolean(idError)}/>
+            {index !== undefined &&
+                <FastField name={`${enumValuesPath}[${index}]id`}
+                           as={DebouncedTextField}
+                           required
+                           fullWidth
+                           validate={validateId}
+                           label={"ID"}
+                           helperText={idError ?? "Value saved in the data source"}
+                           size="small"
+                           autoComplete="off"
+                           error={Boolean(idError)}/>}
         </DialogContent>
 
         <CustomDialogActions>

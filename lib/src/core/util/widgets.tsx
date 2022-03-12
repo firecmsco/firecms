@@ -7,6 +7,7 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import RepeatIcon from "@mui/icons-material/Repeat";
+import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import LinkIcon from "@mui/icons-material/Link";
 import HttpIcon from "@mui/icons-material/Http";
@@ -50,14 +51,15 @@ export type WidgetId =
     "multi_references" |
     "switch" |
     "date_time" |
-    "repeat";
+    "repeat" |
+    "block";
 
 export const WIDGETS: Record<WidgetId, Widget> = {
     text_field: {
         name: "Text field",
         dataType: "string",
         icon: ShortTextIcon,
-        color: "#2d7ff9",
+        color: "#2d7ff9"
     },
     multiline: {
         name: "Multiline",
@@ -109,7 +111,7 @@ export const WIDGETS: Record<WidgetId, Widget> = {
     },
     multi_number_select: {
         name: "Multiple number select",
-        dataType: "number",
+        dataType: "array",
         icon: FormatListNumberedIcon,
         color: "#bec920"
     },
@@ -160,6 +162,12 @@ export const WIDGETS: Record<WidgetId, Widget> = {
         dataType: "array",
         icon: RepeatIcon,
         color: "#ff9408"
+    },
+    block: {
+        name: "Block",
+        dataType: "array",
+        icon: ViewStreamIcon,
+        color: "#ff9408"
     }
 };
 
@@ -203,6 +211,8 @@ export function getWidgetId(property: Property | ResolvedProperty): WidgetId | u
             return "multi_file_upload";
         } else if (of?.dataType === "reference") {
             return "multi_references";
+        } else if (property.oneOf) {
+            return "block";
         } else {
             return "repeat";
         }

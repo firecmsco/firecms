@@ -41,13 +41,13 @@ export function PropertyTree<M>({
         if (!result.destination) {
             return;
         }
-        const sourceIndex = result.source.index;
-        const destinationIndex = result.destination.index;
+        const startIndex = result.source.index;
+        const endIndex = result.destination.index;
 
-        const newPropertiesOrder: string[] = [...propertiesOrder];
-        const temp = newPropertiesOrder[sourceIndex];
-        newPropertiesOrder[sourceIndex] = newPropertiesOrder[destinationIndex];
-        newPropertiesOrder[destinationIndex] = temp;
+        const newPropertiesOrder = Array.from(propertiesOrder);
+        const [removed] = newPropertiesOrder.splice(startIndex, 1);
+        newPropertiesOrder.splice(endIndex, 0, removed);
+
         onPropertyMove(newPropertiesOrder, namespace);
     }
 
@@ -86,17 +86,6 @@ export function PropertyTree<M>({
 
                             {droppableProvided.placeholder}
 
-                            {/*{includeAddButton && <Box p={1}*/}
-                            {/*                          justifyContent="center"*/}
-                            {/*                          textAlign={"left"}>*/}
-                            {/*    <Button variant="outlined"*/}
-                            {/*            color="primary"*/}
-                            {/*            disabled={disabled}*/}
-                            {/*            startIcon={<AddIcon/>}*/}
-                            {/*            onClick={insertInEnd}>*/}
-                            {/*        Add*/}
-                            {/*    </Button>*/}
-                            {/*</Box>}*/}
                         </div>
                     )}
                 </Droppable>

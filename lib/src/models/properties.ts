@@ -391,11 +391,20 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
          * is the corresponding property
          */
         properties: Record<string, AnyProperty>;
+
+        /**
+         * Order in which the properties are displayed.
+         * If you are specifying your schema as code, the order is the same as the
+         * one you define in `properties`, and you don't need to specify this prop.
+         */
+        propertiesOrder?: (Extract<keyof T, string>)[];
+
         /**
          * Name of the field to use as the discriminator for type
          * Defaults to `type`
          */
         typeField?: string;
+
         /**
          * Name of the  field to use as the value
          * Defaults to `value`
@@ -425,7 +434,7 @@ export interface MapProperty<T extends { [Key: string]: any } = any> extends Bas
     /**
      * Order in which the properties are displayed.
      * If you are specifying your schema as code, the order is the same as the
-     * one you define in `properties`
+     * one you define in `properties`, and you don't need to specify this prop.
      */
     propertiesOrder?: (Extract<keyof T, string>)[];
 

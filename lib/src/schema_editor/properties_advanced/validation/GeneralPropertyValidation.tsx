@@ -23,6 +23,7 @@ export function GeneralPropertyValidation({}: {
                 <FastField type="checkbox"
                            name={validationRequired}
                            label={"Required"}
+                           tooltip={"You won't be able to save this entity if this value is not set"}
                            component={SmallSwitch}/>
             </Grid>
 
@@ -30,6 +31,7 @@ export function GeneralPropertyValidation({}: {
                 <FastField type="checkbox"
                            name={validationUnique}
                            label={"Unique"}
+                           tooltip={"There cannot be to entities with the same value"}
                            component={SmallSwitch}/>
             </Grid>
 

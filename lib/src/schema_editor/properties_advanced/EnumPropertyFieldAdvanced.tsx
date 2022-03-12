@@ -15,15 +15,10 @@ export function EnumPropertyFieldAdvanced({
     return (
         <>
             <Grid item>
-                <Typography variant={"subtitle2"} >
-                    Validation
-                </Typography>
-                <Paper variant={"outlined"} sx={{ p: 2, mt: 1 }}>
                     {!multiselect &&
                         <StringPropertyValidation/>}
                     {multiselect &&
                         <ArrayPropertyValidation/>}
-                </Paper>
             </Grid>
 
         </>

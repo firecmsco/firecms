@@ -1,18 +1,18 @@
 import React, { useCallback, useState } from "react";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import { PropertyForm } from "../PropertyEditView";
-import { MapProperty, Property } from "../../models";
+import { ArrayProperty, Property } from "../../models";
 import { getIn, useFormikContext } from "formik";
-import { PropertyTree } from "../PropertyTree";
+import { PropertyForm } from "../PropertyEditView";
 import { getFullId, namespaceToPropertiesOrderPath } from "../util";
+import { PropertyTree } from "../PropertyTree";
+import AddIcon from "@mui/icons-material/Add";
 
-export function MapPropertyField({}: {}) {
+export function BlockPropertyField({}: {}) {
 
     const {
         values,
         setFieldValue
-    } = useFormikContext<MapProperty>();
+    } = useFormikContext<ArrayProperty>();
 
     const [propertyDialogOpen, setPropertyDialogOpen] = useState<boolean>(false);
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
@@ -24,16 +24,16 @@ export function MapPropertyField({}: {}) {
                                            }: { id?: string, property: Property }) => {
         if (!id)
             throw Error();
-        setFieldValue("properties", {
-            ...(values.properties ?? {}),
+        setFieldValue("oneOf.properties", {
+            ...(values.oneOf?.properties ?? {}),
             [id]: property
         }, false);
-        setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? Object.keys(values.properties ?? {})), id], false);
+        setFieldValue("oneOf.propertiesOrder", [...(values.oneOf?.propertiesOrder ?? Object.keys(values.oneOf?.properties ?? {})), id], false);
         setPropertyDialogOpen(false);
-    }, [values.properties, values.propertiesOrder]);
+    }, [values.oneOf?.properties, values.oneOf?.propertiesOrder]);
 
     const selectedPropertyFullId = selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined;
-    const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
+    const selectedProperty = selectedPropertyFullId ? getIn(values.oneOf?.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
     const addChildButton = <Button
         color="primary"
@@ -41,7 +41,7 @@ export function MapPropertyField({}: {}) {
         onClick={() => setPropertyDialogOpen(true)}
         startIcon={<AddIcon/>}
     >
-        Add property to {values.title ?? "this group"}
+        Add property to {values.title ?? "this block"}
     </Button>;
     return (
         <>
@@ -58,8 +58,8 @@ export function MapPropertyField({}: {}) {
                        sx={{ p: 2 }}
                        elevation={0}>
                     <PropertyTree
-                        properties={values.properties ?? {}}
-                        propertiesOrder={values.propertiesOrder}
+                        properties={values.oneOf?.properties ?? {}}
+                        propertiesOrder={values.oneOf?.propertiesOrder}
                         errors={{}}
                         onPropertyClick={(propertyKey, namespace) => {
                             setSelectedPropertyId(propertyKey);
