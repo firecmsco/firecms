@@ -14,8 +14,8 @@ import {
     Typography
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import Brightness5Icon from "@mui/icons-material/Brightness5";
-import Brightness3Icon from "@mui/icons-material/Brightness3";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -133,8 +133,8 @@ export function FireCMSAppBar({
                             onClick={() => toggleMode()}
                             size="large">
                             {mode === "dark"
-                                ? <Brightness3Icon/>
-                                : <Brightness5Icon/>}
+                                ? <DarkModeOutlinedIcon/>
+                                : <LightModeOutlinedIcon/>}
                         </IconButton>
                     </Box>
 
