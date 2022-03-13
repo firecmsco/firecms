@@ -8,6 +8,7 @@ import {
     setIn,
     useFormikContext
 } from "formik";
+import Measure, { ContentRect } from "react-measure";
 import {
     Box,
     Button,
@@ -116,14 +117,16 @@ export function SchemaEditor<M>({
         return <CircularProgressCenter/>;
     }
 
+    const initialValues: EntitySchema = {
+        id: "",
+        name: "",
+        properties: {},
+        propertiesOrder: []
+    };
+
     return (
         <Formik
-            initialValues={schema ?? {
-                id: "",
-                name: "",
-                properties: {},
-                propertiesOrder: []
-            } as EntitySchema}
+            initialValues={schema ?? initialValues}
             validationSchema={YupSchema}
             validate={() => propertyErrorsRef.current}
             onSubmit={(newSchema: EntitySchema, formikHelpers: FormikHelpers<EntitySchema>) => {
@@ -144,23 +147,23 @@ export function SchemaEditor<M>({
                 };
 
                 return (
+
                     <Form noValidate
                           style={{
                               display: "flex",
-                              height: "100%",
                               flexDirection: "column",
                               position: "relative",
+                              height: "100%"
                           }}>
 
                         <Box sx={{
-                            flexGrow: 1,
-                            overflow: "scroll",
-                            p: 2
+                            height: "100%",
+                            flexGrow: 1
                         }}>
                             <SchemaEditorForm showErrors={showErrors}
                                               onPropertyError={onPropertyError}/>
-                            <Box height={64}/>
                         </Box>
+
                         <CustomDialogActions position={"absolute"}>
                             <Button
                                 color="primary"
@@ -210,7 +213,7 @@ export function SchemaEditorForm<M>({
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
-    const asDialog = !largeLayout;
+    const asDialog = !largeLayout
 
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
@@ -219,6 +222,13 @@ export function SchemaEditorForm<M>({
 
     const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
     const [schemaDetailsDialogOpen, setSchemaDetailsDialogOpen] = useState<boolean>(false);
+    const [height, setHeight] = useState<number>();
+
+    const onMeasure = useCallback((contentRect: ContentRect) => {
+        if (contentRect?.bounds) {
+            setHeight(contentRect?.bounds.height);
+        }
+    }, []);
 
     const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
         const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
@@ -302,150 +312,158 @@ export function SchemaEditorForm<M>({
         color="primary"
         variant={"outlined"}
         size={"large"}
+        sx={{ width: "100%" }}
         onClick={() => setNewPropertyDialogOpen(true)}
         startIcon={<AddIcon/>}>
         Add new property
     </Button>;
 
-    const TitleComponent = <Box sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        my: 2
-    }}>
+    const body = (
+        <Grid container>
+            <Grid item
+                  xs={12}
+                  lg={5}
+                  sx={(theme) => ({
+                      p: 3,
+                      [theme.breakpoints.down("md")]: {
+                          p: 2
+                      },
+                      [theme.breakpoints.down("sm")]: {
+                          p: 1
+                      }
+                  })}>
 
-        <Box display={"flex"}
-             sx={{
-                 display: "flex",
-                 flexGrow: 1,
-                 alignItems: "center",
-                 mr: 1
-             }}>
+                <Box display={"flex"}
+                     sx={{
+                         display: "flex",
+                         alignItems: "center",
+                         my: 2
+                     }}>
 
-            <Typography variant={"h4"}>
-                {values.name ? `${values.name} schema` : "Schema"}
-            </Typography>
+                    <Typography variant={"h4"} sx={{
+                        flexGrow: 1
+                    }}>
+                        {values.name ? `${values.name} schema` : "Schema"}
+                    </Typography>
 
-            <Box sx={{ ml: 1 }}>
-                <Button
-                    onClick={() => setSchemaDetailsDialogOpen(true)}
-                    size="large">
-                    <EditIcon/>
-                </Button>
-            </Box>
-        </Box>
-
-        {!emptySchema && addPropertyButton}
-    </Box>;
-
-    let body;
-    if (emptySchema) {
-        body = <Box display="flex"
-                    flexDirection={"column"}
-                    alignItems="center"
-                    justifyContent="center"
-                    width={"100%"}
-                    sx={{ flexGrow: 1 }}
-                    padding={2}>
-            <Box m={2}>Now you can add your first property</Box>
-            {addPropertyButton}
-        </Box>
-    } else {
-        body = <Box
-            sx={{ py: 2 }}>
-            <Grid container>
-                <Grid item xs={12}
-                      lg={5}>
-                    <ErrorBoundary>
-                        <PropertyTree
-                            onPropertyClick={(propertyKey, namespace) => {
-                                setSelectedPropertyId(propertyKey);
-                                setSelectedPropertyNamespace(namespace);
-                            }}
-                            selectedPropertyKey={selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined}
-                            properties={values.properties}
-                            propertiesOrder={(values.propertiesOrder ?? Object.keys(values.properties)) as string[]}
-                            onPropertyMove={onPropertyMove}
-                            errors={showErrors ? errors : {}}/>
-                    </ErrorBoundary>
-                    <Box display={"flex"} justifyContent={"end"} mt={2}>
-                        {addPropertyButton}
+                    <Box sx={{ ml: 1 }}>
+                        <Button
+                            onClick={() => setSchemaDetailsDialogOpen(true)}
+                            size="large">
+                            <EditIcon/>
+                        </Button>
                     </Box>
-                </Grid>
+                </Box>
 
-                {!asDialog && <Grid item xs={12}
-                                    lg={7}
-                                    sx={(theme) => ({
-                                        pl: 2
-                                    })}>
-                    <Box sx={(theme) => ({
-                        height: "100%",
-                        borderLeft: `1px solid ${theme.palette.divider}`,
-                        pl: 2
-                    })}>
-                        <Paper variant={"outlined"} sx={theme => ({
-                            position: "sticky",
-                            top: theme.spacing(2),
-                            p: 2
-                        })}>
-                            {propertyEditForm}
 
-                            {!selectedProperty &&
-                                <Box>
-                                    Select a property to edit it
-                                </Box>}
-                        </Paper>
-                    </Box>
-                </Grid>}
+                <Box mb={2} mt={3}>
+                    {addPropertyButton}
+                </Box>
 
-                {asDialog && propertyEditForm}
+                <ErrorBoundary>
+                    <PropertyTree
+                        onPropertyClick={(propertyKey, namespace) => {
+                            setSelectedPropertyId(propertyKey);
+                            setSelectedPropertyNamespace(namespace);
+                        }}
+                        selectedPropertyKey={selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined}
+                        properties={values.properties}
+                        propertiesOrder={(values.propertiesOrder ?? Object.keys(values.properties)) as string[]}
+                        onPropertyMove={onPropertyMove}
+                        errors={showErrors ? errors : {}}/>
+                </ErrorBoundary>
 
+                {!emptySchema && <Box my={2}>
+                    {addPropertyButton}
+                </Box>}
             </Grid>
-        </Box>
 
-    }
+            {!asDialog && <Grid item xs={12}
+                                lg={7}
+                                sx={(theme) => ({
+                                    pl: 2
+                                })}>
+                <Box sx={(theme) => ({
+                    height: "100%",
+                    p: 2,
+                    borderLeft: `1px solid ${theme.palette.divider}`,
+                    // pl: 2
+                })}>
+                    <Paper variant={"outlined"}
+                           sx={theme => ({
+                               position: "sticky",
+                               top: theme.spacing(2),
+                               p: 2,
+                               height: height ? `calc(${height}px - 88px)` : "100%",
+                               overflow: "scroll",
+                           })}>
+
+                        {propertyEditForm}
+
+                        {!selectedProperty &&
+                            <Box sx={{
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
+                                {emptySchema
+                                    ? "Now you can add your first property"
+                                    : "Select a property to edit it"}
+                            </Box>}
+                    </Paper>
+                </Box>
+            </Grid>}
+
+            {asDialog && propertyEditForm}
+
+        </Grid>);
 
     return (
-        <>
-            <Container fixed
-                       maxWidth={"lg"}
-                       sx={{
-                           p: 3,
-                           [theme.breakpoints.down("md")]: {
-                               p: 2
-                           },
-                           [theme.breakpoints.down("sm")]: {
-                               p: 1
-                           }
-                       }}>
+        <Measure
+            bounds
+            onResize={onMeasure}
+        >
+            {({ measureRef }) => (
+                <Box ref={measureRef}
+                     sx={{
+                         height: "100%",
+                         overflow: "scroll"
+                     }}>
 
-                {TitleComponent}
+                    <Container fixed
+                               maxWidth={"lg"}>
 
-                {body}
+                        {body}
 
-            </Container>
+                    </Container>
 
-            <Dialog
-                open={schemaDetailsDialogOpen}
-                onClose={() => setSchemaDetailsDialogOpen(false)}
-            >
-                <SchemaDetailsForm isNewSchema={false}/>
-                <CustomDialogActions>
-                    <Button
-                        variant="contained"
-                        onClick={() => setSchemaDetailsDialogOpen(false)}> Ok </Button>
-                </CustomDialogActions>
-            </Dialog>
+                    <Box height={52}/>
 
-            <PropertyForm
-                inArray={false}
-                asDialog={true}
-                existing={false}
-                forceShowErrors={showErrors}
-                open={newPropertyDialogOpen}
-                onCancel={() => setNewPropertyDialogOpen(false)}
-                onPropertyChanged={onPropertyCreated}/>
+                    <Dialog
+                        open={schemaDetailsDialogOpen}
+                        onClose={() => setSchemaDetailsDialogOpen(false)}
+                    >
+                        <SchemaDetailsForm isNewSchema={false}/>
+                        <CustomDialogActions>
+                            <Button
+                                variant="contained"
+                                onClick={() => setSchemaDetailsDialogOpen(false)}> Ok </Button>
+                        </CustomDialogActions>
+                    </Dialog>
 
-        </>
+                    <PropertyForm
+                        inArray={false}
+                        asDialog={true}
+                        existing={false}
+                        forceShowErrors={showErrors}
+                        open={newPropertyDialogOpen}
+                        onCancel={() => setNewPropertyDialogOpen(false)}
+                        onPropertyChanged={onPropertyCreated}/>
+
+                </Box>
+
+            )}
+        </Measure>
     );
 }

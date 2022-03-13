@@ -13,7 +13,7 @@ export function CustomDialogActions({
         : children;
 
     return <Box sx={(theme) => ({
-        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255, 255, 255, 0)",
+        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(4px)",
         borderTop: `1px solid ${theme.palette.divider}`,
         py: 1,
@@ -21,7 +21,7 @@ export function CustomDialogActions({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "end",
+        justifyContent: "flex-end",
         position: position,
         bottom: 0,
         right: 0,

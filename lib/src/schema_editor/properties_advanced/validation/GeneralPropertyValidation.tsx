@@ -31,7 +31,7 @@ export function GeneralPropertyValidation({}: {
                 <FastField type="checkbox"
                            name={validationUnique}
                            label={"Unique"}
-                           tooltip={"There cannot be to entities with the same value"}
+                           tooltip={"There cannot be multiple entities with the same value"}
                            component={SmallSwitch}/>
             </Grid>
 

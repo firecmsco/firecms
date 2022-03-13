@@ -64,9 +64,9 @@ export function FieldUploadPropertyFieldAdvanced({
                         <p>You can use the following placeholders in the file name
                             and storage path values:</p>
                         <ul>
-                            <li>{"{file} - Full file name"}</li>
-                            <li>{"{file.name} - Name of the file without extension"}</li>
-                            <li>{"{file.ext} - Extension of the file"}</li>
+                            <li>{"{file} - Full name of the uploaded file"}</li>
+                            <li>{"{file.name} - Name of the uploaded file without extension"}</li>
+                            <li>{"{file.ext} - Extension of the uploaded file"}</li>
                             <li>{"{entityId} - Id of the entity"}</li>
                             <li>{"{propertyId} - Id of this property"}</li>
                             <li>{"{path} - Path of this entity"}</li>

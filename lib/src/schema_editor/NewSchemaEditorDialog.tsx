@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useCallback, useRef, useState } from "react";
-import { Button, Dialog } from "@mui/material";
+import { Box, Button, Dialog } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import {
     EntitySchema,
@@ -8,7 +8,6 @@ import {
     useSnackbarController
 } from "../index";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
-import { SchemaDetailsForm } from "./SchemaDetailsForm";
 import { Form, Formik } from "formik";
 import { YupSchema } from "./SchemaYupValidation";
 import { prepareSchemaForPersistence } from "../core/util/schemas";
@@ -17,6 +16,7 @@ import {
 } from "../hooks/useConfigurationPersistence";
 import { LoadingButton } from "@mui/lab";
 import { removeUndefined } from "../core/util/objects";
+import { SchemaDetailsForm } from "./SchemaDetailsForm";
 
 export interface NewSchemaEditorDialogProps {
     open: boolean;
@@ -60,58 +60,82 @@ export function NewSchemaEditorDialog<M>({
             });
     }, [configurationPersistence, snackbarController]);
 
+    const initialValues: EntitySchema = {
+        id: "",
+        name: "",
+        properties: {},
+        propertiesOrder: []
+    };
     return (
-        <Formik
-            initialValues={{
-                id: "",
-                name: "",
-                properties: {},
-                propertiesOrder: []
-            } as EntitySchema}
-            validationSchema={YupSchema}
-            validate={() => {
-                if (mode === "properties") return propertyErrorsRef.current;
-                return undefined;
-            }}
-            onSubmit={(newSchema: EntitySchema, formikHelpers) => {
-                return saveSchema(newSchema).then(() => {
-                    formikHelpers.resetForm({ values: newSchema });
-                    if (mode === "details")
-                        setMode("properties")
-                    else
-                        handleClose(newSchema);
-                });
+        <Dialog
+            open={open}
+            maxWidth={"lg"}
+            fullWidth
+            PaperProps={{
+                sx: (theme) => ({
+                    height: "100%",
+                    background: theme.palette.background.default
+                })
             }}
         >
-            {({ isSubmitting, dirty, submitCount }) => {
-                return (
-                    <Dialog
-                        open={open}
-                        maxWidth={"lg"}
-                        fullWidth
-                        PaperProps={{
-                            sx: (theme) => ({
-                                // height: "100vh",
-                                background: theme.palette.background.default
-                            })
-                        }}
-                    >
-                        <Form noValidate>
-                            {mode === "details" &&
-                                <SchemaDetailsForm isNewSchema={true}/>}
+            <Formik
+                initialValues={initialValues}
+                validationSchema={YupSchema}
+                validate={() => {
+                    if (mode === "properties") return propertyErrorsRef.current;
+                    return undefined;
+                }}
+                onSubmit={(newSchema: EntitySchema, formikHelpers) => {
+                    if (mode === "details") {
+                        setMode("properties");
+                        formikHelpers.resetForm({
+                            values: newSchema,
+                            touched: { id: true, name: true }
+                        });
+                    } else {
+                        saveSchema(newSchema).then(() => {
+                            formikHelpers.resetForm({ values: initialValues });
+                            setMode("details");
+                            handleClose(newSchema);
+                        });
+                    }
+                }}
+            >
+                {({ isSubmitting, dirty, submitCount }) => {
+                    return (
 
-                            {mode === "properties" && <SchemaEditorForm
-                                showErrors={submitCount > 0}
-                                onPropertyError={(propertyKey, error) => {
-                                    propertyErrorsRef.current = removeUndefined({
-                                        ...propertyErrorsRef.current,
-                                        [propertyKey]: error
-                                    })
-                                }}/>}
+                        <Form noValidate style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            position: "relative",
+                            height: "100%"
+                        }}>
+                            <Box sx={{
+                                height: "100%",
+                                flexGrow: 1
+                            }}>
+                                {mode === "details" &&
+                                    <SchemaDetailsForm isNewSchema={true}/>}
 
-                            <CustomDialogActions position={"sticky"}>
+                                {mode === "properties" &&
+                                    <SchemaEditorForm
+                                        showErrors={submitCount > 0}
+                                        onPropertyError={(propertyKey, error) => {
+                                            propertyErrorsRef.current = removeUndefined({
+                                                ...propertyErrorsRef.current,
+                                                [propertyKey]: error
+                                            })
+                                        }}/>
+                                }
+                            </Box>
+
+                            <CustomDialogActions
+                                position={ "sticky" }>
                                 <Button variant={"text"}
-                                        onClick={() => handleClose()}>
+                                        onClick={() => {
+                                            handleClose();
+                                            setMode("details");
+                                        }}>
                                     Cancel
                                 </Button>
                                 <LoadingButton
@@ -121,16 +145,18 @@ export function NewSchemaEditorDialog<M>({
                                     disabled={!dirty}
                                     loading={isSubmitting}
                                     loadingPosition="start"
-                                    startIcon={<SaveIcon/>}
+                                    startIcon={mode === "properties"
+                                        ? <SaveIcon/>
+                                        : undefined}
                                 >
-                                    Create schema
+                                    {mode === "details" ? "Next" : "Create schema"}
                                 </LoadingButton>
                             </CustomDialogActions>
                         </Form>
-                    </Dialog>
-                );
-            }}
+                    );
+                }}
 
-        </Formik>
+            </Formik>
+        </Dialog>
     );
 }

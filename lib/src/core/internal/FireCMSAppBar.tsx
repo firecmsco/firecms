@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -59,7 +59,7 @@ export function FireCMSAppBar({
                         aria-label="Open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
-                        sx={{mr:2}}
+                        sx={{ mr: 2 }}
                         size="large">
                         <MenuIcon/>
                     </IconButton>
@@ -123,7 +123,6 @@ export function FireCMSAppBar({
                             toolbarExtraWidget
                         }
                     </ErrorBoundary>}
-
 
                     <Box p={1} mr={1}>
                         <IconButton

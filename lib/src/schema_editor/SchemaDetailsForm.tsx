@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import {
-    Button,
+    Box,
     Container,
-    Dialog,
     FormControl,
     FormHelperText,
     Grid,
@@ -15,7 +14,6 @@ import {
 import { getIn, useFormikContext } from "formik";
 import { EntitySchema } from "../models";
 import { toSnakeCase } from "../core/util/strings";
-
 
 export function SchemaDetailsForm({ isNewSchema }: { isNewSchema: boolean }) {
 
@@ -38,42 +36,47 @@ export function SchemaDetailsForm({ isNewSchema }: { isNewSchema: boolean }) {
     }, [isNewSchema, touched, values.name]);
 
     return (
+        <>
+            <Container maxWidth={"md"}
+                       sx={{
+                           p: 3,
+                           height: "100%",
+                           overflow: "scroll"
+                       }}>
+                <Grid container spacing={2}
+                      sx={{
+                          my: 2
+                      }}>
+                    <Grid item>
+                        {isNewSchema && <Typography variant={"h4"}>
+                            {"New schema"}
+                        </Typography>}
+                        {!isNewSchema && <Typography variant={"h6"}>
+                            {"Schema details"}
+                        </Typography>}
+                    </Grid>
 
-        <Container maxWidth={"md"} sx={{
-            p: 2,
-            my: 2
-        }}>
-            <Grid container spacing={2}>
-                <Grid item>
-                    {isNewSchema && <Typography variant={"h4"}>
-                        {"New schema"}
-                    </Typography>}
-                    {!isNewSchema && <Typography variant={"h6"}>
-                        {"Schema details"}
-                    </Typography>}
-                </Grid>
+                    <Grid item xs={12}>
+                        <FormControl fullWidth
+                                     required
+                                     error={touched.name && Boolean(errors.name)}>
+                            <InputLabel
+                                htmlFor="name">Name</InputLabel>
+                            <OutlinedInput
+                                id="name"
+                                value={values.name}
+                                onChange={handleChange}
+                                aria-describedby="name-helper-text"
+                                label="Name"
+                            />
+                            <FormHelperText
+                                id="name-helper-text">
+                                {touched.name && Boolean(errors.name) ? errors.name : "Singular name of this schema (e.g. Product)"}
+                            </FormHelperText>
+                        </FormControl>
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <FormControl fullWidth
-                                 required
-                                 error={touched.name && Boolean(errors.name)}>
-                        <InputLabel
-                            htmlFor="name">Name</InputLabel>
-                        <OutlinedInput
-                            id="name"
-                            value={values.name}
-                            onChange={handleChange}
-                            aria-describedby="name-helper-text"
-                            label="Name"
-                        />
-                        <FormHelperText
-                            id="name-helper-text">
-                            {touched.name && Boolean(errors.name) ? errors.name : "Singular name of this schema (e.g. Product)"}
-                        </FormHelperText>
-                    </FormControl>
-                </Grid>
-
-                <Grid item xs={12}>
+                    <Grid item xs={12}>
                     <FormControl fullWidth
                                  required
                                  disabled={!isNewSchema}
@@ -139,7 +142,10 @@ export function SchemaDetailsForm({ isNewSchema }: { isNewSchema: boolean }) {
                     </FormControl>
                 </Grid>
 
-            </Grid>
-        </Container>
+                </Grid>
+                <Box height={52}/>
+            </Container>
+
+        </>
     )
 }
