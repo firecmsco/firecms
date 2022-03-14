@@ -151,7 +151,7 @@ export function CustomCMSApp() {
                     } else if (!context.authController.canAccessMainView) {
                         component = (
                             <FirebaseLoginView
-                                skipLoginButtonEnabled={false}
+                                allowSkipLogin={false}
                                 signInOptions={signInOptions}
                                 firebaseApp={firebaseApp}
                                 authDelegate={authDelegate}/>

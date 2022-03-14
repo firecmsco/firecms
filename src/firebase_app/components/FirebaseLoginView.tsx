@@ -50,16 +50,20 @@ const useStyles = makeStyles((theme: Theme) =>
  * @category Firebase
  */
 export interface FirebaseLoginViewProps {
-    skipLoginButtonEnabled?: boolean;
     logo?: string;
+    allowSkipLogin?: boolean;
     signInOptions: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     firebaseApp: FirebaseApp;
     authDelegate: FirebaseAuthDelegate;
     /**
      * Prevent users from creating new users in when the `signInOptions` value
-     * is `password`. This does not apply to the rest of login providers
+     * is `password`. This does not apply to the rest of login providers.
      */
     disableSignupScreen?: boolean;
+    /**
+     * Display this component when no user is found a user tries to log in
+     * when the `signInOptions` value is `password`.
+     */
     NoUserComponent?: ReactNode;
 }
 
@@ -70,7 +74,7 @@ export interface FirebaseLoginViewProps {
  * @category Firebase
  */
 export function FirebaseLoginView({
-                                      skipLoginButtonEnabled,
+                                      allowSkipLogin,
                                       logo,
                                       signInOptions,
                                       firebaseApp,
@@ -199,7 +203,7 @@ export function FirebaseLoginView({
                             icon={<PersonOutlineIcon fontSize={"large"}/>}
                             onClick={authDelegate.anonymousLogin}/>}
 
-                        {skipLoginButtonEnabled &&
+                        {allowSkipLogin &&
                         <Box m={1}>
                             <Button onClick={authDelegate.skipLogin}>
                                 Skip login
