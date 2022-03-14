@@ -35,12 +35,12 @@ import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
 import { isReadOnly } from "../../../../util/entities";
 import { useSchemaRegistry } from "../../../../../hooks/useSchemaRegistry";
+import { CustomDialogActions } from "../../../CustomDialogActions";
 
 const PREFIX = "PopupFormField";
 
 const classes = {
     form: `${PREFIX}-form`,
-    button: `${PREFIX}-button`,
     popup: `${PREFIX}-popup`,
     popupInner: `${PREFIX}-popupInner`,
     hidden: `${PREFIX}-hidden`
@@ -54,13 +54,6 @@ const Root = styled("div")((
     [`& .${classes.form}`]: {
         display: "flex",
         flexDirection: "column"
-    },
-
-    [`& .${classes.button}`]: {
-        marginTop: theme.spacing(1),
-        alignSelf: "flex-end",
-        position: "sticky",
-        bottom: 0
     },
 
     [`& .${classes.popup}`]: {
@@ -143,8 +136,6 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const initialPositionSet = React.useRef<boolean>(false);
 
-    const draggableBoundingRect = ref.current?.getBoundingClientRect();
-
     useDraggable({
         containerRef,
         ref,
@@ -184,6 +175,8 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                x,
                                                y
                                            }: { x: number, y: number }) => {
+
+        const draggableBoundingRect = ref.current?.getBoundingClientRect();
         if (!draggableBoundingRect)
             throw Error("normalizePosition called before draggableBoundingRect is set");
 
@@ -191,14 +184,16 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             x: Math.max(0, Math.min(x, windowSize.width - draggableBoundingRect.width)),
             y: Math.max(0, Math.min(y, windowSize.height - draggableBoundingRect.height))
         };
-    }, [draggableBoundingRect, windowSize]);
+    }, [windowSize]);
 
     const updatePopupLocation = useCallback((position?: { x: number, y: number }) => {
+
+        const draggableBoundingRect = ref.current?.getBoundingClientRect();
         if (!cellRect || !draggableBoundingRect) return;
         const newPosition = normalizePosition(position ?? getInitialLocation());
         if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
             setPopupLocation(newPosition);
-    }, [cellRect, draggableBoundingRect, getInitialLocation, normalizePosition, popupLocation]);
+    }, [cellRect, getInitialLocation, normalizePosition, popupLocation]);
 
     useEffect(
         () => {
@@ -207,13 +202,16 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         [propertyId]
     );
 
-    useEffect(
+    useLayoutEffect(
         () => {
+
+            const draggableBoundingRect = ref.current?.getBoundingClientRect();
+            console.log("updatePopupLocation", cellRect, draggableBoundingRect, initialPositionSet.current);
             if (!cellRect || !draggableBoundingRect || initialPositionSet.current) return;
-            initialPositionSet.current = true;
             updatePopupLocation();
+            initialPositionSet.current = true;
         },
-        [cellRect, draggableBoundingRect, updatePopupLocation, initialPositionSet.current]
+        [cellRect, updatePopupLocation, initialPositionSet.current]
     );
 
     useLayoutEffect(
@@ -240,12 +238,10 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     }, [path, propertyId, schema]);
 
     const adaptResize = () => {
-        if (!draggableBoundingRect) return;
         return updatePopupLocation(popupLocation);
     };
 
     const onMove = (position: { x: number, y: number }) => {
-        if (!draggableBoundingRect) return;
         return updatePopupLocation(position);
     };
 
@@ -298,10 +294,6 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                       isSubmitting
                   }: FormikProps<EntityValues<M>>) => {
 
-                    // if (!equal(values, internalValue)) {
-                    //     setInternalValue(values);
-                    // }
-
                     if (!entity)
                         return <ErrorView
                             error={"PopupFormField misconfiguration"}/>;
@@ -338,15 +330,16 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                             shouldAlwaysRerender: true
                         })}
 
-                        <Button
-                            className={classes.button}
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            disabled={disabled}
-                        >
-                            Save
-                        </Button>
+                        <CustomDialogActions>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={disabled}
+                            >
+                                Save
+                            </Button>
+                        </CustomDialogActions>
 
                     </Form>;
                 }}
@@ -363,7 +356,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const draggable = (
         <div
-            key={`draggable_${propertyId}_${entity.id}`}
+            key={`draggable_${propertyId}_${entity.id}_${open}`}
             className={clsx(classes.popup,
                 { [classes.hidden]: !open }
             )}
@@ -371,18 +364,22 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
             <ElementResizeListener onResize={adaptResize}/>
 
-            <div className={classes.popupInner}
-                 ref={ref}>
+            <div
+                className={classes.popupInner}
+                ref={ref}>
 
                 {form}
 
+                <Box sx={{
+                    position: "absolute",
+                    top: -14,
+                    right: -14,
+                    backgroundColor: "#888",
+                    borderRadius: "32px"
+                }}>
                 <IconButton
                     size={"small"}
                     sx={{
-                        position: "absolute",
-                        top: -14,
-                        right: -14,
-                        backgroundColor: "#888"
                     }}
                     onClick={(event) => {
                         event.stopPropagation();
@@ -391,6 +388,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                     <ClearIcon sx={{ color: "white" }}
                                fontSize={"small"}/>
                 </IconButton>
+                </Box>
             </div>
 
         </div>
@@ -399,7 +397,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     return (
         <Portal container={document.body}>
             <Root>
-            {draggable}
+                {draggable}
             </Root>
         </Portal>
     );

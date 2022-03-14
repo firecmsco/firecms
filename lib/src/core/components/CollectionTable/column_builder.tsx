@@ -437,7 +437,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     const popupFormField = (
         <PopupFormField
-            // key={`popup_form_${popupCell?.columnIndex}_${popupCell?.entity?.id}`}
+            key={`popup_form_${popupCell?.columnIndex}_${popupCell?.entity?.id}`}
             open={Boolean(popupCell)}
             onClose={onPopupClose}
             cellRect={popupCell?.cellRect}
