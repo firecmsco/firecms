@@ -18,12 +18,12 @@ const productSchema = buildSchema<Product>({
     name: "Product",
     properties: {
         name: {
-            title: "Name",
+            name: "Name",
             validation: { required: true },
             dataType: "string"
         },
         uppercase_name: {
-            title: "Uppercase Name",
+            name: "Uppercase Name",
             dataType: "string",
             disabled: true,
             description: "This field gets updated with a preSave callback"

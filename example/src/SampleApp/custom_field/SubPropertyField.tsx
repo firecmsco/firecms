@@ -37,7 +37,7 @@ export const CustomField = ({
                 {buildPropertyField({
                     propertyKey: `${propertyKey}.sample`,
                     property: {
-                        title: "Sample",
+                        name: "Sample",
                         dataType: "string",
                         validation: {
                             required: true,

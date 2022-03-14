@@ -58,11 +58,11 @@ export const testEntitySchema = buildSchema({
     name: "Test entity",
     properties: {
         map_array_ref: {
-            title: 'Map',
+            name: 'Map',
             dataType: 'map',
             properties: {
                 child: {
-                    title: "Products",
+                    name: "Products",
                     dataType: 'array',
                     of: {
                         dataType: "reference",
@@ -73,25 +73,25 @@ export const testEntitySchema = buildSchema({
             },
         },
         product: {
-            title: "Product",
+            name: "Product",
             dataType: "reference",
             path: "products",
             previewProperties: ["name", "main_image"]
         },
         test_date: {
-            title: "Test date",
+            name: "Test date",
             dataType: "date"
         },
         movement: buildPropertyBuilder(({values}) => {
             return {
-                title: "Locale",
+                name: "Locale",
                 dataType: "reference",
                 // @ts-ignore
                 path:  !values.product ? false : values.product.path + "/" + values.product.id + "/locales"
             };
         }),
         name: {
-            title: "Name starts with number",
+            name: "Name starts with number",
             dataType: "string",
             validation:{
                 matches: /\d.*/,
@@ -112,12 +112,12 @@ export const testEntitySchema = buildSchema({
             if (values.source) {
                 if ((values.source as any).type === "facebook") {
                     properties["facebookId"] = buildProperty({
-                        title: "Facebook id",
+                        name: "Facebook id",
                         dataType: "string"
                     });
                 } else if ((values.source as any).type === "apple") {
                     properties["appleId"] = buildProperty({
-                        title: "Apple id",
+                        name: "Apple id",
                         dataType: "number"
                     });
                 }
@@ -125,12 +125,12 @@ export const testEntitySchema = buildSchema({
 
             return ({
                 dataType: "map",
-                title: "Source",
+                name: "Source",
                 properties: properties
             });
         },
         gallery: {
-            title: 'Gallery',
+            name: 'Gallery',
             dataType: 'array',
             of: {
                 dataType: 'string',
@@ -144,7 +144,7 @@ export const testEntitySchema = buildSchema({
             },
         },
         available_locales: {
-            title: "Available locales",
+            name: "Available locales",
             dataType: "array",
             of: {
                 dataType: "string",
@@ -156,7 +156,7 @@ export const testEntitySchema = buildSchema({
                 if (values.available_locales.includes("de"))
                     return ({
                         dataType: "string",
-                        title: "Title disabled",
+                        name: "Title disabled",
                         disabled: {
                             hidden: true,
                             clearOnDisabled: true,
@@ -168,12 +168,12 @@ export const testEntitySchema = buildSchema({
             }
             return ({
                 dataType: "string",
-                title: "Title"
+                name: "Title"
             });
         },
         number_enum: {
             dataType: "array",
-            title: "Licences",
+            name: "Licences",
             of: {
                 dataType: "number",
                 enumValues: {
@@ -185,7 +185,7 @@ export const testEntitySchema = buildSchema({
         },
         simple_enum: {
             dataType: "string",
-            title: "Simple enum",
+            name: "Simple enum",
             enumValues: {
                 "facebook": "FacebookId",
                 "apple": "Apple"
@@ -193,7 +193,7 @@ export const testEntitySchema = buildSchema({
         },
         simple_enum_2: {
             dataType: "string",
-            title: "Simple enum 2",
+            name: "Simple enum 2",
             enumValues: [
                 { id: "facebook", label: "FacebookId" },
                 { id: "apple", label: "Apple" },
@@ -201,17 +201,17 @@ export const testEntitySchema = buildSchema({
         },
         validated_custom: {
             dataType: "map",
-            title: "Validated custom field",
+            name: "Validated custom field",
             properties: {
                 sample: {
-                    title: "Sample",
+                    name: "Sample",
                     dataType: "string",
                 }
             },
             Field: CustomField
         },
         content: {
-            title: "Content",
+            name: "Content",
             description: "Example of a complex array with multiple properties as children",
             dataType: "array",
             columnWidth: 450,
@@ -219,18 +219,18 @@ export const testEntitySchema = buildSchema({
                 typeField: "type",
                 valueField: "value",
                 properties: {
-                    title: {
-                        title: "Title",
+                    name: {
+                        name: "Title",
                         dataType: "string"
                     },
                     text: {
                         dataType: "string",
-                        title: "Text",
+                        name: "Text",
                         markdown: true
                     },
                     products: {
                         dataType: "array",
-                        title: "Product",
+                        name: "Product",
                         of: {
                             dataType: "reference",
                             path: "products"
@@ -240,28 +240,28 @@ export const testEntitySchema = buildSchema({
             }
         },
         string_array: {
-            title: "String array",
+            name: "String array",
             dataType: "array",
             of: {
                 dataType: "string"
             }
         },
         empty_string: {
-            title: "Empty String",
+            name: "Empty String",
             dataType: "string",
             validation: {
                 unique: true
             }
         },
         disabled_product: {
-            title: "Disabled product",
+            name: "Disabled product",
             dataType: "reference",
             path: "products",
             disabled: true,
             previewProperties: ["name", "main_image"]
         },
         products: {
-            title: "Products",
+            name: "Products",
             dataType: "array",
             of: {
                 dataType: "reference",
@@ -270,12 +270,12 @@ export const testEntitySchema = buildSchema({
             }
         },
         mark: {
-            title: "Mark",
+            name: "Mark",
             dataType: "string",
             markdown: true
         },
         shaped_array: {
-            title: "My shaped array",
+            name: "My shaped array",
             dataType: "array",
             Field: CustomShapedArrayField,
             Preview: CustomShapedArrayPreview,
@@ -283,33 +283,33 @@ export const testEntitySchema = buildSchema({
                 properties: [
                     buildProperty({
                         dataType: "string",
-                        title: "Name"
+                        name: "Name"
                     }),
                     buildProperty({
                         dataType: "number",
-                        title: "Age"
+                        name: "Age"
                     })
                 ]
             }
         },
         actions: {
-            title: "Actions",
+            name: "Actions",
             description: "Possible user actions",
             dataType: "array",
             of: {
                 dataType: "map",
                 properties: {
                     name: {
-                        title: "Name",
+                        name: "Name",
                         description: "Text that will be shown on the button",
                         dataType: "string"
                     },
                     description: {
-                        title: "Description",
+                        name: "Description",
                         dataType: "string"
                     },
                     type: {
-                        title: "Type",
+                        name: "Type",
                         description: "Action type that determines the user flow",
                         validation: {  uniqueInArray: true },
                         dataType: "string",
@@ -319,7 +319,7 @@ export const testEntitySchema = buildSchema({
                         }
                     },
                     hidden_field: {
-                        title: "Hidden",
+                        name: "Hidden",
                         dataType: "string",
                         disabled: {
                             hidden: true
@@ -330,7 +330,7 @@ export const testEntitySchema = buildSchema({
             }
         },
         imageUrls: {
-            title: "Images",
+            name: "Images",
             dataType: "array",
             of: {
                 dataType: "string",
@@ -346,12 +346,12 @@ export const testEntitySchema = buildSchema({
             }
         },
         status: {
-            title: "Status",
+            name: "Status",
             dataType: "number",
             enumValues: relaxedStatus
         },
         tags: {
-            title: "Tags",
+            name: "Tags",
             dataType: "array",
             of: {
                 dataType: "string"
@@ -359,13 +359,13 @@ export const testEntitySchema = buildSchema({
         },
         available_dates: {
             dataType: "array",
-            title: "Available Dates",
+            name: "Available Dates",
             of: {
                 dataType: "date"
             }
         },
         images: {
-            title: "Images",
+            name: "Images",
             dataType: "array",
             of: {
                 dataType: "string",
@@ -376,7 +376,7 @@ export const testEntitySchema = buildSchema({
             }
         },
         image: {
-            title: "Image",
+            name: "Image",
             dataType: "string",
             storage: {
                 storagePath: "test",
@@ -384,30 +384,30 @@ export const testEntitySchema = buildSchema({
             }
         },
         created_at: {
-            title: "Created at",
+            name: "Created at",
             dataType: "date",
             autoValue: "on_create"
         },
         updated_on: {
-            title: "Updated on",
+            name: "Updated on",
             dataType: "date",
             autoValue: "on_update"
         },
         description: {
-            title: "Description",
+            name: "Description",
             dataType: "string",
             multiline: true
         },
         search_adjacent: {
-            title: "Search adjacent",
+            name: "Search adjacent",
             dataType: "boolean"
         },
         difficulty: {
-            title: "Difficulty",
+            name: "Difficulty",
             dataType: "number"
         },
         range: {
-            title: "Range",
+            name: "Range",
             validation: {
                 min: 0,
                 max: 3
@@ -415,7 +415,7 @@ export const testEntitySchema = buildSchema({
             dataType: "number"
         },
         pdf: buildProperty({
-            title: "Pdf",
+            name: "Pdf",
             dataType: "string",
             storage: {
                 storagePath: "test",
@@ -426,7 +426,7 @@ export const testEntitySchema = buildSchema({
     additionalColumns: [
         {
             id: "full_name",
-            title: "Full Name",
+            name: "Full Name",
             builder: ({entity}) => {
                 let values = entity.values;
                 return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";

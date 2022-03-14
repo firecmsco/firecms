@@ -57,7 +57,7 @@ export function RepeatPropertyField({
                                           existing={existing}
                                           onOkClicked={() => setPropertyDialogOpen(false)}
                                           property={ofProperty}
-                                          includeIdAndTitle={false}
+                                          includeIdAndName={false}
                                           onPropertyChanged={onPropertyChanged}
                                           forceShowErrors={showErrors}/>
                         </Paper>

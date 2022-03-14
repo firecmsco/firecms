@@ -157,7 +157,7 @@ function ArrayOneOfEntry({
     const property = typeInternal ? properties[typeInternal] : undefined;
 
     const enumValues: EnumValueConfig[] = Object.entries(properties)
-        .map(([key, property]) => ({ id: key, label: property.title ?? key }));
+        .map(([key, property]) => ({ id: key, label: property.name ?? key }));
 
     const typeFieldName = `${name}[${typeField}]`;
     const valueFieldName = `${name}[${valueField}]`;

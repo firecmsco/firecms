@@ -183,25 +183,25 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                                                      isArray: boolean = false): TableColumnFilter | undefined => {
 
         if (property.dataType === "number" || property.dataType === "string") {
-            const title = property.title;
+            const name = property.name;
             const enumValues = property.enumValues;
             return {
                 dataType: property.dataType,
                 isArray,
-                title,
+                title: name,
                 enumValues
             };
         } else if (property.dataType === "array" && property.of) {
             return buildFilterableFromProperty(property.of, true);
         } else if (property.dataType === "boolean") {
-            const title = property.title;
+            const name = property.name;
             return {
                 dataType: property.dataType,
                 isArray,
-                title
+                title: name
             };
         } else if (property.dataType === "date") {
-            const title = property.title;
+            const title = property.name;
             return {
                 dataType: property.dataType,
                 isArray,
@@ -399,7 +399,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                 property,
                 align: getCellAlignment(property),
                 icon: (hoverOrOpen) => getIconForProperty(property, hoverOrOpen ? undefined : "disabled", "small"),
-                label: property.title || key as string,
+                label: property.name || key as string,
                 sortable: true,
                 filter: buildFilterableFromProperty(property),
                 width: getPropertyColumnWidth(property),
@@ -414,7 +414,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                 type: "additional",
                 align: "left",
                 sortable: false,
-                label: additionalColumn.title,
+                label: additionalColumn.name,
                 width: additionalColumn.width ?? 200,
                 cellRenderer: additionalCellRenderer
             }));

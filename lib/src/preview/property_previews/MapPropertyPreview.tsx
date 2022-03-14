@@ -49,7 +49,7 @@ export function MapPropertyPreview<T extends Record<string, unknown>>({
             <>
                 {mapPropertyKeys.map((key, index) => (
                     <div
-                        key={"map_preview_" + mapProperty.title + key + index}>
+                        key={"map_preview_" + mapProperty.name + key + index}>
                         <ErrorBoundary>
                             <PropertyPreview propertyKey={key}
                                              value={(value as any)[key]}
@@ -82,7 +82,7 @@ export function MapPropertyPreview<T extends Record<string, unknown>>({
                                        component="th">
                                 <Typography variant={"caption"}
                                             color={"textSecondary"}>
-                                    {mapProperty.properties![key].title}
+                                    {mapProperty.properties![key].name}
                                 </Typography>
                             </TableCell>
                             <TableCell key={`table-cell-${propertyKey}-${key}`}

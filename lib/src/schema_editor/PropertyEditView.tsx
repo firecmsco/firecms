@@ -63,7 +63,7 @@ export type PropertyWithId = Property & { id?: string };
 export function PropertyForm({
                                  asDialog,
                                  open,
-                                 includeIdAndTitle = true,
+                                 includeIdAndName = true,
                                  existing,
                                  inArray,
                                  propertyId,
@@ -78,7 +78,7 @@ export function PropertyForm({
                              }: {
     asDialog: boolean;
     open?: boolean;
-    includeIdAndTitle?: boolean;
+    includeIdAndName?: boolean;
     existing: boolean;
     inArray: boolean;
     propertyId?: string;
@@ -94,7 +94,7 @@ export function PropertyForm({
 
     const initialValue: PropertyWithId = {
         id: "",
-        title: ""
+        name: ""
     } as PropertyWithId;
 
     return (
@@ -127,7 +127,7 @@ export function PropertyForm({
                 const form = <PropertyEditView
                     onPropertyChanged={asDialog ? undefined : onPropertyChanged}
                     onDelete={existing ? onDelete : undefined}
-                    includeIdAndTitle={includeIdAndTitle}
+                    includeIdAndTitle={includeIdAndName}
                     propertyNamespace={propertyNamespace}
                     onError={onError}
                     showErrors={forceShowErrors || props.submitCount > 0}
@@ -485,21 +485,18 @@ function PropertyEditView({
         childComponent = null;
     }
 
-    const title = "title";
-    const titleError = showErrors && getIn(errors, title);
-
+    const name = "name";
     const id = "id";
-    const idError = showErrors && getIn(errors, id);
 
     const selectedWidgetError = showErrors && getIn(errors, "selectedWidget");
 
     useEffect(() => {
         const idTouched = getIn(touched, id);
-        if (!idTouched && !existing && values.title) {
-            setFieldValue(id, toSnakeCase(values.title))
+        if (!idTouched && !existing && values.name) {
+            setFieldValue(id, toSnakeCase(values.name))
         }
 
-    }, [existing, touched, values.title]);
+    }, [existing, touched, values.name]);
 
     const [tabPosition, setTabPosition] = React.useState(0);
 

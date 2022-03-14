@@ -30,6 +30,9 @@ import { useNavigation } from "../../hooks";
 import {
     useConfigurationPersistence
 } from "../../hooks/useConfigurationPersistence";
+import {
+    CollectionEditorDialog
+} from "../../collection_editor/CollectionEditorDialog";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -192,6 +195,11 @@ export function FireCMSHomePage() {
                     </Box>
                 </Box>
             ))}
+
+            {/*<CollectionEditorDialog open={collectionDialogOpen}*/}
+            {/*                        onCancel={() => setCollectionDialogOpen(false)}*/}
+            {/*                        onSave={() => setCollectionDialogOpen(false)}*/}
+            {/*                        path={path}/>*/}
         </Container>
     );
 }

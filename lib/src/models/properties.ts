@@ -71,9 +71,9 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
     dataType: DataType;
 
     /**
-     * Property title (e.g. Product)
+     * Property name (e.g. Product)
      */
-    title?: string;
+    name?: string;
 
     /**
      * Property description, always displayed under the field

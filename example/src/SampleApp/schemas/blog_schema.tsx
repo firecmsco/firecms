@@ -29,12 +29,12 @@ export const blogSchema = buildSchema<BlogEntry>({
     }],
     properties: {
         name: buildProperty({
-            title: "Name",
+            name: "Name",
             validation: { required: true },
             dataType: "string"
         }),
         header_image: buildProperty({
-            title: "Header image",
+            name: "Header image",
             dataType: "string",
             storage: {
                 storagePath: "images",
@@ -45,7 +45,7 @@ export const blogSchema = buildSchema<BlogEntry>({
             }
         }),
         status: buildPropertyBuilder(({ values }) => ({
-            title: "Status",
+            name: "Status",
             validation: { required: true },
             dataType: "string",
             columnWidth: 140,
@@ -60,12 +60,12 @@ export const blogSchema = buildSchema<BlogEntry>({
             defaultValue: "draft"
         })),
         created_at: {
-            title: "Created at",
+            name: "Created at",
             dataType: "date",
             autoValue: "on_create"
         },
         content: buildProperty({
-            title: "Content",
+            name: "Content",
             description: "Example of a complex array with multiple properties as children",
             validation: { required: true },
             dataType: "array",
@@ -75,7 +75,7 @@ export const blogSchema = buildSchema<BlogEntry>({
                 valueField: "value",
                 properties: {
                     images: {
-                        title: "Images",
+                        name: "Images",
                         dataType: "array",
                         of: buildProperty<string>({
                             dataType: "string",
@@ -91,11 +91,11 @@ export const blogSchema = buildSchema<BlogEntry>({
                     },
                     text: {
                         dataType: "string",
-                        title: "Text",
+                        name: "Text",
                         markdown: true
                     },
                     products: {
-                        title: "Products",
+                        name: "Products",
                         dataType: "array",
                         of: {
                             dataType: "reference",
@@ -107,7 +107,7 @@ export const blogSchema = buildSchema<BlogEntry>({
             }
         }),
         gold_text: buildProperty({
-            title: "Gold text",
+            name: "Gold text",
             description: "This field is using a custom component defined by the developer",
             dataType: "string",
             Field: CustomColorTextField,
@@ -116,15 +116,15 @@ export const blogSchema = buildSchema<BlogEntry>({
             }
         }),
         publish_date: buildProperty({
-            title: "Publish date",
+            name: "Publish date",
             dataType: "date"
         }),
         reviewed: buildProperty({
-            title: "Reviewed",
+            name: "Reviewed",
             dataType: "boolean"
         }),
         tags: {
-            title: "Tags",
+            name: "Tags",
             description: "Example of generic array",
             dataType: "array",
             of: {

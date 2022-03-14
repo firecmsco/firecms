@@ -16,13 +16,13 @@ const locales: EnumValues = {
 
 const testProperty = buildProperty({
     dataType: "boolean",
-    title: "Available",
+    name: "Available",
     columnWidth: 100
 });
 
 const testProperty2:StringProperty = buildProperty<string>({
     dataType: "string",
-    title: "Currency",
+    name: "Currency",
     enumValues: {
         EUR: "Euros",
         DOL: "Dollars"
@@ -58,13 +58,13 @@ export const productSchema = buildSchema({
     properties: {
         name: buildProperty({
             dataType: "string",
-            title: "Name",
+            name: "Name",
             multiline: true,
             validation: { required: true }
         }),
         main_image: buildProperty({
             dataType: "string",
-            title: "Image",
+            name: "Image",
             storage: {
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
@@ -79,7 +79,7 @@ export const productSchema = buildSchema({
         }),
         available: buildProperty({
             dataType: "boolean",
-            title: "Available",
+            name: "Available",
             columnWidth: 100
         }),
         price: ({ values }) => ({
@@ -98,7 +98,7 @@ export const productSchema = buildSchema({
         }),
         currency: buildProperty({
             dataType: "string",
-            title: "Currency",
+            name: "Currency",
             enumValues: {
                 EUR: "Euros",
                 DOL: "Dollars"
@@ -109,31 +109,31 @@ export const productSchema = buildSchema({
         }),
         public: buildProperty({
             dataType: "boolean",
-            title: "Public",
+            name: "Public",
             description: "Should this product be visible in the website",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros."
         }),
         brand: buildProperty({
             dataType: "string",
-            title: "Brand",
+            name: "Brand",
             validation: {
                 required: true
             }
         }),
         description: buildProperty({
             dataType: "string",
-            title: "Description",
+            name: "Description",
             description: "Example of a markdown field",
             markdown: true
         }),
         amazon_link: buildProperty({
             dataType: "string",
-            title: "Amazon link",
+            name: "Amazon link",
             url: true
         }),
         images: buildProperty({
             dataType: "array",
-            title: "Images",
+            name: "Images",
             of: {
                 dataType: "string",
                 storage: {
@@ -148,7 +148,7 @@ export const productSchema = buildSchema({
         }),
         related_products: buildProperty({
             dataType: "array",
-            title: "Related products",
+            name: "Related products",
             description: "Reference to self",
             of: {
                 dataType: "reference",
@@ -156,7 +156,7 @@ export const productSchema = buildSchema({
             }
         }),
         publisher: buildProperty({
-            title: "Publisher",
+            name: "Publisher",
             description: "This is an example of a map property",
             dataType: "map",
             properties: {
@@ -171,7 +171,7 @@ export const productSchema = buildSchema({
             }
         }),
         available_locales: buildProperty({
-            title: "Available locales",
+            name: "Available locales",
             description:
                 "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
@@ -183,14 +183,14 @@ export const productSchema = buildSchema({
             }
         }),
         uppercase_name: buildProperty({
-            title: "Uppercase Name",
+            name: "Uppercase Name",
             dataType: "string",
             readOnly: true,
             description: "This field gets updated with a preSave callback"
         }),
         added_on: buildProperty({
             dataType: "date",
-            title: "Added on",
+            name: "Added on",
             autoValue: "on_create"
         })
 

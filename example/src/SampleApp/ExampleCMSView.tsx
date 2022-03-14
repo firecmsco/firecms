@@ -38,12 +38,12 @@ export function ExampleCMSView({
         name: "Custom product",
         properties: {
             name: {
-                title: "Name",
+                name: "Name",
                 validation: { required: true },
                 dataType: "string"
             },
             very_custom_field: {
-                title: "Very custom field",
+                name: "Very custom field",
                 dataType: "string"
             }
         }

@@ -194,7 +194,7 @@ function buildPropertyFromCount(name: string, totalDocsCount: number, mostProbab
         const properties = buildPropertiesFromCount(totalDocsCount, typesCount.map as TypesCountRecord, valuesResult ? valuesResult.mapValues : undefined);
         return {
             dataType: "map",
-            title: title,
+            name: title,
             properties
         };
     } else if (mostProbableType === "array") {
@@ -203,7 +203,7 @@ function buildPropertyFromCount(name: string, totalDocsCount: number, mostProbab
         const of = buildPropertyFromCount(name, totalDocsCount, arrayMostProbableType, arrayTypesCount, valuesResult);
         return {
             dataType: "array",
-            title: title,
+            name: title,
             of
         };
     }
@@ -224,7 +224,7 @@ function buildPropertyFromCount(name: string, totalDocsCount: number, mostProbab
     }
 
     if (title) {
-        result.title = title;
+        result.name = title;
     }
 
     let validation = buildValidation(propertyProps);

@@ -100,7 +100,7 @@ function renderMap<T extends object>(property: ResolvedMapProperty<T>, size: Pre
         return (
             <List>
                 {mapProperties && mapProperties.map((key: string) => (
-                    <ListItem key={property.title + key}>
+                    <ListItem key={property.name + key}>
                         <SkeletonComponent
                             property={(property.properties as any)[key]}
                             size={"small"}/>
@@ -115,7 +115,7 @@ function renderMap<T extends object>(property: ResolvedMapProperty<T>, size: Pre
                 {mapProperties &&
                 mapProperties.map((key, index) => {
                     return (
-                        <TableRow key={`table_${property.title}_${index}`}
+                        <TableRow key={`table_${property.name}_${index}`}
                                   sx={{
                                       "&:last-child th, &:last-child td": {
                                           borderBottom: 0

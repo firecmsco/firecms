@@ -24,7 +24,7 @@ const sampleView: EntityCustomView = {
 
 const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
     id: "spanish_title",
-    title: "Spanish title",
+    name: "Spanish title",
     builder: ({ entity, context }) =>
         <AsyncPreviewComponent builder={
             context.dataSource.fetchEntity({
@@ -46,14 +46,14 @@ export const productSchema = buildSchema<Product>({
     properties: {
         name: {
             dataType: "string",
-            title: "Name",
+            name: "Name",
             validation: {
                 required: true
             }
         },
         main_image: {
             dataType: "string",
-            title: "Image",
+            name: "Image",
             storage: {
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
@@ -68,18 +68,18 @@ export const productSchema = buildSchema<Product>({
         },
         category: {
             dataType: "string",
-            title: "Category",
+            name: "Category",
             enumValues: categories
         },
         available: {
             dataType: "boolean",
-            title: "Available",
+            name: "Available",
             columnWidth: 100,
             description: "Is this product available in the website"
         },
         price: ({ values }) => ({
             dataType: "number",
-            title: "Price",
+            name: "Price",
             validation: {
                 requiredMessage: "You must set a price between 0 and 1000",
                 min: 0,
@@ -94,7 +94,7 @@ export const productSchema = buildSchema<Product>({
         }),
         currency: {
             dataType: "string",
-            title: "Currency",
+            name: "Currency",
             enumValues: "currencies",
             validation: {
                 required: true
@@ -102,31 +102,31 @@ export const productSchema = buildSchema<Product>({
         },
         public: {
             dataType: "boolean",
-            title: "Public",
+            name: "Public",
             description: "Should this product be visible in the website"
             // longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros."
         },
         brand: {
             dataType: "string",
-            title: "Brand",
+            name: "Brand",
             validation: {
                 required: true
             }
         },
         description: {
             dataType: "string",
-            title: "Description",
+            name: "Description",
             description: "Example of a markdown field",
             markdown: true
         },
         amazon_link: {
             dataType: "string",
-            title: "Amazon link",
+            name: "Amazon link",
             url: true
         },
         images: {
             dataType: "array",
-            title: "Images",
+            name: "Images",
             of: {
                 dataType: "string",
                 storage: {
@@ -141,7 +141,7 @@ export const productSchema = buildSchema<Product>({
         },
         related_products: {
             dataType: "array",
-            title: "Related products",
+            name: "Related products",
             description: "Reference to self",
             of: {
                 dataType: "reference",
@@ -149,22 +149,22 @@ export const productSchema = buildSchema<Product>({
             }
         },
         publisher: {
-            title: "Publisher",
+            name: "Publisher",
             description: "This is an example of a map property",
             dataType: "map",
             properties: {
                 name: {
-                    title: "Name",
+                    name: "Name",
                     dataType: "string"
                 },
                 external_id: {
-                    title: "External id",
+                    name: "External id",
                     dataType: "string"
                 }
             }
         },
         available_locales: {
-            title: "Available locales",
+            name: "Available locales",
             description:
                 "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
@@ -177,14 +177,14 @@ export const productSchema = buildSchema<Product>({
             defaultValue: ["es"]
         },
         uppercase_name: {
-            title: "Uppercase Name",
+            name: "Uppercase Name",
             dataType: "string",
             readOnly: true,
             description: "This field gets updated with a preSave callback"
         },
         added_on: {
             dataType: "date",
-            title: "Added on",
+            name: "Added on",
             autoValue: "on_create"
         }
 
@@ -226,24 +226,24 @@ export const localeSchema = buildSchema<Locale>({
     name: "Locale",
     properties: {
         name: {
-            title: "Name",
+            name: "Name",
             validation: { required: true },
             dataType: "string"
         },
         description: {
-            title: "Description",
+            name: "Description",
             validation: { required: true },
             dataType: "string",
             multiline: true
         },
         selectable: {
-            title: "Selectable",
+            name: "Selectable",
             description: "Is this locale selectable",
             longDescription: "Changing this value triggers a cloud function that updates the parent product",
             dataType: "boolean"
         },
         video: {
-            title: "Video",
+            name: "Video",
             dataType: "string",
             validation: { required: false },
             storage: {

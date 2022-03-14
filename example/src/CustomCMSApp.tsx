@@ -39,12 +39,12 @@ const productSchema = buildSchema({
     name: "Product",
     properties: {
         name: {
-            title: "Name",
+            name: "Name",
             validation: { required: true },
             dataType: "string"
         },
         price: {
-            title: "Price",
+            name: "Price",
             validation: {
                 required: true,
                 requiredMessage: "You must set a price between 0 and 1000",
@@ -55,7 +55,7 @@ const productSchema = buildSchema({
             dataType: "number"
         },
         status: {
-            title: "Status",
+            name: "Status",
             validation: { required: true },
             dataType: "string",
             description: "Should this product be visible in the website",

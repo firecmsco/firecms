@@ -9,13 +9,13 @@ export function PropertyFieldPreview({
                                          property,
                                          onClick,
                                          hasError,
-                                         includeTitle,
+                                         includeName,
                                          selected
                                      }: {
     property: Property,
     hasError?: boolean,
     selected?: boolean,
-    includeTitle?: boolean,
+    includeName?: boolean,
     onClick?: () => void
 }) {
 
@@ -61,11 +61,11 @@ export function PropertyFieldPreview({
                         flexDirection: "column",
                     })}>
 
-                    {includeTitle && <Typography variant="subtitle1"
-                                                 component="span"
-                                                 sx={{ flexGrow: 1, pr: 2 }}>
-                        {property.title
-                            ? property.title
+                    {includeName && <Typography variant="subtitle1"
+                                                component="span"
+                                                sx={{ flexGrow: 1, pr: 2 }}>
+                        {property.name
+                            ? property.name
                             : "\u00a0"
                         }
                     </Typography>}
@@ -76,7 +76,7 @@ export function PropertyFieldPreview({
                         alignItems: "center"
                     }}>
                         <Typography sx={{ flexGrow: 1, pr: 2 }}
-                                    variant={includeTitle ? "body2" : "subtitle1"}
+                                    variant={includeName ? "body2" : "subtitle1"}
                                     component="span"
                                     color="text.secondary">
                             {widget?.name}

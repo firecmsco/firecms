@@ -139,14 +139,14 @@ function getYupStringSchema({
                         parentProperty,
                         value
                     }));
-        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} must be min ${validation.min} characters long`);
-        if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.title} must be max ${validation.max} characters long`);
+        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.name} must be min ${validation.min} characters long`);
+        if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.name} must be max ${validation.max} characters long`);
         if (validation.matches) schema = schema.matches(validation.matches, validation.matchesMessage ? { message: validation.matchesMessage } : undefined);
         if (validation.trim) schema = schema.trim();
         if (validation.lowercase) schema = schema.lowercase();
         if (validation.uppercase) schema = schema.uppercase();
-        if (property.email) schema = schema.email(`${property.title} must be an email`);
-        if (property.url) schema = schema.url(`${property.title} must be a url`);
+        if (property.email) schema = schema.email(`${property.name} must be an email`);
+        if (property.url) schema = schema.url(`${property.name} must be a url`);
     } else {
         schema = schema.notRequired().nullable(true);
     }
@@ -174,13 +174,13 @@ function getYupNumberSchema({
                     parentProperty,
                     value
                 }));
-        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} must be higher or equal to ${validation.min}`);
-        if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.title} must be lower or equal to ${validation.max}`);
-        if (validation.lessThan || validation.lessThan === 0) schema = schema.lessThan(validation.lessThan, `${property.title} must be higher than ${validation.lessThan}`);
-        if (validation.moreThan || validation.moreThan === 0) schema = schema.moreThan(validation.moreThan, `${property.title} must be lower than ${validation.moreThan}`);
-        if (validation.positive) schema = schema.positive(`${property.title} must be positive`);
-        if (validation.negative) schema = schema.negative(`${property.title} must be negative`);
-        if (validation.integer) schema = schema.integer(`${property.title} must be an integer`);
+        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.name} must be higher or equal to ${validation.min}`);
+        if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.name} must be lower or equal to ${validation.max}`);
+        if (validation.lessThan || validation.lessThan === 0) schema = schema.lessThan(validation.lessThan, `${property.name} must be higher than ${validation.lessThan}`);
+        if (validation.moreThan || validation.moreThan === 0) schema = schema.moreThan(validation.moreThan, `${property.name} must be lower than ${validation.moreThan}`);
+        if (validation.positive) schema = schema.positive(`${property.name} must be positive`);
+        if (validation.negative) schema = schema.negative(`${property.name} must be negative`);
+        if (validation.integer) schema = schema.integer(`${property.name} must be an integer`);
     } else {
         schema = schema.notRequired().nullable(true);
     }
@@ -236,8 +236,8 @@ function getYupDateSchema({
                     parentProperty,
                     value
                 }));
-        if (validation.min) schema = schema.min(validation.min, `${property.title} must be after ${validation.min}`);
-        if (validation.max) schema = schema.max(validation.max, `${property.title} must be before ${validation.min}`);
+        if (validation.min) schema = schema.min(validation.min, `${property.name} must be after ${validation.min}`);
+        if (validation.max) schema = schema.max(validation.max, `${property.name} must be before ${validation.min}`);
     } else {
         schema = schema.notRequired().nullable(true);
     }
@@ -325,10 +325,10 @@ function getYupArraySchema({
         const arrayUniqueFields = hasUniqueInArrayModifier(property.of);
         if (arrayUniqueFields) {
             if (typeof arrayUniqueFields === "boolean") {
-                schema = schema.uniqueInArray(v => v, `${property.title} should have unique values within the array`);
+                schema = schema.uniqueInArray(v => v, `${property.name} should have unique values within the array`);
             } else if (Array.isArray(arrayUniqueFields)) {
                 arrayUniqueFields.forEach(([name, childProperty]) => {
-                        schema = schema.uniqueInArray(v => v && v[name], `${property.title} → ${childProperty.title ?? name}: should have unique values within the array`);
+                        schema = schema.uniqueInArray(v => v && v[name], `${property.name} → ${childProperty.name ?? name}: should have unique values within the array`);
                     }
                 );
             }
@@ -340,8 +340,8 @@ function getYupArraySchema({
         schema = validation.required
             ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
             : schema.notRequired().nullable(true);
-        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} should be min ${validation.min} entries long`);
-        if (validation.max) schema = schema.max(validation.max, `${property.title} should be max ${validation.max} entries long`);
+        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.name} should be min ${validation.min} entries long`);
+        if (validation.max) schema = schema.max(validation.max, `${property.name} should be max ${validation.max} entries long`);
     } else {
         schema = schema.notRequired().nullable(true);
     }

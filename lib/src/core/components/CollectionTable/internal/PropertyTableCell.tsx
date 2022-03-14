@@ -258,7 +258,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                       path={property.path}
                                                       multiselect={false}
                                                       previewProperties={property.previewProperties}
-                                                      title={property.title}
+                                                      title={property.name}
                                                       setPreventOutsideClick={setPreventOutsideClick}
                 />;
             }
@@ -295,7 +295,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                  multiselect={true}
                                                  path={arrayProperty.of.path}
                                                  previewProperties={arrayProperty.of.previewProperties}
-                                                 title={arrayProperty.of.title}
+                                                 title={arrayProperty.of.name}
                                                  setPreventOutsideClick={setPreventOutsideClick}
                             />;
                     }

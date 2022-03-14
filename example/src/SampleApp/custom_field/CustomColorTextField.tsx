@@ -27,7 +27,7 @@ export default function CustomColorTextField({
                        }}
                        error={!!error}
                        disabled={isSubmitting}
-                       label={property.title}
+                       label={property.name}
                        value={value ?? ""}
                        onChange={(evt: any) => {
                            setValue(

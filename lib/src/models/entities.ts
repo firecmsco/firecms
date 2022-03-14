@@ -128,7 +128,7 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
     /**
      * Header of this column
      */
-    title: string;
+    name: string;
 
     /**
      * Width of the generated column in pixels

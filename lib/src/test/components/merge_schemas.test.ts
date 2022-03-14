@@ -3,7 +3,7 @@ import { mergeSchemas } from "../../core/util/schemas";
 
 const priceBuilder:PropertyBuilder = ({ values }: any) => ({
     dataType: "number",
-    title: "Price",
+    name: "Price",
     validation: {
         requiredMessage: "You must set a price between 0 and 1000",
         min: 0,
@@ -22,13 +22,13 @@ export const baseProductSchema: EntitySchema = {
     properties: {
         name: {
             dataType: "string",
-            title: "Name",
+            name: "Name",
             multiline: true,
             validation: { required: true }
         },
         currency: {
             dataType: "string",
-            title: "Currency",
+            name: "Currency",
             enumValues: "currency"
         },
         price: priceBuilder
@@ -40,29 +40,29 @@ export const persistedProductSchema: EntitySchema = {
     properties: {
         name: {
             dataType: "string",
-            title: "Name updated",
+            name: "Name updated",
             multiline: true,
             validation: { required: true }
         },
         currency: {
             dataType: "string",
-            title: "Currency",
+            name: "Currency",
             enumValues: [
                 { id: "EUR", label: "Euros" },
                 { id: "DOL", label: "Dollars" },
             ]
         },
         publisher: {
-            title: "Publisher",
+            name: "Publisher",
             description: "This is an example of a map property",
             dataType: "map",
             properties: {
                 external_id: {
-                    title: "External id",
+                    name: "External id",
                     dataType: "string"
                 },
                 name: {
-                    title: "Name",
+                    name: "Name",
                     dataType: "string"
                 },
             },

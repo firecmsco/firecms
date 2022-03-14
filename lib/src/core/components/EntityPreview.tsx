@@ -131,7 +131,7 @@ export function EntityPreview<M>(
                             const value = (entity.values as any)[key];
                             return (
                                 <TableRow
-                                    key={"entity_prev" + property.title + key}>
+                                    key={"entity_prev" + property.name + key}>
                                     <TableCell align="right"
                                                component="td"
                                                scope="row"
@@ -140,7 +140,7 @@ export function EntityPreview<M>(
                                             sx={{ paddingLeft: 2 }}
                                             variant={"caption"}
                                             color={"textSecondary"}>
-                                            {property.title}
+                                            {property.name}
                                         </Typography>
                                     </TableCell>
 

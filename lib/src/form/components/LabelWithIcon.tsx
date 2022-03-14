@@ -20,7 +20,7 @@ export function LabelWithIcon({
             <span style={{ paddingRight: "12px" }}>
                 {getIconForProperty(property)}
             </span>
-            <span>{property.title}</span>
+            <span>{property.name}</span>
         </>
     );
 }

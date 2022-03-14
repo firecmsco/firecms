@@ -5,25 +5,25 @@ export const usersSchema = buildSchema({
     name: "User",
     properties: {
         first_name: {
-            title: "First name",
+            name: "First name",
             dataType: "string"
         },
         last_name: {
-            title: "Last name",
+            name: "Last name",
             dataType: "string"
         },
         email: {
-            title: "Email",
+            name: "Email",
             dataType: "string",
             email: true
         },
         phone: {
-            title: "Phone",
+            name: "Phone",
             dataType: "string"
         },
         liked_products: {
             dataType: "array",
-            title: "Liked products",
+            name: "Liked products",
             description: "Products this user has liked",
             of: {
                 dataType: "reference",
@@ -31,16 +31,16 @@ export const usersSchema = buildSchema({
             }
         },
         picture: {
-            title: "Picture",
+            name: "Picture",
             dataType: "map",
             properties: {
                 large: {
-                    title: "Large",
+                    name: "Large",
                     dataType: "string",
                     url: true,
                 },
                 thumbnail: {
-                    title: "Thumbnail",
+                    name: "Thumbnail",
                     dataType: "string",
                     url: true,
                 }
@@ -51,7 +51,7 @@ export const usersSchema = buildSchema({
     additionalColumns: [
         {
             id: "sample_additional",
-            title: "Sample additional",
+            name: "Sample additional",
             builder: ({ entity }) => `Generated column: ${entity.values.first_name}`,
             dependencies: ["first_name"]
         }

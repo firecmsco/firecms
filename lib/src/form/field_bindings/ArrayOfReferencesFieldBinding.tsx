@@ -128,7 +128,7 @@ export function ArrayOfReferencesFieldBinding({
                                     color="primary"
                                     disabled={isSubmitting}
                                     onClick={onEntryClick}>
-                                Edit {property.title}
+                                Edit {property.name}
                             </Button>
                         </Box>
                     </>}

@@ -18,21 +18,21 @@ export const productSchema: EntitySchema = {
     properties: {
         name: {
             dataType: "string",
-            title: "Name",
+            name: "Name",
             multiline: true,
             validation: { required: true }
         },
         publisher: {
-            title: "Publisher",
+            name: "Publisher",
             description: "This is an example of a map property",
             dataType: "map",
             properties: {
                 name: {
-                    title: "Name",
+                    name: "Name",
                     dataType: "string"
                 },
                 external_id: {
-                    title: "External id",
+                    name: "External id",
                     dataType: "string"
                 }
             },
@@ -40,7 +40,7 @@ export const productSchema: EntitySchema = {
         },
         main_image: {
             dataType: "string",
-            title: "Image",
+            name: "Image",
             storage: {
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
@@ -55,12 +55,12 @@ export const productSchema: EntitySchema = {
         },
         available: {
             dataType: "boolean",
-            title: "Available",
+            name: "Available",
             columnWidth: 100
         },
         price: ({ values }: any) => ({
             dataType: "number",
-            title: "Price",
+            name: "Price",
             validation: {
                 requiredMessage: "You must set a price between 0 and 1000",
                 min: 0,

@@ -21,8 +21,8 @@ export function BasePropertyField({
         handleSubmit
     } = useFormikContext<PropertyWithId>();
 
-    const title = "title";
-    const titleError = showErrors && getIn(errors, title);
+    const name = "name";
+    const titleError = showErrors && getIn(errors, name);
 
     const id = "id";
     const idError = showErrors && getIn(errors, id);
@@ -31,10 +31,10 @@ export function BasePropertyField({
         <>
 
             <Grid item>
-                <Field name={title}
+                <Field name={name}
                        as={DebouncedTextField}
-                       validate={validateTitle}
-                       label={"Property title"}
+                       validate={validateName}
+                       label={"Property name"}
                        required
                        fullWidth
                        helperText={titleError}
@@ -76,7 +76,7 @@ function validateId(value: string) {
     return error;
 }
 
-function validateTitle(value: string) {
+function validateName(value: string) {
     let error;
     if (!value) {
         error = "You must specify a title for the property";

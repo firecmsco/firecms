@@ -41,7 +41,7 @@ export function MapPropertyField({}: {}) {
         onClick={() => setPropertyDialogOpen(true)}
         startIcon={<AddIcon/>}
     >
-        Add property to {values.title ?? "this group"}
+        Add property to {values.name ?? "this group"}
     </Button>;
     return (
         <>

@@ -35,6 +35,8 @@ buildProperty<string>({
     }
 });
 ```
+- The prop `title` in properties has been renamed to `name` for consistency with
+  schemas and collections naming
 - `PreviewComponent` has been renamed to `PropertyPreview`
 - `PreviewComponentProps` has been renamed to `PropertyPreviewProps`
 - Validation: The `email`validation prop in string properties is now placed

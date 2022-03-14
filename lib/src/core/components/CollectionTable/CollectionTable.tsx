@@ -119,7 +119,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         const subcollectionColumns: AdditionalColumnDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
             return {
                 id: getSubcollectionColumnId(subcollection),
-                title: subcollection.name,
+                name: subcollection.name,
                 width: 200,
                 dependencies: [],
                 builder: ({ entity }) => (

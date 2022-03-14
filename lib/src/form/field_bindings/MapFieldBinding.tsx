@@ -92,7 +92,7 @@ export function MapFieldBinding<T extends object>({
                     onChange={handleAddProperty}>
                     {keys.map((key) => (
                         <MenuItem key={key} value={key}>
-                            {(property.properties as Properties)[key].title || key}
+                            {(property.properties as Properties)[key].name || key}
                         </MenuItem>
                     ))}
                 </Select>

@@ -41,7 +41,7 @@ export function BlockPropertyField({}: {}) {
         onClick={() => setPropertyDialogOpen(true)}
         startIcon={<AddIcon/>}
     >
-        Add property to {values.title ?? "this block"}
+        Add property to {values.name ?? "this block"}
     </Button>;
     return (
         <>

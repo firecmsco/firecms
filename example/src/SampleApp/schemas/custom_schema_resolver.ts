@@ -20,7 +20,7 @@ export const customSchemaOverrideHandler: SchemaOverrideHandler = ({
             name: "Custom product",
             properties: {
                 name: {
-                    title: "Name",
+                    name: "Name",
                     description: "This entity is using a schema overridden by a schema resolver",
                     validation: { required: true },
                     dataType: "string"

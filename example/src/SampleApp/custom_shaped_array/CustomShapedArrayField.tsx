@@ -29,7 +29,7 @@ export default function CustomShapedArrayField({
     return (
         <FormControl fullWidth error={showError}>
 
-            <FormHelperText>{property.title ?? propertyKey}</FormHelperText>
+            <FormHelperText>{property.name ?? propertyKey}</FormHelperText>
 
             <Paper variant={"outlined"}>
                 <Box m={2}>

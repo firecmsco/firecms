@@ -145,7 +145,7 @@ export function PropertyTreeEntry({
                 ? <PropertyFieldPreview
                     property={propertyOrBuilder}
                     onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
-                    includeTitle={true}
+                    includeName={true}
                     selected={selected}
                     hasError={hasError}/>
                 : <PropertyBuilderPreview name={propertyKey}

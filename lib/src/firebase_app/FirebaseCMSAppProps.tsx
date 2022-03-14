@@ -159,5 +159,5 @@ export interface FirebaseCMSAppProps {
      * to disable registration in `password` mode, or to set up an additional
      * message.
      */
-    LoginViewProps?: FirebaseLoginViewProps;
+    LoginViewProps?: Partial<FirebaseLoginViewProps>;
 }

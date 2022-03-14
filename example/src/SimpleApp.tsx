@@ -53,12 +53,12 @@ const productSchema = buildSchema<Product>({
     name: "Product",
     properties: {
         name: {
-            title: "Name",
+            name: "Name",
             validation: { required: true },
             dataType: "string"
         },
         price: {
-            title: "Price",
+            name: "Price",
             validation: {
                 required: true,
                 requiredMessage: "You must set a price between 0 and 1000",
@@ -69,7 +69,7 @@ const productSchema = buildSchema<Product>({
             dataType: "number"
         },
         status: {
-            title: "Status",
+            name: "Status",
             validation: { required: true },
             dataType: "string",
             description: "Should this product be visible in the website",
@@ -80,7 +80,7 @@ const productSchema = buildSchema<Product>({
             }
         },
         published: ({ values }) => buildProperty({
-            title: "Published",
+            name: "Published",
             dataType: "boolean",
             columnWidth: 100,
             disabled: (
@@ -94,7 +94,7 @@ const productSchema = buildSchema<Product>({
         }),
         related_products: {
             dataType: "array",
-            title: "Related products",
+            name: "Related products",
             description: "Reference to self",
             of: {
                 dataType: "reference",
@@ -102,7 +102,7 @@ const productSchema = buildSchema<Product>({
             }
         },
         main_image: buildProperty({ // The `buildProperty` method is an utility function used for type checking
-            title: "Image",
+            name: "Image",
             dataType: "string",
             storage: {
                 storagePath: "images",
@@ -110,7 +110,7 @@ const productSchema = buildSchema<Product>({
             }
         }),
         tags: {
-            title: "Tags",
+            name: "Tags",
             description: "Example of generic array",
             validation: { required: true },
             dataType: "array",
@@ -119,14 +119,14 @@ const productSchema = buildSchema<Product>({
             }
         },
         description: {
-            title: "Description",
+            name: "Description",
             description: "Not mandatory but it'd be awesome if you filled this up",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
             dataType: "string",
             columnWidth: 300
         },
         categories: {
-            title: "Categories",
+            name: "Categories",
             validation: { required: true },
             dataType: "array",
             of: {
@@ -141,22 +141,22 @@ const productSchema = buildSchema<Product>({
             }
         },
         publisher: {
-            title: "Publisher",
+            name: "Publisher",
             description: "This is an example of a map property",
             dataType: "map",
             properties: {
                 name: {
-                    title: "Name",
+                    name: "Name",
                     dataType: "string"
                 },
                 external_id: {
-                    title: "External id",
+                    name: "External id",
                     dataType: "string"
                 }
             }
         },
         expires_on: {
-            title: "Expires on",
+            name: "Expires on",
             dataType: "date"
         }
     }
@@ -167,18 +167,18 @@ const localeSchema = buildSchema({
     customId: locales,
     name: "Locale",
     properties: {
-        title: {
-            title: "Title",
+        name:  {
+            name:  "Title",
             validation: { required: true },
             dataType: "string"
         },
         selectable: {
-            title: "Selectable",
+            name:  "Selectable",
             description: "Is this locale selectable",
             dataType: "boolean"
         },
         video: {
-            title: "Video",
+            name:  "Video",
             dataType: "string",
             validation: { required: false },
             storage: {
