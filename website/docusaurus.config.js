@@ -10,6 +10,7 @@ module.exports = {
     projectName: 'FireCMS',
     plugins: [
         'docusaurus-tailwindcss-loader',
+        'docusaurus-plugin-sass',
         [
             'docusaurus-plugin-typedoc',
             {
