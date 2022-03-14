@@ -6,7 +6,7 @@ export type TypesCount = {
     boolean?: number,
     map?: TypesCountRecord,
     array?: TypesCount,
-    timestamp?: number,
+    date?: number,
     geopoint?: number,
     reference?: number
 };

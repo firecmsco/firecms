@@ -21,8 +21,8 @@
     "build"
   ],
   "dependencies": {
+    "@camberi/firecms": "2.0.0-alpha.1",
     "firebase": "^8.6.8",
-    "firebase-admin": "^9.9.0",
-    "@camberi/firecms": "2.0.0-alpha.1"
+    "firebase-admin": "^9.9.0"
   }
 }

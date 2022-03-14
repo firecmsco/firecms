@@ -257,7 +257,7 @@ function getType(value: any): DataType {
     else if (Array.isArray(value))
         return "array";
     else if (value instanceof admin.firestore.Timestamp)
-        return "timestamp";
+        return "date";
     else if (value instanceof admin.firestore.GeoPoint)
         return "geopoint";
     else if (value instanceof admin.firestore.DocumentReference)
