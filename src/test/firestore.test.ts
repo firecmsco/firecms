@@ -20,7 +20,7 @@ it("timestamp conversion", () => {
 
     const timestamp = Timestamp.now();
     const date = timestamp.toDate();
-    expect(firestoreToCMSModel({ created_at: timestamp }, schema, "any")
+    expect(firestoreToCMSModel({ created_at: timestamp })
     ).toEqual({ created_at: date });
 });
 
@@ -43,7 +43,7 @@ it("timestamp array conversion", () => {
     const date = timestamp.toDate();
 
     expect(
-        firestoreToCMSModel({ my_array: [timestamp] }, schema as ResolvedEntitySchema<any>, "any")
+        firestoreToCMSModel({ my_array: [timestamp] })
     ).toEqual({ my_array: [date] });
 
 });
