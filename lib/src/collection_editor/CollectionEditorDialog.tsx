@@ -23,9 +23,11 @@ export function CollectionEditorDialog({
             open={open}
             maxWidth={"lg"}
             fullWidth
+            keepMounted={false}
             PaperProps={{
                 sx: (theme) => ({
                     height: "100%",
+                    maxHeight: "900px",
                     background: theme.palette.background.default
                 })
             }}

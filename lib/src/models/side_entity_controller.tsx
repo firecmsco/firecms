@@ -1,7 +1,7 @@
 import { EntityCollection } from "./collections";
 import { EntitySchema } from "./entities";
 import { EntityCallbacks } from "./entity_callbacks";
-import { PermissionsBuilder } from "./permissions";
+import { EntityPermissionsBuilder } from "./permissions";
 import { User } from "./user";
 import {
     ResolvedEntitySchema
@@ -43,7 +43,7 @@ export interface SideEntityPanelProps<M = any, UserType = User> {
     /**
      * Can the elements in this collection be added and edited.
      */
-    permissions?: PermissionsBuilder<M, UserType>;
+    permissions?: EntityPermissionsBuilder<M, UserType>;
 
     /**
      * Schema representing the entities of this view.

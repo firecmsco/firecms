@@ -43,14 +43,11 @@ export function TableReferenceField(props: {
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
-    const handleOpen = useCallback((event: React.MouseEvent) => {
+    const handleOpen = useCallback(() => {
         if (disabled)
             return;
-        if (event.detail <= 1) {
-            event.stopPropagation();
-            setPreventOutsideClick(true);
-            setOpen(true);
-        }
+        setPreventOutsideClick(true);
+        setOpen(true);
     }, [disabled, setPreventOutsideClick]);
 
     const handleClose = useCallback(() => {

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 
 import { Link as ReactLink, NavLink } from "react-router-dom";
 import {
@@ -13,13 +13,10 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
-import ShowChartIcon from '@mui/icons-material/ShowChart';import {
-    computeTopNavigation,
-    TopNavigationEntry,
-    TopNavigationResult
-} from "./util/navigation_utils";
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { useNavigation } from "../hooks";
 import { FireCMSLogo } from "./components/FireCMSLogo";
+import { TopNavigationEntry, TopNavigationResult } from "../models";
 
 /**
  * Props used in case you need to override the default drawer
@@ -41,10 +38,13 @@ export function Drawer({
 
     const navigationContext = useNavigation();
 
+    if (!navigationContext.topLevelNavigation)
+        throw Error("Navigation not ready in Drawer");
+
     const {
         navigationEntries,
         groups
-    }: TopNavigationResult = useMemo(() => computeTopNavigation(navigationContext, true), [navigationContext]);
+    }: TopNavigationResult = navigationContext.topLevelNavigation;
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 

@@ -1,4 +1,4 @@
-import { Box, Breakpoint, Container } from "@mui/material";
+import { Box, Breakpoint, Container, alpha } from "@mui/material";
 import React from "react";
 
 export function CustomDialogActions({
@@ -13,7 +13,7 @@ export function CustomDialogActions({
         : children;
 
     return <Box sx={(theme) => ({
-        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(0, 0, 0, 0.1)",
+        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : alpha(theme.palette.background.paper, 0.1),
         backdropFilter: "blur(4px)",
         borderTop: `1px solid ${theme.palette.divider}`,
         py: 1,

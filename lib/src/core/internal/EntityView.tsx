@@ -24,7 +24,7 @@ import {
     EntitySchema,
     EntityStatus,
     EntityValues,
-    PermissionsBuilder,
+    EntityPermissionsBuilder,
     ResolvedEntitySchema
 } from "../../models";
 import { CircularProgressCenter } from "../components";
@@ -41,7 +41,7 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "../../hooks";
-import { canEdit } from "../util/permissions";
+import { canEditEntity } from "../util/permissions";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as any;
@@ -54,7 +54,7 @@ export interface EntityViewProps<M, UserType> {
     entityId?: string;
     copy?: boolean;
     selectedSubpath?: string;
-    permissions?: PermissionsBuilder<M, UserType>;
+    permissions?: EntityPermissionsBuilder<M, UserType>;
     callbacks?: EntityCallbacks<M>;
     subcollections?: EntityCollection[];
     width?: number | string;
@@ -115,7 +115,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     useEffect(() => {
         if (entity)
-            setReadOnly(!canEdit(permissions, entity, authController, path, context));
+            setReadOnly(!canEditEntity(permissions, entity, authController, path, context));
     }, [entity, permissions]);
 
     const theme = useTheme();

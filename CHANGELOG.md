@@ -1,6 +1,7 @@
 ## [2.0.0-alpha1] - 2021-12-13
 
-- Collections no use `schemaId` instead of point to a schema
+- Collections now use `schemaId` instead of pointing to a schema.
+Schemas are specified as prop at the CMS level.
 - Removed `properties` from collection. The same functionality is achieved
   with the prop `hideFromCollection` at the property level
 - `AdditionalColumnDelegate` has been moved to the `EntitySchema`
@@ -53,6 +54,10 @@ buildProperty<string>({
   when declaring date properties now is `date` instead of `timestamp` 
 - `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where 
   you pass a React Component directly: `Actions`
+- `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where 
+  you pass a React Component directly: `Actions`
+- `Permissions` is now called `EntityPermissions`, and same for the related types.
+
 
 ## [1.0.0-rc.3] - 2022-02-28
 

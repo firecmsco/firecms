@@ -2,7 +2,7 @@ import { EntitySchema } from "./entities";
 import { EntityCollection } from "./collections";
 import { EntityCallbacks } from "./entity_callbacks";
 import { User } from "./user";
-import { PermissionsBuilder } from "./permissions";
+import { EntityPermissionsBuilder } from "./permissions";
 
 
 /**
@@ -24,7 +24,7 @@ export type SchemaOverride<M = any, UserType = User> = {
     /**
      * Can the elements in this collection be added and edited.
      */
-    permissions?: PermissionsBuilder<M, UserType>;
+    permissions?: EntityPermissionsBuilder<M, UserType>;
 
     /**
      * Schema representing the entities of this view

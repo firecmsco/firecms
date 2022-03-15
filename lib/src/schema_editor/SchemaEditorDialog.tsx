@@ -16,20 +16,27 @@ export function SchemaEditorDialog({
                                        schemaId
                                    }: SchemaEditorDialogProps) {
 
+    const [dirty, setDirty] = React.useState(false);
+
     return (
         <Dialog
             open={open}
             maxWidth={"lg"}
             fullWidth
+            keepMounted={false}
+            onClose={dirty ? undefined : () => handleClose()}
             PaperProps={{
                 sx: (theme) => ({
                     height: "100%",
+                    maxHeight: "900px",
                     background: theme.palette.background.default
                 })
             }}
         >
             <SchemaEditor schemaId={schemaId}
-                          handleClose={handleClose}/>
+                          handleClose={handleClose}
+                          setDirty={setDirty}
+            />
         </Dialog>
     );
 }

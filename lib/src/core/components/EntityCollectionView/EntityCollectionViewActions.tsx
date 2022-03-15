@@ -19,7 +19,7 @@ import MenuList from "@mui/material/MenuList";
 import { Add, Delete, Settings } from "@mui/icons-material";
 import { ExportButton } from "../CollectionTable/internal/ExportButton";
 
-import { canCreate, canDelete } from "../../util/permissions";
+import { canCreateEntity, canDeleteEntity } from "../../util/permissions";
 import { useAuthController, useFireCMSContext } from "../../../hooks";
 import {
     Entity,
@@ -59,7 +59,7 @@ export function EntityCollectionViewActions<M>({
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const addButton = canCreate(collection.permissions, authController, path, context) && onNewClick && (largeLayout
+    const addButton = canCreateEntity(collection.permissions, authController, path, context) && onNewClick && (largeLayout
         ? <Button
             onClick={onNewClick}
             startIcon={<Add/>}
@@ -77,7 +77,7 @@ export function EntityCollectionViewActions<M>({
             <Add/>
         </Button>);
 
-    const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collection.permissions, entity, authController, path, context));
+    const multipleDeleteEnabled = selectedEntities.every((entity) => canDeleteEntity(collection.permissions, entity, authController, path, context));
 
     let multipleDeleteButton: JSX.Element | undefined;
     if (selectionEnabled) {

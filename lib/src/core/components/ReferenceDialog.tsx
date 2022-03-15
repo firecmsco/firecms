@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { CollectionSize, Entity, EntityCollection } from "../../models";
-import { Button, Dialog, Typography } from "@mui/material";
+import { Box, Button, Dialog, Typography } from "@mui/material";
 
 import { CollectionTable } from "./CollectionTable";
 import {
@@ -11,29 +11,6 @@ import { useDataSource } from "../../hooks";
 import { ErrorView } from "./ErrorView";
 import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 import { CustomDialogActions } from "./CustomDialogActions";
-
-const PREFIX = "ReferenceDialog";
-
-const classes = {
-    dialogBody: `${PREFIX}-dialogBody`,
-    paper: `${PREFIX}-paper`
-};
-
-const StyledDialog = styled(Dialog)((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.dialogBody}`]: {
-        flexGrow: 1,
-        overflow: "auto",
-        minWidth: "85vw"
-    },
-
-    [`& .${classes.paper}`]: {
-        height: "100%"
-    }
-}));
 
 /**
  * @category Components
@@ -193,16 +170,23 @@ export function ReferenceDialog(
     }
 
     return (
-        <StyledDialog
+        <Dialog
+            keepMounted={false}
             onClose={onClose}
-            classes={{
-                paper: classes.paper
+            PaperProps={{
+                sx: (theme) => ({
+                    height: "90vh",
+                    minWidth: "85vw"
+                })
             }}
             maxWidth={"xl"}
             scroll={"paper"}
             open={open}>
 
-            <div className={classes.dialogBody}>
+            <Box sx={{
+                flexGrow: 1,
+                overflow: "auto"
+            }}>
 
                 {selectedEntities &&
                     <CollectionTable path={path}
@@ -219,7 +203,7 @@ export function ReferenceDialog(
                                      </Button>}
                                      entitiesDisplayedFirst={selectedEntities}
                     />}
-            </div>
+            </Box>
 
             <CustomDialogActions>
                 <Button
@@ -233,7 +217,7 @@ export function ReferenceDialog(
                 </Button>
             </CustomDialogActions>
 
-        </StyledDialog>
+        </Dialog>
     );
 
 }

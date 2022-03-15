@@ -162,6 +162,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
         </Tooltip>
 
         <Dialog
+            keepMounted={false}
             open={open}
             onClose={handleClose}
         >

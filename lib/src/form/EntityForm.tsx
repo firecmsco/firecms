@@ -15,7 +15,11 @@ import { buildPropertyField } from "./form_factory";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
 import { ErrorFocus } from "./components/ErrorFocus";
-import { getDefaultValuesFor, isHidden, isReadOnly } from "../core/util/entities";
+import {
+    getDefaultValuesFor,
+    isHidden,
+    isReadOnly
+} from "../core/util/entities";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
@@ -421,6 +425,9 @@ function FormInternal<M>({
                 <ErrorFocus containerRef={formRef}/>
 
             </Box>
+
+            <Box sx={{ height: 56 }}/>
+
             <CustomDialogActions position={"absolute"}>
 
                 {savingError &&

@@ -72,6 +72,10 @@ export interface Navigation {
 
 }
 
+export type ResolvedEntityCollection = EntityCollection & {
+    modifiable: boolean;
+}
+
 /**
  * @category Models
  */
@@ -87,6 +91,13 @@ export type ResolvedNavigation = Navigation & {
 export type NavigationContext = {
 
     navigation?: ResolvedNavigation;
+
+    /**
+     * Configuration for the views that should be displayed at the top
+     * level of the navigation (e.g. in the home page or the navigation
+     * drawer)
+     */
+    topLevelNavigation?: TopNavigationResult;
 
     loading: boolean;
 
@@ -157,7 +168,6 @@ export type NavigationContext = {
 
 }
 
-
 /**
  * Custom additional views created by the developer, added to the main
  * navigation.
@@ -202,3 +212,17 @@ export interface CMSView {
 
 }
 
+export interface TopNavigationEntry {
+    url: string;
+    name: string;
+    path?: string;
+    type: "collection" | "stored_collection" | "view";
+    editUrl?: string;
+    description?: string;
+    group?: string;
+}
+
+export type TopNavigationResult = {
+    navigationEntries: TopNavigationEntry[],
+    groups: string[]
+};

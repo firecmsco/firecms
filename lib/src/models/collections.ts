@@ -3,7 +3,7 @@ import { Entity } from "./entities";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
-import { PermissionsBuilder } from "./permissions";
+import { EntityPermissionsBuilder } from "./permissions";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -61,7 +61,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any, UserTy
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`
      */
-    permissions?: PermissionsBuilder<M, UserType>;
+    permissions?: EntityPermissionsBuilder<M, UserType>;
 
     /**
      * Are the entities in this collection selectable. Defaults to true

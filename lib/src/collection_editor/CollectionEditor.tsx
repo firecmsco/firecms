@@ -20,19 +20,15 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 
 import * as Yup from "yup";
 import { Formik, FormikHelpers, getIn } from "formik";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link as ReactLink, useLocation } from "react-router-dom";
 import {
     useConfigurationPersistence
 } from "../hooks/useConfigurationPersistence";
-import { EntityCollection } from "../models";
+import { EntityCollection, TopNavigationResult } from "../models";
 import { CircularProgressCenter, ErrorView } from "../core";
 import { useNavigation, useSnackbarController } from "../hooks";
 import { SchemaEditorDialog } from "../schema_editor/SchemaEditorDialog";
-import {
-    computeTopNavigation,
-    TopNavigationResult
-} from "../core/util/navigation_utils";
 import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
 import { LoadingButton } from "@mui/lab";
 import { NewSchemaEditorDialog } from "../schema_editor/NewSchemaEditorDialog";
@@ -88,11 +84,13 @@ export function CollectionEditor<M>({
     const configurationPersistence = useConfigurationPersistence();
     if (!configurationPersistence)
         throw Error("Can't edit a collection with no `ConfigurationPersistence` specified");
+    if (!navigationContext.topLevelNavigation)
+        throw Error("Navigation not ready in collection editor");
 
     const {
         navigationEntries,
         groups
-    }: TopNavigationResult = useMemo(() => computeTopNavigation(navigationContext, true), [navigationContext]);
+    }: TopNavigationResult = navigationContext.topLevelNavigation;
 
     const [collection, setCollection] = useState<EntityCollection | undefined>();
     const [error, setError] = useState<Error | undefined>();
@@ -192,6 +190,7 @@ export function CollectionEditor<M>({
                                       height: "100%"
                                   }}>
                                 <Box sx={{
+                                    py: 2,
                                     flexGrow: 1,
                                     overflow: "scroll"
                                 }}>
@@ -336,8 +335,7 @@ export function CollectionEditor<M>({
                                                        }}>
                                                     <FormControl fullWidth
                                                                  required
-                                                                 disabled={isSubmitting}
-                                                                 error={touched.schemaId && Boolean(errors.schemaId)}>
+                                                                 disabled={isSubmitting}>
                                                         <Autocomplete
                                                             id={"schemaId"}
                                                             value={selectedSchema}
@@ -366,6 +364,7 @@ export function CollectionEditor<M>({
                                                                                        <AccountTreeIcon/>
                                                                                    </InputAdornment>
                                                                            }}
+                                                                           error={touched.schemaId && Boolean(errors.schemaId)}
                                                                            name={"schemaId"}
                                                                            variant={"outlined"}
                                                                            label="Schema"/>
@@ -377,11 +376,14 @@ export function CollectionEditor<M>({
                                                         mt: 1,
                                                         display: "flex",
                                                         flexDirection: "row",
-                                                        justifyContent: "space-between"
+                                                        // justifyContent: "space-between"
                                                     }}>
                                                         <Button
                                                             variant={"outlined"}
                                                             disabled={!values.schemaId}
+                                                            sx={{
+                                                                mr: 1
+                                                            }}
                                                             onClick={(event) => {
                                                                 event.stopPropagation();
                                                                 setSelectedSchemaId(values.schemaId);
@@ -394,7 +396,7 @@ export function CollectionEditor<M>({
 
                                                         {!exitingCollection &&
                                                             <Button
-                                                                variant={values.schemaId ? "text" : "contained"}
+                                                                variant={values.schemaId ? "text" : "outlined"}
                                                                 onClick={(event) => {
                                                                     event.stopPropagation();
                                                                     setSelectedSchemaId(undefined);

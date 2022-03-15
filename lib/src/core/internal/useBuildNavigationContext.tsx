@@ -12,6 +12,8 @@ import {
     SchemaOverrideHandler,
     SchemaRegistry,
     StorageSource,
+    TopNavigationEntry,
+    TopNavigationResult,
     UserConfigurationPersistence
 } from "../../models";
 import {
@@ -52,6 +54,7 @@ export function useBuildNavigationContext<UserType>({
                                                     }: BuildNavigationContextProps<UserType>): NavigationContext {
 
     const [navigation, setNavigation] = useState<ResolvedNavigation | undefined>(undefined);
+    const [topLevelNavigation, setTopLevelNavigation] = useState<TopNavigationResult | undefined>(undefined);
     const [navigationLoading, setNavigationLoading] = useState<boolean>(true);
     const [persistenceLoading, setPersistenceLoading] = useState<boolean>(true);
     const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
@@ -104,6 +107,7 @@ export function useBuildNavigationContext<UserType>({
                 configPersistence
             })
             setNavigation(result);
+            setTopLevelNavigation(computeTopNavigation(result));
             setPersistenceLoading(false);
         } catch (e) {
             setPersistenceLoading(false);
@@ -211,6 +215,50 @@ export function useBuildNavigationContext<UserType>({
         return userConfigPersistence.getCollectionConfig<M>(path);
     }, [userConfigPersistence]);
 
+    const computeTopNavigation = (resolvedNavigation:ResolvedNavigation): TopNavigationResult => {
+
+        if (!resolvedNavigation)
+            throw Error("You can only use `computeTopNavigation` with an initialised navigationContext");
+
+        const navigationEntries: TopNavigationEntry[] = [
+            ...(resolvedNavigation.collections ?? []).map(collection => ({
+                url: buildUrlCollectionPath(collection.path),
+                name: collection.name,
+                path: collection.path,
+                type: "collection",
+                description: collection.description?.trim(),
+                group: collection.group?.trim()
+            } as TopNavigationEntry)),
+            ...(resolvedNavigation.storedCollections ?? []).map(collection => ({
+                url: buildUrlCollectionPath(collection.path),
+                name: collection.name,
+                path: collection.path,
+                type: "stored_collection",
+                editUrl: buildUrlEditCollectionPath({ path: collection.path }),
+                description: collection.description?.trim(),
+                group: collection.group?.trim()
+            } as TopNavigationEntry)),
+            ...(resolvedNavigation.views ?? []).map(view =>
+                !view.hideFromNavigation
+                    ? ({
+                        url: buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
+                        name: view.name,
+                        type: "view",
+                        description: view.description,
+                        group: view.group
+                    })
+                    : undefined)
+                .filter((view) => !!view) as TopNavigationEntry[]
+        ];
+
+        const groups: string[] = Array.from(new Set(
+            Object.values(navigationEntries).map(e => e.group).filter(Boolean) as string[]
+        ).values());
+
+        console.log("computeTopNavigation navigation", resolvedNavigation, "res", navigationEntries);
+        return { navigationEntries, groups };
+    };
+
     return {
         navigation,
         loading: navigationLoading || persistenceLoading,
@@ -225,7 +273,8 @@ export function useBuildNavigationContext<UserType>({
         buildUrlCollectionPath,
         buildUrlEditCollectionPath,
         buildUrlEditSchemaPath,
-        buildCMSUrlPath
+        buildCMSUrlPath,
+        topLevelNavigation
     };
 }
 

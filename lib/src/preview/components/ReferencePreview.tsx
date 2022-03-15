@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MouseEventHandler, useMemo } from "react";
+import { useMemo } from "react";
 
 import {
     Box,
@@ -14,7 +14,7 @@ import {
 import { EntityReference, ResolvedProperty } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { PropertyPreview, PreviewSize, SkeletonComponent } from "../internal";
+import { PreviewSize, PropertyPreview, SkeletonComponent } from "../internal";
 
 import { ErrorView } from "../../core";
 import {
@@ -29,7 +29,7 @@ export type ReferencePreviewProps = {
     reference: EntityReference,
     size: PreviewSize;
     previewProperties?: string[];
-    onClick?: MouseEventHandler<any>;
+    onClick?: () => void;
     onHover?: boolean;
 };
 
@@ -206,7 +206,7 @@ function ReferencePreviewWrap({ children, onHover, size, onClick }: {
     children: React.ReactNode;
     onHover?: boolean;
     size: PreviewSize;
-    onClick?: MouseEventHandler<any>;
+    onClick?: () => void;
 }) {
     return <Paper elevation={0} sx={(theme) => {
         const clickableStyles = onClick
@@ -231,7 +231,12 @@ function ReferencePreviewWrap({ children, onHover, size, onClick }: {
             ...clickableStyles
         });
     }}
-                  onClick={onClick}>
+                  onClick={(event) => {
+                      if (onClick) {
+                          event.preventDefault();
+                          onClick();
+                      }
+                  }}>
 
         {children}
 

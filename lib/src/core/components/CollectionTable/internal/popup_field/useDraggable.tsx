@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 interface DraggableProps {
     containerRef: React.RefObject<HTMLDivElement>,
-    ref: React.RefObject<HTMLDivElement>,
+    // ref: React.RefObject<HTMLDivElement>,
     x?: number;
     y?: number;
     onMove: (x: number, y: number) => void,
@@ -10,23 +10,22 @@ interface DraggableProps {
 
 export function useDraggable({
                                  containerRef,
-                                 ref,
+                                 // ref,
                                  x,
                                  y,
                                  onMove
                              }: DraggableProps) {
 
-
     let relX = 0;
     let relY = 0;
 
-
     const onMouseDown = (event: any) => {
-        if (event.button !== 0 || !ref.current || event.target !== ref.current) {
+        console.log("onMouseDown", containerRef, event);
+        if (event.button !== 0 || !containerRef.current || event.defaultPrevented) {
             return;
         }
 
-        const { x, y } = ref.current.getBoundingClientRect();
+        const { x, y } = containerRef.current.getBoundingClientRect();
 
         relX = event.screenX - x;
         relY = event.screenY - y;
@@ -57,7 +56,7 @@ export function useDraggable({
     };
 
     useEffect(() => {
-        const current = ref.current;
+        const current = containerRef.current;
         if (current)
             current.addEventListener("mousedown", onMouseDown);
         update();

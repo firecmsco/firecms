@@ -26,7 +26,7 @@ import {
     DeleteEntityDialog
 } from "../CollectionTable/internal/DeleteEntityDialog";
 
-import { canCreate, canDelete, canEdit } from "../../util/permissions";
+import { canCreateEntity, canDeleteEntity, canEditEntity } from "../../util/permissions";
 import { Markdown } from "../../../preview";
 import {
     useAuthController,
@@ -230,7 +230,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
     }, [setSelectedEntities]);
 
     const checkInlineEditing = useCallback((entity: Entity<any>) => {
-        if (!canEdit(collection.permissions, entity, authController, path, context)) {
+        if (!canEditEntity(collection.permissions, entity, authController, path, context)) {
             return false;
         }
         return schema.inlineEditing === undefined || schema.inlineEditing;
@@ -352,9 +352,9 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
 
         const isSelected = isEntitySelected(entity);
 
-        const createEnabled = canCreate(collection.permissions, authController, path, context);
-        const editEnabled = canEdit(collection.permissions, entity, authController, path, context);
-        const deleteEnabled = canDelete(collection.permissions, entity, authController, path, context);
+        const createEnabled = canCreateEntity(collection.permissions, authController, path, context);
+        const editEnabled = canEditEntity(collection.permissions, entity, authController, path, context);
+        const deleteEnabled = canDeleteEntity(collection.permissions, entity, authController, path, context);
 
         const onCopyClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
             entityId: clickedEntity.id,

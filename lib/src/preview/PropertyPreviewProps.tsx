@@ -28,7 +28,7 @@ export interface PropertyPreviewProps<T extends CMSType = CMSType, CustomProps =
     /**
      * Click handler
      */
-    onClick?: MouseEventHandler<any>;
+    onClick?: () => void;
 
     /**
      * Desired size of the preview, depending on the context.

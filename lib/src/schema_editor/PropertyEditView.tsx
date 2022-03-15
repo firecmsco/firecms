@@ -7,8 +7,6 @@ import {
     Button,
     Dialog,
     DialogContent,
-    DialogContentText,
-    DialogTitle,
     Divider,
     FormControl,
     FormHelperText,
@@ -57,6 +55,9 @@ import {
     ArrayPropertyFieldAdvanced
 } from "./properties_advanced/ArrayPropertyFieldAdvanced";
 import { BlockPropertyField } from "./properties/BlockPropertyField";
+import {
+    DeleteConfirmationDialog
+} from "../core/components/DeleteConfirmationDialog";
 
 export type PropertyWithId = Property & { id?: string };
 
@@ -139,6 +140,7 @@ export function PropertyForm({
                 if (asDialog) {
                     body =
                         <Dialog
+                            keepMounted={false}
                             open={open ?? false}
                             maxWidth={"sm"}
                             fullWidth
@@ -592,39 +594,14 @@ function PropertyEditView({
 
             {onDelete && <DeleteConfirmationDialog open={deleteDialogOpen}
                                                    onAccept={() => onDelete(values.id, propertyNamespace)}
-                                                   onCancel={() => setDeleteDialogOpen(false)}/>}
+                                                   onCancel={() => setDeleteDialogOpen(false)}
+                                                   title={<>"Delete this
+                                                       property?"</>}
+                                                   body={<> This will <b>not
+                                                       delete any data</b>, only
+                                                       modify the schema.</>}/>}
 
         </>
     );
 }
 
-function DeleteConfirmationDialog({
-                                      open,
-                                      onAccept,
-                                      onCancel
-                                  }: { open: boolean, onAccept: () => void, onCancel: () => void }) {
-    return <Dialog
-        open={open}
-        onClose={onCancel}
-    >
-        <DialogTitle>
-            {"Delete this property?"}
-        </DialogTitle>
-        <DialogContent>
-            <DialogContentText>
-                This will <b>not delete the data</b>, only modify
-                the schema.
-            </DialogContentText>
-        </DialogContent>
-        <CustomDialogActions>
-            <Button
-                onClick={onCancel}
-                autoFocus>Cancel</Button>
-            <Button
-                variant="contained"
-                onClick={onAccept}>
-                Ok
-            </Button>
-        </CustomDialogActions>
-    </Dialog>;
-}

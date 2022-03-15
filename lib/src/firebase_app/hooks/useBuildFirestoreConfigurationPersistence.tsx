@@ -6,6 +6,7 @@ import {
     DocumentSnapshot,
     Firestore,
     getDoc,
+    deleteDoc,
     getFirestore,
     onSnapshot,
     setDoc
@@ -136,6 +137,12 @@ export function useBuildFirestoreConfigurationPersistence({
         return getDoc(ref).then((doc) => doc.data() as EntityCollection<M>);
     }, [firestore]);
 
+    const deleteCollection = useCallback(<M extends { [Key: string]: any }>(path: string): Promise<void> => {
+        if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const ref = doc(firestore, configPath, "config", "collections", path);
+        return deleteDoc(ref);
+    }, [firestore]);
+
     const getSchema = useCallback(<M extends { [Key: string]: any }>(schemaId: string): Promise<EntitySchema<M>> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const ref = doc(firestore, configPath, "config", "schemas", schemaId);
@@ -179,7 +186,8 @@ export function useBuildFirestoreConfigurationPersistence({
         getSchema,
         saveCollection,
         saveSchema,
-        saveEnum
+        saveEnum,
+        deleteCollection
     }
 }
 

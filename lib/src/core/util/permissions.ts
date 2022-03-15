@@ -2,8 +2,8 @@ import {
     AuthController,
     Entity,
     FireCMSContext,
-    Permissions,
-    PermissionsBuilder
+    EntityPermissions,
+    EntityPermissionsBuilder
 } from "../../models";
 
 const DEFAULT_PERMISSIONS = {
@@ -13,16 +13,16 @@ const DEFAULT_PERMISSIONS = {
 };
 
 function checkHasPermissionOnEntity<M extends { [Key: string]: any }, UserType>
-(permission: PermissionsBuilder<M, UserType> | Permissions | undefined,
+(permission: EntityPermissionsBuilder<M, UserType> | EntityPermissions | undefined,
  entity: Entity<M> | null,
  authController: AuthController<UserType>,
  path: string,
- context: FireCMSContext<UserType>): Permissions {
+ context: FireCMSContext<UserType>): EntityPermissions {
 
     if (permission === undefined) {
         return DEFAULT_PERMISSIONS;
     } else if (typeof permission === "object") {
-        return permission as Permissions;
+        return permission as EntityPermissions;
     } else if (typeof permission === "function") {
         return permission({
             user: authController.user,
@@ -36,8 +36,8 @@ function checkHasPermissionOnEntity<M extends { [Key: string]: any }, UserType>
     throw Error("New type of HasPermission added and not mapped");
 }
 
-export function canEdit<M extends { [Key: string]: any }, UserType>
-(permission: PermissionsBuilder<M, UserType> | Permissions | undefined,
+export function canEditEntity<M extends { [Key: string]: any }, UserType>
+(permission: EntityPermissionsBuilder<M, UserType> | EntityPermissions | undefined,
  entity: Entity<M>,
  authController: AuthController<UserType>,
  path: string,
@@ -45,16 +45,16 @@ export function canEdit<M extends { [Key: string]: any }, UserType>
     return checkHasPermissionOnEntity(permission, entity, authController, path, context).edit ?? DEFAULT_PERMISSIONS.edit;
 }
 
-export function canCreate<M extends { [Key: string]: any }, UserType>
-(permission: PermissionsBuilder<M, UserType> | Permissions | undefined,
+export function canCreateEntity<M extends { [Key: string]: any }, UserType>
+(permission: EntityPermissionsBuilder<M, UserType> | EntityPermissions | undefined,
  authController: AuthController<UserType>,
  path: string,
  context: FireCMSContext<UserType>): boolean {
     return checkHasPermissionOnEntity(permission, null, authController, path, context).create ?? DEFAULT_PERMISSIONS.create;
 }
 
-export function canDelete<M extends { [Key: string]: any }, UserType>
-(permission: PermissionsBuilder<M, UserType> | Permissions | undefined,
+export function canDeleteEntity<M extends { [Key: string]: any }, UserType>
+(permission: EntityPermissionsBuilder<M, UserType> | EntityPermissions | undefined,
  entity: Entity<M>,
  authController: AuthController<UserType>,
  path: string,

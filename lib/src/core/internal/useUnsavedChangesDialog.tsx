@@ -79,6 +79,7 @@ export function UnsavedChangesDialog({
 
     return (
         <Dialog
+            keepMounted={false}
             open={open}
             onClose={handleCancel}
             aria-labelledby="alert-dialog-title"

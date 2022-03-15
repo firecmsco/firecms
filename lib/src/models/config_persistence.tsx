@@ -30,6 +30,8 @@ export interface ConfigurationPersistence {
 
     saveCollection: <M>(path: string, collection: EntityCollection<M>) => Promise<void>;
 
+    deleteCollection: <M>(path: string) => Promise<void>;
+
     saveSchema: <M>(schema: EntitySchema<M>) => Promise<void>;
 
     saveEnum: (schema: EnumConfig) => Promise<void>;

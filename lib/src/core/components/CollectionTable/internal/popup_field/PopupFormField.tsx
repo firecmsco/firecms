@@ -6,9 +6,7 @@ import React, {
     useState
 } from "react";
 
-import { styled } from "@mui/material/styles";
-
-import { Box, Button, IconButton, Theme, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { Portal } from "@mui/base";
 
 import ClearIcon from "@mui/icons-material/Clear";
@@ -29,7 +27,6 @@ import {
 } from "../../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
 import { buildPropertyField } from "../../../../../form";
-import clsx from "clsx";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
@@ -37,49 +34,6 @@ import { isReadOnly } from "../../../../util/entities";
 import { useSchemaRegistry } from "../../../../../hooks/useSchemaRegistry";
 import { CustomDialogActions } from "../../../CustomDialogActions";
 
-const PREFIX = "PopupFormField";
-
-const classes = {
-    form: `${PREFIX}-form`,
-    popup: `${PREFIX}-popup`,
-    popupInner: `${PREFIX}-popupInner`,
-    hidden: `${PREFIX}-hidden`
-};
-
-const Root = styled("div")((
-   { theme } : {
-        theme: Theme
-    }
-) => ({
-    [`& .${classes.form}`]: {
-        display: "flex",
-        flexDirection: "column"
-    },
-
-    [`& .${classes.popup}`]: {
-        display: "inline-block",
-        userSelect: "none",
-        position: "fixed",
-        zIndex: 1300,
-        boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
-        borderRadius: "4px",
-        backgroundColor: theme.palette.background.paper
-        // transition: "transform 250ms ease-out",
-        // transform: "scale(1.0)"
-    },
-
-    [`& .${classes.popupInner}`]: {
-        padding: theme.spacing(2),
-        overflow: "auto",
-        cursor: "inherit"
-    },
-
-    [`& .${classes.hidden}`]: {
-        visibility: "hidden",
-        // transform: "scale(0.7)",
-        zIndex: -1
-    }
-}));
 
 interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     entity?: Entity<M>;
@@ -131,14 +85,12 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const windowSize = useWindowSize();
 
-    const ref = React.useRef<HTMLDivElement>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
 
     const initialPositionSet = React.useRef<boolean>(false);
 
     useDraggable({
         containerRef,
-        ref,
         x: popupLocation?.x,
         y: popupLocation?.y,
         onMove: (x, y) => onMove({ x, y })
@@ -150,13 +102,6 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         },
         [propertyId, entity]
     );
-
-    // useEffect(
-    //     () => {
-    //         setInternalValue(entity?.values);
-    //     },
-    //     [entity?.values]
-    // );
 
     const getInitialLocation = useCallback(() => {
         if (!cellRect) throw Error("getInitialLocation error");
@@ -176,7 +121,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                y
                                            }: { x: number, y: number }) => {
 
-        const draggableBoundingRect = ref.current?.getBoundingClientRect();
+        const draggableBoundingRect = containerRef.current?.getBoundingClientRect();
         if (!draggableBoundingRect)
             throw Error("normalizePosition called before draggableBoundingRect is set");
 
@@ -188,7 +133,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const updatePopupLocation = useCallback((position?: { x: number, y: number }) => {
 
-        const draggableBoundingRect = ref.current?.getBoundingClientRect();
+        const draggableBoundingRect = containerRef.current?.getBoundingClientRect();
         if (!cellRect || !draggableBoundingRect) return;
         const newPosition = normalizePosition(position ?? getInitialLocation());
         if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
@@ -204,9 +149,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     useLayoutEffect(
         () => {
-
-            const draggableBoundingRect = ref.current?.getBoundingClientRect();
-            console.log("updatePopupLocation", cellRect, draggableBoundingRect, initialPositionSet.current);
+            const draggableBoundingRect = containerRef.current?.getBoundingClientRect();
             if (!cellRect || !draggableBoundingRect || initialPositionSet.current) return;
             updatePopupLocation();
             initialPositionSet.current = true;
@@ -264,13 +207,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         return <></>;
 
     const form = entity && (
-        <Box
-            key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
-            sx={{
-                width: 520,
-                maxWidth: "100vw",
-                maxHeight: "85vh"
-            }}>
+        <>
             <Formik
                 // key={`popup_form_${propertyId}_${entity?.id}`}
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
@@ -312,36 +249,50 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
                     const property: ResolvedProperty<any> | undefined = schema.properties[propertyId];
 
-                    return <Form
-                        className={classes.form}
-                        onSubmit={handleSubmit}
-                        noValidate>
+                    return (
+                        <Box
+                            key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
+                            sx={{
+                                width: 520,
+                                maxWidth: "100vw",
+                                maxHeight: "85vh"
+                            }}>
+                            <Form
+                                style={{
+                                    padding: "16px",
+                                    display: "flex",
+                                    flexDirection: "column"
+                                }}
+                                onSubmit={handleSubmit}
+                                noValidate>
 
-                        {propertyId && property && buildPropertyField<any, M>({
-                            propertyKey: propertyId as string,
-                            disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
-                            property,
-                            includeDescription: false,
-                            underlyingValueHasChanged: false,
-                            context,
-                            tableMode: true,
-                            partOfArray: false,
-                            autoFocus: open,
-                            shouldAlwaysRerender: true
-                        })}
+                                {propertyId && property && buildPropertyField<any, M>({
+                                    propertyKey: propertyId as string,
+                                    disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
+                                    property,
+                                    includeDescription: false,
+                                    underlyingValueHasChanged: false,
+                                    context,
+                                    tableMode: true,
+                                    partOfArray: false,
+                                    autoFocus: open,
+                                    shouldAlwaysRerender: true
+                                })}
 
-                        <CustomDialogActions>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                type="submit"
-                                disabled={disabled}
-                            >
-                                Save
-                            </Button>
-                        </CustomDialogActions>
+                                <CustomDialogActions>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        type="submit"
+                                        disabled={disabled}
+                                    >
+                                        Save
+                                    </Button>
+                                </CustomDialogActions>
 
-                    </Form>;
+                            </Form>
+
+                        </Box>);
                 }}
             </Formik>
 
@@ -350,23 +301,33 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 {savingError.message}
             </Typography>
             }
-
-        </Box>
+        </>
     );
 
     const draggable = (
-        <div
+        <Box
             key={`draggable_${propertyId}_${entity.id}_${open}`}
-            className={clsx(classes.popup,
-                { [classes.hidden]: !open }
-            )}
+            sx={theme => ({
+                display: "inline-block",
+                userSelect: "none",
+                position: "fixed",
+                zIndex: 1300,
+                boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
+                borderRadius: "4px",
+                backgroundColor: theme.palette.background.paper,
+                visibility: !open ? "hidden" : undefined,
+                cursor: "grab"
+                // transition: "transform 250ms ease-out",
+                // transform: "scale(1.0)"
+            })}
             ref={containerRef}>
 
             <ElementResizeListener onResize={adaptResize}/>
 
-            <div
-                className={classes.popupInner}
-                ref={ref}>
+            <Box
+                sx={{
+                    overflow: "auto"
+                }}>
 
                 {form}
 
@@ -377,28 +338,25 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                     backgroundColor: "#888",
                     borderRadius: "32px"
                 }}>
-                <IconButton
-                    size={"small"}
-                    sx={{
-                    }}
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        onClose();
-                    }}>
-                    <ClearIcon sx={{ color: "white" }}
-                               fontSize={"small"}/>
-                </IconButton>
+                    <IconButton
+                        size={"small"}
+                        sx={{}}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            onClose();
+                        }}>
+                        <ClearIcon sx={{ color: "white" }}
+                                   fontSize={"small"}/>
+                    </IconButton>
                 </Box>
-            </div>
+            </Box>
 
-        </div>
+        </Box>
     );
 
     return (
         <Portal container={document.body}>
-            <Root>
                 {draggable}
-            </Root>
         </Portal>
     );
 

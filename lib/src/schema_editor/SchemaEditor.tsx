@@ -49,11 +49,13 @@ import { SchemaDetailsForm } from "./SchemaDetailsForm";
 export type SchemaEditorProps<M> = {
     schemaId?: string;
     handleClose?: (updatedSchema?: EntitySchema<M>) => void;
+    setDirty?: (dirty: boolean) => void;
 };
 
 export function SchemaEditor<M>({
                                     schemaId,
                                     handleClose,
+                                    setDirty
                                 }: SchemaEditorProps<M>) {
 
     const schemaRegistry = useSchemaRegistry();
@@ -161,7 +163,8 @@ export function SchemaEditor<M>({
                             flexGrow: 1
                         }}>
                             <SchemaEditorForm showErrors={showErrors}
-                                              onPropertyError={onPropertyError}/>
+                                              onPropertyError={onPropertyError}
+                                              setDirty={setDirty}/>
                         </Box>
 
                         <CustomDialogActions position={"absolute"}>
@@ -197,10 +200,12 @@ export function SchemaEditor<M>({
 
 export function SchemaEditorForm<M>({
                                         showErrors,
-                                        onPropertyError
+                                        onPropertyError,
+                                        setDirty
                                     }: {
     showErrors: boolean;
     onPropertyError: (propertyKey: string, namespace: string | undefined, error: string | undefined) => void;
+    setDirty?: (dirty: boolean) => void;
 }) {
 
     const {
@@ -208,7 +213,8 @@ export function SchemaEditorForm<M>({
         setFieldValue,
         setFieldError,
         setFieldTouched,
-        errors
+        errors,
+        dirty
     } = useFormikContext<EntitySchema>();
 
     const theme = useTheme();
@@ -229,6 +235,11 @@ export function SchemaEditorForm<M>({
             setHeight(contentRect?.bounds.height);
         }
     }, []);
+
+    useEffect(() => {
+        if (setDirty)
+            setDirty(dirty);
+    }, [dirty])
 
     const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
         const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;

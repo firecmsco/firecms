@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Box,
     CardActionArea,
@@ -8,6 +8,10 @@ import {
     Divider,
     Grid,
     IconButton,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
     Paper,
     Typography
 } from "@mui/material";
@@ -20,23 +24,20 @@ import EditIcon from "@mui/icons-material/Edit";
 
 import { Link as ReactLink } from "react-router-dom";
 
-import {
-    computeTopNavigation,
-    TopNavigationEntry,
-    TopNavigationResult
-} from "../util/navigation_utils";
 import { Markdown } from "../../preview";
 import { useNavigation } from "../../hooks";
 import {
     useConfigurationPersistence
 } from "../../hooks/useConfigurationPersistence";
-import {
-    CollectionEditorDialog
-} from "../../collection_editor/CollectionEditorDialog";
+import Delete from "@mui/icons-material/Delete";
+import { MoreVert } from "@mui/icons-material";
+import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
+import { TopNavigationEntry, TopNavigationResult } from "../../models";
+
 
 /**
  * Default entry view for the CMS under the path "/"
- * This components takes navigation as an input and renders cards
+ * This component takes navigation as an input and renders cards
  * for each entry, including title and description.
  * @constructor
  * @category Components
@@ -47,14 +48,22 @@ export function FireCMSHomePage() {
     const configurationPersistence = useConfigurationPersistence();
     const configurationPersistenceEnabled = Boolean(configurationPersistence);
 
-    const [navigationResult, setNavigationResult] = useState<TopNavigationResult>(computeTopNavigation(navigationContext, true));
+    if (!navigationContext.topLevelNavigation)
+        throw Error("Navigation not ready in FireCMSHomePage");
 
-    useEffect(() => {
-        setNavigationResult(computeTopNavigation(navigationContext, true))
-    }, [navigationContext.navigation])
+    const navigationResult: TopNavigationResult = navigationContext.topLevelNavigation;
+    const [collectionToBeDeleted, setCollectionToBeDeleted] = useState<TopNavigationEntry | undefined>();
 
-    if (!navigationContext.navigation)
-        return <></>;
+    const onDeleteCollectionClicked = useCallback((entry: TopNavigationEntry) => {
+        setCollectionToBeDeleted(entry);
+    }, []);
+
+    const deleteCollection = useCallback(() => {
+        if (collectionToBeDeleted?.path) {
+            configurationPersistence?.deleteCollection(collectionToBeDeleted.path);
+        }
+        setCollectionToBeDeleted(undefined);
+    }, [collectionToBeDeleted]);
 
     const {
         navigationEntries,
@@ -64,75 +73,6 @@ export function FireCMSHomePage() {
     const allGroups: Array<string | undefined> = [...groups];
     if (configurationPersistenceEnabled || navigationEntries.filter(e => !e.group).length > 0) {
         allGroups.push(undefined);
-    }
-
-    function buildNavigationCard(entry: TopNavigationEntry) {
-        return (
-            <Grid item xs={12}
-                  sm={6}
-                  md={4}
-                  key={`nav_${entry.group}_${entry.name}`}>
-                <Paper variant={"outlined"}>
-
-                    <CardActionArea
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "flex-start",
-                            minHeight: 248
-                        }}
-                        component={ReactLink}
-                        to={entry.url}>
-                        <CardContent
-                            sx={{
-                                flexGrow: 1,
-                                width: "100%"
-                            }}>
-
-                            <Box sx={{
-                                height: 40,
-                                display: "flex",
-                                alignItems: "center",
-                                width: "100%",
-                                justifyContent: "space-between"
-                            }}>
-
-                                {entry.type === "view" &&
-                                    <ShowChartIcon color={"disabled"}/>}
-                                {entry.type !== "view" &&
-                                    <PlaylistPlayIcon color={"disabled"}/>}
-
-                                {configurationPersistenceEnabled && entry.editUrl &&
-                                    <IconButton
-                                        component={ReactLink}
-                                        to={entry.editUrl}>
-                                        <EditIcon color="primary"/>
-                                    </IconButton>}
-                            </Box>
-
-                            <Typography gutterBottom variant="h5"
-                                        component="h2">
-                                {entry.name}
-                            </Typography>
-
-                            {entry.description && <Typography variant="body2"
-                                                              color="textSecondary"
-                                                              component="div">
-                                <Markdown source={entry.description}/>
-                            </Typography>}
-                        </CardContent>
-
-                        <CardActions style={{ alignSelf: "flex-end" }}>
-
-                            <Box p={1}>
-                                <ArrowForwardIcon color="primary"/>
-                            </Box>
-                        </CardActions>
-
-                    </CardActionArea>
-                </Paper>
-            </Grid>
-        );
     }
 
     function buildAddCollectionNavigationCard(group?: string) {
@@ -188,7 +128,16 @@ export function FireCMSHomePage() {
                         <Grid container spacing={2}>
                             {navigationEntries
                                 .filter((entry) => entry.group === group || (!entry.group && group === undefined)) // so we don't miss empty groups
-                                .map((entry) => buildNavigationCard(entry))
+                                .map((entry) =>
+                                    <Grid item xs={12}
+                                          sm={6}
+                                          md={4}
+                                          key={`nav_${entry.group}_${entry.name}`}>
+                                        <NavigationCard entry={entry}
+                                                        onDelete={configurationPersistenceEnabled && entry.type === "stored_collection"
+                                                            ? onDeleteCollectionClicked
+                                                            : undefined}/>
+                                    </Grid>)
                             }
                             {buildAddCollectionNavigationCard(group)}
                         </Grid>
@@ -196,10 +145,120 @@ export function FireCMSHomePage() {
                 </Box>
             ))}
 
-            {/*<CollectionEditorDialog open={collectionDialogOpen}*/}
-            {/*                        onCancel={() => setCollectionDialogOpen(false)}*/}
-            {/*                        onSave={() => setCollectionDialogOpen(false)}*/}
-            {/*                        path={path}/>*/}
+            <DeleteConfirmationDialog
+                open={Boolean(collectionToBeDeleted)}
+                onAccept={deleteCollection}
+                onCancel={() => setCollectionToBeDeleted(undefined)}
+                title={<>Delete this collection?</>}
+                body={<> This will <b>not
+                    delete any data</b>, only
+                    the collection in the CMS</>}/>
+
         </Container>
     );
+}
+
+type NavigationCardProps = { entry: TopNavigationEntry, onDelete: ((entry: TopNavigationEntry) => void) | undefined };
+
+function NavigationCard({ entry, onDelete }: NavigationCardProps) {
+
+    const [menuAnchorEl, setMenuAnchorEl] = useState<any | null>(null);
+
+    const menuOpen = Boolean(menuAnchorEl);
+
+    return (
+        <Paper variant={"outlined"}>
+
+            <CardActionArea
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    minHeight: 248
+                }}
+                disableRipple={menuOpen}
+                component={ReactLink}
+                to={entry.url}
+            >
+                <CardContent
+                    sx={{
+                        flexGrow: 1,
+                        width: "100%"
+                    }}>
+
+                    <Box sx={{
+                        height: 40,
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                        justifyContent: "space-between"
+                    }}>
+
+                        {entry.type === "view" &&
+                            <ShowChartIcon color={"disabled"}/>}
+                        {entry.type !== "view" &&
+                            <PlaylistPlayIcon color={"disabled"}/>}
+                        <div>
+                            {onDelete &&
+                                <IconButton
+                                    onClick={(event: React.MouseEvent) => {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        setMenuAnchorEl(event.currentTarget);
+                                    }}>
+                                    <MoreVert/>
+                                </IconButton>
+                            }
+
+                            {entry.editUrl &&
+                                <IconButton
+                                    component={ReactLink}
+                                    to={entry.editUrl}>
+                                    <EditIcon color="primary"/>
+                                </IconButton>}
+                        </div>
+                    </Box>
+
+                    <Typography gutterBottom variant="h5"
+                                component="h2">
+                        {entry.name}
+                    </Typography>
+
+                    {entry.description && <Typography variant="body2"
+                                                      color="textSecondary"
+                                                      component="div">
+                        <Markdown source={entry.description}/>
+                    </Typography>}
+                </CardContent>
+
+                <CardActions style={{ alignSelf: "flex-end" }}>
+
+                    <Box p={1}>
+                        <ArrowForwardIcon color="primary"/>
+                    </Box>
+                </CardActions>
+
+            </CardActionArea>
+
+            <Menu
+                anchorEl={menuAnchorEl}
+                open={menuOpen}
+                onClose={() => setMenuAnchorEl(null)}
+                elevation={2}
+            >
+                {onDelete && <MenuItem onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    onDelete(entry);
+                    setMenuAnchorEl(undefined);
+                }}>
+                    <ListItemIcon>
+                        <Delete/>
+                    </ListItemIcon>
+                    <ListItemText primary={"Delete"}/>
+                </MenuItem>}
+
+            </Menu>
+
+        </Paper>);
 }
