@@ -11,7 +11,6 @@ import {
     DataSource,
     EntityLinkBuilder,
     EntitySchema,
-    EnumConfig,
     FireCMSContext,
     Locale,
     Navigation,
@@ -137,12 +136,13 @@ export interface FireCMSProps<UserType> {
     baseCollectionPath?: string;
 
     /**
-     * Use this controller to access the configuration that is stored extenally,
+     * Use this controller to access the configuration that is stored externally,
      * and not defined in code
      */
     configPersistence?: ConfigurationPersistence;
+
     /**
-     * Use this controller to access the configuration that is stored extenally,
+     * Use this controller to access the configuration that is stored locally,
      * and not defined in code
      */
     userConfigPersistence?: UserConfigurationPersistence;
