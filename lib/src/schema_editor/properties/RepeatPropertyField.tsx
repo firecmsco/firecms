@@ -5,6 +5,7 @@ import { Field, getIn, useFormikContext } from "formik";
 import { PropertyForm } from "../PropertyEditView";
 import { getBadgeForWidget } from "../../core/util/property_utils";
 import { getWidget } from "../../core/util/widgets";
+import { PropertyFieldPreview } from "../PropertyFieldPreview";
 
 export function RepeatPropertyField({
                                        showErrors,
@@ -21,7 +22,7 @@ export function RepeatPropertyField({
 
     const [propertyDialogOpen, setPropertyDialogOpen] = useState(false);
     const ofProperty = getIn(values, "of");
-    const ofPropertyError = getIn(errors, "of");
+    const ofPropertyError = getIn(touched, "of") && getIn(errors, "of");
 
     const onPropertyChanged = useCallback(({ id, property, namespace }:
                                                { id?: string, property: Property, namespace?: string }) => {
@@ -39,18 +40,27 @@ export function RepeatPropertyField({
                     name={"of"}
                     value={ofProperty}
                     validate={(property: Property) => {
-                        return property?.dataType ? undefined : "You need to specify a repeat property";
+                        return property?.dataType ? undefined : "You need to specify a repeat field";
                     }}
                 >
                     {() => (
                         <Paper variant={"outlined"} sx={{ p: 2, mt: 1 }}>
-                            <Button variant={"text"}
-                                    size={"large"}
-                                    color={ofPropertyError ? "error" : "primary"}
-                                    onClick={() => setPropertyDialogOpen(true)}
-                                    startIcon={widget && getBadgeForWidget(widget)}>
+
+                            {ofProperty && <PropertyFieldPreview
+                                property={ofProperty}
+                                onClick={() => setPropertyDialogOpen(true)}
+                                includeName={false}
+                                includeEditButton={true}
+                                selected={false}
+                                hasError={false}/>}
+
+                            {!ofProperty && <Button variant={"text"}
+                                     size={"large"}
+                                     color={ofPropertyError ? "error" : "primary"}
+                                     onClick={() => setPropertyDialogOpen(true)}>
                                 Edit {`${widget ? widget.name : "repeat component"}`}
-                            </Button>
+                            </Button>}
+
                             <PropertyForm asDialog={true}
                                           inArray={true}
                                           open={propertyDialogOpen}
@@ -59,7 +69,8 @@ export function RepeatPropertyField({
                                           property={ofProperty}
                                           includeIdAndName={false}
                                           onPropertyChanged={onPropertyChanged}
-                                          forceShowErrors={showErrors}/>
+                                          forceShowErrors={showErrors}
+                            />
                         </Paper>
                     )}
                 </Field>

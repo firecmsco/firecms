@@ -5,7 +5,12 @@ import { PropertyForm } from "../PropertyEditView";
 import { MapProperty, Property } from "../../models";
 import { getIn, useFormikContext } from "formik";
 import { PropertyTree } from "../PropertyTree";
-import { getFullId, namespaceToPropertiesOrderPath } from "../util";
+import {
+    getFullId,
+    idToPropertiesPath,
+    namespaceToPropertiesOrderPath,
+    namespaceToPropertiesPath
+} from "../util";
 
 export function MapPropertyField({}: {}) {
 
@@ -32,6 +37,24 @@ export function MapPropertyField({}: {}) {
         setPropertyDialogOpen(false);
     }, [values.properties, values.propertiesOrder]);
 
+    const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
+        const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
+        if (!fullId)
+            throw Error("Schema editor miss config");
+
+        const propertiesPath = idToPropertiesPath(fullId);
+        const propertiesOrderPath = namespaceToPropertiesOrderPath(namespace);
+
+        const currentPropertiesOrder: string[] = getIn(values, propertiesOrderPath) ?? Object.keys(getIn(values, namespaceToPropertiesPath(namespace)));
+
+        setFieldValue(propertiesPath, undefined, false);
+        setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyId), false);
+
+        setPropertyDialogOpen(false);
+        setSelectedPropertyId(undefined);
+        setSelectedPropertyNamespace(undefined);
+    }, [setFieldValue, values]);
+
     const selectedPropertyFullId = selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
@@ -43,6 +66,7 @@ export function MapPropertyField({}: {}) {
     >
         Add property to {values.name ?? "this group"}
     </Button>;
+
     return (
         <>
             <Grid item>
@@ -51,12 +75,14 @@ export function MapPropertyField({}: {}) {
                      alignItems={"end"}
                      mt={2}
                      mb={1}>
-                    <Typography variant={"subtitle2"}>Properties</Typography>
+                    <Typography variant={"subtitle2"}>Properties in this
+                        group</Typography>
                     {addChildButton}
                 </Box>
                 <Paper variant={"outlined"}
                        sx={{ p: 2 }}
                        elevation={0}>
+
                     <PropertyTree
                         properties={values.properties ?? {}}
                         propertiesOrder={values.propertiesOrder}
@@ -69,6 +95,15 @@ export function MapPropertyField({}: {}) {
                         onPropertyMove={(propertiesOrder: string[], namespace?: string) => {
                             setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
                         }}/>
+
+                    {!values.propertiesOrder?.length && <Box sx={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                    }}>
+                        Add the first property to this group
+                    </Box>}
                 </Paper>
             </Grid>
 
@@ -86,11 +121,13 @@ export function MapPropertyField({}: {}) {
                               setSelectedPropertyId(undefined);
                               setSelectedPropertyNamespace(undefined);
                           }}
+                          onDelete={deleteProperty}
                           propertyId={selectedPropertyId}
                           propertyNamespace={selectedPropertyNamespace}
                           property={selectedProperty}
                           existing={Boolean(selectedPropertyId)}
-                          onPropertyChanged={onPropertyCreated}/>
+                          onPropertyChanged={onPropertyCreated}
+                          existingPropertyIds={selectedPropertyId ? undefined : values.propertiesOrder}/>
 
         </>);
 }

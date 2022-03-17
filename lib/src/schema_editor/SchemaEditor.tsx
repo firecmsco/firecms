@@ -273,6 +273,8 @@ export function SchemaEditorForm<M>({
         }, false);
         setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? Object.keys(values.properties)), id], false);
         setNewPropertyDialogOpen(false);
+        setSelectedPropertyId(id);
+        setSelectedPropertyNamespace(undefined);
     }, [values.properties, values.propertiesOrder]);
 
     const onPropertyChanged = useCallback(({ id, property, namespace }) => {
@@ -287,8 +289,8 @@ export function SchemaEditorForm<M>({
     const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: boolean) => {
         const propertyPath = id ? getFullId(id, namespace) : undefined;
         if (propertyPath) {
-            onPropertyError(id, namespace, error ? "Property error" : undefined);
-            setFieldError(idToPropertiesPath(propertyPath), error ? "Property error" : undefined);
+            onPropertyError(id, namespace, error ? "Field error" : undefined);
+            setFieldError(idToPropertiesPath(propertyPath), error ? "Field error" : undefined);
         }
     }, [setFieldError]);
 
@@ -366,7 +368,6 @@ export function SchemaEditorForm<M>({
                     </Box>
                 </Box>
 
-
                 <Box mb={2} mt={3}>
                     {addPropertyButton}
                 </Box>
@@ -419,8 +420,8 @@ export function SchemaEditorForm<M>({
                                 justifyContent: "center"
                             }}>
                                 {emptySchema
-                                    ? "Now you can add your first property"
-                                    : "Select a property to edit it"}
+                                    ? "Now you can add your first field"
+                                    : "Select a field to edit it"}
                             </Box>}
                     </Paper>
                 </Box>
@@ -470,7 +471,8 @@ export function SchemaEditorForm<M>({
                         forceShowErrors={showErrors}
                         open={newPropertyDialogOpen}
                         onCancel={() => setNewPropertyDialogOpen(false)}
-                        onPropertyChanged={onPropertyCreated}/>
+                        onPropertyChanged={onPropertyCreated}
+                        existingPropertyIds={values.propertiesOrder as string[]}/>
 
                 </Box>
 

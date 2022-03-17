@@ -3,7 +3,11 @@ import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { ArrayProperty, Property } from "../../models";
 import { getIn, useFormikContext } from "formik";
 import { PropertyForm } from "../PropertyEditView";
-import { getFullId, namespaceToPropertiesOrderPath } from "../util";
+import {
+    getFullId,
+    idToPropertiesPath,
+    namespaceToPropertiesOrderPath
+} from "../util";
 import { PropertyTree } from "../PropertyTree";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -35,7 +39,23 @@ export function BlockPropertyField({}: {}) {
     const selectedPropertyFullId = selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.oneOf?.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
+    const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
+        const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
+        if (!fullId)
+            throw Error("Schema editor miss config");
+
+        setFieldValue(`oneOf.${idToPropertiesPath(fullId)}`, undefined, false);
+        const propertiesOrderPath = `oneOf.${namespaceToPropertiesOrderPath(namespace)}`;
+        const currentPropertiesOrder: string[] = getIn(values, propertiesOrderPath);
+        setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyId), false);
+
+        setPropertyDialogOpen(false);
+        setSelectedPropertyId(undefined);
+        setSelectedPropertyNamespace(undefined);
+    }, [setFieldValue, values]);
+
     const addChildButton = <Button
+        autoFocus
         color="primary"
         variant={"outlined"}
         onClick={() => setPropertyDialogOpen(true)}
@@ -51,12 +71,14 @@ export function BlockPropertyField({}: {}) {
                      alignItems={"end"}
                      mt={2}
                      mb={1}>
-                    <Typography variant={"subtitle2"}>Properties</Typography>
+                    <Typography variant={"subtitle2"}>Properties in this
+                        block</Typography>
                     {addChildButton}
                 </Box>
                 <Paper variant={"outlined"}
                        sx={{ p: 2 }}
                        elevation={0}>
+
                     <PropertyTree
                         properties={values.oneOf?.properties ?? {}}
                         propertiesOrder={values.oneOf?.propertiesOrder}
@@ -67,8 +89,18 @@ export function BlockPropertyField({}: {}) {
                             setPropertyDialogOpen(true);
                         }}
                         onPropertyMove={(propertiesOrder: string[], namespace?: string) => {
-                            setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
+                            setFieldValue(`oneOf.${namespaceToPropertiesOrderPath(namespace)}`, propertiesOrder, false);
                         }}/>
+
+                    {!values.oneOf?.propertiesOrder?.length && <Box sx={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                    }}>
+                        Add the first property to this block
+                    </Box>}
+
                 </Paper>
             </Grid>
 
@@ -86,11 +118,13 @@ export function BlockPropertyField({}: {}) {
                               setSelectedPropertyId(undefined);
                               setSelectedPropertyNamespace(undefined);
                           }}
+                          onDelete={deleteProperty}
                           propertyId={selectedPropertyId}
                           propertyNamespace={selectedPropertyNamespace}
                           property={selectedProperty}
                           existing={Boolean(selectedPropertyId)}
-                          onPropertyChanged={onPropertyCreated}/>
+                          onPropertyChanged={onPropertyCreated}
+                          existingPropertyIds={selectedPropertyId ? undefined : values.oneOf?.propertiesOrder}/>
 
         </>);
 }

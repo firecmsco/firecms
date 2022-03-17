@@ -2,6 +2,12 @@ export function idToPropertiesPath(id: string): string {
     return "properties." + id.replace(".", ".properties.");
 }
 
+export function namespaceToPropertiesPath(namespace?: string): string {
+    return namespace
+        ? "properties." + namespace.replace(".", ".properties.") + ".properties"
+        : "properties";
+}
+
 export function namespaceToPropertiesOrderPath(namespace?: string): string {
     return namespace
         ? "properties." + namespace.replace(".", ".properties.") + ".propertiesOrder"

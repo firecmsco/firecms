@@ -7,8 +7,13 @@ import DebouncedTextField from "../../form/components/DebouncedTextField";
 
 export function BasePropertyField({
                                       showErrors,
-                                      disabledId
-                                  }: { showErrors: boolean, disabledId: boolean }) {
+                                      disabledId,
+                                      existingPropertyIds
+                                  }: {
+    showErrors: boolean,
+    disabledId: boolean,
+    existingPropertyIds?: string[];
+}) {
 
     const {
         values,
@@ -34,7 +39,7 @@ export function BasePropertyField({
                 <Field name={name}
                        as={DebouncedTextField}
                        validate={validateName}
-                       label={"Property name"}
+                       label={"Field name"}
                        required
                        fullWidth
                        helperText={titleError}
@@ -46,7 +51,7 @@ export function BasePropertyField({
                     <Field name={id}
                            as={TextField}
                            label={"ID"}
-                           validate={validateId}
+                           validate={(value:string) => validateId(value, existingPropertyIds)}
                            disabled={disabledId}
                            required
                            fullWidth
@@ -64,14 +69,17 @@ export function BasePropertyField({
 
 const idRegEx = /^(?:[a-zA-Z]+_)*[a-zA-Z0-9]+$/;
 
-function validateId(value: string) {
+function validateId(value: string, existingPropertyIds?: string[]) {
 
     let error;
     if (!value) {
-        error = "You must specify an id for the property";
+        error = "You must specify an id for the field";
     }
     if (!value.match(idRegEx)) {
         error = "The id can only contain letters, numbers and underscores (_), and not start with a number";
+    }
+    if (existingPropertyIds && existingPropertyIds.includes(value)) {
+        error = "There is another field with this ID already";
     }
     return error;
 }
@@ -79,7 +87,7 @@ function validateId(value: string) {
 function validateName(value: string) {
     let error;
     if (!value) {
-        error = "You must specify a title for the property";
+        error = "You must specify a title for the field";
     }
     return error;
 }

@@ -10,12 +10,14 @@ export function PropertyFieldPreview({
                                          onClick,
                                          hasError,
                                          includeName,
+                                         includeEditButton,
                                          selected
                                      }: {
     property: Property,
     hasError?: boolean,
     selected?: boolean,
     includeName?: boolean,
+    includeEditButton?: boolean;
     onClick?: () => void
 }) {
 
@@ -88,6 +90,10 @@ export function PropertyFieldPreview({
                         </Typography>
                     </Box>
                 </Box>
+
+                {includeEditButton && <Typography variant={"button"}>
+                    Edit
+                </Typography>}
 
             </Paper>
         </Box>

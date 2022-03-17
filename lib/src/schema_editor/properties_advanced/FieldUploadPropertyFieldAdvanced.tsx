@@ -13,8 +13,10 @@ import { Field, getIn, useFormikContext } from "formik";
 
 export function FieldUploadPropertyFieldAdvanced({
                                                      multiple,
+                                                    existing
                                                  }: {
     multiple: boolean;
+    existing: boolean;
 }) {
     const {
         values,
@@ -67,19 +69,21 @@ export function FieldUploadPropertyFieldAdvanced({
                             <li>{"{file} - Full name of the uploaded file"}</li>
                             <li>{"{file.name} - Name of the uploaded file without extension"}</li>
                             <li>{"{file.ext} - Extension of the uploaded file"}</li>
-                            <li>{"{entityId} - Id of the entity"}</li>
-                            <li>{"{propertyId} - Id of this property"}</li>
+                            <li>{"{entityId} - ID of the entity"}</li>
+                            <li>{"{propertyId} - ID of this field"}</li>
                             <li>{"{path} - Path of this entity"}</li>
                         </ul>
                     </Typography>
                     <Field type="checkbox"
                            name={storeUrl}
                            label={"Save URL instead of storage path"}
+                           disabled={existing}
                            component={SmallSwitch}/>
                     <br/>
                     <Typography variant={"caption"}>
                         Turn this setting on, if you prefer to save the download
                         URL of the uploaded file instead of the storage path.
+                        You can only change this prop upon creation.
                     </Typography>
                 </Grid>
             </Grid>

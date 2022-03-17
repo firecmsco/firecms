@@ -14,7 +14,6 @@ export function SmallSwitch({
         checked={field.value ?? false}
         sx={{ ml: 0 }}
         control={
-
             <Switch size="small"
                     onChange={(e, checked) => form.setFieldValue(field.name, checked)}/>
         }

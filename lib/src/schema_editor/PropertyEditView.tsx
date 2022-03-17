@@ -15,7 +15,8 @@ import {
     MenuItem,
     Select,
     Tab,
-    Tabs
+    Tabs,
+    Typography
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -75,7 +76,8 @@ export function PropertyForm({
                                  onPropertyChanged,
                                  onDelete,
                                  onError,
-                                 forceShowErrors
+                                 forceShowErrors,
+                                 existingPropertyIds
                              }: {
     asDialog: boolean;
     open?: boolean;
@@ -91,6 +93,7 @@ export function PropertyForm({
     onOkClicked?: () => void;
     onCancel?: () => void;
     forceShowErrors: boolean;
+    existingPropertyIds?: string[];
 }) {
 
     const initialValue: PropertyWithId = {
@@ -118,9 +121,14 @@ export function PropertyForm({
                 }
             }}
             validate={(values) => {
+                const errors: any = {};
                 if (!getWidget(values)) {
-                    return { selectedWidget: "Required" }
+                    errors.selectedWidget = "Required";
                 }
+                if (existingPropertyIds && values.id && existingPropertyIds.includes(values.id)) {
+                    errors.id = "";
+                }
+                console.log("validate prop", values, errors);
                 return {};
             }}
         >
@@ -134,6 +142,7 @@ export function PropertyForm({
                     showErrors={forceShowErrors || props.submitCount > 0}
                     existing={existing}
                     inArray={inArray}
+                    existingPropertyIds={existingPropertyIds}
                     {...props}/>;
 
                 let body: JSX.Element;
@@ -391,7 +400,8 @@ function PropertyEditView({
                               propertyNamespace,
                               onError,
                               showErrors,
-                              inArray
+                              inArray,
+                              existingPropertyIds
                           }: {
     includeIdAndTitle?: boolean;
     existing: boolean;
@@ -401,6 +411,7 @@ function PropertyEditView({
     onError?: (id: string, namespace?: string, error?: boolean) => void;
     showErrors: boolean;
     inArray: boolean;
+    existingPropertyIds?: string[];
 } & FormikProps<PropertyWithId>) {
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -466,11 +477,11 @@ function PropertyEditView({
     } else if (selectedWidgetId === "file_upload") {
         childComponent = <FieldUploadPropertyField multiple={false}/>;
         childComponentAdvanced =
-            <FieldUploadPropertyFieldAdvanced multiple={false}/>;
+            <FieldUploadPropertyFieldAdvanced multiple={false} existing={existing}/>;
     } else if (selectedWidgetId === "multi_file_upload") {
         childComponent = <FieldUploadPropertyField multiple={true}/>;
         childComponentAdvanced =
-            <FieldUploadPropertyFieldAdvanced multiple={true}/>;
+            <FieldUploadPropertyFieldAdvanced multiple={true} existing={existing}/>;
     } else if (selectedWidgetId === "switch") {
         childComponentAdvanced = <BooleanPropertyFieldAdvanced/>;
     } else if (selectedWidgetId === "group") {
@@ -487,7 +498,6 @@ function PropertyEditView({
         childComponent = null;
     }
 
-    const name = "name";
     const id = "id";
 
     const selectedWidgetError = showErrors && getIn(errors, "selectedWidget");
@@ -509,7 +519,8 @@ function PropertyEditView({
     const hasBasicTab = Boolean(childComponent) || includeIdAndTitle;
     const hasAdvancedTab = Boolean(childComponentAdvanced);
 
-    return (<>
+    return (
+        <>
             <Box sx={{
                 display: "flex",
                 mt: 2,
@@ -519,24 +530,38 @@ function PropertyEditView({
                              error={Boolean(selectedWidgetError)}>
                     <InputLabel id="component-label">Component</InputLabel>
                     <Select fullWidth
+                            defaultOpen={!existing}
                             labelId="component-label"
-                            value={selectedWidgetId}
+                            value={selectedWidgetId ?? ""}
                             label={"Component"}
                             disabled={existing}
                             required
-                            startAdornment={<Box mr={2}>
-                                {getBadgeForWidget(selectedWidget)}
-                            </Box>}
-                            renderValue={(value) => WIDGETS[value].name}
+                            startAdornment={selectedWidget
+                                ? <Box mr={2}>
+                                    {getBadgeForWidget(selectedWidget)}
+                                </Box>
+                                : undefined}
+                            renderValue={(value) => {
+                                if (!value) {
+                                    return <em>Select a property widget</em>;
+                                }
+                                return WIDGETS[value].name;
+                            }}
                             onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
 
                         {displayedWidgets.map(([key, widget]) => {
                             return (
                                 <MenuItem value={key} key={key}>
                                     <Box mr={3}>
-                                        {getBadgeForWidget(widget)}
+                                        <p>{getBadgeForWidget(widget)}</p>
                                     </Box>
-                                    {widget.name}
+                                    <Box>
+                                        <div>{widget.name}</div>
+                                        <Typography variant={"caption"}
+                                                    color={"text.disabled"}>
+                                            {widget.description}
+                                        </Typography>
+                                    </Box>
                                 </MenuItem>
                             );
                         })}
@@ -580,7 +605,8 @@ function PropertyEditView({
                     <Grid container spacing={2} direction={"column"}>
                         {includeIdAndTitle &&
                             <BasePropertyField showErrors={showErrors}
-                                               disabledId={existing}/>}
+                                               disabledId={existing}
+                                               existingPropertyIds={existingPropertyIds}/>}
                         {childComponent}
                     </Grid>
                 </Box>
@@ -592,16 +618,17 @@ function PropertyEditView({
                 </Box>
             </Box>
 
-            {onDelete && <DeleteConfirmationDialog open={deleteDialogOpen}
-                                                   onAccept={() => onDelete(values.id, propertyNamespace)}
-                                                   onCancel={() => setDeleteDialogOpen(false)}
-                                                   title={<>"Delete this
-                                                       property?"</>}
-                                                   body={<> This will <b>not
-                                                       delete any data</b>, only
-                                                       modify the schema.</>}/>}
+            {onDelete &&
+                <DeleteConfirmationDialog open={deleteDialogOpen}
+                                          onAccept={() => onDelete(values.id, propertyNamespace)}
+                                          onCancel={() => setDeleteDialogOpen(false)}
+                                          title={<>Delete this property?</>}
+                                          body={
+                                              <> This will <b>not delete any
+                                                  data</b>, only modify the
+                                                  schema.</>
+                                          }/>}
 
         </>
     );
 }
-

@@ -255,7 +255,6 @@ export function useBuildNavigationContext<UserType>({
             Object.values(navigationEntries).map(e => e.group).filter(Boolean) as string[]
         ).values());
 
-        console.log("computeTopNavigation navigation", resolvedNavigation, "res", navigationEntries);
         return { navigationEntries, groups };
     };
 

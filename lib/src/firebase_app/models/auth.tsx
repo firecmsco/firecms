@@ -2,7 +2,6 @@ import { User as FirebaseUser } from "firebase/auth";
 
 import { AuthDelegate } from "../../models";
 
-
 /**
  * @category Firebase
  */
@@ -17,7 +16,6 @@ export type FirebaseSignInProvider =
     | "twitter.com"
     | "microsoft.com"
     | "apple.com";
-
 
 /**
  * @category Firebase
